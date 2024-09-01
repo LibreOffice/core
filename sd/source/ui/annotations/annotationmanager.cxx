@@ -1213,7 +1213,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage const * pPage, bool bForward 
             return mpDoc->GetMasterSdPage( mpDoc->GetMasterSdPageCount(PageKind::Standard) - 1, PageKind::Standard ); // last page
     }
 
-    sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) >> 1;
+    sal_uInt16 nPageNum = static_cast<sal_uInt16>((pPage->GetPageNum() - 1) >> 1);
 
     // first all non master pages
     if( !pPage->IsMasterPage() )

@@ -1444,8 +1444,11 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
             {
                 // when UndoStack is cleared by ModifyPageRedoAction
                 // the nCount may have changed, so test GetRedoActionCount()
-                while(nNumber-- && pUndoManager->GetRedoActionCount())
+                while (nNumber && pUndoManager->GetRedoActionCount())
+                {
                     pUndoManager->Redo();
+                    --nNumber;
+                }
             }
             catch( const Exception& )
             {

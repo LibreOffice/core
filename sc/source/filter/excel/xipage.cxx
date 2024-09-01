@@ -157,13 +157,14 @@ void XclImpPageSettings::ReadPageBreaks( XclImpStream& rStrm )
     pVec->clear();
     pVec->reserve( nCount );
 
-    while( nCount-- )
+    while (nCount)
     {
         sal_uInt16 nBreak = rStrm.ReaduInt16();
         if( nBreak )
             pVec->push_back( nBreak );
         if( bIgnore )
             rStrm.Ignore( 4 );
+        --nCount;
     }
 }
 

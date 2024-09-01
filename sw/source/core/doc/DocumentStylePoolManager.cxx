@@ -1514,7 +1514,9 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
     }
     OSL_ENSURE(pRCId, "invalid Id");
 
-    while( nArrCnt-- )
+    while (nArrCnt)
+    {
+        --nArrCnt;
         for( size_t n = 0; n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
         {
             pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n );
@@ -1523,6 +1525,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
                 return pNewFormat;
             }
         }
+    }
 
     OUString aNm(SwResId(pRCId));
     SwAttrSet aSet(m_rDoc.GetAttrPool(), *pWhichRange);

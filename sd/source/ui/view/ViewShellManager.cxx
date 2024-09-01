@@ -767,8 +767,11 @@ void ViewShellManager::Implementation::UpdateShellStack()
     while (mrBase.GetSubShell(nIndex)!=nullptr)
         ++nIndex;
     aSfxShellStack.reserve(nIndex);
-    while (nIndex-- > 0)
+    while (nIndex > 0)
+    {
+        --nIndex;
         aSfxShellStack.push_back(mrBase.GetSubShell(nIndex));
+    }
 
 #if OSL_DEBUG_LEVEL >= 2
     SAL_INFO("sd.view", __func__ << ": Current SFX Stack");

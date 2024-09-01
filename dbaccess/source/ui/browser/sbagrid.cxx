@@ -898,7 +898,7 @@ void SbaGridControl::MouseButtonDown( const BrowserMouseEvent& rMEvt)
 {
     sal_Int32 nRow = GetRowAtYPosPixel(rMEvt.GetPosPixel().Y());
     sal_uInt16 nColPos = GetColumnAtXPosPixel(rMEvt.GetPosPixel().X());
-    sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : nColPos-1;
+    sal_uInt16 nViewPos = (nColPos == BROWSER_INVALIDID) ? sal_uInt16(-1) : sal_uInt16(nColPos - 1);
         // 'the handle column' and 'no valid column' will both result in a view position of -1 !
 
     bool bHitEmptySpace = (nRow > GetRowCount()) || (nViewPos == sal_uInt16(-1));
