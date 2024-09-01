@@ -4,7 +4,7 @@ Contains graphics related helper code. Lots of the draw and impress code is in t
 
 - `xoutdev`
 
-    this is where a lot of wht work would happen to move to the canvas. (what does that mean?)
+    this is where a lot of the work would happen to move to the canvas. (what does that mean?)
 
 - `svdraw`
 
