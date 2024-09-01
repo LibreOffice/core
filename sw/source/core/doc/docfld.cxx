@@ -813,12 +813,17 @@ void SwDocUpdateField::InsDelFieldInFieldLst( bool bIns, const SwTextField& rFie
     {
         // look up via the pTextField pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for (SetGetExpFields::size_type n = 0; n < m_pFieldSortList->size(); ++n)
+        SetGetExpFields::size_type n = 0;
+        while (n < m_pFieldSortList->size())
         {
             if (&rField == (*m_pFieldSortList)[n]->GetPointer())
             {
                 m_pFieldSortList->erase_at(n);
-                n--; // one field can occur multiple times
+                // one field can occur multiple times
+            }
+            else
+            {
+                ++n;
             }
         }
     }
