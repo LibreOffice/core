@@ -86,6 +86,33 @@ namespace
     }
 }
 
+namespace
+{
+
+Any convertAsEnum(bool bEnumAsInt, const css::uno::Type& _rExpectedType,
+                  std::u16string_view _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap)
+{
+    Any aReturn;
+
+    sal_uInt16 nEnumValue(0);
+    bool bSuccess = SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
+    OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
+
+    if (bEnumAsInt)
+    {
+        if (TypeClass_SHORT == _rExpectedType.getTypeClass())
+            aReturn <<= static_cast<sal_Int16>(nEnumValue);
+        else
+            aReturn <<= static_cast<sal_Int32>(nEnumValue);
+    }
+    else
+        aReturn = ::cppu::int2enum(static_cast<sal_Int32>(nEnumValue), _rExpectedType);
+
+    return aReturn;
+}
+
+}
+
 Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap, const bool _bInvertBoolean )
 {
@@ -126,17 +153,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
             [[fallthrough]];
         case TypeClass_ENUM:
         {
-            sal_uInt16 nEnumValue(0);
-            bool bSuccess = SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
-            OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
-
-            if (bEnumAsInt)
-                if (TypeClass_SHORT == _rExpectedType.getTypeClass())
-                    aReturn <<= static_cast<sal_Int16>(nEnumValue);
-                else
-                    aReturn <<= static_cast<sal_Int32>(nEnumValue);
-            else
-                aReturn = ::cppu::int2enum(static_cast<sal_Int32>(nEnumValue), _rExpectedType);
+            aReturn = convertAsEnum(bEnumAsInt, _rExpectedType, _rReadCharacters, _pEnumMap);
         }
         break;
         case TypeClass_HYPER:
