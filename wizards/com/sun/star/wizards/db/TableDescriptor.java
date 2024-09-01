@@ -607,7 +607,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 ColumnPropertySet oPropertySet = new ColumnPropertySet(oTypeInspector, xColumnDataDescriptorFactory.createDataDescriptor());
                 oPropertySet.assignPropertyValues(_aNewPropertyValues, true);
-                ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.xPropertySet, sname);
+                ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.getPropertySet(), sname);
                 this.columncontainer.add(oColumnDescriptor);
                 return true;
             }

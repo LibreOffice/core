@@ -27,7 +27,7 @@ public class ColumnPropertySet
 {
 
     private TypeInspector oTypeInspector;
-    public XPropertySet xPropertySet;
+    private XPropertySet xPropertySet;
     private int nType;
     private String sTypeName = PropertyNames.EMPTY_STRING;
 
@@ -35,6 +35,11 @@ public class ColumnPropertySet
     {
         xPropertySet = _xPropertySet;
         oTypeInspector = _oTypeInspector;
+    }
+
+    public XPropertySet getPropertySet()
+    {
+        return xPropertySet;
     }
 
     private void assignPropertyValues(String _sNewName, PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties)
