@@ -100,6 +100,16 @@ public:
         maVector.insert(aIndex, aStart, aEnd);
     }
 
+    void insert(sal_uInt32 nIndex, const CoordinateDataArray2D& rSource, sal_uInt32 nSourceIndex, sal_uInt32 nSourceCount)
+    {
+        // insert data
+        auto aIndex = maVector.begin();
+        aIndex += nIndex;
+        auto aStart = rSource.maVector.cbegin() + nSourceIndex;
+        auto aEnd = rSource.maVector.cbegin() + nSourceIndex + nSourceCount;
+        maVector.insert(aIndex, aStart, aEnd);
+    }
+
     void remove(sal_uInt32 nIndex, sal_uInt32 nCount)
     {
         assert(nCount > 0);
@@ -353,6 +363,27 @@ public:
         ControlVectorPair2DVector::iterator aIndex(maVector.begin() + nIndex);
         ControlVectorPair2DVector::const_iterator aStart(rSource.maVector.begin());
         ControlVectorPair2DVector::const_iterator aEnd(rSource.maVector.end());
+        maVector.insert(aIndex, aStart, aEnd);
+
+        for(; aStart != aEnd; ++aStart)
+        {
+            if(!aStart->getPrevVector().equalZero())
+                mnUsedVectors++;
+
+            if(!aStart->getNextVector().equalZero())
+                mnUsedVectors++;
+        }
+    }
+
+    void insert(sal_uInt32 nIndex, const ControlVectorArray2D& rSource, sal_uInt32 nSourceIndex, sal_uInt32 nSourceCount)
+    {
+        assert(rSource.maVector.size() > 0);
+        assert(nIndex + nSourceCount <= maVector.size());
+
+        // insert data
+        ControlVectorPair2DVector::iterator aIndex(maVector.begin() + nIndex);
+        ControlVectorPair2DVector::const_iterator aStart(rSource.maVector.begin() + nSourceIndex);
+        ControlVectorPair2DVector::const_iterator aEnd(rSource.maVector.begin() + nSourceIndex + nSourceCount);
         maVector.insert(aIndex, aStart, aEnd);
 
         for(; aStart != aEnd; ++aStart)
@@ -805,6 +836,31 @@ public:
 
         insert(nCount, rPoint, 1);
         setPrevControlVector(nCount, rPrev);
+    }
+
+    void append(const ImplB2DPolygon& rSource, sal_uInt32 nSourceIndex, sal_uInt32 nSourceCount)
+    {
+        assert(rSource.maPoints.count() > 0);
+        const sal_uInt32 nIndex = count();
+
+        mpBufferedData.reset();
+
+        maPoints.insert(nIndex, rSource.maPoints, nSourceIndex, nSourceCount);
+
+        if(rSource.moControlVector && rSource.moControlVector->isUsed())
+        {
+            if (!moControlVector)
+                moControlVector.emplace(nIndex);
+            moControlVector->insert(nIndex, *rSource.moControlVector, nSourceIndex, nSourceCount);
+
+            if(!moControlVector->isUsed())
+                moControlVector.reset();
+        }
+        else if(moControlVector)
+        {
+            ControlVectorPair2D aVectorPair;
+            moControlVector->insert(nIndex, aVectorPair, rSource.count());
+        }
     }
 
     void append(const ImplB2DPolygon& rSource)
@@ -1378,7 +1434,7 @@ namespace basegfx
         }
         else
         {
-            mpPolygon->append(ImplB2DPolygon(*rPoly.mpPolygon, nIndex, nCount));
+            mpPolygon->append(*rPoly.mpPolygon, nIndex, nCount);
         }
     }
 
