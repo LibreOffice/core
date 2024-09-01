@@ -1,0 +1,47 @@
+From dfcb642a491f7ec2ae52e3e83d31bb6cdf3670c2 Mon Sep 17 00:00:00 2001
+From: David Seifert <soap@gentoo.org>
+Date: Sat, 31 Aug 2024 12:39:39 +0200
+Subject: [PATCH] Fix boost 1.86 breakage
+
+The fix does not break building against <1.86 since we're now accessing the
+object representation of the return value.
+
+Fixes #67
+---
+ src/libcmis/xml-utils.cxx | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/src/libcmis/xml-utils.cxx b/src/libcmis/xml-utils.cxx
+index e487d17..cdf088f 100644
+--- a/src/libcmis/xml-utils.cxx
++++ b/src/libcmis/xml-utils.cxx
+@@ -531,16 +531,22 @@ namespace libcmis
+         boost::uuids::detail::sha1 sha1;
+         sha1.process_bytes( str.c_str(), str.size() );
+ 
+-        unsigned int digest[5];
++        // on boost <  1.86.0, digest_type is typedef'd as unsigned int[5]
++        // on boost >= 1.86.0, digest_type is typedef'd as unsigned char[20]
++        boost::uuids::detail::sha1::digest_type digest;
+         sha1.get_digest( digest );
+ 
++        // by using a pointer to unsigned char, we can read the
++        // object representation of either typedef.
++        const unsigned char* ptr = reinterpret_cast<const unsigned char*>( digest );
++
+         stringstream out;
+-        // Setup writing mode. Every number must produce eight
++        // Setup writing mode. Every number must produce two
+         // hexadecimal digits, including possible leading 0s, or we get
+         // less than 40 digits as result.
+         out << hex << setfill('0') << right;
+-        for ( int i = 0; i < 5; ++i )
+-            out << setw(8) << digest[i];
++        for ( int i = 0; i < sizeof( digest ); ++ptr, ++i )
++            out << setw(2) << static_cast<int>( *ptr );
+         return out.str();
+     }
+ 
+-- 
+2.45.1
+
