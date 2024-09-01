@@ -1848,11 +1848,12 @@ bool StringResourcePersistenceImpl::implReadPropertiesFile
     return true;
 }
 
-
 static sal_Unicode getHexCharForDigit( sal_uInt16 nDigitVal )
 {
-    sal_Unicode cRet = ( nDigitVal < 10 ) ? ('0' + nDigitVal) : ('a' + (nDigitVal-10));
-    return cRet;
+    if (nDigitVal < 10)
+        return static_cast<sal_Unicode>('0' + nDigitVal);
+    else
+        return static_cast<sal_Unicode>('a' + (nDigitVal-10));
 }
 
 static void implWriteCharToBuffer( OUStringBuffer& aBuf, sal_Unicode cu, bool bKey )
