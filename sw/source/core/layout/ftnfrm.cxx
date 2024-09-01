@@ -79,7 +79,7 @@ bool FootnoteSeparatorHeightFromParagraph(SwDoc& rDoc, SwTwips& rHeight)
 
 /// Search the position of an attribute in the FootnoteArray at the document,
 /// because all footnotes are located there, ordered by their index.
-static sal_uLong lcl_FindFootnotePos( const SwDoc *pDoc, const SwTextFootnote *pAttr )
+static sal_uInt32 lcl_FindFootnotePos( const SwDoc *pDoc, const SwTextFootnote *pAttr )
 {
     const SwFootnoteIdxs &rFootnoteIdxs = pDoc->GetFootnoteIdxs();
 
@@ -87,7 +87,7 @@ static sal_uLong lcl_FindFootnotePos( const SwDoc *pDoc, const SwTextFootnote *p
     SwFootnoteIdxs::const_iterator it = rFootnoteIdxs.find( pBla );
     if ( it != rFootnoteIdxs.end() )
     {
-        sal_uLong nRet = it - rFootnoteIdxs.begin();
+        sal_uInt32 nRet = it - rFootnoteIdxs.begin();
         if( pAttr->GetFootnote().IsEndNote() )
             return nRet + ENDNOTE;
         return nRet;
@@ -1378,10 +1378,10 @@ void SwFootnoteBossFrame::InsertFootnote( SwFootnoteFrame* pNew )
 
     // use the Doc to find out the position
     SwDoc *pDoc = GetFormat()->GetDoc();
-    const sal_uLong nStPos = ::lcl_FindFootnotePos( pDoc, pNew->GetAttr() );
+    const sal_uInt32 nStPos = ::lcl_FindFootnotePos( pDoc, pNew->GetAttr() );
 
-    sal_uLong nCmpPos = 0;
-    sal_uLong nLastPos = 0;
+    sal_uInt32 nCmpPos = 0;
+    sal_uInt32 nLastPos = 0;
     SwFootnoteContFrame *pParent = nullptr;
     if( pSibling )
     {
@@ -1582,7 +1582,7 @@ static SwPageFrame* lcl_GetApproximateFootnotePage(const bool bEnd, const SwPage
     // to ensure that we will finish in finite time even if
     // hundreds of footnotes exist.
     const SwPageFrame *pNxt = static_cast<const SwPageFrame*>(pPage->GetNext());
-    const sal_uLong nStPos = ::lcl_FindFootnotePos(pDoc, pAttr);
+    const sal_uInt32 nStPos = ::lcl_FindFootnotePos(pDoc, pAttr);
     while (pNxt && (bEnd ? pNxt->IsEndNotePage() : pNxt->IsFootnotePage() && !pNxt->IsEndNotePage()))
     {
         const SwFootnoteContFrame *pCont = pNxt->FindFootnoteCont();
@@ -2363,7 +2363,7 @@ void SwFootnoteBossFrame::RearrangeFootnotes( const SwTwips nDeadLine, const boo
         pFootnote = FindFirstFootnote();
     }
     SwDoc *pDoc = GetFormat()->GetDoc();
-    const sal_uLong nFootnotePos = pAttr ? ::lcl_FindFootnotePos( pDoc, pAttr ) : 0;
+    const sal_uInt32 nFootnotePos = pAttr ? ::lcl_FindFootnotePos( pDoc, pAttr ) : 0;
     SwFrame *pCnt = pFootnote ? pFootnote->ContainsAny() : nullptr;
     if ( !pCnt )
         return;
