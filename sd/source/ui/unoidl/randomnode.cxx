@@ -72,8 +72,6 @@ public:
     explicit RandomAnimationNode( sal_Int16 nPresetClass );
     RandomAnimationNode();
 
-    void init( sal_Int16 nPresetClass );
-
     // XInitialization
     void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
@@ -180,25 +178,20 @@ RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
 }
 
 RandomAnimationNode::RandomAnimationNode( sal_Int16 nPresetClass )
+    : mnPresetClass(nPresetClass)
+    , mnFill(AnimationFill::DEFAULT)
+    , mnFillDefault(AnimationFill::INHERIT)
+    , mnRestart(AnimationRestart::DEFAULT)
+    , mnRestartDefault(AnimationRestart::INHERIT)
+    , mfAcceleration(0.0)
+    , mfDecelerate(0.0)
+    , mbAutoReverse(false)
 {
-    init( nPresetClass );
 }
 
 RandomAnimationNode::RandomAnimationNode()
+    : RandomAnimationNode(1)
 {
-    init( 1 );
-}
-
-void RandomAnimationNode::init( sal_Int16 nPresetClass )
-{
-    mnPresetClass = nPresetClass;
-    mnFill = AnimationFill::DEFAULT;
-    mnFillDefault = AnimationFill::INHERIT;
-    mnRestart = AnimationRestart::DEFAULT;
-    mnRestartDefault = AnimationRestart::INHERIT;
-    mfAcceleration = 0.0;
-    mfDecelerate = 0.0;
-    mbAutoReverse = false;
 }
 
 // XInitialization
