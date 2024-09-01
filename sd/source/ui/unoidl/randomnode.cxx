@@ -431,6 +431,7 @@ void SAL_CALL RandomAnimationNode::setParent( const Reference< XInterface >& Par
 // XCloneable
 Reference< XCloneable > SAL_CALL RandomAnimationNode::createClone()
 {
+    std::unique_lock aGuard( maMutex );
     Reference< XCloneable > xNewNode( new RandomAnimationNode( *this ) );
     return xNewNode;
 }
