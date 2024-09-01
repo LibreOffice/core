@@ -117,7 +117,6 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry<sal_uInt16>* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
-    bool bEnumAsInt = false;
     switch (_rExpectedType.getTypeClass())
     {
         case TypeClass_BOOLEAN:     // sal_Bool
@@ -134,6 +133,7 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
         break;
         case TypeClass_SHORT:       // sal_Int16
         case TypeClass_LONG:        // sal_Int32
+        {
             if (!_pEnumMap)
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
@@ -149,11 +149,12 @@ Any PropertyConversion::convertString( const css::uno::Type& _rExpectedType,
                     aReturn <<= nValue;
                 break;
             }
-            bEnumAsInt = true;
-            [[fallthrough]];
+            aReturn = convertAsEnum(true, _rExpectedType, _rReadCharacters, _pEnumMap);
+        }
+        break;
         case TypeClass_ENUM:
         {
-            aReturn = convertAsEnum(bEnumAsInt, _rExpectedType, _rReadCharacters, _pEnumMap);
+            aReturn = convertAsEnum(false, _rExpectedType, _rReadCharacters, _pEnumMap);
         }
         break;
         case TypeClass_HYPER:
