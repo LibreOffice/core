@@ -67,6 +67,7 @@ extern "C" void * allocExec(
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined DRAGONFLY || defined HAIKU
     pagesize = getpagesize();
 #else
+    // coverity[ tainted_data_return : FALSE ] version 2023.12.2
     pagesize = sysconf(_SC_PAGESIZE);
 #endif
 #elif defined _WIN32
