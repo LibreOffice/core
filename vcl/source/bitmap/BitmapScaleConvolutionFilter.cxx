@@ -32,150 +32,129 @@ namespace vcl
 namespace
 {
 
-void ImplCalculateContributions(
-    const sal_Int32 aSourceSize,
-    const sal_Int32 aDestinationSize,
-    sal_Int32& aNumberOfContributions,
-    std::vector<sal_Int16>& rWeights,
-    std::vector<sal_Int32>& rPixels,
-    std::vector<sal_Int32>& rCounts,
-    const Kernel& aKernel)
+void ImplCalculateContributions(const sal_Int32 nSoureSize, const sal_Int32 nDestinationSize,
+                            sal_Int32& rNumberOfContributions, std::vector<sal_Int16>& rWeights,
+                            std::vector<sal_Int32>& rPixels, std::vector<sal_Int32>& rCounts,
+                            const Kernel& rKernel)
 {
-    const double fSamplingRadius(aKernel.GetWidth());
-    const double fScale(aDestinationSize / static_cast< double >(aSourceSize));
+    const double fSamplingRadius(rKernel.GetWidth());
+    const double fScale(nDestinationSize / static_cast< double >(nSoureSize));
     const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
     const double fFilterFactor(std::min(fScale, 1.0));
 
-    aNumberOfContributions = (sal_Int32(fabs(ceil(fScaledRadius))) * 2) + 1;
-    const sal_Int32 nAllocSize(aDestinationSize * aNumberOfContributions);
+    rNumberOfContributions = (sal_Int32(fabs(ceil(fScaledRadius))) * 2) + 1;
+    const sal_Int32 nAllocSize(nDestinationSize * rNumberOfContributions);
     rWeights.resize(nAllocSize);
     rPixels.resize(nAllocSize);
-    rCounts.resize(aDestinationSize);
+    rCounts.resize(nDestinationSize);
 
-    for(sal_Int32 i(0); i < aDestinationSize; i++)
+    for(sal_Int32 i(0); i < nDestinationSize; i++)
     {
-        const sal_Int32 aIndex(i * aNumberOfContributions);
+        const sal_Int32 nIndexes(i * rNumberOfContributions);
         const double aCenter(i / fScale);
-        const sal_Int32 aLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
-        const sal_Int32 aRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
-        sal_Int32 aCurrentCount(0);
+        const sal_Int32 nLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
+        const sal_Int32 nRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
+        sal_Int32 nCurrentCount(0);
 
-        for(sal_Int32 j(aLeft); j <= aRight; j++)
+        for(sal_Int32 j(nLeft); j <= nRight; j++)
         {
-            const double aWeight(aKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
+            const double fWeight(rKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
 
             // Reduce calculations with ignoring weights of 0.0
-            if(fabs(aWeight) < 0.0001)
-            {
+            if(fabs(fWeight) < 0.0001)
                 continue;
-            }
 
             // Handling on edges
-            const sal_Int32 aPixelIndex(std::clamp(j, sal_Int32(0), aSourceSize - 1));
-            const sal_Int32 nIndex(aIndex + aCurrentCount);
+            const sal_Int32 nPixelIndex(std::clamp(j, sal_Int32(0), nSoureSize - 1));
+            const sal_Int32 nIndex(nIndexes + nCurrentCount);
 
             // scale the weight by 255 since we're converting from float to int
-            rWeights[nIndex] = aWeight * 255;
-            rPixels[nIndex] = aPixelIndex;
+            rWeights[nIndex] = fWeight * 255;
+            rPixels[nIndex] = nPixelIndex;
 
-            aCurrentCount++;
+            nCurrentCount++;
         }
 
-        rCounts[i] = aCurrentCount;
+        rCounts[i] = nCurrentCount;
     }
 }
 
-bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rScaleX, const Kernel& aKernel)
+bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rScaleX, const Kernel& rKernel)
 {
     // Do horizontal filtering
     OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
     const sal_Int32 nWidth(rSource.GetSizePixel().Width());
     const sal_Int32 nNewWidth(basegfx::fround(nWidth * rScaleX));
 
-    if(nWidth == nNewWidth)
-    {
+    if (nWidth == nNewWidth)
         return true;
-    }
 
     BitmapScopedReadAccess pReadAcc(rSource);
 
-    if(pReadAcc)
+    if (!pReadAcc)
+        return false;
+
+    std::vector<sal_Int16> aWeights;
+    std::vector<sal_Int32> aPixels;
+    std::vector<sal_Int32> aCounts;
+    sal_Int32 nNumberOfContributions(0);
+
+    const sal_Int32 nHeight(rSource.GetSizePixel().Height());
+    ImplCalculateContributions(nWidth, nNewWidth, nNumberOfContributions, aWeights, aPixels, aCounts, rKernel);
+    rTarget = Bitmap(Size(nNewWidth, nHeight), vcl::PixelFormat::N24_BPP);
+    BitmapScopedWriteAccess pWriteAcc(rTarget);
+
+    if (!pWriteAcc)
+        return false;
+
+    for (sal_Int32 y(0); y < nHeight; y++)
     {
-        std::vector<sal_Int16> aWeights;
-        std::vector<sal_Int32> aPixels;
-        std::vector<sal_Int32> aCounts;
-        sal_Int32 aNumberOfContributions(0);
+        Scanline pScanline = pWriteAcc->GetScanline( y );
+        Scanline pScanlineRead = pReadAcc->GetScanline( y );
 
-        const sal_Int32 nHeight(rSource.GetSizePixel().Height());
-        ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
-        rTarget = Bitmap(Size(nNewWidth, nHeight), vcl::PixelFormat::N24_BPP);
-        BitmapScopedWriteAccess pWriteAcc(rTarget);
-        bool bResult(pWriteAcc);
-
-        if(bResult)
+        for (sal_Int32 x(0); x < nNewWidth; x++)
         {
-            for(sal_Int32 y(0); y < nHeight; y++)
+            const sal_Int32 nBaseIndex(x * nNumberOfContributions);
+            sal_Int32 nSum(0);
+            sal_Int32 nValueRed(0);
+            sal_Int32 nValueGreen(0);
+            sal_Int32 nValueBlue(0);
+
+            for (sal_Int32 j(0); j < aCounts[x]; j++)
             {
-                Scanline pScanline = pWriteAcc->GetScanline( y );
-                Scanline pScanlineRead = pReadAcc->GetScanline( y );
-                for(sal_Int32 x(0); x < nNewWidth; x++)
-                {
-                    const sal_Int32 aBaseIndex(x * aNumberOfContributions);
-                    sal_Int32 aSum(0);
-                    sal_Int32 aValueRed(0);
-                    sal_Int32 aValueGreen(0);
-                    sal_Int32 aValueBlue(0);
+                const sal_Int32 nIndex(nBaseIndex + j);
+                const sal_Int16 nWeight(aWeights[nIndex]);
+                BitmapColor aColor;
 
-                    for(sal_Int32 j(0); j < aCounts[x]; j++)
-                    {
-                        const sal_Int32 aIndex(aBaseIndex + j);
-                        const sal_Int16 aWeight(aWeights[aIndex]);
-                        BitmapColor aColor;
+                nSum += nWeight;
 
-                        aSum += aWeight;
+                if (pReadAcc->HasPalette())
+                    aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, aPixels[nIndex]));
+                else
+                    aColor = pReadAcc->GetPixelFromData(pScanlineRead, aPixels[nIndex]);
 
-                        if(pReadAcc->HasPalette())
-                        {
-                            aColor = pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, aPixels[aIndex]));
-                        }
-                        else
-                        {
-                            aColor = pReadAcc->GetPixelFromData(pScanlineRead, aPixels[aIndex]);
-                        }
-
-                        aValueRed += aWeight * aColor.GetRed();
-                        aValueGreen += aWeight * aColor.GetGreen();
-                        aValueBlue += aWeight * aColor.GetBlue();
-                    }
-
-                    assert(aSum != 0);
-
-                    const BitmapColor aResultColor(
-                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueRed / aSum, 0, 255)),
-                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueGreen / aSum, 0, 255)),
-                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueBlue / aSum, 0, 255)));
-
-                    pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
-                }
+                nValueRed += nWeight * aColor.GetRed();
+                nValueGreen += nWeight * aColor.GetGreen();
+                nValueBlue += nWeight * aColor.GetBlue();
             }
 
-            pWriteAcc.reset();
-        }
+            assert(nSum != 0);
 
-        aWeights.clear();
-        aCounts.clear();
-        aPixels.clear();
+            const BitmapColor aResultColor(
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)));
 
-        if(bResult)
-        {
-            return true;
+            pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
         }
     }
 
-    return false;
+    pWriteAcc.reset();
+
+    return true;
 }
 
-bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rScaleY, const Kernel& aKernel)
+bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rScaleY, const Kernel& rKernel)
 {
     // Do vertical filtering
     OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
@@ -194,10 +173,10 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
     std::vector<sal_Int16> aWeights;
     std::vector<sal_Int32> aPixels;
     std::vector<sal_Int32> aCounts;
-    sal_Int32 aNumberOfContributions(0);
+    sal_Int32 nNumberOfContributions(0);
 
     const sal_Int32 nWidth(rSource.GetSizePixel().Width());
-    ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, aWeights, aPixels, aCounts, aKernel);
+    ImplCalculateContributions(nHeight, nNewHeight, nNumberOfContributions, aWeights, aPixels, aCounts, rKernel);
     rTarget = Bitmap(Size(nWidth, nNewHeight), vcl::PixelFormat::N24_BPP);
     BitmapScopedWriteAccess pWriteAcc(rTarget);
     if(!pWriteAcc)
@@ -213,29 +192,29 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     aScanline[y] = pReadAcc->GetPixel(y, x);
         for(sal_Int32 y(0); y < nNewHeight; y++)
         {
-            const sal_Int32 aBaseIndex(y * aNumberOfContributions);
-            sal_Int32 aSum(0);
-            sal_Int32 aValueRed(0);
-            sal_Int32 aValueGreen(0);
-            sal_Int32 aValueBlue(0);
+            const sal_Int32 nBaseIndex = y * nNumberOfContributions;
+            sal_Int32 nSum(0);
+            sal_Int32 nValueRed(0);
+            sal_Int32 nValueGreen(0);
+            sal_Int32 nValueBlue(0);
 
             for(sal_Int32 j(0); j < aCounts[y]; j++)
             {
-                const sal_Int32 aIndex(aBaseIndex + j);
-                const sal_Int16 aWeight(aWeights[aIndex]);
-                aSum += aWeight;
-                const BitmapColor & aColor = aScanline[aPixels[aIndex]];
-                aValueRed += aWeight * aColor.GetRed();
-                aValueGreen += aWeight * aColor.GetGreen();
-                aValueBlue += aWeight * aColor.GetBlue();
+                const sal_Int32 nIndex(nBaseIndex + j);
+                const sal_Int16 nWeight(aWeights[nIndex]);
+                nSum += nWeight;
+                const BitmapColor & aColor = aScanline[aPixels[nIndex]];
+                nValueRed += nWeight * aColor.GetRed();
+                nValueGreen += nWeight * aColor.GetGreen();
+                nValueBlue += nWeight * aColor.GetBlue();
             }
 
-            assert(aSum != 0);
+            assert(nSum != 0);
 
             const BitmapColor aResultColor(
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueRed / aSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueGreen / aSum, 0, 255)),
-                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueBlue / aSum, 0, 255)));
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueRed / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueGreen / nSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(nValueBlue / nSum, 0, 255)));
 
             if(pWriteAcc->HasPalette())
             {
@@ -248,14 +227,10 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
         }
     }
 
-    aWeights.clear();
-    aCounts.clear();
-    aPixels.clear();
-
     return true;
 }
 
-bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& rScaleY, const Kernel& aKernel)
+bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& rScaleY, const Kernel& rKernel)
 {
     const bool bMirrorHor(rScaleX < 0.0);
     const bool bMirrorVer(rScaleY < 0.0);
@@ -313,7 +288,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
         {
             if(bScaleHor)
             {
-                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, rKernel);
             }
 
             if(bResult && bScaleVer)
@@ -324,14 +299,14 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
                     aSource = aResult;
                 }
 
-                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, rKernel);
             }
         }
         else
         {
             if(bScaleVer)
             {
-                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, aKernel);
+                bResult = ImplScaleConvolutionVer(aSource, aResult, fScaleY, rKernel);
             }
 
             if(bResult && bScaleHor)
@@ -342,7 +317,7 @@ bool ImplScaleConvolution(Bitmap& rBitmap, const double& rScaleX, const double& 
                     aSource = aResult;
                 }
 
-                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, aKernel);
+                bResult = ImplScaleConvolutionHor(aSource, aResult, fScaleX, rKernel);
             }
         }
     }
