@@ -611,6 +611,8 @@ public:
         }
     }
 
+    ImplB2DPolygon(ImplB2DPolygon&&) = default;
+
     ImplB2DPolygon(const ImplB2DPolygon& rToBeCopied, sal_uInt32 nIndex, sal_uInt32 nCount)
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
         mbIsClosed(rToBeCopied.mbIsClosed)
@@ -625,24 +627,8 @@ public:
         }
     }
 
-    ImplB2DPolygon& operator=(const ImplB2DPolygon& rOther)
-    {
-        if (this != &rOther)
-        {
-            moControlVector.reset();
-            mpBufferedData.reset();
-            maPoints = rOther.maPoints;
-            mbIsClosed = rOther.mbIsClosed;
-            if (rOther.moControlVector && rOther.moControlVector->isUsed())
-            {
-                moControlVector.emplace( *rOther.moControlVector );
 
-                if(!moControlVector->isUsed())
-                    moControlVector.reset();
-            }
-        }
-        return *this;
-    }
+    ImplB2DPolygon& operator=(ImplB2DPolygon&&) = default;
 
     sal_uInt32 count() const
     {
