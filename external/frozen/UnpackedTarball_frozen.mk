@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,frozen,\
 	external/frozen/cid1532449_use_move_ctor.0 \
 	external/frozen/cid1586676_use_move_ctor.0 \
 	external/frozen/cid1538304_reference_ctor.0 \
+	external/frozen/cid1618765_big_param.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
