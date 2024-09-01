@@ -389,7 +389,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 
     /* check if initial string contains repeated '/' characters */
     nIndex = systemPath.indexOf( "//" );
-    if( nIndex != -1 )
+    if (nIndex >= 0)
     {
         sal_Int32 nSrcIndex;
         sal_Int32 nDeleted = 0;
