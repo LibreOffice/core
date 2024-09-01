@@ -615,13 +615,10 @@ void ZipPackage::parseContentType()
 void ZipPackage::getZipFileContents()
 {
     ZipEnumeration aEnum = m_pZipFile->entries();
-    OUString sTemp, sDirName;
-    sal_Int32 nOldIndex, nStreamIndex;
-    FolderHash::iterator aIter;
+    OUString sDirName;
 
     while (aEnum.hasMoreElements())
     {
-        nOldIndex = 0;
         ZipPackageFolder* pCurrent = m_xRootFolder.get();
         const ZipEntry & rEntry = *aEnum.nextElement();
         OUString rName = rEntry.sPath;
@@ -633,11 +630,11 @@ void ZipPackage::getZipFileContents()
             rName = rName.replace( '\\', '/' );
         }
 
-        nStreamIndex = rName.lastIndexOf ( '/' );
+        sal_Int32 nStreamIndex = rName.lastIndexOf ( '/' );
         if ( nStreamIndex != -1 )
         {
             sDirName = rName.copy ( 0, nStreamIndex );
-            aIter = m_aRecent.find ( sDirName );
+            FolderHash::iterator aIter = m_aRecent.find ( sDirName );
             if ( aIter != m_aRecent.end() )
                 pCurrent = ( *aIter ).second;
         }
@@ -645,9 +642,10 @@ void ZipPackage::getZipFileContents()
         if ( pCurrent == m_xRootFolder.get() )
         {
             sal_Int32 nIndex;
+            sal_Int32 nOldIndex = 0;
             while ( ( nIndex = rName.indexOf( '/', nOldIndex ) ) != -1 )
             {
-                sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
+                OUString sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
                 if ( nIndex == nOldIndex )
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
@@ -676,7 +674,7 @@ void ZipPackage::getZipFileContents()
         if ( rName.getLength() -1 != nStreamIndex )
         {
             nStreamIndex++;
-            sTemp = rName.copy( nStreamIndex );
+            OUString sTemp = rName.copy( nStreamIndex );
 
             if (!pCurrent->hasByName(sTemp))
             {
@@ -908,15 +906,14 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
 
 Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 {
-    OUString sTemp, sDirName;
+    OUString sDirName;
     sal_Int32 nOldIndex, nStreamIndex;
-    FolderHash::iterator aIter;
-
-    sal_Int32 nIndex = aName.getLength();
 
     if (aName == "/")
         // root directory.
         return Any ( uno::Reference( cppu::getXWeak(m_xRootFolder.get()) ) );
+
+    sal_Int32 nIndex = aName.getLength();
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
@@ -925,7 +922,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     {
         // The name contains '/'.
         sDirName = aName.copy ( 0, nStreamIndex );
-        aIter = m_aRecent.find ( sDirName );
+        FolderHash::iterator aIter = m_aRecent.find ( sDirName );
         if ( aIter != m_aRecent.end() )
         {
             // There is a cached entry for this name.
@@ -936,7 +933,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             {
                 // Determine the directory name.
                 sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
-                sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
+                std::u16string_view sTemp = aName.subView ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
 
                 if (pFolder && sTemp == pFolder->getName())
                     return Any(uno::Reference(cppu::getXWeak(pFolder)));
@@ -944,7 +941,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             else
             {
                 // Determine the file name.
-                sTemp = aName.copy ( nStreamIndex + 1 );
+                OUString sTemp = aName.copy ( nStreamIndex + 1 );
 
                 if (pFolder && pFolder->hasByName(sTemp))
                     return pFolder->getByName(sTemp);
@@ -967,7 +964,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
     {
-        sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
+        OUString sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
         if ( nIndex == nOldIndex )
             break;
         if ( !pCurrent->hasByName( sTemp ) )
@@ -988,7 +985,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         return Any ( uno::Reference( cppu::getXWeak(pCurrent) ) );
     }
 
-    sTemp = aName.copy( nOldIndex );
+    OUString sTemp = aName.copy( nOldIndex );
 
     if ( pCurrent->hasByName ( sTemp ) )
     {
@@ -1002,12 +999,6 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
 sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 {
-    OUString sTemp;
-    sal_Int32 nOldIndex;
-    FolderHash::iterator aIter;
-
-    sal_Int32 nIndex = aName.getLength();
-
     if (aName == "/")
         // root directory
         return true;
@@ -1017,17 +1008,17 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         OUString sDirName;
         sal_Int32 nStreamIndex;
         nStreamIndex = aName.lastIndexOf ( '/' );
-        bool bFolder = nStreamIndex == nIndex-1;
+        bool bFolder = nStreamIndex == aName.getLength()-1;
         if ( nStreamIndex != -1 )
         {
             sDirName = aName.copy ( 0, nStreamIndex );
-            aIter = m_aRecent.find ( sDirName );
+            FolderHash::iterator aIter = m_aRecent.find ( sDirName );
             if ( aIter != m_aRecent.end() )
             {
                 if ( bFolder )
                 {
                     sal_Int32 nDirIndex = aName.lastIndexOf ( '/', nStreamIndex );
-                    sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
+                    std::u16string_view sTemp = aName.subView ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
                     if ( sTemp == ( *aIter ).second->getName() )
                         return true;
                     else
@@ -1035,7 +1026,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 }
                 else
                 {
-                    sTemp = aName.copy ( nStreamIndex + 1 );
+                    OUString sTemp = aName.copy ( nStreamIndex + 1 );
                     if ( ( *aIter ).second->hasByName( sTemp ) )
                         return true;
                     else
@@ -1050,12 +1041,15 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         }
         ZipPackageFolder * pCurrent = m_xRootFolder.get();
         ZipPackageFolder * pPrevious = nullptr;
-        nOldIndex = 0;
+        sal_Int32 nOldIndex = 0;
+        sal_Int32 nIndex;
         while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
         {
-            sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
             if ( nIndex == nOldIndex )
                 break;
+
+            OUString sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
+
             if ( pCurrent->hasByName( sTemp ) )
             {
                 pPrevious = pCurrent;
@@ -1075,7 +1069,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         }
         else
         {
-            sTemp = aName.copy( nOldIndex );
+            OUString sTemp = aName.copy( nOldIndex );
 
             if ( pCurrent->hasByName( sTemp ) )
             {
