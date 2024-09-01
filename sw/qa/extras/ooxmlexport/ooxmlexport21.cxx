@@ -1169,6 +1169,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89731)
     // Without the fix in place this crashes on opening
     loadAndSave("tdf89731.docx");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf61309)
+{
+    // Don't crash on import
+    loadAndSave("tdf61309.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
