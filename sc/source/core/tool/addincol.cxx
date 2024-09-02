@@ -170,7 +170,19 @@ bool ScUnoAddInFuncData::GetExcelName( const LanguageTag& rDestLang, OUString& r
             return true;
         }
 
-        // Second, try match of fallback search with fallback locales,
+        // For "en-US" try the most likely fallback of "en".
+        if (aSearch == "en-US")
+        {
+            itNames = std::find_if(rCompNames.begin(), rCompNames.end(),
+                    [](const LocalizedName& rName) { return rName.maLocale == "en"; });
+            if (itNames != rCompNames.end())
+            {
+                rRetExcelName = (*itNames).maName;
+                return true;
+            }
+        }
+
+        // Try match of fallback search with fallback locales,
         // appending also 'en-US' and 'en' to search if not queried.
         ::std::vector< OUString > aFallbackSearch( rDestLang.getFallbackStrings( true));
         if (aSearch != "en-US")
@@ -196,7 +208,7 @@ bool ScUnoAddInFuncData::GetExcelName( const LanguageTag& rDestLang, OUString& r
 
         if (bFallbackToAny)
         {
-            // Third, last resort, use first (default) entry.
+            // Last resort, use first (default) entry.
             rRetExcelName = rCompNames[0].maName;
             return true;
         }
