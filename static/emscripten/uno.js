@@ -40,10 +40,13 @@ Module.unoObject = function(interfaces, obj) {
     obj.queryInterface = function(type) {
         for (const i in obj.impl_typemap) {
             if (i === type.toString()) {
-                return new Module.uno_Any(
-                    type,
-                    Module['uno_Type_' + i.replace(/\./g, '$')].reference(
-                        obj.impl_interfaces[obj.impl_typemap[i]]));
+                const ifc = Module['uno_Type_' + i.replace(/\./g, '$')].reference(
+                    obj.impl_interfaces[obj.impl_typemap[i]]);
+                try {
+                    return new Module.uno_Any(type, ifc);
+                } finally {
+                    ifc.delete();
+                }
             }
         }
         const ty = Module.uno_Type.Void();
