@@ -1105,9 +1105,18 @@ bool SkiaSalGraphicsImpl::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDev
 
     // Adjust line width for object-to-device scale.
     fLineWidth = (rObjectToDevice * basegfx::B2DVector(fLineWidth, 0)).getLength();
+#ifdef MACOSX
+    // tdf#162646 suppressing drawing hairlines when scaling
+    // Previously, drawing of hairlines (i.e. zero line width) was only
+    // suppressed when running unit tests. But drawing hairlines causes
+    // unexpected shifting of the lines when using a Retina display on
+    // macOS and antialiasing is disabled.
+    if (fLineWidth == 0 && mScaling != 1 && (isUnitTestRunning() || !mParent.getAntiAlias()))
+#else
     // On HiDPI displays, do not draw hairlines, draw 1-pixel wide lines in order to avoid
     // smoothing that would confuse unittests.
     if (fLineWidth == 0 && mScaling != 1 && isUnitTestRunning())
+#endif
         fLineWidth = 1; // this will be scaled by mScaling
 
     // Transform to DeviceCoordinates, get DeviceLineWidth, execute PixelSnapHairline
