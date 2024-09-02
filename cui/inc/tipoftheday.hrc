@@ -133,7 +133,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "You can copy from one sheet to another without the clipboard. Select the area to copy, %MOD1+click the target sheet’s tab and use Sheet ▸ Fill Cells ▸ Fill Sheets."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can change the look of %PRODUCTNAME via View ▸ User Interface."), "", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "In %PRODUCTNAME Impress, use Insert ▸ Media ▸ Photo Album to create a slideshow from a series of pictures with the “Photo Album” feature."), "", "", simpress},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can show formulas instead of results with View ▸ Show Formula (or Tools ▸ Options ▸ %PRODUCTNAME Calc ▸ View ▸ Display ▸ Formulas)."), "", "", scalc},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can show formulas instead of results with View ▸ Show Formulas (or Tools ▸ Options ▸ %PRODUCTNAME Calc ▸ View ▸ Display ▸ Formulas)."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME is developed by a friendly community, made up of hundreds of contributors around the world. Join us with your skills beyond coding."), "https://www.libreoffice.org/community/get-involved/", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Left-handed? Enable Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Asian and check Tools ▸ Options ▸ %PRODUCTNAME Writer ▸ View ▸ Ruler ▸ Right-aligned, which displays the scrollbar to the left."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want headings to always begin a page? Edit the paragraph style applied to the headings. Check “Insert” on the “Text Flow” tab, with Type “Page” and Position “Before”."), "cui/ui/textflowpage/checkInsert", "", swriter},
