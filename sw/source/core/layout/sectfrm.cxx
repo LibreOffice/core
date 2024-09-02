@@ -2774,7 +2774,29 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pFirstOnPage = pFirstOnPage->GetUpper();
             }
             assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
-            for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
+            SwColumnFrame * pColumn{Lower()->IsColumnFrame()
+                    ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
+            auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
+            {
+                if (pLowerFrame->GetNext())
+                {
+                    return pLowerFrame->GetNext();
+                }
+                if (pColumn)
+                {
+                    pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
+                    if (pColumn)
+                    {
+                        return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
+                    }
+                }
+                return nullptr;
+            };
+            for (SwFrame* pLowerFrame = pColumn
+                        ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
+                        : Lower();
+                 pLowerFrame;
+                 pLowerFrame = IterateLower(pLowerFrame))
             {
                 if (pLowerFrame == pFirstOnPage)
                 {
