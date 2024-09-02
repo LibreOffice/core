@@ -99,6 +99,12 @@ class SwFramePage final : public SfxTabPage
 
     std::unique_ptr<weld::Button> m_xRealSizeBT;
 
+    // protect
+    std::unique_ptr<weld::Widget> m_xProtectFrame;
+    std::unique_ptr<weld::CheckButton> m_xProtectContentCB;
+    std::unique_ptr<weld::CheckButton> m_xProtectFrameCB;
+    std::unique_ptr<weld::CheckButton> m_xProtectSizeCB;
+
     // anchor
     std::unique_ptr<weld::Widget> m_xAnchorFrame;
     std::unique_ptr<weld::RadioButton> m_xAnchorAtPageRB;
@@ -297,11 +303,6 @@ class SwFrameAddPage final : public SfxTabPage
     std::unique_ptr<weld::Widget> m_xSequenceFrame;
     std::unique_ptr<weld::ComboBox> m_xPrevLB;
     std::unique_ptr<weld::ComboBox> m_xNextLB;
-
-    std::unique_ptr<weld::Widget> m_xProtectFrame;
-    std::unique_ptr<weld::CheckButton> m_xProtectContentCB;
-    std::unique_ptr<weld::CheckButton> m_xProtectFrameCB;
-    std::unique_ptr<weld::CheckButton> m_xProtectSizeCB;
 
     std::unique_ptr<weld::Widget> m_xContentAlignFrame;
     std::unique_ptr<weld::ComboBox> m_xVertAlignLB;

@@ -390,13 +390,13 @@ FrameMap const aVAsCharHtmlMap[] =
 
 const WhichRangesContainer SwFramePage::s_aPageRg(svl::Items<
     RES_FRM_SIZE, RES_FRM_SIZE,
+    RES_PROTECT, RES_PROTECT,
     RES_VERT_ORIENT, RES_ANCHOR,
     RES_COL, RES_COL,
     RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW
 >);
 const WhichRangesContainer SwFrameAddPage::s_aAddPgRg(svl::Items<
     RES_PRINT,              RES_PRINT,
-    RES_PROTECT,            RES_PROTECT,
     FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
     FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
     FN_UNO_DESCRIPTION,     FN_UNO_DESCRIPTION
@@ -660,6 +660,10 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     , m_xImgRatioTop(new weld::CustomWeld(*m_xBuilder, u"daRatioTop"_ustr, m_aRatioTop))
     , m_xImgRatioBottom(new weld::CustomWeld(*m_xBuilder, u"daRatioBottom"_ustr, m_aRatioBottom))
     , m_xRealSizeBT(m_xBuilder->weld_button(u"origsize"_ustr))
+    , m_xProtectFrame(m_xBuilder->weld_widget(u"protect"_ustr))
+    , m_xProtectContentCB(m_xBuilder->weld_check_button(u"protectcontent"_ustr))
+    , m_xProtectFrameCB(m_xBuilder->weld_check_button(u"protectframe"_ustr))
+    , m_xProtectSizeCB(m_xBuilder->weld_check_button(u"protectsize"_ustr))
     , m_xAnchorFrame(m_xBuilder->weld_widget(u"anchorframe"_ustr))
     , m_xAnchorAtPageRB(m_xBuilder->weld_radio_button(u"topage"_ustr))
     , m_xAnchorAtParaRB(m_xBuilder->weld_radio_button(u"topara"_ustr))
@@ -1066,6 +1070,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
             m_xFixedRatioCB->set_sensitive(false);
         // i#18732 hide checkbox in HTML mode
         m_xFollowTextFlowCB->hide();
+        m_xProtectFrame->hide();
     }
     else
     {
@@ -1108,6 +1113,12 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
         m_xFlySplitCB->hide();
     }
 
+    // Pos Protected
+    const SvxProtectItem& rProt = rSet->Get(RES_PROTECT);
+    m_xProtectFrameCB->set_active(rProt.IsPosProtected());
+    m_xProtectContentCB->set_active(rProt.IsContentProtected());
+    m_xProtectSizeCB->set_active(rProt.IsSizeProtected());
+
     Init(*rSet);
     m_xAtVertPosED->save_value();
     m_xAtHorzPosED->save_value();
@@ -1138,8 +1149,16 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
 
+    const SfxPoolItem* pOldItem;
+    SvxProtectItem aProt(GetItemSet().Get(RES_PROTECT));
+    aProt.SetContentProtect(m_xProtectContentCB->get_active());
+    aProt.SetSizeProtect(m_xProtectSizeCB->get_active());
+    aProt.SetPosProtect(m_xProtectFrameCB->get_active());
+    if (nullptr == (pOldItem = GetOldItem(*rSet, FN_SET_PROTECT)) || aProt != *pOldItem)
+        bRet |= nullptr != rSet->Put(aProt);
+
     const SfxItemSet& rOldSet = GetItemSet();
-    const SfxPoolItem* pOldItem = nullptr;
+    pOldItem = nullptr;
 
     RndStdIds eAnchorId = GetAnchor();
 
@@ -2936,10 +2955,6 @@ SwFrameAddPage::SwFrameAddPage(weld::Container* pPage, weld::DialogController* p
     , m_xSequenceFrame(m_xBuilder->weld_widget(u"frmSequence"_ustr))
     , m_xPrevLB(m_xBuilder->weld_combo_box(u"prev"_ustr))
     , m_xNextLB(m_xBuilder->weld_combo_box(u"next"_ustr))
-    , m_xProtectFrame(m_xBuilder->weld_widget(u"protect"_ustr))
-    , m_xProtectContentCB(m_xBuilder->weld_check_button(u"protectcontent"_ustr))
-    , m_xProtectFrameCB(m_xBuilder->weld_check_button(u"protectframe"_ustr))
-    , m_xProtectSizeCB(m_xBuilder->weld_check_button(u"protectsize"_ustr))
     , m_xContentAlignFrame(m_xBuilder->weld_widget(u"contentalign"_ustr))
     , m_xVertAlignLB(m_xBuilder->weld_combo_box(u"vertalign"_ustr))
     , m_xPropertiesFrame(m_xBuilder->weld_widget(u"properties"_ustr))
@@ -2975,7 +2990,6 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
     m_bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
     if (m_bHtmlMode)
     {
-        m_xProtectFrame->hide();
         m_xEditInReadonlyCB->hide();
         m_xPrintFrameCB->hide();
     }
@@ -3106,11 +3120,6 @@ void SwFrameAddPage::Reset(const SfxItemSet *rSet )
             m_xNextLB->connect_changed(aLink);
         }
     }
-    // Pos Protected
-    const SvxProtectItem& rProt = rSet->Get(RES_PROTECT);
-    m_xProtectFrameCB->set_active(rProt.IsPosProtected());
-    m_xProtectContentCB->set_active(rProt.IsContentProtected());
-    m_xProtectSizeCB->set_active(rProt.IsSizeProtected());
 
     const SwFormatEditInReadonly& rEdit = rSet->Get(RES_EDIT_IN_READONLY);
     m_xEditInReadonlyCB->set_active(rEdit.GetValue());
@@ -3176,15 +3185,6 @@ bool SwFrameAddPage::FillItemSet(SfxItemSet *rSet)
         bRet |= nullptr != rSet->Put(SfxStringItem(FN_SET_FRM_ALT_NAME, m_xAltNameED->get_text()));
     if (m_xDescriptionED->get_value_changed_from_saved())
         bRet |= nullptr != rSet->Put(SfxStringItem(FN_UNO_DESCRIPTION, m_xDescriptionED->get_text()));
-
-    const SfxPoolItem* pOldItem;
-    SvxProtectItem aProt ( GetItemSet().Get(RES_PROTECT) );
-    aProt.SetContentProtect( m_xProtectContentCB->get_active() );
-    aProt.SetSizeProtect ( m_xProtectSizeCB->get_active() );
-    aProt.SetPosProtect  ( m_xProtectFrameCB->get_active() );
-    if ( nullptr == (pOldItem = GetOldItem(*rSet, FN_SET_PROTECT)) ||
-                aProt != *pOldItem )
-        bRet |= nullptr != rSet->Put( aProt);
 
     if ( m_xEditInReadonlyCB->get_state_changed_from_saved() )
         bRet |= nullptr != rSet->Put( SwFormatEditInReadonly( RES_EDIT_IN_READONLY, m_xEditInReadonlyCB->get_active()));
