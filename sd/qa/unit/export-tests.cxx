@@ -1560,18 +1560,18 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
     // check that we actually test graphic style
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]"_ostr,
                 "family"_ostr, u"graphic"_ustr);
-    // check loext graphic attributes for th
+    // check loext text attributes for text in shapes
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
         "glow-text-radius"_ostr, u"0.706cm"_ustr);
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
         "glow-text-color"_ostr, u"#4ea72e"_ustr);
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
         "glow-text-transparency"_ostr, u"5%"_ustr);
 }
 

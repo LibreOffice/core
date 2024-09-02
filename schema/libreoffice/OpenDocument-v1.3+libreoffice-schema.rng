@@ -954,22 +954,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             <rng:ref name="length"/>
           </rng:attribute>
         </rng:optional>
-        <!-- TODO: no proposal for loext:glow-text* -->
-        <rng:optional>
-          <rng:attribute name="loext:glow-text-radius">
-            <rng:ref name="length"/>
-          </rng:attribute>
-        </rng:optional>
-        <rng:optional>
-          <rng:attribute name="loext:glow-text-color">
-            <rng:ref name="color"/>
-          </rng:attribute>
-        </rng:optional>
-        <rng:optional>
-          <rng:attribute name="loext:glow-text-transparency">
-            <rng:ref name="zeroToHundredPercent"/>
-          </rng:attribute>
-        </rng:optional>
       </rng:interleave>
     </rng:define>
 
@@ -2548,6 +2532,22 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     <!-- https://issues.oasis-open.org/browse/OFFICE-4049 -->
     <rng:optional>
       <rng:attribute name="loext:opacity">
+        <rng:ref name="zeroToHundredPercent"/>
+      </rng:attribute>
+    </rng:optional>
+    <!-- TODO: no proposal for loext:glow-text* -->
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-radius">
+        <rng:ref name="length"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-color">
+        <rng:ref name="color"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="loext:glow-text-transparency">
         <rng:ref name="zeroToHundredPercent"/>
       </rng:attribute>
     </rng:optional>

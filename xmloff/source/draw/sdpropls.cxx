@@ -81,6 +81,7 @@ using namespace ::xmloff::token;
 #define GMAPV(name,prefix,token,type,context,version) MAPV_(name,prefix,token,type|XML_TYPE_PROP_GRAPHIC,context,version)
 #define DPMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_DRAWING_PAGE,context)
 #define TMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
+#define TMAPV(name,prefix,token,type,context,version) MAPV_(name,prefix,token,type|XML_TYPE_PROP_TEXT,context,version)
 #define PMAP(name,prefix,token,type,context) MAP_(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 #define MAP_END() { nullptr }
 
@@ -175,9 +176,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAPV( PROP_SoftEdgeRadius,                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // glow text attributes
-    GMAPV(PROP_GlowTextEffectRadius,           XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV(PROP_GlowTextEffectColor,            XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
-    GMAPV(PROP_GlowTextEffectTransparency,     XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    TMAPV( PROP_GlowTextEffectRadius,           XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_RADIUS,          XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    TMAPV( PROP_GlowTextEffectColor,            XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_COLOR,           XML_TYPE_COLOR    , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    TMAPV( PROP_GlowTextEffectTransparency,     XML_NAMESPACE_LO_EXT, XML_GLOW_TEXT_TRANSPARENCY,    XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // graphic attributes
     GMAP( PROP_GraphicColorMode,               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
