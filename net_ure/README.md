@@ -1,5 +1,9 @@
 # .NET UNO Runtime Environment
 
-Support assemblies and tools for the newer cross-platform .NET UNO binding.
+.NET assemblies for the newer cross-platform .NET UNO binding.
 
-Currently only contains code for the `net_basetypes` assembly in the source/basetypes subdirectory, as well as Makefiles to build the `net_uretypes` (for `udkapi`) and `net_oootypes` (for `offapi`) assemblies, using `netmaker` from the codemaker/ module
+Contains code for the `net_basetypes` assembly, `net_bridge` assembly, and `net_bootstrap` native library, along with unit tests.
+Includes scripts to build the `net_uretypes` and `net_oootypes` assemblies from IDL, using `netmaker` from the codemaker/ module.
+Also includes scripts to build the `LibreOffice.Bindings` nuget package for the SDK.
+
+The assemblies compile and can be consumed against .NET Standard 2.0, although the build requirement is set to .NET SDK 8.0 or higher for tests and examples, and to ensure cross platform uniformity.

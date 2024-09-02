@@ -70,6 +70,7 @@ endif
 endif
 
 DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)unopkg" add -f
+SDK_DOTNET="$(OO_SDK_DOTNET_ROOT)/dotnet"
 SDK_JAVA="$(OO_SDK_JAVA_HOME)/bin/java" $(JAVA_OPTIONS)
 SDK_JAVAC="$(OO_SDK_JAVA_HOME)/bin/javac"
 SDK_JAR="$(OO_SDK_JAVA_HOME)/bin/jar"

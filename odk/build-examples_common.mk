@@ -67,6 +67,7 @@ $(gb_CustomTarget_workdir)/$(1)/setsdkenv: \
 	-e 's!@OFFICE_HOME@!$(INSTROOTBASE)!' -e 's!@OO_SDK_MAKE_HOME@!!' \
 	-e 's!@OO_SDK_ZIP_HOME@!!' -e 's!@OO_SDK_CAT_HOME@!!' \
 	-e 's!@OO_SDK_SED_HOME@!!' -e 's!@OO_SDK_CPP_HOME@!!' \
+	-e 's!@OO_SDK_DOTNET_ROOT@!"$(DOTNET_ROOT)"!' \
 	-e 's!@OO_SDK_JAVA_HOME@!$(JAVA_HOME)!' \
 	-e 's!@OO_SDK_OUTPUT_DIR@!$(gb_CustomTarget_workdir)/$(1)/out!' \
 	-e 's!@SDK_AUTO_DEPLOYMENT@!YES!' $$< > $$@

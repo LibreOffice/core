@@ -73,6 +73,10 @@ $main::cppName = "gcc";
 $main::cppVersion = "4.0.1";
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
+$main::OO_SDK_DOTNET_ROOT = "";
+$main::OO_SDK_DOTNET_ROOT_SUGGESTION = dotnetToRoot(searchprog("dotnet") . "/dotnet");
+$main::dotnetSdkVersion = "8";
+
 $main::OO_SDK_JAVA_HOME = "";
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
 $main::javaVersion = "1.6";
@@ -378,6 +382,52 @@ while ( (!$main::correctVersion) &&
     }
 }
 
+# prepare .NET SDK path
+$main::correctVersion = 0;
+while ( (!$main::correctVersion) &&
+        ((! -d "$main::OO_SDK_DOTNET_ROOT" ) ||
+         ((-d "$main::OO_SDK_DOTNET_ROOT") && (! -e "$main::OO_SDK_DOTNET_ROOT/dotnet"))) )
+{
+    print " Enter .NET SDK (8 or higher) installation directory (optional) [$main::OO_SDK_DOTNET_ROOT_SUGGESTION]: ";
+    $main::OO_SDK_DOTNET_ROOT = readStdIn();
+    chop($main::OO_SDK_DOTNET_ROOT);
+    if ( $main::OO_SDK_DOTNET_ROOT eq "" )
+    {
+        $main::OO_SDK_DOTNET_ROOT = $main::OO_SDK_DOTNET_ROOT_SUGGESTION;
+    }
+    if ( ! $main::OO_SDK_DOTNET_ROOT eq "" )
+    {
+        if ( (! -d "$main::OO_SDK_DOTNET_ROOT") ||
+             ((-d "$main::OO_SDK_DOTNET_ROOT") && (! -e "$main::OO_SDK_DOTNET_ROOT/dotnet")) )
+        {
+            print " Error: Could not find directory '$main::OO_SDK_DOTNET_ROOT' or '$main::OO_SDK_DOTNET_ROOT/dotnet'.\n";
+            if ( skipChoice(".NET SDK") == 1 )
+            {
+                $main::correctVersion = 1;
+            }
+            $main::OO_SDK_DOTNET_ROOT = "";
+        } else
+        {
+            #check version
+            my $testVersion = `"$main::OO_SDK_DOTNET_ROOT/dotnet" --version | awk -F. '{ print $1 }'`;
+
+            $main::correctVersion = testVersion($main::dotnetSdkVersion, $testVersion, "$main::OO_SDK_DOTNET_ROOT/dotnet", 1);
+            if ( !$main::correctVersion )
+            {
+                print " The 'dotnet' command found at '$main::OO_SDK_DOTNET_ROOT' has a wrong version\n";
+                if ( skipChoice(".NET SDK") == 1 )
+                {
+                    $main::correctVersion = 1;
+                }
+                $main::OO_SDK_DOTNET_ROOT = "";
+            }
+        }
+    }else
+    {
+        # the .NET SDK is optional
+        $main::correctVersion = 1;
+    }
+}
 
 # prepare Java path
 $main::correctVersion = 0;
@@ -694,7 +744,31 @@ sub searchoffice
     return $officepath;
 }
 
+sub dotnetToRoot
+{
+    my $dotnetExe = shift;
 
+    if (! -e "$dotnetExe")
+    {
+        return "";
+    }
+
+    my $dotnetSdkVer = `"$dotnetExe" --version`;
+    chomp($dotnetSdkVer);
+
+    my $dotnetSdkDir = `"$dotnetExe" --list-sdks | grep $dotnetSdkVer | awk -F'[][]' '{print \$2}'`;
+    chomp($dotnetSdkDir);
+
+    my $dotnetRootDir = `dirname "$dotnetSdkDir"`;
+    chomp($dotnetRootDir);
+
+    if (! -d "$dotnetRootDir")
+    {
+        return "";
+    }
+
+    return $dotnetRootDir;
+}
 
 sub testVersion
 {
@@ -765,6 +839,7 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_CAT_HOME\@#$main::OO_SDK_CAT_HOME#go;
         $_ =~ s#\@OO_SDK_SED_HOME\@#$main::OO_SDK_SED_HOME#go;
         $_ =~ s#\@OO_SDK_CPP_HOME\@#$main::OO_SDK_CPP_HOME#go;
+        $_ =~ s#\@OO_SDK_DOTNET_ROOT\@#"$main::OO_SDK_DOTNET_ROOT"#go;
         $_ =~ s#\@OO_SDK_JAVA_HOME\@#$main::OO_SDK_JAVA_HOME#go;
         $_ =~ s#\@SDK_AUTO_DEPLOYMENT\@#$main::SDK_AUTO_DEPLOYMENT#go;
         $_ =~ s#\@OO_SDK_OUTPUT_DIR\@#$main::OO_SDK_OUTPUT_DIR#go;

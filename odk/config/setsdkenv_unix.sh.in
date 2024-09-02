@@ -54,6 +54,10 @@ OO_SDK_SED_HOME=@OO_SDK_SED_HOME@
 # Example: OO_SDK_CPP_HOME=/usr/bin
 OO_SDK_CPP_HOME=@OO_SDK_CPP_HOME@
 
+# Directory of the .NET SDK.
+# Example: OO_SDK_DOTNET_ROOT=/usr/lib/dotnet
+OO_SDK_DOTNET_ROOT=@OO_SDK_DOTNET_ROOT@
+
 # Directory of the Java SDK.
 # Example: OO_SDK_JAVA_HOME=/usr/jdk/jdk1.6.0_10
 OO_SDK_JAVA_HOME=@OO_SDK_JAVA_HOME@
@@ -239,6 +243,13 @@ then
     export OO_SDK_CPP_HOME
 fi
 
+# Add directory of the dotnet command-line tool to the path, if necessary.
+if [ -n "${OO_SDK_DOTNET_ROOT}" ]
+then
+    PATH=${OO_SDK_DOTNET_ROOT}:${PATH}
+    export OO_SDK_DOTNET_ROOT
+fi
+
 # Add directory of the Java tools to the path, if necessary.
 if [ -n "${OO_SDK_JAVA_HOME}" ]
 then
@@ -293,6 +304,7 @@ echo " * Zip = $OO_SDK_ZIP_HOME"
 echo " * cat = $OO_SDK_CAT_HOME"
 echo " * sed = $OO_SDK_SED_HOME"
 echo " * C++ Compiler = $OO_SDK_CPP_HOME"
+echo " * Dotnet = $OO_SDK_DOTNET_ROOT"
 echo " * Java = $OO_SDK_JAVA_HOME"
 echo " * SDK Output directory = $OO_SDK_OUT"
 echo " * Auto deployment = $SDK_AUTO_DEPLOYMENT"

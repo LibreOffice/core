@@ -10,14 +10,20 @@ $(eval $(call gb_Module_Module,net_ure))
 
 ifeq ($(ENABLE_DOTNET)_$(filter ODK,$(BUILD_TYPE)),TRUE_ODK)
 $(eval $(call gb_Module_add_targets,net_ure,\
+	Library_net_bootstrap \
 	CustomTarget_net_uretypes \
 	CustomTarget_net_oootypes \
 	DotnetLibrary_net_basetypes \
 	DotnetLibrary_net_uretypes \
 	DotnetLibrary_net_oootypes \
+	DotnetLibrary_net_bridge \
+	CustomTarget_net_nuget_pkg \
 	Package_net_basetypes \
 	Package_net_uretypes \
 	Package_net_oootypes \
+	Package_net_bridge \
+	Package_net_nuget_pkg \
+	Package_net_nuget_config \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,net_ure,\

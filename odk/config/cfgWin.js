@@ -62,6 +62,7 @@ var oo_sdk_manifest_used="";
 var oo_sdk_windowssdk="";
 var oo_sdk_cpp_home=getCppHome();
 var oo_sdk_cli_home=getCliHome();
+var oo_sdk_dotnet_root=getDotnetRoot();
 var oo_sdk_java_home=getJavaHome();
 var oo_sdk_out=getOutputDir();
 var sdk_auto_deployment=getAutoDeployment();
@@ -634,6 +635,78 @@ function getCliHome()
     }
 }
 
+function getDotnetRoot()
+{
+    var sSuggestedHome = WshSysEnv("OO_SDK_DOTNET_ROOT");
+    if (sSuggestedHome.length == 0)
+    {
+        try {
+            var sWhereResult = WshShell.Exec("where.exe dotnet.exe").StdOut.ReadLine();
+            if (sWhereResult.length > 0)
+            {
+                sSuggestedHome = sWhereResult;
+                if (!aFileSystemObject.FolderExists(sSuggestedHome))
+                    sSuggestedHome = "";
+            }
+        } catch (exc) {}
+    }
+
+    var bSkip = false;
+    while(true)
+    {
+        stdout.Write("\n Enter .NET SDK (8 or higher) installation directory (optional) [" + sSuggestedHome + "]:");
+        var sHome = stdin.ReadLine();
+        if (sHome.length == 0)
+        {
+            //No user input, check OO_SDK_DOTNET_ROOT or suggested value
+			if ( sSuggestedHome.length == 0 ) {
+			    bSkip = true;
+			} else {
+			    if ( !aFileSystemObject.FolderExists(sSuggestedHome) )
+				{
+					stdout.WriteLine("\n Error: Could not find directory \"" +
+									 sSuggestedHome + "\".");
+					sSuggestedHome = "";
+					bSkip=true;
+				}
+			}
+
+			sHome = sSuggestedHome;
+        } else
+        {
+            //validate the user input
+            if ( ! aFileSystemObject.FolderExists(sHome))
+            {
+                stdout.WriteLine("\n Error: The directory \"" + sHome +
+                                 "\" does not exist.");
+				bSkip = true;
+            }
+        }
+
+		if ( !bSkip) {
+		    //Check if this is an sdk folder by looking for the dotnet executable
+			var dotnetExe = sHome + "\\dotnet.exe";
+			if (! aFileSystemObject.FileExists(dotnetExe))
+			{
+				stdout.WriteLine("\n Error: Could not find \"" +
+								 dotnetExe + "\".");
+				bSkip = true;
+			}
+        }
+
+		if ( bSkip ) {
+		   if ( skipChoice("the .NET SDK") ) {
+			   return "";
+		   } else {
+			   bSkip = false;
+			   continue;
+		   }
+		}
+
+        return sHome;
+    }
+}
+
 function getJavaHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_JAVA_HOME");
@@ -879,6 +952,10 @@ function writeBatFile(fdir, file)
         "REM Example:set OO_SDK_CLI_HOME=C:\\WINXP\\Microsoft.NET\\Framework\\v1.0.3705\n" +
         "set OO_SDK_CLI_HOME=" + oo_sdk_cli_home +
         "\n\n" +
+        "REM .NET SDK installation directory.\n" +
+        "REM Example: set OO_SDK_DOTNET_ROOT=C:\\Program Files\\Java\\jdk1.6.0_05\n" +
+        "set OO_SDK_DOTNET_ROOT=" + oo_sdk_dotnet_root +
+        "\n\n" +
         "REM Java SDK installation directory.\n" +
         "REM Example: set OO_SDK_JAVA_HOME=C:\\Program Files\\Java\\jdk1.6.0_05\n" +
         "set OO_SDK_JAVA_HOME=" + oo_sdk_java_home +
@@ -948,9 +1025,11 @@ function writeBatFile(fdir, file)
         "set OO_SDK_URE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_URE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_URE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
+        "set OO_SDK_URE_DOTNET_DIR=%OFFICE_PROGRAM_PATH%\\dotnet\n" +
         "set OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_OFFICE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
+        "set OO_SDK_OFFICE_DOTNET_DIR=%OFFICE_PROGRAM_PATH%\\dotnet\n" +
         "\n" +
         "REM Set classpath\n" +
         "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\libreoffice.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar\n" +
@@ -983,6 +1062,9 @@ function writeBatFile(fdir, file)
         "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" +
         "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" +
         "\n" +
+        "REM Add directory of the dotnet command-line tool to the path, if necessary.\n" +
+        "if defined OO_SDK_DOTNET_ROOT set PATH=%OO_SDK_DOTNET_ROOT%;%PATH%\n" +
+        "\n" +
         "REM Add directory of the Java tools to the path, if necessary.\n" +
         "if defined OO_SDK_JAVA_HOME set PATH=%OO_SDK_JAVA_HOME%\\bin;%OO_SDK_JAVA_HOME%\\jre\\bin;%PATH%\n" +
         "\n" +
@@ -1005,6 +1087,7 @@ function writeBatFile(fdir, file)
         "echo  * sed = %OO_SDK_SED_HOME%\n" +
         "echo  * C++ Compiler = %OO_SDK_CPP_HOME%\n" +
         "echo  * C# and VB.NET compilers = %OO_SDK_CLI_HOME%\n" +
+        "echo  * Dotnet = %OO_SDK_DOTNET_ROOT%\n" +
         "echo  * Java = %OO_SDK_JAVA_HOME%\n" +
         "echo  * Special Output directory = %OO_SDK_OUT%\n" +
         "echo  * Auto deployment = %SDK_AUTO_DEPLOYMENT%\n" +

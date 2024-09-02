@@ -73,6 +73,7 @@ if test -d $DESTDIR$INSTALLDIR/sdk ; then
         -e "s,@OO_SDK_CPP_HOME@,$(dirname $(command -v cpp))," \
         -e "s,@OO_SDK_SED_HOME@,$(dirname $(command -v sed))," \
         -e "s,@OO_SDK_CAT_HOME@,$(dirname $(command -v cat))," \
+        -e "s,@OO_SDK_DOTNET_ROOT@,$DOTNET_ROOT," \
         -e "s,@OO_SDK_JAVA_HOME@,$JAVA_HOME," \
         -e "s,@OO_SDK_OUTPUT_DIR@,\$HOME," \
         -e "s,@SDK_AUTO_DEPLOYMENT@,NO," \
