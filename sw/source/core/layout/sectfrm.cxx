@@ -2731,8 +2731,31 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
 
-        for (SwFrame* pLowerFrame = Lower(); pLowerFrame; pLowerFrame = pLowerFrame->GetNext())
+        SwColumnFrame * pColumn{Lower()->IsColumnFrame()
+                ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
+        auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
         {
+            if (pLowerFrame->GetNext())
+            {
+                return pLowerFrame->GetNext();
+            }
+            if (pColumn)
+            {
+                pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
+                if (pColumn)
+                {
+                    return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
+                }
+            }
+            return nullptr;
+        };
+        for (SwFrame* pLowerFrame = pColumn
+                    ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
+                    : Lower();
+             pLowerFrame;
+             pLowerFrame = IterateLower(pLowerFrame))
+        {
+            pLowerFrame->Prepare(PrepareHint::Clear, nullptr, false);
             pLowerFrame->InvalidateAll();
             pLowerFrame->InvalidateObjs(false);
         }
@@ -2764,24 +2787,8 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pFirstOnPage = pFirstOnPage->GetUpper();
             }
             assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
-            SwColumnFrame * pColumn{Lower()->IsColumnFrame()
-                    ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
-            auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
-            {
-                if (pLowerFrame->GetNext())
-                {
-                    return pLowerFrame->GetNext();
-                }
-                if (pColumn)
-                {
-                    pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
-                    if (pColumn)
-                    {
-                        return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
-                    }
-                }
-                return nullptr;
-            };
+            pColumn = Lower()->IsColumnFrame()
+                ? static_cast<SwColumnFrame*>(Lower()) : nullptr;
             for (SwFrame* pLowerFrame = pColumn
                         ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
                         : Lower();
