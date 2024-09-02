@@ -4408,20 +4408,21 @@ OString SdXImpressDocument::getPresentationInfo() const
                         // convert transitionDuration time to ms
                         aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
                     }
+                }
 
-                    sal_Int32 nChange(0);
-                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                sal_Int32 nChange(0);
+                if( pSlide->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
                         (pSlide->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
-                    {
-                        double fSlideDuration(0);
-                        if( pSlide->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                {
+                    double fSlideDuration(0);
+                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
                             (pSlide->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
-                        {
-                            // convert slide duration time to ms
-                            aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
-                        }
+                    {
+                        // convert slide duration time to ms
+                        aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
                     }
                 }
+
 
                 AnimationsExporter aAnimationExporter(aJsonWriter, pSlide);
                 if (aAnimationExporter.hasEffects())
