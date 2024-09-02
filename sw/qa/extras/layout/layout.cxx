@@ -4498,6 +4498,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf160958_orphans)
     assertXPath(pExportDump, "//page[2]/body/txt[1]/LineBreak", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testSectionUnhide)
+{
+    createDoc("hiddensection.fodt");
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']", 0);
+        discardDumpedLayout();
+    }
+
+    // Hide the section
+    uno::Reference<css::text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    uno::Reference<css::beans::XPropertySet> xSection(xSections->getByName("Section1"), uno::UNO_QUERY_THROW);
+    xSection->setPropertyValue("IsVisible", css::uno::Any(false));
+    calcLayout();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']", 4);
+        discardDumpedLayout();
+    }
+
+    xSection->setPropertyValue("IsVisible", css::uno::Any(true));
+    calcLayout();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that 3 of the text frames had 0 height because Format was skipped
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']", 0);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHiddenSectionPageDescs)
 {
     createDoc("hidden-sections-with-pagestyles.odt");
