@@ -4367,20 +4367,21 @@ OString SdXImpressDocument::getPresentationInfo() const
                                     // convert transitionDuration time to ms
                                     aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
                                 }
+                            }
 
-                                sal_Int32 nChange(0);
-                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
-                                    (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                            sal_Int32 nChange(0);
+                            if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                                (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                            {
+                                double fSlideDuration(0);
+                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                                    (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
                                 {
-                                    double fSlideDuration(0);
-                                    if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
-                                        (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
-                                    {
-                                        // convert slide duration time to ms
-                                        aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
-                                    }
+                                    // convert slide duration time to ms
+                                    aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
                                 }
                             }
+
 
                             AnimationsExporter aAnimationExporter(aJsonWriter, xSlide);
                             if (aAnimationExporter.hasEffects())
