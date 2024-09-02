@@ -240,6 +240,10 @@ void parseDudenResponse(ProofreadingResult& rResult, std::string&& aJSONBody)
     rResult.aErrors = parseJson(
         std::move(aJSONBody), "check-positions",
         [](const boost::property_tree::ptree& rPos, SingleProofreadingError& rError) {
+            const auto proposals = rPos.get_child_optional("proposals");
+            if (!proposals || proposals->empty())
+                return;
+
             rError.nErrorStart = rPos.get<int>("offset", 0);
             rError.nErrorLength = rPos.get<int>("length", 0);
             rError.nErrorType = text::TextMarkupType::PROOFREADING;
@@ -247,10 +251,6 @@ void parseDudenResponse(ProofreadingResult& rResult, std::string&& aJSONBody)
             //rError.aFullComment = ??
             const std::string sType = rPos.get<std::string>("type", {});
             rError.aProperties = { lcl_GetLineColorPropertyFromErrorId(sType) };
-
-            const auto proposals = rPos.get_child_optional("proposals");
-            if (!proposals)
-                return;
             rError.aSuggestions.realloc(std::min(proposals->size(), MAX_SUGGESTIONS_SIZE));
             auto itProp = proposals->begin();
             for (auto& rSuggestion : asNonConstRange(rError.aSuggestions))
