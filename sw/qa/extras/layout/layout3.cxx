@@ -1812,6 +1812,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionPageDescs)
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        // tdf#152919: Without the fix in place, this test would have failed with
+        // - Expected: 3
+        // - Actual  : 2
         assertXPath(pXmlDoc, "/root/page"_ostr, 3);
         assertXPath(pXmlDoc, "/root/page[1]"_ostr, "formatName"_ostr, "Hotti");
         assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 2);
