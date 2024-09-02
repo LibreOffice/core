@@ -4604,8 +4604,12 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         if (rProp.Value >>= eMetalType)
                                         {
                                             SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
-                                            if (eVersion > SvtSaveOptions::ODFSVER_013
-                                                && (eVersion & SvtSaveOptions::ODFSVER_EXTENDED))
+                                            if (eVersion >= SvtSaveOptions::ODFSVER_014)
+                                            {
+                                                aStr = "draw:MetalODF";
+                                                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_EXTRUSION_METAL_TYPE, aStr);
+                                            }
+                                            else if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                                             {
                                                 if (eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
                                                     aStr = "loext:MetalMSCompatible";
