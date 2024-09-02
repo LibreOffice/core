@@ -35,18 +35,20 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     sal_Unicode cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy;
     ImpGetIntntlSep(cDecimalSep, cThousandSepDummy, cDecimalSepAltDummy);
 
+    auto strNum = OUString::number(rVal);
+    std::u16string_view aAbsStr(strNum);
     OUStringBuffer aBuf(22);
     if (rVal < 0)
     {
         aBuf.append('-');
-        rVal = -rVal;
+        assert(aAbsStr[0] == '-');
+        aAbsStr = aAbsStr.substr(1); // skip the minus
     }
-    OUString aAbsStr = OUString::number(rVal);
-    sal_Int32 hasFractDigits = std::min(aAbsStr.getLength(), sal_Int32(4));
-    sal_Int32 hasWholeDigits = aAbsStr.getLength() - hasFractDigits;
+    size_t hasFractDigits = std::min(aAbsStr.length(), size_t(4));
+    size_t hasWholeDigits = aAbsStr.length() - hasFractDigits;
 
     if (hasWholeDigits > 0)
-        aBuf.append(aAbsStr.subView(0, hasWholeDigits));
+        aBuf.append(aAbsStr.substr(0, hasWholeDigits));
     else
         aBuf.append('0');
     aBuf.append(cDecimalSep);
@@ -60,9 +62,9 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
     // ---   ---------  ---------
     // 0     0.0000     0
     // 0.1   0.1000     0.1
-    for (sal_Int32 i = 4; i > hasFractDigits; --i)
+    for (size_t i = 4; i > hasFractDigits; --i)
         aBuf.append('0');
-    aBuf.append(aAbsStr.subView(aAbsStr.getLength() - hasFractDigits, hasFractDigits));
+    aBuf.append(aAbsStr.substr(aAbsStr.length() - hasFractDigits, hasFractDigits));
 
     return aBuf.makeStringAndClear();
 }
