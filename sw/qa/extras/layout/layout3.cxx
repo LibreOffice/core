@@ -1802,6 +1802,41 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     assertXPath(pXmlDoc, "/root/page"_ostr, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionUnhide)
+{
+    createSwDoc("hiddensection.fodt");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']"_ostr, 0);
+        discardDumpedLayout();
+    }
+
+    // Hide the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Section1"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    calcLayout();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']"_ostr, 4);
+        discardDumpedLayout();
+    }
+
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    calcLayout();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that 3 of the text frames had 0 height because Format was skipped
+        assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']"_ostr, 0);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
@@ -2944,7 +2979,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf160958_page_break)
     assertXPath(pExportDump, "//page/body/section/txt[1]/SwParaPortion"_ostr, 0);
     assertXPath(pExportDump, "//page/body/section/txt[2]/SwParaPortion"_ostr, 0);
     assertXPath(pExportDump, "//page/body/section/txt[3]/SwParaPortion"_ostr, 0);
-    assertXPath(pExportDump, "//page/body/section/txt[4]/SwParaPortion/SwLineLayout"_ostr, 5);
+    assertXPath(pExportDump, "//page/body/section/txt[4]/SwParaPortion"_ostr, 0);
     assertXPath(pExportDump, "//page/body/section/txt[5]/SwParaPortion"_ostr, 0);
     assertXPath(pExportDump, "//page/body/section/txt[6]/SwParaPortion"_ostr, 0);
     assertXPath(pExportDump, "//page/body/section/txt[7]/SwParaPortion"_ostr, 0);
