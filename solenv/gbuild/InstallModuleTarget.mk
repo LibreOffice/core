@@ -12,37 +12,13 @@
 
 # ScpTemplateTarget class
 
-gb_ScpTemplateTarget_TARGET := $(SRCDIR)/scp2/source/templates/modules.pl
-gb_ScpTemplateTarget_COMMAND := $(PERL) -w $(gb_ScpTemplateTarget_TARGET)
-
-gb_ScpTemplateTarget_LANGS := $(sort $(ALL_LANGS))
-
-# Pass first arg if make is running in silent mode, second arg otherwise
-define gb_ScpTemplateTarget__if_silent
-$(if $(findstring s,$(filter-out --%,$(MAKEFLAGS))),$(1),$(2))
-endef
-
-gb_ScpTemplateTarget_get_source = $(SRCDIR)/$(1).sct
-
-define gb_ScpTemplateTarget__command
-$(call gb_Helper_abbreviate_dirs,\
-	export COMPLETELANGISO_VAR='$(gb_ScpTemplateTarget_LANGS)' && \
-	$(gb_ScpTemplateTarget_COMMAND) \
-		$(call gb_ScpTemplateTarget__if_silent,,-verbose) \
-		-i $(SCP_TEMPLATE) \
-		-o $(1) \
-)
-endef
-
-$(dir $(call gb_ScpTemplateTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
-
 # depend on configure output to rebuild everything
-$(call gb_ScpTemplateTarget_get_target,%) : \
-		$(gb_ScpTemplateTarget_TARGET) $(BUILDDIR)/config_$(gb_Side).mk
+$(call gb_ScpTemplateTarget_get_target,%) : export COMPLETELANGISO_VAR:=$(ALL_LANGS)
+$(call gb_ScpTemplateTarget_get_target,%) : $(SRCDIR)/scp2/source/templates/modules.pl \
+                                            $(BUILDDIR)/config_$(gb_Side).mk
 	$(call gb_Output_announce,$*,$(true),SCT,1)
 	$(call gb_Trace_StartRange,$*,SCT)
-	$(call gb_ScpTemplateTarget__command,$@,$*)
+	$(PERL) -w $< $(if $(verbose),-verbose) -i $(filter %.sct,$^) -o $@
 	$(call gb_Trace_EndRange,$*,SCT)
 
 .PHONY : $(call gb_ScpTemplateTarget_get_clean_target,%)
@@ -52,9 +28,8 @@ $(call gb_ScpTemplateTarget_get_clean_target,%) :
 
 # gb_ScpTemplateTarget_ScpTemplateTarget(<target>)
 define gb_ScpTemplateTarget_ScpTemplateTarget
-$(call gb_ScpTemplateTarget_get_target,$(1)) : $(call gb_ScpTemplateTarget_get_source,$(1))
+$(call gb_ScpTemplateTarget_get_target,$(1)) : $(SRCDIR)/$(1).sct
 $(call gb_ScpTemplateTarget_get_target,$(1)) :| $(dir $(call gb_ScpTemplateTarget_get_target,$(1))).dir
-$(call gb_ScpTemplateTarget_get_target,$(1)) : SCP_TEMPLATE := $(call gb_ScpTemplateTarget_get_source,$(1))
 
 endef
 
@@ -75,9 +50,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(SCP_SOURCE) > $(1) \
 )
 endef
-
-$(dir $(call gb_ScpPreprocessTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 # depend on configure output to rebuild everything
 $(call gb_ScpPreprocessTarget_get_target,%) : \
