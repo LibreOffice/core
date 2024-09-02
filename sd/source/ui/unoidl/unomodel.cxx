@@ -4255,6 +4255,16 @@ OString SdXImpressDocument::getPresentationInfo() const
         aJsonWriter.put("docWidth", aDocSize.getWidth());
         aJsonWriter.put("docHeight", aDocSize.getHeight());
 
+        sd::PresentationSettings const& rSettings = mpDoc->getPresentationSettings();
+
+        const bool bIsEndless = rSettings.mbEndless;
+        aJsonWriter.put("isEndless", bIsEndless);
+
+        if (bIsEndless) {
+            const sal_Int32 nPauseTimeout = rSettings.mnPauseTimeout;
+            aJsonWriter.put("loopAndRepeatDuration", nPauseTimeout);
+        }
+
         auto aSlideList = aJsonWriter.startArray("slides");
         sal_Int32 nSlideCount = xDrawPages->getCount();
         for (sal_Int32 i = 0; i < nSlideCount; ++i)
@@ -4411,16 +4421,6 @@ OString SdXImpressDocument::getPresentationInfo() const
                             aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
                         }
                     }
-                }
-
-                sd::PresentationSettings const& rSettings = mpDoc->getPresentationSettings();
-
-                const bool bIsEndless = rSettings.mbEndless;
-                aJsonWriter.put("isEndless", bIsEndless);
-
-                if (bIsEndless) {
-                    const sal_Int32 nPauseTimeout = rSettings.mnPauseTimeout;
-                    aJsonWriter.put("loopAndRepeatDuration", nPauseTimeout);
                 }
 
                 AnimationsExporter aAnimationExporter(aJsonWriter, pSlide);
