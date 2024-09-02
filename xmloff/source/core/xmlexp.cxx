@@ -1212,6 +1212,7 @@ auto SvXMLExport::GetODFVersionAttributeValue() const -> char const*
     char const* pVersion(nullptr);
     switch (getSaneDefaultVersion())
     {
+    case SvtSaveOptions::ODFSVER_014: pVersion = "1.4"; break;
     case SvtSaveOptions::ODFSVER_013_EXTENDED: [[fallthrough]];
     case SvtSaveOptions::ODFSVER_013: pVersion = "1.3"; break;
     case SvtSaveOptions::ODFSVER_012_EXTENDED: [[fallthrough]];

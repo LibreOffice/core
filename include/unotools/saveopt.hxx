@@ -44,6 +44,7 @@ namespace SvtSaveOptions
         ODFVER_012_EXT_COMPAT = 8, // ODF 1.2 extended, but with compatibility fallbacks
         ODFVER_012_EXTENDED = 9, // ODF 1.2 extended
         ODFVER_013 = 10,        // ODF 1.3
+        ODFVER_014 = 11,        // ODF 1.4
 
         ODFVER_LATEST = SAL_MAX_ENUM,      // ODF latest version with enhancements
     };
@@ -59,6 +60,7 @@ namespace SvtSaveOptions
         ODFSVER_012_EXTENDED = 11,  ///< ODF 1.2 extended
         ODFSVER_013 = 12,           ///< ODF 1.3
         ODFSVER_013_EXTENDED = 13,  ///< ODF 1.3 extended
+        ODFSVER_014 = 14,           ///< ODF 1.4
         ODFSVER_FUTURE_EXTENDED = 1000 | ODFSVER_EXTENDED, ///< current extension, unknown future ODF version
 
         // The latest defined standard. Adapt when a new one is published.
