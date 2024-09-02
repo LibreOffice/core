@@ -113,7 +113,7 @@ class ImpXPolyPolygon;
 
 class XPolyPolygon final
 {
-    o3tl::cow_wrapper< ImpXPolyPolygon > pImpXPolyPolygon;
+    o3tl::cow_wrapper< ImpXPolyPolygon > m_pImpXPolyPolygon;
 
 public:
                     XPolyPolygon();

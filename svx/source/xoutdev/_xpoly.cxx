@@ -856,7 +856,7 @@ XPolyPolygon::~XPolyPolygon() = default;
 
 void XPolyPolygon::Insert( XPolygon&& rXPoly )
 {
-    pImpXPolyPolygon->aXPolyList.emplace_back( std::move(rXPoly) );
+    m_pImpXPolyPolygon->aXPolyList.emplace_back( std::move(rXPoly) );
 }
 
 /// insert all XPolygons of a XPolyPolygon
@@ -864,38 +864,38 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly )
 {
     for ( size_t i = 0; i < rXPolyPoly.Count(); i++)
     {
-        pImpXPolyPolygon->aXPolyList.emplace_back( rXPolyPoly[i] );
+        m_pImpXPolyPolygon->aXPolyList.emplace_back( rXPolyPoly[i] );
     }
 }
 
 void XPolyPolygon::Remove( sal_uInt16 nPos )
 {
-    pImpXPolyPolygon->aXPolyList.erase( pImpXPolyPolygon->aXPolyList.begin() + nPos );
+    m_pImpXPolyPolygon->aXPolyList.erase( m_pImpXPolyPolygon->aXPolyList.begin() + nPos );
 }
 
 const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
-    return pImpXPolyPolygon->aXPolyList[ nPos ];
+    return m_pImpXPolyPolygon->aXPolyList[ nPos ];
 }
 
 void XPolyPolygon::Clear()
 {
-    pImpXPolyPolygon->aXPolyList.clear();
+    m_pImpXPolyPolygon->aXPolyList.clear();
 }
 
 sal_uInt16 XPolyPolygon::Count() const
 {
-    return static_cast<sal_uInt16>(pImpXPolyPolygon->aXPolyList.size());
+    return static_cast<sal_uInt16>(m_pImpXPolyPolygon->aXPolyList.size());
 }
 
 tools::Rectangle XPolyPolygon::GetBoundRect() const
 {
-    size_t nXPoly = pImpXPolyPolygon->aXPolyList.size();
+    size_t nXPoly = m_pImpXPolyPolygon->aXPolyList.size();
     tools::Rectangle aRect;
 
     for ( size_t n = 0; n < nXPoly; n++ )
     {
-        XPolygon const & rXPoly = pImpXPolyPolygon->aXPolyList[ n ];
+        XPolygon const & rXPoly = m_pImpXPolyPolygon->aXPolyList[ n ];
         aRect.Union( rXPoly.GetBoundRect() );
     }
 
@@ -904,7 +904,7 @@ tools::Rectangle XPolyPolygon::GetBoundRect() const
 
 XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
-    return pImpXPolyPolygon->aXPolyList[ nPos ];
+    return m_pImpXPolyPolygon->aXPolyList[ nPos ];
 }
 
 XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& ) = default;
@@ -925,7 +925,7 @@ void XPolyPolygon::Distort(const tools::Rectangle& rRefRect,
                            const XPolygon& rDistortedRect)
 {
     for (size_t i = 0; i < Count(); i++)
-        pImpXPolyPolygon->aXPolyList[ i ].Distort(rRefRect, rDistortedRect);
+        m_pImpXPolyPolygon->aXPolyList[ i ].Distort(rRefRect, rDistortedRect);
 }
 
 basegfx::B2DPolyPolygon XPolyPolygon::getB2DPolyPolygon() const
