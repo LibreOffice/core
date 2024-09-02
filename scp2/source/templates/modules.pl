@@ -32,11 +32,6 @@ if ( !defined $completelangiso_var) {
 
 startup_check();
 
-# if ( "$completelangiso_var" eq "$lastcompletelangiso_var" ) {
-#    print STDERR "No new languages. Keeping old file\n";
-#    exit 0;
-# }
-
 my @completelangiso = split " +", $completelangiso_var;
 
 open OUTFILE, ">$outfile" or die "$0 ERROR: cannot open $outfile for writing!\n";
@@ -147,25 +142,6 @@ sub startup_check
         die "Template file \"$infile\" not found!\n";
         exit 1;
     }
-
-    if ( -f "$outfile" ) {
-        # changed script - run always
-        return if (stat($0))[9] > (stat("$outfile"))[9] ;
-        # changed template file - run always
-        return if (stat($infile))[9] > (stat("$outfile"))[9] ;
-
-        open OLDFILE, "$outfile" or die "$0 - ERROR: $outfile exists but isn't readable.\n";
-        while ( $line = <OLDFILE> ) {
-            if ( $line =~ /^\/\/.*completelangiso:/ ) {
-                $lastcompletelangiso_var = $line;
-                chomp $lastcompletelangiso_var;
-                $lastcompletelangiso_var =~ s/^\/\/.*completelangiso:\s*//;
-                last;
-            }
-        }
-        close OLDFILE;
-    }
-
 }
 
 sub usage
