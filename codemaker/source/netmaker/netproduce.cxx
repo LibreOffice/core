@@ -377,6 +377,30 @@ void NetProducer::producePlainStruct(std::string_view name,
     file.endBlock();
     file.endLine(); // extra blank line
 
+    // generate deconstructor
+    file.beginLine().append("public void Deconstruct(");
+    separatedForeach(allFields, [&file]() { file.append(", "); },
+                     [this, &file](const auto& member) {
+                         file.append("out ")
+                             .append(getNetName(member.type))
+                             .append(" ")
+                             .append(getSafeIdentifier(member.name));
+                     });
+    file.append(")").endLine();
+    file.beginBlock();
+    for (const auto& member : allFields)
+    {
+        file.beginLine()
+            .append(getSafeIdentifier(member.name))
+            .append(" = ")
+            .append("this.")
+            .append(getSafeIdentifier(member.name))
+            .append(";")
+            .endLine();
+    }
+    file.endBlock();
+    file.endLine(); // extra blank line
+
     // generate struct fields
     for (const auto& member : entity->getDirectMembers())
     {
@@ -579,6 +603,30 @@ void NetProducer::produceException(std::string_view name,
             .append("this.")
             .append(getSafeIdentifier(member.name))
             .append(" = ")
+            .append(getSafeIdentifier(member.name))
+            .append(";")
+            .endLine();
+    }
+    file.endBlock();
+    file.endLine(); // extra blank line
+
+    // generate deconstructor
+    file.beginLine().append("public void Deconstruct(");
+    separatedForeach(allFields, [&file]() { file.append(", "); },
+                     [this, &file](const auto& member) {
+                         file.append("out ")
+                             .append(getNetName(member.type))
+                             .append(" ")
+                             .append(getSafeIdentifier(member.name));
+                     });
+    file.append(")").endLine();
+    file.beginBlock();
+    for (const auto& member : allFields)
+    {
+        file.beginLine()
+            .append(getSafeIdentifier(member.name))
+            .append(" = ")
+            .append("this.")
             .append(getSafeIdentifier(member.name))
             .append(";")
             .endLine();
@@ -918,15 +966,16 @@ void NetProducer::produceService(
                 .append("ctx.getServiceManager();")
                 .endLine()
                 .beginLine()
-                .append(returnType)
-                .append(" srv = (")
-                .append(returnType)
-                .append(")mcf.createInstanceWithContext(\"")
+                .append("com.sun.star.uno.Any srv = new com.sun.star.uno.Any(")
+                .append("mcf.createInstanceWithContext(\"")
                 .append(name)
-                .append("\", ctx);")
+                .append("\", ctx));")
                 .endLine()
                 .beginLine()
-                .append("return srv;")
+                .append("return srv.cast<")
+                .append(returnType)
+                .append(">();")
+                .beginLine()
                 .endLine()
                 .endBlock();
 
@@ -949,8 +998,8 @@ void NetProducer::produceService(
                 .endLine()
                 .beginBlock()
                 .beginLine()
-                .append(
-                    "throw new com.sun.star.uno.DeploymentException(\"Could not create service ")
+                .append("throw new com.sun.star.uno.DeploymentException(")
+                .append("\"Could not create service ")
                 .append(name)
                 .append(" from given XComponentContext\", ctx);")
                 .endLine()
@@ -989,10 +1038,8 @@ void NetProducer::produceService(
                 .append("ctx.getServiceManager();")
                 .endLine()
                 .beginLine()
-                .append(returnType)
-                .append(" srv = (")
-                .append(returnType)
-                .append(")mcf.createInstanceWithArgumentsAndContext(\"")
+                .append("com.sun.star.uno.Any srv = new com.sun.star.uno.Any(")
+                .append("mcf.createInstanceWithArgumentsAndContext(\"")
                 .append(name)
                 .append("\", ");
             if (restParam)
@@ -1014,7 +1061,14 @@ void NetProducer::produceService(
                                  });
                 file.append(" }");
             }
-            file.append(", ctx);").endLine().beginLine().append("return srv;").endLine().endBlock();
+            file.append(", ctx));")
+                .endLine()
+                .beginLine()
+                .append("return srv.cast<")
+                .append(returnType)
+                .append(">();")
+                .endLine()
+                .endBlock();
 
             for (const auto& e : ctor.exceptions)
             {
@@ -1035,8 +1089,8 @@ void NetProducer::produceService(
                 .endLine()
                 .beginBlock()
                 .beginLine()
-                .append(
-                    "throw new com.sun.star.uno.DeploymentException(\"Could not create service ")
+                .append("throw new com.sun.star.uno.DeploymentException(")
+                .append("\"Could not create service ")
                 .append(name)
                 .append(" from given XComponentContext\", ctx);")
                 .endLine()
@@ -1089,12 +1143,23 @@ void NetProducer::produceSingleton(
         .beginBlock();
 
     file.beginLine()
+        .append("try")
+        .endLine()
+        .beginBlock()
+        .beginLine()
         .append("com.sun.star.uno.Any sgtn = ctx.getValueByName(\"/singletons/")
         .append(name)
         .append("\");")
-        .endLine();
+        .endLine()
+        .beginLine()
+        .append("return sgtn.cast<")
+        .append(getNetName(entity->getBase()))
+        .append(">();")
+        .endLine()
+        .endBlock();
+
     file.beginLine()
-        .append("if (!sgtn.hasValue())")
+        .append("catch")
         .endLine()
         .beginBlock()
         .beginLine()
@@ -1103,11 +1168,6 @@ void NetProducer::produceSingleton(
         .append(" from given XComponentContext\", ctx);")
         .endLine()
         .endBlock();
-    file.beginLine()
-        .append("return (")
-        .append(getNetName(entity->getBase()))
-        .append(")sgtn.Value;")
-        .endLine();
 
     file.endBlock().endBlock();
 

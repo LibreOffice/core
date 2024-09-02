@@ -28,7 +28,6 @@ public class AnyTests
     public void with_RejectsInvalidParams()
     {
         Assert.That(() => Any.with<Any>(Any.VOID), Throws.ArgumentException);
-        Assert.That(() => Any.with<int>(null), Throws.ArgumentException);
     }
 
     [Test]

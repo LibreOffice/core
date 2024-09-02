@@ -180,6 +180,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/subfolder/anotherpage.xhp \
     DevelopersGuide/FirstSteps/FirstUnoContact/cxx/FirstUnoContact.cxx \
     DevelopersGuide/FirstSteps/FirstUnoContact/cxx/Makefile \
+    DevelopersGuide/FirstSteps/FirstUnoContact/csharp/FirstUnoContact.cs \
+    DevelopersGuide/FirstSteps/FirstUnoContact/csharp/Makefile \
     DevelopersGuide/FirstSteps/FirstUnoContact/java/FirstUnoContact.java \
     DevelopersGuide/FirstSteps/FirstUnoContact/java/Makefile \
     DevelopersGuide/FirstSteps/FirstUnoContact/java/build.xml \

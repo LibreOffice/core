@@ -603,7 +603,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_URE,ure, \
 		$(if $(filter MSC,$(COM)),$(if $(filter-out AARCH64_TRUE,$(CPUNAME)_$(CROSS_COMPILING)),cli_uno)) \
 	) \
 	i18nlangtag \
-	$(if $(ENABLE_DOTNET),net_bootstrap) \
+	$(if $(ENABLE_DOTNET), \
+		net_bootstrap \
+		net_uno \
+	) \
 	$(if $(ENABLE_JAVA), \
 		java_uno \
 		jpipe \

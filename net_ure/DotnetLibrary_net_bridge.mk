@@ -9,11 +9,31 @@
 $(eval $(call gb_DotnetLibrary_DotnetLibrary,net_bridge,$(gb_DotnetLibrary_CS)))
 
 $(eval $(call gb_DotnetLibrary_add_sources,net_bridge,\
-	net_ure/source/bridge/NativeBootstrap \
+	net_ure/source/bridge/helper/DisposeGuard \
+	net_ure/source/bridge/helper/StructHelper \
+	net_ure/source/bridge/helper/TypeHelper \
+	net_ure/source/bridge/helper/WeakBase \
+	net_ure/source/bridge/helper/WeakComponentBase \
+))
+
+$(eval $(call gb_DotnetLibrary_add_sources,net_bridge,\
+	net_ure/source/bridge/native/InteropMethods \
+	net_ure/source/bridge/native/InteropTypes \
+	net_ure/source/bridge/native/Marshaller \
+	net_ure/source/bridge/native/NativeBootstrap \
+	net_ure/source/bridge/native/NativeUnoProxy \
+	net_ure/source/bridge/native/NetEnvironment \
+	net_ure/source/bridge/native/WeakIndexTable \
+	net_ure/source/bridge/native/WeakOidTypeTable \
 ))
 
 $(eval $(call gb_DotnetLibrary_add_properties,net_bridge,\
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks> \
 	<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles> \
+))
+
+$(eval $(call gb_DotnetLibrary_add_items,net_bridge,\
+	<PackageReference Include="System.Reflection.DispatchProxy" Version="4.7.1" /> \
 ))
 
 $(eval $(call gb_DotnetLibrary_link_library,net_bridge,net_uretypes))

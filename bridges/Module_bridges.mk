@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,bridges))
 
 $(eval $(call gb_Module_add_targets,bridges,\
 	Library_cpp_uno \
+	$(if $(ENABLE_DOTNET),Library_net_uno) \
 	$(if $(ENABLE_JAVA),\
 		Jar_java_uno \
 		Library_java_uno \

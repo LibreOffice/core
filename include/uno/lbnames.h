@@ -51,6 +51,8 @@ provoking error here, because PP ignores #error
 #define UNO_LB_JAVA "java"
 /** Environment type name for CLI (Common Language Infrastructure). */
 #define UNO_LB_CLI "cli"
+/** Environment type name for new .NET Bindings. */
+#define UNO_LB_NET "net"
 
 #endif
 
