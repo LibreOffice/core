@@ -23,7 +23,7 @@ gb_EMSCRIPTEN_LDFLAGS += -sSTACK_SIZE=131072 -sDEFAULT_PTHREAD_STACK_SIZE=65536
 # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
 # See emscripten.py, finalize_wasm, modify_wasm = True
 # So we need WASM_BIGINT=1 and ASSERTIONS=1 (2 implies STACK_OVERFLOW_CHECK)
-gb_EMSCRIPTEN_LDFLAGS += --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","ccall","cwrap","addOnPreMain","addOnPostRun","registerType","throwBindingError"$(if $(ENABLE_QT6),$(COMMA)"callMain"$(COMMA)"specialHTMLTargets")] -sEXPORT_EXCEPTION_HANDLING_HELPERS
+gb_EMSCRIPTEN_LDFLAGS += --bind -s FORCE_FILESYSTEM=1 -s WASM_BIGINT=1 -s ERROR_ON_UNDEFINED_SYMBOLS=1 -s FETCH=1 -s ASSERTIONS=1 -s EXIT_RUNTIME=0 -s EXPORTED_RUNTIME_METHODS=["UTF16ToString","stringToUTF16","UTF8ToString","ccall","cwrap","addOnPreMain","addOnPostRun","registerType","throwBindingError"$(if $(ENABLE_QT6),$(COMMA)"callMain"$(COMMA)"specialHTMLTargets")]
 gb_EMSCRIPTEN_QTDEFS := -DQT_NO_LINKED_LIST -DQT_NO_JAVA_STYLE_ITERATORS -DQT_NO_EXCEPTIONS -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 
 ifeq ($(ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS),TRUE)
@@ -45,7 +45,8 @@ ifeq ($(ENABLE_QT5),TRUE)
 gb_LinkTarget_CFLAGS += $(gb_EMSCRIPTEN_QTDEFS)
 gb_LinkTarget_CXXFLAGS += $(gb_EMSCRIPTEN_QTDEFS)
 endif
-gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) $(gb_EMSCRIPTEN_EXCEPT)
+gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) \
+    $(gb_EMSCRIPTEN_EXCEPT) -sEXPORT_EXCEPTION_HANDLING_HELPERS
 
 # Linker and compiler optimize + debug flags are handled in LinkTarget.mk
 gb_LINKEROPTFLAGS :=
