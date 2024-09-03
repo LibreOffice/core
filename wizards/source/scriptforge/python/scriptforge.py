@@ -49,7 +49,7 @@
             from scriptforge import CreateScriptService
 
         When Python and LibreOffice are started in separate processes,
-        LibreOffice being started from console ... (example for Linux with port = 2023)
+        LibreOffice being started from console ... (example for Linux with port = 2024)
             ./soffice --accept='socket,host=localhost,port=2024;urp;'
         then use next statements:
             from scriptforge import CreateScriptService, ScriptForge
@@ -259,7 +259,7 @@ class ScriptForge(object, metaclass = _Singleton):
             return _paramarray, _fullscript, _xscript
 
         # The frequently called PythonDispatcher in the ScriptForge Basic library is cached to privilege performance
-        if cls.servicesdispatcher is not None and script == ScriptForge.basicdispatcher:
+        if cls.servicesdispatcher is not None and script == cls.basicdispatcher:
             xscript = cls.servicesdispatcher
             fullscript = script
             paramarray = True
@@ -271,7 +271,7 @@ class ScriptForge(object, metaclass = _Singleton):
             return None
 
         # At 1st execution of the common Basic dispatcher, buffer xscript
-        if fullscript == ScriptForge.basicdispatcher and cls.servicesdispatcher is None:
+        if fullscript == cls.basicdispatcher and cls.servicesdispatcher is None:
             cls.servicesdispatcher = xscript
 
         # Execute the script with the given arguments
@@ -316,7 +316,7 @@ class ScriptForge(object, metaclass = _Singleton):
                     - a new SFServices() object or one of its subclasses otherwise
             """
         # Constants
-        script = ScriptForge.basicdispatcher
+        script = cls.basicdispatcher
         cstNoArgs = '+++NOARGS+++'
         cstValue, cstVarType, cstDims, cstClass, cstType, cstService, cstName = 0, 1, 2, 2, 3, 4, 5
 
@@ -360,10 +360,10 @@ class ScriptForge(object, metaclass = _Singleton):
         #   An array, tuple or tuple of tuples - manage dates inside
         #   A scalar, Nothing, a date
         returnvalue = returntuple[cstValue]
-        if returntuple[cstVarType] == ScriptForge.V_OBJECT and len(returntuple) > cstClass:  # Skip Nothing
-            if returntuple[cstClass] == ScriptForge.objUNO:
+        if returntuple[cstVarType] == cls.V_OBJECT and len(returntuple) > cstClass:  # Skip Nothing
+            if returntuple[cstClass] == cls.objUNO:
                 pass
-            elif returntuple[cstClass] == ScriptForge.objDICT:
+            elif returntuple[cstClass] == cls.objDICT:
                 dico = CreateScriptService('ScriptForge.Dictionary')
                 if not isinstance(returnvalue, uno.ByteSequence):   # if array not empty
                     dico.ImportFromPropertyValues(returnvalue, overwrite = True)
@@ -377,7 +377,7 @@ class ScriptForge(object, metaclass = _Singleton):
                 subcls = cls.serviceslist[servname]
                 if subcls is not None:
                     return subcls(returnvalue, returntuple[cstType], returntuple[cstClass], returntuple[cstName])
-        elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
+        elif returntuple[cstVarType] >= cls.V_ARRAY:
             # Intercept empty array
             if isinstance(returnvalue, uno.ByteSequence):
                 return ()
@@ -391,15 +391,15 @@ class ScriptForge(object, metaclass = _Singleton):
                     returnvalue = tuple(arr)
                 else:                                   # 1D tuple
                     returnvalue = tuple(map(SFScriptForge.SF_Basic.CDateFromUnoDateTime, returnvalue))
-        elif returntuple[cstVarType] == ScriptForge.V_DATE:
+        elif returntuple[cstVarType] == cls.V_DATE:
             dat = SFScriptForge.SF_Basic.CDateFromUnoDateTime(returnvalue)
             return dat
         else:  # All other scalar values
             pass
         return returnvalue
 
-    @staticmethod
-    def SetAttributeSynonyms():
+    @classmethod
+    def SetAttributeSynonyms(cls):
         """
             A synonym of an attribute is either the lowercase or the camelCase form of its original ProperCase name.
             In every subclass of SFServices:
@@ -526,7 +526,7 @@ class SFServices(object):
     # Basic class type
     moduleClass, moduleStandard = 2, 1
     #
-    # Empty dictionary for lower/camelcased homonyms or properties
+    # Empty dictionary for lower/camelcased homonyms of properties
     propertysynonyms = {}
     # To operate dynamic property getting/setting it is necessary to
     # enumerate all types of properties and adapt __getattr__() and __setattr__() according to their type
@@ -559,42 +559,36 @@ class SFServices(object):
             if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms'):
                 pass
             elif name in self.serviceproperties:
-                if self.serviceproperties[name] in (0, 2):  # value may be fetched from the instance's local __dict__
-                    if name in self.__dict__:
-                        return self.__dict__[name]
-                    else:
-                        # Get Property from Basic and store it
-                        prop = self.GetProperty(name)
-                        self.__dict__[name] = prop
-                        return prop
-                else:  # Get Property from Basic and do not store it
-                    return self.GetProperty(name)
+                prop = self.GetProperty(name)   # Get Property from Basic
+                if self.serviceproperties[name] in (0, 2):  # Store the property value for later re-use
+                    object.__setattr__(self, name, prop)
+                return prop
         # Execute the usual attributes getter
         return super(SFServices, self).__getattribute__(name)
 
     def __setattr__(self, name, value):
         """
             Executed for EVERY property assignment, including in __init__() !!
-            Setting a property requires for serviceproperties() to be executed in Basic
-            Management of __dict__ is automatically done in the final usual object.__setattr__ method
+            Setting a property required for all serviceproperties() to be executed in Basic
+            The new value is stored for re-use in the local instance when relevant
             """
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms'):
-                pass
-            elif name[0:2] == '__' or name in self.internal_attributes:
+            if name in self.internal_attributes:
                 pass
             elif name in self.serviceproperties or name in self.propertysynonyms:
                 if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
                     name = self.propertysynonyms[name]
-                if self.serviceproperties[name] in (2, 3):  # Editable
+                proplevel = self.serviceproperties[name]
+                if proplevel in (2, 3):  # Editable
                     self.SetProperty(name, value)
-                    return
+                    if proplevel == 3:  # Do not store in the local instance
+                        return
                 else:
                     raise AttributeError(
                         "object of type '" + self.objecttype + "' has no editable property '" + name + "'")
             else:
                 raise AttributeError("object of type '" + self.objecttype + "' has no property '" + name + "'")
-        object.__setattr__(self, name, value)
+        object.__setattr__(self, name, value)   # Store the new value in the local instance
         return
 
     def __repr__(self):
@@ -1308,11 +1302,11 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Platform'
         servicesynonyms = ('platform', 'scriptforge.platform')
-        serviceproperties = dict(Architecture = 0, ComputerName = 0, CPUCount = 0, CurrentUser = 0,
+        serviceproperties = dict(Architecture = 1, ComputerName = 1, CPUCount = 1, CurrentUser = 1,
                                  Extensions = 0, FilterNames = 0, Fonts = 0, FormatLocale = 0,
-                                 Locale = 0, Machine = 0, OfficeLocale = 0, OfficeVersion = 0,
-                                 OSName = 0, OSPlatform = 0, OSRelease = 0, OSVersion = 0,
-                                 Printers = 0, Processor = 0, PythonVersion = 0, SystemLocale = 0,
+                                 Locale = 0, Machine = 1, OfficeLocale = 0, OfficeVersion = 0,
+                                 OSName = 1, OSPlatform = 1, OSRelease = 1, OSVersion = 1,
+                                 Printers = 0, Processor = 1, PythonVersion = 1, SystemLocale = 0,
                                  UserData = 0)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
@@ -2004,7 +1998,7 @@ class SFDialogs:
         def ReviewServiceArgs(cls, container = '', library = 'Standard', dialogname = ''):
             """
                 Transform positional and keyword arguments into positional only
-                Add the XComfile:///home/jean-pierre/.config/libreoffice/4/user/Scripts/python/QA/scriptforge.pyponentContext as last argument
+                Add the XComponentContext as last argument
                 """
             return container, library, dialogname, ScriptForge.componentcontext
 
