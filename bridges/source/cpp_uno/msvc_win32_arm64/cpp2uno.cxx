@@ -278,6 +278,7 @@ extern "C" void vtableCall(sal_Int32 functionIndex, sal_Int32 vtableOffset, sal_
                                               reinterpret_cast<uno_AcquireFunc>(uno::cpp_acquire));
                             ifc->release();
                             TYPELIB_DANGER_RELEASE(td);
+                            gpr[0] = reinterpret_cast<sal_uInt64>(indirectRet);
                             break;
                         }
                         TYPELIB_DANGER_RELEASE(td);
