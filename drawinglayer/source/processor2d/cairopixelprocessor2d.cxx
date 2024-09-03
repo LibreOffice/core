@@ -874,6 +874,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
+    , mnClipRecurstionCount(0)
 {
     if (pTarget)
     {
@@ -1448,16 +1449,16 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
         return;
     }
 
-    basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
+    const basegfx::B2DPolyPolygon& rMask(rMaskCandidate.getMask());
 
-    if (!aMask.count())
+    if (!rMask.count())
     {
         // no mask (so nothing inside), done
         return;
     }
 
     // calculate visible range
-    basegfx::B2DRange aMaskRange(aMask.getB2DRange());
+    basegfx::B2DRange aMaskRange(rMask.getB2DRange());
     aMaskRange.transform(getViewInformation2D().getObjectToViewTransformation());
     if (!getDiscreteViewRange(mpRT).overlaps(aMaskRange))
     {
@@ -1479,20 +1480,40 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
 
     // create path geometry and put mask as path
     cairo_new_path(mpRT);
-    getOrCreateFillGeometry(mpRT, aMask);
+    getOrCreateFillGeometry(mpRT, rMask);
 
-    // clip to this mask (also reset path, cairo_clip does not consume it)
+    // clip to this mask
     cairo_clip(mpRT);
-    cairo_new_path(mpRT);
 
     // reset transformation to not have it set when processing
     // child content below (was only used to set clip path)
     cairo_identity_matrix(mpRT);
 
     // process sub-content (that shall be masked)
+    mnClipRecurstionCount++;
     process(rMaskCandidate.getChildren());
+    mnClipRecurstionCount--;
 
     cairo_restore(mpRT);
+
+    if (0 == mnClipRecurstionCount)
+    {
+        // for *some* reason Cairo seems to have problems using cairo_clip
+        // recursively, in combination with cairo_save/cairo_restore. I think
+        // it *should* work as used here, see
+        // https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-clip
+        // where this combination is explicitely mentioned/explained. It may
+        // just be a error in cairo, too (?).
+        // The error is that without that for some reason the last clip is not
+        // restored but *stays*, so e.g. when having a shape filled with
+        // 'tux.svg' and an ellipse overlapping in front, suddenly (but not
+        // always?) the ellipse gets 'clipped' against the shape filled with
+        // the tux graphic.
+        // What helps is to count the clip recursion for each incarnation of
+        // CairoPixelProcessor2D/cairo_t used and call/use cairo_reset_clip
+        // when last clip is left.
+        cairo_reset_clip(mpRT);
+    }
 }
 
 void CairoPixelProcessor2D::processModifiedColorPrimitive2D(
@@ -3463,6 +3484,8 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
 
 void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
+    const cairo_status_t aStart(cairo_status(mpRT));
+
     switch (rCandidate.getPrimitive2DID())
     {
         // geometry that *has* to be processed
@@ -3629,6 +3652,13 @@ void CairoPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimit
             process(rCandidate);
             break;
         }
+    }
+
+    const cairo_status_t aEnd(cairo_status(mpRT));
+
+    if (aStart != aEnd)
+    {
+        SAL_WARN("drawinglayer", "CairoSDPR: Cairo status problem (!)");
     }
 }
 

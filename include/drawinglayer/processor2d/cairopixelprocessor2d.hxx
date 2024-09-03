@@ -75,6 +75,10 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     bool mbRenderSimpleTextDirect;
     bool mbRenderDecoratedTextDirect;
 
+    // recursion counter for CairoPixelProcessor2D::processMaskPrimitive2D,
+    // see comment there
+    sal_uInt16 mnClipRecurstionCount;
+
     // helpers for direct paints
     void paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& rPolyPolygon,
                               const basegfx::BColor& rColor, double fTransparency = 0.0);
