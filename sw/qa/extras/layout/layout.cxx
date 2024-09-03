@@ -23,6 +23,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/unolingu.hxx>
+#include <svx/svdpage.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtcntnt.hxx>
@@ -36,6 +37,8 @@
 #include <anchoredobject.hxx>
 #include <ndtxt.hxx>
 #include <frmatr.hxx>
+#include <drawdoc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fldmgr.hxx>
 
@@ -4530,6 +4533,67 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testSectionUnhide)
         // the problem was that 3 of the text frames had 0 height because Format was skipped
         assertXPath(pXmlDoc, "/root/page/body/section/txt/infos/bounds[@height='0']", 0);
         discardDumpedLayout();
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testHiddenSectionFlys)
+{
+    SwDoc* pDoc = createDoc("U-min.fodt");
+
+    //NO! field update job masks if the visibility was created wrong when loading.
+    //Scheduler::ProcessEventsToIdle();
+
+    IDocumentDrawModelAccess const& rIDMA{ pDoc->getIDocumentDrawModelAccess() };
+    SdrPage const* pDrawPage{ rIDMA.GetDrawModel()->GetPage(0) };
+    int invisibleHeaven{ rIDMA.GetInvisibleHeavenId().get() };
+    int visibleHeaven{ rIDMA.GetHeavenId().get() };
+
+    // these are hidden by moving to invisible layer, they're still in layout
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly", 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(invisibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
+    }
+
+    // Show the section
+    uno::Reference<css::text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    uno::Reference<css::beans::XPropertySet> xSection(xSections->getByName("Anlage"), uno::UNO_QUERY_THROW);
+    xSection->setPropertyValue("IsVisible", css::uno::Any(true));
+    calcLayout();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly", 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(visibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
+    }
+
+    xSection->setPropertyValue("IsVisible", css::uno::Any(false));
+    calcLayout();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly", 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(invisibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
     }
 }
 

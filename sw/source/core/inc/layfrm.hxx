@@ -84,6 +84,7 @@ public:
 
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
+    virtual void HideAndShowObjects() override;
 
     /**
      * Finds the closest Content for the SPoint
