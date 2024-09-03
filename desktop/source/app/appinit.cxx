@@ -93,20 +93,13 @@ EM_JS(void, setupMainChannel, (), {
     };
 });
 
-extern "C" void resolveUnoMain() {
-    EM_ASM(
-        let sofficeMain;
-        for (const i in PThread.pthreads) {
-            const worker = PThread.pthreads[i];
-            if (worker.workerID === 1) {
-                sofficeMain = worker;
-                break;
-            }
-        }
+extern "C" void resolveUnoMain(pthread_t id) {
+    EM_ASM({
+        const sofficeMain = PThread.pthreads[$0];
         const channel = new MessageChannel();
         sofficeMain.postMessage({cmd:"LOWA-channel"}, [channel.port2]);
         Module.uno_main$resolve(channel.port1);
-    );
+    }, id);
 }
 
 void initUno() {
@@ -120,7 +113,7 @@ void initUno() {
         runUnoScriptUrl(url.getStr());
     }
     setupMainChannel();
-    emscripten_async_run_in_main_runtime_thread(EM_FUNC_SIG_V, resolveUnoMain);
+    emscripten_async_run_in_main_runtime_thread(EM_FUNC_SIG_VI, resolveUnoMain, pthread_self());
 }
 
 }
