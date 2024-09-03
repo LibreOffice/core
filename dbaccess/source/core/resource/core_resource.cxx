@@ -28,6 +28,11 @@ namespace dbaccess
         return Translate::get(pResId, Translate::Create("dba"));
     }
 
+    OUString ResourceManager::loadString(TranslateNId aContextSingularPlural, int nCardinality)
+    {
+        return Translate::nget(aContextSingularPlural, nCardinality, Translate::Create("dba"));
+    }
+
     OUString ResourceManager::loadString(TranslateId pResId, std::u16string_view _rPlaceholderAscii1, std::u16string_view _rReplace1,
         std::u16string_view _rPlaceholderAscii2, std::u16string_view _rReplace2)
     {

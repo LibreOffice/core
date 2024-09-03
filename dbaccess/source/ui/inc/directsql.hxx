@@ -86,7 +86,7 @@ namespace dbaui
         DECL_LINK( OnStatementModified, LinkParamNone*, void );
 
         /// adds a statement to the statement history
-        void implAddToStatementHistory(const OUString& _rStatement);
+        void implAddToStatementHistory(const OUString& _rStatement, const bool bFromMemory = false);
 
         /// ensures that our history has at most m_nHistoryLimit entries
         void implEnsureHistoryLimit();

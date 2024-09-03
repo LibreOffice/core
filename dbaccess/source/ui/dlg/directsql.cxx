@@ -25,6 +25,7 @@
 #include <comphelper/types.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -36,8 +37,21 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
+// tdf#140298 - remember user settings within the currect session
+// memp is filled in dtor and restored after initialization
+namespace
+{
+    struct memParam {
+        std::vector<OUString> SQLHistory;
+        bool DirectSQL;
+        bool ShowOutput;
+    };
+    memParam memp;
+}
+
 namespace dbaui
 {
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
@@ -73,6 +87,13 @@ namespace dbaui
         m_xClose->connect_clicked(LINK(this, DirectSQLDialog, OnCloseClick));
         m_xSQLHistory->connect_changed(LINK(this, DirectSQLDialog, OnListEntrySelected));
 
+        for (size_t i = 0; i < memp.SQLHistory.size(); i++)
+        {
+            implAddToStatementHistory(memp.SQLHistory[i], true);
+            m_xDirectSQL->set_active(memp.DirectSQL);
+            m_xShowOutput->set_active(memp.ShowOutput);
+        }
+
         // add a dispose listener to the connection
         Reference< XComponent > xConnComp(m_xConnection, UNO_QUERY);
         OSL_ENSURE(xConnComp.is(), "DirectSQLDialog::DirectSQLDialog: invalid connection!");
@@ -85,6 +106,9 @@ namespace dbaui
 
     DirectSQLDialog::~DirectSQLDialog()
     {
+        memp.DirectSQL = m_xDirectSQL->get_active();
+        memp.ShowOutput = m_xShowOutput->get_active();
+
         ::osl::MutexGuard aGuard(m_aMutex);
         if (m_pClosingEvent)
             Application::RemoveUserEvent(m_pClosingEvent);
@@ -147,7 +171,7 @@ namespace dbaui
         }
     }
 
-    void DirectSQLDialog::implAddToStatementHistory(const OUString& _rStatement)
+    void DirectSQLDialog::implAddToStatementHistory(const OUString& _rStatement, const bool bFromMemory)
     {
         #ifdef DBG_UTIL
         {
@@ -159,6 +183,8 @@ namespace dbaui
 
         // add the statement to the history
         m_aStatementHistory.push_back(_rStatement);
+        if (!bFromMemory)
+            memp.SQLHistory.push_back(_rStatement);
 
         // normalize the statement, and remember the normalized form, too
         OUString sNormalized = _rStatement.replaceAll("\n", " ");
@@ -311,7 +337,7 @@ namespace dbaui
 
         const Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRS,UNO_QUERY_THROW)->getMetaData();
         const sal_Int32 nColumnsCount = xResultSetMetaData->getColumnCount();
-
+        sal_Int32 nRowCount = 0;
         // get a handle for the rows
         css::uno::Reference< css::sdbc::XRow > xRow( xRS, css::uno::UNO_QUERY );
         // work through each of the rows
@@ -348,6 +374,7 @@ namespace dbaui
                             out.append(xRow->getString(i) + ",");
                     }
                 }
+                nRowCount++;
             }
             // trap for when we fall off the end of the row
             catch (const SQLException&)
@@ -356,6 +383,7 @@ namespace dbaui
             // report the output
             addOutputText(out);
         }
+        addOutputText(DBA_RES_PLURAL(STR_COMMAND_NROWS, nRowCount).replaceAll("%1", OUString::number(nRowCount)));
     }
 
     void DirectSQLDialog::addStatusText(std::u16string_view _rMessage)

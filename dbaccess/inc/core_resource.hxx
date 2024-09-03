@@ -24,6 +24,7 @@
 #include <unotools/resmgr.hxx>
 
 #define DBA_RES( id )                       ::dbaccess::ResourceManager::loadString( id )
+#define DBA_RES_PLURAL( id, number )        ::dbaccess::ResourceManager::loadString( id, number )
 #define DBA_RES_PARAM( id, ascii, replace ) ::dbaccess::ResourceManager::loadString( id, ascii, replace )
 
 namespace dbaccess
@@ -41,6 +42,7 @@ namespace dbaccess
         /** loads the string with the specified resource id
         */
         static OUString  loadString(TranslateId pResId);
+        static OUString  loadString(TranslateNId aContextSingularPlural, int nCardinality);
 
         /** loads a string from the resource file, substituting two placeholders with given strings
 
