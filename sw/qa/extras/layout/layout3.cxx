@@ -1687,6 +1687,68 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testSectionUnhide)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionFlys)
+{
+    createSwDoc("U-min.fodt");
+
+    //NO! field update job masks if the visibility was created wrong when loading.
+    //Scheduler::ProcessEventsToIdle();
+
+    SwDoc* pDoc = getSwDoc();
+    IDocumentDrawModelAccess const& rIDMA{ pDoc->getIDocumentDrawModelAccess() };
+    SdrPage const* pDrawPage{ rIDMA.GetDrawModel()->GetPage(0) };
+    int invisibleHeaven{ rIDMA.GetInvisibleHeavenId().get() };
+    int visibleHeaven{ rIDMA.GetHeavenId().get() };
+
+    // these are hidden by moving to invisible layer, they're still in layout
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly"_ostr, 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(invisibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
+    }
+
+    // Show the section
+    auto xTextSectionsSupplier = mxComponent.queryThrow<css::text::XTextSectionsSupplier>();
+    auto xSections = xTextSectionsSupplier->getTextSections();
+    CPPUNIT_ASSERT(xSections);
+    auto xSection = xSections->getByName(u"Anlage"_ustr).queryThrow<css::beans::XPropertySet>();
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(true));
+    calcLayout();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly"_ostr, 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(visibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
+    }
+
+    xSection->setPropertyValue(u"IsVisible"_ustr, css::uno::Any(false));
+    calcLayout();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "//anchored/fly"_ostr, 6);
+        discardDumpedLayout();
+
+        CPPUNIT_ASSERT_EQUAL(size_t(6), pDrawPage->GetObjCount());
+        for (int i = 0; i < 6; ++i)
+        {
+            CPPUNIT_ASSERT_EQUAL(invisibleHeaven, int(pDrawPage->GetObj(i)->GetLayer().get()));
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testHiddenSectionPageDescs)
 {
     createSwDoc("hidden-sections-with-pagestyles.odt");
