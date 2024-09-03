@@ -843,6 +843,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
     loadAndSave("too_many_styles.odt");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
+{
+    // Without the fix in place this hangs (and eventually OOMs) on opening
+    loadAndSave("tdf162746.docx");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
