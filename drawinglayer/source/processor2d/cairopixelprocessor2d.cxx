@@ -874,7 +874,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
           officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
     , mbRenderDecoratedTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
-    , mnClipRecurstionCount(0)
+    , mnClipRecursionCount(0)
 {
     if (pTarget)
     {
@@ -1490,13 +1490,13 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
     cairo_identity_matrix(mpRT);
 
     // process sub-content (that shall be masked)
-    mnClipRecurstionCount++;
+    mnClipRecursionCount++;
     process(rMaskCandidate.getChildren());
-    mnClipRecurstionCount--;
+    mnClipRecursionCount--;
 
     cairo_restore(mpRT);
 
-    if (0 == mnClipRecurstionCount)
+    if (0 == mnClipRecursionCount)
     {
         // for *some* reason Cairo seems to have problems using cairo_clip
         // recursively, in combination with cairo_save/cairo_restore. I think
