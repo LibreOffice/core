@@ -153,11 +153,6 @@ const SfxPoolItem* GetDfltAttr(sal_uInt16 nWhich)
 #endif
 }
 
-SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
-    : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( nullptr )
-{
-}
-
 void SwFindNearestNode::CheckNode( const SwNode& rNd )
 {
     if( &m_pNode->GetNodes() == &rNd.GetNodes() )

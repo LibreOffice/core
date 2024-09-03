@@ -142,7 +142,6 @@ class SwTransparencyGrf;
 class SwFormatRuby;
 class SwTableFormulaUpdate;
 class VirtPageNumHint;
-class SwFindNearestNode;
 class SwFltAnchor;
 class SwFltTOX;
 class SwFltRedline;
@@ -434,7 +433,6 @@ constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(181);
 // empty
-constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);
 constexpr sal_uInt16 RES_FORMAT_MSG_END(190);
 
 // An ID for the RTF-reader. The stylesheets are treated like attributes,

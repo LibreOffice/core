@@ -401,11 +401,11 @@ public:
 };
 
 
-class SwFindNearestNode final : public SwMsgPoolItem
+class SwFindNearestNode final
 {
     const SwNode *m_pNode, *m_pFound;
 public:
-    SwFindNearestNode( const SwNode& rNd );
+    SwFindNearestNode( const SwNode& rNd ) : m_pNode(&rNd), m_pFound(nullptr) {}
     void CheckNode( const SwNode& rNd );
 
     const SwNode* GetFoundNode() const { return m_pFound; }

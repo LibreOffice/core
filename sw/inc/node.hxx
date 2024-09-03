@@ -466,7 +466,7 @@ public:
     virtual SwContentNode* MakeCopy(SwDoc&, SwNode& rWhere, bool bNewFrames) const = 0;
 
     /// Get information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     /// SS for PoolItems: hard attributation.
 

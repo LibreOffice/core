@@ -1559,16 +1559,11 @@ SwContentNode *SwContentNode::JoinNext()
 
 
 /// Get info from Modify
-bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
+bool SwContentNode::GetInfo( SwFindNearestNode& rInfo ) const
 {
-    switch( rInfo.Which() )
-    {
-    case RES_FINDNEARESTNODE:
-        if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
-            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
-        return true;
-    }
-    return sw::BroadcastingModify::GetInfo( rInfo );
+    if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
+        rInfo.CheckNode( *this );
+    return true;
 }
 
 /// @param rAttr the attribute to set

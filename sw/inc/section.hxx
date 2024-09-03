@@ -297,7 +297,7 @@ public:
     virtual void MakeFrames() override;
 
     // Get information from Format.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     virtual bool IsVisible() const override;
 

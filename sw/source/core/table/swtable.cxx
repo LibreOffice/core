@@ -2305,19 +2305,13 @@ bool SwTableBox::IsEmpty( bool bWithRemainingNestedTable ) const
 }
 
     // retrieve information from the client
-bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
+bool SwTable::GetInfo( SwFindNearestNode& rInfo ) const
 {
-    switch( rInfo.Which() )
-    {
-        case RES_FINDNEARESTNODE:
-            if( GetFrameFormat() &&
-                GetFrameFormat()->GetFormatAttr( RES_PAGEDESC ).GetPageDesc() &&
-                !m_TabSortContentBoxes.empty() &&
-                m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
-                static_cast<SwFindNearestNode&>(rInfo).CheckNode( *
-                    m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
-            break;
-    }
+    if( GetFrameFormat() &&
+        GetFrameFormat()->GetFormatAttr( RES_PAGEDESC ).GetPageDesc() &&
+        !m_TabSortContentBoxes.empty() &&
+        m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
+        rInfo.CheckNode( *m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
     return true;
 }
 

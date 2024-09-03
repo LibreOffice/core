@@ -32,7 +32,7 @@
 
 namespace sw
 {
-    bool ListenerEntry::GetInfo(SfxPoolItem& rInfo) const
+    bool ListenerEntry::GetInfo(SwFindNearestNode& rInfo) const
         { return m_pToTell == nullptr || m_pToTell->GetInfo( rInfo ); }
     void ListenerEntry::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
     {
@@ -158,7 +158,7 @@ SwModify::~SwModify()
     assert(!hasListenersOnDeath);
 }
 
-bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
+bool SwModify::GetInfo( SwFindNearestNode& rInfo ) const
 {
     if(!m_pWriterListeners)
         return true;

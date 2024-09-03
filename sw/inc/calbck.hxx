@@ -38,6 +38,7 @@ class SwCellFrame;
 class SwTabFrame;
 class SwRowFrame;
 class SwTable;
+class SwFindNearestNode;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -169,7 +170,7 @@ public:
 
 
     // get information about attribute
-    virtual bool GetInfo( SfxPoolItem& ) const { return true; }
+    virtual bool GetInfo( SwFindNearestNode& ) const { return true; }
 };
 
 
@@ -204,7 +205,7 @@ public:
     bool HasOnlyOneListener() const { return m_pWriterListeners && m_pWriterListeners->IsLast(); }
 
     // get information about attribute
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     void LockModify()                   { m_bModifyLocked = true;  }
     void UnlockModify()                 { m_bModifyLocked = false; }
@@ -254,7 +255,7 @@ namespace sw
         }
 
         /** get Client information */
-        virtual bool GetInfo( SfxPoolItem& rInfo) const override;
+        virtual bool GetInfo( SwFindNearestNode& rInfo) const override;
     private:
         virtual void SwClientNotify(const SwModify& rModify, const SfxHint& rHint) override;
     };

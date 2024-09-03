@@ -74,7 +74,7 @@ void SwFormatDrop::SetCharFormat( SwCharFormat *pNew )
         pNew->Add(*this);
 }
 
-bool SwFormatDrop::GetInfo( SfxPoolItem& ) const
+bool SwFormatDrop::GetInfo( SwFindNearestNode& ) const
 {
     return true; // Continue
 }

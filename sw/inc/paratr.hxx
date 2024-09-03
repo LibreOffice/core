@@ -125,7 +125,7 @@ public:
     SwCharFormat *GetCharFormat()       { return static_cast<SwCharFormat*>(GetRegisteredIn()); }
     void SetCharFormat( SwCharFormat *pNew );
     /// Get information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     /// Get and set Modify pointer.
     void ChgDefinedIn( const sw::FormatDropDefiner* pDefiner )

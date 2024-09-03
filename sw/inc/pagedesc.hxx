@@ -282,7 +282,7 @@ public:
     void SetPoolHlpFileId(sal_uInt8 const nId) { m_Master.SetPoolHlpFileId(nId); }
 
     /// Query information from Client.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     const SwFrameFormat* GetPageFormatOfNode( const SwNode& rNd,
                                     bool bCheckForThisPgDc = true ) const;

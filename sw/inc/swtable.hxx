@@ -313,7 +313,7 @@ public:
                             SwSelBoxes& rBoxes, bool bToTop = true );
 
     // Get information from client.
-    virtual bool GetInfo( SfxPoolItem& ) const override;
+    virtual bool GetInfo( SwFindNearestNode& ) const override;
 
     // Search in format for registered table.
     SW_DLLPUBLIC static SwTable * FindTable( SwFrameFormat const*const pFormat );

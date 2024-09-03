@@ -817,19 +817,15 @@ bool SwSectionFormat::IsVisible() const
 }
 
 // Get info from the Format
-bool SwSectionFormat::GetInfo(SfxPoolItem& rInfo) const
+bool SwSectionFormat::GetInfo(SwFindNearestNode& rInfo) const
 {
-    if(rInfo.Which() == RES_FINDNEARESTNODE)
+    if(GetFormatAttr( RES_PAGEDESC ).GetPageDesc())
     {
-        if(GetFormatAttr( RES_PAGEDESC ).GetPageDesc())
-        {
-            const SwSectionNode* pNd = GetSectionNode();
-            if(pNd)
-                static_cast<SwFindNearestNode&>(rInfo).CheckNode(*pNd);
-        }
-        return true;
+        const SwSectionNode* pNd = GetSectionNode();
+        if(pNd)
+            rInfo.CheckNode(*pNd);
     }
-    return sw::BroadcastingModify::GetInfo(rInfo);
+    return true;
 }
 
 static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond)

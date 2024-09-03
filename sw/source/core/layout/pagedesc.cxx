@@ -204,7 +204,7 @@ void SwPageDesc::ResetAllAttr()
 }
 
 // gets information from Modify
-bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
+bool SwPageDesc::GetInfo( SwFindNearestNode & rInfo ) const
 {
     if (!m_Master.GetInfo(rInfo))
         return false;       // found
