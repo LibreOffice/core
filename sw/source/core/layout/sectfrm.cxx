@@ -2769,6 +2769,7 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             pLowerFrame->Prepare(PrepareHint::Clear, nullptr, false);
             pLowerFrame->InvalidateAll();
             pLowerFrame->InvalidateObjs(false);
+            pLowerFrame->HideAndShowObjects();
         }
         // Check if any page-breaks have been unhidden, create the new pages.
         // Call IsHiddenNow() because a parent section could still hide.
