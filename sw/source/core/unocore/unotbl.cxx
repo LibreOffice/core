@@ -225,7 +225,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
             {
                 if(!aValue.get<bool>())
                     aSz.SetWidthPercent(0);
-                else
+                else if (aSz.GetWidthPercent() == 0) // If it's already enabled, just ignore it
                 {
                     throw lang::IllegalArgumentException(u"relative width cannot be switched on with this property"_ustr, nullptr, 0);
                 }
