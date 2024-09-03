@@ -399,7 +399,11 @@ public:
 };
 
 namespace sw {
-    class PageFootnoteHint final : public SfxHint {};
+    class PageFootnoteHint final : public SfxHint
+    {
+    public:
+        PageFootnoteHint() : SfxHint(SfxHintId::SwPageFootnote) {}
+    };
 
     SW_DLLPUBLIC SwTwips FootnoteSeparatorHeight(SwDoc& rDoc, SwPageFootnoteInfo const&);
 }

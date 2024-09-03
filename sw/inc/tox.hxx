@@ -56,7 +56,8 @@ namespace sw {
         SwContentFrame*& m_rpContentFrame;
         const SwRootFrame& m_rLayout;
         FindContentFrameHint(SwContentFrame*& rpContentFrame,const SwRootFrame& rLayout)
-            : m_rpContentFrame(rpContentFrame)
+            : SfxHint(SfxHintId::SwFindContentFrame)
+            , m_rpContentFrame(rpContentFrame)
             , m_rLayout(rLayout)
         {}
     };

@@ -4507,8 +4507,9 @@ void SwRowFrame::OnFrameSize(const SfxPoolItem& rSize)
 
 void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(auto pNewFormatHint = dynamic_cast<const sw::TableLineFormatChanged*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwTableLineFormatChanged)
     {
+        auto pNewFormatHint = static_cast<const sw::TableLineFormatChanged*>(&rHint);
         if(GetTabLine() != &pNewFormatHint->m_rTabLine)
             return;
         RegisterToFormat(const_cast<SwTableLineFormat&>(pNewFormatHint->m_rNewFormat));
@@ -4534,9 +4535,9 @@ void SwRowFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
             pTab->InvalidatePos();
         }
     }
-    else if(auto pMoveTableLineHint = dynamic_cast<const sw::MoveTableLineHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwMoveTableLine)
     {
-
+        auto pMoveTableLineHint = static_cast<const sw::MoveTableLineHint*>(&rHint);
         if(GetTabLine() != &pMoveTableLineHint->m_rTableLine)
             return;
         const_cast<SwFrameFormat*>(&pMoveTableLineHint->m_rNewFormat)->Add(*this);
@@ -6102,8 +6103,9 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
 void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if(auto pNewFormatHint = dynamic_cast<const sw::TableBoxFormatChanged*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwTableBoxFormatChanged)
     {
+        auto pNewFormatHint = static_cast<const sw::TableBoxFormatChanged*>(&rHint);
         if(GetTabBox() != &pNewFormatHint->m_rTableBox)
             return;
         RegisterToFormat(const_cast<SwTableBoxFormat&>(pNewFormatHint->m_rNewFormat));
@@ -6125,8 +6127,9 @@ void SwCellFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             pRow->InvalidatePrt_();
         }
     }
-    else if(auto pMoveTableBoxHint = dynamic_cast<const sw::MoveTableBoxHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwMoveTableBox)
     {
+        auto pMoveTableBoxHint = static_cast<const sw::MoveTableBoxHint*>(&rHint);
         if(GetTabBox() != &pMoveTableBoxHint->m_rTableBox)
             return;
         const_cast<SwFrameFormat*>(&pMoveTableBoxHint->m_rNewFormat)->Add(*this);

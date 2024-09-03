@@ -96,16 +96,18 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         // replace DDETable by real table
         NoDDETable();
     }
-    else if(const auto pLinkAnchorHint = dynamic_cast<const sw::LinkAnchorSearchHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwLinkAnchorSearch)
     {
+        const auto pLinkAnchorHint = static_cast<const sw::LinkAnchorSearchHint*>(&rHint);
         if(pLinkAnchorHint->m_rpFoundNode)
             return;
         const auto pNd = GetTabSortBoxes()[0]->GetSttNd();
         if( pNd && &pLinkAnchorHint->m_rNodes == &pNd->GetNodes() )
             pLinkAnchorHint->m_rpFoundNode = pNd;
     }
-    else if(const sw::InRangeSearchHint* pInRangeHint = dynamic_cast<const sw::InRangeSearchHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwInRangeSearch)
     {
+        const sw::InRangeSearchHint* pInRangeHint = static_cast<const sw::InRangeSearchHint*>(&rHint);
         if(pInRangeHint->m_rIsInRange)
             return;
         const SwTableNode* pTableNd = GetTabSortBoxes()[0]->GetSttNd()->FindTableNode();
@@ -113,8 +115,10 @@ void SwDDETable::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
                 pInRangeHint->m_nSttNd < pTableNd->EndOfSectionIndex() &&
                 pInRangeHint->m_nEndNd > pTableNd->GetIndex() )
             pInRangeHint->m_rIsInRange = true;
-    } else if (const auto pGatherDdeTablesHint = dynamic_cast<const sw::GatherDdeTablesHint*>(&rHint))
+    }
+    else if (rHint.GetId() == SfxHintId::SwGatherDdeTables)
     {
+        const auto pGatherDdeTablesHint = static_cast<const sw::GatherDdeTablesHint*>(&rHint);
         pGatherDdeTablesHint->m_rvTables.push_back(this);
     }
     else if (rHint.GetId() == SfxHintId::SwModifyChanged)

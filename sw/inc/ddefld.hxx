@@ -34,7 +34,8 @@ namespace sw
     {
         SwNodes& m_rNodes;
         const SwNode*& m_rpFoundNode;
-        LinkAnchorSearchHint(SwNodes& rNodes, const SwNode*& rpFoundNode) : m_rNodes(rNodes), m_rpFoundNode(rpFoundNode) {};
+        LinkAnchorSearchHint(SwNodes& rNodes, const SwNode*& rpFoundNode)
+            : SfxHint(SfxHintId::SwLinkAnchorSearch), m_rNodes(rNodes), m_rpFoundNode(rpFoundNode) {};
         virtual ~LinkAnchorSearchHint() override;
     };
     struct InRangeSearchHint final : public SfxHint
@@ -42,7 +43,7 @@ namespace sw
         const SwNodeOffset m_nSttNd, m_nEndNd;
         bool& m_rIsInRange;
         InRangeSearchHint(const SwNodeOffset nSttNd, const SwNodeOffset nEndNd, bool& rIsInRange)
-            : m_nSttNd(nSttNd), m_nEndNd(nEndNd), m_rIsInRange(rIsInRange) {}
+            : SfxHint(SfxHintId::SwInRangeSearch), m_nSttNd(nSttNd), m_nEndNd(nEndNd), m_rIsInRange(rIsInRange) {}
     };
 }
 

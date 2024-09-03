@@ -746,7 +746,7 @@ void SwNoTextFrame::OnGraphicArrived()
 
 void SwNoTextFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(dynamic_cast<const sw::GrfRereadAndInCacheHint*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwGrfRereadAndInCache)
     {
         if(SwNodeType::Grf != GetNode()->GetNodeType())
         {

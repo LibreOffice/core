@@ -60,7 +60,7 @@ void SwNavigationMgr::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     // our cursors may now spontaneously self-destruct: remove from
     // m_entries if that happens
-    if (typeid(rHint) == typeid(sw::UnoCursorHint))
+    if (rHint.GetId() == SfxHintId::SwUnoCursorHint)
     {
         auto it = std::find_if(m_entries.begin(), m_entries.end(),
             [&rBC](const sw::UnoCursorPointer& rItem) { return !rItem || &rBC == &rItem->m_aNotifier; });

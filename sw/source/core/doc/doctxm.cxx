@@ -1282,8 +1282,9 @@ SwTextFormatColl* SwTOXBaseSection::GetTextFormatColl( sal_uInt16 nLevel )
 
 void SwTOXBaseSection::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if (auto pFindHint = dynamic_cast<const sw::FindContentFrameHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::SwFindContentFrame)
     {
+        auto pFindHint = static_cast<const sw::FindContentFrameHint*>(&rHint);
         if(pFindHint->m_rpContentFrame)
             return;
         auto pSectFormat = GetFormat();

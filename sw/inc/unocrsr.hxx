@@ -28,7 +28,7 @@ namespace sw
 {
     struct SW_DLLPUBLIC UnoCursorHint final : public SfxHint
     {
-        UnoCursorHint() {}
+        UnoCursorHint() : SfxHint(SfxHintId::SwUnoCursorHint) {}
         virtual ~UnoCursorHint() override;
     };
 }
@@ -130,7 +130,7 @@ namespace sw
             {
                 if(m_pCursor)
                 {
-                    if(typeid(rHint) == typeid(UnoCursorHint))
+                    if(rHint.GetId() == SfxHintId::SwUnoCursorHint)
                         EndListening(rBC);
                 }
                 if(!GetBroadcasterCount())

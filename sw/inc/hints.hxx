@@ -172,11 +172,13 @@ class CondCollCondChg final : public SfxHint
 {
 public:
     const SwTextFormatColl& m_rColl;
-    CondCollCondChg(const SwTextFormatColl& rColl) : m_rColl(rColl) {};
+    CondCollCondChg(const SwTextFormatColl& rColl) : SfxHint(SfxHintId::SwCondCollCondChg), m_rColl(rColl) {};
 };
 
 class GrfRereadAndInCacheHint final : public SfxHint
 {
+public:
+    GrfRereadAndInCacheHint() : SfxHint(SfxHintId::SwGrfRereadAndInCache) {}
 };
 
 class PreGraphicArrivedHint final : public SfxHint
@@ -208,7 +210,8 @@ class MoveTableLineHint final : public SfxHint
 public:
     const SwFrameFormat& m_rNewFormat;
     const SwTableLine& m_rTableLine;
-    MoveTableLineHint(const SwFrameFormat& rNewFormat, const SwTableLine& rTableLine): m_rNewFormat(rNewFormat), m_rTableLine(rTableLine) {};
+    MoveTableLineHint(const SwFrameFormat& rNewFormat, const SwTableLine& rTableLine)
+        : SfxHint(SfxHintId::SwMoveTableLine), m_rNewFormat(rNewFormat), m_rTableLine(rTableLine) {};
 };
 
 class MoveTableBoxHint final : public SfxHint
@@ -216,7 +219,8 @@ class MoveTableBoxHint final : public SfxHint
 public:
     const SwFrameFormat& m_rNewFormat;
     const SwTableBox& m_rTableBox;
-    MoveTableBoxHint(const SwFrameFormat& rNewFormat, const SwTableBox& rTableBox): m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
+    MoveTableBoxHint(const SwFrameFormat& rNewFormat, const SwTableBox& rTableBox)
+        : SfxHint(SfxHintId::SwMoveTableBox), m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
 
 class DocumentDyingHint final : public SfxHint
@@ -230,14 +234,16 @@ class TableLineFormatChanged final : public SfxHint
 public:
     const SwTableLineFormat& m_rNewFormat;
     const SwTableLine& m_rTabLine;
-    TableLineFormatChanged(const SwTableLineFormat& rNewFormat, const SwTableLine& rTabLine) : m_rNewFormat(rNewFormat), m_rTabLine(rTabLine) {};
+    TableLineFormatChanged(const SwTableLineFormat& rNewFormat, const SwTableLine& rTabLine)
+        : SfxHint(SfxHintId::SwTableLineFormatChanged), m_rNewFormat(rNewFormat), m_rTabLine(rTabLine) {};
 };
 class TableBoxFormatChanged final : public SfxHint
 {
 public:
     const SwTableBoxFormat& m_rNewFormat;
     const SwTableBox& m_rTableBox;
-    TableBoxFormatChanged(const SwTableBoxFormat& rNewFormat, const SwTableBox& rTableBox) : m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
+    TableBoxFormatChanged(const SwTableBoxFormat& rNewFormat, const SwTableBox& rTableBox)
+        : SfxHint(SfxHintId::SwTableBoxFormatChanged), m_rNewFormat(rNewFormat), m_rTableBox(rTableBox) {};
 };
 class NameChanged final : public SfxHint
 {

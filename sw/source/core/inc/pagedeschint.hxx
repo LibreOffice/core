@@ -29,7 +29,7 @@ class SwPageDescHint final : public SfxHint
     SwPageDesc* m_pPageDesc;
 public:
     SwPageDescHint( SwPageDesc* p )
-        : m_pPageDesc(p)
+        : SfxHint(SfxHintId::SwPageDesc), m_pPageDesc(p)
     {}
 
     SwPageDesc* GetPageDesc() const { return m_pPageDesc; }

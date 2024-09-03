@@ -90,7 +90,7 @@ namespace sw {
     };
     struct GatherDdeTablesHint final : SfxHint {
         std::vector<SwDDETable*>& m_rvTables;
-        GatherDdeTablesHint(std::vector<SwDDETable*>& rvTables) : m_rvTables(rvTables) {};
+        GatherDdeTablesHint(std::vector<SwDDETable*>& rvTables) : SfxHint(SfxHintId::SwGatherDdeTables), m_rvTables(rvTables) {};
     };
 }
 

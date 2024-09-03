@@ -515,7 +515,7 @@ void SwPageFrame::PreparePage( bool bFootnote )
 
 void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
-    if(typeid(sw::PageFootnoteHint) == typeid(rHint))
+    if(rHint.GetId() == SfxHintId::SwPageFootnote)
     {
         // currently the savest way:
         static_cast<SwRootFrame*>(GetUpper())->SetSuperfluous();

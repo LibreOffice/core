@@ -115,12 +115,17 @@ using ::editeng::SvxBorderLine;
 
 namespace
 {
-    template<typename Tcoretype, typename Tunotype>
-    struct FindUnoInstanceHint final : SfxHint
+    struct FindUnoCellInstanceHint final : SfxHint
     {
-        FindUnoInstanceHint(Tcoretype* pCore) : m_pCore(pCore), m_pResult(nullptr) {};
-        const Tcoretype* const m_pCore;
-        mutable rtl::Reference<Tunotype> m_pResult;
+        FindUnoCellInstanceHint(SwTableBox* pCore) : SfxHint(SfxHintId::SwFindUnoCellInstance), m_pCore(pCore) {};
+        const SwTableBox* const m_pCore;
+        mutable rtl::Reference<SwXCell> m_pResult;
+    };
+    struct FindUnoTextTableRowInstanceHint final : SfxHint
+    {
+        FindUnoTextTableRowInstanceHint(SwTableLine* pCore) : SfxHint(SfxHintId::SwFindUnoTextTableRowInstance), m_pCore(pCore) {};
+        const SwTableLine* const m_pCore;
+        mutable rtl::Reference<SwXTextTableRow> m_pResult;
     };
     SwFrameFormat* lcl_EnsureCoreConnected(SwFrameFormat* pFormat, cppu::OWeakObject* pObject)
     {
@@ -1123,8 +1128,9 @@ void SwXCell::Notify(const SfxHint& rHint)
     {
         m_pTableFormat = nullptr;
     }
-    else if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableBox, SwXCell>*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwFindUnoCellInstance)
     {
+        auto pFindHint = static_cast<const FindUnoCellInstanceHint*>(&rHint);
         if(!pFindHint->m_pResult && pFindHint->m_pCore == GetTableBox())
             pFindHint->m_pResult = this;
     }
@@ -1140,7 +1146,7 @@ rtl::Reference<SwXCell> SwXCell::CreateXCell(SwFrameFormat* pTableFormat, SwTabl
     if(it == pTable->GetTabSortBoxes().end())
         return nullptr;
     size_t const nPos = it - pTable->GetTabSortBoxes().begin();
-    FindUnoInstanceHint<SwTableBox, SwXCell> aHint{pBox};
+    FindUnoCellInstanceHint aHint{pBox};
     pTableFormat->GetNotifier().Broadcast(aHint);
     return aHint.m_pResult ? aHint.m_pResult.get() : new SwXCell(pTableFormat, pBox, nPos);
 }
@@ -1400,8 +1406,10 @@ void SwXTextTableRow::Notify(const SfxHint& rHint)
     if(rHint.GetId() == SfxHintId::Dying)
     {
         m_pFormat = nullptr;
-    } else if(auto pFindHint = dynamic_cast<const FindUnoInstanceHint<SwTableLine, SwXTextTableRow>*>(&rHint))
+    }
+    else if(rHint.GetId() == SfxHintId::SwFindUnoTextTableRowInstance)
     {
+        auto pFindHint = static_cast<const FindUnoTextTableRowInstanceHint*>(&rHint);
         if(!pFindHint->m_pCore && pFindHint->m_pCore == m_pLine)
             pFindHint->m_pResult = this;
     }
@@ -3892,7 +3900,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(o3tl::make_unsigned(nIndex) >= pTable->GetTabLines().size())
         throw lang::IndexOutOfBoundsException();
     SwTableLine* pLine = pTable->GetTabLines()[nIndex];
-    FindUnoInstanceHint<SwTableLine,SwXTextTableRow> aHint{pLine};
+    FindUnoTextTableRowInstanceHint aHint{pLine};
     pFrameFormat->GetNotifier().Broadcast(aHint);
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);

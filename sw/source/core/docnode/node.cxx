@@ -1193,8 +1193,9 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
         auto pModifyChangedHint = static_cast<const sw::ModifyChangedHint*>(&rHint);
         m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
     }
-    else if(auto pCondCollCondChgHint = dynamic_cast<const sw::CondCollCondChg*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwCondCollCondChg)
     {
+        auto pCondCollCondChgHint = static_cast<const sw::CondCollCondChg*>(&rHint);
         ChkCondColl(&pCondCollCondChgHint->m_rColl);
     }
 }

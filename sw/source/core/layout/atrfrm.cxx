@@ -731,8 +731,9 @@ void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
         if(GetRegisteredIn())
             static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed(); //TODO: recheck if this is really the right way to check for use
     }
-    else if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SwPageDesc)
     {
+        const SwPageDescHint* pHint = static_cast<const SwPageDescHint*>(&rHint);
         // mba: shouldn't that be broadcasted also?
         SwFormatPageDesc aDfltDesc(pHint->GetPageDesc());
         SwPageDesc* pDesc = pHint->GetPageDesc();
