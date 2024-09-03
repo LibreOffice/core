@@ -1758,6 +1758,18 @@ void SwTextFrame::HideAndShowObjects()
     }
 }
 
+void SwLayoutFrame::HideAndShowObjects()
+{
+    for (SwFrame * pLower = Lower(); pLower; pLower = pLower->GetNext())
+    {
+        pLower->HideAndShowObjects();
+    }
+}
+
+void SwFrame::HideAndShowObjects()
+{
+}
+
 /**
  * Returns the first possible break point in the current line.
  * This method is used in SwTextFrame::Format() to decide whether the previous

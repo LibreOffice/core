@@ -1906,6 +1906,14 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             //section again.
             pActualSection.reset(pActualSection->GetUpper());
             pLay = pLay->FindSctFrame();
+            if (pLay->IsHiddenNow())
+            {   // flys were created visible
+                for (SwFlowFrame * pSect = SwFlowFrame::CastFlowFrame(pLay);
+                        pSect; pSect = pSect->GetPrecede())
+                {   // flys were created visible
+                    pSect->GetFrame().HideAndShowObjects();
+                }
+            }
             if ( pActualSection )
             {
                 //Could be, that the last SectionFrame remains empty.
@@ -1936,6 +1944,14 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     {
                         pOuterSectionFrame->DelEmpty( true );
                         SwFrame::DestroyFrame(pOuterSectionFrame);
+                    }
+                    else if (pOuterSectionFrame->IsHiddenNow())
+                    {
+                        for (SwFlowFrame * pSect = SwFlowFrame::CastFlowFrame(pOuterSectionFrame);
+                                pSect; pSect = pSect->GetPrecede())
+                        {   // flys were created visible
+                            pSect->GetFrame().HideAndShowObjects();
+                        }
                     }
                 }
                 else

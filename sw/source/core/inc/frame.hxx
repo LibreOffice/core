@@ -893,6 +893,7 @@ public:
 
     virtual bool IsHiddenNow() const;
     void MakeValidZeroHeight();
+    virtual void HideAndShowObjects();
 
     bool IsColLocked()  const { return mbColLocked; }
     virtual bool IsDeleteForbidden() const { return mnForbidDelete > 0; }
