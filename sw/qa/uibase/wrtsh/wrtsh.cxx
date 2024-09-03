@@ -26,6 +26,9 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <fmtanchr.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
+#include <formatflysplit.hxx>
 
 namespace
 {
@@ -429,6 +432,70 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertComboBoxContentControl)
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
     std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetComboBox());
+}
+
+void InsertSplitFly(SwWrtShell* pWrtShell)
+{
+    SwPosition aInsertPos = *pWrtShell->GetCursor()->GetPoint();
+    // Insert a table:
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert(u"A1"_ustr);
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    // Set fly properties:
+    pWrtShell->StartAllAction();
+    SwFrameFormat* pFly = pWrtShell->GetFlyFrameFormat();
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    SwFormatAnchor aAnchor(RndStdIds::FLY_AT_PARA);
+    aAnchor.SetAnchor(&aInsertPos);
+    aSet.Put(aAnchor);
+    SwDoc* pDoc = pWrtShell->GetDoc();
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+    pWrtShell->EnterStdMode();
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlysAnchorJoin)
+{
+    // Given a document with two paragraphs, each serving as an anchor of a split fly:
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"first para"_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->Insert(u"second para"_ustr);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    InsertSplitFly(pWrtShell);
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->SttPara();
+    InsertSplitFly(pWrtShell);
+
+    // When trying to delete at the end of the first para:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->EndPara();
+    pWrtShell->DelRight();
+
+    // Then make sure the join doesn't happen till a text node can only be an anchor for one split
+    // fly:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    SwCursor* pCursor = pWrtShell->GetCursor();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: first para
+    // - Actual  : first parasecond para
+    // i.e. we did join the 2 anchors and for complex enough documents the layout never finished.
+    CPPUNIT_ASSERT_EQUAL(u"first para"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    CPPUNIT_ASSERT_EQUAL(u"second para"_ustr, pCursor->GetPointNode().GetTextNode()->GetText());
 }
 }
 
