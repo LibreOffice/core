@@ -570,7 +570,7 @@ public:
      * at/as a character of the paragraph, corresponding to the paragraph and
      * paragraph portion visibility.
      */
-    void HideAndShowObjects();
+    void HideAndShowObjects() override;
 
     /// Footnote
     void RemoveFootnote(TextFrameIndex nStart,
