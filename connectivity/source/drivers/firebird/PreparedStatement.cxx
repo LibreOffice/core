@@ -356,6 +356,33 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery()
 
 namespace {
 
+sal_Int64 toPowOf10AndRound(double n, int powOf10)
+{
+    constexpr sal_Int64 powers[] = {
+        1,
+        10,
+        100,
+        1000,
+        10000,
+        100000,
+        1000000,
+        10000000,
+        100000000,
+        1000000000,
+        10000000000,
+        100000000000,
+        1000000000000,
+        10000000000000,
+        100000000000000,
+        1000000000000000,
+        10000000000000000,
+        100000000000000000,
+        1000000000000000000,
+    };
+    powOf10 = std::clamp(powOf10, 0, int(std::size(powers) - 1));
+    return n * powers[powOf10] + (n >= 0 ? 0.5 : -0.5);
+}
+
 /**
  * Take out the number part of a fix point decimal without
  * the information of where is the fractional part from a
@@ -364,7 +391,7 @@ namespace {
 sal_Int64 toNumericWithoutDecimalPlace(const Any& x, sal_Int32 scale)
 {
     if (double value = 0; x >>= value)
-        return static_cast<sal_Int64>(value * pow10Integer(scale) + (value >= 0 ? 0.5 : -0.5));
+        return toPowOf10AndRound(value, scale);
 
     // Can't use conversion of string to double, because it could be not representable in double
 

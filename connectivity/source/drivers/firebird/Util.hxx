@@ -118,8 +118,6 @@ public:
 
         void freeSQLVAR(XSQLDA* pSqlda);
 
-        sal_Int64 pow10Integer( int nDecimalCount );
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

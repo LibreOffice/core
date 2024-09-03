@@ -410,15 +410,4 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
     }
 }
 
-
-sal_Int64 firebird::pow10Integer(int nDecimalCount)
-{
-    sal_Int64 nRet = 1;
-    for(int i=0; i< nDecimalCount; i++)
-    {
-        nRet *= 10;
-    }
-    return nRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
