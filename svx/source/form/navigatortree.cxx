@@ -555,19 +555,22 @@ namespace svxform
 
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        if( auto pRemovedHint = dynamic_cast<const FmNavRemovedHint*>(&rHint) )
+        if( rHint.GetId() == SfxHintId::FmNavRemoved )
         {
+            auto pRemovedHint = static_cast<const FmNavRemovedHint*>(&rHint);
             FmEntryData* pEntryData = pRemovedHint->GetEntryData();
             Remove( pEntryData );
         }
-        else if( auto pInsertedHint = dynamic_cast<const FmNavInsertedHint*>(&rHint) )
+        else if( rHint.GetId() == SfxHintId::FmNavInserted )
         {
+            auto pInsertedHint = static_cast<const FmNavInsertedHint*>(&rHint);
             FmEntryData* pEntryData = pInsertedHint->GetEntryData();
             sal_uInt32 nRelPos = pInsertedHint->GetRelPos();
             Insert( pEntryData, nRelPos );
         }
-        else if( auto pReplacedHint = dynamic_cast<const FmNavModelReplacedHint*>(&rHint) )
+        else if( rHint.GetId() == SfxHintId::FmNavModelReplaced )
         {
+            auto pReplacedHint = static_cast<const FmNavModelReplacedHint*>(&rHint);
             FmEntryData* pData = pReplacedHint->GetEntryData();
             std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pData);
             if (xEntry)
@@ -576,13 +579,14 @@ namespace svxform
                 m_xTreeView->set_image(*xEntry, pData->GetNormalImage());
             }
         }
-        else if( auto pNameChangedHint = dynamic_cast<const FmNavNameChangedHint*>(&rHint) )
+        else if( rHint.GetId() == SfxHintId::FmNavNameChanged )
         {
+            auto pNameChangedHint = static_cast<const FmNavNameChangedHint*>(&rHint);
             std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pNameChangedHint->GetEntryData());
             if (xEntry)
                 m_xTreeView->set_text(*xEntry, pNameChangedHint->GetNewName());
         }
-        else if( dynamic_cast<const FmNavClearedHint*>(&rHint) )
+        else if( rHint.GetId() == SfxHintId::FmNavCleared )
         {
             m_aCutEntries.clear();
             if (m_aControlExchange.isDataExchangeActive())
@@ -597,9 +601,10 @@ namespace svxform
             m_xTreeView->set_image(*m_xRootEntry, RID_SVXBMP_FORMS);
             m_xTreeView->set_sensitive(*m_xRootEntry, true);
         }
-        else if (auto pSelectHint = dynamic_cast<FmNavRequestSelectHint*>(const_cast<SfxHint*>(&rHint)))
+        else if (rHint.GetId() == SfxHintId::FmNavRequestSelect)
         {
-            FmEntryDataArray& arredToSelect = pSelectHint->GetItems();
+            auto pSelectHint = static_cast<const FmNavRequestSelectHint*>(&rHint);
+            FmEntryDataArray& arredToSelect = const_cast<FmNavRequestSelectHint*>(pSelectHint)->GetItems();
             SynchronizeSelection(arredToSelect);
 
             if (pSelectHint->IsMixedSelection())

@@ -2550,8 +2550,10 @@ sal_Int32 OReportController::getGroupPosition(const uno::Reference< report::XGro
 
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
-    const DlgEdHint* pDlgEdHint = dynamic_cast<const DlgEdHint*>(&_rHint);
-    if (!(pDlgEdHint && pDlgEdHint->GetKind() == RPTUI_HINT_SELECTIONCHANGED))
+    if (_rHint.GetId() != SfxHintId::ReportDesignDlgEd)
+        return;
+    const DlgEdHint* pDlgEdHint = static_cast<const DlgEdHint*>(&_rHint);
+    if (pDlgEdHint->GetKind() != RPTUI_HINT_SELECTIONCHANGED)
         return;
 
     const sal_Int32 nSelectionCount = getDesignView()->getMarkedObjectCount();

@@ -163,7 +163,7 @@ class FmFilterHint : public SfxHint
     FmFilterData*   m_pData;
 
 public:
-    explicit FmFilterHint(FmFilterData* pData):m_pData(pData){}
+    explicit FmFilterHint(SfxHintId nHintId, FmFilterData* pData) : SfxHint(nHintId), m_pData(pData) {}
     FmFilterData* GetData() const { return m_pData; }
 };
 
@@ -173,7 +173,7 @@ class FmFilterInsertedHint : public FmFilterHint
 
 public:
     FmFilterInsertedHint(FmFilterData* pData, size_t nRelPos)
-        :FmFilterHint(pData)
+        :FmFilterHint(SfxHintId::FmFilterInserted, pData)
         ,m_nPos(nRelPos){}
 
     size_t GetPos() const { return m_nPos; }
@@ -183,7 +183,7 @@ class FmFilterRemovedHint : public FmFilterHint
 {
 public:
     explicit FmFilterRemovedHint(FmFilterData* pData)
-        :FmFilterHint(pData){}
+        :FmFilterHint(SfxHintId::FmFilterRemoved, pData){}
 };
 
 
@@ -191,19 +191,19 @@ class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
     explicit FmFilterTextChangedHint(FmFilterData* pData)
-        :FmFilterHint(pData){}
+        :FmFilterHint(SfxHintId::FmFilterTextChanged, pData){}
 };
 
 class FilterClearingHint : public SfxHint
 {
 public:
-    FilterClearingHint(){}
+    FilterClearingHint() : SfxHint(SfxHintId::FilterClearing) {}
 };
 
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
-    FmFilterCurrentChangedHint(){}
+    FmFilterCurrentChangedHint() : SfxHint(SfxHintId::FmFilterCurrentChanged) {}
 };
 
 }
@@ -1278,25 +1278,28 @@ IMPL_LINK_NOARG(FmFilterNavigator, SelectHdl, weld::TreeView&, void)
 
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (const FmFilterInsertedHint* pInsertHint = dynamic_cast<const FmFilterInsertedHint*>(&rHint))
+    if (rHint.GetId() == SfxHintId::FmFilterInserted)
     {
+        const FmFilterInsertedHint* pInsertHint = static_cast<const FmFilterInsertedHint*>(&rHint);
         Insert(pInsertHint->GetData(), pInsertHint->GetPos());
     }
-    else if( dynamic_cast<const FilterClearingHint*>(&rHint) )
+    else if( rHint.GetId() == SfxHintId::FilterClearing )
     {
         m_xTreeView->clear();
     }
-    else if (const FmFilterRemovedHint* pRemoveHint = dynamic_cast<const FmFilterRemovedHint*>(&rHint))
+    else if ( rHint.GetId() == SfxHintId::FmFilterRemoved )
     {
+        const FmFilterRemovedHint* pRemoveHint = static_cast<const FmFilterRemovedHint*>(&rHint);
         Remove(pRemoveHint->GetData());
     }
-    else if (const FmFilterTextChangedHint *pChangeHint = dynamic_cast<const FmFilterTextChangedHint*>(&rHint))
+    else if ( rHint.GetId() == SfxHintId::FmFilterTextChanged )
     {
+        const FmFilterTextChangedHint *pChangeHint = static_cast<const FmFilterTextChangedHint*>(&rHint);
         std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pChangeHint->GetData());
         if (xEntry)
             m_xTreeView->set_text(*xEntry, pChangeHint->GetData()->GetText());
     }
-    else if( dynamic_cast<const FmFilterCurrentChangedHint*>(&rHint) )
+    else if( rHint.GetId() == SfxHintId::FmFilterCurrentChanged )
     {
         m_xTreeView->queue_draw();
     }

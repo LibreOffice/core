@@ -55,7 +55,7 @@ void SAL_CALL OObjectListener::propertyChange( const  css::beans::PropertyChange
 
 
 DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
-    : eHintKind(eHint)
+    : SfxHint(SfxHintId::ReportDesignDlgEd), eHintKind(eHint)
 {
 }
 

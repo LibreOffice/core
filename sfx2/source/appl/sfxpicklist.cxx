@@ -153,9 +153,9 @@ SfxPickListImpl::SfxPickListImpl(SfxApplication& rApp)
 
 void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxOpenUrlHint* pOpenUrlHint = dynamic_cast<const SfxOpenUrlHint*>(&rHint);
-    if ( pOpenUrlHint )
+    if (rHint.GetId() == SfxHintId::SfxOpenUrl)
     {
+        const SfxOpenUrlHint* pOpenUrlHint = static_cast<const SfxOpenUrlHint*>(&rHint);
         INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pOpenUrlHint->GetDocumentURL() ));
     }
 

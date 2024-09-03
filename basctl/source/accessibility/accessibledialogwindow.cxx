@@ -444,8 +444,9 @@ void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
             default: ;
         }
     }
-    else if (DlgEdHint const* pDlgEdHint = dynamic_cast<DlgEdHint const*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::BasCtlDlgEd)
     {
+        DlgEdHint const* pDlgEdHint = static_cast<DlgEdHint const*>(&rHint);
         switch (pDlgEdHint->GetKind())
         {
             case DlgEdHint::WINDOWSCROLLED:

@@ -22,7 +22,8 @@
 namespace sd
 {
 ViewShellHint::ViewShellHint(HintId eHintId)
-    : meHintId(eHintId)
+    : SfxHint(SfxHintId::SdViewShell)
+    , meHintId(eHintId)
 {
 }
 

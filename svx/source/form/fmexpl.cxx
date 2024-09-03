@@ -47,7 +47,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos )
-    :pEntryData( pInsertedEntryData )
+    :SfxHint(SfxHintId::FmNavInserted)
+    ,pEntryData( pInsertedEntryData )
     ,nPos( nRelPos )
 
 {
@@ -61,7 +62,7 @@ FmNavInsertedHint::~FmNavInsertedHint()
 
 
 FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData )
-    :pEntryData( pAffectedEntryData )
+    :SfxHint(SfxHintId::FmNavModelReplaced), pEntryData( pAffectedEntryData )
 {
 }
 
@@ -71,7 +72,7 @@ FmNavModelReplacedHint::~FmNavModelReplacedHint()
 }
 
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
-    :pEntryData( pRemovedEntryData )
+    :SfxHint(SfxHintId::FmNavRemoved), pEntryData( pRemovedEntryData )
 {
 }
 
@@ -81,7 +82,7 @@ FmNavRemovedHint::~FmNavRemovedHint()
 }
 
 FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, OUString _aNewName )
-    :pEntryData( pData )
+    :SfxHint(SfxHintId::FmNavNameChanged), pEntryData( pData )
     ,aNewName(std::move( _aNewName ))
 {
 }
@@ -91,7 +92,7 @@ FmNavNameChangedHint::~FmNavNameChangedHint()
 {
 }
 
-FmNavClearedHint::FmNavClearedHint()
+FmNavClearedHint::FmNavClearedHint() : SfxHint(SfxHintId::FmNavCleared)
 {
 }
 

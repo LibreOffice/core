@@ -116,7 +116,8 @@ class FmNavViewMarksChanged final : public SfxHint
 {
     FmFormView* pView;
 public:
-    FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
+    FmNavViewMarksChanged(FmFormView* pWhichView)
+        : SfxHint(SfxHintId::FmNavViewMarksChanged) { pView = pWhichView; }
 
     const FmFormView* GetAffectedView() const { return pView; }
 };
@@ -207,7 +208,8 @@ class FmNavRequestSelectHint final : public SfxHint
     bool                m_bMixedSelection;
 public:
     FmNavRequestSelectHint()
-        : m_bMixedSelection(false)
+        : SfxHint(SfxHintId::FmNavRequestSelect),
+          m_bMixedSelection(false)
     {
     }
 

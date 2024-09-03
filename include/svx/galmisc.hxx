@@ -183,9 +183,11 @@ private:
 public:
 
                      GalleryHint( GalleryHintType nType, OUString aThemeName, void* nData1 = nullptr ) :
+                        SfxHint(SfxHintId::NONE),
                         mnType( nType ), maThemeName(std::move( aThemeName )), mnData1( nData1 ) {}
 
                      GalleryHint( GalleryHintType nType, OUString aThemeName, OUString aStringData ) :
+                        SfxHint(SfxHintId::NONE),
                         mnType( nType ), maThemeName(std::move( aThemeName )), maStringData(std::move( aStringData )), mnData1( nullptr ) {}
 
     GalleryHintType  GetType() const { return mnType; }

@@ -316,7 +316,7 @@ public:
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint final : public SfxHint
 {
 public:
-                         SfxStyleSheetPoolHint() {}
+    SfxStyleSheetPoolHint() : SfxHint(SfxHintId::SfxStyleSheetPool) {}
 };
 
 

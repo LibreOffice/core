@@ -279,8 +279,9 @@ void Listener::Notify (
         mrController.CheckForMasterPageAssignment();
         mrController.CheckForSlideTransitionAssignment();
     }
-    else if (auto pViewShellHint = dynamic_cast<const ViewShellHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SdViewShell)
     {
+        auto pViewShellHint = static_cast<const ViewShellHint*>(&rHint);
         switch (pViewShellHint->GetHintId())
         {
             case ViewShellHint::HINT_PAGE_RESIZE_START:

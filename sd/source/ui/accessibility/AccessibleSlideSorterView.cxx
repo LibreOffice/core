@@ -833,8 +833,9 @@ void AccessibleSlideSorterView::Implementation::Notify (
                 break;
         }
     }
-    else if (auto pViewShellHint = dynamic_cast<const sd::ViewShellHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::SdViewShell)
     {
+        auto pViewShellHint = static_cast<const sd::ViewShellHint*>(&rHint);
         switch (pViewShellHint->GetHintId())
         {
             case sd::ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:

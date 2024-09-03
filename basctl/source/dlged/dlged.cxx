@@ -66,13 +66,15 @@ constexpr OUString aDecorationPropName = u"Decoration"_ustr;
 
 
 DlgEdHint::DlgEdHint(Kind eHint)
-    : eKind(eHint)
+    : SfxHint(SfxHintId::BasCtlDlgEd)
+    , eKind(eHint)
     , pDlgEdObj(nullptr)
 {
 }
 
 DlgEdHint::DlgEdHint(Kind eHint, DlgEdObj* pObj)
-    : eKind(eHint)
+    : SfxHint(SfxHintId::BasCtlDlgEd)
+    , eKind(eHint)
     , pDlgEdObj(pObj)
 {
 }

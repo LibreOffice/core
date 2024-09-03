@@ -79,7 +79,7 @@ std::unique_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify cons
         }
     }
 
-    return std::make_unique<SfxHint>( );
+    return std::make_unique<SfxHint>( SfxHintId::NONE );
 }
 
 void SvxEditSourceHelper::GetAttributeRun( sal_Int32& nStartIndex, sal_Int32& nEndIndex, const EditEngine& rEE, sal_Int32 nPara, sal_Int32 nIndex, bool bInCell )

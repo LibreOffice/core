@@ -675,8 +675,9 @@ namespace svxform
             UpdateContent(nullptr);
         }
         // changed mark of controls?
-        else if (const FmNavViewMarksChanged* pvmcHint = dynamic_cast<const FmNavViewMarksChanged*>(&rHint))
+        else if (rHint.GetId() == SfxHintId::FmNavViewMarksChanged)
         {
+            const FmNavViewMarksChanged* pvmcHint = static_cast<const FmNavViewMarksChanged*>(&rHint);
             BroadcastMarkedObjects(pvmcHint->GetAffectedView()->GetMarkedObjectList());
         }
     }

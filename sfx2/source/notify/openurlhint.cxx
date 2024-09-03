@@ -21,6 +21,7 @@
 #include <utility>
 
 SfxOpenUrlHint::SfxOpenUrlHint( OUString sDocumentURL ) :
+    SfxHint(SfxHintId::SfxOpenUrl),
     msDocumentURL(std::move(sDocumentURL)) { }
 
 const OUString& SfxOpenUrlHint::GetDocumentURL() const

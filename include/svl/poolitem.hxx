@@ -861,7 +861,7 @@ class SVL_DLLPUBLIC SfxPoolItemHint final : public SfxHint
 {
     SfxPoolItem* pObj;
 public:
-    explicit SfxPoolItemHint( SfxPoolItem* Object ) : pObj(Object) {}
+    explicit SfxPoolItemHint( SfxPoolItem* Object ) : SfxHint(SfxHintId::PoolItem), pObj(Object) {}
     SfxPoolItem* GetObject() const { return pObj; }
 };
 

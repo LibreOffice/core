@@ -40,6 +40,26 @@ enum class SfxHintId {
     RedlineChanged,
     DocumentRepair,
     SvxViewChanged,
+    PoolItem,
+    SfxStyleSheetPool,
+    INetURLHistory,
+    SfxOpenUrl,
+
+// svx navigator tree
+    FmNavViewMarksChanged,
+    FmNavRequestSelect,
+    FmNavInserted,
+    FmNavModelReplaced,
+    FmNavRemoved,
+    FmNavNameChanged,
+    FmNavCleared,
+
+// svx filter navigator
+    FmFilterInserted,
+    FilterClearing,
+    FmFilterRemoved,
+    FmFilterTextChanged,
+    FmFilterCurrentChanged,
 
 // VCL text hints
     TextParaInserted,
@@ -60,6 +80,12 @@ enum class SfxHintId {
     BasicInfoWanted,
     BasicStart,
     BasicStop,
+
+// basctl
+    BasCtlDlgEd,
+
+// reportdesign
+    ReportDesignDlgEd,
 
 // SVX
     FmDesignModeChanged,
@@ -102,6 +128,8 @@ enum class SfxHintId {
     ScAccMakeDrawLayer,
     ScAccWindowResized,
 
+// sd hints
+    SdViewShell,
 
 // SFX stylesheet
     StyleSheetCreated,  // new
