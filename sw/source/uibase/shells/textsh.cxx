@@ -524,7 +524,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            SfxItemSet aSet = CreateInsertFrameItemSet(aMgr);
+            auto xSet = CreateInsertFrameItemSet(aMgr);
 
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( GetView().GetDocShell()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -532,8 +532,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
-                                                  aSet));
-            pDlg->StartExecuteAsync([aSet, pDlg, nSlot, this](sal_Int32 nResult) {
+                                                  *xSet));
+            pDlg->StartExecuteAsync([xSet=std::move(xSet), pDlg, nSlot, this](sal_Int32 nResult) {
                 if (nResult == RET_OK && pDlg->GetOutputItemSet())
                 {
                     SwFlyFrameAttrMgr aAttrMgr( true, GetShellPtr(), Frmmgr_Type::TEXT, nullptr );
@@ -544,7 +544,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     rShell.StartUndo(SwUndoId::INSERT);
 
                     SfxItemSet aOutSet(*pDlg->GetOutputItemSet());
-                    const SvxBoxItem* pBox = aSet.GetItem(RES_BOX);
+                    const SvxBoxItem* pBox = xSet->GetItem(RES_BOX);
                     if (pBox && !aOutSet.HasItem(RES_BOX))
                     {
                         // The input set had border info but the output set not, then copy it over
@@ -914,9 +914,9 @@ SwTextShell::~SwTextShell()
 {
 }
 
-SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
+std::shared_ptr<SfxItemSet> SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
 {
-    SfxItemSet aSet(GetPool(), svl::Items<
+    auto xSet = std::make_shared<SfxItemSet>(GetPool(), svl::Items<
         RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
         XATTR_FILL_FIRST,       XATTR_FILL_LAST, // tdf#95003
         SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
@@ -925,38 +925,38 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
         SID_HTML_MODE,          SID_HTML_MODE,
         FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
         FN_SET_FRM_NAME,        FN_SET_FRM_NAME>);
-    aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+    xSet->Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
 
     // For the Area tab page.
-    GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
+    GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(*xSet);
 
     const SwRect &rPg = GetShell().GetAnyCurRect(CurRectType::Page);
     SwFormatFrameSize aFrameSize(SwFrameSize::Variable, rPg.Width(), rPg.Height());
     aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-    aSet.Put(aFrameSize);
+    xSet->Put(aFrameSize);
 
     const SwRect &rPr = GetShell().GetAnyCurRect(CurRectType::PagePrt);
     SwFormatFrameSize aPrtSize(SwFrameSize::Variable, rPr.Width(), rPr.Height());
     aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
-    aSet.Put(aPrtSize);
+    xSet->Put(aPrtSize);
 
-    aSet.Put(rMgr.GetAttrSet());
-    aSet.SetParent( rMgr.GetAttrSet().GetParent() );
+    xSet->Put(rMgr.GetAttrSet());
+    xSet->SetParent( rMgr.GetAttrSet().GetParent() );
 
     // Delete minimum size in columns.
-    SvxBoxInfoItem aBoxInfo(aSet.Get(SID_ATTR_BORDER_INNER));
-    const SvxBoxItem& rBox = aSet.Get(RES_BOX);
+    SvxBoxInfoItem aBoxInfo(xSet->Get(SID_ATTR_BORDER_INNER));
+    const SvxBoxItem& rBox = xSet->Get(RES_BOX);
     aBoxInfo.SetMinDist(false);
     aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
-    aSet.Put(aBoxInfo);
+    xSet->Put(aBoxInfo);
 
     if (!SwFlyFrameAttrMgr::SingleTableSelected(GetShell()))
     {
         SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
-        aSet.Put(aAnchor);
+        xSet->Put(aAnchor);
     }
 
-    return aSet;
+    return xSet;
 }
 
 void SwTextShell::InsertSymbol( SfxRequest& rReq )

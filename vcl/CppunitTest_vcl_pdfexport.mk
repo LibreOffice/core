@@ -42,6 +42,10 @@ $(eval $(call gb_CppunitTest_use_vcl,vcl_pdfexport))
 
 $(eval $(call gb_CppunitTest_use_rdb,vcl_pdfexport,services))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,vcl_pdfexport,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,vcl_pdfexport))
 
 # assert if font/glyph fallback occurs

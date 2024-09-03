@@ -1741,11 +1741,13 @@ void SwFrame::MakeValidZeroHeight()
 {
     SwRectFnSet aRectFnSet(this);
     {
-        SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
+        SwFrameAreaDefinition::FramePrintAreaWriteAccess area(*this);
         aRectFnSet.SetHeight(area, 0);
     }
+    ShrinkFrame(aRectFnSet.GetHeight(getFrameArea()));
+    if (IsLayoutFrame()) // ShrinkFrame might do nothing!
     {
-        SwFrameAreaDefinition::FramePrintAreaWriteAccess area(*this);
+        SwFrameAreaDefinition::FrameAreaWriteAccess area(*this);
         aRectFnSet.SetHeight(area, 0);
     }
     setFrameAreaSizeValid(true);

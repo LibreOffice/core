@@ -27,6 +27,10 @@ namespace com::sun::star::frame
 {
 class XModel;
 }
+namespace weld
+{
+class DialogController;
+}
 
 namespace chart
 {
@@ -38,8 +42,13 @@ public:
     virtual void listeningFinished(const OUString& rNewRange) = 0;
     virtual void disposingRangeSelection() = 0;
 
+    void enableRangeChoosing(bool bEnable, weld::DialogController* pDialog);
+
 protected:
     ~RangeSelectionListenerParent() {}
+
+private:
+    OUString m_sRestorePageIdent;
 };
 
 class RangeSelectionListener final

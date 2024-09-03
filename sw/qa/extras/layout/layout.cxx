@@ -21,6 +21,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <unoframe.hxx>
+#include <fldmgr.hxx>
 
 /// Test to assert layout / rendering result of Writer.
 class SwLayoutWriter : public SwModelTestBase
@@ -743,6 +744,110 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
                     "SwLinePortion[2]"_ostr,
                     "portion"_ostr, "hi");
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
+{
+    createSwDoc("fly_hidden_paragraph.fodt");
+
+    // first, disable both so para gets hidden
+    uno::Sequence<beans::PropertyValue> argsSH(
+        comphelper::InitPropertySequence({ { "ShowHiddenParagraphs", uno::Any(false) } }));
+    dispatchCommand(mxComponent, ".uno:ShowHiddenParagraphs", argsSH);
+
+    uno::Sequence<beans::PropertyValue> args(
+        comphelper::InitPropertySequence({ { "Fieldnames", uno::Any(false) } }));
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "448");
+    discardDumpedLayout();
+
+    // the problem was that now the fly was the same height as before hiding
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "828");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "1000");
+    discardDumpedLayout();
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "448");
+    discardDumpedLayout();
+
+    dispatchCommand(mxComponent, ".uno:Fieldnames", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/txt/infos/bounds"_ostr,
+                "height"_ostr, "828");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr,
+                "1000");
+    discardDumpedLayout();
+
+    // other test like testTdf143239 and testTdf159101 depend on this;
+    // seems getting the previous value is only possible with a listener
+    // so just hardcode it...
+    dispatchCommand(mxComponent, ".uno:Fieldnames", args);
+    Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
+{
+    createSwDoc("field_hide_section.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+    discardDumpedLayout();
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    ::std::unique_ptr<SwField> pField(pWrtShell->GetCurField()->CopyField());
+    SwFieldMgr manager(pWrtShell);
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000 /*(?)*/, "Foo", "1", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[1]/infos/bounds"_ostr, "height"_ostr,
+                "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row[2]/infos/bounds"_ostr, "height"_ostr,
+                "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/infos/bounds"_ostr, "height"_ostr, "0");
+    // the problem was that there were 3 pages now
+    assertXPath(pXmlDoc, "/root/page"_ostr, 1);
+    discardDumpedLayout();
+
+    pWrtShell->StartAllAction();
+    manager.UpdateCurField(10000 /*(?)*/, "Foo", "0", std::move(pField));
+    pWrtShell->EndAllAction();
+    Scheduler::ProcessEventsToIdle();
+
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+    discardDumpedLayout();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)

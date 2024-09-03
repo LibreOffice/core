@@ -29,6 +29,7 @@
 #include "HashMaps.hxx"
 #include "EncryptionData.hxx"
 
+#include <optional>
 #include <unordered_set>
 
 class MemoryByteGrabber;
@@ -52,9 +53,14 @@ class ZipEnumeration;
 
 class ZipFile
 {
+public:
+    enum class Checks { Default, CheckInsensitive };
+
+private:
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
 
     std::unordered_set<OUString> m_EntriesInsensitive;
+    Checks m_Checks;
 
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
@@ -84,13 +90,13 @@ class ZipFile
 
     void getSizeAndCRC( sal_Int64 nOffset, sal_Int64 nCompressedSize, sal_Int64 *nSize, sal_Int32 *nCRC );
 
-    void readLOC( ZipEntry &rEntry );
+    sal_uInt64 readLOC(ZipEntry &rEntry);
     sal_Int32 readCEN();
-    sal_Int32 findEND();
+    std::tuple<sal_Int64, sal_Int64, sal_Int64> findCentralDirectory();
     void recover();
-    static void readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
+    static bool readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLen,
                                 sal_uInt64& nSize, sal_uInt64& nCompressedSize,
-                                sal_uInt64* nOffset,
+                                ::std::optional<sal_uInt64> & roOffset,
                                 OUString const* pCENFilenameToCheck);
 
 public:
@@ -98,13 +104,9 @@ public:
     ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
              css::uno::Reference < css::io::XInputStream > const &xInput,
              css::uno::Reference < css::uno::XComponentContext > xContext,
-             bool bInitialise );
-
-    ZipFile( rtl::Reference<comphelper::RefCountedMutex> aMutexHolder,
-             css::uno::Reference < css::io::XInputStream > const &xInput,
-             css::uno::Reference < css::uno::XComponentContext > xContext,
              bool bInitialise,
-             bool bForceRecover );
+             bool bForceRecover,
+             Checks checks);
 
     ~ZipFile();
 

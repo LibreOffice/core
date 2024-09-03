@@ -180,6 +180,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159336)
 {
+    SwExportFormFieldsGuard g;
     createSwDoc("tdf159336.odt");
     save("writer_pdf_Export");
 
@@ -1002,6 +1003,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1049,6 +1051,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a content control, in placeholder mode:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1077,6 +1080,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a checkbox content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1107,6 +1111,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a dropdown content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1137,6 +1142,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF2)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     createSwDoc("tdf153040.docx");
 
     save("writer_pdf_Export");
@@ -1161,6 +1167,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a date content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1194,6 +1201,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a document with a custom 24pt font size and a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1226,6 +1234,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a combo box content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1257,6 +1266,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
@@ -1293,6 +1303,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
     if (!pPDFium)
         return;
 
+    SwExportFormFieldsGuard g;
     // Given a file with a text-type placeholder field:
     createSwDoc("placeholder.fodt");
 
@@ -1658,6 +1669,64 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
                 u"11"_ustr);
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr, "portion"_ostr,
                 u"\u202F\u1824"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)
+{
+    auto pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a file with two frames, each having a subscript run, on pages 1 and 6:
+    createSwDoc("tdf161990-subscripts.fodt");
+
+    // When exporting to PDF:
+    save(u"writer_pdf_Export"_ustr);
+    auto pPdfDocument = parsePDFExport();
+
+    // Check that both subscripts are positioned correctly relative to the non-subscript runs
+    double expectedOffset = 0;
+
+    // Page 1
+    {
+        auto pPage = pPdfDocument->openPage(0);
+        auto pTextPage = pPage->getTextPage();
+
+        CPPUNIT_ASSERT_EQUAL(2, pPage->getObjectCount());
+
+        auto pObject = pPage->getObject(0);
+        CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pObject->getText(pTextPage));
+        auto textPPos = pObject->getBounds();
+        pObject = pPage->getObject(1);
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pObject->getText(pTextPage));
+        auto text1Pos = pObject->getBounds();
+        expectedOffset = textPPos.getMaxY() - text1Pos.getMaxY();
+        // Without the fix, this would fail with
+        // - Expected: 7.49
+        // - Actual  : 7.54150390625
+        // But if it fails in some configurations because of different page units, then this
+        // check is not as important as that this value is the same as on the 6th page below.
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(7.49, expectedOffset, 0.01);
+    }
+
+    // Page 6
+    {
+        auto pPage = pPdfDocument->openPage(5);
+        auto pTextPage = pPage->getTextPage();
+
+        CPPUNIT_ASSERT_EQUAL(2, pPage->getObjectCount());
+
+        auto pObject = pPage->getObject(0);
+        CPPUNIT_ASSERT_EQUAL(u"P"_ustr, pObject->getText(pTextPage));
+        auto textPPos = pObject->getBounds();
+        pObject = pPage->getObject(1);
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, pObject->getText(pTextPage));
+        auto text1Pos = pObject->getBounds();
+        // Without the fix, this would fail with
+        // - Expected: 7.4925537109375
+        // - Actual  : 20.9005126953125
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(expectedOffset, textPPos.getMaxY() - text1Pos.getMaxY(), 0.01);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

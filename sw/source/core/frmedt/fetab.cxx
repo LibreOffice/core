@@ -66,6 +66,7 @@
 #include <fmtrowsplt.hxx>
 #include <node.hxx>
 #include <sortedobjs.hxx>
+#include <shellres.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1403,6 +1404,16 @@ void SwFEShell::SetTableStyle(const OUString& rStyleName)
     UpdateTableStyleFormatting(pTableNode, false, &rStyleName);
 }
 
+bool SwFEShell::ResetTableStyle()
+{
+    SwTableNode *pTableNode = const_cast<SwTableNode*>(IsCursorInTable());
+    if (!pTableNode)
+        return false;
+
+    OUString takingAddressOfRValue;
+    return UpdateTableStyleFormatting(pTableNode, false, &takingAddressOfRValue);
+}
+
     // AutoFormat for the table/table selection
 bool SwFEShell::SetTableStyle(const SwTableAutoFormat& rStyle)
 {
@@ -1430,7 +1441,19 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     OUString const aTableStyleName(pStyleName
             ? *pStyleName
             : pTableNode->GetTable().GetTableStyleName());
-    SwTableAutoFormat* pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);
+
+    std::unique_ptr<SwTableAutoFormat> pNone;
+    SwTableAutoFormat* pTableStyle;
+    if (pStyleName && pStyleName->isEmpty())
+    {
+        pNone.reset(new SwTableAutoFormat(SwViewShell::GetShellRes()->aStrNone));
+        pNone->DisableAll();
+        pTableStyle = pNone.get();
+    }
+    else
+    {
+        pTableStyle = GetDoc()->GetTableStyles().FindAutoFormat(aTableStyleName);
+    }
     if (!pTableStyle)
         return false;
 
@@ -1455,7 +1478,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
         CurrShell aCurr( this );
         StartAllAction();
         bRet = GetDoc()->SetTableAutoFormat(
-                aBoxes, *pTableStyle, bResetDirect, pStyleName != nullptr);
+                aBoxes, *pTableStyle, bResetDirect, pStyleName);
         ClearFEShellTabCols(*GetDoc(), nullptr);
         EndAllActionAndCall();
     }

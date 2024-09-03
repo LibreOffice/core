@@ -113,9 +113,14 @@ namespace {
 class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
-    HandleTabStopToken(const SwFormToken&, const SwTextNode&,
-            const SwRootFrame *) const override {
+    HandleTabStopToken(const SwFormToken&, const SwTextNode&) const override
+    {
         return HandledTabStopToken();
+    }
+
+    auto CalcEndStop(SwTextNode const&, SwRootFrame const*) const -> tools::Long override
+    {
+        return 0;
     }
 };
 

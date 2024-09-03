@@ -248,6 +248,7 @@ class SW_DLLPUBLIC SwDoc final
 
     std::unique_ptr<sw::FrameFormats<SwFrameFormat*>>    mpFrameFormatTable;    //< Format table
     std::unique_ptr<SwCharFormats>     mpCharFormatTable;
+    std::unique_ptr<SwCharFormats>     mpCharFormatDeletionTable;
     std::unique_ptr<sw::FrameFormats<sw::SpzFrameFormat*>>    mpSpzFrameFormatTable;
     std::unique_ptr<SwSectionFormats>  mpSectionFormatTable;
     std::unique_ptr<sw::TableFrameFormats>    mpTableFrameFormatTable; //< For tables
@@ -1256,7 +1257,7 @@ public:
 
     /// AutoFormat for table/table selection.
     /// @param bResetDirect Reset direct formatting that might be applied to the cells.
-    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, bool isSetStyleName = false);
+    bool SetTableAutoFormat(const SwSelBoxes& rBoxes, const SwTableAutoFormat& rNew, bool bResetDirect = false, OUString const* pStyleNameToSet = nullptr);
 
     // Query attributes.
     bool GetTableAutoFormat( const SwSelBoxes& rBoxes, SwTableAutoFormat& rGet );

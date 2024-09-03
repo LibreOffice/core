@@ -1331,6 +1331,46 @@ static bool ConsiderNextPortionForCursorOffset(const SwLinePortion* pPor, SwTwip
     return true;
 }
 
+static auto SearchLine(SwLineLayout const*const pLineOfFoundPor,
+    SwLinePortion const*const pFoundPor,
+    int & rLines, std::vector<SwFieldPortion const*> & rPortions,
+    SwLineLayout const*const pLine) -> bool
+{
+    for (SwLinePortion const* pLP = pLine; pLP; pLP = pLP->GetNextPortion())
+    {
+        if (pLP == pFoundPor)
+        {
+            return true;
+        }
+        if (pLP->InFieldGrp())
+        {
+            SwFieldPortion const* pField(static_cast<SwFieldPortion const*>(pLP));
+            if (!pField->IsFollow())
+            {
+                rLines = 0;
+                rPortions.clear();
+            }
+            if (pLine == pLineOfFoundPor)
+            {
+                rPortions.emplace_back(pField);
+            }
+        }
+        else if (pLP->IsMultiPortion())
+        {
+            SwMultiPortion const*const pMulti(static_cast<SwMultiPortion const*>(pLP));
+            for (SwLineLayout const* pMLine = &pMulti->GetRoot();
+                    pMLine; pMLine = pMLine->GetNext())
+            {
+                if (SearchLine(pLineOfFoundPor, pFoundPor, rLines, rPortions, pMLine))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return (pLine == pLineOfFoundPor);
+}
+
 // Return: Offset in String
 TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, const Point &rPoint,
                                     bool bChgNode, SwCursorMoveState* pCMS ) const
@@ -1784,23 +1824,7 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                         for (SwLineLayout const* pLine = GetInfo().GetParaPortion();
                                 true; pLine = pLine->GetNext())
                         {
-                            for (SwLinePortion const* pLP = pLine; pLP && pLP != pPor; pLP = pLP->GetNextPortion())
-                            {
-                                if (pLP->InFieldGrp())
-                                {
-                                    SwFieldPortion const* pField(static_cast<SwFieldPortion const*>(pLP));
-                                    if (!pField->IsFollow())
-                                    {
-                                        nLines = 0;
-                                        portions.clear();
-                                    }
-                                    if (pLine == m_pCurr)
-                                    {
-                                        portions.emplace_back(pField);
-                                    }
-                                }
-                            }
-                            if (pLine == m_pCurr)
+                            if (SearchLine(m_pCurr, pPor, nLines, portions, pLine))
                             {
                                 break;
                             }

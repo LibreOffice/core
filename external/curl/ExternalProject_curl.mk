@@ -43,7 +43,8 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--without-libssh2 --without-nghttp2 \
 			--without-libssh --without-brotli \
 			--without-ngtcp2 --without-quiche \
-			--without-zstd --without-hyper --without-libgsasl --without-gssapi \
+			--without-zstd --without-hyper --without-libgsasl \
+			$(if $(WITH_GSSAPI),--with-gssapi,--without-gssapi) \
 			--disable-mqtt --disable-ares \
 			--disable-dict --disable-file --disable-gopher --disable-imap \
 			--disable-ldap --disable-ldaps --disable-manual --disable-pop3 \

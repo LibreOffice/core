@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[24.2.5.2],[],[],[http://documentfoundation.org/])
+AC_INIT([LibreOffice],[24.2.6.2],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -1006,6 +1006,7 @@ ios*) # iOS
     test_libcmis=no
     test_openldap=no
     test_webdav=no
+    with_gssapi=no
     if test -n "$LODE_HOME" ; then
         mac_sanitize_path
         AC_MSG_NOTICE([sanitized the PATH to $PATH])
@@ -1103,6 +1104,7 @@ linux-android*)
     test_openldap=no
     test_system_freetype=no
     test_webdav=no
+    with_gssapi=no
     disable_database_connectivity_dependencies
     enable_lotuswordpro=no
     enable_mpl_subset=yes
@@ -2715,6 +2717,7 @@ AC_ARG_WITH(locales,
 ,)
 
 # Kerberos and GSSAPI used only by PostgreSQL as of LibO 3.5
+# and also by libcurl since LibO 24.2.6
 libo_FUZZ_ARG_WITH(krb5,
     AS_HELP_STRING([--with-krb5],
         [Enable MIT Kerberos 5 support in modules that support it.
@@ -10565,6 +10568,17 @@ dnl ===================================================================
 dnl Check for system curl
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([curl],[CURL],[libcurl >= 7.68.0],enabled)
+
+if test "$enable_curl" = "yes" -a "$with_system_curl" != "yes" -a "$with_gssapi" != "no"; then
+    if test "$_os" != "WINNT"; then
+        WITH_GSSAPI=TRUE
+        save_LIBS=$LIBS
+        AC_SEARCH_LIBS(gss_init_sec_context, [gssapi_krb5 gss 'gssapi -lkrb5 -lcrypto'], [],
+            [AC_MSG_ERROR([could not find function 'gss_init_sec_context' required for GSSAPI])])
+        GSSAPI_LIBS=$LIBS
+        LIBS=$save_LIBS
+    fi
+fi
 
 dnl ===================================================================
 dnl Check for system boost

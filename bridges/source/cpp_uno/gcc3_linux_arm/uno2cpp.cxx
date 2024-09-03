@@ -298,7 +298,7 @@ void callVirtualMethod(
         "mov %[r1], r1\n\t"
         : [r0]"=r" (r0), [r1]"=r" (r1)
         : [pmethod]"m" (pMethod), [pgpr]"m" (pGPR), [pfpr]"m" (pFPR)
-        : "r0", "r1", "r2", "r3", "r4", "r5");
+        : "r2", "r3", "r4", "r5");
 
     MapReturn(r0, r1, pReturnType, static_cast<sal_uInt32*>(pRegisterReturn));
 }
