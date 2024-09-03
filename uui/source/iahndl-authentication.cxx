@@ -38,6 +38,7 @@
 #include <vcl/abstdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>
+#include <comphelper/lok.hxx>
 
 #include "authfallbackdlg.hxx"
 #include <strings.hrc>
@@ -108,8 +109,17 @@ executeLoginDialog(
     if ( bCanUseSysCreds )
         aDialog.SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
-    rInfo.SetResult(aDialog.run() == RET_OK ? DialogMask::ButtonsOk :
-                                              DialogMask::ButtonsCancel);
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Avoid the password dialog popup in the LOK case: it's not async and the "remember
+        // password" checkbox would not work.
+        rInfo.SetResult(DialogMask::ButtonsCancel);
+    }
+    else
+    {
+        rInfo.SetResult(aDialog.run() == RET_OK ? DialogMask::ButtonsOk :
+                DialogMask::ButtonsCancel);
+    }
     rInfo.SetUserName(aDialog.GetName());
     rInfo.SetPassword(aDialog.GetPassword());
     rInfo.SetAccount(aDialog.GetAccount());
