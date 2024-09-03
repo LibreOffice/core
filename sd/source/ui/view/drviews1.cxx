@@ -377,10 +377,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 pTitledDockingWindow->SetTitle(SdResId(aId));
     };
 
-    if (comphelper::LibreOfficeKit::isActive())
-        GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
-                                                   ".uno:DocumentStatus"_ostr); // pseudo-command
-
     if (meEditMode == EditMode::Page)
     {
         /******************************************************************
