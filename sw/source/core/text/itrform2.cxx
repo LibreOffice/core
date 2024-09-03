@@ -1460,6 +1460,7 @@ SwTextPortion *SwTextFormatter::NewTextPortion( SwTextFormatInfo &rInf )
                 case CH_TXTATR_BREAKWORD:
                 case CH_TXTATR_INWORD:
                 case CH_TXTATR_TAB:
+                case CH_TXTATR_NEWLINE:
                 case CH_TXT_ATR_INPUTFIELDSTART:
                 case CH_TXT_ATR_INPUTFIELDEND:
                 case CH_TXT_ATR_FORMELEMENT:
