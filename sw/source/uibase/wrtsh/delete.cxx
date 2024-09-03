@@ -36,6 +36,8 @@
 #include <osl/diagnose.h>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <txtfrm.hxx>
 
 inline void SwWrtShell::OpenMark()
 {
@@ -336,6 +338,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             // #108049# Save the startnode of the current cell
             const SwStartNode* pSNdOld = pWasInTableNd ?
                 GetCursor()->GetPointNode().FindTableBoxStartNode() : nullptr;
+            SwTextNode* pOldTextNode = GetCursor()->GetPointNode().GetTextNode();
             bool bCheckDelFull = SelectionType::Text & nSelection && SwCursorShell::IsSttPara();
             bool bDelFull = false;
             bool bDoNothing = false;
@@ -365,6 +368,7 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
             }
 
             // restore cursor
+            SwTextNode* pNewTextNode = GetCursor()->GetPointNode().GetTextNode();
             SwCursorShell::Pop(SwCursorShell::PopMode::DeleteCurrent);
 
             if (bDelFull)
@@ -372,6 +376,25 @@ bool SwWrtShell::DelRight(bool const isReplaceHeuristic)
                 DelFullPara();
                 UpdateAttr();
             }
+
+            if (pOldTextNode && pNewTextNode && pNewTextNode != pOldTextNode)
+            {
+                SwRootFrame* pLayout = mxDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+                if (pLayout)
+                {
+                    auto pOldFrame = static_cast<SwTextFrame*>(pOldTextNode->getLayoutFrame(pLayout));
+                    auto pNewFrame = static_cast<SwTextFrame*>(pNewTextNode->getLayoutFrame(pLayout));
+                    if (pOldFrame && pNewFrame && pOldFrame->HasSplitFlyDrawObjs() && pNewFrame->HasSplitFlyDrawObjs())
+                    {
+                        // We have a selection where both the old and the new position is an anchor
+                        // for a potentially split fly. Don't allow join of the nodes in this case,
+                        // since the layout supports multiple anchors for one split fly, but it
+                        // doesn't support the usage of the same anchor for multiple split flys.
+                        bDoNothing = true;
+                    }
+                }
+            }
+
             if (bDelFull || bDoNothing)
                 break;
         }

@@ -1481,6 +1481,11 @@ std::vector<SwFlyAtContentFrame*> SwTextFrame::GetSplitFlyDrawObjs() const
     return aObjs;
 }
 
+bool SwTextFrame::HasSplitFlyDrawObjs() const
+{
+    return !GetSplitFlyDrawObjs().empty();
+}
+
 SwFlyAtContentFrame* SwTextFrame::HasNonLastSplitFlyDrawObj() const
 {
     const SwTextFrame* pFollow = GetFollow();

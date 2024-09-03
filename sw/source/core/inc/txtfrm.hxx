@@ -807,6 +807,8 @@ public:
     /// with a negative vertical offset. Such frames may need explicit splitting.
     bool IsEmptyWithSplitFly() const;
 
+    bool HasSplitFlyDrawObjs() const;
+
     static SwView* GetView();
 
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
