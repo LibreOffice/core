@@ -1502,7 +1502,7 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
         // recursively, in combination with cairo_save/cairo_restore. I think
         // it *should* work as used here, see
         // https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-clip
-        // where this combination is explicitely mentioned/explained. It may
+        // where this combination is explicitly mentioned/explained. It may
         // just be a error in cairo, too (?).
         // The error is that without that for some reason the last clip is not
         // restored but *stays*, so e.g. when having a shape filled with
