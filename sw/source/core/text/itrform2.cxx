@@ -2399,7 +2399,7 @@ void SwTextFormatter::FeedInf( SwTextFormatInfo &rInf ) const
     rInf.LeftMargin(GetLeftMargin());
 
     rInf.RealWidth(rInf.Right() - GetLeftMargin());
-    rInf.Width( rInf.RealWidth() );
+    rInf.Width(std::max(rInf.RealWidth(), SwTwips(0)));
     if( const_cast<SwTextFormatter*>(this)->GetRedln() )
     {
         const_cast<SwTextFormatter*>(this)->GetRedln()->Clear( const_cast<SwTextFormatter*>(this)->GetFnt() );
