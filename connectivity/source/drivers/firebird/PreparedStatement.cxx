@@ -364,7 +364,7 @@ namespace {
 sal_Int64 toNumericWithoutDecimalPlace(const Any& x, sal_Int32 scale)
 {
     if (double value = 0; x >>= value)
-        return static_cast<sal_Int64>(value * pow10Integer(scale) + 0.5);
+        return static_cast<sal_Int64>(value * pow10Integer(scale) + (value >= 0 ? 0.5 : -0.5));
 
     // Can't use conversion of string to double, because it could be not representable in double
 
