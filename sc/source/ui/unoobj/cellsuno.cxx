@@ -1531,8 +1531,9 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( !aValueListeners.empty() )
             bGotDataChangedHint = true;
     }
-    else if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
+        auto pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         ScDocument& rDoc = pDocShell->GetDocument();
         std::unique_ptr<ScRangeList> pUndoRanges;
         if ( rDoc.HasUnoRefUndo() )
@@ -1563,8 +1564,9 @@ void ScCellRangesBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 rDoc.AddUnoRefChange( nObjectId, *pUndoRanges );
         }
     }
-    else if ( auto pUndoHint = dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScUnoRefUndo )
     {
+        auto pUndoHint = static_cast<const ScUnoRefUndoHint*>(&rHint);
         if ( pUndoHint->GetObjectId() == nObjectId )
         {
             // restore ranges from hint
@@ -8584,8 +8586,9 @@ ScCellsObj::~ScCellsObj()
 
 void ScCellsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
+        auto pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
                                         pRefHint->GetDx(), pRefHint->GetDy(), pRefHint->GetDz() );
     }
@@ -8695,9 +8698,9 @@ void ScCellsEnumeration::Advance_Impl()
 
 void ScCellsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const ScUpdateRefHint* pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint);
-    if ( pRefHint )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
+        const ScUpdateRefHint* pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         if (pDocShell)
         {
             aRanges.UpdateReference( pRefHint->GetMode(), &pDocShell->GetDocument(), pRefHint->GetRange(),
@@ -8767,7 +8770,7 @@ ScCellFormatsObj::~ScCellFormatsObj()
 
 void ScCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! aTotalRange...
     }
@@ -8929,7 +8932,7 @@ rtl::Reference<ScCellRangeObj> ScCellFormatsEnumeration::NextObject_Impl()
 
 void ScCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! and now???
     }
@@ -8978,7 +8981,7 @@ ScUniqueCellFormatsObj::~ScUniqueCellFormatsObj()
 
 void ScUniqueCellFormatsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! aTotalRange...
     }
@@ -9234,7 +9237,7 @@ ScUniqueCellFormatsEnumeration::~ScUniqueCellFormatsEnumeration()
 
 void ScUniqueCellFormatsEnumeration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! and now ???
     }

@@ -4527,7 +4527,7 @@ ScTableColumnsObj::~ScTableColumnsObj()
 
 void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! update of references for sheet and its start/end
     }
@@ -4782,7 +4782,7 @@ ScTableRowsObj::~ScTableRowsObj()
 
 void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! update of references for sheet and its start/end
     }
@@ -5201,7 +5201,7 @@ ScScenariosObj::~ScScenariosObj()
 
 void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! update of references for sheet and its start/end
     }

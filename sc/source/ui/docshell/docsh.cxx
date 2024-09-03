@@ -736,9 +736,9 @@ bool ScDocShell::Load( SfxMedium& rMedium )
 
 void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const ScTablesHint* pScHint = dynamic_cast< const ScTablesHint* >( &rHint );
-    if (pScHint)
+    if (rHint.GetId() == SfxHintId::ScTables)
     {
+        const ScTablesHint* pScHint = static_cast< const ScTablesHint* >( &rHint );
         if (pScHint->GetTablesHintId() == SC_TAB_INSERTED)
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = m_pDocument->GetVbaEventProcessor();
@@ -755,8 +755,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( auto pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
         NotifyStyle( *pStyleSheetHint );
-    else if ( auto pStlHint = dynamic_cast<const ScAutoStyleHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScAutoStyle )
     {
+        auto pStlHint = static_cast<const ScAutoStyleHint*>(&rHint);
         //! direct call for AutoStyles
 
         //  this is called synchronously from ScInterpreter::ScStyle,

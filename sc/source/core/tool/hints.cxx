@@ -23,6 +23,7 @@
 // ScPaintHint - info what has to be repainted
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, PaintPartFlags nPaint, tools::Long nMaxWidthAffectedHint ) :
+    SfxHint( SfxHintId::ScPaint ),
     aRange( rRng ),
     nParts( nPaint ),
     nWidthAffectedHint(nMaxWidthAffectedHint)
@@ -37,6 +38,7 @@ ScPaintHint::~ScPaintHint()
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                     SCCOL nX, SCROW nY, SCTAB nZ ) :
+    SfxHint(SfxHintId::ScUpdateRef),
     eUpdateRefMode( eMode ),
     aRange( rR ),
     nDx( nX ),
@@ -52,7 +54,7 @@ ScUpdateRefHint::~ScUpdateRefHint()
 //      ScLinkRefreshedHint - a link has been refreshed
 
 ScLinkRefreshedHint::ScLinkRefreshedHint() :
-    nLinkType( ScLinkRefType::NONE )
+    SfxHint(SfxHintId::ScLinkRefreshed), nLinkType( ScLinkRefType::NONE )
 {
 }
 
@@ -85,6 +87,7 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
 
 ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, OUString aSt1,
                                         sal_uLong nT, OUString aSt2 ) :
+    SfxHint(SfxHintId::ScAutoStyle),
     aRange( rR ),
     aStyle1(std::move( aSt1 )),
     aStyle2(std::move( aSt2 )),
@@ -97,7 +100,7 @@ ScAutoStyleHint::~ScAutoStyleHint()
 }
 
 ScDBRangeRefreshedHint::ScDBRangeRefreshedHint( const ScImportParam& rP )
-    : aParam(rP)
+    : SfxHint(SfxHintId::ScDBRangeRefreshed), aParam(rP)
 {
 }
 ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
@@ -105,7 +108,7 @@ ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
 }
 
 ScDataPilotModifiedHint::ScDataPilotModifiedHint( OUString aName )
-    : maName(std::move(aName))
+    : SfxHint(SfxHintId::ScDataPilotModified), maName(std::move(aName))
 {
 }
 ScDataPilotModifiedHint::~ScDataPilotModifiedHint()

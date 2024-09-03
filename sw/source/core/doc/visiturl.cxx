@@ -42,7 +42,7 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( !(dynamic_cast<const INetURLHistoryHint*>(&rHint) && m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
+    if( rHint.GetId() != SfxHintId::INetURLHistory || !m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
     // This URL has been changed:

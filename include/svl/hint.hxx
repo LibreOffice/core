@@ -118,6 +118,17 @@ enum class SfxHintId {
     ScHiddenRowsChanged,
     ScSelectionChanged,
     ScClearCache,
+    ScTabDeleted,
+    ScTabSizeChanged,
+    ScPaint,
+    ScUpdateRef,
+    ScLinkRefreshed,
+    ScAutoStyle,
+    ScDBRangeRefreshed,
+    ScDataPilotModified,
+    ScTables,
+    ScEditView,
+    ScUnoRefUndo,
 
 // SC accessibility hints
     ScAccTableChanged,
@@ -127,6 +138,10 @@ enum class SfxHintId {
     ScAccLeaveEditMode,
     ScAccMakeDrawLayer,
     ScAccWindowResized,
+    ScAccGridWinFocusLost,
+    ScAccGridWinFocusGot,
+    ScAccWinFocusGot,
+    ScAccWinFocusLost,
 
 // sd hints
     SdViewShell,

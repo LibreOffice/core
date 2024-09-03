@@ -411,8 +411,9 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
+        auto pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         if (pRefHint->GetMode() == URM_INSDEL && pRefHint->GetDz() == 0) //test whether table is inserted or deleted
         {
             if (((pRefHint->GetRange().aStart.Col() == maRange.aStart.Col()) &&

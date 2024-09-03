@@ -44,7 +44,7 @@ void ScUnoRefList::Undo( ScDocument* pDoc )
 }
 
 ScUnoRefUndoHint::ScUnoRefUndoHint( ScUnoRefEntry aRefEntry ) :
-    aEntry(std::move( aRefEntry ))
+    SfxHint(SfxHintId::ScUnoRefUndo), aEntry(std::move( aRefEntry ))
 {
 }
 

@@ -207,8 +207,9 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         adjustAnchoredPosition(*pSdrHint, rDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }
-    else if (auto pDeletedHint = dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
+    else if (rHint.GetId() == SfxHintId::ScTabDeleted) // Sheet has been deleted
     {
+        auto pDeletedHint = static_cast<const ScTabDeletedHint*>(&rHint);
         SCTAB nDelTab = pDeletedHint->GetTab();
         if (ValidTab(nDelTab))
         {
@@ -217,8 +218,9 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (auto pChangedHint = dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Size has been changed
+    else if (rHint.GetId() == SfxHintId::ScTabSizeChanged) // Size has been changed
     {
+        auto pChangedHint = static_cast<const ScTabSizeChangedHint*>(&rHint);
         if ( nTab == pChangedHint->GetTab() )
             UpdateWorkArea();
     }

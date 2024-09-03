@@ -160,8 +160,9 @@ void PivotTableDataProvider::Notify(SfxBroadcaster& /*rBroadcaster*/, const SfxH
     }
     else if (m_pDocument)
     {
-        if (auto pDataPilotHint = dynamic_cast<const ScDataPilotModifiedHint*>(&rHint))
+        if (rHint.GetId() == SfxHintId::ScDataPilotModified)
         {
+            auto pDataPilotHint = static_cast<const ScDataPilotModifiedHint*>(&rHint);
             if (pDataPilotHint->GetName() == m_sPivotTableName)
             {
                 m_bNeedsUpdate = true;

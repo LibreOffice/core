@@ -1424,8 +1424,9 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (auto pFocusLostHint = dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
+    if (rHint.GetId() == SfxHintId::ScAccGridWinFocusLost )
     {
+        auto pFocusLostHint = static_cast<const ScAccGridWinFocusLostHint*>(&rHint);
         if (pFocusLostHint->GetOldGridWin() == meSplitPos)
         {
             if (mxTempAcc.is() && mpTempAccEdit)
@@ -1436,8 +1437,9 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 CommitFocusLost();
         }
     }
-    else if (auto pFocusGotHint = dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
+    else if (rHint.GetId() == SfxHintId::ScAccGridWinFocusGot)
     {
+        auto pFocusGotHint = static_cast<const ScAccGridWinFocusGotHint*>(&rHint);
         if (pFocusGotHint->GetNewGridWin() == meSplitPos)
         {
             uno::Reference<XAccessible> xAccessible;
@@ -1466,11 +1468,10 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else
+    else if (rHint.GetId() == SfxHintId::ScAccTableChanged)
     {
         // only notify if child exist, otherwise it is not necessary
-        if ((rHint.GetId() == SfxHintId::ScAccTableChanged) &&
-            mpAccessibleSpreadsheet.is())
+        if (mpAccessibleSpreadsheet.is())
         {
             FreeAccessibleSpreadsheet();
 
@@ -1486,86 +1487,86 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpAccessibleSpreadsheet.is())
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
-        else if (rHint.GetId() == SfxHintId::ScAccMakeDrawLayer)
+    }
+    else if (rHint.GetId() == SfxHintId::ScAccMakeDrawLayer)
+    {
+        if (mpChildrenShapes)
+            mpChildrenShapes->SetDrawBroadcaster();
+    }
+    else if (rHint.GetId() == SfxHintId::ScAccEnterEditMode) // this event comes only on creating edit field of a cell
+    {
+        if (mpViewShell->GetViewData().GetEditActivePart() == meSplitPos)
         {
-            if (mpChildrenShapes)
-                mpChildrenShapes->SetDrawBroadcaster();
-        }
-        else if (rHint.GetId() == SfxHintId::ScAccEnterEditMode) // this event comes only on creating edit field of a cell
-        {
-            if (mpViewShell->GetViewData().GetEditActivePart() == meSplitPos)
+            ScViewData& rViewData = mpViewShell->GetViewData();
+            EditEngine const& rEditEng = rViewData.GetEditView(meSplitPos)->getEditEngine();
+            if (rEditEng.IsUpdateLayout())
             {
-                ScViewData& rViewData = mpViewShell->GetViewData();
-                EditEngine const& rEditEng = rViewData.GetEditView(meSplitPos)->getEditEngine();
-                if (rEditEng.IsUpdateLayout())
-                {
-                    mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
-                        mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
-                        ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::CellInEditMode);
-                    uno::Reference<XAccessible> xAcc = mpTempAccEdit;
+                mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
+                    mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
+                    ScResId(STR_ACC_EDITLINE_DESCR), ScAccessibleEditObject::CellInEditMode);
+                uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
-                    AddChild(xAcc, true);
+                AddChild(xAcc, true);
 
-                    if (mpAccessibleSpreadsheet.is())
-                        mpAccessibleSpreadsheet->LostFocus();
-                    else
-                        CommitFocusLost();
+                if (mpAccessibleSpreadsheet.is())
+                    mpAccessibleSpreadsheet->LostFocus();
+                else
+                    CommitFocusLost();
 
-                    mpTempAccEdit->GotFocus();
-                }
+                mpTempAccEdit->GotFocus();
             }
         }
-        else if (rHint.GetId() == SfxHintId::ScAccLeaveEditMode)
+    }
+    else if (rHint.GetId() == SfxHintId::ScAccLeaveEditMode)
+    {
+        if (mxTempAcc.is())
         {
-            if (mxTempAcc.is())
+            if (mpTempAccEdit)
             {
-                if (mpTempAccEdit)
-                {
-                    mpTempAccEdit->LostFocus();
-                }
-                RemoveChild(mxTempAcc, true);
-                if (mpTempAccEdit)
-                {
-                    // tdf#125982 a11y use-after-free of editengine by
-                    // ScAccessibleEditObjectTextData living past the
-                    // the editengine of the editview passed in above
-                    // in ScAccEnterEditMode
-                    mpTempAccEdit->dispose();
-                    mpTempAccEdit = nullptr;
-                }
+                mpTempAccEdit->LostFocus();
+            }
+            RemoveChild(mxTempAcc, true);
+            if (mpTempAccEdit)
+            {
+                // tdf#125982 a11y use-after-free of editengine by
+                // ScAccessibleEditObjectTextData living past the
+                // the editengine of the editview passed in above
+                // in ScAccEnterEditMode
+                mpTempAccEdit->dispose();
+                mpTempAccEdit = nullptr;
+            }
+            if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
+                mpAccessibleSpreadsheet->GotFocus();
+            else if( mpViewShell && mpViewShell->IsActive())
+                CommitFocusGained();
+        }
+    }
+    else if ((rHint.GetId() == SfxHintId::ScAccVisAreaChanged) || (rHint.GetId() == SfxHintId::ScAccWindowResized))
+    {
+        tools::Rectangle aOldVisArea(maVisArea);
+        maVisArea = GetVisibleArea_Impl();
+
+        if (maVisArea != aOldVisArea)
+        {
+            if (maVisArea.GetSize() != aOldVisArea.GetSize())
+            {
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
+
+                CommitChange(aEvent);
+
+                if (mpAccessibleSpreadsheet.is())
+                    mpAccessibleSpreadsheet->BoundingBoxChanged();
                 if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
-                    mpAccessibleSpreadsheet->GotFocus();
-                else if( mpViewShell && mpViewShell->IsActive())
-                    CommitFocusGained();
+                    mpAccessibleSpreadsheet->FireFirstCellFocus();
             }
-        }
-        else if ((rHint.GetId() == SfxHintId::ScAccVisAreaChanged) || (rHint.GetId() == SfxHintId::ScAccWindowResized))
-        {
-            tools::Rectangle aOldVisArea(maVisArea);
-            maVisArea = GetVisibleArea_Impl();
-
-            if (maVisArea != aOldVisArea)
+            else if (mpAccessibleSpreadsheet.is())
             {
-                if (maVisArea.GetSize() != aOldVisArea.GetSize())
-                {
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-                    CommitChange(aEvent);
-
-                    if (mpAccessibleSpreadsheet.is())
-                        mpAccessibleSpreadsheet->BoundingBoxChanged();
-                    if (mpAccessibleSpreadsheet.is() && mpViewShell && mpViewShell->IsActive())
-                        mpAccessibleSpreadsheet->FireFirstCellFocus();
-                }
-                else if (mpAccessibleSpreadsheet.is())
-                {
-                    mpAccessibleSpreadsheet->VisAreaChanged();
-                }
-                if (mpChildrenShapes)
-                    mpChildrenShapes->VisAreaChanged();
+                mpAccessibleSpreadsheet->VisAreaChanged();
             }
+            if (mpChildrenShapes)
+                mpChildrenShapes->VisAreaChanged();
         }
     }
 

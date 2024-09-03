@@ -1193,90 +1193,87 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScAccWinFocusLostHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScAccWinFocusLost )
     {
         CommitFocusLost();
     }
-    else if ( dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScAccGridWinFocusLost )
     {
         CommitFocusLost();
     }
-    else if ( dynamic_cast<const ScAccWinFocusGotHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScAccWinFocusGot )
     {
         CommitFocusGained();
     }
-    else if ( dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScAccGridWinFocusGot )
     {
         CommitFocusGained();
     }
-    else
+    else if (rHint.GetId() == SfxHintId::ScDataChanged)
     {
         // only notify if child exist, otherwise it is not necessary
-        if (rHint.GetId() == SfxHintId::ScDataChanged)
+        if (mpTable.is()) // if there is no table there is nothing to notify, because no one recognizes the change
         {
-            if (mpTable.is()) // if there is no table there is nothing to notify, because no one recognizes the change
             {
-                {
-                    uno::Reference<XAccessible> xAcc = mpTable;
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.OldValue <<= xAcc;
-                    aEvent.IndexHint = -1;
-                    CommitChange(aEvent);
-                }
-
-                mpTable->dispose();
-                mpTable.clear();
+                uno::Reference<XAccessible> xAcc = mpTable;
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::CHILD;
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                aEvent.OldValue <<= xAcc;
+                aEvent.IndexHint = -1;
+                CommitChange(aEvent);
             }
 
-            Size aOutputSize;
-            vcl::Window* pSizeWindow = mpViewShell->GetWindow();
-            if ( pSizeWindow )
-                aOutputSize = pSizeWindow->GetOutputSizePixel();
-            tools::Rectangle aVisRect( Point(), aOutputSize );
-            GetNotesChildren()->DataChanged(aVisRect);
+            mpTable->dispose();
+            mpTable.clear();
+        }
 
-            GetShapeChildren()->DataChanged();
+        Size aOutputSize;
+        vcl::Window* pSizeWindow = mpViewShell->GetWindow();
+        if ( pSizeWindow )
+            aOutputSize = pSizeWindow->GetOutputSizePixel();
+        tools::Rectangle aVisRect( Point(), aOutputSize );
+        GetNotesChildren()->DataChanged(aVisRect);
 
-            const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-            ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
+        GetShapeChildren()->DataChanged();
 
-            if (aCount.nTables > 0)
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChildren(), GetShapeChildren() );
+
+        if (aCount.nTables > 0)
+        {
+            //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+            sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+
+            mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+            mpTable->Init();
+
             {
-                //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-                sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
-
-                mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                mpTable->Init();
-
-                {
-                    uno::Reference<XAccessible> xAcc = mpTable;
-                    AccessibleEventObject aEvent;
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.NewValue <<= xAcc;
-                    aEvent.IndexHint = -1;
-                    CommitChange(aEvent);
-                }
+                uno::Reference<XAccessible> xAcc = mpTable;
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::CHILD;
+                aEvent.Source = uno::Reference< XAccessibleContext >(this);
+                aEvent.NewValue <<= xAcc;
+                aEvent.IndexHint = -1;
+                CommitChange(aEvent);
             }
         }
-        else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
-        {
-            Size aOutputSize;
-            vcl::Window* pSizeWindow = mpViewShell->GetWindow();
-            if ( pSizeWindow )
-                aOutputSize = pSizeWindow->GetOutputSizePixel();
-            tools::Rectangle aVisRect( Point(), aOutputSize );
-            GetNotesChildren()->DataChanged(aVisRect);
+    }
+    else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
+    {
+        Size aOutputSize;
+        vcl::Window* pSizeWindow = mpViewShell->GetWindow();
+        if ( pSizeWindow )
+            aOutputSize = pSizeWindow->GetOutputSizePixel();
+        tools::Rectangle aVisRect( Point(), aOutputSize );
+        GetNotesChildren()->DataChanged(aVisRect);
 
-            GetShapeChildren()->VisAreaChanged();
+        GetShapeChildren()->VisAreaChanged();
 
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-            CommitChange(aEvent);
-        }
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
+        aEvent.Source = uno::Reference< XAccessibleContext >(this);
+        CommitChange(aEvent);
     }
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }

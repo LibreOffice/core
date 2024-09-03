@@ -203,6 +203,7 @@ void ScUndoAnchorData::Redo()
 }
 
 ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
+    SfxHint(SfxHintId::ScTabDeleted),
     nTab( nTabNo )
 {
 }
@@ -212,6 +213,7 @@ ScTabDeletedHint::~ScTabDeletedHint()
 }
 
 ScTabSizeChangedHint::ScTabSizeChangedHint( SCTAB nTabNo ) :
+    SfxHint(SfxHintId::ScTabSizeChanged),
     nTab( nTabNo )
 {
 }

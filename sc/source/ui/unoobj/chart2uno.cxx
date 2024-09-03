@@ -2802,7 +2802,7 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
 
 void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         // Create a range list from the token list, have the range list
         // updated, and bring the change back to the token list.
@@ -2846,8 +2846,9 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
         }
     }
-    else if ( auto pUndoHint = dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScUnoRefUndo )
     {
+        auto pUndoHint = static_cast<const ScUnoRefUndoHint*>(&rHint);
         do
         {
             if (pUndoHint->GetObjectId() != m_nObjectId)

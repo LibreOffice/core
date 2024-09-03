@@ -94,8 +94,9 @@ void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( auto pRefreshHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScLinkRefreshed )
     {
+        auto pRefreshHint = static_cast<const ScLinkRefreshedHint*>(&rHint);
         if ( pRefreshHint->GetLinkType() == ScLinkRefType::SHEET && pRefreshHint->GetUrl() == aFileName )
             Refreshed_Impl();
     }
@@ -590,8 +591,9 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( auto pRefreshedHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScLinkRefreshed )
     {
+        auto pRefreshedHint = static_cast<const ScLinkRefreshedHint*>(&rHint);
         if ( pRefreshedHint->GetLinkType() == ScLinkRefType::AREA )
         {
             //  get this link to compare dest position
@@ -600,11 +602,8 @@ void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 Refreshed_Impl();
         }
     }
-    else
-    {
-        if ( rHint.GetId() == SfxHintId::Dying )
-            pDocShell = nullptr;       // pointer is invalid
-    }
+    else if ( rHint.GetId() == SfxHintId::Dying )
+        pDocShell = nullptr;       // pointer is invalid
 }
 
 // XFileLink
@@ -1010,19 +1009,17 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     //! notify if links in document are changed
     //  UpdateRef is not needed here
 
-    if ( auto pRefreshedHint = dynamic_cast<const ScLinkRefreshedHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScLinkRefreshed )
     {
+        auto pRefreshedHint = static_cast<const ScLinkRefreshedHint*>(&rHint);
         if ( pRefreshedHint->GetLinkType() == ScLinkRefType::DDE &&
              pRefreshedHint->GetDdeAppl()  == aAppl &&
              pRefreshedHint->GetDdeTopic() == aTopic &&
              pRefreshedHint->GetDdeItem()  == aItem )       //! mode is ignored
             Refreshed_Impl();
     }
-    else
-    {
-        if ( rHint.GetId() == SfxHintId::Dying )
-            pDocShell = nullptr;       // pointer is invalid
-    }
+    else if ( rHint.GetId() == SfxHintId::Dying )
+        pDocShell = nullptr;       // pointer is invalid
 }
 
 // XNamed

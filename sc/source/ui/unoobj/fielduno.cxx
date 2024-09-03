@@ -299,7 +299,7 @@ ScCellFieldsObj::~ScCellFieldsObj()
 
 void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! update of references
     }

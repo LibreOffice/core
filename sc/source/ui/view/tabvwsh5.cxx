@@ -41,8 +41,9 @@
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (const ScPaintHint* pPaintHint = dynamic_cast<const ScPaintHint*>(&rHint))                    // draw new
+    if (rHint.GetId() == SfxHintId::ScPaint) // draw new
     {
+        const ScPaintHint* pPaintHint = static_cast<const ScPaintHint*>(&rHint);
         PaintPartFlags nParts = pPaintHint->GetParts();
         SCTAB nTab = GetViewData().GetTabNo();
         if (pPaintHint->GetStartTab() <= nTab && pPaintHint->GetEndTab() >= nTab)
@@ -78,9 +79,10 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             HideNoteMarker();
         }
     }
-    else if (auto pEditViewHint = dynamic_cast<const ScEditViewHint*>(&rHint))                 // create Edit-View
+    else if (rHint.GetId() == SfxHintId::ScEditView) // create Edit-View
     {
         //  ScEditViewHint is only received at active view
+        auto pEditViewHint = static_cast<const ScEditViewHint*>(&rHint);
 
         SCTAB nTab = GetViewData().GetTabNo();
         if ( pEditViewHint->GetTab() == nTab )
@@ -108,8 +110,9 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if (auto pTablesHint = dynamic_cast<const ScTablesHint*>(&rHint))               // table insert / deleted
+    else if (rHint.GetId() == SfxHintId::ScTables) // table insert / deleted
     {
+        auto pTablesHint = static_cast<const ScTablesHint*>(&rHint);
         // first fetch current table (can be changed during DeleteTab on ViewData)
         SCTAB nActiveTab = GetViewData().GetTabNo();
 

@@ -85,6 +85,7 @@ void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRa
  * Adapt Views when inserting/deleting a table
  */
 ScTablesHint::ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2) :
+    SfxHint(SfxHintId::ScTables),
     nId( nNewId ),
     nTab1( nTable1 ),
     nTab2( nTable2 )
@@ -109,6 +110,7 @@ ScIndexHint::~ScIndexHint()
  * Create new EditView for Cursorposition
  */
 ScEditViewHint::ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos ) :
+    SfxHint(SfxHintId::ScEditView),
     pEditEngine( pEngine ),
     aCursorPos( rCurPos )
 {

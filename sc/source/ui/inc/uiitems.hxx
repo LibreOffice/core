@@ -80,7 +80,7 @@ public:
 #define SC_TABS_INSERTED    6
 #define SC_TABS_DELETED     7
 
-class ScTablesHint : public SfxHint
+class ScTablesHint final : public SfxHint
 {
     sal_uInt16 nId;
     SCTAB nTab1;
@@ -95,7 +95,7 @@ public:
     SCTAB           GetTab2() const         { return nTab2; }
 };
 
-class ScEditViewHint : public SfxHint
+class ScEditViewHint final : public SfxHint
 {
     ScEditEngineDefaulter*  pEditEngine;
     ScAddress                   aCursorPos;

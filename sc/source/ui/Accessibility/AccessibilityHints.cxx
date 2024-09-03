@@ -33,10 +33,8 @@ ScAccWinFocusGotHint::~ScAccWinFocusGotHint()
 
 //      ScAccGridWinFocusLostHint - the current grid window lost its focus (to another application, view or document)
 
-ScAccGridWinFocusLostHint::ScAccGridWinFocusLostHint(ScSplitPos eOld )
-    :
-    ScAccWinFocusLostHint(),
-    eOldGridWin(eOld)
+ScAccGridWinFocusLostHint:: ScAccGridWinFocusLostHint(ScSplitPos eOld )
+    : SfxHint(SfxHintId::ScAccGridWinFocusLost), eOldGridWin(eOld)
 {
 }
 
@@ -47,9 +45,7 @@ ScAccGridWinFocusLostHint::~ScAccGridWinFocusLostHint()
 //      ScAccGridWinFocusGotHint - the grid window got the focus (from another application, view or document)
 
 ScAccGridWinFocusGotHint::ScAccGridWinFocusGotHint(ScSplitPos eNew )
-    :
-    ScAccWinFocusGotHint(),
-    eNewGridWin(eNew)
+    : SfxHint(SfxHintId::ScAccGridWinFocusGot), eNewGridWin(eNew)
 {
 }
 

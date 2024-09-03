@@ -22,19 +22,21 @@
 #include "viewdata.hxx"
 #include <svl/hint.hxx>
 
-class ScAccWinFocusLostHint : public SfxHint
+class ScAccWinFocusLostHint final : public SfxHint
 {
 public:
-                virtual ~ScAccWinFocusLostHint() override;
+    ScAccWinFocusLostHint() : SfxHint(SfxHintId::ScAccWinFocusLost) {}
+    virtual ~ScAccWinFocusLostHint() override;
 };
 
-class ScAccWinFocusGotHint : public SfxHint
+class ScAccWinFocusGotHint final : public SfxHint
 {
 public:
-                virtual ~ScAccWinFocusGotHint() override;
+    ScAccWinFocusGotHint() : SfxHint(SfxHintId::ScAccWinFocusGot) {}
+    virtual ~ScAccWinFocusGotHint() override;
 };
 
-class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
+class ScAccGridWinFocusLostHint final : public SfxHint
 {
     ScSplitPos  eOldGridWin;
 public:
@@ -44,7 +46,7 @@ public:
     ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
 };
 
-class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
+class ScAccGridWinFocusGotHint final : public SfxHint
 {
     ScSplitPos  eNewGridWin;
 public:

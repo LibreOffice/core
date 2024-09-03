@@ -183,7 +183,7 @@ void ScAnnotationEditSource::UpdateData()
 
 void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
         //! reference update
     }

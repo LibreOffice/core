@@ -1592,8 +1592,9 @@ void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if ( rHint.GetId() == SfxHintId::Dying )
         pDocShell = nullptr;
-    else if ( auto pRefreshHint = dynamic_cast<const ScDBRangeRefreshedHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScDBRangeRefreshed )
     {
+        auto pRefreshHint = static_cast<const ScDBRangeRefreshedHint*>(&rHint);
         ScDBData* pDBData = GetDBData_Impl();
         ScImportParam aParam;
         pDBData->GetImportParam(aParam);

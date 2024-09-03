@@ -1219,8 +1219,9 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if (pDataPilotHint->GetName() == aName)
             Refreshed_Impl();
     }
-    else if ( auto pRefHint = dynamic_cast<const ScUpdateRefHint*>(&rHint) )
+    else if ( rHint.GetId() == SfxHintId::ScUpdateRef )
     {
+        auto pRefHint = static_cast<const ScUpdateRefHint*>(&rHint);
         ScRange aRange( 0, 0, nTab );
         ScRangeList aRanges( aRange );
         if ( aRanges.UpdateReference( pRefHint->GetMode(), &GetDocShell()->GetDocument(), pRefHint->GetRange(),
