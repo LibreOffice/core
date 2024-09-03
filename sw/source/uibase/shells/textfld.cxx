@@ -536,20 +536,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
         case FN_REDLINE_COMMENT:
         {
-            /*  this code can be used once we want redline comments in the margin, all other stuff can
-                then be deleted
-            String sComment;
-            const SwRangeRedline *pRedline = rSh.GetCurrRedline();
-
-            if (pRedline)
-            {
-                sComment = pRedline->GetComment();
-                if ( !sComment.Len() )
-                    GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
-                const_cast<SwRangeRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
-            }
-            */
-
             const SwRangeRedline *pRedline = rSh.GetCurrRedline();
             SwDoc *pDoc = rSh.GetDoc();
             // If index is specified, goto and select the appropriate redline

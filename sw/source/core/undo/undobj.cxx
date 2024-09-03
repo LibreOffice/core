@@ -1450,9 +1450,6 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM const & rPam )
 
     RedlineFlags eOld = rDoc.getIDocumentRedlineAccess().GetRedlineFlags();
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld | RedlineFlags::DontCombineRedlines );
-    //#i92154# let UI know about a new redline with comment
-    if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
-        rDoc.GetDocShell()->Broadcast(SwRedlineHint());
 
     auto const result(rDoc.getIDocumentRedlineAccess().AppendRedline(pRedl, true));
     assert(result != IDocumentRedlineAccess::AppendResult::IGNORED); // SwRedlineSaveData::RedlineToDoc: insert redline failed

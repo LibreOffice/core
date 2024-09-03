@@ -1465,13 +1465,6 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
 
             const SwRangeRedline &rRedline = pSh->GetRedline(nPos);
 
-            /* enable again once we have redline comments in the margin
-            sComment = rRedline.GetComment();
-            if ( !sComment.Len() )
-                GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
-            const_cast<SwRangeRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
-            */
-
             OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();

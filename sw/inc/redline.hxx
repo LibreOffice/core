@@ -344,11 +344,6 @@ public:
         { return m_aRedlineData; }
 };
 
-class SW_DLLPUBLIC SwRedlineHint final : public SfxHint
-{
-};
-
-
 namespace sw {
 
 std::vector<std::unique_ptr<SwRangeRedline>> GetAllValidRanges(std::unique_ptr<SwRangeRedline> p);
