@@ -1197,7 +1197,15 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
     {
         CommitFocusLost();
     }
+    else if ( dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
+    {
+        CommitFocusLost();
+    }
     else if ( dynamic_cast<const ScAccWinFocusGotHint*>(&rHint) )
+    {
+        CommitFocusGained();
+    }
+    else if ( dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
     {
         CommitFocusGained();
     }
