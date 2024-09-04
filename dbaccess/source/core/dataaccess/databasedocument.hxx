@@ -20,6 +20,7 @@
 
 #include <sal/config.h>
 
+#include <atomic>
 #include <map>
 #include <memory>
 
@@ -192,7 +193,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
-    bool                                                                                        m_bAllowDocumentScripting;
+    /// Using atomic because locking around accessing this will lead to deadlock in queryInterface
+    std::atomic<bool>                                                                           m_bAllowDocumentScripting;
     bool                                                                                        m_bHasBeenRecovered;
     /// If XModel::attachResource() was called to inform us that the document is embedded into another one.
     bool                                                                                        m_bEmbedded;
