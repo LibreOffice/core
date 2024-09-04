@@ -1391,6 +1391,8 @@ void SVGTextWriter::endTextPosition()
 
 bool SVGTextWriter::hasTextOpacity() const { return !maTextOpacity.isEmpty(); }
 
+OUString& SVGTextWriter::getTextOpacity() { return maTextOpacity; }
+
 void SVGTextWriter::implExportHyperlinkIds()
 {
     if( !msHyperlinkIdList.isEmpty() )
@@ -2545,6 +2547,15 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
     if (nMoveX || nMoveY)
         rMtf.Move(nMoveX, nMoveY);
 
+    std::optional<OUString> oTextOpacity;
+    if (maTextWriter.isTextShapeStarted())
+    {
+        // We're inside <text>, then try to use the fill-opacity attribute instead of a <g> element
+        // to express transparency to ensure well-formed output.
+        oTextOpacity = maTextWriter.getTextOpacity();
+        StartMask(rDestPt, rDestSize, rGradient, nWriteFlags, pColorStops, &maTextWriter.getTextOpacity());
+    }
+
     {
         std::unique_ptr<SvXMLElementExport> pElemG;
         if (!maTextWriter.hasTextOpacity())
@@ -2557,6 +2568,11 @@ void SVGActionWriter::ImplWriteMask(GDIMetaFile& rMtf, const Point& rDestPt, con
         mpVDev->Push();
         ImplWriteActions( rMtf, nWriteFlags, u""_ustr );
         mpVDev->Pop();
+    }
+
+    if (oTextOpacity)
+    {
+        maTextWriter.getTextOpacity() = *oTextOpacity;
     }
 }
 

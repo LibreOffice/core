@@ -258,6 +258,7 @@ class SVGTextWriter final
     void startTextPosition( bool bExportX = true, bool bExportY = true);
     void endTextPosition();
     bool hasTextOpacity() const;
+    OUString& getTextOpacity();
     void implExportHyperlinkIds();
     void implWriteBulletChars();
     template< typename MetaBitmapActionType >
