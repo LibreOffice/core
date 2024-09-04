@@ -3376,7 +3376,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         OUString rJsonMsg;
         CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
-        // TODO - check JSON content
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
         debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 
@@ -3386,7 +3392,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         OUString rJsonMsg;
         CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
-        // TODO - check JSON content
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 
@@ -3396,7 +3408,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         OUString rJsonMsg;
         CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
-        // TODO - check JSON content
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 
@@ -3406,7 +3424,13 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         OUString rJsonMsg;
         CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
         CPPUNIT_ASSERT(bIsBitmapLayer);
-        // TODO - check JSON content
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
         debugWriteImageToFile(4, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 

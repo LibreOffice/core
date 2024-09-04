@@ -8,6 +8,7 @@
  */
 
 #include <SlideshowLayerRenderer.hxx>
+#include <CustomAnimationEffect.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
@@ -25,6 +26,7 @@
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 
 #include <animations/animationnodehelper.hxx>
@@ -127,6 +129,8 @@ public:
         // Does the object have a page
         if (pPage == nullptr)
             return;
+
+        mrRenderState.mpCurrentTarget = pObject;
 
         // is the object visible and not hidden by any option
         const bool bVisible
@@ -298,6 +302,13 @@ void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext)
     aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, &aRedirector);
 }
 
+static void writeContentNode(::tools::JsonWriter& aJsonWriter)
+{
+    ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
+    aJsonWriter.put("type", "%IMAGETYPE%");
+    aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
+}
+
 void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
 {
     ::tools::JsonWriter aJsonWriter;
@@ -305,12 +316,47 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
     aJsonWriter.put("index", maRenderState.currentIndex());
     aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
 
-    aJsonWriter.put("type", "bitmap");
+    bool bIsAnimation = false;
+    SdrObject* pObject = maRenderState.currentTarget();
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
+    if (pObject)
     {
-        ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
-        aJsonWriter.put("type", "%IMAGETYPE%");
-        aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
+        xShape = GetXShapeForSdrObject(pObject);
+
+        auto* pSdPage = dynamic_cast<SdPage*>(&mrPage);
+        if (pSdPage)
+        {
+            std::shared_ptr<sd::MainSequence> pMainSequence(pSdPage->getMainSequence());
+            if (pMainSequence && pMainSequence->hasEffect(xShape))
+                bIsAnimation = true;
+        }
     }
+
+    if (bIsAnimation)
+    {
+        aJsonWriter.put("type", "animated");
+        {
+            ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
+
+            if (xShape.is())
+            {
+                com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xRef;
+                com::sun::star::uno::Any(xShape) >>= xRef;
+                if (xRef.is())
+                    aJsonWriter.put("hash", GetInterfaceHash(xRef));
+            }
+
+            aJsonWriter.put("initVisible", true); // TODO
+            aJsonWriter.put("type", "bitmap");
+            writeContentNode(aJsonWriter);
+        }
+    }
+    else
+    {
+        aJsonWriter.put("type", "bitmap");
+        writeContentNode(aJsonWriter);
+    }
+
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
 
     maRenderState.incrementIndex();
