@@ -64,6 +64,68 @@ void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rD
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testCommentAnnotation)
+{
+    // Enable PDF/UA and Comment as PDF annotations
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "PDFUACompliance", uno::Any(true) }, { "ExportNotes", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf162359.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pAnnot(nullptr);
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("Type"_ostr));
+        if (pType && pType->GetValue() == "StructElem")
+        {
+            auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+            if (pS && pS->GetValue() == "Annot")
+            {
+                pAnnot = pObject;
+            }
+        }
+    }
+    CPPUNIT_ASSERT(pAnnot);
+    auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pAnnot->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pKids);
+    auto pObj = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pKids->GetElement(0));
+    CPPUNIT_ASSERT(pObj);
+    auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObj->LookupElement("Type"_ostr));
+    CPPUNIT_ASSERT_EQUAL("OBJR"_ostr, pOType->GetValue());
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // The page has two annotation.
+    CPPUNIT_ASSERT_EQUAL(2, pPdfPage->getAnnotationCount());
+    // Text annotation
+    {
+        auto pAnnotation = pPdfPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Text, pAnnotation->getSubType());
+        CPPUNIT_ASSERT(pAnnotation->hasKey("StructParent"_ostr));
+    }
+
+    // Popup annotation
+    {
+        auto pAnnotation = pPdfPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
+        CPPUNIT_ASSERT(!pAnnotation->getRectangle().isEmpty());
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testFigurePlacement)
 {
     vcl::filter::PDFDocument aDocument;

@@ -1885,7 +1885,8 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
         { PDFWriter::RubyPosition,      "RubyPosition" },
         { PDFWriter::Type,              "Type" },
         { PDFWriter::Subtype,           "Subtype" },
-        { PDFWriter::LinkAnnotation,    "LinkAnnotation" }
+        { PDFWriter::LinkAnnotation,    "LinkAnnotation" },
+        { PDFWriter::NoteAnnotation,    "NoteAnnotation" }
     });
 
     auto it = aAttributeStrings.find( eAttr );
@@ -2031,6 +2032,28 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                             OString::number( nLink ) +
                             " for Link structure";
                     emitComment( aLine.getStr() );
+                }
+            }
+        }
+        else if (attribute.first == PDFWriter::NoteAnnotation)
+        {
+            sal_Int32 nNote = attribute.second.nValue;
+            std::map<sal_Int32, sal_Int32>::const_iterator link_it = m_aLinkPropertyMap.find(nNote);
+            if (link_it != m_aLinkPropertyMap.end())
+                nNote = link_it->second;
+            if (nNote >= 0 && o3tl::make_unsigned(nNote) < m_aNotes.size())
+            {
+                AppendAnnotKid(i_rEle, m_aNotes[nNote]);
+            }
+            else
+            {
+                OSL_FAIL("unresolved note id for Note structure");
+                SAL_INFO("vcl.pdfwriter", "unresolved note id " << nNote << " for Note structure");
+                if (g_bDebugDisableCompression)
+                {
+                    OString aLine
+                        = "unresolved note id " + OString::number(nNote) + " for Note structure";
+                    emitComment(aLine.getStr());
                 }
             }
         }
@@ -4078,6 +4101,14 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
         appendUnicodeTextStringEncrypt(rNote.m_aContents.maTitle, rNote.m_nObject, aLine);
         aLine.append("\n");
     }
+
+    if (-1 != rNote.m_nStructParent)
+    {
+        aLine.append("/StructParent ");
+        aLine.append(rNote.m_nStructParent);
+        aLine.append("\n");
+    }
+
     aLine.append(">>\n");
     aLine.append("endobj\n\n");
 }
@@ -4086,6 +4117,15 @@ void PDFWriterImpl::emitPopupAnnotationLine(OStringBuffer & aLine, PDFPopupAnnot
 {
     appendObjectID(rPopUp.m_nObject, aLine);
     aLine.append("<</Type /Annot /Subtype /Popup ");
+    aLine.append("/Rect[");
+    appendFixedInt(rPopUp.m_aRect.Left(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rPopUp.m_aRect.Top(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rPopUp.m_aRect.Right(), aLine);
+    aLine.append(' ');
+    appendFixedInt(rPopUp.m_aRect.Bottom(), aLine);
+    aLine.append("]");
     aLine.append("/Parent ");
     appendObjectReference(rPopUp.m_nParentObject, aLine);
     aLine.append(">>\n");
@@ -10521,28 +10561,36 @@ void PDFWriterImpl::intersectClipRegion( const basegfx::B2DPolyPolygon& rRegion 
     }
 }
 
-void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const pdf::PDFNote& rNote, sal_Int32 nPageNr )
+sal_Int32 PDFWriterImpl::createNote(const tools::Rectangle& rRect,
+                                    const tools::Rectangle& rPopupRect, const pdf::PDFNote& rNote,
+                                    sal_Int32 nPageNr)
 {
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
 
     if (nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size())
-        return;
+        return -1;
+
+    sal_Int32 nRet = m_aNotes.size();
 
     m_aNotes.emplace_back();
     auto & rNoteEntry = m_aNotes.back();
     rNoteEntry.m_nObject = createObject();
     rNoteEntry.m_aPopUpAnnotation.m_nObject = createObject();
     rNoteEntry.m_aPopUpAnnotation.m_nParentObject = rNoteEntry.m_nObject;
+    rNoteEntry.m_aPopUpAnnotation.m_aRect = rPopupRect;
     rNoteEntry.m_aContents = rNote;
     rNoteEntry.m_aRect = rRect;
     rNoteEntry.m_nPage = nPageNr;
     // convert to default user space now, since the mapmode may change
     m_aPages[nPageNr].convertRect(rNoteEntry.m_aRect);
+    m_aPages[nPageNr].convertRect(rNoteEntry.m_aPopUpAnnotation.m_aRect);
 
     // insert note to page's annotation list
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_nObject);
     m_aPages[nPageNr].m_aAnnotations.push_back(rNoteEntry.m_aPopUpAnnotation.m_nObject);
+
+    return nRet;
 }
 
 sal_Int32 PDFWriterImpl::createLink(const tools::Rectangle& rRect, sal_Int32 nPageNr, OUString const& rAltText)
@@ -11628,6 +11676,10 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
                 break;
             case PDFWriter::LinkAnnotation:
                 if( eType == PDFWriter::Link )
+                    bInsert = true;
+                break;
+            case PDFWriter::NoteAnnotation:
+                if (eType == PDFWriter::Annot)
                     bInsert = true;
                 break;
             default: break;

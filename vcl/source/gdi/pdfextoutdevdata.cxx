@@ -95,6 +95,7 @@ struct CreateNote {
     MapMode maParaMapMode;
     vcl::pdf::PDFNote maParaPDFNote;
     tools::Rectangle maParaRect;
+    tools::Rectangle maPopupRect;
     sal_Int32 mnPage;
 };
 
@@ -307,7 +308,9 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             const vcl::CreateNote& rCreateNote = std::get<CreateNote>(action);
             rWriter.Push( PushFlags::MAPMODE );
             rWriter.SetMapMode( rCreateNote.maParaMapMode );
-            rWriter.CreateNote( rCreateNote.maParaRect, rCreateNote.maParaPDFNote, rCreateNote.mnPage );
+            mParaIds.push_back(rWriter.CreateNote(rCreateNote.maParaRect, rCreateNote.maPopupRect, rCreateNote.maParaPDFNote, rCreateNote.mnPage));
+            rWriter.SetLinkPropertyID(mParaIds.back(), sal_Int32(mParaIds.size() - 1));
+            rWriter.Pop();
         }
         else if (std::holds_alternative<SetPageTransition>(action)) {
             const vcl::SetPageTransition& rSetPageTransition = std::get<SetPageTransition>(action);
@@ -724,10 +727,13 @@ sal_Int32 PDFExtOutDevData::CreateOutlineItem( sal_Int32 nParent, const OUString
     mpGlobalSyncData->mActions.push_back( vcl::CreateOutlineItem{ rText, nParent, nDestID } );
     return mpGlobalSyncData->mCurId++;
 }
-void PDFExtOutDevData::CreateNote( const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, sal_Int32 nPageNr )
+sal_Int32 PDFExtOutDevData::CreateNote(const tools::Rectangle& rRect,
+                                       const vcl::pdf::PDFNote& rNote,
+                                       const tools::Rectangle& rPopupRect, sal_Int32 nPageNr)
 {
-    mpGlobalSyncData->mActions.push_back(
-        vcl::CreateNote{ mrOutDev.GetMapMode(), rNote, rRect, nPageNr == -1 ? mnPage : nPageNr } );
+    mpGlobalSyncData->mActions.push_back(vcl::CreateNote{
+        mrOutDev.GetMapMode(), rNote, rRect, rPopupRect, nPageNr == -1 ? mnPage : nPageNr });
+    return mpGlobalSyncData->mCurId++;
 }
 void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec )
 {
