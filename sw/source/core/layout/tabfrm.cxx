@@ -3307,7 +3307,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         // TODO: why not just ignore HoriOrient?
         bool isHoriOrientShiftDown =
                rHori.GetHoriOrient() == text::HoriOrientation::NONE
-            || rHori.GetHoriOrient() == text::HoriOrientation::LEFT;
+            || rHori.GetHoriOrient() == text::HoriOrientation::LEFT
+            || rHori.GetHoriOrient() == text::HoriOrientation::RIGHT;
         // Only consider invalid Writer fly frames if they'll be shifted down.
         bool bIgnoreFlyValidity = bAddVerticalFlyOffsets && isHoriOrientShiftDown;
         bool bConsiderFly =
@@ -3473,7 +3474,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
         }
         if ((css::text::WrapTextMode_LEFT == nSurround
              || css::text::WrapTextMode_PARALLEL == nSurround)
-            && text::HoriOrientation::RIGHT == rHori.GetHoriOrient())
+            && text::HoriOrientation::RIGHT == rHori.GetHoriOrient()
+            && !bShiftDown)
         {
             const tools::Long nWidth
                 = aRectFnSet.XDiff(aRectFnSet.GetRight(pFly->GetAnchorFrame()->getFrameArea()),
