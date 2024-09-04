@@ -58,6 +58,8 @@
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 
 #include <stlpool.hxx>
+#include <undo/undomanager.hxx>
+
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -2024,6 +2026,17 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf152070)
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(83), // 83%
         xBackgroundProps->getPropertyValue(u"FillBitmapPositionOffsetY"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf143603)
+{
+    createSdImpressDoc("odp/tdf143603.fodp");
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    // Loading FODP used to record UNDO entries - this was 2
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetUndoManager()->GetUndoActionCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

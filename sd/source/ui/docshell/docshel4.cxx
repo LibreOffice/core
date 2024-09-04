@@ -42,6 +42,7 @@
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/syswin.hxx>
@@ -416,6 +417,17 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         // TextParagraphPropertiesContext constructor. So default tab width
         // of the LibreOffice is 1270 but MSO is 2540 on general settings.
         mpDoc->SetDefaultTabulator( 2540 );
+    }
+
+    comphelper::ScopeGuard undoGuard([this, wasUndo = mpDoc->IsUndoEnabled()]
+                                     { mpDoc->EnableUndo(wasUndo); });
+    if (xInsertPosition) // insert mode
+    {
+        undoGuard.dismiss();
+    }
+    else // initial loading of the document
+    {
+        mpDoc->EnableUndo(false);
     }
 
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
