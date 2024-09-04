@@ -1214,8 +1214,9 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 
 void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( auto pDataPilotHint = dynamic_cast<const ScDataPilotModifiedHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScDataPilotModified )
     {
+        auto pDataPilotHint = static_cast<const ScDataPilotModifiedHint*>(&rHint);
         if (pDataPilotHint->GetName() == aName)
             Refreshed_Impl();
     }
