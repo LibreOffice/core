@@ -1181,6 +1181,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
 {
     // Without the fix in place this hangs (and eventually OOMs) on opening
     loadAndSave("tdf162746.docx");
+    // tdf#162781: test the page body table vertical offset and width
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    // Without the fix, this would be 0 - i.e., the page body table didn't shift down
+    // below the header's floating table
+    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "top"_ostr, u"35"_ustr);
+    // Without the fix, this would be 100, because the page body table only used tiny space
+    // to the left of the header's floating table
+    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "width"_ostr, u"9360"_ustr);
 }
 
 } // end of anonymous namespace
