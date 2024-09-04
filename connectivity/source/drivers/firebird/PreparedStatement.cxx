@@ -358,7 +358,7 @@ namespace {
 
 sal_Int64 toPowOf10AndRound(double n, int powOf10)
 {
-    constexpr sal_Int64 powers[] = {
+    static constexpr sal_Int64 powers[] = {
         1,
         10,
         100,
