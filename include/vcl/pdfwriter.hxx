@@ -148,6 +148,9 @@ public:
         // case the arbitrary id has to be passed again when the
         // actual link annotation is created via SetLinkPropertyID
         LinkAnnotation,
+        // note destination is an artificial attribute that sets
+        // the note annotation ID of a Note element
+        NoteAnnotation,
         // Language currently sets a LanguageType (see i18nlangtag/lang.h)
         // which will be internally changed to a corresponding locale
         Language
@@ -1042,6 +1045,9 @@ The following structure describes the permissions used in PDF security
     active rectangle of the note (that is the area that has to be
     hit to popup the annotation)
 
+    @param rPopupRect
+    specifies the rectangle of the popup window for the note
+
     @param rNote
     specifies the contents of the note
 
@@ -1049,7 +1055,7 @@ The following structure describes the permissions used in PDF security
     number of page the note is on (as returned by NewPage)
     or -1 in which case the current page is used
     */
-    void CreateNote( const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, sal_Int32 nPageNr );
+    sal_Int32 CreateNote( const tools::Rectangle& rRect, const tools::Rectangle& rPopupRect, const vcl::pdf::PDFNote& rNote, sal_Int32 nPageNr );
 
     /** begin a new logical structure element
 

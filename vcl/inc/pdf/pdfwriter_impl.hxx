@@ -463,7 +463,10 @@ struct PDFNoteEntry : public PDFAnnotation
 
     PDFPopupAnnotation m_aPopUpAnnotation;
 
+    sal_Int32 m_nStructParent;
+
     PDFNoteEntry()
+        : m_nStructParent(-1)
     {}
 };
 
@@ -1337,7 +1340,7 @@ public:
     void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes
-    void createNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr );
+    sal_Int32 createNote(const tools::Rectangle& rRect, const tools::Rectangle& rPopupRect, const PDFNote& rNote, sal_Int32 nPageNr);
     // structure elements
     sal_Int32 ensureStructureElement();
     void initStructureElement(sal_Int32 id, PDFWriter::StructElement eType, std::u16string_view rAlias);

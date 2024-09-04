@@ -382,9 +382,10 @@ sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, std::u16string_view r
     return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }
 
-void PDFWriter::CreateNote( const tools::Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
+sal_Int32 PDFWriter::CreateNote(const tools::Rectangle& rRect, const tools::Rectangle& rPopupRect,
+                                const PDFNote& rNote, sal_Int32 nPageNr)
 {
-    xImplementation->createNote( rRect, rNote, nPageNr );
+    return xImplementation->createNote(rRect, rPopupRect, rNote, nPageNr);
 }
 
 sal_Int32 PDFWriter::EnsureStructureElement()

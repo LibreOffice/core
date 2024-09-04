@@ -87,6 +87,8 @@
 #include <tblafmt.hxx>
 #include <authfld.hxx>
 #include <dcontact.hxx>
+#include <PostItMgr.hxx>
+#include <AnnotationWin.hxx>
 
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
@@ -130,6 +132,7 @@ void lcl_DBGCheckStack()
 typedef std::set< tools::Long, lt_TableColumn > TableColumnsMapEntry;
 typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
 typedef std::vector< IdMapEntry > LinkIdMap;
+typedef std::vector< IdMapEntry > NoteIdMap;
 typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
 typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
@@ -139,6 +142,7 @@ struct SwEnhancedPDFState
 {
     TableColumnsMap m_TableColumnsMap;
     LinkIdMap m_LinkIdMap;
+    NoteIdMap m_NoteIdMap;
     NumListIdMap m_NumListIdMap;
     NumListBodyIdMap m_NumListBodyIdMap;
     FrameTagSet m_FrameTagSet;
@@ -212,6 +216,7 @@ constexpr OUStringLiteral aFigureString = u"Figure";
 constexpr OUStringLiteral aFormulaString = u"Formula";
 constexpr OUString aLinkString = u"Link"_ustr;
 constexpr OUStringLiteral aNoteString = u"Note";
+constexpr OUStringLiteral aAnnotString = u"Annot";
 
 // returns true if first paragraph in cell frame has 'table heading' style
 bool lcl_IsHeadlineCell( const SwCellFrame& rCellFrame )
@@ -946,6 +951,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         bool bBaselineShift = false;
         bool bTextDecorationType = false;
         bool bLinkAttribute = false;
+        bool bAnnotAttribute = false;
         bool bLanguage = false;
 
         // Check which attributes to set:
@@ -1025,6 +1031,11 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 }
                 break;
 
+            case vcl::PDFWriter::Annot:
+                bAnnotAttribute =
+                bLanguage = true;
+                break;
+
             default:
                 break;
         }
@@ -1080,6 +1091,23 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             SwRect aPorRect;
             rInf.CalcRect( *pPor, &aPorRect );
             LinkLinkLink(*mpPDFExtOutDevData, aPorRect);
+        }
+
+        if (bAnnotAttribute)
+        {
+            SwRect aPorRect;
+            rInf.CalcRect(*pPor, &aPorRect);
+            const NoteIdMap& rNoteIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NoteIdMap);
+            const Point aCenter = aPorRect.Center();
+            auto aIter = std::find_if(rNoteIdMap.begin(), rNoteIdMap.end(),
+                                      [&aCenter](const IdMapEntry& rEntry)
+                                      { return rEntry.first.Contains(aCenter); });
+            if (aIter != rNoteIdMap.end())
+            {
+                sal_Int32 nNoteId = (*aIter).second;
+                mpPDFExtOutDevData->SetStructureAttributeNumerical(vcl::PDFWriter::NoteAnnotation,
+                                                                   nNoteId);
+            }
         }
     }
     else if (mpNumInfo && eType == vcl::PDFWriter::List)
@@ -1844,6 +1872,14 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
     switch ( pPor->GetWhichPor() )
     {
+        case PortionType::PostIts:
+            if (!mpPDFExtOutDevData->GetSwPDFState()->m_NoteIdMap.empty())
+            {
+                nPDFType = vcl::PDFWriter::Annot;
+                aPDFType = aAnnotString;
+            }
+            break;
+
         case PortionType::Hyphen :
         case PortionType::SoftHyphen :
         // Check for alternative spelling:
@@ -2200,9 +2236,32 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // Guess what the contents contains...
                     aNote.maContents = pField->GetText();
 
+                    tools::Rectangle aPopupRect(0, 0);
+                    SwPostItMgr* pPostItMgr = pDoc->GetEditShell()->GetPostItMgr();
+                    for (auto it = pPostItMgr->begin(); it != pPostItMgr->end(); ++it)
+                    {
+                        sw::annotation::SwAnnotationWin* pWin = it->get()->mpPostIt;
+                        if (pWin)
+                        {
+                            const SwRect& aAnnotRect = pWin->GetAnchorRect();
+                            if (aAnnotRect.Contains(rNoteRect))
+                            {
+                                Point aPt(pDoc->GetEditShell()->GetWin()->PixelToLogic(pWin->GetPosPixel()));
+                                Size aSize(pDoc->GetEditShell()->GetWin()->PixelToLogic(pWin->GetSizePixel()));
+                                aPopupRect = tools::Rectangle(aPt, aSize);
+                            }
+                        }
+                    }
+
                     // Link Export
                     tools::Rectangle aRect(SwRectToPDFRect(pCurrPage, rNoteRect.SVRect()));
-                    pPDFExtOutDevData->CreateNote(aRect, aNote, aNotePageNum);
+                    sal_Int32 nNoteId = pPDFExtOutDevData->CreateNote(aRect, aNote, aPopupRect, aNotePageNum);
+
+                    if (mrPrintData.GetPrintPostIts() != SwPostItMode::InMargins)
+                    {
+                        const IdMapEntry aNoteEntry(aRect, nNoteId);
+                        pPDFExtOutDevData->GetSwPDFState()->m_NoteIdMap.push_back(aNoteEntry);
+                    }
                 }
                 mrSh.SwCursorShell::ClearMark();
             }
