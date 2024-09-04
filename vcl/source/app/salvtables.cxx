@@ -715,7 +715,7 @@ void SalInstanceWidget::get_property_tree(tools::JsonWriter& rJsonWriter)
 
 void SalInstanceWidget::set_stack_background()
 {
-    set_background(m_xWidget->GetSettings().GetStyleSettings().GetWindowColor());
+    set_background(m_xWidget->GetSettings().GetStyleSettings().GetFieldColor());
 }
 
 void SalInstanceWidget::set_title_background()

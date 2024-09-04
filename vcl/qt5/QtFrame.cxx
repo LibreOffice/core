@@ -1130,7 +1130,6 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
 
     // Base
     style.SetFieldColor(aBase);
-    style.SetWindowColor(aBase);
     style.SetActiveTabColor(aBase);
     style.SetListBoxWindowBackgroundColor(aBase);
     style.SetAlternatingRowColor(toColor(pal.color(QPalette::Active, QPalette::AlternateBase)));
@@ -1163,6 +1162,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     // Background
     style.BatchSetBackgrounds(aBack);
     style.SetInactiveTabColor(aBack);
+    style.SetWindowColor(aBack);
 
     // Workspace
     style.SetWorkspaceColor(aMid);
