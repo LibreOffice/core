@@ -42,6 +42,7 @@ struct RenderState
     std::unordered_set<SdrObject*> maObjectsDone;
     std::unordered_set<SdrObject*> maInAnimation;
     sal_Int32 mnIndex = 0;
+    SdrObject* mpCurrentTarget = nullptr;
 
     bool mbFirstObjectInPass = true;
     bool mbPassHasOutput = false;
@@ -59,7 +60,7 @@ struct RenderState
     }
 
     /// returns the current stage as string
-    OString stageString()
+    OString stageString() const
     {
         if (meStage == RenderStage::Master)
             return "MasterPage"_ostr;
@@ -67,12 +68,15 @@ struct RenderState
     }
 
     /// returns the current index depending on the current render stage
-    sal_Int32 currentIndex()
+    sal_Int32 currentIndex() const
     {
         if (meStage == RenderStage::Master)
             return mnMasterIndex;
         return mnIndex;
     }
+
+    /// returns the current target element for which layer is created if any
+    SdrObject* currentTarget() const { return mpCurrentTarget; }
 
     /// resets properties that are valid for one pass
     void resetPass()
@@ -80,28 +84,29 @@ struct RenderState
         mbFirstObjectInPass = true;
         mbPassHasOutput = false;
         mbSkipAllInThisPass = false;
+        mpCurrentTarget = nullptr;
     }
 
     /// return if there was no rendering output in the pass
-    bool noMoreOutput()
+    bool noMoreOutput() const
     {
         // no output and we don't skip anything
         return !mbPassHasOutput && !mbSkipAllInThisPass;
     }
 
     /// should include background in rendering
-    bool includeBackground()
+    bool includeBackground() const
     {
         // include background only if we are rendering the first pass
         return mnCurrentPass == 0;
     }
 
-    bool isObjectAlreadyRendered(SdrObject* pObject)
+    bool isObjectAlreadyRendered(SdrObject* pObject) const
     {
         return maObjectsDone.find(pObject) != maObjectsDone.end();
     }
 
-    bool isObjectInAnimation(SdrObject* pObject)
+    bool isObjectInAnimation(SdrObject* pObject) const
     {
         return maInAnimation.find(pObject) != maInAnimation.end();
     }
