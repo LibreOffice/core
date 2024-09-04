@@ -2378,6 +2378,8 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
 
     // Mark Kashida positions, so that VCL knows where to insert Kashida and
     // where to only expand the width.
+    // The underlying array may be reused across updates. Ensure there is no stale data.
+    rLine.GetKashidaArray().clear();
     if (nKashidas)
     {
         rLine.GetKashidaArray().resize(rLine.GetCharPosArray().size(), false);
