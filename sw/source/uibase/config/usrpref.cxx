@@ -30,6 +30,10 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#if defined(__GNUC__) && !defined(__clang__)
+#include <cstring>
+#endif
+
 using namespace utl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
