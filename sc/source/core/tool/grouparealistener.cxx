@@ -117,10 +117,9 @@ ScRange FormulaGroupAreaListener::getListeningRange() const
 
 void FormulaGroupAreaListener::Notify( const SfxHint& rHint )
 {
-    // BulkDataHint may include (SfxHintId::ScDataChanged |
-    // SfxHintId::ScTableOpDirty) so has to be checked first.
-    if ( const BulkDataHint* pBulkHint = dynamic_cast<const BulkDataHint*>(&rHint) )
+    if ( rHint.GetId() == SfxHintId::ScBulkData )
     {
+        const BulkDataHint* pBulkHint = static_cast<const BulkDataHint*>(&rHint);
         notifyBulkChange(*pBulkHint);
     }
     else if (rHint.GetId() == SfxHintId::ScDataChanged || rHint.GetId() == SfxHintId::ScTableOpDirty)

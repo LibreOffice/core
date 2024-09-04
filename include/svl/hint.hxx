@@ -129,6 +129,7 @@ enum class SfxHintId {
     ScTables,
     ScEditView,
     ScUnoRefUndo,
+    ScBulkData,
 
 // SC accessibility hints
     ScAccTableChanged,

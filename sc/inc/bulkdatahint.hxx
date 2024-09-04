@@ -23,8 +23,8 @@ class BulkDataHint final : public SfxHint
     const ColumnSpanSet* mpSpans;
 
 public:
-    BulkDataHint(ScDocument& rDoc, SfxHintId nHintId)
-        : SfxHint(nHintId)
+    BulkDataHint(ScDocument& rDoc)
+        : SfxHint(SfxHintId::ScBulkData)
         , mrDoc(rDoc)
         , mpSpans(nullptr)
     {

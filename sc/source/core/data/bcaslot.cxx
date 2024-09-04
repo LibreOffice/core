@@ -1145,7 +1145,7 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast( SfxHintId nHintId )
     if (--nInBulkBroadcast == 0)
     {
         ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
-        bool bBroadcasted = BulkBroadcastGroupAreas( nHintId );
+        bool bBroadcasted = BulkBroadcastGroupAreas();
         // Trigger the "final" tracking.
         if (pDoc->IsTrackFormulasPending())
             pDoc->FinalTrackFormulas( nHintId );
@@ -1172,12 +1172,12 @@ void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, co
     rSet.set(*pDoc, rRange, true);
 }
 
-bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas( SfxHintId nHintId )
+bool ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
 {
     if (m_BulkGroupAreas.empty())
         return false;
 
-    sc::BulkDataHint aHint( *pDoc, nHintId);
+    sc::BulkDataHint aHint( *pDoc );
 
     bool bBroadcasted = false;
     for (const auto& [pArea, rSpans] : m_BulkGroupAreas)
