@@ -445,7 +445,7 @@ void ScPatternAttr::fillFontOnly(
     rFont.SetTransparent( true );
 }
 
-void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* pTextConfigColor)
+void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode, const SfxItemSet* pCondSet, const Color* pBackConfigColor, const Color* /*pTextConfigColor*/)
 {
     model::ComplexColor aComplexColor;
 
@@ -519,37 +519,16 @@ void ScPatternAttr::fillColor(model::ComplexColor& rComplexColor, const SfxItemS
             }
         }
 
-        //  get system text color for comparison
-        Color aSysTextColor;
-        if (eAutoMode == ScAutoFontColorMode::Print)
-        {
-            aSysTextColor = COL_BLACK;
-        }
-        else if (pTextConfigColor)
-        {
-            // pTextConfigColor can be used to avoid repeated lookup of the configured color
-            aSysTextColor = *pTextConfigColor;
-        }
-        else
-        {
-            aSysTextColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
-        }
-
         //  select the resulting color
-        if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
+        if ( aBackColor.IsDark() )
         {
             //  use white instead of dark on dark
             aColor = COL_WHITE;
         }
-        else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
+        else
         {
             //  use black instead of bright on bright
             aColor = COL_BLACK;
-        }
-        else
-        {
-            //  use aSysTextColor (black for ScAutoFontColorMode::Print, from style settings otherwise)
-            aColor = aSysTextColor;
         }
     }
     aComplexColor.setFinalColor(aColor);
