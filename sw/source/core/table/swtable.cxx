@@ -1720,21 +1720,26 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
                 break;
         }
     }
+
     // process all table box formulas
-    ItemSurrogates aSurrogates;
-    pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    for(const SfxPoolItem* pItem : aSurrogates)
+    SwTableLines& rTableLines = GetTabLines();
+    for (SwTableLine* pTableLine : rTableLines)
     {
-        // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto & rBoxFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
-        if(rBoxFormula.GetDefinedIn())
+        SwTableBoxes& rTableBoxes = pTableLine->GetTabBoxes();
+        for (SwTableBox* pTableBox : rTableBoxes)
         {
-            if(eFlags == TBL_BOXPTR)
-                rBoxFormula.TryBoxNmToPtr();
-            else if(eFlags == TBL_RELBOXNAME)
-                rBoxFormula.TryRelBoxNm();
-            else
-                rBoxFormula.ChangeState();
+            SwTableBoxFormat* pTableBoxFormat = static_cast<SwTableBoxFormat*>(pTableBox->GetFrameFormat());
+            if (const SwTableBoxFormula* pItem = pTableBoxFormat->GetItemIfSet( RES_BOXATR_FORMULA, false ))
+            {
+                // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
+                auto & rBoxFormula = const_cast<SwTableBoxFormula&>(*pItem);
+                if(eFlags == TBL_BOXPTR)
+                    rBoxFormula.TryBoxNmToPtr();
+                else if(eFlags == TBL_RELBOXNAME)
+                    rBoxFormula.TryRelBoxNm();
+                else
+                    rBoxFormula.ChangeState();
+            }
         }
     }
 }
