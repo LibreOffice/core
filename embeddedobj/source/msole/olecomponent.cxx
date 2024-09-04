@@ -1541,7 +1541,7 @@ void SAL_CALL OleComponent::removeCloseListener( const uno::Reference< util::XCl
 
 uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor& aFlavor )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -1585,6 +1585,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
 
                 HRESULT hr;
                 {
+                    osl::ResettableMutexGuardScopedReleaser own_releaser(aGuard);
                     SolarMutexReleaser releaser;
                     hr = pDataObject->GetData(&aFormat, &aMedium);
                 }
