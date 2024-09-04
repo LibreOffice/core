@@ -967,12 +967,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     {
             setParameterNull(nParameterIndex, false);
             const sal_Int32 nMaxSize = 0xFFFF;
-            Sequence<sal_Int8> xBytesCopy(xBytes);
-            if (xBytesCopy.getLength() > nMaxSize)
-            {
-                xBytesCopy.realloc( nMaxSize );
-            }
-            const sal_uInt16 nSize = xBytesCopy.getLength();
+            const sal_uInt16 nSize = std::min(xBytes.getLength(), nMaxSize);
             // 8000 corresponds to value from lcl_addDefaultParameters
             // in dbaccess/source/filter/hsqldb/createparser.cxx
             if (nSize > 8000)
@@ -984,7 +979,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             // First 2 bytes indicate string size
             memcpy(pVar->sqldata, &nSize, 2);
             // Actual data
-            memcpy(pVar->sqldata + 2, xBytesCopy.getConstArray(), nSize);
+            memcpy(pVar->sqldata + 2, xBytes.getConstArray(), nSize);
     }
     else if( dType == SQL_TEXT )
     {
