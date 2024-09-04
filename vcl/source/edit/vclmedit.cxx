@@ -441,11 +441,7 @@ OUString ImpVclMEdit::GetTextLines( LineEnd aSeparator ) const
 
 void ImpVclMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if ( !pTextHint )
-        return;
-
-    switch (pTextHint->GetId())
+    switch (rHint.GetId())
     {
         case SfxHintId::TextViewScrolled:
             if (mpHScrollBar->IsVisible())

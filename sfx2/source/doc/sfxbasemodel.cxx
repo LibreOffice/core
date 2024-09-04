@@ -2983,8 +2983,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         }
 
         Any aSupplement;
-        if (const SfxPrintingHint* pPrintingHint = dynamic_cast<const SfxPrintingHint*>(&rHint))
-            aSupplement <<= pPrintingHint->GetWhich();
+        if (rNamedHint.GetEventId() == SfxEventHintId::PrintDoc)
+            aSupplement <<= static_cast<const SfxPrintingHint*>(&rHint)->GetWhich();
         const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
         postEvent_Impl( rNamedHint.GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >(), aSupplement );
     }

@@ -2723,8 +2723,9 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 SetCompletePaint();
         }
     }
-    else if(const auto pHint = dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint))
+    else if(rHint.GetId() == SfxHintId::SwSectionFrameMoveAndDelete)
     {
+        const auto pHint = static_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);
         // #i117863#
         if(&rMod != GetDep())
             return;

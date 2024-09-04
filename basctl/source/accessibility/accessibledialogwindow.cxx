@@ -421,8 +421,9 @@ awt::Rectangle AccessibleDialogWindow::implGetBounds()
 
 void AccessibleDialogWindow::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (SdrHint const* pSdrHint = dynamic_cast<SdrHint const*>(&rHint))
+    if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
+        SdrHint const* pSdrHint = static_cast<SdrHint const*>(&rHint);
         switch ( pSdrHint->GetKind() )
         {
             case SdrHintKind::ObjectInserted:

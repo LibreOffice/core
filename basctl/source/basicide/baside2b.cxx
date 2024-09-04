@@ -1138,12 +1138,7 @@ void EditorWindow::CreateEditEngine()
 
 void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    TextHint const* pTextHint = dynamic_cast<TextHint const*>(&rHint);
-    if (!pTextHint)
-        return;
-
-    TextHint const& rTextHint = *pTextHint;
-    if( rTextHint.GetId() == SfxHintId::TextViewScrolled )
+    if( rHint.GetId() == SfxHintId::TextViewScrolled )
     {
         rModulWindow.GetEditVScrollBar().SetThumbPos( pEditView->GetStartDocPos().Y() );
         rModulWindow.GetEditHScrollBar().SetThumbPos( pEditView->GetStartDocPos().X() );
@@ -1152,7 +1147,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         rModulWindow.GetLineNumberWindow().DoScroll
             ( rModulWindow.GetLineNumberWindow().GetCurYOffset() - pEditView->GetStartDocPos().Y() );
     }
-    else if( rTextHint.GetId() == SfxHintId::TextHeightChanged )
+    else if( rHint.GetId() == SfxHintId::TextHeightChanged )
     {
         if ( pEditView->GetStartDocPos().Y() )
         {
@@ -1166,7 +1161,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
         SetScrollBarRanges();
     }
-    else if( rTextHint.GetId() == SfxHintId::TextFormatted )
+    else if( rHint.GetId() == SfxHintId::TextFormatted )
     {
 
         const tools::Long nWidth = pEditEngine->CalcTextWidth();
@@ -1181,20 +1176,23 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         if ( nCurTextWidth != nPrevTextWidth )
             SetScrollBarRanges();
     }
-    else if( rTextHint.GetId() == SfxHintId::TextParaInserted )
+    else if( rHint.GetId() == SfxHintId::TextParaInserted )
     {
+        TextHint const & rTextHint = static_cast<TextHint const&>(rHint);
         ParagraphInsertedDeleted( rTextHint.GetValue(), true );
         DoDelayedSyntaxHighlight( rTextHint.GetValue() );
     }
-    else if( rTextHint.GetId() == SfxHintId::TextParaRemoved )
+    else if( rHint.GetId() == SfxHintId::TextParaRemoved )
     {
+        TextHint const & rTextHint = static_cast<TextHint const&>(rHint);
         ParagraphInsertedDeleted( rTextHint.GetValue(), false );
     }
-    else if( rTextHint.GetId() == SfxHintId::TextParaContentChanged )
+    else if( rHint.GetId() == SfxHintId::TextParaContentChanged )
     {
+        TextHint const & rTextHint = static_cast<TextHint const&>(rHint);
         DoDelayedSyntaxHighlight( rTextHint.GetValue() );
     }
-    else if( rTextHint.GetId() == SfxHintId::TextViewSelectionChanged )
+    else if( rHint.GetId() == SfxHintId::TextViewSelectionChanged )
     {
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
@@ -1202,7 +1200,7 @@ void EditorWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             pBindings->Invalidate( SID_COPY );
         }
     }
-    else if( rTextHint.GetId() == SfxHintId::TextViewCaretChanged )
+    else if( rHint.GetId() == SfxHintId::TextViewCaretChanged )
     {
         // Check whether the line number where the caret is has changed and the
         // highlight needs to be redrawn

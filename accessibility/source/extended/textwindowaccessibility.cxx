@@ -1391,12 +1391,7 @@ void SAL_CALL Document::disposing()
 // virtual
 void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
 {
-    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if (!pTextHint)
-        return;
-
-    ::TextHint const & rTextHint = *pTextHint;
-    switch (rTextHint.GetId())
+    switch (rHint.GetId())
     {
     case SfxHintId::TextParaInserted:
     case SfxHintId::TextParaRemoved:
@@ -1420,6 +1415,7 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
             if (!isAlive())
                 break;
 
+            const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
             m_aParagraphNotifications.push(rTextHint);
             break;
         }

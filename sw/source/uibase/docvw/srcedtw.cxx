@@ -707,11 +707,7 @@ void SwSrcEditWindow::ImpDoHighlight( std::u16string_view aSource, sal_uInt16 nL
 
 void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
-    if (!pTextHint)
-        return;
-
-    switch (pTextHint->GetId())
+    switch (rHint.GetId())
     {
         case SfxHintId::TextViewScrolled:
             m_pHScrollbar->SetThumbPos( m_pTextView->GetStartDocPos().X() );
@@ -729,6 +725,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         case SfxHintId::TextParaContentChanged:
             if ( !m_bHighlighting )
             {
+                auto pTextHint = static_cast<const TextHint*>(&rHint);
                 m_aSyntaxLineTable.insert( o3tl::narrowing<sal_uInt16>(pTextHint->GetValue()) );
                 m_aSyntaxIdle.Start();
             }

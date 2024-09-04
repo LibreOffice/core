@@ -227,11 +227,11 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         //  must be from Area broadcasters
 
-        const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
-        if (pScHint && (pScHint->GetId() == SfxHintId::ScDataChanged))
+        if (rHint.GetId() == SfxHintId::ScDataChanged)
             bDataChanged = true;
-        else if (const ScAreaChangedHint *pChgHint = dynamic_cast<const ScAreaChangedHint*>(&rHint))      // position of broadcaster changed
+        else if (rHint.GetId() == SfxHintId::ScAreaChanged)  // position of broadcaster changed
         {
+            const ScAreaChangedHint *pChgHint = static_cast<const ScAreaChangedHint*>(&rHint);
             const ScRange& aNewRange = pChgHint->GetRange();
             if ( aRange != aNewRange )
             {
@@ -239,15 +239,12 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 bDataChanged = true;
             }
         }
-        else
+        else if (rHint.GetId() == SfxHintId::Dying)
         {
-            if (rHint.GetId() == SfxHintId::Dying)
-            {
-                //  If the range is being deleted, listening must be restarted
-                //  after the deletion is complete (done in GetData)
-                bRefreshListener = true;
-                bDataChanged = true;
-            }
+            //  If the range is being deleted, listening must be restarted
+            //  after the deletion is complete (done in GetData)
+            bRefreshListener = true;
+            bDataChanged = true;
         }
     }
 

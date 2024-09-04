@@ -532,11 +532,7 @@ void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         aObjectCatalog->UpdateEntries();
     }
 
-    SbxHint const* pSbxHint = dynamic_cast<SbxHint const*>(&rHint);
-    if (!pSbxHint)
-        return;
-
-    const SfxHintId nHintId = pSbxHint->GetId();
+    const SfxHintId nHintId = rHint.GetId();
     if ( ( nHintId != SfxHintId::BasicStart ) &&
          ( nHintId != SfxHintId::BasicStop ) )
         return;

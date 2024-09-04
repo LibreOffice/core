@@ -139,16 +139,14 @@ void SbxObject::Clear()
 
 void SbxObject::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
-    if( !p )
-        return;
-
-    const SfxHintId nId = p->GetId();
+    const SfxHintId nId = rHint.GetId();
     bool bRead  = ( nId == SfxHintId::BasicDataWanted );
     bool bWrite = ( nId == SfxHintId::BasicDataChanged );
-    SbxVariable* pVar = p->GetVar();
     if( !(bRead || bWrite) )
         return;
+    const SbxHint* p = static_cast<const SbxHint*>(&rHint);
+
+    SbxVariable* pVar = p->GetVar();
 
     OUString aVarName( pVar->GetName() );
     sal_uInt16 nHash_ = MakeHashCode( aVarName );
