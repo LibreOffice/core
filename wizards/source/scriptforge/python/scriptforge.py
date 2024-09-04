@@ -1302,12 +1302,9 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.Platform'
         servicesynonyms = ('platform', 'scriptforge.platform')
-        serviceproperties = dict(Architecture = 1, ComputerName = 1, CPUCount = 1, CurrentUser = 1,
-                                 Extensions = 0, FilterNames = 0, Fonts = 0, FormatLocale = 0,
-                                 Locale = 0, Machine = 1, OfficeLocale = 0, OfficeVersion = 0,
-                                 OSName = 1, OSPlatform = 1, OSRelease = 1, OSVersion = 1,
-                                 Printers = 0, Processor = 1, PythonVersion = 1, SystemLocale = 0,
-                                 UserData = 0)
+        serviceproperties = dict(Extensions = 0, FilterNames = 0, Fonts = 0, FormatLocale = 0,
+                                 Locale = 0, OfficeLocale = 0, OfficeVersion = 0,
+                                 Printers = 0, SystemLocale = 0,UserData = 0)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
@@ -1315,45 +1312,67 @@ class SFScriptForge:
         def Architecture(self):
             return self.SIMPLEEXEC(self.py, 'Architecture')
 
+        architecture = Architecture
+
         @property
         def ComputerName(self):
             return self.SIMPLEEXEC(self.py, 'ComputerName')
+
+        computername, computerName = ComputerName, ComputerName
 
         @property
         def CPUCount(self):
             return self.SIMPLEEXEC(self.py, 'CPUCount')
 
+        cpucount, cpuCount = CPUCount, CPUCount
+
         @property
         def CurrentUser(self):
             return self.SIMPLEEXEC(self.py, 'CurrentUser')
+
+        currentuser, currentUser = CurrentUser, CurrentUser
 
         @property
         def Machine(self):
             return self.SIMPLEEXEC(self.py, 'Machine')
 
+        machine = Machine
+
         @property
         def OSName(self):
             return self.SIMPLEEXEC(self.py, 'OSName')
+
+        osname, osName = OSName, OSName
 
         @property
         def OSPlatform(self):
             return self.SIMPLEEXEC(self.py, 'OSPlatform')
 
+        osplatform, osPlatform = OSPlatform, OSPlatform
+
         @property
         def OSRelease(self):
             return self.SIMPLEEXEC(self.py, 'OSRelease')
+
+        osrelease, osRelease = OSRelease, OSRelease
 
         @property
         def OSVersion(self):
             return self.SIMPLEEXEC(self.py, 'OSVersion')
 
+        osversion, osVersion = OSVersion, OSVersion
+
         @property
         def Processor(self):
             return self.SIMPLEEXEC(self.py, 'Processor')
 
+        processor = Processor
+
         @property
         def PythonVersion(self):
             return self.SIMPLEEXEC(self.py, 'PythonVersion')
+
+        pythonversion, pythonVersion = PythonVersion, PythonVersion
 
     # #########################################################################
     # SF_Region CLASS
@@ -1597,20 +1616,7 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.TextStream'
         servicesynonyms = ()
-        serviceproperties = dict(AtEndOfStream = 1, Encoding = 0, FileName = 0, IOMode = 0,
-                                 Line = 1, NewLine = 2)
-
-        @property
-        def AtEndOfStream(self):
-            return self.GetProperty('AtEndOfStream')
-
-        atEndOfStream, atendofstream = AtEndOfStream, AtEndOfStream
-
-        @property
-        def Line(self):
-            return self.GetProperty('Line')
-
-        line = Line
+        serviceproperties = dict(AtEndOfStream = 1, Encoding = 0, FileName = 0, IOMode = 0, Line = 1, NewLine = 2)
 
         def CloseFile(self):
             return self.ExecMethod(self.vbMethod, 'CloseFile')
