@@ -660,11 +660,8 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    isc_blob_handle aBlobHandle = 0;
-#else
-    isc_blob_handle aBlobHandle = nullptr;
-#endif
+    // value-initialization: isc_blob_handle may be either a pointer of an integer
+    isc_blob_handle aBlobHandle{};
     ISC_QUAD aBlobId;
 
     openBlobForWriting(aBlobHandle, aBlobId);
@@ -709,17 +706,14 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
     setValue< ISC_QUAD >(nParameterIndex, aBlobId, SQL_BLOB);
 }
 
-void OPreparedStatement::setClob( sal_Int32 nParameterIndex, const OUString& rStr )
+void OPreparedStatement::setClob(sal_Int32 nParameterIndex, std::u16string_view rStr)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     checkParameterIndex(nParameterIndex);
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    isc_blob_handle aBlobHandle = 0;
-#else
-    isc_blob_handle aBlobHandle = nullptr;
-#endif
+    // value-initialization: isc_blob_handle may be either a pointer of an integer
+    isc_blob_handle aBlobHandle{};
     ISC_QUAD aBlobId;
 
     openBlobForWriting(aBlobHandle, aBlobId);
@@ -785,11 +779,8 @@ void SAL_CALL OPreparedStatement::setBlob(sal_Int32 nParameterIndex,
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
     checkParameterIndex(nParameterIndex);
 
-#if SAL_TYPES_SIZEOFPOINTER == 8
-    isc_blob_handle aBlobHandle = 0;
-#else
-    isc_blob_handle aBlobHandle = nullptr;
-#endif
+    // value-initialization: isc_blob_handle may be either a pointer of an integer
+    isc_blob_handle aBlobHandle{};
     ISC_QUAD aBlobId;
 
     openBlobForWriting(aBlobHandle, aBlobId);
@@ -919,11 +910,8 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
 
     if( dType == SQL_BLOB )
     {
-#if SAL_TYPES_SIZEOFPOINTER == 8
-        isc_blob_handle aBlobHandle = 0;
-#else
-        isc_blob_handle aBlobHandle = nullptr;
-#endif
+        // value-initialization: isc_blob_handle may be either a pointer of an integer
+        isc_blob_handle aBlobHandle{};
         ISC_QUAD aBlobId;
 
         openBlobForWriting(aBlobHandle, aBlobId);
