@@ -27,6 +27,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <atomic>
 #include <algorithm>
 #include <vector>
 #include <mutex>
@@ -232,7 +233,7 @@ void SAL_CALL OWeakObject::release() noexcept
 
 void OWeakObject::disposeWeakConnectionPoint()
 {
-    OSL_PRECOND( m_refCount == 0, "OWeakObject::disposeWeakConnectionPoint: only to be called with a ref count of 0!" );
+    OSL_PRECOND( (atomic_thread_fence(std::memory_order_acquire), m_refCount == 0), "OWeakObject::disposeWeakConnectionPoint: only to be called with a ref count of 0!" );
     if (m_pWeakConnectionPoint != nullptr) {
         OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
         m_pWeakConnectionPoint = nullptr;
