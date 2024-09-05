@@ -30,6 +30,7 @@
 #include <property.hxx>
 #include <services.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/guarding.hxx>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -1640,10 +1641,14 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
         case PROPERTY_ID_DATASOURCE:
         {
-            Reference< XConnection > xSomeConnection;
-            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xSomeConnection ) )
-                throw PropertyVetoException();
-
+            css::uno::Reference<XInterface> xParent = getParent();
+            {
+                // prevent ABBA deadlock between this mutex and the SolarMutex
+                comphelper::MutexRelease aReleaser(m_aMutex);
+                Reference< XConnection > xSomeConnection;
+                if ( ::dbtools::isEmbeddedInDatabase( xParent, xSomeConnection ) )
+                    throw PropertyVetoException();
+            }
             try
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCENAME, rValue);
@@ -1706,8 +1711,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
 
         case PROPERTY_ID_ACTIVE_CONNECTION:
         {
+            bool bIsEmbeddedInDatabase;
             Reference< XConnection > xOuterConnection;
-            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xOuterConnection ) )
+            css::uno::Reference<XInterface> xParent = getParent();
+            {
+                // prevent ABBA deadlock between this mutex and the SolarMutex
+                comphelper::MutexRelease aReleaser(m_aMutex);
+                bIsEmbeddedInDatabase = ::dbtools::isEmbeddedInDatabase( xParent, xOuterConnection );
+            }
+            if (bIsEmbeddedInDatabase)
             {
                 if ( xOuterConnection != Reference< XConnection >( rValue, UNO_QUERY ) )
                     // somebody's trying to set a connection which is not equal the connection
