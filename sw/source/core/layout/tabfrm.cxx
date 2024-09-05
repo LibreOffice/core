@@ -2029,9 +2029,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // The beloved keep attribute
     const bool bKeep = IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), bEmulateTableKeep);
 
+    bool const isHiddenNow(IsHiddenNow());
     // All rows should keep together
-    const bool bDontSplit = !IsFollow() &&
-                            ( !GetFormat()->GetLayoutSplit().GetValue() );
+    const bool bDontSplit = isHiddenNow
+                || (!IsFollow() && !GetFormat()->GetLayoutSplit().GetValue());
 
     // The number of repeated headlines
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
@@ -2105,7 +2106,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
-    bool const isHiddenNow(IsHiddenNow());
     if (isHiddenNow)
         MakeValidZeroHeight();
 
