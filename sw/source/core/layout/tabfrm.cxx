@@ -2165,9 +2165,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     std::optional<SwBorderAttrAccess> oAccess(std::in_place, SwFrame::GetCache(), this);
     const SwBorderAttrs *pAttrs = oAccess->Get();
 
+    bool const isHiddenNow(IsHiddenNow());
     // All rows should keep together
-    bool bDontSplit = !IsFollow() &&
-                            ( !GetFormat()->GetLayoutSplit().GetValue() );
+    bool bDontSplit = isHiddenNow
+                || (!IsFollow() && !GetFormat()->GetLayoutSplit().GetValue());
 
     // The number of repeated headlines
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
@@ -2262,7 +2263,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
-    bool const isHiddenNow(IsHiddenNow());
     if (isHiddenNow)
         MakeValidZeroHeight();
 
