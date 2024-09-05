@@ -28,6 +28,8 @@
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
+#include <comphelper/bytereader.hxx>
+#include <rtl/ref.hxx>
 #include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
@@ -40,7 +42,8 @@ class SequenceInputStreamService:
     public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         io::XSeekableInputStream,
-        lang::XInitialization>
+        lang::XInitialization>,
+    public comphelper::ByteReader
 {
 public:
     explicit SequenceInputStreamService();
@@ -69,14 +72,16 @@ public:
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize( const uno::Sequence< css::uno::Any > & aArguments ) override;
 
+    // comphelper::ByteReader
+    virtual sal_Int32 readSomeBytes(sal_Int8* aData, sal_Int32 nBytesToRead) override;
+
 private:
     virtual ~SequenceInputStreamService() override {}
 
 
     std::mutex m_aMutex;
     bool m_bInitialized;
-    uno::Reference< io::XInputStream > m_xInputStream;
-    uno::Reference< io::XSeekable > m_xSeekable;
+    rtl::Reference< comphelper::SequenceInputStream > m_xInputStream;
 };
 
 SequenceInputStreamService::SequenceInputStreamService()
@@ -118,6 +123,15 @@ uno::Sequence< OUString > SAL_CALL SequenceInputStreamService::getSupportedServi
     return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
+::sal_Int32 SequenceInputStreamService::readSomeBytes( sal_Int8* aData, sal_Int32 nMaxBytesToRead )
+{
+    std::scoped_lock aGuard( m_aMutex );
+    if ( !m_xInputStream.is() )
+        throw io::NotConnectedException();
+
+    return m_xInputStream->readSomeBytes( aData, nMaxBytesToRead );
+}
+
 void SAL_CALL SequenceInputStreamService::skipBytes( ::sal_Int32 nBytesToSkip )
 {
     std::scoped_lock aGuard( m_aMutex );
@@ -144,35 +158,34 @@ void SAL_CALL SequenceInputStreamService::closeInput()
 
     m_xInputStream->closeInput();
     m_xInputStream.clear();
-    m_xSeekable.clear();
 }
 
 // css::io::XSeekable:
 void SAL_CALL SequenceInputStreamService::seek( ::sal_Int64 location )
 {
     std::scoped_lock aGuard( m_aMutex );
-    if ( !m_xSeekable.is() )
+    if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
-    m_xSeekable->seek( location );
+    m_xInputStream->seek( location );
 }
 
 ::sal_Int64 SAL_CALL SequenceInputStreamService::getPosition()
 {
     std::scoped_lock aGuard( m_aMutex );
-    if ( !m_xSeekable.is() )
+    if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
-    return m_xSeekable->getPosition();
+    return m_xInputStream->getPosition();
 }
 
 ::sal_Int64 SAL_CALL SequenceInputStreamService::getLength()
 {
     std::scoped_lock aGuard( m_aMutex );
-    if ( !m_xSeekable.is() )
+    if ( !m_xInputStream.is() )
         throw io::NotConnectedException();
 
-    return m_xSeekable->getLength();
+    return m_xInputStream->getLength();
 }
 
 // css::lang::XInitialization:
@@ -193,11 +206,7 @@ void SAL_CALL SequenceInputStreamService::initialize( const uno::Sequence< css::
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             1 );
 
-    uno::Reference< io::XInputStream > xInputStream(
-                    static_cast< ::cppu::OWeakObject* >( new ::comphelper::SequenceInputStream( aSeq ) ),
-                    uno::UNO_QUERY_THROW );
-    m_xSeekable.set(xInputStream, uno::UNO_QUERY_THROW);
-    m_xInputStream = xInputStream;
+    m_xInputStream = new ::comphelper::SequenceInputStream( aSeq );
     m_bInitialized = true;
 }
 
