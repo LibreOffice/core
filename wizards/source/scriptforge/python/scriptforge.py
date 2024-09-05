@@ -156,7 +156,7 @@ class ScriptForge(object, metaclass = _Singleton):
         ScriptForge.port = port
         # Determine main pyuno entry points
         ScriptForge.componentcontext = self.ConnectToLOProcess(hostname, port)  # com.sun.star.uno.XComponentContext
-        ScriptForge.scriptprovider = self.ScriptProvider(self.componentcontext)  # ...script.provider.XScriptProvider
+        ScriptForge.scriptprovider = self.ScriptProvider(ScriptForge.componentcontext)  # ...script.provider.XScriptProvider
         #
         # Establish a list of the available services as a dictionary (servicename, serviceclass)
         ScriptForge.serviceslist = dict((cls.servicename, cls) for cls in SFServices.__subclasses__())
@@ -1807,10 +1807,10 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'DLookup', expression, tablename, criteria, orderclause)
 
         def DMax(self, expression, tablename, criteria = ''):
-            return self.ExecMethod(self.vbMethod, 'DMax', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod + self.flgDateRet, 'DMax', expression, tablename, criteria)
 
         def DMin(self, expression, tablename, criteria = ''):
-            return self.ExecMethod(self.vbMethod, 'DMin', expression, tablename, criteria)
+            return self.ExecMethod(self.vbMethod + self.flgDateRet, 'DMin', expression, tablename, criteria)
 
         def DSum(self, expression, tablename, criteria = ''):
             return self.ExecMethod(self.vbMethod, 'DSum', expression, tablename, criteria)

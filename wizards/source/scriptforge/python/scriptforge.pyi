@@ -2639,7 +2639,7 @@ class SFDatabases:
                 """
             ...
 
-        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> Optional[float, int]:
+        def DAvg(self, expression: str, tablename: str, criteria: str = ...) -> Optional[Union[float, int]]:
             """
                 Compute the aggregate function ``AVG()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2692,7 +2692,8 @@ class SFDatabases:
                 """
             ...
 
-        def DMax(self, expression: str, tablename: str, criteria: str = ...) -> Optional[float, int]:
+        def DMax(self, expression: str, tablename: str, criteria: str = ...) \
+                -> Optional[Union[float, int, str, datetime.datetime]]:
             """
                 Compute the aggregate function ``MAX()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2707,7 +2708,8 @@ class SFDatabases:
                 """
             ...
 
-        def DMin(self, expression: str, tablename: str, criteria: str = ...) -> Optional[float, int]:
+        def DMin(self, expression: str, tablename: str, criteria: str = ...) \
+                -> Optional[Union[float, int, str, datetime.datetime]]:
             """
                 Compute the aggregate function ``MIN()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -2722,7 +2724,7 @@ class SFDatabases:
                 """
             ...
 
-        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> Optional[float, int]:
+        def DSum(self, expression: str, tablename: str, criteria: str = ...) -> Optional[Union[float, int]]:
             """
                 Compute the aggregate function ``SUM()`` on a  field or expression belonging to a table
                 filtered by a ``WHERE``-clause.
@@ -5494,7 +5496,7 @@ class SFDocuments:
                 """
             ...
 
-        def GetFormula(self, range: RANGE) -> Union[str, Tuple[str, ...], Tuple[Tuple[str, ...]], ...]:
+        def GetFormula(self, range: RANGE) -> Union[str, Tuple[str, ...], Tuple[Tuple[str, ...]]]:
             """
                 Get the formula(s) stored in the given range of cells as a single string, a tuple of strings,
                 or a tuple of tuples of strings.
@@ -7320,7 +7322,7 @@ def CreateScriptService(service: Literal['newdialog', 'NewDialog', 'SFDialogs.Ne
                         place: Tuple[int, int, int, int]) -> Optional[DIALOG]: ...
 @overload
 def CreateScriptService(service: Literal['dialogevent', 'DialogEvent', 'SFDialogs.DialogEvent'],
-                        event: Optional[UNO] = None) -> Optional[DIALOG, DIALOGCONTROL]: ...
+                        event: Optional[UNO] = None) -> Optional[Union[DIALOG, DIALOGCONTROL]]: ...
 @overload
 def CreateScriptService(service: Literal['document', 'Document', 'SFDocuments.Document'],
                         windowname: Union[UNO, str] = '') -> Optional[DOCUMENT]: ...
