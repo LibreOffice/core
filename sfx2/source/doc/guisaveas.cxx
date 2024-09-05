@@ -226,7 +226,7 @@ public:
         try
         {
             uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY );
-            if (xModel)
+            if (xDocSettingsSupplier)
             {
                 m_xDocumentSettings.set(
                     xDocSettingsSupplier->createInstance( u"com.sun.star.document.Settings"_ustr ),
