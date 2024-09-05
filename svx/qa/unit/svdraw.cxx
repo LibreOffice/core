@@ -790,6 +790,25 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
     // Second line
     assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]"_ostr, "x"_ostr, 12489.0, 300.0);
 }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
+{
+    loadFromFile(u"tdf161724.pptx");
+
+    SdrPage* pSdrPage = getFirstDrawPageWithAssert();
+    xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
+
+    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap"_ostr, "xy13"_ostr).toInt32();
+    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap"_ostr, "xy23"_ostr).toInt32();
+    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap"_ostr, "xy11"_ostr).toInt32();
+    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap"_ostr, "xy22"_ostr).toInt32();
+
+    // Without the fix in place, all these values would have been completely different
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBmpPosX);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(6356), nBmpPosY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(9901), nBmpWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(12693), nBmpHeight);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
