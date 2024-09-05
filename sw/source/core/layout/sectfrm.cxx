@@ -2680,6 +2680,24 @@ void SwSectionFrame::CalcEndAtEndFlag()
     }
 }
 
+static void InvalidateFramesInSection(SwFrame * pFrame)
+{
+    while (pFrame)
+    {
+        pFrame->InvalidateAll();
+        pFrame->InvalidateObjs(false);
+        if (pFrame->IsLayoutFrame())
+        {
+            InvalidateFramesInSection(pFrame->GetLower());
+        }
+        else if (pFrame->IsTextFrame())
+        {
+            pFrame->Prepare(PrepareHint::Clear, nullptr, false);
+        }
+        pFrame = pFrame->GetNext();
+    }
+}
+
 void SwSectionFrame::Notify(SfxHint const& rHint)
 {
     SwSectionFormat *const pFormat(GetSection()->GetFormat());
@@ -2742,35 +2760,8 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
 
-        SwColumnFrame * pColumn{Lower()->IsColumnFrame()
-                ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
-        auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
-        {
-            if (pLowerFrame->GetNext())
-            {
-                return pLowerFrame->GetNext();
-            }
-            if (pColumn)
-            {
-                pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
-                if (pColumn)
-                {
-                    return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
-                }
-            }
-            return nullptr;
-        };
-        for (SwFrame* pLowerFrame = pColumn
-                    ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
-                    : Lower();
-             pLowerFrame;
-             pLowerFrame = IterateLower(pLowerFrame))
-        {
-            pLowerFrame->Prepare(PrepareHint::Clear, nullptr, false);
-            pLowerFrame->InvalidateAll();
-            pLowerFrame->InvalidateObjs(false);
-            pLowerFrame->HideAndShowObjects();
-        }
+        InvalidateFramesInSection(Lower());
+        Lower()->HideAndShowObjects(); // recursive
         // Check if any page-breaks have been unhidden, create the new pages.
         // Call IsHiddenNow() because a parent section could still hide.
         if (!IsFollow() && IsInDocBody() && !IsInTab() && !IsHiddenNow())
@@ -2799,8 +2790,24 @@ void SwSectionFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 pFirstOnPage = pFirstOnPage->GetUpper();
             }
             assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
-            pColumn = Lower()->IsColumnFrame()
-                ? static_cast<SwColumnFrame*>(Lower()) : nullptr;
+            SwColumnFrame * pColumn{Lower()->IsColumnFrame()
+                    ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
+            auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
+            {
+                if (pLowerFrame->GetNext())
+                {
+                    return pLowerFrame->GetNext();
+                }
+                if (pColumn)
+                {
+                    pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
+                    if (pColumn)
+                    {
+                        return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
+                    }
+                }
+                return nullptr;
+            };
             for (SwFrame* pLowerFrame = pColumn
                         ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
                         : Lower();
