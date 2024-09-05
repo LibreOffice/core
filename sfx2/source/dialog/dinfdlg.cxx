@@ -823,6 +823,7 @@ SfxDocumentPage::SfxDocumentPage(weld::Container* pPage, weld::DialogController*
 
     m_aMultiSignedStr = m_xSignedValFt->get_label();
     m_xSignedValFt->set_label(OUString());
+    m_xImagePreferredDpiComboBox->set_entry_width_chars(5); // "width in chars" in Glade not effective
 
     ImplUpdateSignatures();
     ImplCheckPasswordState();

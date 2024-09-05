@@ -1,409 +1,424 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
-  <!-- n-columns=2 n-rows=12 -->
-  <object class="GtkGrid" id="DescriptionInfoPage">
+  <object class="GtkScrolledWindow" id="DescriptionInfoPage">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="border-width">6</property>
-    <property name="row-spacing">6</property>
-    <property name="column-spacing">12</property>
+    <property name="shadow-type">in</property>
     <child>
-      <object class="GtkLabel" id="label27">
+      <object class="GtkViewport">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label27">_Title:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">title</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label28">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label28">_Subject:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">subject</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label29">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label29">_Keywords:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">keywords</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label31">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label31">Co_ntributor:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">contributor</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label32">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label32">Co_verage:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">coverage</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label37">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label37">_Identifier:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">identifier</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label39">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label39">_Publisher:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">publisher</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">6</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label40">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label40">R_elation:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">relation</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">7</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label41">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label41">Ri_ghts:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">rights</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">8</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label42">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label42">So_urce:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">source</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">9</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label45">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label45">T_ype:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">type</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label30">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">start</property>
-        <property name="label" translatable="yes" context="descriptioninfopage|label30">_Comments:</property>
-        <property name="use-underline">True</property>
-        <property name="mnemonic-widget">comments</property>
-        <property name="xalign">1</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">11</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="title">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="title-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|title">Enter a title for the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="subject">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="subject-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|subject">Enter a subject for the document. You can use a subject to group documents with similar contents.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="keywords">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="keywords-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|keywords">Enter the words that you want to use to index the content of your document. Keywords must be separated by commas. A keyword can contain white space characters or semicolons.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="contributor">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="contributor-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|contributor">Enter the names of the people, organizations, or other entities that have made contributions to the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="coverage">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="coverage-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|coverage">Enter the time, place, or jurisdiction that the document is relevant to.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">4</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="identifier">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="identifier-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|identifier">Enter a unique and unambiguous identifier for the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="publisher">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="publisher-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|publisher">Enter the name of the entity that is making the document available.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">6</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="relation">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="relation-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|relation">Enter information about a resource related to the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">7</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="rights">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="rights-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|rights">Enter information about intellectual property rights associated with the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">8</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="source">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="source-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|source">Enter information about other resources from which the document is derived.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">9</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkEntry" id="type">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="truncate-multiline">True</property>
-        <child internal-child="accessible">
-          <object class="AtkObject" id="type-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|type">Enter information about the category or format of the document.</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">10</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkScrolledWindow" id="scrolledwindow1">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <property name="shadow-type">in</property>
+        <property name="margin-end">6</property>
+        <property name="border-width">12</property>
         <child>
-          <object class="GtkTextView" id="comments">
+          <!-- n-columns=2 n-rows=12 -->
+          <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+            <property name="can-focus">False</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="label27">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label27">_Title:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">title</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label28">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label28">_Subject:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">subject</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label29">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label29">_Keywords:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">keywords</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label31">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label31">Co_ntributor:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">contributor</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label32">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label32">Co_verage:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">coverage</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label37">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label37">_Identifier:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">identifier</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label39">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label39">_Publisher:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">publisher</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label40">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label40">R_elation:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">relation</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label41">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label41">Ri_ghts:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">rights</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label42">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label42">So_urce:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">source</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label45">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label45">T_ype:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">type</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label30">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="valign">start</property>
+                <property name="label" translatable="yes" context="descriptioninfopage|label30">_Comments:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">comments</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">11</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="title">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="title-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|title">Enter a title for the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="subject">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="subject-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|subject">Enter a subject for the document. You can use a subject to group documents with similar contents.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="keywords">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="keywords-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|keywords">Enter the words that you want to use to index the content of your document. Keywords must be separated by commas. A keyword can contain white space characters or semicolons.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="contributor">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="contributor-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|contributor">Enter the names of the people, organizations, or other entities that have made contributions to the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="coverage">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="coverage-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|coverage">Enter the time, place, or jurisdiction that the document is relevant to.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="identifier">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="identifier-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|identifier">Enter a unique and unambiguous identifier for the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="publisher">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="publisher-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|publisher">Enter the name of the entity that is making the document available.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="relation">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="relation-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|relation">Enter information about a resource related to the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="rights">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="rights-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|rights">Enter information about intellectual property rights associated with the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="source">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="source-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|source">Enter information about other resources from which the document is derived.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="type">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="truncate-multiline">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="type-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|type">Enter information about the category or format of the document.</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolledwindow1">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView" id="comments">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="comments-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|comments">Enter comments to help identify the document.</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">11</property>
+              </packing>
+            </child>
             <child internal-child="accessible">
-              <object class="AtkObject" id="comments-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|comments">Enter comments to help identify the document.</property>
+              <object class="AtkObject" id="DescriptionInfoPage-atkobject">
+                <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|DescriptionInfoPage">Contains descriptive information about the document.</property>
               </object>
             </child>
           </object>
         </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">11</property>
-      </packing>
-    </child>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="DescriptionInfoPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|DescriptionInfoPage">Contains descriptive information about the document.</property>
       </object>
     </child>
   </object>
