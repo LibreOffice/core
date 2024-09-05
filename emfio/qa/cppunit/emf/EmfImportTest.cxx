@@ -146,7 +146,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawImagePointsTypeBitmap)
         "ffffff,fbfbfb,fefefe,ffffff,fcfcfc,ffffff,fdfdfd,ffffff,ffffff,ffffff,ffffff,fbfbfb,"
         "010101,ffffff,fefefe,ffffff,ffffff,ffffff,fcfcfc,ffffff,fafafa,ffffff,ffffff,fefefe,"
         "ffffff,fdfdfd,fefefe,fefefe,ffffff,ffffff,fdfdfd,fffbfb,1e0000,8f4347,b13a3e,b82d32,"
-        "bb3438,b73237,b63338,b33035,b63338"_ustr);
+        "bb3438,b73237,b63338,b33035,b63338,b83338,b9313b,b9313b,b83239,b83338,b63338,b53438,"
+        "b63539,b53335,ba3236,a2393e,1c0000"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawString)
