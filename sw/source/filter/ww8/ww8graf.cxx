@@ -2431,16 +2431,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec& rRecord, WW8_FS
             bIsObjectLayoutInTableCell = true;
             rFlySet.Put(SwFormatFollowTextFlow(true));
         }
-
-        // Microsoft strangely ignores all wrapping for not-layoutInCell objects
-        const SfxPoolItem* pItem;
-        if (SfxItemState::SET == rFlySet.GetItemState(RES_SURROUND, false, &pItem))
-        {
-            const text::WrapTextMode eSurround
-                = static_cast<const SwFormatSurround*>(pItem)->GetSurround();
-            if (eSurround != text::WrapTextMode_THROUGH)
-                rFlySet.Put(SwFormatSurround(text::WrapTextMode_THROUGH));
-        }
     }
 
     // If the image is inline, then the relative orientation means nothing,
@@ -2869,7 +2859,6 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( tools::Long nGrafAnchorCp )
             aFSFA.nby = WW8_FSPA::RelPageBorder;
         }
 
-        // this might also adjust previously set RES_SURROUND and RES_FOLLOW_TEXT_FLOW
         RndStdIds eAnchor = ProcessEscherAlign(*pRecord, aFSFA, aFlySet);
 
         // Should we, and is it possible to make this into a writer textbox

@@ -14,7 +14,6 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -722,26 +721,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_from
 
     // since in fact layoutInCell is supposed to be applied, we mark (and export) as layoutInCell
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf162612,
-                         "tdf162612_notLayoutInCell_notWrapThrough_contourOpaque.docx")
-{
-    // given cell B2 with a centered, tight-wrapped image that is NOT layoutInCell
-    // (but Microsoft doesn't wrap any text around it)
-    xmlDocUniquePtr pDump = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(OUString("-anchor point-"),
-                         getXPathContent(pDump, "//tab/row[2]/cell[2]/txt"_ostr));
-    sal_Int32 nParaHeight
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "height"_ostr).toInt32();
-    // text should not wrap as two lines(552) beside the shape. It is one line(276) behind the shape
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(276), nParaHeight);
-
-    // the image is over top of the text
-    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"Opaque"_ustr));
-    // image should be wrapThrough, not PARALLEL (despite being wp:wrapTight wrapText="bothSides")
-    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,
-                         getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
