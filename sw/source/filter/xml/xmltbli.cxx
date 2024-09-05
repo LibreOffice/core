@@ -2614,7 +2614,7 @@ void SwXMLTableContext::MakeTable()
     m_bOwnsBox1 = true;
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
-    m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_pBox1->GetFrameFormat());
+    m_pBoxFormat = m_pBox1->GetFrameFormat();
 
     MakeTable_();
 

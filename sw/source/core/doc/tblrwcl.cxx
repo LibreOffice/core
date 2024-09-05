@@ -286,7 +286,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
             itFind != pCpyPara->rTabFrameArr.end() )
             aFindFrame = *itFind;
         else
-            aFindFrame.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+            aFindFrame.pNewFrameFormat = pBox->GetFrameFormat();
     }
 
     if (!rFndBox.GetLines().empty())
@@ -333,7 +333,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
                                             pCpyPara->nInsPos - 1 ];
                 }
 
-                aFindFrame.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+                aFindFrame.pNewFrameFormat = pBox->GetFrameFormat();
 
                 // Else we copy before that and the first Line keeps the TopLine
                 // and we remove it at the original
@@ -1055,7 +1055,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
         // Insert nCnt new Lines into the Box
         SwTableLine* pInsLine = pSelBox->GetUpper();
-        SwTableBoxFormat* pFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat());
+        SwTableBoxFormat* pFrameFormat = pSelBox->GetFrameFormat();
 
         // Respect the Line's height, reset if needed
         SwFormatFrameSize aFSz( pInsLine->GetFrameFormat()->GetFrameSize() );
@@ -1087,7 +1087,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
                 }
         }
 
-        SwTableBoxFormat* pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat());
+        SwTableBoxFormat* pCpyBoxFrameFormat = pSelBox->GetFrameFormat();
         bool bChkBorder = nullptr != pCpyBoxFrameFormat->GetBox().GetTop();
         if( bChkBorder )
             pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
@@ -1195,7 +1195,7 @@ bool SwTable::SplitCol(SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt)
 
         // Find the Frame Format in the Frame Format Array
         SwTableBoxFormat* pLastBoxFormat;
-        CpyTabFrame aFindFrame( static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat()) );
+        CpyTabFrame aFindFrame( pSelBox->GetFrameFormat() );
         CpyTabFrames::const_iterator itFind = aFrameArr.lower_bound( aFindFrame );
         const size_t nFndPos = itFind - aFrameArr.begin();
         if( itFind == aFrameArr.end() || !(*itFind == aFindFrame) )
@@ -1404,7 +1404,7 @@ static void lcl_Merge_MoveBox(FndBox_ & rFndBox, InsULPara *const pULPara)
         return;
 
     SwTableBox* pBox = new SwTableBox(
-            static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()),
+            rFndBox.GetBox()->GetFrameFormat(),
             0, pULPara->pInsLine );
     InsULPara aPara( *pULPara );
     aPara.pInsBox = pBox;
@@ -1469,7 +1469,7 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             // inserted
             SwTableLine* pInsLine = pULPara->pLeftBox->GetUpper();
             SwTableBox* pLMBox = new SwTableBox(
-                static_cast<SwTableBoxFormat*>(pULPara->pLeftBox->GetFrameFormat()), 0, pInsLine );
+                pULPara->pLeftBox->GetFrameFormat(), 0, pInsLine );
             SwTableLine* pLMLn = new SwTableLine(
                         static_cast<SwTableLineFormat*>(pInsLine->GetFrameFormat()), 2, pLMBox );
             pLMLn->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
@@ -1578,8 +1578,8 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     sal_uInt16 nInsPos = pLines->GetPos( pNewLine );
     pLines->insert( pLines->begin() + nInsPos, pInsLine );
 
-    SwTableBox* pLeftBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pMergeBox->GetFrameFormat()), 0, pInsLine );
-    SwTableBox* pRightBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pMergeBox->GetFrameFormat()), 0, pInsLine );
+    SwTableBox* pLeftBox = new SwTableBox( pMergeBox->GetFrameFormat(), 0, pInsLine );
+    SwTableBox* pRightBox = new SwTableBox( pMergeBox->GetFrameFormat(), 0, pInsLine );
     pMergeBox->SetUpper( pInsLine );
     pInsLine->GetTabBoxes().insert( pInsLine->GetTabBoxes().begin(), pLeftBox );
     pLeftBox->ClaimFrameFormat();
@@ -1829,7 +1829,7 @@ static void lcl_CopyBoxToDoc(FndBox_ const& rFndBox, CpyPara *const pCpyPara)
     do
     {
         // Find the Frame Format in the list of all Frame Formats
-        CpyTabFrame aFindFrame(static_cast<SwTableBoxFormat*>(rFndBox.GetBox()->GetFrameFormat()));
+        CpyTabFrame aFindFrame(rFndBox.GetBox()->GetFrameFormat());
 
         std::shared_ptr<SwFormatFrameSize> aFrameSz(std::make_shared<SwFormatFrameSize>());
         CpyTabFrames::const_iterator itFind = pCpyPara->rTabFrameArr.lower_bound( aFindFrame );

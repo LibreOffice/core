@@ -3012,7 +3012,7 @@ void WW8TabDesc::InsertCells( short nIns )
     m_pTabBoxes = &m_pTabLine->GetTabBoxes();
     m_pTabBox = (*m_pTabBoxes)[0];
 
-    m_pIo->m_rDoc.GetNodes().InsBoxen( m_pTableNd, m_pTabLine, static_cast<SwTableBoxFormat*>(m_pTabBox->GetFrameFormat()),
+    m_pIo->m_rDoc.GetNodes().InsBoxen( m_pTableNd, m_pTabLine, m_pTabBox->GetFrameFormat(),
                             const_cast<SwTextFormatColl*>(m_pIo->m_pDfltTextFormatColl), nullptr, m_pTabBoxes->size(), nIns );
     // The third parameter contains the FrameFormat of the boxes.
     // Here it is possible to optimize to save (reduce) FrameFormats.

@@ -2392,7 +2392,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
     m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
-    m_pBoxFormat = static_cast<SwTableBoxFormat*>(m_xBox1->GetFrameFormat());
+    m_pBoxFormat = m_xBox1->GetFrameFormat();
 
     MakeTable_( pBox );
 

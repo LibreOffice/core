@@ -160,7 +160,7 @@ void SwDDETable::ChangeContent()
             pTextNode->EraseText( aCntIdx );
             pTextNode->InsertText( aLine.getToken( 0, '\t', nLineTokenPos ), aCntIdx );
 
-            SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+            SwTableBoxFormat* pBoxFormat = pBox->GetFrameFormat();
             pBoxFormat->LockModify();
             pBoxFormat->ResetFormatAttr( RES_BOXATR_VALUE );
             pBoxFormat->UnlockModify();

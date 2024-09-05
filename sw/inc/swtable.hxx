@@ -480,8 +480,8 @@ public:
     const SwTableLine *GetUpper() const { return m_pUpper; }
     void SetUpper( SwTableLine *pNew ) { m_pUpper = pNew; }
 
-    SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
-    SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwTableBoxFormat* GetFrameFormat()       { return static_cast<SwTableBoxFormat*>(GetRegisteredIn()); }
+    SwTableBoxFormat* GetFrameFormat() const { return const_cast<SwTableBoxFormat*>(static_cast<const SwTableBoxFormat*>(GetRegisteredIn())); }
 
     /// Set that this table box contains formatting that is not set by the table style.
     void SetDirectFormatting(bool bDirect) { mbDirectFormatting = bDirect; }

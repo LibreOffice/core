@@ -2117,7 +2117,7 @@ SwFrameFormat* SwTableBox::ClaimFrameFormat()
     // of an SwTableBoxFormat object
     // If other SwTableBox objects currently listen to the same SwTableBoxFormat as
     // this one, something needs to be done
-    SwTableBoxFormat *pRet = static_cast<SwTableBoxFormat*>(GetFrameFormat());
+    SwTableBoxFormat *pRet = GetFrameFormat();
     SwIterator<SwTableBox,SwFormat> aIter( *pRet );
     for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {

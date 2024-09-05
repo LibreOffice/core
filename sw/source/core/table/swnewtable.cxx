@@ -704,7 +704,7 @@ bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
         SwTableBox* pBox = pLine->GetTabBoxes()[ nInsPos ];
         if( bBehind )
             ++nInsPos;
-        SwTableBoxFormat* pBoxFrameFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+        SwTableBoxFormat* pBoxFrameFormat = pBox->GetFrameFormat();
         ::InsTableBox( rDoc, pTableNd, pLine, pBoxFrameFormat, pBox, nInsPos, nCnt );
         sal_Int32 nRowSpan = pBox->getRowSpan();
         tools::Long nDiff = i - nLastLine;
@@ -2227,7 +2227,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                     // import filter (xmltbli.cxx) converts all box widths to absolute
                     assert(pSourceBox->GetFrameFormat()->GetFrameSize().GetWidthPercent() == 0);
                     ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
-                        static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
+                        pSourceBox->GetFrameFormat(),
                         pSourceBox, j+k, 1);
                     // insert dummy text node...
                     pDoc->GetNodes().MakeTextNode(
@@ -2265,7 +2265,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
                 assert(pSourceBox->GetTabLines().empty()); // checked for that
                 sal_uInt16 const nInsPos(j < nBox ? j : j + pSubLine->GetTabBoxes().size() - 1);
                 ::InsTableBox(*pDoc, GetTableNode(), pNewLine,
-                    static_cast<SwTableBoxFormat*>(pSourceBox->GetFrameFormat()),
+                    pSourceBox->GetFrameFormat(),
                     pSourceBox, nInsPos, 1);
                 // adjust row span:
                 // N rows in subtable, N-1 rows inserted:

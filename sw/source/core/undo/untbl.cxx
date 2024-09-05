@@ -1685,7 +1685,7 @@ void SwUndoTableNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
-            SwTableBox* pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), aIdx,
+            SwTableBox* pBox = new SwTableBox( pCpyBox->GetFrameFormat(), aIdx,
                                                 pCpyBox->GetUpper() );
             rLnBoxes.push_back( pBox );
         }
@@ -1889,7 +1889,7 @@ void SwUndoTableMerge::UndoImpl(::sw::UndoRedoContext & rContext)
         aIdx = rBox;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx.GetNode(),
                                             SwTableBoxStartNode, pColl );
-        pBox = new SwTableBox( static_cast<SwTableBoxFormat*>(pCpyBox->GetFrameFormat()), *pSttNd,
+        pBox = new SwTableBox( pCpyBox->GetFrameFormat(), *pSttNd,
                                 pCpyBox->GetUpper() );
         rLnBoxes.push_back( pBox );
 

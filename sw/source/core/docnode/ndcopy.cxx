@@ -148,7 +148,7 @@ static void lcl_CopyTableLine( const SwTableLine* pLine, CopyTable* pCT );
 
 static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
 {
-    SwTableBoxFormat * pBoxFormat = static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat());
+    SwTableBoxFormat * pBoxFormat = pBox->GetFrameFormat();
     for (const auto& rMap : pCT->m_rMapArr)
         if ( !lcl_SrchNew( rMap, reinterpret_cast<SwFrameFormat**>(&pBoxFormat) ) )
             break;

@@ -321,7 +321,7 @@ bool SwEditShell::GetTableBoxFormulaAttrs( SfxItemSet& rSet ) const
     for (size_t n = 0; n < aBoxes.size(); ++n)
     {
         const SwTableBox* pSelBox = aBoxes[ n ];
-        const SwTableBoxFormat* pTableFormat = static_cast<SwTableBoxFormat*>(pSelBox->GetFrameFormat());
+        const SwTableBoxFormat* pTableFormat = pSelBox->GetFrameFormat();
         if( !n )
         {
             // Convert formulae into external presentation

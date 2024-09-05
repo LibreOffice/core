@@ -877,13 +877,13 @@ static void lcl_InsTableBox( SwTableNode* pTableNd, SwDoc* pDoc, SwTableBox* pBo
                                 ->GetContentNode();
     if( pCNd && pCNd->IsTextNode() )
         pDoc->GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
-                static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat()),
+                pBox->GetFrameFormat(),
                 static_cast<SwTextNode*>(pCNd)->GetTextColl(),
                 pCNd->GetpSwAttrSet(),
                 nInsPos, nCnt );
     else
         pDoc->GetNodes().InsBoxen( pTableNd, pBox->GetUpper(),
-                static_cast<SwTableBoxFormat*>(pBox->GetFrameFormat()),
+                pBox->GetFrameFormat(),
                 pDoc->GetDfltTextFormatColl(), nullptr,
                 nInsPos, nCnt );
 }

@@ -4114,7 +4114,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
                 pUndo->SetNumFormat( nFormatIdx, fNumber );
             }
 
-            SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.GetFrameFormat());
+            SwTableBoxFormat* pBoxFormat = rBox.GetFrameFormat();
             SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aBoxSet( GetAttrPool() );
 
             bool bLockModify = true;
@@ -4173,7 +4173,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
     else
     {
         // It's not a number
-        SwTableBoxFormat* pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.GetFrameFormat());
+        SwTableBoxFormat* pBoxFormat = rBox.GetFrameFormat();
         if( SfxItemState::SET == pBoxFormat->GetItemState( RES_BOXATR_FORMAT, false ) ||
             SfxItemState::SET == pBoxFormat->GetItemState( RES_BOXATR_VALUE, false ) )
         {
