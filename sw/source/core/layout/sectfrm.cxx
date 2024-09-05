@@ -2638,6 +2638,24 @@ void SwSectionFrame::CalcEndAtEndFlag()
     }
 }
 
+static void InvalidateFramesInSection(SwFrame * pFrame)
+{
+    while (pFrame)
+    {
+        pFrame->InvalidateAll();
+        pFrame->InvalidateObjs(false);
+        if (pFrame->IsLayoutFrame())
+        {
+            InvalidateFramesInSection(pFrame->GetLower());
+        }
+        else if (pFrame->IsTextFrame())
+        {
+            pFrame->Prepare(PREP_CLEAR, nullptr, false);
+        }
+        pFrame = pFrame->GetNext();
+    }
+}
+
 void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     sal_uInt8 nInvFlags = 0;
@@ -2671,35 +2689,8 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
             SwRectFnSet(this).SetHeight(area, HUGE_POSITIVE);
         }
 
-        SwColumnFrame * pColumn{Lower()->IsColumnFrame()
-                ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
-        auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
-        {
-            if (pLowerFrame->GetNext())
-            {
-                return pLowerFrame->GetNext();
-            }
-            if (pColumn)
-            {
-                pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
-                if (pColumn)
-                {
-                    return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
-                }
-            }
-            return nullptr;
-        };
-        for (SwFrame* pLowerFrame = pColumn
-                    ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
-                    : Lower();
-             pLowerFrame;
-             pLowerFrame = IterateLower(pLowerFrame))
-        {
-            pLowerFrame->Prepare(PREP_CLEAR, nullptr, false);
-            pLowerFrame->InvalidateAll();
-            pLowerFrame->InvalidateObjs(false);
-            pLowerFrame->HideAndShowObjects();
-        }
+        InvalidateFramesInSection(Lower());
+        Lower()->HideAndShowObjects(); // recursive
         // Check if any page-breaks have been unhidden, create the new pages.
         // Call IsHiddenNow() because a parent section could still hide.
         if (!IsFollow() && IsInDocBody() && !IsInTab() && !IsHiddenNow())
@@ -2726,8 +2717,24 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
                 pFirstOnPage = pFirstOnPage->GetUpper();
             }
             assert(pFirstOnPage->IsContentFrame() || pFirstOnPage->IsTabFrame());
-            pColumn = Lower()->IsColumnFrame()
-                ? static_cast<SwColumnFrame*>(Lower()) : nullptr;
+            SwColumnFrame * pColumn{Lower()->IsColumnFrame()
+                    ? static_cast<SwColumnFrame*>(Lower()) : nullptr};
+            auto IterateLower = [&pColumn](SwFrame *const pLowerFrame) -> SwFrame*
+            {
+                if (pLowerFrame->GetNext())
+                {
+                    return pLowerFrame->GetNext();
+                }
+                if (pColumn)
+                {
+                    pColumn = static_cast<SwColumnFrame*>(pColumn->GetNext());
+                    if (pColumn)
+                    {
+                        return static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower();
+                    }
+                }
+                return nullptr;
+            };
             for (SwFrame* pLowerFrame = pColumn
                         ? static_cast<SwLayoutFrame*>(pColumn->Lower())->Lower()
                         : Lower();
