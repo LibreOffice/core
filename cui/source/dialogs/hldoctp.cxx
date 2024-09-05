@@ -253,10 +253,13 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, void)
     {
         weld::WaitObject aWait(mpDialog->getDialog());
 
-        if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
-            mxMarkWnd->RefreshTree ( u""_ustr );
-        else
-            mxMarkWnd->RefreshTree ( maStrURL );
+        if (mxMarkWnd)
+        {
+            if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
+                mxMarkWnd->RefreshTree ( u""_ustr );
+            else
+                mxMarkWnd->RefreshTree ( maStrURL );
+        }
     }
 }
 
