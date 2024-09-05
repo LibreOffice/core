@@ -1587,6 +1587,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     //the SwActualSection class has a member, which points to an upper(section).
     //When the "inner" section finishes, the upper will used instead.
 
+    std::vector<SwSectionFrame *> newHiddenSections;
+
     // Do not consider the end node. The caller (Section/MakeFrames()) has to
     // ensure that the end of this range is positioned before EndIndex!
     for ( ; nEndIndex == SwNodeOffset(0) || nIndex < nEndIndex; ++nIndex)
@@ -1908,12 +1910,8 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             pActualSection.reset(pActualSection->GetUpper());
             pLay = pLay->FindSctFrame();
             if (pLay->IsHiddenNow())
-            {   // flys were created visible
-                for (SwFlowFrame * pSect = SwFlowFrame::CastFlowFrame(pLay);
-                        pSect; pSect = pSect->GetPrecede())
-                {   // flys were created visible
-                    pSect->GetFrame().HideAndShowObjects();
-                }
+            {
+                newHiddenSections.push_back(static_cast<SwSectionFrame*>(pLay));
             }
             if ( pActualSection )
             {
@@ -1948,11 +1946,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                     }
                     else if (pOuterSectionFrame->IsHiddenNow())
                     {
-                        for (SwFlowFrame * pSect = SwFlowFrame::CastFlowFrame(pOuterSectionFrame);
-                                pSect; pSect = pSect->GetPrecede())
-                        {   // flys were created visible
-                            pSect->GetFrame().HideAndShowObjects();
-                        }
+                        newHiddenSections.push_back(pOuterSectionFrame);
                     }
                 }
                 else
@@ -2023,6 +2017,15 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
         if ( !isFlyCreationSuppressed )
             AppendAllObjs( pTable, pLayout );
         bObjsDirect = true;
+    }
+
+    // do it after AppendAllObjs()
+    for (SwSectionFrame * pNew : newHiddenSections)
+    {
+        for (SwFlowFrame * pSect = pNew; pSect; pSect = pSect->GetPrecede())
+        {   // flys were created visible; section may be paginated so iterate
+            pSect->GetFrame().HideAndShowObjects();
+        }
     }
 
     if( pPageMaker )
