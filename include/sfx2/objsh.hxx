@@ -361,7 +361,8 @@ public:
     void AfterSigning(bool bSignSuccess, bool bSignScriptingContent);
     bool HasValidSignatures() const;
     SignatureState              GetDocumentSignatureState();
-    bool                        SignDocumentContent(weld::Window* pDialogParent);
+    void SignDocumentContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback);
+    void AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent);
     css::uno::Sequence<css::security::DocumentSignatureInformation> GetDocumentSignatureInformation(
         bool bScriptingContent,
         const css::uno::Reference<css::security::XDocumentDigitalSignatures>& xSigner
