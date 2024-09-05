@@ -612,6 +612,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120629)
     // i.e. numbering type gets changed to ARABIC, should stay the same
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(56), numFormat_after);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf54862)
+{
+    createSwDoc("tdf54862.doc");
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+        sal_Int32 nCellA2Height = getXPath(pXmlDoc, "//tab/row[1]/cell[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+        sal_Int32 nCellB4Height = getXPath(pXmlDoc, "//tab/row[4]/cell[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+
+        // Without the fix in place this is this fails with:
+        // Expected: 1269, 9021
+        // Actual:   562, 623
+        // i.e. Cells A2 and B4 are not vertically merged, making them the wrong height
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1269), nCellA2Height);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9021), nCellB4Height);
+    };
+
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
