@@ -37,7 +37,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
-// tdf#140298 - remember user settings within the currect session
+// tdf#140298 - remember user settings within the current session
 // memp is filled in dtor and restored after initialization
 namespace
 {
