@@ -216,10 +216,13 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl, weld::Button&, void)
 
         weld::WaitObject aWait(mpDialog->getDialog());
 
-        if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
-            mxMarkWnd->RefreshTree ( u""_ustr );
-        else
-            mxMarkWnd->RefreshTree ( maStrURL );
+        if (mxMarkWnd)
+        {
+            if ( maStrURL.equalsIgnoreAsciiCase( INET_FILE_SCHEME ) )
+                mxMarkWnd->RefreshTree ( u""_ustr );
+            else
+                mxMarkWnd->RefreshTree ( maStrURL );
+        }
     }
     else
         mxMarkWnd->SetError( LERR_DOCNOTOPEN );
