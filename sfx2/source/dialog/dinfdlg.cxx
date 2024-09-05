@@ -870,9 +870,9 @@ IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl, weld::Button&, void)
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
     {
-        pDoc->SignDocumentContent(GetFrameWeld());
-
-        ImplUpdateSignatures();
+        pDoc->SignDocumentContent(GetFrameWeld(), [this] (bool /*bHaveWeSigned*/) {
+            ImplUpdateSignatures();
+        });
     }
 }
 

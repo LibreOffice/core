@@ -537,6 +537,25 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
 }
 }
 
+void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent)
+{
+    if ( bHaveWeSigned && HasValidSignatures() )
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog( pDialogParent,
+                    VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_REMEMBERSIGNATURE)));
+        if (xBox->run() == RET_YES)
+        {
+            rSignatureInfosRemembered = GetDocumentSignatureInformation(false);
+            bRememberSignature = true;
+        }
+        else
+        {
+            rSignatureInfosRemembered = uno::Sequence< security::DocumentSignatureInformation >();
+            bRememberSignature = false;
+        }
+    }
+}
+
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 {
     weld::Window* pDialogParent = rReq.GetFrameWeld();
@@ -589,7 +608,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             else
             {
-                bHaveWeSigned |= SignDocumentContent(pDialogParent);
+                // Async, all code before return has to go into the callback.
+                SignDocumentContent(pDialogParent, [this, pDialogParent] (bool bSigned) {
+                    AfterSignContent(bSigned, pDialogParent);
+                });
+                return;
             }
         }
         else
@@ -597,21 +620,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             bHaveWeSigned |= SignScriptingContent(pDialogParent);
         }
 
-        if ( bHaveWeSigned && HasValidSignatures() )
-        {
-            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog( pDialogParent,
-                                                      VclMessageType::Question, VclButtonsType::YesNo, SfxResId(STR_QUERY_REMEMBERSIGNATURE)));
-            if (xBox->run() == RET_YES)
-            {
-                rSignatureInfosRemembered = GetDocumentSignatureInformation(false);
-                bRememberSignature = true;
-            }
-            else
-            {
-                rSignatureInfosRemembered = uno::Sequence< security::DocumentSignatureInformation >();
-                bRememberSignature = false;
-            }
-        }
+        AfterSignContent(bHaveWeSigned, pDialogParent);
 
         return;
     }
@@ -2119,19 +2128,25 @@ SignatureState SfxObjectShell::GetDocumentSignatureState()
     return ImplGetSignatureState();
 }
 
-bool SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent)
+void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback)
 {
     if (!PrepareForSigning(pDialogParent))
-        return false;
+    {
+        rCallback(false);
+        return;
+    }
 
     if (CheckIsReadonly(false, pDialogParent))
-        return false;
+    {
+        rCallback(false);
+        return;
+    }
 
     bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures());
 
     AfterSigning(bSignSuccess, false);
 
-    return bSignSuccess;
+    rCallback(bSignSuccess);
 }
 
 bool SfxObjectShell::ResignDocument(uno::Sequence< security::DocumentSignatureInformation >& rSignaturesInfo)
