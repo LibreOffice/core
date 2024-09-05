@@ -20,6 +20,7 @@
 #include <tools/color.hxx>
 
 #include <tools/debug.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>
 #include <svl/numformat.hxx>
@@ -1103,7 +1104,20 @@ void SvxNumberFormatShell::GetPreviewString_Impl(OUString& rString, const Color*
     }
     else
     {
-        pFormatter->GetOutputString(nValNum, nCurFormatKey, rString, &rpColor, bUseStarFormat);
+        double nVal = nValNum;
+        const SvNumberformat* pEntry = pFormatter->GetEntry(nCurFormatKey);
+        if (nVal == 0.0 && pEntry && pEntry->GetFormatstring().indexOf("NatNum12") >= 0)
+        {
+            sal_Int32 nEnd;
+            rtl_math_ConversionStatus eStatus;
+            LocaleDataWrapper aLocale(LanguageTag(pEntry->GetLanguage()));
+
+            nVal = aLocale.stringToDouble(aValStr, true, &eStatus, &nEnd);
+            if (rtl_math_ConversionStatus_Ok != eStatus || nEnd == 0)
+                nVal = GetDefaultValNum(pFormatter->GetType(nCurFormatKey));
+        }
+
+        pFormatter->GetOutputString(nVal, nCurFormatKey, rString, &rpColor, bUseStarFormat);
     }
 }
 
