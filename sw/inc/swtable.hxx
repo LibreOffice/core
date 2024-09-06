@@ -492,7 +492,7 @@ public:
     bool HasDirectFormatting() const { return mbDirectFormatting; }
 
     // Creates its own FrameFormat if more boxes depend on it.
-    SwFrameFormat* ClaimFrameFormat();
+    SwTableBoxFormat* ClaimFrameFormat();
     void ChgFrameFormat( SwTableBoxFormat *pNewFormat, bool bNeedToReregister = true );
 
     void RemoveFromTable();

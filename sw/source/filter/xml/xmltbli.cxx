@@ -1721,7 +1721,7 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
 
         // get the old format, and reset all attributes
         // (but preserve FillOrder)
-        pBoxFormat2 = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
+        pBoxFormat2 = pBox->ClaimFrameFormat();
         SwFormatFillOrder aFillOrder( pBoxFormat2->GetFillOrder() );
         pBoxFormat2->ResetAllFormatAttr(); // #i73790# - method renamed
         pBoxFormat2->SetFormatAttr( aFillOrder );
@@ -1740,7 +1740,7 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
 
         // claim it, if we are not allowed to share
         if ( !bMayShare )
-            pBoxFormat2 = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
+            pBoxFormat2 = pBox->ClaimFrameFormat();
     }
 
     // lock format (if so desired)

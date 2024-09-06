@@ -4147,7 +4147,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
 
             if( bSetNumberFormat || bForceNumberFormat )
             {
-                pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.ClaimFrameFormat());
+                pBoxFormat = rBox.ClaimFrameFormat();
 
                 aBoxSet.Put( SwTableBoxValue( fNumber ));
                 aBoxSet.Put( SwTableBoxNumFormat( nFormatIdx ));
@@ -4183,7 +4183,7 @@ void SwDoc::ChkBoxNumFormat( SwTableBox& rBox, bool bCallUpdate )
                 pUndo.reset(new SwUndoTableNumFormat( rBox ));
             }
 
-            pBoxFormat = static_cast<SwTableBoxFormat*>(rBox.ClaimFrameFormat());
+            pBoxFormat = rBox.ClaimFrameFormat();
 
             // Remove all number formats
             sal_uInt16 nWhich1 = RES_BOXATR_FORMULA;
@@ -4526,8 +4526,7 @@ bool SwDoc::UnProtectCells( const SwSelBoxes& rBoxes )
                     pBox->ChgFrameFormat(it->second);
                 else
                 {
-                    SwTableBoxFormat *const pNewBoxFormat(
-                        static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat()));
+                    SwTableBoxFormat *const pNewBoxFormat(pBox->ClaimFrameFormat());
                     pNewBoxFormat->ResetFormatAttr( RES_PROTECT );
                     aFormatsMap.insert(std::make_pair(pBoxFormat, pNewBoxFormat));
                 }

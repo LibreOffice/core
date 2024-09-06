@@ -227,7 +227,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
         if( itFind == pCpyPara->rTabFrameArr.end() || !(*itFind == aFindFrame) )
         {
             // For nested copying, also save the new Format as an old one.
-            SwTableBoxFormat* pNewFormat = static_cast<SwTableBoxFormat*>(pBox->ClaimFrameFormat());
+            SwTableBoxFormat* pNewFormat = pBox->ClaimFrameFormat();
 
             // Find the selected Boxes in the Line:
             FndLine_ const* pCmpLine = nullptr;
@@ -1090,7 +1090,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         SwTableBoxFormat* pCpyBoxFrameFormat = pSelBox->GetFrameFormat();
         bool bChkBorder = nullptr != pCpyBoxFrameFormat->GetBox().GetTop();
         if( bChkBorder )
-            pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
+            pCpyBoxFrameFormat = pSelBox->ClaimFrameFormat();
 
         for( sal_uInt16 i = 0; i <= nCnt; ++i )
         {
@@ -1116,7 +1116,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 
                 if( bChkBorder )
                 {
-                    pCpyBoxFrameFormat = static_cast<SwTableBoxFormat*>(pNewLine->GetTabBoxes()[ 0 ]->ClaimFrameFormat());
+                    pCpyBoxFrameFormat = pNewLine->GetTabBoxes()[ 0 ]->ClaimFrameFormat();
                     SvxBoxItem aTmp( pCpyBoxFrameFormat->GetBox() );
                     aTmp.SetLine( nullptr, SvxBoxItemLine::TOP );
                     pCpyBoxFrameFormat->SetFormatAttr( aTmp );
@@ -1139,7 +1139,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
             }
         }
         // In Boxes with Lines, we can only have Size/Fillorder
-        pFrameFormat = static_cast<SwTableBoxFormat*>(pNewBox->ClaimFrameFormat());
+        pFrameFormat = pNewBox->ClaimFrameFormat();
         pFrameFormat->ResetFormatAttr( RES_LR_SPACE, RES_FRMATR_END - 1 );
         pFrameFormat->ResetFormatAttr( RES_BOXATR_BEGIN, RES_BOXATR_END - 1 );
     }
@@ -1201,7 +1201,7 @@ bool SwTable::SplitCol(SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt)
         if( itFind == aFrameArr.end() || !(*itFind == aFindFrame) )
         {
             // Change the FrameFormat
-            aFindFrame.pNewFrameFormat = static_cast<SwTableBoxFormat*>(pSelBox->ClaimFrameFormat());
+            aFindFrame.pNewFrameFormat = pSelBox->ClaimFrameFormat();
             SwTwips nBoxSz = aFindFrame.pNewFrameFormat->GetFrameSize().GetWidth();
             SwTwips nNewBoxSz = nBoxSz / ( nCnt + 1 );
             aFindFrame.pNewFrameFormat->SetFormatAttr( SwFormatFrameSize( SwFrameSize::Variable,

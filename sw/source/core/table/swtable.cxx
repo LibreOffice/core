@@ -2133,7 +2133,7 @@ SwTableBoxFormat* SwTableBox::CheckBoxFormat( SwTableBoxFormat* pFormat )
     return pFormat;
 }
 
-SwFrameFormat* SwTableBox::ClaimFrameFormat()
+SwTableBoxFormat* SwTableBox::ClaimFrameFormat()
 {
     // This method makes sure that this object is an exclusive SwTableBox client
     // of an SwTableBoxFormat object
