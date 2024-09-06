@@ -34,7 +34,7 @@
 
 # Builds the OfficeDevPathSettingsTest example of the Developers Guide.
 
-PRJ=../../../..
+PRJ=../../../../..
 SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk

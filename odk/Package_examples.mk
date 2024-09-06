@@ -189,6 +189,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/FirstSteps/FirstUnoContact/python/FirstUnoContact.py \
     DevelopersGuide/FirstSteps/FirstLoadComponent/cxx/FirstLoadComponent.cxx \
     DevelopersGuide/FirstSteps/FirstLoadComponent/cxx/Makefile \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/csharp/FirstLoadComponent.cs \
+    DevelopersGuide/FirstSteps/FirstLoadComponent/csharp/Makefile \
     DevelopersGuide/FirstSteps/FirstLoadComponent/java/FirstLoadComponent.java \
     DevelopersGuide/FirstSteps/FirstLoadComponent/java/Makefile \
     DevelopersGuide/FirstSteps/FirstLoadComponent/basic/FirstLoadComponent.bas \
@@ -196,6 +198,8 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/FirstSteps/FirstLoadComponent/python/DualComponentLoader.py \
     DevelopersGuide/FirstSteps/HelloTextTableShape/cxx/HelloTextTableShape.cxx \
     DevelopersGuide/FirstSteps/HelloTextTableShape/cxx/Makefile \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/csharp/HelloTextTableShape.cs \
+    DevelopersGuide/FirstSteps/HelloTextTableShape/csharp/Makefile \
     DevelopersGuide/FirstSteps/HelloTextTableShape/java/HelloTextTableShape.java \
     DevelopersGuide/FirstSteps/HelloTextTableShape/java/Makefile \
     DevelopersGuide/FirstSteps/HelloTextTableShape/basic/HelloTextTableShape.bas \
@@ -324,13 +328,20 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/OfficeDev/MenuElement.java \
     DevelopersGuide/OfficeDev/Number_Formats.java \
     DevelopersGuide/OfficeDev/OfficeConnect.java \
-    DevelopersGuide/OfficeDev/PathSettings/Makefile \
-    DevelopersGuide/OfficeDev/PathSettings/PathSettingsTest.java \
+    DevelopersGuide/OfficeDev/PathSettings/csharp/Makefile \
+    DevelopersGuide/OfficeDev/PathSettings/csharp/PathSettingsTest.cs \
+    DevelopersGuide/OfficeDev/PathSettings/java/Makefile \
+    DevelopersGuide/OfficeDev/PathSettings/java/PathSettingsTest.java \
+    DevelopersGuide/OfficeDev/PathSubstitution/csharp/Makefile \
+    DevelopersGuide/OfficeDev/PathSubstitution/csharp/PathSubstitutionTest.cs \
     DevelopersGuide/OfficeDev/PathSubstitution/java/Makefile \
     DevelopersGuide/OfficeDev/PathSubstitution/java/PathSubstitutionTest.java \
     DevelopersGuide/OfficeDev/PathSubstitution/python/path_substitution_test.py \
     DevelopersGuide/OfficeDev/TerminationTest/cxx/Makefile \
     DevelopersGuide/OfficeDev/TerminationTest/cxx/TerminationTest.cxx \
+    DevelopersGuide/OfficeDev/TerminationTest/csharp/Makefile \
+    DevelopersGuide/OfficeDev/TerminationTest/csharp/TerminateListener.cs \
+    DevelopersGuide/OfficeDev/TerminationTest/csharp/TerminationTest.cs \
     DevelopersGuide/OfficeDev/TerminationTest/java/Makefile \
     DevelopersGuide/OfficeDev/TerminationTest/java/TerminateListener.java \
     DevelopersGuide/OfficeDev/TerminationTest/java/TerminationTest.java \
@@ -466,6 +477,12 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     cpp/counter/countermain.cxx \
     cpp/remoteclient/Makefile \
     cpp/remoteclient/remoteclient.cxx \
+    dotnet/WriterDemo/csharp/Makefile \
+    dotnet/WriterDemo/csharp/WriterDemo.cs \
+    dotnet/WriterDemo/fsharp/Makefile \
+    dotnet/WriterDemo/fsharp/WriterDemo.fs \
+    dotnet/WriterDemo/vbasic/Makefile \
+    dotnet/WriterDemo/vbasic/WriterDemo.vb \
     java/DocumentHandling/DocumentConverter.java \
     java/DocumentHandling/DocumentLoader.java \
     java/DocumentHandling/DocumentPrinter.java \

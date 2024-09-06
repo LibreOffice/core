@@ -33,7 +33,7 @@ my_example_dirs_java = \
     DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection \
     DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_java \
     DevelopersGuide/OfficeDev/Linguistic \
-    DevelopersGuide/OfficeDev/PathSettings \
+    DevelopersGuide/OfficeDev/PathSettings/java \
     DevelopersGuide/OfficeDev/PathSubstitution/java \
     DevelopersGuide/OfficeDev/TerminationTest/java \
     DevelopersGuide/ProfUNO/InterprocessConn \
