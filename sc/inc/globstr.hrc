@@ -520,6 +520,7 @@
 #define STR_INVALIDVAR                          NC_("STR_INVALIDVAR", "Undefined name for variable cell.")
 #define STR_INVALIDFORM                         NC_("STR_INVALIDFORM", "Undefined name as formula cell.")
 #define STR_NOFORMULA                           NC_("STR_NOFORMULA", "Formula cell must contain a formula.")
+#define STR_SOLVER_ENGINE_ERROR                 NC_("STR_SOLVER_ENGINE_ERROR", "An internal error occurred while running the solver engine.")
 #define STR_INVALIDINPUT                        NC_("STR_INVALIDINPUT", "Invalid input.")
 #define STR_INVALIDCONDITION                    NC_("STR_INVALIDCONDITION", "Invalid condition.")
 #define STR_QUERYREMOVE                         NC_("STR_QUERYREMOVE", "Should the entry\n#\nbe deleted?")

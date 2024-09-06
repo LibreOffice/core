@@ -165,6 +165,7 @@ private:
     OUString m_sSocialConstant;
     OUString m_sConstrictionCoeff;
     OUString m_sMutationProbability;
+    // SCO only
     OUString m_sLibrarySize;
 
     css::uno::Sequence<css::beans::PropertyValue> m_aEngineOptions;

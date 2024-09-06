@@ -1116,8 +1116,20 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         }
     }
 
-    xSolver->solve();
-    bool bSuccess = xSolver->getSuccess();
+    // tdf#162760 The solver engine may crash unexpectedly, so we need a try...catch here
+    bool bSuccess(false);
+    try
+    {
+        xSolver->solve();
+        bSuccess = xSolver->getSuccess();
+    }
+    catch (const uno::RuntimeException&)
+    {
+        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                                                  VclMessageType::Error, VclButtonsType::Ok,
+                                                  ScResId(STR_SOLVER_ENGINE_ERROR)));
+        xBox->run();
+    }
 
     xProgress->response(RET_CLOSE);
 

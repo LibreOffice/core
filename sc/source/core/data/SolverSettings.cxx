@@ -763,17 +763,23 @@ void SolverSettings::ResetToDefaults()
     m_sVariableCells = "";
     m_sMSEngineId = "1";
 
-    // The default solver engine is the first implementation available
     css::uno::Sequence<OUString> aEngineNames;
     css::uno::Sequence<OUString> aDescriptions;
     ScSolverUtil::GetImplementations(aEngineNames, aDescriptions);
+
+    // tdf#162760 Set the parameters of all available solver engines to the default values
+    for (const auto& sEngine : aEngineNames)
+    {
+        css::uno::Sequence<css::beans::PropertyValue> aEngineProps
+            = ScSolverUtil::GetDefaults(sEngine);
+        SetEngineOptions(aEngineProps);
+    }
+
+    // The default solver engine is the first implementation available
     m_sLOEngineName = aEngineNames[0];
 
     // Default engine options
     m_aEngineOptions = ScSolverUtil::GetDefaults(m_sLOEngineName);
-
-    // Default solver engine options
-    SetEngineOptions(m_aEngineOptions);
 
     // Clear all constraints
     m_aConstraints.clear();
