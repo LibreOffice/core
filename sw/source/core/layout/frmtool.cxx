@@ -1908,10 +1908,6 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             //section again.
             pActualSection.reset(pActualSection->GetUpper());
             pLay = pLay->FindSctFrame();
-            if (pLay->IsHiddenNow())
-            {
-                newHiddenSections.push_back(static_cast<SwSectionFrame*>(pLay));
-            }
             if ( pActualSection )
             {
                 //Could be, that the last SectionFrame remains empty.
@@ -1926,6 +1922,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                 }
                 else
                 {
+                    if (pLay->IsHiddenNow())
+                    {
+                        newHiddenSections.push_back(static_cast<SwSectionFrame*>(pLay));
+                    }
                     pPrv = pLay;
                     pLay = pLay->GetUpper();
                 }
@@ -1969,6 +1969,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             }
             else
             {
+                if (pLay->IsHiddenNow())
+                {
+                    newHiddenSections.push_back(static_cast<SwSectionFrame*>(pLay));
+                }
                 //Nothing more with sections, it goes on right behind
                 //the SectionFrame.
                 pPrv = pLay;
