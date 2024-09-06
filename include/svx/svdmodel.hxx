@@ -199,12 +199,12 @@ protected:
     std::deque<std::unique_ptr<SfxUndoAction>> m_aRedoStack;
     std::unique_ptr<SdrUndoGroup> m_pCurrentUndoGroup;  // For multi-level
     sal_uInt16          m_nUndoLevel;                   // undo nesting
+    sal_uInt16          m_nPageNumsDirtyFrom = SAL_MAX_UINT16;
+    sal_uInt16          m_nMasterPageNumsDirtyFrom = SAL_MAX_UINT16;
     bool                m_bIsWriter:1;        // to clean up pMyPool from 303a
     bool                m_bThemedControls:1;  // If false UnoControls should not use theme colors
     bool                mbUndoEnabled:1;  // If false no undo is recorded or we are during the execution of an undo action
     bool                mbChanged:1;
-    bool                m_bPagNumsDirty:1;
-    bool                m_bMPgNumsDirty:1;
     bool                m_bTransportContainer:1;  // doc is temporary object container, no display (e.g. clipboard)
     bool                m_bReadOnly:1;
     bool                m_bTransparentTextFrames:1;
@@ -397,8 +397,8 @@ public:
     static OUString  GetPercentString(const Fraction& rVal);
 
     // RecalcPageNums is ordinarily only called by the Page.
-    bool             IsPagNumsDirty() const                     { return m_bPagNumsDirty; };
-    bool             IsMPgNumsDirty() const                     { return m_bMPgNumsDirty; };
+    bool             IsPagNumsDirty() const                     { return m_nPageNumsDirtyFrom != SAL_MAX_UINT16; }
+    bool             IsMPgNumsDirty() const                     { return m_nMasterPageNumsDirtyFrom != SAL_MAX_UINT16; }
     void             RecalcPageNums(bool bMaster);
     // After the Insert the Page belongs to the SdrModel.
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
