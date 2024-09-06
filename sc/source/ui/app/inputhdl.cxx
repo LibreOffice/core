@@ -3940,7 +3940,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         UpdateActiveView();
         bool bNewView = DataChanging( nChar );
 
-        if (bProtected || (pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // Protected cell?
+        if (bProtected || (pActiveViewSh && pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // Protected cell?
             bUsed = true;                           // Don't forward KeyEvent
         else                                        // Changes allowed
         {
@@ -4174,12 +4174,11 @@ void ScInputHandler::InputCommand( const CommandEvent& rCEvt )
         UpdateActiveView();
         bool bNewView = DataChanging( 0, true );
 
-        if (!bProtected && !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // changes allowed
+        if (!bProtected && pActiveViewSh && !(pActiveViewSh->GetViewShell() && pActiveViewSh->GetViewShell()->IsLokReadOnlyView())) // changes allowed
         {
             if (bNewView)                           // create new edit view
             {
-                if (pActiveViewSh)
-                    pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
+                pActiveViewSh->GetViewData().GetDocShell()->PostEditView( mpEditEngine.get(), aCursorPos );
                 UpdateActiveView();
                 if (eMode==SC_INPUT_NONE)
                     if (pTableView || pTopView)
