@@ -16,6 +16,7 @@
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentState.hxx>
 #include <docsh.hxx>
 #include <unocoll.hxx>
@@ -1371,8 +1372,19 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             if (pShape->GetLayoutDir() == SwFrameFormat::HORI_R2L)
             {
                 auto nRightSpace = pShape->GetLRSpace().GetRight();
-                aNewHOri.SetPos(aRect.Right() + nRightSpace
-                                + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+
+                const bool bMSOLayout = pFormat->getIDocumentSettingAccess().get(
+                    DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS);
+                if (bMSOLayout)
+                {
+                    aNewHOri.SetPos(-aRect.Right() + nRightSpace
+                                    + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+                }
+                else
+                {
+                    aNewHOri.SetPos(aRect.Right() + nRightSpace
+                                    + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+                }
             }
             else
             {
