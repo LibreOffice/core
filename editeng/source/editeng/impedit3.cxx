@@ -910,6 +910,9 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         // =>...
         pLine->GetCharPosArray().clear();
 
+        // tdf#162803: Stale kashida position data also needs to be cleared on each layout.
+        pLine->GetKashidaArray().clear();
+
         sal_Int32 nTmpPos = nIndex;
         sal_Int32 nTmpPortion = pLine->GetStartPortion();
         tools::Long nTmpWidth = 0;
