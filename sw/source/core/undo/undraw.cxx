@@ -354,7 +354,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
 
     if (SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj)))
     {
-        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
+        SwDrawFrameFormat* pFormat = pContact->GetFormat();
 
         m_pObjArray[0].pObj = pObj;
         m_pObjArray[0].pFormat = pFormat;
@@ -629,7 +629,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         if (!pContact)
             continue;
 
-        SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
+        SwDrawFrameFormat *pFormat = pContact->GetFormat();
 
         // object will destroy itself
         pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );

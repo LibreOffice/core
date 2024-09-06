@@ -109,9 +109,9 @@ public:
     virtual const SdrObject *GetMaster() const = 0;
     virtual SdrObject *GetMaster() = 0;
 
-          SwFrameFormat  *GetFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
-    const SwFrameFormat  *GetFormat() const
-        { return static_cast<const SwFrameFormat*>(GetRegisteredIn()); }
+          SwDrawFrameFormat  *GetFormat() { return static_cast<SwDrawFrameFormat*>(GetRegisteredIn()); }
+    const SwDrawFrameFormat  *GetFormat() const
+        { return static_cast<const SwDrawFrameFormat*>(GetRegisteredIn()); }
 
     bool IsInDTOR() const { return mbInDTOR;}
 
