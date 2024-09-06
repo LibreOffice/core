@@ -551,6 +551,20 @@ void SwFormatHeader::RegisterToFormat( SwFormat& rFormat )
     rFormat.Add(*this);
 }
 
+void SwFormatHeader::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatHeader"));
+    SfxPoolItem::dumpAsXml(pWriter);
+
+    const SwFrameFormat* pHeaderFormat = GetHeaderFormat();
+    if (pHeaderFormat)
+    {
+        pHeaderFormat->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 // Partially implemented inline in hxx
 SwFormatFooter::SwFormatFooter( SwFrameFormat *pFooterFormat )
     : SfxPoolItem( RES_FOOTER, SfxItemType::SwFormatFooterType ),

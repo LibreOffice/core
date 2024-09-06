@@ -56,6 +56,7 @@ public:
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return m_bActive; }
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
  /**Footer, for pageformats
