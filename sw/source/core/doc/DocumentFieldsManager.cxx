@@ -614,14 +614,12 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
         }
     }
     // process all table box formulas
-    ItemSurrogates aSurrogates;
-    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    std::vector<SwTableBoxFormula*> aTableBoxFormulas;
+    SwTable::GatherFormulas(m_rDoc, aTableBoxFormulas);
+    for (SwTableBoxFormula* pBoxFormula : aTableBoxFormulas)
     {
-        // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto & rBoxFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
-        if(rBoxFormula.GetDefinedIn())
-            rBoxFormula.ChangeState();
+        if(pBoxFormula->GetDefinedIn())
+            pBoxFormula->ChangeState();
     }
 
     SwRootFrame const* pLayout(nullptr);
@@ -716,11 +714,10 @@ void DocumentFieldsManager::UpdateTableFields(const SwTable* pTable)
     }
 
     // calculate the formula at the boxes
-    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    for (const SfxPoolItem* pItem : aSurrogates)
+    SwTable::GatherFormulas(m_rDoc, aTableBoxFormulas);
+    for (SwTableBoxFormula* pItem : aTableBoxFormulas)
     {
-        // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
-        auto & rFormula = const_cast<SwTableBoxFormula&>(static_cast<const SwTableBoxFormula&>(*pItem));
+        auto & rFormula = *pItem;
         if(!rFormula.GetDefinedIn() || rFormula.IsValid())
             continue;
         SwTableBox* pBox = rFormula.GetTableBox();

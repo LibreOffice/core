@@ -1623,17 +1623,34 @@ bool SwTable::IsDeleted() const
 
 void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
 {
-    ItemSurrogates aSurrogates;
-    GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    for(const SfxPoolItem* pItem: aSurrogates)
+    GatherFormulas(*GetFrameFormat()->GetDoc(), rvFormulas);
+}
+
+void SwTable::GatherFormulas(SwDoc& rDoc, std::vector<SwTableBoxFormula*>& rvFormulas)
+{
+    rvFormulas.clear();
+    sw::TableFrameFormats* pTableFrameFormats = rDoc.GetTableFrameFormats();
+    for(SwTableFormat* pFormat : *pTableFrameFormats)
     {
-        const auto & rBoxFormula = static_cast<const SwTableBoxFormula&>(*pItem);
-        if(!rBoxFormula.GetDefinedIn())
+        SwTable* pTable = FindTable(pFormat);
+        if (!pTable)
             continue;
-        const SwNode* pNd = rBoxFormula.GetNodeOfFormula();
-        if(!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes()) // is this ever valid or should we assert here?
-            continue;
-        rvFormulas.push_back(const_cast<SwTableBoxFormula*>(&rBoxFormula));
+        SwTableLines& rTableLines = pTable->GetTabLines();
+        for (SwTableLine* pTableLine : rTableLines)
+        {
+            SwTableBoxes& rTableBoxes = pTableLine->GetTabBoxes();
+            for (SwTableBox* pTableBox : rTableBoxes)
+            {
+                SwTableBoxFormat* pTableBoxFormat = pTableBox->GetFrameFormat();
+                if (const SwTableBoxFormula* pBoxFormula = pTableBoxFormat->GetItemIfSet( RES_BOXATR_FORMULA, false ))
+                {
+                    const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
+                    if(!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes()) // is this ever valid or should we assert here?
+                        continue;
+                    rvFormulas.push_back(const_cast<SwTableBoxFormula*>(pBoxFormula));
+                }
+            }
+        }
     }
 }
 

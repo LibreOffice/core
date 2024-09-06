@@ -416,17 +416,17 @@ bool SwCursorShell::GotoNxtPrvTableFormula( bool bNext, bool bOnlyErrors )
                                 &rPos, &tmp) );
     }
 
-    ItemSurrogates aSurrogates;
-    GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    const sal_uInt32 nMaxItems(aSurrogates.size());
+    std::vector<SwTableBoxFormula*> aTableBoxFormulas;
+    SwTable::GatherFormulas(*GetDoc(), aTableBoxFormulas);
+    const sal_uInt32 nMaxItems(aTableBoxFormulas.size());
     if( nMaxItems > 0 )
     {
         sal_uInt8 nMaxDo = 2;
         do {
-            for (const SfxPoolItem* pItem : aSurrogates)
+            for (SwTableBoxFormula* pItem : aTableBoxFormulas)
             {
                 const SwTableBox* pTBox;
-                auto & rFormulaItem = static_cast<const SwTableBoxFormula&>(*pItem);
+                auto & rFormulaItem = *pItem;
                 pTBox = rFormulaItem.GetTableBox();
                 if( pTBox &&
                     pTBox->GetSttNd() &&

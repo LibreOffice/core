@@ -455,7 +455,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_GRFATR_DUMMY4, new SfxBoolItem( RES_GRFATR_DUMMY4 ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_GRFATR_DUMMY5, new SfxBoolItem( RES_GRFATR_DUMMY5 ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_FORMAT, new SwTableBoxNumFormat, 0, SFX_ITEMINFOFLAG_NONE },
-            { RES_BOXATR_FORMULA, new SwTableBoxFormula( OUString() ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_BOXATR_FORMULA, new SwTableBoxFormula( OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_VALUE, new SwTableBoxValue, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_UNKNOWNATR_CONTAINER, new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }
         }};

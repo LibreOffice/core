@@ -2390,9 +2390,9 @@ bool SwTable::CanConvertSubtables() const
     {
         return false; // no formulas in fields yet
     }
-    ItemSurrogates aSurrogates;
-    pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_BOXATR_FORMULA);
-    if (!aSurrogates.empty())
+    std::vector<SwTableBoxFormula*> aTableBoxFormulas;
+    SwTable::GatherFormulas(*pDoc, aTableBoxFormulas);
+    if (!aTableBoxFormulas.empty())
     {
         return false; // no table box formulas yet
     }
