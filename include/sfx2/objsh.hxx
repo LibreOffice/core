@@ -377,7 +377,7 @@ public:
                            const css::uno::Reference<css::graphic::XGraphic>& xInvalidGraphic,
                            const OUString& aComment);
     SignatureState              GetScriptingSignatureState();
-    bool                        SignScriptingContent(weld::Window* pDialogParent);
+    void SignScriptingContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
 
     virtual std::shared_ptr<SfxDocumentInfoDialog> CreateDocumentInfoDialog(weld::Window* pParent, const SfxItemSet& rItemSet);

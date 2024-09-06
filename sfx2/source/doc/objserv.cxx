@@ -607,7 +607,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         else
         {
-            bHaveWeSigned |= SignScriptingContent(pDialogParent);
+            // Async, all code before return has to go into the callback.
+            SignScriptingContent(pDialogParent, [this, pDialogParent] (bool bSigned) {
+                AfterSignContent(bSigned, pDialogParent);
+            });
+            return;
         }
 
         AfterSignContent(bHaveWeSigned, pDialogParent);
@@ -2144,11 +2148,12 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent, const std:
         return;
     }
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures());
+    // Async, all code before the end has to go into the callback.
+    GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures(), [this, rCallback](bool bSignSuccess) {
+            AfterSigning(bSignSuccess, false);
 
-    AfterSigning(bSignSuccess, false);
-
-    rCallback(bSignSuccess);
+            rCallback(bSignSuccess);
+    });
 }
 
 bool SfxObjectShell::ResignDocument(uno::Sequence< security::DocumentSignatureInformation >& rSignaturesInfo)
@@ -2259,15 +2264,15 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
     if (CheckIsReadonly(false, pDialogParent))
         return;
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent,
-        false, HasValidSignatures(), aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
+    GetMedium()->SignContents_Impl(pDialogParent,
+        false, HasValidSignatures(), [this](bool bSignSuccess) {
+        AfterSigning(bSignSuccess, false);
 
-    AfterSigning(bSignSuccess, false);
-
-    // Reload the document to get the updated graphic
-    // FIXME: Update just the signature line graphic instead of reloading the document
-    if (SfxViewFrame* pFrame = GetFrame())
-        pFrame->GetDispatcher()->Execute(SID_RELOAD);
+        // Reload the document to get the updated graphic
+        // FIXME: Update just the signature line graphic instead of reloading the document
+        if (SfxViewFrame* pFrame = GetFrame())
+            pFrame->GetDispatcher()->Execute(SID_RELOAD);
+    }, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
 }
 
 SignatureState SfxObjectShell::GetScriptingSignatureState()
@@ -2275,19 +2280,25 @@ SignatureState SfxObjectShell::GetScriptingSignatureState()
     return ImplGetSignatureState( true );
 }
 
-bool SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent)
+void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent, const std::function<void(bool)>& rCallback)
 {
     if (!PrepareForSigning(pDialogParent))
-        return false;
+    {
+        rCallback(false);
+        return;
+    }
 
     if (CheckIsReadonly(true, pDialogParent))
-        return false;
+    {
+        rCallback(false);
+        return;
+    }
 
-    bool bSignSuccess = GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures());
+    GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures(), [this, rCallback](bool bSignSuccess) {
+        AfterSigning(bSignSuccess, true);
 
-    AfterSigning(bSignSuccess, true);
-
-    return bSignSuccess;
+        rCallback(bSignSuccess);
+    });
 }
 
 const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()

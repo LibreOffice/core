@@ -272,9 +272,10 @@ public:
                              const INetURLObject& aDest,
                              const css::uno::Reference< css::ucb::XCommandEnvironment >& xComEnv );
 
-    SAL_DLLPRIVATE bool
+    SAL_DLLPRIVATE void
     SignContents_Impl(weld::Window* pDialogParent,
                       bool bSignScriptingContent, bool bHasValidDocumentSignature,
+                      const std::function<void(bool)>& rCallback,
                       const OUString& aSignatureLineId = OUString(),
                       const css::uno::Reference<css::security::XCertificate>& xCert
                       = css::uno::Reference<css::security::XCertificate>(),
