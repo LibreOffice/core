@@ -65,9 +65,11 @@ bool SdPdfFilter::Import()
 
     // Add as many pages as we need up-front.
     mrDocument.CreateFirstPages();
+    sal_uInt16 nPageToDuplicate = 0;
     for (size_t i = 0; i < aGraphics.size() - 1; ++i)
     {
-        mrDocument.DuplicatePage(0);
+        // duplicating the last page is cheaper than repeatedly duplicating the first one
+        nPageToDuplicate = mrDocument.DuplicatePage(nPageToDuplicate);
     }
 
     for (vcl::PDFGraphicResult const& rPDFGraphicResult : aGraphics)

@@ -132,8 +132,6 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     , m_bThemedControls(true)
     , mbUndoEnabled(true)
     , mbChanged(false)
-    , m_bPagNumsDirty(false)
-    , m_bMPgNumsDirty(false)
     , m_bTransportContainer(false)
     , m_bReadOnly(false)
     , m_bTransparentTextFrames(false)
@@ -1175,23 +1173,27 @@ void SdrModel::RecalcPageNums(bool bMaster)
 {
     if(bMaster)
     {
-        sal_uInt16 nCount=sal_uInt16(maMasterPages.size());
-        sal_uInt16 i;
-        for (i=0; i<nCount; i++) {
-            SdrPage* pPg = maMasterPages[i].get();
-            pPg->SetPageNum(i);
+        if (m_nMasterPageNumsDirtyFrom != SAL_MAX_UINT16)
+        {
+            sal_uInt16 nCount=sal_uInt16(maMasterPages.size());
+            for (sal_uInt16 i=m_nMasterPageNumsDirtyFrom; i<nCount; i++) {
+                SdrPage* pPg = maMasterPages[i].get();
+                pPg->SetPageNum(i);
+            }
+            m_nMasterPageNumsDirtyFrom = SAL_MAX_UINT16;
         }
-        m_bMPgNumsDirty=false;
     }
     else
     {
-        sal_uInt16 nCount=sal_uInt16(maPages.size());
-        sal_uInt16 i;
-        for (i=0; i<nCount; i++) {
-            SdrPage* pPg = maPages[i].get();
-            pPg->SetPageNum(i);
+        if (m_nPageNumsDirtyFrom != SAL_MAX_UINT16)
+        {
+            sal_uInt16 nCount=sal_uInt16(maPages.size());
+            for (sal_uInt16 i = m_nPageNumsDirtyFrom; i<nCount; i++) {
+                SdrPage* pPg = maPages[i].get();
+                pPg->SetPageNum(i);
+            }
+            m_nPageNumsDirtyFrom = SAL_MAX_UINT16;
         }
-        m_bPagNumsDirty=false;
     }
 }
 
@@ -1209,7 +1211,7 @@ void SdrModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     if (mbMakePageObjectsNamesUnique)
         pPage->MakePageObjectsNamesUnique();
 
-    if (nPos<nCount) m_bPagNumsDirty=true;
+    if (nPos<nCount) m_nPageNumsDirtyFrom = std::min(m_nPageNumsDirtyFrom, static_cast<sal_uInt16>(nPos + 1));
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPage);
     Broadcast(aHint);
@@ -1228,7 +1230,7 @@ rtl::Reference<SdrPage> SdrModel::RemovePage(sal_uInt16 nPgNum)
     if (pPg) {
         pPg->SetInserted(false);
     }
-    m_bPagNumsDirty=true;
+    m_nPageNumsDirtyFrom = std::min(m_nPageNumsDirtyFrom, nPgNum);
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPg.get());
     Broadcast(aHint);
@@ -1258,7 +1260,7 @@ void SdrModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     pPage->SetPageNum(nPos);
 
     if (nPos<nCount) {
-        m_bMPgNumsDirty=true;
+        m_nMasterPageNumsDirtyFrom = std::min(m_nMasterPageNumsDirtyFrom, static_cast<sal_uInt16>(nPos + 1));
     }
 
     SetChanged();
@@ -1290,7 +1292,7 @@ rtl::Reference<SdrPage> SdrModel::RemoveMasterPage(sal_uInt16 nPgNum)
         pRetPg->SetInserted(false);
     }
 
-    m_bMPgNumsDirty=true;
+    m_nMasterPageNumsDirtyFrom = std::min(m_nMasterPageNumsDirtyFrom, nPgNum);
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pRetPg.get());
     Broadcast(aHint);
@@ -1307,7 +1309,7 @@ void SdrModel::MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
         maMasterPages.insert(maMasterPages.begin()+nNewPos,pPg);
         MasterPageListChanged();
     }
-    m_bMPgNumsDirty=true;
+    m_nMasterPageNumsDirtyFrom = std::min(m_nMasterPageNumsDirtyFrom, std::min(nPgNum, nNewPos));
     SetChanged();
     SdrHint aHint(SdrHintKind::PageOrderChange, pPg.get());
     Broadcast(aHint);
@@ -1483,7 +1485,7 @@ void SdrModel::Merge(SdrModel& rSourceModel,
                     maMasterPages.insert(maMasterPages.begin()+nDstMasterPageCnt, pPg);
                     MasterPageListChanged();
                     pPg->SetInserted();
-                    m_bMPgNumsDirty=true;
+                    m_nMasterPageNumsDirtyFrom = std::min(m_nMasterPageNumsDirtyFrom, nDstMasterPageCnt);
                     if (bUndo) AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pPg));
                 } else {
                     OSL_FAIL("SdrModel::Merge(): MasterPage not found in SourceModel.");
@@ -1566,8 +1568,8 @@ void SdrModel::Merge(SdrModel& rSourceModel,
     pMasterMap.reset();
     pMasterNeed.reset();
 
-    m_bMPgNumsDirty=true;
-    m_bPagNumsDirty=true;
+    m_nMasterPageNumsDirtyFrom = 0;
+    m_nPageNumsDirtyFrom = 0;
 
     SetChanged();
     // TODO: Missing: merging and mapping of layers
