@@ -42,6 +42,10 @@
 #include <DrawDocShell.hxx>
 #include <drawdoc.hxx>
 #include <errhdl.hrc>
+#include <unotools/syslocale.hxx>
+
+#include <officecfg/Office/Draw.hxx>
+#include <officecfg/Office/Impress.hxx>
 
 #define ShellClass_SdModule
 #include <sdslots.hxx>
@@ -140,6 +144,20 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
             pImpressOptions = new SdOptions(true);
 
         pOptions = pImpressOptions;
+    }
+    if( pOptions )
+    {
+        SvtSysLocale aSysLocale;
+        if (eDocType == DocumentType::Impress)
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                PutItem( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Impress::Layout::Other::MeasureUnit::Metric::get() ) );
+            else
+                PutItem( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Impress::Layout::Other::MeasureUnit::NonMetric::get() ) );
+        else
+            if (aSysLocale.GetLocaleData().getMeasurementSystemEnum() == MeasurementSystem::Metric)
+                PutItem( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Draw::Layout::Other::MeasureUnit::Metric::get() ) );
+            else
+                PutItem( SfxUInt16Item( SID_ATTR_METRIC, officecfg::Office::Draw::Layout::Other::MeasureUnit::NonMetric::get() ) );
     }
 
     return pOptions;
