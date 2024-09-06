@@ -444,6 +444,7 @@ Public Function Properties() As Variant
 					, &quot;FileSystem&quot; _
 					, &quot;Frames&quot; _
 					, &quot;ImportFilters&quot; _
+					, &quot;IsAlive&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
@@ -556,6 +557,11 @@ REM ----------------------------------------------------------------------------
 Property Get ImportFilters() As Variant
 	ImportFilters = [_Super].GetProperty(&quot;ImportFilters&quot;)
 End Property	&apos;	SFDocuments.SF_Writer.ImportFilters
+
+REM -----------------------------------------------------------------------------
+Property Get IsAlive() As Boolean
+	IsAlive = [_Super].GetProperty(&quot;IsAlive&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.IsAlive
 
 REM -----------------------------------------------------------------------------
 Property Get IsBase() As Boolean

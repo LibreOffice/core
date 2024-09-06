@@ -1933,7 +1933,7 @@ class SFDatabases:
         servicename = 'SFDatabases.Datasheet'
         servicesynonyms = ('datasheet', 'sfdatabases.datasheet')
         serviceproperties = dict(ColumnHeaders = 0, CurrentColumn = 1, CurrentRow = 1,
-                                 DatabaseFileName = 0, Filter = 2, LastRow = 0, OrderBy = 2,
+                                 DatabaseFileName = 0, Filter = 2, IsAlive = 1, LastRow = 0, OrderBy = 2,
                                  ParentDatabase = 0, Source = 0, SourceType = 0, XComponent = 0,
                                  XControlModel = 0, XTabControllerModel = 0)
 
@@ -1991,11 +1991,10 @@ class SFDialogs:
         serviceimplementation = 'basic'
         servicename = 'SFDialogs.Dialog'
         servicesynonyms = ('dialog', 'sfdialogs.dialog')
-        serviceproperties = dict(Caption = 2, Height = 2, Modal = 0, Name = 0,
+        serviceproperties = dict(Caption = 2, Height = 2, IsAlive = 1, Modal = 0, Name = 0,
                                  OnFocusGained = 2, OnFocusLost = 2, OnKeyPressed = 2,
                                  OnKeyReleased = 2, OnMouseDragged = 2, OnMouseEntered = 2,
-                                 OnMouseExited = 2, OnMouseMoved = 2, OnMousePressed = 2,
-                                 OnMouseReleased = 2,
+                                 OnMouseExited = 2, OnMouseMoved = 2, OnMousePressed = 2, OnMouseReleased = 2,
                                  Page = 2, Visible = 2, Width = 2, XDialogModel = 0, XDialogView = 0)
         # Class constants used together with the Execute() method
         OKBUTTON, CANCELBUTTON = 1, 0
@@ -2261,7 +2260,7 @@ class SFDocuments:
         servicesynonyms = ('document', 'sfdocuments.document')
         serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
                                  DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
-                                 IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
+                                 IsAlive = 1, IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
                                  IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
                                  StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
                                  XDocumentSettings = 0)
@@ -2356,7 +2355,7 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Base'
         servicesynonyms = ('base', 'scriptforge.base')
-        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsBase = 0, IsCalc = 0,
+        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
                                  IsWriter = 0, XComponent = 0)
 
@@ -2415,7 +2414,7 @@ class SFDocuments:
         servicesynonyms = ('calc', 'sfdocuments.calc')
         serviceproperties = dict(CurrentSelection = 3, CustomProperties = 3, Description = 3,
                                  DocumentProperties = 1, DocumentType = 0, ExportFilters = 0,
-                                 FileSystem = 0, ImportFilters = 0, IsBase = 0, IsCalc = 0,
+                                 FileSystem = 0, ImportFilters = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
                                  IsWriter = 0, Keywords = 3, Readonly = 1, Sheets = 1,
                                  StyleFamilies = 0, Subject = 3, Title = 3, XComponent = 0,
@@ -2773,7 +2772,7 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.FormDocument'
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
-        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsBase = 0, IsCalc = 0,
+        serviceproperties = dict(DocumentType = 0, FileSystem = 0, IsAlive = 1, IsBase = 0, IsCalc = 0,
                                  IsDraw = 0, IsFormDocument = 0, IsImpress = 0, IsMath = 0,
                                  IsWriter = 0, Readonly = 0, StyleFamilies = 0, XComponent = 0,
                                  XDocumentSettings = 0)
@@ -2813,7 +2812,7 @@ class SFDocuments:
         servicesynonyms = ('writer', 'sfdocuments.writer')
         serviceproperties = dict(CustomProperties = 3, Description = 3, DocumentProperties = 1,
                                  DocumentType = 0, ExportFilters = 0, FileSystem = 0, ImportFilters = 0,
-                                 IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
+                                 IsAlive = 1, IsBase = 0, IsCalc = 0, IsDraw = 0, IsFormDocument = 0,
                                  IsImpress = 0, IsMath = 0, IsWriter = 0, Keywords = 3, Readonly = 1,
                                  StyleFamilies = 1, Subject = 3, Title = 3, XComponent = 0,
                                  XDocumentSettings = 0)

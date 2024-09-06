@@ -254,6 +254,12 @@ Property Let Height(Optional ByVal pvHeight As Variant)
 End Property	&apos;	SFDialogs.SF_Dialog.Height (let)
 
 REM -----------------------------------------------------------------------------
+Property Get IsAlive() As Boolean
+&apos;&apos;&apos;	Returns True when the dialog has not been closed by the user
+	IsAlive = _PropertyGet(&quot;IsAlive&quot;)
+End Property	&apos;	SFDocuments.SF_Dialog.IsAlive
+
+REM -----------------------------------------------------------------------------
 Property Get Modal() As Boolean
 &apos;&apos;&apos;	The Modal property specifies if the dialog box has been executed in modal mode
 	Modal = _PropertyGet(&quot;Modal&quot;)
@@ -2256,6 +2262,7 @@ Public Function Properties() As Variant
 	Properties = Array( _
 					&quot;Caption&quot; _
 					, &quot;Height&quot; _
+					, &quot;IsAlive&quot; _
 					, &quot;Modal&quot; _
 					, &quot;Name&quot; _
 					, &quot;OnFocusGained&quot; _
@@ -2872,7 +2879,9 @@ Const cstSubArgs = &quot;&quot;
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not _IsStillAlive() Then GoTo Finally
+	If UCase(psProperty) &lt;&gt; UCase(&quot;IsAlive&quot;) Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
 
 	If IsNull(oSession) Then Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
 	Select Case UCase(psProperty)
@@ -2884,6 +2893,8 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				If oSession.HasUNOProperty(_DialogModel, &quot;Height&quot;) Then _PropertyGet = _DialogModel.Height
 			End If			
+		Case UCase(&quot;IsAlive&quot;)
+			_PropertyGet = _IsStillAlive(False)
 		Case UCase(&quot;Modal&quot;)
 			_PropertyGet = _Modal
 		Case UCase(&quot;Name&quot;)

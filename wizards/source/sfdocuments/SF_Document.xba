@@ -294,6 +294,11 @@ Property Get ImportFilters() As Variant
 End Property	&apos;	SFDocuments.SF_Document.ImportFilters
 
 REM -----------------------------------------------------------------------------
+Property Get IsAlive() As Boolean
+	IsAlive = _PropertyGet(&quot;IsAlive&quot;)
+End Property	&apos;	SFDocuments.SF_Document.IsAlive
+
+REM -----------------------------------------------------------------------------
 Property Get IsBase() As Boolean
 	IsBase = _PropertyGet(&quot;IsBase&quot;)
 End Property	&apos;	SFDocuments.SF_Document.IsBase
@@ -997,6 +1002,7 @@ Public Function Properties() As Variant
 					, &quot;ExportFilters&quot; _
 					, &quot;FileSystem&quot; _
 					, &quot;ImportFilters&quot; _
+					, &quot;IsAlive&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
@@ -2152,11 +2158,14 @@ Const cstSubArgs = &quot;&quot;
 	_PropertyGet = False
 
 	Select Case _DocumentType
-		Case &quot;Calc&quot;		:	cstThisSub = &quot;SFDocuments.SF_&quot; &amp; _DocumentType &amp; &quot;.get&quot; &amp; psProperty
+		Case &quot;Base&quot;, &quot;Calc&quot;, &quot;FormDocument&quot;, &quot;Writer&quot;
+			cstThisSub = &quot;SFDocuments.SF_&quot; &amp; _DocumentType &amp; &quot;.get&quot; &amp; psProperty
 		Case Else		:	cstThisSub = &quot;SFDocuments.SF_Document.get&quot; &amp; psProperty
 	End Select
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not _IsStillAlive() Then GoTo Finally
+	If psProperty &lt;&gt; &quot;IsAlive&quot; Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
 
 	Select Case psProperty
 		Case &quot;CustomProperties&quot;
@@ -2181,6 +2190,8 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = oContent.getIdentifier().ContentIdentifier &amp; &quot;/&quot;
 		Case &quot;ImportFilters&quot;
 			_PropertyGet = _GetFilterNames(False)
+		Case &quot;IsAlive&quot;
+			_PropertyGet = _IsStillAlive(False, False)
 		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsFormDocument&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;
 			_PropertyGet = ( Mid(psProperty, 3) = _DocumentType )
 		Case &quot;Keywords&quot;

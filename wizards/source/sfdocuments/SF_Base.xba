@@ -687,6 +687,7 @@ Public Function Properties() As Variant
 	Properties = Array( _
 					&quot;DocumentType&quot; _
 					, &quot;FileSystem&quot; _
+					, &quot;IsAlive&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw &quot; _
@@ -829,6 +830,11 @@ REM ----------------------------------------------------------------------------
 Property Get FileSystem() As String
 	FileSystem = [_Super].GetProperty(&quot;FileSystem&quot;)
 End Property	&apos;	SFDocuments.SF_Base.FileSystem
+
+REM -----------------------------------------------------------------------------
+Property Get IsAlive() As Boolean
+	IsAlive = [_Super].GetProperty(&quot;IsAlive&quot;)
+End Property	&apos;	SFDocuments.SF_Base.IsAlive
 
 REM -----------------------------------------------------------------------------
 Property Get IsBase() As Boolean

@@ -147,6 +147,11 @@ Property Let Filter(Optional ByVal pvFilter As Variant)
 End Property	&apos;	SFDatabases.SF_Datasheet.Filter (let)
 
 REM -----------------------------------------------------------------------------
+Property Get IsAlive() As Boolean
+	IsAlive = _PropertyGet(&quot;IsAlive&quot;)
+End Property	&apos;	SFDatabases.SF_Datasheet.IsAlive
+
+REM -----------------------------------------------------------------------------
 Property Get LastRow() As Long
 &apos;&apos;&apos;	Returns the total number of rows
 &apos;&apos;&apos;	The process may imply to move the cursor to the last available row.
@@ -579,6 +584,7 @@ Public Function Properties() As Variant
 					, &quot;CurrentRow&quot; _
 					, &quot;DatabaseFileName&quot; _
 					, &quot;Filter&quot; _
+					, &quot;IsAlive&quot; _
 					, &quot;LastRow&quot; _
 					, &quot;OrderBy&quot; _
 					, &quot;ParentDatabase&quot; _
@@ -835,7 +841,9 @@ Const cstSubArgs = &quot;&quot;
 	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)
-	If Not _IsStillAlive(False) Then GoTo Finally
+	If psProperty &lt;&gt; &quot;IsAlive&quot; Then
+		If Not _IsStillAlive() Then GoTo Finally
+	End If
 
 	Select Case psProperty
 		Case &quot;ColumnHeaders&quot;
@@ -848,6 +856,8 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = ScriptForge.SF_FileSystem._ConvertFromUrl(_BaseFileName)
 		Case &quot;Filter&quot;
 			_PropertyGet = _TabControllerModel.Filter
+		Case &quot;IsAlive&quot;
+			_PropertyGet = _IsStillAlive(False)
 		Case &quot;LastRow&quot;
 			With _TabControllerModel
 				If .IsRowCountFinal Then

@@ -3111,6 +3111,8 @@ class SFDatabases:
         Filter: str
         """ Specifies a filter to be applied to the datasheet expressed as the ``WHERE`` clause of a ``SQL`` query
         without the ``WHERE`` keyword. If an empty string is specified then the active Filter is removed. """
+        IsAlive: bool
+        """ Returns True when the datasheet component has not been closed by the user.  """
         LastRow: int
         """ Returns the number of rows in the datasheet.    """
         OrderBy: str
@@ -3273,6 +3275,8 @@ class SFDialogs:
         """ Specify the title of the dialog.        """
         Height: int
         """ Specify the height of the dialog.       """
+        IsAlive: bool
+        """ Returns True when the dialog is not terminated due to a user intervention.  """
         Modal: bool
         """ Specifies if the dialog box is currently in execution in modal mode.    """
         Name: str
@@ -4429,6 +4433,8 @@ class SFDocuments:
         """ Returns a tuple of strings with the import filter names applicable to the current document.
         Filters used for both import/export are also returned.
         This property is not applicable to ``Base`` documents. """
+        IsAlive: bool
+        """ Returns True when the document component has not been closed by the user.  """
         IsBase: bool
         """ ``True`` when type of document = ``Base``.          """
         IsCalc: bool
