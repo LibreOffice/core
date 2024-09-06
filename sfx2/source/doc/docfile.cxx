@@ -4298,9 +4298,10 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
 }
 
 // note: this is the only function creating scripting signature
-bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
+void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                                   bool bSignScriptingContent,
                                   bool bHasValidDocumentSignature,
+                                  const std::function<void(bool)>& rCallback,
                                   const OUString& aSignatureLineId,
                                   const Reference<XCertificate>& xCert,
                                   const Reference<XGraphic>& xValidGraphic,
@@ -4312,7 +4313,8 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
     if (IsOpen() || GetErrorIgnoreWarning())
     {
         SAL_WARN("sfx.doc", "The medium must be closed by the signer!");
-        return bChanges;
+        rCallback(bChanges);
+        return;
     }
 
     // The component should know if there was a valid document signature, since
@@ -4494,7 +4496,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 
     ResetError();
 
-    return bChanges;
+    rCallback(bChanges);
 }
 
 
