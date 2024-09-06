@@ -113,7 +113,6 @@ namespace desktop
         "Developer arguments:                                                           \n"
         "   --terminate_after_init                                                      \n"
         "                       Exit after initialization complete (no documents loaded)\n"
-        "   --eventtesting      Exit after loading documents.                           \n\n"
         "New document creation arguments:                                               \n"
         "The arguments create an empty document of specified kind. Only one of them may \n"
         "be used in one command line. If filenames are specified after an argument,     \n"

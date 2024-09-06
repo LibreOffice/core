@@ -484,7 +484,6 @@ certain functionality.
 @li @c vcl.debugevent
 @li @c vcl.driver Graphics driver handling
 @li @c vcl.emf - EMF/EMF+ processing
-@li @c vcl.eventtesting
 @li @c vcl.filter
 @li @c vcl.filter.webp
 @li @c vcl.fonts - font-specific code
