@@ -118,13 +118,26 @@ using OUStringChar = OUStringChar_ const;
 namespace libreoffice_internal
 {
 #if defined LIBO_INTERNAL_ONLY
-template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
+template <typename I, std::enable_if_t<
+    std::is_integral_v<I> && std::is_signed_v<I>,
+    int> = 0>
 constexpr bool IsValidStrLen(I i, sal_Int32 margin = 0)
 {
     assert(margin >= 0);
     constexpr sal_uInt32 maxLen = std::numeric_limits<sal_Int32>::max();
     return i >= 0 && static_cast<std::make_unsigned_t<I>>(i) <= maxLen - margin;
 }
+
+template <typename I, std::enable_if_t<
+    std::is_integral_v<I> && std::is_unsigned_v<I>,
+    int> = 0>
+constexpr bool IsValidStrLen(I i, sal_Int32 margin = 0)
+{
+    assert(margin >= 0);
+    constexpr sal_uInt32 maxLen = std::numeric_limits<sal_Int32>::max();
+    return i <= maxLen - margin;
+}
+
 template <typename I, std::enable_if_t<std::is_integral_v<I>, int> = 0>
 sal_Int32 ThrowIfInvalidStrLen(I i, sal_Int32 margin = 0)
 {
