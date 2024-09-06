@@ -611,7 +611,7 @@
                 <property name="column-spacing">18</property>
                 <child>
                   <object class="GtkCheckButton" id="protectcontent">
-                    <property name="label" translatable="yes" context="frmaddpage|protectcontent">_Contents</property>
+                    <property name="label" translatable="yes" context="frmtypepage|protectcontent">_Contents</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -620,7 +620,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="protectcontent-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|protectcontent">Prevents changes to the contents of the selected item.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|protectcontent">Prevents changes to the contents of the selected item.</property>
                       </object>
                     </child>
                   </object>
@@ -631,7 +631,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="protectframe">
-                    <property name="label" translatable="yes" context="frmaddpage|protectframe">P_osition</property>
+                    <property name="label" translatable="yes" context="frmtypepage|protectframe">P_osition</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -639,7 +639,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="protectframe-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|protectframe">Locks the position of the selected item in the current document.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|protectframe">Locks the position of the selected item in the current document.</property>
                       </object>
                     </child>
                   </object>
@@ -650,7 +650,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="protectsize">
-                    <property name="label" translatable="yes" context="frmaddpage|protectsize">_Size</property>
+                    <property name="label" translatable="yes" context="frmtypepage|protectsize">_Size</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -658,7 +658,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="protectsize-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="frmaddpage|extended_tip|protectsize">Locks the size of the selected item.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="frmtypepage|extended_tip|protectsize">Locks the size of the selected item.</property>
                       </object>
                     </child>
                   </object>
@@ -673,7 +673,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="frmaddpage|label8">Protect</property>
+                <property name="label" translatable="yes" context="frmtypepage|label8">Protect</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
