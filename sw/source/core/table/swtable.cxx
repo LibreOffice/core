@@ -1721,7 +1721,7 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
         SwTableBoxes& rTableBoxes = pTableLine->GetTabBoxes();
         for (SwTableBox* pTableBox : rTableBoxes)
         {
-            SwTableBoxFormat* pTableBoxFormat = static_cast<SwTableBoxFormat*>(pTableBox->GetFrameFormat());
+            SwTableBoxFormat* pTableBoxFormat = pTableBox->GetFrameFormat();
             if (const SwTableBoxFormula* pItem = pTableBoxFormat->GetItemIfSet( RES_BOXATR_FORMULA, false ))
             {
                 // SwTableBoxFormula is non-shareable, so const_cast is somewhat OK
