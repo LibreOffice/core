@@ -284,13 +284,6 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         mpDoc->SetStarDrawPreviewMode( true );
     }
 
-    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION)&&
-        rSet.Get( SID_DOC_STARTPRESENTATION ).GetValue() )
-    {
-        bStartPresentation = true;
-        mpDoc->SetStartWithPresentation( true );
-    }
-
     bRet = SfxObjectShell::Load( rMedium );
     if (bRet)
     {
@@ -332,6 +325,25 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
         //pStore->SetError(SVSTREAM_WRONGVERSION);
         else
             SetError(ERRCODE_ABORT);
+    }
+
+    if (SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION))
+    {
+        sal_uInt16 nStartingSlide = rSet.Get(SID_DOC_STARTPRESENTATION).GetValue();
+        if (nStartingSlide == 0)
+        {
+            OUString sStartPage = mpDoc->getPresentationSettings().maPresPage;
+            if (!sStartPage.isEmpty())
+            {
+                bool bIsMasterPage = false;
+                sal_uInt16 nPageNumb = mpDoc->GetPageByName(sStartPage, bIsMasterPage);
+                nStartingSlide = (nPageNumb + 1) / 2;
+            }
+            else
+                nStartingSlide = 1;
+        }
+        bStartPresentation = nStartingSlide;
+        mpDoc->SetStartWithPresentation(nStartingSlide);
     }
 
     // tell SFX to change viewshell when in preview mode
@@ -957,7 +969,9 @@ void DrawDocShell::OpenBookmark( const OUString& rBookmarkURL )
 {
     SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
     SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
-    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, nullptr };
+    SfxUInt16Item   aPresentation( SID_DOC_STARTPRESENTATION );
+    const SfxPoolItem* ppArgs[] = { &aStrItem, &aReferer, &aPresentation, nullptr };
+
     if (SfxViewFrame* pFrame = mpViewShell ? mpViewShell->GetViewFrame() : SfxViewFrame::Current())
         pFrame->GetBindings().Execute( SID_OPENHYPERLINK, ppArgs );
 }
