@@ -129,6 +129,7 @@ public:
     void testCreateLines();
     void testTdf154248MultilineFieldWrapping();
     void testTdf151748StaleKashidaArray();
+    void testTdf162803StaleKashidaArray();
 
     DECL_STATIC_LINK(Test, CalcFieldValueHdl, EditFieldInfo*, void);
 
@@ -162,6 +163,7 @@ public:
     CPPUNIT_TEST(testCreateLines);
     CPPUNIT_TEST(testTdf154248MultilineFieldWrapping);
     CPPUNIT_TEST(testTdf151748StaleKashidaArray);
+    CPPUNIT_TEST(testTdf162803StaleKashidaArray);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2242,6 +2244,7 @@ void Test::testTdf154248MultilineFieldWrapping()
     }
 }
 
+// tdf#151748: Verify that editeng produces an empty kashida array if the line does not have room
 void Test::testTdf151748StaleKashidaArray()
 {
     ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
@@ -2294,6 +2297,68 @@ void Test::testTdf151748StaleKashidaArray()
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
+
+        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+
+        // Since there is no room for kashida, the kashida array should be empty.
+        // Without the bug fix, this will be 17:
+        CPPUNIT_ASSERT_EQUAL(size_t(0), rArray.size());
+    }
+}
+
+// tdf#162803: Verify that editeng clears stale kashida data during layout
+void Test::testTdf162803StaleKashidaArray()
+{
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDevice(DeviceFormat::WITHOUT_ALPHA);
+
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetRefDevice(pVirtualDevice.get());
+    aEditEngine.SetPaperSize(Size(1500, 500));
+    aEditEngine.SetDefaultHorizontalTextDirection(EEHorizontalTextDirection::R2L);
+    aEditEngine.SetText(u"خط تخوردگی و توسط"_ustr);
+
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEditEngine.GetParagraphCount());
+
+    SfxItemSet aSet{ aEditEngine.GetParaAttribs(0) };
+    aSet.Put(SvxAdjustItem{ SvxAdjust::Block, EE_PARA_JUST });
+    aEditEngine.SetParaAttribs(0, aSet);
+
+    CPPUNIT_ASSERT_EQUAL(SvxAdjust::Block, aEditEngine.GetParaAttrib(0, EE_PARA_JUST).GetAdjust());
+    CPPUNIT_ASSERT_EQUAL(true, aEditEngine.IsFormatted());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+
+    // Initial state: Check that a kashida array has been created
+    {
+        ParaPortionList& rParagraphPortionList = aEditEngine.GetParaPortions();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rParagraphPortionList.Count());
+
+        EditLineList& rLines = rParagraphPortionList.getRef(0).GetLines();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rLines.Count());
+        EditLine const& rLine = rLines[0];
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11), rLine.GetEnd());
+
+        std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
+        CPPUNIT_ASSERT_EQUAL(size_t(17), rArray.size());
+    }
+
+    // Resize the paper so the entire text fits on a single line
+    aEditEngine.SetPaperSize(Size(4000, 500));
+
+    // Follow-up state: Check that the kashida array has been cleared
+    {
+        ParaPortionList& rParagraphPortionList = aEditEngine.GetParaPortions();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rParagraphPortionList.Count());
+
+        EditLineList& rLines = rParagraphPortionList.getRef(0).GetLines();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rLines.Count());
+        EditLine const& rLine = rLines[0];
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(17), rLine.GetEnd());
 
         std::vector<sal_Bool> const& rArray = rLine.GetKashidaArray();
 
