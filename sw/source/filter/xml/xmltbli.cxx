@@ -546,8 +546,6 @@ css::uno::Reference<css::xml::sax::XFastContextHandler> SwXMLTableCellContext_Im
                 if ( IsXMLToken( aIter, XML_TRUE ) )
                     bSubTable = true;
             }
-            else
-                XMLOFF_WARN_UNKNOWN("sw", aIter);
         //FIXME: RDFa
         }
     }
