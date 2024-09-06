@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPCONVOLUTIONMATRIXFILTER_HXX
-#define INCLUDED_VCL_BITMAPCONVOLUTIONMATRIXFILTER_HXX
+#pragma once
 
 #include <vcl/BitmapFilter.hxx>
 
@@ -30,7 +29,5 @@ public:
 private:
     const sal_Int32 (&mrMatrix)[9];
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
