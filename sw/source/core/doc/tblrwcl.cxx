@@ -349,7 +349,7 @@ static void lcl_CopyCol( FndBox_ & rFndBox, CpyPara *const pCpyPara)
 static SwTableLine* lcl_CopyRow(FndLine_& rFndLine, CpyPara *const pCpyPara)
 {
     SwTableLine* pNewLine = new SwTableLine(
-                            static_cast<SwTableLineFormat*>(rFndLine.GetLine()->GetFrameFormat()),
+                        rFndLine.GetLine()->GetFrameFormat(),
                         rFndLine.GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {
@@ -1096,7 +1096,7 @@ bool SwTable::OldSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
         {
             // Create a new Line in the new Box
             SwTableLine* pNewLine = new SwTableLine(
-                    static_cast<SwTableLineFormat*>(pInsLine->GetFrameFormat()), 1, pNewBox );
+                    pInsLine->GetFrameFormat(), 1, pNewBox );
             if( bChgLineSz )
             {
                 pNewLine->ClaimFrameFormat()->SetFormatAttr( aFSz );
@@ -1471,7 +1471,7 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
             SwTableBox* pLMBox = new SwTableBox(
                 pULPara->pLeftBox->GetFrameFormat(), 0, pInsLine );
             SwTableLine* pLMLn = new SwTableLine(
-                        static_cast<SwTableLineFormat*>(pInsLine->GetFrameFormat()), 2, pLMBox );
+                        pInsLine->GetFrameFormat(), 2, pLMBox );
             pLMLn->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
 
             pLMBox->GetTabLines().insert( pLMBox->GetTabLines().begin(), pLMLn );
@@ -1505,7 +1505,7 @@ static void lcl_Merge_MoveLine(FndLine_& rFndLine, InsULPara *const pULPara)
     pLines = &pULPara->pInsBox->GetTabLines();
 
     SwTableLine* pNewLine = new SwTableLine(
-        static_cast<SwTableLineFormat*>(rFndLine.GetLine()->GetFrameFormat()), 0, pULPara->pInsBox );
+        rFndLine.GetLine()->GetFrameFormat(), 0, pULPara->pInsBox );
     InsULPara aPara( *pULPara );       // copying
     aPara.pInsLine = pNewLine;
     FndBoxes_t & rLineBoxes = rFndLine.GetBoxes();
@@ -1566,7 +1566,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     SwTableLine* pInsLine = new SwTableLine(
-                static_cast<SwTableLineFormat*>(pFndBox->GetLines().front()->GetLine()->GetFrameFormat()), 0,
+                pFndBox->GetLines().front()->GetLine()->GetFrameFormat(), 0,
                 !pFndBox->GetUpper() ? nullptr : pFndBox->GetBox() );
     pInsLine->ClaimFrameFormat()->ResetFormatAttr( RES_FRM_SIZE );
 

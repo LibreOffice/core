@@ -1580,7 +1580,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     }
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
     {
-        SwTableLineFormat *pFrameFormat = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
+        SwTableLineFormat *pFrameFormat = pLine->ClaimFrameFormat();
         ResetLineFrameFormatAttrs( pFrameFormat );
 
         if( nRowHeight )
@@ -1602,7 +1602,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     else if( !m_pLineFrameFormatNoHeight )
     {
         // else, we'll have to remove the height from the attribute and remember the format
-        m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
+        m_pLineFrameFormatNoHeight = pLine->ClaimFrameFormat();
 
         ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
     }
@@ -1739,7 +1739,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                 if( !m_pLineFrameFormatNoHeight )
                 {
                     // If there's no line format without height yet, we can use that one
-                    m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
+                    m_pLineFrameFormatNoHeight = pLine->ClaimFrameFormat();
 
                     ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
                 }
@@ -2391,7 +2391,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
     m_xBox1.reset((pLine1->GetTabBoxes())[0]);
     pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
-    m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
+    m_pLineFormat = pLine1->GetFrameFormat();
     m_pBoxFormat = m_xBox1->GetFrameFormat();
 
     MakeTable_( pBox );

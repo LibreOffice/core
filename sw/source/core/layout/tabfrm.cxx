@@ -5521,7 +5521,7 @@ bool SwRowFrame::IsRowSplitAllowed() const
     if ( IsForceRowSplitAllowed() )
         return true;
 
-    const SwTableLineFormat* pFrameFormat = static_cast<SwTableLineFormat*>(GetTabLine()->GetFrameFormat());
+    const SwTableLineFormat* pFrameFormat = GetTabLine()->GetFrameFormat();
     const SwFormatRowSplit& rLP = pFrameFormat->GetRowSplit();
     return rLP.GetValue();
 }

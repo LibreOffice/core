@@ -2184,7 +2184,7 @@ void SwTable::ConvertSubtableBox(sal_uInt16 const nRow, sal_uInt16 const nBox)
     {
         SwTableLine *const pSubLine(pSubTableBox->GetTabLines()[i]);
         SwTableLine *const pNewLine = new SwTableLine(
-            static_cast<SwTableLineFormat*>(pSourceLine->GetFrameFormat()),
+            pSourceLine->GetFrameFormat(),
             pSourceLine->GetTabBoxes().size() - 1 + pSubLine->GetTabBoxes().size(),
             nullptr);
         SwFrameFormat const& rSubLineFormat(*pSubLine->GetFrameFormat());

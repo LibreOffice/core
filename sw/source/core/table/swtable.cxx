@@ -1477,13 +1477,13 @@ SwTableLine::~SwTableLine()
         delete pMod;    // and delete
 }
 
-SwFrameFormat* SwTableLine::ClaimFrameFormat()
+SwTableLineFormat* SwTableLine::ClaimFrameFormat()
 {
     // This method makes sure that this object is an exclusive SwTableLine client
     // of an SwTableLineFormat object
     // If other SwTableLine objects currently listen to the same SwTableLineFormat as
     // this one, something needs to be done
-    SwTableLineFormat *pRet = static_cast<SwTableLineFormat*>(GetFrameFormat());
+    SwTableLineFormat *pRet = GetFrameFormat();
     SwIterator<SwTableLine,SwFormat> aIter( *pRet );
     for( SwTableLine* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {

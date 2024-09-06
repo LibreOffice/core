@@ -395,11 +395,11 @@ public:
     const SwTableBox *GetUpper() const { return m_pUpper; }
     void SetUpper( SwTableBox *pNew ) { m_pUpper = pNew; }
 
-    SwFrameFormat* GetFrameFormat()       { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
-    SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SwTableLineFormat* GetFrameFormat()       { return static_cast<SwTableLineFormat*>(GetRegisteredIn()); }
+    SwTableLineFormat* GetFrameFormat() const { return const_cast<SwTableLineFormat*>(static_cast<const SwTableLineFormat*>(GetRegisteredIn())); }
 
     // Creates an own FrameFormat if more lines depend on it.
-    SwFrameFormat* ClaimFrameFormat();
+    SwTableLineFormat* ClaimFrameFormat();
     void ChgFrameFormat( SwTableLineFormat* pNewFormat );
 
     // Search next/previous box with content.

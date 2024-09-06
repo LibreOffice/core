@@ -2613,7 +2613,7 @@ void SwXMLTableContext::MakeTable()
     pLine1->GetTabBoxes().erase( pLine1->GetTabBoxes().begin() );
     m_bOwnsBox1 = true;
 
-    m_pLineFormat = static_cast<SwTableLineFormat*>(pLine1->GetFrameFormat());
+    m_pLineFormat = pLine1->GetFrameFormat();
     m_pBoxFormat = m_pBox1->GetFrameFormat();
 
     MakeTable_();
