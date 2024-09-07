@@ -1497,17 +1497,19 @@ void GalleryBrowser1::FillThemeEntries()
             const GalleryThemeEntry* pThemeInfo = mpGallery->GetThemeInfo( i );
             OUString aThemeName = pThemeInfo->GetThemeName();
             //sal_uInt32 nId = pThemeInfo->GetId();
-            GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, maLocalListner);
-            sal_uInt32 nObjectCount = pTheme->GetObjectCount();
-            for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
+            if (GalleryTheme* pTheme = mpGallery->AcquireTheme(aThemeName, maLocalListner))
             {
-                if (std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject))
+                sal_uInt32 nObjectCount = pTheme->GetObjectCount();
+                for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
                 {
-                    OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
-                    maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
+                    if (std::unique_ptr<SgaObject> xSgaObject = pTheme->AcquireObject(nObject))
+                    {
+                        OUString aTitle = GetItemText(*xSgaObject, GalleryItemFlags::Title);
+                        maAllThemeEntries.push_back(ThemeEntry(aThemeName, aTitle, nObject));
+                    }
                 }
+                mpGallery->ReleaseTheme(pTheme, maLocalListner);
             }
-            mpGallery->ReleaseTheme(pTheme, maLocalListner);
         }
         maFoundThemeEntries.assign(maAllThemeEntries.begin(), maAllThemeEntries.end());
 }
