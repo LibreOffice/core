@@ -119,6 +119,8 @@
 #include <hints.hxx>
 #include <uiitems.hxx>
 #include <unoxstyle.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
 
 #include <cassert>
 #include <memory>
@@ -3865,24 +3867,29 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc& rInitDoc, IStyleAccess::SwAut
         std::set< std::pair< sal_uInt16, text::RubyAdjust > > aRubyMap;
         SwAttrPool& rAttrPool = m_rDoc.GetAttrPool();
 
-        // do this in two phases otherwise we invalidate the iterators when we insert into the pool
-        std::vector<const SwFormatRuby*> vRubyItems;
-        ItemSurrogates aSurrogates;
-        rAttrPool.GetItemSurrogates(aSurrogates, RES_TXTATR_CJK_RUBY);
-        for (const SfxPoolItem* pItem : aSurrogates)
+        SwNodeOffset nCount = m_rDoc.GetNodes().Count();
+        for (SwNodeOffset i(0); i < nCount; ++i)
         {
-            const auto & rRubyItem = static_cast<const SwFormatRuby&>(*pItem);
-            if ( rRubyItem.GetTextRuby() )
-                vRubyItems.push_back(&rRubyItem);
-        }
-        for (const SwFormatRuby* pRubyItem : vRubyItems)
-        {
-            std::pair< sal_uInt16, text::RubyAdjust > aPair( pRubyItem->GetPosition(), pRubyItem->GetAdjustment() );
-            if ( aRubyMap.insert( aPair ).second )
+            SwNode* pNode = m_rDoc.GetNodes()[i];
+            if (!pNode->IsTextNode())
+                continue;
+            SwTextNode* pTextNode = pNode->GetTextNode();
+            if (!pTextNode->HasHints())
+                continue;
+            SwpHints& rHints = pTextNode->GetSwpHints();
+            for (size_t j = 0; j < rHints.Count(); ++j)
             {
-                auto pItemSet = std::make_shared<SfxItemSetFixed<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>>( rAttrPool );
-                pItemSet->Put( *pRubyItem );
-                mAutoStyles.push_back( pItemSet );
+                const SwTextAttr* pTextAttr = rHints.Get(j);
+                if (pTextAttr->Which() != RES_TXTATR_CJK_RUBY)
+                    continue;
+                const SwFormatRuby& rRubyItem = pTextAttr->GetRuby();
+                std::pair< sal_uInt16, text::RubyAdjust > aPair( rRubyItem.GetPosition(), rRubyItem.GetAdjustment() );
+                if ( aRubyMap.insert( aPair ).second )
+                {
+                    auto pItemSet = std::make_shared<SfxItemSetFixed<RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY>>( rAttrPool );
+                    pItemSet->Put( rRubyItem );
+                    mAutoStyles.push_back( pItemSet );
+                }
             }
         }
     }
