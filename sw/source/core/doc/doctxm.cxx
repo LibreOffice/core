@@ -83,34 +83,58 @@ MakeSwTOXSortTabBase(SwRootFrame const*const pLayout, Args&& ... args)
     return pRet;
 }
 
+/// Iterate over all SwTOXMark, if the function returns false, iteration is stopped
+void SwDoc::ForEachTOXMark( const std::function<bool(const SwTOXMark&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode->HasHints())
+            continue;
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t j = 0; j < rHints.Count(); ++j)
+        {
+            const SwTextAttr* pTextAttr = rHints.Get(j);
+            if (pTextAttr->Which() != RES_TXTATR_TOXMARK)
+                continue;
+            const SwTOXMark& rToxMark = pTextAttr->GetTOXMark();
+            if (!rFunc(rToxMark))
+                return;
+        }
+    }
+}
+
 void SwDoc::GetTOIKeys(SwTOIKeyType eTyp, std::vector<OUString>& rArr,
         SwRootFrame const& rLayout) const
 {
     rArr.clear();
 
     // Look up all Primary and Secondary via the Pool
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_TOXMARK);
-    for (const SfxPoolItem* pPoolItem : aSurrogates)
-    {
-        const SwTOXMark& rItem = static_cast<const SwTOXMark&>(*pPoolItem);
-        const SwTOXType* pTOXType = rItem.GetTOXType();
-        if ( !pTOXType || pTOXType->GetType()!=TOX_INDEX )
-            continue;
-        const SwTextTOXMark* pMark = rItem.GetTextTOXMark();
-        if ( pMark && pMark->GetpTextNd() &&
-             pMark->GetpTextNd()->GetNodes().IsDocNodes() &&
-             (!rLayout.IsHideRedlines()
-                || !sw::IsMarkHintHidden(rLayout, *pMark->GetpTextNd(), *pMark)))
+    ForEachTOXMark(
+        [&rLayout, &eTyp, &rArr] (const SwTOXMark& rItem) -> bool
         {
-            const OUString sStr = TOI_PRIMARY == eTyp
-                ? rItem.GetPrimaryKey()
-                : rItem.GetSecondaryKey();
+            const SwTOXType* pTOXType = rItem.GetTOXType();
+            if ( !pTOXType || pTOXType->GetType()!=TOX_INDEX )
+                return true;
+            const SwTextTOXMark* pMark = rItem.GetTextTOXMark();
+            if ( pMark && pMark->GetpTextNd() &&
+                 pMark->GetpTextNd()->GetNodes().IsDocNodes() &&
+                 (!rLayout.IsHideRedlines()
+                    || !sw::IsMarkHintHidden(rLayout, *pMark->GetpTextNd(), *pMark)))
+            {
+                const OUString sStr = TOI_PRIMARY == eTyp
+                    ? rItem.GetPrimaryKey()
+                    : rItem.GetSecondaryKey();
 
-            if( !sStr.isEmpty() )
-                rArr.push_back( sStr );
-        }
-    }
+                if( !sStr.isEmpty() )
+                    rArr.push_back( sStr );
+            }
+            return true;
+        });
 }
 
 /// Get current table of contents Mark.

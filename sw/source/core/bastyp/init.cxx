@@ -331,7 +331,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_CHRATR_IDCTHINT, new SfxInt16Item( RES_CHRATR_IDCTHINT, sal_Int16(-1) ), 0, SFX_ITEMINFOFLAG_NONE },
 
             { RES_TXTATR_REFMARK, new SwFormatRefMark( OUString() ),  0, SFX_ITEMINFOFLAG_NONE },
-            { RES_TXTATR_TOXMARK, createSwTOXMarkForItemInfoPackage(),  0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_TOXMARK, createSwTOXMarkForItemInfoPackage(),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_META, SwFormatMeta::CreatePoolDefault(RES_TXTATR_META),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_METAFIELD, SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_AUTOFMT, new SwFormatAutoFormat,  0, SFX_ITEMINFOFLAG_NONE },

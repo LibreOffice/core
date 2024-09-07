@@ -519,10 +519,13 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
                     GetContentNode()->getLayoutFrame(GetLayout(), &rPos, &tmp));
     }
 
-    const SwTextNode* pTextNd;
-    const SwTextTOXMark* pTextTOX;
-    ItemSurrogates aSurrogates;
-    GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_TOXMARK);
+    std::vector<const SwTOXMark*> aSurrogates;
+    GetDoc()->ForEachTOXMark(
+        [&aSurrogates] (const SwTOXMark& rItem) -> bool
+        {
+            aSurrogates.push_back(&rItem);
+            return true;
+        });
     const sal_uInt32 nMaxItems(aSurrogates.size());
     if( nMaxItems == 0 )
     {
@@ -530,10 +533,12 @@ bool SwCursorShell::GotoNxtPrvTOXMark( bool bNext )
         return false;
     }
 
+    const SwTextNode* pTextNd;
+    const SwTextTOXMark* pTextTOX;
     do {
-        for (const SfxPoolItem* pItem : aSurrogates)
+        for (const SwTOXMark* pItem : aSurrogates)
         {
-            auto & rToxMarkItem = static_cast<const SwTOXMark&>(*pItem);
+            auto & rToxMarkItem = *pItem;
             pTextTOX = rToxMarkItem.GetTextTOXMark();
             if( !pTextTOX )
                 continue;

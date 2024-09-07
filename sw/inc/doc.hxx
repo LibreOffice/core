@@ -937,6 +937,8 @@ public:
     void DeleteTOXMark( const SwTOXMark* pTOXMark );
     SW_DLLPUBLIC const SwTOXMark& GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                 SwTOXSearch eDir, bool bInReadOnly );
+    /// Iterate over all SwTOXMark, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachTOXMark( const std::function<bool(const SwTOXMark&)>&  ) const;
 
     // Insert/Renew table/index
     SW_DLLPUBLIC SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
