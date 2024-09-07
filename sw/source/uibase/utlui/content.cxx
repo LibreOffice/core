@@ -6015,20 +6015,18 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             if(nMode == EditEntryMode::DELETE)
             {
                 const OUString& rName = pCnt->GetName();
-                ItemSurrogates aSurrogates;
-                m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-                for (const SfxPoolItem* pItem : aSurrogates)
-                {
-                    const auto & rFormatRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-                    const SwTextRefMark* pTextRef = rFormatRefMark.GetTextRefMark();
-                    if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
-                            &m_pActiveShell->GetNodes() && rName == rFormatRefMark.GetRefName())
+                m_pActiveShell->GetDoc()->ForEachRefMark(
+                    [&rName, this] (const SwFormatRefMark& rFormatRefMark) -> bool
                     {
-                        m_pActiveShell->GetDoc()->DeleteFormatRefMark(&rFormatRefMark);
-                        m_pActiveShell->SwViewShell::UpdateFields();
-                        break;
-                    }
-                }
+                        const SwTextRefMark* pTextRef = rFormatRefMark.GetTextRefMark();
+                        if (pTextRef && rName == rFormatRefMark.GetRefName())
+                        {
+                            m_pActiveShell->GetDoc()->DeleteFormatRefMark(&rFormatRefMark);
+                            m_pActiveShell->SwViewShell::UpdateFields();
+                            return false;
+                        }
+                        return true;
+                    });
             }
         }
         break;
@@ -6350,20 +6348,17 @@ void SwContentTree::DeleteAllContentOfEntryContentType(const weld::TreeIter& rEn
         for (size_t i = 0; i < nCount; i++)
         {
             const OUString& rName = pContentType->GetMember(i)->GetName();
-            ItemSurrogates aSurrogates;
-            m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-            for (const SfxPoolItem* pItem : aSurrogates)
-            {
-                assert(dynamic_cast<const SwFormatRefMark*>(pItem));
-                const auto & rFormatRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-                const SwTextRefMark* pTextRef = rFormatRefMark.GetTextRefMark();
-                if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
-                        &m_pActiveShell->GetNodes() && rName == rFormatRefMark.GetRefName())
+            m_pActiveShell->GetDoc()->ForEachRefMark(
+                [&rName, this] (const SwFormatRefMark& rFormatRefMark) -> bool
                 {
-                    m_pActiveShell->GetDoc()->DeleteFormatRefMark(&rFormatRefMark);
-                    break;
-                }
-            }
+                    const SwTextRefMark* pTextRef = rFormatRefMark.GetTextRefMark();
+                    if (pTextRef && rName == rFormatRefMark.GetRefName())
+                    {
+                        m_pActiveShell->GetDoc()->DeleteFormatRefMark(&rFormatRefMark);
+                        return false;
+                    }
+                    return true;
+                });
         }
         m_pActiveShell->SwViewShell::UpdateFields();
         m_pActiveShell->EndUndo();
@@ -7037,16 +7032,14 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             else if (nType == ContentTypeId::REFERENCE)
             {
                 std::vector<const SwTextAttr*> aTextAttrArr;
-                ItemSurrogates aSurrogates;
-                m_pActiveShell->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-                for (const SfxPoolItem* pItem : aSurrogates)
-                {
-                    const auto& rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-                    const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
-                    if (pTextRef && &pTextRef->GetTextNode().GetNodes() ==
-                            &m_pActiveShell->GetNodes())
-                        aTextAttrArr.push_back(pTextRef);
-                }
+                m_pActiveShell->GetDoc()->ForEachRefMark(
+                    [&aTextAttrArr] (const SwFormatRefMark& rRefMark) -> bool
+                    {
+                        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
+                        if (pTextRef)
+                            aTextAttrArr.push_back(pTextRef);
+                        return true;
+                    });
                 BringReferencesToAttention(aTextAttrArr);
             }
             else if (nType == ContentTypeId::POSTIT)

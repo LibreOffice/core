@@ -1071,17 +1071,19 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
 /// @return the reference in the doc for the name
 const SwFormatRefMark* SwDoc::GetRefMark( std::u16string_view rName ) const
 {
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rFormatRef = static_cast<const SwFormatRefMark&>(*pItem);
-        const SwTextRefMark* pTextRef = rFormatRef.GetTextRefMark();
-        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() &&
-            rName == rFormatRef.GetRefName() )
-            return &rFormatRef;
-    }
-    return nullptr;
+    const SwFormatRefMark* pRet = nullptr;
+    ForEachRefMark(
+        [&pRet, &rName] (const SwFormatRefMark& rRefMark) -> bool
+        {
+            const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
+            if( pTextRef && rName == rRefMark.GetRefName() )
+            {
+                pRet = &rRefMark;
+                return false;
+            }
+            return true;
+        });
+    return pRet;
 }
 
 /// @return the RefMark per index - for Uno
@@ -1090,22 +1092,17 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     const SwFormatRefMark* pRet = nullptr;
 
     sal_uInt32 nCount = 0;
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
-        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+    ForEachRefMark(
+        [&nCount, &pRet, &nIndex] (const SwFormatRefMark& rRefMark) -> bool
         {
             if(nCount == nIndex)
             {
                 pRet = &rRefMark;
-                break;
+                return false;
             }
             nCount++;
-        }
-    }
+            return true;
+        });
     return pRet;
 }
 
@@ -1115,13 +1112,8 @@ const SwFormatRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
 {
     sal_uInt16 nCount = 0;
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
-        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+    ForEachRefMark(
+        [&pNames, &nCount] (const SwFormatRefMark& rRefMark) -> bool
         {
             if( pNames )
             {
@@ -1129,23 +1121,44 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
                 pNames->insert(pNames->begin() + nCount, aTmp);
             }
             ++nCount;
-        }
-    }
+            return true;
+        });
 
     return nCount;
 }
 
 void SwDoc::GetRefMarks( std::vector<const SwFormatRefMark*>& rMarks ) const
 {
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_REFMARK);
-    rMarks.reserve(aSurrogates.size());
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rRefMark = static_cast<const SwFormatRefMark&>(*pItem);
-        const SwTextRefMark* pTextRef = rRefMark.GetTextRefMark();
-        if( pTextRef && &pTextRef->GetTextNode().GetNodes() == &GetNodes() )
+    ForEachRefMark(
+        [&rMarks] (const SwFormatRefMark& rRefMark) -> bool
+        {
             rMarks.push_back(&rRefMark);
+            return true;
+        });
+}
+
+/// Iterate over all SwFormatRefMark, if the function returns false, iteration is stopped
+void SwDoc::ForEachRefMark( const std::function<bool(const SwFormatRefMark&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode->HasHints())
+            continue;
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t j = 0; j < rHints.Count(); ++j)
+        {
+            const SwTextAttr* pTextAttr = rHints.Get(j);
+            if (pTextAttr->Which() != RES_TXTATR_REFMARK)
+                continue;
+            const SwFormatRefMark& rRefMark = pTextAttr->GetRefMark();
+            if (!rFunc(rRefMark))
+                return;
+        }
     }
 }
 
