@@ -449,8 +449,6 @@ bool ZipPackageStream::saveChild(
         ::std::optional<sal_Int32> const oPBKDF2IterationCount,
         ::std::optional<::std::tuple<sal_Int32, sal_Int32, sal_Int32>> const oArgon2Args)
 {
-    bool bSuccess = true;
-
     static constexpr OUString sDigestProperty (u"Digest"_ustr);
     static constexpr OUString sEncryptionAlgProperty    (u"EncryptionAlgorithm"_ustr);
     static constexpr OUString sStartKeyAlgProperty  (u"StartKeyAlgorithm"_ustr);
@@ -516,8 +514,7 @@ bool ZipPackageStream::saveChild(
         if ( !xStream.is() )
         {
             OSL_FAIL( "ZipPackageStream didn't have a stream associated with it, skipping!" );
-            bSuccess = false;
-            return bSuccess;
+            return false;
         }
 
         uno::Reference < io::XSeekable > xSeek ( xStream, uno::UNO_QUERY );
@@ -568,15 +565,13 @@ bool ZipPackageStream::saveChild(
                 }
                 else
                 {
-                    bSuccess = false;
-                    return bSuccess;
+                    return false;
                 }
             }
         }
         catch ( uno::Exception& )
         {
-            bSuccess = false;
-            return bSuccess;
+            return false;
         }
 
         if ( bToBeEncrypted || m_bRawStream || bTransportOwnEncrStreamAsRaw )
@@ -667,6 +662,7 @@ bool ZipPackageStream::saveChild(
         }
     }
 
+    bool bSuccess = true;
     // If the entry is already stored in the zip file in the format we
     // want for this write...copy it raw
     if ( !bUseNonSeekableAccess
@@ -683,8 +679,7 @@ bool ZipPackageStream::saveChild(
             if ( !xStream.is() )
             {
                 // Make sure that we actually _got_ a new one !
-                bSuccess = false;
-                return bSuccess;
+                return false;
             }
         }
 
@@ -740,8 +735,7 @@ bool ZipPackageStream::saveChild(
             if ( !xStream.is() )
             {
                 // Make sure that we actually _got_ a new one !
-                bSuccess = false;
-                return bSuccess;
+                return false;
             }
         }
 
