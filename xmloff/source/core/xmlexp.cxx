@@ -1688,6 +1688,8 @@ void SvXMLExport::ExportThemeElement(std::shared_ptr<model::Theme> const& pTheme
     SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
 
     auto pColorSet = pTheme->getColorSet();
+    if (!pColorSet)
+        return;
     if (!pColorSet->getName().isEmpty())
         AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pColorSet->getName());
     SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_THEME_COLORS, true, true);
