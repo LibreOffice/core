@@ -1428,6 +1428,8 @@ public:
     void DeleteAutoCorrExceptWord();
 
     const SwFormatINetFormat* FindINetAttr( std::u16string_view rName ) const;
+    /// Iterate over all SwFormatINetFormat, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachINetFormat( const std::function<bool(const SwFormatINetFormat&)>&  ) const;
 
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );

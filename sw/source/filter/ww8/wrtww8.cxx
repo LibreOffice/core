@@ -3368,26 +3368,14 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
 
 void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
 {
+    rDoc.ForEachINetFormat(
+        [this] (const SwFormatINetFormat& rINetFormat) -> bool
+        {
+            AddLinkTarget( rINetFormat.GetValue() );
+            return true;
+        });
+
     ItemSurrogates aSurrogates;
-    rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rINetFormat = static_cast<const SwFormatINetFormat&>(*pItem);
-
-        const SwTextINetFormat* pTextAttr = rINetFormat.GetTextINetFormat();
-        if (!pTextAttr)
-            continue;
-
-        const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
-        if (!pTextNd)
-            continue;
-
-        if (!pTextNd->GetNodes().IsDocNodes())
-            continue;
-
-        AddLinkTarget( rINetFormat.GetValue() );
-    }
-
     rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
     for (const SfxPoolItem* pItem : aSurrogates)
     {

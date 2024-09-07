@@ -57,38 +57,32 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         sBkmk = "#" + pIURL->GetMark();
 
     bool bAction = false, bUnLockView = false;
-    ItemSurrogates aSurrogates;
-    m_rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const SwFormatINetFormat& rFormatItem = static_cast<const SwFormatINetFormat&>(*pItem);
-        if( rFormatItem.GetValue() == sURL || ( !sBkmk.isEmpty() && rFormatItem.GetValue() == sBkmk ) )
+    m_rDoc.ForEachINetFormat(
+        [&sURL, &sBkmk, &bAction, &pESh, &bUnLockView] (const SwFormatINetFormat& rFormatItem) -> bool
         {
-            const SwTextINetFormat* pTextAttr = rFormatItem.GetTextINetFormat();
-            if (pTextAttr != nullptr)
+            if( rFormatItem.GetValue() == sURL || ( !sBkmk.isEmpty() && rFormatItem.GetValue() == sBkmk ) )
             {
+                const SwTextINetFormat* pTextAttr = rFormatItem.GetTextINetFormat();
                 const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
-                if (pTextNd != nullptr)
+                if( !bAction && pESh )
                 {
-                    if( !bAction && pESh )
-                    {
-                        pESh->StartAllAction();
-                        bAction = true;
-                        bUnLockView = !pESh->IsViewLocked();
-                        pESh->LockView( true );
-                    }
-                    const_cast<SwTextINetFormat*>(pTextAttr)->SetVisitedValid(false);
-                    const SwTextAttr* pAttr = pTextAttr;
-                    SwUpdateAttr aUpdateAttr(
-                        pAttr->GetStart(),
-                        *pAttr->End(),
-                        RES_FMT_CHG);
-
-                    const_cast<SwTextNode*>(pTextNd)->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
+                    pESh->StartAllAction();
+                    bAction = true;
+                    bUnLockView = !pESh->IsViewLocked();
+                    pESh->LockView( true );
                 }
+                const_cast<SwTextINetFormat*>(pTextAttr)->SetVisitedValid(false);
+                const SwTextAttr* pAttr = pTextAttr;
+                SwUpdateAttr aUpdateAttr(
+                    pAttr->GetStart(),
+                    *pAttr->End(),
+                    RES_FMT_CHG);
+
+                const_cast<SwTextNode*>(pTextNd)->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
             }
-        }
-    }
+            return true;
+        });
+
 
     if( bAction )
         pESh->EndAllAction();

@@ -140,17 +140,16 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
     case EVENT_OBJECT_INETATTR:
         if( bCheckPtr  )
         {
-            ItemSurrogates aSurrogates;
-            GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
-            for (const SfxPoolItem* pItem : aSurrogates)
-            {
-                const auto & rFormatItem = static_cast<const SwFormatINetFormat&>(*pItem);
-                if( SfxPoolItem::areSame(rCallEvent.PTR.pINetAttr, &rFormatItem) )
+            ForEachINetFormat(
+                [&rCallEvent, &bCheckPtr] (const SwFormatINetFormat& rFormatItem) -> bool
                 {
-                    bCheckPtr = false;       // misuse as a flag
-                    break;
-                }
-            }
+                    if( SfxPoolItem::areSame(rCallEvent.PTR.pINetAttr, &rFormatItem) )
+                    {
+                        bCheckPtr = false;       // misuse as a flag
+                        return false;
+                    }
+                    return true;
+                });
         }
         if( !bCheckPtr )
             pTable = rCallEvent.PTR.pINetAttr->GetMacroTable();

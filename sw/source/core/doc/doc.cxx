@@ -1273,23 +1273,43 @@ void SwDoc::InvalidateAutoCompleteFlag()
 
 const SwFormatINetFormat* SwDoc::FindINetAttr( std::u16string_view rName ) const
 {
-    ItemSurrogates aSurrogates;
-    GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rFormatItem = static_cast<const SwFormatINetFormat&>(*pItem);
-        if( rFormatItem.GetName() != rName )
-            continue;
-        const SwTextINetFormat* pTextAttr = rFormatItem.GetTextINetFormat();
-        if( !pTextAttr )
-            continue;
-        const SwTextNode* pTextNd = pTextAttr->GetpTextNode();
-        if( pTextNd && &pTextNd->GetNodes() == &GetNodes() )
+    const SwFormatINetFormat* pRet = nullptr;
+    ForEachINetFormat(
+        [&pRet, &rName] (const SwFormatINetFormat& rFormatItem) -> bool
         {
-            return &rFormatItem;
+            if( rFormatItem.GetName() == rName )
+            {
+                pRet = &rFormatItem;
+                return false;
+            };
+            return true;
+        });
+    return pRet;
+}
+
+/// Iterate over all SwFormatINetFormat, if the function returns false, iteration is stopped
+void SwDoc::ForEachINetFormat( const std::function<bool(const SwFormatINetFormat&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode->HasHints())
+            continue;
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t j = 0; j < rHints.Count(); ++j)
+        {
+            const SwTextAttr* pTextAttr = rHints.Get(j);
+            if (pTextAttr->Which() != RES_TXTATR_INETFMT)
+                continue;
+            const SwFormatINetFormat& rFormat = pTextAttr->GetINetFormat();
+            if (!rFunc(rFormat))
+                return;
         }
     }
-    return nullptr;
 }
 
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)

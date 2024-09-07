@@ -340,7 +340,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             // is not initialized and the translated resource strings would not be available.
             // Luckily this mechanism allows to also flag this ItemInfo as 'incomplete' using
             // a nullptr as ItemPtr and implementing on-demand creation, see ::getItemInfo
-            { RES_TXTATR_INETFMT, nullptr,  FN_TXTATR_INET, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_TXTATR_INETFMT, nullptr,  FN_TXTATR_INET, SFX_ITEMINFOFLAG_NONE },
 
             { RES_TXTATR_CHARFMT, new SwFormatCharFormat( nullptr ),  0, SFX_ITEMINFOFLAG_NONE },
             { RES_TXTATR_CJK_RUBY, new SwFormatRuby( OUString() ),  SID_ATTR_CHAR_CJK_RUBY, SFX_ITEMINFOFLAG_NONE },

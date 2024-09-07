@@ -2240,23 +2240,14 @@ void SwHTMLWriter::AddLinkTarget( std::u16string_view aURL )
 
 void SwHTMLWriter::CollectLinkTargets()
 {
-    const SwTextINetFormat* pTextAttr;
-
-    ItemSurrogates aSurrogates;
-    m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INETFMT);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rINetFormat = static_cast<const SwFormatINetFormat&>(*pItem);
-        const SwTextNode* pTextNd;
-
-        if( nullptr != ( pTextAttr = rINetFormat.GetTextINetFormat()) &&
-            nullptr != ( pTextNd = pTextAttr->GetpTextNode() ) &&
-            pTextNd->GetNodes().IsDocNodes() )
+    m_pDoc->ForEachINetFormat(
+        [this] (const SwFormatINetFormat& rINetFormat) -> bool
         {
             AddLinkTarget( rINetFormat.GetValue() );
-        }
-    }
+            return true;
+        });
 
+    ItemSurrogates aSurrogates;
     m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
