@@ -159,7 +159,6 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
         throw ElementExistException(THROW_WHERE );
 
     uno::Reference < XInterface > xRef;
-    aElement >>= xRef;
     if ( !(aElement >>= xRef) )
         throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
