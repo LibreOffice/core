@@ -83,8 +83,7 @@ class ScImportAsciiDlg : public weld::GenericDialogController
 public:
                                 ScImportAsciiDlg(
                                     weld::Window* pParent, std::u16string_view aDatName,
-                                    SvStream* pInStream, ScImportAsciiCall eCall,
-                                    const ScAsciiOptions* aOptions = nullptr );
+                                    SvStream* pInStream, ScImportAsciiCall eCall );
                                 virtual ~ScImportAsciiDlg() override;
 
     void                        GetOptions( ScAsciiOptions& rOpt );
