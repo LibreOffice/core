@@ -7239,9 +7239,9 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER
         else
             AC_MSG_RESULT([$CSC_PATH/csc.exe])
         fi
-    
+
         CSC_PATH=`win_short_path_for_make "$CSC_PATH"`
-    
+
         dnl Check al.exe
         AC_MSG_CHECKING([for al.exe])
         if test -n "$winsdkbinsubdir" \
@@ -7253,7 +7253,7 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER
         elif test -f "$winsdktest_unix/Bin/al.exe"; then
             AL_PATH="$winsdktest/Bin"
         fi
-    
+
         if test -z "$AL_PATH"; then
             find_al
             PathFormat "$altest"
@@ -7270,9 +7270,9 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER
         else
             AC_MSG_RESULT([$AL_PATH/al.exe])
         fi
-    
+
         AL_PATH=`win_short_path_for_make "$AL_PATH"`
-    
+
         dnl Check mscoree.lib / .NET Framework dir
         AC_MSG_CHECKING(.NET Framework)
         find_dotnetsdk
@@ -7290,13 +7290,13 @@ if test "$build_os" = "cygwin" -o "$build_os" = "wsl" -o -n "$WSL_ONLY_AS_HELPER
             AC_MSG_ERROR([mscoree.lib not found])
         fi
         AC_MSG_RESULT([found: $DOTNET_FRAMEWORK_HOME])
-    
+
         PathFormat "$AL_PATH"
         AL_PATH="$formatted_path"
-    
+
         PathFormat "$DOTNET_FRAMEWORK_HOME"
         DOTNET_FRAMEWORK_HOME="$formatted_path"
-    
+
         PathFormat "$CSC_PATH"
         CSC_PATH="$formatted_path"
 
@@ -10377,7 +10377,7 @@ if test \( "$cross_compiling" = yes -a -z "$PYTHON_FOR_BUILD" \) -o "$enable_pyt
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
     PYTHON_VERSION_MINOR=10
-    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.14
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.15
     if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
         AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
     fi
