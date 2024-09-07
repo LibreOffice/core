@@ -37,7 +37,7 @@ public:
     virtual bool supportsFullDrawingLayerFillAttributeSet() const override;
 };
 
-class SwTableLineFormat final : public SwFrameFormat
+class SAL_DLLPUBLIC_RTTI SwTableLineFormat final : public SwFrameFormat
 {
     friend class SwDoc;
 
