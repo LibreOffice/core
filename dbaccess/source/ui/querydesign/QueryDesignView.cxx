@@ -651,7 +651,7 @@ namespace
                     if  ( field->isAggregateFunction() )
                     {
                         OSL_ENSURE(!field->GetFunction().isEmpty(),"Function name must not be empty! ;-(");
-                        aTmpStr = field->GetFunction() + "(" + aTmpStr + ")";
+                        aTmpStr = field->GetFunction() + "(" + aTmpStr.makeStringAndClear() + ")";
                     }
 
                     if (!rFieldAlias.isEmpty()                         &&
