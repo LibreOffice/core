@@ -308,8 +308,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         Any aRoot = pPackage->getByHierarchicalName(u"/"_ustr);
         auto xRootNameContainer = aRoot.queryThrow<container::XNameContainer>();
 
-        uno::Reference< XInterface > xNPSDummy( xNewPackStream, UNO_QUERY );
-        xRootNameContainer->insertByName(u"dummy"_ustr, Any( xNPSDummy ) );
+        xRootNameContainer->insertByName(u"dummy"_ustr, Any( xNewPackStream ) );
 
         // commit the temporary package
         pPackage->commitChanges();
@@ -333,7 +332,6 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         // close raw stream, package stream and folder
         xInRaw.clear();
         xNewPSProps.clear();
-        xNPSDummy.clear();
         xNewPackStream.clear();
         xRootNameContainer.clear();
 
