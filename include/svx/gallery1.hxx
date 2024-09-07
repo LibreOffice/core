@@ -132,7 +132,7 @@ public:
     void                        RenameTheme( const OUString& rOldName, const OUString& rNewName );
     bool                        RemoveTheme( const OUString& rThemeName );
 
-    GalleryTheme*               AcquireTheme( std::u16string_view rThemeName, SfxListener& rListener );
+    SAL_RET_MAYBENULL GalleryTheme* AcquireTheme( std::u16string_view rThemeName, SfxListener& rListener );
     void                        ReleaseTheme( GalleryTheme* pTheme, SfxListener& rListener );
 
 public:
