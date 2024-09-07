@@ -448,11 +448,12 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
 
                 if (xView.is())
                 {
-                    auto pViewShellWrapper
-                        = dynamic_cast<framework::ViewShellWrapper*>(xView.get());
-                    if (pViewShellWrapper->GetViewShell().get() == this)
+                    if (auto pViewShellWrapper = dynamic_cast<framework::ViewShellWrapper*>(xView.get()))
                     {
-                        return rResId;
+                        if (pViewShellWrapper->GetViewShell().get() == this)
+                        {
+                            return rResId;
+                        }
                     }
                 }
             }
