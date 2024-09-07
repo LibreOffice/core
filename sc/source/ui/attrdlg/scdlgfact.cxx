@@ -1063,10 +1063,9 @@ const SfxItemSet* ScAsyncTabController_Impl::GetOutputItemSet() const
 // =========================Factories  for createdialog ===================
 VclPtr<AbstractScImportAsciiDlg> ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg(weld::Window* pParent,
                                                     const OUString& aDatName,
-                                                    SvStream* pInStream, ScImportAsciiCall eCall,
-                                                    ScAsciiOptions* aOptions)
+                                                    SvStream* pInStream, ScImportAsciiCall eCall)
 {
-    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_shared<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall, aOptions));
+    return VclPtr<AbstractScImportAsciiDlg_Impl>::Create(std::make_shared<ScImportAsciiDlg>(pParent, aDatName,pInStream, eCall));
 }
 
 VclPtr<AbstractScTextImportOptionsDlg> ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg(weld::Window* pParent)
