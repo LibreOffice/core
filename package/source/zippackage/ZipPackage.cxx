@@ -1122,7 +1122,7 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
     if ( m_xRootFolder->hasByName( sMime ) )
         m_xRootFolder->removeByName( sMime );
 
-    ZipEntry * pEntry = new ZipEntry;
+    auto pEntry = std::make_unique<ZipEntry>();
     sal_Int32 nBufferLength = m_xRootFolder->GetMediaType().getLength();
     OString sMediaType = OUStringToOString( m_xRootFolder->GetMediaType(), RTL_TEXTENCODING_ASCII_US );
     const uno::Sequence< sal_Int8 > aType( reinterpret_cast<sal_Int8 const *>(sMediaType.getStr()),
@@ -1139,8 +1139,8 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 
     try
     {
-        ZipOutputStream::setEntry(pEntry);
-        aZipOut.writeLOC(pEntry);
+        ZipOutputStream::setEntry(*pEntry);
+        aZipOut.writeLOC(std::move(pEntry));
         aZipOut.rawWrite(aType);
         aZipOut.rawCloseEntry();
     }
@@ -1158,7 +1158,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
 {
     // Write the manifest
     uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( m_xContext );
-    ZipEntry * pEntry = new ZipEntry;
+    auto pEntry = std::make_unique<ZipEntry>();
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
     pEntry->sPath = "META-INF/manifest.xml";
@@ -1173,9 +1173,10 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
     pBuffer->realloc( nBufferLength );
 
     // the manifest.xml is never encrypted - so pass an empty reference
-    ZipOutputStream::setEntry(pEntry);
-    aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr, /*bEncrypt*/false);
+    ZipOutputStream::setEntry(*pEntry);
+    auto p = pEntry.get();
+    aZipOut.writeLOC(std::move(pEntry));
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, p, nullptr, /*bEncrypt*/false);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();
@@ -1183,7 +1184,7 @@ void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const std::vector< uno
 
 void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector< uno::Sequence < PropertyValue > >& aManList )
 {
-    ZipEntry* pEntry = new ZipEntry;
+    auto pEntry = std::make_unique<ZipEntry>();
     rtl::Reference<ZipPackageBuffer> pBuffer = new ZipPackageBuffer;
 
     pEntry->sPath = "[Content_Types].xml";
@@ -1231,9 +1232,10 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const std::vector<
     pBuffer->realloc( nBufferLength );
 
     // there is no encryption in this format currently
-    ZipOutputStream::setEntry(pEntry);
-    aZipOut.writeLOC(pEntry);
-    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, *pEntry, nullptr, /*bEncrypt*/false);
+    ZipOutputStream::setEntry(*pEntry);
+    auto p = pEntry.get();
+    aZipOut.writeLOC(std::move(pEntry));
+    ZipOutputEntry aZipEntry(aZipOut.getStream(), m_xContext, p, nullptr, /*bEncrypt*/false);
     aZipEntry.write(pBuffer->getSequence());
     aZipEntry.closeEntry();
     aZipOut.rawCloseEntry();

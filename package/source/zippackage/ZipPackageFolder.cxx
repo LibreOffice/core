@@ -269,15 +269,15 @@ void ZipPackageFolder::saveContents(
     if ( maContents.empty() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
-        ZipEntry* pTempEntry = new ZipEntry(aEntry);
+        auto pTempEntry = std::make_unique<ZipEntry>(aEntry);
         pTempEntry->nPathLen = static_cast<sal_Int16>( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
         pTempEntry->sPath = rPath;
 
         try
         {
-            ZipOutputStream::setEntry(pTempEntry);
-            rZipOut.writeLOC(pTempEntry);
+            ZipOutputStream::setEntry(*pTempEntry);
+            rZipOut.writeLOC(std::move(pTempEntry));
             rZipOut.rawCloseEntry();
         }
         catch ( ZipException& )

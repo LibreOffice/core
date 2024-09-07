@@ -44,17 +44,18 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 ZipOutputEntryBase::ZipOutputEntryBase(
         css::uno::Reference< css::io::XOutputStream > xOutput,
         uno::Reference< uno::XComponentContext > xContext,
-        ZipEntry& rEntry,
+        ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
         bool checkStream)
 : m_xContext(std::move(xContext))
 , m_xOutStream(std::move(xOutput))
-, m_pCurrentEntry(&rEntry)
+, m_pCurrentEntry(pEntry)
 , m_nDigested(0)
 , m_pCurrentStream(pStream)
 , m_bEncryptCurrentEntry(bEncrypt)
 {
+    assert(pEntry);
     assert(m_pCurrentEntry->nMethod == DEFLATED && "Use ZipPackageStream::rawWrite() for STORED entries");
     (void)checkStream;
     assert(!checkStream || m_xOutStream.is());
@@ -176,11 +177,11 @@ void ZipOutputEntryBase::processInput( const uno::Sequence< sal_Int8 >& rBuffer 
 ZipOutputEntry::ZipOutputEntry(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
         const uno::Reference< uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry,
+        ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt,
         bool checkStream)
-: ZipOutputEntryBase(rxOutput, rxContext, rEntry, pStream, bEncrypt, checkStream)
+: ZipOutputEntryBase(rxOutput, rxContext, pEntry, pStream, bEncrypt, checkStream)
 , m_aDeflateBuffer(n_ConstBufferSize)
 , m_aDeflater(DEFAULT_COMPRESSION, true)
 {
@@ -189,10 +190,10 @@ ZipOutputEntry::ZipOutputEntry(
 ZipOutputEntry::ZipOutputEntry(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
         const uno::Reference< uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry,
+        ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
-: ZipOutputEntry( rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
+: ZipOutputEntry( rxOutput, rxContext, pEntry, pStream, bEncrypt, true)
 {
 }
 
@@ -243,10 +244,11 @@ bool ZipOutputEntry::isDeflaterFinished() const
 
 ZipOutputEntryInThread::ZipOutputEntryInThread(
         const uno::Reference< uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry,
+        std::unique_ptr<ZipEntry>&& pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
-: ZipOutputEntry( uno::Reference< css::io::XOutputStream >(), rxContext, rEntry, pStream, bEncrypt, false )
+: ZipOutputEntry( uno::Reference< css::io::XOutputStream >(), rxContext, pEntry.get(), pStream, bEncrypt, false )
+, m_pOwnedZipEntry(std::move(pEntry))
 , m_bFinished(false)
 {
 }
@@ -345,10 +347,10 @@ void ZipOutputEntry::writeStream(const uno::Reference< io::XInputStream >& xInSt
 ZipOutputEntryParallel::ZipOutputEntryParallel(
         const css::uno::Reference< css::io::XOutputStream >& rxOutput,
         const uno::Reference< uno::XComponentContext >& rxContext,
-        ZipEntry& rEntry,
+        ZipEntry* pEntry,
         ZipPackageStream* pStream,
         bool bEncrypt)
-: ZipOutputEntryBase(rxOutput, rxContext, rEntry, pStream, bEncrypt, true)
+: ZipOutputEntryBase(rxOutput, rxContext, pEntry, pStream, bEncrypt, true)
 , totalIn(0)
 , totalOut(0)
 , finished(false)

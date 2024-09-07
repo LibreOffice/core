@@ -37,7 +37,7 @@ class ZipPackageStream;
 class ZipOutputStream
 {
     css::uno::Reference< css::io::XOutputStream > m_xStream;
-    ::std::vector < ZipEntry * > m_aZipList;
+    std::vector<std::unique_ptr<ZipEntry>> m_aZipList;
     std::shared_ptr<comphelper::ThreadTaskTag> mpThreadTaskTag;
 
     ByteChucker         m_aChucker;
@@ -54,7 +54,7 @@ public:
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeLOC( ZipEntry *pEntry, bool bEncrypt = false );
+    void writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt = false);
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
     void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer );
@@ -68,7 +68,7 @@ public:
     const css::uno::Reference< css::io::XOutputStream >& getStream() const;
 
     static sal_uInt32 getCurrentDosTime();
-    static void setEntry( ZipEntry *pEntry );
+    static void setEntry(ZipEntry& rEntry);
 
 private:
     /// @throws css::io::IOException

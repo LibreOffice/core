@@ -688,10 +688,8 @@ bool ZipPackageStream::saveChild(
             if ( m_bRawStream )
                 xStream->skipBytes( m_nMagicalHackPos );
 
-            ZipOutputStream::setEntry(pTempEntry);
-            rZipOut.writeLOC(pTempEntry);
-            // coverity[leaked_storage] - the entry is provided to the ZipOutputStream that will delete it
-            pAutoTempEntry.release();
+            ZipOutputStream::setEntry(*pTempEntry);
+            rZipOut.writeLOC(std::move(pAutoTempEntry));
 
             uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
             sal_Int32 nLength;
@@ -757,15 +755,14 @@ bool ZipPackageStream::saveChild(
 
         try
         {
-            ZipOutputStream::setEntry(pTempEntry);
+            ZipOutputStream::setEntry(*pTempEntry);
             // the entry is provided to the ZipOutputStream that will delete it
-            pAutoTempEntry.release();
 
             if (pTempEntry->nMethod == STORED)
             {
                 sal_Int32 nLength;
                 uno::Sequence< sal_Int8 > aSeq(n_ConstBufferSize);
-                rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
+                rZipOut.writeLOC(std::move(pAutoTempEntry), bToBeEncrypted);
                 do
                 {
                     nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
@@ -792,8 +789,8 @@ bool ZipPackageStream::saveChild(
                     // them in threads, but not in background (i.e. writeStream() will block).
                     // This is suitable for large data.
                     bBackgroundThreadDeflate = false;
-                    rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
-                    ZipOutputEntryParallel aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    rZipOut.writeLOC(std::move(pAutoTempEntry), bToBeEncrypted);
+                    ZipOutputEntryParallel aZipEntry(rZipOut.getStream(), m_xContext, pTempEntry, this, bToBeEncrypted);
                     aZipEntry.writeStream(xStream);
                     rZipOut.rawCloseEntry(bToBeEncrypted);
                 }
@@ -809,15 +806,15 @@ bool ZipPackageStream::saveChild(
 
                     // Start a new thread task deflating this zip entry
                     ZipOutputEntryInThread *pZipEntry = new ZipOutputEntryInThread(
-                            m_xContext, *pTempEntry, this, bToBeEncrypted);
+                            m_xContext, std::move(pAutoTempEntry), this, bToBeEncrypted);
                     rZipOut.addDeflatingThreadTask( pZipEntry,
                             pZipEntry->createTask( rZipOut.getThreadTaskTag(), xStream) );
                 }
                 else
                 {
                     bBackgroundThreadDeflate = false;
-                    rZipOut.writeLOC(pTempEntry, bToBeEncrypted);
-                    ZipOutputEntry aZipEntry(rZipOut.getStream(), m_xContext, *pTempEntry, this, bToBeEncrypted);
+                    rZipOut.writeLOC(std::move(pAutoTempEntry), bToBeEncrypted);
+                    ZipOutputEntry aZipEntry(rZipOut.getStream(), m_xContext, pTempEntry, this, bToBeEncrypted);
                     aZipEntry.writeStream(xStream);
                     rZipOut.rawCloseEntry(bToBeEncrypted);
                 }

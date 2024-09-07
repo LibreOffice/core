@@ -53,19 +53,19 @@ ZipOutputStream::~ZipOutputStream()
 {
 }
 
-void ZipOutputStream::setEntry( ZipEntry *pEntry )
+void ZipOutputStream::setEntry(ZipEntry& rEntry)
 {
-    if (pEntry->nTime == -1)
-        pEntry->nTime = getCurrentDosTime();
-    if (pEntry->nMethod == -1)
-        pEntry->nMethod = DEFLATED;
-    pEntry->nVersion = 20;
-    pEntry->nFlag = 1 << 11;
-    if (pEntry->nSize == -1 || pEntry->nCompressedSize == -1 ||
-        pEntry->nCrc == -1)
+    if (rEntry.nTime == -1)
+        rEntry.nTime = getCurrentDosTime();
+    if (rEntry.nMethod == -1)
+        rEntry.nMethod = DEFLATED;
+    rEntry.nVersion = 20;
+    rEntry.nFlag = 1 << 11;
+    if (rEntry.nSize == -1 || rEntry.nCompressedSize == -1 ||
+        rEntry.nCrc == -1)
     {
-        pEntry->nSize = pEntry->nCompressedSize = 0;
-        pEntry->nFlag |= 8;
+        rEntry.nSize = rEntry.nCompressedSize = 0;
+        rEntry.nFlag |= 8;
     }
 }
 
@@ -103,7 +103,7 @@ void ZipOutputStream::consumeScheduledThreadTaskEntry(std::unique_ptr<ZipOutputE
         return;
     }
 
-    writeLOC(pCandidate->getZipEntry(), pCandidate->isEncrypt());
+    writeLOC(pCandidate->moveZipEntry(), pCandidate->isEncrypt());
 
     sal_Int32 nRead;
     uno::Sequence< sal_Int8 > aSequence(n_ConstBufferSize);
@@ -174,10 +174,9 @@ void ZipOutputStream::finish()
     }
 
     sal_Int32 nOffset= static_cast < sal_Int32 > (m_aChucker.GetPosition());
-    for (ZipEntry* p : m_aZipList)
+    for (auto& p : m_aZipList)
     {
         writeCEN( *p );
-        delete p;
     }
     writeEND( nOffset, static_cast < sal_Int32 > (m_aChucker.GetPosition()) - nOffset);
     m_aZipList.clear();
@@ -285,11 +284,11 @@ void ZipOutputStream::writeExtraFields(const ZipEntry& rEntry)
     m_aChucker.WriteInt32( 0 );  //Number of the disk on which this file starts
 }
 
-void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
+void ZipOutputStream::writeLOC(std::unique_ptr<ZipEntry>&& pEntry, bool bEncrypt)
 {
     assert(!m_pCurrentEntry && "Forgot to close an entry with rawCloseEntry()?");
-    m_pCurrentEntry = pEntry;
-    m_aZipList.push_back( m_pCurrentEntry );
+    m_aZipList.push_back(std::move(pEntry));
+    m_pCurrentEntry = m_aZipList.back().get();
     const ZipEntry &rEntry = *m_pCurrentEntry;
 
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
