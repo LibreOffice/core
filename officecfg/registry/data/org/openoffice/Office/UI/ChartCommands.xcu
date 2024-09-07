@@ -56,12 +56,12 @@
       </node>
       <node oor:name=".uno:InsertMenuXErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">X Error ~Bars...</value>
+          <value xml:lang="en-US">~X Error Bars...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertMenuYErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Y Error ~Bars...</value>
+          <value xml:lang="en-US">~Y Error Bars...</value>
         </prop>
       </node>
       <node oor:name=".uno:InsertMenuDataTable" oor:op="replace">
@@ -445,12 +445,12 @@
       <!-- error bars -->
       <node oor:name=".uno:InsertXErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert X Error ~Bars...</value>
+          <value xml:lang="en-US">Insert ~X Error Bars...</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteXErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete X Error ~Bars</value>
+          <value xml:lang="en-US">Delete ~X Error Bars</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatXErrorBars" oor:op="replace">
@@ -460,12 +460,12 @@
       </node>
       <node oor:name=".uno:InsertYErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Y Error ~Bars...</value>
+          <value xml:lang="en-US">Insert ~Y Error Bars...</value>
         </prop>
       </node>
       <node oor:name=".uno:DeleteYErrorBars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Delete Y Error ~Bars</value>
+          <value xml:lang="en-US">Delete ~Y Error Bars</value>
         </prop>
       </node>
       <node oor:name=".uno:FormatYErrorBars" oor:op="replace">
