@@ -306,6 +306,7 @@ void GalleryObjTest::TestInsertGalleryObject()
 
     // Insert Objects Into Theme
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT(pGalleryTheme);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
@@ -352,6 +353,7 @@ void GalleryObjTest::TestRemoveGalleryObject()
 
     // Insert Objects Into Theme
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT(pGalleryTheme);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
@@ -408,6 +410,7 @@ void GalleryObjTest::TestChangePositionGalleryObject()
 
     // Insert Objects Into Theme
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT(pGalleryTheme);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 
@@ -469,6 +472,7 @@ void GalleryObjTest::TestGetThemeNameFromGalleryTheme()
     SfxApplication::GetOrCreate();
 
     GalleryTheme* pGalleryTheme = pGallery->AcquireTheme(myThemeName, aListener);
+    CPPUNIT_ASSERT(pGalleryTheme);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Object count inconsistent", sal_uInt32(0),
                                  pGalleryTheme->GetObjectCount());
 

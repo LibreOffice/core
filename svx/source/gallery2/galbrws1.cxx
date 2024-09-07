@@ -359,13 +359,14 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
 {
     if (rIdent == u"update")
     {
-        GalleryTheme*       pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener );
+        if (GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener ))
+        {
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog(mxThemes.get(), pTheme));
 
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<VclAbstractDialog> aActualizeProgress(pFact->CreateActualizeProgressDialog(mxThemes.get(), pTheme));
-
-        aActualizeProgress->Execute();
-        mpGallery->ReleaseTheme( pTheme, maLocalListener );
+            aActualizeProgress->Execute();
+            mpGallery->ReleaseTheme( pTheme, maLocalListener );
+        }
     }
     else if (rIdent == u"delete")
     {
@@ -376,45 +377,47 @@ void GalleryBrowser1::ImplExecute(std::u16string_view rIdent)
     }
     else if (rIdent == u"rename")
     {
-        GalleryTheme*   pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener );
-        const OUString  aOldName( pTheme->GetName() );
-
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(mxThemes.get(), aOldName));
-
-        if( aDlg->Execute() == RET_OK )
+        if (GalleryTheme* pTheme = mpGallery->AcquireTheme(GetSelectedTheme(), maLocalListener))
         {
-            const OUString aNewName( aDlg->GetTitle() );
+            const OUString  aOldName( pTheme->GetName() );
 
-            if( !aNewName.isEmpty() && ( aNewName != aOldName ) )
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            ScopedVclPtr<AbstractTitleDialog> aDlg(pFact->CreateTitleDialog(mxThemes.get(), aOldName));
+
+            if( aDlg->Execute() == RET_OK )
             {
-                OUString  aName( aNewName );
-                sal_uInt16  nCount = 0;
+                const OUString aNewName( aDlg->GetTitle() );
 
-                while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
+                if( !aNewName.isEmpty() && ( aNewName != aOldName ) )
                 {
-                    aName = aNewName + " " + OUString::number( nCount );
-                }
+                    OUString  aName( aNewName );
+                    sal_uInt16  nCount = 0;
 
-                mpGallery->RenameTheme( aOldName, aName );
+                    while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
+                    {
+                        aName = aNewName + " " + OUString::number( nCount );
+                    }
+
+                    mpGallery->RenameTheme( aOldName, aName );
+                }
             }
+            mpGallery->ReleaseTheme( pTheme, maLocalListener );
         }
-        mpGallery->ReleaseTheme( pTheme, maLocalListener );
     }
     else if (rIdent == u"assign")
     {
-        GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener );
-
-        if (pTheme && !pTheme->IsReadOnly())
+        if (GalleryTheme* pTheme = mpGallery->AcquireTheme( GetSelectedTheme(), maLocalListener ))
         {
+            if (!pTheme->IsReadOnly())
+            {
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(mxThemes.get(), pTheme));
+                if( aDlg->Execute() == RET_OK )
+                    pTheme->SetId( aDlg->GetId(), true );
+            }
 
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ScopedVclPtr<AbstractGalleryIdDialog> aDlg(pFact->CreateGalleryIdDialog(mxThemes.get(), pTheme));
-            if( aDlg->Execute() == RET_OK )
-                pTheme->SetId( aDlg->GetId(), true );
+            mpGallery->ReleaseTheme( pTheme, maLocalListener );
         }
-
-        mpGallery->ReleaseTheme( pTheme, maLocalListener );
     }
     else if (rIdent == u"properties")
     {
