@@ -305,10 +305,8 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         }
 
         // insert a new stream in the package
-        uno::Reference< XInterface > xTmp;
         Any aRoot = pPackage->getByHierarchicalName(u"/"_ustr);
-        aRoot >>= xTmp;
-        uno::Reference< container::XNameContainer > xRootNameContainer( xTmp, UNO_QUERY_THROW );
+        auto xRootNameContainer = aRoot.queryThrow<container::XNameContainer>();
 
         uno::Reference< XInterface > xNPSDummy( xNewPackStream, UNO_QUERY );
         xRootNameContainer->insertByName(u"dummy"_ustr, Any( xNPSDummy ) );
@@ -337,7 +335,6 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         xNewPSProps.clear();
         xNPSDummy.clear();
         xNewPackStream.clear();
-        xTmp.clear();
         xRootNameContainer.clear();
 
         // return the stream representing the first temporary file
