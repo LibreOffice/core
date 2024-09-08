@@ -500,7 +500,7 @@ Public Function _NewDictionary(Optional ByVal pvArgs As Variant) As Variant
 &apos;&apos;&apos;		[0] : If True, the keys are compared case-sensitively. Default = False
 &apos;&apos;&apos;	Returns: the instance or Nothing
 
-Dim oDict As Variant			&apos;	Reurn value
+Dim oDict As Variant			&apos;	Return value
 Dim bCaseSensitive As Boolean	&apos;	Keys comparison
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
