@@ -617,8 +617,7 @@ void SdrDragView::BrkDragObj()
         SetMarkHandles(nullptr);
         mbInsPolyPoint=false;
     }
-
-    if (IsInsertGluePoint())
+    else if (IsInsertGluePoint())
     {
         mpInsPointUndo->Undo(); // delete inserted gluepoint again
         mpInsPointUndo.reset();
