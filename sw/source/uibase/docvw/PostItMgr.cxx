@@ -2204,7 +2204,7 @@ bool SwPostItMgr::HasNotes() const
 void SwPostItMgr::SetSidebarWidth(Point aMousePos)
 {
     sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
-    sal_uInt16 nPxWidth
+    tools::Long nPxWidth
         = aMousePos.X() - mpEditWin->LogicToPixel(GetSidebarRect(aMousePos).TopLeft()).X();
     double nFactor = static_cast<double>(nPxWidth) / static_cast<double>(nZoom);
     nFactor = std::clamp(nFactor, 1.0, 8.0);
