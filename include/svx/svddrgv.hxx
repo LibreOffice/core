@@ -40,7 +40,7 @@ class SVXCORE_DLLPUBLIC SdrDragView : public SdrExchangeView
 protected:
     SdrHdl*                     mpDragHdl;
     std::unique_ptr<SdrDragMethod> mpCurrentSdrDragMethod;
-    SdrUndoGeoObj*              mpInsPointUndo;
+    std::unique_ptr<SdrUndoAction> mpInsPointUndo;
     tools::Rectangle            maDragLimit;
     OUString                    maInsPointUndoStr;
     SdrHdlKind                  meDragHdl;

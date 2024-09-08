@@ -44,7 +44,6 @@ using namespace sdr;
 SdrDragView::SdrDragView(SdrModel& rSdrModel, OutputDevice* pOut)
     : SdrExchangeView(rSdrModel, pOut)
     , mpDragHdl(nullptr)
-    , mpInsPointUndo(nullptr)
     , meDragHdl(SdrHdlKind::Move)
     , mnDragThresholdPixels(6)
     , mbFramDrag(false)
@@ -549,7 +548,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
         if (IsInsertGluePoint() && bUndo)
         {
             BegUndo(maInsPointUndoStr);
-            AddUndo(std::unique_ptr<SdrUndoAction>(mpInsPointUndo));
+            AddUndo(std::move(mpInsPointUndo));
         }
 
         bRet = mpCurrentSdrDragMethod->EndSdrDrag(bCopy);
@@ -574,7 +573,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
             if( bUndo )
             {
                 BegUndo(maInsPointUndoStr);
-                AddUndo(std::unique_ptr<SdrUndoAction>(mpInsPointUndo));
+                AddUndo(std::move(mpInsPointUndo));
                 EndUndo();
             }
         }
@@ -614,8 +613,7 @@ void SdrDragView::BrkDragObj()
     if (mbInsPolyPoint)
     {
         mpInsPointUndo->Undo(); // delete inserted point again
-        delete mpInsPointUndo;
-        mpInsPointUndo=nullptr;
+        mpInsPointUndo.reset();
         SetMarkHandles(nullptr);
         mbInsPolyPoint=false;
     }
@@ -623,8 +621,7 @@ void SdrDragView::BrkDragObj()
     if (IsInsertGluePoint())
     {
         mpInsPointUndo->Undo(); // delete inserted gluepoint again
-        delete mpInsPointUndo;
-        mpInsPointUndo=nullptr;
+        mpInsPointUndo.reset();
         SetInsertGluePoint(false);
     }
 
@@ -644,7 +641,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
     if(auto pMarkedPath = dynamic_cast<SdrPathObj*>( mpMarkedObj))
     {
         BrkAction();
-        mpInsPointUndo = dynamic_cast<SdrUndoGeoObj*>(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj).release());
+        mpInsPointUndo = GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*mpMarkedObj);
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
 
         OUString aStr(SvxResId(STR_DragInsertPoint));
@@ -687,8 +684,7 @@ bool SdrDragView::ImpBegInsObjPoint(bool bIdxZwang, const Point& rPnt, bool bNew
         }
         else
         {
-            delete mpInsPointUndo;
-            mpInsPointUndo = nullptr;
+            mpInsPointUndo.reset();
         }
     }
 
@@ -743,7 +739,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
     {
         BrkAction();
         UnmarkAllGluePoints();
-        mpInsPointUndo = dynamic_cast<SdrUndoGeoObj*>(GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj).release());
+        mpInsPointUndo = GetModel().GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
         DBG_ASSERT( mpInsPointUndo, "svx::SdrDragView::BegInsObjPoint(), could not create correct undo object!" );
         OUString aStr(SvxResId(STR_DragInsertGluePoint));
 
@@ -774,8 +770,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
                 else
                 {
                     SetInsertGluePoint(false);
-                    delete mpInsPointUndo;
-                    mpInsPointUndo=nullptr;
+                    mpInsPointUndo.reset();
                 }
             }
             else
@@ -787,8 +782,7 @@ bool SdrDragView::BegInsGluePoint(const Point& rPnt)
         {
             // no gluepoints possible for this object (e. g. Edge)
             SetInsertGluePoint(false);
-            delete mpInsPointUndo;
-            mpInsPointUndo=nullptr;
+            mpInsPointUndo.reset();
         }
     }
 
