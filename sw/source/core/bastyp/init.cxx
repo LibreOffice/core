@@ -413,7 +413,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_FRMMACRO, new SvxMacroItem( RES_FRMMACRO ), SID_ATTR_MACROITEM, SFX_ITEMINFOFLAG_NONE },
             { RES_COL, new SwFormatCol, FN_ATTR_COLUMNS, SFX_ITEMINFOFLAG_NONE },
             { RES_KEEP, new SvxFormatKeepItem( false, RES_KEEP ), SID_ATTR_PARA_KEEP, SFX_ITEMINFOFLAG_NONE },
-            { RES_URL, new SwFormatURL(), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_URL, new SwFormatURL(), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_EDIT_IN_READONLY, new SwFormatEditInReadonly, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_LAYOUT_SPLIT, new SwFormatLayoutSplit, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_CHAIN, new SwFormatChain, 0, SFX_ITEMINFOFLAG_NONE },

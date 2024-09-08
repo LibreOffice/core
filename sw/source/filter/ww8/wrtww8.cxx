@@ -3375,25 +3375,23 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
             return true;
         });
 
-    ItemSurrogates aSurrogates;
-    rDoc.GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rURL = static_cast<const SwFormatURL&>(*pItem);
-
-        AddLinkTarget(rURL.GetURL());
-        const ImageMap *pIMap = rURL.GetMap();
-        if (!pIMap)
-            continue;
-
-        for (size_t i=0; i < pIMap->GetIMapObjectCount(); ++i)
+    rDoc.ForEachFormatURL(
+        [this] (const SwFormatURL& rURL) -> bool
         {
-            const IMapObject* pObj = pIMap->GetIMapObject(i);
-            if (!pObj)
-                continue;
-            AddLinkTarget( pObj->GetURL() );
-        }
-    }
+            AddLinkTarget(rURL.GetURL());
+            const ImageMap *pIMap = rURL.GetMap();
+            if (!pIMap)
+                return true;
+
+            for (size_t i=0; i < pIMap->GetIMapObjectCount(); ++i)
+            {
+                const IMapObject* pObj = pIMap->GetIMapObject(i);
+                if (!pObj)
+                    continue;
+                AddLinkTarget( pObj->GetURL() );
+            }
+            return true;
+        });
 }
 
 namespace

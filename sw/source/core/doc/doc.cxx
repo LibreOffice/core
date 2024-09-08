@@ -112,6 +112,7 @@
 #include <unotextrange.hxx>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
+#include <fmturl.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1309,6 +1310,18 @@ void SwDoc::ForEachINetFormat( const std::function<bool(const SwFormatINetFormat
             if (!rFunc(rFormat))
                 return;
         }
+    }
+}
+
+/// Iterate over all SwFormatURL, if the function returns false, iteration is stopped
+void SwDoc::ForEachFormatURL( const std::function<bool(const SwFormatURL&)>& rFunc ) const
+{
+    for(sw::SpzFrameFormat* pSpz : *GetSpzFrameFormats())
+    {
+        auto pFormat = static_cast<SwFlyFrameFormat*>(pSpz);
+        const SwFormatURL& rURLItem = pFormat->GetURL();
+        if (!rFunc(rURLItem))
+            return;
     }
 }
 

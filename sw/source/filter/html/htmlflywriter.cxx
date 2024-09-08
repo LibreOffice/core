@@ -2247,25 +2247,24 @@ void SwHTMLWriter::CollectLinkTargets()
             return true;
         });
 
-    ItemSurrogates aSurrogates;
-    m_pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_URL);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rURL = static_cast<const SwFormatURL&>(*pItem);
-        AddLinkTarget( rURL.GetURL() );
-        const ImageMap *pIMap = rURL.GetMap();
-        if( pIMap )
+    m_pDoc->ForEachFormatURL(
+        [this] (const SwFormatURL& rURL) -> bool
         {
-            for( size_t i=0; i<pIMap->GetIMapObjectCount(); ++i )
+            AddLinkTarget( rURL.GetURL() );
+            const ImageMap *pIMap = rURL.GetMap();
+            if( pIMap )
             {
-                const IMapObject* pObj = pIMap->GetIMapObject( i );
-                if( pObj )
+                for( size_t i=0; i<pIMap->GetIMapObjectCount(); ++i )
                 {
-                    AddLinkTarget( pObj->GetURL() );
+                    const IMapObject* pObj = pIMap->GetIMapObject( i );
+                    if( pObj )
+                    {
+                        AddLinkTarget( pObj->GetURL() );
+                    }
                 }
             }
-        }
-    }
+            return true;
+        });
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

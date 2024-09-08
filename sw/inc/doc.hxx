@@ -1431,6 +1431,9 @@ public:
     /// Iterate over all SwFormatINetFormat, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachINetFormat( const std::function<bool(const SwFormatINetFormat&)>&  ) const;
 
+    /// Iterate over all SwFormatURL, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachFormatURL( const std::function<bool(const SwFormatURL&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
