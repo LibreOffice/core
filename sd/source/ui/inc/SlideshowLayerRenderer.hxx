@@ -13,6 +13,7 @@
 #include <tools/gen.hxx>
 #include <rtl/string.hxx>
 #include <deque>
+#include <map>
 #include <unordered_set>
 
 class SdrPage;
@@ -41,6 +42,7 @@ struct RenderState
 
     std::unordered_set<SdrObject*> maObjectsDone;
     std::unordered_set<SdrObject*> maInAnimation;
+    std::map<SdrObject*, bool> maInitiallyVisible;
     sal_Int32 mnIndex = 0;
     SdrObject* mpCurrentTarget = nullptr;
 

@@ -242,12 +242,16 @@ void SlideshowLayerRenderer::setupAnimations()
                     uno::Any aAny = xAnimate->getTarget();
 
                     uno::Reference<drawing::XShape> xShape;
+                    SvxShape* pShape = nullptr;
+                    SdrObject* pObject = nullptr;
+
                     if ((aAny >>= xShape) && xShape.is())
                     {
-                        SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
+                        pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
                         if (pShape)
                         {
-                            maRenderState.maInAnimation.insert(pShape->GetSdrObject());
+                            pObject = pShape->GetSdrObject();
+                            maRenderState.maInAnimation.insert(pObject);
                         }
                     }
                     else // if target is not a shape
@@ -259,12 +263,25 @@ void SlideshowLayerRenderer::setupAnimations()
 
                             xShape = aParagraphTarget.Shape;
 
-                            SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
+                            pShape = comphelper::getFromUnoTunnel<SvxShape>(xShape);
                             if (pShape)
                             {
-                                maRenderState.maInAnimation.insert(pShape->GetSdrObject());
+                                pObject = pShape->GetSdrObject();
+                                maRenderState.maInAnimation.insert(pObject);
                             }
                         }
+                    }
+
+                    if (pObject)
+                    {
+                        bool bVisible = anim::getVisibilityProperty(xAnimate);
+
+                        // if initial anim sets shape visible, set it
+                        // to invisible. If we're asked for the final
+                        // state, don't do anything obviously
+                        bVisible = !bVisible;
+
+                        maRenderState.maInitiallyVisible[pObject] = bVisible;
                     }
                 }
             }
@@ -343,10 +360,16 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
                 com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xRef;
                 com::sun::star::uno::Any(xShape) >>= xRef;
                 if (xRef.is())
+                {
                     aJsonWriter.put("hash", GetInterfaceHash(xRef));
+
+                    bool bInitiallyVisible = true;
+                    if (maRenderState.maInitiallyVisible.contains(pObject))
+                        bInitiallyVisible = maRenderState.maInitiallyVisible[pObject];
+                    aJsonWriter.put("initVisible", bInitiallyVisible);
+                }
             }
 
-            aJsonWriter.put("initVisible", true); // TODO
             aJsonWriter.put("type", "bitmap");
             writeContentNode(aJsonWriter);
         }
