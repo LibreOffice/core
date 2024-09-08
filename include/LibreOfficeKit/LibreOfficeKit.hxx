@@ -917,11 +917,12 @@ public:
 
     /// Create a slide renderer in core for the input slide.
     bool createSlideRenderer(
+        const char* pSlideHash,
         int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage)
     {
         return mpDoc->pClass->createSlideRenderer(
-            mpDoc, nSlideNumber, nViewWidth, nViewHeight, bRenderBackground, bRenderMasterPage);
+            mpDoc, pSlideHash, nSlideNumber, nViewWidth, nViewHeight, bRenderBackground, bRenderMasterPage);
     }
 
     /// Clean-up the slideshow (slide renderer)

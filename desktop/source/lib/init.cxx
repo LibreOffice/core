@@ -1290,6 +1290,7 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis);
 
 static bool doc_createSlideRenderer(
     LibreOfficeKitDocument* pThis,
+    const char* pSlideHash,
     int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
     bool bRenderBackground, bool bRenderMasterPage);
 
@@ -5703,6 +5704,7 @@ static char* doc_getPresentationInfo(LibreOfficeKitDocument* pThis)
 
 static bool doc_createSlideRenderer(
     LibreOfficeKitDocument* pThis,
+    const char* pSlideHash,
     int nSlideNumber, unsigned* pViewWidth, unsigned* pViewHeight,
     bool bRenderBackground, bool bRenderMasterPage)
 {
@@ -5716,9 +5718,11 @@ static bool doc_createSlideRenderer(
         return false;
     }
 
+    OString sSlideHash(pSlideHash);
     sal_Int32 nViewWidth = *pViewWidth;
     sal_Int32 nViewHeight = *pViewHeight;
     bool bReturn = pDoc->createSlideRenderer(
+                    sSlideHash,
                     nSlideNumber, nViewWidth, nViewHeight,
                     bRenderBackground, bRenderMasterPage);
 
