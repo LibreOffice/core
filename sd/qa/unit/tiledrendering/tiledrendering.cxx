@@ -30,6 +30,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <unotools/datetime.hxx>
@@ -41,6 +42,7 @@
 #include <sdpage.hxx>
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
+
 #include <svx/svxids.hrc>
 #include <pres.hxx>
 #include <navigatr.hxx>
@@ -2796,9 +2798,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 
@@ -2874,10 +2877,12 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
+
     CPPUNIT_ASSERT(pPage);
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 
@@ -2972,9 +2977,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     CPPUNIT_ASSERT(pViewShell);
     SdPage* pPage = pViewShell->GetActualPage();
     CPPUNIT_ASSERT(pPage);
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 
@@ -3083,7 +3089,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     CPPUNIT_ASSERT(pPage);
     sal_Int32 nViewWidth = 2000;
     sal_Int32 nViewHeight = 2000;
-    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 

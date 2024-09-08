@@ -545,6 +545,7 @@ struct _LibreOfficeKitDocumentClass
     /// @see lok::Document::createSlideRenderer
     bool (*createSlideRenderer) (
         LibreOfficeKitDocument* pThis,
+        const char* pSlideHash,
         int nSlideNumber, unsigned* nViewWidth, unsigned* nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage);
 

@@ -4649,12 +4649,38 @@ namespace
 {
 // use VCL slideshow renderer or not - leave the old one in for now, so it is possible to compare output
 constexpr const bool bVCLSlideShowRenderer = true;
+
+bool isRequestedSlideValid(SdDrawDocument* mpDoc, sal_Int32 nSlideNumber, const std::string& slideHash)
+{
+    try
+    {
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPages(getXWeak(mpDoc->getUnoModel()),
+                                                               uno::UNO_QUERY_THROW);
+        uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(),
+                                                        uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber),
+                                                  uno::UNO_QUERY_THROW);
+        if (xSlide.is()) {
+            return slideHash == GetInterfaceHash(xSlide);
+        }
+    }
+    catch (uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION( "sd", "SdXImpressDocument::createLOKSlideRenderer: failed" );
+    }
+    return false;
+}
 }
 
 bool SdXImpressDocument::createSlideRenderer(
+    const OString& rSlideHash,
     sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
     bool bRenderBackground, bool bRenderMasterPage)
 {
+    std::string sSlideHash(rSlideHash);
+    if (!isRequestedSlideValid(mpDoc, nSlideNumber, sSlideHash))
+        return false;
+
     if (bVCLSlideShowRenderer)
     {
         SdPage* pPage = mpDoc->GetSdPage(sal_uInt16(nSlideNumber), PageKind::Standard);

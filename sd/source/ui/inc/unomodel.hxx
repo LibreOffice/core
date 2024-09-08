@@ -304,6 +304,7 @@ public:
     SD_DLLPUBLIC OString getPresentationInfo() const override;
     /// @see vcl::ITiledRenderable::createSlideRenderer().
     SD_DLLPUBLIC bool createSlideRenderer(
+        const OString& rSlideHash,
         sal_Int32 nSlideNumber, sal_Int32& nViewWidth, sal_Int32& nViewHeight,
         bool bRenderBackground, bool bRenderMasterPage) override;
     /// @see vcl::ITiledRenderable::postSlideshowCleanup().

@@ -392,6 +392,7 @@ public:
     }
     /** Creates a slide show renderer (Impress only function) */
     virtual bool createSlideRenderer(
+        const OString& /*rSlideHash*/,
         sal_Int32 /*nSlideNumber*/, sal_Int32& /*nViewWidth*/, sal_Int32& /*nViewHeight*/,
         bool /*bRenderBackground*/, bool /*bRenderMasterPage*/)
    {
