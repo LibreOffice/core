@@ -16,6 +16,7 @@
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <view.hxx>
+#include <wrtsh.hxx>
 #include <cmdid.h>
 #include <sfx2/request.hxx>
 #include <vcl/commandevent.hxx>
@@ -104,6 +105,13 @@ void SwCommentRuler::dispose()
 {
     mpSwWin.clear();
     SvxRuler::dispose();
+}
+
+sw::sidebarwindows::SidebarPosition SwCommentRuler::GetSidebarPosition()
+{
+    if (SwPostItMgr* pPostItMgr = mpViewShell->GetPostItMgr())
+        return pPostItMgr->GetSidebarPos(mpSwWin->GetView().GetWrtShell().GetCursorDocPos());
+    return sw::sidebarwindows::SidebarPosition::NONE;
 }
 
 void SwCommentRuler::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
@@ -200,7 +208,10 @@ void SwCommentRuler::Command(const CommandEvent& rCEvt)
 void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 {
     if (mbIsDrag)
+    {
+        mpSwWin->DrawCommentGuideLine(rMEvt.GetPosPixel());
         return;
+    }
 
     SvxRuler::MouseMove(rMEvt);
     if (!mpViewShell->GetPostItMgr() || !mpViewShell->GetPostItMgr()->HasNotes())
@@ -221,6 +232,15 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
 
 void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    // If right-click while dragging to resize the comment width, stop resizing
+    if (mbIsDrag && rMEvt.GetButtons() == MOUSE_RIGHT)
+    {
+        ReleaseMouse();
+        mpSwWin->ReleaseCommentGuideLine();
+        mbIsDrag = false;
+        return;
+    }
+
     Point aMousePos = rMEvt.GetPosPixel();
     if (!rMEvt.IsLeft() || IsTracking()
         || (!GetCommentControlRegion().Contains(aMousePos) && !GetDragArea().Contains(aMousePos)))
@@ -232,6 +252,7 @@ void SwCommentRuler::MouseButtonDown(const MouseEvent& rMEvt)
     if (GetDragArea().Contains(aMousePos))
     {
         mbIsDrag = true;
+        CaptureMouse();
     }
     else
     {
@@ -254,7 +275,10 @@ void SwCommentRuler::MouseButtonUp(const MouseEvent& rMEvt)
         SvxRuler::MouseButtonUp(rMEvt);
         return;
     }
-    mpViewShell->GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel());
+
+    mpSwWin->SetSidebarWidth(rMEvt.GetPosPixel());
+    ReleaseMouse();
+    mpSwWin->ReleaseCommentGuideLine();
     mbIsDrag = false;
     Invalidate();
 }
@@ -280,7 +304,10 @@ void SwCommentRuler::UpdateCommentHelpText()
 tools::Rectangle SwCommentRuler::GetDragArea()
 {
     tools::Rectangle base(GetCommentControlRegion());
-    base.Move(Size(base.GetWidth() - 5, 0));
+    if (GetSidebarPosition() == sw::sidebarwindows::SidebarPosition::LEFT)
+        base.Move(-5, 0);
+    else
+        base.Move(Size(base.GetWidth() - 5, 0));
     base.SetWidth(10);
     return base;
 }
@@ -300,7 +327,7 @@ tools::Rectangle SwCommentRuler::GetCommentControlRegion()
 
     //FIXME When the page width is larger then screen, the ruler is misplaced by one pixel
     tools::Long nLeft = GetPageOffset();
-    if (GetTextRTL())
+    if (GetSidebarPosition() == sw::sidebarwindows::SidebarPosition::LEFT)
         nLeft += GetBorderOffset() - nSidebarWidth;
     else
         nLeft += GetWinOffset() + mpSwWin->LogicToPixel(Size(GetPageWidth(), 0)).Width();

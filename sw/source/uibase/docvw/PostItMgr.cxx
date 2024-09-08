@@ -81,6 +81,7 @@
 
 #include <annotsh.hxx>
 #include <swabstdlg.hxx>
+#include <pagefrm.hxx>
 #include <memory>
 
 // distance between Anchor Y and initial note position
@@ -2134,8 +2135,7 @@ tools::Rectangle SwPostItMgr::GetSidebarRect(const Point& rPointLogic)
     if (!nPageNum)
         return tools::Rectangle();
 
-    OSL_ENSURE(mPages.size() > nPageNum - 1, "SwPostitMgr:: page container size wrong");
-    return mPages[nPageNum - 1]->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT
+    return GetSidebarPos(rPointLogic) == sw::sidebarwindows::SidebarPosition::LEFT
                ? tools::Rectangle(
                      Point(aPageFrame.Left() - GetSidebarWidth() - GetSidebarBorderWidth(),
                            aPageFrame.Top()),
@@ -2149,13 +2149,23 @@ bool SwPostItMgr::IsHitSidebarDragArea(const Point& rPointPx)
 {
     if (!HasNotes() || !ShowNotes())
         return false;
-    const Point aPoint = mpEditWin->PixelToLogic(rPointPx);
-    tools::Rectangle aDragArea(GetSidebarRect(aPoint));
-    aDragArea.SetPos(Point(aDragArea.TopRight().X() - 50, aDragArea.TopRight().Y()));
+
+    const Point aPointLogic = mpEditWin->PixelToLogic(rPointPx);
+    sw::sidebarwindows::SidebarPosition eSidebarPosition = GetSidebarPos(aPointLogic);
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::NONE)
+        return false;
+
+    tools::Rectangle aDragArea(GetSidebarRect(aPointLogic));
+    aDragArea.SetTop(aPointLogic.Y());
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT)
+        aDragArea.SetPos(Point(aDragArea.Right() - 50, aDragArea.Top()));
+    else
+        aDragArea.SetPos(Point(aDragArea.Left() - 50, aDragArea.Top()));
+
     Size aS(aDragArea.GetSize());
     aS.setWidth(100);
     aDragArea.SetSize(aS);
-    return aDragArea.Contains(aPoint);
+    return aDragArea.Contains(aPointLogic);
 }
 
 tools::Rectangle SwPostItMgr::GetBottomScrollRect(const tools::ULong aPage) const
@@ -2271,12 +2281,28 @@ bool SwPostItMgr::HasNotes() const
     return !mvPostItFields.empty();
 }
 
-void SwPostItMgr::SetSidebarWidth(Point aMousePos)
+void SwPostItMgr::SetSidebarWidth(const Point& rPointLogic)
 {
-    sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
-    tools::Long nPxWidth
-        = aMousePos.X() - mpEditWin->LogicToPixel(GetSidebarRect(aMousePos).TopLeft()).X();
-    double nFactor = static_cast<double>(nPxWidth) / static_cast<double>(nZoom);
+    tools::Rectangle nSidebarRect = GetSidebarRect(rPointLogic);
+    if (nSidebarRect.IsEmpty())
+        return;
+
+    sw::sidebarwindows::SidebarPosition eSidebarPosition = GetSidebarPos(rPointLogic);
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::NONE)
+        return;
+
+    // Calculate the width to be applied in logic units
+    tools::Long nLogicWidth;
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT)
+        nLogicWidth = rPointLogic.X() - nSidebarRect.Left();
+    else
+        nLogicWidth = nSidebarRect.Right() - rPointLogic.X();
+
+    // The zoom level is conveniently used as reference to define the minimum width
+    const sal_uInt16 nZoom = mpWrtShell->GetViewOptions()->GetZoom();
+    double nFactor = static_cast<double>(mpEditWin->LogicToPixel(Point(nLogicWidth, 0)).X())
+                     / static_cast<double>(nZoom);
+    // The width may vary from 1x to 8x the zoom factor
     nFactor = std::clamp(nFactor, 1.0, 8.0);
     std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
         comphelper::ConfigurationChanges::create());
@@ -2286,6 +2312,7 @@ void SwPostItMgr::SetSidebarWidth(Point aMousePos)
     // tdf#159146 After resizing the sidebar the layout and the ruler needs to be updated
     mpWrtShell->InvalidateLayout(true);
     mpView->GetHRuler().Invalidate();
+    mpView->InvalidateRulerPos();
 
     LayoutPostIts();
 }
@@ -2680,6 +2707,17 @@ void SwPostItMgr::UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* to
             }
         }
     }
+}
+
+sw::sidebarwindows::SidebarPosition SwPostItMgr::GetSidebarPos(const Point& rPointLogic)
+{
+    if (const SwRootFrame* pLayout = mpWrtShell->GetLayout())
+    {
+        const SwPageFrame* pPageFrame = pLayout->GetPageAtPos(rPointLogic, nullptr, true);
+        if (pPageFrame)
+            return pPageFrame->SidebarPosition();
+    }
+    return sw::sidebarwindows::SidebarPosition::NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

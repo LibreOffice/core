@@ -163,6 +163,9 @@ using namespace ::com::sun::star;
  */
 static bool g_bInputLanguageSwitched = false;
 
+// Used to draw the guide line while resizing the comment sidebar width
+static tools::Rectangle aLastCommentSidebarPos;
+
 // Usually in MouseButtonUp a selection is revoked when the selection is
 // not currently being pulled open. Unfortunately in MouseButtonDown there
 // is being selected at double/triple click. That selection is completely
@@ -2992,9 +2995,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    if (m_rView.GetPostItMgr()->IsHitSidebarDragArea(aMEvt.GetPosPixel()))
+    if (aMEvt.GetButtons() == MOUSE_LEFT && m_rView.GetPostItMgr()->IsHitSidebarDragArea(aMEvt.GetPosPixel()))
     {
         mbIsDragSidebar = true;
+        // Capture mouse to keep tracking even if the mouse leaves the document window
+        CaptureMouse();
         return;
     }
 
@@ -4000,6 +4005,14 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     }
     else if (MOUSE_RIGHT == aMEvt.GetButtons())
     {
+        // If right-click while dragging to resize the comment width, stop resizing
+        if (mbIsDragSidebar)
+        {
+            ReleaseCommentGuideLine();
+            ReleaseMouse();
+            return;
+        }
+
         if (rSh.GetViewOptions()->IsShowOutlineContentVisibilityButton()
             && aMEvt.GetModifier() == KEY_MOD1)
         {
@@ -4129,9 +4142,16 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             return;
         }
     }
+
     if (m_rView.GetPostItMgr()->IsHitSidebarDragArea(rMEvt.GetPosPixel()))
     {
         SetPointer(PointerStyle::HSizeBar);
+        return;
+    }
+
+    if (mbIsDragSidebar)
+    {
+        DrawCommentGuideLine(rMEvt.GetPosPixel());
         return;
     }
 
@@ -4688,8 +4708,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (mbIsDragSidebar)
     {
-        m_rView.GetPostItMgr()->SetSidebarWidth(rMEvt.GetPosPixel());
-        mbIsDragSidebar = false;
+        SetSidebarWidth(rMEvt.GetPosPixel());
+        // While dragging the mouse is captured, so we need to release it here
+        ReleaseMouse();
+        ReleaseCommentGuideLine();
         return;
     }
 
@@ -6300,6 +6322,57 @@ void SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
             rSh.EnterSelFrameMode();
         }
     }
+}
+
+void SwEditWin::DrawCommentGuideLine(Point aPointPixel)
+{
+    const Point aPointLogic = PixelToLogic(aPointPixel);
+
+    sw::sidebarwindows::SidebarPosition eSidebarPosition
+        = m_rView.GetPostItMgr()->GetSidebarPos(aPointLogic);
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::NONE) // should never happen
+        return;
+
+    tools::Long nPosX;
+    sal_uInt16 nZoom = m_rView.GetWrtShell().GetViewOptions()->GetZoom();
+    if (eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT)
+    {
+        tools::Long nSidebarRectLeft
+            = LogicToPixel(m_rView.GetPostItMgr()->GetSidebarRect(aPointLogic).TopLeft()).X();
+        tools::Long nPxWidth = aPointPixel.X() - nSidebarRectLeft;
+        nPosX = nSidebarRectLeft + std::clamp<tools::Long>(nPxWidth, 1 * nZoom, 8 * nZoom);
+    }
+    else
+    {
+        tools::Long nSidebarRectRight
+            = LogicToPixel(m_rView.GetPostItMgr()->GetSidebarRect(aPointLogic).TopRight()).X();
+        tools::Long nPxWidth = nSidebarRectRight - aPointPixel.X();
+        nPosX = nSidebarRectRight - std::clamp<tools::Long>(nPxWidth, 1 * nZoom, 8 * nZoom);
+    }
+
+
+    // We need two InvertTracking calls here to "erase" the previous and draw the new position at each mouse move
+    InvertTracking(aLastCommentSidebarPos, ShowTrackFlags::Clip | ShowTrackFlags::Split);
+    const tools::Long nHeight = GetOutDev()->GetOutputSizePixel().Height();
+    aLastCommentSidebarPos
+        = tools::Rectangle(PixelToLogic(Point(nPosX, 0)), PixelToLogic(Point(nPosX, nHeight)));
+    InvertTracking(aLastCommentSidebarPos, ShowTrackFlags::Clip | ShowTrackFlags::Split);
+}
+
+void SwEditWin::ReleaseCommentGuideLine()
+{
+    InvertTracking(aLastCommentSidebarPos, ShowTrackFlags::Clip | ShowTrackFlags::Split);
+    aLastCommentSidebarPos = tools::Rectangle();
+    mbIsDragSidebar = false;
+}
+
+void SwEditWin::SetSidebarWidth(const Point& rPointPixel)
+{
+    if (aLastCommentSidebarPos.IsEmpty())
+        return;
+    // aLastCommentSidebarPos right and left positions are the same so either can be used here
+    m_rView.GetPostItMgr()->SetSidebarWidth(
+        Point(aLastCommentSidebarPos.Right(), PixelToLogic(rPointPixel).Y()));
 }
 
 static SfxShell* lcl_GetTextShellFromDispatcher( SwView const & rView )

@@ -14,6 +14,8 @@
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 
+#include <SidebarWindowsTypes.hxx>
+
 class SwViewShell;
 class View;
 namespace vcl { class Window; }
@@ -80,6 +82,8 @@ private:
      * current cursor position.
      */
     virtual void Update() override;
+
+    sw::sidebarwindows::SidebarPosition GetSidebarPosition();
 
     tools::Rectangle GetDragArea();
 

@@ -298,6 +298,12 @@ public:
     void ToggleOutlineContentVisibility(const size_t nOutlinePos, const bool bSubs);
 
     virtual FactoryFunction GetUITestFactory() const override;
+
+    // Draws a guide line at the specified position
+    void DrawCommentGuideLine(Point aPointPixel);
+    // Stops drawing the guide line
+    void ReleaseCommentGuideLine();
+    void SetSidebarWidth(const Point& rPointPixel);
 };
 
 extern bool g_bModePushed;

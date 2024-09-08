@@ -67,7 +67,7 @@ struct SwPostItPageItem
     tools::Long lOffset;
     SwRect mPageRect;
     std::vector<SwSidebarItem*> mvSidebarItems;
-    SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::RIGHT ), lOffset(0)
+    SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::NONE ), lOffset(0)
     {
     }
 };
@@ -155,7 +155,7 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
         bool ShowScrollbar(const tools::ULong aPage) const;
         bool HasNotes() const ;
         bool ShowNotes() const;
-        void SetSidebarWidth(Point aPoint);
+        void SetSidebarWidth(const Point& rPointLogic);
         tools::Rectangle GetSidebarRect(const Point& rPointLogic);
         tools::ULong GetSidebarWidth(bool bPx = false) const;
         tools::ULong GetSidebarBorderWidth(bool bPx = false) const;
@@ -252,6 +252,8 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
 
         void DrawNotesForPage(OutputDevice *pOutDev, sal_uInt32 nPage);
         void PaintTile(OutputDevice& rRenderContext);
+
+        sw::sidebarwindows::SidebarPosition GetSidebarPos(const Point& rPointLogic);
 };
 
 #endif
