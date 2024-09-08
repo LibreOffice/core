@@ -39,15 +39,9 @@
     <style:style style:name="gr12" style:family="graphic" style:parent-style-name="Outlined_20_White">
       <style:graphic-properties draw:marker-start="Circle" draw:marker-start-width="0.38cm"/>
     </style:style>
-    <style:style style:name="pr1" style:family="presentation" style:parent-style-name="Yellow_20_Idea-title">
-      <style:graphic-properties fo:min-height="2.507cm"/>
-    </style:style>
     <style:style style:name="P3" style:family="paragraph">
       <style:paragraph-properties fo:text-align="start"/>
       <style:text-properties fo:font-size="130pt" fo:font-weight="normal" style:font-size-asian="130pt" style:font-size-complex="130pt"/>
-    </style:style>
-    <style:style style:name="P6" style:family="paragraph">
-      <loext:graphic-properties draw:fill-color="#ffffff"/>
     </style:style>
     <style:style style:name="P7" style:family="paragraph">
       <style:paragraph-properties fo:text-align="center"/>
@@ -66,7 +60,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
-          <draw:frame presentation:style-name="Yellow_20_Idea-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Yellow_20_Idea-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -80,7 +74,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="2" presentation:class="page"/>
-          <draw:frame presentation:style-name="Description-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Description-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -103,7 +97,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="3" presentation:class="page"/>
-          <draw:frame presentation:style-name="Contents-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Contents-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -122,7 +116,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="4" presentation:class="page"/>
-          <draw:frame presentation:style-name="Title-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Title-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -139,7 +133,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="5" presentation:class="page"/>
-          <draw:frame presentation:style-name="Article1-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Article1-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -156,7 +150,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="6" presentation:class="page"/>
-          <draw:frame presentation:style-name="Article2-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Article2-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -228,7 +222,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="7" presentation:class="page"/>
-          <draw:frame presentation:style-name="Infographic1-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Infographic1-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -339,7 +333,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="8" presentation:class="page"/>
-          <draw:frame presentation:style-name="Infographic2-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Infographic2-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -353,7 +347,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr6" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="9" presentation:class="page"/>
-          <draw:frame presentation:style-name="End-notes" draw:text-style-name="P6" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="End-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
