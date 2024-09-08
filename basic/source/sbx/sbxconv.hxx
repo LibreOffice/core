@@ -26,6 +26,7 @@
 #include <basic/sbxdef.hxx>
 
 #include <o3tl/float_int_conversion.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/math.hxx>
 #include <sal/types.h>
 
@@ -107,14 +108,76 @@ void        ImpPutCurrency( SbxValues*, const sal_Int64 );
 
 inline  sal_Int64   ImpDoubleToCurrency( double d )
 {
-    if (d > 0)
-        return static_cast<sal_Int64>( d * CURRENCY_FACTOR + 0.5);
-    else
-        return static_cast<sal_Int64>( d * CURRENCY_FACTOR - 0.5);
+    double result = d > 0 ? (d * CURRENCY_FACTOR + 0.5) : (d * CURRENCY_FACTOR - 0.5);
+    if (result >= double(SAL_MAX_INT64)) // double(SAL_MAX_INT64) is greater than SAL_MAX_INT64
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return SAL_MAX_INT64;
+    }
+    if (result < double(SAL_MIN_INT64))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return SAL_MIN_INT64;
+    }
+    return result;
 }
 
-inline  double      ImpCurrencyToDouble( const sal_Int64 r )
-                    { return static_cast<double>(r) / double(CURRENCY_FACTOR); }
+template <typename I>
+    requires std::is_integral_v<I>
+inline sal_Int64 CurFrom(I n)
+{
+    using ValidRange = o3tl::ValidRange<sal_Int64, SAL_MIN_INT64 / CURRENCY_FACTOR, SAL_MAX_INT64 / CURRENCY_FACTOR>;
+    if (ValidRange::isAbove(n))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return SAL_MAX_INT64;
+    }
+    if (ValidRange::isBelow(n))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return SAL_MIN_INT64;
+    }
+    return n * CURRENCY_FACTOR;
+}
+
+inline double ImpCurrencyToDouble(sal_Int64 r) { return static_cast<double>(r) / CURRENCY_FACTOR; }
+
+template <typename I>
+    requires std::is_integral_v<I>
+inline I CurTo(sal_Int64 cur_val)
+{
+    sal_Int64 i = CurTo<sal_Int64>(cur_val);
+    if (o3tl::ValidRange<I>::isAbove(i))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return std::numeric_limits<I>::max();
+    }
+    if (o3tl::ValidRange<I>::isBelow(i))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return std::numeric_limits<I>::min();
+    }
+    return i;
+}
+
+template <> inline sal_Int64 CurTo<sal_Int64>(sal_Int64 cur_val)
+{
+    sal_Int64 i = cur_val / CURRENCY_FACTOR;
+    // Rounding (half-to-even)
+    int f = cur_val % CURRENCY_FACTOR;
+    if (i % 2 == 1)
+    {
+        if (f < 0)
+            --f;
+        else
+            ++f;
+    }
+    if (f > CURRENCY_FACTOR / 2)
+        ++i;
+    else if (f < -CURRENCY_FACTOR / 2)
+        --i;
+    return i;
+}
 
 
 // SBXDEC.CXX

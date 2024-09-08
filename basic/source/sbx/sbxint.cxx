@@ -78,21 +78,8 @@ start:
             nRes = ImpDoubleToInteger(p->nSingle);
             break;
         case SbxCURRENCY:
-            {
-                sal_Int64 tstVal = p->nInt64 / sal_Int64(CURRENCY_FACTOR);
-
-                if( tstVal > SbxMAXINT )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXINT;
-                }
-                else if( tstVal  < SbxMININT )
-                {
-                    SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMININT;
-                }
-                else
-                    nRes = static_cast<sal_Int16>(tstVal);
-                break;
-            }
+            nRes = CurTo<sal_Int16>(p->nInt64);
+            break;
         case SbxSALINT64:
             if( p->nInt64 > SbxMAXINT )
             {
@@ -227,7 +214,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
         case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxDECIMAL:
@@ -286,7 +273,7 @@ start:
             }
             *p->pULong = static_cast<sal_uInt32>(n); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
+            *p->pnInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
@@ -357,7 +344,7 @@ start:
             nRes = ImpDoubleToSalInt64(p->nDouble);
             break;
         case SbxCURRENCY:
-            nRes = p->nInt64 / CURRENCY_FACTOR; break;
+            nRes = CurTo<sal_Int64>(p->nInt64); break;
         case SbxSALINT64:
             nRes = p->nInt64; break;
         case SbxSALUINT64:
@@ -413,7 +400,7 @@ start:
         case SbxBYREF | SbxULONG:
             nRes = *p->pULong; break;
         case SbxBYREF | SbxCURRENCY:
-            nRes = p->nInt64 / CURRENCY_FACTOR; break;
+            nRes = CurTo<sal_Int64>(*p->pnInt64); break;
         case SbxBYREF | SbxSALINT64:
             nRes = *p->pnInt64; break;
 
@@ -564,7 +551,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = static_cast<double>(n); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
+            *p->pnInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
@@ -612,7 +599,7 @@ start:
             nRes = ImpDoubleToSalUInt64(p->nDouble);
             break;
         case SbxCURRENCY:
-            nRes = p->nInt64 * CURRENCY_FACTOR; break;
+            nRes = CurFrom(p->nInt64); break;
         case SbxSALINT64:
             if( p->nInt64 < 0 )
             {
@@ -797,12 +784,8 @@ start:
 
             *p->pDouble = ImpSalUInt64ToDouble( n ); break;
         case SbxBYREF | SbxCURRENCY:
-            if ( n > ( SAL_MAX_INT64 / CURRENCY_FACTOR ) )
-            {
-                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                 n = SAL_MAX_INT64;
-            }
-            *p->pnInt64 = static_cast<sal_Int64>( n * CURRENCY_FACTOR ); break;
+            *p->pnInt64 = CurFrom(n);
+            break;
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
         case SbxBYREF | SbxSALINT64:

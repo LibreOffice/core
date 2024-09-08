@@ -74,16 +74,7 @@ start:
                 nRes = static_cast<sal_uInt16>(p->nULong);
             break;
         case SbxCURRENCY:
-            if( p->nInt64 / CURRENCY_FACTOR > SbxMAXUINT )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXUINT;
-            }
-            else if( p->nInt64 < 0 )
-            {
-                SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
-            }
-            else
-                nRes = static_cast<sal_uInt16>(p->nInt64 / CURRENCY_FACTOR);
+            nRes = CurTo<sal_uInt16>(p->nInt64);
             break;
         case SbxSALINT64:
             if( p->nInt64 > SbxMAXUINT )
@@ -209,7 +200,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
         case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxSALUINT64:
@@ -276,7 +267,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
+            *p->pnInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:

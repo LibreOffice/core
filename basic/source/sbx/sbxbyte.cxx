@@ -92,23 +92,20 @@ start:
                 nRes = static_cast<sal_uInt8>(p->nULong);
             break;
         case SbxCURRENCY:
+            nRes = CurTo<sal_uInt8>(p->nInt64);
+            break;
         case SbxSALINT64:
-        {
-            sal_Int64 val = p->nInt64;
-            if ( p->eType == SbxCURRENCY )
-                val = val / CURRENCY_FACTOR;
-            if( val > SbxMAXBYTE )
+            if (sal_Int64 val = p->nInt64; val > SbxMAXBYTE)
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXBYTE;
             }
-            else if( p->nInt64 < 0 )
+            else if (val < 0)
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = 0;
             }
             else
                 nRes = static_cast<sal_uInt8>(val);
             break;
-        }
         case SbxSALUINT64:
             if( p->uInt64 > SbxMAXBYTE )
             {
@@ -249,7 +246,7 @@ void ImpPutByte( SbxValues* p, sal_uInt8 n )
         case SbxDOUBLE:
             p->nDouble = n; break;
         case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxSALUINT64:
@@ -298,7 +295,7 @@ void ImpPutByte( SbxValues* p, sal_uInt8 n )
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
         case SbxBYREF | SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:

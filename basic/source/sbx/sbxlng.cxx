@@ -67,14 +67,8 @@ start:
             nRes = p->uInt64;
             break;
         case SbxCURRENCY:
-        {
-            sal_Int64  tstVal = p->nInt64 / CURRENCY_FACTOR;
-            nRes = static_cast<sal_Int32>(tstVal);
-            if( tstVal < SbxMINLNG || SbxMAXLNG < tstVal )  SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-            if( SbxMAXLNG < tstVal ) nRes = SbxMAXLNG;
-            if( tstVal < SbxMINLNG ) nRes = SbxMINLNG;
+            nRes = CurTo<sal_Int32>(p->nInt64);
             break;
-        }
         case SbxDATE:
         case SbxDOUBLE:
         case SbxDECIMAL:
@@ -192,7 +186,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
         case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxDECIMAL:
@@ -282,7 +276,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = static_cast<double>(n); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = static_cast<sal_Int64>(n) * sal_Int64(CURRENCY_FACTOR); break;
+            *p->pnInt64 = CurFrom(n); break;
         default:
             SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     }

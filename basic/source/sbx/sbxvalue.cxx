@@ -24,6 +24,7 @@
 
 #include <osl/diagnose.h>
 #include <o3tl/float_int_conversion.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
@@ -771,6 +772,40 @@ bool SbxValue::Convert( SbxDataType eTo )
 }
 ////////////////////////////////// Calculating
 
+static sal_Int64 MulAndDiv(sal_Int64 n, sal_Int64 mul, sal_Int64 div)
+{
+    if (div == 0)
+    {
+        SbxBase::SetError(ERRCODE_BASIC_ZERODIV);
+        return n;
+    }
+    auto errorValue = [](sal_Int64 x, sal_Int64 y, sal_Int64 z)
+    {
+        const int i = (x < 0 ? -1 : 1) * (y < 0 ? -1 : 1) * (z < 0 ? -1 : 1);
+        return i == 1 ? SAL_MAX_INT64 : SAL_MIN_INT64;
+    };
+    sal_Int64 result;
+    // If x * integral part of (mul/div) overflows -> product does not fit
+    if (o3tl::checked_multiply(n, mul / div, result))
+    {
+        SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+        return errorValue(n, mul, div);
+    }
+    if (sal_Int64 mul_frac = mul % div)
+    {
+        // can't overflow: mul_frac < div
+        sal_Int64 result_frac = n / div * mul_frac;
+        if (sal_Int64 x_frac = n % div)
+            result_frac += x_frac * mul_frac / div;
+        if (o3tl::checked_add(result, result_frac, result))
+        {
+            SbxBase::SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+            return errorValue(n, mul, div);
+        }
+    }
+    return result;
+}
+
 bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
 #if !HAVE_FEATURE_SCRIPTING
@@ -841,9 +876,10 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         {
             if( GetType() == eOpType )
             {
-                if( GetType() == SbxSALUINT64 || GetType() == SbxSALINT64
-                 || GetType() == SbxCURRENCY  || GetType() == SbxULONG )
+                if (GetType() == SbxSALUINT64 || GetType() == SbxSALINT64 || GetType() == SbxULONG)
                     aL.eType = aR.eType = GetType();
+                else if (GetType() == SbxCURRENCY)
+                    aL.eType = aR.eType = SbxSALINT64; // Convert to integer value before operation
                 // tdf#145960 - return type of boolean operators should be of type boolean
                 else if ( eOpType == SbxBOOL && eOp != SbxMOD && eOp != SbxIDIV )
                     aL.eType = aR.eType = SbxBOOL;
@@ -853,9 +889,9 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
             else
                 aL.eType = aR.eType = SbxLONG;
 
-            if( rOp.Get( aR ) )     // re-do Get after type assigns above
+            if (rOp.Get(aR) && Get(aL)) // re-do Get after type assigns above
             {
-                if( Get( aL ) ) switch( eOp )
+                switch( eOp )
                 {
                     /* TODO: For SbxEMPTY operands with boolean operators use
                      * the VBA Nothing definition of Comparing Nullable Types?
@@ -868,16 +904,10 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                      * string.
                      */
                     case SbxIDIV:
-                        if( aL.eType == SbxCURRENCY )
-                            if( !aR.nInt64 ) SetError( ERRCODE_BASIC_ZERODIV );
-                            else {
-                                aL.nInt64 /= aR.nInt64;
-                                aL.nInt64 *= CURRENCY_FACTOR;
-                        }
-                        else if( aL.eType == SbxSALUINT64 )
+                        if( aL.eType == SbxSALUINT64 )
                             if( !aR.uInt64 ) SetError( ERRCODE_BASIC_ZERODIV );
                             else aL.uInt64 /= aR.uInt64;
-                        else if( aL.eType == SbxSALINT64 )
+                        else if( aL.eType == SbxCURRENCY || aL.eType == SbxSALINT64 )
                             if( !aR.nInt64 ) SetError( ERRCODE_BASIC_ZERODIV );
                             else aL.nInt64 /= aR.nInt64;
                         else if( aL.eType == SbxLONG )
@@ -990,92 +1020,34 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         }
         else if( GetType() == SbxCURRENCY || rOp.GetType() == SbxCURRENCY )
         {
-            aL.eType = SbxCURRENCY;
-            aR.eType = SbxCURRENCY;
+            aL.eType = aR.eType = SbxCURRENCY;
 
-            if( rOp.Get( aR ) )
+            if (rOp.Get(aR) && Get(aL))
             {
-                if( Get( aL ) ) switch( eOp )
+                switch (eOp)
                 {
                     case SbxMUL:
-                        {
-                            // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
-                            double dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64) / double(CURRENCY_FACTOR_SQUARE);
-                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
-                            {
-                                aL.nInt64 = SAL_MAX_INT64;
-                                if( dTest < SbxMINCURR ) aL.nInt64 = SAL_MIN_INT64;
-                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                                break;
-                            }
-                            // second overflow check: see if unscaled product overflows - if so use doubles
-                            dTest = static_cast<double>(aL.nInt64) * static_cast<double>(aR.nInt64);
-                            if( !(o3tl::convertsToAtLeast(dTest, SAL_MIN_INT64)
-                                  && o3tl::convertsToAtMost(dTest, SAL_MAX_INT64)))
-                            {
-                                aL.nInt64 = static_cast<sal_Int64>( dTest / double(CURRENCY_FACTOR) );
-                                break;
-                            }
-                            // precise calc: multiply then scale back (move decimal pt)
-                            aL.nInt64 *= aR.nInt64;
-                            aL.nInt64 /= CURRENCY_FACTOR;
-                            break;
-                        }
+                        aL.nInt64 = MulAndDiv(aL.nInt64, aR.nInt64, CURRENCY_FACTOR);
+                        break;
 
                     case SbxDIV:
-                        {
-                            if( !aR.nInt64 )
-                            {
-                                SetError( ERRCODE_BASIC_ZERODIV );
-                                break;
-                            }
-                            // first overflow check: see if quotient will fit - calc real value of quotient (curr factors cancel)
-                            double dTest = static_cast<double>(aL.nInt64) / static_cast<double>(aR.nInt64);
-                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
-                            {
-                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                                break;
-                            }
-                            // second overflow check: see if scaled dividend overflows - if so use doubles
-                            dTest = static_cast<double>(aL.nInt64) * double(CURRENCY_FACTOR);
-                            if( !(o3tl::convertsToAtLeast(dTest, SAL_MIN_INT64)
-                                  && o3tl::convertsToAtMost(dTest, SAL_MAX_INT64)))
-                            {
-                                aL.nInt64 = static_cast<sal_Int64>(dTest / static_cast<double>(aR.nInt64));
-                                break;
-                            }
-                            // precise calc: scale (move decimal pt) then divide
-                            aL.nInt64 *= CURRENCY_FACTOR;
-                            aL.nInt64 /= aR.nInt64;
-                            break;
-                        }
+                        aL.nInt64 = MulAndDiv(aL.nInt64, CURRENCY_FACTOR, aR.nInt64);
+                        break;
 
                     case SbxPLUS:
-                        {
-                            double dTest = ( static_cast<double>(aL.nInt64) + static_cast<double>(aR.nInt64) ) / double(CURRENCY_FACTOR);
-                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
-                            {
-                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                                break;
-                            }
-                            aL.nInt64 += aR.nInt64;
-                            break;
-                        }
-
-                    case SbxMINUS:
-                        {
-                            double dTest = ( static_cast<double>(aL.nInt64) - static_cast<double>(aR.nInt64) ) / double(CURRENCY_FACTOR);
-                            if( dTest < SbxMINCURR || SbxMAXCURR < dTest)
-                            {
-                                SetError( ERRCODE_BASIC_MATH_OVERFLOW );
-                                break;
-                            }
-                            aL.nInt64 -= aR.nInt64;
-                            break;
-                        }
-                    case SbxNEG:
-                        aL.nInt64 = -aL.nInt64;
+                        if (o3tl::checked_add(aL.nInt64, aR.nInt64, aL.nInt64))
+                            SetError(ERRCODE_BASIC_MATH_OVERFLOW);
                         break;
+
+                    case SbxNEG:
+                        // Use subtraction; allows to detect negation of SAL_MIN_INT64
+                        aR.nInt64 = std::exchange(aL.nInt64, 0);
+                        [[fallthrough]];
+                    case SbxMINUS:
+                        if (o3tl::checked_sub(aL.nInt64, aR.nInt64, aL.nInt64))
+                            SetError(ERRCODE_BASIC_MATH_OVERFLOW);
+                        break;
+
                     default:
                         SetError( ERRCODE_BASIC_BAD_ARGUMENT );
                 }
@@ -1142,6 +1114,29 @@ Lbl_OpIsEmpty:
 
 // The comparison routine deliver TRUE or FALSE.
 
+template <typename T> static bool CompareNormal(const T& l, const T& r, SbxOperator eOp)
+{
+    switch (eOp)
+    {
+        case SbxEQ:
+            return l == r;
+        case SbxNE:
+            return l != r;
+        case SbxLT:
+            return l < r;
+        case SbxGT:
+            return l > r;
+        case SbxLE:
+            return l <= r;
+        case SbxGE:
+            return l >= r;
+        default:
+            assert(false);
+    }
+    SbxBase::SetError(ERRCODE_BASIC_BAD_ARGUMENT);
+    return false;
+}
+
 bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
 #if !HAVE_FEATURE_SCRIPTING
@@ -1184,23 +1179,8 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         if( GetType() == SbxSTRING || rOp.GetType() == SbxSTRING )
         {
             aL.eType = aR.eType = SbxSTRING;
-            if( Get( aL ) && rOp.Get( aR ) ) switch( eOp )
-            {
-                case SbxEQ:
-                    bRes = ( *aL.pOUString == *aR.pOUString ); break;
-                case SbxNE:
-                    bRes = ( *aL.pOUString != *aR.pOUString ); break;
-                case SbxLT:
-                    bRes = ( *aL.pOUString <  *aR.pOUString ); break;
-                case SbxGT:
-                    bRes = ( *aL.pOUString >  *aR.pOUString ); break;
-                case SbxLE:
-                    bRes = ( *aL.pOUString <= *aR.pOUString ); break;
-                case SbxGE:
-                    bRes = ( *aL.pOUString >= *aR.pOUString ); break;
-                default:
-                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
-            }
+            if (Get(aL) && rOp.Get(aR))
+                bRes = CompareNormal(*aL.pOUString, *aR.pOUString, eOp);
         }
         // From 1995-12-19: If SbxSINGLE participate, then convert to SINGLE,
         //              otherwise it shows a numeric error
@@ -1208,23 +1188,7 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
         {
             aL.eType = aR.eType = SbxSINGLE;
             if( Get( aL ) && rOp.Get( aR ) )
-              switch( eOp )
-            {
-                case SbxEQ:
-                    bRes = ( aL.nSingle == aR.nSingle ); break;
-                case SbxNE:
-                    bRes = ( aL.nSingle != aR.nSingle ); break;
-                case SbxLT:
-                    bRes = ( aL.nSingle <  aR.nSingle ); break;
-                case SbxGT:
-                    bRes = ( aL.nSingle >  aR.nSingle ); break;
-                case SbxLE:
-                    bRes = ( aL.nSingle <= aR.nSingle ); break;
-                case SbxGE:
-                    bRes = ( aL.nSingle >= aR.nSingle ); break;
-                default:
-                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
-            }
+                bRes = CompareNormal(aL.nSingle, aR.nSingle, eOp);
         }
         else if( GetType() == SbxDECIMAL && rOp.GetType() == SbxDECIMAL )
         {
@@ -1259,6 +1223,12 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             releaseDecimalPtr( aL.pDecimal );
             releaseDecimalPtr( aR.pDecimal );
         }
+        else if (GetType() == SbxCURRENCY && rOp.GetType() == SbxCURRENCY)
+        {
+            aL.eType = aR.eType = GetType();
+            if (Get(aL) && rOp.Get(aR))
+                bRes = CompareNormal(aL.nInt64, aR.nInt64, eOp);
+        }
         // Everything else comparing on a SbxDOUBLE-Basis
         else
         {
@@ -1266,23 +1236,7 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
             bool bGetL = Get( aL );
             bool bGetR = rOp.Get( aR );
             if( bGetL && bGetR )
-              switch( eOp )
-            {
-                case SbxEQ:
-                    bRes = ( aL.nDouble == aR.nDouble ); break;
-                case SbxNE:
-                    bRes = ( aL.nDouble != aR.nDouble ); break;
-                case SbxLT:
-                    bRes = ( aL.nDouble <  aR.nDouble ); break;
-                case SbxGT:
-                    bRes = ( aL.nDouble >  aR.nDouble ); break;
-                case SbxLE:
-                    bRes = ( aL.nDouble <= aR.nDouble ); break;
-                case SbxGE:
-                    bRes = ( aL.nDouble >= aR.nDouble ); break;
-                default:
-                    SetError( ERRCODE_BASIC_BAD_ARGUMENT );
-            }
+                bRes = CompareNormal(aL.nDouble, aR.nDouble, eOp);
             // at least one value was got
             // if this is VBA then a conversion error for one
             // side will yield a false result of an equality test

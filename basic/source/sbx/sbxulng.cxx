@@ -252,7 +252,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
+            *p->pnInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:

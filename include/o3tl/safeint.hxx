@@ -269,6 +269,55 @@ template<typename T> [[nodiscard]] inline T sanitizing_min(T a, T b)
     return static_cast<short>(res);
 }
 
+// A helper for taking care of signed/unsigned comparisons in constant bounds case
+// Should avoid Coverity warnings like "cid#1618764 Operands don't affect result"
+template <typename I, I Min = std::template numeric_limits<I>::min(),
+                      I Max = std::template numeric_limits<I>::max(),
+                      std::enable_if_t<std::is_integral_v<I> && (Min <= 0) && (Max > 0), int> = 0>
+struct ValidRange
+{
+    using SI = std::make_signed_t<I>;
+    using UI = std::make_unsigned_t<I>;
+
+    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
+    static constexpr bool isAbove(I2 n)
+    {
+        using UI2 = std::make_unsigned_t<I2>;
+        if constexpr (static_cast<UI2>(std::numeric_limits<I2>::max()) <= static_cast<UI>(Max))
+            return false;
+        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
+            return n > Max;
+        else if constexpr (std::is_signed_v<I>) // I2 is unsigned
+            return n > static_cast<UI>(Max);
+        else // I is unsigned, I2 is signed
+            return n > 0 && static_cast<UI2>(n) > Max;
+    }
+
+    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
+    static constexpr bool isBelow(I2 n)
+    {
+        using SI2 = std::make_signed_t<I2>;
+        if constexpr (static_cast<SI2>(std::numeric_limits<I2>::min()) >= static_cast<SI>(Min))
+            return false; // Covers all I2 unsigned
+        else if constexpr (std::is_signed_v<I> == std::is_signed_v<I2>)
+            return n < Min;
+        else // I is unsigned, I2 is signed
+            return n < 0;
+    }
+
+    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
+    static constexpr bool isOutside(I2 n)
+    {
+        return isAbove(n) || isBelow(n);
+    }
+
+    template <typename I2, std::enable_if_t<std::is_integral_v<I2>, int> = 0>
+    static constexpr bool isInside(I2 n)
+    {
+        return !isOutside(n);
+    }
+};
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

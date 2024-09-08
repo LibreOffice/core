@@ -194,7 +194,7 @@ constexpr sal_uInt32 SbxMAXULNG = 0xffffffff;
         // Currency stored as SbxSALINT64 == sal_Int64
         // value range limits are ~(2^63 - 1)/10000
         // fixed precision has 4 digits right of decimal pt
-constexpr auto CURRENCY_FACTOR = 10000;
+constexpr sal_Int64 CURRENCY_FACTOR = 10000;
 constexpr auto CURRENCY_FACTOR_SQUARE = 100000000;
 
 // TODO effective MAX/MINCURR limits:

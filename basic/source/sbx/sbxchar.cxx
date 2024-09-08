@@ -74,25 +74,20 @@ start:
                 nRes = static_cast<sal_Unicode>(p->nULong);
             break;
         case SbxCURRENCY:
+            nRes = CurTo<sal_Unicode>(p->nInt64);
+            break;
         case SbxSALINT64:
-        {
-            sal_Int64 val = p->nInt64;
-
-            if ( p->eType == SbxCURRENCY )
-                val = val / CURRENCY_FACTOR;
-
-            if( val > SbxMAXCHAR )
+            if (sal_Int64 val = p->nInt64; val > SbxMAXCHAR)
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMAXCHAR;
             }
-            else if( p->nInt64 < SbxMINCHAR )
+            else if (val < SbxMINCHAR)
             {
                 SbxBase::SetError( ERRCODE_BASIC_MATH_OVERFLOW ); nRes = SbxMINCHAR;
             }
             else
                 nRes = static_cast<sal_Unicode>(val);
             break;
-        }
         case SbxSALUINT64:
             if( p->uInt64 > SbxMAXCHAR )
             {
@@ -227,7 +222,7 @@ start:
         case SbxDOUBLE:
             p->nDouble = n; break;
         case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxSALUINT64:
@@ -285,7 +280,7 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = static_cast<double>(n); break;
         case SbxBYREF | SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+            p->nInt64 = CurFrom(n); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
