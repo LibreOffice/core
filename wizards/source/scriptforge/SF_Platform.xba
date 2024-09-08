@@ -221,7 +221,7 @@ REM ----------------------------------------------------------------------------
 Property Get UserData() As Variant
 &apos;&apos;&apos;	Returns a dictionary of all Options + User Data values
 &apos;&apos;&apos;	Example:
-&apos;&apos;&apos;		MsgBox platform.UserData
+&apos;&apos;&apos;		dict = platform.UserData
 	UserData = _PropertyGet(&quot;UserData&quot;)
 End Property	&apos;	ScriptForge.SF_Platform.UserData (get)
 
@@ -464,8 +464,8 @@ Const cstSubArgs = &quot;&quot;
 				)
 			&apos;	Get the UserData page from the Options database
 			vUserDataOptions = SF_Utils._GetRegistryKeyContent(&quot;org.openoffice.UserProfile/Data&quot;)
-			&apos;	Create and feed the output dictionary
-			vUserData = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+			&apos;	Create and feed an output dictionary with case-sensitive comparison of keys
+			vUserData = CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
 			For i = 0 To UBound(vUserDataExternal)
 				vUserData.Add(vUserDataExternal(i), vUserDataOptions.getByName(vUserDataInternal(i)))
 			Next i

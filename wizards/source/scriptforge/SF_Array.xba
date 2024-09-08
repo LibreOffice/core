@@ -336,7 +336,7 @@ End Function	&apos;	ScriptForge.SF_Array.Contains
 
 REM -----------------------------------------------------------------------------
 Public Function ConvertToDictionary(Optional ByRef Array_2D As Variant) As Variant
-&apos;&apos;&apos;	Store the content of a 2-columns array into a dictionary
+&apos;&apos;&apos;	Store the content of a 2-columns array into a dictionary with case-sensitive comparison of keys
 &apos;&apos;&apos;	Key found in 1st column, Item found in 2nd
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Array_2D: 1st column must contain exclusively non zero-length strings
@@ -348,7 +348,7 @@ Public Function ConvertToDictionary(Optional ByRef Array_2D As Variant) As Varia
 
 Dim oDict As Variant		&apos;	Return value
 Dim i As Long
-Const cstThisSub = &quot;Dictionary.ConvertToArray&quot;
+Const cstThisSub = &quot;Array.ConvertToDictionary&quot;
 Const cstSubArgs = &quot;Array_2D&quot;
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -359,7 +359,7 @@ Check:
 	End If
 
 Try:
-	Set oDict = SF_Services.CreateScriptService(&quot;Dictionary&quot;)
+	Set oDict = SF_Services.CreateScriptService(&quot;Dictionary&quot;, True)
 	For i = LBound(Array_2D, 1) To UBound(Array_2D, 1)
 		oDict.Add(Array_2D(i, 0), Array_2D(i, 1))
 	Next i

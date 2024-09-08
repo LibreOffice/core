@@ -372,7 +372,7 @@ Try:
 	&apos;	Force the visibility of the toolbar
 	Visible = True
 
-	Set _ToolbarButtons = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+	Set _ToolbarButtons = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)	&apos;	with case-sensitive comparison of keys
 	Set oElement = _LayoutManager.getElement(_ResourceURL)
 	Set oSettings = oElement.getSettings(True)
 

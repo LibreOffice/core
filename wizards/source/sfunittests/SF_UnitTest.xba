@@ -1515,7 +1515,7 @@ Try:
 					bEval = ( Len(A) &gt; 0 )
 					If bEval Then
 						Set oAliasB = B
-						bEval = ScriptForge.SF_Array.Contains(oAliasB.Keys(), A, CaseSensitive := True)
+						bEval = ScriptForge.SF_Array.Contains(oAliasB.Keys(), A, CaseSensitive := oAliasB.CaseSensitive)
 					End If
 				Case Else
 					bEval = False

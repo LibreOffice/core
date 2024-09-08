@@ -1427,7 +1427,7 @@ Check:
 	If IsNull(poComponent) Then GoTo Catch
 
 Try:
-	Set oToolbarsDict = CreateScriptService(&quot;Dictionary&quot;)
+	Set oToolbarsDict = CreateScriptService(&quot;Dictionary&quot;, True)	&apos;	with case-sensitive comparison of keys
 
 	&apos;	1. Collect all builtin and custom toolbars stored in the LibreOffice configuration files
 

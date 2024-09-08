@@ -1381,7 +1381,7 @@ Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant
 
 Dim vBookmark As Variant			&apos;	Bookmark on the current record
 Dim vValue As Variant				&apos;	A single record  field value
-Dim vValuesDict As Object		&apos;	A dictionary (field name, field value)
+Dim vValuesDict As Object			&apos;	A dictionary (field name, field value)
 Dim i As Long
 
 Dim cstThisSub As String
@@ -1397,8 +1397,8 @@ Const cstSubArgs = &quot;&quot;
 			Case &quot;BOF&quot;
 				_PropertyGet = .isBeforeFirst()
 			Case &quot;DefaultValues&quot;
-				&apos;	Load the pairs field name / field default value in the dictionary
-				vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+				&apos;	Load the pairs field name / field default value in the dictionary (with case-sensitive comparison of keys)
+				vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
 				For i = 0 To UBound(_DefaultValues)
 					vValuesDict.Add(_Fields(i), _DefaultValues(i))
 				Next i
@@ -1434,8 +1434,8 @@ Const cstSubArgs = &quot;&quot;
 					If .isBeforeFirst() Or .isAfterLast() Or .rowDeleted() Then
 						Set _PropertyGet = Nothing
 					Else
-						&apos;	Load the pairs field name / field value in the dictionary
-						vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+						&apos;	Load the pairs field name / field value in the dictionary (with case-sensitive comparison of keys)
+						vValuesDict = ScriptForge.SF_Services.CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
 						For i = 0 To UBound(_Fields)
 							vValue = _ParentDatabase._GetColumnValue(_RowSet, i + 1, False)
 							vValuesDict.Add(_Fields(i), vValue)

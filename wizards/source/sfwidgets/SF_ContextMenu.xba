@@ -482,7 +482,7 @@ Dim MainConfigManager As Object	&apos;	com.sun.star.ui.XUIConfigurationManager
 
 Try:
 	&apos;	Initialize the dictionary
-	Set MenuTree = ScriptForge.SF_Services.CreateScriptService(&quot;Dictionary&quot;)
+	Set MenuTree = ScriptForge.SF_Services.CreateScriptService(&quot;Dictionary&quot;, True)	&apos;	with case-sensitive comparison of keys
 
 	&apos;	Identify the container of the menu tree
 	&apos;		The container is taken either from the system configuration manager of from the local (= in document) one

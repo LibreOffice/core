@@ -635,7 +635,7 @@ Check:
 	&apos;	Reinterpret arguments one by one into vArgs
 	&apos;	- convert UNO dates/times
 	&apos;	- identify conventional NoArgs/Empty/Null/Missing constants
-	&apos;	- convert arrays of property values into DictionarY
+	&apos;	- convert arrays of property values into Dictionary
 	iNbArgs = -1
 	vArgs = Array()
 
@@ -667,7 +667,8 @@ Check:
 				If IsArray(vArg) Then
 					If UBound(vArg) &gt;= 0 Then
 						If sess.UnoObjectType(vArg(0)) = &quot;com.sun.star.beans.PropertyValue&quot; Then
-							Set oDict = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+							&apos;	Create a dictionary - keys in Python dicts are case-sensitive
+							Set oDict = CreateScriptService(&quot;ScriptForge.Dictionary&quot;, True)
 							oDict.ImportFromPropertyValues(vArg, Overwrite := True)
 							vArg = oDict
 						End If

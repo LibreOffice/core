@@ -670,8 +670,8 @@ Dim iContinue As Integer	&apos;	0 = None, 1 = MsgId, 2 = MsgStr
 Const cstMsgId = 1, cstMsgStr = 2
 
 Try:
-	&apos;	Initialize dictionary anyway
-	Set _Dictionary = SF_Services.CreateScriptService(&quot;Dictionary&quot;)
+	&apos;	Initialize dictionary anyway with case-sensitive comparison of keys
+	Set _Dictionary = SF_Services.CreateScriptService(&quot;Dictionary&quot;, True)
 	Set _Dictionary.[_Parent] = [Me]
 
 	&apos;	Load PO file

@@ -710,10 +710,10 @@ Public Sub _Initialize(ByRef poPeer As Object _
 &apos;&apos;&apos;		plXPos, plYPos: the coordinates
 
 Try:
-	&apos;	Initialize the dictionaries
+	&apos;	Initialize the dictionaries (with case-sensitive comparison of keys)
 	With ScriptForge.SF_Services
-		Set MenuTree = .CreateScriptService(&quot;Dictionary&quot;)
-		Set MenuIdentification = .CreateScriptService(&quot;Dictionary&quot;)
+		Set MenuTree = .CreateScriptService(&quot;Dictionary&quot;, True)
+		Set MenuIdentification = .CreateScriptService(&quot;Dictionary&quot;, True)
 	End With
 
 	&apos;	Initialize the root of the menu tree

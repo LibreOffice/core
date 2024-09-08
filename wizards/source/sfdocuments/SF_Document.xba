@@ -2101,7 +2101,7 @@ End Function	&apos;	SFDocuments.SF_Document._ListContextMenus
 
 REM -----------------------------------------------------------------------------
 Private Sub _LoadDocumentProperties()
-&apos;&apos;&apos;	Create dictionary with document properties as entries/ Custom properties are excluded
+&apos;&apos;&apos;	Create dictionary with document properties as entries / Custom properties are excluded
 &apos;&apos;&apos;	Document is presumed still alive
 &apos;&apos;&apos;	Special values:
 &apos;&apos;&apos;		Only valid dates are taken
@@ -2169,7 +2169,8 @@ Const cstSubArgs = &quot;&quot;
 
 	Select Case psProperty
 		Case &quot;CustomProperties&quot;
-			_CustomProperties = CreateScriptService(&quot;Dictionary&quot;)	&apos;	Always reload as updates could have been done manually by user
+			_CustomProperties = CreateScriptService(&quot;Dictionary&quot;, True)	&apos;	Always reload as updates could have been done manually by user
+																		&apos;	(with case-sensitive comparison of keys)
 			_CustomProperties.ImportFromPropertyValues(_Component.getDocumentProperties().UserDefinedProperties.getPropertyValues)
 			_PropertyGet = _CustomProperties
 		Case &quot;Description&quot;

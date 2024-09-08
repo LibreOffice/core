@@ -41,7 +41,7 @@ Const UNKNOWNFILEERROR			=	&quot;UNKNOWNFILEERROR&quot;			&apos;	Source file doe
 
 REM ============================================================== PUBLIC MEMBERS
 
-&apos;	Defines an entry in in the services dictionary
+&apos;	Defines an entry in the services dictionary
 Type _Service
 	ServiceName				As String
 	ServiceType				As Integer
@@ -494,19 +494,31 @@ Finally:
 End Function	&apos;	ScriptForge.SF_Services._LoadLibraryServices
 
 REM -----------------------------------------------------------------------------
-Public Function _NewDictionary() As Variant
+Public Function _NewDictionary(Optional ByVal pvArgs As Variant) As Variant
 &apos;&apos;&apos;	Create a new instance of the SF_Dictionary class
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		[0] : If True, the keys are compared case-sensitively. Default = False
 &apos;&apos;&apos;	Returns: the instance or Nothing
 
-Dim oDict As Variant
+Dim oDict As Variant			&apos;	Reurn value
+Dim bCaseSensitive As Boolean	&apos;	Keys comparison
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 Check:
+	If IsMissing(pvArgs) Then pvArgs = Array()
+	If Not IsArray(pvArgs) Then pvArgs = Array(pvArgs)
+	If UBound(pvArgs) &lt; 0 Then
+		bCaseSensitive = False
+	Else
+		If Not SF_Utils._Validate(pvArgs(0), &quot;CaseSensitive (Arg0)&quot;, V_BOOLEAN) Then GoTo Catch
+		bCaseSensitive = pvArgs(0)
+	End If
 
 Try:
 	Set oDict = New SF_Dictionary
 	Set oDict.[Me] = oDict
+	oDict.CaseSensitive = bCaseSensitive
 
 Finally:
 	Set _NewDictionary = oDict

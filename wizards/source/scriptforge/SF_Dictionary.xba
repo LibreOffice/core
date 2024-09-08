@@ -15,21 +15,23 @@ Option Explicit
 &apos;&apos;&apos;	=============
 &apos;&apos;&apos;		Class for management of dictionaries
 &apos;&apos;&apos;		A dictionary is a collection of key-item pairs
-&apos;&apos;&apos;			The key is a not case-sensitive string
+&apos;&apos;&apos;			The key is either a case-sensitive or a not case-sensitive string
 &apos;&apos;&apos;			Items may be of any type
 &apos;&apos;&apos;		Keys, items can be retrieved, counted, etc.
 &apos;&apos;&apos;
-&apos;&apos;&apos;		The implementation is based on
-&apos;&apos;&apos;			- one collection mapping keys and entries in the array
-&apos;&apos;&apos;			- one 1-column array: key + data
+&apos;&apos;&apos;		The implementation is based on 3 one-column arrays:
+&apos;&apos;&apos;		1) The keys - sorted
+&apos;&apos;&apos;		2) The positions in 3) - same sequence as 1)
+&apos;&apos;&apos;		3) The item contents - stacked up when defined - erased items are set to Empty
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Why a Dictionary class beside the builtin Collection class ?
 &apos;&apos;&apos;			A standard Basic collection does not support the retrieval of the keys
-&apos;&apos;&apos;			Additionally it may contain only simple data (strings, numbers, ...)
+&apos;&apos;&apos;			A standard Basic collection does not support the update/removal of entries
+&apos;&apos;&apos;			No easy conversion to/from json or PropertyValues
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Service instantiation example:
 &apos;&apos;&apos;			Dim myDict As Variant
-&apos;&apos;&apos;			myDict = CreateScriptService(&quot;Dictionary&quot;)		&apos;	Once per dictionary
+&apos;&apos;&apos;			myDict = CreateScriptService(&quot;Dictionary&quot;, True)		&apos;	Case-sensitive, default = False
 &apos;&apos;&apos;
 &apos;&apos;&apos;		Detailed user documentation:
 &apos;&apos;&apos;			https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_dictionary.html?DbPAR=BASIC
@@ -43,17 +45,13 @@ Const INVALIDKEYERROR			=	&quot;INVALIDKEYERROR&quot;		&apos;	Key contains only 
 
 REM ============================================================= PRIVATE MEMBERS
 
-&apos;	Defines an entry in the MapItems array
-Type ItemMap
-	Key						As String
-	Value					As Variant
-End Type
-
 Private [Me]				As Object
 Private [_Parent]			As Object
 Private ObjectType			As String		&apos; Must be &quot;DICTIONARY&quot;
 Private ServiceName			As String
-Private MapKeys				As Variant		&apos; To retain the original keys
+Private CaseSensitive		As Boolean		&apos; Determined at dictionary creation, default = False
+Private MapKeys				As Variant		&apos; Array of keys
+Private MapPositions		As Variant		&apos; Array of indexes in MapItems, sorted as MapKeys
 Private MapItems			As Variant		&apos; Array of ItemMaps
 Private _MapSize			As Long			&apos; Total number of entries in the dictionary
 Private _MapRemoved			As Long			&apos; Number of inactive entries in the dictionary
@@ -66,8 +64,10 @@ Private Sub Class_Initialize()
 	Set [_Parent] = Nothing
 	ObjectType = &quot;DICTIONARY&quot;
 	ServiceName = &quot;ScriptForge.Dictionary&quot;
-	Set MapKeys = New Collection
-	Set MapItems = Array()
+	CaseSensitive = False
+	MapKeys = Array()
+	MapPositions = Array()
+	MapItems = Array()
 	_MapSize = 0
 	_MapRemoved = 0
 End Sub		&apos;	ScriptForge.SF_Dictionary Constructor
@@ -157,7 +157,8 @@ Public Function Add(Optional ByVal Key As Variant _
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		myDict.Add(&quot;NewKey&quot;, NewValue)
 
-Dim oItemMap As ItemMap			&apos;	New entry in the MapItems array
+Dim vItemMap As Variant			&apos;	Output of SF_Array._FindItem
+Dim lIndex As Long				&apos;	Index in MapKeys and MapPositions
 Const cstThisSub = &quot;Dictionary.Add&quot;
 Const cstSubArgs = &quot;Key, Item&quot;
 
@@ -174,15 +175,16 @@ Check:
 		End If
 	End If
 	If Key = Space(Len(Key)) Then GoTo CatchInvalid
-	If Exists(Key) Then GoTo CatchDuplicate
 
 Try:
 	_MapSize = _MapSize + 1
-	MapKeys.Add(_MapSize, Key)
-	oItemMap.Key = Key
-	oItemMap.Value = Item
+	vItemMap = SF_Array._FindItem(MapKeys, Key, CaseSensitive, &quot;ASC&quot;)
+	If vItemMap(0) Then GoTo CatchDuplicate		&apos;	Key exists already
+	lIndex = vItemMap(1)
+	MapKeys = SF_Array.Insert(MapKeys, lIndex, Key)
+	MapPositions = SF_Array.Insert(MapPositions, lIndex, _MapSize)
 	ReDim Preserve MapItems(1 To _MapSize)
-	MapItems(_MapSize) = oItemMap
+	MapItems(_MapSize) = Item
 	Add = True
 
 Finally:
@@ -404,12 +406,7 @@ Check:
 	End If
 
 Try:
-	&apos;	Dirty but preferred to go through whole collection
-	On Local Error GoTo NotFound
-	vItem = MapKeys(Key)
-	NotFound:
-		Exists = ( Not ( Err = 5 ) And vItem &gt; 0 )
-		On Local Error GoTo 0
+	Exists = SF_Array.Contains(MapKeys, Key, CaseSensitive, SortOrder := &quot;ASC&quot;)
 
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
@@ -660,7 +657,8 @@ Public Function Remove(Optional ByVal Key As Variant) As Boolean
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		myDict.Remove(&quot;OldKey&quot;)
 
-Dim lIndex As Long				&apos;	To remove entry in the MapItems array
+Dim vItemMap As Variant			&apos;	Output of SF_Array._FindItem
+Dim lIndex As Long				&apos;	Index in MapKeys and MapPositions
 Const cstThisSub = &quot;Dictionary.Remove&quot;
 Const cstSubArgs = &quot;Key&quot;
 
@@ -671,12 +669,15 @@ Check:
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not SF_Utils._Validate(Key, &quot;Key&quot;, V_STRING) Then GoTo Catch
 	End If
-	If Not Exists(Key) Then GoTo CatchUnknown
-
 Try:
-	lIndex = MapKeys.Item(Key)
-	MapKeys.Remove(Key)
-	Erase MapItems(lIndex)	&apos;	Is now Empty
+	vItemMap = SF_Array._FindItem(MapKeys, Key, CaseSensitive, &quot;ASC&quot;)
+	If Not vItemMap(0) Then GoTo CatchUnknown
+	lIndex = vItemMap(1)
+	MapKeys(lIndex) = &quot;&quot;
+	MapKeys = SF_Array.TrimArray(MapKeys)
+	Erase MapItems(MapPositions(lIndex))
+	MapPositions(lIndex) = Null
+	MapPositions = SF_Array.TrimArray(MapPositions)
 	_MapRemoved = _MapRemoved + 1
 	Remove = True
 
@@ -712,7 +713,7 @@ Check:
 Try:
 	vKeys = Keys
 	For Each sColl In vKeys
-		MapKeys.Remove(sColl)
+		Remove(sColl)
 	Next sColl
 	Erase MapKeys
 	Erase MapItems
@@ -740,7 +741,7 @@ Public Function ReplaceItem(Optional ByVal Key As Variant _
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		myDict.ReplaceItem(&quot;Key&quot;, NewValue)
 
-Dim oItemMap As ItemMap			&apos;	Content to update in the MapItems array
+Dim vItemMap As Variant			&apos;	Output of SF_Array._FindItem
 Dim lIndex As Long				&apos;	Entry in the MapItems array
 Const cstThisSub = &quot;Dictionary.ReplaceItem&quot;
 Const cstSubArgs = &quot;Key, Value&quot;
@@ -757,13 +758,13 @@ Check:
 			If Not SF_Utils._Validate(Value, &quot;Value&quot;) Then GoTo Catch
 		End If
 	End If
-	If Not Exists(Key) Then GoTo CatchUnknown
 
 Try:
 	&apos;	Find entry in MapItems and update it with the new value
-	lIndex = MapKeys.Item(Key)
-	oItemMap = MapItems(lIndex)
-	oItemMap.Value = Value
+	vItemMap = SF_Array._FindItem(MapKeys, Key, CaseSensitive, &quot;ASC&quot;)
+	If Not vItemMap(0) Then GoTo CatchUnknown
+	lIndex = vItemMap(1)
+	MapItems(MapPositions(lIndex)) = Value
 	ReplaceItem = True
 
 Finally:
@@ -791,8 +792,6 @@ Public Function ReplaceKey(Optional ByVal Key As Variant _
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		myDict.ReplaceKey(&quot;OldKey&quot;, &quot;NewKey&quot;)
 
-Dim oItemMap As ItemMap			&apos;	Content to update in the MapItems array
-Dim lIndex As Long				&apos;	Entry in the MapItems array
 Const cstThisSub = &quot;Dictionary.ReplaceKey&quot;
 Const cstSubArgs = &quot;Key, Value&quot;
 
@@ -809,14 +808,9 @@ Check:
 	If Exists(Value) Then GoTo CatchDuplicate
 
 Try:
-	&apos;	Remove the Key entry and create a new one in MapKeys
-	With MapKeys
-		lIndex = .Item(Key)
-		.Remove(Key)
-		.Add(lIndex, Value)
-	End With
-	oItemMap = MapItems(lIndex)
-	oItemMap.Key = Value
+	&apos;	Remove the Key entry and create a new one
+	Add(Value, Item(Key))
+	Remove(Key)
 	ReplaceKey = True
 
 Finally:
@@ -880,8 +874,9 @@ Private Function _PropertyGet(Optional ByVal psProperty As String _
 &apos;&apos;&apos;		psProperty: the name of the property
 &apos;&apos;&apos;		pvKey: the key to retrieve, numeric or string
 
-Dim vItemMap As Variant			&apos;	Entry in the MapItems array
-Dim vArray As Variant			&apos;	To get Keys or Values
+Dim vItemMap As Variant			&apos;	Output of SF_Array._FindItem
+Dim lIndex As Long				&apos;	Entry in the MapItems array
+Dim vArray As Variant			&apos;	To get Keys or Items
 Dim i As Long
 Dim cstThisSub As String
 Dim cstSubArgs As String
@@ -898,18 +893,19 @@ Dim cstSubArgs As String
 			_PropertyGet = _MapSize - _MapRemoved
 		Case UCase(&quot;Item&quot;)
 			If Not SF_Utils._Validate(pvKey, &quot;Key&quot;, V_STRING) Then GoTo Catch
-			If Exists(pvKey) Then _PropertyGet = MapItems(MapKeys(pvKey)).Value Else _PropertyGet = Empty
+			vItemMap = SF_Array._FindItem(MapKeys, pvKey, CaseSensitive, &quot;ASC&quot;)
+			lIndex = vItemMap(1)
+			If vItemMap(0) Then _PropertyGet = MapItems(MapPositions(lIndex)) Else _PropertyGet = Empty
 		Case UCase(&quot;Keys&quot;), UCase(&quot;Items&quot;)
 			vArray = Array()
-			If _MapSize - _MapRemoved - 1 &gt;= 0 Then
-				ReDim vArray(0 To (_MapSize - _MapRemoved - 1))
-				i = -1
-				For each vItemMap In MapItems()
-					If Not IsEmpty(vItemMap) Then
-						i = i + 1
-						If UCase(psProperty) = &quot;KEYS&quot; Then vArray(i) = vItemMap.Key Else vArray(i) = vItemMap.Value
-					End If
-				Next vItemMap
+			If UBound(MapKeys) &gt;= 0 Then
+				ReDim vArray(0 To UBound(MapKeys))
+				For i = 0 To UBound(MapKeys)
+					Select Case UCase(psProperty)
+						Case &quot;KEYS&quot;		:	vArray(i) = MapKeys(i)
+						Case &quot;ITEMS&quot;	:	vArray(i) = MapItems(MapPositions(i))
+					End Select
+				Next i
 			End If
 			_PropertyGet = vArray
 	End Select

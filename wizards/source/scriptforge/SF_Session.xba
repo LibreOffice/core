@@ -355,8 +355,8 @@ Try:
 	Set oNodePath = SF_Utils._MakePropertyValue(&quot;nodepath&quot;, &quot;/org.openoffice.Office.Common/Filter/PDF/Export/&quot;)
 	Set oOptions = oConfig.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, Array(oNodePath))
 
-	&apos;	Copy the options into a ScriptForge dictionary
-	Set vDict = CreateScriptService(&quot;dictionary&quot;)
+	&apos;	Copy the options into a ScriptForge dictionary with case-sensitive comparison of keys
+	Set vDict = CreateScriptService(&quot;Dictionary&quot;, True)
 	vOptionNames = oOptions.getElementNames()
 	vOptionValues = oOptions.getPropertyValues(vOptionNames)
 	&apos;
