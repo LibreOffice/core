@@ -330,12 +330,12 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
 
     OOperand* pColumnOp = execute(pColumn);
     OOperand* pOb1 = execute(p1stValue);
-    OBoolOperator* pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::LESS_EQUAL : SQLFilterOperator::GREATER);
+    OBoolOperator* pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::LESS : SQLFilterOperator::GREATER_EQUAL);
     m_aCodeList.emplace_back(pOperator);
 
     execute(pColumn);
     OOperand* pOb2 = execute(p2ndtValue);
-    pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::GREATER_EQUAL : SQLFilterOperator::LESS);
+    pOperator = new OOp_COMPARE(bNot ? SQLFilterOperator::GREATER : SQLFilterOperator::LESS_EQUAL);
     m_aCodeList.emplace_back(pOperator);
 
     if ( pColumnOp && pOb1 && pOb2 )
