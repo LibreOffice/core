@@ -1114,6 +1114,7 @@ void SwAnnotationShell::NoteExec(SfxRequest const &rReq)
         case FN_DELETE_COMMENT_THREAD:
         case FN_RESOLVE_NOTE:
         case FN_RESOLVE_NOTE_THREAD:
+        case FN_PROMOTE_COMMENT:
             if ( pPostItMgr->HasActiveSidebarWin() )
                 pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
             break;
@@ -1237,6 +1238,15 @@ void SwAnnotationShell::GetNoteState(SfxItemSet &rSet)
                         sAuthor = SwResId( STR_REDLINE_UNKNOWN_AUTHOR );
                     if (sAuthor == pPostItMgr->GetActiveSidebarWin()->GetAuthor())
                         rSet.DisableItem(nWhich);
+                }
+                break;
+            }
+        case FN_PROMOTE_COMMENT:
+            {
+                if (!pPostItMgr || !pPostItMgr->HasActiveAnnotationWin()
+                    || pPostItMgr->GetActiveSidebarWin()->IsRootNote())
+                {
+                    rSet.DisableItem(nWhich);
                 }
                 break;
             }
