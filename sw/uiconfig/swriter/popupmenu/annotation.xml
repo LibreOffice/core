@@ -22,6 +22,7 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ResolveComment"/>
   <menu:menuitem menu:id=".uno:ResolveCommentThread"/>
+  <menu:menuitem menu:id=".uno:PromoteComment"/>
   <menu:menuitem menu:id=".uno:DeleteComment"/>
   <menu:menuitem menu:id=".uno:DeleteCommentThread"/>
   <menu:menuitem menu:id=".uno:DeleteAuthor"/>

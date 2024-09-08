@@ -3860,6 +3860,7 @@ static void doc_iniUnoCommands ()
         u".uno:ReplyComment"_ustr,
         u".uno:ResolveComment"_ustr,
         u".uno:ResolveCommentThread"_ustr,
+        u".uno:PromoteComment"_ustr,
         u".uno:InsertRowsBefore"_ustr,
         u".uno:InsertRowsAfter"_ustr,
         u".uno:InsertColumnsBefore"_ustr,

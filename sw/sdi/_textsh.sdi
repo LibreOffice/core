@@ -1110,6 +1110,11 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
+    FN_PROMOTE_COMMENT
+    [
+        ExecMethod = ExecField ;
+        StateMethod = StateField;
+    ]
     FN_REDLINE_COMMENT // status(play)
     [
         ExecMethod = ExecField ;

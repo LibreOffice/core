@@ -307,6 +307,24 @@ bool SwAnnotationWin::IsThreadResolved()
     }
 }
 
+bool SwAnnotationWin::IsRootNote() const
+{
+    return static_cast<SwPostItField*>(mpFormatField->GetField())->GetParentPostItId() == 0;
+}
+
+void SwAnnotationWin::SetAsRoot()
+{
+    if (!IsRootNote())
+    {
+        SwPostItField* pPostIt = static_cast<SwPostItField*>(mpFormatField->GetField());
+        pPostIt->SetParentId(0);
+        pPostIt->SetParentPostItId(0);
+        pPostIt->SetParentName("");
+        mrMgr.MoveSubthreadToRoot(this);
+        mpFormatField->Broadcast(SwFormatFieldHint(nullptr, SwFormatFieldHintWhich::CHANGED));
+    }
+}
+
 void SwAnnotationWin::UpdateData()
 {
     if ( mpOutliner->IsModified() || mbResolvedStateUpdated )

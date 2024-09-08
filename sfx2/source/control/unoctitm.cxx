@@ -1179,6 +1179,7 @@ constexpr auto handlers = frozen::make_unordered_map<std::u16string_view, Payloa
     { u"DeleteAnnotation", EnabledPayload },
     { u"ResolveAnnotation", EnabledPayload },
     { u"ResolveAnnotationThread", EnabledPayload },
+    { u"PromoteComment", EnabledPayload },
     { u"InsertRowsBefore", EnabledPayload },
     { u"InsertRowsAfter", EnabledPayload },
     { u"InsertColumnsBefore", EnabledPayload },

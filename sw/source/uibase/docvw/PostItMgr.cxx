@@ -1713,6 +1713,62 @@ void SwPostItMgr::Delete()
     LayoutPostIts();
 }
 
+void SwPostItMgr::PromoteToRoot(sal_uInt32 nPostItId)
+{
+    mpWrtShell->StartAllAction();
+
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SwResId(STR_CONTENT_TYPE_SINGLE_POSTIT));
+
+    // We have no undo ID at the moment.
+
+    IsPostitFieldWithPostitId aFilter(nPostItId);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    const SwFormatField* pField = aStack.pop();
+    // pField now contains our AnnotationWin object
+    if (pField)
+    {
+        SwAnnotationWin* pWin = GetSidebarWin(pField);
+        pWin->SetAsRoot();
+    }
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
+void SwPostItMgr::MoveSubthreadToRoot(const sw::annotation::SwAnnotationWin* pNewRoot)
+{
+    std::vector<std::unique_ptr<SwSidebarItem>>::iterator first, middle, last;
+    first = std::find_if(mvPostItFields.begin(), mvPostItFields.end(),
+                         [&pNewRoot](const std::unique_ptr<SwSidebarItem>& pField) {
+                             return pField->mpPostIt == pNewRoot;
+                         });
+    if (first == mvPostItFields.end())
+        return;
+    std::set<int> aPostItIds;
+    aPostItIds.insert(pNewRoot->GetPostItField()->GetPostItId());
+    middle = first + 1;
+    while (middle != mvPostItFields.end()
+           && aPostItIds.contains((*middle)->mpPostIt->GetPostItField()->GetParentPostItId()))
+    {
+        aPostItIds.insert((*middle)->mpPostIt->GetPostItField()->GetPostItId());
+        ++middle;
+    }
+    if (middle == mvPostItFields.end())
+        return;
+    last = middle;
+    while (last != mvPostItFields.end()
+           && (*last)->mpPostIt->GetPostItField()->GetParentPostItId() != 0)
+        ++last;
+    if (last == middle)
+        return;
+    std::rotate(first, middle, last);
+    CalcRects();
+    LayoutPostIts();
+}
+
 void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
 {
     if (mvPostItFields.empty())

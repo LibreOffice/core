@@ -1072,10 +1072,10 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             {
                 // Get newly created SwPostItField and set its paraIdParent
                 auto pPostItField = mrMgr.GetLatestPostItField();
-                pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
-                pPostItField->SetParentPostItId(GetTopReplyNote()->GetPostItField()->GetPostItId());
+                pPostItField->SetParentId(GetParaId());
+                pPostItField->SetParentPostItId(GetPostItField()->GetPostItId());
                 this->GeneratePostItName();
-                pPostItField->SetParentName(GetTopReplyNote()->GetPostItField()->GetName());
+                pPostItField->SetParentName(GetPostItField()->GetName());
 
                 // In this case, force generating the associated window
                 // synchronously so we can bundle its use of the registered
@@ -1125,6 +1125,12 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             aItems[1] = nullptr;
             mrView.GetViewFrame().GetBindings().Execute( nSlot, aItems, SfxCallMode::ASYNCHRON );
         }
+            break;
+        case FN_PROMOTE_COMMENT:
+            SetAsRoot();
+            DoResize();
+            Invalidate();
+            mrMgr.LayoutPostIts();
             break;
         default:
             mrView.GetViewFrame().GetBindings().Execute( nSlot );
