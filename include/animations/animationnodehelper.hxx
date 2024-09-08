@@ -19,7 +19,9 @@
 
 #pragma once
 
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -69,6 +71,41 @@ namespace anim
         catch( css::uno::Exception& )
         {
         }
+    }
+
+    inline bool getVisibilityProperty(
+        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode)
+    {
+        bool bVisible( false );
+        if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
+        {
+
+            css::uno::Any aAny( xAnimateNode->getTo() );
+
+            // try to extract bool value
+            if( !(aAny >>= bVisible) )
+            {
+                // try to extract string
+                OUString aString;
+                if( aAny >>= aString )
+                {
+                    // we also take the strings "true" and "false",
+                    // as well as "on" and "off" here
+                    if( aString.equalsIgnoreAsciiCase("true") ||
+                        aString.equalsIgnoreAsciiCase("on") )
+                    {
+                        bVisible = true;
+                    }
+                    if( aString.equalsIgnoreAsciiCase("false") ||
+                        aString.equalsIgnoreAsciiCase("off") )
+                    {
+                        bVisible = false;
+                    }
+                }
+            }
+        }
+
+        return bVisible;
     }
 }
 

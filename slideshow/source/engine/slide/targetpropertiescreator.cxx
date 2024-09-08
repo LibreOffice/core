@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <animations/animationnodehelper.hxx>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -257,34 +258,7 @@ namespace slideshow::internal
                         // initially. This is currently the only place
                         // where a shape effect influences shape
                         // attributes outside it's effective duration.
-                        bool bVisible( false );
-                        if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
-                        {
-
-                            uno::Any aAny( xAnimateNode->getTo() );
-
-                            // try to extract bool value
-                            if( !(aAny >>= bVisible) )
-                            {
-                                // try to extract string
-                                OUString aString;
-                                if( aAny >>= aString )
-                                {
-                                    // we also take the strings "true" and "false",
-                                    // as well as "on" and "off" here
-                                    if( aString.equalsIgnoreAsciiCase("true") ||
-                                        aString.equalsIgnoreAsciiCase("on") )
-                                    {
-                                        bVisible = true;
-                                    }
-                                    if( aString.equalsIgnoreAsciiCase("false") ||
-                                        aString.equalsIgnoreAsciiCase("off") )
-                                    {
-                                        bVisible = false;
-                                    }
-                                }
-                            }
-                        }
+                        bool bVisible = anim::getVisibilityProperty(xAnimateNode);
 
                         // if initial anim sets shape visible, set it
                         // to invisible. If we're asked for the final

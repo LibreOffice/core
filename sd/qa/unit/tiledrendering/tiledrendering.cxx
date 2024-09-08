@@ -2960,6 +2960,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
         CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
@@ -2976,6 +2977,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
@@ -3008,6 +3010,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": false") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
