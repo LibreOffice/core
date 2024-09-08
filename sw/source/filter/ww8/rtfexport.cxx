@@ -1343,12 +1343,10 @@ void RtfExport::OutColorTable()
 
         auto pOver = GetDfltAttr(RES_CHRATR_OVERLINE);
         InsColor(pOver->GetColor());
-        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_OVERLINE);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pOver = &static_cast<const SvxOverlineItem&>(*pItem);
-            InsColor(pOver->GetColor());
-        }
+        m_rDoc.ForEachOverlineItem([this](const SvxOverlineItem& rOver) -> bool {
+            InsColor(rOver.GetColor());
+            return true;
+        });
     }
 
     // background color

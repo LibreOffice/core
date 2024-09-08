@@ -304,6 +304,7 @@ public:
     SwCellStyleDescriptor(const std::pair<OUString, std::unique_ptr<SwBoxAutoFormat>>& rCellStyleDesc) : m_rCellStyleDesc(rCellStyleDesc) { }
 
     const OUString&  GetName() const   { return m_rCellStyleDesc.first; }
+    const SwBoxAutoFormat& GetAutoFormat() const   { return *m_rCellStyleDesc.second; }
 };
 
 class SwCellStyleTable

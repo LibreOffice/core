@@ -1434,6 +1434,9 @@ public:
     /// Iterate over all SwFormatURL, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachFormatURL( const std::function<bool(const SwFormatURL&)>&  ) const;
 
+    /// Iterate over all SvxOverlineItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 

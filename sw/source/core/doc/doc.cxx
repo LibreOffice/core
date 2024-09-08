@@ -51,6 +51,7 @@
 #include <editeng/keepitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/pbinitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <officecfg/Office/Writer.hxx>
@@ -113,6 +114,7 @@
 #include <unoprnms.hxx>
 #include <unomap.hxx>
 #include <fmturl.hxx>
+#include <tblafmt.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1222,6 +1224,60 @@ static bool lcl_CheckSmartTagsAgain( SwNode* pNd, void*  )
         pTextNode->ClearSmartTags();
     }
     return true;
+}
+
+/// Iterate over all SvxOverlineItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        const SwAttrSet& rAttrSet = pTextNode->GetSwAttrSet();
+        if (const SvxOverlineItem* pItem = rAttrSet.GetItemIfSet(RES_CHRATR_OVERLINE, false))
+            if (!rFunc(*pItem))
+                return;
+        if (pTextNode->HasHints())
+        {
+            SwpHints& rHints = pTextNode->GetSwpHints();
+            for (size_t j = 0; j < rHints.Count(); ++j)
+            {
+                const SwTextAttr* pTextAttr = rHints.Get(j);
+                if (pTextAttr->Which() != RES_TXTATR_AUTOFMT)
+                    continue;
+                const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
+                const std::shared_ptr<SfxItemSet> & rxItemSet = rAutoFormat.GetStyleHandle();
+                if (const SvxOverlineItem* pItem = rxItemSet->GetItemIfSet(RES_CHRATR_OVERLINE, false))
+                    if (!rFunc(*pItem))
+                        return;
+            }
+        }
+    }
+    const auto& aTableTemplateMap = SwTableAutoFormat::GetTableTemplateMap();
+    const SwTableAutoFormatTable& rTableStyles = GetTableStyles();
+    for (size_t i=0; i < rTableStyles.size(); ++i)
+    {
+        const SwTableAutoFormat& rTableStyle = rTableStyles[i];
+        for (const sal_uInt32 nBoxIndex : aTableTemplateMap)
+        {
+            const SwBoxAutoFormat& rBoxFormat = rTableStyle.GetBoxFormat(nBoxIndex);
+            const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
+            if (!rFunc(rOverlineItem))
+                return;
+        }
+    }
+    const SwCellStyleTable& rCellStyleTable = GetCellStyles();
+    for (size_t i=0; i < rCellStyleTable.size(); ++i)
+    {
+        const SwCellStyleDescriptor& rCellStyle = rCellStyleTable[i];
+        const SwBoxAutoFormat& rBoxFormat = rCellStyle.GetAutoFormat();
+        const SvxOverlineItem rOverlineItem = rBoxFormat.GetOverline();
+        if (!rFunc(rOverlineItem))
+            return;
+    }
 }
 
 /**
