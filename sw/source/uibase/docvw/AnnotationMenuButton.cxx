@@ -55,6 +55,8 @@ IMPL_LINK(SwAnnotationWin, SelectHdl, const OUString&, rIdent, void)
         ExecuteCommand(FN_DELETE_ALL_NOTES);
     else if (rIdent == "formatall")
         ExecuteCommand(FN_FORMAT_ALL_NOTES);
+    else if (rIdent == "promote")
+        ExecuteCommand(FN_PROMOTE_COMMENT);
 
     if (bSwitchedFocus)
         UnsetActiveSidebarWin();
@@ -76,6 +78,7 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
         mxMenuButton->set_item_visible(u"resolvethread"_ustr, false);
         mxMenuButton->set_item_visible(u"unresolvethread"_ustr, false);
         mxMenuButton->set_item_visible(u"delete"_ustr, false );
+        mxMenuButton->set_item_visible(u"promote"_ustr, false);
     }
     else
     {
@@ -86,6 +89,7 @@ IMPL_LINK_NOARG(SwAnnotationWin, ToggleHdl, weld::Toggleable&, void)
         mxMenuButton->set_item_visible(u"resolvethread"_ustr, !IsThreadResolved());
         mxMenuButton->set_item_visible(u"unresolvethread"_ustr, IsThreadResolved());
         mxMenuButton->set_item_visible(u"delete"_ustr, !IsReadOnlyOrProtected());
+        mxMenuButton->set_item_visible(u"promote"_ustr, !IsReadOnlyOrProtected() && !IsRootNote());
     }
 
     mxMenuButton->set_item_visible(u"deletethread"_ustr, !bReadOnly);

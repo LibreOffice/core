@@ -518,18 +518,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                             sText = pTextItem->GetValue();
                         pMgr->RegisterAnswerText(sText);
                         pWin->ExecuteCommand(nSlot);
-
-                        SwPostItField* pLatestPostItField = pMgr->GetLatestPostItField();
-                        if (pLatestPostItField)
-                        {
-                            // Set the parent postit id of the reply.
-                            pLatestPostItField->SetParentPostItId(pIdItem->GetValue().toUInt32());
-
-                            // If name of the replied comment is empty, we need to set a name in order to connect them in the xml file.
-                            pWin->GeneratePostItName(); // Generates a name if the current name is empty.
-
-                            pLatestPostItField->SetParentName(pWin->GetPostItField()->GetName());
-                        }
                     }
                 }
             }
@@ -561,6 +549,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
         }
         break;
+        case FN_PROMOTE_COMMENT:
+        {
+            const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+            if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
+            {
+                GetView().GetPostItMgr()->PromoteToRoot(pIdItem->GetValue().toUInt32());
+            }
+            break;
+        }
         case FN_REDLINE_COMMENT:
         {
             const SwRangeRedline *pRedline = rSh.GetCurrRedline();

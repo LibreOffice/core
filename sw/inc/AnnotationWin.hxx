@@ -208,6 +208,9 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         virtual FactoryFunction GetUITestFactory() const override;
 
+        bool IsRootNote() const;
+        void SetAsRoot();
+
     private:
 
         virtual void    LoseFocus() override;

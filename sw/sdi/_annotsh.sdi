@@ -78,6 +78,12 @@ interface _Annotation
         StateMethod = GetNoteState ;
     ]
 
+    FN_PROMOTE_COMMENT
+    [
+        ExecMethod = NoteExec ;
+        StateMethod = GetNoteState ;
+    ]
+
     FN_POSTIT
         [
                 ExecMethod = NoteExec ;
