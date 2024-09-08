@@ -1437,6 +1437,9 @@ public:
     /// Iterate over all SvxOverlineItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&)>&  ) const;
 
+    /// Iterate over all SwFormatField, if the function returns false, iteration is stopped
+    void ForEachFormatField( TypedWhichId<SwFormatField> nWhich, const std::function<bool(const SwFormatField&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 

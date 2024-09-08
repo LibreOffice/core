@@ -171,32 +171,30 @@ static SwTextField* lcl_FindInputField( SwDoc* pDoc, const SwField& rField )
             && (static_cast<SwSetExpFieldType*>(rField.GetTyp())->GetType()
                 & nsSwGetSetExpType::GSE_STRING)))
     {
-        ItemSurrogates aSurrogates;
-        pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INPUTFIELD);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            const auto & rFormatField = static_cast<const SwFormatField&>(*pItem);
-            if( rFormatField.GetField() == &rField )
+        pDoc->ForEachFormatField(RES_TXTATR_INPUTFIELD,
+            [&rField, &pTField] (const SwFormatField& rFormatField) -> bool
             {
-                pTField = const_cast<SwFormatField&>(rFormatField).GetTextField();
-                break;
-            }
-        }
+                if( rFormatField.GetField() == &rField )
+                {
+                    pTField = const_cast<SwFormatField&>(rFormatField).GetTextField();
+                    return false;
+                }
+                return true;
+            });
     }
     else if( SwFieldIds::SetExp == rField.Which()
         && static_cast<const SwSetExpField&>(rField).GetInputFlag() )
     {
-        ItemSurrogates aSurrogates;
-        pDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_FIELD);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            const auto & rFormatField = static_cast<const SwFormatField&>(*pItem);
-            if( rFormatField.GetField() == &rField )
+        pDoc->ForEachFormatField(RES_TXTATR_FIELD,
+            [&rField, &pTField] (const SwFormatField& rFormatField) -> bool
             {
-                pTField = const_cast<SwFormatField&>(rFormatField).GetTextField();
-                break;
-            }
-        }
+                if( rFormatField.GetField() == &rField )
+                {
+                    pTField = const_cast<SwFormatField&>(rFormatField).GetTextField();
+                    return false;
+                }
+                return true;
+            });
     }
     return pTField;
 }

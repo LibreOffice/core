@@ -1280,6 +1280,31 @@ void SwDoc::ForEachOverlineItem( const std::function<bool(const SvxOverlineItem&
     }
 }
 
+/// Iterate over all SwFormatField, if the function returns false, iteration is stopped
+void SwDoc::ForEachFormatField( TypedWhichId<SwFormatField> nWhich, const std::function<bool(const SwFormatField&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode->HasHints())
+            continue;
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t j = 0; j < rHints.Count(); ++j)
+        {
+            const SwTextAttr* pTextAttr = rHints.Get(j);
+            if (pTextAttr->Which() != nWhich)
+                continue;
+            const SwFormatField& rFormatField = pTextAttr->GetFormatField();
+            if (!rFunc(rFormatField))
+                return;
+        }
+    }
+}
+
 /**
  * Re-trigger spelling in the idle handler.
  *

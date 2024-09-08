@@ -599,30 +599,24 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 /// Check if the DocNodesArray contains fields.
 bool SwViewShell::IsAnyFieldInDoc() const
 {
-    ItemSurrogates aSurrogates;
-    mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_FIELD);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const auto & rFormatField = static_cast<const SwFormatField&>(*pItem);
-        const SwTextField* pTextField = rFormatField.GetTextField();
-        if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
+    bool bFound = false;
+    mxDoc->ForEachFormatField(RES_TXTATR_FIELD,
+        [&bFound] (const SwFormatField& /*rFormatField*/) -> bool
         {
-            return true;
-        }
-    }
+            bFound = true;
+            return false;
+        });
+    if (bFound)
+        return true;
 
-    mxDoc->GetAttrPool().GetItemSurrogates(aSurrogates, RES_TXTATR_INPUTFIELD);
-    for (const SfxPoolItem* pItem : aSurrogates)
-    {
-        const SwFormatField& rFormatField = static_cast<const SwFormatField&>(*pItem);
-        const SwTextField* pTextField = rFormatField.GetTextField();
-        if( pTextField && pTextField->GetTextNode().GetNodes().IsDocNodes() )
+    mxDoc->ForEachFormatField(RES_TXTATR_INPUTFIELD,
+        [&bFound] (const SwFormatField& /*rFormatField*/) -> bool
         {
-            return true;
-        }
-    }
+            bFound = true;
+            return false;
+        });
 
-    return false;
+    return bFound;
 }
 
 ///  Saves some settings at the draw view
