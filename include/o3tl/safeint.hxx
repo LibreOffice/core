@@ -70,6 +70,8 @@ typename std::enable_if<std::is_signed<T>::value, T>::type saturating_toggle_sig
     return a * -1;
 }
 
+// TODO: reimplement using ckd_add/ckd_sub/ckd_mul from <stdckdint.h>, when C23 is part of C++
+
 #if defined(_MSC_VER)
 
 template<typename T> inline bool checked_multiply(T a, T b, T& result)
