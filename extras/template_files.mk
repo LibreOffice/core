@@ -84,9 +84,7 @@ extra_files_PRESENTATIONS := \
     presnt/Growing_Liberty/Pictures/10000201000001F10000029333ED1BC48076B5C4.png  \
     presnt/Growing_Liberty/Pictures/10000201000001F3000003548E51808DE171DA02.png  \
     presnt/Growing_Liberty/Pictures/10000C1C0000034200004A6A2C92F38BC117DD3C.svg  \
-    presnt/Growing_Liberty/Pictures/10000C340000844B000003422549B923A55839CC.svg  \
     presnt/Growing_Liberty/Pictures/10000C8F0000034200004A6ABD021DA9BD39254C.svg  \
-    presnt/Growing_Liberty/Pictures/10000CA90000844B000003426738F0E80CCFF9F3.svg  \
     presnt/Growing_Liberty/Thumbnails/thumbnail.png \
     presnt/Inspiration/Thumbnails/thumbnail.png \
     presnt/Lights/Thumbnails/thumbnail.png \

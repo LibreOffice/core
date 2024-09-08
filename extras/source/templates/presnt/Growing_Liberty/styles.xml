@@ -76,7 +76,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Noto Sans" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-name-complex="Noto Sans Devanagari" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="18pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="18pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="objectwithoutfill" style:family="graphic" style:parent-style-name="standard"/>
     <style:style style:name="Object_20_with_20_no_20_fill_20_and_20_no_20_line" style:display-name="Object with no fill and no line" style:family="graphic" style:parent-style-name="standard">
@@ -2471,36 +2471,28 @@
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:header/>
-            </text:span>
+            <presentation:header/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr1" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame draw:style-name="Mgr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -2525,36 +2517,28 @@
         <draw:frame presentation:style-name="Title_20_Slide-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Title_20_Slide-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr22" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr22" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2574,27 +2558,21 @@
       <draw:frame presentation:style-name="Right_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="1.4cm" svg:y="14.8cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Right_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.6cm" svg:x="9.5cm" svg:y="14.8cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Right_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="20.08cm" svg:y="14.8cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -2606,36 +2584,28 @@
         <draw:frame presentation:style-name="Right_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Right_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr2" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2655,27 +2625,21 @@
       <draw:frame presentation:style-name="Left_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="1.4cm" svg:y="14.8cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Left_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.6cm" svg:x="9.5cm" svg:y="14.8cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Left_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="20.08cm" svg:y="14.8cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -2687,36 +2651,28 @@
         <draw:frame presentation:style-name="Left_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Left_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr4" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2724,8 +2680,8 @@
     </style:master-page>
     <style:master-page style:name="Bottom_20_Bar_20_White" style:display-name="Bottom Bar White" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="28cm" svg:height="0.7cm" svg:x="0cm" svg:y="15.05cm">
-        <draw:image xlink:href="Pictures/10000CA90000844B000003426738F0E80CCFF9F3.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml"/>
+      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="0.7cm" svg:height="28cm" draw:transform="rotate (-1.5707963267949) translate (28cm 15.05cm)">
+        <draw:image xlink:href="Pictures/10000C8F0000034200004A6ABD021DA9BD39254C.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml"/>
       </draw:frame>
       <draw:frame presentation:style-name="Bottom_20_Bar_20_White-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.5cm" svg:x="1.4cm" svg:y="1cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -2736,27 +2692,21 @@
       <draw:frame presentation:style-name="Bottom_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="1.4cm" svg:y="14.8cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Bottom_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.6cm" svg:x="9.5cm" svg:y="14.8cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Bottom_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="20.08cm" svg:y="14.8cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -2768,36 +2718,28 @@
         <draw:frame presentation:style-name="Bottom_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Bottom_20_Bar_20_White-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr6" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2805,8 +2747,8 @@
     </style:master-page>
     <style:master-page style:name="Bottom_20_Bar_20_Blue" style:display-name="Bottom Bar Blue" style:page-layout-name="PM1" draw:style-name="Mdp2">
       <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="28cm" svg:height="0.7cm" svg:x="0cm" svg:y="15.05cm">
-        <draw:image xlink:href="Pictures/10000C340000844B000003422549B923A55839CC.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml"/>
+      <draw:frame draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="0.7cm" svg:height="28cm" draw:transform="rotate (-1.5707963267949) translate (28cm 15.05cm)">
+        <draw:image xlink:href="Pictures/10000C1C0000034200004A6A2C92F38BC117DD3C.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="image/svg+xml"/>
       </draw:frame>
       <draw:frame presentation:style-name="Bottom_20_Bar_20_Blue-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.5cm" svg:x="1.4cm" svg:y="1cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -2849,36 +2791,28 @@
         <draw:frame presentation:style-name="Bottom_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Bottom_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr8" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2901,27 +2835,21 @@
       <draw:frame presentation:style-name="Leaf_20_White_20_1-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="1.4cm" svg:y="14.8cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Leaf_20_White_20_1-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.6cm" svg:x="9.5cm" svg:y="14.8cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Leaf_20_White_20_1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="20.08cm" svg:y="14.8cm" presentation:class="page-number">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <text:page-number/>
-            </text:span>
+            <text:page-number/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -2933,36 +2861,28 @@
         <draw:frame presentation:style-name="Leaf_20_White_20_1-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Leaf_20_White_20_1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr10" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr10" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -2987,18 +2907,14 @@
       <draw:frame presentation:style-name="Leaf_20_White_20_2-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="6.52cm" svg:height="0.6cm" svg:x="1.4cm" svg:y="14.8cm" presentation:class="date-time">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:date-time/>
-            </text:span>
+            <presentation:date-time/>
           </text:p>
         </draw:text-box>
       </draw:frame>
       <draw:frame presentation:style-name="Leaf_20_White_20_2-backgroundobjects" draw:text-style-name="MP5" draw:layer="backgroundobjects" svg:width="9cm" svg:height="0.6cm" svg:x="9.5cm" svg:y="14.8cm" presentation:class="footer">
         <draw:text-box>
           <text:p>
-            <text:span>
-              <presentation:footer/>
-            </text:span>
+            <presentation:footer/>
           </text:p>
         </draw:text-box>
       </draw:frame>
@@ -3019,36 +2935,28 @@
         <draw:frame presentation:style-name="Leaf_20_White_20_2-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Leaf_20_White_20_2-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr12" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr12" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -3100,36 +3008,28 @@
         <draw:frame presentation:style-name="Right_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Right_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr14" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr14" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -3181,36 +3081,28 @@
         <draw:frame presentation:style-name="Left_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Left_20_Bar_20_Blue-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr16" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -3265,36 +3157,28 @@
         <draw:frame presentation:style-name="Leaf_20_Blue_20_1-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Leaf_20_Blue_20_1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr18" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr18" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -3349,36 +3233,28 @@
         <draw:frame presentation:style-name="Leaf_20_Blue_20_1-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Leaf_20_Blue_20_1-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr20" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr20" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
@@ -3428,36 +3304,28 @@
         <draw:frame presentation:style-name="End_20_Slide-backgroundobjects" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="0cm" presentation:class="header">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:header/>
-              </text:span>
+              <presentation:header/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="End_20_Slide-backgroundobjects" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="0cm" presentation:class="date-time">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:date-time/>
-              </text:span>
+              <presentation:date-time/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr24" draw:text-style-name="MP2" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="0cm" svg:y="28.215cm" presentation:class="footer">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <presentation:footer/>
-              </text:span>
+              <presentation:footer/>
             </text:p>
           </draw:text-box>
         </draw:frame>
         <draw:frame presentation:style-name="Mpr24" draw:text-style-name="MP4" draw:layer="backgroundobjects" svg:width="9.113cm" svg:height="1.484cm" svg:x="11.886cm" svg:y="28.215cm" presentation:class="page-number">
           <draw:text-box>
             <text:p>
-              <text:span>
-                <text:page-number/>
-              </text:span>
+              <text:page-number/>
             </text:p>
           </draw:text-box>
         </draw:frame>
