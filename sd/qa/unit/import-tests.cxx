@@ -1653,6 +1653,28 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTableBorderLineStyle)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTableMergedCellsBorderLineStyle)
+{
+    createSdImpressDoc("pptx/tdf149865.pptx");
+
+    const SdrPage* pPage = GetPage(1);
+
+    sdr::table::SdrTableObj* pTableObj;
+    uno::Reference<table::XCellRange> xTable;
+    uno::Reference<beans::XPropertySet> xCell;
+    table::BorderLine2 aBorderLine;
+
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    xCell.set(xTable->getCellByPosition(4, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue(u"RightBorder"_ustr) >>= aBorderLine;
+    table::BorderLine2 expectedRight(0x30ba78, 0, 17, 0, 0, 17);
+    CPPUNIT_ASSERT_EQUAL(expectedRight.LineStyle, aBorderLine.LineStyle);
+    CPPUNIT_ASSERT_EQUAL(expectedRight.Color, aBorderLine.Color);
+    CPPUNIT_ASSERT_EQUAL(expectedRight.LineWidth, aBorderLine.LineWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testBnc862510_6)
 {
     // Black text was imported instead of gray
