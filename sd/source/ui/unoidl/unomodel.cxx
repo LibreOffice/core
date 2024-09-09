@@ -4212,6 +4212,98 @@ void SdXImpressDocument::initializeDocument()
     }
 }
 
+static
+void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools::JsonWriter& rJsonWriter)
+{
+    bool bIsShapeVisible = true;
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    if (!xShapeProps)
+        return;
+    xShapeProps->getPropertyValue("Visible") >>= bIsShapeVisible;
+    if (!bIsShapeVisible)
+        return;
+
+    presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+    xShapeProps->getPropertyValue(u"OnClick"_ustr) >>= eClickAction;
+
+    if (eClickAction != presentation::ClickAction_NONE)
+    {
+        ::tools::ScopedJsonWriterStruct aShape = rJsonWriter.startStruct();
+
+        sal_Int32 nVerb = 0;
+        OUString sBookmark;
+
+        xShapeProps->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
+        {
+            auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+            auto const& rRectangle = pObject->GetLogicRect();
+            auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+            ::tools::ScopedJsonWriterNode aRect = rJsonWriter.startNode("bounds");
+            rJsonWriter.put("x", aRectangle.Left());
+            rJsonWriter.put("y", aRectangle.Top());
+            rJsonWriter.put("width", aRectangle.GetWidth());
+            rJsonWriter.put("height", aRectangle.GetHeight());
+        }
+
+        {
+            ::tools::ScopedJsonWriterNode aInteraction = rJsonWriter.startNode("clickAction");
+            switch (eClickAction)
+            {
+            case presentation::ClickAction_BOOKMARK:
+                rJsonWriter.put("action", "bookmark");
+                rJsonWriter.put("bookmark", sBookmark);
+                break;
+            case presentation::ClickAction_DOCUMENT:
+                rJsonWriter.put("action", "document");
+                rJsonWriter.put("document", sBookmark);
+                break;
+
+            case presentation::ClickAction_PREVPAGE:
+                rJsonWriter.put("action", "prevpage");
+                break;
+            case presentation::ClickAction_NEXTPAGE:
+                rJsonWriter.put("action", "nextpage");
+                break;
+
+            case presentation::ClickAction_FIRSTPAGE:
+                rJsonWriter.put("action", "firstpage");
+                break;
+            case presentation::ClickAction_LASTPAGE:
+                rJsonWriter.put("action", "lastpage");
+                break;
+
+            case presentation::ClickAction_SOUND:
+                rJsonWriter.put("action", "sound");
+                rJsonWriter.put("sound", sBookmark);
+                break;
+
+            case presentation::ClickAction_VERB:
+                rJsonWriter.put("action", "verb");
+                xShapeProps->getPropertyValue(u"Verb"_ustr) >>= nVerb;
+                rJsonWriter.put("verb", nVerb);
+                break;
+
+            case presentation::ClickAction_PROGRAM:
+                rJsonWriter.put("action", "program");
+                rJsonWriter.put("program", sBookmark);
+                break;
+
+            case presentation::ClickAction_MACRO:
+                rJsonWriter.put("action", "macro");
+                rJsonWriter.put("macro", sBookmark);
+                break;
+
+            case presentation::ClickAction_STOPPRESENTATION:
+                rJsonWriter.put("action", "stoppresentation");
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+}
+
 OString SdXImpressDocument::getPresentationInfo() const
 {
     ::tools::JsonWriter aJsonWriter;
@@ -4316,6 +4408,24 @@ OString SdXImpressDocument::getPresentationInfo() const
                                         aJsonWriter.put("width", aRectangle.GetWidth());
                                         aJsonWriter.put("height", aRectangle.GetHeight());
                                     }
+                                }
+                            }
+
+                            uno::Reference<drawing::XShapes> const xShapes(xSlide, uno::UNO_QUERY_THROW);
+                            if (xShapes.is())
+                            {
+                                ::tools::ScopedJsonWriterArray aVideoList = aJsonWriter.startArray("interactions");
+                                auto count = xShapes->getCount();
+                                for (auto j = 0; j < count; j++)
+                                {
+                                    auto xObject = xShapes->getByIndex(j);
+                                    uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+                                    if (!xShape.is())
+                                    {
+                                        continue;
+                                    }
+
+                                    getShapeClickAction(xShape, aJsonWriter);
                                 }
                             }
 
