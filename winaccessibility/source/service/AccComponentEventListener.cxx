@@ -114,6 +114,7 @@ void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
     m_rObjManager.SetValue(m_xAccessible.get(), newValue);
     m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
+    m_rObjManager.NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_TEXTCHANGE);
 }
 
 /**
