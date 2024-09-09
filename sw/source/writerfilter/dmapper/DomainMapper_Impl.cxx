@@ -5167,20 +5167,23 @@ void DomainMapper_Impl::SetLineSpacing(const Id nName, sal_Int32 nIntValue, bool
         if (sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_doc_ST_LineSpacingRule_auto)
         {
             appendGrabBag(m_aSubInteropGrabBag, u"lineRule"_ustr, u"auto"_ustr);
-            if (aSpacing.Height >= 0)
+            if (aSpacing.Mode != style::LineSpacingMode::PROP)
             {
-                aSpacing.Mode = style::LineSpacingMode::PROP;
-                // reinterpret the already set value
-                aSpacing.Height = sal_Int16(
-                    round(aSpacing.Height * 100.0
-                          / ConversionHelper::convertTwipToMm100_Limited(nSingleLineSpacing)));
-            }
-            else
-            {
-                // Negative value still means a positive height,
-                // just the mode is "exact".
-                aSpacing.Mode = style::LineSpacingMode::FIX;
-                aSpacing.Height *= -1;
+                if (aSpacing.Height >= 0)
+                {
+                    aSpacing.Mode = style::LineSpacingMode::PROP;
+                    // reinterpret the already set value
+                    aSpacing.Height = sal_Int16(
+                        round(aSpacing.Height * 100.0
+                            / ConversionHelper::convertTwipToMm100_Limited(nSingleLineSpacing)));
+                }
+                else
+                {
+                    // Negative value still means a positive height,
+                    // just the mode is "exact".
+                    aSpacing.Mode = style::LineSpacingMode::FIX;
+                    aSpacing.Height *= -1;
+                }
             }
         }
         else if (sal::static_int_cast<Id>(nIntValue)
