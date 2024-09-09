@@ -396,14 +396,20 @@ private:
 class SVT_DLLPUBLIC FontStyleBox
 {
     std::unique_ptr<weld::ComboBox> m_xComboBox;
+    OUString m_aLastStyle;
+    Link<weld::ComboBox&, void> m_aChangedLink;
 public:
     FontStyleBox(std::unique_ptr<weld::ComboBox> p);
 
     void Fill(std::u16string_view rName, const FontList* pList);
 
-    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
+    void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_aChangedLink = rLink; }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }
-    void set_active_text(const OUString& rText) { m_xComboBox->set_active_text(rText); }
+    void set_active_text(const OUString& rText)
+    {
+        m_aLastStyle = rText;
+        m_xComboBox->set_active_text(rText);
+    }
     void set_size_request(int nWidth, int nHeight) {  m_xComboBox->set_size_request(nWidth, nHeight); }
 
     void append_text(const OUString& rStr) { m_xComboBox->append_text(rStr); }
@@ -415,6 +421,8 @@ public:
 private:
     FontStyleBox(const FontStyleBox& ) = delete;
     FontStyleBox& operator=(const FontStyleBox&) = delete;
+
+    DECL_LINK(ChangeHdl, weld::ComboBox&, void);
 };
 
 class SVT_DLLPUBLIC FontSizeBox
