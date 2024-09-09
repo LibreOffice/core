@@ -239,7 +239,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                     for (const auto& rTextBoxElement : pTextBoxNode->GetAllTextBoxes())
                         vSavedTextBoxes.emplace(rTextBoxElement);
 
-            pFormat = pContact->GetFormat();
+            pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
             // Deletes itself!
             pContact->Changed(*pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
             pObj->SetUserCall( nullptr );
@@ -478,7 +478,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             {
                 if (SwDrawContact* pC = static_cast<SwDrawContact*>(GetUserCall(pObj)))
                 {
-                    SwDrawFrameFormat* pFrameFormat = pC->GetFormat();
+                    SwDrawFrameFormat* pFrameFormat = static_cast<SwDrawFrameFormat*>(pC->GetFormat());
                     if (pFrameFormat
                         && RndStdIds::FLY_AS_CHAR == pFrameFormat->GetAnchor().GetAnchorId())
                     {
@@ -508,7 +508,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
                     if( pContact ) // of course not for grouped objects
                     {
-                        SwDrawFrameFormat *pFormat = pContact->GetFormat();
+                        SwDrawFrameFormat *pFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
                         // before delete of selection is performed, marked
                         // <SwDrawVirtObj>-objects have to be replaced by its
                         // reference objects.  Thus, assert, if a

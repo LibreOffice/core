@@ -1247,7 +1247,7 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFormat()->Which(),
             "InsertDrawLabel(): not a DrawFrameFormat" );
 
-    SwDrawFrameFormat* pOldFormat = pContact->GetFormat();
+    SwDrawFrameFormat* pOldFormat = static_cast<SwDrawFrameFormat*>(pContact->GetFormat());
     if (!pOldFormat)
         return nullptr;
 
