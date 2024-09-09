@@ -3213,6 +3213,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering)
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 
     const Color aTransparentColor(ColorAlpha, 0x00000000);
+
+    // Background Layer - TODO
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
@@ -3283,6 +3292,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_WithFie
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
 
     const Color aTransparentColor(ColorAlpha, 0x00000000);
+
+    // Background Layer - TODO
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
         bool bIsBitmapLayer = false;
@@ -3369,6 +3387,23 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
     CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
     CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"Background\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
+        debugWriteImageToFile(0, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
 
     {
         std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);

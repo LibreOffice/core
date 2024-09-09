@@ -117,6 +117,12 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
     {
+        if (mrRenderState.meStage == RenderStage::Background)
+        {
+            mrRenderState.mbSkipAllInThisPass = true;
+            return;
+        }
+
         if (mrRenderState.mbSkipAllInThisPass)
             return;
 
@@ -204,11 +210,7 @@ SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
     : mrPage(rPage)
     , mrModel(rPage.getSdrModelFromSdrPage())
 {
-    if (!hasEmptyMaster(rPage))
-        maRenderState.meStage = RenderStage::Master;
-    else
-        maRenderState.meStage = RenderStage::Slide;
-
+    maRenderState.meStage = RenderStage::Background;
     setupAnimations();
 }
 
@@ -400,6 +402,12 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
     writeJSON(rJsonMsg);
 
     maRenderState.mnCurrentPass++;
+
+    if (maRenderState.meStage == RenderStage::Background)
+        maRenderState.meStage = RenderStage::Master;
+
+    if (hasEmptyMaster(mrPage))
+        maRenderState.meStage = RenderStage::Slide;
 
     return true;
 }

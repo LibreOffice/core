@@ -28,22 +28,24 @@ struct RenderContext;
 
 enum class RenderStage
 {
+    Background,
     Master,
-    Slide
+    Slide,
+    TextFields,
+    Count
 };
 
 /** Holds rendering state, properties and switches through all rendering passes */
 struct RenderState
 {
-    RenderStage meStage = RenderStage::Master;
+    RenderStage meStage = RenderStage::Background;
 
-    sal_Int32 mnMasterIndex = 0;
     bool mbStopRenderingWhenField = true;
 
     std::unordered_set<SdrObject*> maObjectsDone;
     std::unordered_set<SdrObject*> maInAnimation;
     std::map<SdrObject*, bool> maInitiallyVisible;
-    sal_Int32 mnIndex = 0;
+    sal_Int32 mnIndex[static_cast<unsigned>(RenderStage::Count)] = { 0, 0, 0, 0 };
     SdrObject* mpCurrentTarget = nullptr;
 
     bool mbFirstObjectInPass = true;
@@ -53,29 +55,22 @@ struct RenderState
     sal_Int32 mnCurrentPass = 0;
 
     /// increments index depending on the current render stage
-    void incrementIndex()
-    {
-        if (meStage == RenderStage::Master)
-            mnMasterIndex++;
-        else
-            mnIndex++;
-    }
+    void incrementIndex() { mnIndex[static_cast<unsigned>(meStage)]++; }
 
     /// returns the current stage as string
     OString stageString() const
     {
         if (meStage == RenderStage::Master)
             return "MasterPage"_ostr;
+        else if (meStage == RenderStage::Background)
+            return "Background"_ostr;
+        else if (meStage == RenderStage::TextFields)
+            return "TextFields"_ostr;
         return "DrawPage"_ostr;
     }
 
     /// returns the current index depending on the current render stage
-    sal_Int32 currentIndex() const
-    {
-        if (meStage == RenderStage::Master)
-            return mnMasterIndex;
-        return mnIndex;
-    }
+    sal_Int32 currentIndex() const { return mnIndex[static_cast<unsigned>(meStage)]; }
 
     /// returns the current target element for which layer is created if any
     SdrObject* currentTarget() const { return mpCurrentTarget; }
@@ -97,11 +92,7 @@ struct RenderState
     }
 
     /// should include background in rendering
-    bool includeBackground() const
-    {
-        // include background only if we are rendering the first pass
-        return mnCurrentPass == 0;
-    }
+    bool includeBackground() const { return meStage == RenderStage::Background; }
 
     bool isObjectAlreadyRendered(SdrObject* pObject) const
     {
