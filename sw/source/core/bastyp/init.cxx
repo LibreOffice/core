@@ -323,7 +323,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_CHRATR_RSID, new SvxRsidItem( 0, RES_CHRATR_RSID ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_CHRATR_BOX, new SvxBoxItem( RES_CHRATR_BOX ), SID_ATTR_CHAR_BOX, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
             { RES_CHRATR_SHADOW, new SvxShadowItem( RES_CHRATR_SHADOW ), SID_ATTR_CHAR_SHADOW, SFX_ITEMINFOFLAG_NONE },
-            { RES_CHRATR_HIGHLIGHT, new SvxBrushItem( RES_CHRATR_HIGHLIGHT ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE },
+            { RES_CHRATR_HIGHLIGHT, new SvxBrushItem( RES_CHRATR_HIGHLIGHT ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_CHRATR_GRABBAG, new SfxGrabBagItem( RES_CHRATR_GRABBAG ), SID_ATTR_CHAR_GRABBAG, SFX_ITEMINFOFLAG_NONE },
 
             // CharacterAttr - MSWord weak char direction/script override emulation
