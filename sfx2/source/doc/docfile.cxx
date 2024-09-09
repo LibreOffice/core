@@ -4338,6 +4338,14 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
     CreateTempFile( false );
     GetMedium_Impl();
 
+    auto onSignDocumentContentFinished = [this, rCallback](bool bRet) {
+        CloseAndRelease();
+
+        ResetError();
+
+        rCallback(bRet);
+    };
+
     try
     {
         if ( !pImpl->xStream.is() )
@@ -4426,6 +4434,8 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         }
         else
         {
+            auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
+            assert(xModelSigner);
             if (xMetaInf.is())
             {
                 // ODF.
@@ -4434,16 +4444,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                     xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
                 bool bSuccess = false;
-                if (xCert.is())
-                    bSuccess = xSigner->signSignatureLine(
-                        GetZipStorageToSign_Impl(), xStream, aSignatureLineId, xCert,
-                        xValidGraphic, xInvalidGraphic, aComment);
-                else
-                    bSuccess = xSigner->signDocumentContent(GetZipStorageToSign_Impl(),
-                                                            xStream);
-
-                if (bSuccess)
-                {
+                auto onODFSignDocumentContentFinished = [this, xMetaInf, xWriteableZipStor]() {
                     uno::Reference< embed::XTransactedObject > xTransact( xMetaInf, uno::UNO_QUERY_THROW );
                     xTransact->commit();
                     xTransact.set( xWriteableZipStor, uno::UNO_QUERY_THROW );
@@ -4451,6 +4452,29 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 
                     // the temporary file has been written, commit it to the original file
                     Commit();
+                };
+                if (xCert.is())
+                    bSuccess = xSigner->signSignatureLine(
+                        GetZipStorageToSign_Impl(), xStream, aSignatureLineId, xCert,
+                        xValidGraphic, xInvalidGraphic, aComment);
+                else
+                {
+                    // Async, all code before return has to go into the callback.
+                    xModelSigner->SignDocumentContentAsync(GetZipStorageToSign_Impl(),
+                                                            xStream, [onODFSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
+                        if (bRet)
+                        {
+                            onODFSignDocumentContentFinished();
+                        }
+
+                        onSignDocumentContentFinished(bRet);
+                    });
+                    return;
+                }
+
+                if (bSuccess)
+                {
+                    onODFSignDocumentContentFinished();
                     bChanges = true;
                 }
             }
@@ -4459,6 +4483,13 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 // OOXML.
                 uno::Reference<io::XStream> xStream;
 
+                auto onOOXMLSignDocumentContentFinished = [this, xWriteableZipStor]() {
+                    uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
+                    xTransact->commit();
+
+                    // the temporary file has been written, commit it to the original file
+                    Commit();
+                };
                 bool bSuccess = false;
                 if (xCert.is())
                 {
@@ -4469,17 +4500,21 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 else
                 {
                     // We need read-write to be able to add the signature relation.
-                    bSuccess =xSigner->signDocumentContent(
-                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+                    xModelSigner->SignDocumentContentAsync(
+                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, [onOOXMLSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
+                        if (bRet)
+                        {
+                            onOOXMLSignDocumentContentFinished();
+                        }
+
+                        onSignDocumentContentFinished(bRet);
+                    });
+                    return;
                 }
 
                 if (bSuccess)
                 {
-                    uno::Reference<embed::XTransactedObject> xTransact(xWriteableZipStor, uno::UNO_QUERY_THROW);
-                    xTransact->commit();
-
-                    // the temporary file has been written, commit it to the original file
-                    Commit();
+                    onOOXMLSignDocumentContentFinished();
                     bChanges = true;
                 }
             }
@@ -4488,8 +4523,10 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 // Something not ZIP based: e.g. PDF.
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
                 uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
-                if (xSigner->signDocumentContent(uno::Reference<embed::XStorage>(), xStream))
-                    bChanges = true;
+                xModelSigner->SignDocumentContentAsync(uno::Reference<embed::XStorage>(), xStream, [onSignDocumentContentFinished](bool bRet) {
+                    onSignDocumentContentFinished(bRet);
+                });
+                return;
             }
         }
     }
@@ -4498,11 +4535,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         TOOLS_WARN_EXCEPTION("sfx.doc", "Couldn't use signing functionality!");
     }
 
-    CloseAndRelease();
-
-    ResetError();
-
-    rCallback(bChanges);
+    onSignDocumentContentFinished(bChanges);
 }
 
 

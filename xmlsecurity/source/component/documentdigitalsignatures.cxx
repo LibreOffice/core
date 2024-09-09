@@ -212,6 +212,10 @@ public:
                              const css::uno::Reference<css::security::XCertificate>& xCertificate,
                              const css::uno::Reference<css::embed::XStorage>& xStorage,
                              const css::uno::Reference<css::io::XStream>& xStream) override;
+    /// See sfx2::DigitalSignatures::SignDocumentContentAsync().
+    void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                  const css::uno::Reference<css::io::XStream>& xSignStream,
+                                  const std::function<void(bool)>& rCallback) override;
 };
 
 }
@@ -273,11 +277,10 @@ DocumentDigitalSignatures::getSupportedServiceNames()
 }
 
 sal_Bool DocumentDigitalSignatures::signDocumentContent(
-    const Reference< css::embed::XStorage >& rxStorage,
-    const Reference< css::io::XStream >& xSignStream)
+    const Reference< css::embed::XStorage >& /*rxStorage*/,
+    const Reference< css::io::XStream >& /*xSignStream*/)
 {
-    OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false );
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 sal_Bool DocumentDigitalSignatures::signSignatureLine(
@@ -825,6 +828,15 @@ bool DocumentDigitalSignatures::SignModelWithCertificate(
 {
     return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
                                    DocumentSignatureMode::Content);
+}
+
+void DocumentDigitalSignatures::SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& rxStorage,
+                              const css::uno::Reference<css::io::XStream>& xSignStream,
+                              const std::function<void(bool)>& rCallback)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    bool bRet = ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false );
+    rCallback(bRet);
 }
 
 sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(

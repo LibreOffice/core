@@ -32,6 +32,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     /** signs the content of the document including text and pictures.
 
        <p>Macros will not be signed.</p>
+
+       Deprecated, this synchronous version would block the UI till signing is in progress.
      */
     boolean signDocumentContent( [in] ::com::sun::star::embed::XStorage xStorage,
                                  [in] ::com::sun::star::io::XStream xSignStream);
