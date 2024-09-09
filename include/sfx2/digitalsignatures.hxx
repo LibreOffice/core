@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <functional>
+
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -28,6 +30,12 @@ public:
                              const css::uno::Reference<css::security::XCertificate>& xCertificate,
                              const css::uno::Reference<css::embed::XStorage>& xStorage,
                              const css::uno::Reference<css::io::XStream>& xStream)
+        = 0;
+
+    /// Async replacement for signDocumentContent().
+    virtual void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                          const css::uno::Reference<css::io::XStream>& xSignStream,
+                                          const std::function<void(bool)>& rCallback)
         = 0;
 
 protected:
