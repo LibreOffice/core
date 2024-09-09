@@ -117,6 +117,7 @@ public:
     {
         if (mrRenderState.meStage == RenderStage::Background)
         {
+            mrRenderState.mbPassHasOutput = true;
             mrRenderState.mbSkipAllInThisPass = true;
             return;
         }
@@ -133,8 +134,6 @@ public:
         // Does the object have a page
         if (pPage == nullptr)
             return;
-
-        mrRenderState.mpCurrentTarget = pObject;
 
         // is the object visible and not hidden by any option
         const bool bVisible
@@ -166,6 +165,9 @@ public:
 
         if (mrRenderState.isObjectInAnimation(pObject))
         {
+            if (!mrRenderState.mbFirstObjectInPass)
+                return;
+
             mrRenderState.mbSkipAllInThisPass = true;
         }
 
@@ -176,6 +178,8 @@ public:
             mrRenderState.mbSkipAllInThisPass = true;
             return;
         }
+
+        mrRenderState.mpCurrentTarget = pObject;
 
         // render the object
         sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
