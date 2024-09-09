@@ -9,9 +9,13 @@
 
 #pragma once
 
-#include <sddllapi.h>
-#include <tools/gen.hxx>
 #include <rtl/string.hxx>
+#include <sal/log.hxx>
+#include <sddllapi.h>
+#include <svx/unoapi.hxx>
+#include <tools/gen.hxx>
+#include <tools/helpers.hxx>
+
 #include <deque>
 #include <map>
 #include <unordered_set>
@@ -102,6 +106,29 @@ struct RenderState
     bool isObjectInAnimation(SdrObject* pObject) const
     {
         return maInAnimation.find(pObject) != maInAnimation.end();
+    }
+
+    bool isObjectInitiallyVisible(SdrObject* pObject) const
+    {
+        bool bInitiallyVisible = true;
+        if (maInitiallyVisible.contains(pObject))
+            bInitiallyVisible = maInitiallyVisible.at(pObject);
+        return bInitiallyVisible;
+    }
+
+    static std::string getObjectHash(SdrObject* pObject)
+    {
+        css::uno::Reference<css::drawing::XShape> xShape = GetXShapeForSdrObject(pObject);
+        if (xShape.is())
+        {
+            css::uno::Reference<css::uno::XInterface> xRef;
+            css::uno::Any(xShape) >>= xRef;
+            if (xRef.is())
+                return GetInterfaceHash(xRef);
+        }
+
+        SAL_WARN("sd", "RenderState::getObjectHash: failed");
+        return std::string();
     }
 };
 

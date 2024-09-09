@@ -258,7 +258,8 @@ namespace slideshow::internal
                         // initially. This is currently the only place
                         // where a shape effect influences shape
                         // attributes outside it's effective duration.
-                        bool bVisible = anim::getVisibilityProperty(xAnimateNode);
+                        bool bVisible = false;
+                        anim::getVisibilityProperty(xAnimateNode, bVisible);
 
                         // if initial anim sets shape visible, set it
                         // to invisible. If we're asked for the final
