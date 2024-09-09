@@ -41,7 +41,7 @@ using namespace ::comphelper;
 
 OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection,const OUString& _sColorEntry)
 : Window( _pParent,WB_DIALOGCONTROL)
-,OPropertyChangeListener(m_aMutex)
+,OPropertyChangeListener()
 ,m_pParent(_pParent)
 ,m_aStartMarker( VclPtr<rptui::OStartMarker>::Create(this,_sColorEntry))
 ,m_aReportSection( VclPtr<rptui::OReportSection>::Create(this,_xSection))

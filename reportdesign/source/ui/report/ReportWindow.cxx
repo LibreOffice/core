@@ -47,7 +47,7 @@ using namespace ::comphelper;
 
 OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 : Window(_pParent,WB_DIALOGCONTROL)
-, ::comphelper::OPropertyChangeListener(m_aMutex)
+, ::comphelper::OPropertyChangeListener()
 ,m_aHRuler(VclPtr<Ruler>::Create(this))
 ,m_pView(_pView)
 ,m_pParent(_pParent)

@@ -32,8 +32,13 @@ using namespace ::com::sun::star::beans;
 
 OPropertyChangeListener::~OPropertyChangeListener()
 {
-    if (m_xAdapter.is())
-        m_xAdapter->dispose();
+    rtl::Reference<OPropertyChangeMultiplexer> xTmpAdapter;
+    {
+        std::unique_lock aGuard(m_aAdapterMutex);
+        xTmpAdapter = std::move(m_xAdapter);
+    }
+    if ( xTmpAdapter.is() )
+        xTmpAdapter->dispose();
 }
 
 
@@ -45,8 +50,13 @@ void OPropertyChangeListener::_disposing(const EventObject&)
 
 void OPropertyChangeListener::disposeAdapter()
 {
-    if ( m_xAdapter.is() )
-        m_xAdapter->dispose();
+    rtl::Reference<OPropertyChangeMultiplexer> xTmpAdapter;
+    {
+        std::unique_lock aGuard(m_aAdapterMutex);
+        xTmpAdapter = std::move(m_xAdapter);
+    }
+    if ( xTmpAdapter.is() )
+        xTmpAdapter->dispose();
 
     // will automatically set a new adapter
     OSL_ENSURE( !m_xAdapter.is(), "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
@@ -55,7 +65,7 @@ void OPropertyChangeListener::disposeAdapter()
 
 void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
+    std::unique_lock aGuard(m_aAdapterMutex);
     m_xAdapter = pAdapter;
 }
 

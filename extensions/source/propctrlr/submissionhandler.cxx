@@ -82,7 +82,7 @@ namespace pcr
 
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :PropertyHandlerComponent( _rxContext )
-        ,OPropertyChangeListener( m_aMutex )
+        ,OPropertyChangeListener()
     {
     }
 

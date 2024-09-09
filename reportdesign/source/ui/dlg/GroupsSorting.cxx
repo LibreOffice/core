@@ -785,7 +785,7 @@ Size OFieldExpressionControl::GetOptimalSize() const
 OGroupsSortingDialog::OGroupsSortingDialog(weld::Window* pParent, bool bReadOnly,
                                            OReportController* pController)
     : GenericDialogController(pParent, u"modules/dbreport/ui/floatingsort.ui"_ustr, u"FloatingSort"_ustr)
-    , OPropertyChangeListener(m_aMutex)
+    , OPropertyChangeListener()
     , m_pController(pController)
     , m_xGroups(m_pController->getReportDefinition()->getGroups())
     , m_bReadOnly(bReadOnly)

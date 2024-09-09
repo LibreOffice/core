@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
+#include <mutex>
 #include <vector>
 
 namespace com::sun::star::beans { class XPropertySet; }
@@ -46,11 +47,12 @@ namespace comphelper
         friend class OPropertyChangeMultiplexer;
 
         rtl::Reference<OPropertyChangeMultiplexer> m_xAdapter;
-        ::osl::Mutex&               m_rMutex;
+        // We have our own mutex here for the m_xAdapter field, because we sit between two different objects
+        // which often have their own mutexes, and if we use a mutex from one of them,
+        // we end up with ABBA deadlock risks.
+        std::mutex                  m_aAdapterMutex;
 
     public:
-        OPropertyChangeListener(::osl::Mutex& _rMutex)
-            : m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
         /// @throws css::uno::RuntimeException

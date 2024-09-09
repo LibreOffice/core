@@ -61,7 +61,7 @@ IMPL_LINK(OAddFieldWindow, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
 OAddFieldWindow::OAddFieldWindow(weld::Window* pParent, uno::Reference< beans::XPropertySet > xRowSet)
     : GenericDialogController(pParent, u"modules/dbreport/ui/floatingfield.ui"_ustr, u"FloatingField"_ustr)
-    , ::comphelper::OPropertyChangeListener(m_aMutex)
+    , ::comphelper::OPropertyChangeListener()
     , ::comphelper::OContainerListener(m_aMutex)
     , m_xRowSet(std::move(xRowSet))
     , m_xActions(m_xBuilder->weld_toolbar(u"toolbox"_ustr))

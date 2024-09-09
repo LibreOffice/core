@@ -1133,7 +1133,7 @@ OBoundControlModel::OBoundControlModel(
         const OUString& _rUnoControlModelTypeName, const OUString& _rDefault,
         const bool _bCommitable, const bool _bSupportExternalBinding, const bool _bSupportsValidation )
     :OControlModel( _rxFactory, _rUnoControlModelTypeName, _rDefault, false )
-    ,OPropertyChangeListener( m_aMutex )
+    ,OPropertyChangeListener()
     ,m_nValuePropertyAggregateHandle( -1 )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( false )
@@ -1162,7 +1162,7 @@ OBoundControlModel::OBoundControlModel(
 OBoundControlModel::OBoundControlModel(
         const OBoundControlModel* _pOriginal, const Reference< XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory, true, false )
-    ,OPropertyChangeListener( m_aMutex )
+    ,OPropertyChangeListener()
     ,m_nValuePropertyAggregateHandle( _pOriginal->m_nValuePropertyAggregateHandle )
     ,m_nFieldType( DataType::OTHER )
     ,m_bValuePropertyMayBeVoid( _pOriginal->m_bValuePropertyMayBeVoid )

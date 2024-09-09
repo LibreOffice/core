@@ -441,7 +441,7 @@ namespace frm
     OClickableImageBaseModel::OClickableImageBaseModel( const Reference< XComponentContext >& _rxFactory, const OUString& _rUnoControlModelTypeName,
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
-        ,OPropertyChangeListener(m_aMutex)
+        ,OPropertyChangeListener()
         ,m_bDispatchUrlInternal(false)
         ,m_bProdStarted(false)
     {
@@ -452,7 +452,7 @@ namespace frm
 
     OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
-        ,OPropertyChangeListener( m_aMutex )
+        ,OPropertyChangeListener()
         ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
         ,m_bDispatchUrlInternal(false)
         ,m_bProdStarted( false )

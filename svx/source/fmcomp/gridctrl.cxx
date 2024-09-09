@@ -143,7 +143,7 @@ public:
 };
 
 GridFieldValueListener::GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& _rField, sal_uInt16 _nId)
-    :OPropertyChangeListener(m_aMutex)
+    :OPropertyChangeListener()
     ,m_rParent(_rParent)
     ,m_nId(_nId)
     ,m_nSuspended(0)
@@ -254,7 +254,7 @@ public:
 };
 
 FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
-    :OPropertyChangeListener(m_aMutex)
+    :OPropertyChangeListener()
     ,m_pParent(_pParent)
     ,m_nSuspended(0)
 {
