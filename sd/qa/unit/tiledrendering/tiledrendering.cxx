@@ -3431,9 +3431,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
-        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
-        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
-        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3450,6 +3450,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"hash\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3470,6 +3471,138 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
         debugWriteImageToFile(4, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animations2)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("anim.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"Background\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
+
+        debugWriteImageToFile(0, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(4, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 2") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(5, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 3") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(6, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 
     {
