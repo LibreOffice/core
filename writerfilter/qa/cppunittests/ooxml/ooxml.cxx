@@ -9,6 +9,9 @@
 
 #include <test/unoapi_test.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -68,6 +71,19 @@ CPPUNIT_TEST_FIXTURE(Test, testRecursiveHeaderRels)
     // Given a document with self-referencing rels in a header/footer:
     loadFromFile(u"recursive_header_rels.docx");
     // It should not crash/hang on load
+
+    // given an essentially corrupt document, which parses styles.xml multiple times,
+    uno::Reference<style::XStyleFamiliesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies = xSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(
+        xStyleFamilies->getByName(u"ParagraphStyles"_ustr), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xStandard(xStyleFamily->getByName(u"Standard"_ustr),
+                                                  uno::UNO_QUERY_THROW);
+    style::LineSpacing aLineSpacing;
+    xStandard->getPropertyValue(u"ParaLineSpacing"_ustr) >>= aLineSpacing;
+    // the proportional line spacing defined as default for the entire document should be 108%
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Default para style has 1.08 line-spacing", sal_Int16(107),
+                                 aLineSpacing.Height);
 }
 }
 
