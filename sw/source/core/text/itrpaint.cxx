@@ -131,11 +131,6 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     ::std::optional<SwTaggedPDFHelper> & roTaggedParagraph,
     bool const isPDFTaggingEnabled)
 {
-#if OSL_DEBUG_LEVEL > 1
-//    sal_uInt16 nFntHeight = GetInfo().GetFont()->GetHeight( GetInfo().GetVsh(), GetInfo().GetOut() );
-//    sal_uInt16 nFntAscent = GetInfo().GetFont()->GetAscent( GetInfo().GetVsh(), GetInfo().GetOut() );
-#endif
-
     // maybe catch-up adjustment
     GetAdjusted();
     AddExtraBlankWidth();
