@@ -244,7 +244,7 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent
         NotifyWinEvent( IA2_EVENT_TEXT_CARET_MOVED,hAcc, OBJID_CLIENT,dChildID  );
         break;
     case UnoMSAAEvent::OBJECT_TEXTCHANGE:
-        NotifyWinEvent( IA2_EVENT_TEXT_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
+        NotifyWinEvent(IA2_EVENT_TEXT_UPDATED, hAcc, OBJID_CLIENT, dChildID);
         break;
     case UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED:
         UpdateAccFocus(pXAcc);
