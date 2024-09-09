@@ -12,14 +12,12 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/helpers.hxx>
 #include <tools/json_writer.hxx>
 #include <editeng/editeng.hxx>
 
@@ -117,6 +115,7 @@ public:
         const sdr::contact::DisplayInfo& rDisplayInfo,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
     {
+        // Generate single pass for background layer
         if (mrRenderState.meStage == RenderStage::Background)
         {
             mrRenderState.mbPassHasOutput = true;
@@ -167,9 +166,11 @@ public:
 
         if (mrRenderState.isObjectInAnimation(pObject))
         {
+            // Animated object cannot be attached to the previous object
             if (!mrRenderState.mbFirstObjectInPass)
                 return;
 
+            // Animated object has to be only one in the render
             mrRenderState.mbSkipAllInThisPass = true;
         }
 
@@ -280,14 +281,17 @@ void SlideshowLayerRenderer::setupAnimations()
 
                     if (pObject)
                     {
-                        bool bVisible = anim::getVisibilityProperty(xAnimate);
+                        bool bVisible;
 
-                        // if initial anim sets shape visible, set it
-                        // to invisible. If we're asked for the final
-                        // state, don't do anything obviously
-                        bVisible = !bVisible;
+                        if (anim::getVisibilityProperty(xAnimate, bVisible))
+                        {
+                            // if initial anim sets shape visible, set it
+                            // to invisible. If we're asked for the final
+                            // state, don't do anything obviously
+                            bVisible = !bVisible;
 
-                        maRenderState.maInitiallyVisible[pObject] = bVisible;
+                            maRenderState.maInitiallyVisible[pObject] = bVisible;
+                        }
                     }
                 }
             }
@@ -339,43 +343,17 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
     aJsonWriter.put("index", maRenderState.currentIndex());
     aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
 
-    bool bIsAnimation = false;
     SdrObject* pObject = maRenderState.currentTarget();
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
-    if (pObject)
-    {
-        xShape = GetXShapeForSdrObject(pObject);
 
-        auto* pSdPage = dynamic_cast<SdPage*>(&mrPage);
-        if (pSdPage)
-        {
-            std::shared_ptr<sd::MainSequence> pMainSequence(pSdPage->getMainSequence());
-            if (pMainSequence && pMainSequence->hasEffect(xShape))
-                bIsAnimation = true;
-        }
-    }
-
-    if (bIsAnimation)
+    bool bIsAnimated = maRenderState.isObjectInAnimation(pObject);
+    if (bIsAnimated)
     {
+        assert(pObject);
         aJsonWriter.put("type", "animated");
         {
             ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
-
-            if (xShape.is())
-            {
-                com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xRef;
-                com::sun::star::uno::Any(xShape) >>= xRef;
-                if (xRef.is())
-                {
-                    aJsonWriter.put("hash", GetInterfaceHash(xRef));
-
-                    bool bInitiallyVisible = true;
-                    if (maRenderState.maInitiallyVisible.contains(pObject))
-                        bInitiallyVisible = maRenderState.maInitiallyVisible[pObject];
-                    aJsonWriter.put("initVisible", bInitiallyVisible);
-                }
-            }
-
+            aJsonWriter.put("hash", RenderState::getObjectHash(pObject));
+            aJsonWriter.put("initVisible", maRenderState.isObjectInitiallyVisible(pObject));
             aJsonWriter.put("type", "bitmap");
             writeContentNode(aJsonWriter);
         }

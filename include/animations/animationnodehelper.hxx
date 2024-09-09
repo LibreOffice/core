@@ -75,12 +75,11 @@ namespace anim
     }
 
     inline bool getVisibilityProperty(
-        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode)
+        const css::uno::Reference< css::animations::XAnimate >& xAnimateNode, bool& bReturn)
     {
-        bool bVisible( false );
         if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
         {
-
+            bool bVisible( false );
             css::uno::Any aAny( xAnimateNode->getTo() );
 
             // try to extract bool value
@@ -104,9 +103,11 @@ namespace anim
                     }
                 }
             }
+            bReturn = bVisible;
+            return true;
         }
 
-        return bVisible;
+        return false;
     }
 }
 
