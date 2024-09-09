@@ -519,7 +519,7 @@ void DbGridColumn::ImplInitWindow( vcl::Window const & rParent, const InitWindow
 
 
 DbCellControl::DbCellControl( DbGridColumn& _rColumn )
-    :OPropertyChangeListener(m_aMutex)
+    :OPropertyChangeListener()
     ,m_bTransparent( false )
     ,m_bAlignedController( true )
     ,m_bAccessingValueProperty( false )

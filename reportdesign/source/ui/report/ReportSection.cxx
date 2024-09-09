@@ -73,7 +73,7 @@ static Color lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiS
 
 OReportSection::OReportSection(OSectionWindow* _pParent,uno::Reference< report::XSection > _xSection)
     : Window(_pParent,WB_DIALOGCONTROL)
-    , ::comphelper::OPropertyChangeListener(m_aMutex)
+    , ::comphelper::OPropertyChangeListener()
     , DropTargetHelper(this)
     , m_pPage(nullptr)
     , m_pView(nullptr)

@@ -44,7 +44,7 @@ static void lcl_setScrollBar(sal_Int32 _nNewValue,const Point& _aPos,const Size&
 
 OScrollWindowHelper::OScrollWindowHelper( ODesignView* _pDesignView)
     : OScrollWindowHelper_BASE( _pDesignView,WB_DIALOGCONTROL)
-    ,OPropertyChangeListener(m_aMutex)
+    ,OPropertyChangeListener()
     ,m_aHScroll( VclPtr<ScrollAdaptor>::Create(this, true) )
     ,m_aVScroll( VclPtr<ScrollAdaptor>::Create(this, false) )
     ,m_pParent(_pDesignView)

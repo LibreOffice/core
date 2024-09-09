@@ -202,7 +202,7 @@ public:
 };
 
 NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportController& rController)
-    : OPropertyChangeListener(m_aMutex)
+    : OPropertyChangeListener()
     , m_xTreeView(std::move(xTreeView))
     , m_rController(rController)
 {
@@ -672,7 +672,7 @@ void NavigatorTree::removeEntry(const weld::TreeIter& rEntry, bool bRemove)
 }
 
 NavigatorTree::UserData::UserData(NavigatorTree* pTree,uno::Reference<uno::XInterface> xContent)
-    : OPropertyChangeListener(m_aMutex)
+    : OPropertyChangeListener()
     , OContainerListener(m_aMutex)
     , m_xContent(std::move(xContent))
     , m_pTree(pTree)
