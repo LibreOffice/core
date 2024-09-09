@@ -1399,6 +1399,8 @@ void SwDoc::ForEachFormatURL( const std::function<bool(const SwFormatURL&)>& rFu
 {
     for(sw::SpzFrameFormat* pSpz : *GetSpzFrameFormats())
     {
+        if (pSpz->Which() != RES_FLYFRMFMT)
+            continue;
         auto pFormat = static_cast<SwFlyFrameFormat*>(pSpz);
         const SwFormatURL& rURLItem = pFormat->GetURL();
         if (!rFunc(rURLItem))

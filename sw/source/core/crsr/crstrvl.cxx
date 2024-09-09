@@ -2806,6 +2806,8 @@ bool SwCursorShell::SelectNxtPrvHyperlink( bool bNext )
     {
         for(sw::SpzFrameFormat* pSpz: *GetDoc()->GetSpzFrameFormats())
         {
+            if (pSpz->Which() != RES_FLYFRMFMT)
+                continue;
             auto pFormat = static_cast<SwFlyFrameFormat*>(pSpz);
             const SwFormatURL& rURLItem = pFormat->GetURL();
             if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
