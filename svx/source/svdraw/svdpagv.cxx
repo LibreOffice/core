@@ -102,13 +102,13 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
     // For example, in the case of charts, there is a LayerAdmin, but it has no valid values. Therefore
     // a solution like pLayerAdmin->getVisibleLayersODF(aLayerVisi) is not possible. So use the
     // generic SetAll() for now.
-    aLayerVisi.SetAll();
-    aLayerPrn.SetAll();
+    m_aLayerVisi.SetAll();
+    m_aLayerPrn.SetAll();
 
     mbHasMarked = false;
     mbVisible = false;
-    pCurrentList = nullptr;
-    pCurrentGroup = nullptr;
+    m_pCurrentList = nullptr;
+    m_pCurrentGroup = nullptr;
     SetCurrentGroupAndList(nullptr, mpPage);
 
     for(sal_uInt32 a(0); a < rNewView.PaintWindowCount(); a++)
@@ -636,9 +636,9 @@ bool SdrPageView::IsObjMarkable(SdrObject const * pObj) const
 
     // the layer has to be visible and must not be locked
     SdrLayerID nL = pObj->GetLayer();
-    if (!aLayerVisi.IsSet(nL))
+    if (!m_aLayerVisi.IsSet(nL))
         return false;
-    if (aLayerLock.IsSet(nL))
+    if (m_aLayerLock.IsSet(nL))
         return false;
     return true;
 }
@@ -657,9 +657,9 @@ void SdrPageView::SetPageOrigin(const Point& rOrg)
 
 void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 {
-    if (!(GetView().IsHlplVisible() && nNum<aHelpLines.GetCount()))        return;
+    if (!(GetView().IsHlplVisible() && nNum<m_aHelpLines.GetCount()))        return;
 
-    const SdrHelpLine& rHL=aHelpLines[nNum];
+    const SdrHelpLine& rHL=m_aHelpLines[nNum];
 
     for(sal_uInt32 a(0); a < GetView().PaintWindowCount(); a++)
     {
@@ -681,40 +681,40 @@ void SdrPageView::ImpInvalidateHelpLineArea(sal_uInt16 nNum) const
 
 void SdrPageView::SetHelpLines(const SdrHelpLineList& rHLL)
 {
-    aHelpLines=rHLL;
+    m_aHelpLines=rHLL;
     InvalidateAllWin();
 }
 
 void SdrPageView::SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine)
 {
-    if (nNum >= aHelpLines.GetCount() || aHelpLines[nNum] == rNewHelpLine)
+    if (nNum >= m_aHelpLines.GetCount() || m_aHelpLines[nNum] == rNewHelpLine)
         return;
 
     bool bNeedRedraw = true;
-    if (aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
+    if (m_aHelpLines[nNum].GetKind()==rNewHelpLine.GetKind()) {
         switch (rNewHelpLine.GetKind()) {
-            case SdrHelpLineKind::Vertical  : if (aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
-            case SdrHelpLineKind::Horizontal: if (aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
+            case SdrHelpLineKind::Vertical  : if (m_aHelpLines[nNum].GetPos().X()==rNewHelpLine.GetPos().X()) bNeedRedraw = false; break;
+            case SdrHelpLineKind::Horizontal: if (m_aHelpLines[nNum].GetPos().Y()==rNewHelpLine.GetPos().Y()) bNeedRedraw = false; break;
             default: break;
         } // switch
     }
     if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
-    aHelpLines[nNum]=rNewHelpLine;
+    m_aHelpLines[nNum]=rNewHelpLine;
     if (bNeedRedraw) ImpInvalidateHelpLineArea(nNum);
 }
 
 void SdrPageView::DeleteHelpLine(sal_uInt16 nNum)
 {
-    if (nNum<aHelpLines.GetCount()) {
+    if (nNum<m_aHelpLines.GetCount()) {
         ImpInvalidateHelpLineArea(nNum);
-        aHelpLines.Delete(nNum);
+        m_aHelpLines.Delete(nNum);
     }
 }
 
 void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
 {
-    sal_uInt16 nNum = aHelpLines.GetCount();
-    aHelpLines.Insert(rHL,nNum);
+    sal_uInt16 nNum = m_aHelpLines.GetCount();
+    m_aHelpLines.Insert(rHL,nNum);
     if (GetView().IsHlplVisible())
         ImpInvalidateHelpLineArea(nNum);
 }
@@ -722,13 +722,13 @@ void SdrPageView::InsertHelpLine(const SdrHelpLine& rHL)
 // set current group and list
 void SdrPageView::SetCurrentGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewList)
 {
-    if(pCurrentGroup != pNewGroup)
+    if(m_pCurrentGroup != pNewGroup)
     {
-        pCurrentGroup = pNewGroup;
+        m_pCurrentGroup = pNewGroup;
     }
-    if(pCurrentList != pNewList)
+    if(m_pCurrentList != pNewList)
     {
-        pCurrentList = pNewList;
+        m_pCurrentList = pNewList;
     }
 }
 
