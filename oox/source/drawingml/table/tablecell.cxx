@@ -202,11 +202,11 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
     {
         if (nCol == 0)
             applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
-        if (nCol == nMaxCol)
+        if (nCol >= nMaxCol)
             applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
         if (nRow == 0)
             applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
-        if (nRow == nMaxRow)
+        if (nRow >= nMaxRow)
             applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
 
         applyBorder( rFilterBase, rTableStylePart, XML_insideH, rInsideHBorder );
