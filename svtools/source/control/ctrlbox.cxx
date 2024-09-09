@@ -900,6 +900,7 @@ void FontNameBox::set_active_or_entry_text(const OUString& rText)
 
 FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
     : m_xComboBox(std::move(p))
+    , m_aLastStyle(m_xComboBox->get_active_text())
 {
     //Use the standard texts to get an optimal size and stick to that size.
     //That should stop the character dialog dancing around.
@@ -912,12 +913,19 @@ FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
     nMaxLen = std::max(nMaxLen, m_xComboBox->get_pixel_size(SvtResId(STR_SVT_STYLE_BLACK)).Width());
     nMaxLen = std::max(nMaxLen, m_xComboBox->get_pixel_size(SvtResId(STR_SVT_STYLE_BLACK_ITALIC)).Width());
     m_xComboBox->set_entry_width_chars(std::ceil(nMaxLen / m_xComboBox->get_approximate_digit_width()));
+    m_xComboBox->connect_changed(LINK(this, FontStyleBox, ChangeHdl));
+}
+
+IMPL_LINK(FontStyleBox, ChangeHdl, weld::ComboBox&, rComboBox, void)
+{
+    // update m_aLastStyle to whatever is explicitly selected by the user
+    m_aLastStyle = rComboBox.get_active_text();
+    m_aChangedLink.Call(rComboBox);
 }
 
 void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 {
     OUString aOldText = m_xComboBox->get_active_text();
-    int nPos = m_xComboBox->get_active();
 
     m_xComboBox->freeze();
     m_xComboBox->clear();
@@ -1034,19 +1042,32 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 
     m_xComboBox->thaw();
 
+    // tdf#162113 prefer restoring the last explicitly set
+    // style if that is possible
+    if (!m_aLastStyle.isEmpty())
+    {
+        int nFound = m_xComboBox->find_text(m_aLastStyle);
+        if (nFound != -1)
+        {
+            m_xComboBox->set_active(nFound);
+            return;
+        }
+    }
+
+    // otherwise, restore the style that was last selected
+    // if that is possible
     if (!aOldText.isEmpty())
     {
         int nFound = m_xComboBox->find_text(aOldText);
         if (nFound != -1)
-            m_xComboBox->set_active(nFound);
-        else
         {
-            if (nPos >= m_xComboBox->get_count())
-                m_xComboBox->set_active(0);
-            else
-                m_xComboBox->set_active(nPos);
+            m_xComboBox->set_active(nFound);
+            return;
         }
     }
+
+    // otherwise, just pick something
+    m_xComboBox->set_active(0);
 }
 
 FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
