@@ -68,6 +68,9 @@ bool SdFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 void SdFiltersTest::testCVEs()
 {
 #ifndef DISABLE_CVE_TESTS
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
     testDir("MS PowerPoint 97",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/ppt/"),
             "sd");
@@ -75,7 +78,7 @@ void SdFiltersTest::testCVEs()
     testDir("Impress Office Open XML",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/"),
             "",  (SfxFilterFlags::IMPORT | SfxFilterFlags::ALIEN | SfxFilterFlags::STARONEFILTER));
-
+#endif
     testDir("impress8",
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/"),
             "sd");

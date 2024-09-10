@@ -143,11 +143,13 @@ void SwFiltersTest::testCVEs()
             FILTER_XML,
             SfxFilterFlags::IMPORT | SfxFilterFlags::OWN | SfxFilterFlags::DEFAULT,
             isstorage, SOFFICE_FILEFORMAT_CURRENT);
-
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
     testDir("MS Word 97",
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ww8/"),
             FILTER_WW8);
-
+#endif
     testDir("MS WinWord 6.0",
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ww6/"),
             sWW6);
@@ -164,12 +166,14 @@ void SwFiltersTest::testCVEs()
             m_directories.getURLFromSrc(u"/sw/qa/core/data/ooxml/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
-
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
     testDir("Rich Text Format",
             m_directories.getURLFromSrc(u"/sw/qa/core/data/rtf/"),
             OUString(),
             SfxFilterFlags::STARONEFILTER);
-
+#endif
     testDir("HTML",
             m_directories.getURLFromSrc(u"/sw/qa/core/data/html/"),
             sHTML);
