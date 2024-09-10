@@ -3508,6 +3508,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
         CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"hash\""));
         CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"bounds\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"content\": { \"type\": \"%IMAGETYPE%\", \"checksum\": \"%IMAGECHECKSUM%\"}") >= 0);
 
@@ -3523,6 +3524,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"bounds\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
         debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3537,6 +3539,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"MasterPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 1") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"bounds\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
         debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3552,6 +3555,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 0") >= 0);
         CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"bounds\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
         debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3583,6 +3587,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 2") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": true") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"bounds\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
@@ -3599,6 +3604,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 3") >= 0);
         CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"bounds\""));
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
         debugWriteImageToFile(6, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
@@ -3614,6 +3620,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 4") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": false") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"bounds\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
