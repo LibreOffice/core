@@ -4253,8 +4253,15 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     if (!xShapeProps)
         return;
+
+    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName( u"Visible"_ustr ))
+        return;
     xShapeProps->getPropertyValue("Visible") >>= bIsShapeVisible;
+
     if (!bIsShapeVisible)
+        return;
+
+    if (!xShapeProps->getPropertySetInfo()->hasPropertyByName( u"OnClick"_ustr ))
         return;
 
     presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
@@ -4267,7 +4274,9 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
         sal_Int32 nVerb = 0;
         OUString sBookmark;
 
-        xShapeProps->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
+        if (xShapeProps->getPropertySetInfo()->hasPropertyByName( u"Bookmark"_ustr ))
+            xShapeProps->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
+
         {
             auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
             auto const& rRectangle = pObject->GetLogicRect();
