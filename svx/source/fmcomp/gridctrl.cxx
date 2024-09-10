@@ -123,7 +123,6 @@ private:
 
 class GridFieldValueListener : protected ::comphelper::OPropertyChangeListener
 {
-    osl::Mutex                          m_aMutex;
     DbGridControl&                      m_rParent;
     rtl::Reference<::comphelper::OPropertyChangeMultiplexer> m_pRealListener;
     sal_uInt16                          m_nId;
@@ -240,8 +239,6 @@ class FmXGridSourcePropListener : public ::comphelper::OPropertyChangeListener
 {
     VclPtr<DbGridControl> m_pParent;
 
-    // a DbGridControl has no mutex, so we use our own as the base class expects one
-    osl::Mutex          m_aMutex;
     sal_Int16           m_nSuspended;
 
 public:
