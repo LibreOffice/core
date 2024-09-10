@@ -4592,7 +4592,7 @@ OString SdXImpressDocument::getPresentationInfo() const
                 uno::Reference<drawing::XShapes> const xShapes(cppu::getXWeak(pSlide), uno::UNO_QUERY_THROW);
                 if (xShapes.is())
                 {
-                    auto aVideoList = aJsonWriter.startArray("interactions");
+                    auto aInteractions = aJsonWriter.startArray("interactions");
                     auto count = xShapes->getCount();
                     for (auto j = 0; j < count; j++)
                     {
