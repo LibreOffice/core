@@ -133,7 +133,7 @@ bool TaskPaneList::IsInList( vcl::Window *pWindow )
 
 bool TaskPaneList::IsCycleKey(const vcl::KeyCode& rKeyCode)
 {
-    return rKeyCode.GetCode() == KEY_F6 && !rKeyCode.IsMod2(); // F6
+    return rKeyCode.GetCode() == KEY_F6 && !rKeyCode.IsMod2() && !rKeyCode.IsShift(); // F6
 }
 
 bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
@@ -152,8 +152,6 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     bool bForward = !aKeyCode.IsShift();
     if (TaskPaneList::IsCycleKey(aKeyCode))
     {
-        bool bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
-
         // is the focus in the list ?
         auto p = std::find_if(mTaskPanes.begin(), mTaskPanes.end(),
             [](const VclPtr<vcl::Window>& rWinPtr) { return rWinPtr->HasChildPathFocus( true ); });
@@ -162,7 +160,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
             vcl::Window *pWin = p->get();
 
             // Ctrl-F6 goes directly to the document
-            if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
+            if( !pWin->IsDialog() && aKeyCode.IsMod1() )
             {
                 pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 );
                 return true;
@@ -171,10 +169,7 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
             // activate next task pane
             vcl::Window *pNextWin = nullptr;
 
-            if( bSplitterOnly )
-                pNextWin = FindNextSplitter( *p );
-            else
-                pNextWin = FindNextFloat( *p, bForward );
+            pNextWin = FindNextFloat( *p, bForward );
 
             if( pNextWin != pWin )
             {
@@ -184,10 +179,6 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
             }
             else
             {
-                // forward key if no splitter found
-                if( bSplitterOnly )
-                    return false;
-
                 // we did not find another taskpane, so
                 // put focus back into document
                 pWin->ImplGrabFocusToDocument( GetFocusFlags::F6 | (bForward ? GetFocusFlags::Forward : GetFocusFlags::Backward));
@@ -198,10 +189,8 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
 
         // the focus is not in the list: activate first float if F6 was pressed
         vcl::Window *pWin;
-        if( bSplitterOnly )
-            pWin = FindNextSplitter( nullptr );
-        else
-            pWin = FindNextFloat( nullptr, bForward );
+
+        pWin = FindNextFloat( nullptr, bForward );
         if( pWin )
         {
             ImplTaskPaneListGrabFocus( pWin, bForward );
@@ -210,37 +199,6 @@ bool TaskPaneList::HandleKeyEvent(const KeyEvent& rKeyEvent)
     }
 
     return false;
-}
-
-// returns next splitter
-vcl::Window* TaskPaneList::FindNextSplitter( vcl::Window *pWindow )
-{
-    ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
-
-    auto p = mTaskPanes.begin();
-    if( pWindow )
-        p = std::find(mTaskPanes.begin(), mTaskPanes.end(), pWindow);
-
-    if( p != mTaskPanes.end() )
-    {
-        unsigned n = mTaskPanes.size();
-        while( --n )
-        {
-            if( pWindow )   // increment before test
-                ++p;
-            if( p == mTaskPanes.end() )
-                p = mTaskPanes.begin();
-            if( (*p)->ImplIsSplitter() && (*p)->IsReallyVisible() && !(*p)->IsDialog() && (*p)->GetParent()->HasChildPathFocus() )
-            {
-                pWindow = (*p).get();
-                break;
-            }
-            if( !pWindow )  // increment after test, otherwise first element is skipped
-                ++p;
-        }
-    }
-
-    return pWindow;
 }
 
 // returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float

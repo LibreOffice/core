@@ -34,7 +34,6 @@ class VCL_DLLPUBLIC TaskPaneList
 {
     ::std::vector< VclPtr<vcl::Window> > mTaskPanes;
     SAL_DLLPRIVATE vcl::Window *FindNextFloat( vcl::Window *pWindow, bool bForward );
-    SAL_DLLPRIVATE vcl::Window *FindNextSplitter( vcl::Window *pWindow );
 
 public:
     SAL_DLLPRIVATE bool IsInList( vcl::Window *pWindow );
