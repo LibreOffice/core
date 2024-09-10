@@ -27,7 +27,6 @@ class SwRubyListEntry
     SwFormatRuby m_aRubyAttr;
 public:
     SwRubyListEntry() : m_aRubyAttr( OUString() ) {}
-    ~SwRubyListEntry();
 
     const OUString& GetText() const                    { return m_sText; }
     void SetText( const OUString& rStr )        { m_sText = rStr; }

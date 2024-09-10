@@ -40,6 +40,8 @@
 
 using namespace ::com::sun::star::i18n;
 
+constexpr int nMaxBaseTexts = 30;
+
 /*
  * Members in the list:
  *   - String - the orig text
@@ -78,9 +80,9 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
                      else
                         break;
                 }
-            } while( 30 > rList.size() && *aPam.GetPoint() < *pEnd );
+            } while (nMaxBaseTexts > rList.size() && *aPam.GetPoint() < *pEnd);
         }
-        if( 30 <= rList.size() )
+        if (nMaxBaseTexts <= rList.size())
             break;
         _pStartCursor = _pStartCursor->GetNext();
     } while( _pStartCursor != _pStartCursor2 );
@@ -88,95 +90,146 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList )
     return rList.size();
 }
 
-void SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList )
+void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
 {
-    GetIDocumentUndoRedo().StartUndo( SwUndoId::SETRUBYATTR, nullptr );
+    SwPaM aOrigPam{ *rPam.GetPoint(), *rPam.GetMark() };
+    aOrigPam.Normalize();
+
+    GetIDocumentUndoRedo().StartUndo(SwUndoId::SETRUBYATTR, nullptr);
     const o3tl::sorted_vector<sal_uInt16> aDelArr{ RES_TXTATR_CJK_RUBY };
 
     SwRubyList::size_type nListEntry = 0;
+    int nCurrBaseTexts = 0;
 
-    const SwPaM *_pStartCursor = rPam.GetNext(),
-                *_pStartCursor2 = _pStartCursor;
-    bool bCheckEmpty = &rPam != _pStartCursor;
-    do {
-        auto [pStt, pEnd] = _pStartCursor->StartEnd(); // SwPosition*
-        if( !bCheckEmpty || ( pStt != pEnd && *pStt != *pEnd ))
+    const SwPaM* pStartCursor = rPam.GetNext();
+    auto [pStt, pEnd] = pStartCursor->StartEnd();
+
+    bool bCheckEmpty = (&rPam == pStartCursor) || (pStt != pEnd && *pStt != *pEnd);
+
+    // Sequentially replace as many spans as possible
+    SwPaM aPam(*pStt);
+    while (bCheckEmpty && nListEntry < rList.size() && nCurrBaseTexts < nMaxBaseTexts)
+    {
+        if (pEnd != pStt)
         {
-
-            SwPaM aPam( *pStt );
-            do {
-                SwRubyListEntry aCheckEntry;
-                if( pEnd != pStt )
-                {
-                    aPam.SetMark();
-                    *aPam.GetMark() = *pEnd;
-                }
-                if( SelectNextRubyChars( aPam, aCheckEntry ))
-                {
-                    const SwRubyListEntry* pEntry = rList[ nListEntry++ ].get();
-                    if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
-                    {
-                        // set/reset the attribute
-                        if( !pEntry->GetRubyAttr().GetText().isEmpty() )
-                        {
-                            getIDocumentContentOperations().InsertPoolItem( aPam, pEntry->GetRubyAttr() );
-                        }
-                        else
-                        {
-                            ResetAttrs( aPam, true, aDelArr );
-                        }
-                    }
-
-                    if (aCheckEntry.GetText() != pEntry->GetText())
-                    {
-                        if (pEntry->GetText().isEmpty())
-                        {
-                            ResetAttrs(aPam, true, aDelArr);
-                        }
-
-                        // text is changed, so replace the original
-                        getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(),
-                                                                     false);
-                        std::swap(*aPam.GetMark(), *aPam.GetPoint());
-                    }
-
-                    aPam.DeleteMark();
-                }
-                else
-                {
-                     if( *aPam.GetPoint() < *pEnd )
-                     {
-                        // goto next paragraph
-                        aPam.DeleteMark();
-                        aPam.Move( fnMoveForward, GoInNode );
-                     }
-                     else
-                    {
-                        const SwRubyListEntry* pEntry = rList[ nListEntry++ ].get();
-
-                        // set/reset the attribute
-                        if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
-                            !pEntry->GetText().isEmpty() )
-                        {
-                            getIDocumentContentOperations().InsertString( aPam, pEntry->GetText() );
-                            aPam.SetMark();
-                            aPam.GetMark()->AdjustContent( -pEntry->GetText().getLength() );
-                            getIDocumentContentOperations().InsertPoolItem(
-                                aPam, pEntry->GetRubyAttr(), SetAttrMode::DONTEXPAND );
-                        }
-                        else
-                            break;
-                        aPam.DeleteMark();
-                    }
-                }
-            } while( nListEntry < rList.size() && *aPam.GetPoint() < *pEnd );
+            aPam.SetMark();
+            *aPam.GetMark() = *pEnd;
         }
-        if( 30 <= rList.size() )
-            break;
-        _pStartCursor = _pStartCursor->GetNext();
-    } while( _pStartCursor != _pStartCursor2 );
 
-    GetIDocumentUndoRedo().EndUndo( SwUndoId::SETRUBYATTR, nullptr );
+        SwRubyListEntry aCheckEntry;
+        if (!SelectNextRubyChars(aPam, aCheckEntry))
+        {
+            // goto next paragraph
+            aPam.DeleteMark();
+            aPam.Move(fnMoveForward, GoInNode);
+
+            if (*aPam.GetPoint() >= *pEnd)
+            {
+                break;
+            }
+
+            continue;
+        }
+
+        ++nCurrBaseTexts;
+
+        const SwRubyListEntry* pEntry = rList[nListEntry++].get();
+        if (aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr())
+        {
+            // set/reset the attribute
+            if (!pEntry->GetRubyAttr().GetText().isEmpty())
+            {
+                getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
+            }
+            else
+            {
+                ResetAttrs(aPam, true, aDelArr);
+            }
+        }
+
+        if (aCheckEntry.GetText() != pEntry->GetText())
+        {
+            if (pEntry->GetText().isEmpty())
+            {
+                ResetAttrs(aPam, true, aDelArr);
+            }
+
+            // text is changed, so replace the original
+            getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(), false);
+            aPam.Exchange();
+        }
+
+        aPam.DeleteMark();
+    }
+
+    // Delete any spans past the end of the ruby list
+    while (nListEntry == rList.size() && nCurrBaseTexts < nMaxBaseTexts)
+    {
+        if (pEnd != pStt)
+        {
+            aPam.SetMark();
+            *aPam.GetMark() = *pEnd;
+        }
+
+        SwRubyListEntry aCheckEntry;
+        if (!SelectNextRubyChars(aPam, aCheckEntry))
+        {
+            // goto next paragraph
+            aPam.DeleteMark();
+            aPam.Move(fnMoveForward, GoInNode);
+
+            if (*aPam.GetPoint() >= *pEnd)
+            {
+                break;
+            }
+
+            continue;
+        }
+
+        ++nCurrBaseTexts;
+
+        ResetAttrs(aPam, true, aDelArr);
+        getIDocumentContentOperations().DeleteRange(aPam);
+        aPam.Exchange();
+
+        aPam.DeleteMark();
+    }
+
+    // Insert any spans past the end of the base text list
+    sal_Int32 nTotalContentGrowth = 0;
+    while (nListEntry < rList.size())
+    {
+        const SwRubyListEntry* pEntry = rList[nListEntry++].get();
+
+        if (pEnd != pStt)
+        {
+            aPam.SetMark();
+            *aPam.GetMark() = *pEnd;
+        }
+
+        aPam.SetMark();
+        getIDocumentContentOperations().InsertString(aPam, pEntry->GetText());
+        nTotalContentGrowth += pEntry->GetText().getLength();
+
+        if (!pEntry->GetRubyAttr().GetText().isEmpty())
+        {
+            getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
+        }
+
+        aPam.DeleteMark();
+    }
+
+    // Expand selection to account for insertion
+    rPam.Normalize();
+    rPam = SwPaM{ *aOrigPam.GetPoint(), *rPam.GetMark() };
+    if (*rPam.GetPoint() == *rPam.GetMark())
+    {
+        rPam.GetPoint()->AdjustContent(-nTotalContentGrowth);
+    }
+
+    rPam.Normalize();
+
+    GetIDocumentUndoRedo().EndUndo(SwUndoId::SETRUBYATTR, nullptr);
 }
 
 bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
@@ -318,10 +371,6 @@ bool SwDoc::SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry )
     rEntry.SetText( rText.copy( nStart,
                            rPam.GetPoint()->GetContentIndex() - nStart ));
     return rPam.HasMark();
-}
-
-SwRubyListEntry::~SwRubyListEntry()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

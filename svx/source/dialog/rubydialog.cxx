@@ -43,6 +43,7 @@
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/itemset.hxx>
 
 using namespace css::uno;
@@ -119,6 +120,70 @@ public:
 
     virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent) override;
     virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
+
+    bool IsSelectionGrouped() { return aRubyValues.getLength() < 2; }
+
+    void MakeSelectionGrouped()
+    {
+        if (aRubyValues.getLength() < 2)
+        {
+            return;
+        }
+
+        OUString sBaseTmp;
+        OUStringBuffer aBaseString;
+        for (const PropertyValues& pVals : aRubyValues)
+        {
+            sBaseTmp.clear();
+            for (const PropertyValue& pVal : pVals)
+            {
+                if (pVal.Name == cRubyBaseText)
+                {
+                    pVal.Value >>= sBaseTmp;
+                }
+            }
+
+            aBaseString.append(sBaseTmp);
+        }
+
+        Sequence<PropertyValues> aNewRubyValues{ 1 };
+        PropertyValues* pNewRubyValues = aNewRubyValues.getArray();
+
+        // Copy some reasonable style values from the previous ruby array
+        pNewRubyValues[0] = aRubyValues[0];
+        for (const PropertyValues& pVals : aRubyValues)
+        {
+            for (const PropertyValue& pVal : pVals)
+            {
+                if (pVal.Name == cRubyText)
+                {
+                    pVal.Value >>= sBaseTmp;
+                    if (!sBaseTmp.isEmpty())
+                    {
+                        pNewRubyValues[0] = pVals;
+                        break;
+                    }
+                }
+            }
+        }
+
+        PropertyValue* pNewValues = pNewRubyValues[0].getArray();
+        for (sal_Int32 i = 0; i < pNewRubyValues[0].getLength(); ++i)
+        {
+            if (pNewValues[i].Name == cRubyBaseText)
+            {
+                sBaseTmp = aBaseString;
+                pNewValues[i].Value <<= sBaseTmp;
+            }
+            else if (pNewValues[i].Name == cRubyText)
+            {
+                sBaseTmp.clear();
+                pNewValues[i].Value <<= sBaseTmp;
+            }
+        }
+
+        aRubyValues = std::move(aNewRubyValues);
+    }
 };
 
 SvxRubyData_Impl::SvxRubyData_Impl()
@@ -207,6 +272,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     , m_xCharStyleFT(m_xBuilder->weld_label(u"styleft"_ustr))
     , m_xCharStyleLB(m_xBuilder->weld_combo_box(u"stylelb"_ustr))
     , m_xStylistPB(m_xBuilder->weld_button(u"styles"_ustr))
+    , m_xSelectionGroupPB(m_xBuilder->weld_button(u"selection-group"_ustr))
     , m_xApplyPB(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xContentArea(m_xDialog->weld_content_area())
@@ -228,6 +294,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     aEditArr[6] = m_xLeft4ED.get();
     aEditArr[7] = m_xRight4ED.get();
 
+    m_xSelectionGroupPB->connect_clicked(LINK(this, SvxRubyDialog, SelectionGroup_Impl));
     m_xApplyPB->connect_clicked(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
     m_xClosePB->connect_clicked(LINK(this, SvxRubyDialog, CloseHdl_Impl));
     m_xStylistPB->connect_clicked(LINK(this, SvxRubyDialog, StylistHdl_Impl));
@@ -405,6 +472,9 @@ void SvxRubyDialog::GetRubyText()
 
 void SvxRubyDialog::Update()
 {
+    // Only enable selection grouping options when they can be applied
+    m_xSelectionGroupPB->set_sensitive(!m_pImpl->IsSelectionGrouped());
+
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     sal_Int32 nLen = aRubyValues.getLength();
     m_xScrolledWindow->vadjustment_configure(0, 0, !nLen ? 1 : nLen, 1, 4, 4);
@@ -503,6 +573,12 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, weld::ScrolledWindow&, rScroll, void)
     SetRubyText(nPos, *m_xLeft4ED, *m_xRight4ED);
     SetLastPos(nPos - 3);
     m_xPreviewWin->Invalidate();
+}
+
+IMPL_LINK_NOARG(SvxRubyDialog, SelectionGroup_Impl, weld::Button&, void)
+{
+    m_pImpl->MakeSelectionGrouped();
+    Update();
 }
 
 IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl, weld::Button&, void)

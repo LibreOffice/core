@@ -1591,7 +1591,7 @@ public:
 
     // Interface for the list of Ruby - texts/attributes
     static sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList );
-    void SetRubyList( const SwPaM& rPam, const SwRubyList& rList );
+    void SetRubyList( SwPaM& rPam, const SwRubyList& rList );
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );

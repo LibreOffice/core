@@ -132,6 +132,7 @@ public:
     void testTdf92308();
     void testTableCellComparison();
     void testTdf156211();
+    void testFillRubyList();
     void testSetRubyList();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
@@ -171,6 +172,7 @@ public:
     CPPUNIT_TEST(testTdf92308);
     CPPUNIT_TEST(testTableCellComparison);
     CPPUNIT_TEST(testTdf156211);
+    CPPUNIT_TEST(testFillRubyList);
     CPPUNIT_TEST(testSetRubyList);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1985,6 +1987,165 @@ void SwDocTest::testTdf156211()
     CPPUNIT_ASSERT(!oSI.IsKashidaLine(TextFrameIndex{ 95 }));
 }
 
+void SwDocTest::testFillRubyList()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+
+    auto& rOps = m_pDoc->getIDocumentContentOperations();
+
+    auto fnAppendJapanese = [&](const OUString& rText)
+    {
+        rOps.AppendTextNode(*aPaM.GetPoint());
+
+        SvxLanguageItem aCJKLangItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE);
+        SvxLanguageItem aWestLangItem(LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE);
+        rOps.InsertPoolItem(aPaM, aCJKLangItem);
+        rOps.InsertPoolItem(aPaM, aWestLangItem);
+
+        rOps.InsertString(aPaM, rText);
+
+        aPaM.SetMark();
+        aPaM.GetPoint()->nContent = 0;
+
+        CPPUNIT_ASSERT_EQUAL(rText, aPaM.GetText());
+    };
+
+    auto fnAppendRuby = [](SwRubyList* rList, OUString aBase, OUString aRuby)
+    {
+        auto pEnt = std::make_unique<SwRubyListEntry>();
+        pEnt->SetText(std::move(aBase));
+        pEnt->SetRubyAttr(SwFormatRuby{ std::move(aRuby) });
+
+        rList->push_back(std::move(pEnt));
+    };
+
+    auto fnGetCombinedString = [&]
+    {
+        SwRubyList aRubies;
+        SwDoc::FillRubyList(aPaM, aRubies);
+
+        OUStringBuffer aTemp;
+
+        for (auto const& rRuby : aRubies)
+        {
+            aTemp.append(rRuby->GetText() + u"["_ustr + rRuby->GetRubyAttr().GetText() + u"]"_ustr);
+        }
+
+        return aTemp.toString();
+    };
+
+    // Single word without existing rubies
+    {
+        fnAppendJapanese(u"学校"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"学校[]"_ustr, fnGetCombinedString());
+    }
+
+    // Compound word without existing rubies
+    {
+        fnAppendJapanese(u"自動販売機"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"自動[]販売[]機[]"_ustr, fnGetCombinedString());
+    }
+
+    // Single word with existing rubies
+    {
+        fnAppendJapanese(u"学校"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]"_ustr, fnGetCombinedString());
+    }
+
+    // Compound word with existing rubies
+    {
+        fnAppendJapanese(u"自動販売機"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"自動"_ustr, u"じどう"_ustr);
+        fnAppendRuby(&rList, u"販売"_ustr, u"はんばい"_ustr);
+        fnAppendRuby(&rList, u"機"_ustr, u"き"_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"自動[じどう]販売[はんばい]機[き]"_ustr, fnGetCombinedString());
+    }
+
+    // Compound word with existing rubies treated as a single word
+    {
+        fnAppendJapanese(u"自動販売機"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"自動販売機"_ustr, u"じどうはんばいき"_ustr);
+        fnAppendRuby(&rList, u""_ustr, u""_ustr);
+        fnAppendRuby(&rList, u""_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"自動販売機[じどうはんばいき]"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#141466: Characteristic test from bug
+    {
+        fnAppendJapanese(u"学校に行きます。"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
+        fnAppendRuby(&rList, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr);
+        fnAppendRuby(&rList, u"きます"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"。"_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に[]行[い]き[]ます[]。[]"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#107184: Characteristic test for ruby group mode editing
+    {
+        fnAppendJapanese(u"学校に行きます"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校に行きます"_ustr, u"がっこうにいきます"_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学校に行きます[がっこうにいきます]"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#156543: Characteristic test for ruby mono mode editing
+    {
+        fnAppendJapanese(u"学校に行きます"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学"_ustr, u"がっ"_ustr);
+        fnAppendRuby(&rList, u"校"_ustr, u"こう"_ustr);
+        fnAppendRuby(&rList, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr);
+        fnAppendRuby(&rList, u"き"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"ま"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"す"_ustr, u""_ustr);
+
+        m_pDoc->SetRubyList(aPaM, rList);
+
+        CPPUNIT_ASSERT_EQUAL(u"学[がっ]校[こう]に[]行[い]き[]ます[]"_ustr, fnGetCombinedString());
+    }
+
+    // Empty PaM
+    {
+        fnAppendJapanese(u"学校"_ustr);
+
+        aPaM.DeleteMark();
+
+        CPPUNIT_ASSERT_EQUAL(u"学校[]"_ustr, fnGetCombinedString());
+    }
+}
+
 void SwDocTest::testSetRubyList()
 {
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
@@ -2057,7 +2218,11 @@ void SwDocTest::testSetRubyList()
         SwRubyList rList;
         fnAppendRuby(&rList, u"学校"_ustr, u"がっこう"_ustr);
 
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aPaM.GetMark()->GetContentIndex());
         m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aPaM.GetMark()->GetContentIndex());
 
         CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]"_ustr, fnGetCombinedString());
     }
@@ -2073,7 +2238,11 @@ void SwDocTest::testSetRubyList()
         fnAppendRuby(&rList, u"きます"_ustr, u""_ustr);
         fnAppendRuby(&rList, u"。"_ustr, u""_ustr);
 
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPaM.GetMark()->GetContentIndex());
         m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPaM.GetMark()->GetContentIndex());
 
         CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に行[い]きます。"_ustr, fnGetCombinedString());
     }
@@ -2089,7 +2258,11 @@ void SwDocTest::testSetRubyList()
         fnAppendRuby(&rList, u"きます"_ustr, u""_ustr);
         fnAppendRuby(&rList, u"。"_ustr, u""_ustr);
 
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPaM.GetMark()->GetContentIndex());
         m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPaM.GetMark()->GetContentIndex());
 
         CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に行[い]きます。"_ustr, fnGetCombinedString());
 
@@ -2101,9 +2274,131 @@ void SwDocTest::testSetRubyList()
         fnAppendRuby(&rList2, u"ます"_ustr, u""_ustr);
         fnAppendRuby(&rList2, u"。"_ustr, u""_ustr);
 
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPaM.GetMark()->GetContentIndex());
         m_pDoc->SetRubyList(aPaM, rList2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
 
         CPPUNIT_ASSERT_EQUAL(u"学校[がっこう]に来[き]ます。"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#107184: Characteristic test for ruby group mode editing
+    {
+        fnAppendJapanese(u"学校に行きます"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校に行きます"_ustr, u"がっこうにいきます"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学校に行きます[がっこうにいきます]"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#107184: Delete ruby in group mode after populating
+    {
+        fnAppendJapanese(u"学校に行きます"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学校に行きます"_ustr, u"がっこうにいきます"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学校に行きます[がっこうにいきます]"_ustr, fnGetCombinedString());
+
+        SwRubyList rList2;
+        fnAppendRuby(&rList2, u"学校に行きます"_ustr, u""_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aPaM, rList2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学校に行きます"_ustr, fnGetCombinedString());
+    }
+
+    // tdf#156543: Characteristic test for ruby mono mode editing
+    {
+        fnAppendJapanese(u"学校に行きます"_ustr);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"学"_ustr, u"がっ"_ustr);
+        fnAppendRuby(&rList, u"校"_ustr, u"こう"_ustr);
+        fnAppendRuby(&rList, u"に"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"行"_ustr, u"い"_ustr);
+        fnAppendRuby(&rList, u"き"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"ま"_ustr, u""_ustr);
+        fnAppendRuby(&rList, u"す"_ustr, u"す"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学[がっ]校[こう]に行[い]きます[す]"_ustr, fnGetCombinedString());
+    }
+
+    // Offset PaM - Combination of insert and replace
+    {
+        fnAppendJapanese(u"学校員"_ustr);
+
+        SwPosition aNewPos{ aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent };
+        const SwTextNode* pTNd = aNewPos.GetNode().GetTextNode();
+        pTNd->GoNext(&aNewPos, SwCursorSkipMode::Chars);
+
+        SwPaM aEmptyPaM{ aNewPos };
+        aEmptyPaM.SetMark();
+        aEmptyPaM.GetMark()->AdjustContent(1);
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"森林"_ustr, u"しんりん"_ustr);
+        fnAppendRuby(&rList, u"海上"_ustr, u"かいじょう"_ustr);
+        fnAppendRuby(&rList, u"地面"_ustr, u"じめん"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEmptyPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEmptyPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aEmptyPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEmptyPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aEmptyPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学森林[しんりん]海上[かいじょう]地面[じめん]員"_ustr,
+                             fnGetCombinedString());
+    }
+
+    // Empty PaM - Should insert
+    {
+        fnAppendJapanese(u"学校"_ustr);
+
+        SwPosition aNewPos{ aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent };
+        const SwTextNode* pTNd = aNewPos.GetNode().GetTextNode();
+        pTNd->GoNext(&aNewPos, SwCursorSkipMode::Chars);
+
+        SwPaM aEmptyPaM{ aNewPos };
+        aEmptyPaM.SetMark();
+
+        SwRubyList rList;
+        fnAppendRuby(&rList, u"森林"_ustr, u"しんりん"_ustr);
+        fnAppendRuby(&rList, u"海上"_ustr, u"かいじょう"_ustr);
+        fnAppendRuby(&rList, u"地面"_ustr, u"じめん"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEmptyPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEmptyPaM.GetMark()->GetContentIndex());
+        m_pDoc->SetRubyList(aEmptyPaM, rList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEmptyPaM.GetPoint()->GetContentIndex());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), aEmptyPaM.GetMark()->GetContentIndex());
+
+        CPPUNIT_ASSERT_EQUAL(u"学森林[しんりん]海上[かいじょう]地面[じめん]校"_ustr,
+                             fnGetCombinedString());
     }
 }
 
