@@ -43,9 +43,6 @@ private:
 public:
     UITestLogger();
 
-    void logCommand(std::u16string_view rAction,
-                    const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-
     void logAction(VclPtr<Control> const& xUIElement, VclEventId nEvent);
 
     void logAction(vcl::Window* const& xUIWin, VclEventId nEvent);
