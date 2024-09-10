@@ -166,12 +166,12 @@ public:
 
         if (mrRenderState.isObjectInAnimation(pObject))
         {
+            // Animated object has to be only one in the render
+            mrRenderState.mbSkipAllInThisPass = true;
+
             // Animated object cannot be attached to the previous object
             if (!mrRenderState.mbFirstObjectInPass)
                 return;
-
-            // Animated object has to be only one in the render
-            mrRenderState.mbSkipAllInThisPass = true;
         }
 
         if (mrRenderState.meStage == RenderStage::Master && hasFields(pObject)

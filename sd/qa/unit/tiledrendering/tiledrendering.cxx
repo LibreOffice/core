@@ -3598,11 +3598,26 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
 
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 3") >= 0);
+        CPPUNIT_ASSERT_EQUAL(-1, rJsonMsg.indexOf(u"\"initVisible\""));
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
+
+        debugWriteImageToFile(6, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+        CPPUNIT_ASSERT(bIsBitmapLayer);
+
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"group\": \"DrawPage\"") >= 0);
+        CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"index\": 4") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"initVisible\": false") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"animated\"") >= 0);
         CPPUNIT_ASSERT(rJsonMsg.indexOf(u"\"type\": \"bitmap\"") >= 0);
 
-        debugWriteImageToFile(6, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+        debugWriteImageToFile(7, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
     }
 
     {
