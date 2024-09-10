@@ -433,10 +433,22 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet& rSet = rMedium.GetItemSet();
-    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION)&&
-        rSet.Get( SID_DOC_STARTPRESENTATION ).GetValue() )
+    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION) )
     {
-        mpDoc->SetStartWithPresentation( true );
+        sal_uInt16 nStartingSlide = rSet.Get(SID_DOC_STARTPRESENTATION).GetValue();
+        if (nStartingSlide == 0)
+        {
+            OUString sStartPage = mpDoc->getPresentationSettings().maPresPage;
+            if (!sStartPage.isEmpty())
+            {
+                bool bIsMasterPage = false;
+                sal_uInt16 nPageNumb = mpDoc->GetPageByName(sStartPage, bIsMasterPage);
+                nStartingSlide = (nPageNumb + 1) / 2;
+            }
+            else
+                nStartingSlide = 1;
+        }
+        mpDoc->SetStartWithPresentation(nStartingSlide);
 
         // tell SFX to change viewshell when in preview mode
         if( IsPreview() )
@@ -465,11 +477,23 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         mpDoc->SetStarDrawPreviewMode( true );
     }
 
-    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION)&&
-        rSet.Get( SID_DOC_STARTPRESENTATION ).GetValue() )
+    if( SfxItemState::SET == rSet.GetItemState(SID_DOC_STARTPRESENTATION) )
     {
-        bStartPresentation = true;
-        mpDoc->SetStartWithPresentation( true );
+        sal_uInt16 nStartingSlide = rSet.Get(SID_DOC_STARTPRESENTATION).GetValue();
+        if (nStartingSlide == 0)
+        {
+            OUString sStartPage = mpDoc->getPresentationSettings().maPresPage;
+            if (!sStartPage.isEmpty())
+            {
+                bool bIsMasterPage = false;
+                sal_uInt16 nPageNumb = mpDoc->GetPageByName(sStartPage, bIsMasterPage);
+                nStartingSlide = (nPageNumb + 1) / 2;
+            }
+            else
+                nStartingSlide = 1;
+        }
+        bStartPresentation = nStartingSlide;
+        mpDoc->SetStartWithPresentation(nStartingSlide);
     }
 
     if( aFilterName == pFilterPowerPoint97
