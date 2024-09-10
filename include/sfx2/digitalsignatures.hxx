@@ -38,6 +38,13 @@ public:
                                           const std::function<void(bool)>& rCallback)
         = 0;
 
+    /// Async replacement for signScriptingContent().
+    virtual void
+    SignScriptingContentAsync(const css::uno::Reference<css::embed::XStorage>& rxStorage,
+                              const css::uno::Reference<css::io::XStream>& xSignStream,
+                              const std::function<void(bool)>& rCallback)
+        = 0;
+
 protected:
     ~DigitalSignatures() noexcept = default;
 };

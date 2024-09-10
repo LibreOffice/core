@@ -56,6 +56,33 @@ using namespace css;
 using namespace css::graphic;
 using namespace css::uno;
 
+/// RAII class to init / shut down libxmlsec.
+class Xmlsec
+{
+public:
+    Xmlsec();
+    ~Xmlsec();
+};
+
+Xmlsec::Xmlsec() { initXmlSec(); }
+
+Xmlsec::~Xmlsec() { deInitXmlSec(); }
+
+namespace
+{
+/// Shared access to libxmlsec, to avoid double init.
+struct XmlsecLibrary
+{
+    static std::shared_ptr<Xmlsec>& get();
+};
+
+std::shared_ptr<Xmlsec>& XmlsecLibrary::get()
+{
+    static std::shared_ptr<Xmlsec> pInstance = std::make_shared<Xmlsec>();
+    return pInstance;
+}
+}
+
 DocumentSignatureManager::DocumentSignatureManager(
     const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
     : mxContext(xContext)
@@ -64,7 +91,7 @@ DocumentSignatureManager::DocumentSignatureManager(
 {
 }
 
-DocumentSignatureManager::~DocumentSignatureManager() { deInitXmlSec(); }
+DocumentSignatureManager::~DocumentSignatureManager() { mpXmlsecLibrary.reset(); }
 
 bool DocumentSignatureManager::init()
 {
@@ -76,7 +103,7 @@ bool DocumentSignatureManager::init()
                 "DocumentSignatureManager::Init - mxGpgSEInitializer already set!");
 
     // xmlsec is needed by both services, so init before those
-    initXmlSec();
+    mpXmlsecLibrary = XmlsecLibrary::get();
 
     mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
 #if HAVE_FEATURE_GPGME

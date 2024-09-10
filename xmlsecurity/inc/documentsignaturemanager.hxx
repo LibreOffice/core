@@ -54,6 +54,7 @@ class XComponentContext;
 }
 }
 class PDFSignatureHelper;
+class Xmlsec;
 
 /// Manages signatures (addition, removal), used by DigitalSignaturesDialog.
 class XMLSECURITY_DLLPUBLIC DocumentSignatureManager
@@ -75,6 +76,7 @@ private:
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
     css::uno::Reference<css::xml::crypto::XSEInitializer> mxGpgSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxGpgSecurityContext;
+    std::shared_ptr<Xmlsec> mpXmlsecLibrary;
 
 public:
     DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext,
