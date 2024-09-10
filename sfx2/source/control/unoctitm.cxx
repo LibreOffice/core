@@ -512,14 +512,54 @@ OUString SfxDispatchController_Impl::getSlaveCommand( const css::util::URL& rURL
 
 namespace {
 
+OUString parseArguments(std::u16string_view rAction,
+                              const css::uno::Sequence<css::beans::PropertyValue>& rArgs)
+{
+    OUStringBuffer aBuffer(rAction);
+
+    if (rArgs.hasElements())
+    {
+        aBuffer.append(" {");
+        for (const css::beans::PropertyValue& rProp : rArgs)
+        {
+            OUString aTypeName = rProp.Value.getValueTypeName();
+
+            if (aTypeName == "long" || aTypeName == "short")
+            {
+                sal_Int32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append("\"" + rProp.Name + "\": " + OUString::number(nValue) + ", ");
+            }
+            else if (aTypeName == "unsigned long")
+            {
+                sal_uInt32 nValue = 0;
+                rProp.Value >>= nValue;
+                aBuffer.append("\"" + rProp.Name + "\": " + OUString::number(nValue) + ", ");
+            }
+            else if (aTypeName == "boolean")
+            {
+                bool bValue = false;
+                rProp.Value >>= bValue;
+                aBuffer.append("\"" + rProp.Name + "\": ");
+                if (bValue)
+                    aBuffer.append("True, ");
+                else
+                    aBuffer.append("False, ");
+            }
+        }
+        aBuffer.append("}");
+    }
+
+    return aBuffer.makeStringAndClear();
+}
+
 void collectUIInformation(const util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs)
 {
     static const char* pFile = std::getenv("LO_COLLECT_UIINFO");
     if (!pFile)
         return;
 
-    UITestLogger::getInstance().logCommand(
-        Concat2View("Send UNO Command (\"" + rURL.Complete + "\") "), rArgs);
+    UITestLogger::getInstance().log(parseArguments(Concat2View("Send UNO Command (\"" + rURL.Complete + "\") "), rArgs));
 }
 
 }
@@ -530,7 +570,7 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 {
     if ( aURL.Protocol == ".uno:")
     {
-        CrashReporter::logUnoCommand(aURL.Path);
+        CrashReporter::logUnoCommand(parseArguments(aURL.Path, aArgs));
     }
     collectUIInformation(aURL, aArgs);
 

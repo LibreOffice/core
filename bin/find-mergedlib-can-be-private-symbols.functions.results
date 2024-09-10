@@ -9840,7 +9840,6 @@ UITestLogger::UITestLogger()
 UITestLogger::log(std::basic_string_view<char16_t, std::char_traits<char16_t> >)
 UITestLogger::logAction(VclPtr<Control> const&, VclEventId)
 UITestLogger::logAction(vcl::Window* const&, VclEventId)
-UITestLogger::logCommand(std::basic_string_view<char16_t, std::char_traits<char16_t> >, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 UITestLogger::logKeyInput(VclPtr<vcl::Window> const&, KeyEvent const&)
 URIHelper::SetMaybeFileHdl(Link<rtl::OUString*, bool> const&)
 UnoControl::GetComponentServiceName() const
