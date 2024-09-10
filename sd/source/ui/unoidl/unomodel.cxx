@@ -4382,7 +4382,7 @@ OString SdXImpressDocument::getPresentationInfo() const
                             uno::Reference<drawing::XShapes> const xShapes(xSlide, uno::UNO_QUERY_THROW);
                             if (xShapes.is())
                             {
-                                ::tools::ScopedJsonWriterArray aVideoList = aJsonWriter.startArray("interactions");
+                                ::tools::ScopedJsonWriterArray aInteractions = aJsonWriter.startArray("interactions");
                                 auto count = xShapes->getCount();
                                 for (auto j = 0; j < count; j++)
                                 {
