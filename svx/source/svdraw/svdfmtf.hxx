@@ -47,8 +47,8 @@ class ImpSdrGDIMetaFileImport final
 {
     ::std::vector< rtl::Reference<SdrObject> > maTmpList;
     ScopedVclPtr<VirtualDevice> mpVD;
-    tools::Rectangle                   maScaleRect;
-    size_t                      mnMapScalingOfs; // from here on, not edited with MapScaling
+    MapMode maPrefMapMode;
+    tools::Rectangle            maScaleRect;
     std::unique_ptr<SfxItemSet> mpLineAttr;
     std::unique_ptr<SfxItemSet> mpFillAttr;
     std::unique_ptr<SfxItemSet> mpTextAttr;
@@ -150,6 +150,11 @@ class ImpSdrGDIMetaFileImport final
     bool CheckLastPolyLineAndFillMerge(const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     void DoLoopActions(GDIMetaFile const & rMtf, SvdProgressInfo* pProgrInfo, sal_uInt32* pActionsToReport);
+
+    // map from current virtual device mapmode to original mapmode
+    Size implMap(const Size& rSz) const;
+    Point implMap(const Point& rPt) const;
+    basegfx::B2DHomMatrix implMapMatrix() const;
 
     // Copy assignment is forbidden and not implemented.
     ImpSdrGDIMetaFileImport (const ImpSdrGDIMetaFileImport &) = delete;

@@ -347,6 +347,43 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf143412)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf162455)
+{
+    createSdImpressDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pActualPage->GetObjCount());
+
+    OUString aImageURL = createFileURL(u"tdf162455.svg");
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "FileName", uno::Any(aImageURL) },
+    }));
+    dispatchCommand(mxComponent, u".uno:InsertGraphic"_ustr, aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
+
+    // split the (auto-selected) svg up
+
+    dispatchCommand(mxComponent, u".uno:Break"_ustr, {});
+
+    // Get the newly created shape that has the text '100' in it
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(4, 0));
+    uno::Reference<text::XTextRange> xParagraph1(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph1));
+    CPPUNIT_ASSERT_EQUAL(u"100"_ustr, xRun->getString());
+
+    uno::Reference<beans::XPropertySet> xPropSet1(xRun, uno::UNO_QUERY);
+    double fFontSize1 = xPropSet1->getPropertyValue(u"CharHeight"_ustr).get<double>();
+
+    /* before this fix the font sizes were way too small
+      - Expected: 7.5
+      - Actual  : 0.300000011920929 */
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(7.5, fFontSize1, 0.01);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf96206)
 {
     // Copying/pasting slide referring to a non-default master with a text duplicated the master
