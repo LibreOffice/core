@@ -48,6 +48,7 @@
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Scripting.hxx>
 
@@ -299,10 +300,11 @@ ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle
 
 void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString )
 {
-    sal_Unicode cDecimalSep, cThousandSep, cDecimalSepAlt;
-    ImpGetIntntlSep( cDecimalSep, cThousandSep, cDecimalSepAlt );
+    sal_Unicode cDecimalSep;
     if( bCoreString )
         cDecimalSep = '.';
+    else
+        ImpGetIntntlSep(cDecimalSep, o3tl::temporary(sal_Unicode()), o3tl::temporary(sal_Unicode()));
 
     // tdf#143575 - use rtl::math::doubleToUString to convert numbers to strings in basic
     rRes = rtl::math::doubleToUString(nNum, rtl_math_StringFormat_Automatic, nPrec, cDecimalSep, true);
@@ -368,37 +370,34 @@ bool ImpConvStringExt( OUString& rSrc, SbxDataType eTargetType )
 // the return value is the number of characters used
 // from the format
 
-static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUString& rFmt )
+static void printfmtstr(std::u16string_view rStr, OUString& rRes, std::u16string_view rFmt)
 {
+    if (rFmt.empty())
+        rFmt = u"&";
+
     OUStringBuffer aTemp;
-    const sal_Unicode* pStr = rStr.getStr();
-    const sal_Unicode* pFmtStart = rFmt.getStr();
-    const sal_Unicode* pFmt = pFmtStart;
+    auto pStr = rStr.begin();
+    auto pFmt = rFmt.begin();
 
     switch( *pFmt )
     {
     case '!':
-        aTemp.append(*pStr++);
-        pFmt++;
+        if (pStr != rStr.end())
+            aTemp.append(*pStr);
         break;
     case '\\':
         do
         {
-            aTemp.append( *pStr ? *pStr++ : u' ');
-            pFmt++;
-        }
-        while( *pFmt && *pFmt != '\\' );
-        aTemp.append(*pStr ? *pStr++ : u' ');
-        pFmt++; break;
+            aTemp.append(pStr != rStr.end() ? *pStr++ : u' ');
+        } while (++pFmt != rFmt.end() && *pFmt != '\\');
+        aTemp.append(pStr != rStr.end() ? *pStr : u' ');
+        break;
     case '&':
-        aTemp = rStr;
-        pFmt++; break;
     default:
         aTemp = rStr;
         break;
     }
     rRes = aTemp.makeStringAndClear();
-    return static_cast<sal_uInt16>( pFmt - pFmtStart );
 }
 
 
@@ -451,7 +450,6 @@ enum class VbaFormatType
 {
     Offset,      // standard number format
     UserDefined, // user defined number format
-    Null
 };
 
 #if HAVE_FEATURE_SCRIPTING
@@ -461,105 +459,146 @@ struct VbaFormatInfo
     VbaFormatType meType;
     std::u16string_view mpVbaFormat; // Format string in vba
     NfIndexTableOffset meOffset; // SvNumberFormatter format index, if meType = VbaFormatType::Offset
-    const char* mpOOoFormat;     // if meType = VbaFormatType::UserDefined
-};
-
-const VbaFormatInfo pFormatInfoTable[] =
-{
-    { VbaFormatType::Offset,      std::u16string_view(u"Long Date"),   NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, std::u16string_view(u"Medium Date"), NF_NUMBER_STANDARD,     "DD-MMM-YY" },
-    { VbaFormatType::Offset,      std::u16string_view(u"Short Date"),  NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::UserDefined, std::u16string_view(u"Long Time"),   NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      std::u16string_view(u"Medium Time"), NF_TIME_HHMMAMPM,       nullptr },
-    { VbaFormatType::Offset,      std::u16string_view(u"Short Time"),  NF_TIME_HHMM,           nullptr },
-    { VbaFormatType::Offset,      std::u16string_view(u"ddddd"),       NF_DATE_SYSTEM_SHORT,   nullptr },
-    { VbaFormatType::Offset,      std::u16string_view(u"dddddd"),      NF_DATE_SYSTEM_LONG,    nullptr },
-    { VbaFormatType::UserDefined, std::u16string_view(u"ttttt"),       NF_NUMBER_STANDARD,     "H:MM:SS AM/PM" },
-    { VbaFormatType::Offset,      std::u16string_view(u"ww"),          NF_DATE_WW,             nullptr },
-    { VbaFormatType::Null,        std::u16string_view(u""),            NF_INDEX_TABLE_ENTRIES, nullptr }
+    OUString mpOOoFormat;     // if meType = VbaFormatType::UserDefined
 };
 
 const VbaFormatInfo* getFormatInfo( std::u16string_view rFmt )
 {
-    const VbaFormatInfo* pInfo = pFormatInfoTable;
-    while( pInfo->meType != VbaFormatType::Null )
+    static constexpr const VbaFormatInfo formatInfoTable[] =
     {
-        if( o3tl::equalsIgnoreAsciiCase( rFmt, pInfo->mpVbaFormat ) )
-            break;
-        ++pInfo;
-    }
-    return pInfo;
+        { VbaFormatType::Offset,      u"Long Date",   NF_DATE_SYSTEM_LONG,    u""_ustr },
+        { VbaFormatType::UserDefined, u"Medium Date", NF_NUMBER_STANDARD,     u"DD-MMM-YY"_ustr },
+        { VbaFormatType::Offset,      u"Short Date",  NF_DATE_SYSTEM_SHORT,   u""_ustr },
+        { VbaFormatType::UserDefined, u"Long Time",   NF_NUMBER_STANDARD,     u"H:MM:SS AM/PM"_ustr },
+        { VbaFormatType::Offset,      u"Medium Time", NF_TIME_HHMMAMPM,       u""_ustr },
+        { VbaFormatType::Offset,      u"Short Time",  NF_TIME_HHMM,           u""_ustr },
+        { VbaFormatType::Offset,      u"ddddd",       NF_DATE_SYSTEM_SHORT,   u""_ustr },
+        { VbaFormatType::Offset,      u"dddddd",      NF_DATE_SYSTEM_LONG,    u""_ustr },
+        { VbaFormatType::UserDefined, u"ttttt",       NF_NUMBER_STANDARD,     u"H:MM:SS AM/PM"_ustr },
+        { VbaFormatType::Offset,      u"ww",          NF_DATE_WW,             u""_ustr },
+    };
+
+    for (auto& info : formatInfoTable)
+        if (o3tl::equalsIgnoreAsciiCase(rFmt, info.mpVbaFormat))
+            return &info;
+    return nullptr;
 }
 #endif
 
-} // namespace
+void BasicFormatNum(double d, const OUString& rFmt, OUString& rRes)
+{
+    SbxAppData& rAppData = GetSbxData_Impl();
 
-#if HAVE_FEATURE_SCRIPTING
-constexpr OUStringLiteral VBAFORMAT_GENERALDATE = u"General Date";
-constexpr OUStringLiteral VBAFORMAT_C = u"c";
-constexpr OUStringLiteral VBAFORMAT_N = u"n";
-constexpr OUString VBAFORMAT_NN = u"nn"_ustr;
-constexpr OUStringLiteral VBAFORMAT_W = u"w";
-constexpr OUStringLiteral VBAFORMAT_Y = u"y";
-constexpr OUStringLiteral VBAFORMAT_LOWERCASE = u"<";
-constexpr OUStringLiteral VBAFORMAT_UPPERCASE = u">";
-#endif
+    LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+    if (rAppData.pBasicFormater)
+        if (rAppData.eBasicFormaterLangType != eLangType)
+            rAppData.pBasicFormater.reset();
+    rAppData.eBasicFormaterLangType = eLangType;
+
+    if (!rAppData.pBasicFormater)
+    {
+        SvtSysLocale aSysLocale;
+        const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
+        sal_Unicode cComma = rData.getNumDecimalSep()[0];
+        sal_Unicode c1000 = rData.getNumThousandSep()[0];
+        const OUString& aCurrencyStrg = rData.getCurrSymbol();
+
+        // initialize the Basic-formater help object:
+        // get resources for predefined output
+        // of the Format()-command, e. g. for "On/Off"
+        OUString aOnStrg = BasResId(STR_BASICKEY_FORMAT_ON);
+        OUString aOffStrg = BasResId(STR_BASICKEY_FORMAT_OFF);
+        OUString aYesStrg = BasResId(STR_BASICKEY_FORMAT_YES);
+        OUString aNoStrg = BasResId(STR_BASICKEY_FORMAT_NO);
+        OUString aTrueStrg = BasResId(STR_BASICKEY_FORMAT_TRUE);
+        OUString aFalseStrg = BasResId(STR_BASICKEY_FORMAT_FALSE);
+        OUString aCurrencyFormatStrg = BasResId(STR_BASICKEY_FORMAT_CURRENCY);
+
+        rAppData.pBasicFormater = std::make_unique<SbxBasicFormater>(
+            cComma, c1000, aOnStrg, aOffStrg, aYesStrg, aNoStrg, aTrueStrg, aFalseStrg,
+            aCurrencyStrg, aCurrencyFormatStrg);
+    }
+    // Remark: For performance reasons there's only ONE BasicFormater-
+    //    object created and 'stored', so that the expensive resource-
+    //    loading is saved (for country-specific predefined outputs,
+    //    e. g. "On/Off") and the continuous string-creation
+    //    operations, too.
+    // BUT: therefore this code is NOT multithreading capable!
+    rRes = rAppData.pBasicFormater->BasicFormat(d, rFmt);
+}
+
+void BasicFormatNum(double d, const OUString* pFmt, SbxDataType eType, OUString& rRes)
+{
+    if (pFmt)
+        BasicFormatNum(d, *pFmt, rRes);
+    else
+        ImpCvtNum(d, eType == SbxSINGLE ? 6 : eType == SbxDOUBLE ? 14 : 0, rRes);
+}
+
+// For numeric types, takes the number directly; otherwise, tries to take string and convert it
+bool GetNumberIntl(const SbxValue& val, double& ret)
+{
+    switch (val.GetType())
+    {
+        case SbxCHAR:
+        case SbxBYTE:
+        case SbxINTEGER:
+        case SbxUSHORT:
+        case SbxLONG:
+        case SbxULONG:
+        case SbxINT:
+        case SbxUINT:
+        case SbxSINGLE:
+        case SbxDOUBLE:
+            ret = val.GetDouble();
+            return true;
+        case SbxSTRING:
+        default:
+            return SbxValue::ScanNumIntnl(val.GetOUString(), ret) == ERRCODE_NONE;
+    }
+}
+} // namespace
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 {
-    short nComma = 0;
-    double d = 0;
+    if (pFmt)
+    {
+        if (*pFmt == "<") // VBA lowercase
+        {
+            rRes = SvtSysLocale().GetCharClass().lowercase(GetOUString());
+            return;
+        }
+        if (*pFmt == ">") // VBA uppercase
+        {
+            rRes = SvtSysLocale().GetCharClass().uppercase(GetOUString());
+            return;
+        }
 
     // pflin, It is better to use SvNumberFormatter to handle the date/time/number format.
     // the SvNumberFormatter output is mostly compatible with
     // VBA output besides the OOo-basic output
 #if HAVE_FEATURE_SCRIPTING
-    if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
-    {
-        OUString aStr = GetOUString();
-
-        SvtSysLocale aSysLocale;
-        const CharClass& rCharClass = aSysLocale.GetCharClass();
-
-        if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_LOWERCASE ) )
-        {
-            rRes = rCharClass.lowercase( aStr );
-            return;
-        }
-        if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_UPPERCASE ) )
-        {
-            rRes = rCharClass.uppercase( aStr );
-            return;
-        }
-
-        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-        std::shared_ptr<SvNumberFormatter> pFormatter;
-        if (GetSbData()->pInst)
-        {
-            pFormatter = GetSbData()->pInst->GetNumberFormatter();
-        }
-        else
-        {
-            sal_uInt32 n;   // Dummy
-            pFormatter = SbiInstance::PrepareNumberFormatter( n, n, n );
-        }
-
-        // Passing an index of a locale switches IsNumberFormat() to use that
-        // locale in case the formatter wasn't default created with it.
-        sal_uInt32 nIndex = pFormatter->GetStandardIndex( eLangType);
-        double nNumber;
-        const Color* pCol;
-
-        bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, nNumber );
-
         // number format, use SvNumberFormatter to handle it.
-        if( bSuccess )
+        if (double nNumber; !SbxBasicFormater::isBasicFormat(*pFmt) && GetNumberIntl(*this, nNumber))
         {
+            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
+            std::shared_ptr<SvNumberFormatter> pFormatter;
+            if (GetSbData()->pInst)
+            {
+                pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
+            else
+            {
+                sal_uInt32 n; // Dummy
+                pFormatter = SbiInstance::PrepareNumberFormatter(n, n, n);
+            }
+
+            sal_uInt32 nIndex;
+            const Color* pCol;
             sal_Int32 nCheckPos = 0;
             SvNumFormatType nType;
             OUString aFmtStr = *pFmt;
-            const VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
-            if( pInfo->meType != VbaFormatType::Null )
+            if (const VbaFormatInfo* pInfo = getFormatInfo(aFmtStr))
             {
                 if( pInfo->meType == VbaFormatType::Offset )
                 {
@@ -567,43 +606,40 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 }
                 else
                 {
-                    aFmtStr = OUString::createFromAscii(pInfo->mpOOoFormat);
+                    aFmtStr = pInfo->mpOOoFormat;
                     pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
                 }
                 pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
-            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_GENERALDATE )
-                    || aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_C ))
+            else if (aFmtStr.equalsIgnoreAsciiCase("General Date") // VBA general date variants
+                     || aFmtStr.equalsIgnoreAsciiCase("c"))
             {
+                OUString dateStr;
                 if( nNumber <=-1.0 || nNumber >= 1.0 )
                 {
                     // short date
                     nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
-                    pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
+                    pFormatter->GetOutputString(nNumber, nIndex, dateStr, &pCol);
 
-                    // long time
-                    if( floor( nNumber ) != nNumber )
+                    if (floor(nNumber) == nNumber)
                     {
-                        aFmtStr = "H:MM:SS AM/PM";
-                        pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
-                        OUString aTime;
-                        pFormatter->GetOutputString( nNumber, nIndex, aTime, &pCol );
-                        rRes += " " + aTime;
+                        rRes = dateStr;
+                        return;
                     }
                 }
-                else
-                {
-                    // long time only
-                    aFmtStr = "H:MM:SS AM/PM";
-                    pFormatter->PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH_US, eLangType, true);
-                    pFormatter->GetOutputString( nNumber, nIndex, rRes, &pCol );
-                }
+                // long time
+                aFmtStr = u"H:MM:SS AM/PM"_ustr;
+                pFormatter->PutandConvertEntry(aFmtStr, nCheckPos, nType, nIndex,
+                                               LANGUAGE_ENGLISH_US, eLangType, true);
+                pFormatter->GetOutputString(nNumber, nIndex, rRes, &pCol);
+                if (!dateStr.isEmpty())
+                    rRes = dateStr + " " + rRes;
             }
-            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_N ) ||
-                     aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_NN ))
+            else if (aFmtStr.equalsIgnoreAsciiCase("n") // VBA minute variants
+                     || aFmtStr.equalsIgnoreAsciiCase("nn"))
             {
                 sal_Int32 nMin = implGetMinute( nNumber );
-                if( nMin < 10 && aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_NN ))
+                if (nMin < 10 && aFmtStr.equalsIgnoreAsciiCase("nn"))
                 {
                     // Minute in two digits
                      sal_Unicode aBuf[2];
@@ -616,12 +652,11 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                     rRes = OUString::number(nMin);
                 }
             }
-            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_W ))
+            else if (aFmtStr.equalsIgnoreAsciiCase("w")) // VBA weekday number
             {
-                sal_Int32 nWeekDay = implGetWeekDay( nNumber );
-                rRes = OUString::number(nWeekDay);
+                rRes = OUString::number(implGetWeekDay(nNumber));
             }
-            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_Y ))
+            else if (aFmtStr.equalsIgnoreAsciiCase("y")) // VBA year day number
             {
                 sal_Int16 nYear = implGetDateYear( nNumber );
                 double dBaseDate;
@@ -637,12 +672,15 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 
             return;
         }
-    }
 #endif
+    }
 
     SbxDataType eType = GetType();
     switch( eType )
     {
+    case SbxNULL:
+        rRes = SbxBasicFormater::BasicFormatNull(pFmt ? *pFmt : std::u16string_view{});
+        break;
     case SbxCHAR:
     case SbxBYTE:
     case SbxINTEGER:
@@ -651,99 +689,19 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     case SbxULONG:
     case SbxINT:
     case SbxUINT:
-    case SbxNULL:       // #45929 NULL with a little cheating
-        nComma = 0;     goto cvt;
     case SbxSINGLE:
-        nComma = 6;     goto cvt;
     case SbxDOUBLE:
-        nComma = 14;
-
-    cvt:
-        if( eType != SbxNULL )
-        {
-            d = GetDouble();
-        }
-        // #45355 another point to jump in for isnumeric-String
-    cvt2:
-        if( pFmt )
-        {
-            SbxAppData& rAppData = GetSbxData_Impl();
-
-            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
-            if( rAppData.pBasicFormater )
-            {
-                if( rAppData.eBasicFormaterLangType != eLangType )
-                {
-                    rAppData.pBasicFormater.reset();
-                }
-            }
-            rAppData.eBasicFormaterLangType = eLangType;
-
-
-            if( !rAppData.pBasicFormater )
-            {
-                SvtSysLocale aSysLocale;
-                const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-                sal_Unicode cComma = rData.getNumDecimalSep()[0];
-                sal_Unicode c1000  = rData.getNumThousandSep()[0];
-                const OUString& aCurrencyStrg = rData.getCurrSymbol();
-
-                // initialize the Basic-formater help object:
-                // get resources for predefined output
-                // of the Format()-command, e. g. for "On/Off"
-                OUString aOnStrg = BasResId(STR_BASICKEY_FORMAT_ON);
-                OUString aOffStrg = BasResId(STR_BASICKEY_FORMAT_OFF);
-                OUString aYesStrg = BasResId(STR_BASICKEY_FORMAT_YES);
-                OUString aNoStrg = BasResId(STR_BASICKEY_FORMAT_NO);
-                OUString aTrueStrg = BasResId(STR_BASICKEY_FORMAT_TRUE);
-                OUString aFalseStrg = BasResId(STR_BASICKEY_FORMAT_FALSE);
-                OUString aCurrencyFormatStrg = BasResId(STR_BASICKEY_FORMAT_CURRENCY);
-
-                rAppData.pBasicFormater = std::make_unique<SbxBasicFormater>(
-                                                                cComma,c1000,aOnStrg,aOffStrg,
-                                                                aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
-                                                                aCurrencyStrg,aCurrencyFormatStrg );
-            }
-            // Remark: For performance reasons there's only ONE BasicFormater-
-            //    object created and 'stored', so that the expensive resource-
-            //    loading is saved (for country-specific predefined outputs,
-            //    e. g. "On/Off") and the continuous string-creation
-            //    operations, too.
-            // BUT: therefore this code is NOT multithreading capable!
-
-            // here are problems with ;;;Null because this method is only
-            // called, if SbxValue is a number!!!
-            // in addition rAppData.pBasicFormater->BasicFormatNull( *pFmt ); could be called!
-            if( eType != SbxNULL )
-            {
-                rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
-            }
-            else
-            {
-                rRes = SbxBasicFormater::BasicFormatNull( *pFmt );
-            }
-
-        }
-        else
-            ImpCvtNum( GetDouble(), nComma, rRes );
+        BasicFormatNum(GetDouble(), pFmt, eType, rRes);
         break;
     case SbxSTRING:
+        rRes = GetOUString();
         if( pFmt )
         {
             // #45355 converting if numeric
-            if( IsNumericRTL() )
-            {
-                ScanNumIntnl( GetOUString(), d );
-                goto cvt2;
-            }
+            if (double d; ScanNumIntnl(rRes, d) == ERRCODE_NONE)
+                BasicFormatNum(d, *pFmt, rRes);
             else
-            {
-                printfmtstr( GetOUString(), rRes, *pFmt );
-            }
-        }
-        else
-        {
-            rRes = GetOUString();
+                printfmtstr(rRes, rRes, *pFmt);
         }
         break;
     default:
