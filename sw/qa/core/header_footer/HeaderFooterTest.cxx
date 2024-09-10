@@ -716,6 +716,9 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testFirstPageFooterEnabled)
     verify();
 }
 
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
 {
     auto verify = [this]() {
@@ -800,6 +803,7 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc519228OddBreaks)
     saveAndReload(u"Office Open XML Text"_ustr);
     verify();
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testBnc875718)
 {

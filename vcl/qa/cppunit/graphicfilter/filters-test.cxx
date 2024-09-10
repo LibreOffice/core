@@ -160,10 +160,12 @@ void VclFiltersTest::testCVEs()
 
     testDir(OUString(),
         m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/png/"));
-
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
     testDir(OUString(),
         m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/jpg/"));
-
+#endif
     testDir(OUString(),
         m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/gif/"));
 

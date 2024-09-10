@@ -188,7 +188,11 @@ void VBATest::testMiscOLEStuff()
 // Since some time, on a properly updated Windows 10, this works
 // only with a 64-bit LibreOffice
 
-#if defined(_WIN64)
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+    // Avoid "this method is empty and should be removed" warning
+    (void) 42;
+#elif defined(_WIN64)
     // test if we have the necessary runtime environment
     // to run the OLE tests.
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;

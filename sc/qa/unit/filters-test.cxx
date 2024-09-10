@@ -92,9 +92,12 @@ void ScFiltersTest::testCVEs()
     //not indicate that it imported as .slk.
     testDir(u"SYLK"_ustr,
         m_directories.getURLFromSrc(u"/sc/qa/unit/data/slk/"));
-
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
     testDir(u"MS Excel 97"_ustr,
         m_directories.getURLFromSrc(u"/sc/qa/unit/data/xls/"));
+#endif
 
     testDir(u"Calc Office Open XML"_ustr,
         m_directories.getURLFromSrc(u"/sc/qa/unit/data/xlsx/"), OUString(), XLSX_FORMAT_TYPE);

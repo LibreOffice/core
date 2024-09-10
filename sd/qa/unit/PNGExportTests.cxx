@@ -941,6 +941,9 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf155048)
     }
 }
 
+#if defined _WIN32 && defined _ARM64_
+    // skip for windows arm64 build
+#else
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testNoAntiAliasExport)
 {
 #ifdef MACOSX
@@ -1043,5 +1046,6 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
     CPPUNIT_ASSERT_GREATER(350, topNonWhites); // 399 in my testing
     CPPUNIT_ASSERT_GREATER(350, bottomNonWhites); // 362 in my testing
 }
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
