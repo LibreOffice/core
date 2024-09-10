@@ -76,7 +76,7 @@ AccObjectWinManager::AccObjectWinManager( AccObjectManagerAgent* Agent ):
 AccObjectWinManager::~AccObjectWinManager()
 {
     {
-        std::scoped_lock l(m_Mutex);
+        std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
         XIdAccList.clear();
         HwndXAcc.clear();
@@ -127,7 +127,7 @@ AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
     if( pXAcc == nullptr)
         return nullptr;
 
-    std::scoped_lock l(m_Mutex);
+    std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
     XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
     if ( pIndTemp == XIdAccList.end() )
@@ -143,7 +143,7 @@ AccObject* AccObjectWinManager::GetAccObjByXAcc( XAccessible* pXAcc)
    */
 IMAccessible * AccObjectWinManager::GetTopWindowIMAccessible(HWND hWnd)
 {
-    std::scoped_lock l(m_Mutex); // tdf#155794 for HwndXAcc and XIdAccList
+    std::unique_lock<std::recursive_mutex> l(m_Mutex); // tdf#155794 for HwndXAcc and XIdAccList
 
     XHWNDToXAccHash::iterator iterResult =HwndXAcc.find(hWnd);
     if(iterResult == HwndXAcc.end())
@@ -488,7 +488,7 @@ void AccObjectWinManager::DeleteAccChildNode( AccObject* pObj )
    */
 void AccObjectWinManager::DeleteFromHwndXAcc(XAccessible* pXAcc )
 {
-    std::scoped_lock l(m_Mutex);
+    std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
     XHWNDToXAccHash::iterator iter = HwndXAcc.begin();
     while(iter!=HwndXAcc.end())
@@ -542,7 +542,7 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     rtl::Reference<AccEventListener> pListener;
 
     {
-        std::scoped_lock l(m_Mutex);
+        std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
         XIdToAccObjHash::iterator temp = XIdAccList.find(pXAcc);
         if( temp != XIdAccList.end() )
@@ -692,7 +692,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
     {
         short nCurRole = GetRole(pXAcc);
 
-        std::scoped_lock l(m_Mutex);
+        std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
         XIdToAccObjHash::iterator itXacc = XIdAccList.find( pXAcc );
         if (itXacc != XIdAccList.end() )
@@ -764,7 +764,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
         return false;
 
     {
-        std::scoped_lock l(m_Mutex);
+        std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
         XIdAccList.insert( XIdToAccObjHash::value_type( pXAcc, pObj ));
         XIdToAccObjHash::iterator pIndTemp = XIdAccList.find( pXAcc );
@@ -793,7 +793,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
    */
 void AccObjectWinManager::SaveTopWindowHandle(HWND hWnd, css::accessibility::XAccessible* pXAcc)
 {
-    std::scoped_lock l(m_Mutex);
+    std::unique_lock<std::recursive_mutex> l(m_Mutex);
 
     HwndXAcc.insert( XHWNDToXAccHash::value_type( hWnd,pXAcc ) );
 }
