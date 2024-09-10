@@ -2436,6 +2436,12 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="DisplayMovedTextInGreen" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether moved text is displayed in green.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Insert">
       <info>

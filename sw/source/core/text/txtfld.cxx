@@ -466,7 +466,8 @@ static bool lcl_setRedlineAttr( SwTextFormatInfo &rInf, const SwTextNode& rTextN
         return false;
 
     // moved text: dark green with double underline or strikethrough
-    if ( bIsMoved )
+    bool bDisplayMovedTextInGreen = officecfg::Office::Writer::Comparison::DisplayMovedTextInGreen::get();
+    if ( bDisplayMovedTextInGreen && bIsMoved )
     {
         pNumFnt->SetColor(COL_GREEN);
         if ( RedlineType::Delete == pRedlineNum->GetType() )

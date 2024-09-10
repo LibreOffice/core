@@ -53,6 +53,7 @@
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 using namespace ::com::sun::star;
 
@@ -799,7 +800,8 @@ short SwRedlineItr::Seek(SwFont& rFnt,
                     SfxWhichIter aIter( *m_pSet );
 
                     // moved text: dark green with double underline or strikethrough
-                    if ( pRed->IsMoved() )
+                    bool bDisplayMovedTextInGreen = officecfg::Office::Writer::Comparison::DisplayMovedTextInGreen::get();
+                    if ( bDisplayMovedTextInGreen && pRed->IsMoved() )
                     {
                         m_pSet->Put(SvxColorItem( COL_GREEN, RES_CHRATR_COLOR ));
                         if (SfxItemState::SET == m_pSet->GetItemState(RES_CHRATR_CROSSEDOUT, true))
