@@ -127,6 +127,7 @@ public:
         bool bReset;
         bool bResetListAttrs; // #i62575#
         bool bResetAll;
+        bool bResetAllCharAttrs;
         bool bInclRefToxMark;
         /// From the attributes included in the range, delete only the ones which have exactly same range. Don't delete the ones which are simply included in the range.
         bool bExactRange;
@@ -144,13 +145,14 @@ public:
             , bReset(false) // #i62675#
             , bResetListAttrs(false)
             , bResetAll(true)
+            , bResetAllCharAttrs(false)
             , bInclRefToxMark(false)
             , bExactRange(false)
         {
         }
     };
     static bool lcl_RstTextAttr( SwNode* pNd, void* pArgs ); //originally from docfmt.cxx
-
+    static std::shared_ptr<SfxItemSet> lcl_createDelSet(SwDoc& rDoc);
 
     virtual ~DocumentContentOperationsManager() override;
 

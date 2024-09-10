@@ -1023,6 +1023,22 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
     SwTextFormatColl* pFormat = pPara->pFormatColl;
     if ( pPara->bReset )
     {
+        if (pCNd->IsTextNode() && pPara->bResetAllCharAttrs && pPara->pDelSet && pPara->pDelSet->Count())
+        {
+            //TODO: copy to select the text node completely
+            SwPosition aStart(*pCNd, 0);
+            SwPosition aEnd(*pCNd, pCNd->GetTextNode()->GetText().getLength());
+            sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            &aStart, &aEnd, pPara->pHistory, nullptr, pPara->pLayout);
+            aPara.pFormatColl = pPara->pFormatColl;
+            aPara.bReset = pPara->bReset;
+            // #i62675#
+            aPara.bResetListAttrs = pPara->bResetListAttrs;
+            aPara.bResetAllCharAttrs = pPara->bResetAllCharAttrs;
+            aPara.pDelSet = pPara->pDelSet;
+            sw::DocumentContentOperationsManager::lcl_RstTextAttr(pCNd, &aPara);
+        }
+
         lcl_RstAttr(pCNd, pPara);
 
         // #i62675# check, if paragraph style has changed
@@ -1091,6 +1107,7 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
                           SwTextFormatColl *pFormat,
                           const bool bReset,
                           const bool bResetListAttrs,
+                          const bool bResetAllCharAttrs,
                           SwRootFrame const*const pLayout)
 {
     SwDataChanged aTmp( rRg );
@@ -1107,12 +1124,20 @@ bool SwDoc::SetTextFormatColl(const SwPaM &rRg,
         GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
 
+    std::shared_ptr<SfxItemSet> pDelSet;
     sw::DocumentContentOperationsManager::ParaRstFormat aPara(
             pStt, pEnd, pHst, nullptr, pLayout);
     aPara.pFormatColl = pFormat;
     aPara.bReset = bReset;
     // #i62675#
     aPara.bResetListAttrs = bResetListAttrs;
+    aPara.bResetAllCharAttrs = bResetAllCharAttrs;
+    if (bResetAllCharAttrs)
+    {
+        o3tl::sorted_vector<sal_uInt16> aAttribs;
+        pDelSet = sw::DocumentContentOperationsManager::lcl_createDelSet(*this);
+        aPara.pDelSet = pDelSet.get();
+    }
 
     GetNodes().ForEach( pStt->GetNodeIndex(), pEnd->GetNodeIndex()+1,
                         lcl_SetTextFormatColl, &aPara );

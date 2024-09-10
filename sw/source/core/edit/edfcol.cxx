@@ -2208,7 +2208,8 @@ void SwEditShell::ClassifyDocPerHighestParagraphClass()
 
 // #i62675#
 void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
-                                const bool bResetListAttrs)
+                                const bool bResetListAttrs,
+                                SetAttrMode nMode)
 {
     SwTextFormatColl *pLocal = pFormat? pFormat: (*GetDoc()->GetTextFormatColls())[0];
     StartAllAction();
@@ -2238,7 +2239,7 @@ void SwEditShell::SetTextFormatColl(SwTextFormatColl *pFormat,
             }
 
             // Change the paragraph style to pLocal and remove all direct paragraph formatting.
-            GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, GetLayout());
+            GetDoc()->SetTextFormatColl(rPaM, pLocal, true, bResetListAttrs, !!(nMode & SetAttrMode::REMOVE_ALL_ATTR), GetLayout());
 
             // If there are hints on the nodes which cover the whole node, then remove those, too.
             SwPaM aPaM(*rPaM.Start(), *rPaM.End());

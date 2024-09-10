@@ -60,7 +60,7 @@ int SwFindParaFormatColl::DoFind(SwPaM & rCursor, SwMoveFnCollection const & fnM
     else if( pReplColl )
     {
         rCursor.GetDoc().SetTextFormatColl(rCursor,
-            const_cast<SwTextFormatColl*>(pReplColl), true, false, m_pLayout);
+            const_cast<SwTextFormatColl*>(pReplColl), true, false, false, m_pLayout);
         nRet = FIND_NO_RING;
     }
     return nRet;

@@ -381,7 +381,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
  *
  * @param nStt starting position
  * @param nLen length of the deletion
- * @param nthat ???
+ * @param nWhich ???
  * @param pSet ???
  * @param bInclRefToxMark ???
  */

@@ -335,7 +335,9 @@ public:
 
     // #i62675#
     /// Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTextFormatColl(..)>
-    SW_DLLPUBLIC void SetTextFormatColl(SwTextFormatColl*, const bool bResetListAttrs = false);
+    SW_DLLPUBLIC void SetTextFormatColl(SwTextFormatColl*,
+        const bool bResetListAttrs = false,
+        SetAttrMode nMode = SetAttrMode::DEFAULT);
     SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl(const OUString &rFormatCollName,
         SwTextFormatColl *pDerivedFrom = nullptr);
     void FillByEx(SwTextFormatColl*);
