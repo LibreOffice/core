@@ -31,6 +31,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -394,7 +395,7 @@ private:
     HashMultimap_OWString_Interface m_ServiceMap;
     HashSet_Ref                     m_ImplementationMap;
     HashMap_OWString_Interface      m_ImplementationNameMap;
-    Reference<XEventListener >      xFactoryListener;
+    rtl::Reference<OServiceManager_Listener > xFactoryListener;
     bool                            m_bInDisposing;
 };
 
