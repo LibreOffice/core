@@ -162,7 +162,8 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( std::u16string_vi
         uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
         uno::TypeClass eClass = aValue.getValueTypeClass();
         // only use properties of supported types
-        if ( eClass == uno::TypeClass_BOOLEAN || eClass == uno::TypeClass_LONG || eClass == uno::TypeClass_DOUBLE )
+        if (eClass == uno::TypeClass_BOOLEAN || eClass == uno::TypeClass_LONG || eClass == uno::TypeClass_SHORT
+            || eClass == uno::TypeClass_BYTE || eClass == uno::TypeClass_DOUBLE)
             pDefaults[nValid++] = beans::PropertyValue( rProp.Name, -1, aValue, beans::PropertyState_DIRECT_VALUE );
     }
     aDefaults.realloc(nValid);
