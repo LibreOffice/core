@@ -82,7 +82,6 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     const tools::Rectangle& rRect)
 :   mpVD(VclPtr<VirtualDevice>::Create()),
     maScaleRect(rRect),
-    mnMapScalingOfs(0),
     mpModel(&rModel),
     mnLayer(nLay),
     mnLineWidth(0),
@@ -210,6 +209,9 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
     size_t nInsPos,
     SvdProgressInfo* pProgrInfo)
 {
+    maPrefMapMode = rMtf.GetPrefMapMode();
+    mpVD->SetMapMode(maPrefMapMode);
+
     // setup some global scale parameter
     // mfScaleX, mfScaleY, maScaleX, maScaleY, mbMov, mbSize
     mfScaleX = mfScaleY = 1.0;
@@ -262,9 +264,6 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
         pProgrInfo->ReportActions(nActionsToReport);
         nActionsToReport = 0;
     }
-
-    // MapMode scaling
-    MapScaling();
 
     // To calculate the progress meter, we use GetActionSize()*3.
     // However, maTmpList has a lower entry count limit than GetActionSize(),
@@ -393,7 +392,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
     if(bText && mbFntDirty)
     {
         vcl::Font aFnt(mpVD->GetFont());
-        const sal_uInt32 nHeight(basegfx::fround(aFnt.GetFontSize().Height() * mfScaleY));
+        const sal_uInt32 nHeight(basegfx::fround(implMap(aFnt.GetFontSize()).Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamilyType(), aFnt.GetFamilyName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
@@ -660,7 +659,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction const & rAct)
         return;
 
     basegfx::B2DPolygon aLine;
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
 
     aLine.append(aStart);
     aLine.append(aEnd);
@@ -882,6 +882,7 @@ void ImpSdrGDIMetaFileImport::checkClip()
     if(isClip())
     {
         const basegfx::B2DHomMatrix aTransform(
+            implMapMatrix() *
             basegfx::utils::createScaleTranslateB2DHomMatrix(
                 mfScaleX,
                 mfScaleY,
@@ -904,7 +905,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction const & rAct )
 
     if(aSource.count())
     {
-        const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+        const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                               basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
         aSource.transform(aTransform);
     }
 
@@ -950,7 +952,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolygonAction const & rAct )
     if(!aSource.count())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aSource.transform(aTransform);
 
     if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(basegfx::B2DPolyPolygon(aSource)))
@@ -974,7 +977,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
     if(!aSource.count())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aSource.transform(aTransform);
 
     if(!mbLastObjWasPolyWithoutLine || !CheckLastPolyLineAndFillMerge(aSource))
@@ -990,6 +994,21 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction const & rAct)
     }
 }
 
+Size ImpSdrGDIMetaFileImport::implMap(const Size& rSz) const
+{
+    return OutputDevice::LogicToLogic(rSz, mpVD->GetMapMode(), maPrefMapMode);
+}
+
+Point ImpSdrGDIMetaFileImport::implMap(const Point& rPt) const
+{
+    return OutputDevice::LogicToLogic(rPt, mpVD->GetMapMode(), maPrefMapMode);
+}
+
+basegfx::B2DHomMatrix ImpSdrGDIMetaFileImport::implMapMatrix() const
+{
+    return OutputDevice::LogicToLogic(mpVD->GetMapMode(), maPrefMapMode);
+}
+
 void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rStr, const MetaAction& rAct )
 {
     // calc text box size, add 5% to make it fit safely
@@ -998,15 +1017,22 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     vcl::Font aFnt( mpVD->GetFont() );
     TextAlign eAlg( aFnt.GetAlignment() );
 
-    sal_Int32 nTextWidth = static_cast<sal_Int32>( mpVD->GetTextWidth( rStr ) * mfScaleX );
-    sal_Int32 nTextHeight = static_cast<sal_Int32>( mpVD->GetTextHeight() * mfScaleY );
+    Size aTextSizeMapped(implMap(Size(mpVD->GetTextWidth(rStr), mpVD->GetTextHeight())));
 
-    Point aPos(basegfx::fround<tools::Long>(rPos.X() * mfScaleX + maOfs.X()),
-               basegfx::fround<tools::Long>(rPos.Y() * mfScaleY + maOfs.Y()));
+    sal_Int32 nTextWidth = static_cast<sal_Int32>(aTextSizeMapped.Width() * mfScaleX);
+    sal_Int32 nTextHeight = static_cast<sal_Int32>(aTextSizeMapped.Height() * mfScaleY);
+
+    Point aPosMapped(implMap(rPos));
+
+    Point aPos(basegfx::fround<tools::Long>(aPosMapped.X() * mfScaleX + maOfs.X()),
+               basegfx::fround<tools::Long>(aPosMapped.Y() * mfScaleY + maOfs.Y()));
     Size aSize( nTextWidth, nTextHeight );
 
     if ( eAlg == ALIGN_BASELINE )
-        aPos.AdjustY(basegfx::fround<tools::Long>(aFontMetric.GetAscent() * -mfScaleY));
+    {
+        auto nAscent = implMap(Size(0, aFontMetric.GetAscent())).Height();
+        aPos.AdjustY(basegfx::fround<tools::Long>(nAscent * -mfScaleY));
+    }
     else if ( eAlg == ALIGN_BOTTOM )
         aPos.AdjustY( -nTextHeight );
 
@@ -1141,7 +1167,8 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction const & rAct )
     if(!aSource.count())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aSource.transform(aTransform);
 
     if(mbLastObjWasPolyWithoutLine && CheckLastPolyLineAndFillMerge(aSource))
@@ -1193,32 +1220,10 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineColorAction& rAct)
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 {
-    MapScaling();
     rAct.Execute(mpVD);
     mbLastObjWasPolyWithoutLine = false;
     mbLastObjWasLine = false;
 }
-
-void ImpSdrGDIMetaFileImport::MapScaling()
-{
-    const size_t nCount(maTmpList.size());
-    const MapMode& rMap = mpVD->GetMapMode();
-    Point aMapOrg( rMap.GetOrigin() );
-    bool bMov2(aMapOrg.X() != 0 || aMapOrg.Y() != 0);
-
-    if(bMov2)
-    {
-        for(size_t i = mnMapScalingOfs; i < nCount; i++)
-        {
-            SdrObject* pObj = maTmpList[i].get();
-
-            pObj->NbcMove(Size(aMapOrg.X(), aMapOrg.Y()));
-        }
-    }
-
-    mnMapScalingOfs = nCount;
-}
-
 
 void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction const & rAct, GDIMetaFile const & rMtf, size_t& a) // GDIMetaFile* pMtf )
 {
@@ -1400,7 +1405,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction const & rAct)
     if(aRange.isEmpty())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aRange.transform(aTransform);
     const Gradient& rGradient = rAct.GetGradient();
     rtl::Reference<SdrRectObj> pRect = new SdrRectObj(
@@ -1441,7 +1447,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaTransparentAction const & rAct)
     if(!aSource.count())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aSource.transform(aTransform);
     aSource.setClosed(true);
 
@@ -1461,7 +1468,8 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction const & rAct)
     if(!aSource.count())
         return;
 
-    const basegfx::B2DHomMatrix aTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
+    const basegfx::B2DHomMatrix aTransform(implMapMatrix() *
+                                           basegfx::utils::createScaleTranslateB2DHomMatrix(mfScaleX, mfScaleY, maOfs.X(), maOfs.Y()));
     aSource.transform(aTransform);
 
     if(mbLastObjWasPolyWithoutLine && CheckLastPolyLineAndFillMerge(aSource))
