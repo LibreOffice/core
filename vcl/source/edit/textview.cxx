@@ -133,7 +133,7 @@ struct ImpTextView
     std::unique_ptr<SelectionEngine> mpSelEngine;
     std::unique_ptr<TextSelFunctionSet> mpSelFuncSet;
 
-    css::uno::Reference< css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    rtl::Reference< vcl::unohelper::DragAndDropWrapper > mxDnDListener;
 
     sal_uInt16              mnTravelXPos;
 
@@ -182,10 +182,8 @@ TextView::TextView( ExtTextEngine* pEng, vcl::Window* pWindow ) :
     {
         mpImpl->mxDnDListener = new vcl::unohelper::DragAndDropWrapper( this );
 
-        css::uno::Reference< css::datatransfer::dnd::XDragGestureListener> xDGL( mpImpl->mxDnDListener, css::uno::UNO_QUERY );
-        pWindow->GetDragGestureRecognizer()->addDragGestureListener( xDGL );
-        css::uno::Reference< css::datatransfer::dnd::XDropTargetListener> xDTL( xDGL, css::uno::UNO_QUERY );
-        pWindow->GetDropTarget()->addDropTargetListener( xDTL );
+        pWindow->GetDragGestureRecognizer()->addDragGestureListener( mpImpl->mxDnDListener );
+        pWindow->GetDropTarget()->addDropTargetListener( mpImpl->mxDnDListener );
         pWindow->GetDropTarget()->setActive( true );
         pWindow->GetDropTarget()->setDefaultActions( css::datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
     }

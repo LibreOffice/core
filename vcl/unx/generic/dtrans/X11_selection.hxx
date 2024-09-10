@@ -44,6 +44,7 @@ namespace x11 {
 
     class PixmapHolder; // in bmp.hxx
     class SelectionManager;
+    class X11Transferable;
 
     rtl_TextEncoding getTextPlainEncoding( const OUString& rMimeType );
 
@@ -113,7 +114,7 @@ namespace x11 {
         >
     {
         ::osl::Mutex m_aMutex;
-        css::uno::Reference< css::datatransfer::dnd::XDragSource >
+        rtl::Reference< SelectionManager >
             m_xRealDragSource;
     public:
         SelectionManagerHolder();
@@ -266,7 +267,7 @@ namespace x11 {
         Time                        m_nDropTime;
         sal_Int8                    m_nLastDropAction;
         // XTransferable for Xdnd with foreign drag source
-        css::uno::Reference< css::datatransfer::XTransferable >
+        rtl::Reference< X11Transferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
         // set to true when calling drop()

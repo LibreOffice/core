@@ -687,8 +687,7 @@ Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
 
                         if( xDragGestureRecognizer.is() )
                         {
-                            xDragGestureRecognizer->addDragGestureListener(
-                                Reference< css::datatransfer::dnd::XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                            xDragGestureRecognizer->addDragGestureListener(mpWindowImpl->mpFrameData->mxDropTargetListener);
                         }
                         else
                             mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = true;
@@ -705,11 +704,11 @@ Reference< css::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
 
         }
 
-        mpWindowImpl->mxDNDListenerContainer = static_cast < css::datatransfer::dnd::XDropTarget * > ( new DNDListenerContainer( nDefaultActions ) );
+        mpWindowImpl->mxDNDListenerContainer = new DNDListenerContainer( nDefaultActions );
     }
 
     // this object is located in the same process, so there will be no runtime exception
-    return Reference< css::datatransfer::dnd::XDropTarget > ( mpWindowImpl->mxDNDListenerContainer, UNO_QUERY );
+    return mpWindowImpl->mxDNDListenerContainer;
 }
 
 Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()

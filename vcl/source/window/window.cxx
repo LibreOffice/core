@@ -58,6 +58,8 @@
 #include <toolbox.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
+#include <dndlistenercontainer.hxx>
+#include <dndeventdispatcher.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRelation.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -174,10 +176,8 @@ void Window::dispose()
     }
 
     // shutdown drag and drop
-    Reference < XComponent > xDnDComponent( mpWindowImpl->mxDNDListenerContainer, UNO_QUERY );
-
-    if( xDnDComponent.is() )
-        xDnDComponent->dispose();
+    if( mpWindowImpl->mxDNDListenerContainer.is() )
+        mpWindowImpl->mxDNDListenerContainer->dispose();
 
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData )
     {
@@ -189,8 +189,7 @@ void Window::dispose()
                 Reference< XDragGestureRecognizer > xDragGestureRecognizer(mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
                 if( xDragGestureRecognizer.is() )
                 {
-                    xDragGestureRecognizer->removeDragGestureListener(
-                        Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                    xDragGestureRecognizer->removeDragGestureListener(mpWindowImpl->mpFrameData->mxDropTargetListener);
                 }
 
                 mpWindowImpl->mpFrameData->mxDropTarget->removeDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );

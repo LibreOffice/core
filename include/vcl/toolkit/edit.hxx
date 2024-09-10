@@ -85,7 +85,7 @@ private:
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
     css::uno::Reference<css::i18n::XExtendedInputSequenceChecker> mxISC;
-    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+    rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();

@@ -4107,7 +4107,7 @@ void SelectionManagerHolder::initialize( const Sequence< Any >& arguments )
 
     SelectionManager& rManager = SelectionManager::get( aDisplayName );
     rManager.initialize( arguments );
-    m_xRealDragSource = static_cast< XDragSource* >(&rManager);
+    m_xRealDragSource = &rManager;
 }
 
 /*

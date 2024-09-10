@@ -48,6 +48,8 @@ class VCLXWindow;
 namespace vcl { class WindowData; }
 class SalFrame;
 class SalObject;
+class DNDEventDispatcher;
+class DNDListenerContainer;
 enum class MouseEventModifiers;
 enum class NotifyEventType;
 enum class ActivateModeFlags;
@@ -173,7 +175,7 @@ struct ImplFrameData
 
     css::uno::Reference< css::datatransfer::dnd::XDragSource > mxDragSource;
     css::uno::Reference< css::datatransfer::dnd::XDropTarget > mxDropTarget;
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
+    rtl::Reference< DNDEventDispatcher > mxDropTargetListener; // css::datatransfer::dnd::XDropTargetListener
     css::uno::Reference< css::datatransfer::clipboard::XClipboard > mxClipboard;
 
     bool                mbInternalDragGestureRecognizer;
@@ -392,7 +394,7 @@ public:
                         mbNonHomogeneous:1,
                         mbDoubleBufferingRequested:1;
 
-    css::uno::Reference< css::uno::XInterface > mxDNDListenerContainer;
+    rtl::Reference< DNDListenerContainer > mxDNDListenerContainer;
 
     const vcl::ILibreOfficeKitNotifier* mpLOKNotifier; ///< To emit the LOK callbacks eg. for dialog tunneling.
     vcl::LOKWindowId mnLOKWindowId; ///< ID of this specific window.

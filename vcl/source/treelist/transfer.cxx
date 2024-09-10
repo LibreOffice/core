@@ -304,7 +304,7 @@ css::uno::Sequence<OUString> TransferableHelper::TerminateListener::getSupported
 
 TransferableHelper::~TransferableHelper()
 {
-    css::uno::Reference<css::frame::XTerminateListener> listener;
+    rtl::Reference< TerminateListener > listener;
     {
         const SolarMutexGuard aGuard;
         std::swap(listener, mxTerminateListener);

@@ -39,6 +39,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <rtl/ref.hxx>
 #include <memory>
 #include <mutex>
 #include <utility>
@@ -166,7 +167,7 @@ private:
     css::uno::Any                                                             maAny;
     OUString                                                                  maLastFormat;
     mutable css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
-    css::uno::Reference< css::frame::XTerminateListener >                     mxTerminateListener;
+    rtl::Reference< TerminateListener >                                       mxTerminateListener;
     DataFlavorExVector                                                        maFormats;
     std::unique_ptr<TransferableObjectDescriptor>                             mxObjDesc;
 
@@ -399,7 +400,7 @@ private:
     std::mutex                                                            maMutex;
     css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
 
-    css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
+    rtl::Reference< DragSourceHelper::DragGestureListener >   mxDragGestureListener;
 
     DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper ) = delete;
     bool                operator==( const DragSourceHelper& rDragSourceHelper ) const = delete;
@@ -448,7 +449,7 @@ private:
     std::mutex                                                            maMutex;
     css::uno::Reference< css::datatransfer::dnd::XDropTarget >            mxDropTarget;
 
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
+    rtl::Reference< DropTargetHelper::DropTargetListener >                mxDropTargetListener;
     DataFlavorExVector                                                    maFormats;
 
                         DropTargetHelper() = delete;

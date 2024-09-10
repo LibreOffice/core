@@ -33,6 +33,7 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <brdwin.hxx>
+#include <dndlistenercontainer.hxx>
 
 #include "impldockingwrapper.hxx"
 

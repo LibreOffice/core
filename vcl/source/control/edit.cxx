@@ -240,13 +240,11 @@ void Edit::dispose()
     {
         if ( GetDragGestureRecognizer().is() )
         {
-            uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
-            GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
+            GetDragGestureRecognizer()->removeDragGestureListener( mxDnDListener );
         }
         if ( GetDropTarget().is() )
         {
-            uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( mxDnDListener, uno::UNO_QUERY );
-            GetDropTarget()->removeDropTargetListener( xDTL );
+            GetDropTarget()->removeDropTargetListener( mxDnDListener );
         }
 
         mxDnDListener->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
@@ -330,13 +328,11 @@ void Edit::ImplInit(vcl::Window* pParent, WinBits nStyle)
     SetPointer( PointerStyle::Text );
     ApplySettings(*GetOutDev());
 
-    uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
     if ( xDGR.is() )
     {
-        xDGR->addDragGestureListener( xDGL );
-        uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( mxDnDListener, uno::UNO_QUERY );
-        GetDropTarget()->addDropTargetListener( xDTL );
+        xDGR->addDragGestureListener( mxDnDListener );
+        GetDropTarget()->addDropTargetListener( mxDnDListener );
         GetDropTarget()->setActive( true );
         GetDropTarget()->setDefaultActions( datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE );
     }
