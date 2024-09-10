@@ -1310,7 +1310,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
         pInfo->m_nMiddleLine=nXP1Cnt-1;
     }
     sal_uInt16 nNum=aXP2.GetPointCount();
-    if (aXP1[nXP1Cnt-1]==aXP2[nXP2Cnt-1] && nXP1Cnt>1 && nXP2Cnt>1) nNum--;
+    if (nXP1Cnt > 1 && nXP2Cnt > 1 && aXP1[nXP1Cnt-1] == aXP2[nXP2Cnt-1]) nNum--;
     while (nNum>0) {
         nNum--;
         aXP1.Insert(XPOLY_APPEND,aXP2[nNum],PolyFlags::Normal);
