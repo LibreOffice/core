@@ -287,7 +287,12 @@ void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName
 {
     DBG_ASSERT(!mpThemePropsDlgItemSet, "mpThemePropsDlgItemSet already set!");
     mpThemePropsDlgItemSet.reset(new SfxItemSet( SfxGetpApp()->GetPool() ));
-    GalleryTheme*   pTheme = mpGallery->AcquireTheme( rThemeName, maLocalListener );
+    GalleryTheme* pTheme = mpGallery->AcquireTheme( rThemeName, maLocalListener );
+    if (!pTheme)
+    {
+        SAL_WARN("svx", "failed to acquire theme: " << OUString(rThemeName));
+        return;
+    }
 
     ImplFillExchangeData( pTheme, *mpExchangeData );
 
