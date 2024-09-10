@@ -89,9 +89,10 @@ private:
     bool m_bHasDocumentSignature;
 
     /// @throws css::uno::RuntimeException
-    bool ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
+    void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                             const css::uno::Reference<css::io::XStream>& xSignStream,
-                            DocumentSignatureMode eMode, bool bReadOnly);
+                            DocumentSignatureMode eMode, bool bReadOnly,
+                            const std::function<void(bool)>& rCallback);
     /// @throws css::uno::RuntimeException
     void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                             const css::uno::Reference<css::io::XInputStream>& xSignStream,
@@ -221,6 +222,10 @@ public:
     void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
                                   const css::uno::Reference<css::io::XStream>& xSignStream,
                                   const std::function<void(bool)>& rCallback) override;
+    /// See sfx2::DigitalSignatures::SignScriptingContentAsync().
+    void SignScriptingContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                   const css::uno::Reference<css::io::XStream>& xSignStream,
+                                   const std::function<void(bool)>& rCallback) override;
 };
 
 }
@@ -359,12 +364,10 @@ OUString DocumentDigitalSignatures::getDocumentContentSignatureDefaultStreamName
 }
 
 sal_Bool DocumentDigitalSignatures::signScriptingContent(
-    const Reference< css::embed::XStorage >& rxStorage,
-    const Reference< css::io::XStream >& xSignStream )
+    const Reference< css::embed::XStorage >& /*rxStorage*/,
+    const Reference< css::io::XStream >& /*xSignStream*/ )
 {
-    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
-    return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false );
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 Sequence< css::security::DocumentSignatureInformation >
@@ -391,11 +394,10 @@ OUString DocumentDigitalSignatures::getScriptingContentSignatureDefaultStreamNam
 
 
 sal_Bool DocumentDigitalSignatures::signPackage(
-    const Reference< css::embed::XStorage >& rxStorage,
-    const Reference< css::io::XStream >& xSignStream  )
+    const Reference< css::embed::XStorage >& /*rxStorage*/,
+    const Reference< css::io::XStream >& /*xSignStream*/  )
 {
-    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    return ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Package, false );
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 Sequence< css::security::DocumentSignatureInformation >
@@ -429,12 +431,12 @@ void DocumentDigitalSignatures::ImplViewSignatures(
     Reference< io::XStream > xStream;
     if ( xSignStream.is() )
         xStream.set( xSignStream, UNO_QUERY );
-    ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly );
+    ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly, [](bool /*bSuccess*/){} );
 }
 
-bool DocumentDigitalSignatures::ImplViewSignatures(
+void DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage, const Reference< css::io::XStream >& xSignStream,
-    DocumentSignatureMode eMode, bool bReadOnly )
+    DocumentSignatureMode eMode, bool bReadOnly, const std::function<void(bool)>& rCallback )
 {
     bool bChanges = false;
     auto xSignaturesDialog = std::make_shared<DigitalSignaturesDialog>(
@@ -452,7 +454,8 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
         {
             xSignaturesDialog->beforeRun();
             weld::DialogController::runAsync(xSignaturesDialog, [] (sal_Int32) {});
-            return false;
+            rCallback(false);
+            return;
         }
         else if (xSignaturesDialog->run() == RET_OK)
         {
@@ -466,6 +469,8 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
                     xTrans->commit();
                 }
             }
+            rCallback(bChanges);
+            return;
         }
     }
     else
@@ -476,7 +481,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
         xBox->run();
     }
 
-    return bChanges;
+    rCallback(bChanges);
 }
 
 Sequence< css::security::DocumentSignatureInformation >
@@ -838,8 +843,16 @@ void DocumentDigitalSignatures::SignDocumentContentAsync(const css::uno::Referen
                               const std::function<void(bool)>& rCallback)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    bool bRet = ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false );
-    rCallback(bRet);
+    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false, rCallback );
+}
+
+void DocumentDigitalSignatures::SignScriptingContentAsync(
+    const Reference<css::embed::XStorage>& rxStorage,
+    const Reference<css::io::XStream>& xSignStream, const std::function<void(bool)>& rCallback)
+{
+    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
+    OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
+    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false, rCallback );
 }
 
 sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(

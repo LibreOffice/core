@@ -78,6 +78,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     /** signs the content of the Scripting including macros and basic dialogs
 
         <p>The rest of document content will not be signed.</p>
+
+       Deprecated, this synchronous version would block the UI till signing is in progress.
      */
     boolean signScriptingContent( [in] ::com::sun::star::embed::XStorage xStorage,
                                   [in] ::com::sun::star::io::XStream xSignStream);
@@ -102,6 +104,8 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     string getScriptingContentSignatureDefaultStreamName();
 
     /** signs the full Package, which means everything in the storage except the content of META-INF
+
+       Deprecated, this synchronous version would block the UI till signing is in progress.
      */
     boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
                          [in] ::com::sun::star::io::XStream xSignStream);

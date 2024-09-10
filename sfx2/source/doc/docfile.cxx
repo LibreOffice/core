@@ -4382,6 +4382,8 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 throw uno::RuntimeException();
         }
 
+        auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
+        assert(xModelSigner);
         if ( bSignScriptingContent )
         {
             // If the signature has already the document signature it will be removed
@@ -4395,8 +4397,10 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
             // xWriteableZipStor because a writable storage can't have 2
             // instances of sub-storage for the same directory open, but with
             // independent storages it somehow works
-            if (xSigner->signScriptingContent(GetScriptingStorageToSign_Impl(), xStream))
-            {
+            xModelSigner->SignScriptingContentAsync(
+                GetScriptingStorageToSign_Impl(), xStream,
+                [this, xSigner, xMetaInf, xWriteableZipStor,
+                 onSignDocumentContentFinished](bool bRet) {
                 // remove the document signature if any
                 OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
                 if ( !aDocSigName.isEmpty() && xMetaInf->hasByName( aDocSigName ) )
@@ -4423,13 +4427,12 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                     || !uno::Reference<util::XModifiable>(pImpl->xStorage, uno::UNO_QUERY_THROW)->isModified());
                 // the temporary file has been written, commit it to the original file
                 Commit();
-                bChanges = true;
-            }
+                onSignDocumentContentFinished(bRet);
+            });
+            return;
         }
         else
         {
-            auto xModelSigner = dynamic_cast<sfx2::DigitalSignatures*>(xSigner.get());
-            assert(xModelSigner);
             if (xMetaInf.is())
             {
                 // ODF.
