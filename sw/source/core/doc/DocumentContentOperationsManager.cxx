@@ -230,7 +230,6 @@ namespace
         }
         rChgPos.SetContent( nContentPos );
     }
-
 }
 
 namespace sw
@@ -3689,12 +3688,34 @@ bool DocumentContentOperationsManager::InsertPoolItem(
     SwRootFrame const*const pLayout,
     SwTextAttr **ppNewTextAttr)
 {
+    SwHistory* pHistory = nullptr;
     SwDataChanged aTmp( rRg );
     std::unique_ptr<SwUndoAttr> pUndoAttr;
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
     {
         m_rDoc.GetIDocumentUndoRedo().ClearRedo();
         pUndoAttr.reset(new SwUndoAttr( rRg, rHt, nFlags ));
+        pHistory = &pUndoAttr->GetHistory();
+    }
+
+    if (nFlags & SetAttrMode::REMOVE_ALL_ATTR)
+    {
+        std::shared_ptr<const SfxItemSet> pDelSet = lcl_createDelSet(m_rDoc);
+        SwPosition aStart(*rRg.GetMark()->GetNode().GetContentNode(), rRg.GetMark()->GetContentIndex());
+        SwPosition aEnd(*rRg.GetPoint()->GetNode().GetContentNode(), rRg.GetPoint()->GetContentIndex());
+        sw::DocumentContentOperationsManager::ParaRstFormat aPara(
+            &aStart, &aEnd, pHistory, nullptr, nullptr /* //TODO: is layout required? m_rDoc.GetLayout()*/);
+        //            aPara.pFormatColl = pPara->pFormatColl;
+        aPara.bReset = true;
+        // #i62675#
+        aPara.bResetListAttrs = false;
+        aPara.bResetAllCharAttrs = true;
+        aPara.pDelSet = pDelSet.get();
+        m_rDoc.GetNodes().ForEach(
+            aStart.GetNode().GetIndex(),
+            aEnd.GetNode().GetIndex(),
+            ::sw::DocumentContentOperationsManager::lcl_RstTextAttr,
+            &aPara);
     }
 
     SfxItemSet aSet( m_rDoc.GetAttrPool(), rHt.Which(), rHt.Which() );
@@ -4203,6 +4224,44 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // were paired with old fly formats (aOldTextBoxes) and that aSet is
     // parallel with aVecSwFrameFormat.
     SwTextBoxHelper::restoreLinks(aSet, aVecSwFrameFormat, aOldTextBoxes);
+}
+
+/*
+    create ItemSet to be used in ParaRstFormat
+*/
+std::shared_ptr<SfxItemSet> DocumentContentOperationsManager::lcl_createDelSet(SwDoc& rDoc)
+{
+    std::shared_ptr<SfxItemSet> pDelSet(new SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                        RES_TXTATR_INETFMT, RES_TXTATR_UNKNOWN_CONTAINER,
+                        RES_PARATR_BEGIN, RES_FRMATR_END - 1,
+                        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>(rDoc.GetAttrPool()));
+    o3tl::sorted_vector<sal_uInt16> aAttribs;
+
+    constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+        // tdf#40496: we don't want to change writing direction, so exclude RES_FRAMEDIR:
+        { RES_TXTATR_CHARFMT,RES_TXTATR_CHARFMT },
+        { RES_FRMATR_BEGIN, RES_FRAMEDIR - 1 },
+        { RES_FRAMEDIR + 1, RES_FRMATR_END - 1 },
+        { RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1 },
+        { RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1 },
+        { RES_CHRATR_CJK_LANGUAGE + 1, RES_CHRATR_CTL_LANGUAGE - 1 },
+        { RES_CHRATR_CTL_LANGUAGE + 1, RES_CHRATR_END - 1 },
+        { RES_PARATR_BEGIN, RES_PARATR_END - 1 },
+        { RES_PARATR_LIST_AUTOFMT, RES_PARATR_LIST_AUTOFMT },
+        { RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER },
+        { RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1 },
+    };
+    for (const auto& [nBegin, nEnd] : aResetableSetRange)
+    {
+        for (sal_uInt16 i = nBegin; i <= nEnd; ++i)
+            aAttribs.insert( i );
+    }
+    for( auto it = aAttribs.rbegin(); it != aAttribs.rend(); ++it )
+    {
+        if( POOLATTR_END > *it )
+            pDelSet->Put( *GetDfltAttr( *it ));
+    }
+    return pDelSet;
 }
 
 /*

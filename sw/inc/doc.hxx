@@ -814,6 +814,7 @@ public:
     SW_DLLPUBLIC bool SetTextFormatColl(const SwPaM &rRg, SwTextFormatColl *pFormat,
                        const bool bReset = true,
                        const bool bResetListAttrs = false,
+                       const bool bResetAllCharAttrs = false,
                        SwRootFrame const* pLayout = nullptr);
     SwTextFormatColl* FindTextFormatCollByName( const OUString& rName ) const
         {   return mpTextFormatCollTable->FindFormatByName(rName); }

@@ -151,11 +151,13 @@ enum class SetAttrMode
     /// for Undo, translated to SwInsertFlags::NOHINTEXPAND
     NOHINTEXPAND    = 0x0100,
     /// don't change the cursor position
-    NO_CURSOR_CHANGE = 0x0200
+    NO_CURSOR_CHANGE = 0x0200,
+    // remove all char attributes and char styles when para/char styles are applied
+    REMOVE_ALL_ATTR = 0x0400
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x3ff> {};
+    template<> struct typed_flags<SetAttrMode> : is_typed_flags<SetAttrMode, 0x7ff> {};
 }
 
 namespace sw {

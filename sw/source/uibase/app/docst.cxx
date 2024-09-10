@@ -1197,8 +1197,12 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
         case SfxStyleFamily::Char:
         {
             SwFormatCharFormat aFormat(pStyle->GetCharFormat());
-            pSh->SetAttrItem( aFormat, (nMode & KEY_SHIFT) ?
-                SetAttrMode::DONTREPLACE : SetAttrMode::DEFAULT );
+            SetAttrMode nFlags = (nMode & KEY_SHIFT) ?
+                SetAttrMode::DONTREPLACE : SetAttrMode::DEFAULT;
+            if (nMode & KEY_MOD1)
+                nFlags |= SetAttrMode::REMOVE_ALL_ATTR;
+            pSh->SetAttrItem( aFormat, nFlags );
+
             break;
         }
         case SfxStyleFamily::Para:
@@ -1215,7 +1219,7 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
                 // #i62675#
                 // clear also list attributes at affected text nodes, if paragraph
                 // style has the list style attribute set.
-                pSh->SetTextFormatColl( pStyle->GetCollection(), true );
+                pSh->SetTextFormatColl( pStyle->GetCollection(), true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
             }
             break;
         }

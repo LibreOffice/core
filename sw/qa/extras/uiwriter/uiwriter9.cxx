@@ -14,6 +14,9 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
+
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
@@ -46,7 +49,6 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
-
 #include <svx/svdview.hxx>
 #include <svx/svdmark.hxx>
 
@@ -734,6 +736,67 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
     CPPUNIT_ASSERT(pWrtShell->HasSelection());
     CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
+{
+    createSwDoc("tdf162326.odt");
+    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(2), 2), u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
+
+    pWrtShell->Down(/*bSelect=*/true, 3);
+
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Footnote"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(3), 2), css::container::NoSuchElementException);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
+{
+    createSwDoc("tdf162326.odt");
+    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        awt::FontSlant_ITALIC,
+        getProperty<awt::FontSlant>(getRun(getParagraph(2), 2), u"CharPosture"_ustr));
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
+
+    pWrtShell->Down(/*bSelect=*/true, 3);
+
+    //add Ctrl/MOD_1
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr,
+                    { comphelper::makePropertyValue(u"FamilyName"_ustr, u"CharacterStyles"_ustr),
+                      comphelper::makePropertyValue(u"Style"_ustr, u"Definition"_ustr),
+                      comphelper::makePropertyValue(u"KeyModifier"_ustr, uno::Any(KEY_MOD1)) });
+
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_THROW(getRun(getParagraph(2), 2), css::container::NoSuchElementException);
+    //last runs are not changed because the selection ends at the beginning of that paragraph
+    CPPUNIT_ASSERT_EQUAL(short(1),
+                         getProperty<short>(getRun(getParagraph(3), 2), u"CharUnderline"_ustr));
 }
 
 } // end of anonymous namespace
