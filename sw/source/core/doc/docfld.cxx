@@ -938,7 +938,11 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
     for (const TypedWhichId<SwFormatField> & nWhichHint : { RES_TXTATR_FIELD, RES_TXTATR_INPUTFIELD })
     {
         rDoc.ForEachFormatField(nWhichHint,
-            [this, eGetMode, &rDoc, bIsDBManager] (const SwFormatField& rFormatField) -> bool
+            [this, eGetMode, &rDoc
+#if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
+                                  , bIsDBManager
+#endif
+            ] (const SwFormatField& rFormatField) -> bool
             {
                 const SwTextField* pTextField = rFormatField.GetTextField();
 
