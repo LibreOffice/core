@@ -1262,6 +1262,7 @@ poppler_bool PDFOutDev::tilingPatternFill(GfxState *state, Gfx *, Catalog *,
     auto pSplashGfxState = new GfxState(nDPI, nDPI, &aBox, 0, false);
     auto pSplashOut = new SplashOutputDev(splashModeRGB8, 1, false, nullptr);
     pSplashOut->setEnableFreeType(false);
+    pSplashOut->startDoc(m_pDoc);
     pSplashOut->startPage(0 /* pageNum */, pSplashGfxState, nullptr /* xref */);
 
     auto pSplashGfx = new Gfx(m_pDoc, pSplashOut, pResDict, &aBox, nullptr);
