@@ -67,6 +67,21 @@ private:
     }
 };
 
+class JobExecutorThread : public salhelper::Thread
+{
+public:
+    JobExecutorThread(css::uno::Reference<css::task::XJobExecutor> const& object)
+        : Thread("jobexecutor")
+        , object_(object)
+    {
+    }
+
+private:
+    void execute() override { object_->trigger(u"executor thread"_ustr); }
+
+    css::uno::Reference<css::task::XJobExecutor> object_;
+};
+
 class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
 {
     sal_Bool SAL_CALL getBoolean() override { return true; }
@@ -861,10 +876,19 @@ class Test : public cppu::WeakImplHelper<org::libreoffice::embindtest::XTest>
         }
     }
 
-    void SAL_CALL
-    passJobExecutor(css::uno::Reference<css::task::XJobExecutor> const& object) override
+    void SAL_CALL passJobExecutor(css::uno::Reference<css::task::XJobExecutor> const& object,
+                                  sal_Bool newThread) override
     {
-        object->trigger(u"executor"_ustr);
+        if (newThread)
+        {
+            JobExecutorThread t(object);
+            t.launch();
+            t.join();
+        }
+        else
+        {
+            object->trigger(u"executor"_ustr);
+        }
     }
 
     void SAL_CALL passInterface(css::uno::Reference<css::uno::XInterface> const& object) override

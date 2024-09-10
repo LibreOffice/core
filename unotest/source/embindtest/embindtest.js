@@ -878,7 +878,8 @@ Module.uno_init.then(function() {
         s.delete();
     }
     test.passJob(css.task.XJob.query(obj));
-    test.passJobExecutor(css.task.XJobExecutor.query(obj));
+    test.passJobExecutor(css.task.XJobExecutor.query(obj), false);
+    //TODO: test.passJobExecutor(css.task.XJobExecutor.query(obj), true);
     test.passInterface(obj);
     css.task.XJobExecutor.query(obj).trigger('from JS');
     {
