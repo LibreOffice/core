@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
@@ -50,7 +51,7 @@ public:
 
 class AnyCompareFactory : public cppu::WeakImplHelper< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
-    Reference< XAnyCompare >            m_xAnyCompare;
+    rtl::Reference< AnyCompare >        m_xAnyCompare;
     Reference< XComponentContext >      m_xContext;
     Locale                              m_Locale;
 
