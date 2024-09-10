@@ -139,7 +139,7 @@ struct Entity
     sax_expatwrap::XMLFile2UTFConverter converter;
 };
 
-
+class LocatorImpl;
 class SaxExpatParser_Impl
 {
 public: // module scope
@@ -152,7 +152,7 @@ public: // module scope
     css::uno::Reference< XErrorHandler >  rErrorHandler;
     css::uno::Reference< XDTDHandler >    rDTDHandler;
     css::uno::Reference< XEntityResolver > rEntityResolver;
-    css::uno::Reference < XLocator >      rDocumentLocator;
+    rtl::Reference < LocatorImpl >        rDocumentLocator;
 
 
     rtl::Reference < comphelper::AttributeList > rAttrList;
