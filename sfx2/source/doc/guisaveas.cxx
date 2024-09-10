@@ -1904,12 +1904,13 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                 return;
 
             std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecurityContexts{
-                xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
-                    ->createSecurityContext({}),
                 xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
+                    ->createSecurityContext({}),
+                xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
                     ->createSecurityContext({}),
             };
 
+            bool bFoundCert = false;
             for (const auto& xSecurityContext : xSecurityContexts)
             {
                 if (xSecurityContext.is())
@@ -1919,6 +1920,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
 
                     if (xCert.is() && SfxViewShell::Current())
                     {
+                        bFoundCert = true;
                         SfxObjectShell* pDocShell = SfxViewShell::Current()->GetObjectShell();
                         bool bSigned = pDocShell->SignDocumentContentUsingCertificate(xCert);
                         if (bSigned && pDocShell->HasValidSignatures())
@@ -1933,6 +1935,16 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
                         return;
                     }
                 }
+            }
+            if (!bFoundCert)
+            {
+                // couldn't find the specified default signing certificate!
+                // alert the user the document won't be singed
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
+                    VclMessageType::Error, VclButtonsType::Ok,
+                    SfxResId(STR_ERROR_NOMATCHINGDEFUALTCERT)));
+                xBox->run();
             }
             return;
 #endif

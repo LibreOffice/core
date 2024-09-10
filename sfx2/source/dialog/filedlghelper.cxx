@@ -524,34 +524,8 @@ void FileDialogHelper_Impl::updateSignByDefault()
     if (!mbHasSignByDefault)
         return;
 
-    auto HaveMatchingUserSigningKey = []() -> bool
-    {
-        auto aSigningKey = SvtUserOptions{}.GetSigningKey();
-        if (aSigningKey.isEmpty())
-            return false;
-
-        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecurityContexts{
-            xml::crypto::SEInitializer::create(comphelper::getProcessComponentContext())
-                ->createSecurityContext({}),
-            xml::crypto::GPGSEInitializer::create(comphelper::getProcessComponentContext())
-                ->createSecurityContext({}),
-        };
-
-        for (const auto& xSecurityContext : xSecurityContexts)
-        {
-            if (xSecurityContext.is())
-            {
-                css::uno::Reference<css::security::XCertificate> xCert
-                    = comphelper::xmlsec::FindCertInContext(xSecurityContext, aSigningKey);
-                if (xCert.is())
-                    return true;
-            }
-        }
-        return false;
-    };
-
-    updateExtendedControl(ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN,
-                          HaveMatchingUserSigningKey());
+    OUString aSigningKey = SvtUserOptions{}.GetSigningKey();
+    updateExtendedControl(ExtendedFilePickerElementIds::CHECKBOX_GPGSIGN, !aSigningKey.isEmpty());
 #endif
 }
 

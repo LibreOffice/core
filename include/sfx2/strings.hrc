@@ -143,6 +143,7 @@
 #define RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN  NC_("RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN", "The document has to be saved before it can be signed.\nDo you want to save the document?")
 #define STR_QUERY_CANCELCHECKOUT                NC_("STR_QUERY_CANCELCHECKOUT", "This will discard all changes on the server since check-out.\nDo you want to proceed?")
 #define STR_QUERY_REMEMBERSIGNATURE             NC_("STR_QUERY_REMEMBERSIGNATURE", "Do you want to remember that signature for each save?")
+#define STR_ERROR_NOMATCHINGDEFUALTCERT         NC_("STR_ERROR_NOMATCHINGDEFUALTCERT", "Couldn't find a matching signing key. The document won't be signed.\nPlease update the signing key in Options.")
 #define STR_INFO_WRONGDOCFORMAT                 NC_("STR_INFO_WRONGDOCFORMAT", "This document must be saved in OpenDocument file format before it can be digitally signed.")
 #define RID_XMLSEC_DOCUMENTSIGNED               NC_("RID_XMLSEC_DOCUMENTSIGNED", " (Signed)")
 #define STR_EMBEDDED_TITLE                      NC_("STR_EMBEDDED_TITLE", " (Embedded document)")
