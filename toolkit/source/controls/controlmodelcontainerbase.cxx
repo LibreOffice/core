@@ -1371,7 +1371,6 @@ sal_Bool ControlContainerBase::setModel( const Reference< XControlModel >& rxMod
     {
         mxTabController->setModel( nullptr );                  // just to be sure, should not be necessary
         removeTabController( mxTabController );
-        ::comphelper::disposeComponent( mxTabController );  // just to be sure, should not be necessary
         mxTabController.clear();
     }
 

@@ -37,12 +37,13 @@
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/interfacecontainer4.hxx>
+#include <rtl/ref.hxx>
 #include <mutex>
 #include <vector>
 
 namespace com::sun::star::resource { class XStringResourceResolver; }
 namespace com::sun::star::uno { class XComponentContext; }
-
+class StdTabController;
 
 typedef UnoControlModel     ControlModel_Base;
 typedef ::cppu::AggImplInheritanceHelper8   <   ControlModel_Base
@@ -221,7 +222,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
-    css::uno::Reference< css::awt::XTabController >   mxTabController;
+    rtl::Reference< StdTabController >                mxTabController;
     css::uno::Reference< css::util::XModifyListener > mxListener;
 
     void        ImplInsertControl( css::uno::Reference< css::awt::XControlModel > const & rxModel, const OUString& rName );
