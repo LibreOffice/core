@@ -862,7 +862,21 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pFilter = rMatcher.GetFilter4EA( aTypeName );
             }
 
-            if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
+            bool bStartPresentation = false;
+            if (pFilter)
+            {
+                const SfxUInt16Item* pSlide = rReq.GetArg<SfxUInt16Item>(SID_DOC_STARTPRESENTATION);
+                if (pSlide
+                    && (pFilter->GetWildcard().Matches(u".pptx")
+                        || pFilter->GetWildcard().Matches(u".ppt")
+                        || pFilter->GetWildcard().Matches(u".ppsx")
+                        || pFilter->GetWildcard().Matches(u".pps")))
+                {
+                    bStartPresentation = true;
+                }
+            }
+
+            if (!pFilter || (!lcl_isFilterNativelySupported(*pFilter) && !bStartPresentation))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
                 if ( aINetProtocol == INetProtocol::Mailto )
