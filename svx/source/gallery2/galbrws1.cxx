@@ -223,14 +223,14 @@ void GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
     mxThemes->append(u""_ustr, pEntry->GetThemeName(), *pImage);
 }
 
-void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData )
+void GalleryBrowser1::ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData& rData)
 {
-    rData.pTheme = const_cast<GalleryTheme*>(pThm);
-    rData.aEditedTitle = pThm->GetName();
+    rData.pTheme = const_cast<GalleryTheme*>(&rThm);
+    rData.aEditedTitle = rThm.GetName();
 
     try
     {
-        DateTime aDateTime(pThm->getModificationDate());
+        DateTime aDateTime(rThm.getModificationDate());
 
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
@@ -289,7 +289,7 @@ void GalleryBrowser1::ImplGalleryThemeProperties( std::u16string_view rThemeName
     mpThemePropsDlgItemSet.reset(new SfxItemSet( SfxGetpApp()->GetPool() ));
     GalleryTheme*   pTheme = mpGallery->AcquireTheme( rThemeName, maLocalListener );
 
-    ImplFillExchangeData( pTheme, *mpExchangeData );
+    ImplFillExchangeData(*pTheme, *mpExchangeData);
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     VclPtr<VclAbstractDialog> xThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog(mxThemes.get(), mpExchangeData.get(), mpThemePropsDlgItemSet.get());

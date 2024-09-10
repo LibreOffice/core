@@ -138,7 +138,7 @@ private:
     SfxListener maLocalListener;
 
     void ImplInsertThemeEntry(const GalleryThemeEntry* pEntry);
-    static void ImplFillExchangeData(const GalleryTheme* pThm, ExchangeData& rData);
+    static void ImplFillExchangeData(const GalleryTheme& rThm, ExchangeData& rData);
     void ImplGetExecuteVector(std::vector<OUString>& o_aExec);
     void ImplExecute(std::u16string_view rIdent);
     void ImplGalleryThemeProperties(std::u16string_view rThemeName, bool bCreateNew);
