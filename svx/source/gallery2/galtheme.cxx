@@ -480,7 +480,7 @@ bool GalleryTheme::InsertModelStream(SvStream& rModelStream, sal_uInt32 nInsertP
     return bRet;
 }
 
-bool GalleryTheme::GetURL(sal_uInt32 nPos, INetURLObject& rURL)
+bool GalleryTheme::GetURL(sal_uInt32 nPos, INetURLObject& rURL) const
 {
     const GalleryObject*    pObject = maGalleryObjectCollection.getForPosition( nPos );
     bool                    bRet = false;

@@ -1666,7 +1666,7 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     const SgaObjKind eObjKind = mpTheme->GetObjectKind( mnObjectPos );
     INetURLObject    aURL;
 
-    const_cast< GalleryTheme* >( mpTheme )->GetURL( mnObjectPos, aURL );
+    mpTheme->GetURL(mnObjectPos, aURL);
     const bool bValidURL = ( aURL.GetProtocol() != INetProtocol::NotValid );
 
     mxPopupMenu->set_visible(u"add"_ustr, bValidURL && SgaObjKind::Sound != eObjKind);

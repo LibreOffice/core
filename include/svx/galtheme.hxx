@@ -143,7 +143,7 @@ public:
     SAL_DLLPRIVATE bool         GetModelStream(sal_uInt32 nPos, SvStream & rModelStream);
     SAL_DLLPRIVATE bool         InsertModelStream(SvStream& rModelStream, sal_uInt32 nInsertPos);
 
-    SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL);
+    SAL_DLLPRIVATE bool         GetURL(sal_uInt32 nPos, INetURLObject& rURL) const;
     bool                        InsertURL(const INetURLObject& rURL, sal_uInt32 nInsertPos = SAL_MAX_UINT32);
     SAL_DLLPRIVATE bool         InsertFileOrDirURL(const INetURLObject& rFileOrDirURL, sal_uInt32 nInsertPos);
 
