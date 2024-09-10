@@ -158,7 +158,7 @@ friend ContentEventListener_Impl;
     Reference< XContent >               m_xContent;
     Reference< XCommandProcessor >          m_xCommandProcessor;
     Reference< XCommandEnvironment >    m_xEnv;
-    Reference< XContentEventListener >  m_xContentEventListener;
+    rtl::Reference< ContentEventListener_Impl >  m_xContentEventListener;
     mutable std::mutex                  m_aMutex;
 
 private:

@@ -137,8 +137,8 @@ struct ResultSet_Impl
 {
     uno::Reference< uno::XComponentContext >        m_xContext;
     uno::Reference< css::ucb::XCommandEnvironment > m_xEnv;
-    uno::Reference< beans::XPropertySetInfo >       m_xPropSetInfo;
-    uno::Reference< sdbc::XResultSetMetaData >      m_xMetaData;
+    rtl::Reference< PropertySetInfo >               m_xPropSetInfo;
+    rtl::Reference< ResultSetMetaData >             m_xMetaData;
     uno::Sequence< beans::Property >                m_aProperties;
     rtl::Reference< ResultSetDataSupplier >         m_xDataSupplier;
     std::mutex                          m_aMutex;
