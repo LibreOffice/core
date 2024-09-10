@@ -339,7 +339,8 @@ static void writeContentNode(::tools::JsonWriter& aJsonWriter)
 static void writeBoundingBox(::tools::JsonWriter& aJsonWriter, SdrObject* pObject)
 {
     ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("bounds");
-    ::tools::Rectangle aRect = pObject->GetCurrentBoundRect();
+    ::tools::Rectangle aRectmm100 = pObject->GetCurrentBoundRect();
+    ::tools::Rectangle aRect = o3tl::convert(aRectmm100, o3tl::Length::mm100, o3tl::Length::twip);
     aJsonWriter.put("x", aRect.getX());
     aJsonWriter.put("y", aRect.getY());
     aJsonWriter.put("width", aRect.GetWidth());
