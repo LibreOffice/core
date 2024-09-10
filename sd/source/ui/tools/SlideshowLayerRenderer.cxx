@@ -334,6 +334,16 @@ static void writeContentNode(::tools::JsonWriter& aJsonWriter)
     aJsonWriter.put("checksum", "%IMAGECHECKSUM%");
 }
 
+static void writeBoundingBox(::tools::JsonWriter& aJsonWriter, SdrObject* pObject)
+{
+    auto aContentNode = aJsonWriter.startNode("bounds");
+    ::tools::Rectangle aRect = pObject->GetCurrentBoundRect();
+    aJsonWriter.put("x", aRect.getX());
+    aJsonWriter.put("y", aRect.getY());
+    aJsonWriter.put("width", aRect.GetWidth());
+    aJsonWriter.put("height", aRect.GetHeight());
+}
+
 void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
 {
     ::tools::JsonWriter aJsonWriter;
@@ -354,6 +364,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
             aJsonWriter.put("initVisible", maRenderState.isObjectInitiallyVisible(pObject));
             aJsonWriter.put("type", "bitmap");
             writeContentNode(aJsonWriter);
+            writeBoundingBox(aJsonWriter, pObject);
         }
     }
     else
