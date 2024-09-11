@@ -450,28 +450,25 @@ void DocumentDigitalSignatures::ImplViewSignatures(
 
         xSignaturesDialog->SetSignatureStream( xSignStream );
 
-        if (bReadOnly)
-        {
-            xSignaturesDialog->beforeRun();
-            weld::DialogController::runAsync(xSignaturesDialog, [] (sal_Int32) {});
-            rCallback(false);
-            return;
-        }
-        else if (xSignaturesDialog->run() == RET_OK)
-        {
-            if (xSignaturesDialog->SignaturesChanged())
+        xSignaturesDialog->beforeRun();
+        weld::DialogController::runAsync(xSignaturesDialog, [xSignaturesDialog, rxStorage, xSignStream, rCallback] (sal_Int32 nRet) {
+            if (nRet == RET_OK)
             {
-                bChanges = true;
-                // If we have a storage and no stream, we are responsible for commit
-                if ( rxStorage.is() && !xSignStream.is() )
+                bool bChanged = false;
+                if (xSignaturesDialog->SignaturesChanged())
                 {
-                    uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
-                    xTrans->commit();
+                    bChanged = true;
+                    // If we have a storage and no stream, we are responsible for commit
+                    if ( rxStorage.is() && !xSignStream.is() )
+                    {
+                        uno::Reference< embed::XTransactedObject > xTrans( rxStorage, uno::UNO_QUERY );
+                        xTrans->commit();
+                    }
                 }
+                rCallback(bChanged);
             }
-            rCallback(bChanges);
-            return;
-        }
+        });
+        return;
     }
     else
     {

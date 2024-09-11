@@ -2065,8 +2065,7 @@ void SfxObjectShell::AfterSigning(bool bSignSuccess, bool bSignScriptingContent)
 
 bool SfxObjectShell::CheckIsReadonly(bool bSignScriptingContent, weld::Window* pDialogParent)
 {
-    // in LOK case we support only viewer / readonly mode so far
-    if (GetMedium()->IsOriginallyReadOnly() || comphelper::LibreOfficeKit::isActive())
+    if (GetMedium()->IsOriginallyReadOnly())
     {
         // If the file is physically read-only, we just show the existing signatures
         try
