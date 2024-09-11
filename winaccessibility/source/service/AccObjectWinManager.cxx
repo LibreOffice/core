@@ -615,6 +615,16 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
         if(pParentXAcc)
         {
             AccObject* pObj = GetAccObjByXAcc(pParentXAcc);
+
+            // insert parent if necessary
+            if (!pObj)
+            {
+                Reference<XAccessibleContext> xParentContext = pParentXAcc->getAccessibleContext();
+                assert(xParentContext.is() && "parent accessible has no context");
+                InsertAccObj(pParentXAcc, xParentContext->getAccessibleParent().get());
+                pObj = GetAccObjByXAcc(pParentXAcc);
+            }
+
             if(pObj)
                 pWnd = pObj->GetParentHWND();
         }
