@@ -1050,7 +1050,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     }
 
     // merge first cell
-    CellRef xOriginCell( dynamic_cast< Cell* >( getCellByPosition( nCol, nRow ).get() ) );
+    CellRef xOriginCell( getCell( nCol, nRow ) );
     if(!xOriginCell.is())
         return;
 
@@ -1065,7 +1065,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
     {
         for( ; nTempCol < nLastCol; nTempCol++ )
         {
-            CellRef xCell( dynamic_cast< Cell* >( getCellByPosition( nTempCol, nRow ).get() ) );
+            CellRef xCell( getCell( nTempCol, nRow ) );
             if( xCell.is() && !xCell->isMerged() )
             {
                 if( bUndo )

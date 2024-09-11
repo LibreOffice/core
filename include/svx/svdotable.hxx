@@ -39,6 +39,7 @@ namespace sdr::table {
 
 class TableLayouter;
 struct ImplTableShadowPaintInfo;
+class TableModel;
 
 #ifndef CellRef
     class Cell;
@@ -116,6 +117,8 @@ public:
     void DistributeRows( sal_Int32 nFirstRow, sal_Int32 nLastRow, const bool bOptimize, const bool bMinimize );
 
     css::uno::Reference< css::table::XTable > getTable() const;
+    /// Get the concrete UNO class for the table
+    rtl::Reference< sdr::table::TableModel > getUnoTable() const;
 
     bool isValid( const sdr::table::CellPos& rPos ) const;
     static CellPos getFirstCell();

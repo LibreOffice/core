@@ -59,7 +59,7 @@ public:
 private:
     SvStream& mrStrm;
     SdrTableObj& mrObj;
-    Reference< XTable > mxTable;
+    rtl::Reference< TableModel > mxTable;
 };
 
 void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
@@ -73,7 +73,7 @@ constexpr OUString gsSize( u"Size"_ustr );
 SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 : mrStrm( rStrm )
 , mrObj( rObj )
-, mxTable( rObj.getTable() )
+, mxTable( rObj.getUnoTable() )
 {
 }
 
@@ -131,7 +131,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     const sal_Int32 nColCount = mxTable->getColumnCount();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+        CellRef xCell( mxTable->getCell( nCol, nRow ) );
 
         if( !xCell.is() )
             continue;
@@ -158,7 +158,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
 
 void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 {
-    CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+    CellRef xCell( mxTable->getCell( nCol, nRow ) );
 
     if( !xCell.is() || xCell->isMerged() )
     {

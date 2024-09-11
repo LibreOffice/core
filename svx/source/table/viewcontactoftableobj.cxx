@@ -193,7 +193,7 @@ namespace sdr::contact
                 bool const isTaggedPDF,
                 drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
         {
-            const uno::Reference< css::table::XTable > xTable = rTableObj.getTable();
+            const rtl::Reference< table::TableModel > xTable = rTableObj.getUnoTable();
 
             if(xTable.is())
             {
@@ -245,7 +245,7 @@ namespace sdr::contact
                             }
 
                             // access the cell
-                            xCurrentCell.set(dynamic_cast< sdr::table::Cell* >(xTable->getCellByPosition(aCellPos.mnCol, aCellPos.mnRow).get()));
+                            xCurrentCell = xTable->getCell(aCellPos.mnCol, aCellPos.mnRow);
 
                             if(xCurrentCell.is())
                             {

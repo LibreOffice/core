@@ -251,9 +251,9 @@ void SdrTableObjImpl::CropTableModelToSelection(const CellPos& rStart, const Cel
     {
         for( sal_Int32 nCol = 0; nCol < nColumns; ++nCol ) try
         {
-            CellRef xTargetCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+            CellRef xTargetCell( mxTable->getCell( nCol, nRow ) );
             if( xTargetCell.is() )
-                xTargetCell->cloneFrom( dynamic_cast< Cell* >( xOldTable->getCellByPosition( rStart.mnCol + nCol, rStart.mnRow + nRow ).get() ) );
+                xTargetCell->cloneFrom( xOldTable->getCell( rStart.mnCol + nCol, rStart.mnRow + nRow ) );
         }
         catch( Exception& )
         {
@@ -723,7 +723,7 @@ CellRef SdrTableObjImpl::getCell(  const CellPos& rPos  ) const
     CellRef xCell;
     if( mxTable.is() ) try
     {
-        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( rPos.mnCol, rPos.mnRow ).get() ) );
+        xCell = mxTable->getCell( rPos.mnCol, rPos.mnRow );
     }
     catch( Exception& )
     {
@@ -912,6 +912,10 @@ Reference< XTable > SdrTableObj::getTable() const
     return mpImpl->mxTable;
 }
 
+rtl::Reference< TableModel > SdrTableObj::getUnoTable() const
+{
+    return mpImpl->mxTable;
+}
 
 bool SdrTableObj::isValid( const CellPos& rPos ) const
 {
@@ -1585,12 +1589,12 @@ void SdrTableObj::setActiveCell( const CellPos& rPos )
 
     try
     {
-        mpImpl->mxActiveCell.set( dynamic_cast< Cell* >( mpImpl->mxTable->getCellByPosition( rPos.mnCol, rPos.mnRow ).get() ) );
+        mpImpl->mxActiveCell = mpImpl->mxTable->getCell( rPos.mnCol, rPos.mnRow );
         if( mpImpl->mxActiveCell.is() && mpImpl->mxActiveCell->isMerged() )
         {
             CellPos aOrigin;
             findMergeOrigin( mpImpl->mxTable, rPos.mnCol, rPos.mnRow, aOrigin.mnCol, aOrigin.mnRow );
-            mpImpl->mxActiveCell.set( dynamic_cast< Cell* >( mpImpl->mxTable->getCellByPosition( aOrigin.mnCol, aOrigin.mnRow ).get() ) );
+            mpImpl->mxActiveCell = mpImpl->mxTable->getCell( aOrigin.mnCol, aOrigin.mnRow );
             mpImpl->maEditPos = aOrigin;
         }
         else

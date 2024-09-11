@@ -132,7 +132,7 @@ private:
     RTFCellDefault* mpActDefault;
     RTFCellDefault* mpDefMerge;
 
-    Reference< XTable > mxTable;
+    rtl::Reference< TableModel > mxTable;
 
     RTFColumnVectorPtr mxLastRow;
     // Copy assignment is forbidden and not implemented.
@@ -152,7 +152,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mnVMergeIdx ( 0 )
 , mpActDefault( nullptr )
 , mpDefMerge( nullptr )
-, mxTable( rTableObj.getTable() )
+, mxTable( rTableObj.getUnoTable() )
 {
     mpOutliner->SetUpdateLayout(true);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );
@@ -308,7 +308,7 @@ void SdrTableRTFParser::FillTable()
             {
                 RTFCellInfoPtr xCellInfo( (*xColumn)[nIdx] );
 
-                CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+                CellRef xCell( mxTable->getCell( nCol, nRow ) );
                 if( xCell.is() && xCellInfo )
                 {
                     const SfxPoolItem *pPoolItem = nullptr;

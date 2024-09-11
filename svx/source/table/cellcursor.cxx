@@ -165,14 +165,14 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
     // single cell merge is never valid
     if( mxTable.is() && ((mnLeft != mnRight) || (mnTop != mnBottom)) ) try
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( mnLeft, mnTop ).get() ) );
+        CellRef xCell = mxTable->getCell( mnLeft, mnTop );
 
         // check if first cell is merged
         if( xCell.is() && xCell->isMerged() )
             findMergeOrigin( mxTable, mnLeft, mnTop, rStart.mnCol, rStart.mnRow );
 
         // check if last cell is merged
-        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( mnRight, mnBottom ).get() ) );
+        xCell = mxTable->getCell( mnRight, mnBottom );
         if( xCell.is() )
         {
             if( xCell->isMerged() )
@@ -181,7 +181,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
                 // merge not possible if selection is only one cell and all its merges
                 if( rEnd == rStart )
                     return false;
-                xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( rEnd.mnCol, rEnd.mnRow ).get() ) );
+                xCell = mxTable->getCell( rEnd.mnCol, rEnd.mnRow );
             }
         }
         if( xCell.is() )
@@ -196,7 +196,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
         {
             for( nCol = rStart.mnCol; nCol <= rEnd.mnCol; nCol++ )
             {
-                xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+                xCell = mxTable->getCell( nCol, nRow );
                 if( !xCell.is() )
                     continue;
 
@@ -208,7 +208,7 @@ bool CellCursor::GetMergedSelection( CellPos& rStart, CellPos& rEnd )
                         if( (nOriginCol < rStart.mnCol) || (nOriginRow < rStart.mnRow) )
                             return false;
 
-                        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( nOriginCol, nOriginRow ).get() ) );
+                        xCell = mxTable->getCell( nOriginCol, nOriginRow );
                         if( xCell.is() )
                         {
                             nOriginCol += xCell->getColumnSpan()-1;
@@ -277,7 +277,7 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
     // first check how many columns we need to add
     for( nRow = mnTop; nRow <= mnBottom; ++nRow )
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+        CellRef xCell = mxTable->getCell( nCol, nRow );
         if( xCell.is() && !xCell->isMerged() )
             nNewCols = std::max( nNewCols, nColumns - xCell->getColumnSpan() + 1 - rLeftOvers[nRow] );
     }
@@ -307,13 +307,13 @@ void CellCursor::split_column( sal_Int32 nCol, sal_Int32 nColumns, std::vector< 
 
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+        CellRef xCell = mxTable->getCell( nCol, nRow );
         if( !xCell.is() || xCell->isMerged() )
         {
             if( nNewCols > 0 )
             {
                 // merged cells are ignored, but newly added columns will be added to leftovers
-                xCell.set( dynamic_cast< Cell* >(mxTable->getCellByPosition( nCol+1, nRow ).get() ) );
+                xCell = mxTable->getCell( nCol+1, nRow );
                 if( !xCell.is() || !xCell->isMerged() )
                     rLeftOvers[nRow] += nNewCols;
             }
@@ -391,7 +391,7 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
     // first check how many columns we need to add
     for( nCol = mnLeft; nCol <= mnRight; ++nCol )
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+        CellRef xCell = mxTable->getCell( nCol, nRow );
         if( xCell.is() && !xCell->isMerged() )
             nNewRows = std::max( nNewRows, nRows - xCell->getRowSpan() + 1 - rLeftOvers[nCol] );
     }
@@ -421,13 +421,13 @@ void CellCursor::split_row( sal_Int32 nRow, sal_Int32 nRows, std::vector< sal_In
 
     for( nCol = 0; nCol < nColCount; ++nCol )
     {
-        CellRef xCell( dynamic_cast< Cell* >( mxTable->getCellByPosition( nCol, nRow ).get() ) );
+        CellRef xCell = mxTable->getCell( nCol, nRow );
         if( !xCell.is() || xCell->isMerged() )
         {
             if( nNewRows )
             {
                 // merged cells are ignored, but newly added columns will be added to leftovers
-                xCell.set( dynamic_cast< Cell* >(mxTable->getCellByPosition( nCol, nRow+1 ).get() ) );
+                xCell = mxTable->getCell( nCol, nRow+1 );
                 if( !xCell.is() || !xCell->isMerged() )
                     rLeftOvers[nCol] += nNewRows;
             }

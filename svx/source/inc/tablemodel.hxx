@@ -26,6 +26,7 @@
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include "celltypes.hxx"
+#include <svx/svxdllapi.h>
 
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -50,7 +51,7 @@ protected:
 
 typedef ::comphelper::WeakComponentImplHelper< css::table::XTable, css::util::XBroadcaster > TableModelBase;
 
-class TableModel final :
+class SVXCORE_DLLPUBLIC TableModel final :
                    public TableModelBase,
                    public ICellRange
 {
@@ -135,6 +136,8 @@ public:
     virtual void SAL_CALL lockBroadcasts() override;
     virtual void SAL_CALL unlockBroadcasts() override;
 
+    CellRef getCell( sal_Int32 nCol, sal_Int32 nRow ) const;
+
 private:
     void notifyModification();
 
@@ -147,7 +150,6 @@ private:
     sal_Int32 getColumnCountImpl() const;
 
     CellRef createCell();
-    CellRef getCell( ::sal_Int32 nCol, ::sal_Int32 nRow ) const;
 
     void UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount );
     void UndoRemoveRows( sal_Int32 nIndex, RowVector& aNewRows );

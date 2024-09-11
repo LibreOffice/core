@@ -933,7 +933,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     CellRef xCell;
     if( mxTable.is() ) try
     {
-        xCell.set( dynamic_cast< Cell* >( mxTable->getCellByPosition( rPos.mnCol, rPos.mnRow ).get() ) );
+        xCell = mxTable->getCell( rPos.mnCol, rPos.mnRow );
     }
     catch( Exception& )
     {

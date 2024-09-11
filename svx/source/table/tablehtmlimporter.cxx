@@ -150,7 +150,7 @@ private:
     HTMLCellDefault* mpActDefault;
     sal_Int32 mnCellInRow;
 
-    Reference<XTable> mxTable;
+    rtl::Reference<TableModel> mxTable;
 
     HTMLColumnVectorPtr mxLastRow;
     // Copy assignment is forbidden and not implemented.
@@ -169,7 +169,7 @@ SdrTableHTMLParser::SdrTableHTMLParser(SdrTableObj& rTableObj)
     , mnVMergeIdx(0)
     , mpActDefault(nullptr)
     , mnCellInRow(-1)
-    , mxTable(rTableObj.getTable())
+    , mxTable(rTableObj.getUnoTable())
 {
     mpOutliner->SetUpdateLayout(true);
     mpOutliner->SetStyleSheet(0, mrTableObj.GetStyleSheet());
@@ -310,7 +310,7 @@ void SdrTableHTMLParser::FillTable()
             {
                 HTMLCellInfoPtr xCellInfo((*xColumn)[nIdx]);
 
-                CellRef xCell(dynamic_cast<Cell*>(mxTable->getCellByPosition(nCol, nRow).get()));
+                CellRef xCell(mxTable->getCell(nCol, nRow));
                 if (xCell.is() && xCellInfo)
                 {
                     const SfxPoolItem* pPoolItem = nullptr;
