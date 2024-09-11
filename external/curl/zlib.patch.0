@@ -8,18 +8,18 @@
  
  # Check whether --with-zlib was given.
  if test ${with_zlib+y}
-@@ -23045,6 +23044,7 @@
+@@ -23609,12 +23609,28 @@
  
  
- if test "$OPT_ZLIB" = "no" ; then
-+    ZLIB_LIBS=""
-     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: zlib disabled" >&5
+ if test "$OPT_ZLIB" = "no"; then
++  ZLIB_LIBS=""
+   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: zlib disabled" >&5
  printf "%s\n" "$as_me: WARNING: zlib disabled" >&2;}
  else
-@@ -23052,6 +23052,21 @@
+   if test "$OPT_ZLIB" = "yes"; then
      OPT_ZLIB=""
    fi
- 
++  
 + if test -n "$ZLIB_CFLAGS$ZLIB_LIBS"; then
 +  CPPFLAGS="$CPPFLAGS $ZLIB_CFLAGS"
 +  LIBS="$ZLIB_LIBS $LIBS"
@@ -34,10 +34,9 @@
 +  AMFIXLIB="1"
 + else
 +  ZLIB_LIBS=""
-+
-   if test -z "$OPT_ZLIB" ; then
  
-     if test -n "$PKG_CONFIG"; then
+   if test -z "$OPT_ZLIB"; then
+
 @@ -23903,6 +23903,7 @@
      LIBCURL_PC_REQUIRES_PRIVATE="$LIBCURL_PC_REQUIRES_PRIVATE zlib"
      curl_zlib_msg="enabled"
@@ -48,21 +47,22 @@
   if test x"$AMFIXLIB" = x1; then
 --- configure.ac
 +++ configure.ac
-@@ -1243,19 +1243,30 @@
+@@ -1302,19 +1302,31 @@
  clean_CPPFLAGS=$CPPFLAGS
  clean_LDFLAGS=$LDFLAGS
  clean_LIBS=$LIBS
 -ZLIB_LIBS=""
++
  AC_ARG_WITH(zlib,
  AS_HELP_STRING([--with-zlib=PATH],[search for zlib in PATH])
  AS_HELP_STRING([--without-zlib],[disable use of zlib]),
-                [OPT_ZLIB="$withval"])
+   [OPT_ZLIB="$withval"])
  
- if test "$OPT_ZLIB" = "no" ; then
-+    ZLIB_LIBS=""
-     AC_MSG_WARN([zlib disabled])
+ if test "$OPT_ZLIB" = "no"; then
++  ZLIB_LIBS=""
+   AC_MSG_WARN([zlib disabled])
  else
-   if test "$OPT_ZLIB" = "yes" ; then
+   if test "$OPT_ZLIB" = "yes"; then
      OPT_ZLIB=""
    fi
  
@@ -77,7 +77,7 @@
 + else
 +  ZLIB_LIBS=""
 +
-   if test -z "$OPT_ZLIB" ; then
+   if test -z "$OPT_ZLIB"; then
      CURL_CHECK_PKGCONFIG(zlib)
  
 @@ -1395,6 +1395,7 @@
