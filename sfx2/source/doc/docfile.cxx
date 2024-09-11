@@ -4525,7 +4525,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
             {
                 // Something not ZIP based: e.g. PDF.
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
-                uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+                uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
                 xModelSigner->SignDocumentContentAsync(uno::Reference<embed::XStorage>(), xStream, [onSignDocumentContentFinished](bool bRet) {
                     onSignDocumentContentFinished(bRet);
                 });
