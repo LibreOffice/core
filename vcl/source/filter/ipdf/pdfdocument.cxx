@@ -865,7 +865,8 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     sal_Int64 nSignatureContentOffset = 0;
     sal_Int32 nSignatureId = WriteSignatureObject(
         rDescription, bAdES, nSignatureLastByteRangeOffset, nSignatureContentOffset);
-
+    assert(nSignatureContentOffset > 0
+           && "WriteSignatureObject guarantees a length for nSignatureContentOffset");
     tools::Rectangle aSignatureRectangle;
     sal_Int32 nAppearanceId = WriteAppearanceObject(aSignatureRectangle);
 
