@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <svl/itemset.hxx>
 #include <svl/svldllapi.h>
 #include <o3tl/sorted_vector.hxx>
@@ -88,10 +89,11 @@ private:
     mutable css::uno::Sequence< css::beans::Property > m_aPropSeq;
 };
 
+class SfxItemPropertySetInfo;
 class SVL_DLLPUBLIC SfxItemPropertySet final
 {
     SfxItemPropertyMap                                        m_aMap;
-    mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
+    mutable rtl::Reference<SfxItemPropertySetInfo> m_xInfo;
 
 public:
                             SfxItemPropertySet( std::span<const SfxItemPropertyMapEntry> pMap ) :
@@ -131,8 +133,7 @@ public:
         getPropertyState(const SfxItemPropertyMapEntry& rEntry, const SfxItemSet& rSet)
                                     noexcept;
 
-    css::uno::Reference<css::beans::XPropertySetInfo> const &
-        getPropertySetInfo() const;
+    rtl::Reference<SfxItemPropertySetInfo> const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const {return m_aMap;}
 };
 
