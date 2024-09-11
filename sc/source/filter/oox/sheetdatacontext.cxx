@@ -301,7 +301,9 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     {
         std::u16string_view aColSpanToken = o3tl::getToken(aColSpansText, 0, ' ', nIndex );
         size_t nSepPos = aColSpanToken.find( ':' );
-        if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.size()) )
+        if (nSepPos == std::u16string_view::npos)
+            continue;
+        if (nSepPos > 0 && (nSepPos + 1 < aColSpanToken.size()))
         {
             // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
             const sal_Int32 nCol1 = o3tl::toInt32(aColSpanToken.substr( 0, nSepPos )) - 1;
