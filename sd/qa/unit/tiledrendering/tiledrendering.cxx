@@ -3124,7 +3124,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     CPPUNIT_ASSERT_EQUAL(15875, aTree.get_child("docWidth").get_value<int>());
     CPPUNIT_ASSERT_EQUAL(8930,  aTree.get_child("docHeight").get_value<int>());
 
-    CPPUNIT_ASSERT_EQUAL(size_t(4),  aTree.get_child("slides").size());
+    CPPUNIT_ASSERT_EQUAL(size_t(5),  aTree.get_child("slides").size());
 
     // Slide Index 0
     {
@@ -3176,10 +3176,15 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfo)
     }
 
     // Slide Index 3 - Hidden
+    {
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 3);
+        CPPUNIT_ASSERT_EQUAL(3, rChild.get_child("index").get_value<int>());
+        CPPUNIT_ASSERT_EQUAL(true, rChild.get_child("hidden").get_value<bool>());
+    }
 
     // Slide Index 4
     {
-        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 3);
+        const boost::property_tree::ptree& rChild = child_at(aTree, "slides", 4);
         CPPUNIT_ASSERT_EQUAL(4, rChild.get_child("index").get_value<int>());
         CPPUNIT_ASSERT_EQUAL(false, rChild.get_child("empty").get_value<bool>());
         // Check only that these exist

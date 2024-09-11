@@ -4350,7 +4350,15 @@ OString SdXImpressDocument::getPresentationInfo() const
                     {
                         bool bIsVisible = true; // default visible
                         xPropSet->getPropertyValue("Visible") >>= bIsVisible;
-                        if (bIsVisible)
+                        if (!bIsVisible)
+                        {
+                            ::tools::ScopedJsonWriterStruct aSlideNode = aJsonWriter.startStruct();
+                            std::string sSlideHash = GetInterfaceHash(xSlide);
+                            aJsonWriter.put("hash", sSlideHash);
+                            aJsonWriter.put("index", i);
+                            aJsonWriter.put("hidden", true);
+                        }
+                        else
                         {
                             SdrPage* pPage = SdPage::getImplementation(xSlide);
 
