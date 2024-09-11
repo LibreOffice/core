@@ -37,6 +37,7 @@
 namespace com::sun::star::awt { class XPrinter; }
 namespace vcl { class OldStylePrintAdaptor; }
 class Printer;
+class VCLXDevice;
 
 // relevant properties for the printer:
 /*
@@ -58,7 +59,7 @@ class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
 {
 protected:
     VclPtr<Printer>             mxPrinter;
-    css::uno::Reference< css::awt::XDevice >  mxPrnDevice;
+    rtl::Reference< VCLXDevice >  mxPrnDevice;
 
     sal_Int16                   mnOrientation;
     bool                        mbHorizontal;
@@ -67,7 +68,7 @@ public:
     virtual ~VCLXPrinterPropertySet() override;
 
     Printer*                    GetPrinter() const { return mxPrinter.get(); }
-    css::uno::Reference< css::awt::XDevice > const &  GetDevice();
+    rtl::Reference< VCLXDevice > const &  GetDevice();
 
     // css::uno::XInterface
     DECLARE_XINTERFACE();

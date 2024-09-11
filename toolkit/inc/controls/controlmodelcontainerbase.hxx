@@ -223,7 +223,7 @@ protected:
     bool                                                                        mbSizeModified;
     bool                                                                        mbPosModified;
     rtl::Reference< StdTabController >                mxTabController;
-    css::uno::Reference< css::util::XModifyListener > mxListener;
+    rtl::Reference< ResourceListener > mxListener;
 
     void        ImplInsertControl( css::uno::Reference< css::awt::XControlModel > const & rxModel, const OUString& rName );
     void        ImplRemoveControl( css::uno::Reference< css::awt::XControlModel > const & rxModel );

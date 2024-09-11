@@ -32,6 +32,7 @@
 #include <memory>
 
 class OutputDevice;
+class VCLXDevice;
 namespace vcl { class Region; }
 namespace com::sun::star::graphic { class XGraphic; }
 
@@ -55,7 +56,7 @@ class VCLXGraphics final : public cppu::WeakImplHelper<
 {
 private:
     // used to return same reference on each call to getDevice()
-    css::uno::Reference< css::awt::XDevice> mxDevice;
+    rtl::Reference<VCLXDevice> mxDevice;
 
     VclPtr<OutputDevice> mpOutputDevice;
     vcl::Font       maFont;

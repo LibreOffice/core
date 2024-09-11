@@ -36,7 +36,7 @@ namespace com::sun::star {
         class XComponentContext;
     }
 }
-
+namespace toolkit { class ScriptEventContainer; }
 
 // namespace toolkit
 // {
@@ -56,7 +56,7 @@ namespace com::sun::star {
     protected:
         css::uno::Reference< css::uno::XAggregation >
                     m_xAggregate;
-        css::uno::Reference< css::container::XNameContainer >
+        rtl::Reference< toolkit::ScriptEventContainer >
                     mxEventContainer;
 
         // <properties>
