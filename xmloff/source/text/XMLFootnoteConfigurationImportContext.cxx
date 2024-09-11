@@ -176,7 +176,7 @@ void XMLFootnoteConfigurationImportContext::SetAttribute( sal_Int32 nElement,
         case XML_ELEMENT(TEXT, XML_OFFSET): // for backwards compatibility with SRC630 & earlier
         {
             sal_Int32 nTmp;
-            if (::sax::Converter::convertNumber(nTmp, rValue))
+            if (::sax::Converter::convertNumber(nTmp, rValue, 0, SAL_MAX_UINT16))
             {
                 nOffset = static_cast<sal_uInt16>(nTmp);
             }
