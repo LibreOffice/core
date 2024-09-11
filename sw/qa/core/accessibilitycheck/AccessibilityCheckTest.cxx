@@ -247,6 +247,46 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTOCHyperlink)
     CPPUNIT_ASSERT_EQUAL(size_t(0), aIssues.size());
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testDeleteHeader)
+{
+    // Delete Header from doc and check if we have less Direct format warning
+    createSwDoc("DeleteHeader.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sw::AccessibilityCheck aCheck(pDoc);
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    aCheck.check();
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[4]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[5]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[6]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[7]->m_eIssueID);
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // modify header
+    pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
+    pWrtShell->GetWin()->GrabFocusToDocument();
+
+    // re-check A11Y issues
+    sw::AccessibilityCheck aReCheck(pDoc);
+    auto& aResultIssues = aReCheck.getIssueCollection().getIssues();
+    aReCheck.check();
+
+    // Check the result
+    aResultIssues = aReCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aResultIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aResultIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aResultIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aResultIssues[2]->m_eIssueID);
+}
+
 namespace
 {
 std::vector<std::shared_ptr<sfx::AccessibilityIssue>>
