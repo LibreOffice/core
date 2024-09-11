@@ -4376,7 +4376,15 @@ OString SdXImpressDocument::getPresentationInfo() const
             SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
             bool bIsVisible = true; // default visible
             pSlide->getPropertyValue("Visible") >>= bIsVisible;
-            if (bIsVisible)
+            if (!bIsVisible)
+            {
+                auto aSlideNode = aJsonWriter.startStruct();
+                std::string sSlideHash = GetInterfaceHash(cppu::getXWeak(pSlide));
+                aJsonWriter.put("hash", sSlideHash);
+                aJsonWriter.put("index", i);
+                aJsonWriter.put("hidden", true);
+            }
+            else
             {
                 SdrPage* pPage = pSlide->GetSdrPage();
 
