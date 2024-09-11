@@ -954,9 +954,15 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 pTextNd->EraseText( aIdx, 1 );
             }
 
-            while( nPos-- && ( pFootnoteNd = &( pSrch = rFootnoteArr[ nPos ] )->
-                    GetTextNode())->GetIndex() >= pStt->GetNodeIndex() )
+            while (nPos > 0)
             {
+                --nPos;
+
+                pSrch = rFootnoteArr[nPos];
+                pFootnoteNd = &pSrch->GetTextNode();
+                if (pFootnoteNd->GetIndex() < pStt->GetNodeIndex())
+                    break;
+
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !(DelContentType::CheckNoCntnt & nDelContentType) && (
                     ( &pStt->GetNode() == pFootnoteNd &&
