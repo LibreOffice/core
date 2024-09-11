@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_UNOIPSET_HXX
 
 #include <editeng/editengdllapi.h>
+#include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <vector>
 
@@ -32,7 +33,7 @@ class SvxItemPropertySetUsrAnys;
 class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
-    mutable css::uno::Reference<css::beans::XPropertySetInfo> m_xInfo;
+    mutable rtl::Reference<SfxItemPropertySetInfo> m_xInfo;
     SfxItemPool&                    mrItemPool;
 
 public:
@@ -50,7 +51,7 @@ public:
     css::uno::Any getPropertyValue( const SfxItemPropertyMapEntry* pMap, SvxItemPropertySetUsrAnys& rAnys ) const;
     static void setPropertyValue( const SfxItemPropertyMapEntry* pMap, const css::uno::Any& rVal, SvxItemPropertySetUsrAnys& rAnys );
 
-    css::uno::Reference< css::beans::XPropertySetInfo > const & getPropertySetInfo() const;
+    rtl::Reference< SfxItemPropertySetInfo > const & getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertyMapEntry* getPropertyMapEntry(const OUString& rName) const;
 };

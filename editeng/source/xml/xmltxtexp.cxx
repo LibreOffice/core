@@ -254,7 +254,7 @@ public:
     virtual void ExportContent_() override;
 
 private:
-    css::uno::Reference< css::text::XText > mxText;
+    rtl::Reference< SvxUnoText > mxText;
 };
 
 }

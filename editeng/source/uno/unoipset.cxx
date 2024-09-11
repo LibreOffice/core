@@ -215,7 +215,7 @@ const SfxItemPropertyMapEntry* SvxItemPropertySet::getPropertyMapEntry(const OUS
  }
 
 
-uno::Reference< beans::XPropertySetInfo > const &  SvxItemPropertySet::getPropertySetInfo() const
+rtl::Reference< SfxItemPropertySetInfo > const &  SvxItemPropertySet::getPropertySetInfo() const
 {
     if( !m_xInfo.is() )
         m_xInfo = new SfxItemPropertySetInfo( m_aPropertyMap );

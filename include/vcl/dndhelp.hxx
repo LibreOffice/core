@@ -83,7 +83,7 @@ public:
     void          SAL_CALL release() noexcept override  { OWeakObject::release(); }
 
     // css::lang::XEventListener
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    VCL_DLLPUBLIC void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // css::datatransfer::dnd::XDragGestureListener
     void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;

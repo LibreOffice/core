@@ -275,7 +275,7 @@ private:
     std::optional<PointerStyle> mxPointer;
     std::unique_ptr<DragAndDropInfo> mpDragAndDropInfo;
 
-    css::uno::Reference<css::datatransfer::dnd::XDragSourceListener> mxDnDListener;
+    rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
     tools::Long mnInvalidateMore;
     EVControlBits mnControl;
