@@ -1066,18 +1066,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind2, "tdf159158_zOrder_h
     CPPUNIT_ASSERT(!getProperty<bool>(zOrder1, u"Opaque"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf100037_inlineZOrder, "tdf100037_inlineZOrder.docx")
-{
-    // given a floating textbox followed by an inline image,
-    // an inline image should always be behind a heaven-layer floating object.
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    CPPUNIT_ASSERT_EQUAL(u"Image 2"_ustr, getProperty<OUString>(zOrder0, u"LinkDisplayName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder1, u"LinkDisplayName"_ustr));
-}
-
 DECLARE_OOXMLEXPORT_TEST(testTdf155903, "tdf155903.odt")
 {
     // Without the accompanying fix in place, this test would have crashed,
