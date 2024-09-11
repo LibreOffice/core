@@ -372,6 +372,8 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
     }
     else
     {
+        if (pObject && hasFields(pObject))
+            aJsonWriter.put("isField", true); // TODO: to be removed, implement properly
         aJsonWriter.put("type", "bitmap");
         writeContentNode(aJsonWriter);
     }
