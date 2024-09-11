@@ -1449,10 +1449,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf158436, "tdf158436.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159032, "tdf124795-5.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf159032, "tdf159032.docx")
 {
     // This resulted crashing
-    CPPUNIT_ASSERT_EQUAL(57, getPages());
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160518, "tdf160518_useWord2013TrackBottomHyphenation.docx")
