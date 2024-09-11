@@ -2266,7 +2266,9 @@ bool SwFEShell::EndMark()
             SwFlyFrame* pOldSelFly = ::GetFlyFromMarked( &rMrkList, this );
 
             if ( rMrkList.GetMarkCount() > 1 )
-                for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
+            {
+                size_t i = 0;
+                while (i < rMrkList.GetMarkCount())
                 {
                     SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                     if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr )
@@ -2276,9 +2278,11 @@ bool SwFEShell::EndMark()
                             bShowHdl = true;
                         }
                         rMrkList.DeleteMark( i );
-                        --i;    // no exceptions
+                        continue;
                     }
+                    ++i;
                 }
+            }
 
             if( bShowHdl )
             {
