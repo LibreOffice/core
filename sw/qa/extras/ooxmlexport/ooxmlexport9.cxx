@@ -688,7 +688,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf109310_endnoteStyleForMSO)
 {
     loadAndSave("tdf109310_endnoteStyleForMSO.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/endnotes.xml"_ustr);
-    // Check w:rStyle element has w:val attribute - note that w: is not specified for attribute
+    // It is important that EndnoteCharacters exists, and is not duplicated on each round-trip
     assertXPath(pXmlDoc, "/w:endnotes/w:endnote[@w:id='2']/w:p/w:r[1]/w:rPr/w:rStyle"_ostr, "val"_ostr,
                 u"EndnoteCharacters"_ustr);
 }
