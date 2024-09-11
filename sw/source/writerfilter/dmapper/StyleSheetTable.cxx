@@ -1666,8 +1666,8 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "envelope address", "Addressee" }, // RES_POOLCOLL_ENVELOPE_ADDRESS
         { "Envelope Return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
         { "envelope return", "Sender" }, // RES_POOLCOLL_SEND_ADDRESS
-        { "footnote reference", "Footnote Characters" }, // RES_POOLCHR_FOOTNOTE; tdf#82173
-        { "Footnote Reference", "Footnote Characters" }, // RES_POOLCHR_FOOTNOTE; tdf#82173
+        { "footnote reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173 tdf#162884
+        { "Footnote Reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173 tdf#162884
         { "Annotation Reference", "" },
         { "annotation reference", "" },
         { "Line Number", "Line Numbering" }, // RES_POOLCHR_LINENUM
@@ -1675,8 +1675,8 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Page Number", "Page Number" }, // RES_POOLCHR_PAGENO
         { "page number", "Page Number" }, // RES_POOLCHR_PAGENO
         { "PageNumber", "Page Number" }, // RES_POOLCHR_PAGENO
-        { "endnote reference", "Endnote Characters" }, // RES_POOLCHR_ENDNOTE; tdf#82173
-        { "Endnote Reference", "Endnote Characters" }, // RES_POOLCHR_ENDNOTE; tdf#82173
+        { "endnote reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173 tdf#162884
+        { "Endnote Reference", "Endnote Symbol" }, // RES_POOLCHR_ENDNOTE; tdf#82173 tdf#162884
         { "endnote text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
         { "Endnote Text", "Endnote" }, // RES_POOLCOLL_ENDNOTE
         { "Table of Authorities", "Bibliography Heading" }, // RES_POOLCOLL_TOX_AUTHORITIESH
