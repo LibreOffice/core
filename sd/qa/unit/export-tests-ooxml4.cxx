@@ -429,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf129372)
 
     const SdrObject* pObj = pPage->GetObj(0);
     CPPUNIT_ASSERT_MESSAGE("no object", pObj != nullptr);
-    CPPUNIT_ASSERT_EQUAL(SdrObjKind::OLE2, pObj->GetObjIdentifier());
+    CPPUNIT_ASSERT_EQUAL(SdrObjKind::CustomShape, pObj->GetObjIdentifier());
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeGlowEffect)
