@@ -31,7 +31,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-scriptrun.patch.1 \
 	external/icu/icu4c-rtti.patch.1 \
 	external/icu/icu4c-clang-cl.patch.1 \
-	external/icu/gcc9.patch \
 	external/icu/c++20-comparison.patch.1 \
 	external/icu/Wdeprecated-copy-dtor.patch \
 	external/icu/icu4c-windows-cygwin-cross.patch.1 \
