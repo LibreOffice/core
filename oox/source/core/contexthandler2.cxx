@@ -24,6 +24,7 @@
 #include <oox/token/tokens.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -239,30 +240,24 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
                 // is long gone. For now let's decide depending on a list of supported
                 // namespaces like we do in writerfilter
 
-                std::vector<OUString> aSupportedNS =
+                std::u16string_view aSupportedNS[] =
                 {
-                    u"a14"_ustr, // Impress needs this to import math formulas.
-                    u"p14"_ustr,
-                    u"p15"_ustr,
-                    u"x12ac"_ustr,
-                    u"v"_ustr
+                    // u"a14", // We do not currently support inline formulas and other a14 stuff
+                    u"p14",
+                    u"p15",
+                    u"x12ac",
+                    u"v"
                 };
 
-                Reference<XServiceInfo> xModel(getDocFilter().getModel(), UNO_QUERY);
-                if (xModel.is() && xModel->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
+                for (size_t pos = 0; pos != std::u16string_view::npos;)
                 {
-                    // No a14 for Calc documents, it would cause duplicated shapes as-is.
-                    auto it = std::find(aSupportedNS.begin(), aSupportedNS.end(), "a14");
-                    if (it != aSupportedNS.end())
-                    {
-                        aSupportedNS.erase(it);
-                    }
+                    // 'Requires' is a space-separated list
+                    auto ns = o3tl::getToken(aRequires, u' ', pos);
+                    if (!ns.empty() && std::find(std::begin(aSupportedNS), std::end(aSupportedNS), ns) == std::end(aSupportedNS))
+                        return false;
                 }
 
-                if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
-                    setMCEState( MCE_STATE::FoundChoice ) ;
-                else
-                    return false;
+                setMCEState( MCE_STATE::FoundChoice ) ;
             }
             break;
 
