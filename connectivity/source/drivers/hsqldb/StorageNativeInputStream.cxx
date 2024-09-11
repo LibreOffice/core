@@ -153,7 +153,7 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stor
                 try
                 {
                     do {
-                        if (tmpLongVal >= std::numeric_limits<sal_Int64>::max() )
+                        if (tmpLongVal > std::numeric_limits<sal_Int32>::max() )
                             tmpIntVal = std::numeric_limits<sal_Int32>::max();
                         else // Casting is safe here.
                             tmpIntVal = static_cast<sal_Int32>(tmpLongVal);
