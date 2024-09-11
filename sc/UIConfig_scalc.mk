@@ -186,6 +186,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/multipleoperationsdialog \
 	sc/uiconfig/scalc/ui/navigatorpanel \
 	sc/uiconfig/scalc/ui/nosolutiondialog \
+	sc/uiconfig/scalc/ui/onlyactivesheetsaveddialog \
 	sc/uiconfig/scalc/ui/optcalculatepage \
 	sc/uiconfig/scalc/ui/optchangespage \
 	sc/uiconfig/scalc/ui/optcompatibilitypage \

@@ -84,6 +84,7 @@
 #include <svx/svdpage.hxx>
 #include <docmodel/theme/Theme.hxx>
 
+#include <inputopt.hxx>
 #include <formulacell.hxx>
 #include <global.hxx>
 #include <filter.hxx>
@@ -2636,8 +2637,11 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 bRet = true;
 
                 if (m_pDocument->GetTableCount() > 1)
-                    if (!rMed.GetErrorIgnoreWarning())
-                        rMed.SetError(SCWARN_EXPORT_ASCII);
+                    if (!rMed.GetErrorIgnoreWarning() && SC_MOD()->GetInputOptions().GetWarnActiveSheet())
+                    {
+                        ScTabViewShell* pViewShell = GetBestViewShell();
+                        pViewShell->ExecuteOnlyActiveSheetSavedDlg();
+                    }
             }
         }
     }
@@ -2735,7 +2739,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
 
             if (m_pDocument->GetTableCount() > 1)
-                if (!rMed.GetErrorIgnoreWarning())
+                if (!rMed.GetErrorIgnoreWarning() && SC_MOD()->GetInputOptions().GetWarnActiveSheet())
                     rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }
@@ -2785,6 +2789,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if (GetErrorIgnoreWarning())
             SetError(SCERR_IMPORT_NI);
     }
+
     return bRet;
 }
 

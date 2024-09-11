@@ -484,6 +484,8 @@ ScTpLayoutOptions::ScTpLayoutOptions(weld::Container* pPage, weld::DialogControl
     , m_xLegacyCellSelectionImg(m_xBuilder->weld_widget(u"locklegacy_cell"_ustr))
     , m_xEnterPasteModeCB(m_xBuilder->weld_check_button(u"enter_paste_mode_cb"_ustr))
     , m_xEnterPasteModeImg(m_xBuilder->weld_widget(u"lockenter_paste"_ustr))
+    , m_xWarnActiveSheetCB(m_xBuilder->weld_check_button(u"warnactivesheet_cb"_ustr))
+    , m_xWarnActiveSheetImg(m_xBuilder->weld_widget(u"lockwarnactivesheet"_ustr))
 {
     SetExchangeSupport();
 
@@ -543,7 +545,8 @@ OUString ScTpLayoutOptions::GetAllStrings()
 
     OUString checkButton[] = { u"aligncb"_ustr,   u"editmodecb"_ustr, u"enter_paste_mode_cb"_ustr,
                                u"formatcb"_ustr,  u"exprefcb"_ustr,   u"sortrefupdatecb"_ustr,
-                               u"markhdrcb"_ustr, u"replwarncb"_ustr, u"legacy_cell_selection_cb"_ustr };
+                               u"markhdrcb"_ustr, u"replwarncb"_ustr, u"legacy_cell_selection_cb"_ustr,
+                               u"warnactivesheet_cb"_ustr };
 
     for (const auto& check : checkButton)
     {
@@ -658,6 +661,12 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
     if (m_xEnterPasteModeCB->get_state_changed_from_saved())
     {
         rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_ENTER_PASTE_MODE, m_xEnterPasteModeCB->get_active() ) );
+        bRet = true;
+    }
+
+    if (m_xWarnActiveSheetCB->get_state_changed_from_saved())
+    {
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_WARNACTIVESHEET, m_xWarnActiveSheetCB->get_active() ) );
         bRet = true;
     }
 
@@ -813,6 +822,13 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     m_xEnterPasteModeCB->set_sensitive(!bReadOnly);
     m_xEnterPasteModeImg->set_visible(bReadOnly);
 
+    if( const SfxBoolItem* pWarnActiveSheetItem = rCoreSet->GetItemIfSet( SID_SC_INPUT_WARNACTIVESHEET, false ) )
+        m_xWarnActiveSheetCB->set_active( pWarnActiveSheetItem->GetValue() );
+
+    bReadOnly = officecfg::Office::Calc::Input::WarnActiveSheet::isReadOnly();
+    m_xWarnActiveSheetCB->set_sensitive(!bReadOnly);
+    m_xWarnActiveSheetImg->set_visible(bReadOnly);
+
     m_xAlignCB->save_state();
     m_xAlignLB->save_value();
     m_xEditModeCB->save_state();
@@ -825,6 +841,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 
     m_xLegacyCellSelectionCB->save_state();
     m_xEnterPasteModeCB->save_state();
+    m_xWarnActiveSheetCB->save_state();
 
     AlignHdl(*m_xAlignCB);
 

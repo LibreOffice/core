@@ -38,6 +38,7 @@ private:
     bool        bReplCellsWarn;
     bool        bLegacyCellSelection;
     bool        bEnterPasteMode;
+    bool        bWarnActiveSheet;
 
 public:
                 ScInputOptions();
@@ -70,6 +71,8 @@ public:
     bool        GetLegacyCellSelection() const      { return bLegacyCellSelection; }
     void        SetEnterPasteMode(bool bSet)    { bEnterPasteMode = bSet; }
     bool        GetEnterPasteMode() const       { return bEnterPasteMode; }
+    void        SetWarnActiveSheet(bool bSet)    { bWarnActiveSheet = bSet; }
+    bool        GetWarnActiveSheet() const       { return bWarnActiveSheet; }
 };
 
 // CfgItem for input options

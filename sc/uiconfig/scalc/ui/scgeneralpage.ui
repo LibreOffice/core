@@ -262,7 +262,7 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <child>
-                  <!-- n-columns=3 n-rows=9 -->
+                  <!-- n-columns=3 n-rows=10 -->
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -572,6 +572,39 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="lockwarnactivesheet">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">9</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="warnactivesheet_cb">
+                        <property name="label" translatable="yes" context="scgeneralpage|warnactivesheet_cb">Warn when saving only the active sheet</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="warnactivesheet_cb-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|legacy_cell_selection_cb">Specifies whether a warning box informs when saving was applied to only the active sheet.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">9</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                   </object>

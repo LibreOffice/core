@@ -37,6 +37,7 @@
 #include <drwlayer.hxx>
 #include <retypepassdlg.hxx>
 #include <tabprotection.hxx>
+#include <onlyactivesheetsaveddlg.hxx>
 
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 
@@ -258,6 +259,12 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 
     aDlg.WriteNewDataToDocument(rDoc);
     return true;
+}
+
+void ScTabViewShell::ExecuteOnlyActiveSheetSavedDlg()
+{
+    ScOnlyActiveSheetSavedDlg aDlg(GetFrameWeld());
+    aDlg.run();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

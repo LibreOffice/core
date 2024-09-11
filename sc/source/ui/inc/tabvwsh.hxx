@@ -410,6 +410,7 @@ public:
     bool    HasAccessibilityObjects() const;
 
     bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
+    void    ExecuteOnlyActiveSheetSavedDlg();
 
     void    FinishProtectTable();
     void    ExecProtectTable( SfxRequest& rReq );

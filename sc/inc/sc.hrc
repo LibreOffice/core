@@ -110,6 +110,7 @@ class SvxZoomSliderItem;
 
 // misc:
 #define SID_LINKS               (SC_VIEW_START + 60)
+#define SID_SC_INPUT_WARNACTIVESHEET    TypedWhichId<SfxBoolItem>(SC_VIEW_START + 61)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
 // Put this here since all available slots for "SC_INPUT" are taken
 #define SID_SC_INPUT_ENTER_PASTE_MODE TypedWhichId<SfxBoolItem>(SC_VIEW_START + 64)
@@ -167,7 +168,7 @@ class SvxZoomSliderItem;
 
 #define SID_SC_OPT_KEY_BINDING_COMPAT   TypedWhichId<SfxUInt16Item>(SC_VIEW_START + 99)
 
-// NOTE: last valid ID is (SC_VIEW_START + 99)
+// NOTE: last valid ID is (SC_VIEW_START + 100)
 
 // messages
 

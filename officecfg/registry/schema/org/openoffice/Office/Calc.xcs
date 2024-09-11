@@ -706,6 +706,14 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="WarnActiveSheet" oor:type="xs:boolean" oor:nillable="false">
+        <!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
+        <info>
+          <desc>Specifies whether a warning is shown if saving a document works only for the active sheet, eg. in case of CSV.</desc>
+          <label>Warn when saving only the active sheet</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="UseScrollLock" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Toggles the scroll lock behavior allowing to disable it for special keyboards</desc>
