@@ -478,6 +478,7 @@ sal_Int32 SAL_CALL osl_writePipe(oslPipe pPipe, const void *pBuffer, sal_Int32 n
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_writePipe: invalid pipe"); // osl_sendPipe detects invalid pipe
     while (BytesToSend > 0)
     {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         sal_Int32 RetVal = osl_sendPipe(pPipe, pBuffer, BytesToSend);
         /* error occurred? */
         if (RetVal <= 0)
@@ -500,6 +501,7 @@ sal_Int32 SAL_CALL osl_readPipe( oslPipe pPipe, void *pBuffer , sal_Int32 n )
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_readPipe: invalid pipe"); // osl_receivePipe detects invalid pipe
     while (BytesToRead > 0)
     {
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
         sal_Int32 RetVal = osl_receivePipe(pPipe, pBuffer, BytesToRead);
         /* error occurred? */
         if (RetVal <= 0)
