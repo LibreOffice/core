@@ -207,7 +207,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > const & xStream,
     if ( m_nStorageMode & embed::ElementModes::WRITE )
     {
         m_pSwitchStream = new SwitchablePersistenceStream(xStream);
-        m_xStream = static_cast< io::XStream* >( m_pSwitchStream.get() );
+        m_xStream = m_pSwitchStream.get();
     }
     else
     {
@@ -378,7 +378,7 @@ void OStorage_Impl::OpenOwnPackage()
             uno::Sequence< uno::Any > aArguments( 2 );
             auto pArguments = aArguments.getArray();
             if ( m_nStorageMode & embed::ElementModes::WRITE )
-                pArguments[ 0 ] <<= m_xStream;
+                pArguments[ 0 ] <<= css::uno::Reference< css::io::XStream >(m_xStream);
             else
             {
                 SAL_WARN_IF( !m_xInputStream.is(), "package.xstor", "Input stream must be set for readonly access!" );
@@ -1715,8 +1715,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
 
     if ( m_xRelStorage->hasElements() )
     {
-        uno::Reference< embed::XTransactedObject > xTrans( m_xRelStorage, uno::UNO_QUERY_THROW );
-        xTrans->commit();
+        m_xRelStorage->commit();
     }
 
     if ( xNewPackageFolder.is() && xNewPackageFolder->hasByName( aRelsStorName ) )
