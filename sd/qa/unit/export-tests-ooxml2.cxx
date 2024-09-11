@@ -378,13 +378,13 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObject)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObjectPPT2010)
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathExportNonBMP)
 {
     // Check import / export of math object
-    createSdImpressDoc("pptx/Math.pptx");
+    createSdImpressDoc("odp/Math.fodp");
     save(u"Impress Office Open XML"_ustr);
 
-    // Export an MS specific ole object (imported from a PPTX document)
+    // Export an MS specific ole object
     {
         xmlDocUniquePtr pXmlDocContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
         assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice"_ostr,
