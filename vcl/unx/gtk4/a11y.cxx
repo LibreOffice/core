@@ -763,8 +763,18 @@ static GtkAccessible* lo_accessible_get_next_accessible_sibling(GtkAccessible* s
 
     css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
         pAccessible->uno_accessible->getAccessibleContext());
+    if (!xContext.is())
+    {
+        SAL_WARN("vcl.gtk", "Accessible has no accessible context");
+        return nullptr;
+    }
+
     sal_Int64 nThisChildIndex = xContext->getAccessibleIndexInParent();
-    assert(nThisChildIndex != -1);
+    if (nThisChildIndex < 0)
+    {
+        SAL_WARN("vcl.gtk", "Invalid accessible index in parent");
+        return nullptr;
+    }
     sal_Int64 nNextChildIndex = nThisChildIndex + 1;
 
     css::uno::Reference<css::accessibility::XAccessible> xParent = xContext->getAccessibleParent();
