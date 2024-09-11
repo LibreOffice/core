@@ -410,8 +410,9 @@ sal_uInt32 SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
         pParent = Next(const_cast<SvTreeListEntry*>(pParent), &nActDepth);
         nCount++;
     } while( pParent && nRefDepth < nActDepth );
-    nCount--;
-    return nCount;
+
+    assert(nCount > 0 && "given do...while");
+    return nCount - 1;
 }
 
 sal_uInt32 SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListEntry* pParent) const
@@ -431,9 +432,9 @@ sal_uInt32 SvTreeList::GetVisibleChildCount(const SvListView* pView, SvTreeListE
         pParent = NextVisible( pView, pParent, &nActDepth );
         nCount++;
     } while( pParent && nRefDepth < nActDepth );
-    assert(nCount >= 1 && "given do...while");
-    nCount--;
-    return nCount;
+
+    assert(nCount > 0 && "given do...while");
+    return nCount - 1;
 }
 
 sal_uInt32 SvTreeList::GetChildSelectionCount(const SvListView* pView,SvTreeListEntry* pParent) const
@@ -454,7 +455,7 @@ sal_uInt32 SvTreeList::GetChildSelectionCount(const SvListView* pView,SvTreeList
         if( pParent && pView->IsSelected( pParent ) && nRefDepth < nActDepth)
             nCount++;
     } while( pParent && nRefDepth < nActDepth );
-//  nCount--;
+
     return nCount;
 }
 
