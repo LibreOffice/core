@@ -964,7 +964,7 @@ void SwCursorShell::GotoFormControl(bool bNext)
     SwTextContentControl* pTCC = !pFieldMark ? CursorInsideContentControl() : nullptr;
 
     auto pCC = pTCC ? pTCC->GetContentControl().GetContentControl() : nullptr;
-    const sal_Int32 nCurTabIndex = pCC && pCC->GetTabIndex() ? pCC->GetTabIndex() : SAL_MAX_UINT32;
+    const sal_uInt32 nCurTabIndex = pCC && pCC->GetTabIndex() ? pCC->GetTabIndex() : SAL_MAX_UINT32;
 
     SwPosition nCurPos(*GetCursor()->GetPoint());
     if (pFieldMark)
