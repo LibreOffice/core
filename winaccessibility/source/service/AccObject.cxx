@@ -323,8 +323,7 @@ void AccObject::DeleteChild( AccObject* pChild )
     if(iter!=m_childrenList.end())
     {
         m_childrenList.erase(iter);
-        if(m_pIMAcc)
-            pChild->SetParentObj(nullptr);
+        pChild->SetParentObj(nullptr);
     }
 }
 
@@ -334,11 +333,7 @@ void AccObject::DeleteChild( AccObject* pChild )
    * @param.
    * @return
    */
-void AccObject::UpdateValidWindow()
-{
-    if(m_pIMAcc)
-        m_pIMAcc->Put_XAccWindowHandle(m_pParantID);
-}
+void AccObject::UpdateValidWindow() { m_pIMAcc->Put_XAccWindowHandle(m_pParantID); }
 
 /**
    * Update value property to com object.
@@ -347,7 +342,7 @@ void AccObject::UpdateValidWindow()
    */
 void AccObject::UpdateValue()
 {
-    if( nullptr == m_pIMAcc  || !m_xAccContextRef.is() )
+    if (!m_xAccContextRef.is())
     {
         assert(false);
         return ;
@@ -370,7 +365,7 @@ void AccObject::UpdateValue()
    */
 void  AccObject::SetValue( Any pAny )
 {
-    if( nullptr == m_pIMAcc || !m_xAccContextRef.is() )
+    if (!m_xAccContextRef.is())
     {
         assert(false);
         return ;
@@ -576,10 +571,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     //case  SENSITIVE:
     //    IState = STATE_SYSTEM_PROTECTED;
     case EDITABLE:
-        if( m_pIMAcc )
-        {
-            m_pIMAcc->DecreaseState( STATE_SYSTEM_READONLY );
-        }
+        m_pIMAcc->DecreaseState(STATE_SYSTEM_READONLY);
         break;
     case OFFSCREEN:
         IState = STATE_SYSTEM_OFFSCREEN;
@@ -607,11 +599,6 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
    */
 void  AccObject::DecreaseState( sal_Int64 xState )
 {
-    if( nullptr == m_pIMAcc )
-    {
-        return;
-    }
-
     if( xState == FOCUSABLE)
     {
         if (m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM)
@@ -647,13 +634,6 @@ void  AccObject::DecreaseState( sal_Int64 xState )
    */
 void AccObject::IncreaseState( sal_Int64 xState )
 {
-    if( nullptr == m_pIMAcc )
-    {
-        assert(false);
-        return;
-    }
-
-
     if( xState == AccessibleStateType::VISIBLE  )
     {
         m_pIMAcc->DecreaseState( STATE_SYSTEM_INVISIBLE );
@@ -689,11 +669,6 @@ AccObject* AccObject::NextChild()
    */
 void AccObject::UpdateRole()
 {
-    if (!m_pIMAcc)
-    {
-        return;
-    }
-
     const sal_Int16 nUnoRole = m_xAccContextRef->getAccessibleRole();
     short nIA2Role = lcl_mapToIAccessible2Role(nUnoRole);
     m_pIMAcc->Put_XAccRole(nIA2Role);
@@ -706,11 +681,6 @@ void AccObject::UpdateRole()
    */
 void AccObject::UpdateState()
 {
-    if (!m_pIMAcc)
-    {
-        return;
-    }
-
     XAccessibleContext* pContext  = m_xAccContextRef.get();
     sal_Int64 nRState = pContext->getAccessibleStateSet();
 
@@ -880,7 +850,7 @@ void AccObject::UpdateState()
    */
 bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
 {
-    if( nullptr == m_pIMAcc || !m_xAccContextRef.is()  )
+    if (!m_xAccContextRef.is())
     {
         assert(false);
         return false;
@@ -903,13 +873,10 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
    */
 void AccObject::setFocus()
 {
-    if(m_pIMAcc)
-    {
-        IncreaseState(FOCUSED);
-        m_pIMAcc->Put_XAccFocus(CHILDID_SELF);
+    IncreaseState(FOCUSED);
+    m_pIMAcc->Put_XAccFocus(CHILDID_SELF);
 
-        UpdateRole();
-    }
+    UpdateRole();
 }
 
 /**
@@ -919,11 +886,8 @@ void AccObject::setFocus()
    */
 void AccObject::unsetFocus()
 {
-    if(m_pIMAcc)
-    {
-        DecreaseState( FOCUSED );
-        m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
-    }
+    DecreaseState(FOCUSED);
+    m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
 }
 
 void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
@@ -943,34 +907,22 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
         *isExpandable = true;
 }
 
-void AccObject::NotifyDestroy()
-{
-    if(m_pIMAcc)
-        m_pIMAcc->NotifyDestroy();
-}
+void AccObject::NotifyDestroy() { m_pIMAcc->NotifyDestroy(); }
 
 void AccObject::SetParentObj(AccObject* pParentAccObj)
 {
     m_pParentObj = pParentAccObj;
 
-    if(m_pIMAcc)
-    {
-        if(m_pParentObj)
-        {
-            m_pIMAcc->Put_XAccParent(m_pParentObj->GetIMAccessible());
-        }
-        else
-        {
-            m_pIMAcc->Put_XAccParent(nullptr);
-        }
-    }
+    if (m_pParentObj)
+        m_pIMAcc->Put_XAccParent(m_pParentObj->GetIMAccessible());
+    else
+        m_pIMAcc->Put_XAccParent(nullptr);
 }
 //ResID means ChildID in MSAA
 void AccObject::SetResID(long id)
 {
     m_resID = id;
-    if(m_pIMAcc)
-        m_pIMAcc->Put_XAccChildID(m_resID);
+    m_pIMAcc->Put_XAccChildID(m_resID);
 }
 //return COM interface in acc object
 IMAccessible*  AccObject::GetIMAccessible()
