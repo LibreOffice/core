@@ -87,7 +87,7 @@ public:
     void testTdf91378();
     void testBnc822341();
     void testMathObject();
-    void testMathObjectPPT2010();
+    void testMathExportNonBMP();
     void testTdf119015();
     void testTdf123090();
     void testTdf126324();
@@ -160,7 +160,7 @@ public:
     CPPUNIT_TEST(testTdf91378);
     CPPUNIT_TEST(testBnc822341);
     CPPUNIT_TEST(testMathObject);
-    CPPUNIT_TEST(testMathObjectPPT2010);
+    CPPUNIT_TEST(testMathExportNonBMP);
     CPPUNIT_TEST(testTdf119015);
     CPPUNIT_TEST(testTdf123090);
     CPPUNIT_TEST(testTdf126324);
@@ -507,13 +507,13 @@ void SdOOXMLExportTest2::testMathObject()
     }
 }
 
-void SdOOXMLExportTest2::testMathObjectPPT2010()
+void SdOOXMLExportTest2::testMathExportNonBMP()
 {
     // Check import / export of math object
-    createSdImpressDoc("pptx/Math.pptx");
+    createSdImpressDoc("odp/Math.fodp");
     save("Impress Office Open XML");
 
-    // Export an MS specific ole object (imported from a PPTX document)
+    // Export an MS specific ole object
     {
         xmlDocUniquePtr pXmlDocContent = parseExport("ppt/slides/slide1.xml");
         assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice",
