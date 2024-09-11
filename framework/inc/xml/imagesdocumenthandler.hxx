@@ -22,7 +22,9 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <xml/imagesconfiguration.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
@@ -121,7 +123,7 @@ class OWriteImagesDocumentHandler final
 
         const ImageItemDescriptorList&                            m_rImageItemList;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
+        rtl::Reference< ::comphelper::AttributeList >             m_xEmptyList;
         OUString                                                  m_aXMLImageNS;
         OUString                                                  m_aAttributeXlinkType;
         OUString                                                  m_aAttributeValueSimple;

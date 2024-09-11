@@ -25,8 +25,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <comphelper/attributelist.hxx>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 

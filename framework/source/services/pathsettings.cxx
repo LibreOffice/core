@@ -156,7 +156,7 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
 
     /** helper to listen for configuration changes without ownership cycle problems */
-    css::uno::Reference< css::util::XChangesListener > m_xCfgNewListener;
+    rtl::Reference< WeakChangesListener > m_xCfgNewListener;
 
     std::unique_ptr<::cppu::OPropertyArrayHelper> m_pPropHelp;
 

@@ -53,7 +53,12 @@
 #include <rtl/ref.hxx>
 #include <unotools/cmdoptions.hxx>
 
+namespace comphelper { class NumberedCollection; }
+
 namespace framework{
+
+class InterceptionHelper;
+class OFrames;
 
 enum ELoadState
 {
@@ -396,8 +401,8 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
         css::uno::Reference< css::uno::XComponentContext >              m_xContext;               /// reference to factory, which has create this instance
         FrameContainer                                                  m_aChildTaskContainer;    /// array of child tasks (children of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         comphelper::OMultiTypeInterfaceContainerHelper2                 m_aListenerContainer;     /// container for ALL Listener
-        css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
-        css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper;        /// helper to dispatch something for new tasks, created by "_blank"!
+        rtl::Reference< OFrames >                                       m_xFramesHelper;          /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
+        rtl::Reference< InterceptionHelper >                            m_xDispatchHelper;        /// helper to dispatch something for new tasks, created by "_blank"!
         ELoadState                                                      m_eLoadState;             /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         bool                                                            m_bSuspendQuickstartVeto; /// don't ask quickstart for a veto
         std::unique_ptr<SvtCommandOptions>                              m_xCommandOptions;        /// ref counted class to support disabling commands defined by configuration file
@@ -441,7 +446,7 @@ class FWK_DLLPUBLIC Desktop final : private cppu::BaseMutex,
           */
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
 
-        css::uno::Reference< css::frame::XUntitledNumbers > m_xTitleNumberGenerator;
+        rtl::Reference< ::comphelper::NumberedCollection > m_xTitleNumberGenerator;
 
         std::vector<css::uno::Reference<css::frame::XTerminateListener>> m_xComponentDllListeners;
 

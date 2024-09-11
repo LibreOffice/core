@@ -45,6 +45,7 @@
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <framework/addonsoptions.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 namespace framework
 {
@@ -146,7 +147,7 @@ class MenuBarManager final :
             rtl::Reference< MenuBarManager >                                  xSubMenuManager;
             css::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
             css::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;
-            css::uno::Reference< css::awt::XPopupMenu >                       xPopupMenu;
+            rtl::Reference< VCLXPopupMenu >                                   xPopupMenu;
             vcl::KeyCode                                                      aKeyCode;
         };
 

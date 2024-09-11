@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
 #include <mutex>
@@ -36,6 +37,8 @@
 
 namespace framework
 {
+
+class WeakContainerListener;
 
 //  Configuration access class for PopupMenuControllerFactory implementation
 
@@ -87,7 +90,7 @@ private:
     MenuControllerMap            m_aMenuControllerMap;
     css::uno::Reference< css::lang::XMultiServiceFactory >    m_xConfigProvider;
     css::uno::Reference< css::container::XNameAccess >        m_xConfigAccess;
-    css::uno::Reference< css::container::XContainerListener > m_xConfigAccessListener;
+    rtl::Reference< WeakContainerListener > m_xConfigAccessListener;
     bool                          m_bConfigAccessInitialized;
 };
 

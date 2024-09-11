@@ -29,7 +29,6 @@
 
 #include <vcl/status.hxx>
 
-#include <comphelper/attributelist.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 using namespace ::com::sun::star::uno;

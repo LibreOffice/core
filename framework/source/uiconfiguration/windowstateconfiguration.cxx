@@ -42,6 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -208,7 +209,7 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         OUString                          m_aConfigWindowAccess;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
-        Reference< XContainerListener >   m_xConfigListener;
+        rtl::Reference< WeakContainerListener >   m_xConfigListener;
         ResourceURLToInfoCache            m_aResourceURLToInfoCache;
         bool                              m_bConfigAccessInitialized : 1,
                                           m_bModified : 1;

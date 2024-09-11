@@ -32,7 +32,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/attributelist.hxx>
 
 #ifdef ATTRIBUTE_HELPID
 #undef ATTRIBUTE_HELPID

@@ -376,9 +376,9 @@ private:
     /// points to an external set progress, which should be used instead of the internal one.
     css::uno::WeakReference< css::task::XStatusIndicator >                  m_xIndicatorInterception;
     /// helper for XDispatch/Provider and interception interfaces
-    rtl::Reference< InterceptionHelper >                    m_xDispatchHelper;
+    rtl::Reference< InterceptionHelper >                                    m_xDispatchHelper;
     /// helper for XFrames, XIndexAccess and XElementAccess interfaces
-    css::uno::Reference< css::frame::XFrames >                              m_xFramesHelper;
+    rtl::Reference< OFrames >                                               m_xFramesHelper;
     /// container for ALL Listener
     comphelper::OMultiTypeInterfaceContainerHelper2                         m_aListenerContainer;
     /// parent of this frame
@@ -390,7 +390,7 @@ private:
     /// controller of the actual frame
     css::uno::Reference< css::frame::XController >                          m_xController;
     /// listen to drag & drop
-    css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener;
+    rtl::Reference< OpenFileDropTargetListener >                            m_xDropTargetListener;
     /// state, if I am a member of active path in tree or I have the focus or...
     EActiveState                                                            m_eActiveState;
     /// name of this frame
@@ -412,8 +412,8 @@ private:
     bool                                                                    m_bDocHidden = false;
     /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;
-    css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
-    css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper;
+    rtl::Reference< DispatchInformationProvider >                           m_xDispatchInfoHelper;
+    rtl::Reference< TitleHelper >                                           m_xTitleHelper;
 
     std::unique_ptr<WindowCommandDispatch>                                  m_pWindowCommandDispatch;
 
@@ -1794,7 +1794,7 @@ void SAL_CALL XFrameImpl::addTitleChangeListener( const css::uno::Reference< css
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper);
     aReadLock.clear();
     // <- SAFE
 
@@ -1807,7 +1807,7 @@ void SAL_CALL XFrameImpl::removeTitleChangeListener( const css::uno::Reference< 
 
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XTitleChangeBroadcaster > xTitle(m_xTitleHelper);
     aReadLock.clear();
     // <- SAFE
 
@@ -2036,7 +2036,7 @@ void XFrameImpl::implts_forgetSubFrames()
 {
     // SAFE ->
     SolarMutexClearableGuard aReadLock;
-    css::uno::Reference< css::container::XIndexAccess > xContainer(m_xFramesHelper, css::uno::UNO_QUERY_THROW);
+    rtl::Reference< OFrames > xContainer(m_xFramesHelper);
     aReadLock.clear();
     // <- SAFE
 

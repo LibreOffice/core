@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
+#include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>
 
 namespace framework{
@@ -212,7 +213,7 @@ class OWriteMenuDocumentHandler final
 
         css::uno::Reference< css::container::XIndexAccess > m_xMenuBarContainer;
         css::uno::Reference< css::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;
-        css::uno::Reference< css::xml::sax::XAttributeList > m_xEmptyList;
+        rtl::Reference< ::comphelper::AttributeList > m_xEmptyList;
         bool m_bIsMenuBar;
 };
 

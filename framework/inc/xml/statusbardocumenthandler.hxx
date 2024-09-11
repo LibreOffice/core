@@ -24,6 +24,8 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
+#include <comphelper/attributelist.hxx>
 #include <cppuhelper/implbase.hxx>
 
 #include <unordered_map>
@@ -122,7 +124,7 @@ class OWriteStatusBarDocumentHandler final
 
         css::uno::Reference< css::container::XIndexAccess >       m_aStatusBarItems;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        css::uno::Reference< css::xml::sax::XAttributeList >      m_xEmptyList;
+        rtl::Reference< comphelper::AttributeList >               m_xEmptyList;
         OUString                                                  m_aXMLStatusBarNS;
         OUString                                                  m_aXMLXlinkNS;
         OUString                                                  m_aAttributeURL;

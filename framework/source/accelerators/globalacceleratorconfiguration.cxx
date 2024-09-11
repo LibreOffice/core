@@ -71,7 +71,7 @@ public:
 private:
 
     /** helper to listen for configuration changes without ownership cycle problems */
-    css::uno::Reference< css::util::XChangesListener > m_xCfgListener;
+    rtl::Reference< WeakChangesListener > m_xCfgListener;
 };
 
 GlobalAcceleratorConfiguration::GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext)

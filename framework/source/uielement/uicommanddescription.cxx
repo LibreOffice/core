@@ -42,6 +42,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
+#include <rtl/ref.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -141,9 +142,9 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         Reference< XNameAccess >          m_xGenericUICommands;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
-        Reference< XContainerListener >   m_xConfigListener;
+        rtl::Reference< WeakContainerListener >   m_xConfigListener;
         Reference< XNameAccess >          m_xConfigAccessPopups;
-        Reference< XContainerListener >   m_xConfigAccessListener;
+        rtl::Reference< WeakContainerListener >   m_xConfigAccessListener;
         Sequence< OUString >         m_aCommandImageList;
         Sequence< OUString >         m_aCommandRotateImageList;
         Sequence< OUString >         m_aCommandMirrorImageList;

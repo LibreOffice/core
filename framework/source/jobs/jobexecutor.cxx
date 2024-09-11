@@ -70,7 +70,7 @@ private:
     ConfigAccess m_aConfig;
 
     /** helper to allow us listen to the configuration without a cyclic dependency */
-    css::uno::Reference<css::container::XContainerListener> m_xConfigListener;
+    rtl::Reference<WeakContainerListener> m_xConfigListener;
 
     virtual void disposing(std::unique_lock<std::mutex>& rGuard) final override;
 

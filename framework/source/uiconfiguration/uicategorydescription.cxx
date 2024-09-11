@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/syslocale.hxx>
@@ -88,7 +89,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         Reference< XNameAccess >          m_xGenericUICategories;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
-        Reference< XContainerListener >   m_xConfigListener;
+        rtl::Reference< WeakContainerListener >   m_xConfigListener;
         bool                              m_bConfigAccessInitialized;
         bool                              m_bCacheFilled;
         IdToInfoCache                     m_aIdCache;

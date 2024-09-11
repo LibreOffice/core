@@ -712,16 +712,14 @@ void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Refe
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
-    xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
+    m_xDispatchHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
 void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    css::uno::Reference< css::frame::XDispatchProviderInterception > xInterceptionHelper( m_xDispatchHelper, css::uno::UNO_QUERY );
-    xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
+    m_xDispatchHelper->releaseDispatchProviderInterceptor( xInterceptor );
 }
 
 /*-************************************************************************************************************
@@ -1069,11 +1067,6 @@ void SAL_CALL Desktop::disposing()
     // Normally all open document was already closed by our terminate() function before ...
     // New opened frames will have a problem now .-)
     m_aChildTaskContainer.clear();
-
-    // Dispose our helper too.
-    css::uno::Reference< css::lang::XEventListener > xFramesHelper( m_xFramesHelper, css::uno::UNO_QUERY );
-    if( xFramesHelper.is() )
-        xFramesHelper->disposing( aEvent );
 
     // At least clean up other member references.
     m_xDispatchHelper.clear();
