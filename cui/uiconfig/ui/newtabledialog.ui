@@ -133,6 +133,11 @@
                 <property name="adjustment">columns_value</property>
                 <property name="snap-to-ticks">True</property>
                 <property name="numeric">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="columns-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="newtabledialog|extended_tip|columns">Enter the number of columns for the new table.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -148,6 +153,11 @@
                 <property name="adjustment">rows_value</property>
                 <property name="snap-to-ticks">True</property>
                 <property name="numeric">True</property>
+                <child internal-child="accessible">
+                  <object class="AtkObject" id="rows-atkobject">
+                    <property name="AtkObject::accessible-description" translatable="yes" context="newtabledialog|extended_tip|rows">Enter the number of rows for the new table.</property>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="left-attach">1</property>
