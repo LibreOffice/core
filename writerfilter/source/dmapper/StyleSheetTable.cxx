@@ -1580,8 +1580,6 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
     // These are from the w:latentStyles in the styles.xml of a Word 15.0 DOCX,
     // plus some pre-existing additions and variants.
     static const std::map< OUString, OUString> StyleNameMap {
-//        FIXME: testFdo77716, testTdf129575_docDefault etc. fail with correct mapping
-//        { "Normal", "Default Paragraph Style" }, // RES_POOLCOLL_STANDARD
         { "Normal", "Standard" }, // RES_POOLCOLL_STANDARD
         { "heading 1", "Heading 1" }, // RES_POOLCOLL_HEADLINE1
         { "heading 2", "Heading 2" }, // RES_POOLCOLL_HEADLINE2
@@ -1669,8 +1667,8 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Footnote Reference", "Footnote Symbol" }, // RES_POOLCHR_FOOTNOTE; tdf#82173 tdf#162884
         { "Annotation Reference", "" },
         { "annotation reference", "" },
-        { "Line Number", "Line Numbering" }, // RES_POOLCHR_LINENUM
-        { "line number", "Line Numbering" }, // RES_POOLCHR_LINENUM
+        { "Line Number", "Line numbering" }, // RES_POOLCHR_LINENUM
+        { "line number", "Line numbering" }, // RES_POOLCHR_LINENUM
         { "Page Number", "Page Number" }, // RES_POOLCHR_PAGENO
         { "page number", "Page Number" }, // RES_POOLCHR_PAGENO
         { "PageNumber", "Page Number" }, // RES_POOLCHR_PAGENO
@@ -1703,13 +1701,11 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Signature", "Signature" }, // RES_POOLCOLL_SIGNATURE
         { "Default Paragraph Font", "" },
         { "DefaultParagraphFont", "" },
-//        FIXME: testTdf118947_tableStyle fails with correct mapping
-//        { "Body Text", "Body Text" }, // RES_POOLCOLL_TEXT
         { "Body Text", "Text body" }, // RES_POOLCOLL_TEXT
-        { "BodyText", "Body Text" }, // RES_POOLCOLL_TEXT
+        { "BodyText", "Text body" }, // RES_POOLCOLL_TEXT
         { "BodyTextIndentItalic", "" },
-        { "Body Text Indent", "Body Text, Indented" }, // RES_POOLCOLL_TEXT_MOVE
-        { "BodyTextIndent", "Body Text, Indented" }, // RES_POOLCOLL_TEXT_MOVE
+        { "Body Text Indent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
+        { "BodyTextIndent", "Text body indent" }, // RES_POOLCOLL_TEXT_MOVE
         { "BodyTextIndent2", "" },
         { "List Continue", "List 1 Cont." }, // RES_POOLCOLL_BULLET_NONUM1
         { "List Continue 2", "List 2 Cont." }, // RES_POOLCOLL_BULLET_NONUM2
@@ -1718,9 +1714,9 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "List Continue 5", "List 5 Cont." }, // RES_POOLCOLL_BULLET_NONUM5
         { "Message Header", "" },
         { "Subtitle", "Subtitle" }, // RES_POOLCOLL_DOC_SUBTITLE
-        { "Salutation", "Complimentary Close" }, // RES_POOLCOLL_GREETING
+        { "Salutation", "Salutation" }, // RES_POOLCOLL_GREETING
         { "Date", "" },
-        { "Body Text First Indent", "First Line Indent" }, // RES_POOLCOLL_TEXT_IDENT
+        { "Body Text First Indent", "First line indent" }, // RES_POOLCOLL_TEXT_IDENT
         { "Body Text First Indent 2", "" },
         { "Note Heading", "" },
         { "Body Text 2", "" },
@@ -1728,7 +1724,7 @@ StyleSheetTable::ConvertStyleName(const OUString& rWWName)
         { "Body Text Indent 2", "" },
         { "Body Text Indent 3", "" },
         { "Block Text", "" },
-        { "Hyperlink", "Internet Link" }, // RES_POOLCHR_INET_NORMAL
+        { "Hyperlink", "Internet link" }, // RES_POOLCHR_INET_NORMAL
         { "FollowedHyperlink", "Visited Internet Link" }, // RES_POOLCHR_INET_VISIT
         { "Strong", "Strong Emphasis" }, // RES_POOLCHR_HTML_STRONG
         { "Emphasis", "Emphasis" }, // RES_POOLCHR_HTML_EMPHASIS
