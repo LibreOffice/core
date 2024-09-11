@@ -4847,29 +4847,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                     xShapePropertySet->setPropertyValue(getPropertyName(PROP_BOTTOM_MARGIN),
                                                         aPropMargin->second);
 
-                sal_Int64 zOrder = SAL_MIN_INT64; // lowest in heaven-layer: AS_CHAR in body text
-                // AS_CHARs anchored inside a fly should be just above the fly's zOrder
-                if (m_vAnchoredStack.size() > 1)
-                {
-                    uno::Reference<beans::XPropertySet> xParentPropertySet(
-                        m_vAnchoredStack[m_vAnchoredStack.size() - 2].xTextContent,
-                        uno::UNO_QUERY_THROW);
-                    uno::Sequence<beans::PropertyValue> aGrabBag;
-                    xParentPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= aGrabBag;
-                    for (const auto& rProp : aGrabBag)
-                    {
-                        if (rProp.Name == "VML-Z-ORDER")
-                        {
-                            rProp.Value >>= zOrder;
-                            ++zOrder;
-                            GraphicZOrderHelper::adjustRelativeHeight(zOrder, /*IsZIndex=*/true,
-                                                                      zOrder < 0,
-                                                                      IsInHeaderFooter());
-                            xShapePropertySet->setPropertyValue(getPropertyName(PROP_OPAQUE),
-                                                                uno::Any(zOrder >= 0));
-                        }
-                    }
-                }
+                sal_Int64 zOrder = SAL_MIN_INT64;
                 xShapePropertySet->setPropertyValue(u"ZOrder"_ustr,
                     uno::Any(rZOrderHelper.findZOrder(zOrder, /*LastDuplicateWins*/true)));
                 rZOrderHelper.addItem(xShapePropertySet, zOrder);
