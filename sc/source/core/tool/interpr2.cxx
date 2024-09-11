@@ -3602,8 +3602,9 @@ void ScInterpreter::ScGetPivotData()
         aFilters.resize(nFilterCount);
 
         sal_uInt16 i = nFilterCount;
-        while (i-- > 0)
+        while (i > 0)
         {
+            --i;
             /* TODO: also, in case of numeric the entire filter match should
              * not be on a (even if locale independent) formatted string down
              * below in pDPObj->GetPivotData(). */

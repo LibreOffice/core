@@ -2076,7 +2076,7 @@ void ChartController::sendPopupRequest(std::u16string_view rCID, tools::Rectangl
 
     // Get dimension index from CID
     size_t nStartPos = rCID.rfind('.');
-    nStartPos++;
+    nStartPos = (nStartPos == std::u16string_view::npos) ? 0 : (nStartPos + 1);
     sal_Int32 nEndPos = rCID.size();
     std::u16string_view sDimensionIndex = rCID.substr(nStartPos, nEndPos - nStartPos);
     sal_Int32 nDimensionIndex = o3tl::toInt32(sDimensionIndex);
