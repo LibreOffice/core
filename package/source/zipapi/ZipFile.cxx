@@ -1143,11 +1143,11 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
                 nEndPos = nPos + nEnd;
                 break;
             }
-            nPos--;
             if (nPos == 0)
             {
                 throw ZipException(u"Zip END signature not found!"_ustr);
             }
+            nPos--;
         }
 
         aGrabber.seek(nEndPos + 4);
