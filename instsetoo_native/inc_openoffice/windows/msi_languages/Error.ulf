@@ -230,7 +230,7 @@ en-US = "The file [2][3] is being held in use {by the following process: Name: [
 en-US = "The product [2] is already installed, preventing the installation of this product.  The two products are incompatible."
 
 [OOO_ERROR_72]
-en-US = "Out of disk space -- Volume: [2]; required space: [3] KB; available space: [4] KB.  If rollback is disabled, enough space is available. Click Cancel to quit, Retry to check available disk space again, or Ignore to continue without rollback."
+en-US = "Out of disk space -- Volume: [2]; required space: [3] KB; available space: [4] KB.  If rollback is disabled, enough space is available. Click Abort to quit, Retry to check available disk space again, or Ignore to continue without rollback."
 
 [OOO_ERROR_73]
 en-US = "Could not access network location [2]."
