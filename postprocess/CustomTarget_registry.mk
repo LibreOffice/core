@@ -403,12 +403,10 @@ postprocess_FILES_onlineupdate := \
 	$(call gb_XcuModuleTarget_get_target,extensions/source/update/check)/org/openoffice/Office/Jobs-onlineupdate.xcu
 endif
 
-ifeq ($(ENABLE_OPENGL_TRANSITIONS),TRUE)
 postprocess_XCDS += ogltrans.xcd
 postprocess_DEPS_ogltrans := main
 postprocess_FILES_ogltrans := \
 	$(postprocess_MOD)/org/openoffice/Office/Impress-ogltrans.xcu
-endif
 
 ifeq ($(ENABLE_PDFIMPORT),TRUE)
 postprocess_XCDS += pdfimport.xcd
