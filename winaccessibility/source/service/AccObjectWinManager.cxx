@@ -510,15 +510,14 @@ bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible*
     if(!IsContainer(pXAcc))
         return false;
 
-    Reference< XAccessibleContext > pRContext;
-
     if( pXAcc == nullptr)
         return false;
-    pRContext = pXAcc->getAccessibleContext();
-    if( !pRContext.is() )
+
+    Reference<XAccessibleContext> xContext = pXAcc->getAccessibleContext();
+    if (!xContext.is())
         return false;
 
-    short role = pRContext->getAccessibleRole();
+    short role = xContext->getAccessibleRole();
 
     if(css::accessibility::AccessibleRole::DOCUMENT == role ||
             css::accessibility::AccessibleRole::DOCUMENT_PRESENTATION == role ||
@@ -531,11 +530,10 @@ bool AccObjectWinManager::InsertChildrenAccObj( css::accessibility::XAccessible*
         }
     }
 
-    const sal_Int64 nCount = pRContext->getAccessibleChildCount();
+    const sal_Int64 nCount = xContext->getAccessibleChildCount();
     for (sal_Int64 i = 0; i < nCount; i++)
     {
-        Reference<XAccessible> mxAccessible
-        = pRContext->getAccessibleChild(i);
+        Reference<XAccessible> mxAccessible = xContext->getAccessibleChild(i);
         XAccessible* mpAccessible = mxAccessible.get();
         if(mpAccessible != nullptr)
         {
