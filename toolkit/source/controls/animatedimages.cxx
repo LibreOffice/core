@@ -258,6 +258,7 @@ namespace toolkit {
 
     rtl::Reference<UnoControlModel> AnimatedImagesControlModel::Clone() const
     {
+        std::unique_lock aGuard( m_aMutex );
         return new AnimatedImagesControlModel( *this );
     }
 
