@@ -27,7 +27,7 @@
 #define STR_BASICKEY_FORMAT_FALSE       NC_("STR_BASICKEY_FORMAT_FALSE", "False")
 #define STR_BASICKEY_FORMAT_YES         NC_("STR_BASICKEY_FORMAT_YES", "Yes")
 #define STR_BASICKEY_FORMAT_NO          NC_("STR_BASICKEY_FORMAT_NO", "No")
-//format currency
+//format currency: do not localize decimal separators and currency symbol - that is done in code
 #define STR_BASICKEY_FORMAT_CURRENCY    NC_("STR_BASICKEY_FORMAT_CURRENCY", "@0.00 $;@(0.00 $)")
 
 #define IDS_SBERR_TERMINATED            NC_("IDS_SBERR_TERMINATED", "The macro running has been interrupted")
