@@ -576,17 +576,15 @@ void AccObjectWinManager::InsertAccChildNode( AccObject* pCurObj, AccObject* pPa
    */
 bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentXAcc,HWND pWnd )
 {
-    Reference< XAccessibleContext > pRContext;
-
     if( pXAcc == nullptr)
         return false;
 
-    pRContext = pXAcc->getAccessibleContext();
-    if( !pRContext.is() )
+    Reference<XAccessibleContext> xContext = pXAcc->getAccessibleContext();
+    if (!xContext.is())
         return false;
 
     {
-        short nCurRole = pRContext->getAccessibleRole();
+        short nCurRole = xContext->getAccessibleRole();
 
         std::scoped_lock l(m_Mutex);
 
@@ -647,7 +645,7 @@ bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pParentX
         CreateAccEventListener(pXAcc);
     if (!pListener.is())
         return false;
-    Reference<XAccessibleComponent> xComponent(pRContext,UNO_QUERY);
+    Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
     Reference<XAccessibleEventBroadcaster> broadcaster(xComponent,UNO_QUERY);
     if (broadcaster.is())
     {
