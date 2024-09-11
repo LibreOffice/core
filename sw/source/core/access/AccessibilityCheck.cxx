@@ -15,6 +15,7 @@
 #include <ndnotxt.hxx>
 #include <ndtxt.hxx>
 #include <docsh.hxx>
+#include <wrtsh.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <svx/svdpage.hxx>
@@ -1065,52 +1066,60 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
+        SwDoc& rDocument = pTextNode->GetDoc();
         auto nParagraphLength = pTextNode->GetText().getLength();
         if (nParagraphLength == 0)
         {
             SwTextNode* pPrevTextNode = getPrevTextNode(pCurrent);
             if (!pPrevTextNode)
                 return;
-            if (pPrevTextNode->GetText().getLength() == 0)
+
+            SwWrtShell* pWrtShell = rDocument.GetDocShell()->GetWrtShell();
+            if (pWrtShell && pPrevTextNode->getLayoutFrame(pWrtShell->GetLayout()))
             {
-                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
-                pIssue->setIssueObject(IssueObject::TEXT);
-                pIssue->setNode(pTextNode);
-                SwDoc& rDocument = pTextNode->GetDoc();
-                pIssue->setDoc(rDocument);
+                if (pPrevTextNode->GetText().getLength() == 0)
+                {
+                    auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
+                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                    pIssue->setIssueObject(IssueObject::TEXT);
+                    pIssue->setNode(pTextNode);
+                    pIssue->setDoc(rDocument);
+                }
             }
         }
         else
         {
-            // Check for excess lines inside this paragraph
-            const OUString& sParagraphText = pTextNode->GetText();
-            int nLineCount = 0;
-            for (sal_Int32 i = 0; i < nParagraphLength; i++)
+            SwWrtShell* pWrtShell = rDocument.GetDocShell()->GetWrtShell();
+            if (pWrtShell && pTextNode->getLayoutFrame(pWrtShell->GetLayout()))
             {
-                auto aChar = sParagraphText[i];
-                if (aChar == '\n')
+                // Check for excess lines inside this paragraph
+                const OUString& sParagraphText = pTextNode->GetText();
+                int nLineCount = 0;
+                for (sal_Int32 i = 0; i < nParagraphLength; i++)
                 {
-                    nLineCount++;
-                    // Looking for 2 newline characters and above as one can be part of the line
-                    // break after a sentence
-                    if (nLineCount > 2)
+                    auto aChar = sParagraphText[i];
+                    if (aChar == '\n')
                     {
-                        auto pIssue
-                            = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
-                                          sfx::AccessibilityIssueID::TEXT_FORMATTING);
-                        pIssue->setIssueObject(IssueObject::TEXT);
-                        pIssue->setNode(pTextNode);
-                        SwDoc& rDocument = pTextNode->GetDoc();
-                        pIssue->setDoc(rDocument);
-                        pIssue->setStart(i);
-                        pIssue->setEnd(i);
+                        nLineCount++;
+                        // Looking for 2 newline characters and above as one can be part of the line
+                        // break after a sentence
+                        if (nLineCount > 2)
+                        {
+                            auto pIssue
+                                = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_NEWLINES_SPACE),
+                                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                            pIssue->setIssueObject(IssueObject::TEXT);
+                            pIssue->setNode(pTextNode);
+                            pIssue->setDoc(rDocument);
+                            pIssue->setStart(i);
+                            pIssue->setEnd(i);
+                        }
                     }
-                }
-                // Don't count carriage return as normal character
-                else if (aChar != '\r')
-                {
-                    nLineCount = 0;
+                    // Don't count carriage return as normal character
+                    else if (aChar != '\r')
+                    {
+                        nLineCount = 0;
+                    }
                 }
             }
         }
