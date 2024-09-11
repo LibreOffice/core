@@ -1386,7 +1386,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
             aPropertyValues.push_back(comphelper::makePropertyValue(u"BulletChar"_ustr, aUString));
 
             //BulletFontName
-            aUString = pFont ? pFont->GetStyleName() : OUString();
+            aUString = pFont ? pFont->GetFamilyName() : OUString();
             aPropertyValues.push_back(comphelper::makePropertyValue(u"BulletFontName"_ustr, aUString));
 
             //BulletFont
