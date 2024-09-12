@@ -230,17 +230,15 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
             break;
 
         case MCE_TOKEN( Choice ):
+            if (!isMCEStateEmpty() && getMCEState() == MCE_STATE::Started)
             {
-                if (isMCEStateEmpty() || getMCEState() != MCE_STATE::Started)
-                    return false;
-
-                OUString aRequires = rAttribs.getString( XML_Requires, u"none"_ustr );
+                OUString aRequires = rAttribs.getStringDefaulted(XML_Requires);
 
                 // At this point we can't access namespaces as the correct xml filter
                 // is long gone. For now let's decide depending on a list of supported
                 // namespaces like we do in writerfilter
 
-                std::u16string_view aSupportedNS[] =
+                static constexpr std::u16string_view aSupportedNS[] =
                 {
                     // u"a14", // We do not currently support inline formulas and other a14 stuff
                     u"p14",
@@ -258,8 +256,9 @@ bool ContextHandler2Helper::prepareMceContext( sal_Int32 nElement, const Attribu
                 }
 
                 setMCEState( MCE_STATE::FoundChoice ) ;
+                break;
             }
-            break;
+            return false;
 
         case MCE_TOKEN( Fallback ):
             if( !isMCEStateEmpty() && getMCEState() == MCE_STATE::Started )
