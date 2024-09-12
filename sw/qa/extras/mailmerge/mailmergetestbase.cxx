@@ -94,7 +94,6 @@ public:
                                 column != nullptr);
 
         verify();
-        finish();
 
         mnCurOutputType = 0;
     }
@@ -266,7 +265,6 @@ public:
             mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
-        mnStartTime = osl_getGlobalTimer();
         mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename,
                                       u"com.sun.star.text.TextDocument"_ustr);
         calcLayout();

@@ -60,7 +60,6 @@ SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUStri
     , mbExported(false)
     , mpXmlBuffer(nullptr)
     , mpFilter(pFilter)
-    , mnStartTime(0)
 {
 }
 
@@ -72,7 +71,6 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     verify();
     saveAndReload(mpFilter, pPassword);
     verify();
-    finish();
     maTempFile.EnableKillingFile();
 }
 
@@ -83,7 +81,6 @@ void SwModelTestBase::executeImportExport(const char* filename, const char* pPas
     loadAndSave(filename, pPassword);
     maTempFile.EnableKillingFile(false);
     verify();
-    finish();
     maTempFile.EnableKillingFile();
 }
 
@@ -397,7 +394,6 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
     if (!isExported())
     {
         std::cout << rURL << ":\n";
-        mnStartTime = osl_getGlobalTimer();
     }
 
     UnoApiXmlTest::load(rURL, pPassword);
@@ -426,12 +422,6 @@ void SwModelTestBase::loadAndReload(const char* pName)
 {
     loadURL(createFileURL(OUString::createFromAscii(pName)));
     saveAndReload(mpFilter);
-}
-
-void SwModelTestBase::finish()
-{
-    sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << (nEndTime - mnStartTime) << std::endl;
 }
 
 int SwModelTestBase::getPages() const

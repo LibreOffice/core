@@ -93,8 +93,6 @@ protected:
     xmlBufferPtr mpXmlBuffer;
     OUString mpFilter;
 
-    sal_uInt32 mnStartTime;
-
     /// Copy&paste helper.
     void paste(std::u16string_view aFilename, OUString aInstance, css::uno::Reference<css::text::XTextRange> const& xTextRange);
 
@@ -230,8 +228,6 @@ protected:
 
     /// Combines load() and saveAndReload().
     void loadAndReload(const char* pName);
-
-    void finish();
 
     /// Get page count.
     int getPages() const;
