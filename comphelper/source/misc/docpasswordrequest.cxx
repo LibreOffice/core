@@ -41,15 +41,11 @@ using ::com::sun::star::task::XInteractionPassword2;
 
 namespace comphelper {
 
-namespace {
-
 class AbortContinuation : public ::cppu::WeakImplHelper< XInteractionAbort >
 {
 public:
     virtual void SAL_CALL select() override {}
 };
-
-}
 
 class PasswordContinuation : public ::cppu::WeakImplHelper< XInteractionPassword2 >
 {
