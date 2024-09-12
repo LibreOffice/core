@@ -514,7 +514,7 @@ public:
     // XScriptEventSupplier
     virtual Reference< container::XNameContainer > SAL_CALL getEvents(  ) override { return m_xNameContainer; }
 private:
-    Reference< container::XNameContainer > m_xNameContainer;
+    rtl::Reference< ReadOnlyEventsNameContainer > m_xNameContainer;
 };
 
 }

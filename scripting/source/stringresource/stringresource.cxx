@@ -1049,13 +1049,12 @@ void StringResourcePersistenceImpl::implStoreAtLocation
 class BinaryOutput
 {
     rtl::Reference< utl::TempFileFastService > m_xTempFile;
-    Reference< io::XOutputStream >          m_xOutputStream;
 
 public:
     explicit BinaryOutput();
 
-    const Reference< io::XOutputStream >& getOutputStream() const
-        { return m_xOutputStream; }
+    Reference< io::XOutputStream > getOutputStream() const
+        { return m_xTempFile; }
 
     Sequence< ::sal_Int8 > closeAndGetData();
 
@@ -1073,13 +1072,12 @@ public:
 BinaryOutput::BinaryOutput()
 {
     m_xTempFile = new utl::TempFileFastService;
-    m_xOutputStream = m_xTempFile;
 }
 
 template< class T >
 void BinaryOutput::write16BitInt( T n )
 {
-    if( !m_xOutputStream.is() )
+    if( !m_xTempFile.is() )
         return;
 
     Sequence< sal_Int8 > aSeq( 2 );
@@ -1090,12 +1088,12 @@ void BinaryOutput::write16BitInt( T n )
 
     p[0] = nLow;
     p[1] = nHigh;
-    m_xOutputStream->writeBytes( aSeq );
+    m_xTempFile->writeBytes( aSeq );
 }
 
 void BinaryOutput::writeInt32( sal_Int32 n )
 {
-    if( !m_xOutputStream.is() )
+    if( !m_xTempFile.is() )
         return;
 
     Sequence< sal_Int8 > aSeq( 4 );
@@ -1106,7 +1104,7 @@ void BinaryOutput::writeInt32( sal_Int32 n )
         p[i] = sal_Int8( n & 0xff );
         n >>= 8;
     }
-    m_xOutputStream->writeBytes( aSeq );
+    m_xTempFile->writeBytes( aSeq );
 }
 
 void BinaryOutput::writeString( const OUString& aStr )
@@ -1123,10 +1121,10 @@ void BinaryOutput::writeString( const OUString& aStr )
 Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 {
     Sequence< ::sal_Int8 > aRetSeq;
-    if( !m_xOutputStream.is() )
+    if( !m_xTempFile.is() )
         return aRetSeq;
 
-    m_xOutputStream->closeOutput();
+    m_xTempFile->closeOutput();
 
     sal_Int32 nSize = static_cast<sal_Int32>(m_xTempFile->getPosition());
 
