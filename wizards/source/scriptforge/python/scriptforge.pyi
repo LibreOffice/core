@@ -240,7 +240,7 @@ class ScriptForge(object, metaclass = ...):
         The class may be instantiated several times. Only the first instance will be retained ("Singleton").
         """
 
-    def __init__(self, hostname: str = ..., port: int = ...):
+    def __init__(self, hostname: str = ..., port: int = ..., pipe: str = ...):
         """
             The ScriptForge class encapsulates the core of the ScriptForge run-time
                 - Bridge with the LibreOffice process
@@ -258,6 +258,8 @@ class ScriptForge(object, metaclass = ...):
                     ``hostname``: probably 'localhost'
 
                     ``port``: port number
+
+                    ``pipe``: pipe name
             """
         ...
 

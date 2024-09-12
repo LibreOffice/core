@@ -105,6 +105,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Inter-process parameters
     hostname = ''
     port = 0
+    pipe = ''
 
     componentcontext = None  # com.sun.star.uno.XComponentContext
     scriptprovider = None   # com.sun.star.script.provider.XScriptProvider
@@ -144,18 +145,21 @@ class ScriptForge(object, metaclass = _Singleton):
                             ('ScriptForge.String', 7),
                             ('ScriptForge.UI', 8)])
 
-    def __init__(self, hostname = '', port = 0):
+    def __init__(self, hostname = '', port = 0, pipe = ''):
         """
             Because singleton, constructor is executed only once while Python active
             Both arguments are mandatory when Python and LibreOffice run in separate processes
             Otherwise both arguments must be left out.
             :param hostname: probably 'localhost'
             :param port: port number
+            :param pipe: pipe name
             """
         ScriptForge.hostname = hostname
         ScriptForge.port = port
+        ScriptForge.pipe = pipe
         # Determine main pyuno entry points
-        ScriptForge.componentcontext = self.ConnectToLOProcess(hostname, port)  # com.sun.star.uno.XComponentContext
+        ScriptForge.componentcontext = self.ConnectToLOProcess(hostname, port, pipe)
+                                # com.sun.star.uno.XComponentContext
         ScriptForge.scriptprovider = self.ScriptProvider(ScriptForge.componentcontext)  # ...script.provider.XScriptProvider
         #
         # Establish a list of the available services as a dictionary (servicename, serviceclass)
@@ -169,7 +173,7 @@ class ScriptForge(object, metaclass = _Singleton):
         ScriptForge.SCRIPTFORGEINITDONE = True
 
     @classmethod
-    def ConnectToLOProcess(cls, hostname = '', port = 0):
+    def ConnectToLOProcess(cls, hostname = '', port = 0, pipe = ''):
         """
             Called by the ScriptForge class constructor to establish the connection with
             the requested LibreOffice instance
@@ -177,25 +181,30 @@ class ScriptForge(object, metaclass = _Singleton):
 
             :param hostname: probably 'localhost' or ''
             :param port: port number or 0
+            :param pipe: pipe name or ''
             :return: the derived component context
             """
-        if len(hostname) > 0 and port > 0:  # Explicit connection request via socket
+        if (len(hostname) > 0 and port > 0 and len(pipe) == 0) \
+                or (len(hostname) == 0 and port == 0 and len(pipe) > 0):    # Explicit connection via socket or pipe
             ctx = uno.getComponentContext()  # com.sun.star.uno.XComponentContext
             resolver = ctx.ServiceManager.createInstanceWithContext(
                 'com.sun.star.bridge.UnoUrlResolver', ctx)  # com.sun.star.comp.bridge.UnoUrlResolver
             try:
-                conn = 'socket,host=%s,port=%d' % (hostname, port)
+                if len(pipe) == 0:
+                    conn = 'socket,host=%s,port=%d' % (hostname, port)
+                else:
+                    conn = 'pipe,name=%s' % pipe
                 url = 'uno:%s;urp;StarOffice.ComponentContext' % conn
                 ctx = resolver.resolve(url)
             except Exception:  # thrown when LibreOffice specified instance isn't started
                 raise SystemExit(
-                    'Connection to LibreOffice failed (host = ' + hostname + ', port = ' + str(port) + ')')
+                    "Connection to LibreOffice failed (%s)" % conn)
             return ctx
-        elif len(hostname) == 0 and port == 0:  # Usual interactive mode
+        elif len(hostname) == 0 and port == 0 and len(pipe) == 0:  # Usual interactive mode
             return uno.getComponentContext()
         else:
             raise SystemExit('The creation of the ScriptForge() instance got invalid arguments: '
-                             + '(host = ' + hostname + ', port = ' + str(port) + ')')
+                             + "(host = '" + hostname + "', port = " + str(port) + ", pipe = '" + pipe + "')")
 
     @classmethod
     def ScriptProvider(cls, context = None):
