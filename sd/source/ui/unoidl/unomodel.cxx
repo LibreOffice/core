@@ -61,6 +61,8 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 
+#include <animations/animationnodehelper.hxx>
+
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <comphelper/dispatchcommand.hxx>
@@ -586,8 +588,6 @@ private:
     void exportAnimate(const Reference<XAnimate>& xAnimate);
 
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
-    static void convertTarget(OStringBuffer& sTmp, const Any& rTarget);
-    static Reference<XInterface> getParagraphTarget( const ParagraphTarget& pTarget );
     void convertTiming(OStringBuffer& sTmp, const Any& rValue) const;
 
 private:
@@ -965,55 +965,6 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
     }
 }
 
-Reference<XInterface> AnimationsExporter::getParagraphTarget(const ParagraphTarget& pTarget)
-{
-    try
-    {
-        Reference<XEnumerationAccess> xParaEnumAccess(pTarget.Shape, UNO_QUERY_THROW);
-
-        Reference<XEnumeration> xEnumeration(xParaEnumAccess->createEnumeration(),
-                                             css::uno::UNO_SET_THROW);
-        sal_Int32 nParagraph = pTarget.Paragraph;
-
-        while (xEnumeration->hasMoreElements())
-        {
-            Reference<XInterface> xRef(xEnumeration->nextElement(), UNO_QUERY);
-            if (nParagraph-- == 0)
-                return xRef;
-        }
-    }
-    catch (const RuntimeException&)
-    {
-        TOOLS_WARN_EXCEPTION("sd", "AnimationsExporter::getParagraphTarget");
-    }
-
-    Reference<XInterface> xRef;
-    return xRef;
-}
-
-void AnimationsExporter::convertTarget(OStringBuffer& sTmp, const Any& rTarget)
-{
-    if (!rTarget.hasValue())
-        return;
-
-    Reference<XInterface> xRef;
-    if (!(rTarget >>= xRef))
-    {
-        if (auto pt = o3tl::tryAccess<ParagraphTarget>(rTarget))
-        {
-            xRef = getParagraphTarget(*pt);
-        }
-    }
-
-    SAL_WARN_IF(!xRef.is(), "sd", "AnimationsExporter::convertTarget(), invalid target type!");
-    if (xRef.is())
-    {
-        const std::string aIdentifier(GetInterfaceHash(xRef));
-        if (!aIdentifier.empty())
-            sTmp.append(aIdentifier);
-    }
-}
-
 void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue) const
 {
     if (!rValue.hasValue())
@@ -1056,7 +1007,7 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue) c
         {
             if (pEvent->Source.hasValue())
             {
-                convertTarget(sTmp, pEvent->Source);
+                anim::convertTarget(sTmp, pEvent->Source);
                 sTmp.append('.');
             }
 
@@ -1219,7 +1170,7 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
             Any aTemp(xIter->getTarget());
             if (aTemp.hasValue())
             {
-                convertTarget(sTmp, aTemp);
+                anim::convertTarget(sTmp, aTemp);
                 mrWriter.put("targetElement", sTmp.makeStringAndClear());
             }
             sal_Int16 nTemp = xIter->getSubItem();
@@ -1273,7 +1224,7 @@ void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
         Any aTemp(xAnimate->getTarget());
         if (aTemp.hasValue())
         {
-            convertTarget(sTmp, aTemp);
+            anim::convertTarget(sTmp, aTemp);
             mrWriter.put("targetElement", sTmp.makeStringAndClear());
         }
         nTemp = xAnimate->getSubItem();
