@@ -89,7 +89,6 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_nImportedDerivedKeySize( 0 )
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
 , m_nMagicalHackPos( 0 )
-, m_nMagicalHackSize( 0 )
 , m_nOwnStreamOrigSize( 0 )
 , m_bHasSeekable( false )
 , m_bCompressedIsSetFromOutside( false )
@@ -407,7 +406,7 @@ bool ZipPackageStream::ParsePackageRawStream()
                     }
                     m_nImportedDerivedKeySize = nDerivedKeySize;
                     m_nImportedStartKeyAlgorithm = nStartKeyGenID;
-                    m_nMagicalHackSize = nMagHackSize;
+                    m_nOwnStreamOrigSize = nMagHackSize;
                     msMediaType = aMediaType;
 
                     bOk = true;
@@ -495,7 +494,10 @@ bool ZipPackageStream::saveChild(
     bool bTransportOwnEncrStreamAsRaw = false;
     // During the storing the original size of the stream can be changed
     // TODO/LATER: get rid of this hack
-    m_nOwnStreamOrigSize = m_bRawStream ? m_nMagicalHackSize : aEntry.nSize;
+    if (!m_bRawStream)
+    {
+        m_nOwnStreamOrigSize = aEntry.nSize;
+    }
 
     bool bUseNonSeekableAccess = false;
     uno::Reference < io::XInputStream > xStream;
@@ -903,7 +905,6 @@ void ZipPackageStream::SetPackageMember( bool bNewValue )
     {
         m_nStreamMode = PACKAGE_STREAM_PACKAGEMEMBER;
         m_nMagicalHackPos = 0;
-        m_nMagicalHackSize = 0;
     }
     else if ( m_nStreamMode == PACKAGE_STREAM_PACKAGEMEMBER )
         m_nStreamMode = PACKAGE_STREAM_NOTSET; // must be reset

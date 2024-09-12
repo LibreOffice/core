@@ -61,7 +61,6 @@ private:
 
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
-    sal_uInt32  m_nMagicalHackSize;
     sal_Int64   m_nOwnStreamOrigSize;
 
     bool m_bHasSeekable;
