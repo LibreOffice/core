@@ -68,7 +68,12 @@ namespace dbaccess
                             SelectColumnsMetaData& o_rColumnNames /* out */,
                             bool i_bAppendTableName = false);
 
-    typedef std::pair<ORowSetRow,std::pair<sal_Int32,css::uno::Reference< css::sdbc::XRow> > > OKeySetValue;
+    struct OKeySetValue
+    {
+        ORowSetRow m_aRowSetRow;
+        sal_Int32 m_nUpdateInsert;
+        css::uno::Reference< css::sdbc::XRow> m_xRow;
+    };
     typedef std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
     typedef std::map<sal_Int32, rtl::Reference<ORowSetValueVector> > OUpdatedParameter;
     // is used when the source supports keys

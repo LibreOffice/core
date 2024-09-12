@@ -245,7 +245,7 @@ void OKeySet::setOneKeyColumnParameter( sal_Int32 &nPos, const Reference< XParam
 
 OUStringBuffer OKeySet::createKeyFilter()
 {
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.m_aRowSetRow->begin();
 
     static const char aAnd[] = " AND ";
     const OUString aQuote    = getIdentifierQuoteString();
@@ -311,7 +311,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
-    OKeySetValue keySetValue(nullptr,std::pair<sal_Int32,Reference<XRow> >(0,Reference<XRow>()));
+    OKeySetValue keySetValue{nullptr,0,Reference<XRow>()};
     m_aKeyMap.emplace(0, keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 }
@@ -321,7 +321,7 @@ void OKeySet::reset(const Reference< XResultSet>& _xDriverSet)
     OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
     m_bRowCountFinal = false;
     m_aKeyMap.clear();
-    OKeySetValue keySetValue(nullptr,std::pair<sal_Int32,Reference<XRow> >(0,Reference<XRow>()));
+    OKeySetValue keySetValue{nullptr,0,Reference<XRow>()};
     m_aKeyMap.emplace(0,keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 }
@@ -331,8 +331,8 @@ void OKeySet::ensureStatement( )
     // do we already have a statement for the current combination of NULLness
     // of key & foreign columns?
     std::vector<bool> FilterColumnsNULL;
-    FilterColumnsNULL.reserve(m_aKeyIter->second.first->size());
-    for (auto const& elem : *m_aKeyIter->second.first)
+    FilterColumnsNULL.reserve(m_aKeyIter->second.m_aRowSetRow->size());
+    for (auto const& elem : *m_aKeyIter->second.m_aRowSetRow)
         FilterColumnsNULL.push_back(elem.isNull());
     vStatements_t::const_iterator pNewStatement(m_vStatements.find(FilterColumnsNULL));
     if(pNewStatement == m_vStatements.end())
@@ -575,9 +575,9 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
         const sal_Int32 nBookmark = ::comphelper::getINT32((*_rInsertRow)[0].getAny());
         m_aKeyIter = m_aKeyMap.find(nBookmark);
         assert(m_aKeyIter != m_aKeyMap.end());
-        m_aKeyIter->second.second.first = 2;
-        m_aKeyIter->second.second.second.clear();
-        copyRowValue(_rInsertRow,m_aKeyIter->second.first,nBookmark);
+        m_aKeyIter->second.m_nUpdateInsert = 2;
+        m_aKeyIter->second.m_xRow.clear();
+        copyRowValue(_rInsertRow, m_aKeyIter->second.m_aRowSetRow, nBookmark);
         tryRefetch(_rInsertRow,bRefetch);
     }
 }
@@ -752,7 +752,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_pKeyColumnNames->size());
         copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
 
-        m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue(aKeyRow,std::pair<sal_Int32,Reference<XRow> >(1,Reference<XRow>())) ).first;
+        m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue{aKeyRow,1,Reference<XRow>()} ).first;
         // now we set the bookmark for this row
         (*_rInsertRow)[0] = Any(static_cast<sal_Int32>(m_aKeyIter->first));
         tryRefetch(_rInsertRow,bRefetch);
@@ -774,7 +774,7 @@ void OKeySet::tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch)
     }
     if ( !bRefetch )
     {
-        m_aKeyIter->second.second.second = new OPrivateRow(std::vector(*_rInsertRow));
+        m_aKeyIter->second.m_xRow = new OPrivateRow(std::vector(*_rInsertRow));
     }
 }
 
@@ -1102,7 +1102,7 @@ bool OKeySet::doTryRefetch_throw()
     }
 
     // now set the primary key column values
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.first->begin();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aIter = m_aKeyIter->second.m_aRowSetRow->begin();
     for (auto const& keyColumnName : *m_pKeyColumnNames)
         setOneKeyColumnParameter(nPos,xParameter,*aIter++,keyColumnName.second.nType,keyColumnName.second.nScale);
     for (auto const& foreignColumnName : *m_pForeignColumnNames)
@@ -1120,9 +1120,9 @@ void OKeySet::refreshRow()
     if(isBeforeFirst() || isAfterLast())
         return;
 
-    if ( m_aKeyIter->second.second.second.is() )
+    if ( m_aKeyIter->second.m_xRow.is() )
     {
-        m_xRow = m_aKeyIter->second.second.second;
+        m_xRow = m_aKeyIter->second.m_xRow;
         return;
     }
 
@@ -1197,7 +1197,7 @@ bool OKeySet::fetchRow()
             aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xRow);
             ++aIter;
         }
-        m_aKeyIter = m_aKeyMap.emplace( m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,std::pair<sal_Int32,Reference<XRow> >(0,Reference<XRow>())) ).first;
+        m_aKeyIter = m_aKeyMap.emplace( m_aKeyMap.rbegin()->first+1,OKeySetValue{aKeyRow,0,Reference<XRow>()} ).first;
     }
     else
         m_bRowCountFinal = true;
@@ -1354,12 +1354,12 @@ Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex )
 
 bool OKeySet::rowUpdated(  )
 {
-    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 2;
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.m_nUpdateInsert == 2;
 }
 
 bool OKeySet::rowInserted(  )
 {
-    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 1;
+    return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.m_nUpdateInsert == 1;
 }
 
 bool OKeySet::rowDeleted(  )
