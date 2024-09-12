@@ -46,6 +46,7 @@
 #include <attrib.hxx>
 #include <tabview.hxx>
 #include <tabvwsh.hxx>
+#include <docpool.hxx>
 #include <docsh.hxx>
 #include <patattr.hxx>
 #include <editutil.hxx>
@@ -1610,6 +1611,11 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bEditActive[eWhich] = true;
 
     const ScPatternAttr* pPattern = mrDoc.GetPattern(nNewX, nNewY, nTabNo);
+    if (!pPattern)
+    {
+        SAL_WARN("sc.viewdata", "No Pattern Found for: Col: " << nNewX << ", Row: " << nNewY << ", Tab: " << nTabNo);
+        pPattern = &(mrDoc.GetPool()->GetDefaultItem(ATTR_PATTERN));
+    }
     SvxCellHorJustify eJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
 
     bool bBreak = ( eJust == SvxCellHorJustify::Block ) ||
