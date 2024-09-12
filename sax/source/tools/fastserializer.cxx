@@ -35,25 +35,11 @@
 #include <set>
 #endif
 
-using ::std::vector;
 using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::io::XOutputStream;
 
-#define HAS_NAMESPACE(x) ((x & 0xffff0000) != 0)
-#define NAMESPACE(x) (x >> 16)
-#define TOKEN(x) (x & 0xffff)
-// number of characters without terminating 0
-#define N_CHARS(string) (SAL_N_ELEMENTS(string) - 1)
-
-const char sClosingBracket[] = ">";
-const char sSlashAndClosingBracket[] = "/>";
-constexpr OString sColon = ":"_ostr;
-const char sOpeningBracket[] = "<";
-const char sOpeningBracketAndSlash[] = "</";
-const char sQuote[] = "\"";
-const char sEqualSignAndQuote[] = "=\"";
-const char sSpace[] = " ";
-const char sXmlHeader[] = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
+static constexpr bool HAS_NAMESPACE(sal_Int32 x) { return (x & 0xffff0000) != 0; }
+static constexpr sal_Int32 NAMESPACE(sal_Int32 x) { return x >> 16; }
+static constexpr sal_Int32 TOKEN(sal_Int32 x) { return x & 0xffff; }
 
 namespace sax_fastparser {
     FastSaxSerializer::FastSaxSerializer( const css::uno::Reference< css::io::XOutputStream >& xOutputStream )
@@ -76,7 +62,7 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::startDocument()
     {
-        writeBytes(sXmlHeader, N_CHARS(sXmlHeader));
+        write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n");
     }
 
     void FastSaxSerializer::write( double value )
@@ -318,7 +304,7 @@ namespace sax_fastparser {
             auto const Namespace(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
             assert(Namespace.hasElements());
             writeBytes(Namespace);
-            writeBytes(sColon.getStr(), sColon.getLength());
+            write(":");
             auto const Element(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
             assert(Element.hasElements());
             writeBytes(Element);
@@ -339,7 +325,7 @@ namespace sax_fastparser {
                 mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
             return std::string_view(
                      reinterpret_cast<char const*>(ns.getConstArray()), ns.getLength())
-                 + sColon
+                 + ":"_ostr
                  + std::string_view(
                      reinterpret_cast<char const*>(name.getConstArray()), name.getLength());
         } else {
@@ -365,7 +351,7 @@ namespace sax_fastparser {
             maMarkStack.top()->m_DebugStartedElements.push_back(Element);
 #endif
 
-        writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
+        write("<");
 
         writeId(Element);
         if (pAttrList)
@@ -373,7 +359,7 @@ namespace sax_fastparser {
         else
             writeTokenValueList();
 
-        writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
+        write(">");
     }
 
     void FastSaxSerializer::endFastElement( ::sal_Int32 Element )
@@ -405,11 +391,11 @@ namespace sax_fastparser {
         }
 #endif
 
-        writeBytes(sOpeningBracketAndSlash, N_CHARS(sOpeningBracketAndSlash));
+        write("</");
 
         writeId(Element);
 
-        writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
+        write(">");
     }
 
     void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList const * pAttrList )
@@ -420,7 +406,7 @@ namespace sax_fastparser {
             maMarkStack.top()->setCurrentElement( Element );
         }
 
-        writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
+        write("<");
 
         writeId(Element);
         if (pAttrList)
@@ -428,7 +414,7 @@ namespace sax_fastparser {
         else
             writeTokenValueList();
 
-        writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
+        write("/>");
     }
 
     css::uno::Reference< css::io::XOutputStream > const & FastSaxSerializer::getOutputStream() const
@@ -443,7 +429,7 @@ namespace sax_fastparser {
 #endif
         for (const TokenValue & rTokenValue : maTokenValues)
         {
-            writeBytes(sSpace, N_CHARS(sSpace));
+            write(" ");
 
             sal_Int32 nToken = rTokenValue.nToken;
             writeId(nToken);
@@ -455,11 +441,11 @@ namespace sax_fastparser {
             DebugAttributes.insert(nameId);
 #endif
 
-            writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
+            write("=\"");
 
             write(rTokenValue.pValue, -1, true);
 
-            writeBytes(sQuote, N_CHARS(sQuote));
+            write("\"");
         }
         maTokenValues.clear();
     }
@@ -472,7 +458,7 @@ namespace sax_fastparser {
         const std::vector< sal_Int32 >& Tokens = rAttrList.getFastAttributeTokens();
         for (size_t j = 0; j < Tokens.size(); j++)
         {
-            writeBytes(sSpace, N_CHARS(sSpace));
+            write(" ");
 
             sal_Int32 nToken = Tokens[j];
             writeId(nToken);
@@ -485,7 +471,7 @@ namespace sax_fastparser {
             DebugAttributes.insert(nameId);
 #endif
 
-            writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
+            write("=\"");
 
             const char* pAttributeValue = rAttrList.getFastAttributeValue(j);
 
@@ -498,7 +484,7 @@ namespace sax_fastparser {
 
             write(pAttributeValue, rAttrList.AttributeValueLength(j), bEscape);
 
-            writeBytes(sQuote, N_CHARS(sQuote));
+            write("\"");
         }
     }
 
