@@ -48,6 +48,7 @@ struct RenderState
 
     std::unordered_set<SdrObject*> maObjectsDone;
     std::unordered_set<SdrObject*> maInAnimation;
+    std::map<SdrObject*, OString> maAnimationTargetHash;
     std::map<SdrObject*, bool> maInitiallyVisible;
     sal_Int32 mnIndex[static_cast<unsigned>(RenderStage::Count)] = { 0, 0, 0, 0 };
     SdrObject* mpCurrentTarget = nullptr;
