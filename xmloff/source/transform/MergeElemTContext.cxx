@@ -103,8 +103,7 @@ void XMLMergeElemTransformerContext::ExportStartElement()
     for( const auto& rChildContext : m_aChildContexts )
     {
         XMLPersTextContentTContext *pContext = rChildContext.get();
-        static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-            ->AddAttribute( pContext->GetExportQName(),
+        m_xAttrList->AddAttribute( pContext->GetExportQName(),
                             pContext->GetTextContent() );
     }
     XMLTransformerContext::StartElement( m_xAttrList );

@@ -21,6 +21,7 @@
 
 #include <rtl/ref.hxx>
 #include "FlatTContext.hxx"
+#include "MutableAttrList.hxx"
 #include <vector>
 
 typedef ::std::vector< ::rtl::Reference< XMLPersTextContentTContext> >
@@ -28,7 +29,7 @@ typedef ::std::vector< ::rtl::Reference< XMLPersTextContentTContext> >
 
 class XMLMergeElemTransformerContext : public XMLTransformerContext
 {
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    rtl::Reference< XMLMutableAttributeList > m_xAttrList;
     XMLPersTextContentTContextVector m_aChildContexts;
     sal_uInt16 const m_nActionMap;
     bool m_bStartElementExported;

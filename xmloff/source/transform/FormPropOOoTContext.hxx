@@ -26,7 +26,7 @@ class XMLFormPropValueTContext_Impl;
 
 class XMLFormPropOOoTransformerContext : public XMLTransformerContext
 {
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    rtl::Reference< XMLMutableAttributeList > m_xAttrList;
 
     ::rtl::Reference< XMLFormPropValueTContext_Impl > m_xValueContext;
 

@@ -58,7 +58,7 @@ const sal_uInt16 aAttrActionMaps[XML_PROP_TYPE_END] =
 
 class XMLPropertiesTContext_Impl : public XMLPersElemContentTContext
 {
-    css::uno::Reference< css::xml::sax::XAttributeList > m_xAttrList;
+    rtl::Reference< XMLMutableAttributeList > m_xAttrList;
 
     XMLPropType m_ePropType;
     bool const  m_bControlStyle;
@@ -113,17 +113,9 @@ void XMLPropertiesTContext_Impl::StartElement(
 
     if( pActions )
     {
-        rtl::Reference<XMLMutableAttributeList> pAttrList;
         if( !m_xAttrList.is() )
-        {
-            pAttrList = new XMLMutableAttributeList();
-            m_xAttrList = pAttrList;
-        }
-        else
-        {
-            pAttrList =
-                static_cast< XMLMutableAttributeList * >( m_xAttrList.get() );
-        }
+            m_xAttrList = new XMLMutableAttributeList();
+        rtl::Reference<XMLMutableAttributeList> pAttrList = m_xAttrList;
 
         XMLTokenEnum eUnderline = XML_TOKEN_END;
         bool bBoldUnderline = false, bDoubleUnderline = false;
@@ -583,8 +575,7 @@ void XMLPropertiesTContext_Impl::StartElement(
         }
         else
         {
-            static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-                ->AppendAttributeList( rAttrList );
+            m_xAttrList->AppendAttributeList( rAttrList );
         }
     }
 }

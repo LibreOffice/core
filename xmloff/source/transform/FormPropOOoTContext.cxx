@@ -231,15 +231,13 @@ void XMLFormPropOOoTransformerContext::EndElement()
             OUString aAttrQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_OFFICE, GetXMLToken(m_eValueToken) ) );
-            static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-                ->AddAttribute( aAttrQName, m_xValueContext->GetTextContent() );
+            m_xAttrList->AddAttribute( aAttrQName, m_xValueContext->GetTextContent() );
         }
     }
 
     if( m_nValueTypeAttr != -1 && m_eValueTypeToken != XML_TOKEN_END )
     {
-        static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
-            ->SetValueByIndex( m_nValueTypeAttr ,
+        m_xAttrList->SetValueByIndex( m_nValueTypeAttr ,
                                 GetXMLToken( m_eValueTypeToken ) );
     }
 

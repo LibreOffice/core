@@ -131,8 +131,7 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
     {
     }
 
-    Reference < XImporter > xImporter( mxFastHandler, UNO_QUERY );
-    xImporter->setTargetDocument( rComp );
+    mxFastHandler->setTargetDocument( rComp );
 
     xComp = rComp;  // keep ref to component only if there is a handler
 

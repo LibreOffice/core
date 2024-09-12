@@ -26,7 +26,7 @@ namespace com::sun::star::lang { class XComponent; }
 
 class XMLEmbeddedObjectImportContext final : public SvXMLImportContext
 {
-    css::uno::Reference<css::xml::sax::XFastDocumentHandler > mxFastHandler;
+    rtl::Reference<SvXMLImport> mxFastHandler;
     css::uno::Reference<css::lang::XComponent > xComp;
 
     OUString sFilterService;
