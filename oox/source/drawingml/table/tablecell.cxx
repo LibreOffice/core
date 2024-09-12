@@ -605,7 +605,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     else if ( getVertToken() != XML_horz && getVertToken() != XML_eaVert )
     {
         // put the vert value in the grab bag for roundtrip
-        const OUString aTokenName(StaticTokenMap().getUnicodeTokenName(getVertToken()));
+        const OUString aTokenName(TokenMap::getUnicodeTokenName(getVertToken()));
         Sequence<PropertyValue> aGrabBag;
         xPropSet->getPropertyValue("CellInteropGrabBag") >>= aGrabBag;
         PropertyValue aPropertyValue = comphelper::makePropertyValue("mso-tcPr-vert-value", aTokenName);

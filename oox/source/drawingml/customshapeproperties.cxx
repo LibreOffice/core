@@ -56,7 +56,7 @@ CustomShapeProperties::CustomShapeProperties()
 
 OUString CustomShapeProperties::getShapePresetTypeName() const
 {
-    return StaticTokenMap().getUnicodeTokenName(mnShapePresetType);
+    return TokenMap::getUnicodeTokenName(mnShapePresetType);
 }
 
 sal_Int32 CustomShapeProperties::SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide )

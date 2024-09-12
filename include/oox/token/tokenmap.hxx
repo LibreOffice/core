@@ -35,69 +35,28 @@
 namespace oox {
 
 
-class TokenMap
+namespace TokenMap
 {
-public:
-    explicit            TokenMap();
-                        ~TokenMap();
+/** Returns the token identifier for a UTF8 string passed in pToken */
+sal_Int32 getTokenFromUtf8(std::string_view token);
 
-    /** Returns the token identifier for the passed Unicode token name. */
-    static sal_Int32    getTokenFromUnicode( std::u16string_view rUnicodeName );
+/** Returns the token identifier for the passed Unicode token name. */
+inline sal_Int32 getTokenFromUnicode(std::u16string_view rUnicodeName)
+{
+    return getTokenFromUtf8(OUStringToOString(rUnicodeName, RTL_TEXTENCODING_UTF8));
+}
 
-    /** Returns the UTF8 name of the passed token identifier as byte sequence. */
-    css::uno::Sequence< sal_Int8 > const &
-                        getUtf8TokenName( sal_Int32 nToken ) const
-    {
-        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
-        if (0 <= nToken && nToken < XML_TOKEN_COUNT)
-            return maTokenNames[ nToken ];
-        return EMPTY_BYTE_SEQ;
-    }
+/** Returns the UTF8 name of the passed token identifier as byte sequence. */
+css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
 
-    /** Returns the token identifier for the passed UTF8 token name. */
-    sal_Int32           getTokenFromUtf8(
-                            const css::uno::Sequence< sal_Int8 >& rUtf8Name ) const
-    {
-        return getTokenFromUTF8( reinterpret_cast< const char * >(
-                                rUtf8Name.getConstArray() ),
-                             rUtf8Name.getLength() );
-    }
-
-    /** Returns the token identifier for a UTF8 string passed in pToken */
-    sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength ) const
-    {
-        // 50% of OOXML tokens are primarily 1 lower-case character, a-z
-        if( nLength == 1)
-        {
-            char c = pToken[0];
-            if (c >= 'a' && c <= 'z')
-                return mnAlphaTokens[ c - 'a' ];
-        }
-        return getTokenPerfectHash( pToken, nLength );
-    }
-
-    /** Returns the name of the passed token identifier as OUString. */
-    OUString getUnicodeTokenName(sal_Int32 nToken) const
-    {
-        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
-        OUString const ret((0 <= nToken && nToken < XML_TOKEN_COUNT)
-            ? rtl::OUString(reinterpret_cast<const char*>(maTokenNames[nToken].getConstArray()),
-                            maTokenNames[nToken].getLength(), RTL_TEXTENCODING_UTF8)
-            : OUString());
-        return ret;
-    }
-
-private:
-    static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
-    static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
-
-    std::vector< css::uno::Sequence< sal_Int8 > >
-                        maTokenNames;
-    sal_Int32           mnAlphaTokens[26];
+/** Returns the name of the passed token identifier as OUString. */
+inline OUString getUnicodeTokenName(sal_Int32 nToken)
+{
+    auto name = getUtf8TokenName(nToken);
+    return OUString(reinterpret_cast<const char*>(name.getConstArray()), name.getLength(),
+                    RTL_TEXTENCODING_UTF8);
+}
 };
-
-
-TokenMap& StaticTokenMap();
 
 } // namespace oox
 

@@ -29,8 +29,6 @@
 #include <sal/types.h>
 #include <sax/fastattribs.hxx>
 
-namespace oox { class TokenMap; }
-
 namespace oox::core {
 
 
@@ -41,8 +39,7 @@ class OOX_DLLPUBLIC FastTokenHandler final :
     public cppu::ImplInheritanceHelper< sax_fastparser::FastTokenHandlerBase, css::lang::XServiceInfo >
 {
 public:
-    explicit            FastTokenHandler();
-    virtual             ~FastTokenHandler() override;
+    explicit            FastTokenHandler() = default;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -54,10 +51,7 @@ public:
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
 
     // Much faster direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
-
-private:
-    const TokenMap&     mrTokenMap;     ///< Reference to global token map singleton.
+    virtual sal_Int32 getTokenDirect(std::string_view token) const override;
 };
 
 

@@ -94,7 +94,7 @@ public:
     css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
 
     //Much fast direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pTag, sal_Int32 nLength ) const override;
+    virtual sal_Int32 getTokenDirect(std::string_view token) const override;
 };
 
 enum SwXMLBlockListToken : sal_Int32
@@ -120,7 +120,7 @@ public:
     css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token ) override;
 
     //Much fast direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pTag, sal_Int32 nLength ) const override;
+    virtual sal_Int32 getTokenDirect(std::string_view token) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

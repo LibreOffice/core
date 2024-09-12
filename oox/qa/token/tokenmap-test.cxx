@@ -30,9 +30,6 @@ public:
     CPPUNIT_TEST(test_roundTrip);
     CPPUNIT_TEST(test_roundTripUnicode);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    TokenMap tokenMap;
 };
 
 void TokenmapTest::test_roundTrip()
@@ -40,10 +37,9 @@ void TokenmapTest::test_roundTrip()
     for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
     {
         // check that the getIdentifier <-> getToken roundtrip works
-        Sequence< sal_Int8 > rUtf8Name = tokenMap.getUtf8TokenName(nToken);
-        sal_Int32 ret = tokenMap.getTokenFromUTF8(
-            reinterpret_cast< const char * >(rUtf8Name.getConstArray()),
-            rUtf8Name.getLength() );
+        Sequence< sal_Int8 > rUtf8Name = TokenMap::getUtf8TokenName(nToken);
+        sal_Int32 ret = TokenMap::getTokenFromUtf8(std::string_view(
+            reinterpret_cast<const char*>(rUtf8Name.getConstArray()), rUtf8Name.getLength()));
         CPPUNIT_ASSERT_EQUAL(ret, nToken);
     }
 }
@@ -53,7 +49,7 @@ void TokenmapTest::test_roundTripUnicode()
     for (sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken)
     {
         // check that the getIdentifier <-> getToken roundtrip works for OUString
-        OUString sName = tokenMap.getUnicodeTokenName(nToken);
+        OUString sName = TokenMap::getUnicodeTokenName(nToken);
         sal_Int32 ret = oox::TokenMap::getTokenFromUnicode(sName);
         CPPUNIT_ASSERT_EQUAL(ret, nToken);
     }

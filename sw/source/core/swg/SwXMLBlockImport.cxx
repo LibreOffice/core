@@ -127,7 +127,7 @@ SwXMLTextBlockTokenHandler::~SwXMLTextBlockTokenHandler()
 
 sal_Int32 SAL_CALL SwXMLTextBlockTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {
-    return getTokenDirect( reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength() );
+    return getTokenDirect( std::string_view(reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength()) );
 }
 
 Sequence< sal_Int8 > SAL_CALL SwXMLTextBlockTokenHandler::getUTF8Identifier( sal_Int32 )
@@ -135,11 +135,9 @@ Sequence< sal_Int8 > SAL_CALL SwXMLTextBlockTokenHandler::getUTF8Identifier( sal
     return Sequence< sal_Int8 >();
 }
 
-sal_Int32 SwXMLTextBlockTokenHandler::getTokenDirect( const char *pTag, sal_Int32 nLength ) const
+sal_Int32 SwXMLTextBlockTokenHandler::getTokenDirect(std::string_view token) const
 {
-    if( !nLength )
-        nLength = strlen( pTag );
-    const struct xmltoken* pToken = TextBlockTokens::in_word_set( pTag, nLength );
+    const struct xmltoken* pToken = TextBlockTokens::in_word_set(token.data(), token.size());
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
@@ -153,7 +151,7 @@ SwXMLBlockListTokenHandler::~SwXMLBlockListTokenHandler()
 
 sal_Int32 SAL_CALL SwXMLBlockListTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
 {
-    return getTokenDirect( reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength() );
+    return getTokenDirect( std::string_view(reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength()) );
 }
 
 Sequence< sal_Int8 > SAL_CALL SwXMLBlockListTokenHandler::getUTF8Identifier( sal_Int32 )
@@ -161,11 +159,9 @@ Sequence< sal_Int8 > SAL_CALL SwXMLBlockListTokenHandler::getUTF8Identifier( sal
     return Sequence< sal_Int8 >();
 }
 
-sal_Int32 SwXMLBlockListTokenHandler::getTokenDirect( const char *pTag, sal_Int32 nLength ) const
+sal_Int32 SwXMLBlockListTokenHandler::getTokenDirect(std::string_view token) const
 {
-    if( !nLength )
-        nLength = strlen( pTag );
-    const struct xmltoken* pToken = BlockListTokens::in_word_set( pTag, nLength );
+    const struct xmltoken* pToken = BlockListTokens::in_word_set(token.data(), token.size());
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 

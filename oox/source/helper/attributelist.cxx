@@ -62,6 +62,19 @@ sal_Unicode lclGetXChar( const sal_Unicode*& rpcStr, const sal_Unicode* pcEnd )
     return *rpcStr++;
 }
 
+template<typename C> sal_uInt32 decodeUnsigned_impl(std::basic_string_view<C> rValue)
+{
+    return getLimitedValue<sal_uInt32, sal_Int64>(o3tl::toInt64(rValue), 0, SAL_MAX_UINT32);
+}
+
+template <typename C> sal_Int32 decodeIntegerHex_impl(std::basic_string_view<C> rValue)
+{
+    // It looks like all Office Open XML attributes containing hexadecimal
+    // values are based on xsd:hexBinary and so use an unsigned representation:
+    return static_cast<sal_Int32>(o3tl::toUInt32(rValue, 16));
+        //TODO: Change this function to return sal_uInt32 and get rid of the
+        // cast, but that will have a ripple effect
+}
 } // namespace
 
 #define STRING_TO_TOKEN(color) if (sColorName == u"" #color) return XML_##color
@@ -98,12 +111,13 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     // string shorter than one encoded character - no need to decode
     if( rValue.getLength() < XSTRING_ENCCHAR_LEN )
         return rValue;
-    if (rValue.indexOf(u"_x") == -1)
+    sal_Int32 index = rValue.indexOf(u"_x");
+    if (index == -1)
         return rValue;
 
-    OUStringBuffer aBuffer;
-    const sal_Unicode* pcStr = rValue.getStr();
-    const sal_Unicode* pcEnd = pcStr + rValue.getLength();
+    OUStringBuffer aBuffer(rValue.subView(0, index));
+    const sal_Unicode* pcStr = rValue.getStr() + index;
+    const sal_Unicode* pcEnd = rValue.getStr() + rValue.getLength();
     while( pcStr < pcEnd )
         aBuffer.append( lclGetXChar( pcStr, pcEnd ) );
     return comphelper::string::sanitizeStringSurrogates(aBuffer.makeStringAndClear());
@@ -116,7 +130,7 @@ sal_Int32 AttributeConversion::decodeInteger( std::u16string_view rValue )
 
 sal_uInt32 AttributeConversion::decodeUnsigned( std::u16string_view rValue )
 {
-    return getLimitedValue< sal_uInt32, sal_Int64 >( o3tl::toInt64(rValue), 0, SAL_MAX_UINT32 );
+    return decodeUnsigned_impl(rValue);
 }
 
 sal_Int64 AttributeConversion::decodeHyper( std::u16string_view rValue )
@@ -126,27 +140,19 @@ sal_Int64 AttributeConversion::decodeHyper( std::u16string_view rValue )
 
 sal_Int32 AttributeConversion::decodeIntegerHex( std::u16string_view rValue )
 {
-    // It looks like all Office Open XML attributes containing hexadecimal
-    // values are based on xsd:hexBinary and so use an unsigned representation:
-    return static_cast< sal_Int32 >(o3tl::toUInt32(rValue, 16));
-        //TODO: Change this function to return sal_uInt32 and get rid of the
-        // cast, but that will have a ripple effect
+    return decodeIntegerHex_impl(rValue);
 }
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :
-    mxAttribs( rxAttribs ),
-    mpAttribList( nullptr )
+    mxAttribs(&sax_fastparser::castToFastAttributeList(rxAttribs))
 {
-    OSL_ENSURE( mxAttribs.is(), "AttributeList::AttributeList - missing attribute list interface" );
 }
 
-sax_fastparser::FastAttributeList *AttributeList::getAttribList() const
+AttributeList::~AttributeList() = default;
+
+css::uno::Reference<css::xml::sax::XFastAttributeList> AttributeList::getFastAttributeList() const
 {
-    if( mpAttribList == nullptr )
-    {
-        mpAttribList = &sax_fastparser::castToFastAttributeList( mxAttribs );
-    }
-    return mpAttribList;
+    return mxAttribs;
 }
 
 bool AttributeList::hasAttribute( sal_Int32 nAttrToken ) const
@@ -173,46 +179,43 @@ std::optional< sal_Int32 > AttributeList::getToken( sal_Int32 nAttrToken ) const
 std::optional< OUString > AttributeList::getString( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
-    if( mxAttribs->hasAttribute( nAttrToken ) )
-        return std::optional< OUString >( mxAttribs->getOptionalValue( nAttrToken ) );
+    if (sal_Int32 index = mxAttribs->getAttributeIndex(nAttrToken); index >= 0)
+        return mxAttribs->getValueByIndex(index);
     return std::optional< OUString >();
 }
 
 OUString AttributeList::getStringDefaulted( sal_Int32 nAttrToken ) const
 {
-    // check if the attribute exists (empty string may be different to missing attribute)
-    if( mxAttribs->hasAttribute( nAttrToken ) )
-        return mxAttribs->getOptionalValue( nAttrToken );
-    return OUString();
+    return mxAttribs->getOptionalValue(nAttrToken);
 }
 
 std::optional< OUString > AttributeList::getXString( sal_Int32 nAttrToken ) const
 {
     // check if the attribute exists (empty string may be different to missing attribute)
-    if( mxAttribs->hasAttribute( nAttrToken ) )
-        return std::optional< OUString >( AttributeConversion::decodeXString( mxAttribs->getOptionalValue( nAttrToken ) ) );
+    if (sal_Int32 index = mxAttribs->getAttributeIndex(nAttrToken); index >= 0)
+        return AttributeConversion::decodeXString(mxAttribs->getValueByIndex(index));
     return std::optional< OUString >();
 }
 
 std::optional< double > AttributeList::getDouble( sal_Int32 nAttrToken ) const
 {
     double nValue;
-    bool bValid = getAttribList()->getAsDouble( nAttrToken, nValue );
+    bool bValid = mxAttribs->getAsDouble(nAttrToken, nValue);
     return bValid ? std::optional< double >( nValue ) : std::optional< double >();
 }
 
 std::optional< sal_Int32 > AttributeList::getInteger( sal_Int32 nAttrToken ) const
 {
     sal_Int32 nValue;
-    bool bValid = getAttribList()->getAsInteger( nAttrToken, nValue );
+    bool bValid = mxAttribs->getAsInteger(nAttrToken, nValue);
     return bValid ? std::optional< sal_Int32 >( nValue ) : std::optional< sal_Int32 >();
 }
 
 std::optional< sal_uInt32 > AttributeList::getUnsigned( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return bValid ? std::optional< sal_uInt32 >( AttributeConversion::decodeUnsigned( aValue ) ) : std::optional< sal_uInt32 >();
+    std::string_view aValue = getView(nAttrToken);
+    bool bValid = !aValue.empty();
+    return bValid ? std::optional< sal_uInt32 >( decodeUnsigned_impl( aValue ) ) : std::optional< sal_uInt32 >();
 }
 
 std::optional< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
@@ -224,19 +227,19 @@ std::optional< sal_Int64 > AttributeList::getHyper( sal_Int32 nAttrToken ) const
 
 std::optional< sal_Int32 > AttributeList::getIntegerHex( sal_Int32 nAttrToken ) const
 {
-    OUString aValue = mxAttribs->getOptionalValue( nAttrToken );
-    bool bValid = !aValue.isEmpty();
-    return bValid ? std::optional< sal_Int32 >( AttributeConversion::decodeIntegerHex( aValue ) ) : std::optional< sal_Int32 >();
+    std::string_view aValue = getView(nAttrToken);
+    bool bValid = !aValue.empty();
+    return bValid ? std::optional< sal_Int32 >( decodeIntegerHex_impl( aValue ) ) : std::optional< sal_Int32 >();
 }
 
 std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
 {
-    std::string_view pAttr;
+    sal_Int32 index = mxAttribs->getAttributeIndex(nAttrToken);
+    if (index == -1)
+        return std::optional< bool >();
+    std::string_view pAttr = mxAttribs->getAsViewByIndex(index);
 
     // catch the common cases as quickly as possible first
-    bool bHasAttr = getAttribList()->getAsView( nAttrToken, pAttr );
-    if( !bHasAttr )
-        return std::optional< bool >();
     if( pAttr == "false" )
         return std::optional< bool >( false );
     if( pAttr == "true" )
@@ -245,7 +248,7 @@ std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
     // now for all the crazy stuff
 
     // boolean attributes may be "t", "f", "true", "false", "on", "off", "1", or "0"
-    switch( getToken( nAttrToken, XML_TOKEN_INVALID ) )
+    switch (mxAttribs->getValueTokenByIndex(index))
     {
         case XML_t:     return std::optional< bool >( true );  // used in VML
         case XML_true:  return std::optional< bool >( true );
@@ -254,8 +257,7 @@ std::optional< bool > AttributeList::getBool( sal_Int32 nAttrToken ) const
         case XML_false: return std::optional< bool >( false );
         case XML_off:   return std::optional< bool >( false );
     }
-    std::optional< sal_Int32 > onValue = getInteger( nAttrToken );
-    return onValue.has_value() ? std::optional< bool >( onValue.value() != 0 ) : std::optional< bool >();
+    return std::optional<bool>(o3tl::toInt32(pAttr) != 0);
 }
 
 std::optional< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) const
@@ -288,17 +290,8 @@ sal_Int32 AttributeList::getToken( sal_Int32 nAttrToken, sal_Int32 nDefault ) co
 
 OUString AttributeList::getString( sal_Int32 nAttrToken, const OUString& rDefault ) const
 {
-    // try to avoid slow exception throw/catch if we can
-    if (rDefault.isEmpty())
-        return mxAttribs->getOptionalValue( nAttrToken );
-
-    try
-    {
-        return mxAttribs->getValue( nAttrToken );
-    }
-    catch( Exception& )
-    {
-    }
+    if (sal_Int32 index = mxAttribs->getAttributeIndex(nAttrToken); index >= 0)
+        return mxAttribs->getValueByIndex(index);
     return rDefault;
 }
 
@@ -310,7 +303,7 @@ OUString AttributeList::getXString( sal_Int32 nAttrToken, const OUString& rDefau
 std::string_view AttributeList::getView( sal_Int32 nAttrToken ) const
 {
     std::string_view p;
-    getAttribList()->getAsView(nAttrToken, p);
+    mxAttribs->getAsView(nAttrToken, p);
     return p;
 }
 
@@ -357,12 +350,9 @@ util::DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const util::Dat
 std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
 {
     std::vector<sal_Int32> aValues;
-    OUString sValue = getString(nAttrToken, "");
-    sal_Int32 nIndex = 0;
-    do
-    {
-        aValues.push_back(AttributeConversion::decodeToken(o3tl::getToken(sValue, 0, ' ', nIndex)));
-    } while (nIndex >= 0);
+    if (std::string_view sValue = getView(nAttrToken); !sValue.empty())
+        for (size_t index = 0; index != std::string_view::npos;)
+            aValues.push_back(TokenMap::getTokenFromUtf8(o3tl::getToken(sValue, ' ', index)));
 
     return aValues;
 }

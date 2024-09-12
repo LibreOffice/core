@@ -18,72 +18,29 @@
 
 namespace xmloff::token {
 
-class TokenMap
+namespace TokenMap
 {
-public:
-    explicit TokenMap();
-            ~TokenMap();
+/** Returns the UTF-8 name of the passed token identifier as byte sequence. */
+css::uno::Sequence<sal_Int8> const& getUtf8TokenName(sal_Int32 nToken);
 
-    /** Returns the UTF-8 name of the passed token identifier as byte sequence. */
-    css::uno::Sequence< sal_Int8 > const & getUtf8TokenName( sal_Int32 nToken ) const
-    {
-        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
-        if( 0 <= nToken && nToken < XML_TOKEN_COUNT )
-            return maTokenNamesUtf8[ nToken ];
-        return EMPTY_BYTE_SEQ;
-    }
-
-    const OUString& getTokenName( sal_Int32 nToken ) const
-    {
-        SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "xmloff", "Wrong nToken parameter");
-        if( 0 <= nToken && nToken < XML_TOKEN_COUNT )
-            return maTokenNames[ nToken ];
-        return EMPTY_STRING;
-    }
-
-    /** Returns the token identifier for the passed UTF-8 token name. */
-    static sal_Int32 getTokenFromUtf8( const css::uno::Sequence< sal_Int8 >& rUtf8Name )
-    {
-        return getTokenFromUTF8( reinterpret_cast< const char* >(
-                    rUtf8Name.getConstArray() ), rUtf8Name.getLength() );
-    }
-
-    /** Returns the token identifier for a UTF-8 string */
-    static sal_Int32 getTokenFromUTF8( const char *pToken, sal_Int32 nLength )
-    {
-        return getTokenPerfectHash( pToken, nLength );
-    }
-
-private:
-    static sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength );
-
-    std::vector< css::uno::Sequence< sal_Int8 > > maTokenNamesUtf8;
-    std::vector< OUString > maTokenNames;
-
-    static const css::uno::Sequence< sal_Int8 > EMPTY_BYTE_SEQ;
-    static const OUString EMPTY_STRING;
+/** Returns the token identifier for a UTF-8 string */
+sal_Int32 getTokenFromUtf8(std::string_view token);
 };
-
-TokenMap& StaticTokenMap();
 
 class FastTokenHandler final :
     public sax_fastparser::FastTokenHandlerBase
 {
 public:
-    explicit FastTokenHandler();
-    virtual ~FastTokenHandler() override;
+    explicit FastTokenHandler() = default;
 
     // XFastTokenHandler
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
 
-    const OUString & getIdentifier( sal_Int32 nToken ) const;
+    static const OUString& getIdentifier(sal_Int32 nToken);
 
     // Much faster direct C++ shortcut to the method that matters
-    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
-
-private:
-    TokenMap& mrTokenMap;
+    virtual sal_Int32 getTokenDirect(std::string_view token) const override;
 };
 
 } // namespace xmloff::token

@@ -23,9 +23,6 @@ namespace xmloff {
 class TokenmapTest: public CppUnit::TestFixture
 {
 public:
-
-    TokenmapTest();
-
     void test_roundTrip();
     void test_listEquality();
 
@@ -35,25 +32,18 @@ public:
     CPPUNIT_TEST(test_listEquality);
 
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    std::unique_ptr<token::TokenMap> pTokenMap;
 };
-
-TokenmapTest::TokenmapTest() : pTokenMap(new token::TokenMap)
-{
-}
 
 void TokenmapTest::test_roundTrip()
 {
     for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
     {
         // check that the getIdentifier <-> getToken roundtrip works
-        Sequence< sal_Int8 > rUtf8Name = pTokenMap->getUtf8TokenName(nToken);
+        Sequence< sal_Int8 > rUtf8Name = token::TokenMap::getUtf8TokenName(nToken);
         CPPUNIT_ASSERT_MESSAGE("Token name sequence should not be empty", rUtf8Name.getLength());
         const char* pChar = reinterpret_cast< const char * >(rUtf8Name.getConstArray());
         CPPUNIT_ASSERT_MESSAGE("Token name sequence array pointer failed", pChar);
-        sal_Int32 ret = token::TokenMap::getTokenFromUTF8( pChar, rUtf8Name.getLength() );
+        sal_Int32 ret = token::TokenMap::getTokenFromUtf8( std::string_view(pChar, rUtf8Name.getLength()) );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("No roundtrip for token", ret, nToken);
     }
 }
@@ -65,7 +55,7 @@ void TokenmapTest::test_listEquality()
     // aTokenList in xmloff/source/core/xmltoken.cxx, and xmloff/source/token/tokens.txt
     for ( sal_Int32 nToken = 0; nToken < XML_TOKEN_COUNT; ++nToken )
     {
-        Sequence< sal_Int8 > rUtf8Name = pTokenMap->getUtf8TokenName(nToken);
+        Sequence<sal_Int8> rUtf8Name = token::TokenMap::getUtf8TokenName(nToken);
         const OUString& rName = OUString( reinterpret_cast< const char* >(
                         rUtf8Name.getConstArray() ), rUtf8Name.getLength(), RTL_TEXTENCODING_UTF8 );
         if ( rName.endsWith("_DUMMY") )
@@ -78,7 +68,7 @@ void TokenmapTest::test_listEquality()
             nToken < xmloff::token::XMLTokenEnum::XML_TOKEN_END; ++nToken )
     {
         const OUString& rTokenName = GetXMLToken( static_cast<xmloff::token::XMLTokenEnum>(nToken) );
-        Sequence< sal_Int8 > rUtf8Name = pTokenMap->getUtf8TokenName(nToken);
+        Sequence<sal_Int8> rUtf8Name = token::TokenMap::getUtf8TokenName(nToken);
         const OUString& rName = OUString( reinterpret_cast< const char* >(
                         rUtf8Name.getConstArray() ), rUtf8Name.getLength(), RTL_TEXTENCODING_UTF8 );
         if ( !rName.endsWith("_DUMMY") )
