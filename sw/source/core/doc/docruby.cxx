@@ -117,53 +117,57 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
         }
 
         SwRubyListEntry aCheckEntry;
-        if (!SelectNextRubyChars(aPam, aCheckEntry))
+        auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
+
+        if (bSelected)
         {
-            // goto next paragraph
+            ++nCurrBaseTexts;
+
+            // Existing ruby text was located. Apply the new attributes.
+            const SwRubyListEntry* pEntry = rList[nListEntry++].get();
+            if (aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr())
+            {
+                // set/reset the attribute
+                if (!pEntry->GetRubyAttr().GetText().isEmpty())
+                {
+                    getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
+                }
+                else
+                {
+                    ResetAttrs(aPam, true, aDelArr);
+                }
+            }
+
+            if (aCheckEntry.GetText() != pEntry->GetText())
+            {
+                if (pEntry->GetText().isEmpty())
+                {
+                    ResetAttrs(aPam, true, aDelArr);
+                }
+
+                // text is changed, so replace the original
+                getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(), false);
+                aPam.Exchange();
+            }
+
+            aPam.DeleteMark();
+        }
+        else
+        {
+            // No existing ruby text located. Advance to next paragraph.
             aPam.DeleteMark();
             aPam.Move(fnMoveForward, GoInNode);
-
-            if (*aPam.GetPoint() >= *pEnd)
-            {
-                break;
-            }
-
-            continue;
         }
 
-        ++nCurrBaseTexts;
-
-        const SwRubyListEntry* pEntry = rList[nListEntry++].get();
-        if (aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr())
+        // Stop substituting when the cursor advances to the end of the selection.
+        if (*aPam.GetPoint() >= *pEnd)
         {
-            // set/reset the attribute
-            if (!pEntry->GetRubyAttr().GetText().isEmpty())
-            {
-                getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
-            }
-            else
-            {
-                ResetAttrs(aPam, true, aDelArr);
-            }
+            break;
         }
-
-        if (aCheckEntry.GetText() != pEntry->GetText())
-        {
-            if (pEntry->GetText().isEmpty())
-            {
-                ResetAttrs(aPam, true, aDelArr);
-            }
-
-            // text is changed, so replace the original
-            getIDocumentContentOperations().ReplaceRange(aPam, pEntry->GetText(), false);
-            aPam.Exchange();
-        }
-
-        aPam.DeleteMark();
     }
 
     // Delete any spans past the end of the ruby list
-    while (nListEntry == rList.size() && nCurrBaseTexts < nMaxBaseTexts)
+    while (nListEntry == rList.size() && nCurrBaseTexts < nMaxBaseTexts && *aPam.GetPoint() < *pEnd)
     {
         if (pEnd != pStt)
         {
@@ -172,27 +176,24 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
         }
 
         SwRubyListEntry aCheckEntry;
-        if (!SelectNextRubyChars(aPam, aCheckEntry))
+        auto bSelected = SelectNextRubyChars(aPam, aCheckEntry);
+
+        if (bSelected)
         {
-            // goto next paragraph
+            ++nCurrBaseTexts;
+
+            ResetAttrs(aPam, true, aDelArr);
+            getIDocumentContentOperations().DeleteRange(aPam);
+            aPam.Exchange();
+
+            aPam.DeleteMark();
+        }
+        else
+        {
+            // No existing ruby text located. Advance to next paragraph.
             aPam.DeleteMark();
             aPam.Move(fnMoveForward, GoInNode);
-
-            if (*aPam.GetPoint() >= *pEnd)
-            {
-                break;
-            }
-
-            continue;
         }
-
-        ++nCurrBaseTexts;
-
-        ResetAttrs(aPam, true, aDelArr);
-        getIDocumentContentOperations().DeleteRange(aPam);
-        aPam.Exchange();
-
-        aPam.DeleteMark();
     }
 
     // Insert any spans past the end of the base text list
@@ -201,22 +202,21 @@ void SwDoc::SetRubyList(SwPaM& rPam, const SwRubyList& rList)
     {
         const SwRubyListEntry* pEntry = rList[nListEntry++].get();
 
-        if (pEnd != pStt)
+        if (!pEntry->GetText().isEmpty())
         {
             aPam.SetMark();
-            *aPam.GetMark() = *pEnd;
+            getIDocumentContentOperations().InsertString(aPam, pEntry->GetText());
+            aPam.GetMark()->AdjustContent(-pEntry->GetText().getLength());
+
+            if (!pEntry->GetRubyAttr().GetText().isEmpty())
+            {
+                getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
+            }
+
+            aPam.DeleteMark();
+
+            nTotalContentGrowth += pEntry->GetText().getLength();
         }
-
-        aPam.SetMark();
-        getIDocumentContentOperations().InsertString(aPam, pEntry->GetText());
-        nTotalContentGrowth += pEntry->GetText().getLength();
-
-        if (!pEntry->GetRubyAttr().GetText().isEmpty())
-        {
-            getIDocumentContentOperations().InsertPoolItem(aPam, pEntry->GetRubyAttr());
-        }
-
-        aPam.DeleteMark();
     }
 
     // Expand selection to account for insertion

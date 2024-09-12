@@ -84,6 +84,7 @@ class SvxRubyDialog final : public SfxModelessDialogController
     std::unique_ptr<weld::Button> m_xStylistPB;
 
     std::unique_ptr<weld::Button> m_xSelectionGroupPB;
+    std::unique_ptr<weld::Button> m_xSelectionMonoPB;
 
     std::unique_ptr<weld::Button> m_xApplyPB;
     std::unique_ptr<weld::Button> m_xClosePB;
@@ -95,6 +96,7 @@ class SvxRubyDialog final : public SfxModelessDialogController
     std::unique_ptr<weld::CustomWeld> m_xPreview;
 
     DECL_LINK(SelectionGroup_Impl, weld::Button&, void);
+    DECL_LINK(SelectionMono_Impl, weld::Button&, void);
     DECL_LINK(ApplyHdl_Impl, weld::Button&, void);
     DECL_LINK(CloseHdl_Impl, weld::Button&, void);
     DECL_LINK(StylistHdl_Impl, weld::Button&, void);

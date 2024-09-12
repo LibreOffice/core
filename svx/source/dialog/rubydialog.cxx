@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <svx/rubydialog.hxx>
 #include <sfx2/dispatch.hxx>
@@ -38,6 +39,8 @@
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/event.hxx>
@@ -80,6 +83,7 @@ SfxChildWinInfo SvxRubyChildWindow::GetInfo() const { return SfxChildWindow::Get
 
 class SvxRubyData_Impl : public cppu::WeakImplHelper<css::view::XSelectionChangeListener>
 {
+    Reference<css::i18n::XBreakIterator> xBreak;
     Reference<XModel> xModel;
     Reference<XRubySelection> xSelection;
     Sequence<PropertyValues> aRubyValues;
@@ -132,14 +136,14 @@ public:
 
         OUString sBaseTmp;
         OUStringBuffer aBaseString;
-        for (const PropertyValues& pVals : aRubyValues)
+        for (const PropertyValues& rVals : aRubyValues)
         {
             sBaseTmp.clear();
-            for (const PropertyValue& pVal : pVals)
+            for (const PropertyValue& rVal : rVals)
             {
-                if (pVal.Name == cRubyBaseText)
+                if (rVal.Name == cRubyBaseText)
                 {
-                    pVal.Value >>= sBaseTmp;
+                    rVal.Value >>= sBaseTmp;
                 }
             }
 
@@ -151,16 +155,16 @@ public:
 
         // Copy some reasonable style values from the previous ruby array
         pNewRubyValues[0] = aRubyValues[0];
-        for (const PropertyValues& pVals : aRubyValues)
+        for (const PropertyValues& rVals : aRubyValues)
         {
-            for (const PropertyValue& pVal : pVals)
+            for (const PropertyValue& rVal : rVals)
             {
-                if (pVal.Name == cRubyText)
+                if (rVal.Name == cRubyText)
                 {
-                    pVal.Value >>= sBaseTmp;
+                    rVal.Value >>= sBaseTmp;
                     if (!sBaseTmp.isEmpty())
                     {
-                        pNewRubyValues[0] = pVals;
+                        pNewRubyValues[0] = rVals;
                         break;
                     }
                 }
@@ -184,12 +188,131 @@ public:
 
         aRubyValues = std::move(aNewRubyValues);
     }
+
+    bool IsSelectionMono()
+    {
+        if (!xBreak.is())
+        {
+            // Cannot continue if BreakIterator is not available
+            // Disable the button
+            return true;
+        }
+
+        // Locale does not matter in this case; default ICU BreakIterator is sufficient
+        Locale aLocale;
+
+        OUString sBaseTmp;
+        return std::all_of(
+            aRubyValues.begin(), aRubyValues.end(), [&](const PropertyValues& rVals) {
+                return !std::any_of(rVals.begin(), rVals.end(), [&](const PropertyValue& rVal) {
+                    if (rVal.Name == cRubyBaseText)
+                    {
+                        rVal.Value >>= sBaseTmp;
+                        sal_Int32 nDone = 0;
+                        auto nPos = xBreak->nextCharacters(
+                            sBaseTmp, 0, aLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1,
+                            nDone);
+                        return nPos < sBaseTmp.getLength();
+                    }
+
+                    return false;
+                });
+            });
+    }
+
+    void MakeSelectionMono()
+    {
+        if (!xBreak.is())
+        {
+            // Cannot continue if BreakIterator is not available
+            return;
+        }
+
+        // Locale does not matter in this case; default ICU BreakIterator is sufficient
+        Locale aLocale;
+
+        OUString sBaseTmp;
+
+        // Count the grapheme clusters
+        sal_Int32 nTotalGraphemeClusters = 0;
+        for (const PropertyValues& rVals : aRubyValues)
+        {
+            for (const PropertyValue& rVal : rVals)
+            {
+                if (rVal.Name == cRubyBaseText)
+                {
+                    rVal.Value >>= sBaseTmp;
+
+                    sal_Int32 nPos = 0;
+                    while (nPos < sBaseTmp.getLength())
+                    {
+                        sal_Int32 nDone = 0;
+                        nPos = xBreak->nextCharacters(sBaseTmp, nPos, aLocale,
+                                                      css::i18n::CharacterIteratorMode::SKIPCELL, 1,
+                                                      nDone);
+                        ++nTotalGraphemeClusters;
+                    }
+                }
+            }
+        }
+
+        // Put each grapheme cluster in its own entry
+        Sequence<PropertyValues> aNewRubyValues{ nTotalGraphemeClusters };
+        PropertyValues* pNewRubyValues = aNewRubyValues.getArray();
+
+        sal_Int32 nCurrGraphemeCluster = 0;
+        for (const PropertyValues& rVals : aRubyValues)
+        {
+            for (const PropertyValue& rVal : rVals)
+            {
+                if (rVal.Name == cRubyBaseText)
+                {
+                    rVal.Value >>= sBaseTmp;
+
+                    sal_Int32 nPos = 0;
+                    while (nPos < sBaseTmp.getLength())
+                    {
+                        sal_Int32 nDone = 0;
+                        auto nNextPos = xBreak->nextCharacters(
+                            sBaseTmp, nPos, aLocale, css::i18n::CharacterIteratorMode::SKIPCELL, 1,
+                            nDone);
+
+                        PropertyValues& rNewVals = pNewRubyValues[nCurrGraphemeCluster++];
+
+                        // Initialize new property values with values from current run
+                        rNewVals = rVals;
+
+                        PropertyValue* aNewVals = rNewVals.getArray();
+                        for (sal_Int32 i = 0; i < rNewVals.getLength(); ++i)
+                        {
+                            PropertyValue& rNewVal = aNewVals[i];
+
+                            if (rNewVal.Name == cRubyText)
+                            {
+                                rNewVal.Value <<= OUString{};
+                            }
+                            else if (rNewVal.Name == cRubyBaseText)
+                            {
+                                rNewVal.Value <<= sBaseTmp.copy(nPos, nNextPos - nPos);
+                            }
+                        }
+
+                        nPos = nNextPos;
+                    }
+                }
+            }
+        }
+
+        aRubyValues = std::move(aNewRubyValues);
+    }
 };
 
 SvxRubyData_Impl::SvxRubyData_Impl()
     : bHasSelectionChanged(false)
     , bDisposing(false)
 {
+    Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    xBreak = css::i18n::BreakIterator::create(xContext);
 }
 
 SvxRubyData_Impl::~SvxRubyData_Impl() {}
@@ -273,6 +396,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     , m_xCharStyleLB(m_xBuilder->weld_combo_box(u"stylelb"_ustr))
     , m_xStylistPB(m_xBuilder->weld_button(u"styles"_ustr))
     , m_xSelectionGroupPB(m_xBuilder->weld_button(u"selection-group"_ustr))
+    , m_xSelectionMonoPB(m_xBuilder->weld_button(u"selection-mono"_ustr))
     , m_xApplyPB(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xContentArea(m_xDialog->weld_content_area())
@@ -295,6 +419,7 @@ SvxRubyDialog::SvxRubyDialog(SfxBindings* pBind, SfxChildWindow* pCW, weld::Wind
     aEditArr[7] = m_xRight4ED.get();
 
     m_xSelectionGroupPB->connect_clicked(LINK(this, SvxRubyDialog, SelectionGroup_Impl));
+    m_xSelectionMonoPB->connect_clicked(LINK(this, SvxRubyDialog, SelectionMono_Impl));
     m_xApplyPB->connect_clicked(LINK(this, SvxRubyDialog, ApplyHdl_Impl));
     m_xClosePB->connect_clicked(LINK(this, SvxRubyDialog, CloseHdl_Impl));
     m_xStylistPB->connect_clicked(LINK(this, SvxRubyDialog, StylistHdl_Impl));
@@ -474,6 +599,7 @@ void SvxRubyDialog::Update()
 {
     // Only enable selection grouping options when they can be applied
     m_xSelectionGroupPB->set_sensitive(!m_pImpl->IsSelectionGrouped());
+    m_xSelectionMonoPB->set_sensitive(!m_pImpl->IsSelectionMono());
 
     const Sequence<PropertyValues>& aRubyValues = m_pImpl->GetRubyValues();
     sal_Int32 nLen = aRubyValues.getLength();
@@ -578,6 +704,12 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, weld::ScrolledWindow&, rScroll, void)
 IMPL_LINK_NOARG(SvxRubyDialog, SelectionGroup_Impl, weld::Button&, void)
 {
     m_pImpl->MakeSelectionGrouped();
+    Update();
+}
+
+IMPL_LINK_NOARG(SvxRubyDialog, SelectionMono_Impl, weld::Button&, void)
+{
+    m_pImpl->MakeSelectionMono();
     Update();
 }
 
