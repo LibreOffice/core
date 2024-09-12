@@ -1516,13 +1516,15 @@ void SwAccessibleTable::FireSelectionEvent( )
             if (pAccCell)
                 pAccCell->FireAccessibleEvent(aEvent);
         }
-        return ;
     }
     else
     {
         aEvent.EventId = AccessibleEventId::SELECTION_CHANGED_WITHIN;
         FireAccessibleEvent(aEvent);
     }
+
+    m_vecCellRemove.clear();
+    m_vecCellAdd.clear();
 }
 
 void SwAccessibleTable::AddSelectionCell(
