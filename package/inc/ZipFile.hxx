@@ -76,12 +76,13 @@ private:
             ZipEntry const & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
-            bool bDecrypt,
+            ::std::optional<sal_Int64> oDecryptedSize,
             const bool bUseBufferedStream = true,
             const OUString& aMediaType = OUString() );
 
     css::uno::Reference<css::io::XInputStream> checkValidPassword(
             ZipEntry const& rEntry, rtl::Reference<EncryptionData> const& rData,
+            sal_Int64 nDecryptedSize,
             rtl::Reference<comphelper::RefCountedMutex> const& rMutexHolder);
 
     bool checkSizeAndCRC( const ZipEntry& aEntry );
@@ -116,7 +117,7 @@ public:
     css::uno::Reference< css::io::XInputStream > getRawData(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            bool bDecrypt,
+            ::std::optional<sal_Int64> oDecryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder,
             const bool bUseBufferedStream = true );
 
@@ -157,18 +158,19 @@ public:
     css::uno::Reference< css::io::XInputStream > getInputStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            bool bDecrypt,
+            ::std::optional<sal_Int64> oDecryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
-            bool bDecrypt,
+            ::std::optional<sal_Int64> oEncryptedSize,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
     css::uno::Reference< css::io::XInputStream > getWrappedRawStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
+            sal_Int64 nDecryptedSize,
             const OUString& aMediaType,
             const rtl::Reference<comphelper::RefCountedMutex>& aMutexHolder );
 
