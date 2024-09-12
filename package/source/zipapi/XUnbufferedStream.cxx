@@ -49,7 +49,7 @@ XUnbufferedStream::XUnbufferedStream(
                       Reference < XInputStream > const & xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
                       sal_Int8 nStreamMode,
-                      bool bIsEncrypted,
+                      ::std::optional<sal_Int64> const oDecryptedSize,
                       const OUString& aMediaType,
                       bool bRecoveryMode )
 : maMutexHolder( aMutexHolder )
@@ -68,16 +68,17 @@ XUnbufferedStream::XUnbufferedStream(
 , mbCheckCRC(!bRecoveryMode && !utl::ConfigManager::IsFuzzing())
 {
     mnZipCurrent = maEntry.nOffset;
-    sal_Int64 nSize;
+    sal_Int64 nSize; // data size in the zip file
+    assert(maEntry.nMethod != STORED || maEntry.nCompressedSize == maEntry.nSize);
     if ( mbRawStream )
     {
-        mnZipSize = maEntry.nMethod == DEFLATED ? maEntry.nCompressedSize : maEntry.nSize;
+        mnZipSize = maEntry.nCompressedSize;
         nSize = mnZipSize;
     }
     else
     {
-        mnZipSize = maEntry.nSize;
-        nSize = maEntry.nMethod == DEFLATED ? maEntry.nCompressedSize : maEntry.nSize;
+        mnZipSize = oDecryptedSize ? *oDecryptedSize : maEntry.nSize;
+        nSize = maEntry.nCompressedSize;
     }
 
     if (mnZipSize < 0)
@@ -90,7 +91,7 @@ XUnbufferedStream::XUnbufferedStream(
         ((rData->m_aSalt.hasElements() && rData->m_nIterationCount != 0)
          ||
          rData->m_aKey.hasElements());
-    bool bMustDecrypt = nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && bIsEncrypted;
+    bool bMustDecrypt = nStreamMode == UNBUFF_STREAM_DATA && bHaveEncryptData && oDecryptedSize;
 
     if ( bMustDecrypt )
     {
@@ -98,7 +99,7 @@ XUnbufferedStream::XUnbufferedStream(
         mnBlockSize = ( rData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 1 );
     }
 
-    if ( bHaveEncryptData && mbWrappedRaw && bIsEncrypted )
+    if (bHaveEncryptData && mbWrappedRaw && oDecryptedSize)
     {
         // if we have the data needed to decrypt it, but didn't want it decrypted (or
         // we couldn't decrypt it due to wrong password), then we prepend this
@@ -111,7 +112,7 @@ XUnbufferedStream::XUnbufferedStream(
                             rData->m_aDigest.getLength() +
                             aMediaType.getLength() * sizeof( sal_Unicode ) );
         sal_Int8 * pHeader = maHeader.getArray();
-        ZipFile::StaticFillHeader( rData, rEntry.nSize, aMediaType, pHeader );
+        ZipFile::StaticFillHeader(rData, *oDecryptedSize, aMediaType, pHeader);
         mnHeaderToRead = static_cast < sal_Int16 > ( maHeader.getLength() );
         mnZipSize += mnHeaderToRead;
     }
