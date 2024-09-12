@@ -1503,7 +1503,10 @@ void SwAccessibleTable::FireSelectionEvent( )
         // fdo#57197: check if the object is still alive
         rtl::Reference<SwAccessibleContext> const pAccCell(rxCell);
         if (pAccCell)
-            pAccCell->FireAccessibleEvent(aEvent);
+        {
+            aEvent.NewValue <<= uno::Reference<XAccessible>(pAccCell);
+            FireAccessibleEvent(aEvent);
+        }
     }
 
     if (m_vecCellAdd.size() <= SELECTION_WITH_NUM)
@@ -1514,7 +1517,10 @@ void SwAccessibleTable::FireSelectionEvent( )
             // fdo#57197: check if the object is still alive
             rtl::Reference<SwAccessibleContext> const pAccCell(rxCell);
             if (pAccCell)
-                pAccCell->FireAccessibleEvent(aEvent);
+            {
+                aEvent.NewValue <<= uno::Reference<XAccessible>(pAccCell);
+                FireAccessibleEvent(aEvent);
+            }
         }
     }
     else
