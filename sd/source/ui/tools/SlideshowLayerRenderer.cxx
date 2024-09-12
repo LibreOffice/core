@@ -292,6 +292,14 @@ void SlideshowLayerRenderer::setupAnimations()
 
                             maRenderState.maInitiallyVisible[pObject] = bVisible;
                         }
+
+                        if (aAny.hasValue())
+                        {
+                            OStringBuffer sTmp;
+                            anim::convertTarget(sTmp, aAny);
+                            maRenderState.maAnimationTargetHash[pObject]
+                                = static_cast<OString>(sTmp);
+                        }
                     }
                 }
             }
@@ -363,7 +371,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
         aJsonWriter.put("type", "animated");
         {
             ::tools::ScopedJsonWriterNode aContentNode = aJsonWriter.startNode("content");
-            aJsonWriter.put("hash", RenderState::getObjectHash(pObject));
+            aJsonWriter.put("hash", maRenderState.maAnimationTargetHash.at(pObject));
             aJsonWriter.put("initVisible", maRenderState.isObjectInitiallyVisible(pObject));
             aJsonWriter.put("type", "bitmap");
             writeContentNode(aJsonWriter);
