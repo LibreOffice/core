@@ -678,7 +678,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ](sal_Int32 nResult) {
                         if ( nResult == RET_OK )
                         {
-                            sal_uInt16 nDoc = pDlg->GetSelectedDocument();
+                            sal_uInt16 nSelectedDoc = pDlg->GetSelectedDocument();
                             SCTAB nSelectedTab = pDlg->GetSelectedTable();
                             bool bCopy = pDlg->GetCopyTable();
                             bool bRna = pDlg->GetRenameTable();
@@ -692,9 +692,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             bool bDoItAsync = true;
 
                             OUString aFoundDocName;
-                            if ( nDoc != SC_DOC_NEW )
+                            if ( nSelectedDoc != SC_DOC_NEW )
                             {
-                                ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
+                                ScDocShell* pSh = ScDocShell::GetShellByNum( nSelectedDoc );
                                 if (pSh)
                                 {
                                     aFoundDocName = pSh->GetTitle();
@@ -716,10 +716,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 pReq->Done();
 
                                 if (bFromContextMenu)
-                                    MoveTable(nDoc, nSelectedTab, bCopy, &aNewTabName, true,
+                                    MoveTable(nSelectedDoc, nSelectedTab, bCopy, &aNewTabName, true,
                                               nContextMenuTab);
                                 else
-                                    MoveTable(nDoc, nSelectedTab, bCopy, &aNewTabName);
+                                    MoveTable(nSelectedDoc, nSelectedTab, bCopy, &aNewTabName);
                             }
                         }
 
