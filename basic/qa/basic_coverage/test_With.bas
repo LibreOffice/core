@@ -54,6 +54,21 @@ Sub test_with
     fields = "n = " & foo_var.n & " s = " & foo_var.s
     TestUtil.AssertEqual(fields, "n = 6 s = baz", "Field values of foo_var")
 
+    ' tdf#162935: Test an UNO struct - it used to copy into the With variable, not used by ref
+    Dim uno_struct As New com.sun.star.table.CellRangeAddress
+    With uno_struct
+        .Sheet = 1
+        .StartColumn = 2
+        .StartRow = 3
+        .EndColumn = 4
+        .EndRow = 5
+    End With
+    TestUtil.AssertEqual(uno_struct.Sheet, 1, "uno_struct.Sheet")
+    TestUtil.AssertEqual(uno_struct.StartColumn, 2, "uno_struct.StartColumn")
+    TestUtil.AssertEqual(uno_struct.StartRow, 3, "uno_struct.StartRow")
+    TestUtil.AssertEqual(uno_struct.EndColumn, 4, "uno_struct.EndColumn")
+    TestUtil.AssertEqual(uno_struct.EndRow, 5, "uno_struct.EndRow")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("test_with", Err, Error$, Erl)

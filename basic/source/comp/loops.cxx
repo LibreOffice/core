@@ -318,7 +318,7 @@ void SbiParser::With()
     SbiExpression aWithParent(this, *pWithParentDef);
     aWithParent.Gen();
     aVar.Gen();
-    aGen.Gen(SbiOpcode::SET_);
+    aGen.Gen(SbiOpcode::PUTC_);
 
     OpenBlock(NIL, aWithParent.GetExprNode());
     StmntBlock( ENDWITH );
@@ -337,7 +337,7 @@ void SbiParser::With()
     }
     aWithParent.Gen();
     SbiExpression(this, *pNothingDef).Gen();
-    aGen.Gen(SbiOpcode::SET_);
+    aGen.Gen(SbiOpcode::PUTC_);
 }
 
 // LOOP/NEXT/WEND without construct
