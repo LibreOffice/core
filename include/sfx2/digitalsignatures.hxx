@@ -45,6 +45,11 @@ public:
                               const std::function<void(bool)>& rCallback)
         = 0;
 
+    /// Create a scripting signature before creating a document signature.
+    virtual void
+    SetSignScriptingContent(const css::uno::Reference<css::io::XStream>& xScriptingSignStream)
+        = 0;
+
 protected:
     ~DigitalSignatures() noexcept = default;
 };

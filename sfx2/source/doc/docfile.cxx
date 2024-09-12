@@ -4439,12 +4439,39 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
         }
         else
         {
+            // Signing the entire document.
             if (xMetaInf.is())
             {
                 // ODF.
                 uno::Reference< io::XStream > xStream;
+                uno::Reference< io::XStream > xScriptingStream;
                 if (GetFilter() && GetFilter()->IsOwnFormat())
+                {
+                    bool bImplicitScriptSign = officecfg::Office::Common::Security::Scripting::ImplicitScriptSign::get();
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        bImplicitScriptSign = true;
+                    }
+
+                    OUString aDocSigName = xSigner->getDocumentContentSignatureDefaultStreamName();
+                    bool bHasSignatures = xMetaInf->hasByName(aDocSigName);
+
+                    // C.f. DocumentSignatureHelper::CreateElementList() for the
+                    // DocumentSignatureMode::Macros case.
+                    bool bHasMacros = xWriteableZipStor->hasByName(u"Basic"_ustr)
+                                      || xWriteableZipStor->hasByName(u"Dialogs"_ustr)
+                                      || xWriteableZipStor->hasByName(u"Scripts"_ustr);
+
                     xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
+                    if (bImplicitScriptSign && bHasMacros && !bHasSignatures)
+                    {
+                        xScriptingStream.set(
+                            xMetaInf->openStreamElement(
+                                xSigner->getScriptingContentSignatureDefaultStreamName(),
+                                embed::ElementModes::READWRITE),
+                            uno::UNO_SET_THROW);
+                    }
+                }
 
                 bool bSuccess = false;
                 auto onODFSignDocumentContentFinished = [this, xMetaInf, xWriteableZipStor]() {
@@ -4462,6 +4489,11 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                         xValidGraphic, xInvalidGraphic, aComment);
                 else
                 {
+                    if (xScriptingStream.is())
+                    {
+                        xModelSigner->SetSignScriptingContent(xScriptingStream);
+                    }
+
                     // Async, all code before return has to go into the callback.
                     xModelSigner->SignDocumentContentAsync(GetZipStorageToSign_Impl(),
                                                             xStream, [onODFSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {

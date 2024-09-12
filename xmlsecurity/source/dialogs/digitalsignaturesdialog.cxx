@@ -311,12 +311,32 @@ void DigitalSignaturesDialog::SetStorage( const css::uno::Reference < css::embed
                     || !DocumentSignatureHelper::isODFPre_1_2(m_sODFVersion);
 
     maSignatureManager.setStore(rxStore);
-    maSignatureManager.getSignatureHelper().SetStorage( maSignatureManager.getStore(), m_sODFVersion);
+    maSignatureManager.getSignatureHelper().SetStorage( maSignatureManager.getStore(), m_sODFVersion, {});
 }
 
 void DigitalSignaturesDialog::SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
 {
     maSignatureManager.setSignatureStream(rxStream);
+}
+
+void DigitalSignaturesDialog::SetScriptingSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream )
+{
+    if (!rxStream.is())
+    {
+        return;
+    }
+
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    moScriptSignatureManager.emplace(xContext, DocumentSignatureMode::Macros);
+    if (!moScriptSignatureManager->init())
+    {
+        return;
+    }
+    moScriptSignatureManager->setStore(maSignatureManager.getStore());
+    // This is the storage used by UriBindingHelper::getUriBinding().
+    moScriptSignatureManager->getSignatureHelper().SetStorage(maSignatureManager.getStore(), m_sODFVersion);
+    maSignatureManager.getSignatureHelper().SetStorage(maSignatureManager.getStore(), m_sODFVersion, rxStream);
+    moScriptSignatureManager->setSignatureStream(rxStream);
 }
 
 bool DigitalSignaturesDialog::canAddRemove()
@@ -469,6 +489,23 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         while (aChooser->run() == RET_OK)
         {
             sal_Int32 nSecurityId;
+
+            if (moScriptSignatureManager)
+            {
+                if (!moScriptSignatureManager->add(aChooser->GetSelectedCertificates()[0],
+                                                   aChooser->GetSelectedSecurityContext(),
+                                                   aChooser->GetDescription(), nSecurityId,
+                                                   m_bAdESCompliant))
+                {
+                    return;
+                }
+
+                moScriptSignatureManager->read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+                moScriptSignatureManager->write(m_bAdESCompliant);
+
+                maSignatureManager.setScriptingSignatureStream(moScriptSignatureManager->getSignatureStream());
+            }
+
             if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
                                         aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;

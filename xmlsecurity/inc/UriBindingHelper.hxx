@@ -26,7 +26,10 @@
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
 namespace com::sun::star {
-    namespace io { class XInputStream; }
+    namespace io {
+        class XStream;
+        class XInputStream;
+    }
     namespace embed { class XStorage; }
 }
 
@@ -36,16 +39,17 @@ class UriBindingHelper final : public cppu::WeakImplHelper< css::xml::crypto::XU
 {
 private:
     css::uno::Reference < css::embed::XStorage > mxStorage;
+    css::uno::Reference<css::io::XStream> mxScriptingSignatureStream;
 
 public:
     UriBindingHelper();
-    explicit UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage );
+    explicit UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
 
     void SAL_CALL setUriBinding( const OUString& uri, const css::uno::Reference< css::io::XInputStream >& aInputStream ) override;
 
     css::uno::Reference< css::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri ) override;
 
-    static css::uno::Reference < css::io::XInputStream > OpenInputStream( const css::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI );
+    static css::uno::Reference < css::io::XInputStream > OpenInputStream( const css::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,6 +39,7 @@ class DigitalSignaturesDialog final : public weld::GenericDialogController
 {
 private:
     DocumentSignatureManager maSignatureManager;
+    std::optional<DocumentSignatureManager> moScriptSignatureManager;
     bool                    mbVerifySignatures;
     bool                    mbSignaturesChanged;
 
@@ -108,6 +109,7 @@ public:
             // Set the storage which should be signed or verified
     void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore );
     void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
+    void    SetScriptingSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
 
     // Execute the dialog...
     void    beforeRun();

@@ -1149,6 +1149,68 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
     CPPUNIT_ASSERT(xSignatureInfo[0].InvalidSignatureLineImage.is());
 }
 
+CPPUNIT_TEST_FIXTURE(SigningTest, testImplicitScriptSign)
+{
+    // Given an ODT file with macros, and two signature managers to create macro + doc signatures:
+    OUString aFileURL = createFileURL(u"macro.odt");
+    uno::Reference<embed::XStorage> xWriteableZipStor
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aFileURL,
+                                                                embed::ElementModes::READWRITE);
+    uno::Reference<embed::XStorage> xMetaInf
+        = xWriteableZipStor->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READWRITE);
+    uno::Reference<io::XStream> xStream = xMetaInf->openStreamElement(
+        u"documentsignatures.xml"_ustr, embed::ElementModes::READWRITE);
+    uno::Reference<io::XStream> xScriptingStream
+        = xMetaInf->openStreamElement(u"macrosignatures.xml"_ustr, embed::ElementModes::READWRITE);
+    uno::Reference<embed::XStorage> xZipStor
+        = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aFileURL,
+                                                                embed::ElementModes::READ);
+    DocumentSignatureManager aManager(m_xContext, DocumentSignatureMode::Content);
+    CPPUNIT_ASSERT(aManager.init());
+    aManager.setStore(xZipStor);
+    aManager.setSignatureStream(xStream);
+    aManager.getSignatureHelper().SetStorage(xZipStor, u"1.2", xScriptingStream);
+    DocumentSignatureManager aScriptManager(m_xContext, DocumentSignatureMode::Macros);
+    CPPUNIT_ASSERT(aScriptManager.init());
+    aScriptManager.setStore(xZipStor);
+    aScriptManager.getSignatureHelper().SetStorage(xZipStor, u"1.2");
+    aScriptManager.setSignatureStream(xScriptingStream);
+    uno::Reference<security::XCertificate> xCertificate
+        = getCertificate(aManager, svl::crypto::SignatureMethodAlgorithm::RSA);
+    if (!xCertificate.is())
+        return;
+
+    // When adding those signatures and writing them to the streams from the read-write storage:
+    OUString aDescription;
+    sal_Int32 nSecurityId;
+    bool bAdESCompliant = true;
+    aScriptManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, bAdESCompliant);
+    aScriptManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+    aScriptManager.write(bAdESCompliant);
+    aManager.setScriptingSignatureStream(xScriptingStream);
+    aManager.add(xCertificate, mxSecurityContext, aDescription, nSecurityId, bAdESCompliant);
+    aManager.read(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+    aManager.write(bAdESCompliant);
+
+    // Then make sure both signatures are created correctly:
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xScriptingStream, true));
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    OUString aScriptDigest = getXPathContent(
+        pXmlDoc, "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
+                 "dsig:Reference[@URI='Basic/script-lc.xml']/dsig:DigestValue"_ostr);
+    // Without the accompanying fix in place, this test would have failed, the digest value was just a
+    // " " placeholder.
+    CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), aScriptDigest.getLength());
+    pStream = utl::UcbStreamHelper::CreateStream(xStream, true);
+    pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this test would have failed, the macro signature was
+    // not part of the signed data of the document signature.
+    assertXPath(pXmlDoc,
+                "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
+                "dsig:Reference[@URI='META-INF/macrosignatures.xml']"_ostr,
+                1);
+}
+
 #if HAVE_FEATURE_GPGVERIFY
 /// Test a typical ODF where all streams are GPG-signed.
 CPPUNIT_TEST_FIXTURE(SigningTest, testODFGoodGPG)

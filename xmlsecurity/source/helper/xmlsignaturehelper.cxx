@@ -70,10 +70,11 @@ XMLSignatureHelper::~XMLSignatureHelper()
 
 void XMLSignatureHelper::SetStorage(
     const Reference < css::embed::XStorage >& rxStorage,
-    std::u16string_view sODFVersion)
+    std::u16string_view sODFVersion,
+    const css::uno::Reference<css::io::XStream>& xScriptStream)
 {
     SAL_WARN_IF( mxUriBinding.is(), "xmlsecurity.helper", "SetStorage - UriBinding already set!" );
-    mxUriBinding = new UriBindingHelper( rxStorage );
+    mxUriBinding = new UriBindingHelper( rxStorage, xScriptStream );
     SAL_WARN_IF(!rxStorage.is(), "xmlsecurity.helper", "SetStorage - empty storage!");
     mbODFPre1_2 = DocumentSignatureHelper::isODFPre_1_2(sODFVersion);
 }

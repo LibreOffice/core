@@ -28,6 +28,8 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 
+#include <documentsignaturehelper.hxx>
+
 using namespace com::sun::star;
 
 // XUriBinding
@@ -36,9 +38,10 @@ UriBindingHelper::UriBindingHelper()
 {
 }
 
-UriBindingHelper::UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage )
+UriBindingHelper::UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage, const uno::Reference<io::XStream>& xScriptingSignatureStream )
 {
     mxStorage = rxStorage;
+    mxScriptingSignatureStream = xScriptingSignatureStream;
 }
 
 void SAL_CALL UriBindingHelper::setUriBinding( const OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
@@ -50,7 +53,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     uno::Reference< io::XInputStream > xInputStream;
     if ( mxStorage.is() )
     {
-        xInputStream = OpenInputStream( mxStorage, uri );
+        xInputStream = OpenInputStream( mxStorage, uri, mxScriptingSignatureStream );
     }
     else
     {
@@ -60,7 +63,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     return xInputStream;
 }
 
-uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI )
+uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const OUString& rURI, const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream )
 {
     OSL_ASSERT(!rURI.isEmpty());
     uno::Reference < io::XInputStream > xInStream;
@@ -87,7 +90,23 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
 
         uno::Reference< io::XStream > xStream;
         if (!rxStore->hasByName(sName))
-            SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << sName);
+        {
+            if (xScriptingSignatureStream.is() && sName == DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName())
+            {
+                xStream = xScriptingSignatureStream;
+                uno::Reference<io::XSeekable> xSeekable(xScriptingSignatureStream, uno::UNO_QUERY);
+                if (xSeekable.is())
+                {
+                    // Cloned streams are always positioned at the start, do the same in the overlay
+                    // case.
+                    xSeekable->seek(0);
+                }
+            }
+            else
+            {
+                SAL_WARN("xmlsecurity.helper", "expected stream, but not found: " << sName);
+            }
+        }
         else
             xStream = rxStore->cloneStreamElement( sName );
         if ( !xStream.is() )
@@ -103,7 +122,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
 
         OUString aElement = aURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
-        xInStream = OpenInputStream( xSubStore, aElement );
+        xInStream = OpenInputStream( xSubStore, aElement, xScriptingSignatureStream );
     }
     return xInStream;
 }

@@ -436,6 +436,15 @@ bool DocumentSignatureManager::add(
 
     std::vector<OUString> aElements = DocumentSignatureHelper::CreateElementList(
         mxStore, meSignatureMode, DocumentSignatureAlgorithm::OOo3_2);
+
+    if (mxScriptingSignatureStream.is())
+    {
+        aElements.emplace_back(
+            u"META-INF/"_ustr
+            + DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName());
+        std::sort(aElements.begin(), aElements.end());
+    }
+
     DocumentSignatureHelper::AppendContentTypes(mxStore, aElements);
 
     for (OUString const& rUri : aElements)
