@@ -78,6 +78,7 @@ class DocumentDigitalSignatures
 private:
     css::uno::Reference<css::uno::XComponentContext> mxCtx;
     css::uno::Reference<css::awt::XWindow> mxParentWindow;
+    uno::Reference<io::XStream> mxScriptingSignStream;
 
     /// will be set by XInitialization. If not we assume true. false means an earlier version (whatever that means,
     /// this is a string, not a boolean).
@@ -226,6 +227,10 @@ public:
     void SignScriptingContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
                                    const css::uno::Reference<css::io::XStream>& xSignStream,
                                    const std::function<void(bool)>& rCallback) override;
+
+    /// See sfx2::DigitalSignatures::SetSignScriptingContent().
+    void SetSignScriptingContent(
+        const css::uno::Reference<css::io::XStream>& xScriptingSignStream) override;
 };
 
 }
@@ -449,6 +454,7 @@ void DocumentDigitalSignatures::ImplViewSignatures(
         xSignaturesDialog->SetStorage(rxStorage);
 
         xSignaturesDialog->SetSignatureStream( xSignStream );
+        xSignaturesDialog->SetScriptingSignatureStream( mxScriptingSignStream );
 
         xSignaturesDialog->beforeRun();
         weld::DialogController::runAsync(xSignaturesDialog, [xSignaturesDialog, rxStorage, xSignStream, rCallback] (sal_Int32 nRet) {
@@ -850,6 +856,12 @@ void DocumentDigitalSignatures::SignScriptingContentAsync(
     OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
     ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false, rCallback );
+}
+
+void DocumentDigitalSignatures::SetSignScriptingContent(
+    const css::uno::Reference<css::io::XStream>& xScriptingSignStream)
+{
+    mxScriptingSignStream = xScriptingSignStream;
 }
 
 sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(

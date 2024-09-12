@@ -2370,6 +2370,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="ImplicitScriptSign" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Specifies whether to implicitly sign macros when adding the first signature
+            to an ODF document with macros.</desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="CertDir" oor:type="xs:string">
           <info>
             <desc>Contains the path to the users NSS certificate directory.</desc>

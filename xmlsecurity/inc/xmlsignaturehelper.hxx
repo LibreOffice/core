@@ -37,6 +37,7 @@ namespace com::sun::star {
     namespace io {
         class XOutputStream;
         class XInputStream;
+        class XStream;
     }
     namespace embed { class XStorage; }
 }
@@ -83,7 +84,7 @@ public:
     // Set the storage which should be used by the default UriBinding
     // Must be set before StartMission().
     //sODFVersion indicates  the ODF version
-    void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion );
+    void        SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStorage, std::u16string_view sODFVersion, const css::uno::Reference<css::io::XStream>& xScriptStream = css::uno::Reference<css::io::XStream>() );
 
                 // Argument for the Link is a uno::Reference< xml::sax::XAttributeList >*
                 // Return 1 to verify, 0 to skip.
