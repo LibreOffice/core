@@ -193,7 +193,7 @@ FileProvider::createContentIdentifier(
 
 //XPropertySetInfoImpl
 
-namespace {
+namespace fileaccess {
 
 class XPropertySetInfoImpl2
     : public cppu::OWeakObject,
