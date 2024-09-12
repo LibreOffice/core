@@ -1939,7 +1939,7 @@ bool SfxStoringHelper::FinishGUIStoreModel(::comphelper::SequenceAsHashMap::cons
             if (!bFoundCert)
             {
                 // couldn't find the specified default signing certificate!
-                // alert the user the document won't be singed
+                // alert the user the document won't be signed
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
                     SfxStoringHelper::GetModelWindow(aModelData.GetModel()),
                     VclMessageType::Error, VclButtonsType::Ok,
