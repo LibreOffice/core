@@ -394,7 +394,7 @@ uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
 uno::Reference <xml::sax::XFastTokenHandler> OOXMLStreamImpl::getFastTokenHandler()
 {
     if (! mxFastTokenHandler.is())
-        mxFastTokenHandler.set(new oox::core::FastTokenHandler());
+        mxFastTokenHandler.set(new oox::core::FastTokenHandler);
 
     return mxFastTokenHandler;
 }

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <array>
+
 #include <oox/token/tokenmap.hxx>
 
 #include <string.h>
@@ -24,8 +28,6 @@
 #include <oox/token/tokens.hxx>
 
 namespace oox {
-
-using ::com::sun::star::uno::Sequence;
 
 namespace {
 // include auto-generated Perfect_Hash
@@ -42,55 +44,61 @@ namespace {
 #endif
 } // namespace
 
-const css::uno::Sequence< sal_Int8 > TokenMap::EMPTY_BYTE_SEQ;
-
-TokenMap::TokenMap() :
-    maTokenNames( static_cast< size_t >( XML_TOKEN_COUNT ) )
-{
-    static const char* sppcTokenNames[] =
-    {
-// include auto-generated C array with token names as C strings
-#include <tokennames.inc>
-        ""
-    };
-
-    const char* const* ppcTokenName = sppcTokenNames;
-    for (auto & tokenName : maTokenNames)
-    {
-        OString aUtf8Token( *ppcTokenName );
-        tokenName = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
-        ++ppcTokenName;
-    }
-
-    for (unsigned char c = 'a'; c <= 'z'; c++)
-    {
-        const struct xmltoken* pToken = Perfect_Hash::in_word_set(
-                reinterpret_cast< const char* >( &c ), 1 );
-        mnAlphaTokens[ c - 'a' ] = pToken ? pToken->nToken : XML_TOKEN_INVALID;
-    }
-}
-
-TokenMap::~TokenMap()
-{
-}
-
-sal_Int32 TokenMap::getTokenFromUnicode( std::u16string_view rUnicodeName )
-{
-    OString aUtf8Name = OUStringToOString( rUnicodeName, RTL_TEXTENCODING_UTF8 );
-    const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
-    return pToken ? pToken->nToken : XML_TOKEN_INVALID;
-}
-
-sal_Int32 TokenMap::getTokenPerfectHash( const char *pStr, sal_Int32 nLength )
+static sal_Int32 getTokenPerfectHash(const char* pStr, sal_Int32 nLength)
 {
     const struct xmltoken* pToken = Perfect_Hash::in_word_set( pStr, nLength );
     return pToken ? pToken->nToken : XML_TOKEN_INVALID;
 }
 
-TokenMap& StaticTokenMap()
+css::uno::Sequence<sal_Int8> const& TokenMap::getUtf8TokenName(sal_Int32 nToken)
 {
-    static TokenMap SINGLETON;
-    return SINGLETON;
+    static const auto saTokenNames = []()
+    {
+        static constexpr std::string_view sppcTokenNames[] = {
+// include auto-generated C array with token names as C strings
+#include <tokennames.inc>
+        };
+        static_assert(std::size(sppcTokenNames) == XML_TOKEN_COUNT);
+
+        std::vector<css::uno::Sequence<sal_Int8>> aTokenNames;
+        aTokenNames.reserve(std::size(sppcTokenNames));
+        std::transform(
+            std::begin(sppcTokenNames), std::end(sppcTokenNames), std::back_inserter(aTokenNames),
+            [](auto aUtf8Token)
+            {
+                return css::uno::Sequence<sal_Int8>(
+                    reinterpret_cast<const sal_Int8*>(aUtf8Token.data()), aUtf8Token.size());
+            });
+        return aTokenNames;
+    }();
+
+    SAL_WARN_IF(nToken < 0 || nToken >= XML_TOKEN_COUNT, "oox", "Wrong nToken parameter");
+    if (0 <= nToken && nToken < XML_TOKEN_COUNT)
+        return saTokenNames[nToken];
+    static const css::uno::Sequence<sal_Int8> EMPTY_BYTE_SEQ;
+    return EMPTY_BYTE_SEQ;
+}
+
+
+/** Returns the token identifier for a UTF8 string passed in pToken */
+sal_Int32 TokenMap::getTokenFromUtf8(std::string_view token)
+{
+    static const auto snAlphaTokens = []()
+    {
+        std::array<sal_Int32, 26> nAlphaTokens{};
+        for (char c = 'a'; c <= 'z'; c++)
+            nAlphaTokens[c - 'a'] = getTokenPerfectHash(&c, 1);
+        return nAlphaTokens;
+    }();
+
+    // 50% of OOXML tokens are primarily 1 lower-case character, a-z
+    if (token.size() == 1)
+    {
+        char c = token[0];
+        if (c >= 'a' && c <= 'z')
+            return snAlphaTokens[c - 'a'];
+    }
+    return getTokenPerfectHash(token.data(), token.size());
 }
 
 } // namespace oox

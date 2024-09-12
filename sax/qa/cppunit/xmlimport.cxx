@@ -262,7 +262,7 @@ public:
     virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
     //FastTokenHandlerBase
-    virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
+    virtual sal_Int32 getTokenDirect(std::string_view sToken) const override;
 };
 
 const std::string_view DummyTokenHandler::tokens[] = {
@@ -304,13 +304,12 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 
 sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
 {
-    return getTokenDirect( reinterpret_cast< const char* >(
-                    rIdentifier.getConstArray() ), rIdentifier.getLength() );
+    return getTokenDirect(std::string_view(
+        reinterpret_cast<const char*>(rIdentifier.getConstArray()), rIdentifier.getLength()));
 }
 
-sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
+sal_Int32 DummyTokenHandler::getTokenDirect(std::string_view sToken) const
 {
-    std::string_view sToken( pToken, nLength );
     for( size_t  i = 0; i < std::size(tokens); i++ )
     {
         if ( tokens[i] == sToken )

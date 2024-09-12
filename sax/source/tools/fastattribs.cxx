@@ -172,9 +172,7 @@ sal_Int32 FastAttributeList::getValueToken( ::sal_Int32 Token )
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
-            return FastTokenHandlerBase::getTokenFromChars(
-                       mpTokenHandler,
-                       getAsViewByIndex(i) );
+            return getValueTokenByIndex(i);
 
     throw SAXException("FastAttributeList::getValueToken: unknown token " + OUString::number(Token), nullptr, Any());
 }
@@ -183,9 +181,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
 {
     for (size_t i = 0, n = maAttributeTokens.size(); i < n; ++i)
         if (maAttributeTokens[i] == Token)
-            return FastTokenHandlerBase::getTokenFromChars(
-                       mpTokenHandler,
-                       getAsViewByIndex(i) );
+            return getValueTokenByIndex(i);
 
     return Default;
 }
@@ -246,6 +242,12 @@ OUString FastAttributeList::getOptionalValue( ::sal_Int32 Token )
 
     return OUString();
 }
+
+sal_Int32 FastAttributeList::getValueTokenByIndex(sal_Int32 nTokenIndex) const
+{
+    return FastTokenHandlerBase::getTokenFromChars(mpTokenHandler, getAsViewByIndex(nTokenIndex));
+}
+
 Sequence< Attribute > FastAttributeList::getUnknownAttributes(  )
 {
     auto nSize = maUnknownAttributes.size();
@@ -282,7 +284,7 @@ sal_Int32 FastTokenHandlerBase::getTokenFromChars(
         const FastTokenHandlerBase *pTokenHandler,
         std::string_view token )
 {
-    return pTokenHandler->getTokenDirect(token.data(), token.size());
+    return pTokenHandler->getTokenDirect(token);
 }
 
 }

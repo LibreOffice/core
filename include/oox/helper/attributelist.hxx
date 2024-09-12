@@ -29,6 +29,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <oox/drawingml/color.hxx>
 
@@ -83,10 +84,10 @@ class OOX_DLLPUBLIC AttributeList
 public:
     explicit            AttributeList(
                             const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs );
+    ~AttributeList();
 
     /** Returns the wrapped com.sun.star.xml.sax.XFastAttributeList object. */
-    const css::uno::Reference< css::xml::sax::XFastAttributeList >&
-                        getFastAttributeList() const { return mxAttribs; }
+    css::uno::Reference<css::xml::sax::XFastAttributeList> getFastAttributeList() const;
 
     /** Returns true, if the specified attribute is present. */
     bool                hasAttribute( sal_Int32 nAttrToken ) const;
@@ -180,10 +181,12 @@ public:
     std::vector<sal_Int32> getTokenList(sal_Int32 nAttrToken) const;
 
 private:
-    css::uno::Reference< css::xml::sax::XFastAttributeList >
-                        mxAttribs;
-    mutable sax_fastparser::FastAttributeList *mpAttribList;
-    sax_fastparser::FastAttributeList *getAttribList() const;
+    AttributeList(const AttributeList&) = delete;
+    AttributeList(AttributeList&&) = delete;
+    void operator=(const AttributeList&) = delete;
+    void operator=(AttributeList&&) = delete;
+
+    rtl::Reference<sax_fastparser::FastAttributeList> mxAttribs;
 };
 
 

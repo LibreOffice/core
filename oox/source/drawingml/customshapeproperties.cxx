@@ -117,7 +117,7 @@ CustomShapeProperties::CustomShapeProperties()
 
 OUString CustomShapeProperties::getShapePresetTypeName() const
 {
-    return StaticTokenMap().getUnicodeTokenName(mnShapePresetType);
+    return TokenMap::getUnicodeTokenName(mnShapePresetType);
 }
 
 bool CustomShapeProperties::representsDefaultShape() const

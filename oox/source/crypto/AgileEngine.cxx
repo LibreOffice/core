@@ -65,7 +65,7 @@ public:
         return Sequence<sal_Int8>();
     }
 
-    virtual sal_Int32 getTokenDirect( const char * /* pToken */, sal_Int32 /* nLength */ ) const override
+    virtual sal_Int32 getTokenDirect(std::string_view /* token */) const override
     {
         return -1;
     }
