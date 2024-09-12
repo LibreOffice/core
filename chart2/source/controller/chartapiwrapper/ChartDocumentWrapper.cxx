@@ -709,20 +709,18 @@ Reference< XDiagram > SAL_CALL ChartDocumentWrapper::getDiagram()
     return m_xDiagram;
 }
 
-void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& xDiagram )
+void SAL_CALL ChartDocumentWrapper::setDiagram( const Reference< XDiagram >& _xDiagram )
 {
-    uno::Reference< util::XRefreshable > xAddIn( xDiagram, uno::UNO_QUERY );
-    if( xAddIn.is() )
-    {
-        setAddIn( xAddIn );
-    }
-    else if( xDiagram.is() && xDiagram != m_xDiagram )
+    if (!_xDiagram.is())
+        return;
+    auto xDiagram = dynamic_cast<DiagramWrapper*>(_xDiagram.get());
+    assert(xDiagram);
+    if( xDiagram != m_xDiagram )
     {
         // set new wrapped diagram at new chart.  This requires the old
         // diagram given as parameter to implement the new interface.  If
         // this is not possible throw an exception
-        Reference< chart2::XDiagramProvider > xNewDiaProvider( xDiagram, uno::UNO_QUERY_THROW );
-        Reference< chart2::XDiagram > xNewDia( xNewDiaProvider->getDiagram());
+        rtl::Reference< ::chart::Diagram > xNewDia( xDiagram->getUnderlyingDiagram());
 
         try
         {
@@ -1354,7 +1352,7 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
         m_xLegend.clear();
     else if( rSource.Source == m_xChartData )
         m_xChartData.clear();
-    else if( rSource.Source == m_xDiagram )
+    else if( rSource.Source == cppu::getXWeak(m_xDiagram.get()) )
         m_xDiagram.clear();
     else if( rSource.Source == m_xArea )
         m_xArea.clear();

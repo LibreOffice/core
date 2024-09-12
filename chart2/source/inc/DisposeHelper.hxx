@@ -36,6 +36,15 @@ template <class T> void DisposeAndClear(css::uno::Reference<T>& rInterface)
     rInterface.clear();
 }
 
+template <class T> void DisposeAndClear(rtl::Reference<T>& rInterface)
+{
+    if (rInterface)
+    {
+        rInterface->dispose();
+        rInterface.clear();
+    }
+}
+
 template <class Container> void DisposeAllElements(Container& rContainer)
 {
     for (const auto& rElement : rContainer)

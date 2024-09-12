@@ -1845,6 +1845,11 @@ Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     return m_spChart2ModelContact->getDiagram();
 }
 
+rtl::Reference< ::chart::Diagram > DiagramWrapper::getUnderlyingDiagram()
+{
+    return m_spChart2ModelContact->getDiagram();
+}
+
 void SAL_CALL DiagramWrapper::setDiagram(
     const Reference< chart2::XDiagram >& /*xDiagram*/ )
 {

@@ -33,12 +33,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
-
 #include <com/sun/star/chart/X3DDefaultSetter.hpp>
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace com::sun::star::chart2 { class XDiagram; }
 namespace com::sun::star::lang { class XEventListener; }
+namespace chart { class Diagram; }
 
 namespace chart::wrapper
 {
@@ -177,6 +178,8 @@ public:
     // ____ XDiagramProvider ____
     virtual css::uno::Reference< css::chart2::XDiagram > SAL_CALL getDiagram() override;
     virtual void SAL_CALL setDiagram( const css::uno::Reference< css::chart2::XDiagram >& xDiagram ) override;
+
+    rtl::Reference< ::chart::Diagram > getUnderlyingDiagram();
 
 protected:
     // ____ WrappedPropertySet ____
