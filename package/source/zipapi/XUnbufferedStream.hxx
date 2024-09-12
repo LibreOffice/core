@@ -19,6 +19,8 @@
 #ifndef INCLUDED_PACKAGE_SOURCE_ZIPAPI_XUNBUFFEREDSTREAM_HXX
 #define INCLUDED_PACKAGE_SOURCE_ZIPAPI_XUNBUFFEREDSTREAM_HXX
 
+#include <optional>
+
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/crypto/XCipherContext.hpp>
@@ -67,7 +69,7 @@ public:
                  css::uno::Reference < css::io::XInputStream > const & xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,
                  sal_Int8 nStreamMode,
-                 bool bIsEncrypted,
+                 ::std::optional<sal_Int64> oDecryptedSize,
                  const OUString& aMediaType,
                  bool bRecoveryMode );
 
