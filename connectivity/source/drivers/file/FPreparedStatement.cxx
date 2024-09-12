@@ -128,6 +128,11 @@ css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  )
 {
+    return getMetaDataImpl();
+}
+
+const rtl::Reference< OResultSetMetaData > & OPreparedStatement::getMetaDataImpl(  )
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -377,7 +382,7 @@ void OPreparedStatement::initResultSet(OResultSet *pResultSet)
          m_pConnection->throwGenericSQLException(STR_INVALID_PARA_COUNT,*this);
 
     pResultSet->OpenImpl();
-    pResultSet->setMetaData(getMetaData());
+    pResultSet->setMetaData(getMetaDataImpl());
 }
 
 void SAL_CALL OPreparedStatement::acquire() noexcept

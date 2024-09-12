@@ -33,7 +33,7 @@
 
 namespace connectivity::firebird
     {
-
+        class OResultSetMetaData;
         class OBoundParam;
         typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
                                         css::sdbc::XParameters,
@@ -46,7 +46,7 @@ namespace connectivity::firebird
         {
         protected:
             OUString                                              m_sSqlStatement;
-            css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
+            rtl::Reference<OResultSetMetaData>                    m_xMetaData;
 
             XSQLDA*         m_pOutSqlda;
             XSQLDA*         m_pInSqlda;

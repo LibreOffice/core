@@ -148,7 +148,6 @@ void Connection::close()
 
         vectorDispose.push_back( Reference< XComponent > ( m_settings.users, UNO_QUERY ) );
         vectorDispose.push_back( Reference< XComponent > ( m_settings.tables , UNO_QUERY ) );
-        vectorDispose.push_back( Reference< XComponent > ( m_meta, UNO_QUERY ) );
         m_meta.clear();
         m_settings.tables.clear();
         m_settings.users.clear();

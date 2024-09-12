@@ -29,6 +29,7 @@
 
 namespace connectivity::file
     {
+        class OResultSetMetaData;
 
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OPreparedStatement : public  OStatement_BASE2,
                                     public  css::sdbc::XPreparedStatement,
@@ -42,7 +43,7 @@ namespace connectivity::file
             // Data attributes
 
             OValueRefRow                                          m_aParameterRow;
-            css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xMetaData;
+            rtl::Reference<OResultSetMetaData>                    m_xMetaData;
 
             ::rtl::Reference<connectivity::OSQLColumns>           m_xParamColumns;    // the parameter columns
 
@@ -113,6 +114,8 @@ namespace connectivity::file
                         virtual void SAL_CALL close(  ) override;
             // XResultSetMetaDataSupplier
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
+
+            const rtl::Reference<OResultSetMetaData> & getMetaDataImpl();
         };
 
 }

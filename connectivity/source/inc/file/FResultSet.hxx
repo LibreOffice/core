@@ -41,9 +41,12 @@
 #include <TSkipDeletedSet.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <o3tl/safeint.hxx>
+#include "FResultSetMetaData.hxx"
 
 namespace connectivity::file
     {
+        class OResultSetMetaData;
+
         typedef ::cppu::WeakComponentImplHelper<  css::sdbc::XResultSet,
                                                   css::sdbc::XRow,
                                                   css::sdbc::XResultSetMetaDataSupplier,
@@ -96,7 +99,7 @@ namespace connectivity::file
             sal_Int32                               m_nResultSetConcurrency;
 
             css::uno::Reference< css::uno::XInterface>            m_xStatement;
-            css::uno::Reference< css::sdbc::XResultSetMetaData>   m_xMetaData;
+            rtl::Reference< OResultSetMetaData>                   m_xMetaData;
             css::uno::Reference< css::container::XNameAccess>     m_xColNames; // table columns
             css::uno::Reference< css::container::XIndexAccess>    m_xColsIdx; // table columns
 
@@ -267,7 +270,7 @@ namespace connectivity::file
 
             void setOrderByColumns(std::vector<sal_Int32>&& _aColumnOrderBy)  { m_aOrderbyColumnNumber = std::move(_aColumnOrderBy); }
             void setOrderByAscending(std::vector<TAscendingOrder>&& _aOrderbyAsc)    { m_aOrderbyAscending = std::move(_aOrderbyAsc); }
-            void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+            void setMetaData(const rtl::Reference< OResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             static void setBoundedColumns(const OValueRefRow& _rRow,
                                     const OValueRefRow& _rSelectRow,

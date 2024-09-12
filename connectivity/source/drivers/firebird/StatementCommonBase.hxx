@@ -38,6 +38,7 @@
 
 namespace connectivity::firebird
     {
+        class OResultSet;
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier,
                                                    css::util::XCancellable,
@@ -52,7 +53,7 @@ namespace connectivity::firebird
         protected:
             ::osl::Mutex        m_aMutex;
 
-            css::uno::Reference< css::sdbc::XResultSet> m_xResultSet;   // The last ResultSet created
+            rtl::Reference<OResultSet> m_xResultSet;   // The last ResultSet created
             //  for this Statement
 
             ::rtl::Reference<Connection>                m_pConnection;

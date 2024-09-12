@@ -47,7 +47,7 @@ namespace connectivity::evoab
             // the EBookQuery we're working with
             QueryData                                             m_aQueryData;
             // our meta data
-            css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
+            rtl::Reference<OEvoabResultSetMetaData>               m_xMetaData;
 
             virtual ~OEvoabPreparedStatement() override;
 

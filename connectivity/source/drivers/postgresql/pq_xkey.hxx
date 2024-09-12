@@ -48,6 +48,7 @@
 
 namespace pq_sdbc_driver
 {
+class KeyColumnDescriptors;
 
 class Key : public ReflectionBase,
             public css::sdbcx::XColumnsSupplier
@@ -87,7 +88,7 @@ public: // XDataDescriptorFactory
 
 class KeyDescriptor : public ReflectionBase, public css::sdbcx::XColumnsSupplier
 {
-    css::uno::Reference< css::container::XNameAccess > m_keyColumns;
+    rtl::Reference<KeyColumnDescriptors> m_keyColumns;
 
 public:
     KeyDescriptor( const ::rtl::Reference< comphelper::RefCountedMutex > & refMutex,

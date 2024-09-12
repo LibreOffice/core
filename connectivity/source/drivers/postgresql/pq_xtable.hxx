@@ -117,7 +117,7 @@ class TableDescriptor
       public css::sdbcx::XIndexesSupplier,
       public css::sdbcx::XKeysSupplier
 {
-    css::uno::Reference< css::container::XNameAccess > m_columns;
+    rtl::Reference<ColumnDescriptors> m_columns;
     css::uno::Reference< css::container::XIndexAccess > m_keys;
     css::uno::Reference< css::container::XNameAccess > m_indexes;
 

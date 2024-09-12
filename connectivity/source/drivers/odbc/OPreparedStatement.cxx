@@ -83,6 +83,11 @@ css::uno::Sequence< css::uno::Type > SAL_CALL OPreparedStatement::getTypes(  )
 
 Reference< XResultSetMetaData > SAL_CALL OPreparedStatement::getMetaData(  )
 {
+    return getMetaDataImpl();
+}
+
+const rtl::Reference< OResultSetMetaData > & OPreparedStatement::getMetaDataImpl()
+{
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -907,7 +912,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 rtl::Reference<OResultSet> OPreparedStatement::createResultSet()
 {
     rtl::Reference<OResultSet> pReturn = new OResultSet(m_aStatementHandle,this);
-    pReturn->setMetaData(getMetaData());
+    pReturn->setMetaData(getMetaDataImpl());
     return pReturn;
 }
 

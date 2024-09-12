@@ -19,6 +19,7 @@
 
 #include "StatementCommonBase.hxx"
 #include "Util.hxx"
+#include "ResultSet.hxx"
 
 #include <sal/log.hxx>
 #include <comphelper/sequence.hxx>
@@ -62,9 +63,8 @@ OStatementCommonBase::~OStatementCommonBase()
 
 void OStatementCommonBase::disposeResultSet()
 {
-    uno::Reference< XComponent > xComp(m_xResultSet, UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
+    if (m_xResultSet.is())
+        m_xResultSet->dispose();
     m_xResultSet.clear();
 }
 

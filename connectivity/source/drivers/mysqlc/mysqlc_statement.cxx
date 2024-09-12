@@ -51,8 +51,7 @@ void OCommonStatement::closeResultSet()
 {
     if (m_xResultSet.is())
     {
-        css::uno::Reference<css::sdbc::XCloseable> xClose(m_xResultSet, UNO_QUERY_THROW);
-        xClose->close();
+        m_xResultSet->close();
         m_xResultSet.clear();
     }
 }

@@ -40,6 +40,8 @@
 
 namespace connectivity
 {
+    class ODatabaseMetaDataResultSetMetaData;
+
     typedef ::comphelper::WeakComponentImplHelper<   css::sdbc::XResultSet,
                                                css::sdbc::XRow,
                                                css::sdbc::XResultSetMetaDataSupplier,
@@ -106,7 +108,7 @@ namespace connectivity
     private:
         ORowSetValue                    m_aEmptyValue;
         css::uno::WeakReferenceHelper    m_aStatement;
-        css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
+        rtl::Reference< ODatabaseMetaDataResultSetMetaData>        m_xMetaData;
         sal_Int32                       m_nColPos;
 
         sal_Int32                       m_nFetchSize;

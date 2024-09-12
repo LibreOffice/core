@@ -41,6 +41,8 @@ using my_bool = bool;
 using my_bool = char;
 #endif
 
+class OResultSetMetaData;
+
 struct BindMetaData
 {
     my_bool is_null = false;
@@ -55,7 +57,7 @@ typedef ::cppu::ImplHelper4<css::sdbc::XPreparedStatement, css::sdbc::XParameter
 class OPreparedStatement final : public OCommonStatement, public OPreparedStatement_BASE
 {
     unsigned int m_paramCount = 0; // number of placeholders
-    Reference<XResultSetMetaData> m_xMetaData;
+    rtl::Reference<OResultSetMetaData> m_xMetaData;
     MYSQL_STMT* m_pStmt;
     std::vector<MYSQL_BIND> m_binds;
     std::vector<BindMetaData> m_bindMetas;

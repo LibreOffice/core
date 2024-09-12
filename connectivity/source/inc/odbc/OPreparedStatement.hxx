@@ -30,7 +30,7 @@
 
 namespace connectivity::odbc
     {
-
+        class OResultSetMetaData;
         class OBoundParam;
         typedef ::cppu::ImplHelper5<    css::sdbc::XPreparedStatement,
                                         css::sdbc::XParameters,
@@ -51,7 +51,7 @@ namespace connectivity::odbc
             std::unique_ptr<OBoundParam[]>  boundParams;
                             // Array of bound parameter objects. Each parameter marker will have a
                             // corresponding object to hold bind information, and resulting data.
-            css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData;
+            rtl::Reference<OResultSetMetaData>  m_xMetaData;
             bool                                                                        m_bPrepared;
 
             void FreeParams();
@@ -137,6 +137,7 @@ namespace connectivity::odbc
             virtual void SAL_CALL close(  ) override;
             // XResultSetMetaDataSupplier
             virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
+            const rtl::Reference< OResultSetMetaData > & getMetaDataImpl();
 
         public:
             using OStatement_Base::executeQuery;

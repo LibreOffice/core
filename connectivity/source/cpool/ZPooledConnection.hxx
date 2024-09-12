@@ -22,10 +22,11 @@
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
-
+#include <rtl/ref.hxx>
 
 namespace connectivity
 {
+    class OConnectionWeakWrapper;
 
     // OPooledConnection -
     // allows to pool a real connection
@@ -37,7 +38,7 @@ namespace connectivity
                              ,public OPooledConnection_Base
     {
         css::uno::Reference< css::sdbc::XConnection >             m_xRealConnection;  // the connection from driver
-        css::uno::Reference< css::lang::XComponent >              m_xComponent;       // the connection which wraps the real connection
+        rtl::Reference< OConnectionWeakWrapper >                  m_xComponent;       // the connection which wraps the real connection
         css::uno::Reference< css::reflection::XProxyFactory >     m_xProxyFactory;
     public:
         // OComponentHelper

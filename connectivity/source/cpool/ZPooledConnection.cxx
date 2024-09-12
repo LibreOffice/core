@@ -65,7 +65,7 @@ Reference< XConnection > OPooledConnection::getConnection()
         if (m_xComponent.is())
             m_xComponent->addEventListener(this);
     }
-    return Reference< XConnection >(m_xComponent,UNO_QUERY);
+    return m_xComponent;
 }
 
 

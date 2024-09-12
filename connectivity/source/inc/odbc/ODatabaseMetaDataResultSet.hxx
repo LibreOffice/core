@@ -42,6 +42,7 @@
 
 namespace connectivity::odbc
     {
+        class OResultSetMetaData;
         /*
         **  java_sql_ResultSet
         */
@@ -68,8 +69,7 @@ namespace connectivity::odbc
 
             SQLHANDLE                                   m_aStatementHandle;   // ... until freed
             css::uno::WeakReferenceHelper               m_aStatement;
-            css::uno::Reference< css::sdbc::XResultSetMetaData>
-                                                        m_xMetaData;
+            rtl::Reference<OResultSetMetaData>          m_xMetaData;
             std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
             rtl::Reference<OConnection>                 m_pConnection;
             rtl_TextEncoding                            m_nTextEncoding;

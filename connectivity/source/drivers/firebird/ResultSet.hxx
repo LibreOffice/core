@@ -39,6 +39,7 @@
 
 namespace connectivity::firebird
     {
+        class OResultSetMetaData;
         /*
         **  OResultSet
         */
@@ -73,7 +74,7 @@ namespace connectivity::firebird
             ::osl::Mutex& m_rMutex;
             const css::uno::Reference< css::uno::XInterface >& m_xStatement;
 
-            css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
+            rtl::Reference<OResultSetMetaData>          m_xMetaData;
 
             XSQLDA*                                     m_pSqlda;
             isc_stmt_handle                             m_statementHandle;

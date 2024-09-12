@@ -41,6 +41,7 @@
 namespace connectivity::mysqlc
 {
 using ::com::sun::star::uno::Any;
+class OResultSetMetaData;
 
 /*
         **  OResultSet
@@ -62,7 +63,7 @@ class OResultSet final : public cppu::BaseMutex,
     std::vector<OUString> m_aFields;
     MYSQL* m_pMysql = nullptr;
     css::uno::WeakReferenceHelper m_aStatement;
-    css::uno::Reference<css::sdbc::XResultSetMetaData> m_xMetaData;
+    rtl::Reference<OResultSetMetaData> m_xMetaData;
     MYSQL_RES* m_pResult;
     rtl_TextEncoding m_encoding;
     bool m_bWasNull = false; // did the last getXXX result null?

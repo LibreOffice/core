@@ -66,6 +66,8 @@
 namespace pq_sdbc_driver
 {
 struct ConnectionSettings;
+class DatabaseMetaData;
+
 struct ConnectionSettings
 {
     ConnectionSettings() :
@@ -123,7 +125,7 @@ class Connection : public ConnectionBase
     css::uno::Reference< css::container::XNameAccess > m_typeMap;
     ConnectionSettings m_settings;
     ::rtl::Reference< comphelper::RefCountedMutex > m_xMutex;
-    css::uno::Reference< css::sdbc::XDatabaseMetaData > m_meta;
+    rtl::Reference< DatabaseMetaData > m_meta;
     WeakHashMap m_myStatements;
 
 private:

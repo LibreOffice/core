@@ -74,7 +74,7 @@ java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java
     SDBThreadAttach::addRef();
     osl_atomic_increment(&m_refCount);
     if ( pStmt )
-        m_xStatement = *pStmt;
+        m_xStatement = pStmt;
 
     osl_atomic_decrement(&m_refCount);
 }
@@ -452,7 +452,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::previous(  )
 
 Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  )
 {
-    return m_xStatement;
+    return cppu::getXWeak(m_xStatement.get());
 }
 
 

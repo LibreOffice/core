@@ -59,7 +59,7 @@ namespace connectivity
                                 public  ::cppu::OPropertySetHelper,
                                 public  ::comphelper::OPropertyArrayUsageHelper<java_sql_ResultSet>
     {
-        css::uno::Reference< css::uno::XInterface>            m_xStatement;
+        rtl::Reference<java_sql_Statement_Base>               m_xStatement;
         java::sql::ConnectionLog                              m_aLogger;
         java_sql_Connection*                                  m_pConnection;
 

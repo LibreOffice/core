@@ -39,6 +39,7 @@ namespace connectivity::mysqlc
 using ::com::sun::star::sdbc::SQLWarning;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
+class OResultSet;
 
 typedef ::cppu::WeakComponentImplHelper3<css::sdbc::XWarningsSupplier, css::util::XCancellable,
                                          css::sdbc::XCloseable>
@@ -59,7 +60,7 @@ private:
 protected:
     rtl::Reference<OConnection> m_xConnection; // The owning Connection object
 
-    css::uno::Reference<css::sdbc::XResultSet> m_xResultSet;
+    rtl::Reference<OResultSet> m_xResultSet;
 
     // number of rows affected by an UPDATE, DELETE or INSERT statement.
     sal_Int32 m_nAffectedRows = 0;

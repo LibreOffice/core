@@ -27,8 +27,11 @@
 #include <functional>
 #include <connectivity/dbtoolsdllapi.hxx>
 
+namespace comphelper { class OEventListenerHelper; }
+
 namespace connectivity
 {
+
         class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
                                         public  cppu::BaseMutex,
                                         public ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData2,
@@ -65,7 +68,7 @@ namespace connectivity
             }
         protected:
             css::uno::Reference< css::sdbc::XConnection >     m_xConnection;
-            css::uno::Reference< css::lang::XEventListener>   m_xListenerHelper; // forward the calls from the connection to me
+            rtl::Reference< comphelper::OEventListenerHelper> m_xListenerHelper; // forward the calls from the connection to me
 
             virtual ~ODatabaseMetaDataBase() override;
 

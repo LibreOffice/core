@@ -40,9 +40,11 @@
 #include <connectivity/FValue.hxx>
 #include <TSkipDeletedSet.hxx>
 #include <memory>
+#include "OResultSetMetaData.hxx"
 
 namespace connectivity::odbc
     {
+        class OResultSetMetaData;
 
         /*
         **  java_sql_ResultSet
@@ -132,7 +134,7 @@ namespace connectivity::odbc
             OStatement_Base*                            m_pStatement;
             std::unique_ptr<OSkipDeletedSet>            m_pSkipDeletedSet;
             css::uno::Reference< css::uno::XInterface>    m_xStatement;
-            css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
+            rtl::Reference< OResultSetMetaData>        m_xMetaData;
             std::unique_ptr<SQLUSMALLINT[]>             m_pRowStatusArray;
             rtl_TextEncoding                            m_nTextEncoding;
             sal_Int32                                   m_nRowPos;
@@ -235,7 +237,7 @@ namespace connectivity::odbc
                 return css::uno::Reference< css::uno::XInterface >(*static_cast<OResultSet_BASE*>(this));
             }
 
-            void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
+            void setMetaData(const rtl::Reference<OResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
