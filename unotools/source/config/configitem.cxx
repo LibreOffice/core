@@ -155,6 +155,9 @@ ConfigItem::ConfigItem(OUString aSubTree, ConfigItemMode nSetMode ) :
         m_xHierarchyAccess = ConfigManager::getConfigManager().addConfigItem(*this);
 }
 
+ConfigItem::ConfigItem(ConfigItem const &) = default;
+ConfigItem::ConfigItem(ConfigItem &&) = default;
+
 ConfigItem::~ConfigItem()
 {
     suppress_fun_call_w_exception(RemoveChangesListener());

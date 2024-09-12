@@ -104,13 +104,13 @@ class OOutputStreamWrapper : public cppu::WeakImplHelper<css::io::XOutputStream>
 public:
     UNOTOOLS_DLLPUBLIC OOutputStreamWrapper(SvStream& _rStream);
 
-protected:
-    virtual ~OOutputStreamWrapper() override;
-
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) override final;
     virtual void SAL_CALL flush() override final;
     virtual void SAL_CALL closeOutput() override final;
+
+protected:
+    virtual ~OOutputStreamWrapper() override;
 
     /// throws an exception according to the error flag of m_pSvStream
     void checkError() const;

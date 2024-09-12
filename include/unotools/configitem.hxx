@@ -21,6 +21,7 @@
 #define INCLUDED_UNOTOOLS_CONFIGITEM_HXX
 
 #include <sal/types.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
@@ -57,6 +58,7 @@ namespace o3tl
 
 namespace utl
 {
+class ConfigChangeListener_Impl;
 
     enum class ConfigNameFormat
     {
@@ -72,7 +74,7 @@ namespace utl
             const OUString              sSubTree;
             css::uno::Reference< css::container::XHierarchicalNameAccess>
                                         m_xHierarchyAccess;
-            css::uno::Reference< css::util::XChangesListener >
+            rtl::Reference< ConfigChangeListener_Impl >
                                         xChangeLstnr;
             ConfigItemMode              m_nMode;
             bool                        m_bIsModified;
@@ -144,8 +146,8 @@ namespace utl
         public:
             virtual ~ConfigItem() override;
 
-            ConfigItem(ConfigItem const &) = default;
-            ConfigItem(ConfigItem &&) = default;
+            ConfigItem(ConfigItem const &);
+            ConfigItem(ConfigItem &&);
             ConfigItem & operator =(ConfigItem const &) = delete; // due to const sSubTree
             ConfigItem & operator =(ConfigItem &&) = delete; // due to const sSubTree
 
