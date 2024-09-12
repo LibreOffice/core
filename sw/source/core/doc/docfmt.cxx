@@ -1884,22 +1884,33 @@ void SwDoc::SetFormatItemByAutoFormat( const SwPaM& rPam, const SfxItemSet& rSet
     SfxItemIter iter(rSet);
     for (SfxPoolItem const* pItem = iter.GetCurItem(); pItem; pItem = iter.NextItem())
     {
-        whichIds.push_back({pItem->Which(), pItem->Which()});
+        if (RES_CHRATR_BEGIN <= pItem->Which() && pItem->Which() < RES_CHRATR_END)
+        {   // tdf#162911 don't add items with static default like INETFMT
+            whichIds.push_back({pItem->Which(), pItem->Which()});
+        }
     }
-    SfxItemSet currentSet(GetAttrPool(), WhichRangesContainer(whichIds.data(), whichIds.size()));
-    pTNd->GetParaAttr(currentSet, nEnd, nEnd);
-    for (const WhichPair& rPair : whichIds)
-    {   // yuk - want to explicitly set the pool defaults too :-/
-        currentSet.Put(currentSet.Get(rPair.first));
+
+    ::std::optional<SfxItemSet> oCurrentSet;
+    if (!whichIds.empty())
+    {
+        oCurrentSet.emplace(GetAttrPool(), WhichRangesContainer(whichIds.data(), whichIds.size()));
+        pTNd->GetParaAttr(*oCurrentSet, nEnd, nEnd);
+        for (const WhichPair& rPair : whichIds)
+        {   // yuk - want to explicitly set the pool defaults too :-/
+            oCurrentSet->Put(oCurrentSet->Get(rPair.first));
+        }
     }
 
     getIDocumentContentOperations().InsertItemSet( rPam, rSet, SetAttrMode::DONTEXPAND );
 
-    // fdo#62536: DONTEXPAND does not work when there is already an AUTOFMT
-    // here, so insert the old attributes as an empty hint to stop expand
-    SwPaM endPam(*pTNd, nEnd);
-    endPam.SetMark();
-    getIDocumentContentOperations().InsertItemSet(endPam, currentSet);
+    if (!whichIds.empty())
+    {
+        // fdo#62536: DONTEXPAND does not work when there is already an AUTOFMT
+        // here, so insert the old attributes as an empty hint to stop expand
+        SwPaM endPam(*pTNd, nEnd);
+        endPam.SetMark();
+        getIDocumentContentOperations().InsertItemSet(endPam, *oCurrentSet);
+    }
 
     getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
 }
