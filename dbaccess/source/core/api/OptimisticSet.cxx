@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <composertools.hxx>
+#include "PrivateRow.hxx"
 
 using namespace dbaccess;
 using namespace ::connectivity;
@@ -105,7 +106,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const OU
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
-    OKeySetValue keySetValue{nullptr,0,Reference<XRow>()};
+    OKeySetValue keySetValue{nullptr,0,nullptr};
     m_aKeyMap.emplace(0,keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 

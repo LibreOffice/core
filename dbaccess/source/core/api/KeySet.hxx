@@ -32,6 +32,8 @@
 
 namespace dbaccess
 {
+    class OPrivateRow;
+
     struct SelectColumnDescription
     {
         OUString sRealName;      // may be empty
@@ -72,7 +74,7 @@ namespace dbaccess
     {
         ORowSetRow m_aRowSetRow;
         sal_Int32 m_nUpdateInsert;
-        css::uno::Reference< css::sdbc::XRow> m_xRow;
+        rtl::Reference<OPrivateRow> m_xRow;
     };
     typedef std::map<sal_Int32,OKeySetValue > OKeySetMatrix;
     typedef std::map<sal_Int32, rtl::Reference<ORowSetValueVector> > OUpdatedParameter;

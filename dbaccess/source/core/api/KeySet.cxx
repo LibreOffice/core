@@ -311,7 +311,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
-    OKeySetValue keySetValue{nullptr,0,Reference<XRow>()};
+    OKeySetValue keySetValue{nullptr,0,nullptr};
     m_aKeyMap.emplace(0, keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 }
@@ -321,7 +321,7 @@ void OKeySet::reset(const Reference< XResultSet>& _xDriverSet)
     OCacheSet::construct(_xDriverSet, m_sRowSetFilter);
     m_bRowCountFinal = false;
     m_aKeyMap.clear();
-    OKeySetValue keySetValue{nullptr,0,Reference<XRow>()};
+    OKeySetValue keySetValue{nullptr,0,nullptr};
     m_aKeyMap.emplace(0,keySetValue);
     m_aKeyIter = m_aKeyMap.begin();
 }
@@ -752,7 +752,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >(m_pKeyColumnNames->size());
         copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
 
-        m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue{aKeyRow,1,Reference<XRow>()} ).first;
+        m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue{aKeyRow,1,nullptr} ).first;
         // now we set the bookmark for this row
         (*_rInsertRow)[0] = Any(static_cast<sal_Int32>(m_aKeyIter->first));
         tryRefetch(_rInsertRow,bRefetch);
@@ -1197,7 +1197,7 @@ bool OKeySet::fetchRow()
             aIter->fill(rColDesc.nPosition, rColDesc.nType, m_xRow);
             ++aIter;
         }
-        m_aKeyIter = m_aKeyMap.emplace( m_aKeyMap.rbegin()->first+1,OKeySetValue{aKeyRow,0,Reference<XRow>()} ).first;
+        m_aKeyIter = m_aKeyMap.emplace( m_aKeyMap.rbegin()->first+1,OKeySetValue{aKeyRow,0,nullptr} ).first;
     }
     else
         m_bRowCountFinal = true;
