@@ -2820,15 +2820,6 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             // If we will end up updating LoKit at the end, we can skip it here
             pInputWin->SetTextString(aText, !bUpdateKit);
         }
-
-        if (comphelper::LibreOfficeKit::isActive())
-        {
-            if (pActiveViewSh)
-            {
-                // TODO: deprecated?
-                pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8());
-            }
-        }
     }
 
     // If the cursor is before the end of a paragraph, parts are being pushed to
@@ -2871,8 +2862,10 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (pActiveView)
             aSel = pActiveView->GetSelection();
 
+        OUString aText = ScEditUtil::GetMultilineString(*mpEditEngine);
+        pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8());
         pActiveViewSh->LOKSendFormulabarUpdate(pActiveView,
-                                               ScEditUtil::GetMultilineString(*mpEditEngine),
+                                               aText,
                                                aSel);
     }
 
@@ -4381,7 +4374,6 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                             aSel.nEndPara = 0;
 
                         pActiveViewSh->LOKSendFormulabarUpdate(pActiveView, aString, aSel);
-                        // TODO: deprecated?
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8());
                     }
                 }
