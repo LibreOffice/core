@@ -92,7 +92,6 @@ struct ScIconSetInfo
 {
     sal_Int32 nIconIndex;
     ScIconSetType eIconSetType;
-    ScConditionMode eConditionMode;
     tools::Long mnHeight = 0;
     bool mbShowValue;
 };
