@@ -1043,8 +1043,16 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
 
     while (pStyle)
     {
-        StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
-        aArr.emplace_back(pNew);
+        if (pStyle->IsHidden()
+            && (pStyle->GetFamily() == SfxStyleFamily::Page
+                || pStyle->GetFamily() == SfxStyleFamily::Pseudo
+                || pStyle->GetFamily() == SfxStyleFamily::Table))
+            ;
+        else
+        {
+            StyleTree_Impl* pNew = new StyleTree_Impl(pStyle->GetName(), pStyle->GetParent());
+            aArr.emplace_back(pNew);
+        }
         pStyle = m_pStyleSheetPool->Next();
     }
     OUString aUIName = getDefaultStyleName(eFam);
@@ -1729,7 +1737,7 @@ IMPL_LINK(StyleList, CustomRenderHdl, weld::TreeView::render_args, aPayload, voi
             {
                 rRenderContext.Push(vcl::PushFlags::ALL);
                 // tdf#119919 - show "hidden" styles as disabled to not move children onto root node
-                if (pStyleSheet->IsHidden())
+                if (pStyleSheet->IsHidden() && m_bHierarchical)
                     rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
 
                 sal_Int32 nSize = aRect.GetHeight();
