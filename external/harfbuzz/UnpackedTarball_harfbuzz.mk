@@ -17,12 +17,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,harfbuzz,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/tdf159529.patch.0 \
-))
-
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
-$(eval $(call gb_UnpackedTarball_add_patches,harfbuzz, \
     external/harfbuzz/icu_75.patch.0 \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
