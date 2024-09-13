@@ -824,10 +824,10 @@ void SwDocShell::Edit(
         else
             nMask = SfxStyleSearchBits::UserDefined;
 
-        if ( nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Char || nFamily == SfxStyleFamily::Frame )
+        if (nFamily == SfxStyleFamily::Para || nFamily == SfxStyleFamily::Char
+            || nFamily == SfxStyleFamily::Frame || nFamily == SfxStyleFamily::Pseudo)
         {
-            // Prevent undo append from being done during paragraph, character, and frame style Make
-            // Do it after ok return from style dialog when derived from style is known
+            // Do Make undo append after an OK return from the style dialog below
             ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
             pStyle = &m_xBasePool->Make( rName, nFamily, nMask );
         }
@@ -1052,6 +1052,16 @@ void SwDocShell::Edit(
                                 GetDoc()->GetIDocumentUndoRedo().AppendUndo(
                                     std::make_unique<SwUndoFrameFormatCreate>(xTmp->GetFrameFormat(), pFFormat, *GetDoc()));
                             }
+                        }
+                    }
+                    break;
+                    case SfxStyleFamily::Pseudo:
+                    {
+                        if (GetDoc()->GetIDocumentUndoRedo().DoesUndo())
+                        {
+                            GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+                                std::make_unique<SwUndoNumruleCreate>(xTmp->GetNumRule(),
+                                                                      *GetDoc()));
                         }
                     }
                     break;
