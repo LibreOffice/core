@@ -3136,7 +3136,7 @@ private:
     SwFrameFormat* m_pFrameFormat;
 
 public:
-    uno::WeakReference<uno::XInterface> m_wThis;
+    unotools::WeakReference<SwXCellRange> m_wThis;
     std::mutex m_Mutex; // just for OInterfaceContainerHelper4
     ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> m_ChartListeners;
 
@@ -3213,7 +3213,7 @@ rtl::Reference<SwXCellRange> SwXCellRange::CreateXCellRange(
 {
     rtl::Reference<SwXCellRange> pCellRange(new SwXCellRange(pCursor, rFrameFormat, rDesc));
     // need a permanent Reference to initialize m_wThis
-    pCellRange->m_pImpl->m_wThis = uno::Reference<table::XCellRange>(pCellRange);
+    pCellRange->m_pImpl->m_wThis = pCellRange.get();
     return pCellRange;
 }
 
