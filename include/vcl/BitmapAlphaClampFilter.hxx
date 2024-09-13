@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_BITMAPALPHACLAMPFILTER_HXX
-#define INCLUDED_INCLUDE_VCL_BITMAPALPHACLAMPFILTER_HXX
+#pragma once
 
 #include <config_options.h>
 #include <vcl/BitmapFilter.hxx>
@@ -29,7 +28,5 @@ public:
 private:
     sal_uInt8 mcThreshold;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
