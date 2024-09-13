@@ -59,7 +59,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
@@ -698,7 +698,6 @@ public:
     librdf_NamedGraph(librdf_Repository * i_pRep,
             uno::Reference<rdf::XURI> i_xName)
         : m_wRep(i_pRep)
-        , m_pRep(i_pRep)
         , m_xName(std::move(i_xName))
     { };
 
@@ -736,8 +735,7 @@ private:
         const uno::Reference< rdf::XNode > & i_xObject);
 
     /// weak reference: this is needed to check if m_pRep is valid
-    uno::WeakReference< rdf::XRepository > const m_wRep;
-    librdf_Repository *const m_pRep;
+    unotools::WeakReference< librdf_Repository > const m_wRep;
     uno::Reference< rdf::XURI > const m_xName;
 
     /// Querying is rather slow, so cache the results.
@@ -771,14 +769,14 @@ uno::Reference< rdf::XURI > SAL_CALL librdf_NamedGraph::getName()
 
 void SAL_CALL librdf_NamedGraph::clear()
 {
-    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    rtl::Reference< librdf_Repository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             u"librdf_NamedGraph::clear: repository is gone"_ustr, *this);
     }
     const OUString contextU( m_xName->getStringValue() );
     try {
-        m_pRep->clearGraph_NoLock(contextU);
+        xRep->clearGraph_NoLock(contextU);
     } catch (lang::IllegalArgumentException & ex) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw lang::WrappedTargetRuntimeException( ex.Message,
@@ -793,7 +791,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
-    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    rtl::Reference< librdf_Repository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             u"librdf_NamedGraph::addStatement: repository is gone"_ustr, *this);
@@ -802,7 +800,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
         std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.clear();
     }
-    m_pRep->addStatementGraph_NoLock(
+    xRep->addStatementGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
 
@@ -811,7 +809,7 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
     const uno::Reference< rdf::XURI > & i_xPredicate,
     const uno::Reference< rdf::XNode > & i_xObject)
 {
-    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    rtl::Reference< librdf_Repository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             u"librdf_NamedGraph::removeStatements: repository is gone"_ustr, *this);
@@ -820,7 +818,7 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
         std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.clear();
     }
-    m_pRep->removeStatementsGraph_NoLock(
+    xRep->removeStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 }
 
@@ -853,12 +851,12 @@ librdf_NamedGraph::getStatements(
         }
     }
 
-    uno::Reference< rdf::XRepository > xRep( m_wRep );
+    rtl::Reference< librdf_Repository > xRep( m_wRep );
     if (!xRep.is()) {
         throw rdf::RepositoryException(
             u"librdf_NamedGraph::getStatements: repository is gone"_ustr, *this);
     }
-    std::vector<rdf::Statement> vStatements = m_pRep->getStatementsGraph_NoLock(
+    std::vector<rdf::Statement> vStatements = xRep->getStatementsGraph_NoLock(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 
     {
