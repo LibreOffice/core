@@ -772,9 +772,9 @@ void QtWidget::focusOutEvent(QFocusEvent*)
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
-    // if you try to set the QWidget parent via the QtFrame, instead of using the Q_NULLPTR, at
+    // if you try to set the QWidget parent via the QtFrame, instead of using nullptr, at
     // least test Wayland popups; these horribly broke last time doing this (read commits)!
-    : QWidget(Q_NULLPTR, f)
+    : QWidget(nullptr, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
     , m_bInInputMethodQueryCursorRectangle(false)
