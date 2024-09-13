@@ -39,6 +39,7 @@ SwTextAttr::SwTextAttr( const SfxPoolItemHolder& rAttr, sal_Int32 nStart )
     , m_bFormatIgnoreEnd(false)
     , m_bHasContent( false )
 {
+    assert(!m_aAttr.getItem()->isStaticDefault());
 }
 
 SwTextAttr::~SwTextAttr() COVERITY_NOEXCEPT_FALSE
