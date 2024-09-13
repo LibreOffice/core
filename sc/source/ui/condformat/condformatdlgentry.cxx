@@ -1250,9 +1250,9 @@ protected:
 private:
     std::unique_ptr<weld::Container> mxGrid;
     std::unique_ptr<weld::Image> mxImgIcon;
+    std::unique_ptr<weld::Label> mxFtEntry;
     std::unique_ptr<weld::Entry> mxEdEntry;
     std::unique_ptr<weld::ComboBox> mxLbEntryType;
-    std::unique_ptr<weld::ComboBox> mxConditionMode;
     weld::Container* mpContainer;
 
 public:
@@ -1268,6 +1268,8 @@ public:
     }
 
     ScColorScaleEntry* CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const;
+
+    void SetFirstEntry();
 };
 
 ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconSetType eType, const ScDocument* pDoc, sal_Int32 i, const ScColorScaleEntry* pEntry)
@@ -1276,17 +1278,11 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     , mxImgIcon(mxBuilder->weld_image(u"icon"_ustr))
     , mxEdEntry(mxBuilder->weld_entry(u"entry"_ustr))
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
-    , mxConditionMode(mxBuilder->weld_combo_box(u"conditionMode"_ustr))
     , mpContainer(pParent)
 {
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
     {
-        if (pEntry->GetMode() >= ScConditionMode::Equal && pEntry->GetMode() <= ScConditionMode::NotEqual)
-            mxConditionMode->set_active(static_cast<int>(pEntry->GetMode()));
-        else
-            assert(false && "ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry: Invalid condition mode");
-
         switch(pEntry->GetType())
         {
             case COLORSCALE_VALUE:
@@ -1312,7 +1308,6 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     else
     {
         mxLbEntryType->set_active(1);
-        mxConditionMode->set_active(0);
     }
 }
 
@@ -1323,8 +1318,7 @@ ScIconSetFrmtDataEntry::~ScIconSetFrmtDataEntry()
 
 ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const ScAddress& rPos) const
 {
-    sal_Int32 nTypePos = mxLbEntryType->get_active();
-    sal_Int32 nModePos = mxConditionMode->get_active();
+    sal_Int32 nPos = mxLbEntryType->get_active();
     OUString aText = mxEdEntry->get_text();
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
@@ -1334,7 +1328,7 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const S
     (void)pNumberFormatter->IsNumberFormat(aText, nIndex, nVal);
     pEntry->SetValue(nVal);
 
-    switch(nTypePos)
+    switch(nPos)
     {
         case 0:
             pEntry->SetType(COLORSCALE_VALUE);
@@ -1353,9 +1347,16 @@ ScColorScaleEntry* ScIconSetFrmtDataEntry::CreateEntry(ScDocument& rDoc, const S
             assert(false);
     }
 
-    pEntry->SetMode(static_cast<ScConditionMode>(nModePos));
-
     return pEntry;
+}
+
+void ScIconSetFrmtDataEntry::SetFirstEntry()
+{
+    mxEdEntry->hide();
+    mxLbEntryType->hide();
+    mxFtEntry->hide();
+    mxEdEntry->set_text("0");
+    mxLbEntryType->set_active(1);
 }
 
 ScIconSetFrmtEntry::ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScIconSetFormat* pFormat)
@@ -1384,6 +1385,7 @@ ScIconSetFrmtEntry::ScIconSetFrmtEntry(ScCondFormatList* pParent, ScDocument* pD
                 mxIconParent.get(), eType, pDoc, i, pIconSetFormatData->m_Entries[i].get()));
             maEntries[i]->set_grid_top_attach(i);
         }
+        maEntries[0]->SetFirstEntry();
     }
     else
         IconSetTypeHdl(*mxLbIconSetType);
@@ -1417,6 +1419,7 @@ IMPL_LINK_NOARG( ScIconSetFrmtEntry, IconSetTypeHdl, weld::ComboBox&, void )
         maEntries[i]->set_grid_top_attach(i);
         maEntries[i]->Show();
     }
+    maEntries[0]->SetFirstEntry();
 }
 
 OUString ScIconSetFrmtEntry::GetExpressionString()

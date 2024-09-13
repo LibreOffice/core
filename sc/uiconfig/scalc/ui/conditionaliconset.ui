@@ -16,17 +16,11 @@
         <property name="row-spacing">6</property>
         <property name="column-spacing">12</property>
         <child>
-          <object class="GtkComboBoxText" id="conditionMode">
+          <object class="GtkLabel" id="label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <items>
-              <item context="conditionaliconset|conditionMode"> = </item>
-              <item context="conditionaliconset|conditionMode"> &lt; </item>
-              <item context="conditionaliconset|conditionMode"> &gt; </item>
-              <item context="conditionaliconset|conditionMode"> &lt;= </item>
-              <item context="conditionaliconset|conditionMode"> &gt;= </item>
-              <item context="conditionaliconset|conditionMode"> &lt;&gt; </item>
-            </items>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="conditionaliconset|label"> &gt;= </property>
           </object>
           <packing>
             <property name="left-attach">1</property>

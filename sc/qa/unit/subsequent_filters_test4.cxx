@@ -884,17 +884,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCondFormatThemeColor3XLSX)
 
 namespace
 {
-// This function is used temporarily so we don't have to update test files.
-void convertToOldCondFormat(const ScIconSetFormat* pIconSet)
-{
-    auto itr = pIconSet->begin();
-    (*itr)->SetMode(ScConditionMode::Less);
-    (*itr)->SetValue((*(itr + 1))->GetValue());
-    (*itr)->SetType((*(++itr))->GetType());
-    for (; itr != pIconSet->end(); ++itr)
-        (*itr)->SetMode(ScConditionMode::EqGreater);
-}
-
 void testComplexIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, ScIconSetType eType)
 {
     ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 0);
@@ -917,7 +906,6 @@ void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    convertToOldCondFormat(pIconSet);
     std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1)));
     if (nIndex == -1)
         CPPUNIT_ASSERT(!pInfo);
@@ -966,7 +954,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf101104)
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    convertToOldCondFormat(pIconSet);
 
     for (size_t i = 1; i < 10; ++i)
     {
@@ -993,7 +980,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf64401)
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    convertToOldCondFormat(pIconSet);
 
     for (size_t i = 0; i < 10; ++i)
     {
