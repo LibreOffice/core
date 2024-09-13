@@ -1485,7 +1485,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             CommitChange(aEvent); // all children changed
 
             if (mpAccessibleSpreadsheet.is())
-                mpAccessibleSpreadsheet->FireFirstCellFocus();
+                mpAccessibleSpreadsheet->GotFocus();
         }
     }
     else if (rHint.GetId() == SfxHintId::ScAccMakeDrawLayer)
