@@ -268,7 +268,7 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
 
     // this one needs to be blocking, so that the handling in main thread
     // is processed before the thread emitting the signal continues
-    connect(this, SIGNAL(ImplYieldSignal(bool, bool)), this, SLOT(ImplYield(bool, bool)),
+    connect(this, &QtInstance::ImplYieldSignal, this, &QtInstance::ImplYield,
             Qt::BlockingQueuedConnection);
 
     // this one needs to be queued non-blocking
