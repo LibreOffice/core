@@ -1655,6 +1655,19 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer)
         if (pSlot && !(pSlot->nFlags & SfxSlotMode::VIEWERAPP) && isViewerAppMode)
             return false;
 
+        // Enable insert new annotation in Writer in read-only mode
+        if (pSlot && bReadOnly && getenv("EDIT_COMMENT_IN_READONLY_MODE") != nullptr)
+        {
+            OUString sCommand = pSlot->GetCommand();
+            if (sCommand == u".uno:InsertAnnotation"_ustr
+                || ((sCommand == u".uno:FontDialog"_ustr
+                     || sCommand == u".uno:ParagraphDialog"_ustr)
+                    && pIFace->GetClassName() == "SwAnnotationShell"_ostr))
+            {
+                bReadOnly = false;
+            }
+        }
+
         if ( pSlot && !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )
             return false;
 

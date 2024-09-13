@@ -920,8 +920,9 @@ void SwAnnotationWin::SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSi
 
 void SwAnnotationWin::SetReadonly(bool bSet)
 {
-    mbReadonly = bSet;
-    GetOutlinerView()->SetReadOnly(bSet);
+    // the OutlinerView determines if the comment window accepts key input
+    mbReadonly = bSet && getenv("EDIT_COMMENT_IN_READONLY_MODE") == nullptr;
+    GetOutlinerView()->SetReadOnly(mbReadonly);
 }
 
 void SwAnnotationWin::GetFocus()
