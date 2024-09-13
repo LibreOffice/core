@@ -64,7 +64,7 @@ public:
     SAL_DLLPRIVATE virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
 };
 
-class DragAndDropWrapper final :
+class SAL_DLLPUBLIC_RTTI DragAndDropWrapper final :
                             public css::datatransfer::dnd::XDragGestureListener,
                             public css::datatransfer::dnd::XDragSourceListener,
                             public css::datatransfer::dnd::XDropTargetListener,
