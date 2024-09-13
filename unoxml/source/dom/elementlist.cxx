@@ -26,6 +26,7 @@
 #include <o3tl/safeint.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
+#include <unotools/weakref.hxx>
 
 #include "element.hxx"
 #include "document.hxx"
@@ -33,25 +34,25 @@
 using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;
+namespace DOM { class CElementListImpl; }
 
 namespace
 {
     class WeakEventListener : public ::cppu::WeakImplHelper<css::xml::dom::events::XEventListener>
     {
     private:
-        css::uno::WeakReference<css::xml::dom::events::XEventListener> mxOwner;
+        unotools::WeakReference<DOM::CElementListImpl> mxOwner;
 
     public:
-        explicit WeakEventListener(const css::uno::Reference<css::xml::dom::events::XEventListener>& rOwner)
+        explicit WeakEventListener(const rtl::Reference<DOM::CElementListImpl>& rOwner)
             : mxOwner(rOwner)
         {
         }
 
         virtual void SAL_CALL handleEvent(const css::uno::Reference<css::xml::dom::events::XEvent>& rEvent) override
         {
-            css::uno::Reference<css::xml::dom::events::XEventListener> xOwner(mxOwner.get(),
-                css::uno::UNO_QUERY);
-            if (xOwner.is())
+            rtl::Reference<DOM::CElementListImpl> xOwner(mxOwner);
+            if (xOwner)
                 xOwner->handleEvent(rEvent);
         }
     };
