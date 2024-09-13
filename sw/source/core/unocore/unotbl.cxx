@@ -1912,7 +1912,7 @@ public:
     const SfxItemPropertySet * m_pPropSet;
 
     unotools::WeakReference<SwXTableRows> m_xRows;
-    css::uno::WeakReference<css::table::XTableColumns> m_xColumns;
+    unotools::WeakReference<SwXTableColumns> m_xColumns;
 
     bool m_bFirstRowAsLabel;
     bool m_bFirstColumnAsLabel;
@@ -2036,11 +2036,14 @@ rtl::Reference<SwXTableRows> SwXTextTable::getSwRows()
 uno::Reference<table::XTableColumns> SAL_CALL SwXTextTable::getColumns()
 {
     SolarMutexGuard aGuard;
-    uno::Reference<table::XTableColumns> xResult(m_pImpl->m_xColumns);
+    rtl::Reference<SwXTableColumns> xResult(m_pImpl->m_xColumns.get());
     if(xResult.is())
         return xResult;
     if(SwFrameFormat* pFormat = GetFrameFormat())
-        m_pImpl->m_xColumns = xResult = new SwXTableColumns(*pFormat);
+    {
+        xResult = new SwXTableColumns(*pFormat);
+        m_pImpl->m_xColumns = xResult.get();
+    }
     if(!xResult.is())
         throw uno::RuntimeException();
     return xResult;
