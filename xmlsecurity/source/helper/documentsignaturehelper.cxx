@@ -281,12 +281,6 @@ DocumentSignatureHelper::CreateElementList(
             }
         }
         break;
-        case DocumentSignatureMode::Package:
-        {
-            // Everything except META-INF
-            ImplFillElementList(aElements, rxStore, std::u16string_view(), true, mode);
-        }
-        break;
     }
 
     return aElements;

@@ -200,7 +200,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     , m_bWarningShowSignMacro(false)
     , m_xHintDocFT(m_xBuilder->weld_label(u"dochint"_ustr))
     , m_xHintBasicFT(m_xBuilder->weld_label(u"macrohint"_ustr))
-    , m_xHintPackageFT(m_xBuilder->weld_label(u"packagehint"_ustr))
     , m_xSignaturesLB(m_xBuilder->weld_tree_view(u"signatures"_ustr))
     , m_xSigsValidImg(m_xBuilder->weld_image(u"validimg"_ustr))
     , m_xSigsValidFI(m_xBuilder->weld_label(u"validft"_ustr))
@@ -255,9 +254,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
             break;
         case DocumentSignatureMode::Macros:
             m_xHintBasicFT->show();
-            break;
-        case DocumentSignatureMode::Package:
-            m_xHintPackageFT->show();
             break;
     }
 

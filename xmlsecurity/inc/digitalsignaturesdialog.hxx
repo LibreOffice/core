@@ -53,7 +53,6 @@ private:
 
     std::unique_ptr<weld::Label>       m_xHintDocFT;
     std::unique_ptr<weld::Label>       m_xHintBasicFT;
-    std::unique_ptr<weld::Label>       m_xHintPackageFT;
     std::unique_ptr<weld::TreeView>    m_xSignaturesLB;
     std::unique_ptr<weld::Image>       m_xSigsValidImg;
     std::unique_ptr<weld::Label>       m_xSigsValidFI;

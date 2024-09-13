@@ -36,7 +36,6 @@ enum class DocumentSignatureMode
 {
     Content,
     Macros,
-    Package
 };
 
 enum class DocumentSignatureAlgorithm

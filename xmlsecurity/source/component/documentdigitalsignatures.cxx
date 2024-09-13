@@ -121,9 +121,6 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDocumentDigitalSignatures
-    sal_Bool SAL_CALL
-    signDocumentContent(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                        const css::uno::Reference<css::io::XStream>& xSignStream) override;
     sal_Bool SAL_CALL signSignatureLine(
         const css::uno::Reference<css::embed::XStorage>& Storage,
         const css::uno::Reference<css::io::XStream>& xSignStream, const OUString& aSignatureLineId,
@@ -139,9 +136,6 @@ public:
         const css::uno::Reference<css::embed::XStorage>& xStorage,
         const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
     OUString SAL_CALL getDocumentContentSignatureDefaultStreamName() override;
-    sal_Bool SAL_CALL
-    signScriptingContent(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                         const css::uno::Reference<css::io::XStream>& xSignStream) override;
     css::uno::Sequence<css::security::DocumentSignatureInformation>
         SAL_CALL verifyScriptingContentSignatures(
             const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -150,17 +144,6 @@ public:
         const css::uno::Reference<css::embed::XStorage>& xStorage,
         const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
     OUString SAL_CALL getScriptingContentSignatureDefaultStreamName() override;
-    sal_Bool SAL_CALL
-    signPackage(const css::uno::Reference<css::embed::XStorage>& Storage,
-                const css::uno::Reference<css::io::XStream>& xSignStream) override;
-    css::uno::Sequence<css::security::DocumentSignatureInformation>
-        SAL_CALL verifyPackageSignatures(
-            const css::uno::Reference<css::embed::XStorage>& Storage,
-            const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
-    void SAL_CALL
-    showPackageSignatures(const css::uno::Reference<css::embed::XStorage>& xStorage,
-                          const css::uno::Reference<css::io::XInputStream>& xSignInStream) override;
-    OUString SAL_CALL getPackageSignatureDefaultStreamName() override;
     void SAL_CALL
     showCertificate(const css::uno::Reference<css::security::XCertificate>& Certificate) override;
     void SAL_CALL manageTrustedSources() override;
@@ -189,11 +172,6 @@ public:
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
                             css::uno::Reference<css::embed::XStorage> const & xStoragexStorage,
                             css::uno::Reference<css::io::XStream> const & xStream) override;
-
-    sal_Bool SAL_CALL signPackageWithCertificate(
-                            css::uno::Reference<css::security::XCertificate> const& xCertificate,
-                            css::uno::Reference<css::embed::XStorage> const& xStoragexStorage,
-                            css::uno::Reference<css::io::XStream> const& xStream) override;
 
     sal_Bool SAL_CALL trustUntrustedCertificate(
                             css::uno::Reference<css::security::XCertificate> const& xCertificate) override;
@@ -286,13 +264,6 @@ DocumentDigitalSignatures::getSupportedServiceNames()
     return aRet;
 }
 
-sal_Bool DocumentDigitalSignatures::signDocumentContent(
-    const Reference< css::embed::XStorage >& /*rxStorage*/,
-    const Reference< css::io::XStream >& /*xSignStream*/)
-{
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
-}
-
 sal_Bool DocumentDigitalSignatures::signSignatureLine(
     const Reference<css::embed::XStorage>& rxStorage,
     const Reference<css::io::XStream>& xSignStream,
@@ -363,13 +334,6 @@ OUString DocumentDigitalSignatures::getDocumentContentSignatureDefaultStreamName
     return DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName();
 }
 
-sal_Bool DocumentDigitalSignatures::signScriptingContent(
-    const Reference< css::embed::XStorage >& /*rxStorage*/,
-    const Reference< css::io::XStream >& /*xSignStream*/ )
-{
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
-}
-
 Sequence< css::security::DocumentSignatureInformation >
 DocumentDigitalSignatures::verifyScriptingContentSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
@@ -391,37 +355,6 @@ OUString DocumentDigitalSignatures::getScriptingContentSignatureDefaultStreamNam
 {
     return DocumentSignatureHelper::GetScriptingContentSignatureDefaultStreamName();
 }
-
-
-sal_Bool DocumentDigitalSignatures::signPackage(
-    const Reference< css::embed::XStorage >& /*rxStorage*/,
-    const Reference< css::io::XStream >& /*xSignStream*/  )
-{
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
-}
-
-Sequence< css::security::DocumentSignatureInformation >
-DocumentDigitalSignatures::verifyPackageSignatures(
-    const Reference< css::embed::XStorage >& rxStorage,
-    const Reference< css::io::XInputStream >& xSignInStream )
-{
-    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    return ImplVerifySignatures( rxStorage, xSignInStream, DocumentSignatureMode::Package );
-}
-
-void DocumentDigitalSignatures::showPackageSignatures(
-    const Reference< css::embed::XStorage >& rxStorage,
-    const Reference< css::io::XInputStream >& xSignInStream )
-{
-    OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    ImplViewSignatures( rxStorage, xSignInStream, DocumentSignatureMode::Package, true );
-}
-
-OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
-{
-    return DocumentSignatureHelper::GetPackageSignatureDefaultStreamName();
-}
-
 
 void DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
@@ -859,16 +792,6 @@ void DocumentDigitalSignatures::SetSignScriptingContent(
     const css::uno::Reference<css::io::XStream>& xScriptingSignStream)
 {
     mxScriptingSignStream = xScriptingSignStream;
-}
-
-sal_Bool DocumentDigitalSignatures::signPackageWithCertificate(
-    css::uno::Reference<css::security::XCertificate> const& xCertificate,
-    css::uno::Reference<css::embed::XStorage> const& xStorage,
-    css::uno::Reference<css::io::XStream> const& xStream)
-{
-    uno::Reference<frame::XModel> xModel;
-    return signWithCertificateImpl(xModel, xCertificate, xStorage, xStream,
-                                   DocumentSignatureMode::Package);
 }
 
 sal_Bool DocumentDigitalSignatures::trustUntrustedCertificate(

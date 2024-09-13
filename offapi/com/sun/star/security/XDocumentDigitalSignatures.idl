@@ -29,15 +29,6 @@ module com { module sun { module star { module security {
 
 interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
 {
-    /** signs the content of the document including text and pictures.
-
-       <p>Macros will not be signed.</p>
-
-       Deprecated, this synchronous version would block the UI till signing is in progress.
-     */
-    boolean signDocumentContent( [in] ::com::sun::star::embed::XStorage xStorage,
-                                 [in] ::com::sun::star::io::XStream xSignStream);
-
     /** Signs the content of the document including text and pictures
         using the given XCertificate.
 
@@ -75,15 +66,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     string getDocumentContentSignatureDefaultStreamName();
 
-    /** signs the content of the Scripting including macros and basic dialogs
-
-        <p>The rest of document content will not be signed.</p>
-
-       Deprecated, this synchronous version would block the UI till signing is in progress.
-     */
-    boolean signScriptingContent( [in] ::com::sun::star::embed::XStorage xStorage,
-                                  [in] ::com::sun::star::io::XStream xSignStream);
-
     /** checks for digital signatures and their status.
 
         <p>Only Scripting content will be checked.</p>
@@ -102,33 +84,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         the scripting content.
      */
     string getScriptingContentSignatureDefaultStreamName();
-
-    /** signs the full Package, which means everything in the storage except the content of META-INF
-
-       Deprecated, this synchronous version would block the UI till signing is in progress.
-     */
-    boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
-                         [in] ::com::sun::star::io::XStream xSignStream);
-
-    /** checks for digital signatures and their status.
-
-        <p>Only Package content will be checked.</p>
-     */
-    sequence< com::sun::star::security::DocumentSignatureInformation > verifyPackageSignatures(
-                        [in] ::com::sun::star::embed::XStorage Storage,
-                        [in] ::com::sun::star::io::XInputStream xSignInStream );
-
-    /** shows the digital signatures of the package
-     */
-    void showPackageSignatures(
-                        [in] ::com::sun::star::embed::XStorage xStorage,
-                        [in] ::com::sun::star::io::XInputStream xSignInStream );
-
-    /** allows to get the default stream name for storing of the signature of
-        the package.
-     */
-    string getPackageSignatureDefaultStreamName();
-
 
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
 
@@ -217,14 +172,6 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
         @since LibreOffice 7.0
     */
     boolean signScriptingContentWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
-                                                [in] ::com::sun::star::embed::XStorage xStorage,
-                                                [in] ::com::sun::star::io::XStream xStream);
-
-    /** signs the full Package, which means everything in the storage except the content of META-INF with the provided certificate.
-
-        @since LibreOffice 7.0
-    */
-    boolean signPackageWithCertificate([in] ::com::sun::star::security::XCertificate xCertificate,
                                                 [in] ::com::sun::star::embed::XStorage xStorage,
                                                 [in] ::com::sun::star::io::XStream xStream);
 
