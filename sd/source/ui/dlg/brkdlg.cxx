@@ -36,6 +36,8 @@ namespace sd {
  * dialog to split metafiles
  */
 
+// This only shows up for metafiles with a lot of records, a good example can be seen at:
+// https://bz.apache.org/ooo/show_bug.cgi?id=119125 as "Firefox-logo.svg"
 BreakDlg::BreakDlg(weld::Window* pWindow, DrawView* pDrView, DrawDocShell* pShell,
     sal_uLong nSumActionCount, sal_uLong nObjCount)
     : SfxDialogController(pWindow, u"modules/sdraw/ui/breakdialog.ui"_ustr, u"BreakDialog"_ustr)
