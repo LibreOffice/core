@@ -34,9 +34,9 @@ QtTimer::QtTimer()
 {
     m_aTimer.setSingleShot(true);
     m_aTimer.setTimerType(Qt::PreciseTimer);
-    connect(&m_aTimer, SIGNAL(timeout()), this, SLOT(timeoutActivated()));
-    connect(this, SIGNAL(startTimerSignal(int)), this, SLOT(startTimer(int)));
-    connect(this, SIGNAL(stopTimerSignal()), this, SLOT(stopTimer()));
+    connect(&m_aTimer, &QTimer::timeout, this, &QtTimer::timeoutActivated);
+    connect(this, &QtTimer::startTimerSignal, this, &QtTimer::startTimer);
+    connect(this, &QtTimer::stopTimerSignal, this, &QtTimer::stopTimer);
 }
 
 void QtTimer::timeoutActivated()
