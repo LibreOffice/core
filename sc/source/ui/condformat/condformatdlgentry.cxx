@@ -1276,6 +1276,7 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     : mxBuilder(Application::CreateBuilder(pParent, u"modules/scalc/ui/conditionaliconset.ui"_ustr))
     , mxGrid(mxBuilder->weld_container(u"ConditionalIconSet"_ustr))
     , mxImgIcon(mxBuilder->weld_image(u"icon"_ustr))
+    , mxFtEntry(mxBuilder->weld_label("label"))
     , mxEdEntry(mxBuilder->weld_entry(u"entry"_ustr))
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
     , mpContainer(pParent)
