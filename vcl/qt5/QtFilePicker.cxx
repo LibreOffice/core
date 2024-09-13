@@ -111,16 +111,14 @@ QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> cont
     setMultiSelectionMode(false);
 
     // XFilePickerListener notifications
-    connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
-            SLOT(filterSelected(const QString&)));
-    connect(m_pFileDialog.get(), SIGNAL(currentChanged(const QString&)), this,
-            SLOT(currentChanged(const QString&)));
+    connect(m_pFileDialog.get(), &QFileDialog::filterSelected, this, &QtFilePicker::filterSelected);
+    connect(m_pFileDialog.get(), &QFileDialog::currentChanged, this, &QtFilePicker::currentChanged);
 
     // update automatic file extension when filter is changed
-    connect(m_pFileDialog.get(), SIGNAL(filterSelected(const QString&)), this,
-            SLOT(updateAutomaticFileExtension()));
+    connect(m_pFileDialog.get(), &QFileDialog::filterSelected, this,
+            &QtFilePicker::updateAutomaticFileExtension);
 
-    connect(m_pFileDialog.get(), SIGNAL(finished(int)), this, SLOT(finished(int)));
+    connect(m_pFileDialog.get(), &QFileDialog::finished, this, &QtFilePicker::finished);
 }
 
 QtFilePicker::~QtFilePicker()
@@ -688,8 +686,13 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_AUTOEXTENSION:
             pCheckbox = new QCheckBox(getResString(resId), m_pExtraControls);
             // to add/remove automatic file extension based on checkbox
-            connect(pCheckbox, SIGNAL(stateChanged(int)), this,
-                    SLOT(updateAutomaticFileExtension()));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            connect(pCheckbox, &QCheckBox::checkStateChanged, this,
+                    &QtFilePicker::updateAutomaticFileExtension);
+#else
+            connect(pCheckbox, &QCheckBox::stateChanged, this,
+                    &QtFilePicker::updateAutomaticFileExtension);
+#endif
             widget = pCheckbox;
             break;
         case CHECKBOX_PASSWORD:
