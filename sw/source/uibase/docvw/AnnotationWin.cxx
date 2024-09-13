@@ -514,9 +514,14 @@ OString SwAnnotationWin::GetSimpleHtml() const
     return GetOutlinerView()->GetEditView().GetSimpleHtml();
 }
 
+bool SwAnnotationWin::IsReadOnly() const
+{
+    return mbReadonly;
+}
+
 bool SwAnnotationWin::IsReadOnlyOrProtected() const
 {
-    return mbReadonly ||
+    return IsReadOnly() ||
            GetLayoutStatus() == SwPostItHelper::DELETED ||
            ( mpFormatField && mpFormatField->IsProtect() );
 }

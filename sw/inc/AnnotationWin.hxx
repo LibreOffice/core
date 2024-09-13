@@ -140,10 +140,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         void            SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition);
         void            SetReadonly(bool bSet);
-        bool            IsReadOnly() const
-        {
-            return mbReadonly;
-        }
+        bool            IsReadOnly() const;
 
         void         SetColor(Color aColorDark,Color aColorLight, Color aColorAnchor);
         const Color& ColorDark() { return mColorDark; }
