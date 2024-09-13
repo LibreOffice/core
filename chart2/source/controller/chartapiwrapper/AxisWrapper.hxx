@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace com::sun::star::chart2 { class XAxis; }
@@ -35,6 +35,8 @@ namespace com::sun::star::chart2 { class XAxis; }
 namespace chart::wrapper
 {
 class Chart2ModelContact;
+class TitleWrapper;
+class GridWrapper;
 
 class AxisWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
@@ -113,9 +115,9 @@ private: //member
 
     tAxisType           m_eType;
 
-    css::uno::Reference< css::beans::XPropertySet >   m_xAxisTitle;
-    css::uno::Reference< css::beans::XPropertySet >   m_xMajorGrid;
-    css::uno::Reference< css::beans::XPropertySet >   m_xMinorGrid;
+    rtl::Reference< TitleWrapper >   m_xAxisTitle;
+    rtl::Reference< GridWrapper >   m_xMajorGrid;
+    rtl::Reference< GridWrapper >   m_xMinorGrid;
 };
 
 } //  namespace chart::wrapper

@@ -58,7 +58,6 @@ public:
     virtual css::uno::Any getReferenceSize() override;
     virtual css::awt::Size getCurrentSizeForReference() override;
 
-private:
     // ____ XShape ____
     virtual css::awt::Point SAL_CALL getPosition() override;
     virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
@@ -95,6 +94,7 @@ private:
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
 
+private:
     css::uno::Reference< css::chart2::XTitle > getTitleObject();
 
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;

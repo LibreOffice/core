@@ -665,11 +665,10 @@ class UNLESS_MERGELIBS(SAL_DLLPUBLIC_RTTI) Svx3DSceneObject final : public SvxSh
 private:
     rtl::Reference< SvxDrawPage > mxPage;
 
-protected:
+public:
     using SvxShape::setPropertyValue;
     using SvxShape::getPropertyValue;
 
-public:
     UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) Svx3DSceneObject(SdrObject* pObj, SvxDrawPage* pDrawPage);
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;

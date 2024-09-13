@@ -858,7 +858,11 @@ void SAL_CALL ChartDocumentWrapper::dispose()
     try
     {
         Reference< lang::XComponent > xFormerDelegator( m_xDelegator, uno::UNO_QUERY );
-        DisposeHelper::DisposeAndClear( m_xTitle );
+        if (m_xTitle)
+        {
+            m_xTitle->dispose();
+            m_xTitle.clear();
+        }
         DisposeHelper::DisposeAndClear( m_xSubTitle );
         DisposeHelper::DisposeAndClear( m_xLegend );
         DisposeHelper::DisposeAndClear( m_xChartData );
@@ -1344,11 +1348,11 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType
 // ____ ::utl::OEventListenerAdapter ____
 void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 {
-    if( rSource.Source == m_xTitle )
+    if( rSource.Source == cppu::getXWeak(m_xTitle.get()) )
         m_xTitle.clear();
-    else if( rSource.Source == m_xSubTitle )
+    else if( rSource.Source == cppu::getXWeak(m_xSubTitle.get()) )
         m_xSubTitle.clear();
-    else if( rSource.Source == m_xLegend )
+    else if( rSource.Source == cppu::getXWeak(m_xLegend.get()) )
         m_xLegend.clear();
     else if( rSource.Source == m_xChartData )
         m_xChartData.clear();

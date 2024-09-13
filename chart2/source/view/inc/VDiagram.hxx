@@ -97,7 +97,7 @@ private: //members
     rtl::Reference< ::chart::Diagram > m_xDiagram;
 
     css::drawing::Direction3D                                  m_aPreferredAspectRatio;
-    css::uno::Reference< css::beans::XPropertySet > m_xAspectRatio3D;
+    rtl::Reference< Svx3DSceneObject > m_xAspectRatio3D;
 
     double m_fXAnglePi;
     double m_fYAnglePi;
