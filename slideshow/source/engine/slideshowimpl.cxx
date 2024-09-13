@@ -310,16 +310,6 @@ private:
     virtual void SAL_CALL setShapeCursor(
         uno::Reference<drawing::XShape> const& xShape, sal_Int16 nPointerShape ) override;
 
-    virtual sal_Bool SAL_CALL createLOKSlideRenderer(
-        sal_Int32& nViewWidth, sal_Int32& nViewHeight,
-        sal_Bool bRenderMasterPage, sal_Bool bRenderBackground,
-        const uno::Reference<drawing::XDrawPage>& xSlide,
-        const uno::Reference<drawing::XDrawPagesSupplier>& xDrawPages,
-        const uno::Reference<animations::XAnimationNode>& xRootNode) override;
-
-    virtual sal_Bool SAL_CALL renderNextLOKSlideLayer(
-        sal_Int64 nBufferPointer, sal_Bool& bIsBitmapLayer, OUString& rJsonMsg) override;
-
     // CursorManager
 
 
@@ -1073,68 +1063,6 @@ private:
     bool& mrbSkipAllMainSequenceEffects;
     bool& mrbSkipSlideTransition;
 };
-
-sal_Bool SlideShowImpl::createLOKSlideRenderer(
-    sal_Int32& nViewWidth, sal_Int32& nViewHeight,
-    sal_Bool bRenderMasterPage, sal_Bool bRenderBackground,
-    uno::Reference<drawing::XDrawPage> const& xDrawPage,
-    uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
-    uno::Reference<animations::XAnimationNode> const&  xRootNode)
-{
-    if (!xDrawPage.is())
-        return false;
-
-    //Retrieve polygons for the current slide
-    PolygonMap::iterator aIter = findPolygons(xDrawPage);
-
-    mpCurrentSlide = createSlide(xDrawPage,
-                                xDrawPages,
-                                xRootNode,
-                                maEventQueue,
-                                maEventMultiplexer,
-                                maScreenUpdater,
-                                maActivitiesQueue,
-                                maUserEventQueue,
-                                *this,
-                                *this,
-                                maViewContainer,
-                                mxComponentContext,
-                                maShapeEventListeners,
-                                maShapeCursors,
-                                (aIter != maPolygons.end()) ? aIter->second :  PolyPolygonVector(),
-                                maUserPaintColor ? *maUserPaintColor : RGBColor(),
-                                maUserPaintStrokeWidth,
-                                !!maUserPaintColor,
-                                mbImageAnimationsAllowed,
-                                mbDisableAnimationZOrder);
-
-    if (!mpCurrentSlide)
-        return false;
-
-    const Size aDeviceSize = mpCurrentSlide->createLOKSlideRenderer(nViewWidth, nViewHeight,
-                                                                     bRenderBackground,
-                                                                     bRenderMasterPage);
-    nViewWidth = aDeviceSize.getWidth();
-    nViewHeight = aDeviceSize.getHeight();
-
-    return (nViewWidth > 0 && nViewHeight > 0);
-}
-
-sal_Bool SlideShowImpl::renderNextLOKSlideLayer(sal_Int64 nBufferPointer, sal_Bool& bIsBitmapLayer, OUString& rJsonMsg)
-{
-    if (!mpCurrentSlide)
-        return true;
-
-    auto pBuffer = reinterpret_cast<unsigned char*>(nBufferPointer);
-    bool bBitmapRendered = false;
-    OString sMsg;
-    bool bDone = mpCurrentSlide->renderNextLOKSlideLayer(pBuffer, bBitmapRendered, sMsg);
-
-    bIsBitmapLayer = bBitmapRendered;
-    rJsonMsg = OUString::fromUtf8(sMsg);
-
-    return bDone;
-}
 
 void SlideShowImpl::displaySlide(
     uno::Reference<drawing::XDrawPage> const& xSlide,

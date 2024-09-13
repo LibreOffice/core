@@ -319,24 +319,6 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     void setShapeCursor(
         [in] ::com::sun::star::drawing::XShape xShape,
         [in] short nPointerShape );
-
-    /** Used to create a slide renderer for the Online client.<p>
-    */
-    boolean createLOKSlideRenderer(
-        [out] long nViewWidth,
-        [out] long nViewHeight,
-        [in] boolean bRenderMasterPage,
-        [in] boolean bRenderBackground,
-        [in] ::com::sun::star::drawing::XDrawPage xSlide,
-        [in] ::com::sun::star::drawing::XDrawPagesSupplier xDrawPages,
-        [in] ::com::sun::star::animations::XAnimationNode xRootNode );
-
-    /** Used to renderer a slide layer for the Online client.<p>
-    */
-    boolean renderNextLOKSlideLayer(
-        [in] hyper nBufferPointer,
-        [out] boolean bIsBitmapLayer,
-        [out] string rJsonMsg );
 };
 
 }; }; }; };

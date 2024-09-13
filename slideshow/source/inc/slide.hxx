@@ -143,14 +143,6 @@ namespace slideshow::internal
             virtual SlideBitmapSharedPtr
                 getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const = 0;
 
-            virtual Size createLOKSlideRenderer(int nViewWidth, int nViewHeight,
-                                                bool bRenderBackground,
-                                                bool bRenderMasterPageObjects) = 0;
-
-            virtual bool renderNextLOKSlideLayer(unsigned char* buffer,
-                                                 bool& bIsBitmapLayer,
-                                                 OString& rJsonMsg) = 0;
-
         protected:
             ~Slide() {}
         };
