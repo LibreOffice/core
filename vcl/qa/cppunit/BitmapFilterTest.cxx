@@ -15,6 +15,7 @@
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
+#include <vcl/BitmapAlphaClampFilter.hxx>
 #include <vcl/BitmapArithmeticBlendFilter.hxx>
 #include <vcl/BitmapDarkenBlendFilter.hxx>
 #include <vcl/BitmapLightenBlendFilter.hxx>
@@ -41,6 +42,7 @@ public:
     {
     }
 
+    void testClampAlpha();
     void testBlurCorrectness();
     void testBasicMorphology();
     void testPerformance();
@@ -53,6 +55,7 @@ public:
     void testArithmeticBlendFilter();
 
     CPPUNIT_TEST_SUITE(BitmapFilterTest);
+    CPPUNIT_TEST(testClampAlpha);
     CPPUNIT_TEST(testBlurCorrectness);
     CPPUNIT_TEST(testBasicMorphology);
     CPPUNIT_TEST(testPerformance);
@@ -90,6 +93,22 @@ private:
         rFilter.compressAsPNG(BitmapEx(rBmp), aStream);
     }
 };
+
+void BitmapFilterTest::testClampAlpha()
+{
+    // Setup test bitmap
+    Size aSize(1, 1);
+    Bitmap aBitmap24Bit(aSize, vcl::PixelFormat::N24_BPP);
+
+    {
+        BitmapScopedWriteAccess aWriteAccess(aBitmap24Bit);
+        aWriteAccess->Erase(COL_RED);
+    }
+
+    BitmapEx aBitmapEx24Bit(aBitmap24Bit);
+    BitmapFilter::Filter(aBitmapEx24Bit, BitmapAlphaClampFilter(0x7F));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0xFF), aBitmapEx24Bit.GetAlpha(0, 0));
+}
 
 void BitmapFilterTest::testBlurCorrectness()
 {

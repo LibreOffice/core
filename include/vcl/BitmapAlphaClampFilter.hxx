@@ -10,12 +10,11 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <vcl/BitmapFilter.hxx>
 
 /** If the alpha is beyond a certain threshold, make it fully transparent
  */
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) BitmapAlphaClampFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapAlphaClampFilter final : public BitmapFilter
 {
 public:
     BitmapAlphaClampFilter(sal_uInt8 cThreshold)
