@@ -29,14 +29,14 @@ namespace {
 
 class ColumnsEnumWrapper : public EnumerationHelper_BASE
 {
-    uno::WeakReference< XHelperInterface > mxParent;
+    unotools::WeakReference< SwVbaColumns > mxParent;
     uno::Reference< uno::XComponentContext > mxContext;
     uno::Reference< text::XTextTable > mxTextTable;
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     sal_Int32 mnIndex;
 
 public:
-    ColumnsEnumWrapper( const uno::Reference< XHelperInterface >& xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnIndex( 0 )
+    ColumnsEnumWrapper( const rtl::Reference< SwVbaColumns >& xParent, uno::Reference< uno::XComponentContext > xContext, uno::Reference< text::XTextTable >  xTextTable ) : mxParent( xParent ), mxContext(std::move( xContext )), mxTextTable(std::move( xTextTable )), mnIndex( 0 )
     {
         mxIndexAccess = mxTextTable->getColumns();
     }
@@ -49,7 +49,7 @@ public:
     {
         if( mnIndex < mxIndexAccess->getCount() )
         {
-            return uno::Any( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent, mxContext, mxTextTable, mnIndex++ ) ) );
+            return uno::Any( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent.get(), mxContext, mxTextTable, mnIndex++ ) ) );
         }
         throw container::NoSuchElementException();
     }
