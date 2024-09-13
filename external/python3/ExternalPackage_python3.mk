@@ -663,6 +663,7 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/importlib/_common.py \
 	Lib/importlib/abc.py \
 	Lib/importlib/machinery.py \
+	Lib/importlib/readers.py \
 	Lib/importlib/resources.py \
 	Lib/importlib/util.py \
 ))
