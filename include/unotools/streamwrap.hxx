@@ -99,10 +99,10 @@ public:
 
 //= OOutputStreamWrapper
 
-class OOutputStreamWrapper : public cppu::WeakImplHelper<css::io::XOutputStream>
+class UNOTOOLS_DLLPUBLIC OOutputStreamWrapper : public cppu::WeakImplHelper<css::io::XOutputStream>
 {
 public:
-    UNOTOOLS_DLLPUBLIC OOutputStreamWrapper(SvStream& _rStream);
+    OOutputStreamWrapper(SvStream& _rStream);
 
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) override final;

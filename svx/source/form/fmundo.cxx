@@ -71,8 +71,6 @@ using namespace ::svxform;
 using namespace ::dbtools;
 
 
-namespace {
-
 class ScriptEventListenerWrapper : public cppu::WeakImplHelper< XScriptListener >
 {
 public:
@@ -141,6 +139,8 @@ private:
 
 };
 
+
+namespace {
 
 // some helper structs for caching property infos
 

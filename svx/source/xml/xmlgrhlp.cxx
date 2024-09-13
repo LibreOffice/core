@@ -91,7 +91,7 @@ private:
 
 private:
     utl::TempFileFast maTempFile;
-    Reference<XInputStream> mxStreamWrapper;
+    rtl::Reference<::utl::OInputStreamWrapper> mxStreamWrapper;
 
 public:
 
@@ -224,7 +224,7 @@ private:
 
     std::optional<::utl::TempFileFast> moTmp;
     SvStream*                        mpOStm;
-    Reference< XOutputStream >       mxStmWrapper;
+    rtl::Reference< ::utl::OOutputStreamWrapper > mxStmWrapper;
     std::optional<GraphicObject>     moGrfObj;
     bool                             mbClosed;
 

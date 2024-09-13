@@ -66,7 +66,7 @@ constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.Gr
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper<XOutputStream>
 {
     std::mutex    maMutex;
-    Reference < XOutputStream > xOut;
+    rtl::Reference < OOutputStreamWrapper > xOut;
     TempFileFast aTempFile;
     bool bStreamClosed : 1;
     SvStream* pStream;

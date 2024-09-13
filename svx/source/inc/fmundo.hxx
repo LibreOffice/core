@@ -44,6 +44,7 @@ class FmFormModel;
 class FmFormObj;
 class SdrObject;
 struct PropertySetInfo;
+class ScriptEventListenerWrapper;
 
 class FmUndoPropertyAction final : public SdrUndoAction
 {
@@ -193,7 +194,7 @@ private:
     ::osl::Mutex                            m_aMutex;
     bool                                    bReadOnly;
     bool                                    m_bDisposed;
-    css::uno::Reference< css::script::XScriptListener > m_vbaListener;
+    rtl::Reference< ScriptEventListenerWrapper > m_vbaListener;
 };
 
 

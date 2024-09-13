@@ -39,6 +39,7 @@ class SvxBoxItem;
 
 namespace sdr::table {
 
+class SvxTableControllerModifyListener;
 class TableModel;
 
 class SVXCORE_DLLPUBLIC SvxTableController final : public sdr::SelectionController
@@ -189,7 +190,7 @@ private:
     std::optional<sdr::overlay::OverlayObjectList>  mpSelectionOverlay;
     SdrView& mrView;
     unotools::WeakReference<SdrTableObj> mxTableObj;
-    css::uno::Reference< css::util::XModifyListener > mxModifyListener;
+    rtl::Reference< SvxTableControllerModifyListener > mxModifyListener;
     ImplSVEvent * mnUpdateEvent;
 };
 

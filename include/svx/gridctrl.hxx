@@ -42,6 +42,7 @@ namespace weld { class Menu; }
 
 class CursorWrapper;
 class GridFieldValueListener;
+class RowSetEventListener;
 
 bool CompareBookmark(const css::uno::Any& aLeft, const css::uno::Any& aRight);
 
@@ -257,8 +258,7 @@ private:
     // For that reason we have to listen to some properties of our data source.
     rtl::Reference<::comphelper::OPropertyChangeMultiplexer>  m_pDataSourcePropMultiplexer;
     FmXGridSourcePropListener*                      m_pDataSourcePropListener;
-    css::uno::Reference< css::sdb::XRowsChangeListener>
-                                                    m_xRowSetListener; // get notification when rows were changed
+    rtl::Reference<RowSetEventListener>             m_xRowSetListener; // get notification when rows were changed
 
     std::map<sal_uInt16, GridFieldValueListener*>   m_aFieldListeners;
         // property listeners for field values

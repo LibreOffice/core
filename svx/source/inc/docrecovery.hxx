@@ -356,7 +356,7 @@ class SaveProgressDialog final : public weld::GenericDialogController
         std::unique_ptr<weld::ProgressBar> m_xProgressBar;
 
         // @short   TODO
-        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+        rtl::Reference< PluginProgress > m_xProgress;
     // interface
     public:
         /** @short  create all child controls of this dialog.
@@ -395,7 +395,7 @@ class RecoveryDialog final : public weld::GenericDialogController
         OUString         m_aRecoveryOnlyFinishDescr;
 
         RecoveryCore*   m_pCore;
-        css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
+        rtl::Reference< PluginProgress > m_xProgress;
         enum EInternalRecoveryState
         {
             E_RECOVERY_PREPARED,            // dialog started... recovery prepared
