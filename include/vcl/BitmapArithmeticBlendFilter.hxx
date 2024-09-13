@@ -11,19 +11,23 @@
 #ifndef INCLUDED_VCL_BITMAPARITHMETICBLENDFILTER_HXX
 #define INCLUDED_VCL_BITMAPARITHMETICBLENDFILTER_HXX
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapArithmeticBlendFilter
+class VCL_DLLPUBLIC BitmapArithmeticBlendFilter final : public BitmapFilter
 {
 private:
-    BitmapEx maBitmapEx;
     BitmapEx maBitmapEx2;
+    double mnK1;
+    double mnK2;
+    double mnK3;
+    double mnK4;
 
 public:
-    BitmapArithmeticBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+    BitmapArithmeticBlendFilter(BitmapEx const& rBmpEx2, double nK1, double nK2, double nK3,
+                                double nK4);
     ~BitmapArithmeticBlendFilter();
 
-    BitmapEx execute(double aK1, double aK2, double aK3, double aK4);
+    BitmapEx execute(BitmapEx const& rBitmapEx) const;
 };
 
 #endif
