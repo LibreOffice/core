@@ -36,6 +36,18 @@
 #define PACKAGE_STREAM_DATA             3
 #define PACKAGE_STREAM_RAW              4
 
+struct ImportedAlgorithms
+{
+    sal_Int32 nImportedStartKeyAlgorithm;
+    sal_Int32 nImportedEncryptionAlgorithm;
+    // optional because it is not used with AEAD
+    ::std::optional<sal_Int32> oImportedChecksumAlgorithm;
+    // GPG encrypted ODF does not have this in the file, but don't use optional
+    // here because it depends on the nImportedEncryptionAlgorithm of the same
+    // entry, so theoretically it could be different for different entries.
+    sal_Int32 nImportedDerivedKeySize;
+};
+
 class ZipPackage;
 struct ZipEntry;
 class ZipPackageStream final : public cppu::ImplInheritanceHelper
@@ -54,10 +66,7 @@ private:
     css::uno::Sequence< css::beans::NamedValue > m_aStorageEncryptionKeys;
     css::uno::Sequence< sal_Int8 > m_aEncryptionKey;
 
-    sal_Int32 m_nImportedStartKeyAlgorithm;
-    sal_Int32 m_nImportedEncryptionAlgorithm;
-    ::std::optional<sal_Int32> m_oImportedChecksumAlgorithm;
-    sal_Int32 m_nImportedDerivedKeySize;
+    ::std::optional<ImportedAlgorithms> m_oImportedAlgorithms;
 
     sal_uInt8   m_nStreamMode;
     sal_uInt32  m_nMagicalHackPos;
@@ -93,10 +102,10 @@ public:
 
     void SetToBeCompressed (bool bNewValue) { m_bToBeCompressed = bNewValue;}
     void SetIsEncrypted (bool bNewValue) { m_bIsEncrypted = bNewValue;}
-    void SetImportedStartKeyAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedStartKeyAlgorithm = nAlgorithm; }
-    void SetImportedEncryptionAlgorithm( sal_Int32 nAlgorithm ) { m_nImportedEncryptionAlgorithm = nAlgorithm; }
-    void SetImportedChecksumAlgorithm(::std::optional<sal_Int32> const& roAlgorithm) { m_oImportedChecksumAlgorithm = roAlgorithm; }
-    void SetImportedDerivedKeySize( sal_Int32 nSize ) { m_nImportedDerivedKeySize = nSize; }
+    void SetImportedAlgorithms(ImportedAlgorithms const algorithms)
+    {
+        m_oImportedAlgorithms.emplace(algorithms);
+    }
     void SetToBeEncrypted (bool bNewValue)
     {
         m_bToBeEncrypted  = bNewValue;

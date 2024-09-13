@@ -135,6 +135,20 @@ class DummyInputStream : public ::cppu::WeakImplHelper< XInputStream >
         {}
 };
 
+} // namespace
+
+sal_Int32 GetDefaultDerivedKeySize(sal_Int32 const nCipherID)
+{
+    switch (nCipherID)
+    {
+        case css::xml::crypto::CipherID::BLOWFISH_CFB_8:
+            return 16;
+        case css::xml::crypto::CipherID::AES_CBC_W3C_PADDING:
+        case css::xml::crypto::CipherID::AES_GCM_W3C:
+            return 32;
+        default:
+            O3TL_UNREACHABLE;
+    }
 }
 
 ZipPackage::ZipPackage ( uno::Reference < XComponentContext > xContext )
@@ -320,11 +334,9 @@ void ZipPackage::parseManifest()
 
                                         assert(pDigestAlg->has<sal_Int32>());
                                         oDigestAlg.emplace(pDigestAlg->get<sal_Int32>());
-                                        pStream->SetImportedChecksumAlgorithm(oDigestAlg);
                                     }
 
                                     *pEncryptionAlg >>= nEncryptionAlg;
-                                    pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
 
                                     *pKeyInfo >>= m_aGpgProps;
 
@@ -338,7 +350,14 @@ void ZipPackage::parseManifest()
                                     // c.f. ZipPackageStream::GetEncryptionKey()
                                     // trying to get key value from properties
                                     const sal_Int32 nStartKeyAlg = xml::crypto::DigestID::SHA256;
-                                    pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                    pStream->SetImportedAlgorithms({
+                                        .nImportedStartKeyAlgorithm = nStartKeyAlg,
+                                        .nImportedEncryptionAlgorithm = nEncryptionAlg,
+                                        .oImportedChecksumAlgorithm = oDigestAlg,
+                                        // note m_nCommonEncryptionID is not inited yet here
+                                        .nImportedDerivedKeySize = ::GetDefaultDerivedKeySize(nEncryptionAlg),
+                                        });
 
                                     if (!m_bHasEncryptedEntries
                                         && (pStream->getName() == "content.xml"
@@ -405,19 +424,22 @@ void ZipPackage::parseManifest()
 
                                         assert(pDigestAlg->has<sal_Int32>());
                                         oDigestAlg.emplace(pDigestAlg->get<sal_Int32>());
-                                        pStream->SetImportedChecksumAlgorithm(oDigestAlg);
                                     }
 
                                     *pEncryptionAlg >>= nEncryptionAlg;
-                                    pStream->SetImportedEncryptionAlgorithm( nEncryptionAlg );
 
                                     if ( pDerivedKeySize )
                                         *pDerivedKeySize >>= nDerivedKeySize;
-                                    pStream->SetImportedDerivedKeySize( nDerivedKeySize );
 
                                     if ( pStartKeyAlg )
                                         *pStartKeyAlg >>= nStartKeyAlg;
-                                    pStream->SetImportedStartKeyAlgorithm( nStartKeyAlg );
+
+                                    pStream->SetImportedAlgorithms({
+                                        .nImportedStartKeyAlgorithm = nStartKeyAlg,
+                                        .nImportedEncryptionAlgorithm = nEncryptionAlg,
+                                        .oImportedChecksumAlgorithm = oDigestAlg,
+                                        .nImportedDerivedKeySize = nDerivedKeySize,
+                                        });
 
                                     pStream->SetToBeCompressed ( true );
                                     pStream->SetToBeEncrypted ( true );

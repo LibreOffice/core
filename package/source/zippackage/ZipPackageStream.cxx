@@ -84,9 +84,6 @@ ZipPackageStream::ZipPackageStream ( ZipPackage & rNewPackage,
 , m_bToBeEncrypted ( false )
 , m_bHaveOwnKey ( false )
 , m_bIsEncrypted ( false )
-, m_nImportedStartKeyAlgorithm( 0 )
-, m_nImportedEncryptionAlgorithm( 0 )
-, m_nImportedDerivedKeySize( 0 )
 , m_nStreamMode( PACKAGE_STREAM_NOTSET )
 , m_nMagicalHackPos( 0 )
 , m_nOwnStreamOrigSize( 0 )
@@ -185,7 +182,9 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetRawEncrStreamNoHeaderCop
 
 sal_Int32 ZipPackageStream::GetEncryptionAlgorithm() const
 {
-    return m_nImportedEncryptionAlgorithm ? m_nImportedEncryptionAlgorithm : m_rZipPackage.GetEncAlgID();
+    return m_oImportedAlgorithms
+        ? m_oImportedAlgorithms->nImportedEncryptionAlgorithm
+        : m_rZipPackage.GetEncAlgID();
 }
 
 sal_Int32 ZipPackageStream::GetIVSize() const
@@ -211,8 +210,8 @@ sal_Int32 ZipPackageStream::GetIVSize() const
             *m_xBaseEncryptionData,
             GetEncryptionKey(bugs),
             GetEncryptionAlgorithm(),
-            m_oImportedChecksumAlgorithm ? m_oImportedChecksumAlgorithm : m_rZipPackage.GetChecksumAlgID(),
-            m_nImportedDerivedKeySize ? m_nImportedDerivedKeySize : m_rZipPackage.GetDefaultDerivedKeySize(),
+            m_oImportedAlgorithms ? m_oImportedAlgorithms->oImportedChecksumAlgorithm : m_rZipPackage.GetChecksumAlgID(),
+            m_oImportedAlgorithms ? m_oImportedAlgorithms->nImportedDerivedKeySize : m_rZipPackage.GetDefaultDerivedKeySize(),
             GetStartKeyGenID(),
             bugs != Bugs::None);
 
@@ -263,7 +262,9 @@ sal_Int32 ZipPackageStream::GetStartKeyGenID() const
 {
     // generally should all the streams use the same Start Key
     // but if raw copy without password takes place, we should preserve the imported algorithm
-    return m_nImportedStartKeyAlgorithm ? m_nImportedStartKeyAlgorithm : m_rZipPackage.GetStartKeyGenID();
+    return m_oImportedAlgorithms
+        ? m_oImportedAlgorithms->nImportedStartKeyAlgorithm
+        : m_rZipPackage.GetStartKeyGenID();
 }
 
 uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( bool bAddHeaderForEncr )
@@ -395,17 +396,14 @@ bool ZipPackageStream::ParsePackageRawStream()
                                                         + xTempEncrData->m_aInitVector.getLength()
                                                         + xTempEncrData->m_aDigest.getLength()
                                                         + aMediaType.getLength() * sizeof( sal_Unicode );
-                    m_nImportedEncryptionAlgorithm = nEncAlgorithm;
-                    if (nChecksumAlgorithm == 0)
-                    {
-                        m_oImportedChecksumAlgorithm.reset();
-                    }
-                    else
-                    {
-                        m_oImportedChecksumAlgorithm.emplace(nChecksumAlgorithm);
-                    }
-                    m_nImportedDerivedKeySize = nDerivedKeySize;
-                    m_nImportedStartKeyAlgorithm = nStartKeyGenID;
+                    m_oImportedAlgorithms.emplace(ImportedAlgorithms{
+                        .nImportedStartKeyAlgorithm = nStartKeyGenID,
+                        .nImportedEncryptionAlgorithm = nEncAlgorithm,
+                        .oImportedChecksumAlgorithm = nChecksumAlgorithm == 0
+                            ? ::std::optional<sal_Int32>{}
+                            : ::std::optional<sal_Int32>{nChecksumAlgorithm},
+                        .nImportedDerivedKeySize = nDerivedKeySize,
+                        });
                     m_nOwnStreamOrigSize = nMagHackSize;
                     msMediaType = aMediaType;
 
@@ -915,7 +913,7 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
 {
     // if seekable access is required the wrapping will be done on demand
     m_xStream = aStream;
-    m_nImportedEncryptionAlgorithm = 0;
+    m_oImportedAlgorithms.reset();
     m_bHasSeekable = false;
     SetPackageMember ( false );
     aEntry.nTime = -1;
@@ -1041,7 +1039,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
                     // missing a specified startkey of SHA256
 
                     // force SHA256 and see if that works
-                    m_nImportedStartKeyAlgorithm = xml::crypto::DigestID::SHA256;
+                    m_oImportedAlgorithms->nImportedStartKeyAlgorithm = xml::crypto::DigestID::SHA256;
                     xResult = m_rZipPackage.getZipFile().getDataStream(aEntry,
                         GetEncryptionData(), oDecryptedSize,
                         m_rZipPackage.GetSharedMutexRef());
@@ -1051,7 +1049,7 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
                 {
                     // if that didn't work, restore to SHA1 and trundle through the *other* earlier
                     // bug fix
-                    m_nImportedStartKeyAlgorithm = xml::crypto::DigestID::SHA1;
+                    m_oImportedAlgorithms->nImportedStartKeyAlgorithm = xml::crypto::DigestID::SHA1;
                 }
 
                 // workaround for the encrypted documents generated with the old OOo1.x bug.
