@@ -1871,15 +1871,6 @@ CPPUNIT_TEST_FIXTURE(Test, test148544Tdf)
         }
     }
 }
-
-CPPUNIT_TEST_FIXTURE(Test, test162268Tdf)
-{
-    createSwDoc("tdf162268.rtf");
-    xmlDocUniquePtr pLayout = parseLayoutDump();
-    sal_Int32 nBodyTop
-        = getXPath(pLayout, "/root/page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1387), nBodyTop);
-}
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();

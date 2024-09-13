@@ -513,7 +513,6 @@ private:
     std::optional<int> m_xNextUnusedCharacterStyleNo;
     css::uno::Reference<css::text::XText> m_xBodyText;
     css::uno::Reference<css::text::XTextContent> m_xEmbedded;
-    css::uno::Sequence<css::beans::PropertyValue> m_aLastLineBreakProperties;
 
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
@@ -1254,16 +1253,6 @@ private:
     bool m_bSaxError;
 
     std::unordered_map<OUString, CommentProperties> m_aCommentProps;
-    void setLastLineBreakProperties(const css::uno::Sequence<css::beans::PropertyValue>& rValues)
-    {
-        m_aLastLineBreakProperties = rValues;
-    }
-    void resetLastLineBreakProperties()
-    {
-        m_aLastLineBreakProperties.realloc(0);
-    }
-    bool checkAndClearLastLineBreakProperties(const std::vector<css::beans::PropertyValue>& rParagraphProperties);
-
 };
 
 } //namespace writerfilter::dmapper

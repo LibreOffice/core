@@ -2176,53 +2176,6 @@ void DomainMapper_Impl::ValidateListLevel(const OUString& sStyleIdentifierD)
         // WARNING: PROP_NUMBERING_LEVEL is now out of sync with GetListLevel()
     }
 }
-namespace
-{
-class SortPropertyValues
-{
-public:
-    bool operator()(const beans::PropertyValue& left, const beans::PropertyValue& right) const
-    {
-        return left.Name < right.Name;
-    }
-};
-}
-bool DomainMapper_Impl::checkAndClearLastLineBreakProperties(const std::vector<beans::PropertyValue>& rParagraphProperties)
-{
-    if (m_aLastLineBreakProperties.size())
-    {
-        o3tl::sorted_vector<beans::PropertyValue, SortPropertyValues> aParaSortedProperties;
-        for (std::vector<beans::PropertyValue>::const_iterator aParaIter = rParagraphProperties
-            .begin(); aParaIter != rParagraphProperties.end(); ++aParaIter)
-        {
-            if (aParaIter->Name.startsWithIgnoreAsciiCase("Char"))
-                aParaSortedProperties.insert(*aParaIter);
-        }
-        o3tl::sorted_vector<beans::PropertyValue, SortPropertyValues> aCharSortedProperties;
-        for (size_t charIndex = 0;
-             charIndex < m_aLastLineBreakProperties.size(); ++charIndex)
-        {
-            if (m_aLastLineBreakProperties[charIndex].Name.startsWithIgnoreAsciiCase("Char"))
-                aCharSortedProperties.insert(m_aLastLineBreakProperties[charIndex]);
-        }
-        m_aLastLineBreakProperties.realloc(0);
-        if (aCharSortedProperties.size() != aParaSortedProperties.size())
-            return true;
-        o3tl::sorted_vector<beans::PropertyValue>::const_iterator aParaPropIter = aParaSortedProperties.begin();;
-        o3tl::sorted_vector<beans::PropertyValue>::const_iterator aCharPropIter = aCharSortedProperties.begin();;
-        while (aParaPropIter != aParaSortedProperties.end())
-        {
-            if (aParaPropIter->Name != aCharPropIter->Name)
-                return true;
-            if (aParaPropIter->Value != aCharPropIter->Value)
-                return true;
-            ++aParaPropIter;
-            ++aCharPropIter;
-        }
-    }
-    return false;
-}
-
 
 void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, const bool bRemove, const bool bNoNumbering )
 {
@@ -2804,11 +2757,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         }
                     }
 
-                    if (checkAndClearLastLineBreakProperties(aProperties))
-                    {
-                        uno::Sequence<beans::PropertyValue> aEmptyValues;
-                        xTextAppend->appendTextPortion(u"\x200B"_ustr, aEmptyValues);
-                    }
                     xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
                     m_xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
@@ -3296,7 +3244,6 @@ void DomainMapper_Impl::MergeAtContentImageRedlineWithNext(const css::uno::Refer
 
     void DomainMapper_Impl::appendTextPortion( const OUString& rString, const PropertyMapPtr& pPropertyMap )
 {
-    resetLastLineBreakProperties();
     if (m_bDiscardHeaderFooter)
         return;
 
@@ -3425,7 +3372,6 @@ void DomainMapper_Impl::appendTextContent(
     const uno::Sequence< beans::PropertyValue >& xPropertyValues
     )
 {
-    resetLastLineBreakProperties();
     SAL_WARN_IF(m_aTextAppendStack.empty(), "writerfilter.dmapper", "no text append stack");
     if (m_aTextAppendStack.empty())
         return;
@@ -3451,7 +3397,6 @@ void DomainMapper_Impl::appendTextContent(
 
 void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::shared_ptr<OLEHandler>& pOLEHandler )
 {
-    resetLastLineBreakProperties();
     try
     {
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
@@ -3564,7 +3509,6 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
 
 void DomainMapper_Impl::appendStarMath( const Value& val )
 {
-    resetLastLineBreakProperties();
     uno::Reference< embed::XEmbeddedObject > formula;
     val.getAny() >>= formula;
     if( !formula.is() )
@@ -3723,7 +3667,6 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange > const & xBefore )
 {
     uno::Reference< beans::XPropertySet > xRet;
-    resetLastLineBreakProperties();
     if (m_aTextAppendStack.empty())
         return xRet;
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -5223,7 +5166,6 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
     if (!m_oLineBreakClear.has_value())
     {
         appendTextPortion("\n", pPropertyMap);
-        setLastLineBreakProperties(pPropertyMap->GetPropertyValues());
         return;
     }
 
@@ -5234,7 +5176,6 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
         uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
         xLineBreakProps->setPropertyValue("Clear", uno::Any(*m_oLineBreakClear));
         appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
-        setLastLineBreakProperties(pPropertyMap->GetPropertyValues());
     }
     m_oLineBreakClear.reset();
 }
