@@ -281,6 +281,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119800)
                     u"false"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
+{
+    loadAndSave("tdf131728.docx");
+    // Inline paragraphs specified by w:specVanish were loaded as not
+    // inline paragraphs, breaking the paragraph layout. Use ODF text
+    // frame to keep the paragraph layout, where the frame contains the
+    // original inline paragraph, keeping also ODF ToC/PDF bookmark support.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // This was 22 (the 5 inline headings were not inline, i.e. normal paragraphs)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p"_ostr, 17);
+
+    // Still existing headings (duplicated by alternate content)
+    assertXPath(pXmlDoc, "//w:p"_ostr, 27);
+    assertXPath(pXmlDoc, "//w:txbxContent/w:p"_ostr, 10);
+    assertXPath(pXmlDoc, "//w:pStyle[@w:val='Heading2']"_ostr, 10);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
 {
     loadAndSave("fdo77129.docx");

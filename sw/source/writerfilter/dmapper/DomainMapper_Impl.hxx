@@ -273,6 +273,9 @@ struct SubstreamContext
     bool bIsOutsideAParagraph = true;
     bool bDummyParaAddedForTableInSection = false; // tdf#161631
     std::map<sal_Int32, css::uno::Any> deferredCharacterProperties;
+    // inline paragraph: hidden paragraph mark by w:specVanish
+    bool bIsInlineParagraph = false;
+    bool bIsPreviousInlineParagraph = false;
 };
 
 /// Information about a paragraph to be finished after a field end.

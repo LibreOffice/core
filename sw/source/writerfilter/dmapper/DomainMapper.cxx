@@ -2090,6 +2090,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             }
         }
         break;
+    case NS_ooxml::LN_EG_RPrBase_specVanish:
+        if ( nIntValue && !IsStyleSheetImport() )
+            m_pImpl->m_StreamStateStack.top().bIsInlineParagraph = true;
+        break;
     case NS_ooxml::LN_EG_RPrBase_sz:
     case NS_ooxml::LN_EG_RPrBase_szCs:
         {

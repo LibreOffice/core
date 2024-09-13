@@ -2822,7 +2822,57 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         uno::Sequence<beans::PropertyValue> aEmptyValues;
                         xTextAppend->appendTextPortion(u"\x200B"_ustr, aEmptyValues);
                     }
-                    xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
+
+                    // tdf#131728 insert the paragraph before the style separator to
+                    // a frame to get inline paragraphs, keeping also the table of content support
+                    // FIXME: overwrite the non-character styles of the paragraph style
+                    // with the settings of the next paragraph style, like MSO does
+                    if ( m_StreamStateStack.top().bIsInlineParagraph && !m_StreamStateStack.top().bIsPreviousInlineParagraph )
+                    {
+                        uno::Reference<text::XParagraphCursor> xParaCursor(
+                            xTextAppend->createTextCursorByRange(xTextAppend->getEnd()), uno::UNO_QUERY_THROW);
+                        //select paragraph
+                        xParaCursor->gotoStartOfParagraph( true );
+
+                        xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
+
+                        uno::Reference< text::XTextRange > xRangeStart, xRangeEnd;
+                        xRangeStart = xParaCursor->getStart();
+                        xRangeEnd = xParaCursor->getEnd();
+
+                        // TODO anchor as character
+                        std::vector<beans::PropertyValue> aFrameProperties
+                        {
+                            comphelper::makePropertyValue(u"TextWrap"_ustr, css::text::WrapTextMode_RIGHT),
+                            comphelper::makePropertyValue(getPropertyName(PROP_POSITION_PROTECTED), true),
+                            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_PROTECTED), true),
+                            comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT),
+                            comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false),
+                            comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN),
+                            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN)
+                        };
+
+                        fillEmptyFrameProperties(aFrameProperties, false);
+
+                        uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
+                        uno::Reference<text::XTextAppend> xTextAppend2(xParaCursor->getText(), uno::UNO_QUERY);
+
+                        xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
+
+                        m_StreamStateStack.top().bIsInlineParagraph = false;
+                        m_StreamStateStack.top().bIsPreviousInlineParagraph = true;
+                    }
+                    else
+                    {
+                        xTextRange = xTextAppend->finishParagraph( comphelper::containerToSequence(aProperties) );
+
+                        if ( m_StreamStateStack.top().bIsPreviousInlineParagraph )
+                        {
+                            m_StreamStateStack.top().bIsInlineParagraph = false;
+                            m_StreamStateStack.top().bIsPreviousInlineParagraph = false;
+                        }
+                    }
+
                     m_StreamStateStack.top().xPreviousParagraph.set(xTextRange, uno::UNO_QUERY);
 
                     if (m_StreamStateStack.top().xPreviousParagraph.is() && // null for SvxUnoTextBase
