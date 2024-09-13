@@ -93,15 +93,23 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
 
 CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
 {
-    // Create a pixel processor.
+    // Creating a pixel-processor and after that attacing a metafile
+    // recording is not possible anymore, the pixel-processor may be
+    // a SDPR, e.g. a CairoSDPR, and *not* a VclPixelProcessor2D anymore.
+    // Since the intention had changed already (see comments below
+    // where it is explained why two lines are expected nowadays)
+    // it is also okay to just use a VclMetafileProcessor2D - to record
+    // a metafile.
     ScopedVclPtrInstance<VirtualDevice> pDev;
+    GDIMetaFile aMetaFile;
+    aMetaFile.Record(pDev);
     drawinglayer::geometry::ViewInformation2D aView;
+
+    // This creates a VclMetafileProcessor2D - the only processor that
+    // (as the name states) can record metafiles
     std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createProcessor2DFromOutputDevice(*pDev, aView));
     CPPUNIT_ASSERT(pProcessor);
-    GDIMetaFile aMetaFile;
-    // Start recording after the processor is created, so we can test the pixel processor.
-    aMetaFile.Record(pDev);
 
     // Create a border line primitive that's similar to the one from the bugdoc:
     // 1.47 pixels is 0.03cm at 130% zoom and 96 DPI.

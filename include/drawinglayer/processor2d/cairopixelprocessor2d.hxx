@@ -181,6 +181,16 @@ public:
     CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                           cairo_surface_t* pTarget);
     virtual ~CairoPixelProcessor2D() override;
+
+    // access to BColorModifierStack
+    const basegfx::BColorModifierStack& getBColorModifierStack() const
+    {
+        return maBColorModifierStack;
+    }
+    void setBColorModifierStack(const basegfx::BColorModifierStack& rStack)
+    {
+        maBColorModifierStack = rStack;
+    }
 };
 }
 

@@ -1017,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
 
     tools::Rectangle topX(12, 21, 37, 60);
     int topNonWhites = 0;
-    tools::Rectangle bottomX(13, 83, 37, 126);
+    tools::Rectangle bottomX(12, 82, 37, 126);
     int bottomNonWhites = 0;
 
     // Check that there is nothing outside the X rectangles

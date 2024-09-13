@@ -453,9 +453,9 @@ class CairoSurfaceHelper
                 const BitmapColor aAlpha(pAlphaReadAccess->GetColor(y, x));
                 const sal_uInt16 nAlpha(aAlpha.GetRed());
 
-                pPixelData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nAlpha, aColor.GetRed());
-                pPixelData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nAlpha, aColor.GetGreen());
-                pPixelData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nAlpha, aColor.GetBlue());
+                pPixelData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(aColor.GetRed(), nAlpha);
+                pPixelData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(aColor.GetGreen(), nAlpha);
+                pPixelData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(aColor.GetBlue(), nAlpha);
                 pPixelData[SVP_CAIRO_ALPHA] = nAlpha;
                 pPixelData += 4;
             }
@@ -1186,12 +1186,10 @@ void CairoPixelProcessor2D::paintPolyPoylgonRGBA(const basegfx::B2DPolyPolygon& 
 
     // set linear transformation
     cairo_matrix_t aMatrix;
-    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
     const basegfx::B2DHomMatrix& rObjectToView(
         getViewInformation2D().getObjectToViewTransformation());
     cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
+                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
     cairo_set_matrix(mpRT, &aMatrix);
 
     // determine & set color
@@ -1265,6 +1263,10 @@ void CairoPixelProcessor2D::processTransparencePrimitive2D(
     cairo_surface_t* pContent(cairo_surface_create_similar(
         pTarget, cairo_surface_get_content(pTarget), fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
+
+    // important for content rendering: need to take over the ColorModifierStack
+    aContent.setBColorModifierStack(getBColorModifierStack());
+
     aContent.process(rTransCandidate.getChildren());
 
     // munge the temporary surfaces to our target surface
@@ -1316,6 +1318,10 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
     cairo_surface_t* pContent(cairo_surface_create_similar_image(
         pTarget, CAIRO_FORMAT_ARGB32, fContainedWidth, fContainedHeight));
     CairoPixelProcessor2D aContent(aViewInformation2D, pContent);
+
+    // take over evtl. used ColorModifierStack for content
+    aContent.setBColorModifierStack(getBColorModifierStack());
+
     aContent.process(rInvertCandidate.getChildren());
     cairo_surface_flush(pContent);
 
@@ -1324,9 +1330,18 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
     //       current default does, so keep it
     static bool bUseBuiltinXOR(false);
 
-    if (!bUseBuiltinXOR)
+    if (bUseBuiltinXOR)
     {
-        // get read access to target - XOR unfortunately needs that
+        // draw XOR to target using Cairo Operator CAIRO_OPERATOR_XOR
+        cairo_set_source_surface(mpRT, pContent, aVisibleRange.getMinX(), aVisibleRange.getMinY());
+        cairo_rectangle(mpRT, aVisibleRange.getMinX(), aVisibleRange.getMinY(),
+                        aVisibleRange.getWidth(), aVisibleRange.getHeight());
+        cairo_set_operator(mpRT, CAIRO_OPERATOR_XOR);
+        cairo_fill(mpRT);
+    }
+    else
+    {
+        // get read/write access to target - XOR unfortunately needs that
         cairo_surface_t* pRenderTarget(pTarget);
 
         if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pRenderTarget))
@@ -1345,6 +1360,8 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
         const sal_uInt32 nBackOffY(floor(aVisibleRange.getMinY()));
         const sal_uInt32 nBackStride(cairo_image_surface_get_stride(pRenderTarget));
         unsigned char* pBackDataRoot(cairo_image_surface_get_data(pRenderTarget));
+        const bool bBackPreMultiply(CAIRO_FORMAT_ARGB32
+                                    == cairo_image_surface_get_format(pRenderTarget));
 
         if (nullptr != pFrontDataRoot && nullptr != pBackDataRoot)
         {
@@ -1355,84 +1372,81 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
                 unsigned char* pBackData(pBackDataRoot + (nBackStride * (y + nBackOffY))
                                          + (nBackOffX * 4));
 
-                for (sal_uInt32 x(0); x < nFrontWidth; ++x)
+                // added advance mem to for-expression to be able to to coninue calls inside
+                for (sal_uInt32 x(0); x < nFrontWidth; ++x, pBackData += 4, pFrontData += 4)
                 {
-                    // do not forget pre-multiply -> need to get both alphas
-                    const sal_uInt8 nBackAlpha(pBackData[SVP_CAIRO_ALPHA]);
+                    // do not forget pre-multiply. Use 255 for non-premultiplied to
+                    // not have to do if not needed
+                    const sal_uInt8 nBackAlpha(bBackPreMultiply ? pBackData[SVP_CAIRO_ALPHA] : 255);
+
+                    // change will only be visible in back/target when not fully transparent
+                    if (0 == nBackAlpha)
+                        continue;
+
+                    // do not forget pre-multiply -> need to get both alphas. Use 255
+                    // for non-premultiplied to not have to do if not needed
                     const sal_uInt8 nFrontAlpha(pFrontData[SVP_CAIRO_ALPHA]);
 
-                    // only something to do if not fully transparent
-                    if (0 != nFrontAlpha)
+                    // only something to do if source is not fully transparent
+                    if (0 == nFrontAlpha)
+                        continue;
+
+                    sal_uInt8 nFrontB(pFrontData[SVP_CAIRO_BLUE]);
+                    sal_uInt8 nFrontG(pFrontData[SVP_CAIRO_GREEN]);
+                    sal_uInt8 nFrontR(pFrontData[SVP_CAIRO_RED]);
+
+                    if (255 != nFrontAlpha)
                     {
-                        sal_uInt8 nFrontB(pFrontData[SVP_CAIRO_BLUE]);
-                        sal_uInt8 nFrontG(pFrontData[SVP_CAIRO_GREEN]);
-                        sal_uInt8 nFrontR(pFrontData[SVP_CAIRO_RED]);
-
-                        if (255 != nFrontAlpha)
-                        {
-                            nFrontB = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontB);
-                            nFrontG = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontG);
-                            nFrontR = vcl::bitmap::unpremultiply(nFrontAlpha, nFrontR);
-                        }
-
-                        sal_uInt8 nBackB(pBackData[SVP_CAIRO_BLUE]);
-                        sal_uInt8 nBackG(pBackData[SVP_CAIRO_GREEN]);
-                        sal_uInt8 nBackR(pBackData[SVP_CAIRO_RED]);
-
-                        if (255 != nBackAlpha)
-                        {
-                            nBackB = vcl::bitmap::unpremultiply(nBackAlpha, nBackB);
-                            nBackG = vcl::bitmap::unpremultiply(nBackAlpha, nBackG);
-                            nBackR = vcl::bitmap::unpremultiply(nBackAlpha, nBackR);
-                        }
-
-                        // create XOR r,g,b
-                        const sal_uInt8 b(nFrontB ^ nBackB);
-                        const sal_uInt8 g(nFrontG ^ nBackG);
-                        const sal_uInt8 r(nFrontR ^ nBackR);
-
-                        // write back
-                        if (255 == nFrontAlpha)
-                        {
-                            pFrontData[SVP_CAIRO_BLUE] = b;
-                            pFrontData[SVP_CAIRO_GREEN] = g;
-                            pFrontData[SVP_CAIRO_RED] = r;
-                        }
-                        else
-                        {
-                            pFrontData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(nFrontAlpha, b);
-                            pFrontData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(nFrontAlpha, g);
-                            pFrontData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(nFrontAlpha, r);
-                        }
+                        // get front color (Front is always CAIRO_FORMAT_ARGB32 and
+                        // thus pre-multiplied)
+                        nFrontB = vcl::bitmap::unpremultiply(nFrontB, nFrontAlpha);
+                        nFrontG = vcl::bitmap::unpremultiply(nFrontG, nFrontAlpha);
+                        nFrontR = vcl::bitmap::unpremultiply(nFrontR, nFrontAlpha);
                     }
 
-                    // advance memory
-                    pBackData += 4;
-                    pFrontData += 4;
+                    sal_uInt8 nBackB(pBackData[SVP_CAIRO_BLUE]);
+                    sal_uInt8 nBackG(pBackData[SVP_CAIRO_GREEN]);
+                    sal_uInt8 nBackR(pBackData[SVP_CAIRO_RED]);
+
+                    if (255 != nBackAlpha)
+                    {
+                        // get back color if bBackPreMultiply (aka 255)
+                        nBackB = vcl::bitmap::unpremultiply(nBackB, nBackAlpha);
+                        nBackG = vcl::bitmap::unpremultiply(nBackG, nBackAlpha);
+                        nBackR = vcl::bitmap::unpremultiply(nBackR, nBackAlpha);
+                    }
+
+                    // create XOR r,g,b
+                    const sal_uInt8 b(nFrontB ^ nBackB);
+                    const sal_uInt8 g(nFrontG ^ nBackG);
+                    const sal_uInt8 r(nFrontR ^ nBackR);
+
+                    // write back directly to pBackData/target
+                    if (255 == nBackAlpha)
+                    {
+                        pBackData[SVP_CAIRO_BLUE] = b;
+                        pBackData[SVP_CAIRO_GREEN] = g;
+                        pBackData[SVP_CAIRO_RED] = r;
+                    }
+                    else
+                    {
+                        // additionally premultiply if bBackPreMultiply (aka 255)
+                        pBackData[SVP_CAIRO_BLUE] = vcl::bitmap::premultiply(b, nBackAlpha);
+                        pBackData[SVP_CAIRO_GREEN] = vcl::bitmap::premultiply(g, nBackAlpha);
+                        pBackData[SVP_CAIRO_RED] = vcl::bitmap::premultiply(r, nBackAlpha);
+                    }
                 }
             }
 
-            cairo_surface_mark_dirty(pContent);
+            cairo_surface_mark_dirty(pRenderTarget);
         }
 
         if (pRenderTarget != pTarget)
         {
-            // cleanup mapping for read access to target
+            // cleanup mapping for read/write access to target
             cairo_surface_unmap_image(pTarget, pRenderTarget);
         }
     }
-
-    // draw XOR to target
-    cairo_set_source_surface(mpRT, pContent, aVisibleRange.getMinX(), aVisibleRange.getMinY());
-    cairo_rectangle(mpRT, aVisibleRange.getMinX(), aVisibleRange.getMinY(),
-                    aVisibleRange.getWidth(), aVisibleRange.getHeight());
-
-    if (bUseBuiltinXOR)
-    {
-        cairo_set_operator(mpRT, CAIRO_OPERATOR_XOR);
-    }
-
-    cairo_fill(mpRT);
 
     // cleanup temporary surface
     cairo_surface_destroy(pContent);
@@ -1468,14 +1482,12 @@ void CairoPixelProcessor2D::processMaskPrimitive2D(
 
     cairo_save(mpRT);
 
-    // set linear transformation
+    // set linear transformation for applying mask. use no fAAOffset for mask
     cairo_matrix_t aMatrix;
     const basegfx::B2DHomMatrix& rObjectToView(
         getViewInformation2D().getObjectToViewTransformation());
-    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
     cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
+                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
     cairo_set_matrix(mpRT, &aMatrix);
 
     // create path geometry and put mask as path
@@ -1889,12 +1901,10 @@ void CairoPixelProcessor2D::processFilledRectanglePrimitive2D(
     cairo_save(mpRT);
 
     cairo_matrix_t aMatrix;
-    const double fAAOffset(getViewInformation2D().getUseAntiAliasing() ? 0.5 : 0.0);
     const basegfx::B2DHomMatrix& rObjectToView(
         getViewInformation2D().getObjectToViewTransformation());
     cairo_matrix_init(&aMatrix, rObjectToView.a(), rObjectToView.b(), rObjectToView.c(),
-                      rObjectToView.d(), rObjectToView.e() + fAAOffset,
-                      rObjectToView.f() + fAAOffset);
+                      rObjectToView.d(), rObjectToView.e(), rObjectToView.f());
 
     // set linear transformation
     cairo_set_matrix(mpRT, &aMatrix);

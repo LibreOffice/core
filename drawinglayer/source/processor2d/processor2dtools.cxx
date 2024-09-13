@@ -38,11 +38,18 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
 {
     static bool bUsePrimitiveRenderer(
 #if defined(_WIN32)
-        // Windows: make still dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
+        // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
         nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER")
 #elif USE_HEADLESS_CODE
-        // Linux/Cairo: make dependent on ExperimentalMode now
-        officecfg::Office::Common::Misc::ExperimentalMode::get()
+        // Linux/Cairo: activate to check tests/builds. Leave a
+        // possibility to deactivate for easy test/request testing
+        nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER")
+
+        // Use this if all is stable/teste for a while
+        // true
+
+        // Also possible: make dependent on ExperimentalMode
+        // officecfg::Office::Common::Misc::ExperimentalMode::get()
 #else
         // all others: do not use, not (yet) supported
         false
