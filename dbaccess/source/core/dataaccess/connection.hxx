@@ -24,7 +24,6 @@
 #include <cstddef>
 #include <map>
 
-#include <apitools.hxx>
 #include <querycontainer.hxx>
 #include <tablecontainer.hxx>
 #include <viewcontainer.hxx>
@@ -48,11 +47,13 @@
 #include <connectivity/ConnectionWrapper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/warningscontainer.hxx>
+#include <unotools/weakref.hxx>
 
 namespace dbaccess
 {
 
-typedef cppu::ImplHelper13  <   css::container::XChild
+typedef cppu::WeakComponentImplHelper<
+                                        css::container::XChild
                                     ,   css::sdbcx::XTablesSupplier
                                     ,   css::sdbcx::XViewsSupplier
                                     ,   css::sdbc::XConnection
@@ -70,11 +71,11 @@ typedef cppu::ImplHelper13  <   css::container::XChild
 class ODatabaseSource;
 // OConnection
 class OConnection final     :public ::cppu::BaseMutex
-                            ,public OSubComponent
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
                             ,public IRefreshListener
 {
+    unotools::WeakReference<ODatabaseSource> m_xParent;
     css::uno::Reference< css::sdbcx::XTablesSupplier >
                                           m_xMasterTables; // just to avoid the recreation of the catalog
     connectivity::OWeakRefArray           m_aStatements;

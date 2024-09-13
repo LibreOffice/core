@@ -255,10 +255,11 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap)
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection > const & _rxMaster
                          , const Reference< XComponentContext >& _rxORB)
-            :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
+            :OConnection_Base(m_aMutex)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do its own refcounting, it would have to acquire m_pMutex
                 // same for tables
+            ,m_xParent(&_rDB)
             ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_aContext( _rxORB )
@@ -388,7 +389,6 @@ Sequence< Type > OConnection::getTypes()
 {
     TypeBag aNormalizedTypes;
 
-    lcl_copyTypes( aNormalizedTypes, OSubComponent::getTypes() );
     lcl_copyTypes( aNormalizedTypes, OConnection_Base::getTypes() );
     lcl_copyTypes( aNormalizedTypes, ::connectivity::OConnectionWrapper::getTypes() );
 
@@ -416,34 +416,30 @@ Any OConnection::queryInterface( const Type & rType )
         return Any();
     else if ( !m_bSupportsGroups && rType.equals( cppu::UnoType<XGroupsSupplier>::get() ) )
         return Any();
-    Any aReturn = OSubComponent::queryInterface( rType );
+    Any aReturn = OConnection_Base::queryInterface( rType );
     if (!aReturn.hasValue())
-    {
-        aReturn = OConnection_Base::queryInterface( rType );
-        if (!aReturn.hasValue())
-            aReturn = OConnectionWrapper::queryInterface( rType );
-    }
+        aReturn = OConnectionWrapper::queryInterface( rType );
     return aReturn;
 }
 
 void OConnection::acquire() noexcept
 {
     // include this one when you want to see who calls it (call graph)
-    OSubComponent::acquire();
+    OConnection_Base::acquire();
 }
 
 void OConnection::release() noexcept
 {
     // include this one when you want to see who calls it (call graph)
-    OSubComponent::release();
+    OConnection_Base::release();
 }
 
-// OSubComponent
+// OConnection_Base
 void OConnection::disposing()
 {
     MutexGuard aGuard(m_aMutex);
 
-    OSubComponent::disposing();
+    OConnection_Base::disposing();
     OConnectionWrapper::disposing();
 
     for (auto const& statement : m_aStatements)
@@ -485,7 +481,7 @@ Reference< XInterface >  OConnection::getParent()
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xParent;
+    return static_cast<OWeakObject*>(m_xParent.get().get());
 }
 
 void OConnection::setParent(const Reference< XInterface > & /*Parent*/)
