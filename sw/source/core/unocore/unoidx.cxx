@@ -301,8 +301,8 @@ public:
     bool m_bIsDescriptor;
     SwDoc* m_pDoc;
     std::optional<SwDocIndexDescriptorProperties_Impl> m_oProps;
-    uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
-    uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
+    unotools::WeakReference<StyleAccess_Impl> m_wStyleAccess;
+    unotools::WeakReference<TokenAccess_Impl> m_wTokenAccess;
 
     Impl(SwDoc& rDoc, const TOXTypes eType, SwTOXBaseSection *const pBaseSection)
         : m_pFormat(pBaseSection ? pBaseSection->GetFormat() : nullptr)
@@ -1051,26 +1051,26 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
             break;
             case WID_LEVEL_FORMAT:
             {
-                uno::Reference< container::XIndexReplace > xTokenAccess(
-                    m_pImpl->m_wTokenAccess);
+                rtl::Reference< TokenAccess_Impl > xTokenAccess(
+                    m_pImpl->m_wTokenAccess.get());
                 if (!xTokenAccess.is())
                 {
                     xTokenAccess = new TokenAccess_Impl(*this);
-                    m_pImpl->m_wTokenAccess = xTokenAccess;
+                    m_pImpl->m_wTokenAccess = xTokenAccess.get();
                 }
-                aRet <<= xTokenAccess;
+                aRet <<= uno::Reference< container::XIndexReplace >(xTokenAccess);
             }
             break;
             case WID_LEVEL_PARAGRAPH_STYLES:
             {
-                uno::Reference< container::XIndexReplace > xStyleAccess(
-                    m_pImpl->m_wStyleAccess);
+                rtl::Reference< StyleAccess_Impl > xStyleAccess(
+                    m_pImpl->m_wStyleAccess.get());
                 if (!xStyleAccess.is())
                 {
                     xStyleAccess = new StyleAccess_Impl(*this);
-                    m_pImpl->m_wStyleAccess = xStyleAccess;
+                    m_pImpl->m_wStyleAccess = xStyleAccess.get();
                 }
-                aRet <<= xStyleAccess;
+                aRet <<= uno::Reference< container::XIndexReplace >(xStyleAccess);
             }
             break;
             case WID_MAIN_ENTRY_CHARACTER_STYLE_NAME:
