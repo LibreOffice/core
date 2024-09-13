@@ -865,11 +865,22 @@ public:
     {
     }
 
-    void checkAutoFormat(SwTextNode* pTextNode, const SwTextAttr* pTextAttr)
+    void checkAutoFormat(SwTextNode* pTextNode, const SwTextAttr* pTextAttr,
+                         const std::map<sal_Int32, const SwTextAttr*>& rCharFormats)
     {
         const SwFormatAutoFormat& rAutoFormat = pTextAttr->GetAutoFormat();
         SfxItemIter aItemIter(*rAutoFormat.GetStyleHandle());
         const SfxPoolItem* pItem = aItemIter.GetCurItem();
+
+        const SwTextAttr* pCharAttr = nullptr;
+        auto itr = rCharFormats.find(pTextAttr->GetStart());
+        if (itr != rCharFormats.end())
+            pCharAttr = itr->second;
+
+        const SwCharFormat* pCharformat = nullptr;
+        if (pCharAttr && (*pTextAttr->GetEnd() == *pCharAttr->GetEnd()))
+            pCharformat = pCharAttr->GetCharFormat().GetCharFormat();
+
         std::vector<OUString> aFormattings;
         while (pItem)
         {
@@ -879,61 +890,366 @@ public:
                 case RES_CHRATR_WEIGHT:
                 case RES_CHRATR_CJK_WEIGHT:
                 case RES_CHRATR_CTL_WEIGHT:
-                    sFormattingType = "Weight";
-                    break;
+                {
+                    const SvxWeightItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                    {
+                        pStyleItem = pCharformat->GetItemIfSet(
+                            TypedWhichId<SvxWeightItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                            TypedWhichId<SvxWeightItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            TypedWhichId<SvxWeightItem>(pItem->Which()));
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxWeightItem*>(pItem), pStyleItem))
+                        sFormattingType = "Weight";
+                }
+                break;
+
                 case RES_CHRATR_POSTURE:
                 case RES_CHRATR_CJK_POSTURE:
                 case RES_CHRATR_CTL_POSTURE:
-                    sFormattingType = "Posture";
-                    break;
+                {
+                    const SvxPostureItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                    {
+                        pStyleItem = pCharformat->GetItemIfSet(
+                            TypedWhichId<SvxPostureItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                            TypedWhichId<SvxPostureItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            TypedWhichId<SvxPostureItem>(pItem->Which()));
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxPostureItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Posture";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_SHADOWED:
-                    sFormattingType = "Shadowed";
-                    break;
+                {
+                    const SvxShadowedItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_SHADOWED, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_SHADOWED, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_SHADOWED);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxShadowedItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Shadowed";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_COLOR:
-                    sFormattingType = "Font Color";
-                    break;
+                {
+                    const SvxColorItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_COLOR, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_COLOR, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_COLOR);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxColorItem*>(pItem), pStyleItem))
+                        sFormattingType = "Font Color";
+                }
+                break;
 
                 case RES_CHRATR_FONTSIZE:
-                case RES_CHRATR_CJK_FONTSIZE:
-                case RES_CHRATR_CTL_FONTSIZE:
-                    sFormattingType = "Font Size";
-                    break;
+                {
+                    // case RES_CHRATR_CJK_FONTSIZE:
+                    // case RES_CHRATR_CTL_FONTSIZE:
+                    // TODO: check depending on which lang is used Western, Complex, Asia
+                    const SvxFontHeightItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                    {
+                        pStyleItem = pCharformat->GetItemIfSet(
+                            TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                            TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            TypedWhichId<SvxFontHeightItem>(pItem->Which()));
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxFontHeightItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Font Size";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_FONT:
                 case RES_CHRATR_CJK_FONT:
                 case RES_CHRATR_CTL_FONT:
-                    sFormattingType = "Font";
-                    break;
+                {
+                    // 3. direct formatting
+                    const SvxFontItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                    {
+                        pStyleItem = pCharformat->GetItemIfSet(
+                            TypedWhichId<SvxFontItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                            TypedWhichId<SvxFontItem>(pItem->Which()), false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            TypedWhichId<SvxFontItem>(pItem->Which()));
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxFontItem*>(pItem), pStyleItem))
+                        sFormattingType = "Font";
+                }
+                break;
 
                 case RES_CHRATR_EMPHASIS_MARK:
-                    sFormattingType = "Emphasis Mark";
-                    break;
+                {
+                    const SvxEmphasisMarkItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                            RES_CHRATR_EMPHASIS_MARK, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_EMPHASIS_MARK);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxEmphasisMarkItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Emphasis Mark";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_UNDERLINE:
-                    sFormattingType = "Underline";
-                    break;
+                {
+                    const SvxUnderlineItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_UNDERLINE);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxUnderlineItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Underline";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_OVERLINE:
-                    sFormattingType = "Overline";
-                    break;
+                {
+                    const SvxOverlineItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_OVERLINE, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_OVERLINE, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_OVERLINE);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxOverlineItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Overline";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_CROSSEDOUT:
-                    sFormattingType = "Strikethrough";
-                    break;
+                {
+                    const SvxCrossedOutItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_CROSSEDOUT);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxCrossedOutItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Strikethrough";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_RELIEF:
-                    sFormattingType = "Relief";
-                    break;
+                {
+                    const SvxCharReliefItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_RELIEF, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_RELIEF, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_RELIEF);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxCharReliefItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Relief";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_CONTOUR:
-                    sFormattingType = "Outline";
-                    break;
+                {
+                    const SvxContourItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_CONTOUR, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CONTOUR, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_CONTOUR);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxContourItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "Outline";
+                    }
+                }
+                break;
 
                 case RES_CHRATR_NOHYPHEN:
-                    sFormattingType = "No Hyphenation";
-                    break;
+                {
+                    const SvxNoHyphenItem* pStyleItem = nullptr;
+
+                    if (pCharformat)
+                        pStyleItem = pCharformat->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
+
+                    if (!pStyleItem && pTextNode->GetTextColl())
+                    {
+                        pStyleItem
+                            = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
+                    }
+
+                    if (!pStyleItem)
+                    {
+                        pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                            RES_CHRATR_NOHYPHEN);
+                    }
+
+                    if (!SfxPoolItem::areSame(static_cast<const SvxNoHyphenItem*>(pItem),
+                                              pStyleItem))
+                    {
+                        sFormattingType = "No Hyphenation";
+                    }
+                }
+                break;
 
                 default:
                     break;
@@ -956,46 +1272,329 @@ public:
         pIssue->setEnd(pTextAttr->GetAnyEnd());
     }
 
+    static bool isDirectFormat(const SwTextNode* pTextNode, const SwAttrSet& rSwAttrSet)
+    {
+        const SfxPoolItem* pItem = nullptr;
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_WEIGHT, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CJK_WEIGHT, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CTL_WEIGHT, false)))
+        {
+            // 3. direct formatting
+            const SvxWeightItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+            {
+                // 1. paragraph format
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                    TypedWhichId<SvxWeightItem>(pItem->Which()), false);
+            }
+
+            if (!pStyleItem)
+            {
+                // 0. document default
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    TypedWhichId<SvxWeightItem>(pItem->Which()));
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxWeightItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_POSTURE, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CJK_POSTURE, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CTL_POSTURE, false)))
+        {
+            const SvxPostureItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+            {
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                    TypedWhichId<SvxPostureItem>(pItem->Which()), false);
+            }
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    TypedWhichId<SvxPostureItem>(pItem->Which()));
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxPostureItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_SHADOWED, false)))
+        {
+            const SvxShadowedItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_SHADOWED, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_SHADOWED);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxShadowedItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_COLOR, false)))
+        {
+            const SvxColorItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_COLOR, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem
+                    = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_COLOR);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxColorItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        // TODO: check depending on which lang is used Western, Complex, Asia
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_FONTSIZE, false))
+            /*|| (pItem = rSwAttrSet.GetItem(RES_CHRATR_CJK_FONTSIZE, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CTL_FONTSIZE, false))*/)
+        {
+            const SvxFontHeightItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+            {
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                    TypedWhichId<SvxFontHeightItem>(pItem->Which()), false);
+            }
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    TypedWhichId<SvxFontHeightItem>(pItem->Which()));
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxFontHeightItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_FONT, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CJK_FONT, false))
+            || (pItem = rSwAttrSet.GetItem(RES_CHRATR_CTL_FONT, false)))
+        {
+            const SvxFontItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+            {
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(
+                    TypedWhichId<SvxFontItem>(pItem->Which()), false);
+            }
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    TypedWhichId<SvxFontItem>(pItem->Which()));
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxFontItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_EMPHASIS_MARK, false)))
+        {
+            const SvxEmphasisMarkItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+            {
+                pStyleItem
+                    = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_EMPHASIS_MARK, false);
+            }
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_EMPHASIS_MARK);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxEmphasisMarkItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_UNDERLINE, false)))
+        {
+            const SvxUnderlineItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_UNDERLINE);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxUnderlineItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_OVERLINE, false)))
+        {
+            const SvxOverlineItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_OVERLINE, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_OVERLINE);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxOverlineItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_CROSSEDOUT, false)))
+        {
+            const SvxCrossedOutItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CROSSEDOUT, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_CROSSEDOUT);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxCrossedOutItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_RELIEF, false)))
+        {
+            const SvxCharReliefItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_RELIEF, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_RELIEF);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxCharReliefItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_NOHYPHEN, false)))
+        {
+            const SvxNoHyphenItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_NOHYPHEN, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_NOHYPHEN);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxNoHyphenItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        if ((pItem = rSwAttrSet.GetItem(RES_CHRATR_CONTOUR, false)))
+        {
+            const SvxContourItem* pStyleItem = nullptr;
+
+            if (pTextNode->GetTextColl())
+                pStyleItem = pTextNode->GetTextColl()->GetItemIfSet(RES_CHRATR_CONTOUR, false);
+
+            if (!pStyleItem)
+            {
+                pStyleItem = &pTextNode->GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(
+                    RES_CHRATR_CONTOUR);
+            }
+
+            if (!SfxPoolItem::areSame(static_cast<const SvxContourItem*>(pItem), pStyleItem))
+                return true;
+            else
+                pItem = nullptr;
+        }
+
+        return false;
+    }
+
     void check(SwNode* pCurrent) override
     {
         if (!pCurrent->IsTextNode())
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
+        SwWrtShell* pWrtShell = pTextNode->GetDoc().GetDocShell()->GetWrtShell();
+        if (pWrtShell && !pTextNode->getLayoutFrame(pWrtShell->GetLayout()))
+            return;
+
         if (pTextNode->HasHints())
         {
+            // collect character style formats (if have)
             SwpHints& rHints = pTextNode->GetSwpHints();
+            std::map<sal_Int32, const SwTextAttr*> aCharFormats;
+            for (size_t i = 0; i < rHints.Count(); ++i)
+            {
+                const SwTextAttr* pTextAttr = rHints.Get(i);
+
+                if (pTextAttr->Which() == RES_TXTATR_CHARFMT)
+                {
+                    aCharFormats.insert({ pTextAttr->GetStart(), pTextAttr });
+                }
+            }
+
+            // direct formatting
             for (size_t i = 0; i < rHints.Count(); ++i)
             {
                 const SwTextAttr* pTextAttr = rHints.Get(i);
                 if (pTextAttr->Which() == RES_TXTATR_AUTOFMT)
                 {
-                    checkAutoFormat(pTextNode, pTextAttr);
+                    checkAutoFormat(pTextNode, pTextAttr, aCharFormats);
                 }
             }
         }
+
         if (pTextNode->HasSwAttrSet())
         {
             // Paragraph doesn't have hints but the entire paragraph might have char attributes
-            auto& aSwAttrSet = pTextNode->GetSwAttrSet();
             auto nParagraphLength = pTextNode->GetText().getLength();
             if (nParagraphLength == 0)
                 return;
-            if (aSwAttrSet.GetItem(RES_CHRATR_WEIGHT, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CJK_WEIGHT, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CTL_WEIGHT, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_POSTURE, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CJK_POSTURE, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CTL_POSTURE, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_SHADOWED, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_COLOR, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_EMPHASIS_MARK, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_UNDERLINE, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_OVERLINE, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CROSSEDOUT, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_RELIEF, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_NOHYPHEN, false)
-                || aSwAttrSet.GetItem(RES_CHRATR_CONTOUR, false))
+            if (isDirectFormat(pTextNode, pTextNode->GetSwAttrSet()))
             {
                 auto pIssue
                     = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),

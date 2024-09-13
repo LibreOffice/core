@@ -287,6 +287,24 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testDeleteHeader)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aResultIssues[2]->m_eIssueID);
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testStylesWithHeader)
+{
+    // Check direct formats, char/para styles and not allowed page styles
+    createSwDoc("PageCharParaStyles.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    sw::AccessibilityCheck aCheck(pDoc);
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    aCheck.check();
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_TITLE, aIssues[0]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[1]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[2]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[3]->m_eIssueID);
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DIRECT_FORMATTING, aIssues[4]->m_eIssueID);
+}
+
 namespace
 {
 std::vector<std::shared_ptr<sfx::AccessibilityIssue>>
