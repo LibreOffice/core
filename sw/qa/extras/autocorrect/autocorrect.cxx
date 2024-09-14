@@ -514,6 +514,132 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf158051)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testTdf162911)
+{
+    createSwDoc();
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    emulateTyping(*pTextDoc, u"foo@bar.com foo2@bar.com ");
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 2, u" "_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo2@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 3, u"foo2@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    // Without the fix in place, this would have crashed here
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2@bar.com "_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2@bar."_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(
+        u""_ustr,
+        getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2@bar"_ustr), u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2@"_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 2, u" foo2"_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u"mailto:foo@bar.com"_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 2, u" "_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com "_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr,
+                         getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar.com"_ustr),
+                                               u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(
+        u""_ustr,
+        getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar."_ustr), u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(
+        u""_ustr,
+        getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@bar"_ustr), u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 1, u"foo@"_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 1, u"foo"_ustr),
+                                                         u"HyperLinkURL"_ustr));
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(getRun(getParagraph(1), 1, u""_ustr),
+                                                         u"HyperLinkURL"_ustr));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
