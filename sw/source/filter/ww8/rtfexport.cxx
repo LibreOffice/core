@@ -1406,12 +1406,10 @@ void RtfExport::OutColorTable()
         const SvxBoxItem* pCharBox = rPool.GetUserDefaultItem(RES_CHRATR_BOX);
         if (pCharBox)
             InsColorLine(*pCharBox);
-        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_BOX);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pCharBox = &static_cast<const SvxBoxItem&>(*pItem);
-            InsColorLine(*pCharBox);
-        }
+        m_rDoc.ForEachCharacterBoxItem([this](const SvxBoxItem& rCharBox) -> bool {
+            InsColorLine(rCharBox);
+            return true;
+        });
     }
 
     // TextFrame or paragraph background solid fill.
