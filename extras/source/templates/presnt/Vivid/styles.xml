@@ -422,7 +422,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.372cm" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#04617b" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid1-outline2" style:family="presentation" style:parent-style-name="Vivid1-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.297cm" fo:text-indent="0cm"/>
@@ -552,7 +552,7 @@
       <style:paragraph-properties fo:text-align="start">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="45pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="45pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="45pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#dbf5f9" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="45pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="45pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="45pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-background" style:family="presentation">
       <style:graphic-properties draw:stroke="none" draw:fill="none" style:repeat="stretch"/>
@@ -613,7 +613,7 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.373cm" fo:text-indent="0cm"/>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:color="#04617b" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Vivid2-outline2" style:family="presentation" style:parent-style-name="Vivid2-outline1">
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0.297cm" fo:text-indent="0cm"/>
