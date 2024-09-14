@@ -1170,6 +1170,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
     assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "width"_ostr, u"9360"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf61000)
+{
+    // Without the fix in place this crashes on opening
+    loadAndSave("tdf61000.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
+    assertXPath(
+        pXmlDoc,
+        "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:numFmt"_ostr,
+        "val"_ostr, u"bullet"_ustr);
+    // Without the fix in place, this would be -540, and the abstractNumId is 4
+    // The negative value of the tab stop is the culprit for the crash
+    assertXPath(
+        pXmlDoc,
+        "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab"_ostr,
+        "pos"_ostr, u"0"_ustr);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
