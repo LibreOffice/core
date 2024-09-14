@@ -37,21 +37,14 @@ namespace vcl
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath )
     {
         sal_Int32 nStateIndexInPath = 0;
-        bool bFound = false;
         for (auto const& path : _rPath)
         {
             if (path == _nState)
-            {
-                bFound = true;
-                break;
-            }
+                return nStateIndexInPath;
             ++nStateIndexInPath;
         }
-        if (!bFound)
-            nStateIndexInPath = -1;
-        return nStateIndexInPath;
+        return -1;
     }
-
 
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId )
     {
@@ -61,7 +54,6 @@ namespace vcl
             nStateIndexInPath = getStateIndexInPath( _nState, aPathPos->second );
         return nStateIndexInPath;
     }
-
 
     sal_Int32 RoadmapWizardImpl::getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS )
     {
