@@ -277,49 +277,29 @@
       </draw:page>
       <draw:page draw:name="page8" draw:style-name="dp1" draw:master-page-name="Diagram" presentation:presentation-page-layout-name="AL3T19" xml:id="id14" draw:id="id14">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
-        <draw:g>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id1" draw:id="id1" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="1.5cm" svg:y="8.7cm">
-            <text:p>
-              <text:span>Lorem</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id2" draw:id="id2" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="10.4cm" svg:y="6.3cm">
-            <text:p>
-              <text:span>Ipsum</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id3" draw:id="id3" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="10.4cm" svg:y="11.1cm">
-            <text:p>
-              <text:span>Dolor</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id5" draw:id="id5" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="1.5cm">
-            <text:p>
-              <text:span>Sit Amet</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id6" draw:id="id6" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="6.3cm">
-            <text:p>
-              <text:span>Consectetur</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:custom-shape draw:style-name="gr30" xml:id="id4" draw:id="id4" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="11.1cm">
-            <text:p>
-              <text:span>Adipiscing</text:span>
-            </text:p>
-            <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
-          </draw:custom-shape>
-          <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="7.862cm" svg:y1="10.065cm" svg:x2="10.406cm" svg:y2="7.705cm" draw:start-shape="id1" draw:start-glue-point="1" draw:end-shape="id2" draw:end-glue-point="3" svg:d="M7862 10065h553l1438-2360h553" svg:viewBox="0 0 2545 2361"/>
-          <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="7.862cm" svg:y1="10.065cm" svg:x2="10.406cm" svg:y2="12.511cm" draw:start-shape="id1" draw:start-glue-point="1" draw:end-shape="id3" draw:end-glue-point="3" svg:d="M7862 10065h553l1438 2446h553" svg:viewBox="0 0 2545 2447"/>
-          <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="12.511cm" svg:x2="19.314cm" svg:y2="12.511cm" draw:start-shape="id3" draw:start-glue-point="1" draw:end-shape="id4" draw:end-glue-point="3" svg:d="M16770 12511h553 1438 553" svg:viewBox="0 0 2545 1"/>
-          <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="7.705cm" svg:x2="19.314cm" svg:y2="2.9cm" draw:start-shape="id2" draw:start-glue-point="1" draw:end-shape="id5" draw:end-glue-point="3" svg:d="M16770 7705h553l1438-4805h553" svg:viewBox="0 0 2545 4806"/>
-          <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="7.705cm" svg:x2="19.314cm" svg:y2="7.705cm" draw:start-shape="id2" draw:start-glue-point="1" draw:end-shape="id6" draw:end-glue-point="3" svg:d="M16770 7705h553 1438 553" svg:viewBox="0 0 2545 1"/>
-        </draw:g>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id1" draw:id="id1" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="1.5cm" svg:y="8.7cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id2" draw:id="id2" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="10.4cm" svg:y="6.3cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id3" draw:id="id3" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="10.4cm" svg:y="11.1cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id5" draw:id="id5" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="1.5cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id6" draw:id="id6" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="6.3cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:frame presentation:style-name="Diagram-subtitle" xml:id="id4" draw:id="id4" draw:layer="layout" svg:width="6.4cm" svg:height="2.8cm" svg:x="19.3cm" svg:y="11.1cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
+        <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="7.862cm" svg:y1="10.065cm" svg:x2="10.406cm" svg:y2="7.705cm" draw:start-shape="id1" draw:start-glue-point="1" draw:end-shape="id2" draw:end-glue-point="3" svg:d="M7862 10065h553l1438-2360h553" svg:viewBox="0 0 2545 2361"/>
+        <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="7.862cm" svg:y1="10.065cm" svg:x2="10.406cm" svg:y2="12.511cm" draw:start-shape="id1" draw:start-glue-point="1" draw:end-shape="id3" draw:end-glue-point="3" svg:d="M7862 10065h553l1438 2446h553" svg:viewBox="0 0 2545 2447"/>
+        <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="12.511cm" svg:x2="19.314cm" svg:y2="12.511cm" draw:start-shape="id3" draw:start-glue-point="1" draw:end-shape="id4" draw:end-glue-point="3" svg:d="M16770 12511h553 1438 553" svg:viewBox="0 0 2545 1"/>
+        <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="7.705cm" svg:x2="19.314cm" svg:y2="2.9cm" draw:start-shape="id2" draw:start-glue-point="1" draw:end-shape="id5" draw:end-glue-point="3" svg:d="M16770 7705h553l1438-4805h553" svg:viewBox="0 0 2545 4806"/>
+        <draw:connector draw:style-name="gr30" draw:layer="layout" draw:type="lines" svg:x1="16.77cm" svg:y1="7.705cm" svg:x2="19.314cm" svg:y2="7.705cm" draw:start-shape="id2" draw:start-glue-point="1" draw:end-shape="id6" draw:end-glue-point="3" svg:d="M16770 7705h553 1438 553" svg:viewBox="0 0 2545 1"/>
         <draw:frame presentation:style-name="Diagram-title" draw:layer="layout" svg:width="25.2cm" svg:height="3cm" svg:x="1.4cm" svg:y="0.6cm" presentation:class="title" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
