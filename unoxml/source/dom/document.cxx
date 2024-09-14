@@ -99,7 +99,7 @@ namespace DOM
         xDoc->m_NodeMap.emplace(
                 reinterpret_cast<xmlNodePtr>(pDoc),
                 ::std::make_pair(
-                    WeakReference<XNode>(static_cast<XDocument*>(xDoc.get())),
+                    xDoc.get(),
                     xDoc.get()));
         return xDoc;
     }
@@ -111,7 +111,7 @@ namespace DOM
         // node map must be empty now, otherwise CDocument must not die!
         for (const auto& rEntry : m_NodeMap)
         {
-            Reference<XNode> const xNode(rEntry.second.first);
+            rtl::Reference<CNode> const xNode(rEntry.second.first);
             OSL_ENSURE(!xNode.is(),
             "CDocument::~CDocument(): ERROR: live node in document node map!");
         }
@@ -168,12 +168,10 @@ namespace DOM
         nodemap_t::const_iterator const i = m_NodeMap.find(pNode);
         if (i != m_NodeMap.end()) {
             // #i113681# check that the CNode is still alive
-            uno::Reference<XNode> const xNode(i->second.first);
+            rtl::Reference<CNode> const xNode(i->second.first);
             if (xNode.is())
             {
-                ::rtl::Reference<CNode> ret(i->second.second);
-                OSL_ASSERT(ret.is());
-                return ret;
+                return xNode;
             }
         }
 
@@ -249,7 +247,7 @@ namespace DOM
         if (pCNode != nullptr) {
             bool const bInserted = m_NodeMap.emplace(
                         pNode,
-                        ::std::make_pair(WeakReference<XNode>(pCNode), pCNode.get())
+                        ::std::make_pair(pCNode.get(), pCNode.get())
                 ).second;
             OSL_ASSERT(bInserted);
             if (!bInserted) {
