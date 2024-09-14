@@ -132,13 +132,6 @@
     <style:style style:name="gr204" style:family="graphic" style:parent-style-name="Filled_20_White">
       <style:graphic-properties draw:stroke="dash" draw:stroke-dash="Dash_20__28_Rounded_29_" svg:stroke-width="0.1cm" svg:stroke-color="#e54b89" draw:marker-start-width="0.36cm" draw:marker-end-width="0.36cm" svg:stroke-linecap="round" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="2.25cm" fo:min-width="5.5cm" fo:padding-top="0.174cm" fo:padding-bottom="0.174cm" fo:padding-left="0.3cm" fo:padding-right="0.3cm" loext:decorative="false"/>
     </style:style>
-    <style:style style:name="pr4" style:family="presentation" style:parent-style-name="Candy-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr5" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-subtitle">
-      <style:graphic-properties fo:min-height="1.8cm"/>
-      <style:paragraph-properties fo:text-align="left"/>
-    </style:style>
     <style:style style:name="pr6" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-subtitle">
       <style:graphic-properties fo:min-height="1.8cm"/>
       <style:paragraph-properties fo:text-align="right"/>
@@ -153,19 +146,6 @@
       <style:graphic-properties fo:min-height="1.8cm"/>
       <style:paragraph-properties fo:text-align="right"/>
       <style:text-properties fo:color="#f8b622"/>
-    </style:style>
-    <style:style style:name="pr9" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr11" style:family="presentation" style:parent-style-name="Topic_20_Title_20_1-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr12" style:family="presentation" style:parent-style-name="Topic_20_Title_20_2-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-      <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
-    </style:style>
-    <style:style style:name="pr14" style:family="presentation" style:parent-style-name="Sample_20_Article-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
     </style:style>
     <style:style style:name="pr15" style:family="presentation" style:parent-style-name="Content-subtitle">
       <style:text-properties fo:color="#60c4e4"/>
@@ -182,15 +162,6 @@
     <style:style style:name="pr21" style:family="presentation" style:parent-style-name="Content-notes">
       <style:graphic-properties draw:fill-color="#ffffff" fo:min-height="13.364cm"/>
     </style:style>
-    <style:style style:name="pr23" style:family="presentation" style:parent-style-name="Insert_20_Picture-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr24" style:family="presentation" style:parent-style-name="Insert_20_Picture_20_1-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr25" style:family="presentation" style:parent-style-name="Topic_20_Title_20_3-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
     <style:style style:name="pr26" style:family="presentation" style:parent-style-name="Content-subtitle">
       <style:graphic-properties draw:textarea-horizontal-align="right" fo:min-height="1cm"/>
       <style:text-properties fo:font-size="20pt" style:font-size-asian="20pt" style:font-size-complex="20pt"/>
@@ -206,12 +177,6 @@
     <style:style style:name="pr29" style:family="presentation" style:parent-style-name="Content-outline1">
       <style:graphic-properties draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false" fo:min-height="1.8cm"/>
       <style:text-properties fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
-    </style:style>
-    <style:style style:name="pr40" style:family="presentation" style:parent-style-name="List_20_Content-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
-    </style:style>
-    <style:style style:name="pr42" style:family="presentation" style:parent-style-name="Greetings-notes">
-      <style:graphic-properties draw:fill-color="#ffffff" draw:auto-grow-height="true" fo:min-height="13.364cm"/>
     </style:style>
     <style:style style:name="pr43" style:family="presentation" style:parent-style-name="Content-subtitle">
       <style:graphic-properties draw:auto-grow-height="false" loext:decorative="false"/>
@@ -258,78 +223,78 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="1" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr4" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Candy-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
       </draw:page>
       <draw:page draw:name="page2" draw:style-name="dp1" draw:master-page-name="Table_20_of_20_Content" presentation:presentation-page-layout-name="AL1T2">
         <draw:g>
-          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="1.721cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="11.335cm" svg:y="1.72cm">
             <text:p>
               <text:span text:style-name="T5">1</text:span>
             </text:p>
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="gr2" draw:layer="layout" svg:x1="21.386cm" svg:y1="3.02cm" svg:x2="13cm" svg:y2="3.02cm"/>
+          <draw:line draw:style-name="gr2" draw:layer="layout" svg:x1="21.886cm" svg:y1="3.02cm" svg:x2="12cm" svg:y2="3.02cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18.001cm" svg:y="4.601cm">
+          <draw:custom-shape draw:style-name="Filled_20_Cyan" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18.5cm" svg:y="4.6cm">
             <text:p>
               <text:span text:style-name="T5">2</text:span>
             </text:p>
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="gr4" draw:layer="layout" svg:x1="10.144cm" svg:y1="5.9cm" svg:x2="18.536cm" svg:y2="5.9cm"/>
+          <draw:line draw:style-name="gr4" draw:layer="layout" svg:x1="9.144cm" svg:y1="5.9cm" svg:x2="19.036cm" svg:y2="5.9cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="7.329cm">
+          <draw:custom-shape draw:style-name="gr15" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="11.335cm" svg:y="7.33cm">
             <text:p>
               <text:span text:style-name="T5">3</text:span>
             </text:p>
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="gr6" draw:layer="layout" svg:x1="21.386cm" svg:y1="8.63cm" svg:x2="13cm" svg:y2="8.63cm"/>
+          <draw:line draw:style-name="gr6" draw:layer="layout" svg:x1="21.886cm" svg:y1="8.63cm" svg:x2="12cm" svg:y2="8.63cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18cm" svg:y="10.201cm">
+          <draw:custom-shape draw:style-name="gr14" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="18.5cm" svg:y="10.2cm">
             <text:p>
               <text:span text:style-name="T5">4</text:span>
             </text:p>
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="gr8" draw:layer="layout" svg:x1="10.144cm" svg:y1="11.5cm" svg:x2="18.536cm" svg:y2="11.5cm"/>
+          <draw:line draw:style-name="gr8" draw:layer="layout" svg:x1="9.144cm" svg:y1="11.5cm" svg:x2="19.036cm" svg:y2="11.5cm"/>
         </draw:g>
         <draw:g>
-          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="12.335cm" svg:y="12.659cm">
+          <draw:custom-shape draw:style-name="gr13" draw:layer="layout" svg:width="1.365cm" svg:height="1.365cm" svg:x="11.335cm" svg:y="12.66cm">
             <text:p>
               <text:span text:style-name="T5">5</text:span>
             </text:p>
             <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="ellipse" draw:enhanced-path="U 10800 10800 10800 10800 0 360 Z N"/>
           </draw:custom-shape>
-          <draw:line draw:style-name="gr2" draw:layer="layout" svg:x1="21.386cm" svg:y1="13.96cm" svg:x2="13cm" svg:y2="13.96cm"/>
+          <draw:line draw:style-name="gr2" draw:layer="layout" svg:x1="21.886cm" svg:y1="13.96cm" svg:x2="12cm" svg:y2="13.96cm"/>
         </draw:g>
-        <draw:frame presentation:style-name="Table_20_of_20_Content-subtitle" draw:layer="layout" svg:width="7.2cm" svg:height="1.8cm" svg:x="14cm" svg:y="1.4cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="Table_20_of_20_Content-subtitle" draw:layer="layout" svg:width="8.7cm" svg:height="1.3cm" svg:x="13cm" svg:y="1.72cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr6" draw:layer="layout" svg:width="7.2cm" svg:height="1.8cm" svg:x="10.4cm" svg:y="4.25cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr6" draw:layer="layout" svg:width="8.7cm" svg:height="1.3cm" svg:x="9.4cm" svg:y="4.6cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr7" draw:layer="layout" svg:width="7.2cm" svg:height="1.8cm" svg:x="14cm" svg:y="7.1cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr7" draw:layer="layout" svg:width="8.7cm" svg:height="1.3cm" svg:x="13cm" svg:y="7.33cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="pr8" draw:layer="layout" svg:width="7.2cm" svg:height="1.8cm" svg:x="10.4cm" svg:y="9.9cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="pr8" draw:layer="layout" svg:width="8.7cm" svg:height="1.3cm" svg:x="9.4cm" svg:y="10.2cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Table_20_of_20_Content-subtitle" draw:layer="layout" svg:width="7.2cm" svg:height="1.813cm" svg:x="14cm" svg:y="12.25cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
+        <draw:frame presentation:style-name="Table_20_of_20_Content-subtitle" draw:layer="layout" svg:width="8.7cm" svg:height="1.3cm" svg:x="13cm" svg:y="12.66cm" presentation:class="subtitle" presentation:placeholder="true" presentation:user-transformed="true">
           <draw:text-box/>
         </draw:frame>
-        <draw:frame presentation:style-name="Table_20_of_20_Content-title" draw:layer="layout" svg:width="12.1cm" svg:height="3.125cm" draw:transform="rotate (-1.56817833291691) translate (26.69cm 2.028cm)" presentation:class="title" presentation:placeholder="true">
+        <draw:frame presentation:style-name="Table_20_of_20_Content-title" draw:layer="layout" svg:width="13.75cm" svg:height="3.125cm" draw:transform="rotate (-1.5707963267949) translate (26.69cm 1cm)" presentation:class="title" presentation:placeholder="true">
           <draw:text-box/>
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="2" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr9" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Table_20_of_20_Content-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -346,7 +311,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="3" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr11" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Topic_20_Title_20_1-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -473,7 +438,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="5" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr14" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Sample_20_Article-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -490,7 +455,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="6" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr12" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Topic_20_Title_20_2-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -591,7 +556,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="8" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr23" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Insert_20_Picture-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -606,7 +571,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="9" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr24" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Insert_20_Picture_20_1-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -623,7 +588,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="10" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr25" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Topic_20_Title_20_3-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -907,7 +872,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="12" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr40" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="List_20_Content-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>
@@ -934,7 +899,7 @@
         </draw:frame>
         <presentation:notes draw:style-name="dp2">
           <draw:page-thumbnail draw:style-name="gr1" draw:layer="layout" svg:width="17cm" svg:height="9.56cm" svg:x="2cm" svg:y="2.5cm" draw:page-number="13" presentation:class="page"/>
-          <draw:frame presentation:style-name="pr42" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
+          <draw:frame presentation:style-name="Greetings-notes" draw:layer="layout" svg:width="17cm" svg:height="14cm" svg:x="2cm" svg:y="13cm" presentation:class="notes" presentation:placeholder="true">
             <draw:text-box/>
           </draw:frame>
         </presentation:notes>

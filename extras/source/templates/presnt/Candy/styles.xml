@@ -321,7 +321,7 @@
     <style:style style:name="Candy-outline8" style:family="presentation" style:parent-style-name="Candy-outline7"/>
     <style:style style:name="Candy-outline9" style:family="presentation" style:parent-style-name="Candy-outline8"/>
     <style:style style:name="Candy-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Candy-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -369,7 +369,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#fe7130" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-pitch="variable" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-pitch-complex="variable" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Candy-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Candy-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -500,7 +500,7 @@
     <style:style style:name="Table_20_of_20_Content-outline8" style:display-name="Table of Content-outline8" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-outline7"/>
     <style:style style:name="Table_20_of_20_Content-outline9" style:display-name="Table of Content-outline9" style:family="presentation" style:parent-style-name="Table_20_of_20_Content-outline8"/>
     <style:style style:name="Table_20_of_20_Content-subtitle" style:display-name="Table of Content-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Table_20_of_20_Content-subtitle" style:display-name="Table of Content-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -548,7 +548,7 @@
       <style:text-properties fo:color="#7f59ae" fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Table_20_of_20_Content-title" style:display-name="Table of Content-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Table_20_of_20_Content-title" style:display-name="Table of Content-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -725,7 +725,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Topic_20_Title_20_1-title" style:display-name="Topic Title 1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Topic_20_Title_20_1-title" style:display-name="Topic Title 1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -852,7 +852,7 @@
     <style:style style:name="Content-outline8" style:family="presentation" style:parent-style-name="Content-outline7"/>
     <style:style style:name="Content-outline9" style:family="presentation" style:parent-style-name="Content-outline8"/>
     <style:style style:name="Content-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Content-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -900,7 +900,7 @@
       <style:text-properties fo:color="#7f59ae" fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Content-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Content-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1027,7 +1027,7 @@
     <style:style style:name="Sample_20_Article-outline8" style:display-name="Sample Article-outline8" style:family="presentation" style:parent-style-name="Sample_20_Article-outline7"/>
     <style:style style:name="Sample_20_Article-outline9" style:display-name="Sample Article-outline9" style:family="presentation" style:parent-style-name="Sample_20_Article-outline8"/>
     <style:style style:name="Sample_20_Article-subtitle" style:display-name="Sample Article-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Sample_20_Article-subtitle" style:display-name="Sample Article-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1075,7 +1075,7 @@
       <style:text-properties fo:color="#ffffff" fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-pitch-complex="variable" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Sample_20_Article-title" style:display-name="Sample Article-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Sample_20_Article-title" style:display-name="Sample Article-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1252,7 +1252,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Topic_20_Title_20_2-title" style:display-name="Topic Title 2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Topic_20_Title_20_2-title" style:display-name="Topic Title 2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1429,7 +1429,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Insert_20_Picture-title" style:display-name="Insert Picture-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Insert_20_Picture-title" style:display-name="Insert Picture-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1606,7 +1606,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Insert_20_Picture_20_1-title" style:display-name="Insert Picture 1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Insert_20_Picture_20_1-title" style:display-name="Insert Picture 1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1733,7 +1733,7 @@
     <style:style style:name="List_20_Content-outline8" style:display-name="List Content-outline8" style:family="presentation" style:parent-style-name="List_20_Content-outline7"/>
     <style:style style:name="List_20_Content-outline9" style:display-name="List Content-outline9" style:family="presentation" style:parent-style-name="List_20_Content-outline8"/>
     <style:style style:name="List_20_Content-subtitle" style:display-name="List Content-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="List_20_Content-subtitle" style:display-name="List Content-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1781,7 +1781,7 @@
       <style:text-properties fo:color="#7f59ae" fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-pitch-complex="variable" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="List_20_Content-title" style:display-name="List Content-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="List_20_Content-title" style:display-name="List Content-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1958,7 +1958,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Topic_20_Title_20_3-title" style:display-name="Topic Title 3-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Topic_20_Title_20_3-title" style:display-name="Topic Title 3-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -2135,7 +2135,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-pitch-complex="variable" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Greetings-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Greetings-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -2457,7 +2457,7 @@
         <draw:polygon draw:style-name="Mgr3" draw:layer="backgroundobjects" svg:width="4.355cm" svg:height="1.992cm" svg:x="0.771cm" svg:y="13.825cm" svg:viewBox="0 0 4356 1993" draw:points="3055,0 0,1993 4356,1993"/>
         <draw:polygon draw:style-name="Filled_20_Cyan" draw:layer="backgroundobjects" svg:width="3.885cm" svg:height="2.535cm" svg:x="0cm" svg:y="0cm" svg:viewBox="0 0 3886 2536" draw:points="0,0 0,2536 3886,0"/>
       </draw:g>
-      <draw:frame presentation:style-name="Table_20_of_20_Content-title" draw:layer="backgroundobjects" svg:width="12.1cm" svg:height="3.125cm" draw:transform="rotate (-1.56817833291691) translate (26.69cm 2.028cm)" presentation:class="title" presentation:placeholder="true">
+      <draw:frame presentation:style-name="Table_20_of_20_Content-title" draw:layer="backgroundobjects" svg:width="13.75cm" svg:height="3.125cm" draw:transform="rotate (-1.5707963267949) translate (26.69cm 1cm)" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
       <draw:frame presentation:style-name="Table_20_of_20_Content-outline1" draw:layer="backgroundobjects" svg:width="17.5cm" svg:height="14cm" svg:x="6.5cm" svg:y="1cm" presentation:class="outline" presentation:placeholder="true">
