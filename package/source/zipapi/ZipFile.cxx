@@ -1151,7 +1151,6 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
 std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
 {
     // this method is called in constructor only, no need for mutex
-    std::vector < sal_Int8 > aBuffer;
     try
     {
         sal_Int64 const nLength = aGrabber.getLength();
@@ -1165,7 +1164,7 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
         aGrabber.seek( nEnd );
 
         auto nSize = nLength - nEnd;
-        aBuffer.reserve(nSize);
+        std::vector<sal_Int8> aBuffer(nSize);
         if (nSize != aGrabber.readBytes(aBuffer.data(), nSize))
             throw ZipException(u"Zip END signature not found!"_ustr );
 
