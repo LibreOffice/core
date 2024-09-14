@@ -365,7 +365,7 @@ public:
 private:
     SwRect      maOldBox;                       // the old bounds for CHILD_POS_CHANGED
                                                 // and POS_CHANGED
-    uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
+    unotools::WeakReference < SwAccessibleContext > mxAcc;   // The object that fires the event
     SwAccessibleChild maFrameOrObj;             // the child for CHILD_POS_CHANGED and
                                                 // the same as xAcc for any other
                                                 // event type
@@ -464,10 +464,7 @@ public:
 
     ::rtl::Reference < SwAccessibleContext > GetContext() const
     {
-        uno::Reference < XAccessible > xTmp( mxAcc );
-        ::rtl::Reference < SwAccessibleContext > xAccImpl(
-                            static_cast<SwAccessibleContext*>( xTmp.get() ) );
-
+        rtl::Reference < SwAccessibleContext > xAccImpl( mxAcc );
         return xAccImpl;
     }
 
