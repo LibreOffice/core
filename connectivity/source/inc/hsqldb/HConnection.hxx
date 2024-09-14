@@ -44,13 +44,12 @@ namespace connectivity::hsqldb
         // OHsqlConnection - wraps all methods to the real connection from the driver
         // but when disposed it doesn't dispose the real connection
 
-        typedef ::cppu::WeakComponentImplHelper<   css::util::XFlushable
+        typedef ::cppu::ImplInheritanceHelper<     OConnectionWrapper
+                                               ,   css::util::XFlushable
                                                ,   css::sdb::application::XTableUIProvider
                                                >   OHsqlConnection_BASE;
 
-        class OHsqlConnection   :public cppu::BaseMutex
-                                ,public OHsqlConnection_BASE
-                                ,public OConnectionWrapper
+        class OHsqlConnection   :public OHsqlConnection_BASE
                                 ,public IMethodGuardAccess
         {
         private:
@@ -73,8 +72,6 @@ namespace connectivity::hsqldb
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
-            DECLARE_XTYPEPROVIDER()
-            DECLARE_XINTERFACE( )
 
             // IMethodGuardAccess
             virtual ::osl::Mutex&   getMutex() const override;

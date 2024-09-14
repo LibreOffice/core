@@ -29,18 +29,11 @@ using namespace ::com::sun::star::container;
 using namespace connectivity;
 
 OSharedConnection::OSharedConnection(Reference<XAggregation>& _rxProxyConnection)
-    : OSharedConnection_BASE(m_aMutex)
 {
-    setDelegation(_rxProxyConnection, m_refCount);
+    setDelegation(_rxProxyConnection);
 }
 
 OSharedConnection::~OSharedConnection() {}
-
-void SAL_CALL OSharedConnection::disposing()
-{
-    OConnectionWrapper::disposing();
-    OSharedConnection_BASE::disposing();
-}
 
 Reference<XStatement> SAL_CALL OSharedConnection::createStatement()
 {
@@ -146,8 +139,6 @@ Reference<css::container::XNameAccess> SAL_CALL OSharedConnection::getTypeMap()
 
     return m_xConnection->getTypeMap();
 }
-
-IMPLEMENT_GET_IMPLEMENTATION_ID(OSharedConnection)
 
 } // namespace dbaccess
 

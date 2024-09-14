@@ -32,23 +32,18 @@ namespace connectivity
     // OConnectionWeakWrapper - wraps all methods to the real connection from the driver
     // but when disposed it doesn't dispose the real connection
 
-    typedef ::cppu::WeakComponentImplHelper< css::sdbc::XConnection > OConnectionWeakWrapper_BASE;
+    typedef ::cppu::ImplInheritanceHelper<OConnectionWrapper, css::sdbc::XConnection> OConnectionWeakWrapper_BASE;
 
-    class OConnectionWeakWrapper : public ::cppu::BaseMutex
-                                 , public OConnectionWeakWrapper_BASE
-                                 , public OConnectionWrapper
+    class OConnectionWeakWrapper : public OConnectionWeakWrapper_BASE
     {
     protected:
         // OComponentHelper
-        virtual void SAL_CALL disposing() override;
         virtual ~OConnectionWeakWrapper() override;
     public:
         explicit OConnectionWeakWrapper(css::uno::Reference< css::uno::XAggregation >& _xConnection);
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();
-        DECLARE_XTYPEPROVIDER()
-        DECLARE_XINTERFACE( )
 
         // XConnection
         virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;

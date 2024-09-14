@@ -32,38 +32,16 @@ namespace dbaccess
     // All methods will be forwarded with exception of the set methods, which are not allowed
     // to be called on shared connections. Instances of this class will be created when the
     // datasource is asked for not isolated connection.
-    typedef ::cppu::WeakComponentImplHelper< css::sdbc::XConnection
+    typedef ::cppu::ImplInheritanceHelper<connectivity::OConnectionWrapper,
+                                          css::sdbc::XConnection
                                            > OSharedConnection_BASE;
 
-    class OSharedConnection :   public ::cppu::BaseMutex
-                              , public OSharedConnection_BASE
-                              , public ::connectivity::OConnectionWrapper
+    class OSharedConnection : public OSharedConnection_BASE
     {
     protected:
-        virtual void SAL_CALL disposing() override;
         virtual ~OSharedConnection() override;
     public:
         explicit OSharedConnection(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
-
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
-
-        virtual void SAL_CALL acquire() noexcept override { OSharedConnection_BASE::acquire(); }
-        virtual void SAL_CALL release() noexcept override { OSharedConnection_BASE::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override
-        {
-            return ::comphelper::concatSequences(
-                OSharedConnection_BASE::getTypes(),
-                ::connectivity::OConnectionWrapper::getTypes()
-            );
-        }
-
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override
-        {
-            css::uno::Any aReturn = OSharedConnection_BASE::queryInterface(_rType);
-            if ( !aReturn.hasValue() )
-                aReturn = ::connectivity::OConnectionWrapper::queryInterface(_rType);
-            return aReturn;
-        }
 
         // XCloseable
         virtual void SAL_CALL close(  ) override

@@ -52,8 +52,8 @@
 namespace dbaccess
 {
 
-typedef cppu::WeakComponentImplHelper<
-                                        css::container::XChild
+typedef cppu::ImplInheritanceHelper<    connectivity::OConnectionWrapper
+                                    ,   css::container::XChild
                                     ,   css::sdbcx::XTablesSupplier
                                     ,   css::sdbcx::XViewsSupplier
                                     ,   css::sdbc::XConnection
@@ -70,9 +70,7 @@ typedef cppu::WeakComponentImplHelper<
 
 class ODatabaseSource;
 // OConnection
-class OConnection final     :public ::cppu::BaseMutex
-                            ,public ::connectivity::OConnectionWrapper
-                            ,public OConnection_Base
+class OConnection final     :public OConnection_Base
                             ,public IRefreshListener
 {
     unotools::WeakReference<ODatabaseSource> m_xParent;
@@ -112,12 +110,9 @@ public:
 
 // css::lang::XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;

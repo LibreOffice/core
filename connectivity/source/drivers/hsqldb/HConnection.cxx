@@ -76,19 +76,17 @@ namespace connectivity::hsqldb
     {
         m_aFlushListeners.disposeAndClear( EventObject( *this ) );
         OHsqlConnection_BASE::disposing();
-        OConnectionWrapper::disposing();
     }
 
     OHsqlConnection::OHsqlConnection( const Reference< XDriver >& _rxDriver,
         const Reference< XConnection >& _xConnection ,const Reference< XComponentContext >& _rxContext )
-        :OHsqlConnection_BASE( m_aMutex )
-        ,m_aFlushListeners( m_aMutex )
+        :m_aFlushListeners( m_aMutex )
         ,m_xDriver( _rxDriver )
         ,m_xContext( _rxContext )
         ,m_bIni(true)
         ,m_bReadOnly(false)
     {
-        setDelegation(_xConnection,_rxContext,m_refCount);
+        setDelegation(_xConnection, _rxContext);
     }
 
     OHsqlConnection::~OHsqlConnection()
@@ -100,9 +98,7 @@ namespace connectivity::hsqldb
         }
     }
 
-    IMPLEMENT_FORWARD_XINTERFACE2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
     IMPLEMENT_SERVICE_INFO(OHsqlConnection, u"com.sun.star.sdbc.drivers.hsqldb.OHsqlConnection"_ustr, u"com.sun.star.sdbc.Connection"_ustr)
-    IMPLEMENT_FORWARD_XTYPEPROVIDER2(OHsqlConnection,OHsqlConnection_BASE,OConnectionWrapper)
 
 
     ::osl::Mutex& OHsqlConnection::getMutex() const

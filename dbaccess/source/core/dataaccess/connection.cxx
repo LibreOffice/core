@@ -255,11 +255,7 @@ void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap)
 OConnection::OConnection(ODatabaseSource& _rDB
                          , Reference< XConnection > const & _rxMaster
                          , const Reference< XComponentContext >& _rxORB)
-            :OConnection_Base(m_aMutex)
-                // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
-                // container would do its own refcounting, it would have to acquire m_pMutex
-                // same for tables
-            ,m_xParent(&_rDB)
+            :m_xParent(&_rDB)
             ,m_aTableFilter(_rDB.m_pImpl->m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_pImpl->m_aTableTypeFilter)
             ,m_aContext( _rxORB )
@@ -276,7 +272,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
     {
         Reference< XProxyFactory > xProxyFactory = ProxyFactory::create( m_aContext );
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster);
-        setDelegation(xAgg,m_refCount);
+        setDelegation(xAgg);
         OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
     }
     catch(const Exception&)
@@ -390,7 +386,6 @@ Sequence< Type > OConnection::getTypes()
     TypeBag aNormalizedTypes;
 
     lcl_copyTypes( aNormalizedTypes, OConnection_Base::getTypes() );
-    lcl_copyTypes( aNormalizedTypes, ::connectivity::OConnectionWrapper::getTypes() );
 
     if ( !m_bSupportsViews )
         aNormalizedTypes.erase( cppu::UnoType<XViewsSupplier>::get() );
@@ -402,11 +397,6 @@ Sequence< Type > OConnection::getTypes()
     return comphelper::containerToSequence(aNormalizedTypes);
 }
 
-Sequence< sal_Int8 > OConnection::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
 // css::uno::XInterface
 Any OConnection::queryInterface( const Type & rType )
 {
@@ -416,22 +406,7 @@ Any OConnection::queryInterface( const Type & rType )
         return Any();
     else if ( !m_bSupportsGroups && rType.equals( cppu::UnoType<XGroupsSupplier>::get() ) )
         return Any();
-    Any aReturn = OConnection_Base::queryInterface( rType );
-    if (!aReturn.hasValue())
-        aReturn = OConnectionWrapper::queryInterface( rType );
-    return aReturn;
-}
-
-void OConnection::acquire() noexcept
-{
-    // include this one when you want to see who calls it (call graph)
-    OConnection_Base::acquire();
-}
-
-void OConnection::release() noexcept
-{
-    // include this one when you want to see who calls it (call graph)
-    OConnection_Base::release();
+    return OConnection_Base::queryInterface( rType );
 }
 
 // OConnection_Base
@@ -440,7 +415,6 @@ void OConnection::disposing()
     MutexGuard aGuard(m_aMutex);
 
     OConnection_Base::disposing();
-    OConnectionWrapper::disposing();
 
     for (auto const& statement : m_aStatements)
     {

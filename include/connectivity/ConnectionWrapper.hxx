@@ -20,7 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_CONNECTIONWRAPPER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <sal/config.h>
+
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <connectivity/CommonTools.hxx>
@@ -37,11 +40,12 @@ namespace connectivity
     //= OConnectionWrapper - wraps all methods to the real connection from the driver
     //= but when disposed it doesn't dispose the real connection
 
-    typedef ::cppu::ImplHelper2<        css::lang::XServiceInfo,
+    typedef cppu::WeakComponentImplHelper<css::lang::XServiceInfo,
                                         css::lang::XUnoTunnel
                                 > OConnection_BASE;
 
-    class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper :     public OConnection_BASE
+    class OOO_DLLPUBLIC_DBTOOLS OConnectionWrapper : public cppu::BaseMutex,
+                                                     public OConnection_BASE
     {
     protected:
         css::uno::Reference< css::uno::XAggregation >   m_xProxyConnection;
@@ -51,12 +55,10 @@ namespace connectivity
         css::uno::Reference< css::lang::XServiceInfo >  m_xServiceInfo;
 
         virtual ~OConnectionWrapper();
-        void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
+        void setDelegation(css::uno::Reference< css::uno::XAggregation >& _rxProxyConnection);
         void setDelegation(const css::uno::Reference< css::sdbc::XConnection >& _xConnection
-            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext
-            ,oslInterlockedCount& _rRefCount);
-        // must be called from derived classes
-        void disposing();
+            ,const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
+        virtual void SAL_CALL disposing() override;
     public:
         OConnectionWrapper( );
 
