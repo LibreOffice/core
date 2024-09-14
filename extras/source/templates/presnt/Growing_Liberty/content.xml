@@ -37,10 +37,6 @@
       <style:paragraph-properties fo:text-align="center"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
     </style:style>
-    <style:style style:name="P36" style:family="paragraph">
-      <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="20pt" fo:font-weight="bold" style:font-size-asian="20pt" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-weight-complex="bold"/>
-    </style:style>
     <style:style style:name="P77" style:family="paragraph">
       <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%" fo:text-align="left"/>
       <style:text-properties fo:color="#ffffff" loext:opacity="100%" fo:font-size="36pt" fo:font-weight="bold" style:font-size-asian="36pt" style:font-weight-asian="bold" style:font-size-complex="36pt" style:font-weight-complex="bold"/>
@@ -206,7 +202,6 @@
       <draw:page draw:name="page5" draw:style-name="dp1" draw:master-page-name="Left_20_Bar_20_White" presentation:presentation-page-layout-name="AL1T2">
         <office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
         <draw:custom-shape draw:style-name="Gradient_20_22" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="1.45cm" svg:y="8.2cm">
-          <text:p text:style-name="P36">Lorem</text:p>
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
             <draw:equation draw:name="f0" draw:formula="left+3600"/>
             <draw:equation draw:name="f1" draw:formula="right-3600"/>
@@ -218,8 +213,10 @@
             <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
+        <draw:frame presentation:style-name="Left_20_Bar_20_White-subtitle" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="1.45cm" svg:y="8.2cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
         <draw:custom-shape draw:style-name="Gradient_20_22" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="6.55cm" svg:y="8.2cm">
-          <text:p text:style-name="P36">Ipsum</text:p>
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
             <draw:equation draw:name="f0" draw:formula="left+3600"/>
             <draw:equation draw:name="f1" draw:formula="right-3600"/>
@@ -231,8 +228,10 @@
             <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
+        <draw:frame presentation:style-name="Left_20_Bar_20_White-subtitle" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="6.55cm" svg:y="8.2cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
         <draw:custom-shape draw:style-name="Gradient_20_22" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="11.65cm" svg:y="8.2cm">
-          <text:p text:style-name="P36">Dolor</text:p>
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
             <draw:equation draw:name="f0" draw:formula="left+3600"/>
             <draw:equation draw:name="f1" draw:formula="right-3600"/>
@@ -244,8 +243,10 @@
             <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
+        <draw:frame presentation:style-name="Left_20_Bar_20_White-subtitle" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="11.65cm" svg:y="8.2cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
         <draw:custom-shape draw:style-name="Gradient_20_22" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="16.75cm" svg:y="8.2cm">
-          <text:p text:style-name="P36">Sit</text:p>
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
             <draw:equation draw:name="f0" draw:formula="left+3600"/>
             <draw:equation draw:name="f1" draw:formula="right-3600"/>
@@ -257,8 +258,10 @@
             <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
+        <draw:frame presentation:style-name="Left_20_Bar_20_White-subtitle" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="16.75cm" svg:y="8.2cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
         <draw:custom-shape draw:style-name="Gradient_20_22" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="21.85cm" svg:y="8.2cm">
-          <text:p text:style-name="P36">Amet</text:p>
           <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
             <draw:equation draw:name="f0" draw:formula="left+3600"/>
             <draw:equation draw:name="f1" draw:formula="right-3600"/>
@@ -270,6 +273,9 @@
             <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
+        <draw:frame presentation:style-name="Left_20_Bar_20_White-subtitle" draw:layer="layout" svg:width="4.7cm" svg:height="5cm" svg:x="21.85cm" svg:y="8.2cm" presentation:class="subtitle" presentation:placeholder="true">
+          <draw:text-box/>
+        </draw:frame>
         <draw:g>
           <draw:path draw:style-name="Gradient_20_10" draw:layer="layout" svg:width="2.956cm" svg:height="2.846cm" svg:x="2.322cm" svg:y="4.58cm" svg:viewBox="0 0 2957 2847" svg:d="M1009 965c-163-92-339-172-510-259 13 201 47 369 94 516-191-31-394-40-593-60 327 886 879 900 1385 1451 28 72 63 145 106 221 0 2 0 4 1 6 0-1 0-1 1-2 2 3 3 6 4 9 4-9 8-18 11-27 522-625 1109-601 1449-1524-198 20-401 28-593 60 47-148 81-316 94-516-158 81-322 155-476 239 14-275-123-614-509-1079-203 313-445 613-464 965z"/>
           <draw:path draw:style-name="gr5" draw:layer="layout" svg:width="0.655cm" svg:height="0.818cm" svg:x="3.472cm" svg:y="5.752cm" svg:viewBox="0 0 656 819" svg:d="M0 366h60v-69c0-11 0-21 1-32l1-2v-1-3-4l1-3v-3l1-4 1-3v-1l2-7v-2-2-1l1-2v-1l1-3v-3l1-4v-3l2-3v-1-2l1-2 1-1v-2-1l1-2 3-7v-3l1-3v-1l3-7 1-1 1-2c1-3 3-7 4-10l1-3c13-27 29-53 50-75 38-42 86-71 141-82h3l4-1 3-1h4l3-1 3-1h4 3 7l3-1h21l4 1h6 4 2l4 1 4 1h2l4 1 4 1h3c55 11 104 40 142 82 12 14 23 28 33 44v1c5 7 9 15 13 22l1 3 2 5 3 6v1l3 6 1 2 1 1c0 4 2 7 3 11l1 3 1 4 1 2 1 1v2l2 4v2l1 6 1 3 1 6 2 4v1 2l1 2v3l2 5v2 1l1 3v2 5 4l1 3v1 2c0 3 1 6 1 9v1c1 9 1 17 1 25v69h61v453h-656zM168 366h320v-69c0-8-1-17-2-26l-1-2v-2-1-2l-1-1-1-3v-2-1-2l-1-1v-2-3l-1-2v-2-1l-2-3v-2h-1v-2l-1-3-1-1v-2l-1-1-1-2v-2h-1v-2-1-1c-2-3-3-6-5-9-2-4-4-8-6-11v-2l-2-1v-1-1l-2-2c-4-6-8-11-13-17 0-2-2-4-5-6v-1c-1-1-3-2-4-4v-1h-1l-1-1c-16-16-36-29-57-37h-2l-2-1h-1l-3-1-1-1h-3-2l-1-1-2-1h-2-2l-2-1h-2-2-2l-2-1h-2l-2-1h-8-2-8-3-7l-3 1h-2l-2 1h-1-2-3l-2 1h-1-3l-1 1-2 1h-3-1l-2 1-2 1h-2l-2 1h-1l-3 1-1 1-2 1c-17 7-31 16-46 28l-1 1-1 2-2 1-1 2-2 1-1 1-4 4v1c-7 7-12 15-18 23l-1 3-1 1-1 1-1 2-3 5-1 1v1l-1 1v1 1 1l-1 2-3 6-2 4-1 1-1 1-1 3v1 3l-1 2v1l-1 2v1l-1 2-1 2v1 2h-1v2l-1 2v2l-1 1-1 6v1l-1 2v1c0 2 0 5 0 8-1 9-2 17-2 25zM301 573l-2 18v13c-2 30-5 65-9 108h74c-2-43-5-78-8-108l-1-13-1-18c15-11 24-28 24-48 0-31-22-57-50-57h-1c-28 0-50 26-50 57 0 20 10 37 24 48z"/>

@@ -298,7 +298,7 @@
     <style:style style:name="Right_20_Bar_20_White-outline8" style:display-name="Right Bar White-outline8" style:family="presentation" style:parent-style-name="Right_20_Bar_20_White-outline7"/>
     <style:style style:name="Right_20_Bar_20_White-outline9" style:display-name="Right Bar White-outline9" style:family="presentation" style:parent-style-name="Right_20_Bar_20_White-outline8"/>
     <style:style style:name="Right_20_Bar_20_White-subtitle" style:display-name="Right Bar White-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Right_20_Bar_20_White-subtitle" style:display-name="Right Bar White-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -346,7 +346,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#0393e4" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="24pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="24pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="24pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Right_20_Bar_20_White-title" style:display-name="Right Bar White-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Right_20_Bar_20_White-title" style:display-name="Right Bar White-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -474,7 +474,7 @@
     <style:style style:name="Left_20_Bar_20_White-outline8" style:display-name="Left Bar White-outline8" style:family="presentation" style:parent-style-name="Left_20_Bar_20_White-outline7"/>
     <style:style style:name="Left_20_Bar_20_White-outline9" style:display-name="Left Bar White-outline9" style:family="presentation" style:parent-style-name="Left_20_Bar_20_White-outline8"/>
     <style:style style:name="Left_20_Bar_20_White-subtitle" style:display-name="Left Bar White-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Left_20_Bar_20_White-subtitle" style:display-name="Left Bar White-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -519,10 +519,10 @@
         </text:list-style>
       </style:graphic-properties>
       <style:paragraph-properties fo:margin-left="0cm" fo:margin-right="0cm" fo:text-align="center" fo:text-indent="0cm"/>
-      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
+      <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="false" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Left_20_Bar_20_White-title" style:display-name="Left Bar White-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Left_20_Bar_20_White-title" style:display-name="Left Bar White-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -650,7 +650,7 @@
     <style:style style:name="Bottom_20_Bar_20_White-outline8" style:display-name="Bottom Bar White-outline8" style:family="presentation" style:parent-style-name="Bottom_20_Bar_20_White-outline7"/>
     <style:style style:name="Bottom_20_Bar_20_White-outline9" style:display-name="Bottom Bar White-outline9" style:family="presentation" style:parent-style-name="Bottom_20_Bar_20_White-outline8"/>
     <style:style style:name="Bottom_20_Bar_20_White-subtitle" style:display-name="Bottom Bar White-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Bottom_20_Bar_20_White-subtitle" style:display-name="Bottom Bar White-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -698,7 +698,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#0393e4" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Bottom_20_Bar_20_White-title" style:display-name="Bottom Bar White-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Bottom_20_Bar_20_White-title" style:display-name="Bottom Bar White-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -874,7 +874,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Bottom_20_Bar_20_Blue-title" style:display-name="Bottom Bar Blue-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Bottom_20_Bar_20_Blue-title" style:display-name="Bottom Bar Blue-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1002,7 +1002,7 @@
     <style:style style:name="Leaf_20_White_20_1-outline8" style:display-name="Leaf White 1-outline8" style:family="presentation" style:parent-style-name="Leaf_20_White_20_1-outline7"/>
     <style:style style:name="Leaf_20_White_20_1-outline9" style:display-name="Leaf White 1-outline9" style:family="presentation" style:parent-style-name="Leaf_20_White_20_1-outline8"/>
     <style:style style:name="Leaf_20_White_20_1-subtitle" style:display-name="Leaf White 1-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_White_20_1-subtitle" style:display-name="Leaf White 1-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1050,7 +1050,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#0393e4" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Leaf_20_White_20_1-title" style:display-name="Leaf White 1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_White_20_1-title" style:display-name="Leaf White 1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1178,7 +1178,7 @@
     <style:style style:name="Leaf_20_White_20_2-outline8" style:display-name="Leaf White 2-outline8" style:family="presentation" style:parent-style-name="Leaf_20_White_20_2-outline7"/>
     <style:style style:name="Leaf_20_White_20_2-outline9" style:display-name="Leaf White 2-outline9" style:family="presentation" style:parent-style-name="Leaf_20_White_20_2-outline8"/>
     <style:style style:name="Leaf_20_White_20_2-subtitle" style:display-name="Leaf White 2-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="50%" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ffffff" draw:opacity="50%" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_White_20_2-subtitle" style:display-name="Leaf White 2-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1226,7 +1226,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#0393e4" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Leaf_20_White_20_2-title" style:display-name="Leaf White 2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_White_20_2-title" style:display-name="Leaf White 2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1402,7 +1402,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Right_20_Bar_20_Blue-title" style:display-name="Right Bar Blue-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Right_20_Bar_20_Blue-title" style:display-name="Right Bar Blue-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1530,7 +1530,7 @@
     <style:style style:name="Left_20_Bar_20_Blue-outline8" style:display-name="Left Bar Blue-outline8" style:family="presentation" style:parent-style-name="Left_20_Bar_20_Blue-outline7"/>
     <style:style style:name="Left_20_Bar_20_Blue-outline9" style:display-name="Left Bar Blue-outline9" style:family="presentation" style:parent-style-name="Left_20_Bar_20_Blue-outline8"/>
     <style:style style:name="Left_20_Bar_20_Blue-subtitle" style:display-name="Left Bar Blue-subtitle" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Left_20_Bar_20_Blue-subtitle" style:display-name="Left Bar Blue-subtitle">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1578,7 +1578,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="20pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="bold" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="20pt" style:font-style-asian="normal" style:font-weight-asian="bold" style:font-size-complex="20pt" style:font-style-complex="normal" style:font-weight-complex="bold" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Left_20_Bar_20_Blue-title" style:display-name="Left Bar Blue-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Left_20_Bar_20_Blue-title" style:display-name="Left Bar Blue-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1754,7 +1754,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Leaf_20_Blue_20_1-title" style:display-name="Leaf Blue 1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_Blue_20_1-title" style:display-name="Leaf Blue 1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -1930,7 +1930,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Leaf_20_Blue_20_2-title" style:display-name="Leaf Blue 2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="Leaf_20_Blue_20_2-title" style:display-name="Leaf Blue 2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -2282,7 +2282,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" style:use-window-font-color="false" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="32pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="32pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="32pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="End_20_Slide-title" style:display-name="End Slide-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true">
         <text:list-style style:name="End_20_Slide-title" style:display-name="End Slide-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="●">
             <style:list-level-properties text:min-label-width="0.6cm"/>
