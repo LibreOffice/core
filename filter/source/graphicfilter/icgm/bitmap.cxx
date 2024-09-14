@@ -325,7 +325,10 @@ bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
         rDesc.mbStatus = false;
 
     if (!rDesc.mnX || !rDesc.mnY)
+    {
         rDesc.mbStatus = false;
+        return false;
+    }
 
     sal_uInt32 nHeaderSize = 2 + 3 * nPrecision + 3 * mpCGM->ImplGetPointSize();
 
