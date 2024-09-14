@@ -3631,11 +3631,17 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 {
     SolarMutexGuard aGuard;
 
-    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
+    if (!IsValid())
+    {
+        SAL_WARN("sw.uno", "no DocShell when attempting to initialize for tiled rendering");
+        return;
+    }
 
     SwView* pView = m_pDocShell->GetView();
     if (!pView)
         return;
+
+    SwViewShell* pViewShell = m_pDocShell->GetWrtShell();
 
     pView->SetViewLayout(1/*nColumns*/, false/*bBookMode*/, true);
 
