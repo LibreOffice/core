@@ -147,8 +147,10 @@ public class _XRowLocate extends MultiMethodTest {
         int comparison = 0 ;
         int comparison1 = 0 ;
         try {
-            comparison = oObj.compareBookmarks(bookmark1, bookmark2) ;
-            comparison1 = oObj.compareBookmarks(bookmark1, bookmark1) ;
+            synchronized (oObj) {
+                comparison = oObj.compareBookmarks(bookmark1, bookmark2) ;
+                comparison1 = oObj.compareBookmarks(bookmark1, bookmark1) ;
+            }
         } catch (SQLException e) {
             log.println("Exception occurred :" + e) ;
         }
