@@ -993,7 +993,7 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
     {
         // read always in UTF8, some tools seem not to set UTF8 bit
         // coverity[tainted_data] - we've checked negative lens, and up to max short is ok here
-        rNameBuffer.reserve(nPathLen);
+        rNameBuffer.resize(nPathLen);
         sal_Int32 nRead = aGrabber.readBytes(rNameBuffer.data(), nPathLen);
         std::string_view aNameView(reinterpret_cast<const char *>(rNameBuffer.data()), nRead);
 
@@ -1015,7 +1015,7 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
         ::std::optional<sal_uInt64> oOffset64;
         if (nExtraLen != 0)
         {
-            rExtraBuffer.reserve(nExtraLen);
+            rExtraBuffer.resize(nExtraLen);
             aGrabber.readBytes(rExtraBuffer.data(), nExtraLen);
             MemoryByteGrabber extraMemGrabber(rExtraBuffer.data(), nExtraLen);
 
@@ -1345,8 +1345,7 @@ sal_Int32 ZipFile::readCEN()
             throw ZipException(u"central directory too big"_ustr);
 
         aGrabber.seek(nCenPos);
-        std::vector<sal_Int8> aCENBuffer;
-        aCENBuffer.reserve(nCenLen);
+        std::vector<sal_Int8> aCENBuffer(nCenLen);
         sal_Int64 nRead = aGrabber.readBytes ( aCENBuffer.data(), nCenLen );
         if (nCenLen != nRead)
             throw ZipException (u"Error reading CEN into memory buffer!"_ustr );
@@ -1781,9 +1780,8 @@ void ZipFile::recover()
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    std::vector < sal_Int8 > aBuffer;
     const sal_Int64 nToRead = 32000;
-    aBuffer.reserve(nToRead);
+    std::vector<sal_Int8> aBuffer(nToRead);
 
     try
     {
@@ -1864,8 +1862,7 @@ sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
 
     CRC32 aCRC;
     sal_Int64 nBlockSize = ::std::min(nSize, static_cast< sal_Int64 >(32000));
-    std::vector < sal_Int8 > aBuffer;
-    aBuffer.reserve(nBlockSize);
+    std::vector<sal_Int8> aBuffer(nBlockSize);
 
     aGrabber.seek( nOffset );
     sal_Int32 nRead;
