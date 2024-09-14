@@ -350,7 +350,7 @@ void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
         if (RES_TXTATR_AUTOFMT == rAttr.Which() &&
             SfxItemState::SET == pSet->GetItemState( RES_CHRATR_HIDDEN, true, &pHiddenItem ) &&
             pHiddenItem->StaticWhichCast(RES_CHRATR_HIDDEN).GetValue() &&
-            !m_pShell->GetViewOptions()->IsShowHiddenChar())
+            m_pShell && !m_pShell->GetViewOptions()->IsShowHiddenChar())
             return;
 
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
