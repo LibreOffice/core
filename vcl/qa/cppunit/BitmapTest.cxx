@@ -16,12 +16,11 @@
 #include <rtl/strbuf.hxx>
 
 #include <vcl/BitmapTools.hxx>
-#include <vcl/bitmap.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
 
-#include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/Octree.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>

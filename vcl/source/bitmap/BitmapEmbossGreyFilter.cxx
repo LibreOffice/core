@@ -12,9 +12,7 @@
 
 #include <tools/helpers.hxx>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapEmbossGreyFilter.hxx>
+#include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>

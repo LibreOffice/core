@@ -21,14 +21,13 @@
 
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <vcl/bitmapex.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <vcl/BitmapDarkenBlendFilter.hxx>
-#include <vcl/BitmapLightenBlendFilter.hxx>
-#include <vcl/BitmapMultiplyBlendFilter.hxx>
-#include <vcl/BitmapNormalBlendFilter.hxx>
-#include <vcl/BitmapScreenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapDarkenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapLightenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapMultiplyBlendFilter.hxx>
+#include <vcl/bitmap/BitmapNormalBlendFilter.hxx>
+#include <vcl/bitmap/BitmapScreenBlendFilter.hxx>
 #include <vcl/BitmapTools.hxx>
 
 namespace svgio::svgreader

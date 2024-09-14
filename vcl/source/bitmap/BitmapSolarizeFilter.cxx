@@ -8,9 +8,7 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapSolarizeFilter.hxx>
+#include <vcl/bitmap/BitmapSolarizeFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapSolarizeFilter::execute(BitmapEx const& rBitmapEx) const

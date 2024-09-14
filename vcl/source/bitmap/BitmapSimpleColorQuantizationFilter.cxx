@@ -8,9 +8,7 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+#include <vcl/bitmap/BitmapSimpleColorQuantizationFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <bitmap/Octree.hxx>
 

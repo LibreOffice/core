@@ -9,9 +9,8 @@
  */
 
 #include <tools/solar.h>
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapPopArtFilter.hxx>
+
+#include <vcl/bitmap/BitmapPopArtFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapPopArtFilter::execute(BitmapEx const& rBitmapEx) const

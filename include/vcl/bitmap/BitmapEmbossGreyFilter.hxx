@@ -10,12 +10,25 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <tools/degree.hxx>
 #include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapMaskToAlphaFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapEmbossGreyFilter final : public BitmapFilter
 {
 public:
+    BitmapEmbossGreyFilter(Degree100 nAzimuthAngle, Degree100 nElevationAngle)
+        : mnAzimuthAngle(nAzimuthAngle)
+        , mnElevationAngle(nElevationAngle)
+    {
+    }
+
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+
+private:
+    Degree100 mnAzimuthAngle;
+    Degree100 mnElevationAngle;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

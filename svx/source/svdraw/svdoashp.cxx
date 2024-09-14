@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/BitmapShadowFilter.hxx>
+#include <vcl/bitmap/BitmapShadowFilter.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unoapi.hxx>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>

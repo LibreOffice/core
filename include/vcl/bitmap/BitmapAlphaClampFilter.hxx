@@ -8,29 +8,24 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPDUOTONEFILTER_HXX
-#define INCLUDED_VCL_BITMAPDUOTONEFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
-class BitmapDuoToneFilter final : public BitmapFilter
+/** If the alpha is beyond a certain threshold, make it fully transparent
+ */
+class VCL_DLLPUBLIC BitmapAlphaClampFilter final : public BitmapFilter
 {
 public:
-    BitmapDuoToneFilter(Color nColorOne, Color nColorTwo)
-        : mnColorOne(nColorOne)
-        , mnColorTwo(nColorTwo)
+    BitmapAlphaClampFilter(sal_uInt8 cThreshold)
+        : mcThreshold(cThreshold)
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    Color mnColorOne;
-    Color mnColorTwo;
+    sal_uInt8 mcThreshold;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

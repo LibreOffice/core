@@ -8,26 +8,24 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPPOPARTILTER_HXX
-#define INCLUDED_VCL_BITMAPPOPARTILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapPopArtFilter final : public BitmapFilter
+class BitmapEx;
+
+class VCL_DLLPUBLIC BitmapSmoothenFilter final : public BitmapFilter
 {
 public:
-    BitmapPopArtFilter() {}
+    BitmapSmoothenFilter(double fRadius)
+        : mfRadius(fRadius)
+    {
+    }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    struct PopArtEntry
-    {
-        sal_uInt16 mnIndex;
-        sal_uInt32 mnCount;
-    };
+    double mfRadius;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,9 +11,7 @@
 #ifndef INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
 #define INCLUDED_VCL_BITMAPFILTERSTACKBLUR_HXX
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapFilterStackBlur final : public BitmapFilter
 {

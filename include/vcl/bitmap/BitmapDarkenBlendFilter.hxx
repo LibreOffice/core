@@ -8,19 +8,21 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSOBELGREYILTER_HXX
-#define INCLUDED_VCL_BITMAPSOBELGREYILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmapex.hxx>
 
-class VCL_DLLPUBLIC BitmapSobelGreyFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapDarkenBlendFilter
 {
+private:
+    BitmapEx maBitmapEx;
+    BitmapEx maBitmapEx2;
+
 public:
-    BitmapSobelGreyFilter() {}
+    BitmapDarkenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
 
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+    ~BitmapDarkenBlendFilter();
+    BitmapEx execute();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

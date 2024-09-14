@@ -10,14 +10,23 @@
 
 #pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-/** If the alpha is beyond a certain threshold, make it fully transparent
- */
-class VCL_DLLPUBLIC BitmapAlphaClampFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMonochromeFilter final : public BitmapFilter
 {
 public:
-    BitmapAlphaClampFilter(sal_uInt8 cThreshold)
+    /** Convert to 2 color bitmap.
+
+        Converts to a 2 color indexed bitmap - note that we don't change to black
+        and white monochrome, but we pick the closest color to black and white in
+        the bitmap.
+
+        @param cThreshold
+        Luminance value that determines whether the colour should be black (or
+        closest color to black) or white (or closest color to white).
+
+     */
+    BitmapMonochromeFilter(sal_uInt8 cThreshold)
         : mcThreshold(cThreshold)
     {
     }

@@ -8,22 +8,24 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPMULTIPLYBLENDFILTER_HXX
-#define INCLUDED_VCL_BITMAPMULTIPLYBLENDFILTER_HXX
+#pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapMultiplyBlendFilter
+class BitmapEx;
+
+class VCL_DLLPUBLIC BitmapSolarizeFilter final : public BitmapFilter
 {
-private:
-    BitmapEx maBitmapEx;
-    BitmapEx maBitmapEx2;
-
 public:
-    BitmapMultiplyBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+    BitmapSolarizeFilter(double cSolarGreyThreshold)
+        : mcSolarGreyThreshold(cSolarGreyThreshold)
+    {
+    }
 
-    ~BitmapMultiplyBlendFilter();
-    BitmapEx execute();
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+
+private:
+    sal_uInt8 mcSolarGreyThreshold;
 };
-#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,12 +8,9 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
-#define INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
+#pragma once
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 enum class BasicMorphologyOp
 {
@@ -65,7 +62,5 @@ public:
     {
     }
 };
-
-#endif // INCLUDED_VCL_BITMAPBASICMORPHOLOGYFILTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

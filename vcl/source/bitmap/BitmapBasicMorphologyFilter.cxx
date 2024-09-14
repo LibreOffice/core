@@ -10,9 +10,10 @@
 
 #include <sal/config.h>
 
-#include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
-#include <vcl/BitmapBasicMorphologyFilter.hxx>
+#include <comphelper/threadpool.hxx>
+
+#include <vcl/bitmap/BitmapBasicMorphologyFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>

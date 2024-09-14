@@ -10,10 +10,8 @@
 
 #include <tools/helpers.hxx>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapConvolutionMatrixFilter.hxx>
-#include <vcl/BitmapSharpenFilter.hxx>
+#include <vcl/bitmap/BitmapConvolutionMatrixFilter.hxx>
+#include <vcl/bitmap/BitmapSharpenFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <array>

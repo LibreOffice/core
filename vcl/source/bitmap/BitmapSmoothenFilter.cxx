@@ -8,10 +8,9 @@
  *
  */
 
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapGaussianSeparableBlurFilter.hxx>
-#include <vcl/BitmapSeparableUnsharpenFilter.hxx>
-#include <vcl/BitmapSmoothenFilter.hxx>
+#include <vcl/bitmap/BitmapGaussianSeparableBlurFilter.hxx>
+#include <vcl/bitmap/BitmapSeparableUnsharpenFilter.hxx>
+#include <vcl/bitmap/BitmapSmoothenFilter.hxx>
 
 BitmapEx BitmapSmoothenFilter::execute(BitmapEx const& rBitmapEx) const
 {

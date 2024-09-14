@@ -18,10 +18,8 @@
  */
 
 #include "GlowSoftEgdeShadowTools.hxx"
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapFilter.hxx>
-#include <vcl/BitmapBasicMorphologyFilter.hxx>
-#include <vcl/BitmapFilterStackBlur.hxx>
+#include <vcl/bitmap/BitmapBasicMorphologyFilter.hxx>
+#include <vcl/bitmap/BitmapFilterStackBlur.hxx>
 
 namespace drawinglayer::primitive2d
 {

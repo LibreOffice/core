@@ -10,24 +10,19 @@
 
 #pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmapex.hxx>
 
-class BitmapEx;
-
-/** Filter image based on a 3x3 convolution matrix
- */
-class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter
+class VCL_DLLPUBLIC BitmapLightenBlendFilter
 {
-public:
-    BitmapConvolutionMatrixFilter(const sal_Int32 (&rMatrix)[9])
-        : mrMatrix(rMatrix)
-    {
-    }
-
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
-
 private:
-    const sal_Int32 (&mrMatrix)[9];
+    BitmapEx maBitmapEx;
+    BitmapEx maBitmapEx2;
+
+public:
+    BitmapLightenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+
+    ~BitmapLightenBlendFilter();
+    BitmapEx execute();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

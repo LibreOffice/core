@@ -8,9 +8,8 @@
  *
  */
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap/BitmapShadowFilter.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapShadowFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapShadowFilter::execute(BitmapEx const& rBitmapEx) const

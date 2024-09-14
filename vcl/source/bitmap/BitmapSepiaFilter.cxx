@@ -10,9 +10,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapSepiaFilter.hxx>
+#include <vcl/bitmap/BitmapSepiaFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>

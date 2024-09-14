@@ -26,13 +26,13 @@
 #include <basegfx/color/bcolormodifier.hxx>
 
 #include <vcl/ImageTree.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
 
 // BitmapEx::Create
 #include <salbmp.hxx>

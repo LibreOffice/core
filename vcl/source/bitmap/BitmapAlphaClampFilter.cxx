@@ -8,8 +8,7 @@
  *
  */
 
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapAlphaClampFilter.hxx>
+#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapAlphaClampFilter::execute(BitmapEx const& rBitmapEx) const

@@ -8,31 +8,26 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSEPIAFILTER_HXX
-#define INCLUDED_VCL_BITMAPSEPIAFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapSepiaFilter final : public BitmapFilter
+/** Filter image based on a 3x3 convolution matrix
+ */
+class VCL_DLLPUBLIC BitmapConvolutionMatrixFilter : public BitmapFilter
 {
 public:
-    BitmapSepiaFilter(double nSepiaPercent)
+    BitmapConvolutionMatrixFilter(const sal_Int32 (&rMatrix)[9])
+        : mrMatrix(rMatrix)
     {
-        // clamp value to 100%
-        if (nSepiaPercent <= 100)
-            mnSepiaPercent = nSepiaPercent;
-        else
-            mnSepiaPercent = 100;
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uInt16 mnSepiaPercent;
+    const sal_Int32 (&mrMatrix)[9];
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

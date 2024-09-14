@@ -10,9 +10,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapColorQuantizationFilter.hxx>
+#include <vcl/bitmap/BitmapColorQuantizationFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>

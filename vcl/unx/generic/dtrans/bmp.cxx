@@ -23,7 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
-#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
+#include <vcl/bitmap/BitmapSimpleColorQuantizationFilter.hxx>
 
 #include <sal/log.hxx>
 #include <unx/x11/xlimits.hxx>

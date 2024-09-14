@@ -8,22 +8,21 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPLIGHTENBLENDFILTER_HXX
-#define INCLUDED_VCL_BITMAPLIGHTENBLENDFILTER_HXX
+#pragma once
 
 #include <vcl/bitmapex.hxx>
 
-class VCL_DLLPUBLIC BitmapLightenBlendFilter
+class VCL_DLLPUBLIC BitmapNormalBlendFilter
 {
 private:
     BitmapEx maBitmapEx;
     BitmapEx maBitmapEx2;
 
 public:
-    BitmapLightenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+    BitmapNormalBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
 
-    ~BitmapLightenBlendFilter();
+    ~BitmapNormalBlendFilter();
     BitmapEx execute();
 };
-#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

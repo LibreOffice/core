@@ -8,9 +8,7 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapMonochromeFilter::execute(BitmapEx const& aBitmapEx) const

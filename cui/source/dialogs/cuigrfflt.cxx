@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/BitmapMosaicFilter.hxx>
-#include <vcl/BitmapSharpenFilter.hxx>
-#include <vcl/BitmapEmbossGreyFilter.hxx>
-#include <vcl/BitmapSepiaFilter.hxx>
-#include <vcl/BitmapSmoothenFilter.hxx>
-#include <vcl/BitmapSolarizeFilter.hxx>
-#include <vcl/BitmapColorQuantizationFilter.hxx>
+#include <vcl/bitmap/BitmapMosaicFilter.hxx>
+#include <vcl/bitmap/BitmapSharpenFilter.hxx>
+#include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>
+#include <vcl/bitmap/BitmapSepiaFilter.hxx>
+#include <vcl/bitmap/BitmapSmoothenFilter.hxx>
+#include <vcl/bitmap/BitmapSolarizeFilter.hxx>
+#include <vcl/bitmap/BitmapColorQuantizationFilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>

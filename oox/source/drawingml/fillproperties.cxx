@@ -24,8 +24,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <drawingml/graphicproperties.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/BitmapFilter.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>

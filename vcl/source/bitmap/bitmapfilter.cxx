@@ -8,10 +8,10 @@
  *
  */
 
-#include <vcl/BitmapFilter.hxx>
-#include <vcl/animate/Animation.hxx>
-
 #include <sal/log.hxx>
+
+#include <vcl/animate/Animation.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 BitmapFilter::BitmapFilter() {}
 

@@ -8,30 +8,18 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSEPARABLEUNSHARPENFILTER_HXX
-#define INCLUDED_VCL_BITMAPSEPARABLEUNSHARPENFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapEx;
 
-/** Separable Unsharpen Mask filter is actually a subtracted blurred
-    image from the original image.
- */
-class BitmapSeparableUnsharpenFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMedianFilter final : public BitmapFilter
 {
 public:
-    BitmapSeparableUnsharpenFilter(double fRadius)
-        : mfRadius(fRadius)
-    {
-    }
+    BitmapMedianFilter() {}
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
-
-private:
-    double mfRadius;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

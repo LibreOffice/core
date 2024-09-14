@@ -20,7 +20,7 @@
 #ifndef VCL_INC_BITMAP_BITMAPSCALECONVOLUTIONFILTER_HXX
 #define VCL_INC_BITMAP_BITMAPSCALECONVOLUTIONFILTER_HXX
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 #include <ResampleKernel.hxx>
 

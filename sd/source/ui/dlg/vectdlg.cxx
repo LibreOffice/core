@@ -20,9 +20,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/bitmap/BitmapSimpleColorQuantizationFilter.hxx>
 #include <vcl/bitmap/Vectorizer.hxx>
 #include <vcl/metaact.hxx>
-#include <vcl/BitmapSimpleColorQuantizationFilter.hxx>
 #include <vcl/svapp.hxx>
 
 #include <DrawDocShell.hxx>

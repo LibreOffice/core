@@ -8,9 +8,7 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapMedianFilter.hxx>
+#include <vcl/bitmap/BitmapMedianFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #define S2(a, b)                                                                                   \

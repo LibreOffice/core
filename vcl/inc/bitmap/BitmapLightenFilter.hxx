@@ -11,7 +11,7 @@
 #ifndef INCLUDED_VCL_INC_BITMAP_BITMAPLIGHTENFILTER_HXX
 #define INCLUDED_VCL_INC_BITMAP_BITMAPLIGHTENFILTER_HXX
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapLightenFilter final : public BitmapFilter
 {

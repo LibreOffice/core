@@ -8,32 +8,28 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
-#define INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
+#pragma once
 
 #include <sal/config.h>
 
-#include <tools/degree.hxx>
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
+#include <algorithm>
 
-class VCL_DLLPUBLIC BitmapEmbossGreyFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMosaicFilter final : public BitmapFilter
 {
 public:
-    BitmapEmbossGreyFilter(Degree100 nAzimuthAngle, Degree100 nElevationAngle)
-        : mnAzimuthAngle(nAzimuthAngle)
-        , mnElevationAngle(nElevationAngle)
+    BitmapMosaicFilter(sal_Int32 nTileWidth, sal_Int32 nTileHeight)
+        : mnTileWidth(std::max(nTileWidth, sal_Int32(1)))
+        , mnTileHeight(std::max(nTileHeight, sal_Int32(1)))
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    Degree100 mnAzimuthAngle;
-    Degree100 mnElevationAngle;
+    sal_Int32 mnTileWidth;
+    sal_Int32 mnTileHeight;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,17 +8,16 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSHARPENFILTER_HXX
-#define INCLUDED_VCL_BITMAPSHARPENFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapConvolutionMatrixFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapSharpenFilter final : public BitmapConvolutionMatrixFilter
+class VCL_DLLPUBLIC BitmapSobelGreyFilter final : public BitmapFilter
 {
 public:
-    BitmapSharpenFilter();
-};
+    BitmapSobelGreyFilter() {}
 
-#endif
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

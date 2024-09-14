@@ -9,7 +9,8 @@
  */
 
 #include <comphelper/diagnose_ex.hxx>
-#include <vcl/BitmapScreenBlendFilter.hxx>
+
+#include <vcl/bitmap/BitmapScreenBlendFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 

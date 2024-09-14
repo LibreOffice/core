@@ -10,22 +10,19 @@
 
 #pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmapex.hxx>
 
-/** If the alpha is beyond a certain threshold, make it fully transparent
- */
-class VCL_DLLPUBLIC BitmapShadowFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapMultiplyBlendFilter
 {
-public:
-    BitmapShadowFilter(Color aShadowColor)
-        : maShadowColor(aShadowColor)
-    {
-    }
-
-    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
-
 private:
-    Color maShadowColor;
+    BitmapEx maBitmapEx;
+    BitmapEx maBitmapEx2;
+
+public:
+    BitmapMultiplyBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+
+    ~BitmapMultiplyBlendFilter();
+    BitmapEx execute();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

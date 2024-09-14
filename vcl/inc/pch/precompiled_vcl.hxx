@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-07-19 09:24:26 using:
+ Generated on 2024-09-15 00:23:48 using:
  ./bin/update_pch vcl vcl --cutoff=6 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -28,10 +28,10 @@
 #include <cassert>
 #include <chrono>
 #include <cmath>
+#include <compare>
 #include <cstddef>
-#include <cstdio>
+#include <cstdint>
 #include <cstdlib>
-#include <cstring>
 #include <deque>
 #include <float.h>
 #include <functional>
@@ -50,6 +50,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stddef.h>
 #include <string.h>
 #include <string>
@@ -70,17 +71,14 @@
 #if PCH_LEVEL >= 2
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/getglobalmutex.hxx>
 #include <osl/interlck.h>
 #include <osl/module.hxx>
 #include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/nlsupport.h>
-#include <osl/security.h>
 #include <osl/signal.h>
 #include <osl/socket.h>
 #include <osl/socket.hxx>
@@ -93,7 +91,6 @@
 #include <rtl/cipher.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
-#include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
@@ -121,7 +118,6 @@
 #endif // PCH_LEVEL >= 2
 #if PCH_LEVEL >= 3
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -132,6 +128,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/Range2D.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Size2D.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
@@ -140,12 +137,10 @@
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/utils/common.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <vcl/BitmapWriteAccess.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/datatransfer/XTransferable2.hpp>
@@ -161,11 +156,10 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/i18n/Calendar2.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -173,6 +167,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -183,7 +178,6 @@
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
@@ -191,17 +185,18 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <comphelper/base64.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/errcode.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/unoimplbase.hxx>
 #include <cppu/cppudllapi.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
@@ -209,8 +204,9 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <editeng/EPosition.hxx>
+#include <editeng/ESelection.hxx>
+#include <editeng/editengdllapi.h>
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
@@ -220,6 +216,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/i18nutildllapi.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <o3tl/deleter.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -235,12 +232,14 @@
 #include <salhelper/thread.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/hint.hxx>
 #include <svl/macitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <test/outputdevice.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <tools/date.hxx>
@@ -278,7 +277,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
-#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
@@ -287,12 +285,11 @@
 #include <accel.hxx>
 #include <brdwin.hxx>
 #include <configsettings.hxx>
+#include <dndlistenercontainer.hxx>
 #include <drawmode.hxx>
 #include <fontattributes.hxx>
-#include <glyphid.hxx>
 #include <impfontcache.hxx>
 #include <impglyphitem.hxx>
-#include <ppdparser.hxx>
 #include <salbmp.hxx>
 #include <salframe.hxx>
 #include <salgdi.hxx>
@@ -312,13 +309,14 @@
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <vcl/BitmapColor.hxx>
-#include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/QueueInfo.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
@@ -342,7 +340,6 @@
 #include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
-#include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -363,6 +360,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
@@ -393,7 +391,6 @@
 #include <vcl/unohelp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/vcllayout.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

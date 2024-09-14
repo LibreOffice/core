@@ -11,8 +11,7 @@
 #ifndef VCL_INC_BITMAP_BITMAPFASTSCALEFILTER_HXX
 #define VCL_INC_BITMAP_BITMAPFASTSCALEFILTER_HXX
 
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapFastScaleFilter final : public BitmapFilter
 {

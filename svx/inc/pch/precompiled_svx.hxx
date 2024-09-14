@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2023-01-10 23:28:52 using:
+ Generated on 2024-10-12 19:40:59 using:
  ./bin/update_pch svx svx --cutoff=3 --exclude:system --exclude:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -29,7 +29,6 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdlib>
-#include <deque>
 #include <functional>
 #include <limits.h>
 #include <limits>
@@ -42,6 +41,7 @@
 #include <set>
 #include <span>
 #include <stddef.h>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -56,11 +56,11 @@
 #include <osl/endian.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
+#include <osl/mutex.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
@@ -75,12 +75,12 @@
 #include <sal/saldllapi.h>
 #include <sal/types.h>
 #include <sal/typesizes.h>
-#include <vcl/BitmapFilter.hxx>
 #include <vcl/EnumContext.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/InterimItemWindow.hxx>
 #include <vcl/Scanline.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
@@ -126,9 +126,10 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/range/b3drange.hxx>
+#include <basegfx/tuple/Size2D.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
-#include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/utils/bgradient.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -136,9 +137,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/awt/GradientStyle.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -164,6 +162,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -172,6 +171,7 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -188,6 +188,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
@@ -220,14 +221,16 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/basemutex.hxx>
+#include <comphelper/unoimplbase.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/weakagg.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/dllapi.h>
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -235,11 +238,8 @@
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
-#include <editeng/editdata.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editengdllapi.h>
-#include <editeng/editstat.hxx>
-#include <editeng/eedata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/flditem.hxx>
@@ -248,14 +248,10 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/numdef.hxx>
 #include <editeng/numitem.hxx>
-#include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/overflowingtxt.hxx>
-#include <editeng/paragraphdata.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/svxenum.hxx>
-#include <editeng/svxfont.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/wghtitem.hxx>
@@ -267,6 +263,7 @@
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <o3tl/unit_conversion.hxx>
@@ -305,7 +302,6 @@
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/metitem.hxx>
 #include <svl/poolitem.hxx>
@@ -315,7 +311,6 @@
 #include <svl/stylesheetuser.hxx>
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
-#include <svl/undo.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
@@ -335,10 +330,12 @@
 #include <tools/debug.hxx>
 #include <tools/degree.hxx>
 #include <tools/fldunit.hxx>
+#include <tools/fontenum.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/json_writer.hxx>
 #include <tools/link.hxx>
 #include <tools/long.hxx>
 #include <tools/mapunit.hxx>
@@ -349,7 +346,6 @@
 #include <tools/time.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/urlobj.hxx>
-#include <unotools/configmgr.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/resmgr.hxx>
@@ -396,6 +392,8 @@
 #include <svx/srchdlg.hxx>
 #include <svx/strarray.hxx>
 #include <svx/svddef.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdgeodata.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
@@ -406,6 +404,7 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdtext.hxx>
@@ -415,6 +414,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/ucsubset.hxx>
 #include <svx/unomid.hxx>
 #include <svx/view3d.hxx>
 #include <svx/viewpt3d.hxx>

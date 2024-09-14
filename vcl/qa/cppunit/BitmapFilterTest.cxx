@@ -9,21 +9,20 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/BitmapWriteAccess.hxx>
-
 #include <tools/stream.hxx>
+
+#include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
+#include <vcl/bitmap/BitmapArithmeticBlendFilter.hxx>
+#include <vcl/bitmap/BitmapDarkenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapLightenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapMultiplyBlendFilter.hxx>
+#include <vcl/bitmap/BitmapNormalBlendFilter.hxx>
+#include <vcl/bitmap/BitmapScreenBlendFilter.hxx>
+#include <vcl/bitmap/BitmapBasicMorphologyFilter.hxx>
+#include <vcl/bitmap/BitmapFilterStackBlur.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#include <vcl/BitmapAlphaClampFilter.hxx>
-#include <vcl/BitmapArithmeticBlendFilter.hxx>
-#include <vcl/BitmapDarkenBlendFilter.hxx>
-#include <vcl/BitmapLightenBlendFilter.hxx>
-#include <vcl/BitmapMultiplyBlendFilter.hxx>
-#include <vcl/BitmapNormalBlendFilter.hxx>
-#include <vcl/BitmapScreenBlendFilter.hxx>
-#include <vcl/BitmapBasicMorphologyFilter.hxx>
-#include <vcl/BitmapFilterStackBlur.hxx>
 #include <BitmapSymmetryCheck.hxx>
 
 #include <chrono>

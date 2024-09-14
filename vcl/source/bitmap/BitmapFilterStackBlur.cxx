@@ -8,11 +8,11 @@
  *
  */
 
-#include <vcl/BitmapFilterStackBlur.hxx>
-#include <vcl/BitmapWriteAccess.hxx>
 #include <sal/log.hxx>
-
 #include <comphelper/threadpool.hxx>
+
+#include <vcl/bitmap/BitmapFilterStackBlur.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 
 namespace
 {

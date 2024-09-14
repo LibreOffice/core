@@ -8,12 +8,11 @@
  *
  */
 
-#ifndef INCLUDED_INCLUDE_VCL_BITMAPSIMPLECOLORQUANTIZATIONFILTER_HXX
-#define INCLUDED_INCLUDE_VCL_BITMAPSIMPLECOLORQUANTIZATIONFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapSimpleColorQuantizationFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapColorQuantizationFilter final : public BitmapFilter
 {
 public:
     /** Reduce number of colors for the bitmap using the POPULAR algorithm
@@ -21,7 +20,7 @@ public:
         @param nNewColorCount
         Maximal number of bitmap colors after the reduce operation
      */
-    BitmapSimpleColorQuantizationFilter(sal_uInt16 nNewColorCount)
+    BitmapColorQuantizationFilter(sal_uInt16 nNewColorCount)
         : mnNewColorCount(nNewColorCount)
     {
     }
@@ -30,8 +29,12 @@ public:
 
 private:
     sal_uInt16 mnNewColorCount;
-};
 
-#endif
+    struct PopularColorCount
+    {
+        sal_uInt32 mnIndex;
+        sal_uInt32 mnCount;
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

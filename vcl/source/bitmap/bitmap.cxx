@@ -34,7 +34,7 @@
 #if HAVE_FEATURE_SKIA
 #include <vcl/skia/SkiaHelper.hxx>
 #endif
-#include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 
 #include <bitmap/BitmapScaleSuperFilter.hxx>
 #include <bitmap/BitmapScaleConvolutionFilter.hxx>

@@ -8,22 +8,26 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPDARKENBLENDFILTER_HXX
-#define INCLUDED_VCL_BITMAPDARKENBLENDFILTER_HXX
+#pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapDarkenBlendFilter
+class BitmapEx;
+
+class BitmapDuoToneFilter final : public BitmapFilter
 {
-private:
-    BitmapEx maBitmapEx;
-    BitmapEx maBitmapEx2;
-
 public:
-    BitmapDarkenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
+    BitmapDuoToneFilter(Color nColorOne, Color nColorTwo)
+        : mnColorOne(nColorOne)
+        , mnColorTwo(nColorTwo)
+    {
+    }
 
-    ~BitmapDarkenBlendFilter();
-    BitmapEx execute();
+    virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
+
+private:
+    Color mnColorOne;
+    Color mnColorTwo;
 };
-#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

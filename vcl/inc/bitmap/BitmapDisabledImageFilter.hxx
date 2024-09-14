@@ -11,7 +11,7 @@
 #ifndef INCLUDED_VCL_INC_BITMAP_BITMAPDISABLEDIMAGEFILTER_HXX
 #define INCLUDED_VCL_INC_BITMAP_BITMAPDISABLEDIMAGEFILTER_HXX
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class VCL_DLLPUBLIC BitmapDisabledImageFilter final : public BitmapFilter
 {

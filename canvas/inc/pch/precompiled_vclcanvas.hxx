@@ -13,7 +13,7 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2021-03-08 13:11:36 using:
+ Generated on 2024-10-12 02:56:17 using:
  ./bin/update_pch canvas vclcanvas --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
@@ -25,22 +25,22 @@
 #include <cstdlib>
 #include <memory>
 #include <tuple>
+#include <utility>
 #include <boost/cast.hpp>
 #endif // PCH_LEVEL >= 1
 #if PCH_LEVEL >= 2
 #include <osl/diagnose.h>
-#include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
-#include <vcl/BitmapAlphaClampFilter.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/bitmap/BitmapAlphaClampFilter.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/gradient.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
@@ -76,12 +76,11 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <comphelper/diagnose_ex.hxx>
-#include <tools/long.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
 #endif // PCH_LEVEL >= 3

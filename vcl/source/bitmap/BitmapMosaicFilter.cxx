@@ -8,9 +8,7 @@
  *
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapMosaicFilter.hxx>
+#include <vcl/bitmap/BitmapMosaicFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 BitmapEx BitmapMosaicFilter::execute(BitmapEx const& rBitmapEx) const

@@ -10,9 +10,7 @@
 
 #include <sal/config.h>
 
-#include <vcl/bitmap.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapSobelGreyFilter.hxx>
+#include <vcl/bitmap/BitmapSobelGreyFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <algorithm>

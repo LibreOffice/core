@@ -11,7 +11,8 @@
 #pragma once
 
 #include <tools/color.hxx>
-#include <vcl/BitmapFilter.hxx>
+
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapColorizeFilter final : public BitmapFilter
 {

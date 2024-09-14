@@ -25,8 +25,7 @@
 #include <tools/stream.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
-#include <vcl/BitmapReadAccess.hxx>
-#include <vcl/BitmapMonochromeFilter.hxx>
+#include <vcl/bitmap/BitmapMonochromeFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/alpha.hxx>
 #include <vcl/graphicfilter.hxx>

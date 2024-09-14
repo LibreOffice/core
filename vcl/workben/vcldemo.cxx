@@ -51,7 +51,7 @@
 #include <vcl/kernarray.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/ImageTree.hxx>
-#include <vcl/BitmapEmbossGreyFilter.hxx>
+#include <vcl/bitmap/BitmapEmbossGreyFilter.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
 
 #include <basegfx/numeric/ftools.hxx>

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_BITMAP_BITMAPSCALESUPER_HXX
 #define INCLUDED_VCL_INC_BITMAP_BITMAPSCALESUPER_HXX
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapScaleSuperFilter final : public BitmapFilter
 {

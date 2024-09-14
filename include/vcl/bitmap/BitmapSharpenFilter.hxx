@@ -8,22 +8,14 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSCREENBLENDFILTER_HXX
-#define INCLUDED_VCL_BITMAPSCREENBLENDFILTER_HXX
+#pragma once
 
-#include <vcl/bitmapex.hxx>
+#include <vcl/bitmap/BitmapConvolutionMatrixFilter.hxx>
 
-class VCL_DLLPUBLIC BitmapScreenBlendFilter
+class VCL_DLLPUBLIC BitmapSharpenFilter final : public BitmapConvolutionMatrixFilter
 {
-private:
-    BitmapEx maBitmapEx;
-    BitmapEx maBitmapEx2;
-
 public:
-    BitmapScreenBlendFilter(BitmapEx const& rBmpEx, BitmapEx const& rBmpEx2);
-
-    ~BitmapScreenBlendFilter();
-    BitmapEx execute();
+    BitmapSharpenFilter();
 };
-#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

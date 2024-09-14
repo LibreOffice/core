@@ -25,8 +25,7 @@
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/BitmapArithmeticBlendFilter.hxx>
+#include <vcl/bitmap/BitmapArithmeticBlendFilter.hxx>
 #include <drawinglayer/converters.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/BitmapWriteAccess.hxx>

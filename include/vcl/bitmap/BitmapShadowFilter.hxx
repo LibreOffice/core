@@ -8,27 +8,24 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSMOOTHENFILTER_HXX
-#define INCLUDED_VCL_BITMAPSMOOTHENFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
-class VCL_DLLPUBLIC BitmapSmoothenFilter final : public BitmapFilter
+/** If the alpha is beyond a certain threshold, make it fully transparent
+ */
+class VCL_DLLPUBLIC BitmapShadowFilter final : public BitmapFilter
 {
 public:
-    BitmapSmoothenFilter(double fRadius)
-        : mfRadius(fRadius)
+    BitmapShadowFilter(Color aShadowColor)
+        : maShadowColor(aShadowColor)
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    double mfRadius;
+    Color maShadowColor;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

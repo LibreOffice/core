@@ -8,27 +8,23 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPSOLARIZEFILTER_HXX
-#define INCLUDED_VCL_BITMAPSOLARIZEFILTER_HXX
+#pragma once
 
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
-class BitmapEx;
-
-class VCL_DLLPUBLIC BitmapSolarizeFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapPopArtFilter final : public BitmapFilter
 {
 public:
-    BitmapSolarizeFilter(double cSolarGreyThreshold)
-        : mcSolarGreyThreshold(cSolarGreyThreshold)
-    {
-    }
+    BitmapPopArtFilter() {}
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uInt8 mcSolarGreyThreshold;
+    struct PopArtEntry
+    {
+        sal_uInt16 mnIndex;
+        sal_uInt32 mnCount;
+    };
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

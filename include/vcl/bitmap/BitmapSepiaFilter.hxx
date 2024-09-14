@@ -8,33 +8,28 @@
  *
  */
 
-#ifndef INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
-#define INCLUDED_VCL_BITMAPMOSAICFILTER_HXX
+#pragma once
 
-#include <sal/config.h>
-
-#include <algorithm>
-
-#include <vcl/BitmapFilter.hxx>
+#include <vcl/bitmap/BitmapFilter.hxx>
 
 class BitmapEx;
 
-class VCL_DLLPUBLIC BitmapMosaicFilter final : public BitmapFilter
+class VCL_DLLPUBLIC BitmapSepiaFilter final : public BitmapFilter
 {
 public:
-    BitmapMosaicFilter(sal_Int32 nTileWidth, sal_Int32 nTileHeight)
-        : mnTileWidth(std::max(nTileWidth, sal_Int32(1)))
-        , mnTileHeight(std::max(nTileHeight, sal_Int32(1)))
+    BitmapSepiaFilter(double nSepiaPercent)
     {
+        // clamp value to 100%
+        if (nSepiaPercent <= 100)
+            mnSepiaPercent = nSepiaPercent;
+        else
+            mnSepiaPercent = 100;
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_Int32 mnTileWidth;
-    sal_Int32 mnTileHeight;
+    sal_uInt16 mnSepiaPercent;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
