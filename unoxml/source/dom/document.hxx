@@ -27,7 +27,7 @@
 #include <sal/types.h>
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -81,7 +81,7 @@ namespace DOM
         css::uno::Reference< css::io::XOutputStream > m_rOutputStream;
 
         typedef std::unordered_map< xmlNodePtr,
-                    ::std::pair< css::uno::WeakReference<css::xml::dom::XNode>, CNode* > > nodemap_t;
+                    ::std::pair< unotools::WeakReference<CNode>, CNode* > > nodemap_t;
         nodemap_t m_NodeMap;
 
         ::std::unique_ptr<events::CEventDispatcher> const m_pEventDispatcher;
