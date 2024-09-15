@@ -37,6 +37,7 @@ namespace ooo::vba::excel {
 }
 
 class ScVbaSheetObjectsBase;
+class ScVbaChartObjects;
 
 typedef InheritedHelperInterfaceWeakImpl< ov::excel::XWorksheet >  WorksheetImpl_BASE;
 
@@ -44,7 +45,7 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
 {
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
     css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< ov::excel::XChartObjects > mxCharts;
+    rtl::Reference<ScVbaChartObjects> mxCharts;
     css::uno::Reference< ov::excel::XHyperlinks > mxHlinks;
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons[2];
     bool mbVeryHidden;

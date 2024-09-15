@@ -24,7 +24,7 @@
 #include <com/sun/star/sheet/FillDateMode.hpp>
 #include <com/sun/star/sheet/FillMode.hpp>
 #include <com/sun/star/sheet/FillDirection.hpp>
-
+#include <rtl/ref.hxx>
 #include "vbaformat.hxx"
 #include <address.hxx>
 #include <formula/grammar.hxx>
@@ -44,6 +44,8 @@ class ScCellRangeObj;
 class ScDocShell;
 class ScDocument;
 class ScRangeList;
+class ScVbaRangeAreas;
+class ScVbaValidation;
 
 class ArrayVisitor
 {
@@ -73,13 +75,13 @@ enum class RangeValueType { value, value2 };
 
 class ScVbaRange : public ScVbaRange_BASE
 {
-    css::uno::Reference< ov::XCollection > m_Areas;
+    rtl::Reference< ScVbaRangeAreas > m_Areas;
     css::uno::Reference< ov::XCollection > m_Borders;
     css::uno::Reference< css::table::XCellRange > mxRange;
     css::uno::Reference< css::sheet::XSheetCellRangeContainer > mxRanges;
     bool mbIsRows;
     bool mbIsColumns;
-    css::uno::Reference< ov::excel::XValidation > m_xValidation;
+    rtl::Reference< ScVbaValidation > m_xValidation;
     /// @throws css::uno::RuntimeException
     double getCalcColWidth(const css::table::CellRangeAddress&);
     /// @throws css::uno::RuntimeException

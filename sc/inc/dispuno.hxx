@@ -27,6 +27,7 @@
 
 namespace com::sun::star::frame { class XDispatchProviderInterception; }
 class ScTabViewShell;
+class ScDispatch;
 
 class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<
                                         css::frame::XDispatchProviderInterceptor,
@@ -43,7 +44,7 @@ class ScDispatchProviderInterceptor final : public cppu::WeakImplHelper<
     css::uno::Reference< css::frame::XDispatchProvider> m_xMasterDispatcher;
 
     /// own dispatch
-    css::uno::Reference< css::frame::XDispatch> m_xMyDispatch;
+    rtl::Reference<ScDispatch> m_xMyDispatch;
 
 public:
 

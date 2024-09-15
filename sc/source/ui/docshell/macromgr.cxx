@@ -102,8 +102,6 @@ ScMacroManager::~ScMacroManager()
 
 typedef ::cppu::WeakImplHelper< css::container::XContainerListener > ContainerListenerHelper;
 
-namespace {
-
 class VBAProjectListener : public ContainerListenerHelper
 {
     ScMacroManager* mpMacroMgr;
@@ -124,8 +122,6 @@ public:
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& /*Event*/ ) override {}
 
 };
-
-}
 
 void ScMacroManager::InitUserFuncData()
 {

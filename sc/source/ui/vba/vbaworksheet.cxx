@@ -711,11 +711,10 @@ ScVbaWorksheet::ChartObjects( const uno::Any& Index )
     }
     if ( Index.hasValue() )
     {
-        uno::Reference< XCollection > xColl( mxCharts, uno::UNO_QUERY_THROW );
-        return xColl->Item( Index, uno::Any() );
+        return mxCharts->Item( Index, uno::Any() );
     }
     else
-        return uno::Any( mxCharts );
+        return uno::Any( uno::Reference<ov::excel::XChartObjects>(mxCharts) );
 
 }
 

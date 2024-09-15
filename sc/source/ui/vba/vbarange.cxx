@@ -323,6 +323,8 @@ public:
     }
 };
 
+}
+
 class ScVbaRangeAreas : public ScVbaCollectionBaseImpl
 {
     bool mbIsRows;
@@ -343,8 +345,6 @@ public:
     virtual uno::Sequence< OUString > getServiceNames() override { return uno::Sequence< OUString >(); }
 
 };
-
-}
 
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaRangeAreas::createEnumeration()
@@ -3930,7 +3930,7 @@ uno::Any SAL_CALL
 ScVbaRange::Areas( const uno::Any& item)
 {
     if ( !item.hasValue() )
-        return uno::Any( m_Areas );
+        return uno::Any( uno::Reference< ov::XCollection >(m_Areas) );
     return m_Areas->Item( item, uno::Any() );
 }
 

@@ -11,6 +11,7 @@
 
 #include <com/sun/star/container/XContainerListener.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 
@@ -20,6 +21,7 @@
 class ScDocument;
 class ScFormulaCell;
 class ScUserMacroDepTracker;
+class VBAProjectListener;
 
 class ScMacroManager
 {
@@ -38,7 +40,7 @@ public:
 private:
     typedef std::unordered_map<OUString, bool> NameBoolMap;
     NameBoolMap mhFuncToVolatile;
-    css::uno::Reference<css::container::XContainerListener> mxContainerListener;
+    rtl::Reference<VBAProjectListener> mxContainerListener;
 
     ::std::unique_ptr<ScUserMacroDepTracker> mpDepTracker;
     ScDocument& mrDoc;

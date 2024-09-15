@@ -66,6 +66,7 @@ class ScNavigatorSettings;
 class ScRangeName;
 class ScDrawTransferObj;
 class ScCondFormatDlgData;
+class ScDispatchProviderInterceptor;
 
 namespace sc { class SparklineShell; }
 
@@ -147,8 +148,7 @@ private:
 
     std::unique_ptr<::editeng::SvxBorderLine> pCurFrameLine;
 
-    css::uno::Reference< css::frame::XDispatchProviderInterceptor >
-                            xDisProvInterceptor;
+    rtl::Reference<ScDispatchProviderInterceptor> xDisProvInterceptor;
 
     Point                   aWinPos;
 
