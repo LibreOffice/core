@@ -36,7 +36,7 @@ using namespace css::xml::dom;
 using namespace css::xml::dom::events;
 namespace DOM { class CElementListImpl; }
 
-namespace
+namespace DOM
 {
     class WeakEventListener : public ::cppu::WeakImplHelper<css::xml::dom::events::XEventListener>
     {

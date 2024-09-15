@@ -38,6 +38,7 @@
 
 namespace DOM
 {
+    class WeakEventListener;
     class CElement;
 
     class CElementListImpl
@@ -48,7 +49,7 @@ namespace DOM
         /** @short  proxy weak binding to forward Events to ourself without
                     an ownership cycle
           */
-        css::uno::Reference< css::xml::dom::events::XEventListener > m_xEventListener;
+        rtl::Reference< WeakEventListener > m_xEventListener;
 
         ::rtl::Reference<CElement> const m_pElement;
         ::osl::Mutex & m_rMutex;
