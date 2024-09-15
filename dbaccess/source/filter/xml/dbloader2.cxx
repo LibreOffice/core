@@ -197,7 +197,7 @@ class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInf
 {
 private:
     const Reference< XComponentContext >  m_aContext;
-    Reference< XFrameLoader >           m_xMySelf;
+    rtl::Reference< DBContentLoader >   m_xMySelf;
     OUString                            m_sCurrentURL;
     ImplSVEvent * m_nStartWizard;
 

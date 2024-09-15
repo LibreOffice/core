@@ -868,14 +868,13 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< XControlMo
 void SbaXDataBrowserController::addControlListeners(const Reference< css::awt::XControl > & _xGridControl)
 {
     // to ge the 'modified' for the current cell
-    Reference< XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
-    if (xBroadcaster.is())
-        xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
+    rtl::Reference< SbaXGridControl >  xGridControl(getBrowserView()->getGridControl() );
+    if (xGridControl.is())
+        xGridControl->addModifyListener(static_cast<XModifyListener*>(this));
 
     // introduce ourself as dispatch provider for the grid
-    Reference< XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
-    if (xInterception.is())
-        xInterception->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
+    if (xGridControl.is())
+        xGridControl->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
     // add as focus listener to the control (needed for the form controller functionality)
     Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
@@ -929,7 +928,7 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
     m_xFormControllerImpl->m_aActivateListeners.notifyEach( &css::form::XFormControllerListener::formDeactivated, aEvt );
 
     // commit the changes of the grid control (as we're deactivated)
-    Reference< XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xCommitable(getBrowserView()->getGridControl());
     if (xCommitable.is())
         xCommitable->commit();
     else
@@ -983,7 +982,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source)
     if (getBrowserView())
     {
         Reference< css::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
-        if (xSourceControl == getBrowserView()->getGridControl())
+        if (xSourceControl == cppu::getXWeak(getBrowserView()->getGridControl().get()))
             removeControlListeners(getBrowserView()->getGridControl());
     }
 
@@ -1761,7 +1760,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
 void SbaXDataBrowserController::ExecuteSearch()
 {
     // calculate the control source of the active field
-    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xGrid(getBrowserView()->getGridControl());
     OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have a css::form::XGrid interface !");
 
     Reference< css::form::XGridPeer >  xGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -2278,7 +2277,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField() const
     Reference< XPropertySet >  xEmptyReturn;
 
     // get the current column from the grid
-    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xGrid(getBrowserView()->getGridControl());
     if (!xGrid.is())
             return xEmptyReturn;
     sal_uInt16 nViewPos = xGrid->getCurrentColumnPosition();
@@ -2298,7 +2297,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField() const
 
 IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext&, rContext, sal_uInt32)
 {
-    Reference< css::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xPeerContainer(getBrowserView()->getGridControl());
 
     // check all grid columns for their control source
     Reference< css::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
@@ -2373,7 +2372,7 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation&, rIn
         }
     }
 
-    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xGrid(getBrowserView()->getGridControl());
     xGrid->setCurrentColumnPosition(nViewPos); //TODO: sal_Int32 -> sal_Int16!
 }
 
@@ -2558,7 +2557,7 @@ bool SbaXDataBrowserController::isValidCursor() const
 
 sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition() const
 {
-    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl >  xGrid(getBrowserView()->getGridControl());
     sal_Int16 nViewPos = -1;
     try
     {
@@ -2571,7 +2570,7 @@ sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition() const
 
 void SbaXDataBrowserController::setCurrentColumnPosition( sal_Int16 _nPos )
 {
-    Reference< css::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
+    rtl::Reference< SbaXGridControl > xGrid(getBrowserView()->getGridControl());
     try
     {
         if ( -1 != _nPos )

@@ -36,10 +36,11 @@ class Splitter;
 namespace dbaui
 {
     class SbaGridControl;
+    class SbaXGridControl;
 
     class UnoDataBrowserView final : public ODataView, public ::utl::OEventListenerAdapter
     {
-        css::uno::Reference< css::awt::XControl >                 m_xGrid;            // our grid's UNO representation
+        rtl::Reference< SbaXGridControl >                         m_xGrid;            // our grid's UNO representation
         css::uno::Reference< css::awt::XControlContainer >        m_xMe;              // our own UNO representation
         VclPtr<InterimDBTreeListBox>   m_pTreeView;
         VclPtr<Splitter>               m_pSplitter;
@@ -48,7 +49,7 @@ namespace dbaui
         DECL_LINK( SplitHdl, Splitter*, void );
     // attribute access
     public:
-        const css::uno::Reference< css::awt::XControl >&  getGridControl() const  { return m_xGrid; }
+        const rtl::Reference< SbaXGridControl >&  getGridControl() const  { return m_xGrid; }
         SbaGridControl*         getVclControl() const;
 
         UnoDataBrowserView( vcl::Window* pParent,

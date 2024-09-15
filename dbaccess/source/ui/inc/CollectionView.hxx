@@ -24,6 +24,8 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+namespace ucbhelper { class CommandEnvironment; }
+
 namespace dbaui
 {
     /* this class allows to browse through the collection of forms and reports
@@ -32,7 +34,7 @@ namespace dbaui
     {
         css::uno::Reference< css::ucb::XContent>                  m_xContent;
         css::uno::Reference< css::uno::XComponentContext >        m_xContext;
-        css::uno::Reference< css::ucb::XCommandEnvironment >      m_xCmdEnv;
+        rtl::Reference< ::ucbhelper::CommandEnvironment >         m_xCmdEnv;
         bool                   m_bCreateForm;
 
         std::unique_ptr<weld::Label> m_xFTCurrentPath;

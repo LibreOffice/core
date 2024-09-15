@@ -44,7 +44,7 @@ namespace comphelper
 
 namespace dbaccess
 {
-
+    class OEmbedObjectHolder;
     class OInterceptor;
     class OEmbeddedClientHelper;
 // ODocumentDefinition - a database "document" which is simply a link to a real
@@ -63,7 +63,7 @@ class ODocumentDefinition
         ,public ODocumentDefinition_Base
 {
     css::uno::Reference< css::embed::XEmbeddedObject>         m_xEmbeddedObject;
-    css::uno::Reference< css::embed::XStateChangeListener >   m_xListener;
+    rtl::Reference< OEmbedObjectHolder >                      m_xListener;
     css::uno::Reference< css::sdbc::XConnection >             m_xLastKnownConnection;
 
     rtl::Reference<OInterceptor>                              m_pInterceptor;

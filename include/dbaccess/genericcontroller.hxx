@@ -89,6 +89,7 @@ namespace com::sun::star {
 
 namespace vcl { class Window; }
 namespace weld { class Window; }
+namespace framework { class TitleHelper; }
 class NotifyEvent;
 
 namespace dbaui
@@ -239,7 +240,7 @@ namespace dbaui
         css::uno::Reference< css::frame::XDispatchProvider >      m_xSlaveDispatcher;     // for intercepting dispatches
         css::uno::Reference< css::frame::XDispatchProvider >      m_xMasterDispatcher;    // ditto
         css::uno::Reference< css::sdb::XDatabaseContext >         m_xDatabaseContext;
-        css::uno::Reference< css::frame::XTitle >                 m_xTitleHelper;
+        rtl::Reference<::framework::TitleHelper >                 m_xTitleHelper;
 
         bool                    m_bPreview;
         bool                    m_bReadOnly;

@@ -66,6 +66,7 @@
 namespace comphelper {
     class NamedValueCollection;
 }
+namespace framework { class TitleHelper; }
 
 namespace dbaccess
 {
@@ -185,7 +186,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
 
     /** @short  such module manager is used to classify new opened documents. */
     css::uno::Reference< css::frame::XModuleManager2 >                                          m_xModuleManager;
-    css::uno::Reference< css::frame::XTitle >                                                   m_xTitleHelper;
+    rtl::Reference< ::framework::TitleHelper >                                                  m_xTitleHelper;
     TNumberedController                                                                         m_aNumberedControllers;
 
     /** true if and only if the DatabaseDocument's "initNew" or "load" have been called (or, well,
@@ -268,7 +269,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     // ModelDependentComponent overridables
     virtual css::uno::Reference< css::uno::XInterface > getThis() const override;
 
-    css::uno::Reference< css::frame::XTitle > const &     impl_getTitleHelper_throw();
+    rtl::Reference< ::framework::TitleHelper> const &     impl_getTitleHelper_throw();
     css::uno::Reference< css::frame::XUntitledNumbers >   impl_getUntitledHelper_throw(
         const css::uno::Reference< css::uno::XInterface >& _xComponent = css::uno::Reference< css::uno::XInterface >());
 

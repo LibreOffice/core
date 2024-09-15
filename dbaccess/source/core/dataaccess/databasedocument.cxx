@@ -1832,7 +1832,7 @@ void ODatabaseDocument::disposing()
         m_xModuleManager.clear();
 
         {
-            uno::Reference<uno::XInterface> xTitleInterface(m_xTitleHelper);
+            uno::Reference<uno::XInterface> xTitleInterface(cppu::getXWeak(m_xTitleHelper.get()));
             aKeepAlive.push_back(xTitleInterface);
         }
         m_xTitleHelper.clear();
@@ -2070,7 +2070,7 @@ Reference< XController2 > SAL_CALL ODatabaseDocument::createViewController( cons
     return xController;
 }
 
-Reference< XTitle > const & ODatabaseDocument::impl_getTitleHelper_throw()
+rtl::Reference< ::framework::TitleHelper > const & ODatabaseDocument::impl_getTitleHelper_throw()
 {
     if ( ! m_xTitleHelper.is ())
     {
@@ -2133,7 +2133,7 @@ void SAL_CALL ODatabaseDocument::addTitleChangeListener( const uno::Reference< f
     // SYNCHRONIZED ->
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
-    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster( impl_getTitleHelper_throw(), uno::UNO_QUERY_THROW );
+    rtl::Reference< ::framework::TitleHelper > xBroadcaster( impl_getTitleHelper_throw() );
     xBroadcaster->addTitleChangeListener( xListener );
 }
 
@@ -2143,7 +2143,7 @@ void SAL_CALL ODatabaseDocument::removeTitleChangeListener( const uno::Reference
     // SYNCHRONIZED ->
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
-    uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster( impl_getTitleHelper_throw(), uno::UNO_QUERY_THROW );
+    rtl::Reference< ::framework::TitleHelper > xBroadcaster( impl_getTitleHelper_throw() );
     xBroadcaster->removeTitleChangeListener( xListener );
 }
 

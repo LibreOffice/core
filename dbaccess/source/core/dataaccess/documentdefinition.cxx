@@ -150,8 +150,6 @@ namespace dbaccess
     // OEmbedObjectHolder
     typedef ::comphelper::WeakComponentImplHelper<   embed::XStateChangeListener > TEmbedObjectHolder;
 
-    namespace {
-
     class OEmbedObjectHolder : public TEmbedObjectHolder
     {
         Reference< XEmbeddedObject >    m_xBroadCaster;
@@ -177,8 +175,6 @@ namespace dbaccess
         virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
         virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
     };
-
-    }
 
     void OEmbedObjectHolder::disposing(std::unique_lock<std::mutex>& /*rGuard*/)
     {

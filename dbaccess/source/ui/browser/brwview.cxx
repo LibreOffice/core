@@ -87,10 +87,8 @@ void UnoDataBrowserView::Construct(const Reference< css::awt::XControlModel >& x
         OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
         // in design mode (for the moment)
         m_xGrid->setDesignMode(true);
-
-        Reference< css::awt::XWindow >  xGridWindow(m_xGrid, UNO_QUERY);
-        xGridWindow->setVisible(true);
-        xGridWindow->setEnable(true);
+        m_xGrid->setVisible(true);
+        m_xGrid->setEnable(true);
 
         // introduce the model to the grid
         m_xGrid->setModel(xModel);
@@ -225,9 +223,8 @@ void UnoDataBrowserView::resizeDocumentView(tools::Rectangle& _rPlayground)
     }
 
     // set the size of grid control
-    Reference< css::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
-    if (xGridAsWindow.is())
-        xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
+    if (m_xGrid.is())
+        m_xGrid->setPosSize( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
                                    aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height(), css::awt::PosSize::POSSIZE);
 
     // just for completeness: there is no space left, we occupied it all ...

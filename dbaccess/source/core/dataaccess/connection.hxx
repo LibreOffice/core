@@ -77,8 +77,7 @@ class OConnection final     :public OConnection_Base
     css::uno::Reference< css::sdbcx::XTablesSupplier >
                                           m_xMasterTables; // just to avoid the recreation of the catalog
     connectivity::OWeakRefArray           m_aStatements;
-    css::uno::Reference< css::container::XNameAccess >
-                                          m_xQueries;
+    rtl::Reference< OQueryContainer >     m_xQueries;
     connectivity::OWeakRefArray           m_aComposers;
 
     // the filter as set on the parent data link at construction of the connection
