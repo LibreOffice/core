@@ -27,9 +27,11 @@
 #include <GroupProperties.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <rtl/ref.hxx>
 
 namespace reportdesign
 {
+    class OFunctions;
     typedef ::cppu::WeakComponentImplHelper< css::report::XGroup
                                          ,   css::lang::XServiceInfo> GroupBase;
     typedef ::cppu::PropertySetMixin< css::report::XGroup> GroupPropertySet;
@@ -46,7 +48,7 @@ namespace reportdesign
         css::uno::WeakReference< css::report::XGroups >       m_xParent;
         css::uno::Reference< css::report::XSection>           m_xHeader;
         css::uno::Reference< css::report::XSection>           m_xFooter;
-        css::uno::Reference< css::report::XFunctions >        m_xFunctions;
+        rtl::Reference< OFunctions >                          m_xFunctions;
         ::rptshared::GroupProperties                          m_aProps;
 
     private:

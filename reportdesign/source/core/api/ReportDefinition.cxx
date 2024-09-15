@@ -450,6 +450,8 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
     return aRet;
 }
 
+namespace { class OStylesHelper; }
+
 struct OReportDefinitionImpl
 {
     uno::WeakReference< uno::XInterface >                   m_xParent;
@@ -461,7 +463,7 @@ struct OReportDefinitionImpl
     ::std::vector< uno::Reference< frame::XController> >    m_aControllers;
     uno::Sequence< beans::PropertyValue >                   m_aArgs;
 
-    uno::Reference< report::XGroups >                       m_xGroups;
+    rtl::Reference< OGroups >                               m_xGroups;
     uno::Reference< report::XSection>                       m_xReportHeader;
     uno::Reference< report::XSection>                       m_xReportFooter;
     uno::Reference< report::XSection>                       m_xPageHeader;
@@ -470,7 +472,7 @@ struct OReportDefinitionImpl
     uno::Reference< embed::XStorage >                       m_xStorage;
     uno::Reference< frame::XController >                    m_xCurrentController;
     uno::Reference< container::XIndexAccess >               m_xViewData;
-    uno::Reference< container::XNameAccess >                m_xStyles;
+    rtl::Reference< OStylesHelper >                         m_xStyles;
     uno::Reference< container::XNameAccess>                 m_xXMLNamespaceMap;
     uno::Reference< container::XNameAccess>                 m_xGradientTable;
     uno::Reference< container::XNameAccess>                 m_xHatchTable;
@@ -478,12 +480,12 @@ struct OReportDefinitionImpl
     uno::Reference< container::XNameAccess>                 m_xTransparencyGradientTable;
     uno::Reference< container::XNameAccess>                 m_xDashTable;
     uno::Reference< container::XNameAccess>                 m_xMarkerTable;
-    uno::Reference< report::XFunctions >                    m_xFunctions;
+    rtl::Reference< OFunctions >                            m_xFunctions;
     uno::Reference< ui::XUIConfigurationManager2>           m_xUIConfigurationManager;
     uno::Reference< util::XNumberFormatsSupplier>           m_xNumberFormatsSupplier;
     uno::Reference< sdbc::XConnection>                      m_xActiveConnection;
-    uno::Reference< frame::XTitle >                         m_xTitleHelper;
-    uno::Reference< frame::XUntitledNumbers >               m_xNumberedControllers;
+    rtl::Reference< ::framework::TitleHelper >              m_xTitleHelper;
+    rtl::Reference< ::comphelper::NumberedCollection >      m_xNumberedControllers;
     uno::Reference< document::XDocumentProperties >         m_xDocumentProperties;
 
     std::shared_ptr< ::comphelper::EmbeddedObjectContainer>
@@ -2359,20 +2361,19 @@ uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFam
     if ( !m_pImpl->m_xStyles.is() )
     {
         m_pImpl->m_xStyles = new OStylesHelper();
-        uno::Reference< container::XNameContainer> xStyles(m_pImpl->m_xStyles,uno::UNO_QUERY);
 
         uno::Reference< container::XNameContainer> xPageStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(u"PageStyles"_ustr,uno::Any(xPageStyles));
+        m_pImpl->m_xStyles->insertByName(u"PageStyles"_ustr,uno::Any(xPageStyles));
         uno::Reference< style::XStyle> xPageStyle(createInstance(u"com.sun.star.style.PageStyle"_ustr),uno::UNO_QUERY);
         xPageStyles->insertByName(xPageStyle->getName(),uno::Any(xPageStyle));
 
         uno::Reference< container::XNameContainer> xFrameStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(u"FrameStyles"_ustr,uno::Any(xFrameStyles));
+        m_pImpl->m_xStyles->insertByName(u"FrameStyles"_ustr,uno::Any(xFrameStyles));
         uno::Reference< style::XStyle> xFrameStyle(createInstance(u"com.sun.star.style.FrameStyle"_ustr),uno::UNO_QUERY);
         xFrameStyles->insertByName(xFrameStyle->getName(),uno::Any(xFrameStyle));
 
         uno::Reference< container::XNameContainer> xGraphicStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName(u"graphics"_ustr,uno::Any(xGraphicStyles));
+        m_pImpl->m_xStyles->insertByName(u"graphics"_ustr,uno::Any(xGraphicStyles));
         uno::Reference< style::XStyle> xGraphicStyle(createInstance(u"com.sun.star.style.GraphicStyle"_ustr),uno::UNO_QUERY);
         xGraphicStyles->insertByName(xGraphicStyle->getName(),uno::Any(xGraphicStyle));
     }

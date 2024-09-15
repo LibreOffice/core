@@ -61,6 +61,7 @@ namespace rptui
     class OSectionView;
     class OAddFieldWindow;
     class OSectionWindow;
+    class OPropertyMediator;
 
     typedef ::dbaui::DBSubComponentController   OReportController_BASE;
     typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
@@ -94,7 +95,7 @@ namespace rptui
         css::uno::Reference< css::report::XReportEngine >             m_xReportEngine;
         css::uno::Reference< css::frame::XDesktop2 >                  m_xFrameLoader;
         css::uno::Reference< css::sdbc::XRowSet >                     m_xRowSet;
-        css::uno::Reference< css::beans::XPropertyChangeListener >    m_xRowSetMediator;
+        rtl::Reference< OPropertyMediator >                           m_xRowSetMediator;
         css::uno::Reference< css::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
         mutable css::uno::Reference< css::lang::XComponent >          m_xHoldAlive;
         mutable css::uno::Reference< css::container::XNameAccess >    m_xColumns;

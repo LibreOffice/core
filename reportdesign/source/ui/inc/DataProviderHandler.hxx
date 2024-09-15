@@ -32,12 +32,11 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
+#include <rtl/ref.hxx>
 
 namespace rptui
 {
-
-
+    class OPropertyMediator;
     class OPropertyInfoService;
 
     typedef ::cppu::WeakComponentImplHelper<   css::inspection::XPropertyHandler
@@ -101,7 +100,7 @@ namespace rptui
         css::uno::Reference< css::uno::XInterface >                       m_xFormComponent; /// inspectee
         css::uno::Reference< css::report::XReportComponent >              m_xReportComponent; /// inspectee
         css::uno::Reference< css::chart2::XChartDocument>                 m_xChartModel;
-        css::uno::Reference< css::beans::XPropertyChangeListener >        m_xMasterDetails;
+        rtl::Reference< OPropertyMediator >                               m_xMasterDetails;
         /// type converter, needed on various occasions
         css::uno::Reference< css::script::XTypeConverter >                m_xTypeConverter;
     };
