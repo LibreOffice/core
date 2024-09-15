@@ -122,6 +122,7 @@ class SvXMLEmbeddedObjectHelper;
 class SwXFieldmark;
 class SwXSection;
 class SwXFieldMaster;
+class SvNumberFormatsSupplierObj;
 namespace com::sun::star::container { class XNameContainer; }
 namespace com::sun::star::frame { class XController; }
 namespace com::sun::star::lang { struct Locale; }
@@ -188,7 +189,7 @@ private:
     rtl::Reference<SwFmDrawPage>                                m_xDrawPage;
 
     rtl::Reference<SwXBodyText>                                 m_xBodyText;
-    css::uno::Reference< css::uno::XAggregation >               m_xNumFormatAgg;
+    rtl::Reference< SvNumberFormatsSupplierObj >                m_xNumFormatAgg;
 
     rtl::Reference<SwXNumberingRulesCollection>                 mxXNumberingRules;
     rtl::Reference<SwXFootnotes>                                mxXFootnotes;

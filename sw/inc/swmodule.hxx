@@ -69,6 +69,7 @@ namespace com::sun::star::scanner { class XScannerManager2; }
 namespace com::sun::star::linguistic2 { class XLanguageGuessing; }
 namespace com::sun::star::linguistic2 { class XLinguServiceEventListener; }
 namespace ooo::vba { class XSinkCaller; }
+class SwLinguServiceEventListener;
 
 class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, public utl::ConfigurationListener
 {
@@ -103,7 +104,7 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
     std::vector<OUString> m_pAuthorNames;
 
     // DictionaryList listener to trigger spellchecking or hyphenation
-    css::uno::Reference< css::linguistic2::XLinguServiceEventListener > m_xLinguServiceEventListener;
+    rtl::Reference< SwLinguServiceEventListener > m_xLinguServiceEventListener;
     css::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 

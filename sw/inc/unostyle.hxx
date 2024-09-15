@@ -51,6 +51,7 @@ class SwXPageStyle;
 class SwXFrameStyle;
 class StyleFamilyEntry;
 class SwXStyleFamily;
+class SwXAutoStyleFamily;
 
 class SAL_DLLPUBLIC_RTTI SwXStyleFamilies final : public cppu::WeakImplHelper
 <
@@ -115,9 +116,9 @@ class SwXAutoStyles final :
     public SwUnoCollection
 {
     SwDocShell *m_pDocShell;
-    css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoCharStyles;
-    css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoRubyStyles;
-    css::uno::Reference< css::style::XAutoStyleFamily > m_xAutoParaStyles;
+    rtl::Reference< SwXAutoStyleFamily > m_xAutoCharStyles;
+    rtl::Reference< SwXAutoStyleFamily > m_xAutoRubyStyles;
+    rtl::Reference< SwXAutoStyleFamily > m_xAutoParaStyles;
     virtual ~SwXAutoStyles() override;
 
 public:

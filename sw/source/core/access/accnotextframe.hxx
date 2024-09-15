@@ -27,13 +27,14 @@
 
 class SwFlyFrame;
 class SwNoTextNode;
+class SwAccessibleNoTextHyperlink;
 
 class SwAccessibleNoTextFrame : public  SwAccessibleFrameBase,
                                 public css::accessibility::XAccessibleImage,
                                 public css::accessibility::XAccessibleHypertext//Added by yangzhh for HyperLink
 {
     friend class SwAccessibleNoTextHyperlink;
-    css::uno::Reference< css::accessibility::XAccessibleHyperlink > m_xHyperlink;
+    rtl::Reference< SwAccessibleNoTextHyperlink > m_xHyperlink;
     OUString msTitle;
     OUString msDesc;
 

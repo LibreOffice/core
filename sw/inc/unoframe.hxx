@@ -46,6 +46,7 @@ class SwDoc;
 class SwFormat;
 class SwUnoInternalPaM;
 class SfxItemPropertySet;
+class SwXOLEListener;
 namespace com::sun::star::frame { class XModel; }
 
 class BaseFrameProperties_Impl;
@@ -275,7 +276,7 @@ typedef cppu::ImplInheritanceHelper
 
 class SW_DLLPUBLIC SwXTextEmbeddedObject final : public SwXTextEmbeddedObjectBaseClass
 {
-    css::uno::Reference<css::util::XModifyListener> m_xOLEListener;
+    rtl::Reference<SwXOLEListener> m_xOLEListener;
 
     friend class SwXFrame; // just for CreateXFrame
 

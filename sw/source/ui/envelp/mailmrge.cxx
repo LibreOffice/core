@@ -69,7 +69,7 @@ using namespace ::com::sun::star::ui::dialogs;
 
 struct SwMailMergeDlg_Impl {
     uno::Reference<runtime::XFormController> xFController;
-    uno::Reference<XSelectionChangeListener> xChgLstnr;
+    rtl::Reference<SwXSelChgLstnr_Impl> xChgLstnr;
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
 

@@ -29,6 +29,7 @@
 #include <vcl/svapp.hxx>
 
 class SwView;
+class SwXDispatch;
 
 class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
 <
@@ -56,7 +57,7 @@ class SwXDispatchProviderInterceptor final : public cppu::WeakImplHelper
     css::uno::Reference< css::frame::XDispatchProvider>           m_xSlaveDispatcher;
     css::uno::Reference< css::frame::XDispatchProvider>           m_xMasterDispatcher;
 
-    css::uno::Reference< css::frame::XDispatch>                   m_xDispatch;
+    rtl::Reference<SwXDispatch>                                   m_xDispatch;
 
     SwView* m_pView;
 
