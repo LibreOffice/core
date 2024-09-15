@@ -27,6 +27,7 @@
 #include <memory>
 #include <optional>
 
+namespace ucbhelper { class CommandEnvironment; }
 
 namespace svt
 {
@@ -52,7 +53,7 @@ namespace svt
         OUString                                               m_sURL;
         std::optional<::ucbhelper::Content>                    m_oContent;
         State                                                  m_eState;
-        css::uno::Reference < css::ucb::XCommandEnvironment >  m_xCmdEnv;
+        rtl::Reference< ::ucbhelper::CommandEnvironment >      m_xCmdEnv;
         rtl::Reference<::svt::OFilePickerInteractionHandler>   m_xOwnInteraction;
 
     private:

@@ -30,10 +30,12 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/link.hxx>
+#include <rtl/ref.hxx>
 
 class SvtFileDialog_Base;
 namespace weld { class Window; }
 struct ImplSVEvent;
+namespace comphelper { class OWeakEventListenerAdapter; }
 
 namespace svt
 {
@@ -64,8 +66,8 @@ namespace svt
 
         css::uno::Reference< css::awt::XWindow >      m_xDialogParent;
 
-        css::uno::Reference< css::lang::XComponent >  m_xWindowListenerAdapter;
-        css::uno::Reference< css::lang::XComponent >  m_xParentListenerAdapter;
+        rtl::Reference< comphelper::OWeakEventListenerAdapter >  m_xWindowListenerAdapter;
+        rtl::Reference< comphelper::OWeakEventListenerAdapter >  m_xParentListenerAdapter;
 
     protected:
         OUString     m_aTitle;

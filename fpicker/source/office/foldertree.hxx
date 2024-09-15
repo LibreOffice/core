@@ -23,7 +23,7 @@ private:
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     weld::Window* m_pTopLevel;
-    Reference< XCommandEnvironment > m_xEnv;
+    rtl::Reference< ::ucbhelper::CommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
     Sequence< OUString > m_aDenyList;
 
@@ -33,6 +33,7 @@ private:
 
 public:
     FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* pTopLevel);
+    ~FolderTree();
 
     void clear() { m_xTreeView->clear(); }
 

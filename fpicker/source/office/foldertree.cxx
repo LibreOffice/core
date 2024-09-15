@@ -35,6 +35,8 @@ FolderTree::FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* 
     m_xTreeView->connect_expanding(LINK(this, FolderTree, RequestingChildrenHdl));
 }
 
+FolderTree::~FolderTree() {}
+
 IMPL_LINK(FolderTree, RequestingChildrenHdl, const weld::TreeIter&, rEntry, bool)
 {
     weld::WaitObject aWait(m_pTopLevel);

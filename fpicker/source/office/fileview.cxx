@@ -120,7 +120,7 @@ namespace
 class ViewTabListBox_Impl
 {
 private:
-    Reference< XCommandEnvironment >    mxCmdEnv;
+    rtl::Reference< ::ucbhelper::CommandEnvironment >    mxCmdEnv;
     std::unique_ptr<weld::TreeView> mxTreeView;
     std::unique_ptr<weld::TreeIter> mxScratchIter;
 
@@ -219,7 +219,7 @@ public:
     void            EnableDelete( bool bEnable ) { mbEnableDelete = bEnable; }
     bool            TypeColumnVisible() const { return mbShowType; }
 
-    const Reference< XCommandEnvironment >& GetCommandEnvironment() const { return mxCmdEnv; }
+    const rtl::Reference< ::ucbhelper::CommandEnvironment >& GetCommandEnvironment() const { return mxCmdEnv; }
 
     DECL_LINK(ResetQuickSearch_Impl, Timer *, void);
     DECL_LINK(CommandHdl, const CommandEvent&, bool);
