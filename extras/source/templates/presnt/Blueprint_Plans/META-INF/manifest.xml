@@ -4,9 +4,9 @@
   <manifest:file-entry manifest:full-path="Thumbnails/thumbnail.png" manifest:media-type="image/png"/>
   <manifest:file-entry manifest:full-path="meta.xml" manifest:media-type="text/xml"/>
   <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>
-  <manifest:file-entry manifest:full-path="Pictures/100000000000033C0000026D847ACE982C6E20B6.png" manifest:media-type="image/png"/>
-  <manifest:file-entry manifest:full-path="Pictures/10000000000004220000031A5C2E04AB7C51FB60.png" manifest:media-type="image/png"/>
-  <manifest:file-entry manifest:full-path="Pictures/1000020100000500000002D03918081590A75FCF.png" manifest:media-type="image/png"/>
-  <manifest:file-entry manifest:full-path="Pictures/1000020100000500000002D0F25E20EA381A5EBD.png" manifest:media-type="image/png"/>
+  <manifest:file-entry manifest:full-path="Pictures/Blueprint_Plans-first-bg-wide.svg" manifest:media-type="image/svg+xml"/>
+  <manifest:file-entry manifest:full-path="Pictures/Blueprint_Plans-second-bg-wide.svg" manifest:media-type="image/svg+xml"/>
+  <manifest:file-entry manifest:full-path="Pictures/Blueprint_Plans-first-bg-4-3.svg" manifest:media-type="image/svg+xml"/>
+  <manifest:file-entry manifest:full-path="Pictures/Blueprint_Plans-second-bg-4-3.svg" manifest:media-type="image/svg+xml"/>
   <manifest:file-entry manifest:full-path="styles.xml" manifest:media-type="text/xml"/>
 </manifest:manifest>

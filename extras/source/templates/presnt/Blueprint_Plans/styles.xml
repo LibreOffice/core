@@ -14,10 +14,6 @@
     <draw:gradient draw:name="Shapes" draw:style="rectangular" draw:cx="50%" draw:cy="50%" draw:start-color="#cccccc" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
     <draw:gradient draw:name="Gradient_20_1" draw:display-name="Gradient 1" draw:style="linear" draw:start-color="#3465a4" draw:end-color="#ffffff" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="0" draw:border="0%"/>
     <draw:hatch draw:name="Hatching_20_1" draw:display-name="Hatching 1" draw:style="single" draw:color="#3465a4" draw:distance="0.02cm" draw:rotation="0"/>
-    <draw:fill-image draw:name="Blueprint_5f_Plans-first-bg" draw:display-name="Blueprint_Plans-first-bg" xlink:href="Pictures/10000000000004220000031A5C2E04AB7C51FB60.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-    <draw:fill-image draw:name="Blueprint_5f_Plans-second-bg" draw:display-name="Blueprint_Plans-second-bg" xlink:href="Pictures/100000000000033C0000026D847ACE982C6E20B6.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-    <draw:fill-image draw:name="Blueprint_5f_Plans-first-bg-wide" draw:display-name="Blueprint_Plans-first-bg-wide" xlink:href="Pictures/1000020100000500000002D03918081590A75FCF.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-    <draw:fill-image draw:name="Blueprint_5f_Plans-second-bg-wide" draw:display-name="Blueprint_Plans-second-bg-wide" xlink:href="Pictures/1000020100000500000002D0F25E20EA381A5EBD.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     <draw:marker draw:name="Arrow" svg:viewBox="0 0 20 30" svg:d="M10 0l-10 30h20z"/>
     <draw:stroke-dash draw:name="Dashed_20__28_var_29__20_2" draw:display-name="Dashed (var) 2" draw:style="rect" draw:dots1="1" draw:dots1-length="0.02cm" draw:dots2="1" draw:dots2-length="0.02cm" draw:distance="0.02cm"/>
     <style:default-style style:family="graphic">
@@ -180,7 +176,7 @@
     </style:style>
     <style:style style:name="Accent_20_3" style:display-name="Accent 3" style:family="graphic" style:parent-style-name="Accent"/>
     <style:style style:name="Blueprint_20_Plans-background" style:display-name="Blueprint Plans-background" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-first-bg-wide" style:repeat="stretch"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Blueprint_20_Plans-backgroundobjects" style:display-name="Blueprint Plans-backgroundobjects" style:family="presentation">
@@ -356,7 +352,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Blueprint_20_Plans-4_3a_3-background" style:display-name="Blueprint Plans-4:3-background" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-first-bg" style:repeat="stretch"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Blueprint_20_Plans-4_3a_3-backgroundobjects" style:display-name="Blueprint Plans-4:3-backgroundobjects" style:family="presentation">
@@ -532,7 +528,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="44pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="44pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="44pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Standard-background" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-second-bg-wide" style:repeat="stretch"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Standard-backgroundobjects" style:family="presentation">
@@ -708,7 +704,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" style:use-window-font-color="true" loext:opacity="0%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" fo:font-size="33pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" fo:background-color="transparent" style:font-size-asian="33pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="33pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Standard-43-background" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-second-bg" style:repeat="stretch"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none"/>
       <style:text-properties style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Standard-43-backgroundobjects" style:family="presentation">
@@ -926,7 +922,7 @@
       <style:drawing-page-properties draw:background-size="border" draw:fill="bitmap" draw:fill-image-name="Blueprint_5f_Plans-second-bg" style:repeat="stretch"/>
     </style:style>
     <style:style style:name="Mgr1" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm"/>
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-color="#ffffff" draw:auto-grow-height="false" fo:min-height="1.485cm" style:protect="position size"/>
       <style:text-properties fo:color="#000000" loext:opacity="100%"/>
     </style:style>
     <style:style style:name="Mgr2" style:family="graphic" style:parent-style-name="standard">
@@ -1053,7 +1049,7 @@
     </style:handout-master>
     <style:master-page style:name="Blueprint_20_Plans" style:display-name="Blueprint Plans" style:page-layout-name="PM1" draw:style-name="Mdp1">
       <draw:frame draw:style-name="Mgr1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
-        <draw:image xlink:href="Pictures/1000020100000500000002D03918081590A75FCF.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+        <draw:image xlink:href="Pictures/Blueprint_Plans-first-bg-wide.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
       </draw:frame>
       <draw:frame presentation:style-name="Blueprint_20_Plans-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="3.6cm" svg:x="1.4cm" svg:y="2.25cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
@@ -1118,6 +1114,9 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Standard" style:page-layout-name="PM1" draw:style-name="Mdp2">
+      <draw:frame draw:style-name="Mgr1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <draw:image xlink:href="Pictures/Blueprint_Plans-second-bg-wide.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+      </draw:frame>
       <draw:frame presentation:style-name="Standard-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.63cm" svg:x="1.4cm" svg:y="0.627cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -1181,6 +1180,9 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Blueprint_20_Plans-4_3a_3" style:display-name="Blueprint Plans-4:3" style:page-layout-name="PM1" draw:style-name="Mdp4">
+      <draw:frame draw:style-name="Mgr1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <draw:image xlink:href="Pictures/Blueprint_Plans-first-bg-4-3.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+      </draw:frame>
       <draw:frame presentation:style-name="Blueprint_20_Plans-4_3a_3-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="3.6cm" svg:x="1.4cm" svg:y="2.25cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>
@@ -1244,6 +1246,9 @@
       </presentation:notes>
     </style:master-page>
     <style:master-page style:name="Standard-43" style:page-layout-name="PM1" draw:style-name="Mdp5">
+      <draw:frame draw:style-name="Mgr1" draw:layer="backgroundobjects" svg:width="28cm" svg:height="15.75cm" svg:x="0cm" svg:y="0cm">
+        <draw:image xlink:href="Pictures/Blueprint_Plans-second-bg-4-3.svg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+      </draw:frame>
       <draw:frame presentation:style-name="Standard-43-title" draw:layer="backgroundobjects" svg:width="25.2cm" svg:height="2.63cm" svg:x="1.4cm" svg:y="0.627cm" presentation:class="title" presentation:placeholder="true">
         <draw:text-box/>
       </draw:frame>

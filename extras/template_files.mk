@@ -49,10 +49,10 @@ extra_files_COMMON := \
 extra_files_PRESENTATIONS := \
     presnt/Beehive/Thumbnails/thumbnail.png \
     presnt/Blue_Curve/Thumbnails/thumbnail.png \
-    presnt/Blueprint_Plans/Pictures/100000000000033C0000026D847ACE982C6E20B6.png  \
-    presnt/Blueprint_Plans/Pictures/10000000000004220000031A5C2E04AB7C51FB60.png  \
-    presnt/Blueprint_Plans/Pictures/1000020100000500000002D03918081590A75FCF.png  \
-    presnt/Blueprint_Plans/Pictures/1000020100000500000002D0F25E20EA381A5EBD.png  \
+    presnt/Blueprint_Plans/Pictures/Blueprint_Plans-first-bg-wide.svg  \
+    presnt/Blueprint_Plans/Pictures/Blueprint_Plans-second-bg-wide.svg  \
+    presnt/Blueprint_Plans/Pictures/Blueprint_Plans-first-bg-4-3.svg  \
+    presnt/Blueprint_Plans/Pictures/Blueprint_Plans-second-bg-4-3.svg  \
     presnt/Blueprint_Plans/Thumbnails/thumbnail.png \
     presnt/Candy/Pictures/10000000000004A800000500DD5BB9FFED422172.png  \
     presnt/Candy/Pictures/10000000000005000000050014DEA376B6E67205.png  \
