@@ -67,7 +67,7 @@ struct SwPostItPageItem
     tools::Long lOffset;
     SwRect mPageRect;
     std::vector<SwSidebarItem*> mvSidebarItems;
-    SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::LEFT ), lOffset(0)
+    SwPostItPageItem(): bScrollbar(false), eSidebarPosition( sw::sidebarwindows::SidebarPosition::RIGHT ), lOffset(0)
     {
     }
 };
