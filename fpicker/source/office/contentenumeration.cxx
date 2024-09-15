@@ -304,7 +304,9 @@ namespace svt
 
     bool FileViewContentEnumerator::URLOnDenyList ( std::u16string_view sRealURL )
     {
-        std::u16string_view entryName = sRealURL.substr( sRealURL.rfind( '/' ) + 1 );
+        std::u16string_view::size_type pos = sRealURL.rfind('/');
+        pos = (pos != std::u16string_view::npos) ? pos + 1 : 0;
+        std::u16string_view entryName = sRealURL.substr(pos);
 
         return comphelper::findValue(m_rDenyList, entryName) != -1;
     }
