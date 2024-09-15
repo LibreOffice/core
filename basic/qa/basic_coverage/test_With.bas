@@ -28,8 +28,23 @@ Function get_foo As foo
     get_foo = New foo
 End Function
 
+Sub with_in_another_procedure
+    On Local Error GoTo errorHandler
+    ' tdf#162962 "End With" clears the internal variable; it used to fail,
+    ' when several module's procedures used With blocks, using Option Explicit
+    Dim foo_var As New foo
+    With foo_var
+        .n = 6
+        TestUtil.AssertEqual(.n, 6, ".n")
+    End With ' Here (or in similar places in other tests) a "Variable Not Defined" error was generated
+
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("with_in_another_procedure", Err, Error$, Erl)
+End Sub
+
 Sub test_with
-    On Error GoTo errorHandler
+    On Local Error GoTo errorHandler
 
     Dim fields As String
     With get_foo()
@@ -68,6 +83,8 @@ Sub test_with
     TestUtil.AssertEqual(uno_struct.StartRow, 3, "uno_struct.StartRow")
     TestUtil.AssertEqual(uno_struct.EndColumn, 4, "uno_struct.EndColumn")
     TestUtil.AssertEqual(uno_struct.EndRow, 5, "uno_struct.EndRow")
+
+    with_in_another_procedure() ' test tdf#162962
 
     Exit Sub
 errorHandler:

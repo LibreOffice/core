@@ -329,15 +329,16 @@ void SbiParser::With()
 
     // {_with_library.module_offset} = Nothing
     // I don't know how to refer to the global Nothing constant here; just create an own
-    constexpr OUString aNothingName = u"{_with_Nothing}"_ustr;
-    SbiSymDef* pNothingDef = pPool->Find(aNothingName);
-    if (!pNothingDef)
+    OUString aLocalNothingName = u"{_with_Nothing}"_ustr;
+    while (pPool->Find(aLocalNothingName) != nullptr)
     {
-        pNothingDef = new SbiSymDef(aNothingName);
-        pNothingDef->SetType(SbxOBJECT);
-        pPool->Add(pNothingDef);
-        aGen.Gen(SbiOpcode::LOCAL_, pNothingDef->GetId(), pNothingDef->GetType());
+        static sal_Int64 unique_suffix_2;
+        aLocalNothingName = "{_with_Nothing" + OUString::number(unique_suffix_2++) + "}";
     }
+    SbiSymDef* pNothingDef = new SbiSymDef(aLocalNothingName);
+    pNothingDef->SetType(SbxOBJECT);
+    pPool->Add(pNothingDef);
+    aGen.Gen(SbiOpcode::LOCAL_, pNothingDef->GetId(), pNothingDef->GetType());
     aWithParent.Gen();
     SbiExpression(this, *pNothingDef).Gen();
     aGen.Gen(SbiOpcode::PUTC_);
