@@ -394,10 +394,7 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
 
     png_set_read_fn(pPng, &rStream, lclReadStream);
 
-    if (!bFuzzing)
-        png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
-    else
-        png_set_crc_action(pPng, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
+    png_set_crc_action(pPng, PNG_CRC_ERROR_QUIT, PNG_CRC_WARN_DISCARD);
 
     png_set_sig_bytes(pPng, PNG_SIGNATURE_SIZE);
 
@@ -776,7 +773,6 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
     // try to get it using libpng.
     // https://en.wikipedia.org/wiki/Portable_Network_Graphics#File_format
     // Each chunk is: 4 bytes length, 4 bytes type, <length> bytes, 4 bytes crc
-    bool ignoreCrc = comphelper::IsFuzzing();
     for (;;)
     {
         sal_uInt32 length(0), type(0), crc(0);
@@ -809,7 +805,7 @@ BinaryDataContainer getMsGifChunk(SvStream& rStream)
                 return {};
             computedCrc = rtl_crc32(computedCrc, chunk.getData(), chunk.getSize());
             rStream.ReadUInt32(crc);
-            if (!ignoreCrc && crc != computedCrc)
+            if (crc != computedCrc)
                 continue; // invalid chunk, ignore
             return chunk;
         }
