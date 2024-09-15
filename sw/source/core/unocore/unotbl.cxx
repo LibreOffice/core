@@ -162,6 +162,14 @@ namespace
                     &chart::XChartDataChangeEventListener::chartDataChanged,
                     createChartEvent(xSource));
     }
+
+    void lcl_SendChartEvent(std::mutex& rMutex,
+            uno::Reference<uno::XInterface> const& xSource,
+            ::comphelper::OInterfaceContainerHelper4<chart::XChartDataChangeEventListener> & rListeners)
+    {
+        std::unique_lock aGuard(rMutex);
+        lcl_SendChartEvent(aGuard, xSource, rListeners);
+    }
 }
 
 #define UNO_TABLE_COLUMN_SUM 10000
@@ -2337,8 +2345,7 @@ void SwXTextTable::setData(const uno::Sequence< uno::Sequence< double > >& rData
             m_pImpl->m_bFirstRowAsLabel, m_pImpl->m_bFirstColumnAsLabel);
     xAllRange->setData(rData);
     // this is rather inconsistent: setData on XTextTable sends events, but e.g. CellRanges do not
-    std::unique_lock aGuard2(m_pImpl->m_Mutex);
-    lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
+    lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
 }
 
 uno::Sequence<OUString> SwXTextTable::getRowDescriptions()
@@ -2512,8 +2519,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstRowAsLabel != bTmp)
                     {
-                        std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                        lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
+                        lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -2524,8 +2530,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     bool bTmp = *o3tl::doAccess<bool>(aValue);
                     if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
                     {
-                        std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                        lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
+                        lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
                         m_pImpl->m_bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3418,8 +3423,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             bool bTmp = *o3tl::doAccess<bool>(aValue);
             if (m_pImpl->m_bFirstRowAsLabel != bTmp)
             {
-                std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
+                lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstRowAsLabel = bTmp;
             }
         }
@@ -3429,8 +3433,7 @@ SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             bool bTmp = *o3tl::doAccess<bool>(aValue);
             if (m_pImpl->m_bFirstColumnAsLabel != bTmp)
             {
-                std::unique_lock aGuard2(m_pImpl->m_Mutex);
-                lcl_SendChartEvent(aGuard2, *this, m_pImpl->m_ChartListeners);
+                lcl_SendChartEvent(m_pImpl->m_Mutex, *this, m_pImpl->m_ChartListeners);
                 m_pImpl->m_bFirstColumnAsLabel = bTmp;
             }
         }
