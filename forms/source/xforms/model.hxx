@@ -50,6 +50,7 @@ namespace xforms
     class SubmissionCollection;
     class InstanceCollection;
     class EvaluationContext;
+    class ODataTypeRepository;
 }
 
 
@@ -87,7 +88,7 @@ private:
     rtl::Reference<SubmissionCollection> mxSubmissions;  /// the submissions
     rtl::Reference<InstanceCollection>   mxInstances;    /// the instance(s)
 
-    css::uno::Reference<css::xforms::XDataTypeRepository> mxDataTypes;      /// the XSD data-types used
+    rtl::Reference<ODataTypeRepository> mxDataTypes;      /// the XSD data-types used
     css::uno::Reference<css::xml::dom::XDocument> mxForeignSchema;            /// the XSD-schema part we cannot
                                             /// map onto data types
     OUString msSchemaRef;              /// xforms:model/@schema attribute

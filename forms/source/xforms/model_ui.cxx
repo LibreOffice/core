@@ -27,6 +27,7 @@
 #include "resourcehelper.hxx"
 #include "xmlhelper.hxx"
 #include "convert.hxx"
+#include "datatyperepository.hxx"
 #include <strings.hrc>
 
 #include <rtl/ustring.hxx>

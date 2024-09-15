@@ -42,11 +42,11 @@ namespace xforms
         ::osl::Mutex                                        m_aMutex;
         Repository                                          m_aRepository;
 
-    public:
-        ODataTypeRepository( );
-
     protected:
         virtual ~ODataTypeRepository( ) override;
+
+    public:
+        ODataTypeRepository( );
 
         // XDataTypeRepository
         virtual css::uno::Reference< css::xsd::XDataType > SAL_CALL getBasicDataType( sal_Int16 dataTypeClass ) override;
