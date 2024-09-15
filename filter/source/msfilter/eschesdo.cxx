@@ -854,9 +854,8 @@ void ImplEESdrWriter::ImplWritePage(
 ImplEESdrWriter::~ImplEESdrWriter()
 {
     DBG_ASSERT( !mpSolverContainer, "ImplEESdrWriter::~ImplEESdrWriter: unwritten SolverContainer" );
-    Reference<css::lang::XComponent> xComp(mXDrawPage, UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
+    if (mXDrawPage.is())
+        mXDrawPage->dispose();
 }
 
 
@@ -869,10 +868,10 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         ImplFlushSolverContainer();
 
         mpSdrPage = nullptr;
-        Reference<css::lang::XComponent> xOldDrawPage(mXDrawPage, UNO_QUERY);
-        if (xOldDrawPage.is())
-            xOldDrawPage->dispose();
-        mXDrawPage = pSvxDrawPage = new SvxDrawPage( const_cast<SdrPage*>(&rPage) );
+        if (mXDrawPage.is())
+            mXDrawPage->dispose();
+        pSvxDrawPage = new SvxDrawPage( const_cast<SdrPage*>(&rPage) );
+        mXDrawPage = pSvxDrawPage;
         mXShapes = mXDrawPage;
         if ( !mXShapes.is() )
             return false;
@@ -882,7 +881,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         mpSolverContainer.reset( new EscherSolverContainer );
     }
     else
-        pSvxDrawPage = comphelper::getFromUnoTunnel<SvxDrawPage>(mXDrawPage);
+        pSvxDrawPage = mXDrawPage;
 
     return pSvxDrawPage != nullptr;
 }

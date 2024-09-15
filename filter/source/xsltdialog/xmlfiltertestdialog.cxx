@@ -67,8 +67,6 @@ using namespace com::sun::star::system;
 using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
-namespace {
-
 class GlobalEventListenerImpl : public ::cppu::WeakImplHelper< css::document::XDocumentEventListener >
 {
 public:
@@ -82,8 +80,6 @@ public:
 private:
     XMLFilterTestDialog* mpDialog;
 };
-
-}
 
 GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 : mpDialog( pDialog )

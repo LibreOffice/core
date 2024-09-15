@@ -19,13 +19,14 @@
 #pragma once
 #include <filter/msfilter/escherex.hxx>
 #include <o3tl/any.hxx>
-
+#include <rtl/ref.hxx>
 
 // fractions of Draw PPTWriter etc.
 
 class ImplEESdrWriter;
 class SdrObject;
 class SdrPage;
+class SvxDrawPage;
 
 class ImplEESdrObject
 {
@@ -99,7 +100,7 @@ class EscherExHostAppData;
 class ImplEESdrWriter
 {
     EscherEx*           mpEscherEx;
-    css::uno::Reference< css::drawing::XDrawPage >        mXDrawPage;
+    rtl::Reference< SvxDrawPage >        mXDrawPage;
     css::uno::Reference< css::drawing::XShapes >          mXShapes;
     SvStream*           mpPicStrm;
     // own extensions

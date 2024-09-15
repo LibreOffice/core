@@ -26,6 +26,7 @@
 #include <vcl/weld.hxx>
 
 class filter_info_impl;
+class GlobalEventListenerImpl;
 
 class XMLFilterTestDialog : public weld::GenericDialogController
 {
@@ -54,7 +55,7 @@ private:
 private:
     css::uno::Reference< css::uno::XComponentContext >              mxContext;
     css::uno::Reference< css::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
-    css::uno::Reference< css::document::XDocumentEventListener >    mxGlobalEventListener;
+    rtl::Reference< GlobalEventListenerImpl >                       mxGlobalEventListener;
     css::uno::WeakReference< css::lang::XComponent >                mxLastFocusModel;
 
     OUString m_sImportRecentFile;
