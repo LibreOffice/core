@@ -132,6 +132,7 @@ sal_Bool GenericClipboard::supportsService( const OUString& ServiceName )
 
 Reference< css::datatransfer::XTransferable > GenericClipboard::getContents()
 {
+    std::unique_lock aGuard(m_aMutex);
     return m_aContents;
 }
 
