@@ -247,7 +247,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
 
         bReadOnly = officecfg::Office::Writer::Layout::Window::IsVerticalRulerRight::isReadOnly();
         m_xVRulerRightCBox->set_active(pElemAttr->m_bVertRulerRight);
-        m_xVRulerRightCBox->set_sensitive(!bReadOnly);
+        m_xVRulerRightCBox->set_sensitive(pElemAttr->m_bVertRuler && !bReadOnly);
         m_xVRulerRightImg->set_visible(bReadOnly);
 
         bReadOnly = !bWebOptionsPage ? officecfg::Office::Writer::Layout::Window::SmoothScroll::isReadOnly() :
