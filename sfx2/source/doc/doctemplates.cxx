@@ -229,7 +229,7 @@ private:
     void                        doUpdate();
 
     uno::Reference< XComponentContext >              mxContext;
-    uno::Reference< XCommandEnvironment >            maCmdEnv;
+    rtl::Reference< TplTaskEnvironment >             maCmdEnv;
     uno::Reference< XDocumentProperties>             m_xDocProps;
     uno::Reference< XTypeDetection >                 mxType;
 

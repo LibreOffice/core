@@ -355,12 +355,12 @@ struct IMPL_SfxBaseController_DataContainer
     ::sfx2::UserInputInterception           m_aUserInputInterception;
     ::comphelper::OMultiTypeInterfaceContainerHelper2      m_aListenerContainer    ;
     ::comphelper::OInterfaceContainerHelper3<ui::XContextMenuInterceptor> m_aInterceptorContainer ;
-    Reference< XStatusIndicator >           m_xIndicator            ;
+    rtl::Reference< SfxStatusIndicator >    m_xIndicator            ;
     SfxViewShell*                           m_pViewShell            ;
     SfxBaseController*                      m_pController           ;
     bool                                    m_bDisposing            ;
     bool                                    m_bSuspendState         ;
-    Reference< XTitle >                     m_xTitleHelper          ;
+    rtl::Reference< ::framework::TitleHelper > m_xTitleHelper          ;
     Sequence< PropertyValue >               m_aCreationArgs         ;
 
     IMPL_SfxBaseController_DataContainer(   ::osl::Mutex&              aMutex      ,

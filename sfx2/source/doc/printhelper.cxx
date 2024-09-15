@@ -54,13 +54,16 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+namespace {
+class SfxPrintJob_Impl;
+}
 
 struct IMPL_PrintListener_DataContainer : public SfxListener
 {
     SfxObjectShellRef                               m_pObjectShell;
     std::mutex                                      m_aMutex;
     comphelper::OInterfaceContainerHelper4<view::XPrintJobListener> m_aJobListeners;
-    uno::Reference< css::view::XPrintJob>           m_xPrintJob;
+    rtl::Reference<SfxPrintJob_Impl>                m_xPrintJob;
     css::uno::Sequence< css::beans::PropertyValue > m_aPrintOptions;
 
     explicit IMPL_PrintListener_DataContainer()
@@ -777,7 +780,7 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
     if (!m_aJobListeners.getLength(aGuard))
         return;
     view::PrintJobEvent aEvent;
-    aEvent.Source = m_xPrintJob;
+    aEvent.Source = getXWeak(m_xPrintJob.get());
     aEvent.State = pPrintHint->GetWhich();
 
     comphelper::OInterfaceIteratorHelper4 pIterator(aGuard, m_aJobListeners);

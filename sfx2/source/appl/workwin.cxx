@@ -479,9 +479,8 @@ SfxWorkWindow::SfxWorkWindow( vcl::Window *pWin, SfxFrame *pFrm, SfxFrame* pMast
 
     // create and initialize layout manager listener
     Reference< css::frame::XFrame > xFrame = GetFrameInterface();
-    rtl::Reference<LayoutManagerListener> pLayoutManagerListener = new LayoutManagerListener( this );
-    m_xLayoutManagerListener = pLayoutManagerListener;
-    pLayoutManagerListener->setFrame( xFrame );
+    m_xLayoutManagerListener = new LayoutManagerListener( this );
+    m_xLayoutManagerListener->setFrame( xFrame );
 
     SfxShell* pConfigShell = pFrm->GetCurrentViewFrame();
     if ( pConfigShell && pConfigShell->GetObjectShell() )

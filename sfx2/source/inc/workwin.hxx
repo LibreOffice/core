@@ -208,7 +208,7 @@ class SfxWorkWindow final
     bool                    bIsFullScreen : 1;
     bool                    bShowStatusBar : 1;
     sal_Int32               m_nLock;
-    css::uno::Reference< css::lang::XComponent > m_xLayoutManagerListener;
+    rtl::Reference< LayoutManagerListener > m_xLayoutManagerListener;
     SfxFrame*               pMasterFrame;
     SfxFrame*               pFrame;
 

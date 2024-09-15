@@ -216,7 +216,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Reference< frame::XController >                            m_xCurrent               ;
     Reference< document::XDocumentProperties >                 m_xDocumentProperties    ;
     Reference< script::XStarBasicAccess >                      m_xStarBasicAccess       ;
-    Reference< container::XNameReplace >                       m_xEvents                ;
+    rtl::Reference< SfxEvents_Impl >                           m_xEvents                ;
     Sequence< beans::PropertyValue>                            m_seqArguments           ;
     std::vector< Reference< frame::XController > >             m_seqControllers         ;
     Reference< container::XIndexAccess >                       m_contViewData           ;
@@ -227,13 +227,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     bool                                                       m_bSuicide               ;
     bool                                                       m_bExternalTitle         ;
     bool                                                       m_bDisposing             ;
-    Reference< view::XPrintable>                               m_xPrintable             ;
+    rtl::Reference< SfxPrintHelper>                            m_xPrintable             ;
     Reference< ui::XUIConfigurationManager2 >                  m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >  m_pStorageModifyListen   ;
     OUString                                                   m_sModuleIdentifier      ;
-    Reference< frame::XTitle >                                 m_xTitleHelper           ;
-    Reference< frame::XUntitledNumbers >                       m_xNumberedControllers   ;
-    Reference< rdf::XDocumentMetadataAccess>                   m_xDocumentMetadata      ;
+    rtl::Reference< ::framework::TitleHelper >                 m_xTitleHelper           ;
+    rtl::Reference< ::comphelper::NumberedCollection >         m_xNumberedControllers   ;
+    rtl::Reference<::sfx2::DocumentMetadataAccess>             m_xDocumentMetadata      ;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >            m_pDocumentUndoManager   ;
     Sequence< document::CmisProperty>                          m_cmisProperties         ;
     std::shared_ptr<SfxGrabBagItem>                            m_xGrabBagItem           ;
@@ -316,7 +316,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
         return m_xDocumentMetadata;
     }
 
-    Reference<rdf::XDocumentMetadataAccess> CreateDMAUninitialized()
+    rtl::Reference<::sfx2::DocumentMetadataAccess> CreateDMAUninitialized()
     {
         return (m_pObjectShell.is())
             ? new ::sfx2::DocumentMetadataAccess(
@@ -3466,9 +3466,8 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const Reference< view::XPrintJo
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
     impl_getPrintHelper();
-    Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
-    if ( xPJB.is() )
-        xPJB->addPrintJobListener( xListener );
+    if ( m_pData->m_xPrintable.is() )
+        m_pData->m_xPrintable->addPrintJobListener( xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const Reference< view::XPrintJobListener >& xListener )
@@ -3476,9 +3475,8 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const Reference< view::XPrin
     SfxModelGuard aGuard( *this );
 
     impl_getPrintHelper();
-    Reference < view::XPrintJobBroadcaster > xPJB( m_pData->m_xPrintable, UNO_QUERY );
-    if ( xPJB.is() )
-        xPJB->removePrintJobListener( xListener );
+    if ( m_pData->m_xPrintable.is() )
+        m_pData->m_xPrintable->removePrintJobListener( xListener );
 }
 
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIdentifier )
@@ -3987,10 +3985,8 @@ void SfxBaseModel::impl_getPrintHelper()
     if ( m_pData->m_xPrintable.is() )
         return;
     m_pData->m_xPrintable = new SfxPrintHelper();
-    Reference < lang::XInitialization > xInit( m_pData->m_xPrintable, UNO_QUERY );
-    xInit->initialize( { Any(Reference < frame::XModel > (this)) } );
-    Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, UNO_QUERY );
-    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
+    m_pData->m_xPrintable->initialize( { Any(Reference < frame::XModel > (this)) } );
+    m_pData->m_xPrintable->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData.get() ) );
 }
 
 
@@ -4036,10 +4032,9 @@ Reference< frame::XUntitledNumbers > SfxBaseModel::impl_getUntitledHelper ()
 
     if ( ! m_pData->m_xNumberedControllers.is ())
     {
-        rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
-        m_pData->m_xNumberedControllers = pHelper;
-        pHelper->setOwner          (Reference< frame::XModel >(this));
-        pHelper->setUntitledPrefix (u" : "_ustr);
+        m_pData->m_xNumberedControllers = new ::comphelper::NumberedCollection();
+        m_pData->m_xNumberedControllers->setOwner          (Reference< frame::XModel >(this));
+        m_pData->m_xNumberedControllers->setUntitledPrefix (u" : "_ustr);
     }
 
     return m_pData->m_xNumberedControllers;
@@ -4563,7 +4558,7 @@ SfxBaseModel::loadMetadataFromStorage(
 {
     SfxModelGuard aGuard( *this );
 
-    const Reference<rdf::XDocumentMetadataAccess> xDMA(
+    rtl::Reference<::sfx2::DocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
         throw RuntimeException( u"model has no document metadata"_ustr, *this );
@@ -4602,7 +4597,7 @@ SfxBaseModel::loadMetadataFromMedium(
 {
     SfxModelGuard aGuard( *this );
 
-    const Reference<rdf::XDocumentMetadataAccess> xDMA(
+    rtl::Reference<::sfx2::DocumentMetadataAccess> xDMA(
         m_pData->CreateDMAUninitialized());
     if (!xDMA.is()) {
         throw RuntimeException( u"model has no document metadata"_ustr, *this );
