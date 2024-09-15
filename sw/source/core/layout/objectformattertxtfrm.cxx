@@ -223,8 +223,8 @@ bool SwObjectFormatterTextFrame::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                 // index of anchored object in collection of page numbers and
                 // anchor types
                 sal_uInt32 nIdx( CountOfCollected() );
-                OSL_ENSURE( nIdx > 0,
-                        "<SwObjectFormatterTextFrame::DoFormatObj(..)> - anchored object not collected!?" );
+                assert(nIdx > 0 &&
+                        "<SwObjectFormatterTextFrame::DoFormatObj(..)> - anchored object not collected!?");
                 --nIdx;
 
                 sal_uInt32 nToPageNum( 0 );
