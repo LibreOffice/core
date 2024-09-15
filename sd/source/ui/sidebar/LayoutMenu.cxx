@@ -218,9 +218,8 @@ void LayoutMenu::Dispose()
 
     mbIsDisposed = true;
 
-    Reference<lang::XComponent> xComponent (mxListener, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    if (mxListener.is())
+        mxListener->dispose();
 
     Clear();
     Link<tools::EventMultiplexerEvent&,void> aLink (LINK(this,LayoutMenu,EventMultiplexerListener));

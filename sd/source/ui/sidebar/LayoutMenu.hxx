@@ -44,6 +44,7 @@ class ViewShellBase;
 namespace sd::tools
 {
 class EventMultiplexerEvent;
+class SlotStateListener;
 }
 
 namespace sd::sidebar
@@ -99,7 +100,7 @@ private:
     /** If we are asked for the preferred window size, then use this
         many columns for the calculation.
     */
-    css::uno::Reference<css::frame::XStatusListener> mxListener;
+    rtl::Reference<::sd::tools::SlotStateListener> mxListener;
     bool mbIsMainViewChangePending;
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;

@@ -304,8 +304,7 @@ private:
 
     class DisposeListener;
     friend class DisposeListener;
-    css::uno::Reference<css::lang::XComponent>
-        mxDisposeListener;
+    rtl::Reference<DisposeListener> mxDisposeListener;
 
     FrameworkHelper (ViewShellBase& rBase);
     FrameworkHelper (const FrameworkHelper& rHelper) = delete;

@@ -1914,7 +1914,6 @@ Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode()
 SdPageLinkTargets::SdPageLinkTargets( SdGenericDrawPage* pUnoPage ) noexcept
 {
     mxPage = pUnoPage;
-    mpUnoPage = pUnoPage;
 }
 
 SdPageLinkTargets::~SdPageLinkTargets() noexcept
@@ -1931,7 +1930,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
 {
     ::SolarMutexGuard aGuard;
 
-    SdPage* pPage = mpUnoPage->GetPage();
+    SdPage* pPage = mxPage->GetPage();
     if( pPage != nullptr )
     {
         SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
@@ -1958,7 +1957,7 @@ Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
 {
     ::SolarMutexGuard aGuard;
 
-    SdPage* pPage = mpUnoPage->GetPage();
+    SdPage* pPage = mxPage->GetPage();
     if( pPage != nullptr )
     {
         SdrObject* pObj = FindObject( aName );
@@ -1978,7 +1977,7 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
 
     sal_uInt32 nObjCount = 0;
 
-    SdPage* pPage = mpUnoPage->GetPage();
+    SdPage* pPage = mxPage->GetPage();
     if( pPage != nullptr )
     {
         SdrObjListIter aIter( pPage, SdrIterMode::DeepWithGroups );
@@ -2024,7 +2023,7 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
 
 SdrObject* SdPageLinkTargets::FindObject( std::u16string_view rName ) const noexcept
 {
-    SdPage* pPage = mpUnoPage->GetPage();
+    SdPage* pPage = mxPage->GetPage();
     if( pPage == nullptr )
         return nullptr;
 
