@@ -1164,11 +1164,11 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
         aGrabber.seek( nEnd );
 
         auto nSize = nLength - nEnd;
-        std::vector<sal_Int8> aBuffer(nSize);
-        if (nSize != aGrabber.readBytes(aBuffer.data(), nSize))
+        std::unique_ptr<sal_Int8[]> aBuffer(new sal_Int8[nSize]);
+        if (nSize != aGrabber.readBytes(aBuffer.get(), nSize))
             throw ZipException(u"Zip END signature not found!"_ustr );
 
-        const sal_Int8 *pBuffer = aBuffer.data();
+        const sal_Int8 *pBuffer = aBuffer.get();
 
         sal_Int64 nEndPos = {};
         nPos = nSize - ENDHDR;
