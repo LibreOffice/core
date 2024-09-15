@@ -2637,11 +2637,13 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 bRet = true;
 
                 if (m_pDocument->GetTableCount() > 1)
+                {
                     if (!rMed.GetErrorIgnoreWarning() && SC_MOD()->GetInputOptions().GetWarnActiveSheet())
                     {
-                        ScTabViewShell* pViewShell = GetBestViewShell();
-                        pViewShell->ExecuteOnlyActiveSheetSavedDlg();
+                        if (ScTabViewShell* pViewShell = GetBestViewShell())
+                            pViewShell->ExecuteOnlyActiveSheetSavedDlg();
                     }
+                }
             }
         }
     }
