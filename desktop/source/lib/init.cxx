@@ -1020,8 +1020,10 @@ void hideSidebar()
         SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
-void setLanguageToolConfig()
+css::uno::Sequence<css::lang::Locale> setLanguageToolConfig()
 {
+    css::uno::Sequence<css::lang::Locale> aLTLocales;
+
     const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
     const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
 
@@ -1034,7 +1036,7 @@ void setLanguageToolConfig()
 
         OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
         if (aEnabled != "true")
-            return;
+            return aLTLocales;
         OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
         try
         {
@@ -1062,6 +1064,11 @@ void setLanguageToolConfig()
             }
             batch->commit();
 
+            uno::Reference<linguistic2::XProofreader> xGC(
+                xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
+                uno::UNO_QUERY_THROW);
+            uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
+
             css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
                 css::linguistic2::LinguServiceManager::create(xContext);
             if (xLangSrv.is())
@@ -1072,11 +1079,6 @@ void setLanguageToolConfig()
                     Sequence<OUString> aEmpty;
                     Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
 
-                    uno::Reference<linguistic2::XProofreader> xGC(
-                        xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
-                        uno::UNO_QUERY_THROW);
-                    uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
-
                     for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
                     {
                         // turn off spell checker if LanguageTool supports the locale already
@@ -1086,12 +1088,16 @@ void setLanguageToolConfig()
                     }
                 }
             }
+
+            aLTLocales = xSuppLoc->getLocales();
         }
         catch(uno::Exception const& rException)
         {
             SAL_WARN("lok", "Failed to set LanguageTool API settings: " << rException.Message);
         }
     }
+
+    return aLTLocales;
 }
 
 }  // end anonymous namespace
@@ -7900,7 +7906,14 @@ static void preloadData()
     std::cerr << "\n";
 
     // setup LanguageTool config before spell checking init
-    setLanguageToolConfig();
+    css::uno::Sequence<css::lang::Locale> aLTLocales = setLanguageToolConfig();
+    if (aLTLocales.getLength())
+    {
+        std::cerr << "Remote linguistic service languages: ";
+        for (auto &it : std::as_const(aLTLocales))
+            std::cerr << LanguageTag::convertToBcp47(it) << " ";
+        std::cerr << "\n";
+    }
 
     // preload all available dictionaries
     linguistic2::DictionaryList::create(comphelper::getProcessComponentContext());
@@ -7908,7 +7921,7 @@ static void preloadData()
         css::linguistic2::LinguServiceManager::create(comphelper::getProcessComponentContext());
     css::uno::Reference<linguistic2::XSpellChecker> xSpellChecker(xLngSvcMgr->getSpellChecker());
 
-    std::cerr << "Preloading dictionaries: ";
+    std::cerr << "Preloading local dictionaries: ";
     css::uno::Reference<linguistic2::XSupportedLocales> xSpellLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     uno::Sequence< css::lang::Locale > aLocales = xSpellLocales->getLocales();
     for (auto& it : aLocales)
@@ -7931,7 +7944,7 @@ static void preloadData()
     css::uno::Reference<linguistic2::XThesaurus> xThesaurus(xLngSvcMgr->getThesaurus());
     css::uno::Reference<linguistic2::XSupportedLocales> xThesLocales(xSpellChecker, css::uno::UNO_QUERY_THROW);
     aLocales = xThesLocales->getLocales();
-    std::cerr << "Preloading thesauri: ";
+    std::cerr << "Preloading local thesauri: ";
     for (auto& it : aLocales)
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
