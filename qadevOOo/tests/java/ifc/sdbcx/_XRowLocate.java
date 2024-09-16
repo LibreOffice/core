@@ -210,11 +210,13 @@ public class _XRowLocate extends MultiMethodTest {
 
         boolean result = true ;
         try {
-            int hash1 = oObj.hashBookmark(bookmark1) ;
-            int hash2 = oObj.hashBookmark(bookmark2) ;
-            log.println("1st hash = " + hash1 + ", 2nd = " + hash2) ;
+            synchronized (oObj) {
+                int hash1 = oObj.hashBookmark(bookmark1) ;
+                int hash2 = oObj.hashBookmark(bookmark2) ;
+                log.println("1st hash = " + hash1 + ", 2nd = " + hash2) ;
 
-            result = hash1 != hash2 ;
+                result = hash1 != hash2 ;
+            }
         } catch (SQLException e) {
             log.println("Exception occurred :" + e) ;
             result = false ;
