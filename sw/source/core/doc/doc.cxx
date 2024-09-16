@@ -52,6 +52,7 @@
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <officecfg/Office/Writer.hxx>
@@ -1429,6 +1430,28 @@ void SwDoc::ForEachCharacterBoxItem( const std::function<bool(const SvxBoxItem&)
                     return;
     }
 }
+
+/// Iterate over all SvxColorItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterColorItem( const std::function<bool(const SvxColorItem&)>& rFunc ) const
+{
+    for(SwCharFormat* pFormat : *GetCharFormats())
+    {
+        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+        if (const SvxColorItem* pColorItem = rAttrSet.GetItemIfSet(RES_CHRATR_COLOR))
+            if (!rFunc(*pColorItem))
+                return;
+    }
+    std::vector<std::shared_ptr<SfxItemSet>> aStyles;
+    for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
+    {
+        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
+        for (const auto & rxItemSet : aStyles)
+            if (const SvxColorItem* pColorItem = rxItemSet->GetItemIfSet(RES_CHRATR_COLOR))
+                if (!rFunc(*pColorItem))
+                    return;
+    }
+}
+
 
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {

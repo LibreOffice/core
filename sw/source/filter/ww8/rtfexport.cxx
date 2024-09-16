@@ -1325,12 +1325,10 @@ void RtfExport::OutColorTable()
         pCol = rPool.GetUserDefaultItem(RES_CHRATR_COLOR);
         if (pCol)
             InsColor(pCol->GetValue());
-        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_COLOR);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pCol = &static_cast<const SvxColorItem&>(*pItem);
-            InsColor(pCol->GetValue());
-        }
+        m_rDoc.ForEachCharacterColorItem([this](const SvxColorItem& rColorItem) -> bool {
+            InsColor(rColorItem.GetValue());
+            return true;
+        });
 
         auto pUnder = GetDfltAttr(RES_CHRATR_UNDERLINE);
         InsColor(pUnder->GetColor());
