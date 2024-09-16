@@ -49,8 +49,6 @@ public:
 
 protected:
     css::uno::Reference<css::accessibility::XAccessibleComponent> m_xComponent;
-
-    css::accessibility::XAccessibleComponent* GetXInterface() { return m_xComponent.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

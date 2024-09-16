@@ -51,7 +51,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* 
         if (!m_xComponent.is())
             return E_FAIL;
 
-        const css::awt::Point& pt = GetXInterface()->getLocation();
+        const css::awt::Point& pt = m_xComponent->getLocation();
         *x = pt.X;
         *y = pt.Y;
         return S_OK;
@@ -80,7 +80,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color* fo
         {
             return E_FAIL;
         }
-        *foreground = static_cast<long>(GetXInterface()->getForeground());
+        *foreground = static_cast<long>(m_xComponent->getForeground());
 
         return S_OK;
     }
@@ -108,7 +108,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color* ba
         {
             return E_FAIL;
         }
-        *background = static_cast<long>(GetXInterface()->getBackground());
+        *background = static_cast<long>(m_xComponent->getBackground());
 
         return S_OK;
     }
