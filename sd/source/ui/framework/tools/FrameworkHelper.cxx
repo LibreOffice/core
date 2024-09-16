@@ -27,6 +27,7 @@
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShellHint.hxx>
+#include <DrawController.hxx>
 #include <app.hrc>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -319,10 +320,10 @@ void FrameworkHelper::ReleaseInstance (const ViewShellBase& rBase)
 FrameworkHelper::FrameworkHelper (ViewShellBase& rBase)
     : mrBase(rBase)
 {
-    Reference<XControllerManager> xControllerManager (rBase.GetController(), UNO_QUERY);
-    if (xControllerManager.is())
+    DrawController* pDrawController = rBase.GetDrawController();
+    if (pDrawController)
     {
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        mxConfigurationController = pDrawController->getConfigurationController();
     }
 
     new LifetimeController(mrBase);
@@ -798,8 +799,10 @@ CallbackCaller::CallbackCaller (
 {
     try
     {
-        Reference<XControllerManager> xControllerManager (rBase.GetController(), UNO_QUERY_THROW);
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        sd::DrawController* pDrawController = rBase.GetDrawController();
+        if (!pDrawController)
+            return;
+        mxConfigurationController = pDrawController->getConfigurationController();
         if (mxConfigurationController.is())
         {
             if (mxConfigurationController->hasPendingRequests())

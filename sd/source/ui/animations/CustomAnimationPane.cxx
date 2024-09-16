@@ -194,7 +194,7 @@ void CustomAnimationPane::initialize()
     // get current controller and initialize listeners
     try
     {
-        mxView.set(mrBase.GetController(), UNO_QUERY);
+        mxView = mrBase.GetDrawController();
         addListener();
     }
     catch( Exception& )
@@ -835,8 +835,7 @@ void CustomAnimationPane::onSelectionChanged()
 
     if( mxView.is() ) try
     {
-        Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-        maViewSelection = xSel->getSelection();
+        maViewSelection = mxView->getSelection();
         mxCustomAnimationList->onSelectionChanged( maViewSelection );
         updateControls();
     }
@@ -1738,8 +1737,7 @@ void CustomAnimationPane::onAdd()
     std::vector< Any > aTargets;
 
     // gather shapes from the selection
-    Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-    maViewSelection = xSel->getSelection();
+    maViewSelection = mxView->getSelection();
 
     if( maViewSelection.getValueType() == cppu::UnoType<XShapes>::get())
     {

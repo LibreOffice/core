@@ -36,6 +36,7 @@ class EventMultiplexerEvent;
 }
 
 class ViewShellBase;
+class DrawController;
 
 enum TableCheckBox : sal_uInt16
 {
@@ -104,7 +105,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_aCheckBoxes[CB_COUNT];
 
     css::uno::Reference< css::beans::XPropertySet > mxSelectedTable;
-    css::uno::Reference< css::drawing::XDrawView > mxView;
+    rtl::Reference< DrawController > mxView;
     css::uno::Reference< css::container::XIndexAccess > mxTableFamily;
     css::uno::Reference< css::container::XNameContainer > mxCellFamily;
 };

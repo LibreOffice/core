@@ -20,6 +20,7 @@
 #include <config_features.h>
 
 #include <DrawViewShell.hxx>
+#include <DrawController.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
@@ -381,34 +382,36 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                 Reference< XFrame > xFrame( pFrame->GetFrame().GetFrameInterface(), UNO_SET_THROW );
 
                 // Save the current configuration of panes and views.
-                Reference<XControllerManager> xControllerManager (
-                    GetViewShellBase().GetController(), UNO_QUERY_THROW);
-                Reference<XConfigurationController> xConfigurationController (
-                    xControllerManager->getConfigurationController(), UNO_SET_THROW );
-                Reference<XConfiguration> xConfiguration (
-                    xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
-
-                SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
-                if(pWindow)
+                DrawController* pDrawController = GetViewShellBase().GetDrawController();
+                if (pDrawController)
                 {
-                    Svx3DWin* p3DWin = static_cast<Svx3DWin*>(pWindow->GetWindow());
-                    if(p3DWin)
-                        p3DWin->DocumentReload();
+                    Reference<XConfigurationController> xConfigurationController (
+                        pDrawController->getConfigurationController(), UNO_SET_THROW );
+                    Reference<XConfiguration> xConfiguration (
+                        xConfigurationController->getRequestedConfiguration(), UNO_SET_THROW );
+
+                    SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
+                    if(pWindow)
+                    {
+                        Svx3DWin* p3DWin = static_cast<Svx3DWin*>(pWindow->GetWindow());
+                        if(p3DWin)
+                            p3DWin->DocumentReload();
+                    }
+
+                    // normal forwarding to ViewFrame for execution
+                    GetViewFrame()->ExecuteSlot(rReq);
+
+                    // From here on we must cope with this object and the frame already being
+                    // deleted.  Do not call any methods or use data members.
+                    Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
+
+                    // Restore the configuration.
+                    Reference<XControllerManager> xControllerManager( xController, UNO_QUERY_THROW );
+                    xConfigurationController.set( xControllerManager->getConfigurationController() );
+                    if ( ! xConfigurationController.is())
+                        throw RuntimeException();
+                    xConfigurationController->restoreConfiguration(xConfiguration);
                 }
-
-                // normal forwarding to ViewFrame for execution
-                GetViewFrame()->ExecuteSlot(rReq);
-
-                // From here on we must cope with this object and the frame already being
-                // deleted.  Do not call any methods or use data members.
-                Reference<XController> xController( xFrame->getController(), UNO_SET_THROW );
-
-                // Restore the configuration.
-                xControllerManager.set( xController, UNO_QUERY_THROW );
-                xConfigurationController.set( xControllerManager->getConfigurationController() );
-                if ( ! xConfigurationController.is())
-                    throw RuntimeException();
-                xConfigurationController->restoreConfiguration(xConfiguration);
             }
             catch (RuntimeException&)
             {

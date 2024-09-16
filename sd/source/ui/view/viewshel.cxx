@@ -419,13 +419,12 @@ void ViewShell::BroadcastContextForActivation(const bool bIsActivated)
     auto getFrameworkResourceIdForShell
         = [&]() -> uno::Reference<drawing::framework::XResourceId> const
     {
-        Reference<::css::drawing::framework::XControllerManager> xControllerManager(
-            GetViewShellBase().GetController(), UNO_QUERY);
-        if (!xControllerManager.is())
+        DrawController* pDrawController = GetViewShellBase().GetDrawController();
+        if (!pDrawController)
             return {};
 
         Reference<::css::drawing::framework::XConfigurationController> xConfigurationController
-            = xControllerManager->getConfigurationController();
+            = pDrawController->getConfigurationController();
         if (!xConfigurationController.is())
             return {};
 

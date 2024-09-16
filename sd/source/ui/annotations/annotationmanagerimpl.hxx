@@ -42,6 +42,7 @@ namespace sd
 class Annotation;
 class ViewShellBase;
 class View;
+class DrawController;
 
 namespace tools { class EventMultiplexerEvent; }
 
@@ -112,7 +113,7 @@ private:
     ViewShellBase& mrBase;
     SdDrawDocument* mpDoc;
 
-    css::uno::Reference< css::drawing::XDrawView > mxView;
+    rtl::Reference< ::sd::DrawController > mxView;
     rtl::Reference<SdPage> mxCurrentPage;
     rtl::Reference<sdr::annotation::Annotation> mxSelectedAnnotation;
 

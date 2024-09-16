@@ -78,6 +78,7 @@
 
 #include <Window.hxx>
 #include <svl/intitem.hxx>
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -862,16 +863,16 @@ void DrawDocShell::GotoBookmark(std::u16string_view rBookmark)
             // little things to be done.  Especially writing the view
             // data to the frame view.
             sal_uInt16 nSdPgNum = (nPageNumber - 1) / 2;
-            Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
-            if (xController.is())
+            DrawController* pDrawController = rBase.GetDrawController();
+            if (pDrawController)
             {
                 Reference<drawing::XDrawPage> xDrawPage (pPage->getUnoPage(), UNO_QUERY);
-                xController->setCurrentPage (xDrawPage);
+                pDrawController->setCurrentPage (xDrawPage);
             }
             else
             {
                 // As a fall back switch to the page via the core.
-                DBG_ASSERT (xController.is(),
+                DBG_ASSERT (pDrawController,
                     "DrawDocShell::GotoBookmark: can't switch page via API");
                 pDrawViewShell->SwitchPage(nSdPgNum);
             }

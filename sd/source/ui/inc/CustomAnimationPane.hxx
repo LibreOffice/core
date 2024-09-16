@@ -41,6 +41,7 @@ class MotionPathTag;
 class SdPropertySubControl;
 class STLPropertySet;
 class ViewShellBase;
+class DrawController;
 
 typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
 
@@ -159,7 +160,7 @@ private:
     MainSequencePtr mpMainSequence;
 
     css::uno::Reference< css::drawing::XDrawPage > mxCurrentPage;
-    css::uno::Reference< css::drawing::XDrawView > mxView;
+    rtl::Reference< ::sd::DrawController > mxView;
 
     /** The CustomAnimationPresets is initialized either on demand or
         after a short time after the construction of a new object of this

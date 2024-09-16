@@ -66,6 +66,7 @@
 #include "AnnotationPopup.hxx"
 #include <DrawDocShell.hxx>
 #include <DrawViewShell.hxx>
+#include <DrawController.hxx>
 #include <sdresid.hxx>
 #include <EventMultiplexer.hxx>
 #include <ViewShellBase.hxx>
@@ -187,7 +188,7 @@ void AnnotationManagerImpl::init()
     try
     {
         addListener();
-        mxView.set(mrBase.GetController(), uno::UNO_QUERY);
+        mxView = mrBase.GetDrawController();
     }
     catch (uno::Exception&)
     {
@@ -1152,7 +1153,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
             break;
 
         case EventMultiplexerEventId::MainViewAdded:
-            mxView.set(mrBase.GetController(), uno::UNO_QUERY);
+            mxView = mrBase.GetDrawController();
             onSelectionChanged();
             break;
 

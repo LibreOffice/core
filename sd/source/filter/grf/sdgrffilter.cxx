@@ -49,6 +49,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -298,11 +299,11 @@ bool SdGRFFilter::Export()
                         && rSet.Get( SID_SELECTION ).GetValue()
                         && pDrawViewShell )
                     {
-                        uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
-                            pDrawViewShell->GetViewShellBase().GetController(), uno::UNO_QUERY );
-                        if ( xSelectionSupplier.is() )
+                        ::sd::DrawController* pDrawController =
+                            pDrawViewShell->GetViewShellBase().GetDrawController();
+                        if ( pDrawController )
                         {
-                            uno::Any aSelection( xSelectionSupplier->getSelection() );
+                            uno::Any aSelection( pDrawController->getSelection() );
                             uno::Reference< lang::XComponent > xSelection;
                             if ( aSelection >>= xSelection )
                                 xSource = xSelection;

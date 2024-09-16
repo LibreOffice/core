@@ -614,11 +614,11 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
     {
         case SID_SWITCH_SHELL:
         {
-            Reference<XControllerManager> xControllerManager (GetController(), UNO_QUERY);
-            if (xControllerManager.is())
+            DrawController* pDrawController(GetDrawController());
+            if (pDrawController)
             {
                 Reference<XConfigurationController> xConfigurationController (
-                    xControllerManager->getConfigurationController());
+                    pDrawController->getConfigurationController());
                 if (xConfigurationController.is())
                     xConfigurationController->update();
             }
@@ -751,11 +751,11 @@ void ViewShellBase::Activate (bool bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
 
-    Reference<XControllerManager> xControllerManager (GetController(), UNO_QUERY);
-    if (xControllerManager.is())
+    DrawController* pDrawController(GetDrawController());
+    if (pDrawController)
     {
         Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
+            pDrawController->getConfigurationController());
         if (xConfigurationController.is())
             xConfigurationController->update();
     }
@@ -1289,7 +1289,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
 {
     try
     {
-        Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY_THROW);
+        DrawController* pDrawController(mrBase.GetDrawController());
+        if (!pDrawController)
+            return;
 
         const Reference< XComponentContext > xContext(
             ::comphelper::getProcessComponentContext() );
@@ -1308,7 +1310,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         else
         {
             Reference<XConfigurationController> xConfigurationController (
-                xControllerManager->getConfigurationController());
+                pDrawController->getConfigurationController());
             if ( ! xConfigurationController.is())
                 throw RuntimeException();
             Reference<XConfiguration> xConfiguration (
@@ -1322,7 +1324,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         // Set the desired visibility state at the current configuration
         // and update it accordingly.
         Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
+            pDrawController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();
         if (bShowChildWindow)
@@ -1349,9 +1351,11 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     try
     {
         // Get some frequently used values.
-        Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY_THROW);
+        DrawController* pDrawController(mrBase.GetDrawController());
+        if (!pDrawController)
+            return;
         Reference<XConfigurationController> xConfigurationController (
-            xControllerManager->getConfigurationController());
+            pDrawController->getConfigurationController());
         if ( ! xConfigurationController.is())
             throw RuntimeException();
         Reference<XConfiguration> xConfiguration (
@@ -1528,8 +1532,8 @@ void CurrentPageSetter::operator() (bool)
         }
         // Switch to the page last edited by setting the CurrentPage
         // property.
-        Reference<beans::XPropertySet> xSet (mrBase.GetController(), UNO_QUERY_THROW);
-        xSet->setPropertyValue (u"CurrentPage"_ustr, aPage);
+        DrawController* pDrawController = mrBase.GetDrawController();
+        pDrawController->setPropertyValue (u"CurrentPage"_ustr, aPage);
     }
     catch (const RuntimeException&)
     {

@@ -66,6 +66,7 @@
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
 #include <EventMultiplexer.hxx>
+#include <DrawController.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -120,14 +121,17 @@ TableDesignWidget::TableDesignWidget(weld::Builder& rBuilder, ViewShellBase& rBa
     // get current controller and initialize listeners
     try
     {
-        mxView.set(mrBase.GetController(), UNO_QUERY);
+        mxView = mrBase.GetDrawController();
         addListener();
 
-        Reference< XController > xController( mrBase.GetController(), UNO_SET_THROW );
-        Reference< XStyleFamiliesSupplier > xFamiliesSupp( xController->getModel(), UNO_QUERY_THROW );
-        Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
-        mxTableFamily.set( xFamilies->getByName( u"table"_ustr ), UNO_QUERY_THROW );
-        mxCellFamily.set( xFamilies->getByName( u"cell"_ustr ), UNO_QUERY_THROW );
+        DrawController* pController = mrBase.GetDrawController();
+        if (pController)
+        {
+            Reference< XStyleFamiliesSupplier > xFamiliesSupp( pController->getModel(), UNO_QUERY_THROW );
+            Reference< XNameAccess > xFamilies( xFamiliesSupp->getStyleFamilies() );
+            mxTableFamily.set( xFamilies->getByName( u"table"_ustr ), UNO_QUERY_THROW );
+            mxCellFamily.set( xFamilies->getByName( u"cell"_ustr ), UNO_QUERY_THROW );
+        }
     }
     catch (const Exception&)
     {
@@ -548,8 +552,7 @@ void TableDesignWidget::onSelectionChanged()
 
     if( mxView.is() ) try
     {
-        Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-        Any aSel( xSel->getSelection() );
+        Any aSel( mxView->getSelection() );
         Sequence< XShape > xShapeSeq;
         if( aSel >>= xShapeSeq )
         {
@@ -735,7 +738,7 @@ IMPL_LINK(TableDesignWidget,EventMultiplexerListener,
             break;
 
         case EventMultiplexerEventId::MainViewAdded:
-            mxView.set( mrBase.GetController(), UNO_QUERY );
+            mxView = mrBase.GetDrawController();
             onSelectionChanged();
             break;
 

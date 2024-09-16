@@ -21,6 +21,7 @@
 
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
+#include <DrawController.hxx>
 #include "slideshowimpl.hxx"
 #include <framework/FrameworkHelper.hxx>
 
@@ -48,9 +49,10 @@ PaneHider::PaneHider(const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
 
     try
     {
-        Reference<XControllerManager> xControllerManager(
-            rViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
-        mxConfigurationController = xControllerManager->getConfigurationController();
+        DrawController* pDrawController = rViewShell.GetViewShellBase().GetDrawController();
+        if (!pDrawController)
+            return;
+        mxConfigurationController = pDrawController->getConfigurationController();
         if (mxConfigurationController.is())
         {
             // Get and save the current configuration.
