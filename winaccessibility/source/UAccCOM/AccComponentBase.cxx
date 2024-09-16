@@ -48,7 +48,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* 
         if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
 
-        if (!pRXComp.is())
+        if (!m_xComponent.is())
             return E_FAIL;
 
         const css::awt::Point& pt = GetXInterface()->getLocation();
@@ -76,7 +76,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color* fo
         if (foreground == nullptr)
             return E_INVALIDARG;
 
-        if (!pRXComp.is())
+        if (!m_xComponent.is())
         {
             return E_FAIL;
         }
@@ -104,7 +104,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color* ba
         if (background == nullptr)
             return E_INVALIDARG;
 
-        if (!pRXComp.is())
+        if (!m_xComponent.is())
         {
             return E_FAIL;
         }
@@ -140,7 +140,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInte
             return E_FAIL;
         }
         Reference<XAccessibleComponent> pRXI(pRContext, UNO_QUERY);
-        pRXComp = pRXI;
+        m_xComponent = pRXI;
 
         return S_OK;
     }
