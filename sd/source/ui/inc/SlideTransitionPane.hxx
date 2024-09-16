@@ -29,7 +29,7 @@
 #include <map>
 
 class SdDrawDocument;
-
+class SdXImpressDocument;
 namespace com::sun::star::drawing { class XDrawView; }
 namespace com::sun::star::frame { class XModel; }
 namespace sd::tools { class EventMultiplexerEvent; }
@@ -121,7 +121,7 @@ private:
     std::unique_ptr<weld::CheckButton> mxCB_AUTO_PREVIEW;
 
     css::uno::Reference< css::drawing::XDrawView >             mxView;
-    css::uno::Reference< css::frame::XModel >                  mxModel;
+    rtl::Reference< SdXImpressDocument >                  mxModel;
 
     std::unordered_map<OUString, std::unique_ptr<TransitionEntry>> maTranstionMap;
 

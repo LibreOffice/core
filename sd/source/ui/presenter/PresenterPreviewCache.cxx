@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <osl/diagnose.h>
+#include <unomodel.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -43,7 +44,7 @@ public:
 
     void SetDocumentSlides (
         const Reference<container::XIndexAccess>& rxSlides,
-        const Reference<XInterface>& rxDocument);
+        const rtl::Reference<SdXImpressDocument>& rxDocument);
     void SetVisibleSlideRange (
         const sal_Int32 nFirstVisibleSlideIndex,
         const sal_Int32 nLastVisibleSlideIndex);
@@ -58,11 +59,11 @@ public:
     virtual const SdrPage* GetPage (CacheKey aKey) override;
     virtual std::shared_ptr<std::vector<CacheKey> > GetEntryList (bool bVisible) override;
     virtual sal_Int32 GetPriority (CacheKey aKey) override;
-    virtual css::uno::Reference<css::uno::XInterface> GetModel() override;
+    virtual SdXImpressDocument* GetModel() override;
 
 private:
     Reference<container::XIndexAccess> mxSlides;
-    Reference<XInterface> mxDocument;
+    rtl::Reference<SdXImpressDocument> mxDocument;
     sal_Int32 mnFirstVisibleSlideIndex;
     sal_Int32 mnLastVisibleSlideIndex;
     typedef ::std::vector<css::uno::Reference<css::drawing::XSlidePreviewCacheListener> > ListenerContainer;
@@ -113,7 +114,9 @@ void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     ThrowIfDisposed();
     OSL_ASSERT(mpCacheContext != nullptr);
 
-    mpCacheContext->SetDocumentSlides(rxSlides, rxDocument);
+    SdXImpressDocument* pImpressDoc = dynamic_cast<SdXImpressDocument*>(rxDocument.get());
+    assert(pImpressDoc);
+    mpCacheContext->SetDocumentSlides(rxSlides, pImpressDoc);
 }
 
 void SAL_CALL PresenterPreviewCache::setVisibleRange (
@@ -208,7 +211,7 @@ PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext()
 
 void PresenterPreviewCache::PresenterCacheContext::SetDocumentSlides (
     const Reference<container::XIndexAccess>& rxSlides,
-    const Reference<XInterface>& rxDocument)
+    const rtl::Reference<SdXImpressDocument>& rxDocument)
 {
     mxSlides = rxSlides;
     mxDocument = rxDocument;
@@ -324,9 +327,9 @@ sal_Int32 PresenterPreviewCache::PresenterCacheContext::GetPriority (CacheKey aK
     return 0;
 }
 
-Reference<XInterface> PresenterPreviewCache::PresenterCacheContext::GetModel()
+SdXImpressDocument* PresenterPreviewCache::PresenterCacheContext::GetModel()
 {
-    return mxDocument;
+    return mxDocument.get();
 }
 
 const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (

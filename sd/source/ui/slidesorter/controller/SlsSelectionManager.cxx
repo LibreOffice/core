@@ -32,6 +32,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <unomodel.hxx>
 #include <drawview.hxx>
 #include <DrawViewShell.hxx>
 #include <ViewShellBase.hxx>
@@ -153,7 +154,9 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
 
     try
     {
-        Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
+        rtl::Reference<SdXImpressDocument> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel() );
+        if (!xDrawPagesSupplier)
+            return;
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
 
         // Iterate over all pages that were selected when this method was called
@@ -186,7 +189,9 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
 
     try
     {
-        Reference<drawing::XMasterPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
+        rtl::Reference<SdXImpressDocument> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel() );
+        if (!xDrawPagesSupplier)
+            return;
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getMasterPages(), UNO_SET_THROW );
 
         // Iterate over all pages that were selected when this method was called

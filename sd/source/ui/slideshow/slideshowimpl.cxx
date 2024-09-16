@@ -97,6 +97,7 @@
 #include <app.hrc>
 #include <cusshow.hxx>
 #include <optsitem.hxx>
+#include <unomodel.hxx>
 
 #define CM_SLIDES       21
 
@@ -959,7 +960,7 @@ bool SlideshowImpl::startPreview(
         maPresSettings.mnPauseTimeout = 0;
         maPresSettings.mbShowPauseLogo = false;
 
-        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+        rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
         Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
         mpSlideController = std::make_shared<AnimationSlideController>( xSlides, AnimationSlideController::PREVIEW );
 
@@ -1482,8 +1483,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
 
     try
     {
-        Reference< XDrawPagesSupplier > xDrawPages( mxModel, UNO_QUERY_THROW );
-        Reference< XIndexAccess > xPages( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XIndexAccess > xPages( mxModel->getDrawPages(), UNO_QUERY_THROW );
 
         Reference< XShapes > xDrawPage;
         xPages->getByIndex(nSlideNumber) >>= xDrawPage;
@@ -1584,8 +1584,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
 
     if( mpSlideController && mxShow.is() )
     {
-        Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(),
-                                                    UNO_QUERY_THROW );
+        rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
         mpSlideController->displayCurrentSlide( mxShow, xDrawPages, bSkipAllMainSequenceEffects );
         registerShapeEvents(mpSlideController->getCurrentSlideNumber());
         update();
@@ -1604,7 +1603,7 @@ void SlideshowImpl::endPresentation()
 {
     if( maPresSettings.mbMouseAsPen)
     {
-        Reference< XMultiServiceFactory > xDocFactory(mpDoc->getUnoModel(), UNO_QUERY );
+        rtl::Reference< SdXImpressDocument > xDocFactory(mpDoc->getUnoModel() );
         if( xDocFactory.is() )
             mxShow->registerUserPaintPolygons(xDocFactory);
     }
@@ -2512,7 +2511,7 @@ void SlideshowImpl::createSlideList( bool bAll, std::u16string_view rPresSlide )
         ( pCustomShow && !pCustomShow->PagesVector().empty() ) ? AnimationSlideController::CUSTOM :
             (bAll ? AnimationSlideController::ALL : AnimationSlideController::FROM);
 
-    Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+    rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
     Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
     mpSlideController = std::make_shared<AnimationSlideController>( xSlides, eMode );
 
@@ -3355,7 +3354,7 @@ void SlideshowImpl::AsyncNotifyEvent(
 
             // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
             // rXCurrentSlide is the current slide before the change.
-            Reference< XDrawPagesSupplier > xDrawPages( mpDoc->getUnoModel(), UNO_QUERY_THROW );
+            rtl::Reference< SdXImpressDocument > xDrawPages( mpDoc->getUnoModel() );
             Reference< XIndexAccess > xSlides( xDrawPages->getDrawPages(), UNO_QUERY_THROW );
             const sal_Int32 nNewSlideCount(xSlides.is() ? xSlides->getCount() : 0);
 

@@ -195,6 +195,7 @@
 
 #include <sfx2/newstyle.hxx>
 #include <SelectLayerDlg.hxx>
+#include <unomodel.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -767,8 +768,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERT_MASTER_PAGE:
         {
             // Use the API to create a new page.
-            Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
-                GetDoc()->getUnoModel(), UNO_QUERY);
+            rtl::Reference<SdXImpressDocument> xMasterPagesSupplier (
+                GetDoc()->getUnoModel());
             if (xMasterPagesSupplier.is())
             {
                 Reference<drawing::XDrawPages> xMasterPages (

@@ -25,6 +25,7 @@
 #include <ViewShellBase.hxx>
 #include <DrawDocShell.hxx>
 #include <SlideSorterViewShell.hxx>
+#include <unomodel.hxx>
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>

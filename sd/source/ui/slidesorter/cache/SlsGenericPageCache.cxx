@@ -25,6 +25,7 @@
 #include "SlsBitmapCache.hxx"
 #include <cache/SlsPageCacheManager.hxx>
 #include <tools/debug.hxx>
+#include <unomodel.hxx>
 
 namespace sd::slidesorter::cache {
 

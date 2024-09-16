@@ -152,8 +152,8 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
-    virtual void SAL_CALL acquire() noexcept override;
-    virtual void SAL_CALL release() noexcept override;
+    SD_DLLPUBLIC virtual void SAL_CALL acquire() noexcept override;
+    SD_DLLPUBLIC virtual void SAL_CALL release() noexcept override;
 
     // XModel
     virtual void SAL_CALL lockControllers(  ) override;
@@ -188,7 +188,7 @@ public:
     virtual css::uno::Reference< css::presentation::XPresentation > SAL_CALL getPresentation(  ) override;
 
     // XMultiServiceFactory ( SvxFmMSFactory )
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
+    SD_DLLPUBLIC virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference<css::uno::XInterface> SAL_CALL
     createInstanceWithArguments(
         OUString const & ServiceSpecifier,

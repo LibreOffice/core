@@ -104,7 +104,7 @@ model::SharedPageDescriptor ViewCacheContext::GetDescriptor (cache::CacheKey aKe
     return mrModel.GetPageDescriptor(nPageIndex);
 }
 
-css::uno::Reference<css::uno::XInterface> ViewCacheContext::GetModel()
+SdXImpressDocument* ViewCacheContext::GetModel()
 {
     if (mrModel.GetDocument() == nullptr)
         return nullptr;

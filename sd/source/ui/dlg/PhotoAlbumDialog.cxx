@@ -33,6 +33,7 @@
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <unomodel.hxx>
 
 namespace sd
 {
@@ -92,9 +93,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
     }
     else
     {
-        Reference< drawing::XDrawPagesSupplier > xDPS( m_pDoc->getUnoModel(), uno::UNO_QUERY );
+        rtl::Reference< SdXImpressDocument > xDPS( m_pDoc->getUnoModel() );
         Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
-        Reference< lang::XMultiServiceFactory > xShapeFactory( m_pDoc->getUnoModel(), uno::UNO_QUERY );
+        rtl::Reference< SdXImpressDocument > xShapeFactory( m_pDoc->getUnoModel() );
 
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));

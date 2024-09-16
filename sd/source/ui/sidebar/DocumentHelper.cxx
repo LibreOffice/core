@@ -21,6 +21,7 @@
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
+#include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <glob.hxx>
 #include <unmovss.hxx>
@@ -105,8 +106,7 @@ SdPage* DocumentHelper::CopyMasterPageToLocalDocument (
             break;
 
         // Create a new slide (and its notes page.)
-        uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (
-            rTargetDocument.getUnoModel(), uno::UNO_QUERY);
+        rtl::Reference<SdXImpressDocument> xSlideSupplier(rTargetDocument.getUnoModel());
         if ( ! xSlideSupplier.is())
             break;
         uno::Reference<drawing::XDrawPages> xSlides =

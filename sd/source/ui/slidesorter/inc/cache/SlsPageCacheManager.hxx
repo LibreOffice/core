@@ -21,11 +21,13 @@
 
 #include <sal/types.h>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 
 class Size;
 class SdrPage;
+class SdXImpressDocument;
 
 namespace sd::slidesorter::cache {
 
@@ -40,7 +42,7 @@ class PageCacheManager
 {
 public:
     typedef std::vector< std::pair<Size, std::shared_ptr<BitmapCache> > > BestFittingPageCaches;
-    typedef css::uno::Reference<css::uno::XInterface> DocumentKey;
+    typedef rtl::Reference<SdXImpressDocument> DocumentKey;
 
     /** Return the one instance of the PageCacheManager class.
     */

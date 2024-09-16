@@ -62,6 +62,7 @@ class SdrPage;
 class SdrTextObj;
 class SfxItemPool;
 class Size;
+class SdXImpressDocument;
 
 namespace sd
 {
@@ -230,6 +231,9 @@ public:
 
     SAL_DLLPRIVATE rtl::Reference<SdPage>          AllocSdPage(bool bMasterPage);
     SAL_DLLPRIVATE virtual rtl::Reference<SdrPage> AllocPage(bool bMasterPage) override; //forwards to AllocSdPage
+
+    // Override SfxBaseModel::getUnoModel and return a more concrete type
+    SdXImpressDocument* getUnoModel();
 
     SAL_DLLPRIVATE virtual bool        IsReadOnly() const override;
     SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) override;

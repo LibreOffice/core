@@ -3214,7 +3214,7 @@ bool SdXImpressDocument::createSlideRenderer(
     bool bSuccess = false;
     try
     {
-        uno::Reference<drawing::XDrawPagesSupplier> xDrawPages(mpDoc->getUnoModel(), uno::UNO_QUERY_THROW);
+        rtl::Reference<SdXImpressDocument> xDrawPages(mpDoc->getUnoModel());
         uno::Reference<container::XIndexAccess> xSlides(xDrawPages->getDrawPages(), uno::UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(nSlideNumber), uno::UNO_QUERY_THROW);
         uno::Reference<animations::XAnimationNodeSupplier> xAnimNodeSupplier(xSlide, uno::UNO_QUERY_THROW);

@@ -55,6 +55,7 @@
 #include <DrawViewShell.hxx>
 #include <sdabstdlg.hxx>
 #include <sdmod.hxx>
+#include <unomodel.hxx>
 
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
@@ -1084,8 +1085,8 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     {
         // Use the API to create a new page.
         SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-        Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
-            pDocument->getUnoModel(), UNO_QUERY);
+        rtl::Reference<SdXImpressDocument> xMasterPagesSupplier (
+            pDocument->getUnoModel());
         if (xMasterPagesSupplier.is())
         {
             Reference<drawing::XDrawPages> xMasterPages (

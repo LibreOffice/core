@@ -20,7 +20,7 @@
 #include <cache/SlsPageCacheManager.hxx>
 
 #include "SlsBitmapCache.hxx"
-
+#include <unomodel.hxx>
 #include <deque>
 #include <map>
 #include <memory>

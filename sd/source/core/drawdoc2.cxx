@@ -411,9 +411,15 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     if (comphelper::LibreOfficeKit::isActive() && static_cast<SdPage*>(pPage)->GetPageKind() == PageKind::Standard)
     {
-        SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(this->getUnoModel());
+        SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
+}
+
+// Override SfxBaseModel::getUnoModel and return a more concrete type
+SdXImpressDocument* SdDrawDocument::getUnoModel()
+{
+    return comphelper::getFromUnoTunnel<SdXImpressDocument>(FmFormModel::getUnoModel());
 }
 
 // Delete page
@@ -441,7 +447,7 @@ rtl::Reference<SdrPage> SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     if (comphelper::LibreOfficeKit::isActive() && pSdPage->GetPageKind() == PageKind::Standard)
     {
-        SdXImpressDocument* pDoc = comphelper::getFromUnoTunnel<SdXImpressDocument>(this->getUnoModel());
+        SdXImpressDocument* pDoc = getUnoModel();
         SfxLokHelper::notifyDocumentSizeChangedAllViews(pDoc);
     }
 

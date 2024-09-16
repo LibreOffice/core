@@ -22,6 +22,7 @@
 #include <SlideSorter.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellHint.hxx>
+#include <unomodel.hxx>
 #include <controller/SlideSorterController.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <controller/SlsCurrentSlideManager.hxx>
@@ -68,18 +69,17 @@ Listener::Listener (
     mbListeningToDocument = true;
 
     // Connect to the UNO document.
-    Reference<document::XEventBroadcaster> xBroadcaster (
-        mrSlideSorter.GetModel().GetDocument()->getUnoModel(), uno::UNO_QUERY);
+    rtl::Reference<SdXImpressDocument> xBroadcaster(
+        mrSlideSorter.GetModel().GetDocument()->getUnoModel());
     if (xBroadcaster.is())
     {
-        xBroadcaster->addEventListener (this);
+        xBroadcaster->addEventListener(css::uno::Reference< css::document::XEventListener >(this));
         mbListeningToUNODocument = true;
     }
 
     // Listen for disposing events from the document.
-    Reference<XComponent> xComponent (xBroadcaster, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener (
+    if (xBroadcaster.is())
+        xBroadcaster->addEventListener (
             Reference<lang::XEventListener>(
                 static_cast<XWeak*>(this), UNO_QUERY));
 
@@ -139,15 +139,14 @@ void Listener::ReleaseListeners()
 
     if (mbListeningToUNODocument)
     {
-        Reference<document::XEventBroadcaster> xBroadcaster (
-            mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
+        rtl::Reference<SdXImpressDocument> xBroadcaster(
+            mrSlideSorter.GetModel().GetDocument()->getUnoModel());
         if (xBroadcaster.is())
-            xBroadcaster->removeEventListener (this);
+            xBroadcaster->removeEventListener(css::uno::Reference< css::document::XEventListener >(this));
 
         // Remove the dispose listener.
-        Reference<XComponent> xComponent (xBroadcaster, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener (
+        if (xBroadcaster.is())
+            xBroadcaster->removeEventListener (
                 Reference<lang::XEventListener>(
                     static_cast<XWeak*>(this), UNO_QUERY));
 
@@ -388,7 +387,7 @@ void SAL_CALL Listener::disposing (
     if ((mbListeningToDocument || mbListeningToUNODocument)
         && mrSlideSorter.GetModel().GetDocument()!=nullptr
         && rEventObject.Source
-           == mrSlideSorter.GetModel().GetDocument()->getUnoModel())
+           == uno::Reference<XInterface>(cppu::getXWeak(mrSlideSorter.GetModel().GetDocument()->getUnoModel())))
     {
         mbListeningToDocument = false;
         mbListeningToUNODocument = false;

@@ -59,6 +59,7 @@
 #include <svx/bmpmask.hxx>
 #include <LayerTabBar.hxx>
 #include <ViewShellBase.hxx>
+#include <unomodel.hxx>
 
 #include <SlideSorterViewShell.hxx>
 #include <svx/svditer.hxx>
@@ -99,7 +100,9 @@ void DrawViewShell::DeleteActualPage()
 
     try
     {
-        Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
+        rtl::Reference<SdXImpressDocument> xDrawPagesSupplier( GetDoc()->getUnoModel() );
+        if (!xDrawPagesSupplier)
+            return;
         Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
         sal_uInt16 nPageCount   = GetDoc()->GetSdPageCount(mePageKind);
         SdPage* pPage = nullptr;
