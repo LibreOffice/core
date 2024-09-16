@@ -401,7 +401,8 @@ void E3dScene::removeAllNonSelectedObjects()
 {
     E3DModifySceneSnapRectUpdater aUpdater(this);
 
-    for(size_t a = 0; a < GetObjCount(); ++a)
+    size_t a = 0;
+    while (a < GetObjCount())
     {
         SdrObject* pObj = GetObj(a);
 
@@ -434,9 +435,10 @@ void E3dScene::removeAllNonSelectedObjects()
             if(bRemoveObject)
             {
                 NbcRemoveObject(pObj->GetOrdNum());
-                a--;
+                continue;
             }
         }
+        ++a;
     }
 }
 
