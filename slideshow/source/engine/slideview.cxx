@@ -29,6 +29,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/make_shared_from_uno.hxx>
+#include <unotools/weakref.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
 #include <cppcanvas/customsprite.hxx>
@@ -1018,23 +1019,21 @@ void SlideView::disposing( lang::EventObject const& evt )
 // silly wrapper to check that event handlers don't touch dead SlideView
 struct WeakRefWrapper
 {
-    SlideView & m_rObj;
-    uno::WeakReference<uno::XInterface> const m_wObj;
+    unotools::WeakReference<SlideView> const m_wObj;
     std::function<void (SlideView&)> const m_func;
 
     WeakRefWrapper(SlideView & rObj, std::function<void (SlideView&)> func)
-        : m_rObj(rObj)
-        , m_wObj(rObj.getXWeak())
+        : m_wObj(&rObj)
         , m_func(std::move(func))
     {
     }
 
     void operator()()
     {
-        uno::Reference<uno::XInterface> const xObj(m_wObj);
+        rtl::Reference<SlideView> const xObj(m_wObj);
         if (xObj.is())
         {
-            m_func(m_rObj);
+            m_func(*xObj);
         }
     }
 };
