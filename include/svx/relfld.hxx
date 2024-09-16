@@ -47,13 +47,13 @@ public:
 
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
-    void set_value(int nValue, FieldUnit eValueUnit) { m_xSpinButton->set_value(nValue, eValueUnit); }
-    int get_value(FieldUnit eDestUnit) const { return m_xSpinButton->get_value(eDestUnit); }
-    int get_min(FieldUnit eValueUnit) const { return m_xSpinButton->get_min(eValueUnit); }
-    void set_min(int min, FieldUnit eValueUnit) { m_xSpinButton->set_min(min, eValueUnit); }
-    void set_max(int max, FieldUnit eValueUnit) { m_xSpinButton->set_max(max, eValueUnit); }
-    int normalize(int nValue) const { return m_xSpinButton->normalize(nValue); }
-    int denormalize(int nValue) const { return m_xSpinButton->denormalize(nValue); }
+    void set_value(sal_Int64 nValue, FieldUnit eValueUnit) { m_xSpinButton->set_value(nValue, eValueUnit); }
+    sal_Int64 get_value(FieldUnit eDestUnit) const { return m_xSpinButton->get_value(eDestUnit); }
+    sal_Int64 get_min(FieldUnit eValueUnit) const { return m_xSpinButton->get_min(eValueUnit); }
+    void set_min(sal_Int64 min, FieldUnit eValueUnit) { m_xSpinButton->set_min(min, eValueUnit); }
+    void set_max(sal_Int64 max, FieldUnit eValueUnit) { m_xSpinButton->set_max(max, eValueUnit); }
+    sal_Int64 normalize(sal_Int64 nValue) const { return m_xSpinButton->normalize(nValue); }
+    sal_Int64 denormalize(sal_Int64 nValue) const { return m_xSpinButton->denormalize(nValue); }
     void connect_value_changed(const Link<weld::MetricSpinButton&, void>& rLink) { m_xSpinButton->connect_value_changed(rLink); }
     OUString get_text() const { return m_xSpinButton->get_text(); }
     void set_text(const OUString& rText) { m_xSpinButton->set_text(rText); }
@@ -61,9 +61,9 @@ public:
     bool get_value_changed_from_saved() const { return m_xSpinButton->get_value_changed_from_saved(); }
     weld::SpinButton& get_widget() { return m_xSpinButton->get_widget(); }
 
-    int GetCoreValue(MapUnit eUnit) const { return ::GetCoreValue(*m_xSpinButton, eUnit); }
+    sal_Int64 GetCoreValue(MapUnit eUnit) const { return ::GetCoreValue(*m_xSpinButton, eUnit); }
     void SetFieldUnit(FieldUnit eUnit, bool bAll = false) { ::SetFieldUnit(*m_xSpinButton, eUnit, bAll); }
-    void SetMetricValue(int lCoreValue, MapUnit eUnit) { ::SetMetricValue(*m_xSpinButton, lCoreValue, eUnit); }
+    void SetMetricValue(sal_Int64 lCoreValue, MapUnit eUnit) { ::SetMetricValue(*m_xSpinButton, lCoreValue, eUnit); }
 };
 
 #endif
