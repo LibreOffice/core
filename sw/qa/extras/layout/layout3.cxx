@@ -13,6 +13,7 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <vcl/event.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/scheduler.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -395,6 +396,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)
     // There was no SwGluePortion, because of missing justification of the last paragraph line,
     // despite it is a full line with shrunk spaces
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion"_ostr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
+{
+    createSwDoc("tdf161810.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 73 chars on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(73), pDXArray.size());
+
+            // Assert we are using the expected position for the last char
+            // This was 9369, now 9165, according to the fixed space shrinking
+            CPPUNIT_ASSERT_LESS(sal_Int32(9300), pDXArray[72]);
+            break;
+        }
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
