@@ -68,8 +68,7 @@ private:
 
     // The parent if it has been retrieved. This is always an
     // SwAccessibleContext. (protected by Mutex)
-    css::uno::WeakReference <
-        css::accessibility::XAccessible > m_xWeakParent;
+    unotools::WeakReference< SwAccessibleContext > m_xWeakParent;
 
     SwAccessibleMap *m_pMap; // must be protected by solar mutex
     /// note: the m_pMap is guaranteed to be valid until we hit the
@@ -104,7 +103,7 @@ protected:
     //This flag is used to mark the object's selected state.
     bool   m_isSelectedInDoc;
     void SetParent( SwAccessibleContext *pParent );
-    css::uno::Reference< css::accessibility::XAccessible> GetWeakParent() const;
+    rtl::Reference<SwAccessibleContext> GetWeakParent() const;
 
     bool IsDisposing() const { return m_isDisposing; }
 
@@ -198,8 +197,7 @@ protected:
     virtual ~SwAccessibleContext() override;
 
     // Return a reference to the parent.
-    css::uno::Reference< css::accessibility::XAccessible>
-        getAccessibleParentImpl();
+    rtl::Reference<SwAccessibleContext> getAccessibleParentImpl();
 
 public:
     SwAccessibleContext( std::shared_ptr<SwAccessibleMap> const& pMap,

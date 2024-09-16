@@ -65,16 +65,14 @@ void SwAccessibleContext::SetParent( SwAccessibleContext *pParent )
 {
     std::scoped_lock aGuard( m_Mutex );
 
-    uno::Reference < XAccessible > xParent( pParent );
-    m_xWeakParent = xParent;
+    m_xWeakParent = pParent;
 }
 
-uno::Reference< XAccessible > SwAccessibleContext::GetWeakParent() const
+rtl::Reference< SwAccessibleContext > SwAccessibleContext::GetWeakParent() const
 {
     std::scoped_lock aGuard( m_Mutex );
 
-    uno::Reference< XAccessible > xParent( m_xWeakParent );
-    return xParent;
+    return m_xWeakParent.get();
 }
 
 vcl::Window *SwAccessibleContext::GetWindow()
@@ -668,23 +666,23 @@ css::uno::Sequence<uno::Reference<XAccessible>> SAL_CALL
     return comphelper::containerToSequence(aRet);
 }
 
-uno::Reference< XAccessible> SwAccessibleContext::getAccessibleParentImpl()
+rtl::Reference< SwAccessibleContext> SwAccessibleContext::getAccessibleParentImpl()
 {
     SolarMutexGuard aGuard;
 
     const SwFrame *pUpper = GetParent();
     OSL_ENSURE( pUpper != nullptr || m_isDisposing, "no upper found" );
 
-    uno::Reference< XAccessible > xAcc;
+    rtl::Reference< SwAccessibleContext > xAcc;
     if( pUpper )
-        xAcc = GetMap()->GetContext( pUpper, !m_isDisposing );
+        xAcc = GetMap()->GetContextImpl( pUpper, !m_isDisposing );
 
     OSL_ENSURE( xAcc.is() || m_isDisposing, "no parent found" );
 
     // Remember the parent as weak ref.
     {
         std::scoped_lock aWeakParentGuard( m_Mutex );
-        m_xWeakParent = xAcc;
+        m_xWeakParent = xAcc.get();
     }
 
     return xAcc;
