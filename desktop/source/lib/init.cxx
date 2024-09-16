@@ -811,6 +811,11 @@ static int lcl_getViewId(std::string_view payload)
     return 0;
 }
 
+// Wonder global state ...
+static uno::Reference<css::uno::XComponentContext> xContext;
+static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
+static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
+
 namespace {
 
 std::string extractCertificate(const std::string & certificate)
@@ -1022,6 +1027,80 @@ void hideSidebar()
         pViewFrame->SetChildWindow(SID_SIDEBAR, false , false );
     else
         SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
+}
+
+void setLanguageToolConfig()
+{
+    const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
+    const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
+
+    if (pEnabled && pBaseUrlString)
+    {
+        const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
+        const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
+        const char* pSSLVerification = ::getenv("LANGUAGETOOL_SSL_VERIFICATION");
+        const char* pRestProtocol = ::getenv("LANGUAGETOOL_RESTPROTOCOL");
+
+        OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
+        if (aEnabled != "true")
+            return;
+        OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
+        try
+        {
+            using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
+            auto batch(comphelper::ConfigurationChanges::create());
+
+            LanguageToolCfg::BaseURL::set(aBaseUrl, batch);
+            LanguageToolCfg::IsEnabled::set(true, batch);
+            if (pSSLVerification)
+            {
+                OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
+                LanguageToolCfg::SSLCertVerify::set(aSSLVerification == "true", batch);
+            }
+            if (pRestProtocol)
+            {
+                OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
+                LanguageToolCfg::RestProtocol::set(aRestProtocol, batch);
+            }
+            if (pUsername && pApikey)
+            {
+                OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
+                OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
+                LanguageToolCfg::Username::set(aUsername, batch);
+                LanguageToolCfg::ApiKey::set(aApiKey, batch);
+            }
+            batch->commit();
+
+            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
+                css::linguistic2::LinguServiceManager::create(xContext);
+            if (xLangSrv.is())
+            {
+                css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
+                if (xSpell.is())
+                {
+                    Sequence<OUString> aEmpty;
+                    Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
+
+                    uno::Reference<linguistic2::XProofreader> xGC(
+                        xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
+                        uno::UNO_QUERY_THROW);
+                    uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
+
+                    for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
+                    {
+                        // turn off spell checker if LanguageTool supports the locale already
+                        if (xSuppLoc->hasLocale(aLocales[itLocale]))
+                            xLangSrv->setConfiguredServices(
+                                SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
+                    }
+                }
+            }
+        }
+        catch(uno::Exception const& rException)
+        {
+            SAL_WARN("lok", "Failed to set LanguageTool API settings: " << rException.Message);
+        }
+    }
 }
 
 }  // end anonymous namespace
@@ -2713,11 +2792,6 @@ void setFormatSpecificFilterData(std::u16string_view sFormat, comphelper::Sequen
 }
 
 } // anonymous namespace
-
-// Wonder global state ...
-static uno::Reference<css::uno::XComponentContext> xContext;
-static uno::Reference<css::lang::XMultiServiceFactory> xSFactory;
-static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
 static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char* pURL)
 {
@@ -7827,8 +7901,6 @@ static void preLoadShortCutAccelerators()
     batch->commit();
 }
 
-void setLanguageToolConfig();
-
 /// Used only by LibreOfficeKit when used by Online to pre-initialize
 static void preloadData()
 {
@@ -8086,80 +8158,6 @@ void setDeeplConfig()
         catch(uno::Exception const& rException)
         {
             SAL_WARN("lok", "Failed to set Deepl API settings: " << rException.Message);
-        }
-    }
-}
-
-void setLanguageToolConfig()
-{
-    const char* pEnabled = ::getenv("LANGUAGETOOL_ENABLED");
-    const char* pBaseUrlString = ::getenv("LANGUAGETOOL_BASEURL");
-
-    if (pEnabled && pBaseUrlString)
-    {
-        const char* pUsername = ::getenv("LANGUAGETOOL_USERNAME");
-        const char* pApikey = ::getenv("LANGUAGETOOL_APIKEY");
-        const char* pSSLVerification = ::getenv("LANGUAGETOOL_SSL_VERIFICATION");
-        const char* pRestProtocol = ::getenv("LANGUAGETOOL_RESTPROTOCOL");
-
-        OUString aEnabled = OStringToOUString(pEnabled, RTL_TEXTENCODING_UTF8);
-        if (aEnabled != "true")
-            return;
-        OUString aBaseUrl = OStringToOUString(pBaseUrlString, RTL_TEXTENCODING_UTF8);
-        try
-        {
-            using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
-            auto batch(comphelper::ConfigurationChanges::create());
-
-            LanguageToolCfg::BaseURL::set(aBaseUrl, batch);
-            LanguageToolCfg::IsEnabled::set(true, batch);
-            if (pSSLVerification)
-            {
-                OUString aSSLVerification = OStringToOUString(pSSLVerification, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::SSLCertVerify::set(aSSLVerification == "true", batch);
-            }
-            if (pRestProtocol)
-            {
-                OUString aRestProtocol = OStringToOUString(pRestProtocol, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::RestProtocol::set(aRestProtocol, batch);
-            }
-            if (pUsername && pApikey)
-            {
-                OUString aUsername = OStringToOUString(pUsername, RTL_TEXTENCODING_UTF8);
-                OUString aApiKey = OStringToOUString(pApikey, RTL_TEXTENCODING_UTF8);
-                LanguageToolCfg::Username::set(aUsername, batch);
-                LanguageToolCfg::ApiKey::set(aApiKey, batch);
-            }
-            batch->commit();
-
-            css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLangSrv =
-                css::linguistic2::LinguServiceManager::create(xContext);
-            if (xLangSrv.is())
-            {
-                css::uno::Reference<css::linguistic2::XSpellChecker> xSpell = xLangSrv->getSpellChecker();
-                if (xSpell.is())
-                {
-                    Sequence<OUString> aEmpty;
-                    Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
-
-                    uno::Reference<linguistic2::XProofreader> xGC(
-                        xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
-                        uno::UNO_QUERY_THROW);
-                    uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
-
-                    for (int itLocale = 0; itLocale < aLocales.getLength(); itLocale++)
-                    {
-                        // turn off spell checker if LanguageTool supports the locale already
-                        if (xSuppLoc->hasLocale(aLocales[itLocale]))
-                            xLangSrv->setConfiguredServices(
-                                SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
-                    }
-                }
-            }
-        }
-        catch(uno::Exception const& rException)
-        {
-            SAL_WARN("lok", "Failed to set LanguageTool API settings: " << rException.Message);
         }
     }
 }
