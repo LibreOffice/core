@@ -31,7 +31,6 @@ $(eval $(call gb_Library_add_exception_objects,UAccCOM,\
 	winaccessibility/source/UAccCOM/AccAction \
 	winaccessibility/source/UAccCOM/AccActionBase \
 	winaccessibility/source/UAccCOM/AccComponent \
-	winaccessibility/source/UAccCOM/AccComponentBase \
 	winaccessibility/source/UAccCOM/AccEditableText \
 	winaccessibility/source/UAccCOM/AccHyperLink \
 	winaccessibility/source/UAccCOM/AccHypertext \

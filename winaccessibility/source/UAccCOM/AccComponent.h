@@ -20,12 +20,11 @@
 #pragma once
 
 #include "Resource.h" // main symbols
+#include "UNOXWrapper.h"
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include "UNOXWrapper.h"
-#include "AccComponentBase.h"
 
 /**
  * CAccComponent implements IAccessibleComponent interface.
@@ -33,10 +32,11 @@
 class ATL_NO_VTABLE CAccComponent : public CComObjectRoot,
                                     public CComCoClass<CAccComponent, &CLSID_AccComponent>,
                                     public IAccessibleComponent,
-                                    public CAccComponentBase
+                                    public CUNOXWrapper
 {
 public:
-    CAccComponent() {}
+    CAccComponent();
+    virtual ~CAccComponent();
 
     BEGIN_COM_MAP(CAccComponent)
     COM_INTERFACE_ENTRY(IAccessibleComponent)
@@ -77,6 +77,12 @@ public:
 
     // Returns the background color of this object.
     STDMETHOD(get_background)(IA2Color* background) override;
+
+    // Override of IUNOXWrapper.
+    STDMETHOD(put_XInterface)(hyper pXInterface) override;
+
+private:
+    css::uno::Reference<css::accessibility::XAccessibleComponent> m_xComponent;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
