@@ -842,7 +842,8 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
             // This will work only if .uno:ModifiedStatus message will be removed from
             // the mechanism that keeps in the message queue only last message of
             // a particular status even if the values are different.
-            GetViewData().GetDocShell()->GetViewBindings()->Update(SID_DOC_MODIFIED);
+            if (SfxBindings* pBindings = GetViewData().GetDocShell()->GetViewBindings())
+                pBindings->Update(SID_DOC_MODIFIED);
         }
     }
 
