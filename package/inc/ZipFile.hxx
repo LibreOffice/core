@@ -58,7 +58,7 @@ class ZipEnumeration;
 class ZipFile
 {
 public:
-    enum class Checks { Default, CheckInsensitive };
+    enum class Checks { Default, CheckInsensitive, TryCheckInsensitive };
 
 private:
     rtl::Reference<comphelper::RefCountedMutex> m_aMutexHolder;
