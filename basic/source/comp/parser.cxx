@@ -196,7 +196,7 @@ bool SbiParser::HasGlobalCode()
 void SbiParser::OpenBlock( SbiToken eTok, SbiExprNode* pVar )
 {
     SbiParseStack* p = new SbiParseStack;
-    p->eExitTok = eTok;
+    p->eExitTok = (eTok == GET || eTok == LET || eTok == SET) ? PROPERTY : eTok; // #i109051
     p->nChain   = 0;
     p->pWithVar = pWithVar;
     p->pNext    = pStack;
@@ -232,9 +232,7 @@ void SbiParser::Exit()
     SbiToken eTok = Next();
     for( SbiParseStack* p = pStack; p; p = p->pNext )
     {
-        SbiToken eExitTok = p->eExitTok;
-        if( eTok == eExitTok ||
-            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET || eExitTok == SET) ) ) // #i109051
+        if (eTok == p->eExitTok)
         {
             p->nChain = aGen.Gen( SbiOpcode::JUMP_, p->nChain );
             return;
