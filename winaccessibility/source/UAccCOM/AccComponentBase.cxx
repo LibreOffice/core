@@ -63,36 +63,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* 
 }
 
 /**
- * Returns the location of the upper left corner of the object's bounding
- * box in screen.
- *
- * @param    Location    the upper left corner of the object's bounding
- *                       box in screen coordinates.
- */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long* x, long* y)
-{
-    SolarMutexGuard g;
-
-    try
-    {
-        if (x == nullptr || y == nullptr)
-            return E_INVALIDARG;
-
-        if (!pRXComp.is())
-            return E_FAIL;
-
-        const css::awt::Point& pt = GetXInterface()->getLocationOnScreen();
-        *x = pt.X;
-        *y = pt.Y;
-        return S_OK;
-    }
-    catch (...)
-    {
-        return E_FAIL;
-    }
-}
-
-/**
  * Grabs the focus to this object.
  *
  * @param    success    the boolean result to be returned.

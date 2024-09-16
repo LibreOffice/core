@@ -38,10 +38,6 @@ public:
     // box relative to the parent.
     STDMETHOD(get_locationInParent)(long* x, long* y);
 
-    // Returns the location of the upper left corner of the object's bounding
-    // box in screen.
-    STDMETHOD(get_locationOnScreen)(long* x, long* y);
-
     // Grabs the focus to this object.
     STDMETHOD(grabFocus)(boolean* success);
 
