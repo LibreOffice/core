@@ -63,35 +63,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* 
 }
 
 /**
- * Grabs the focus to this object.
- *
- * @param    success    the boolean result to be returned.
- */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean* success)
-{
-    SolarMutexGuard g;
-
-    try
-    {
-        if (success == nullptr)
-            return E_INVALIDARG;
-
-        if (!pRXComp.is())
-        {
-            return E_FAIL;
-        }
-        GetXInterface()->grabFocus();
-        *success = TRUE;
-
-        return S_OK;
-    }
-    catch (...)
-    {
-        return E_FAIL;
-    }
-}
-
-/**
  * Returns the foreground color of this object.
  *
  * @param    Color    the color of foreground.

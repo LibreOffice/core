@@ -38,9 +38,6 @@ public:
     // box relative to the parent.
     STDMETHOD(get_locationInParent)(long* x, long* y);
 
-    // Grabs the focus to this object.
-    STDMETHOD(grabFocus)(boolean* success);
-
     // Returns the foreground color of this object.
     STDMETHOD(get_foreground)(IA2Color* foreground);
 
