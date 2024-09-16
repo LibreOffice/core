@@ -374,9 +374,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::put_XInterface(hyper pXInterfac
     try
     {
         CAccTextBase::put_XInterface(pXInterface);
-        //special query.
+
         if (pUNOInterface == nullptr)
             return E_FAIL;
+
         Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
         if (!pRContext.is())
         {

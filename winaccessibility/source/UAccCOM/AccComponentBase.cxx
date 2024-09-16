@@ -130,9 +130,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInte
     try
     {
         CUNOXWrapper::put_XInterface(pXInterface);
-        //special query.
+
         if (pUNOInterface == nullptr)
             return E_FAIL;
+
         Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
         if (!pRContext.is())
         {

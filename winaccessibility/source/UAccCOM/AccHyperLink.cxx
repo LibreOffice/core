@@ -263,7 +263,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterfac
     try
     {
         CAccActionBase::put_XInterface(pXInterface);
-        //special query.
+
         if (pUNOInterface != nullptr)
         {
             Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
