@@ -31,7 +31,7 @@
 #include <map>
 
 
-// forward declaractions
+// forward declarations
 namespace com::sun::star
 {
     namespace xml::dom { class XDocument; }

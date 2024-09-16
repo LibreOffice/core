@@ -38,7 +38,7 @@
 #include <rtl/ref.hxx>
 #include <vector>
 
-// forward declaractions
+// forward declarations
 namespace xforms
 {
     class Model;

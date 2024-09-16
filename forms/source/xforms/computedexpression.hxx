@@ -22,7 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-// forward declaractions
+// forward declarations
 namespace com::sun::star
 {
     namespace xml

@@ -23,7 +23,7 @@
 
 #include <vector>
 
-// forward declaractions
+// forward declarations
 namespace com::sun::star::xml::dom
 {
 class XNodeList;

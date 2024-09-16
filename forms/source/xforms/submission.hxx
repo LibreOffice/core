@@ -30,7 +30,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "computedexpression.hxx"
 
-// forward declaractions
+// forward declarations
 namespace com::sun::star {
     namespace xforms { class XModel; }
     namespace uno { class Any; }
