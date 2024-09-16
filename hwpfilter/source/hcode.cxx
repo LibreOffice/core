@@ -430,7 +430,7 @@ static hchar s_hh2ks(hchar hh)
         return sal::static_int_cast<hchar>(tblhhtg_ks[hh - HCA_TG]);
     }
     hh -= HCA_KSS;
-    idx = hh / 0x60 + 161;
+    idx = sal::static_int_cast<hchar>(hh / 0x60 + 161);
     i = hh % 0x60 + 160;
     if (idx == 170)
         idx += 2;
