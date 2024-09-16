@@ -404,9 +404,11 @@ void ScDBFunc::ModifiedAutoFilter(ScDocShell* pDocSh)
     ScDocShellModificator aModificator(*pDocSh);
     aModificator.SetDocumentModified();
 
-    SfxBindings* pBindings = pDocSh->GetViewBindings();
-    pBindings->Invalidate(SID_AUTO_FILTER);
-    pBindings->Invalidate(SID_AUTOFILTER_HIDE);
+    if (SfxBindings* pBindings = pDocSh->GetViewBindings())
+    {
+        pBindings->Invalidate(SID_AUTO_FILTER);
+        pBindings->Invalidate(SID_AUTOFILTER_HIDE);
+    }
 }
 
 //      just hide, no data change
