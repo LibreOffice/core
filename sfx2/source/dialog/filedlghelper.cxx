@@ -1306,6 +1306,7 @@ void FileDialogHelper_Impl::preExecute()
     enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
+    updateSignByDefault();
 #endif
 }
 
