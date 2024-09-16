@@ -550,6 +550,7 @@ bool GetNumberIntl(const SbxValue& val, double& ret)
         case SbxUINT:
         case SbxSINGLE:
         case SbxDOUBLE:
+        case SbxDATE:
             ret = val.GetDouble();
             return true;
         case SbxSTRING:
