@@ -307,7 +307,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     if (comphelper::LibreOfficeKit::isActive())
     {
         m_xAddBtn->hide();
-        m_xRemoveBtn->hide();
         m_xStartCertMgrBtn->hide();
     }
 
@@ -439,20 +438,25 @@ bool DigitalSignaturesDialog::canAddRemove()
 
 bool DigitalSignaturesDialog::canAdd() { return canAddRemove(); }
 
-bool DigitalSignaturesDialog::canRemove()
+void DigitalSignaturesDialog::canRemove(const std::function<void(bool)>& rCallback)
 {
+    auto onFinished = [this, rCallback](bool bRet) {
+        rCallback(bRet && canAddRemove());
+    };
     bool bRet = true;
 
     if ( maSignatureManager.getSignatureMode() == DocumentSignatureMode::Content )
     {
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+        std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                   VclMessageType::Question, VclButtonsType::YesNo,
                                                   XsResId(STR_XMLSECDLG_QUERY_REALLYREMOVE)));
-        short nDlgRet = xBox->run();
-        bRet = ( nDlgRet == RET_YES );
+        xBox->runAsync(xBox, [onFinished](sal_Int32 nDlgRet) {
+                onFinished(nDlgRet == RET_YES);
+        });
+        return;
     }
 
-    return (bRet && canAddRemove());
+    onFinished(bRet);
 }
 
 void DigitalSignaturesDialog::beforeRun()
@@ -590,28 +594,31 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
 {
-    if (!canRemove())
-        return;
-    int nEntry = m_xSignaturesLB->get_selected_index();
-    if (nEntry == -1)
-        return;
+    canRemove([this](bool bRet) {
+        if (!bRet)
+            return;
 
-    try
-    {
-        sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
-        maSignatureManager.remove(nSelected);
+        int nEntry = m_xSignaturesLB->get_selected_index();
+        if (nEntry == -1)
+            return;
 
-        mbSignaturesChanged = true;
+        try
+        {
+            sal_uInt16 nSelected = m_xSignaturesLB->get_id(nEntry).toUInt32();
+            maSignatureManager.remove(nSelected);
 
-        ImplFillSignaturesBox();
-    }
-    catch ( uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "Exception while removing a signature!" );
-        // Don't keep invalid entries...
-        ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
-        ImplFillSignaturesBox();
-    }
+            mbSignaturesChanged = true;
+
+            ImplFillSignaturesBox();
+        }
+        catch ( uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "Exception while removing a signature!" );
+            // Don't keep invalid entries...
+            ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/true);
+            ImplFillSignaturesBox();
+        }
+    });
 }
 
 
