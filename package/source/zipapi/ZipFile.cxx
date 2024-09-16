@@ -1470,6 +1470,17 @@ sal_Int32 ZipFile::readCEN()
                 SAL_INFO("package", "Duplicate CEN entry: \"" << aEntry.sPath << "\"");
                 throw ZipException(u"Duplicate CEN entry"_ustr);
             }
+            if (aEntries.empty() && m_Checks == Checks::TryCheckInsensitive)
+            {
+                if (aEntry.sPath == "mimetype" && aEntry.nSize == 0)
+                {   // tdf#162866 AutoCorrect uses ODF package, directories are
+                    m_Checks = Checks::Default; // user-defined => ignore!
+                }
+                else
+                {
+                    m_Checks = Checks::CheckInsensitive;
+                }
+            }
             // this is required for OOXML, but not for ODF
             auto const lowerPath(aEntry.sPath.toAsciiLowerCase());
             if (!m_EntriesInsensitive.insert(lowerPath).second && m_Checks == Checks::CheckInsensitive)
