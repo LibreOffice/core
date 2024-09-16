@@ -876,7 +876,11 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
     {
         m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, true,
             m_bForceRecovery,
-            m_nFormat == embed::StorageFormats::ZIP ? ZipFile::Checks::Default : ZipFile::Checks::CheckInsensitive);
+            m_nFormat == embed::StorageFormats::ZIP
+                ? ZipFile::Checks::Default
+                : m_nFormat == embed::StorageFormats::OFOPXML
+                    ? ZipFile::Checks::CheckInsensitive
+                    : ZipFile::Checks::TryCheckInsensitive);
         getZipFileContents();
     }
     catch ( IOException & e )
@@ -1251,7 +1255,11 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     else
         m_pZipFile.emplace(m_aMutexHolder, m_xContentStream, m_xContext, false,
             false,
-            m_nFormat == embed::StorageFormats::ZIP ? ZipFile::Checks::Default : ZipFile::Checks::CheckInsensitive);
+            m_nFormat == embed::StorageFormats::ZIP
+                ? ZipFile::Checks::Default
+                : m_nFormat == embed::StorageFormats::OFOPXML
+                    ? ZipFile::Checks::CheckInsensitive
+                    : ZipFile::Checks::TryCheckInsensitive);
 }
 
 namespace
