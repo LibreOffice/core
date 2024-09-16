@@ -169,6 +169,37 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(MiscTest, testtestOverwriteReadOnly)
+{
+#ifdef UNX
+    // Given a read-only, already created file:
+    OUString aTargetDir = m_directories.getURLFromWorkdir(u"/CppunitTest/sfx2_misc.test.user/");
+    OUString aURL(aTargetDir + "read-only.odt");
+    osl::File aFile(aURL);
+    aFile.open(osl_File_OpenFlag_Create);
+    aFile.close();
+    osl::File::setAttributes(aURL, osl_File_Attribute_OwnRead);
+    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr);
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    bool bFail = false;
+
+    // When trying to overwrite that:
+    try
+    {
+        xStorable->storeToURL(aURL, { comphelper::makePropertyValue("Overwrite", true) });
+    }
+    catch (const io::IOException&)
+    {
+        bFail = true;
+    }
+
+    // Then make sure we fail:
+    // Without the accompanying fix in place, this test would have failed, the overwrite would
+    // silently ignore the read-only attribute of the file.
+    CPPUNIT_ASSERT(bFail);
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
 {
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
