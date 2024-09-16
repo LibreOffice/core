@@ -2855,7 +2855,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         fillEmptyFrameProperties(aFrameProperties, false);
 
                         uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
-                        uno::Reference<text::XTextAppend> xTextAppend2(xParaCursor->getText(), uno::UNO_QUERY);
 
                         xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
 
