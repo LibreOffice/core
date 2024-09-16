@@ -2276,9 +2276,9 @@ void ScDocShell::GetState( SfxItemSet &rSet )
 
             case SID_NOTEBOOKBAR:
                 {
-                    if (GetViewBindings())
+                    if (SfxBindings* pBindings = GetViewBindings())
                     {
-                        bool bVisible = sfx2::SfxNotebookBar::StateMethod(*GetViewBindings(),
+                        bool bVisible = sfx2::SfxNotebookBar::StateMethod(*pBindings,
                                                                           u"modules/scalc/ui/");
                         rSet.Put( SfxBoolItem( SID_NOTEBOOKBAR, bVisible ) );
                     }
