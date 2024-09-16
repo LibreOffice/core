@@ -97,6 +97,8 @@ class ScriptForge(object, metaclass = _Singleton):
             - Coexistence with UNO
 
         The class may be instantiated several times. Only the first instance will be retained ("Singleton").
+
+        All its properties and methods are for INTERNAL / DEBUGGING use only.
         """
 
     # #########################################################################
@@ -406,6 +408,26 @@ class ScriptForge(object, metaclass = _Singleton):
         else:  # All other scalar values
             pass
         return returnvalue
+
+    @classmethod
+    def initializeRoot(cls, force = False):
+        """
+            Initialize the global scriptforge data structure.
+            When force = False, only when not yet done.
+            When force = True, reinitialize it whatever its status.
+            """
+        script = 'application#ScriptForge.SF_Utils._InitializeRoot'
+        return cls.InvokeSimpleScript(script, force)
+
+    @classmethod
+    def errorHandling(cls, standard = True):
+        """
+            Determine how errors in the ScriptForge Basic code are handled. Either
+            - the standard mode, i.e. display a "crash" message to the user
+            - the debugging mode, i.e. the execution stops on the line causing the error
+            """
+        script = 'application#ScriptForge.SF_Utils._ErrorHandling'
+        return cls.InvokeSimpleScript(script, standard)
 
     @classmethod
     def SetAttributeSynonyms(cls):
