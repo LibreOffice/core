@@ -32,13 +32,9 @@ SwAccessibleHyperTextData::~SwAccessibleHyperTextData()
     iterator aIter = begin();
     while( aIter != end() )
     {
-        Reference < XAccessibleHyperlink > xTmp = (*aIter).second;
+        rtl::Reference < SwAccessibleHyperlink > xTmp = (*aIter).second;
         if( xTmp.is() )
-        {
-            SwAccessibleHyperlink *pTmp =
-                static_cast< SwAccessibleHyperlink * >( xTmp.get() );
-            pTmp->Invalidate();
-        }
+            xTmp->Invalidate();
         ++aIter;
     }
 }

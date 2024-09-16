@@ -20,19 +20,17 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERTEXTDATA_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCHYPERTEXTDATA_HXX
 
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <map>
 
 class SwTextAttr;
-namespace com::sun::star::accessibility {
-    class XAccessibleHyperlink;
-}
+class SwAccessibleHyperlink;
 
 class SwAccessibleHyperTextData
 {
 public:
     typedef const SwTextAttr *                                          key_type;
-    typedef css::uno::WeakReference< css::accessibility::XAccessibleHyperlink > mapped_type;
+    typedef unotools::WeakReference< SwAccessibleHyperlink >            mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
     typedef std::less< const SwTextAttr * >                             key_compare;
     typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;

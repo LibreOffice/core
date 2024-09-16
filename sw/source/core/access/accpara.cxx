@@ -2838,7 +2838,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
     if (!pHt)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Reference<XAccessibleHyperlink> xRet;
+    rtl::Reference<SwAccessibleHyperlink> xRet;
     if (!m_pHyperTextData)
         m_pHyperTextData.reset( new SwAccessibleHyperTextData );
     SwAccessibleHyperTextData::iterator aIter = m_pHyperTextData->find(pHt);
@@ -2858,7 +2858,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                                          *this, nTmpHStt, nTmpHEnd );
         if (aIter != m_pHyperTextData->end())
         {
-            (*aIter).second = xRet;
+            (*aIter).second = xRet.get();
         }
         else
         {
