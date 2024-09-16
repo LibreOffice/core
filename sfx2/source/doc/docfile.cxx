@@ -257,6 +257,11 @@ bool IsFileMovable(const INetURLObject& rURL)
     // Hardlink or symlink: osl::File::move() doesn't play with these nicely.
     if (buf.st_nlink > 1 || S_ISLNK(buf.st_mode))
         return false;
+
+    // Read-only target path: this would be silently replaced.
+    if (access(sPath.toUtf8().getStr(), W_OK) == -1)
+        return false;
+
 #elif defined _WIN32
     if (tools::IsMappedWebDAVPath(rURL.GetMainURL(INetURLObject::DecodeMechanism::NONE)))
         return false;
