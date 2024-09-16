@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+-->
+<rdf:RDF
+ xmlns:pkg="http://docs.oasis-open.org/opendocument/meta/package/common#"
+ xmlns:odf="http://docs.oasis-open.org/opendocument/meta/package/odf#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<pkg:Package rdf:about="urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3">
+    <pkg:hasPart>
+        <odf:ContentFile pkg:path="content.xml">
+            <pkg:hasPart>
+				<odf:Element rdf:about="uri:example-element-1"
+					pkg:idref="ID_A"/>
+            </pkg:hasPart>
+            <pkg:hasPart>
+				<odf:Element rdf:about="uri:example-element-2"
+					pkg:idref="ID_B"/>
+            </pkg:hasPart>
+		</odf:ContentFile>
+    </pkg:hasPart>
+    <pkg:hasPart>
+        <odf:MetadataFile rdf:about="http://hospital-employee/doctor"
+			pkg:path="meta/hospital/doctor.rdf">
+            <rdf:type rdf:resource="http://medical-employee/data"/>
+            <rdf:type rdf:resource="http://www.w3.org/2006/vcard/ns#"/>
+        </odf:MetadataFile>
+    </pkg:hasPart>
+</pkg:Package>
+</rdf:RDF>

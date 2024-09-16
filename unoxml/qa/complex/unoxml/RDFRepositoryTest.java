@@ -63,8 +63,6 @@ public class RDFRepositoryTest
     XURI baz;
     XURI uint;
     XURI rdfslabel;
-    XURI manifest;
-    XURI uuid;
     XURI base;
     XBlankNode blank;
     XLiteral lit;
@@ -113,11 +111,6 @@ public class RDFRepositoryTest
 
             rdfslabel = URI.create(xContext, rdfs + "label");
             assertNotNull("rdfslabel", rdfslabel);
-            manifest = URI.create(xContext, "manifest:manifest"); //FIXME
-            assertNotNull("manifest", manifest);
-            uuid = URI.create(xContext,
-                "urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3");
-            assertNotNull("uuid", uuid);
             base = URI.create(xContext, "base-uri:"); //FIXME
             assertNotNull("base", base);
         } catch (Exception e) {
@@ -344,98 +337,6 @@ public class RDFRepositoryTest
         }
     }
 
-    @Test
-    public void checkSPARQL()
-    {
-        try {
-
-            System.out.println("Checking SPARQL queries...");
-
-            XInputStream xIn = new StreamSimulator(TestDocument.getUrl("example.rdf"), true, param);
-            xRep.importGraph(FileFormat.RDF_XML, xIn, manifest, base);
-
-            String query;
-            query = "SELECT ?p WHERE { ?p rdf:type pkg:Package . }";
-            XQuerySelectResult result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: package-id\n" + query,
-                eq(result, new String[] { "p" },
-                    new XNode[][] { { uuid } }));
-
-            query = "SELECT ?part ?path FROM <" + manifest +
-               "> WHERE { ?pkg rdf:type pkg:Package . ?pkg pkg:hasPart ?part ."
-               + " ?part pkg:path ?path . ?part rdf:type odf:ContentFile. }";
-            result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: contentfile",
-                eq(result, new String[] { "part", "path" },
-                    new XNode[][] { { BlankNode.create(xContext, "whatever"),
-                            Literal.create(xContext, "content.xml") } }));
-
-            query = "SELECT ?pkg ?path FROM <" + toS(manifest) +  "> WHERE { "
-                + "?pkg rdf:type pkg:Package . ?pkg pkg:hasPart ?part . "
-                + "?part pkg:path ?path . ?part rdf:type odf:ContentFile. }";
-            result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: contentfile\n" + query,
-                eq(result, new String[] { "pkg", "path" },
-                    new XNode[][] { { uuid ,
-                            Literal.create(xContext, "content.xml") } }));
-
-            query = "SELECT ?part ?path FROM <" + toS(manifest) + "> WHERE { "
-                + "?pkg rdf:type pkg:Package . ?pkg pkg:hasPart ?part . "
-                + "?part pkg:path ?path . ?part rdf:type odf:StylesFile. }";
-            result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: stylesfile\n" + query,
-                eq(result, new String[] { "part", "path" },
-                    new XNode[][] { }));
-
-            query = "SELECT ?part ?path FROM <" + toS(manifest) + "> WHERE { "
-                + "?pkg rdf:type pkg:Package . ?pkg pkg:hasPart ?part . "
-                + "?part pkg:path ?path . ?part rdf:type odf:MetadataFile. }";
-            result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: metadatafile\n" + query,
-                eq(result, new String[] { "part", "path" },
-                    new XNode[][] { {
-                        URI.create(xContext, "http://hospital-employee/doctor"),
-                        Literal.create(xContext,
-                            "meta/hospital/doctor.rdf") } }));
-
-//FIXME redland BUG
-            String uri = "uri:example-element-2";
-            query = "SELECT ?path ?idref FROM <" + toS(manifest) +  "> WHERE { "
-                + "<" + toS(uuid) + "> pkg:hasPart ?part . "
-                + "?part pkg:path ?path ; "
-                     + " rdf:type ?type ; "
-                     + " pkg:hasPart <" + uri + "> . "
-                + "<" + uri + "> "
-                      + " pkg:idref ?idref . "
-                + " FILTER (?type = odf:ContentFile || ?type = odf:StylesFile)"
-                + " }";
-            result = xRep.querySelect(mkNss() + query);
-            assertTrue("query: example-element-2\n" + query,
-                eq(result, new String[] { "path", "idref" },
-                    new XNode[][] { {
-                        Literal.create(xContext, "content.xml"),
-                        Literal.create(xContext, "ID_B") } }));
-
-            // CONSTRUCT result triples have no graph!
-            Statement x_PkgFooLit = new Statement(uuid, foo, lit, null);
-            query = "CONSTRUCT { ?pkg <" + toS(foo) + "> \"" +
-                lit.getStringValue() + "\" } FROM <" + toS(manifest) +
-                "> WHERE { ?pkg rdf:type pkg:Package . } ";
-            XEnumeration xResultEnum = xRep.queryConstruct(mkNss() + query);
-            assertTrue("query: construct\n" + query,
-                eq(xResultEnum, new Statement[] { x_PkgFooLit }));
-
-            query = "ASK { ?pkg rdf:type pkg:Package . }";
-            boolean bResult = xRep.queryAsk(mkNss() + query);
-            assertTrue("query: ask\n" + query, bResult);
-
-            System.out.println("...done");
-
-        } catch (Exception e) {
-            report(e);
-        }
-    }
-
 // utilities -------------------------------------------------------------
 
     public void report(Exception e) {
@@ -466,32 +367,6 @@ public class RDFRepositoryTest
             c.add(s);
         }
         return c.toArray(new Statement[c.size()]);
-    }
-
-    static XNode[][] toSeqs(XEnumeration i_Enum) throws Exception
-    {
-        java.util.Collection<XNode[]> c = new java.util.ArrayList<XNode[]>();
-        while (i_Enum.hasMoreElements()) {
-            XNode[] s = (XNode[]) i_Enum.nextElement();
-            c.add(s);
-        }
-        return c.toArray(new XNode[c.size()][]);
-    }
-
-    private static class BindingComp implements java.util.Comparator<XNode[]>
-    {
-        public int compare(XNode[] left, XNode[] right)
-        {
-            if (left.length != right.length)
-            {
-                throw new RuntimeException();
-            }
-            for (int i = 0; i < left.length; ++i) {
-                int eq = left[i].getStringValue().compareTo(right[i].getStringValue());
-                if (eq != 0) return eq;
-            }
-            return 0;
-        }
     }
 
     private static class StmtComp implements java.util.Comparator<Statement>
@@ -596,88 +471,6 @@ public class RDFRepositoryTest
                 (i_Left.getStringValue().equals(i_Right.getStringValue())
                 // FIXME: hack: blank nodes considered equal
                 || (isBlank(i_Left) && isBlank(i_Right)));
-        }
-    }
-
-    static boolean eq(XQuerySelectResult i_Result,
-            String[] i_Vars, XNode[][] i_Bindings) throws Exception
-    {
-        String[] vars = i_Result.getBindingNames();
-        XEnumeration iter = i_Result;
-        XNode[][] bindings = toSeqs(iter);
-        if (bindings.length != i_Bindings.length) {
-            System.out.println("binding lengths differ: " + i_Bindings.length +
-                " vs " + bindings.length );
-            return false;
-        }
-        if (vars.length != i_Vars.length) {
-            // ignore for empty result: it is unclear to me whether SPARQL
-            // spec requires returning the variables in this case,
-            // and evidently newer rasqal versions don't
-            if (0 != i_Bindings.length || 0 != vars.length)
-            {
-                System.out.println("var lengths differ: expected "
-                        + i_Vars.length + " but got " + vars.length);
-                return false;
-            }
-        } else {
-            for (int i = 0; i < i_Vars.length; ++i) {
-                if (!vars[i].equals(i_Vars[i])) {
-                    System.out.println("variable names differ: " +
-                        vars[i] + " != " + i_Vars[i]);
-                    return false;
-                }
-            }
-        }
-        java.util.Arrays.sort(bindings, new BindingComp());
-        java.util.Arrays.sort(i_Bindings, new BindingComp());
-        for (int i = 0; i < i_Bindings.length; ++i) {
-            if (i_Bindings[i].length != i_Vars.length) {
-                System.out.println("TEST ERROR!");
-                throw new Exception();
-            }
-            if (bindings[i].length != i_Vars.length) {
-                System.out.println("binding length and var length differ");
-                return false;
-            }
-            for (int j = 0; j < i_Vars.length; ++j) {
-                if (!eq(bindings[i][j], i_Bindings[i][j])) {
-                    System.out.println("bindings differ: " +
-                        toS(bindings[i][j]) + " != " + toS(i_Bindings[i][j]));
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    static String mkNamespace(String i_prefix, String i_namespace)
-    {
-        return "PREFIX " + i_prefix + ": <" + i_namespace + ">\n";
-    }
-
-    static String mkNss()
-    {
-        String namespaces = mkNamespace("rdf",
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-        namespaces += mkNamespace("pkg",
-            "http://docs.oasis-open.org/opendocument/meta/package/common#");
-        namespaces += mkNamespace("odf",
-            "http://docs.oasis-open.org/opendocument/meta/package/odf#");
-        return namespaces;
-    }
-
-    // useful when debugging
-    static void dumpRepo(XDocumentRepository xRep) throws Exception
-    {
-        XEnumeration xEnum = xRep.getStatements(null, null, null);
-        while (xEnum.hasMoreElements())
-        {
-            Statement s = (Statement) xEnum.nextElement();
-            System.out.println("STATEMENT IN: " + toS(s.Graph)
-                    + "\n S: " + toS(s.Subject)
-                    + "\n P: " + toS(s.Predicate)
-                    + "\n O: " + toS(s.Object));
         }
     }
 

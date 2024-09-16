@@ -190,6 +190,145 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
 }
+
+CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
+{
+    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                          css::uno::UNO_SET_THROW);
+    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+    const uno::Reference<io::XInputStream> xInputStream(
+        xFileAccess->openFileRead(m_directories.getURLFromSrc(u"/unoxml/qa/unit/data/example.rdf")),
+        uno::UNO_SET_THROW);
+    uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
+    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocRepo);
+
+    uno::Reference<css::rdf::XURI> xManifest = rdf::URI::create(xContext, "manifest:manifest");
+    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+
+    xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xManifest, xBase);
+
+    OUString sNss("PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                  "PREFIX pkg: <http://docs.oasis-open.org/opendocument/meta/package/common#>\n"
+                  "PREFIX odf: <http://docs.oasis-open.org/opendocument/meta/package/odf#>\n");
+
+    // 1. query: package-id
+    OUString sQuery("SELECT ?p WHERE { ?p rdf:type pkg:Package . }");
+    uno::Reference<rdf::XQuerySelectResult> aResult = xDocRepo->querySelect(sNss + sQuery);
+    uno::Sequence<OUString> aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aBindings.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("p"), aBindings[0]);
+
+    uno::Sequence<uno::Reference<rdf::XNode>> aNode;
+    css::uno::fromAny(aResult->nextElement(), &aNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aNode.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
+                         aNode[0]->getStringValue());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    // 2. query: contentfile
+    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
+             "pkg:hasPart ?part . ?part "
+             "pkg:path ?path . ?part rdf:type odf:ContentFile. }";
+    aResult = xDocRepo->querySelect(sNss + sQuery);
+    aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("part"), aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+
+    css::uno::fromAny(aResult->nextElement(), &aNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
+    CPPUNIT_ASSERT(!aNode[0]->getStringValue().isEmpty());
+    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[1]->getStringValue());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    // 3. query: contentfile
+    sQuery = "SELECT ?pkg ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
+             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:ContentFile. }";
+    aResult = xDocRepo->querySelect(sNss + sQuery);
+    aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("pkg"), aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+
+    css::uno::fromAny(aResult->nextElement(), &aNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
+                         aNode[0]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[1]->getStringValue());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    // 4. query: stylesfile
+    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
+             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:StylesFile. }";
+    aResult = xDocRepo->querySelect(sNss + sQuery);
+    aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBindings.getLength());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    // 5. query: metadatafile
+    sQuery = "SELECT ?part ?path FROM <manifest:manifest> WHERE { ?pkg rdf:type pkg:Package . ?pkg "
+             "pkg:hasPart ?part . ?part pkg:path ?path . ?part rdf:type odf:MetadataFile. }";
+    aResult = xDocRepo->querySelect(sNss + sQuery);
+    aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("part"), aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[1]);
+
+    css::uno::fromAny(aResult->nextElement(), &aNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("http://hospital-employee/doctor"), aNode[0]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(OUString("meta/hospital/doctor.rdf"), aNode[1]->getStringValue());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    //FIXME redland BUG
+    // 6. query: metadatafile
+    sQuery = "SELECT ?path ?idref FROM <manifest:manifest> WHERE { "
+             "<urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3> pkg:hasPart ?part . ?part pkg:path "
+             "?path ;  rdf:type ?type ;  pkg:hasPart <uri:example-element-2> . "
+             "<uri:example-element-2>  pkg:idref ?idref .  FILTER (?type = odf:ContentFile || "
+             "?type = odf:StylesFile) }";
+    aResult = xDocRepo->querySelect(sNss + sQuery);
+    aBindings = aResult->getBindingNames();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aBindings.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("path"), aBindings[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("idref"), aBindings[1]);
+
+    css::uno::fromAny(aResult->nextElement(), &aNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aNode.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("content.xml"), aNode[0]->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(OUString("ID_B"), aNode[1]->getStringValue());
+
+    CPPUNIT_ASSERT(!aResult->hasMoreElements());
+
+    // 7. query: construct
+    sQuery = "CONSTRUCT { ?pkg <uri:foo> \"I am the literal\" } FROM <manifest:manifest> WHERE { "
+             "?pkg rdf:type pkg:Package . } ";
+    uno::Reference<container::XEnumeration> aResultEnum = xDocRepo->queryConstruct(sNss + sQuery);
+
+    rdf::Statement aStatement = aResultEnum->nextElement().get<rdf::Statement>();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
+                         aStatement.Subject->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Predicate->getStringValue());
+    CPPUNIT_ASSERT_EQUAL(OUString("I am the literal"), aStatement.Object->getStringValue());
+
+    CPPUNIT_ASSERT(!aResultEnum->hasMoreElements());
+
+    // 8. query: ask
+    sQuery = "ASK { ?pkg rdf:type pkg:Package . }";
+    CPPUNIT_ASSERT(xDocRepo->queryAsk(sNss + sQuery));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
