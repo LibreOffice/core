@@ -15096,7 +15096,6 @@ winaccessibility/inc/AccObjectWinManager.hxx
 winaccessibility/source/UAccCOM/AccAction.cxx
 winaccessibility/source/UAccCOM/AccAction.h
 winaccessibility/source/UAccCOM/AccActionBase.cxx
-winaccessibility/source/UAccCOM/AccComponent.h
 winaccessibility/source/UAccCOM/AccEditableText.cxx
 winaccessibility/source/UAccCOM/AccEditableText.h
 winaccessibility/source/UAccCOM/AccImage.h
