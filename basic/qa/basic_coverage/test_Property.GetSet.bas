@@ -35,4 +35,5 @@ Property Set objSetter(value As Object)
     .add "branches"
     .add "leaves"
   End With
+  Exit Property ' i#109051
 End Property

@@ -234,7 +234,7 @@ void SbiParser::Exit()
     {
         SbiToken eExitTok = p->eExitTok;
         if( eTok == eExitTok ||
-            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET) ) )   // #i109051
+            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET || eExitTok == SET) ) ) // #i109051
         {
             p->nChain = aGen.Gen( SbiOpcode::JUMP_, p->nChain );
             return;
