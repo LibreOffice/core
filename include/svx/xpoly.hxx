@@ -44,7 +44,7 @@ class ImpXPolygon;
 
 class SVXCORE_DLLPUBLIC XPolygon final
 {
-    o3tl::cow_wrapper< ImpXPolygon > pImpXPolygon;
+    o3tl::cow_wrapper< ImpXPolygon > m_pImpXPolygon;
 
     // auxiliary functions for Bezier conversion
     SAL_DLLPRIVATE void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
