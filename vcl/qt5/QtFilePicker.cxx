@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_gpgme.h>
+
 #include <fpicker/fpsofficeResMgr.hxx>
 #include <QtFilePicker.hxx>
 #include <QtFilePicker.moc>
@@ -658,6 +660,9 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_GPGENCRYPTION:
             resId = STR_SVT_FILEPICKER_GPGENCRYPT;
             break;
+        case CHECKBOX_GPGSIGN:
+            resId = STR_SVT_FILEPICKER_GPGSIGN;
+            break;
         case PUSHBUTTON_PLAY:
             resId = STR_SVT_FILEPICKER_PLAY;
             break;
@@ -702,6 +707,7 @@ void QtFilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_PREVIEW:
         case CHECKBOX_SELECTION:
         case CHECKBOX_GPGENCRYPTION:
+        case CHECKBOX_GPGSIGN:
             widget = new QCheckBox(getResString(resId), m_pExtraControls);
             break;
         case PUSHBUTTON_PLAY:
@@ -786,6 +792,9 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
             addCustomControl(CHECKBOX_AUTOEXTENSION);
             addCustomControl(CHECKBOX_PASSWORD);
             addCustomControl(CHECKBOX_GPGENCRYPTION);
+#if HAVE_FEATURE_GPGME
+            addCustomControl(CHECKBOX_GPGSIGN);
+#endif
             break;
 
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
@@ -793,6 +802,9 @@ void SAL_CALL QtFilePicker::initialize(const uno::Sequence<uno::Any>& args)
             addCustomControl(CHECKBOX_AUTOEXTENSION);
             addCustomControl(CHECKBOX_PASSWORD);
             addCustomControl(CHECKBOX_GPGENCRYPTION);
+#if HAVE_FEATURE_GPGME
+            addCustomControl(CHECKBOX_GPGSIGN);
+#endif
             addCustomControl(CHECKBOX_FILTEROPTIONS);
             break;
 
