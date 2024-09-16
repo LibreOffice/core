@@ -48,7 +48,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = GetXInterface()->getCurrentValue();
+        css::uno::Any anyVal = m_xValue->getCurrentValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
 
@@ -160,7 +160,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT* maximumVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = GetXInterface()->getMaximumValue();
+        css::uno::Any anyVal = m_xValue->getMaximumValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
 
@@ -189,7 +189,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumVa
             return E_FAIL;
 
         // Get Any type value from UNO.
-        css::uno::Any anyVal = GetXInterface()->getMinimumValue();
+        css::uno::Any anyVal = m_xValue->getMinimumValue();
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
 
