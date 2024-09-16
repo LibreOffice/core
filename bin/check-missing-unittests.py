@@ -34,6 +34,28 @@ def whiteboardNotes(whiteboard):
 
     return ''
 
+def linesModified(commit_hash):
+    repoPath = os.path.dirname(os.path.abspath(__file__)) + '/..'
+    commits = subprocess.check_output(
+            ['git', '-C', repoPath, 'show', commit_hash, '--shortstat'],
+            stderr=subprocess.DEVNULL)
+    linesmodified = commits.decode('utf-8', 'ignore').split('\n\n')
+    stats = linesmodified[-1].strip("\n").split(",")
+    insertions = 0
+    deletions = 0
+    # Make sure we have the file stats, a file stat must have
+    # file(s) changed in it
+    if "files changed" in linesmodified[-1] or "file changed" in linesmodified[-1]:
+        fileschanged = re.findall(r'\b\d+\b', stats[0])[0]
+        for element in stats:
+           if "+" in element:
+               insertions = re.findall(r'\b\d+\b', element)[0]
+           elif "-" in element:
+               deletions = re.findall(r'\b\d+\b', element)[0]
+        return [fileschanged, insertions, deletions]
+    else:
+        return ["not found", "not found", "not found"]
+
 def main(ignoredBugs):
     results = {
         'export': {
@@ -72,7 +94,7 @@ def main(ignoredBugs):
             ['git', '-C', repoPath, 'rev-parse', 'HEAD'],
             stderr=subprocess.DEVNULL)
     output = subprocess.check_output(
-            ['git', '-C', repoPath, 'log', '--since="2012-01-01', '--name-only' ,'--pretty=format:"%s%n%ad"', '--date=format:"%Y/%m/%d"'],
+            ['git', '-C', repoPath, 'log', '--since="2012-01-01', '--name-only' ,'--pretty=format:"%s%n%ad%n%H"', '--date=format:"%Y/%m/%d"'],
             stderr=subprocess.DEVNULL)
     commits = output.decode('utf-8', 'ignore').split('\n\n')
 
@@ -100,10 +122,11 @@ def main(ignoredBugs):
             if bugId in hasTestSet:
                 continue
 
+            commitHash = commitInfo[2].strip('"')
             date = commitInfo[1].strip('"')
-            infoList = [date, summary]
+            infoList = [date, summary, commitHash]
 
-            changedFiles = "".join(commitInfo[2:])
+            changedFiles = "".join(commitInfo[3:])
             if 'qa' in changedFiles:
                 hasTestSet.add(bugId)
                 continue
@@ -199,6 +222,7 @@ def main(ignoredBugs):
                 # Ignore performance bugs and accessibility bugs
                 if resolution and resolution == 'FIXED' and 'perf' not in keywords \
                         and 'accessibility' not in keywords:
+                    stats = linesModified(info[2])
                     fixList.append({
                         "id": bugId,
                         "date": info[0],
@@ -206,6 +230,9 @@ def main(ignoredBugs):
                         "summary": info[1],
                         "maintopic":k,
                         "subtopic":k1,
+                        "fileschanged": stats[0],
+                        "insertions": stats[1],
+                        "deletions": stats[2],
                         "notes": notes
                     })
 
