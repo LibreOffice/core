@@ -879,7 +879,7 @@ for constructor in sorted(full_constructor_map.keys()):
     constructor_guard = get_constructor_guard(constructor)
     if constructor_guard:
         print (constructor_guard)
-    print ('void * '+constructor+'( void *, void * );')
+    print ('void '+constructor+'( void );')
     if constructor_guard:
         print ('#endif')
 
