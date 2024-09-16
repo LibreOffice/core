@@ -31,7 +31,7 @@ typedef struct {
 
 typedef struct {
     const char *name;
-    void * (*constructor_function)(void *, void *);
+    void (*constructor_function)(void);
 } lib_to_constructor_mapping;
 
 const lib_to_factory_mapping *lo_get_factory_map(void);
