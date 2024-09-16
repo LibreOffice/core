@@ -450,23 +450,22 @@ static hchar s_hh2kssm(hchar hh)
     if (hh >= HCA_TG)
         return sal::static_int_cast<hchar>(hhtg_tg[hh - HCA_TG]);
     if (idx == 0x1F)
-        hh = hh - 0x1F00 + 0x360;
+        hh = (hh - 0x1F00 + 0x360) & 0xFFFF;
     else
     {
         hh -= HCA_KSS;
         if (hh >= 0x360)
             hh += 0xC0;
     }
-    idx = hh / 0xC0 + 217;
+    idx = (hh / 0xC0 + 217) & 0xFFFF;
     i = hh % 0xC0;
     if (i >= 95)
         i -= 2;
     i += 48;
     if (i >= 127)
         i += 18;
-    return (idx << 8) | i;
+    return ((idx << 8) | i) & 0xFFFF;
 }
-
 
 static hchar lineCharConv(hchar ch)
 {
