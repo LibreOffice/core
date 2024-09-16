@@ -44,7 +44,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentVa
     {
         if (currentValue == nullptr)
             return E_INVALIDARG;
-        if (!pRXVal.is())
+        if (!m_xValue.is())
             return E_FAIL;
 
         // Get Any type value from UNO.
@@ -72,7 +72,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
     try
     {
-        if (!pRXVal.is())
+        if (!m_xValue.is())
             return E_FAIL;
 
         HRESULT hRet = S_OK;
@@ -132,7 +132,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 
         if (hRet == S_OK)
         {
-            hRet = pRXVal->setCurrentValue(anyVal) ? S_OK : E_FAIL;
+            hRet = m_xValue->setCurrentValue(anyVal) ? S_OK : E_FAIL;
         }
 
         return hRet;
@@ -156,7 +156,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT* maximumVa
     {
         if (maximumValue == nullptr)
             return E_INVALIDARG;
-        if (!pRXVal.is())
+        if (!m_xValue.is())
             return E_FAIL;
 
         // Get Any type value from UNO.
@@ -185,7 +185,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumVa
     {
         if (minimumValue == nullptr)
             return E_FAIL;
-        if (!pRXVal.is())
+        if (!m_xValue.is())
             return E_FAIL;
 
         // Get Any type value from UNO.
@@ -224,9 +224,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
         }
         Reference<XAccessibleValue> pRXI(pRContext, UNO_QUERY);
         if (!pRXI.is())
-            pRXVal = nullptr;
+            m_xValue = nullptr;
         else
-            pRXVal = pRXI.get();
+            m_xValue = pRXI.get();
         return S_OK;
     }
     catch (...)
