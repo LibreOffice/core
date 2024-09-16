@@ -325,7 +325,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     }
 
     // we need to ensure all the namespaces in the binding will work correctly.
-    // to do so, we will write out all missing namespace declaractions.
+    // to do so, we will write out all missing namespace declarations.
     const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
     Reference<XNameAccess> xNamespaces(
         xBinding->getPropertyValue( u"ModelNamespaces"_ustr ), UNO_QUERY);
