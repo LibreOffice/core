@@ -493,6 +493,10 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                         sw::GotoNextLayoutTextFrame(*m_oIndex, m_rEditSh.GetLayout());
                         pTextNd = m_oIndex->GetNode().GetTextNode();
                     }
+                    // hmm... the inserted text can have multiple text nodes
+                    // - not sure what the "pos" should point to, but pFrame
+                    // is not changed so try the first node?
+                    nEndPos = sttPos + aCpyPam.GetMark()->GetContentIndex();
                     bRet = true;
                 }
                 aTBlks.EndGetDoc();
