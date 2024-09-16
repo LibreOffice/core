@@ -4125,6 +4125,7 @@ static void doc_iniUnoCommands ()
         u".uno:DistributeVertTop"_ustr,
         u".uno:AnimationEffects"_ustr,
         u".uno:ExecuteAnimationEffect"_ustr,
+        u".uno:EditDoc"_ustr,
     };
 
     util::URL aCommandURL;
