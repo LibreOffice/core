@@ -969,7 +969,6 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
     mpMatcher = nullptr;
     mpGraphicFilter = nullptr;
-    mnPostUserEventId = nullptr;
 
     // create the picker component
     mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
@@ -1228,11 +1227,6 @@ css::uno::Reference<css::ui::dialogs::XFolderPicker2> createFolderPicker(const c
 
 FileDialogHelper_Impl::~FileDialogHelper_Impl()
 {
-    // Remove user event if we haven't received it yet
-    if ( mnPostUserEventId )
-        Application::RemoveUserEvent( mnPostUserEventId );
-    mnPostUserEventId = nullptr;
-
     mpGraphicFilter.reset();
 
     if ( mbDeleteMatcher )
@@ -1274,16 +1268,6 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     }
 }
 
-IMPL_LINK_NOARG( FileDialogHelper_Impl, InitControls, void*, void )
-{
-    mnPostUserEventId = nullptr;
-    enablePasswordBox( true );
-    enableGpgEncrBox( true );
-    updateFilterOptionsBox( );
-    updateSelectionBox( );
-    updateSignByDefault();
-}
-
 void FileDialogHelper_Impl::preExecute()
 {
     loadConfig( );
@@ -1292,22 +1276,11 @@ void FileDialogHelper_Impl::preExecute()
 
     implInitializeFileName( );
 
-#if !defined(MACOSX) && !defined(_WIN32)
-    // allow for dialog implementations which need to be executed before they return valid values for
-    // current filter and such
-
-    // On Vista (at least SP1) it's the same as on MacOSX, the modal dialog won't let message pass
-    // through before it returns from execution
-    mnPostUserEventId = Application::PostUserEvent( LINK( this, FileDialogHelper_Impl, InitControls ) );
-#else
-    // However, the macOS implementation's pickers run modally in execute and so the event doesn't
-    // get through in time... so we call the methods directly
     enablePasswordBox( true );
     enableGpgEncrBox( true );
     updateFilterOptionsBox( );
     updateSelectionBox( );
     updateSignByDefault();
-#endif
 }
 
 void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )

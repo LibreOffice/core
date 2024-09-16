@@ -70,8 +70,6 @@ namespace sfx2
         SfxFilterFlags              m_nMustFlags;
         SfxFilterFlags              m_nDontFlags;
 
-        ImplSVEvent *               mnPostUserEventId;
-
         FileDialogHelper::Context   meContext;
 
         bool                    mbHasPassword           : 1;  // checkbox is visible
@@ -146,7 +144,6 @@ namespace sfx2
                                                       std::vector<OUString>&                   rpURLList );
 
         DECL_LINK( TimeOutHdl_Impl, Timer *, void);
-        DECL_LINK( InitControls, void*, void );
 
     public:
         // XFilePickerListener methods
