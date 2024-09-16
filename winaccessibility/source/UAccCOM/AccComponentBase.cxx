@@ -139,10 +139,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInte
             return E_FAIL;
         }
         Reference<XAccessibleComponent> pRXI(pRContext, UNO_QUERY);
-        if (!pRXI.is())
-            pRXComp = nullptr;
-        else
-            pRXComp = pRXI.get();
+        pRXComp = pRXI;
 
         return S_OK;
     }
