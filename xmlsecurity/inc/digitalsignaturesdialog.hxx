@@ -92,7 +92,7 @@ private:
     //See the spec at specs/www/appwide/security/Electronic_Signatures_and_Security.sxw
     //(6.6.2)Behaviour with regard to ODF 1.2
     bool canAdd();
-    bool canRemove();
+    void canRemove(const std::function<void(bool)>& rCallback);
 
     bool canAddRemove();
 
