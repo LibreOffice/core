@@ -28,15 +28,22 @@
 
 #include <unotextrange.hxx>
 
+#include <unotools/fcm.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -207,6 +214,113 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportRTF(SvStream& rStream)
         bRet = false;
     }
     return bRet;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
+{
+#if 0
+    //TODO: probably end up needing one of these too
+    // do the same sort of check as FilterDetect::detect
+    OString const str(read_uInt8s_ToOString(rStream, 4000));
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+    OUString resultString(str.getStr(), str.getLength(), RTL_TEXTENCODING_ASCII_US,
+                          RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT
+                              | RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT
+                              | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT);
+    if (!resultString.startsWith("<?xml")
+        || resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"")
+               == -1)
+        return false;
+#endif
+
+    uno::Reference<css::frame::XDesktop2> xDesktop
+        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
+
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<css::frame::XModel2> xModel(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.text.TextDocument"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference<css::frame::XLoadable> xModelLoad(xModel, uno::UNO_QUERY_THROW);
+    xModelLoad->initNew();
+
+    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
+        comphelper::getProcessServiceFactory());
+    uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
+
+    uno::Reference<uno::XInterface> xInterface(
+        xMultiServiceFactory->createInstance(u"com.sun.star.comp.Writer.RtfFilter"_ustr),
+        uno::UNO_SET_THROW);
+
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(xModel);
+
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "InputStream", uno::Any(xStream) } }));
+
+    bool ret = true;
+    try
+    {
+        ret = xFilter->filter(aArgs);
+    }
+    catch (...)
+    {
+        ret = false;
+    }
+
+    if (ret)
+    {
+        uno::Reference<text::XTextDocument> xTextDocument(xModel, uno::UNO_QUERY);
+        uno::Reference<text::XText> xText(xTextDocument->getText());
+        uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum(xParaAccess->createEnumeration());
+        while (xParaEnum->hasMoreElements())
+        {
+            uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            // discourage very long paragraphs for fuzzing performance
+            if (xPara && xPara->getString().getLength() > 15000)
+            {
+                ret = false;
+                break;
+            }
+        }
+    }
+
+    if (ret)
+    {
+        css::uno::Reference<css::frame::XController2> xController(
+            xModel->createDefaultViewController(xTargetFrame), uno::UNO_SET_THROW);
+        utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
+
+        utl::TempFileFast aTempFile;
+
+        uno::Reference<document::XFilter> xPDFFilter(
+            xMultiServiceFactory->createInstance(u"com.sun.star.document.PDFFilter"_ustr),
+            uno::UNO_QUERY);
+        uno::Reference<document::XExporter> xExporter(xPDFFilter, uno::UNO_QUERY);
+        xExporter->setSourceDocument(xModel);
+
+        uno::Reference<io::XOutputStream> xOutputStream(
+            new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
+
+        // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
+        // to export thousands of pages from minimal input size
+        uno::Sequence<beans::PropertyValue> aFilterData(
+            comphelper::InitPropertySequence({ { "PageRange", uno::Any(u"1-100"_ustr) } }));
+        uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
+            { { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
+              { "OutputStream", uno::Any(xOutputStream) },
+              { "FilterData", uno::Any(aFilterData) } }));
+        xPDFFilter->filter(aDescriptor);
+    }
+
+    css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
+    xClose->close(false);
+
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

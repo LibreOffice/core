@@ -183,6 +183,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_olefuzzer \
     Executable_pptfuzzer \
     Executable_rtffuzzer \
+    Executable_rtf2pdffuzzer \
     Executable_cgmfuzzer \
     Executable_ww2fuzzer \
     Executable_ww6fuzzer \

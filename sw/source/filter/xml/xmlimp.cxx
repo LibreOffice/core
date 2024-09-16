@@ -1833,14 +1833,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     if (!resultString.startsWith("<?xml") || resultString.indexOf("office:mimetype=\"application/vnd.oasis.opendocument.text\"") == -1)
         return false;
 
-    Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
+    uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
+    uno::Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
 
-    Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    Reference<css::frame::XModel2> xModel(xContext->getServiceManager()->createInstanceWithContext(
-                u"com.sun.star.text.TextDocument"_ustr, xContext), UNO_QUERY_THROW);
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<css::frame::XModel2> xModel(xContext->getServiceManager()->createInstanceWithContext(
+                u"com.sun.star.text.TextDocument"_ustr, xContext), uno::UNO_QUERY_THROW);
 
-    Reference<css::frame::XLoadable> xModelLoad(xModel, UNO_QUERY_THROW);
+    uno::Reference<css::frame::XLoadable> xModelLoad(xModel, uno::UNO_QUERY_THROW);
     xModelLoad->initNew();
 
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
@@ -1909,7 +1909,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     if (ret)
     {
-        css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
+        css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), uno::UNO_SET_THROW);
         utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
         utl::TempFileFast aTempFile;

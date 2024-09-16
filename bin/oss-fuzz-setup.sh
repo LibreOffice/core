@@ -166,6 +166,7 @@ curl --no-progress-meter -S \
     -C - -O https://dev-www.libreoffice.org/corpus/htmlfuzzer_seed_corpus.zip \
     -C - -O https://dev-www.libreoffice.org/corpus/zipfuzzer_seed_corpus.zip
 cp fodtfuzzer_seed_corpus.zip fodt2pdffuzzer_seed_corpus.zip
+cp rtffuzzer_seed_corpus.zip rtf2pdffuzzer_seed_corpus.zip
 cp fodsfuzzer_seed_corpus.zip fods2xlsfuzzer_seed_corpus.zip
 cp htmlfuzzer_seed_corpus.zip schtmlfuzzer_seed_corpus.zip
 
