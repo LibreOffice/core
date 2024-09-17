@@ -31,26 +31,19 @@
 /**
  * CAccEditableText implements IAccessibleEditableText interface.
  */
-class CAccEditableText :
-            public CComObjectRoot,
-            public CComCoClass<CAccEditableText,&CLSID_AccEditableText>,
-            public IAccessibleEditableText,
-            public CUNOXWrapper
+class CAccEditableText : public CComObjectRoot,
+                         public CComCoClass<CAccEditableText, &CLSID_AccEditableText>,
+                         public IAccessibleEditableText,
+                         public CUNOXWrapper
 {
 public:
-    CAccEditableText()
-    {
-
-    }
-    virtual ~CAccEditableText()
-    {
-
-    }
+    CAccEditableText() {}
+    virtual ~CAccEditableText() {}
 
     BEGIN_COM_MAP(CAccEditableText)
     COM_INTERFACE_ENTRY(IAccessibleEditableText)
     COM_INTERFACE_ENTRY(IUNOXWrapper)
-    COM_INTERFACE_ENTRY_FUNC_BLIND(0,SmartQI_)
+    COM_INTERFACE_ENTRY_FUNC_BLIND(0, SmartQI_)
 #if defined __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
@@ -60,16 +53,15 @@ public:
 #pragma clang diagnostic pop
 #endif
 
-    static HRESULT WINAPI SmartQI_(void* pv,
-                                   REFIID iid, void** ppvObject, DWORD_PTR)
+    static HRESULT WINAPI SmartQI_(void* pv, REFIID iid, void** ppvObject, DWORD_PTR)
     {
-        return static_cast<CAccEditableText*>(pv)->SmartQI(iid,ppvObject);
+        return static_cast<CAccEditableText*>(pv)->SmartQI(iid, ppvObject);
     }
 
     HRESULT SmartQI(REFIID iid, void** ppvObject)
     {
-        if( m_pOuterUnknown )
-            return OuterQueryInterface(iid,ppvObject);
+        if (m_pOuterUnknown)
+            return OuterQueryInterface(iid, ppvObject);
         return E_FAIL;
     }
 
@@ -85,7 +77,7 @@ public:
     STDMETHOD(deleteText)(long startOffset, long endOffset) override;
 
     // Inserts text at a specified offset.
-    STDMETHOD(insertText)(long offset, BSTR * text) override;
+    STDMETHOD(insertText)(long offset, BSTR* text) override;
 
     // Cuts a range of text to the clipboard.
     STDMETHOD(cutText)(long startOffset, long endOffset) override;
@@ -94,25 +86,21 @@ public:
     STDMETHOD(pasteText)(long offset) override;
 
     // Replaces range of text with new text.
-    STDMETHOD(replaceText)(long startOffset, long endOffset, BSTR * text) override;
-
+    STDMETHOD(replaceText)(long startOffset, long endOffset, BSTR* text) override;
 
     // Sets attributes of range of text.
-    STDMETHOD(setAttributes)(long startOffset, long endOffset, BSTR * attributes) override;
+    STDMETHOD(setAttributes)(long startOffset, long endOffset, BSTR* attributes) override;
 
     // Override of IUNOXWrapper.
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
 private:
-
     css::uno::Reference<css::accessibility::XAccessibleEditableText> pRXEdtTxt;
 
-    static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString &ouValue, css::uno::Any &rAny);
+    static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString& ouValue,
+                                   css::uno::Any& rAny);
 
-    css::accessibility::XAccessibleEditableText* GetXInterface()
-    {
-        return pRXEdtTxt.get();
-    }
+    css::accessibility::XAccessibleEditableText* GetXInterface() { return pRXEdtTxt.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

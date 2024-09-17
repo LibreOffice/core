@@ -21,7 +21,7 @@
  * AccEditableText.cpp : Implementation of CUAccCOMApp and DLL registration.
  */
 #include "stdafx.h"
-#include  <UAccCOM.h>
+#include <UAccCOM.h>
 #include "AccEditableText.h"
 
 #include <vcl/svapp.hxx>
@@ -52,19 +52,22 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, l
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXEdtTxt.is())
+        {
+            return E_FAIL;
+        }
 
-    if(!pRXEdtTxt.is())
+        if (GetXInterface()->copyText(startOffset, endOffset))
+            return S_OK;
+
+        return E_FAIL;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-
-    if ( GetXInterface()->copyText( startOffset, endOffset ) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -78,17 +81,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset,
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
 
-    if( !pRXEdtTxt.is() )
+        if (GetXInterface()->deleteText(startOffset, endOffset))
+            return S_OK;
+
         return E_FAIL;
-
-    if( GetXInterface()->deleteText( startOffset, endOffset ) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -98,26 +104,29 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset,
  * @param    text      the text to be inserted.
  * @param    success   the boolean result to be returned.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (text == nullptr)
+            return E_INVALIDARG;
 
-    if (text == nullptr)
-        return E_INVALIDARG;
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
 
-    if( !pRXEdtTxt.is() )
+        OUString ouStr(o3tl::toU(*text));
+
+        if (GetXInterface()->insertText(ouStr, offset))
+            return S_OK;
+
         return E_FAIL;
-
-    OUString ouStr(o3tl::toU(*text));
-
-    if( GetXInterface()->insertText( ouStr, offset ) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -131,17 +140,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, lo
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
 
-    if( !pRXEdtTxt.is() )
+        if (GetXInterface()->cutText(startOffset, endOffset))
+            return S_OK;
+
         return E_FAIL;
-
-    if( GetXInterface()->cutText( startOffset, endOffset ) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -154,17 +166,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
 
-    if( !pRXEdtTxt.is() )
+        if (GetXInterface()->pasteText(offset))
+            return S_OK;
+
         return E_FAIL;
-
-    if( GetXInterface()->pasteText( offset ) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -175,24 +190,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
  * @param    text           the replacing text.
  * @param    success        the boolean result to be returned.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset, BSTR * text)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset, long endOffset,
+                                                                BSTR* text)
 {
     SolarMutexGuard g;
 
-    try {
+    try
+    {
+        if (text == nullptr)
+            return E_INVALIDARG;
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
 
-    if (text == nullptr)
-        return E_INVALIDARG;
-    if( !pRXEdtTxt.is() )
+        OUString ouStr(o3tl::toU(*text));
+
+        if (GetXInterface()->replaceText(startOffset, endOffset, ouStr))
+            return S_OK;
         return E_FAIL;
-
-    OUString ouStr(o3tl::toU(*text));
-
-    if( GetXInterface()->replaceText( startOffset,endOffset, ouStr) )
-        return S_OK;
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -203,44 +222,48 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset
  * @param    attributes     the attribute text.
  * @param    success        the boolean result to be returned.
  */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, BSTR * attributes)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset,
+                                                                  BSTR* attributes)
 {
     SolarMutexGuard g;
 
-    try {
-
-    if (attributes == nullptr)
-        return E_INVALIDARG;
-    if( !pRXEdtTxt.is() )
-        return E_FAIL;
-
-    OUString ouStr(o3tl::toU(*attributes));
-
-    std::vector< OUString > vecAttr;
-    for (sal_Int32 nIndex {0}; nIndex >= 0; )
-        vecAttr.push_back(ouStr.getToken(0, ';', nIndex));
-
-    Sequence< PropertyValue > beanSeq(vecAttr.size());
-    auto beanSeqRange = asNonConstRange(beanSeq);
-    for(std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i ++)
+    try
     {
-        OUString attr = vecAttr[i];
-        sal_Int32 nPos = attr.indexOf(':');
-        if(nPos > -1)
+        if (attributes == nullptr)
+            return E_INVALIDARG;
+        if (!pRXEdtTxt.is())
+            return E_FAIL;
+
+        OUString ouStr(o3tl::toU(*attributes));
+
+        std::vector<OUString> vecAttr;
+        for (sal_Int32 nIndex{ 0 }; nIndex >= 0;)
+            vecAttr.push_back(ouStr.getToken(0, ';', nIndex));
+
+        Sequence<PropertyValue> beanSeq(vecAttr.size());
+        auto beanSeqRange = asNonConstRange(beanSeq);
+        for (std::vector<OUString>::size_type i = 0; i < vecAttr.size(); i++)
         {
-            OUString attrName = attr.copy(0, nPos);
-            OUString attrValue = attr.copy(nPos + 1);
-            beanSeqRange[i].Name = attrName;
-            get_AnyFromOLECHAR(attrName, attrValue, beanSeqRange[i].Value);
+            OUString attr = vecAttr[i];
+            sal_Int32 nPos = attr.indexOf(':');
+            if (nPos > -1)
+            {
+                OUString attrName = attr.copy(0, nPos);
+                OUString attrValue = attr.copy(nPos + 1);
+                beanSeqRange[i].Name = attrName;
+                get_AnyFromOLECHAR(attrName, attrValue, beanSeqRange[i].Value);
+            }
         }
+
+        if (GetXInterface()->setAttributes(startOffset, endOffset, beanSeq))
+            return S_OK;
+
+        return E_FAIL;
     }
-
-    if( GetXInterface()->setAttributes( startOffset,endOffset, beanSeq) )
-        return S_OK;
-
-    return E_FAIL;
-
-    } catch(...) { return E_FAIL; }
+    catch (...)
+    {
+        return E_FAIL;
+    }
 }
 
 /**
@@ -250,61 +273,52 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
  * @param   ouValue     the string of attribute value.
  * @param   rAny        the Any object to be returned.
  */
-void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUString &ouValue, Any &rAny)
+void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUString& ouValue,
+                                          Any& rAny)
 {
-    if(ouName == u"CharBackColor" ||
-            ouName == u"CharColor" ||
-            ouName == u"ParaAdjust" ||
-            ouName == u"ParaFirstLineIndent" ||
-            ouName == u"ParaLeftMargin" ||
-            ouName == u"ParaRightMargin" ||
-            ouName == u"ParaTopMargin" ||
-            ouName == u"ParaBottomMargin" ||
-            ouName == u"CharFontPitch" )
+    if (ouName == u"CharBackColor" || ouName == u"CharColor" || ouName == u"ParaAdjust"
+        || ouName == u"ParaFirstLineIndent" || ouName == u"ParaLeftMargin"
+        || ouName == u"ParaRightMargin" || ouName == u"ParaTopMargin"
+        || ouName == u"ParaBottomMargin" || ouName == u"CharFontPitch")
     {
         // Convert to int.
         // NOTE: CharFontPitch is not implemented in java file.
         sal_Int32 nValue = ouValue.toInt32();
         rAny.setValue(&nValue, cppu::UnoType<sal_Int32>::get());
     }
-    else if(ouName == u"CharShadowed" ||
-            ouName == u"CharContoured" )
+    else if (ouName == u"CharShadowed" || ouName == u"CharContoured")
     {
         // Convert to boolean.
         rAny <<= ouValue.toBoolean();
     }
-    else if(ouName == u"CharEscapement" ||
-            ouName == u"CharStrikeout"  ||
-            ouName == u"CharUnderline" ||
-            ouName == u"CharFontPitch" )
+    else if (ouName == u"CharEscapement" || ouName == u"CharStrikeout" || ouName == u"CharUnderline"
+             || ouName == u"CharFontPitch")
     {
         // Convert to short.
         short nValue = static_cast<short>(ouValue.toInt32());
         rAny.setValue(&nValue, cppu::UnoType<short>::get());
     }
-    else if(ouName == u"CharHeight" ||
-            ouName == u"CharWeight" )
+    else if (ouName == u"CharHeight" || ouName == u"CharWeight")
     {
         // Convert to float.
         float fValue = ouValue.toFloat();
         rAny.setValue(&fValue, cppu::UnoType<float>::get());
     }
-    else if(ouName == u"CharFontName" )
+    else if (ouName == u"CharFontName")
     {
         // Convert to string.
         rAny.setValue(&ouValue, cppu::UnoType<OUString>::get());
     }
-    else if(ouName == u"CharPosture" )
+    else if (ouName == u"CharPosture")
     {
         // Convert to FontSlant.
         css::awt::FontSlant fontSlant = static_cast<css::awt::FontSlant>(ouValue.toInt32());
         rAny.setValue(&fontSlant, cppu::UnoType<css::awt::FontSlant>::get());
     }
-    else if(ouName == u"ParaTabStops" )
+    else if (ouName == u"ParaTabStops")
     {
-
         // Convert to the Sequence with TabStop element.
-        std::vector< css::style::TabStop > vecTabStop;
+        std::vector<css::style::TabStop> vecTabStop;
         css::style::TabStop tabStop;
         OUString ouSubValue;
         sal_Int32 pos = 0, posComma = 0;
@@ -313,10 +327,10 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
         {
             // Position.
             pos = ouValue.indexOf("Position=", pos);
-            if(pos != -1)
+            if (pos != -1)
             {
                 posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "Position=".
-                if(posComma != -1)
+                if (posComma != -1)
                 {
                     ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
                     tabStop.Position = ouSubValue.toInt32();
@@ -324,21 +338,23 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
 
                     // TabAlign.
                     pos = ouValue.indexOf("TabAlign=", pos);
-                    if(pos != -1)
+                    if (pos != -1)
                     {
                         posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
-                        if(posComma != -1)
+                        if (posComma != -1)
                         {
                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
-                            tabStop.Alignment = static_cast<css::style::TabAlign>(ouSubValue.toInt32());
+                            tabStop.Alignment
+                                = static_cast<css::style::TabAlign>(ouSubValue.toInt32());
                             pos = posComma + 1;
 
                             // DecimalChar.
                             pos = ouValue.indexOf("DecimalChar=", pos);
-                            if(pos != -1)
+                            if (pos != -1)
                             {
-                                posComma = ouValue.indexOf(',', pos + 11); // 11 = length of "TabAlign=".
-                                if(posComma != -1)
+                                posComma
+                                    = ouValue.indexOf(',', pos + 11); // 11 = length of "TabAlign=".
+                                if (posComma != -1)
                                 {
                                     ouSubValue = ouValue.copy(pos + 11, posComma - pos - 11);
                                     tabStop.DecimalChar = ouSubValue.toChar();
@@ -346,10 +362,11 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
 
                                     // FillChar.
                                     pos = ouValue.indexOf("FillChar=", pos);
-                                    if(pos != -1)
+                                    if (pos != -1)
                                     {
-                                        posComma = ouValue.indexOf(',', pos + 9); // 9 = length of "TabAlign=".
-                                        if(posComma != -1)
+                                        posComma = ouValue.indexOf(
+                                            ',', pos + 9); // 9 = length of "TabAlign=".
+                                        if (posComma != -1)
                                         {
                                             ouSubValue = ouValue.copy(pos + 9, posComma - pos - 9);
                                             tabStop.DecimalChar = ouSubValue.toChar();
@@ -359,41 +376,39 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
                                             vecTabStop.push_back(tabStop);
                                         }
                                         else
-                                            break;  // No match comma.
+                                            break; // No match comma.
                                     }
                                     else
-                                        break;  // No match FillChar.
+                                        break; // No match FillChar.
                                 }
                                 else
-                                    break;  // No match comma.
+                                    break; // No match comma.
                             }
                             else
-                                break;  // No match DecimalChar.
+                                break; // No match DecimalChar.
                         }
                         else
-                            break;  // No match comma.
+                            break; // No match comma.
                     }
                     else
-                        break;  // No match TabAlign.
+                        break; // No match TabAlign.
                 }
                 else
-                    break;  // No match comma.
+                    break; // No match comma.
             }
             else
-                break;  // No match Position.
-        }
-        while(pos < ouValue.getLength());
-
+                break; // No match Position.
+        } while (pos < ouValue.getLength());
 
         // Dump into Sequence.
         int iSeqLen = vecTabStop.empty() ? 1 : vecTabStop.size();
-        Sequence< css::style::TabStop > seqTabStop(iSeqLen);
+        Sequence<css::style::TabStop> seqTabStop(iSeqLen);
         auto pseqTabStop = seqTabStop.getArray();
 
         if (!vecTabStop.empty())
         {
             // Dump every element.
-            for(int i = 0; i < iSeqLen; i ++)
+            for (int i = 0; i < iSeqLen; i++)
             {
                 pseqTabStop[i] = vecTabStop[i];
             }
@@ -408,9 +423,9 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
         }
 
         // Assign to Any object.
-        rAny.setValue(&seqTabStop, cppu::UnoType<Sequence< css::style::TabStop >>::get());
+        rAny.setValue(&seqTabStop, cppu::UnoType<Sequence<css::style::TabStop>>::get());
     }
-    else if(ouName == u"ParaLineSpacing" )
+    else if (ouName == u"ParaLineSpacing")
     {
         // Parse value string.
         css::style::LineSpacing lineSpacing;
@@ -418,36 +433,36 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
         sal_Int32 pos = 0, posComma = 0;
 
         pos = ouValue.indexOf("Mode=", pos);
-        if(pos != -1)
+        if (pos != -1)
         {
             posComma = ouValue.indexOf(',', pos + 5); // 5 = length of "Mode=".
-            if(posComma != -1)
+            if (posComma != -1)
             {
                 ouSubValue = ouValue.copy(pos + 5, posComma - pos - 5);
                 lineSpacing.Mode = static_cast<sal_Int16>(ouSubValue.toInt32());
                 pos = posComma + 1;
 
                 pos = ouValue.indexOf("Height=", pos);
-                if(pos != -1)
+                if (pos != -1)
                 {
                     ouSubValue = ouValue.copy(pos + 7);
                     lineSpacing.Height = static_cast<sal_Int16>(ouSubValue.toInt32());
                 }
                 else
                 {
-                    lineSpacing.Height = sal_Int16(100);    // Default height.
+                    lineSpacing.Height = sal_Int16(100); // Default height.
                 }
             }
             else
             {
-                lineSpacing.Height = sal_Int16(100);    // Default height.
+                lineSpacing.Height = sal_Int16(100); // Default height.
             }
         }
         else
         {
             // Default Mode and Height.
             lineSpacing.Mode = sal_Int16(0);
-            lineSpacing.Height = sal_Int16(100);    // Default height.
+            lineSpacing.Height = sal_Int16(100); // Default height.
         }
 
         // Convert to Any object.
@@ -470,26 +485,29 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInter
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    try {
+    try
+    {
+        CUNOXWrapper::put_XInterface(pXInterface);
 
-    CUNOXWrapper::put_XInterface(pXInterface);
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
 
-    if(pUNOInterface == nullptr)
-        return E_FAIL;
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if( !pRContext.is() )
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleEditableText> pRXI(pRContext, UNO_QUERY);
+        if (!pRXI.is())
+            pRXEdtTxt = nullptr;
+        else
+            pRXEdtTxt = pRXI.get();
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleEditableText> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
-        pRXEdtTxt = nullptr;
-    else
-        pRXEdtTxt = pRXI.get();
-    return S_OK;
-
-    } catch(...) { return E_FAIL; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
