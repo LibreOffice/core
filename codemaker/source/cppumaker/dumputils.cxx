@@ -71,7 +71,8 @@ bool dumpNamespaceClose(
 }
 
 void dumpTypeIdentifier(FileStream & out, std::u16string_view entityName) {
-    out << entityName.substr(entityName.rfind('.') + 1);
+    std::u16string_view::size_type pos = entityName.rfind('.');
+    out << entityName.substr((pos != std::u16string_view::npos) ? pos + 1 : 0);
 }
 
 }
