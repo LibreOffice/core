@@ -842,7 +842,6 @@ uno::Reference< XInputStream > ZipFile::getInputStream( ZipEntry& rEntry,
 
     if (oDecryptedSize && rData.is())
     {
-        assert(oDecryptedSize);
         uno::Reference<XInputStream> const xRet(
             checkValidPassword(rEntry, rData, *oDecryptedSize, aMutexHolder));
         if (xRet.is())
