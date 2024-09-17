@@ -2898,6 +2898,13 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 if ( bTableRowKeep )
                 {
                     const SwRowFrame* pTmpRow = GetFirstNonHeadlineRow();
+                    // Copying the "NEW TABLES" comment, apparently related to commit dcb682563b24bf487a40a9fe7710b4d500850a52
+                    if (pTmpRow && pTmpRow->IsRowSpanLine())
+                    {
+                        ++nMinNumOfLines;
+                        pTmpRow = static_cast<const SwRowFrame*>(pTmpRow->GetNext());
+                    }
+
                     while ( pTmpRow && pTmpRow->ShouldRowKeepWithNext() )
                     {
                         ++nMinNumOfLines;
@@ -6642,47 +6649,41 @@ SwTwips SwTabFrame::CalcHeightOfFirstContentLine() const
         return aRectFnSet.GetHeight(getFrameArea());
     }
 
-    SwTwips nTmpHeight = 0;
-
     const SwRowFrame* pFirstRow = GetFirstNonHeadlineRow();
     OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES
-    if ( pFirstRow && pFirstRow->IsRowSpanLine() && pFirstRow->GetNext() )
+    bool bHasRowSpanLine = pFirstRow && pFirstRow->IsRowSpanLine() && pFirstRow->GetNext();
+    if (bHasRowSpanLine)
         pFirstRow = static_cast<const SwRowFrame*>(pFirstRow->GetNext());
+    const SwRowFrame* pFirstKeepTogetherRow = pFirstRow;
 
-    // Calculate the height of the headlines:
-    const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
-    SwTwips nRepeatHeight = nRepeat ? lcl_GetHeightOfRows( GetLower(), nRepeat ) : 0;
-
-    // Calculate the height of the keeping lines
-    // (headlines + following keeping lines):
-    SwTwips nKeepHeight = nRepeatHeight;
+    // Check how many rows want to keep together
+    sal_uInt16 nKeepRows = 0;
     if ( GetFormat()->GetDoc()->GetDocumentSettingManager().get(DocumentSettingId::TABLE_ROW_KEEP) )
     {
-        sal_uInt16 nKeepRows = nRepeat;
-
-        // Check how many rows want to keep together
         while ( pFirstRow && pFirstRow->ShouldRowKeepWithNext() )
         {
             ++nKeepRows;
             pFirstRow = static_cast<const SwRowFrame*>(pFirstRow->GetNext());
         }
-
-        if ( nKeepRows > nRepeat )
-            nKeepHeight = lcl_GetHeightOfRows( GetLower(), nKeepRows );
     }
+
+    SwTwips nTmpHeight;
 
     // For master tables, the height of the headlines + the height of the
     // keeping lines (if any) has to be considered. For follow tables, we
     // only consider the height of the keeping rows without the repeated lines:
     if ( !IsFollow() )
     {
-        nTmpHeight = nKeepHeight;
+        nKeepRows += GetTable()->GetRowsToRepeat();
+        if (bHasRowSpanLine)
+            ++nKeepRows;
+        nTmpHeight = lcl_GetHeightOfRows(GetLower(), nKeepRows);
     }
     else
     {
-        nTmpHeight = nKeepHeight - nRepeatHeight;
+        nTmpHeight = lcl_GetHeightOfRows(pFirstKeepTogetherRow, nKeepRows);
     }
 
     // pFirstRow row is the first non-heading row.
