@@ -397,7 +397,7 @@ public:
     void CalcPagesForPrint( sal_uInt16 nMax );
 
     // All about fields.
-    void UpdateFields(bool bCloseDB = false);
+    void UpdateFields(bool bCloseDB = false, bool bSetModified = true);
     bool IsAnyFieldInDoc() const;
 
     /// Update the previews of all OLE objects.

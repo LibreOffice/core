@@ -3692,8 +3692,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
         {
             if (SwEditShell* pShell = &pFirstView->GetWrtShell())
             {
-                pShell->SwViewShell::UpdateFields(true);
-                pShell->ResetModified();
+                pShell->SwViewShell::UpdateFields(true, /*bSetModified=*/false);
             }
         }
     }

@@ -4640,6 +4640,26 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
     Scheduler::ProcessEventsToIdle();
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
+{
+    // Given a document with a signature where the digest matches:
+    SwXTextDocument* pXTextDocument = createDoc("signed-doc.odt");
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // When initializing tiled rendering with an author name:
+    uno::Sequence<beans::PropertyValue> aPropertyValues
+        = { comphelper::makePropertyValue(".uno:Author", uno::Any(u"A"_ustr)) };
+    pXTextDocument->initializeForTiledRendering(aPropertyValues);
+    SignatureState eState = getSwDocShell()->GetDocumentSignatureState();
+
+    // Then make sure the signature state is unchanged:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4 (NOTVALIDATED)
+    // - Actual  : 3 (INVALID)
+    // i.e. the doc was modified by the time the signature state was calculated.
+    CPPUNIT_ASSERT_EQUAL(SignatureState::NOTVALIDATED, eState);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

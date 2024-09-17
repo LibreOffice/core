@@ -40,7 +40,7 @@ public:
     virtual SwFieldType *GetSysFieldType( const SwFieldIds eWhich ) const override;
     virtual SwFieldType* GetFieldType(SwFieldIds nResId, const OUString& rName, bool bDbFieldMatching) const override;
     virtual void RemoveFieldType(size_t nField) override;
-    virtual void UpdateFields(bool bCloseDB) override;
+    virtual void UpdateFields(bool bCloseDB, bool bSetModified = true) override;
     virtual void InsDeletedFieldType(SwFieldType &) override;
     virtual void PutValueToField(const SwPosition & rPos, const css::uno::Any& rVal, sal_uInt16 nWhich) override;
     virtual bool UpdateField(SwTextField* rDstFormatField, SwField& rSrcField, bool bUpdateTableFields) override;

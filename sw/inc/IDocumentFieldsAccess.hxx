@@ -61,7 +61,7 @@ namespace com::sun::star::uno { class Any; }
 
     virtual void RemoveFieldType(size_t nField) = 0;
 
-    virtual void UpdateFields(bool bCloseDB) = 0;
+    virtual void UpdateFields(bool bCloseDB, bool bSetModified = true) = 0;
 
     virtual void InsDeletedFieldType(SwFieldType &) = 0;
 
