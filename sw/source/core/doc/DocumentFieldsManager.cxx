@@ -389,7 +389,7 @@ void DocumentFieldsManager::RemoveFieldType(size_t nField)
 }
 
 // All have to be re-evaluated.
-void DocumentFieldsManager::UpdateFields(bool bCloseDB)
+void DocumentFieldsManager::UpdateFields(bool bCloseDB, bool bSetModified)
 {
     // Tell all types to update their fields
     for(auto const& pFieldType: *mpFieldTypes)
@@ -409,8 +409,11 @@ void DocumentFieldsManager::UpdateFields(bool bCloseDB)
         m_rDoc.GetDBManager()->CloseAll();
 #endif
     }
-    // Only evaluate on full update
-    m_rDoc.getIDocumentState().SetModified();
+    if (bSetModified)
+    {
+        // Only evaluate on full update
+        m_rDoc.getIDocumentState().SetModified();
+    }
 }
 
 void DocumentFieldsManager::InsDeletedFieldType( SwFieldType& rFieldTyp )
