@@ -498,10 +498,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInter
             return E_FAIL;
         }
         Reference<XAccessibleEditableText> pRXI(pRContext, UNO_QUERY);
-        if (!pRXI.is())
-            m_xEditableText = nullptr;
-        else
-            m_xEditableText = pRXI.get();
+        m_xEditableText = pRXI;
         return S_OK;
     }
     catch (...)
