@@ -74,7 +74,7 @@ public:
     typedef stringmap TextBuffer;
 
 protected:
-    BuilderBase(bool bLegacy);
+    BuilderBase(const OUString& rUIFile, bool bLegacy);
 
     struct ListStore
     {
@@ -102,6 +102,7 @@ protected:
     static OUString getStyleClass(xmlreader::XmlReader &reader);
     static bool hasOrientationVertical(stringmap &rMap);
 
+    OUString getHelpRoot() { return m_sHelpRoot; }
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
     const std::vector<SizeGroup>& getSizeGroups() const;
@@ -140,6 +141,8 @@ private:
     };
 
     std::unique_ptr<ParserState> m_pParserState;
+
+    OUString m_sHelpRoot;
     bool m_bLegacy;
 };
 
@@ -326,7 +329,6 @@ private:
     };
 
     OUString    m_sID;
-    OUString    m_sHelpRoot;
     VclPtr<vcl::Window> m_pParent;
     bool        m_bToplevelHasDeferredInit;
     bool        m_bToplevelHasDeferredProperties;

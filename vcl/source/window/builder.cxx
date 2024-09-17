@@ -445,10 +445,15 @@ namespace weld
     }
 }
 
-BuilderBase::BuilderBase(bool bLegacy)
+BuilderBase::BuilderBase(const OUString& rUIFile, bool bLegacy)
     : m_pParserState(new ParserState)
+    , m_sHelpRoot(rUIFile)
     , m_bLegacy(bLegacy)
 {
+    const sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
+    if (nIdx != -1)
+        m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
+    m_sHelpRoot += "/";
 }
 
 const std::locale& BuilderBase::getResLocale() const
@@ -486,12 +491,11 @@ void BuilderBase::resetParserState() { m_pParserState.reset(); }
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
                        bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
-    : BuilderBase(bLegacy)
+    : BuilderBase(sUIFile, bLegacy)
     , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
                                    ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
                                    : new NotebookBarAddonsItem{})
     , m_sID(std::move(sID))
-    , m_sHelpRoot(sUIFile)
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
     , m_pVclParserState(new VclParserState)
@@ -501,11 +505,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         ((pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit()) ||
          (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
-
-    sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
-    if (nIdx != -1)
-        m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-    m_sHelpRoot += "/";
 
     try
     {
@@ -1653,7 +1652,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
                         "-page" +
                         OUString::number(nNewPageCount);
                     m_aChildren.emplace_back(sTabPageId, pPage, false);
-                    pPage->SetHelpId(m_sHelpRoot + sTabPageId);
+                    pPage->SetHelpId(getHelpRoot() + sTabPageId);
 
                     pParent = pPage;
 
@@ -1968,13 +1967,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             {
                 VclPtr<VclVBox> xContainer = VclPtr<VclVBox>::Create(pRealParent);
                 OUString containerid(id + "-container");
-                xContainer->SetHelpId(m_sHelpRoot + containerid);
+                xContainer->SetHelpId(getHelpRoot() + containerid);
                 m_aChildren.emplace_back(containerid, xContainer, true);
 
                 VclPtrInstance<HeaderBar> xHeader(xContainer, WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP | WB_3DLOOK);
                 xHeader->set_width_request(0); // let the headerbar width not affect the size request
                 OUString headerid(id + "-header");
-                xHeader->SetHelpId(m_sHelpRoot + headerid);
+                xHeader->SetHelpId(getHelpRoot() + headerid);
                 m_aChildren.emplace_back(headerid, xHeader, true);
 
                 VclPtr<LclHeaderTabListBox> xHeaderBox = VclPtr<LclHeaderTabListBox>::Create(xContainer, nWinStyle);
@@ -2174,7 +2173,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
                 pToolBox->InsertItem(nItemId, extractLabel(rMap), aCommand, nBits);
             }
 
-            pToolBox->SetHelpId(nItemId, m_sHelpRoot + id);
+            pToolBox->SetHelpId(nItemId, getHelpRoot() + id);
             OUString sTooltip(extractTooltipText(rMap));
             if (!sTooltip.isEmpty())
                 pToolBox->SetQuickHelpText(nItemId, sTooltip);
@@ -2241,7 +2240,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         WindowImpl *pWindowImpl = xWindow->ImplGetWindowImpl();
         pWindowImpl->mbDisabled = false;
 
-        xWindow->SetHelpId(m_sHelpRoot + id);
+        xWindow->SetHelpId(getHelpRoot() + id);
         SAL_INFO("vcl.builder", "for name '" << name << "' and id '" << id <<
             "', created " << xWindow.get() << " child of " <<
             pParent << "(" << xWindow->ImplGetWindowImpl()->mpParent.get() << "/" <<
@@ -2539,7 +2538,7 @@ VclPtr<vcl::Window> VclBuilder::insertObject(vcl::Window *pParent, const OUStrin
 
         if (pCurrentChild->GetHelpId().isEmpty())
         {
-            pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);
+            pCurrentChild->SetHelpId(getHelpRoot() + m_sID);
             SAL_INFO("vcl.builder", "for toplevel dialog " << this << " " <<
                 rID << ", set helpid " << pCurrentChild->GetHelpId());
         }
@@ -3535,7 +3534,7 @@ void VclBuilder::insertMenuObject(Menu *pParent, PopupMenu *pSubMenu, const OUSt
 
     if (nOldCount != pParent->GetItemCount())
     {
-        pParent->SetHelpId(nNewId, m_sHelpRoot + rID);
+        pParent->SetHelpId(nNewId, getHelpRoot() + rID);
         if (!extractVisible(rProps))
             pParent->HideItem(nNewId);
 
