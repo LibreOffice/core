@@ -324,7 +324,8 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     }
 
     // Correct current TabPos and default tabs
-    for ( sal_uInt16 i = 0; i < aNewTabs->Count(); i++ )
+    sal_uInt16 i = 0;
+    while (i < aNewTabs->Count())
     {
         if ( (*aNewTabs)[i].GetAdjustment() != SvxTabAdjust::Default )
         {
@@ -333,8 +334,10 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         }
         else
         {
-            aNewTabs->Remove( i-- );
+            aNewTabs->Remove(i);
+            continue;
         }
+        ++i;
     }
 
     // Select current tabulator
