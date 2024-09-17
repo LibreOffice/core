@@ -2603,7 +2603,6 @@ dbaccess/source/core/dataaccess/commandcontainer.hxx
 dbaccess/source/core/dataaccess/commanddefinition.cxx
 dbaccess/source/core/dataaccess/commanddefinition.hxx
 dbaccess/source/core/dataaccess/connection.cxx
-dbaccess/source/core/dataaccess/connection.hxx
 dbaccess/source/core/dataaccess/dataaccessdescriptor.cxx
 dbaccess/source/core/dataaccess/databasecontext.cxx
 dbaccess/source/core/dataaccess/databasedocument.cxx
@@ -2642,6 +2641,7 @@ dbaccess/source/core/inc/column.hxx
 dbaccess/source/core/inc/columnsettings.hxx
 dbaccess/source/core/inc/commandbase.hxx
 dbaccess/source/core/inc/composertools.hxx
+dbaccess/source/core/inc/connection.hxx
 dbaccess/source/core/inc/containerapprove.hxx
 dbaccess/source/core/inc/databasecontext.hxx
 dbaccess/source/core/inc/datasettings.hxx

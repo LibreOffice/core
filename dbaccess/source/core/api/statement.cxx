@@ -31,6 +31,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connection.hxx>
 
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -43,10 +44,11 @@ using namespace dbaccess;
 using namespace dbtools;
 
 
-OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
+OStatementBase::OStatementBase(const rtl::Reference< OConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
-    :OSubComponent(m_aMutex, _xConn)
+    :WeakComponentImplHelper(m_aMutex)
     ,OPropertySetHelper(WeakComponentImplHelper::rBHelper)
+    ,m_xParent(_xConn.get())
     ,m_bUseBookmarks( false )
     ,m_bEscapeProcessing( true )
 
@@ -68,7 +70,7 @@ Sequence< Type > OStatementBase::getTypes()
                            cppu::UnoType<XCloseable>::get(),
                            cppu::UnoType<XMultipleResults>::get(),
                            cppu::UnoType<css::util::XCancellable>::get(),
-                           OSubComponent::getTypes() );
+                           ::cppu::WeakComponentImplHelper<>::getTypes() );
     Reference< XGeneratedResultSet > xGRes(m_xAggregateAsSet, UNO_QUERY);
     if ( xGRes.is() )
         aTypes = OTypeCollection(cppu::UnoType<XGeneratedResultSet>::get(),aTypes.getTypes());
@@ -82,7 +84,7 @@ Sequence< Type > OStatementBase::getTypes()
 // css::uno::XInterface
 Any OStatementBase::queryInterface( const Type & rType )
 {
-    Any aIface = OSubComponent::queryInterface( rType );
+    Any aIface = ::cppu::WeakComponentImplHelper<>::queryInterface( rType );
     if (!aIface.hasValue())
     {
         aIface = ::cppu::queryInterface(
@@ -110,12 +112,12 @@ Any OStatementBase::queryInterface( const Type & rType )
 
 void OStatementBase::acquire() noexcept
 {
-    OSubComponent::acquire();
+    ::cppu::WeakComponentImplHelper<>::acquire();
 }
 
 void OStatementBase::release() noexcept
 {
-    OSubComponent::release();
+    ::cppu::WeakComponentImplHelper<>::release();
 }
 
 void OStatementBase::disposeResultSet()
@@ -159,7 +161,7 @@ void OStatementBase::disposing()
     m_xAggregateAsSet = nullptr;
 
     // free the parent at last
-    OSubComponent::disposing();
+    ::cppu::WeakComponentImplHelper<>::disposing();
 }
 
 // XCloseable
@@ -419,7 +421,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  )
 
 //  OStatement
 
-OStatement::OStatement( const Reference< XConnection >& _xConn, const Reference< XInterface > & _xStatement )
+OStatement::OStatement( const rtl::Reference< OConnection >& _xConn, const Reference< XInterface > & _xStatement )
     :OStatementBase( _xConn, _xStatement )
     ,m_bAttemptedComposerCreation( false )
 {
@@ -534,7 +536,7 @@ Sequence< sal_Int32 > OStatement::executeBatch( )
 
 Reference< XConnection > OStatement::getConnection()
 {
-    return Reference< XConnection >( m_xParent, UNO_QUERY );
+    return m_xParent.get();
 }
 
 void SAL_CALL OStatement::disposing()

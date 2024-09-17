@@ -31,6 +31,7 @@
 #include <strings.hxx>
 #include "resultcolumn.hxx"
 #include "resultset.hxx"
+#include <connection.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace ::com::sun::star::sdbc;
@@ -42,7 +43,7 @@ using namespace ::osl;
 using namespace dbaccess;
 
 
-OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
+OPreparedStatement::OPreparedStatement(const rtl::Reference< OConnection > & _xConn,
                                       const Reference< XInterface > & _xStatement)
                    :OStatementBase(_xConn, _xStatement)
 {
@@ -220,7 +221,7 @@ sal_Bool OPreparedStatement::execute()
 
 Reference< XConnection > OPreparedStatement::getConnection()
 {
-    return Reference< XConnection > (m_xParent, UNO_QUERY);
+    return m_xParent.get();
 }
 
 // XParameters

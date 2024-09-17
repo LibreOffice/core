@@ -21,7 +21,7 @@
 
 #include <iterator>
 
-#include "connection.hxx"
+#include <connection.hxx>
 #include "datasource.hxx"
 #include <strings.hrc>
 #include <strings.hxx>

@@ -24,10 +24,10 @@
 #include <cstddef>
 #include <map>
 
-#include <querycontainer.hxx>
-#include <tablecontainer.hxx>
-#include <viewcontainer.hxx>
-#include <RefreshListener.hxx>
+#include "querycontainer.hxx"
+#include "tablecontainer.hxx"
+#include "viewcontainer.hxx"
+#include "RefreshListener.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

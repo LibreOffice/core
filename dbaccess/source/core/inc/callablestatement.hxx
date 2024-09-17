@@ -32,7 +32,7 @@ namespace dbaccess
                                public css::sdbc::XOutParameters
     {
     public:
-        OCallableStatement(const css::uno::Reference< css::sdbc::XConnection > & _xConn,
+        OCallableStatement(const rtl::Reference< OConnection > & _xConn,
                            const css::uno::Reference< css::uno::XInterface > & _xStatement)
             :OPreparedStatement(_xConn, _xStatement){}
 

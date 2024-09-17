@@ -42,7 +42,7 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XParameters > m_xAggregateAsParameters;
 
     public:
-        OPreparedStatement(const css::uno::Reference< css::sdbc::XConnection > & _xConn,
+        OPreparedStatement(const rtl::Reference< OConnection > & _xConn,
                            const css::uno::Reference< css::uno::XInterface > & _xStatement);
         virtual ~OPreparedStatement() override;
 
