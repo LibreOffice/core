@@ -222,12 +222,6 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
 
 void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly )
 {
-    const bool bUnLockView = !m_pWrtShell->IsViewLocked();
-    m_pWrtShell->LockView( true );
-    m_pWrtShell->LockPaint(LockPaintReason::ViewLayout);
-
-    {
-
     SwActContext aActContext(m_pWrtShell.get());
 
     if ( !GetViewFrame().GetFrame().IsInPlace() && !bViewOnly )
@@ -259,12 +253,6 @@ void SwView::SetViewLayout( sal_uInt16 nColumns, bool bBookMode, bool bViewOnly 
 
     m_pVRuler->ForceUpdate();
     m_pHRuler->ForceUpdate();
-
-    }
-
-    m_pWrtShell->UnlockPaint();
-    if( bUnLockView )
-        m_pWrtShell->LockView( false );
 
     SfxBindings& rBnd = GetViewFrame().GetBindings();
     rBnd.Invalidate( SID_ATTR_VIEWLAYOUT );
