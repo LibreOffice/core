@@ -276,9 +276,9 @@ IMPL_LINK(SwOutlineTabDialog, MenuSelectHdl, const OUString&, rIdent, void)
         return;
     }
 
-    if( nLevelNo-- )
+    if (nLevelNo > 0)
     {
-        const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules( nLevelNo );
+        const SwNumRulesWithName *pRules = m_pChapterNumRules->GetRules(nLevelNo - 1);
         if( pRules )
         {
             pRules->ResetNumRule(m_rWrtSh, *m_xNumRule);
