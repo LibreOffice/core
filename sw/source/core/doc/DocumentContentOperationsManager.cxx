@@ -2327,7 +2327,8 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             // What's with Flys?
         {
             // If there are FlyFrames left, delete these too
-            for( size_t n = 0; n < m_rDoc.GetSpzFrameFormats()->size(); ++n )
+            size_t n = 0;;
+            while (n < m_rDoc.GetSpzFrameFormats()->size())
             {
                 sw::SpzFrameFormat* pFly = (*m_rDoc.GetSpzFrameFormats())[n];
                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
@@ -2341,8 +2342,9 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                     aRg.aStart <= *pAnchorNode && *pAnchorNode <= aRg.aEnd.GetNode() )
                 {
                     m_rDoc.getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-                    --n;
+                    continue;
                 }
+                ++n;
             }
         }
 
