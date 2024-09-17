@@ -79,6 +79,7 @@
 #include <viewsh.hxx>
 #include <unodraw.hxx>
 #include <unotextrange.hxx>
+#include <unotxdoc.hxx>
 
 #include "swcss1.hxx"
 #include "swhtml.hxx"
@@ -280,8 +281,7 @@ const uno::Reference< XMultiServiceFactory >& SwHTMLForm_Impl::GetServiceFactory
     if( !m_xServiceFactory.is() && m_pDocShell )
     {
         m_xServiceFactory =
-            uno::Reference< XMultiServiceFactory >( m_pDocShell->GetBaseModel(),
-                                               UNO_QUERY );
+            uno::Reference< XMultiServiceFactory >( m_pDocShell->GetBaseModel() );
         OSL_ENSURE( m_xServiceFactory.is(),
                 "XServiceFactory not received from model" );
     }
@@ -292,8 +292,7 @@ void SwHTMLForm_Impl::GetDrawPage()
 {
     if( !m_xDrawPage.is() && m_pDocShell )
     {
-        uno::Reference< drawing::XDrawPageSupplier > xTextDoc( m_pDocShell->GetBaseModel(),
-                                                         UNO_QUERY );
+        rtl::Reference< SwXTextDocument > xTextDoc( m_pDocShell->GetBaseModel() );
         OSL_ENSURE( xTextDoc.is(),
                 "drawing::XDrawPageSupplier not received from model" );
         m_xDrawPage = xTextDoc->getDrawPage();

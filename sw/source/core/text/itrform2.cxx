@@ -69,6 +69,7 @@
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1266,8 +1267,8 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 static uno::Reference< rdf::XURI > xODF_SHADING(
                     rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
 
-                uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
-                    rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(
+                    rDoc.GetDocShell()->GetBaseModel());
 
                 const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
                 const uno::Reference<rdf::XRepository>& xRepository =

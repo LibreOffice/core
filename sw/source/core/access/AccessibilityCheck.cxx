@@ -50,6 +50,7 @@
 #include <ndgrf.hxx>
 #include <svl/fstathelper.hxx>
 #include <osl/file.h>
+#include <unotxdoc.hxx>
 
 namespace sw
 {
@@ -2396,12 +2397,10 @@ public:
     }
     void check(SwDoc* pDoc) override
     {
-        uno::Reference<lang::XComponent> xDoc = pDoc->GetDocShell()->GetBaseModel();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
-        if (!xStyleFamiliesSupplier.is())
+        rtl::Reference<SwXTextDocument> xDoc = pDoc->GetDocShell()->GetBaseModel();
+        if (!xDoc)
             return;
-        uno::Reference<container::XNameAccess> xStyleFamilies
-            = xStyleFamiliesSupplier->getStyleFamilies();
+        uno::Reference<container::XNameAccess> xStyleFamilies = xDoc->getStyleFamilies();
         uno::Reference<container::XNameAccess> xStyleFamily(
             xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
         if (!xStyleFamily.is())

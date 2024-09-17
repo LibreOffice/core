@@ -105,6 +105,7 @@
 #include <iodetect.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -887,6 +888,11 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     }
     if ( bResetModified )
         EnableSetModified();
+}
+
+rtl::Reference<SwXTextDocument> SwDocShell::GetBaseModel() const
+{
+    return dynamic_cast<SwXTextDocument*>(SfxObjectShell::GetBaseModel().get());
 }
 
 void SwDocShell::SetVisArea( const tools::Rectangle &rRect )

@@ -40,6 +40,7 @@
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 #include <frameformats.hxx>
+#include <unotxdoc.hxx>
 
 #include <vector>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -620,7 +621,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
-                                uno::Reference< lang::XComponent > xDoc = GetDocShell()->GetBaseModel();
+                                rtl::Reference< SwXTextDocument > xDoc = GetDocShell()->GetBaseModel();
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
                                 const OUString& aExpandText = aConversionMap.getViewText();
@@ -635,7 +636,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 {
                                     aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
-                                            xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
+                                            cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
                                     lcl_syncGrammarError( *pNd->GetTextNode(), aResult, aConversionMap );
 

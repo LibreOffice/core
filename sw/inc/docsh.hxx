@@ -53,6 +53,7 @@ class SwDocShell;
 class SwDrawModel;
 class SwViewShell;
 class SwDocStyleSheetPool;
+class SwXTextDocument;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -184,6 +185,9 @@ public:
 
     /// OLE 2.0-notification.
     DECL_DLLPRIVATE_LINK( Ole2ModifiedHdl, bool, void );
+
+    /// Override SfxObjectShell::GetBaseModel and return a more accurate type
+    rtl::Reference<SwXTextDocument> GetBaseModel() const;
 
     /// OLE-stuff.
     virtual void      SetVisArea( const tools::Rectangle &rRect ) override;

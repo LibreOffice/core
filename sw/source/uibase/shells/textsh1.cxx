@@ -131,6 +131,7 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <formatcontentcontrol.hxx>
 #include <rtl/uri.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2782,7 +2783,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 static constexpr OUStringLiteral sDisplay(u"DisplayName");
                 const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? u"HeaderIsOn"_ustr : u"FooterIsOn"_ustr);
 
-                uno::Reference< XStyleFamiliesSupplier > xSupplier(GetView().GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+                rtl::Reference< SwXTextDocument > xSupplier(GetView().GetDocShell()->GetBaseModel());
                 if (xSupplier.is())
                 {
                     uno::Reference< XNameContainer > xContainer;

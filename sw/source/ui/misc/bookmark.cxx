@@ -37,6 +37,7 @@
 #include <ndtxt.hxx>
 #include <strings.hrc>
 #include <IDocumentSettingAccess.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -207,9 +208,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
 
     sw::mark::MarkBase* pBookmark
         = weld::fromId<sw::mark::MarkBase*>(m_xBookmarksBox->get_id(*xSelected));
-    uno::Reference<frame::XModel> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
-    uno::Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xNameAccess = xBkms->getBookmarks();
+    rtl::Reference<SwXTextDocument> xModel = m_rSh.GetView().GetDocShell()->GetBaseModel();
+    uno::Reference<container::XNameAccess> xNameAccess = xModel->getBookmarks();
     uno::Any aObj = xNameAccess->getByName(pBookmark->GetName());
     uno::Reference<uno::XInterface> xTmp;
     aObj >>= xTmp;

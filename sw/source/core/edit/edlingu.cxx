@@ -55,6 +55,7 @@
 #include <txatbase.hxx>
 #include <txtfrm.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -978,7 +979,7 @@ bool SwEditShell::GetGrammarCorrection(
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mxDoc->GetGCIterator() );
             if (xGCIterator.is())
             {
-                uno::Reference< lang::XComponent > xDoc = mxDoc->GetDocShell()->GetBaseModel();
+                rtl::Reference< SwXTextDocument > xDoc = mxDoc->GetDocShell()->GetBaseModel();
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode, GetLayout());
@@ -993,7 +994,7 @@ bool SwEditShell::GetGrammarCorrection(
                 const sal_Int32 nEndOfSentence = aConversionMap.ConvertToViewPosition( pWrong->getSentenceEnd( nBegin ) );
 
                 rResult = xGCIterator->checkSentenceAtPosition(
-                        xDoc, xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
+                        cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nStartOfSentence,
                         nEndOfSentence == COMPLETE_STRING ? aExpandText.getLength() : nEndOfSentence,
                         rErrorPosInText );
                 bRes = true;

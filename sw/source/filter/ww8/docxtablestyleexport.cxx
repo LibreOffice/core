@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 using namespace oox;
@@ -124,8 +125,7 @@ void DocxTableStyleExport::CnfStyle(const uno::Sequence<beans::PropertyValue>& r
 void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
     // Do we have table styles from InteropGrabBag available?
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        m_pImpl->getDoc().GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTextDocument> xPropertySet(m_pImpl->getDoc().GetDocShell()->GetBaseModel());
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;

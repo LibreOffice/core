@@ -127,6 +127,7 @@
 #include <set>
 #include <string_view>
 #include <limits>
+#include <unotxdoc.hxx>
 
 using namespace css;
 using namespace css::io;
@@ -1296,9 +1297,8 @@ static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, c
             && rEntry.family() != SfxStyleFamily::Para
             && rEntry.family() != SfxStyleFamily::Page)
         return {};
-    auto xModel(pDoc->GetDocShell()->GetBaseModel());
-    uno::Reference<style::XStyleFamiliesSupplier> xFamilySupplier(xModel, uno::UNO_QUERY);
-    auto xFamilies = xFamilySupplier->getStyleFamilies();
+    rtl::Reference<SwXTextDocument> xModel(pDoc->GetDocShell()->GetBaseModel());
+    auto xFamilies = xModel->getStyleFamilies();
     auto aResult(xFamilies->getByName(rEntry.name()));
     if(!aResult.has<return_t>())
         return {};

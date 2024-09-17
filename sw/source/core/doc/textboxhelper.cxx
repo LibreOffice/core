@@ -59,6 +59,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <unotxdoc.hxx>
 
 using namespace com::sun::star;
 
@@ -105,8 +106,8 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (!xTextContentAppend)
     {
-        uno::Reference<text::XTextDocument> xTextDocument(
-            pShape->GetDoc()->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+        rtl::Reference<SwXTextDocument> xTextDocument(
+            pShape->GetDoc()->GetDocShell()->GetBaseModel());
         xTextContentAppend.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
     }
 

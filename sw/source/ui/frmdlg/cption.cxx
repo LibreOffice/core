@@ -40,6 +40,7 @@
 #include <vcl/weld.hxx>
 #include <strings.hrc>
 #include <SwStyleNameMapper.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -112,14 +113,13 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     //#i61007# order of captions
     ApplyCaptionOrder();
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    uno::Reference< frame::XModel >  xModel = m_rView.GetDocShell()->GetBaseModel();
+    rtl::Reference< SwXTextDocument >  xModel = m_rView.GetDocShell()->GetBaseModel();
 
     SelectionType eType = rSh.GetSelectionType();
     if ( eType & SelectionType::Ole )
     {
         eType = SelectionType::Graphic;
-        uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
-        m_xNameAccess = xObjs->getEmbeddedObjects();
+        m_xNameAccess = xModel->getEmbeddedObjects();
     }
 
     m_xCategoryBox->connect_changed(LINK(this, SwCaptionDialog, ModifyComboHdl));
@@ -162,8 +162,7 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
         //if not OLE
         if(!m_xNameAccess.is())
         {
-            uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
-            m_xNameAccess = xGraphics->getGraphicObjects();
+            m_xNameAccess = xModel->getGraphicObjects();
         }
 
     }
@@ -171,15 +170,13 @@ SwCaptionDialog::SwCaptionDialog(weld::Window *pParent, SwView &rV)
     {
         nPoolId = RES_POOLCOLL_LABEL_TABLE;
         sString = m_rView.GetOldTabCat();
-        uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
-        m_xNameAccess = xTables->getTextTables();
+        m_xNameAccess = xModel->getTextTables();
     }
     else if( eType & SelectionType::Frame )
     {
         nPoolId = RES_POOLCOLL_LABEL_FRAME;
         sString = m_rView.GetOldFrameCat();
-        uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
-        m_xNameAccess = xFrames->getTextFrames();
+        m_xNameAccess = xModel->getTextFrames();
     }
     else if( eType == SelectionType::Text )
     {

@@ -347,9 +347,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabel
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum());
 
     SwDoc* pDocMM = mxSwTextDocument->GetDocShell()->GetDoc();
-    uno::Reference<frame::XModel> xModel = mxSwTextDocument->GetDocShell()->GetBaseModel();
-    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    rtl::Reference<SwXTextDocument> xModel = mxSwTextDocument->GetDocShell()->GetBaseModel();
+    uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName(u"PageStyles"_ustr), uno::UNO_QUERY);
 
     // All odd pages have no header, all even pages should have header with text "Page 2 of 2"

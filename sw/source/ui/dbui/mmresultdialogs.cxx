@@ -75,6 +75,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <iodetect.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -686,10 +687,10 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
             pTempView->GetDocShell()->GetDoc()->ReplaceDefaults( *pTargetView->GetDocShell()->GetDoc());
             pTempView->GetDocShell()->GetDoc()->ReplaceDocumentProperties( *pTargetView->GetDocShell()->GetDoc(), true );
 
-            uno::Reference<beans::XPropertySet> const xThisSet(
-                pTargetView->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertySet> const xRetSet(
-                pTempView->GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+            rtl::Reference<SwXTextDocument> const xThisSet(
+                pTargetView->GetDocShell()->GetBaseModel());
+            rtl::Reference<SwXTextDocument> const xRetSet(
+                pTempView->GetDocShell()->GetBaseModel());
             uno::Sequence<beans::PropertyValue> aInteropGrabBag;
             xThisSet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
             xRetSet->setPropertyValue(u"InteropGrabBag"_ustr, uno::Any(aInteropGrabBag));

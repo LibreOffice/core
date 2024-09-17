@@ -113,6 +113,7 @@
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svl/setitem.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
@@ -163,11 +164,11 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( GetGCIterator() );
         if ( xGCIterator.is() )
         {
-            uno::Reference< lang::XComponent >  xDoc = GetDocShell()->GetBaseModel();
-            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+            rtl::Reference< SwXTextDocument >  xDoc = GetDocShell()->GetBaseModel();
+            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc );
 
             // start automatic background checking if not active already
-            if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
+            if ( xFPIP.is() && !xGCIterator->isProofreading( cppu::getXWeak(xDoc.get()) ) )
             {
                 bStarted = true;
                 if ( !bSkipStart )
@@ -177,7 +178,7 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
                         // again until the user modifies the document
                         pLayout->SetNeedGrammarCheck(false);
                     }
-                    xGCIterator->startProofreading( xDoc, xFPIP );
+                    xGCIterator->startProofreading( cppu::getXWeak(xDoc.get()), xFPIP );
                 }
             }
         }
@@ -933,8 +934,7 @@ rtl::Reference<SfxObjectShell> SwDoc::CreateCopy(bool bCallInitNew, bool bEmpty)
 
     xRet->ReplaceStyles(*this);
 
-    uno::Reference<beans::XPropertySet> const xThisSet(
-        GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTextDocument> const xThisSet(GetDocShell()->GetBaseModel());
     uno::Reference<beans::XPropertySet> const xRetSet(
         pRetShell->GetBaseModel(), uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;

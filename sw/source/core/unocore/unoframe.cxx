@@ -115,6 +115,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <vcl/errinf.hxx>
+#include <unotxdoc.hxx>
 
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xbtmpit.hxx>
@@ -1210,11 +1211,9 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     // get the property set for the default style data
     // First get the model
-    uno::Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
-    // Ask the model for its family supplier interface
-    uno::Reference < XStyleFamiliesSupplier > xFamilySupplier ( xModel, uno::UNO_QUERY );
+    rtl::Reference < SwXTextDocument > xModel = pDoc->GetDocShell()->GetBaseModel();
     // Get the style families
-    uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
+    uno::Reference < XNameAccess > xFamilies = xModel->getStyleFamilies();
     // Get the Frame family (and keep it for later)
     const ::uno::Any aAny = xFamilies->getByName (u"FrameStyles"_ustr);
     aAny >>= mxStyleFamily;

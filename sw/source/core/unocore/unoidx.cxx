@@ -61,6 +61,7 @@
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
 #include <mutex>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1973,11 +1974,10 @@ SwXDocumentIndexMark::getAnchor()
     {
         aPam.GetPoint()->AdjustContent(1);
     }
-    const uno::Reference< frame::XModel > xModel =
+    const rtl::Reference< SwXTextDocument > xModel =
         m_pImpl->m_pDoc->GetDocShell()->GetBaseModel();
-    const uno::Reference< text::XTextDocument > xTDoc(xModel, uno::UNO_QUERY);
-    const uno::Reference< text::XTextRange >  xRet =
-        new SwXTextRange(aPam, xTDoc->getText());
+    const uno::Reference< text::XTextRange > xRet =
+        new SwXTextRange(aPam, xModel->getText());
 
     return xRet;
 }

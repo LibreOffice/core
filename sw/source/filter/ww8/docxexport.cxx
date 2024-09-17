@@ -100,6 +100,7 @@
 #include <sal/log.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <unotxdoc.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -1245,7 +1246,7 @@ void DocxExport::WriteSettings()
         m_pAttrOutput->WriteFootnoteEndnotePr( pFS, XML_endnotePr, m_rDoc.GetEndNoteInfo(), XML_endnote );
 
     // Has themeFontLang information
-    uno::Reference< beans::XPropertySet > xPropSet( pDocShell->GetBaseModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xPropSet( pDocShell->GetBaseModel() );
 
     bool bUseGrabBagProtection = false;
     bool bWriterWantsToProtect = false;
@@ -1537,7 +1538,7 @@ void DocxExport::WriteTheme()
 // See OOXMLDocumentImpl::resolveGlossaryStream
 void DocxExport::WriteGlossary()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -1700,7 +1701,7 @@ static void lcl_UpdateXmlValues(const SdtData& sdtData, const uno::Reference<css
 
 void DocxExport::WriteCustomXml()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if ( !xPropSetInfo->hasPropertyByName( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) )
@@ -1802,7 +1803,7 @@ void DocxExport::WriteCustomXml()
 
 void DocxExport::WriteVBA()
 {
-    uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+    rtl::Reference<SwXTextDocument> xStorageBasedDocument(m_rDoc.GetDocShell()->GetBaseModel());
     if (!xStorageBasedDocument.is())
         return;
 
@@ -1861,7 +1862,7 @@ void DocxExport::WriteVBA()
 
 void DocxExport::WriteEmbeddings()
 {
-    uno::Reference< beans::XPropertySet > xPropSet( m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
@@ -2116,7 +2117,7 @@ sal_Int32 DocxExport::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt
 sal_Int32 DocxExport::getWordCompatibilityModeFromGrabBag() const
 {
     sal_Int32 nWordCompatibilityMode = -1;
-    uno::Reference< beans::XPropertySet > xPropSet(m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    rtl::Reference< SwXTextDocument > xPropSet(m_rDoc.GetDocShell()->GetBaseModel());
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     if (xPropSetInfo->hasPropertyByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG))
     {

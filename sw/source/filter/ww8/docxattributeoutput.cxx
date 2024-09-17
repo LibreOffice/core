@@ -164,6 +164,7 @@
 #include <frozen/unordered_map.h>
 #include <IDocumentDeviceAccess.hxx>
 #include <sfx2/printer.hxx>
+#include <unotxdoc.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -4832,7 +4833,7 @@ DocxStringTokenMap const aExceptionTokens[] = {
 void DocxAttributeOutput::LatentStyles()
 {
     // Do we have latent styles available?
-    uno::Reference<beans::XPropertySet> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW);
+    rtl::Reference<SwXTextDocument> xPropertySet(m_rExport.m_rDoc.GetDocShell()->GetBaseModel());
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aLatentStyles;
@@ -5825,7 +5826,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     OSL_ASSERT(pFlyFrameFormat);
 
     // get interoperability information about embedded objects
-    uno::Reference< beans::XPropertySet > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY_THROW );
+    rtl::Reference< SwXTextDocument > xPropSet( m_rExport.m_rDoc.GetDocShell()->GetBaseModel() );
     uno::Sequence< beans::PropertyValue > aGrabBag, aObjectsInteropList,aObjectInteropAttributes;
     xPropSet->getPropertyValue( UNO_NAME_MISC_OBJ_INTEROPGRABBAG ) >>= aGrabBag;
     auto pProp = std::find_if(std::cbegin(aGrabBag), std::cend(aGrabBag),

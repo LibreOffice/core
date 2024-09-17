@@ -156,6 +156,7 @@
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::util;
@@ -5037,13 +5038,12 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         // Initialize RDF metadata, to be able to add statements during the import.
         try
         {
-            uno::Reference<frame::XModel> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
-            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(xModel, uno::UNO_QUERY_THROW);
+            rtl::Reference<SwXTextDocument> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
             uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
             uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
-            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, xModel, m_sBaseURL));
+            const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, static_cast<SfxBaseModel*>(xModel.get()), m_sBaseURL));
             uno::Reference<task::XInteractionHandler> xHandler;
-            xDocumentMetadataAccess->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
+            xModel->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
         catch (const uno::Exception&)
         {
@@ -6765,7 +6765,7 @@ void SwWW8ImplReader::NotifyMacroEventRead()
 {
     if (m_bNotifyMacroEventRead)
         return;
-    uno::Reference<frame::XModel> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
+    uno::Reference<frame::XModel> const xModel(static_cast<SfxBaseModel*>(m_rDoc.GetDocShell()->GetBaseModel().get()));
     comphelper::DocumentInfo::notifyMacroEventRead(xModel);
     m_bNotifyMacroEventRead = true;
 }

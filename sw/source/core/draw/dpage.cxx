@@ -38,6 +38,7 @@
 #include <dflyobj.hxx>
 #include <docsh.hxx>
 #include <flyfrm.hxx>
+#include <unotxdoc.hxx>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 
@@ -252,9 +253,8 @@ Reference< XInterface > SwDPage::createUnoPage()
     SwDocShell* pDocShell = m_pDoc->GetDocShell();
     if ( pDocShell )
     {
-        Reference<XModel> xModel = pDocShell->GetBaseModel();
-        Reference<XDrawPageSupplier> xPageSupp(xModel, UNO_QUERY);
-        xRet = xPageSupp->getDrawPage();
+        rtl::Reference<SwXTextDocument> xModel = pDocShell->GetBaseModel();
+        xRet = xModel->getDrawPage();
     }
     return xRet;
 }

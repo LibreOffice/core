@@ -1039,9 +1039,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         SwEditShell* pEditShell = pDoc->GetEditShell();
         CPPUNIT_ASSERT(pEditShell);
         SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-        uno::Reference<frame::XModel> xModel = pDoc->GetDocShell()->GetBaseModel();
-        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
-        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+        rtl::Reference<SwXTextDocument> xModel = pDoc->GetDocShell()->GetBaseModel();
+        uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
 
         // 1. Add additional page breaks
         for (int j = 0; j < aAdditionalPagesCount[i]; ++j)

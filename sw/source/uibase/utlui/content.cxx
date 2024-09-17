@@ -124,6 +124,7 @@
 #include <svl/fstathelper.hxx>
 
 #include <expfld.hxx>
+#include <unotxdoc.hxx>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -5907,9 +5908,8 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextTablesSupplier >  xTables(xModel, uno::UNO_QUERY);
-                xNameAccess = xTables->getTextTables();
+                rtl::Reference< SwXTextDocument >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                xNameAccess = xModel->getTextTables();
             }
             else
                 nSlot = FN_FORMAT_TABLE_DLG;
@@ -5922,13 +5922,10 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
-                xNameAccess = xGraphics->getGraphicObjects();
-                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
-                xSecond = xFrames->getTextFrames();
-                uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
-                xThird = xObjs->getEmbeddedObjects();
+                rtl::Reference< SwXTextDocument >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                xNameAccess = xModel->getGraphicObjects();
+                xSecond = xModel->getTextFrames();
+                xThird = xModel->getEmbeddedObjects();
             }
             else
                 nSlot = FN_FORMAT_GRAFIC_DLG;
@@ -5942,21 +5939,18 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if(nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextFramesSupplier >  xFrames(xModel, uno::UNO_QUERY);
-                uno::Reference< text::XTextEmbeddedObjectsSupplier >  xObjs(xModel, uno::UNO_QUERY);
+                rtl::Reference< SwXTextDocument >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 if(ContentTypeId::FRAME == nType)
                 {
-                    xNameAccess = xFrames->getTextFrames();
-                    xSecond = xObjs->getEmbeddedObjects();
+                    xNameAccess = xModel->getTextFrames();
+                    xSecond = xModel->getEmbeddedObjects();
                 }
                 else
                 {
-                    xNameAccess = xObjs->getEmbeddedObjects();
-                    xSecond = xFrames->getTextFrames();
+                    xNameAccess = xModel->getEmbeddedObjects();
+                    xSecond = xModel->getTextFrames();
                 }
-                uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
-                xThird = xGraphics->getGraphicObjects();
+                xThird = xModel->getGraphicObjects();
             }
             else
                 nSlot = FN_FORMAT_FRAME_DLG;
@@ -5971,9 +5965,8 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             else if(nMode == EditEntryMode::RENAME)
             {
                 assert(!m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS));
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XBookmarksSupplier >  xBkms(xModel, uno::UNO_QUERY);
-                xNameAccess = xBkms->getBookmarks();
+                rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                xNameAccess = xModel->getBookmarks();
             }
             else
             {
@@ -5996,9 +5989,8 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             }
             else if (nMode == EditEntryMode::RENAME)
             {
-                uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                uno::Reference< text::XTextSectionsSupplier >  xSects(xModel, uno::UNO_QUERY);
-                xNameAccess = xSects->getTextSections();
+                rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                xNameAccess = xModel->getTextSections();
             }
             else
                 nSlot = FN_EDIT_REGION;
@@ -6080,9 +6072,8 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 case EditEntryMode::UPD_IDX:
                 case EditEntryMode::RENAME:
                 {
-                    Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
-                    Reference< XDocumentIndexesSupplier >  xIndexes(xModel, UNO_QUERY);
-                    Reference< XIndexAccess> xIdxAcc(xIndexes->getDocumentIndexes());
+                    rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+                    Reference< XIndexAccess> xIdxAcc(xModel->getDocumentIndexes());
                     Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
                     if(EditEntryMode::RENAME == nMode)
                         xNameAccess = xLocalNameAccess;
@@ -6591,7 +6582,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             // multiple bookmarks are there on the selected text range.
             // Note: this is a workaround because getDialog() of XPanel is not implemented
             // for SwNavigatorPanel.
-            uno::Reference< frame::XModel > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
+            rtl::Reference< SwXTextDocument > xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
 
             Reference<frame::XController2> xController( xModel->getCurrentController(), uno::UNO_QUERY);
             if ( !xController.is() )

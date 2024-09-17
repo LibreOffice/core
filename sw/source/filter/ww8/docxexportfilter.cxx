@@ -73,8 +73,8 @@ bool DocxExportFilter::exportDocument()
         // Check whether application is in headless mode
         if (!Application::IsHeadlessModeEnabled())
         {
-            uno::Reference<document::XStorageBasedDocument> xStorageBasedDocument(
-                pDoc->GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
+            rtl::Reference<SwXTextDocument> xStorageBasedDocument(
+                pDoc->GetDocShell()->GetBaseModel());
             if (xStorageBasedDocument.is())
             {
                 uno::Reference<embed::XStorage> xDocumentStorage =

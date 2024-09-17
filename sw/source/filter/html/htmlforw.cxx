@@ -61,6 +61,7 @@
 #include <frmfmt.hxx>
 #include <frameformats.hxx>
 #include <memory>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -346,8 +347,7 @@ void SwHTMLWriter::OutHiddenForms()
     if( !pDocSh )
         return;
 
-    uno::Reference< drawing::XDrawPageSupplier > xDPSupp( pDocSh->GetBaseModel(),
-                                                     uno::UNO_QUERY );
+    rtl::Reference< SwXTextDocument > xDPSupp( pDocSh->GetBaseModel() );
     OSL_ENSURE( xDPSupp.is(), "XTextDocument not received from XModel" );
     uno::Reference< drawing::XDrawPage > xDrawPage = xDPSupp->getDrawPage();
 

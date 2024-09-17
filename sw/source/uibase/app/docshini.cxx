@@ -402,8 +402,8 @@ void SwDocShell::AddLink()
         m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, dynamic_cast< const SwWebDocShell *>( this ) !=  nullptr );
     }
     m_xDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc
-    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    static_cast<SwXTextDocument*>(xDoc.get())->Reactivate(this);
+    rtl::Reference< SwXTextDocument > xDoc(GetBaseModel());
+    xDoc->Reactivate(this);
 
     SetPool(&m_xDoc->GetAttrPool());
 
@@ -430,8 +430,8 @@ void SwDocShell::UpdateFontList()
 void SwDocShell::RemoveLink()
 {
     // disconnect Uno-Object
-    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
+    rtl::Reference< SwXTextDocument > xDoc(GetBaseModel());
+    xDoc->Invalidate();
     if (m_xDoc)
     {
         if (m_xBasePool.is())
@@ -447,14 +447,14 @@ void SwDocShell::RemoveLink()
 void SwDocShell::InvalidateModel()
 {
     // disconnect Uno-Object
-    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
+    rtl::Reference< SwXTextDocument > xDoc(GetBaseModel());
+    xDoc->Invalidate();
 }
 void SwDocShell::ReactivateModel()
 {
     // disconnect Uno-Object
-    uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    static_cast<SwXTextDocument*>(xDoc.get())->Reactivate(this);
+    rtl::Reference< SwXTextDocument > xDoc(GetBaseModel());
+    xDoc->Reactivate(this);
 }
 
 // Load, Default-Format

@@ -60,6 +60,7 @@
 
 #include "appenv.hxx"
 #include <memory>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -357,10 +358,10 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         //fill the user fields
         if(!bLabel)
         {
-            uno::Reference< frame::XModel >  xModel = pSh->GetView().GetDocShell()->GetBaseModel();
+            rtl::Reference< SwXTextDocument > xModel = pSh->GetView().GetDocShell()->GetBaseModel();
             OSL_ENSURE(pDialogFactory, "SwAbstractDialogFactory fail!");
             SwLabDlgMethod SwLabDlgUpdateFieldInformation = pDialogFactory->GetSwLabDlgStaticMethod ();
-            SwLabDlgUpdateFieldInformation(xModel, rItem);
+            SwLabDlgUpdateFieldInformation(static_cast<SfxBaseModel*>(xModel.get()), rItem);
         }
 
         pFieldMgr->SetEvalExpFields(true);

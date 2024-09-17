@@ -79,6 +79,7 @@
 #include <unicode/ubidi.h>
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;
@@ -973,7 +974,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
-        uno::Reference<frame::XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
+        rtl::Reference<SwXTextDocument> xModel = rDoc.GetDocShell()->GetBaseModel();
 
         static uno::Reference< uno::XComponentContext > xContext(
             ::comphelper::getProcessComponentContext());
@@ -981,10 +982,8 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
         static uno::Reference< rdf::XURI > xODF_SHADING(
             rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
 
-        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
-            rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY);
         const uno::Reference<rdf::XRepository>& xRepository =
-            xDocumentMetadataAccess->getRDFRepository();
+            xModel->getRDFRepository();
         const uno::Reference<container::XEnumeration> xEnum(
             xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
 

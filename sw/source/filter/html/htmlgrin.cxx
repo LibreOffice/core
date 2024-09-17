@@ -74,6 +74,7 @@
 #include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
+#include <unotxdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1572,8 +1573,8 @@ void SwHTMLParser::NotifyMacroEventRead()
     SwDocShell *pDocSh = m_xDoc->GetDocShell();
     if (!pDocSh)
         return;
-    uno::Reference<frame::XModel> const xModel(pDocSh->GetBaseModel());
-    comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+    rtl::Reference<SwXTextDocument> const xModel(pDocSh->GetBaseModel());
+    comphelper::DocumentInfo::notifyMacroEventRead(static_cast<SfxBaseModel*>(xModel.get()));
     m_bNotifyMacroEventRead = true;
 }
 

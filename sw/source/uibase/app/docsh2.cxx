@@ -1542,9 +1542,8 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     RemoveLink();
 
     // now also the UNO-Model has to be informed about the new Doc #51535#
-    uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
-    text::XTextDocument* pxDoc = xDoc.get();
-    static_cast<SwXTextDocument*>(pxDoc)->InitNewDoc();
+    rtl::Reference<SwXTextDocument> xDoc(GetBaseModel());
+    xDoc->InitNewDoc();
 
     AddLink();
     //#116402# update font list when new document is created
