@@ -190,6 +190,25 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     m_xLastChecked->set_label(aText);
 }
 
+static inline OUString WrapString(const OUString& aStr)
+{
+    OUString sResult;
+    OUString sPos;
+    int nPos = 0;
+    for (int i = 0; i < aStr.getLength(); i++)
+    {
+        sPos = aStr.subView(i, 1);
+        sResult += sPos;
+        if ((nPos > 50) && (sPos == ";"))
+        {
+            sResult += "/n";
+            nPos = 0;
+        }
+        nPos++;
+    }
+    return sResult;
+}
+
 void SvxOnlineUpdateTabPage::UpdateUserAgent()
 {
     try {
@@ -209,9 +228,7 @@ void SvxOnlineUpdateTabPage::UpdateUserAgent()
             if ( aHeader.First == "User-Agent" )
             {
                 OUString aText = aHeader.Second;
-                aText = aText.replaceAll(";", ";\n");
-                aText = aText.replaceAll("(", "\n(");
-                m_xUserAgentLabel->set_label(aText);
+                m_xUserAgentLabel->set_label(WrapString(aText));
                 break;
             }
         }
