@@ -89,11 +89,6 @@ public:
 private:
 
     css::uno::Reference<css::accessibility::XAccessibleImage> m_xImage;
-
-    css::accessibility::XAccessibleImage* GetXInterface()
-    {
-        return m_xImage.get();
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

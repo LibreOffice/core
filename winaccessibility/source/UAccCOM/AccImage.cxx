@@ -47,7 +47,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
         if (!m_xImage.is())
             return E_FAIL;
 
-        OUString ouStr = GetXInterface()->getAccessibleImageDescription();
+        OUString ouStr = m_xImage->getAccessibleImageDescription();
         SysFreeString(*description);
         *description = sal::systools::BStr::newBSTR(ouStr);
 
