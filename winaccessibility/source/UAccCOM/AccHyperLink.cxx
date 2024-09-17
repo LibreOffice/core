@@ -177,6 +177,10 @@ CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR* index)
         {
             return E_INVALIDARG;
         }
+
+        if (!m_xHyperlink.is())
+            return E_FAIL;
+
         *index = m_xHyperlink->getStartIndex();
 
         return S_OK;
