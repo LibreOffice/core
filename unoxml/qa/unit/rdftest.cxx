@@ -35,6 +35,25 @@ public:
     }
 };
 
+inline void assertStatementEqual(const rdf::Statement& rExpected, const rdf::Statement& rActual,
+                                 const CppUnit::SourceLine& rSourceLine)
+{
+    CPPUNIT_NS::assertEquals(rExpected.Object->getStringValue(), rActual.Object->getStringValue(),
+                             rSourceLine, "different Object");
+    CPPUNIT_NS::assertEquals(rExpected.Predicate->getStringValue(),
+                             rActual.Predicate->getStringValue(), rSourceLine,
+                             "different Predicate");
+    CPPUNIT_NS::assertEquals(rExpected.Subject->getStringValue(), rActual.Subject->getStringValue(),
+                             rSourceLine, "different Subject");
+
+    if (rExpected.Graph)
+        CPPUNIT_NS::assertEquals(rExpected.Graph->getStringValue(), rActual.Graph->getStringValue(),
+                                 rSourceLine, "different Graph");
+}
+
+#define CPPUNIT_ASSERT_STATEMENT_EQUAL(aExpected, aActual)                                         \
+    assertStatementEqual(aExpected, aActual, CPPUNIT_SOURCELINE())
+
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
 {
     const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
@@ -61,10 +80,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
     CPPUNIT_ASSERT(xGraph);
     uno::Reference<container::XEnumeration> xEnum = xGraph->getStatements(xFoo, xBar, nullptr);
 
-    rdf::Statement aStatement = xEnum->nextElement().get<rdf::Statement>();
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("EVIL"), aStatement.Object->getStringValue());
+    rdf::Statement aFooBarEvil(xFoo, xBar, rdf::Literal::create(xContext, "EVIL"), xManifest);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarEvil, xEnum->nextElement().get<rdf::Statement>());
 }
 
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
@@ -76,15 +93,17 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xTextRange(xParaEnum->nextElement(), uno::UNO_QUERY);
 
-    xTextRange->setString(u"behold, for I am the content."_ustr);
-
-    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
-                                                                         uno::UNO_QUERY);
-    uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
-    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDocRepo);
+    OUString aText(u"behold, for I am the content."_ustr);
+    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                          css::uno::UNO_SET_THROW);
+    uno::Reference<css::rdf::XLiteral> xLitText = rdf::Literal::create(xContext, aText);
+    xTextRange->setString(aText);
 
     uno::Reference<rdf::XMetadatable> xMeta(xTextRange, uno::UNO_QUERY);
+
+    uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
+    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocRepo);
 
     // 1. RDFa: get: not empty (initial)
     ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
@@ -92,12 +111,14 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
 
-    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
+
     uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
     uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
     uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
     uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, "uri:int");
-    css::uno::Sequence<uno::Reference<rdf::XURI>> xURI{};
+    uno::Reference<css::rdf::XLiteral> xLitType
+        = rdf::Literal::createWithType(xContext, "42", xInt);
 
     // 2. RDFa: set: no predicate
     try
@@ -127,12 +148,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     xResult = xDocRepo->getStatementRDFa(xMeta);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
-
-    rdf::Statement aStatement = xResult.First[0];
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("behold, for I am the content."),
-                         aStatement.Object->getStringValue());
+    rdf::Statement aFooBarTRLit(xFoo, xBar, xLitText, nullptr);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarTRLit, xResult.First[0]);
 
     xDocRepo->setStatementRDFa(xFoo, xURI2, xMeta, u"42"_ustr, xInt);
 
@@ -141,13 +158,8 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xResult.First.size());
     CPPUNIT_ASSERT(xResult.Second);
 
-    aStatement = xResult.First[0];
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatement.Predicate->getStringValue());
-
-    uno::Reference<css::rdf::XLiteral> xLitType
-        = rdf::Literal::createWithType(xContext, "42", xInt);
-    CPPUNIT_ASSERT_EQUAL(xLitType->getStringValue(), aStatement.Object->getStringValue());
+    rdf::Statement aFooBarLittype(xFoo, xBar, xLitType, nullptr);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLittype, xResult.First[0]);
 
     xDocRepo->removeStatementRDFa(xMeta);
 
@@ -165,23 +177,13 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(3), xResult.First.size());
     CPPUNIT_ASSERT(!xResult.Second);
 
-    aStatement = xResult.First[0];
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:baz"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("behold, for I am the content."),
-                         aStatement.Object->getStringValue());
+    rdf::Statement aFooBazTRLit(xFoo, xBaz, xLitText, nullptr);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBazTRLit, xResult.First[0]);
 
-    aStatement = xResult.First[1];
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("behold, for I am the content."),
-                         aStatement.Object->getStringValue());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarTRLit, xResult.First[1]);
 
-    aStatement = xResult.First[2];
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("behold, for I am the content."),
-                         aStatement.Object->getStringValue());
+    rdf::Statement aFooFooTRLit(xFoo, xFoo, xLitText, nullptr);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooFooTRLit, xResult.First[2]);
 
     xDocRepo->removeStatementRDFa(xMeta);
 
@@ -200,8 +202,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
     const uno::Reference<io::XInputStream> xInputStream(
-        xFileAccess->openFileRead(m_directories.getURLFromSrc(u"/unoxml/qa/unit/data/example.rdf")),
-        uno::UNO_SET_THROW);
+        xFileAccess->openFileRead(createFileURL(u"example.rdf")), uno::UNO_SET_THROW);
     uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
     uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocRepo);
@@ -316,12 +317,11 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
              "?pkg rdf:type pkg:Package . } ";
     uno::Reference<container::XEnumeration> aResultEnum = xDocRepo->queryConstruct(sNss + sQuery);
 
-    rdf::Statement aStatement = aResultEnum->nextElement().get<rdf::Statement>();
-
-    CPPUNIT_ASSERT_EQUAL(OUString("urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3"),
-                         aStatement.Subject->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("uri:foo"), aStatement.Predicate->getStringValue());
-    CPPUNIT_ASSERT_EQUAL(OUString("I am the literal"), aStatement.Object->getStringValue());
+    uno::Reference<css::rdf::XURI> xUuid
+        = rdf::URI::create(xContext, "urn:uuid:224ab023-77b8-4396-a75a-8cecd85b81e3");
+    uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "I am the literal");
+    rdf::Statement aPkgFooLit(xUuid, xFoo, xLit, nullptr);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aPkgFooLit, aResultEnum->nextElement().get<rdf::Statement>());
 
     CPPUNIT_ASSERT(!aResultEnum->hasMoreElements());
 
