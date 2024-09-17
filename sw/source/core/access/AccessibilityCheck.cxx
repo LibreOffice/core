@@ -370,42 +370,48 @@ public:
 class HyperlinkCheck : public NodeCheck
 {
 private:
-    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange, SwTextNode* pTextNode,
-                        sal_Int32 nStart)
+    void checkHyperLinks(SwTextNode* pTextNode)
     {
-        uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
-        if (!xProperties->getPropertySetInfo()->hasPropertyByName("HyperLinkURL"))
-            return;
-
-        OUString sHyperlink;
-        xProperties->getPropertyValue("HyperLinkURL") >>= sHyperlink;
-        if (!sHyperlink.isEmpty())
+        const OUString& sParagraphText = pTextNode->GetText();
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t i = 0; i < rHints.Count(); ++i)
         {
-            OUString sText = xTextRange->getString();
-            INetURLObject aHyperlink(sHyperlink);
-            std::shared_ptr<sw::AccessibilityIssue> pIssue;
-            if (aHyperlink.GetProtocol() != INetProtocol::NotValid
-                && INetURLObject(sText) == aHyperlink)
+            const SwTextAttr* pTextAttr = rHints.Get(i);
+            if (pTextAttr->Which() == RES_TXTATR_INETFMT)
             {
-                OUString sIssueText
-                    = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
-                pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
-                                     sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
-            }
-            else if (sText.getLength() <= 5)
-            {
-                pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
-                                     sfx::AccessibilityIssueID::HYPERLINK_SHORT);
-            }
+                OUString sHyperlink = pTextAttr->GetINetFormat().GetValue();
+                if (!sHyperlink.isEmpty())
+                {
+                    INetURLObject aHyperlink(sHyperlink);
+                    std::shared_ptr<sw::AccessibilityIssue> pIssue;
+                    sal_Int32 nStart = pTextAttr->GetStart();
+                    OUString sRunText = sParagraphText.copy(nStart, *pTextAttr->GetEnd() - nStart);
 
-            if (pIssue)
-            {
-                pIssue->setIssueObject(IssueObject::TEXT);
-                pIssue->setNode(pTextNode);
-                SwDoc& rDocument = pTextNode->GetDoc();
-                pIssue->setDoc(rDocument);
-                pIssue->setStart(nStart);
-                pIssue->setEnd(nStart + sText.getLength());
+                    if (aHyperlink.GetProtocol() != INetProtocol::NotValid
+                        && INetURLObject(sRunText) == aHyperlink)
+                    {
+                        OUString sIssueText = SwResId(STR_HYPERLINK_TEXT_IS_LINK)
+                                                  .replaceFirst("%LINK%", sHyperlink);
+                        pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                             sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
+                    }
+                    else if (sRunText.getLength() <= 5)
+                    {
+                        pIssue
+                            = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
+                                          sfx::AccessibilityIssueID::HYPERLINK_SHORT);
+                    }
+
+                    if (pIssue)
+                    {
+                        pIssue->setIssueObject(IssueObject::TEXT);
+                        pIssue->setNode(pTextNode);
+                        SwDoc& rDocument = pTextNode->GetDoc();
+                        pIssue->setDoc(rDocument);
+                        pIssue->setStart(nStart);
+                        pIssue->setEnd(nStart + sRunText.getLength());
+                    }
+                }
             }
         }
     }
@@ -422,21 +428,9 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
-        rtl::Reference<SwXParagraph> xParagraph
-            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
-        if (!xParagraph.is())
-            return;
-
-        uno::Reference<container::XEnumeration> xRunEnum = xParagraph->createEnumeration();
-        sal_Int32 nStart = 0;
-        while (xRunEnum->hasMoreElements())
+        if (pTextNode->HasHints())
         {
-            uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-            if (xRun.is())
-            {
-                checkTextRange(xRun, pTextNode, nStart);
-                nStart += xRun->getString().getLength();
-            }
+            checkHyperLinks(pTextNode);
         }
     }
 };
