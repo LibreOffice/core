@@ -3751,7 +3751,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     }
     else if (sClass == "GtkTextBuffer")
     {
-        m_pVclParserState->m_aTextBuffers[sID] = aProperties;
+        addTextBuffer(sID, aProperties);
         return nullptr;
     }
 
@@ -4246,10 +4246,15 @@ const BuilderBase::ListStore* BuilderBase::get_model_by_name(const OUString& sID
     return nullptr;
 }
 
-const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(const OUString& sID) const
+void BuilderBase::addTextBuffer(const OUString& sID, const TextBuffer& rTextBuffer)
 {
-    const auto aI = m_pVclParserState->m_aTextBuffers.find(sID);
-    if (aI != m_pVclParserState->m_aTextBuffers.end())
+    m_pParserState->m_aTextBuffers[sID] = rTextBuffer;
+}
+
+const BuilderBase::TextBuffer* BuilderBase::get_buffer_by_name(const OUString& sID) const
+{
+    const auto aI = m_pParserState->m_aTextBuffers.find(sID);
+    if (aI != m_pParserState->m_aTextBuffers.end())
         return &(aI->second);
     return nullptr;
 }

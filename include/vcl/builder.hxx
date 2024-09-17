@@ -71,6 +71,7 @@ public:
     typedef std::map<OUString, std::pair<OUString, OUString>> accelmap;
 
     typedef stringmap Adjustment;
+    typedef stringmap TextBuffer;
 
 protected:
     BuilderBase(bool bLegacy);
@@ -116,6 +117,10 @@ protected:
 
     void addAdjustment(const OUString& sID, const Adjustment& rAdjustment);
     const Adjustment* get_adjustment_by_name(const OUString& sID) const;
+
+    void addTextBuffer(const OUString& sID, const TextBuffer& rTextBuffer);
+    const TextBuffer* get_buffer_by_name(const OUString& sID) const;
+
     const ListStore* get_model_by_name(const OUString& sID) const;
 
     void handleSizeGroup(xmlreader::XmlReader& reader);
@@ -131,6 +136,7 @@ private:
         std::vector<SizeGroup> m_aSizeGroups;
 
         std::map<OUString, Adjustment> m_aAdjustments;
+        std::map<OUString, TextBuffer> m_aTextBuffers;
     };
 
     std::unique_ptr<ParserState> m_pParserState;
@@ -273,9 +279,6 @@ private:
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
-    typedef stringmap TextBuffer;
-    const TextBuffer* get_buffer_by_name(const OUString& sID) const;
-
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
@@ -294,7 +297,6 @@ private:
         std::vector<ComboBoxModelMap> m_aModelMaps;
 
         std::vector<TextBufferMap> m_aTextBufferMaps;
-        std::map<OUString, TextBuffer> m_aTextBuffers;
 
         std::vector<WidgetAdjustmentMap> m_aNumericFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aFormattedFormatterAdjustmentMaps;
