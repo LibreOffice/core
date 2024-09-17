@@ -1173,7 +1173,7 @@ public:
         @return  true = DDE link found and matrix set. */
     bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
-    SfxBindings*                    GetViewBindings();
+    SAL_RET_MAYBENULL SfxBindings*  GetViewBindings();
     ScDocShell*                     GetDocumentShell() const    { return mpShell; }
     SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer.get();  }
     SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer.get();  }
