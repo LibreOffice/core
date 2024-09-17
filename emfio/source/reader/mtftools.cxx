@@ -1712,6 +1712,19 @@ namespace emfio
         if ( mnLatestTextAlign != mnTextAlign )
         {
             bChangeFont = true;
+
+            if ((mnLatestTextAlign & TA_RTLREADING) != (mnTextAlign & TA_RTLREADING))
+            {
+                auto nFlags = vcl::text::ComplexTextLayoutFlags::Default;
+                if (mnTextAlign & TA_RTLREADING)
+                {
+                    nFlags = vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                             | vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+                }
+
+                mpGDIMetaFile->AddAction(new MetaLayoutModeAction(nFlags));
+            }
+
             mnLatestTextAlign = mnTextAlign;
             mpGDIMetaFile->AddAction( new MetaTextAlignAction( eTextAlign ) );
         }
