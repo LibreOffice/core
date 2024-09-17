@@ -1154,7 +1154,7 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     // page.  This way the PageSelector will recognize it again as
     // anchor (the first selected page after a DeselectAllPages()
     // becomes the anchor.)
-    const sal_uInt16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
+    const sal_Int16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
     sal_uInt16 nIndex (nAnchorIndex);
     while (true)
     {
