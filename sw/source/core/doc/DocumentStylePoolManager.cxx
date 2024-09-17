@@ -1015,15 +1015,26 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SetAllScriptItem(aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE));
 
-                auto const aIndent(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
-                SvxTextLeftMarginItem const leftMargin(aIndent, RES_MARGIN_TEXTLEFT);
-                SvxRightMarginItem const rightMargin(aIndent, RES_MARGIN_RIGHT);
-                aSet.Put(leftMargin);
-                aSet.Put(rightMargin);
+                // Left margin (i.e. Before text indent)
+                aSet.Put(SvxTextLeftMarginItem (0, RES_MARGIN_TEXTLEFT));
 
-                auto const aSpacing(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
-                SvxULSpaceItem topSpacing( aSpacing, 0, RES_UL_SPACE );
-                aSet.Put(topSpacing);
+                // Right margin (i.e. After text indent)
+                aSet.Put(SvxRightMarginItem(0, RES_MARGIN_RIGHT));
+
+                // First line indent
+                aSet.Put(SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE));
+
+                // Top/bottom spacing (i.e. Above/Below paragraph spacing)
+                aSet.Put(SvxULSpaceItem(0, 0, RES_UL_SPACE));
+
+                // Line spacing = SINGLE
+                aSet.Put(SvxLineSpacingItem(0, RES_PARATR_LINESPACING));
+
+                // Font color
+                aSet.Put(SvxColorItem(COL_AUTO, RES_CHRATR_COLOR));
+
+                // Highlight color = NONE
+                aSet.Put(SvxBrushItem(COL_TRANSPARENT, RES_CHRATR_HIGHLIGHT));
             }
             break;
 
