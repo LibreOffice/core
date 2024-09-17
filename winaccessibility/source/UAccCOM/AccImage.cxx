@@ -44,7 +44,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
     {
         if (description == nullptr)
             return E_INVALIDARG;
-        if (!pRXImg.is())
+        if (!m_xImage.is())
             return E_FAIL;
 
         OUString ouStr = GetXInterface()->getAccessibleImageDescription();
@@ -97,9 +97,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
         }
         Reference<XAccessibleImage> pRXI(pRContext, UNO_QUERY);
         if (!pRXI.is())
-            pRXImg = nullptr;
+            m_xImage = nullptr;
         else
-            pRXImg = pRXI.get();
+            m_xImage = pRXI.get();
         return S_OK;
     }
     catch (...)

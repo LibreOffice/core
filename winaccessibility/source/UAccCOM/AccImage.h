@@ -88,11 +88,11 @@ public:
 
 private:
 
-    css::uno::Reference<css::accessibility::XAccessibleImage> pRXImg;
+    css::uno::Reference<css::accessibility::XAccessibleImage> m_xImage;
 
     css::accessibility::XAccessibleImage* GetXInterface()
     {
-        return pRXImg.get();
+        return m_xImage.get();
     }
 };
 
