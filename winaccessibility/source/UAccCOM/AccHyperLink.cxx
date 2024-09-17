@@ -272,12 +272,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterfac
                 return E_FAIL;
             }
             Reference<XAccessibleHyperlink> pRXI(pRContext, UNO_QUERY);
-            if (!pRXI.is())
-            {
-                m_xHyperlink = nullptr;
-            }
-            else
-                m_xHyperlink = pRXI.get();
+            m_xHyperlink = pRXI;
         }
         return S_OK;
     }
