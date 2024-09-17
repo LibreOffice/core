@@ -1931,8 +1931,20 @@ CPPUNIT_TEST_FIXTURE(Test, test162268Tdf)
         = getXPath(pLayout, "/root/page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1387), nBodyTop);
 }
-// tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf163003)
+{
+    createSwDoc("tdf163003.rtf");
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(u"Standard"_ustr),
+                                                uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle1, u"ParaHyphenationNoCaps"_ustr));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(1)),
+                         getProperty<sal_Int32>(getShape(1), u"VertOrientPosition"_ustr));
+}
+
+// tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

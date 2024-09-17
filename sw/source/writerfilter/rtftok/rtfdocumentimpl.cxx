@@ -2064,6 +2064,10 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
         case RTFKeyword::HYPHAUTO:
             m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_autoHyphenation, pBoolValue);
             break;
+        case RTFKeyword::HYPHCAPS:
+            pBoolValue = new RTFValue(int(nParam == 0));
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_doNotHyphenateCaps, pBoolValue);
+            break;
         case RTFKeyword::HYPHPAR:
             m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_suppressAutoHyphens,
                                                     new RTFValue(int(bParam && nParam == 0)));
