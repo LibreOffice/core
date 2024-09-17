@@ -28,7 +28,6 @@ $(eval $(call gb_JunitTest_use_unoapi_jars,unoxml_complex))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,unoxml_complex,\
     unoxml/qa/complex/unoxml/DOMTest \
-    unoxml/qa/complex/unoxml/TestDocument \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,unoxml_complex,\

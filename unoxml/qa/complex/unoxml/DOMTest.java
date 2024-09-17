@@ -93,57 +93,6 @@ public class DOMTest
         //FIXME TODO
     }
 
-    @Test
-    public void testXDocumentBuilder() throws Exception
-    {
-        XDocumentBuilder xBuilder =
-            UnoRuntime.queryInterface(XDocumentBuilder.class,
-            m_xMSF.createInstance("com.sun.star.xml.dom.DocumentBuilder"));
-
-        XDOMImplementation xDomImpl = xBuilder.getDOMImplementation();
-//FIXME fails        assertNotNull("getDOMImplementation", xDomImpl);
-
-        xBuilder.isNamespaceAware();
-        xBuilder.isValidating();
-
-        {
-            XDocument xDoc = xBuilder.newDocument();
-            assertNotNull("newDocument", xDoc);
-        }
-
-        try {
-            xBuilder.parse(null);
-            fail("XDocumentBuilder.parse(null)");
-        } catch (Exception e) { /* expected */ }
-        {
-            XInputStream xIn = new StreamSimulator(
-                    TestDocument.getUrl("example.rdf"), true, m_params);
-            XDocument xDoc = xBuilder.parse(xIn);
-            assertNotNull("XDocumentBuilder.parse", xDoc);
-        }
-        try {
-            xBuilder.parseURI("");
-            fail("XDocumentBuilder.parseURI(\"\")");
-        } catch (Exception e) { /* expected */ }
-        {
-            XDocument xDoc =
-                xBuilder.parseURI(TestDocument.getUrl("example.rdf"));
-            assertNotNull("XDocumentBuilder.parseURI", xDoc);
-        }
-
-        xBuilder.setEntityResolver(null);
-        /* FIXME TODO
-        XEntityResolver xER;
-        xBuilder.setEntityResolver(xER);
-        */
-
-        xBuilder.setErrorHandler(null);
-        /* FIXME TODO
-        XErrorHandler xEH;
-        xBuilder.setErrorHandler(xEH);
-        */
-    }
-
     @Test public void testXDocument() throws Exception
     {
         XDocumentBuilder xBuilder =

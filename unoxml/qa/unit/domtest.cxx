@@ -22,10 +22,13 @@
 #include <sax/fastattribs.hxx>
 #include <comphelper/seqstream.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
@@ -262,6 +265,50 @@ struct BasicTest : public test::BootstrapFixture
             mxErrHandler->mnErrCount /*&& !mxErrHandler->mnFatalCount*/);
     }
 
+    void testXDocumentBuilder()
+    {
+        mxDomBuilder->isNamespaceAware();
+        mxDomBuilder->isValidating();
+
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        try
+        {
+            mxDomBuilder->parse(nullptr);
+            CPPUNIT_FAIL("XDocumentBuilder.parse(null)");
+        }
+        catch (css::uno::RuntimeException&)
+        {
+        }
+
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
+        const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+        uno::Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(m_directories.getURLFromSrc(u"/unoxml/qa/unit/data/example.rdf")),
+                                                  uno::UNO_SET_THROW);
+
+        xDocument = mxDomBuilder->parse(xInputStream);
+        CPPUNIT_ASSERT(xDocument);
+
+        try
+        {
+            mxDomBuilder->parseURI(u""_ustr);
+            CPPUNIT_FAIL("XDocumentBuilder.parseURI(\"\")");
+        }
+        catch (com::sun::star::ucb::ContentCreationException&)
+        {
+        }
+
+        xDocument = mxDomBuilder->parseURI(m_directories.getURLFromSrc(u"/unoxml/qa/unit/data/example.rdf"));
+        CPPUNIT_ASSERT(xDocument);
+
+        mxDomBuilder->setEntityResolver(nullptr);
+        mxDomBuilder->setErrorHandler(nullptr);
+    }
+
         // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -269,6 +316,7 @@ struct BasicTest : public test::BootstrapFixture
     CPPUNIT_TEST(validInputTest);
     CPPUNIT_TEST(warningInputTest);
     CPPUNIT_TEST(errorInputTest);
+    CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST_SUITE_END();
 };
 
