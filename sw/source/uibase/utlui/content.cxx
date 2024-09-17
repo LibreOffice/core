@@ -1021,8 +1021,8 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
     if( pEntry == nullptr)
         return OUString();
 
-    assert(pEntry->GetUserData() == nullptr || dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-    SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
+    //??? assert(pEntry->GetUserData() == nullptr || dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
+    SwContent* pCnt = dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData()));
     if( pCnt == nullptr || pCnt->GetParent() == nullptr)
         return OUString();
 
