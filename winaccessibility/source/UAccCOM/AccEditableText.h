@@ -95,12 +95,12 @@ public:
     STDMETHOD(put_XInterface)(hyper pXInterface) override;
 
 private:
-    css::uno::Reference<css::accessibility::XAccessibleEditableText> pRXEdtTxt;
+    css::uno::Reference<css::accessibility::XAccessibleEditableText> m_xEditableText;
 
     static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString& ouValue,
                                    css::uno::Any& rAny);
 
-    css::accessibility::XAccessibleEditableText* GetXInterface() { return pRXEdtTxt.get(); }
+    css::accessibility::XAccessibleEditableText* GetXInterface() { return m_xEditableText.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

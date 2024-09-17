@@ -54,7 +54,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, l
 
     try
     {
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
         {
             return E_FAIL;
         }
@@ -83,7 +83,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset,
 
     try
     {
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         if (GetXInterface()->deleteText(startOffset, endOffset))
@@ -113,7 +113,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR
         if (text == nullptr)
             return E_INVALIDARG;
 
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         OUString ouStr(o3tl::toU(*text));
@@ -142,7 +142,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, lo
 
     try
     {
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         if (GetXInterface()->cutText(startOffset, endOffset))
@@ -168,7 +168,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
 
     try
     {
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         if (GetXInterface()->pasteText(offset))
@@ -199,7 +199,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset
     {
         if (text == nullptr)
             return E_INVALIDARG;
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         OUString ouStr(o3tl::toU(*text));
@@ -231,7 +231,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
     {
         if (attributes == nullptr)
             return E_INVALIDARG;
-        if (!pRXEdtTxt.is())
+        if (!m_xEditableText.is())
             return E_FAIL;
 
         OUString ouStr(o3tl::toU(*attributes));
@@ -499,9 +499,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::put_XInterface(hyper pXInter
         }
         Reference<XAccessibleEditableText> pRXI(pRContext, UNO_QUERY);
         if (!pRXI.is())
-            pRXEdtTxt = nullptr;
+            m_xEditableText = nullptr;
         else
-            pRXEdtTxt = pRXI.get();
+            m_xEditableText = pRXI.get();
         return S_OK;
     }
     catch (...)
