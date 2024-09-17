@@ -1346,18 +1346,16 @@ void RtfExport::OutColorTable()
     }
 
     // background color
-    static const sal_uInt16 aBrushIds[] = { RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0 };
 
-    for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)
     {
-        auto pBackground = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
+        const SvxBrushItem* pBackground = GetDfltAttr(RES_BACKGROUND);
         InsColor(pBackground->GetColor());
-        pBackground = static_cast<const SvxBrushItem*>(rPool.GetUserDefaultItem(*pIds));
+        pBackground = rPool.GetUserDefaultItem(RES_BACKGROUND);
         if (pBackground)
         {
             InsColor(pBackground->GetColor());
         }
-        rPool.GetItemSurrogates(aSurrogates, *pIds);
+        rPool.GetItemSurrogates(aSurrogates, RES_BACKGROUND);
         for (const SfxPoolItem* pItem : aSurrogates)
         {
             pBackground = static_cast<const SvxBrushItem*>(pItem);
@@ -1366,6 +1364,19 @@ void RtfExport::OutColorTable()
                 InsColor(pBackground->GetColor());
             }
         }
+    }
+    {
+        const SvxBrushItem* pBackground = GetDfltAttr(RES_CHRATR_BACKGROUND);
+        InsColor(pBackground->GetColor());
+        pBackground = rPool.GetUserDefaultItem(RES_CHRATR_BACKGROUND);
+        if (pBackground)
+        {
+            InsColor(pBackground->GetColor());
+        }
+        m_rDoc.ForEachCharacterBrushItem([this](const SvxBrushItem& rBrush) -> bool {
+            InsColor(rBrush.GetColor());
+            return true;
+        });
     }
 
     // shadow color
