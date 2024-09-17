@@ -1446,6 +1446,9 @@ public:
     /// Iterate over all RES_CHRATR_COLOR SvxColorItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachCharacterColorItem(const std::function<bool(const SvxColorItem&)>&  ) const;
 
+    /// Iterate over all RES_CHRATR_UNDERLINE SvxUnderlineItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachCharacterUnderlineItem(const std::function<bool(const SvxUnderlineItem&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 

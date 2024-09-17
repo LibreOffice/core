@@ -1332,12 +1332,10 @@ void RtfExport::OutColorTable()
 
         auto pUnder = GetDfltAttr(RES_CHRATR_UNDERLINE);
         InsColor(pUnder->GetColor());
-        rPool.GetItemSurrogates(aSurrogates, RES_CHRATR_UNDERLINE);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pUnder = &static_cast<const SvxUnderlineItem&>(*pItem);
-            InsColor(pUnder->GetColor());
-        }
+        m_rDoc.ForEachCharacterUnderlineItem([this](const SvxUnderlineItem& rUnder) -> bool {
+            InsColor(rUnder.GetColor());
+            return true;
+        });
 
         auto pOver = GetDfltAttr(RES_CHRATR_OVERLINE);
         InsColor(pOver->GetColor());

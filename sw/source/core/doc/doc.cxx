@@ -1452,6 +1452,26 @@ void SwDoc::ForEachCharacterColorItem( const std::function<bool(const SvxColorIt
     }
 }
 
+/// Iterate over all SvxUnderlineItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterUnderlineItem( const std::function<bool(const SvxUnderlineItem&)>& rFunc ) const
+{
+    for(SwCharFormat* pFormat : *GetCharFormats())
+    {
+        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+        if (const SvxUnderlineItem* pItem = rAttrSet.GetItemIfSet(RES_CHRATR_UNDERLINE))
+            if (!rFunc(*pItem))
+                return;
+    }
+    std::vector<std::shared_ptr<SfxItemSet>> aStyles;
+    for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
+    {
+        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
+        for (const auto & rxItemSet : aStyles)
+            if (const SvxUnderlineItem* pItem = rxItemSet->GetItemIfSet(RES_CHRATR_UNDERLINE))
+                if (!rFunc(*pItem))
+                    return;
+    }
+}
 
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
