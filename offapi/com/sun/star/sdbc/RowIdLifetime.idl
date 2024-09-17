@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** determines RowId life-time values.
+    @since LibreOffice 25.2
+ */
+constants RowIdLifetime
+{
+    /** Indicates that this data source does not support the ROWID type.
+     */
+    const long ROWID_UNSUPPORTED = 0;
+
+    /** Indicates that the lifetime of a RowId from this data source is, effectively, unlimited.
+     */
+    const long ROWID_VALID_FOREVER = 1;
+
+    /** Indicates that the lifetime of a RowId from this data source is indeterminate; but not one of ROWID_VALID_TRANSACTION, ROWID_VALID_SESSION, or, ROWID_VALID_FOREVER.
+     */
+    const long ROWID_VALID_OTHER = 2;
+
+    /** Indicates that the lifetime of a RowId from this data source is at least the containing session.
+     */
+    const long ROWID_VALID_SESSION = 3;
+
+    /** Indicates that the lifetime of a RowId from this data source is at least the containing transaction.
+     */
+    const long ROWID_VALID_TRANSACTION = 4;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

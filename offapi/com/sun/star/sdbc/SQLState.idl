@@ -1,0 +1,53 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+ module com {  module sun {  module star {  module sdbc {
+
+
+/** determines SQL State values.
+    @since LibreOffice 25.2
+ */
+constants SQLState
+{
+    /**
+     *  A possible return value for the method
+     * {@code DatabaseMetaData.getSQLStateType} which is used to indicate
+     * whether the value returned by the method
+     * {@code SQLException.getSQLState} is an
+     * X/Open (now know as Open Group) SQL CLI SQLSTATE value.
+     *
+     */
+    const long sqlStateXOpen = 1;
+
+    /**
+     *  A possible return value for the method
+     * {@code DatabaseMetaData.getSQLStateType} which is used to indicate
+     * whether the value returned by the method
+     * {@code SQLException.getSQLState} is an SQLSTATE value.
+     *
+     */
+    const long sqlStateSQL = 2;
+
+     /**
+     *  A possible return value for the method
+     * {@code DatabaseMetaData.getSQLStateType} which is used to indicate
+     * whether the value returned by the method
+     * {@code SQLException.getSQLState} is an SQL99 SQLSTATE value.
+     * <P>
+     * <b>Note:</b>This constant remains only for compatibility reasons. Developers
+     * should use the constant {@code sqlStateSQL} instead.
+     *
+     */
+    const long sqlStateSQL99 = sqlStateSQL;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

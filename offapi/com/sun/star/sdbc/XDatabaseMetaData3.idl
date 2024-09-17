@@ -1,0 +1,614 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+module com { module sun { module star { module sdbc {
+
+
+/** extends the XDatabaseMetaData interface to allow retrieval of additional
+    information.
+    @since LibreOffice 25.2
+ */
+interface XDatabaseMetaData3 : XDatabaseMetaData2
+{
+    /**
+     * Retrieves whether a {@code SQLException} while autoCommit is {@code true} indicates
+     * that all open ResultSets are closed, even ones that are holdable.  When a {@code SQLException} occurs while
+     * autocommit is {@code true}, it is vendor specific whether the JDBC driver responds with a commit operation, a
+     * rollback operation, or by doing neither a commit nor a rollback.  A potential result of this difference
+     * is in whether or not holdable ResultSets are closed.
+     *
+     * @return {@code true} if so; {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean autoCommitFailureClosesAllResultSets() raises (SQLException);
+
+    /**
+     * Retrieves whether a generated key will always be returned if the column
+     * name(s) or index(es) specified for the auto generated key column(s)
+     * are valid and the statement succeeds.  The key that is returned may or
+     * may not be based on the column(s) for the auto generated key.
+     * Consult your JDBC driver documentation for additional details.
+     * @return {@code true} if so; {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean generatedKeyAlwaysReturned() raises (SQLException);
+
+    /**
+     * Retrieves a description of the given attribute of the given type
+     * for a user-defined type (UDT) that is available in the given schema
+     * and catalog.
+     * <P>
+     * Descriptions are returned only for attributes of UDTs matching the
+     * catalog, schema, type, and attribute name criteria. They are ordered by
+     * {@code TYPE_CAT}, {@code TYPE_SCHEM},
+     * {@code TYPE_NAME} and {@code ORDINAL_POSITION}. This description
+     * does not contain inherited attributes.
+     * <P>
+     * The {@code ResultSet} object that is returned has the following
+     * columns:
+     * <OL>
+     *  <LI><B>TYPE_CAT</B> String {@code =>} type catalog (may be {@code null})
+     *  <LI><B>TYPE_SCHEM</B> String {@code =>} type schema (may be {@code null})
+     *  <LI><B>TYPE_NAME</B> String {@code =>} type name
+     *  <LI><B>ATTR_NAME</B> String {@code =>} attribute name
+     *  <LI><B>DATA_TYPE</B> int {@code =>} attribute type SQL type from java.sql.Types
+     *  <LI><B>ATTR_TYPE_NAME</B> String {@code =>} Data source dependent type name.
+     *  For a UDT, the type name is fully qualified. For a REF, the type name is
+     *  fully qualified and represents the target type of the reference type.
+     *  <LI><B>ATTR_SIZE</B> int {@code =>} column size.  For char or date
+     *      types this is the maximum number of characters; for numeric or
+     *      decimal types this is precision.
+     *  <LI><B>DECIMAL_DIGITS</B> int {@code =>} the number of fractional digits. Null is returned for data types where
+     * DECIMAL_DIGITS is not applicable.
+     *  <LI><B>NUM_PREC_RADIX</B> int {@code =>} Radix (typically either 10 or 2)
+     *  <LI><B>NULLABLE</B> int {@code =>} whether NULL is allowed
+     *      <UL>
+     *      <LI> attributeNoNulls - might not allow NULL values
+     *      <LI> attributeNullable - definitely allows NULL values
+     *      <LI> attributeNullableUnknown - nullability unknown
+     *      </UL>
+     *  <LI><B>REMARKS</B> String {@code =>} comment describing column (may be {@code null})
+     *  <LI><B>ATTR_DEF</B> String {@code =>} default value (may be {@code null})
+     *  <LI><B>SQL_DATA_TYPE</B> int {@code =>} unused
+     *  <LI><B>SQL_DATETIME_SUB</B> int {@code =>} unused
+     *  <LI><B>CHAR_OCTET_LENGTH</B> int {@code =>} for char types the
+     *       maximum number of bytes in the column
+     *  <LI><B>ORDINAL_POSITION</B> int {@code =>} index of the attribute in the UDT
+     *      (starting at 1)
+     *  <LI><B>IS_NULLABLE</B> String  {@code =>} ISO rules are used to determine
+     * the nullability for a attribute.
+     *       <UL>
+     *       <LI> YES           --- if the attribute can include NULLs
+     *       <LI> NO            --- if the attribute cannot include NULLs
+     *       <LI> empty string  --- if the nullability for the
+     * attribute is unknown
+     *       </UL>
+     *  <LI><B>SCOPE_CATALOG</B> String {@code =>} catalog of table that is the
+     *      scope of a reference attribute ({@code null} if DATA_TYPE isn't REF)
+     *  <LI><B>SCOPE_SCHEMA</B> String {@code =>} schema of table that is the
+     *      scope of a reference attribute ({@code null} if DATA_TYPE isn't REF)
+     *  <LI><B>SCOPE_TABLE</B> String {@code =>} table name that is the scope of a
+     *      reference attribute ({@code null} if the DATA_TYPE isn't REF)
+     * <LI><B>SOURCE_DATA_TYPE</B> short {@code =>} source type of a distinct type or user-generated
+     *      Ref type, SQL type from java.sql.Types ({@code null} if DATA_TYPE
+     *      isn't DISTINCT or user-generated REF)
+     * </OL>
+     * @param catalog a catalog name; must match the catalog name as it
+     *        is stored in the database; "" retrieves those without a catalog;
+     *        {@code null} means that the catalog name should not be used to narrow
+     *        the search
+     * @param schemaPattern a schema name pattern; must match the schema name
+     *        as it is stored in the database; "" retrieves those without a schema;
+     *        {@code null} means that the schema name should not be used to narrow
+     *        the search
+     * @param typeNamePattern a type name pattern; must match the
+     *        type name as it is stored in the database
+     * @param attributeNamePattern an attribute name pattern; must match the attribute
+     *        name as it is declared in the database
+     * @return a {@code ResultSet} object in which each row is an
+     *         attribute description
+     *  @throws SQLException
+     *      if a database access error occurs.
+     */
+    XResultSet getAttributes([in]string catalog, [in]string schemaPattern, [in]string typeNamePattern, [in]string attributeNamePattern) raises (SQLException);
+
+    /**
+     * Retrieves a list of the client info properties
+     * that the driver supports.  The result set contains the following columns
+     *
+     * <ol>
+     * <li><b>NAME</b> String{@code =>} The name of the client info property<br>
+     * <li><b>MAX_LEN</b> int{@code =>} The maximum length of the value for the property<br>
+     * <li><b>DEFAULT_VALUE</b> String{@code =>} The default value of the property<br>
+     * <li><b>DESCRIPTION</b> String{@code =>} A description of the property.  This will typically
+     *                                              contain information as to where this property is
+     *                                              stored in the database.
+     * </ol>
+     * <p>
+     * The {@code ResultSet} is sorted by the NAME column
+     *
+     * @return      A {@code ResultSet} object; each row is a supported client info
+     * property
+     *
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getClientInfoProperties() raises (SQLException);
+
+   /**
+     * Retrieves the major version number of the underlying database.
+     *
+     * @return the underlying database's major version
+     * @throws SQLException if a database access error occurs
+     */
+    long getDatabaseMajorVersion();
+
+    /**
+     * Retrieves the minor version number of the underlying database.
+     *
+     * @return underlying database's minor version
+     * @throws SQLException if a database access error occurs
+     */
+    long getDatabaseMinorVersion();
+
+    /**
+     * Retrieves a description of the  system and user functions available
+     * in the given catalog.
+     * <P>
+     * Only system and user function descriptions matching the schema and
+     * function name criteria are returned.  They are ordered by
+     * {@code FUNCTION_CAT}, {@code FUNCTION_SCHEM},
+     * {@code FUNCTION_NAME} and
+     * {@code SPECIFIC_NAME}.
+     *
+     * <P>Each function description has the following columns:
+     *  <OL>
+     *  <LI><B>FUNCTION_CAT</B> String {@code =>} function catalog (may be {@code null})
+     *  <LI><B>FUNCTION_SCHEM</B> String {@code =>} function schema (may be {@code null})
+     *  <LI><B>FUNCTION_NAME</B> String {@code =>} function name.  This is the name
+     * used to invoke the function
+     *  <LI><B>REMARKS</B> String {@code =>} explanatory comment on the function
+     * <LI><B>FUNCTION_TYPE</B> short {@code =>} kind of function:
+     *      <UL>
+     *      <LI>functionResultUnknown - Cannot determine if a return value
+     *       or table will be returned
+     *      <LI> functionNoTable- Does not return a table
+     *      <LI> functionReturnsTable - Returns a table
+     *      </UL>
+     *  <LI><B>SPECIFIC_NAME</B> String  {@code =>} the name which uniquely identifies
+     *  this function within its schema.  This is a user specified, or DBMS
+     * generated, name that may be different then the {@code FUNCTION_NAME}
+     * for example with overload functions
+     *  </OL>
+     * <p>
+     * A user may not have permission to execute any of the functions that are
+     * returned by {@code getFunctions}
+     *
+     * @param catalog a catalog name; must match the catalog name as it
+     *        is stored in the database; "" retrieves those without a catalog;
+     *        {@code null} means that the catalog name should not be used to narrow
+     *        the search
+     * @param schemaPattern a schema name pattern; must match the schema name
+     *        as it is stored in the database; "" retrieves those without a schema;
+     *        {@code null} means that the schema name should not be used to narrow
+     *        the search
+     * @param functionNamePattern a function name pattern; must match the
+     *        function name as it is stored in the database
+     * @return {@code ResultSet} - each row is a function description
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getFunctions([in]string catalog, [in]string schemaPattern, [in]string functionNamePattern) raises (SQLException);
+
+    /**
+    /**
+     * Retrieves a description of the given catalog's system or user
+     * function parameters and return type.
+     *
+     * <P>Only descriptions matching the schema,  function and
+     * parameter name criteria are returned. They are ordered by
+     * {@code FUNCTION_CAT}, {@code FUNCTION_SCHEM},
+     * {@code FUNCTION_NAME} and
+     * {@code SPECIFIC_NAME}. Within this, the return value,
+     * if any, is first. Next are the parameter descriptions in call
+     * order. The column descriptions follow in column number order.
+     *
+     * <P>Each row in the {@code ResultSet}
+     * is a parameter description, column description or
+     * return type description with the following fields:
+     *  <OL>
+     *  <LI><B>FUNCTION_CAT</B> String {@code =>} function catalog (may be {@code null})
+     *  <LI><B>FUNCTION_SCHEM</B> String {@code =>} function schema (may be {@code null})
+     *  <LI><B>FUNCTION_NAME</B> String {@code =>} function name.  This is the name
+     * used to invoke the function
+     *  <LI><B>COLUMN_NAME</B> String {@code =>} column/parameter name
+     *  <LI><B>COLUMN_TYPE</B> Short {@code =>} kind of column/parameter:
+     *      <UL>
+     *      <LI> functionColumnUnknown - nobody knows
+     *      <LI> functionColumnIn - IN parameter
+     *      <LI> functionColumnInOut - INOUT parameter
+     *      <LI> functionColumnOut - OUT parameter
+     *      <LI> functionReturn - function return value
+     *      <LI> functionColumnResult - Indicates that the parameter or column
+     *  is a column in the {@code ResultSet}
+     *      </UL>
+     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from java.sql.Types
+     *  <LI><B>TYPE_NAME</B> String {@code =>} SQL type name, for a UDT type the
+     *  type name is fully qualified
+     *  <LI><B>PRECISION</B> int {@code =>} precision
+     *  <LI><B>LENGTH</B> int {@code =>} length in bytes of data
+     *  <LI><B>SCALE</B> short {@code =>} scale -  null is returned for data types where
+     * SCALE is not applicable.
+     *  <LI><B>RADIX</B> short {@code =>} radix
+     *  <LI><B>NULLABLE</B> short {@code =>} can it contain NULL.
+     *      <UL>
+     *      <LI> functionNoNulls - does not allow NULL values
+     *      <LI> functionNullable - allows NULL values
+     *      <LI> functionNullableUnknown - nullability unknown
+     *      </UL>
+     *  <LI><B>REMARKS</B> String {@code =>} comment describing column/parameter
+     *  <LI><B>CHAR_OCTET_LENGTH</B> int  {@code =>} the maximum length of binary
+     * and character based parameters or columns.  For any other datatype the returned value
+     * is a NULL
+     *  <LI><B>ORDINAL_POSITION</B> int  {@code =>} the ordinal position, starting
+     * from 1, for the input and output parameters. A value of 0
+     * is returned if this row describes the function's return value.
+     * For result set columns, it is the
+     * ordinal position of the column in the result set starting from 1.
+     *  <LI><B>IS_NULLABLE</B> String  {@code =>} ISO rules are used to determine
+     * the nullability for a parameter or column.
+     *       <UL>
+     *       <LI> YES           --- if the parameter or column can include NULLs
+     *       <LI> NO            --- if the parameter or column  cannot include NULLs
+     *       <LI> empty string  --- if the nullability for the
+     * parameter  or column is unknown
+     *       </UL>
+     *  <LI><B>SPECIFIC_NAME</B> String  {@code =>} the name which uniquely identifies
+     * this function within its schema.  This is a user specified, or DBMS
+     * generated, name that may be different then the {@code FUNCTION_NAME}
+     * for example with overload functions
+     *  </OL>
+     *
+     * <p>The PRECISION column represents the specified column size for the given
+     * parameter or column.
+     * For numeric data, this is the maximum precision.  For character data, this is the length in characters.
+     * For datetime datatypes, this is the length in characters of the String representation (assuming the
+     * maximum allowed precision of the fractional seconds component). For binary data, this is the length in bytes.  For the ROWID datatype,
+     * this is the length in bytes. Null is returned for data types where the
+     * column size is not applicable.
+     * @param catalog a catalog name; must match the catalog name as it
+     *        is stored in the database; "" retrieves those without a catalog;
+     *        {@code null} means that the catalog name should not be used to narrow
+     *        the search
+     * @param schemaPattern a schema name pattern; must match the schema name
+     *        as it is stored in the database; "" retrieves those without a schema;
+     *        {@code null} means that the schema name should not be used to narrow
+     *        the search
+     * @param functionNamePattern a procedure name pattern; must match the
+     *        function name as it is stored in the database
+     * @param columnNamePattern a parameter name pattern; must match the
+     * parameter or column name as it is stored in the database
+     * @return {@code ResultSet} - each row describes a
+     * user function parameter, column  or return type
+     *
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getFunctionColumns([in]string catalog, [in]string schemaPattern, [in]string functionNamePattern, [in]string columnNamePattern) raises (SQLException);
+
+
+    /**
+     *
+     * Retrieves the maximum number of bytes this database allows for
+     * the logical size for a {@code LOB}.
+     *<p>
+     * The default implementation will return {@code 0}
+     *
+     * @return the maximum number of bytes allowed; a result of zero
+     * means that there is no limit or the limit is not known
+     * @throws SQLException if a database access error occurs
+     */
+    long getMaxLogicalLobSize() raises (SQLException);
+
+    /**
+     * Retrieves a description of the pseudo or hidden columns available
+     * in a given table within the specified catalog and schema.
+     * Pseudo or hidden columns may not always be stored within
+     * a table and are not visible in a ResultSet unless they are
+     * specified in the query's outermost SELECT list. Pseudo or hidden
+     * columns may not necessarily be able to be modified. If there are
+     * no pseudo or hidden columns, an empty ResultSet is returned.
+     *
+     * <P>Only column descriptions matching the catalog, schema, table
+     * and column name criteria are returned.  They are ordered by
+     * {@code TABLE_CAT},{@code TABLE_SCHEM}, {@code TABLE_NAME}
+     * and {@code COLUMN_NAME}.
+     *
+     * <P>Each column description has the following columns:
+     *  <OL>
+     *  <LI><B>TABLE_CAT</B> String {@code =>} table catalog (may be {@code null})
+     *  <LI><B>TABLE_SCHEM</B> String {@code =>} table schema (may be {@code null})
+     *  <LI><B>TABLE_NAME</B> String {@code =>} table name
+     *  <LI><B>COLUMN_NAME</B> String {@code =>} column name
+     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from java.sql.Types
+     *  <LI><B>COLUMN_SIZE</B> int {@code =>} column size.
+     *  <LI><B>DECIMAL_DIGITS</B> int {@code =>} the number of fractional digits. Null is returned for data types where
+     * DECIMAL_DIGITS is not applicable.
+     *  <LI><B>NUM_PREC_RADIX</B> int {@code =>} Radix (typically either 10 or 2)
+     *  <LI><B>COLUMN_USAGE</B> String {@code =>} The allowed usage for the column.  The
+     *  value returned will correspond to the enum name returned by {@link PseudoColumnUsage#name PseudoColumnUsage.name()}
+     *  <LI><B>REMARKS</B> String {@code =>} comment describing column (may be {@code null})
+     *  <LI><B>CHAR_OCTET_LENGTH</B> int {@code =>} for char types the
+     *       maximum number of bytes in the column
+     *  <LI><B>IS_NULLABLE</B> String  {@code =>} ISO rules are used to determine the nullability for a column.
+     *       <UL>
+     *       <LI> YES           --- if the column can include NULLs
+     *       <LI> NO            --- if the column cannot include NULLs
+     *       <LI> empty string  --- if the nullability for the column is unknown
+     *       </UL>
+     *  </OL>
+     *
+     * <p>The COLUMN_SIZE column specifies the column size for the given column.
+     * For numeric data, this is the maximum precision.  For character data, this is the length in characters.
+     * For datetime datatypes, this is the length in characters of the String representation (assuming the
+     * maximum allowed precision of the fractional seconds component). For binary data, this is the length in bytes.  For the ROWID datatype,
+     * this is the length in bytes. Null is returned for data types where the
+     * column size is not applicable.
+     *
+     * @param catalog a catalog name; must match the catalog name as it
+     *        is stored in the database; "" retrieves those without a catalog;
+     *        {@code null} means that the catalog name should not be used to narrow
+     *        the search
+     * @param schemaPattern a schema name pattern; must match the schema name
+     *        as it is stored in the database; "" retrieves those without a schema;
+     *        {@code null} means that the schema name should not be used to narrow
+     *        the search
+     * @param tableNamePattern a table name pattern; must match the
+     *        table name as it is stored in the database
+     * @param columnNamePattern a column name pattern; must match the column
+     *        name as it is stored in the database
+     * @return {@code ResultSet} - each row is a column description
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getPseudoColumns([in]string catalog, [in]string schemaPattern, [in]string tableNamePattern, [in]string columnNamePattern) raises (SQLException);
+
+    /**
+     * Retrieves this database's default holdability for {@code ResultSet}
+     * objects.
+     *
+     * @return the default holdability; either
+     *         {@code ResultSet.HOLD_CURSORS_OVER_COMMIT} or
+     *         {@code ResultSet.CLOSE_CURSORS_AT_COMMIT}
+     * @throws SQLException if a database access error occurs
+     */
+    long getResultSetHoldability() raises (SQLException);
+
+    /**
+     * Indicates whether this data source supports the SQL {@code  ROWID} type,
+     * and the lifetime for which a {@link  RowId} object remains valid.
+     *
+     * @return the status indicating the lifetime of a {@code  RowId}
+     * @throws SQLException if a database access error occurs
+     * @see RowIdLifetime.idl
+     */
+    long getRowIdLifetime() raises (SQLException);
+
+    /**
+     * Retrieves the schema names available in this database.  The results
+     * are ordered by {@code TABLE_CATALOG} and
+     * {@code TABLE_SCHEM}.
+     *
+     * <P>The schema columns are:
+     *  <OL>
+     *  <LI><B>TABLE_SCHEM</B> String {@code =>} schema name
+     *  <LI><B>TABLE_CATALOG</B> String {@code =>} catalog name (may be {@code null})
+     *  </OL>
+     *
+     *
+     * @param catalog a catalog name; must match the catalog name as it is stored
+     * in the database;"" retrieves those without a catalog; null means catalog
+     * name should not be used to narrow down the search.
+     * @param schemaPattern a schema name; must match the schema name as it is
+     * stored in the database; null means
+     * schema name should not be used to narrow down the search.
+     * @return a {@code ResultSet} object in which each row is a
+     *         schema description
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getSchemasFiltered([in]string catalog, [in]string schemaPattern) raises (SQLException);
+
+    /**
+     * Indicates whether the SQLSTATE returned by {@code SQLException.getSQLState}
+     * is X/Open (now known as Open Group) SQL CLI or SQL:2003.
+     * @return the type of SQLSTATE; one of:
+     *        sqlStateXOpen or
+     *        sqlStateSQL
+     * @throws SQLException if a database access error occurs
+     */
+    long getSQLStateType() raises (SQLException);
+
+    /**
+     * Retrieves a description of the table hierarchies defined in a particular
+     * schema in this database.
+     *
+     * <P>Only supertable information for tables matching the catalog, schema
+     * and table name are returned. The table name parameter may be a fully-
+     * qualified name, in which case, the catalog and schemaPattern parameters
+     * are ignored. If a table does not have a super table, it is not listed here.
+     * Supertables have to be defined in the same catalog and schema as the
+     * sub tables. Therefore, the type description does not need to include
+     * this information for the supertable.
+     *
+     * <P>Each type description has the following columns:
+     *  <OL>
+     *  <LI><B>TABLE_CAT</B> String {@code =>} the type's catalog (may be {@code null})
+     *  <LI><B>TABLE_SCHEM</B> String {@code =>} type's schema (may be {@code null})
+     *  <LI><B>TABLE_NAME</B> String {@code =>} type name
+     *  <LI><B>SUPERTABLE_NAME</B> String {@code =>} the direct super type's name
+     *  </OL>
+     *
+     * <P><B>Note:</B> If the driver does not support type hierarchies, an
+     * empty result set is returned.
+     *
+     * @param catalog a catalog name; "" retrieves those without a catalog;
+     *        {@code null} means drop catalog name from the selection criteria
+     * @param schemaPattern a schema name pattern; "" retrieves those
+     *        without a schema
+     * @param tableNamePattern a table name pattern; may be a fully-qualified
+     *        name
+     * @return a {@code ResultSet} object in which each row is a type description
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getSuperTables([in]string catalog, [in]string schemaPattern, [in]string tableNamePattern) raises (SQLException);
+
+    /**
+     * Retrieves a description of the user-defined type (UDT) hierarchies defined in a
+     * particular schema in this database. Only the immediate super type/
+     * sub type relationship is modeled.
+     * <P>
+     * Only supertype information for UDTs matching the catalog,
+     * schema, and type name is returned. The type name parameter
+     * may be a fully-qualified name. When the UDT name supplied is a
+     * fully-qualified name, the catalog and schemaPattern parameters are
+     * ignored.
+     * <P>
+     * If a UDT does not have a direct super type, it is not listed here.
+     * A row of the {@code ResultSet} object returned by this method
+     * describes the designated UDT and a direct supertype. A row has the following
+     * columns:
+     *  <OL>
+     *  <LI><B>TYPE_CAT</B> String {@code =>} the UDT's catalog (may be {@code null})
+     *  <LI><B>TYPE_SCHEM</B> String {@code =>} UDT's schema (may be {@code null})
+     *  <LI><B>TYPE_NAME</B> String {@code =>} type name of the UDT
+     *  <LI><B>SUPERTYPE_CAT</B> String {@code =>} the direct super type's catalog
+     *                           (may be {@code null})
+     *  <LI><B>SUPERTYPE_SCHEM</B> String {@code =>} the direct super type's schema
+     *                             (may be {@code null})
+     *  <LI><B>SUPERTYPE_NAME</B> String {@code =>} the direct super type's name
+     *  </OL>
+     *
+     * <P><B>Note:</B> If the driver does not support type hierarchies, an
+     * empty result set is returned.
+     *
+     * @param catalog a catalog name; "" retrieves those without a catalog;
+     *        {@code null} means drop catalog name from the selection criteria
+     * @param schemaPattern a schema name pattern; "" retrieves those
+     *        without a schema
+     * @param typeNamePattern a UDT name pattern; may be a fully-qualified
+     *        name
+     * @return a {@code ResultSet} object in which a row gives information
+     *         about the designated UDT
+     * @throws SQLException if a database access error occurs
+     */
+    XResultSet getSuperTypes([in]string catalog, [in]string schemaPattern, [in]string typeNamePattern) raises (SQLException);
+
+    /**
+     * Indicates whether updates made to a LOB are made on a copy or directly
+     * to the LOB.
+     * @return {@code true} if updates are made to a copy of the LOB;
+     *         {@code false} if updates are made directly to the LOB
+     * @throws SQLException if a database access error occurs
+     */
+    boolean locatorsUpdateCopy() raises (SQLException);
+
+    /**     `TRUE`
+            , if the Database supports the CONVERT between the given SQL types
+            otherwise `FALSE` in general (see supportsConvert for specific fromType and toType).
+        @returns
+            `TRUE` if so
+        @throws SQLException
+            if a database access error occurs.
+     */
+    boolean supportsConvertInGeneral()
+        raises (SQLException);
+
+    /**
+     * Retrieves whether auto-generated keys can be retrieved after
+     * a statement has been executed
+     *
+     * @return {@code true} if auto-generated keys can be retrieved
+     *         after a statement has executed; {@code false} otherwise
+     * <p>If {@code true} is returned, the JDBC driver must support the
+     * returning of auto-generated keys for at least SQL INSERT statements
+     *
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsGetGeneratedKeys() raises (SQLException);
+
+    /**
+     * Retrieves whether it is possible to have multiple {@code ResultSet} objects
+     * returned from a {@code CallableStatement} object
+     * simultaneously.
+     *
+     * @return {@code true} if a {@code CallableStatement} object
+     *         can return multiple {@code ResultSet} objects
+     *         simultaneously; {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsMultipleOpenResults() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports named parameters to callable
+     * statements.
+     *
+     * @return {@code true} if named parameters are supported;
+     *         {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsNamedParameters() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports REF CURSOR.
+     *<p>
+     * The default implementation will return {@code false}
+     *
+     * @return {@code true} if this database supports REF CURSOR;
+     *         {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsRefCursors() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports savepoints.
+     *
+     * @return {@code true} if savepoints are supported;
+     *         {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsSavepoints() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports sharding.
+     * @implSpec
+     * The default implementation will return {@code false}
+     *
+     * @return {@code true} if this database supports sharding;
+     *         {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsSharding() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports statement pooling.
+     *
+     * @return {@code true} if so; {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsStatementPooling() raises (SQLException);
+
+    /**
+     * Retrieves whether this database supports invoking user-defined or vendor functions
+     * using the stored procedure escape syntax.
+     *
+     * @return {@code true} if so; {@code false} otherwise
+     * @throws SQLException if a database access error occurs
+     */
+    boolean supportsStoredFunctionsUsingCallSyntax() raises (SQLException);
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

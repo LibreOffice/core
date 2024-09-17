@@ -3292,7 +3292,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbc,\
 	ProcedureResult \
 	ResultSetConcurrency \
 	ResultSetType \
+	RowIdLifetime \
 	SQLException \
+	SQLState \
 	SQLWarning \
 	TransactionIsolation \
 	XArray \
@@ -3306,6 +3308,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbc,\
 	XDataSource \
 	XDatabaseMetaData \
 	XDatabaseMetaData2 \
+	XDatabaseMetaData3 \
 	XDriver \
 	XDriverAccess \
 	XDriverManager \
