@@ -168,7 +168,8 @@ template<typename T> rtl::Reference<T> getCurrentPad(
 
 bool nameHasSameIdentifierAs(std::u16string_view name, std::u16string_view identifier)
 {
-    size_t i = name.rfind('.') + 1;
+    std::u16string_view::size_type pos = name.rfind('.');
+    size_t i = (pos != std::u16string_view::npos) ? pos + 1 : 0;
     return identifier.size() == name.size() - i
         && o3tl::starts_with(name.substr(i), identifier);
 }

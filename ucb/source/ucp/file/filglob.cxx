@@ -187,7 +187,7 @@ namespace fileaccess {
     std::u16string_view getTitle( std::u16string_view aPath )
     {
         size_t lastIndex = aPath.rfind( '/' );
-        return aPath.substr( lastIndex + 1 );
+        return aPath.substr((lastIndex != std::u16string_view::npos) ? lastIndex + 1 : 0);
     }
 
 
