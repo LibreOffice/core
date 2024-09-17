@@ -441,9 +441,16 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, GCLinePara* pGCPara)
         }
 
         // ATTENTION: The number of boxes can change!
-        for( SwTableBoxes::size_type nLen = 0; nLen < pLn->GetTabBoxes().size(); ++nLen )
+        SwTableBoxes::size_type nLen = 0;
+        while (nLen < pLn->GetTabBoxes().size())
+        {
             if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen], pGCPara ))
+            {
                 --nLen;
+                continue;
+            }
+            ++nLen;
+        }
     }
     return true;
 }
