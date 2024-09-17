@@ -59,7 +59,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, l
             return E_FAIL;
         }
 
-        if (GetXInterface()->copyText(startOffset, endOffset))
+        if (m_xEditableText->copyText(startOffset, endOffset))
             return S_OK;
 
         return E_FAIL;
@@ -86,7 +86,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::deleteText(long startOffset,
         if (!m_xEditableText.is())
             return E_FAIL;
 
-        if (GetXInterface()->deleteText(startOffset, endOffset))
+        if (m_xEditableText->deleteText(startOffset, endOffset))
             return S_OK;
 
         return E_FAIL;
@@ -118,7 +118,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::insertText(long offset, BSTR
 
         OUString ouStr(o3tl::toU(*text));
 
-        if (GetXInterface()->insertText(ouStr, offset))
+        if (m_xEditableText->insertText(ouStr, offset))
             return S_OK;
 
         return E_FAIL;
@@ -145,7 +145,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::cutText(long startOffset, lo
         if (!m_xEditableText.is())
             return E_FAIL;
 
-        if (GetXInterface()->cutText(startOffset, endOffset))
+        if (m_xEditableText->cutText(startOffset, endOffset))
             return S_OK;
 
         return E_FAIL;
@@ -171,7 +171,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::pasteText(long offset)
         if (!m_xEditableText.is())
             return E_FAIL;
 
-        if (GetXInterface()->pasteText(offset))
+        if (m_xEditableText->pasteText(offset))
             return S_OK;
 
         return E_FAIL;
@@ -204,7 +204,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset
 
         OUString ouStr(o3tl::toU(*text));
 
-        if (GetXInterface()->replaceText(startOffset, endOffset, ouStr))
+        if (m_xEditableText->replaceText(startOffset, endOffset, ouStr))
             return S_OK;
         return E_FAIL;
     }
@@ -255,7 +255,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
             }
         }
 
-        if (GetXInterface()->setAttributes(startOffset, endOffset, beanSeq))
+        if (m_xEditableText->setAttributes(startOffset, endOffset, beanSeq))
             return S_OK;
 
         return E_FAIL;

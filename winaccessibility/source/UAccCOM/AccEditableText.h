@@ -99,8 +99,6 @@ private:
 
     static void get_AnyFromOLECHAR(std::u16string_view ouName, const OUString& ouValue,
                                    css::uno::Any& rAny);
-
-    css::accessibility::XAccessibleEditableText* GetXInterface() { return m_xEditableText.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
