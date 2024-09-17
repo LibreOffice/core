@@ -36,7 +36,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,unoxml,\
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,unoxml,\
     JunitTest_unoxml_complex \
-    JunitTest_unordf_complex \
 ))
 
 # vim: set noet sw=4 ts=4:

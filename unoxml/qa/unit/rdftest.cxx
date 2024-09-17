@@ -11,10 +11,12 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 #include <com/sun/star/rdf/XRepository.hpp>
+#include <com/sun/star/rdf/BlankNode.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>
 #include <com/sun/star/rdf/Literal.hpp>
 #include <com/sun/star/rdf/Repository.hpp>
@@ -328,6 +330,294 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
     // 8. query: ask
     sQuery = "ASK { ?pkg rdf:type pkg:Package . }";
     CPPUNIT_ASSERT(xDocRepo->queryAsk(sNss + sQuery));
+}
+
+CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
+{
+    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                          css::uno::UNO_SET_THROW);
+    uno::Reference<rdf::XRepository> xRepo = rdf::Repository::create(xContext);
+    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocRepo);
+    uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
+    uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
+    uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+    uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
+    uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "I am the literal");
+    uno::Reference<css::rdf::XURI> xInt = rdf::URI::create(xContext, "uri:int");
+    uno::Reference<css::rdf::XLiteral> xLitType
+        = rdf::Literal::createWithType(xContext, "42", xInt);
+    uno::Reference<css::rdf::XBlankNode> xBlank = rdf::BlankNode::create(xContext, "_:uno");
+
+    // 1. empty: graphs
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), xDocRepo->getGraphNames().size());
+
+    uno::Reference<container::XEnumeration> xEnum
+        = xDocRepo->getStatements(nullptr, nullptr, nullptr);
+
+    // 2. empty: stmts
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    uno::Reference<rdf::XNamedGraph> xGraph = xDocRepo->createGraph(xFoo);
+
+    // 3. foo graph
+    CPPUNIT_ASSERT(xGraph);
+
+    // 4. creating duplicate graph is not allowed
+    try
+    {
+        xDocRepo->createGraph(xFoo);
+        CPPUNIT_FAIL("expected ElementExistException");
+    }
+    catch (com::sun::star::container::ElementExistException&)
+    {
+    }
+
+    // 5. invalid graph name is not allowed
+    try
+    {
+        xDocRepo->createGraph(nullptr);
+        CPPUNIT_FAIL("expected IllegalArgumentException");
+    }
+    catch (css::lang::IllegalArgumentException&)
+    {
+    }
+
+    // 6. foo graph in getGraphNames
+    css::uno::Sequence<css::uno::Reference<css::rdf::XURI>> xURI = xDocRepo->getGraphNames();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(1), xURI.size());
+    CPPUNIT_ASSERT_EQUAL(xFoo->getStringValue(), xURI[0]->getStringValue());
+
+    // 7. foo graph
+    uno::Reference<rdf::XNamedGraph> xFooGraph = xDocRepo->getGraph(xFoo);
+    CPPUNIT_ASSERT(xFooGraph);
+
+    xEnum = xDocRepo->getStatements(nullptr, nullptr, nullptr);
+
+    // 8. empty: stmts
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+    uno::Reference<io::XOutputStream> xOutputStream(
+        xFileAccess->openFileWrite(maTempFile.GetURL()));
+    xDocRepo->exportGraph(rdf::FileFormat::RDF_XML, xOutputStream, xFoo, xBase);
+    xOutputStream->closeOutput();
+
+    uno::Reference<io::XInputStream> xInputStream(xFileAccess->openFileRead(maTempFile.GetURL()),
+                                                  uno::UNO_SET_THROW);
+    xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xBar, xBase);
+
+    // 7. bar graph
+    CPPUNIT_ASSERT(xDocRepo->getGraph(xBar));
+
+    xFooGraph->addStatement(xFoo, xBar, xBaz);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 8. addStatement(foo,bar,baz)
+    rdf::Statement aFoo_FooBarBaz(xFoo, xBar, xBaz, xFoo);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xFoo, xBar, xBlank);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 9. addStatement(foo,bar,blank)
+    rdf::Statement aFoo_FooBarBlank(xFoo, xBar, xBlank, xFoo);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBlank, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xBaz, xBar, xLit);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 10. addStatement(baz,bar,lit)
+    rdf::Statement aFoo_BazBarLit(xBaz, xBar, xLit, xFoo);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBlank, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xEnum = xFooGraph->getStatements(xBaz, xBar, nullptr);
+
+    // 11. addStatement(baz,bar,lit) (baz,bar)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    uno::Reference<css::rdf::XLiteral> xLitLang
+        = rdf::Literal::createWithLanguage(xContext, "I am the literal", "en");
+    xFooGraph->addStatement(xBaz, xBar, xLitLang);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 12. addStatement(baz,bar,litlang)
+    rdf::Statement aFoo_BazBarLitlang(xBaz, xBar, xLitLang, xFoo);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitlang, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBlank, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, xBaz);
+
+    // 13. addStatement(baz,bar,litlang) (baz)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xBaz, xBar, xLitType);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 14. addStatement(baz,bar,littype)
+    rdf::Statement aFoo_BazBarLitType(xBaz, xBar, xLitType, xFoo);
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitlang, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBlank, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->removeStatements(xBaz, xBar, xLitLang);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 15. removeStatement(baz,bar,litlang)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBlank, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->removeStatements(xFoo, xBar, nullptr);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 16. removeStatement(foo,bar,null)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xFoo, xBar, xBaz);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 17. addStatement(foo,bar,baz) (re-add)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xFoo, xBar, xBaz);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 18. addStatement(foo,bar,baz) (duplicate)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xFooGraph->addStatement(xFooGraph, xBar, xBaz);
+
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 19. addStatement(foo,bar,baz) (triplicate, as graph)
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aFoo_BazBarLit, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    xOutputStream.set(xFileAccess->openFileWrite(maTempFile.GetURL()));
+    xDocRepo->exportGraph(rdf::FileFormat::RDF_XML, xOutputStream, xFoo, xBase);
+    xOutputStream->closeOutput();
+
+    xInputStream.set(xFileAccess->openFileRead(maTempFile.GetURL()), uno::UNO_SET_THROW);
+    try
+    {
+        xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xBar, xBase);
+        CPPUNIT_FAIL("importing existing graph did not fail");
+    }
+    catch (com::sun::star::container::ElementExistException&)
+    {
+    }
+
+    xInputStream.set(xFileAccess->openFileRead(maTempFile.GetURL()), uno::UNO_SET_THROW);
+    xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xBaz, xBase);
+    uno::Reference<rdf::XNamedGraph> xBazGraph = xDocRepo->getGraph(xBaz);
+    CPPUNIT_ASSERT(xBazGraph);
+
+    rdf::Statement aBaz_FooBarBaz(xFoo, xBar, xBaz, xBaz);
+    rdf::Statement aBaz_FooBarLit(xBaz, xBar, xLit, xBaz);
+    rdf::Statement aBaz_FooBarLitType(xBaz, xBar, xLitType, xBaz);
+
+    xEnum = xBazGraph->getStatements(nullptr, nullptr, nullptr);
+
+    // 20. importing exported graph
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aBaz_FooBarBaz, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aBaz_FooBarLitType, xEnum->nextElement().get<rdf::Statement>());
+    CPPUNIT_ASSERT_STATEMENT_EQUAL(aBaz_FooBarLit, xEnum->nextElement().get<rdf::Statement>());
+
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    // 21. Checking graph deletion
+    xFooGraph->clear();
+    xEnum = xFooGraph->getStatements(nullptr, nullptr, nullptr);
+    CPPUNIT_ASSERT(!xEnum->hasMoreElements());
+
+    // 22. baz graph zombie
+    xDocRepo->destroyGraph(xBaz);
+    CPPUNIT_ASSERT(!xDocRepo->getGraph(xBaz));
+
+    try
+    {
+        xBazGraph->clear();
+        CPPUNIT_FAIL("deleted graph not invalid (clear)");
+    }
+    catch (com::sun::star::container::NoSuchElementException&)
+    {
+    }
+
+    try
+    {
+        xBazGraph->addStatement(xFoo, xFoo, xFoo);
+        CPPUNIT_FAIL("deleted graph not invalid (add)");
+    }
+    catch (com::sun::star::container::NoSuchElementException&)
+    {
+    }
+
+    try
+    {
+        xBazGraph->removeStatements(nullptr, nullptr, nullptr);
+        CPPUNIT_FAIL("deleted graph not invalid (remove)");
+    }
+    catch (com::sun::star::container::NoSuchElementException&)
+    {
+    }
+
+    try
+    {
+        xBazGraph->getStatements(nullptr, nullptr, nullptr);
+        CPPUNIT_FAIL("deleted graph not invalid (remove)");
+    }
+    catch (com::sun::star::container::NoSuchElementException&)
+    {
+    }
 }
 }
 
