@@ -70,6 +70,8 @@ public:
     typedef std::map<OUString, OUString> stringmap;
     typedef std::map<OUString, std::pair<OUString, OUString>> accelmap;
 
+    typedef stringmap Adjustment;
+
 protected:
     BuilderBase(bool bLegacy);
 
@@ -111,6 +113,9 @@ protected:
     std::vector<ComboBoxTextItem> handleItems(xmlreader::XmlReader& reader) const;
     void handleListStore(xmlreader::XmlReader& reader, const OUString& rID, std::u16string_view rClass);
     void handleRow(xmlreader::XmlReader& reader, const OUString& rID);
+
+    void addAdjustment(const OUString& sID, const Adjustment& rAdjustment);
+    const Adjustment* get_adjustment_by_name(const OUString& sID) const;
     const ListStore* get_model_by_name(const OUString& sID) const;
 
     void handleSizeGroup(xmlreader::XmlReader& reader);
@@ -124,6 +129,8 @@ private:
 
         std::map<OUString, ListStore> m_aModels;
         std::vector<SizeGroup> m_aSizeGroups;
+
+        std::map<OUString, Adjustment> m_aAdjustments;
     };
 
     std::unique_ptr<ParserState> m_pParserState;
@@ -271,9 +278,6 @@ private:
 
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
-    typedef stringmap Adjustment;
-    const Adjustment* get_adjustment_by_name(const OUString& sID) const;
-
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(FormattedField &rTarget, const Adjustment &rAdjustment);
     static void     mungeAdjustment(ScrollBar &rTarget, const Adjustment &rAdjustment);
@@ -296,8 +300,6 @@ private:
         std::vector<WidgetAdjustmentMap> m_aFormattedFormatterAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::vector<WidgetAdjustmentMap> m_aSliderAdjustmentMaps;
-
-        std::map<OUString, Adjustment> m_aAdjustments;
 
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         ImageSizeMap m_aImageSizeMap;

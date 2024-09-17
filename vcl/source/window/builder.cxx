@@ -3746,7 +3746,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
 
     if (sClass == "GtkAdjustment")
     {
-        m_pVclParserState->m_aAdjustments[sID] = aProperties;
+        addAdjustment(sID, aProperties);
         return nullptr;
     }
     else if (sClass == "GtkTextBuffer")
@@ -4254,10 +4254,15 @@ const VclBuilder::TextBuffer *VclBuilder::get_buffer_by_name(const OUString& sID
     return nullptr;
 }
 
-const VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(const OUString& sID) const
+void BuilderBase::addAdjustment(const OUString& sID, const Adjustment& rAdjustment)
 {
-    const auto aI = m_pVclParserState->m_aAdjustments.find(sID);
-    if (aI != m_pVclParserState->m_aAdjustments.end())
+    m_pParserState->m_aAdjustments[sID] = rAdjustment;
+}
+
+const BuilderBase::Adjustment* BuilderBase::get_adjustment_by_name(const OUString& sID) const
+{
+    const auto aI = m_pParserState->m_aAdjustments.find(sID);
+    if (aI != m_pParserState->m_aAdjustments.end())
         return &(aI->second);
     return nullptr;
 }
