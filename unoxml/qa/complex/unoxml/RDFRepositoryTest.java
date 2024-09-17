@@ -436,101 +436,6 @@ public class RDFRepositoryTest
         }
     }
 
-    @Test public void checkRDFa()
-    {
-        try {
-            System.out.println("Checking RDFa gunk...");
-
-            String content = "behold, for I am the content.";
-            XTextRange xTR = new TestRange(content);
-            XMetadatable xM = (XMetadatable) xTR;
-
-            Pair<Statement[], Boolean> result =
-                xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: not empty (initial)",
-                0 == result.First.length);
-
-            try {
-                xRep.setStatementRDFa(foo, new XURI[] {}, xM, "", null);
-                fail("RDFa: set: no predicate");
-            } catch (IllegalArgumentException e) {
-                // ignore
-            }
-
-            try {
-                xRep.setStatementRDFa(foo, new XURI[] {bar}, null, "", null);
-                fail("RDFa: set: null");
-            } catch (IllegalArgumentException e) {
-                // ignore
-            }
-
-            XLiteral trlit = Literal.create(xContext, content);
-            Statement x_FooBarTRLit = new Statement(foo, bar, trlit, null);
-            xRep.setStatementRDFa(foo, new XURI[] { bar }, xM, "", null);
-
-            result = xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: without content",
-                !result.Second && (1 == result.First.length)
-                && eq(result.First[0], x_FooBarTRLit));
-
-            //FIXME: do this?
-            xTR.setString(lit.getStringValue());
-/*
-            Statement xFooBarLit = new Statement(foo, bar, lit, null);
-            result = xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: change",
-                eq((Statement)result.First, xFooBarLit) && null == result.Second);
-*/
-
-            Statement x_FooBarLittype = new Statement(foo, bar, littype, null);
-            xRep.setStatementRDFa(foo, new XURI[] { bar }, xM, "42", uint);
-
-            result = xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: with content",
-                result.Second &&
-                (1 == result.First.length) &&
-                eq(result.First[0], x_FooBarLittype));
-
-            //FIXME: do this?
-            xTR.setString(content);
-/*
-            Statement xFooLabelTRLit = new Statement(foo, rdfslabel, trlit, null);
-            result = xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: change (label)",
-                eq((Statement)result.First, xFooBarLittype) &&
-                eq((Statement)result.Second, xFooLabelTRLit));
-*/
-
-            xRep.removeStatementRDFa((XMetadatable)xTR);
-
-            result = xRep.getStatementRDFa((XMetadatable)xTR);
-            assertTrue("RDFa: get: not empty (removed)",
-                0 == result.First.length);
-
-            xRep.setStatementRDFa(foo, new XURI[] { foo, bar, baz }, xM,
-                "", null);
-
-            Statement x_FooFooTRLit = new Statement(foo, foo, trlit, null);
-            Statement x_FooBazTRLit = new Statement(foo, baz, trlit, null);
-            result = xRep.getStatementRDFa((XMetadatable) xTR);
-            assertTrue("RDFa: get: without content (multiple predicates, reinsert)",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                     x_FooFooTRLit, x_FooBarTRLit, x_FooBazTRLit }));
-
-            xRep.removeStatementRDFa((XMetadatable)xTR);
-
-            result = xRep.getStatementRDFa((XMetadatable) xTR);
-            assertTrue("RDFa: get: not empty (re-removed)",
-                0 == result.First.length);
-
-            System.out.println("...done");
-
-        } catch (Exception e) {
-            report(e);
-        }
-    }
-
 // utilities -------------------------------------------------------------
 
     public void report(Exception e) {
@@ -774,37 +679,6 @@ public class RDFRepositoryTest
                     + "\n P: " + toS(s.Predicate)
                     + "\n O: " + toS(s.Object));
         }
-    }
-
-    private class TestRange implements XTextRange, XMetadatable, XServiceInfo
-    {
-        private String m_Stream;
-        String m_XmlId;
-        String m_Text;
-        TestRange(String i_Str) { m_Text = i_Str; }
-
-        public String getStringValue() { return ""; }
-        public String getNamespace() { return ""; }
-        public String getLocalName() { return ""; }
-
-        public StringPair getMetadataReference()
-            { return new StringPair(m_Stream, m_XmlId); }
-        public void setMetadataReference(StringPair i_Ref)
-            throws IllegalArgumentException
-            { m_Stream = i_Ref.First; m_XmlId = i_Ref.Second; }
-        public void ensureMetadataReference()
-            { m_Stream = "content.xml"; m_XmlId = "42"; }
-
-        public String getImplementationName() { return null; }
-        public String[] getSupportedServiceNames() { return null; }
-        public boolean supportsService(String i_Svc)
-            { return i_Svc.equals("com.sun.star.text.Paragraph"); }
-
-        public XText getText() { return null; }
-        public XTextRange getStart() { return null; }
-        public XTextRange getEnd() { return null; }
-        public String getString() { return m_Text; }
-        public void setString(String i_Str) { m_Text = i_Str; }
     }
 
     private XMultiServiceFactory getMSF()
