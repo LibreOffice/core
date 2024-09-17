@@ -39,7 +39,7 @@ public class SQLQueryComposer
 {
 
     private QueryMetaData CurDBMetaData;
-    public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
+    private XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
     private ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
     private XSingleSelectQueryComposer m_queryComposer;
     private XMultiServiceFactory xMSF;
@@ -223,6 +223,11 @@ public class SQLQueryComposer
             }
         }
         return _filterconditions;
+    }
+
+    public void setQuery(String Query) throws SQLException
+    {
+        m_xQueryAnalyzer.setQuery(Query);
     }
 
     public String getQuery()

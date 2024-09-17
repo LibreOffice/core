@@ -750,7 +750,7 @@ public class DBMetaData
             Object oQuery = xSSFQueryDefs.createInstance(); //"com.sun.star.sdb.QueryDefinition"
             XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, oQuery );
 
-            String s = _oSQLQueryComposer.m_xQueryAnalyzer.getQuery();
+            String s = _oSQLQueryComposer.getQuery();
             xPSet.setPropertyValue(PropertyNames.COMMAND, s);
 
             XNameContainer xNameCont = UnoRuntime.queryInterface( XNameContainer.class, xQueryDefs );

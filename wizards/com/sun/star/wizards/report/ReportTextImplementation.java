@@ -277,7 +277,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                         {
                             return bexecute;
                         }
-                        getRecordParser().getSQLQueryComposer().m_xQueryAnalyzer.setQuery(getRecordParser().Command);
+                        getRecordParser().getSQLQueryComposer().setQuery(getRecordParser().Command);
                         getRecordParser().getSQLQueryComposer().prependSortingCriteria();
                         getRecordParser().Command = getRecordParser().getSQLQueryComposer().getQuery();
 

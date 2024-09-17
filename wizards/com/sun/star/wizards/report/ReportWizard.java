@@ -275,7 +275,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 {
                     if (m_reportDocument instanceof ReportTextImplementation)
                     {
-                        sqlQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
+                        sqlQueryComposer.setQuery(sCommand);
                         sqlQueryComposer.prependSortingCriteria();
                         m_reportDocument.setCommandType(CommandType.COMMAND);
                         m_reportDocument.setCommand(sqlQueryComposer.getQuery());
