@@ -1761,6 +1761,9 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
             Point aPoint(aRealPoint2D.X * 100.0, aRealPoint2D.Y * 100.0);
             Size aSize(aRealSize2D.Width * 100.0, aRealSize2D.Height * 100.0);
 
+            Point aPopupPoint(aPoint.X(), aPoint.Y());
+            Size aPopupSize(aSize.Width() * 10.0, aSize.Height() * 10.0);
+
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
 
             vcl::pdf::PDFNote aNote;
@@ -1798,7 +1801,8 @@ static void ImplPDFExportComments( const uno::Reference< drawing::XDrawPage >& x
                 }
             }
 
-            rPDFExtOutDevData.CreateNote(::tools::Rectangle(aPoint, aSize), aNote);
+            rPDFExtOutDevData.CreateNote(::tools::Rectangle(aPoint, aSize), aNote,
+                                         ::tools::Rectangle(aPopupPoint, aPopupSize));
         }
     }
     catch (const uno::Exception&)

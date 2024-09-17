@@ -349,7 +349,7 @@ public:
     number of page the note is on (as returned by NewPage)
     or -1 in which case the current page is used
     */
-    sal_Int32 CreateNote(const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, const tools::Rectangle& rPopupRect = tools::Rectangle(), sal_Int32 nPageNr = -1);
+    sal_Int32 CreateNote(const tools::Rectangle& rRect, const vcl::pdf::PDFNote& rNote, const tools::Rectangle& rPopupRect, sal_Int32 nPageNr = -1);
 
     /** begin a new logical structure element
 

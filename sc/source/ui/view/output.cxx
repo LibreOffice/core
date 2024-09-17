@@ -21,6 +21,7 @@
 #include <editeng/brushitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/svdocapt.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/svxfont.hxx>
 #include <tools/poly.hxx>
@@ -2647,7 +2648,7 @@ void ScOutputData::AddPDFNotes()
                     // use origin's pCell for NotePtr test below
                 }
 
-                const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
+                ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
 
                 if ( pNote && ( bIsMerged || ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
@@ -2679,7 +2680,22 @@ void ScOutputData::AddPDFNotes()
                         OUString aContent = pNote->GetText();
                         aNote.maContents = aContent.replaceAll("\n", " ");
 
-                        pPDFData->CreateNote( aNoteRect, aNote );
+                        // If the caption is hidden, we need to show it to get its rectangle,
+                        // then hide it again because it is also hidden in the file.
+                        bool bShowCaption = pNote->IsCaptionShown();
+                        if (!bShowCaption)
+                            pNote->ShowCaption(aAddress, true);
+
+                        SdrCaptionObj* pCaption = pNote->GetCaption();
+                        tools::Rectangle aCaptionRect(pCaption->GetLogicRect());
+                        Point aPoint(aCaptionRect.getX() + nScrX, aCaptionRect.getY() + nScrY);
+                        Size aSize(aCaptionRect.GetWidth(), aCaptionRect.GetHeight());
+                        tools::Rectangle aPopupRect(aPoint, aSize);
+
+                        if (!bShowCaption)
+                            pNote->ShowCaption(aAddress, false);
+
+                        pPDFData->CreateNote(aNoteRect, aNote, aPopupRect);
                     }
                 }
 

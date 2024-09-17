@@ -64,6 +64,32 @@ void PdfExportTest::load(std::u16string_view rFile, vcl::filter::PDFDocument& rD
     CPPUNIT_ASSERT(rDocument.Read(aStream));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPopupRectangleSize)
+{
+    // Enable Comment as PDF annotations
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "ExportNotes", uno::Any(true) } }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    saveAsPDF(u"tdf162955_comment.odp");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Popup annotation
+    {
+        auto pAnnotation = pPdfPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
+        CPPUNIT_ASSERT(!pAnnotation->getRectangle().isEmpty());
+        double nWidth = pAnnotation->getRectangle().getWidth();
+        double nHeight = pAnnotation->getRectangle().getHeight();
+        CPPUNIT_ASSERT(nWidth > 0);
+        CPPUNIT_ASSERT(nHeight > 0);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testCommentAnnotation)
 {
     // Enable PDF/UA and Comment as PDF annotations
