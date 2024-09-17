@@ -1855,6 +1855,21 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfInEmf)
                          aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAlignRtlReading)
+{
+    // EMF file with the TA_RTLREADING alignment flag
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestAlignRtlReading.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion", 4);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[1]", "rtl"_ostr, u"true"_ustr);
+    assertXPathNoAttribute(pDocument, aXPathPrefix + "mask/textsimpleportion[2]", "rtl"_ostr);
+    assertXPath(pDocument, aXPathPrefix + "mask/textsimpleportion[3]", "rtl"_ostr, u"true"_ustr);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

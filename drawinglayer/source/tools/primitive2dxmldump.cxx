@@ -930,6 +930,12 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 const drawinglayer::attribute::FontAttribute& aFontAttribute
                     = rTextSimplePortionPrimitive2D.getFontAttribute();
                 rWriter.attribute("familyname", aFontAttribute.getFamilyName());
+
+                if (aFontAttribute.getRTL())
+                {
+                    rWriter.attribute("rtl", std::u16string_view{ u"true" });
+                }
+
                 const std::vector<double> aDx = rTextSimplePortionPrimitive2D.getDXArray();
                 if (aDx.size())
                 {
