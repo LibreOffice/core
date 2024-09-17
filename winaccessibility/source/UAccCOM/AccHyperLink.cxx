@@ -111,7 +111,7 @@ CAccHyperLink::get_anchor(/* [in] */ long index,
             return E_INVALIDARG;
         }
 
-        if (!pRXLink.is())
+        if (!m_xHyperlink.is())
         {
             return E_FAIL;
         }
@@ -146,7 +146,7 @@ CAccHyperLink::get_anchorTarget(/* [in] */ long index,
             return E_INVALIDARG;
         }
 
-        if (!pRXLink.is())
+        if (!m_xHyperlink.is())
         {
             return E_FAIL;
         }
@@ -206,7 +206,7 @@ CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR* index)
             return E_INVALIDARG;
         }
 
-        if (!pRXLink.is())
+        if (!m_xHyperlink.is())
         {
             return E_FAIL;
         }
@@ -237,7 +237,7 @@ CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR* valid)
             return E_INVALIDARG;
         }
 
-        if (!pRXLink.is())
+        if (!m_xHyperlink.is())
         {
             return E_FAIL;
         }
@@ -274,10 +274,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XInterface(hyper pXInterfac
             Reference<XAccessibleHyperlink> pRXI(pRContext, UNO_QUERY);
             if (!pRXI.is())
             {
-                pRXLink = nullptr;
+                m_xHyperlink = nullptr;
             }
             else
-                pRXLink = pRXI.get();
+                m_xHyperlink = pRXI.get();
         }
         return S_OK;
     }
@@ -296,7 +296,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::put_XSubInterface(hyper pXSubIn
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    pRXLink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
+    m_xHyperlink = reinterpret_cast<XAccessibleHyperlink*>(pXSubInterface);
     pRXAct = reinterpret_cast<XAccessibleAction*>(pXSubInterface);
 
     return S_OK;
