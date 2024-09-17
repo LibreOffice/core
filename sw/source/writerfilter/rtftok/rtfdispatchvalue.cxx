@@ -363,6 +363,9 @@ bool RTFDocumentImpl::dispatchFrameValue(RTFKeyword nKeyword, int nParam)
         {
             nId = NS_ooxml::LN_CT_FramePr_y;
             m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_yAlign, 0);
+            //offset is also added on docx-export in Word
+            //TODO: file version dependent?
+            nParam += 1;
         }
         break;
         default:
