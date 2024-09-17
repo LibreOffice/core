@@ -57,6 +57,7 @@ private:
 
     // unit tests
 public:
+    void testPopupRectangleSize_Tdf162955();
     void testMediaShapeScreen_Tdf159094();
     void testExportRange_Tdf120161();
     void testExportFitToPage_Tdf103516();
@@ -74,6 +75,7 @@ public:
     void testForcepoint97();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
+    CPPUNIT_TEST(testPopupRectangleSize_Tdf162955);
     CPPUNIT_TEST(testMediaShapeScreen_Tdf159094);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
@@ -221,6 +223,36 @@ void ScPDFExportTest::testMediaShapeScreen_Tdf159094()
 
     // Without the fix, this test would crash on export media file to pdf
     exportToPDF(xModel, aRange);
+}
+
+void ScPDFExportTest::testPopupRectangleSize_Tdf162955()
+{
+    loadFromFile(u"tdf162955_comment.ods");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1
+    ScRange aRange(0, 0, 0, 0, 0, 0);
+    exportToPDF(xModel, aRange);
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    // Get the first page
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Popup annotation
+    {
+        auto pAnnotation = pPdfPage->getAnnotation(1);
+        CPPUNIT_ASSERT(pAnnotation);
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Popup, pAnnotation->getSubType());
+        CPPUNIT_ASSERT(!pAnnotation->getRectangle().isEmpty());
+        double nWidth = pAnnotation->getRectangle().getWidth();
+        double nHeight = pAnnotation->getRectangle().getHeight();
+        CPPUNIT_ASSERT(nWidth > 0);
+        CPPUNIT_ASSERT(nHeight > 0);
+    }
 }
 
 // Selection was not taken into account during export into PDF
