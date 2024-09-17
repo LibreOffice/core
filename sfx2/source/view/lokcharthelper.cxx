@@ -85,8 +85,9 @@ vcl::Window* LokChartHelper::GetWindow()
                 if (pParent)
                 {
                     sal_uInt16 nTotChildren = pParent->GetChildCount();
-                    while (nTotChildren--)
+                    while (nTotChildren > 0)
                     {
+                        --nTotChildren;
                         vcl::Window* pChildWin = pParent->GetChild(nTotChildren);
                         if (pChildWin && pChildWin->IsChart())
                         {

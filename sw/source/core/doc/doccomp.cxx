@@ -1975,7 +1975,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         SwRedlineTable::size_type n = 0;
 
             // find the first redline for StartPos
-        if( !rDoc.getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n )
+        if (!rDoc.getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n > 0)
             --n;
 
         const SwRedlineTable& rRedlineTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();

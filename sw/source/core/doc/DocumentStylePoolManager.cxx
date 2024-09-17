@@ -2556,13 +2556,16 @@ bool DocumentStylePoolManager::IsPoolFormatUsed( sal_uInt16 nId ) const
     if( bFnd )
     {
         bFnd = false;
-        while( nArrCnt-- && !bFnd )
+        while (nArrCnt > 0 && !bFnd)
+        {
+            --nArrCnt;
             for( size_t n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFormatCount(); ++n )
             {
                 pNewFormat = (*pArray[ nArrCnt ] ).GetFormat( n );
                 if( nId == pNewFormat->GetPoolFormatId() )
                     bFnd = true;
             }
+        }
     }
 
     // Not found or no dependencies?

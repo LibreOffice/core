@@ -684,7 +684,7 @@ void SdrObjList::sort( std::vector<sal_Int32>& sortOrder)
     {
         if (nPrev != aDuplicates[i])
             aNewSortOrder[i] = aDuplicates[i] + aIncrements[aDuplicates[i]];
-        else
+        else if (i > 0)
             aNewSortOrder[i] = aNewSortOrder[i-1] + 1;
 
         nPrev = aDuplicates[i];

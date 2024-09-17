@@ -508,7 +508,7 @@ bool SwDoc::SetCurFootnote( const SwPaM& rPam, const OUString& rNumStr,
     }
 
     nPos = nPosSave;       // There are more in the front!
-    while( nPos )
+    while (nPos > 0)
     {
         SwTextFootnote* pTextFootnote = rFootnoteArr[ --nPos ];
         SwNodeOffset nIdx = SwTextFootnote_GetIndex(pTextFootnote);

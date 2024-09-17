@@ -1554,7 +1554,7 @@ OUString SvNumberformat::LocaleType::generateCode() const
         {
             aBuf.append(toUniChar(n));
         }
-        n16 = n16 << 4;
+        n16 = (n16 << 4) & 0xFFFF;
     }
 
     return aBuf.makeStringAndClear();

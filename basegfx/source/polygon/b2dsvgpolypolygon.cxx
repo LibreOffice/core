@@ -265,15 +265,17 @@ namespace basegfx::utils
                             }
 
                             // ensure existence of start point
-                            if(!aCurrPoly.count())
+                            sal_uInt32 nCurrPolyCount = aCurrPoly.count();
+                            if (nCurrPolyCount == 0)
                             {
                                 aCurrPoly.append(B2DPoint(nLastX, nLastY));
+                                nCurrPolyCount = 1;
                             }
 
                             // get first control point. It's the reflection of the PrevControlPoint
                             // of the last point. If not existent, use current point (see SVG)
                             B2DPoint aPrevControl(nLastX, nLastY);
-                            const sal_uInt32 nIndex(aCurrPoly.count() - 1);
+                            const sal_uInt32 nIndex(nCurrPolyCount - 1);
 
                             if(aCurrPoly.areControlPointsUsed() && aCurrPoly.isPrevControlPointUsed(nIndex))
                             {

@@ -396,9 +396,9 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     // search for text block
     // - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
+    sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : USHRT_MAX;
     // if not found then search in all groups
-    if( nFound == sal_uInt16(-1) )
+    if (nFound == USHRT_MAX)
     {
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
@@ -454,7 +454,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
                 }
                 else
                 {
-                    nFound = sal_uInt16(-1);
+                    nFound = USHRT_MAX;
                     bCancel = true;
                 }
             }
@@ -462,7 +462,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     }
 
     // not found
-    if( nFound == sal_uInt16(-1) )
+    if (nFound == USHRT_MAX)
     {
         if( !bCancel )
         {

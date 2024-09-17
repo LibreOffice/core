@@ -296,13 +296,14 @@ bool SwCursor::GotoPrevFootnoteAnchor()
                 }
             }
         }
-        else if( nPos )
+        else if (nPos > 0)
         {
             // search backwards
             pTextFootnote = nullptr;
-            while( nPos )
+            while (nPos > 0)
             {
-                pTextFootnote = rFootnoteArr[ --nPos ];
+                --nPos;
+                pTextFootnote = rFootnoteArr[nPos];
                 if( CmpL( *pTextFootnote, nNdPos, nCntPos ))
                     break; // found
                 pTextFootnote = nullptr;
@@ -311,7 +312,7 @@ bool SwCursor::GotoPrevFootnoteAnchor()
         else
             pTextFootnote = nullptr;
     }
-    else if( nPos )
+    else if (nPos > 0)
         pTextFootnote = rFootnoteArr[ nPos-1 ];
 
     if( pTextFootnote == nullptr )
