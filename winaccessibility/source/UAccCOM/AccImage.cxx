@@ -95,11 +95,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
         {
             return E_FAIL;
         }
-        Reference<XAccessibleImage> pRXI(pRContext, UNO_QUERY);
-        if (!pRXI.is())
-            m_xImage = nullptr;
-        else
-            m_xImage = pRXI.get();
+        Reference<XAccessibleImage> xImage(pRContext, UNO_QUERY);
+        m_xImage = xImage;
         return S_OK;
     }
     catch (...)
