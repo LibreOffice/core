@@ -48,6 +48,7 @@
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/warningscontainer.hxx>
+#include <unotools/weakref.hxx>
 
 namespace dbaccess
 {
@@ -445,11 +446,11 @@ namespace dbaccess
     //  ORowSetClone
 
     class ORowSetClone : public cppu::BaseMutex
-                         ,public OSubComponent
+                         ,public ::cppu::WeakComponentImplHelper<>
                          ,public ORowSetBase
                          ,public ::comphelper::OPropertyArrayUsageHelper < ORowSetClone >
     {
-        ORowSet*                    m_pParent;
+        unotools::WeakReference<ORowSet> m_xParent;
         sal_Int32                   m_nFetchDirection;
         sal_Int32                   m_nFetchSize;
         bool                    m_bIsBookmarkable;

@@ -2708,9 +2708,9 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 // ***********************************************************
 
 ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
-             :OSubComponent(m_aMutex, rParent)
+             : ::cppu::WeakComponentImplHelper<>(m_aMutex)
              ,ORowSetBase( _rContext, WeakComponentImplHelper::rBHelper, _pMutex )
-             ,m_pParent(&rParent)
+             ,m_xParent(&rParent)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
              ,m_bIsBookmarkable(true)
@@ -2801,7 +2801,7 @@ ORowSetClone::~ORowSetClone()
 // css::XTypeProvider
 Sequence< Type > ORowSetClone::getTypes()
 {
-    return ::comphelper::concatSequences(OSubComponent::getTypes(),ORowSetBase::getTypes());
+    return ::comphelper::concatSequences(::cppu::WeakComponentImplHelper<>::getTypes(),ORowSetBase::getTypes());
 }
 
 // css::XInterface
@@ -2809,18 +2809,18 @@ Any ORowSetClone::queryInterface( const Type & rType )
 {
     Any aRet = ORowSetBase::queryInterface(rType);
     if(!aRet.hasValue())
-        aRet = OSubComponent::queryInterface(rType);
+        aRet = ::cppu::WeakComponentImplHelper<>::queryInterface(rType);
     return aRet;
 }
 
 void ORowSetClone::acquire() noexcept
 {
-    OSubComponent::acquire();
+    ::cppu::WeakComponentImplHelper<>::acquire();
 }
 
 void ORowSetClone::release() noexcept
 {
-    OSubComponent::release();
+    ::cppu::WeakComponentImplHelper<>::release();
 }
 
 // XServiceInfo
@@ -2845,9 +2845,9 @@ void ORowSetClone::disposing()
     MutexGuard aGuard( m_aMutex );
     ORowSetBase::disposing();
 
-    m_pParent   = nullptr;
+    m_xParent   = nullptr;
     m_pMutex    = &m_aMutex; // this must be done here because someone could hold a ref to us and try to do something
-    OSubComponent::disposing();
+    ::cppu::WeakComponentImplHelper<>::disposing();
 }
 
 // XCloseable
@@ -2879,8 +2879,8 @@ void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,c
 {
     if ( nHandle == PROPERTY_ID_FETCHSIZE )
     {
-        if ( m_pParent )
-            m_pParent->setFastPropertyValue_NoBroadcast( nHandle, rValue );
+        if ( auto xParent = m_xParent.get() )
+            xParent->setFastPropertyValue_NoBroadcast( nHandle, rValue );
     }
 
     OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
