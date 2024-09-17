@@ -1,0 +1,47 @@
+From e06f9a3bece6130212b244ac4e1a1d316990f3c0 Mon Sep 17 00:00:00 2001
+From: John Bowler <jbowler@acm.org>
+Date: Mon, 16 Sep 2024 17:30:38 -0700
+Subject: [PATCH] ACES AP0 adjusted fixes
+
+The subtracts in PNG_XYZ_from_xy might be producing integer overflow
+with some valid but extreme xy values.  This re-introduces the previous
+checks but with less limited bounds; sufficient I believe to accomodate
+any reasonable set of endpoints.
+
+This is a temporary fix since it outlaws valid PNG cHRM chunks; the only
+valid approaches are not to check or to using floating point arithmetic
+internally.
+
+Signed-off-by: John Bowler <jbowler@acm.org>
+---
+ png.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/png.c b/png.c
+index 500daea5f..5d6db2974 100644
+--- a/png.c
++++ b/png.c
+@@ -1289,6 +1289,20 @@ png_XYZ_from_xy(png_XYZ *XYZ, const png_xy *xy)
+    png_fixed_point red_inverse, green_inverse, blue_scale;
+    png_fixed_point left, right, denominator;
+ 
++   /* Check xy and, implicitly, z.  Note that wide gamut color spaces typically
++    * have end points with 0 tristimulus values (these are impossible end
++    * points, but they are used to cover the possible colors).  We check
++    * xy->whitey against 5, not 0, to avoid a possible integer overflow.
++    */
++   if (xy->redx   < -PNG_FP_1 || xy->redx > 2*PNG_FP_1) return 1;
++   if (xy->redy   < -PNG_FP_1 || xy->redy > 2*PNG_FP_1) return 1;
++   if (xy->greenx < -PNG_FP_1 || xy->greenx > 2*PNG_FP_1) return 1;
++   if (xy->greeny < -PNG_FP_1 || xy->greeny > 2*PNG_FP_1) return 1;
++   if (xy->bluex  < -PNG_FP_1 || xy->bluex > 2*PNG_FP_1) return 1;
++   if (xy->bluey  < -PNG_FP_1 || xy->bluey > 2*PNG_FP_1) return 1;
++   if (xy->whitex < -PNG_FP_1 || xy->whitex > 2*PNG_FP_1) return 1;
++   if (xy->whitey < -PNG_FP_1 || xy->whitey > 2*PNG_FP_1) return 1;
++
+    /* The reverse calculation is more difficult because the original tristimulus
+     * value had 9 independent values (red,green,blue)x(X,Y,Z) however only 8
+     * derived values were recorded in the cHRM chunk;
+-- 
+2.46.0
+
