@@ -123,8 +123,6 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleHyperlink> m_xHyperlink;
-
-    css::accessibility::XAccessibleHyperlink* GetXInterface() { return m_xHyperlink.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

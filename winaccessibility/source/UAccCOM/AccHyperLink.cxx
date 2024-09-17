@@ -115,8 +115,7 @@ CAccHyperLink::get_anchor(/* [in] */ long index,
         {
             return E_FAIL;
         }
-        // Get Any type value via pRXLink.
-        css::uno::Any anyVal = GetXInterface()->getAccessibleActionAnchor(index);
+        css::uno::Any anyVal = m_xHyperlink->getAccessibleActionAnchor(index);
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, anchor);
 
@@ -150,8 +149,7 @@ CAccHyperLink::get_anchorTarget(/* [in] */ long index,
         {
             return E_FAIL;
         }
-        // Get Any type value via pRXLink.
-        css::uno::Any anyVal = GetXInterface()->getAccessibleActionObject(index);
+        css::uno::Any anyVal = m_xHyperlink->getAccessibleActionObject(index);
         // Convert Any to VARIANT.
         CMAccessible::ConvertAnyToVariant(anyVal, anchorTarget);
 
@@ -179,7 +177,7 @@ CAccHyperLink::get_startIndex(/* [retval][out] */ long __RPC_FAR* index)
         {
             return E_INVALIDARG;
         }
-        *index = GetXInterface()->getStartIndex();
+        *index = m_xHyperlink->getStartIndex();
 
         return S_OK;
     }
@@ -210,7 +208,7 @@ CAccHyperLink::get_endIndex(/* [retval][out] */ long __RPC_FAR* index)
         {
             return E_FAIL;
         }
-        *index = GetXInterface()->getEndIndex();
+        *index = m_xHyperlink->getEndIndex();
 
         return S_OK;
     }
@@ -241,7 +239,7 @@ CAccHyperLink::get_valid(/* [retval][out] */ boolean __RPC_FAR* valid)
         {
             return E_FAIL;
         }
-        *valid = GetXInterface()->isValid();
+        *valid = m_xHyperlink->isValid();
 
         return S_OK;
     }
