@@ -310,8 +310,13 @@ void GrammarCheckingIterator::TerminateThread()
         osl_joinWithThread(t);
         osl_destroyThread(t);
     }
+    // After m_bEnd was used to flag lcl_workerfunc to quit, now
+    // reset it so lcl_workerfunc could be relaunched later.
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( MyMutex() );
+        m_bEnd = false;
+    }
 }
-
 
 bool GrammarCheckingIterator::joinThreads()
 {
