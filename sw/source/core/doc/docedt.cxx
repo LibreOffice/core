@@ -105,7 +105,8 @@ void RestFlyInRange( SaveFlyArr & rArr, const SwPosition& rStartPos,
 void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
 {
     sw::SpzFrameFormats& rSpzs = *rRg.aStart.GetNode().GetDoc().GetSpzFrameFormats();
-    for(sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0; n < rSpzs.size(); ++n )
+    sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0;
+    while (n < rSpzs.size())
     {
         auto pSpz = rSpzs[n];
         SwFormatAnchor const*const pAnchor = &pSpz->GetAnchor();
@@ -126,8 +127,10 @@ void SaveFlyInRange( const SwNodeRange& rRg, SaveFlyArr& rArr )
             SwFormatAnchor aAnchor( pSpz->GetAnchor() );
             aAnchor.SetAnchor(nullptr);
             pSpz->SetFormatAttr(aAnchor);
-            rSpzs.erase( rSpzs.begin() + n-- );
+            rSpzs.erase( rSpzs.begin() + n );
+            continue;
         }
+        ++n;
     }
     sw::CheckAnchoredFlyConsistency(rRg.aStart.GetNode().GetDoc());
 }
