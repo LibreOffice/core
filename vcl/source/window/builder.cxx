@@ -997,18 +997,6 @@ namespace
         return bHasEntry;
     }
 
-    bool extractOrientation(VclBuilder::stringmap &rMap)
-    {
-        bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"orientation"_ustr);
-        if (aFind != rMap.end())
-        {
-            bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
-            rMap.erase(aFind);
-        }
-        return bVertical;
-    }
-
     bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
@@ -1726,7 +1714,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkBox" || name == "GtkStatusbar")
     {
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         if (bVertical)
             xWindow = VclPtr<VclVBox>::Create(pParent);
         else
@@ -1737,7 +1725,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkPaned")
     {
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         if (bVertical)
             xWindow = VclPtr<VclVPaned>::Create(pParent);
         else
@@ -1749,7 +1737,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         xWindow = VclPtr<VclVBox>::Create(pParent);
     else if (name == "GtkButtonBox")
     {
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         if (bVertical)
             xWindow = VclPtr<VclVButtonBox>::Create(pParent);
         else
@@ -2064,25 +2052,25 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     }
     else if (name == "GtkSeparator")
     {
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         xWindow = VclPtr<FixedLine>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
     }
     else if (name == "GtkScrollbar")
     {
         extractAdjustmentToMap(id, rMap, m_pVclParserState->m_aScrollAdjustmentMaps);
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         xWindow = VclPtr<ScrollBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
     }
     else if (name == "GtkProgressBar")
     {
         extractAdjustmentToMap(id, rMap, m_pVclParserState->m_aScrollAdjustmentMaps);
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ, ProgressBar::BarStyle::Progress);
     }
     else if (name == "GtkLevelBar")
     {
         extractAdjustmentToMap(id, rMap, m_pVclParserState->m_aScrollAdjustmentMaps);
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
         xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ, ProgressBar::BarStyle::Level);
     }
     else if (name == "GtkScrolledWindow")
@@ -2140,7 +2128,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             OUString sValuePos = extractValuePos(rMap);
             (void)sValuePos;
         }
-        bVertical = extractOrientation(rMap);
+        bVertical = hasOrientationVertical(rMap);
 
         WinBits nWinStyle = bVertical ? WB_VERT : WB_HORZ;
 
@@ -3987,6 +3975,18 @@ OUString BuilderBase::getStyleClass(xmlreader::XmlReader &reader)
     }
 
     return aRet;
+}
+
+bool BuilderBase::hasOrientationVertical(VclBuilder::stringmap &rMap)
+{
+    bool bVertical = false;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"orientation"_ustr);
+    if (aFind != rMap.end())
+    {
+        bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
+        rMap.erase(aFind);
+    }
+    return bVertical;
 }
 
 void BuilderBase::collectProperty(xmlreader::XmlReader& reader, stringmap& rMap) const

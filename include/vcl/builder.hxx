@@ -95,6 +95,7 @@ protected:
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);
     static OUString getStyleClass(xmlreader::XmlReader &reader);
+    static bool hasOrientationVertical(stringmap &rMap);
 
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
