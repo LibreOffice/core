@@ -26,33 +26,19 @@
 
 namespace comphelper
 {
-
-
     using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise too many changes
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-
     // OAccessibleKeyBindingHelper
-
-
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper()
     {
     }
 
-
-    OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
-        : cppu::WeakImplHelper<XAccessibleKeyBinding>( rHelper )
-        , m_aKeyBindings( rHelper.m_aKeyBindings )
-    {
-    }
-
-
     OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper()
     {
     }
-
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding )
     {
@@ -61,24 +47,19 @@ namespace comphelper
         m_aKeyBindings.push_back( rKeyBinding );
     }
 
-
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke )
     {
         std::scoped_lock aGuard( m_aMutex );
         m_aKeyBindings.push_back( { rKeyStroke } );
     }
 
-
     // XAccessibleKeyBinding
-
-
     sal_Int32 OAccessibleKeyBindingHelper::getAccessibleKeyBindingCount()
     {
         std::scoped_lock aGuard( m_aMutex );
 
         return m_aKeyBindings.size();
     }
-
 
     Sequence< awt::KeyStroke > OAccessibleKeyBindingHelper::getAccessibleKeyBinding( sal_Int32 nIndex )
     {
@@ -89,7 +70,6 @@ namespace comphelper
 
         return m_aKeyBindings[nIndex];
     }
-
 
 }   // namespace comphelper
 
