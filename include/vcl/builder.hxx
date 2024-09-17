@@ -91,6 +91,8 @@ protected:
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
     void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
+    void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
+                                            OUString& rId, OUString& rCustomProperty);
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader &reader, int &nPriority);

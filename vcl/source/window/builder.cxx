@@ -3597,12 +3597,9 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
     return true;
 }
 
-VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem)
+void BuilderBase::extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
+                                                     OUString& rId, OUString& rCustomProperty)
 {
-    OUString sClass;
-    OUString sID;
-    OUString sCustomProperty;
-
     xmlreader::Span name;
     int nsId;
 
@@ -3611,23 +3608,31 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
         if (name == "class")
         {
             name = reader.getAttributeValue(false);
-            sClass = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
+            rClass = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
         }
         else if (name == "id")
         {
             name = reader.getAttributeValue(false);
-            sID = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
+            rId = OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8);
             if (isLegacy())
             {
-                sal_Int32 nDelim = sID.indexOf(':');
+                sal_Int32 nDelim = rId.indexOf(':');
                 if (nDelim != -1)
                 {
-                    sCustomProperty = sID.subView(nDelim+1);
-                    sID = sID.copy(0, nDelim);
+                    rCustomProperty = rId.subView(nDelim+1);
+                    rId = rId.copy(0, nDelim);
                 }
             }
         }
     }
+}
+
+VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem)
+{
+    OUString sClass;
+    OUString sID;
+    OUString sCustomProperty;
+    extractClassAndIdAndCustomProperty(reader, sClass, sID, sCustomProperty);
 
     if (sClass == "GtkListStore" || sClass == "GtkTreeStore")
     {
@@ -3673,6 +3678,8 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     VclPtr<vcl::Window> pCurrentChild;
     while(true)
     {
+        xmlreader::Span name;
+        int nsId;
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
