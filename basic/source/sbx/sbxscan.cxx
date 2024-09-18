@@ -535,6 +535,7 @@ void BasicFormatNum(double d, const OUString* pFmt, SbxDataType eType, OUString&
         ImpCvtNum(d, eType == SbxSINGLE ? 6 : eType == SbxDOUBLE ? 14 : 0, rRes);
 }
 
+#if HAVE_FEATURE_SCRIPTING
 // For numeric types, takes the number directly; otherwise, tries to take string and convert it
 bool GetNumberIntl(const SbxValue& val, double& ret)
 {
@@ -558,6 +559,7 @@ bool GetNumberIntl(const SbxValue& val, double& ret)
             return SbxValue::ScanNumIntnl(val.GetOUString(), ret) == ERRCODE_NONE;
     }
 }
+#endif
 } // namespace
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
