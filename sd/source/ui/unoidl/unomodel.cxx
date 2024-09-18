@@ -4311,12 +4311,18 @@ OString SdXImpressDocument::getPresentationInfo() const
                         }
                         else
                         {
-                            SdrPage* pPage = SdPage::getImplementation(xSlide);
+                            SdPage* pPage = SdPage::getImplementation(xSlide);
 
                             ::tools::ScopedJsonWriterStruct aSlideNode = aJsonWriter.startStruct();
                             std::string sSlideHash = GetInterfaceHash(xSlide);
                             aJsonWriter.put("hash", sSlideHash);
                             aJsonWriter.put("index", i);
+
+                            if (pPage)
+                            {
+                                auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
+                                aJsonWriter.put("name", aName);
+                            }
 
                             uno::Reference<drawing::XShapes> xSlideShapes(xSlide, uno::UNO_QUERY_THROW);
                             bool bIsDrawPageEmpty = true;
