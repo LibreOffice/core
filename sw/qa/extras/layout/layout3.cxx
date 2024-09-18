@@ -3496,6 +3496,29 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf152142DoNotMirrorRtlDrawObjs)
     CPPUNIT_ASSERT_LESS(nShapeEnd, nTextBoxEnd);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152298)
+{
+    createSwDoc("tdf152298.docx");
+    auto pDump = parseLayoutDump();
+
+    assertXPath(pDump, "//page"_ostr, 2);
+    // Without the fix, this was 39
+    assertXPath(pDump, "//page[1]/body/tab/row"_ostr, 38);
+    assertXPath(pDump, "//page[1]/body/tab/row[38]/cell[1]"_ostr, "rowspan"_ostr, u"4"_ustr);
+    OUString a38_id = getXPath(pDump, "//page[1]/body/tab/row[38]/cell[1]"_ostr, "id"_ostr);
+    OUString follow_id = getXPath(pDump, "//page[1]/body/tab/row[38]/cell[1]"_ostr, "follow"_ostr);
+    // The text of A38, that spans four rows, must be split: empty paragraph here
+    assertXPathContent(pDump, "//page[1]/body/tab/row[38]/cell[1]/txt"_ostr, u""_ustr);
+    // First row is the repeating line
+    assertXPathContent(pDump, "//page[2]/body/tab/row[1]/cell[1]/txt"_ostr, u"1"_ustr);
+    assertXPathContent(pDump, "//page[2]/body/tab/row[1]/cell[2]/txt"_ostr, u"2"_ustr);
+    assertXPathContent(pDump, "//page[2]/body/tab/row[1]/cell[3]/txt"_ostr, u"3"_ustr);
+    // The text in the follow row's first cell is the second paragraph of A38, "10"
+    assertXPath(pDump, "//page[2]/body/tab/row[2]/cell[1]"_ostr, "id"_ostr, follow_id);
+    assertXPath(pDump, "//page[2]/body/tab/row[2]/cell[1]"_ostr, "precede"_ostr, a38_id);
+    assertXPathContent(pDump, "//page[2]/body/tab/row[2]/cell[1]/txt"_ostr, u"10"_ustr);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
