@@ -1082,6 +1082,8 @@ void ScHTMLLayoutParser::TableDataOn( HtmlImportInfo* pInfo )
                     mxActEntry->nRowOverlap = static_cast<SCROW>(nRowOverlap);
                 else
                     SAL_WARN("sc", "ScHTMLLayoutParser::TableDataOn ignoring rowspan: " << nRowOverlap);
+                if (comphelper::IsFuzzing())
+                    mxActEntry->nRowOverlap = std::min(mxActEntry->nRowOverlap, sal_Int32(1024));
             }
             break;
             case HtmlOptionId::ALIGN:
