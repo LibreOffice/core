@@ -74,6 +74,8 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
     DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
 
+    static QWidget* GetNativeParentFromWeldParent(weld::Widget* pParent);
+
 private Q_SLOTS:
     bool ImplYield(bool bWait, bool bHandleAllCurrentEvents);
     static void deleteObjectLater(QObject* pObject);

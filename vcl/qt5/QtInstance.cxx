@@ -798,6 +798,27 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
     m_pActivePopup = pFrame;
 }
 
+QWidget* QtInstance::GetNativeParentFromWeldParent(weld::Widget* pParent)
+{
+    if (!pParent)
+        return nullptr;
+
+    if (QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pParent))
+        return pQtInstanceWidget->getQWidget();
+
+    // the parent is not welded/not a native Qt widget; get QWidget via frame
+    if (SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pParent))
+    {
+        if (vcl::Window* pWindow = pSalWidget->getWidget())
+        {
+            if (QtFrame* pFrame = static_cast<QtFrame*>(pWindow->ImplGetFrame()))
+                return pFrame->GetQWidget();
+        }
+    }
+
+    return nullptr;
+}
+
 std::unique_ptr<weld::Builder>
 QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
@@ -829,27 +850,7 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
     }
     else
     {
-        QWidget* pQtParent = nullptr;
-        if (pParent)
-        {
-            if (QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pParent))
-            {
-                pQtParent = pQtInstanceWidget->getQWidget();
-            }
-            else
-            {
-                // the parent is not welded/not a native Qt widget; get QWidget via frame
-                if (SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pParent))
-                {
-                    if (vcl::Window* pWindow = pSalWidget->getWidget())
-                    {
-                        if (QtFrame* pFrame = static_cast<QtFrame*>(pWindow->ImplGetFrame()))
-                            pQtParent = pFrame->GetQWidget();
-                    }
-                }
-            }
-        }
-
+        QWidget* pQtParent = GetNativeParentFromWeldParent(pParent);
         QMessageBox* pMessageBox = new QMessageBox(pQtParent);
         pMessageBox->setText(toQString(rPrimaryMessage));
         pMessageBox->setIcon(vclMessageTypeToQtIcon(eMessageType));
