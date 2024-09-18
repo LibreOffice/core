@@ -3970,4 +3970,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:attribute>
     </rng:optional>
   </rng:define>
+
+  <!-- OFFICE-4169, bug tdf#162963 -->
+  <rng:define name="table-database-range-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="calcext:contains-footer">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
 </rng:grammar>

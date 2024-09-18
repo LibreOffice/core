@@ -42,6 +42,7 @@ struct SAL_DLLPUBLIC_RTTI ScQueryParamBase
 {
     utl::SearchParam::SearchType eSearchType;
     bool            bHasHeader;
+    bool            bHasTotals;
     bool            bByRow;
     bool            bInplace;
     bool            bCaseSens;
@@ -88,6 +89,7 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
     stream << "{" <<
         "searchType=" << rParam.eSearchType <<
         ",hasHeader=" << (rParam.bHasHeader?"YES":"NO") <<
+        ",hasTotals=" << (rParam.bHasTotals?"YES":"NO") <<
         ",byRow=" << (rParam.bByRow?"YES":"NO") <<
         ",inplace=" << (rParam.bInplace?"YES":"NO") <<
         ",caseSens=" << (rParam.bCaseSens?"YES":"NO") <<

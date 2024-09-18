@@ -519,6 +519,7 @@ namespace xmloff::token {
         TOKEN( "consolidation",                   XML_CONSOLIDATION ),
         TOKEN( "constant",                        XML_CONSTANT ),
         TOKEN( "contains-error",                  XML_CONTAINS_ERROR ),
+        TOKEN( "contains-footer",                 XML_CONTAINS_FOOTER ),
         TOKEN( "contains-header",                 XML_CONTAINS_HEADER ),
         TOKEN( "content",                         XML_CONTENT ),
         TOKEN( "content-validation",              XML_CONTENT_VALIDATION ),

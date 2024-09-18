@@ -81,6 +81,7 @@ class ScXMLDatabaseRangeContext : public ScXMLImportContext
     bool            bSubTotalsAscending;
     bool            bFilterConditionSourceRange;
     bool            bHasHeader;
+    bool            bHasFooter; // UNO TotalsRow, ODF contains-footer
     bool            bByRow;
     ScDBCollection::RangeType meRangeType;
 

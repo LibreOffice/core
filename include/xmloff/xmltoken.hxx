@@ -507,6 +507,7 @@ namespace xmloff::token {
         XML_CONSOLIDATION,
         XML_CONSTANT,
         XML_CONTAINS_ERROR,
+        XML_CONTAINS_FOOTER,
         XML_CONTAINS_HEADER,
         XML_CONTENT,
         XML_CONTENT_VALIDATION,

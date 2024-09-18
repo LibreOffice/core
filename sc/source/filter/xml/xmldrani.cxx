@@ -104,6 +104,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsAscending(true),
     bFilterConditionSourceRange(false),
     bHasHeader(true),
+    bHasFooter(false),
     bByRow(true),
     meRangeType(ScDBCollection::GlobalNamed)
 {
@@ -148,6 +149,13 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                 {
                     bHasHeader = IsXMLToken( aIter, XML_TRUE );
                     mpQueryParam->bHasHeader = bHasHeader;
+                }
+                break;
+                case XML_ELEMENT( TABLE, XML_CONTAINS_FOOTER ):
+                case XML_ELEMENT( CALC_EXT, XML_CONTAINS_FOOTER ):
+                {
+                    bHasFooter = IsXMLToken( aIter, XML_TRUE );
+                    mpQueryParam->bHasTotals = bHasFooter;
                 }
                 break;
                 case XML_ELEMENT( TABLE, XML_DISPLAY_FILTER_BUTTONS ):
@@ -247,7 +255,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
     ScDocument* pDoc = GetScImport().GetDocument();
 
     ::std::unique_ptr<ScDBData> pData(
-        new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row(), bByRow, bHasHeader));
+        new ScDBData(rName, maRange.aStart.Tab(), maRange.aStart.Col(), maRange.aStart.Row(), maRange.aEnd.Col(), maRange.aEnd.Row(), bByRow, bHasHeader, bHasFooter));
 
     pData->SetAutoFilter(bAutoFilter);
     pData->SetKeepFmt(bKeepFormats);

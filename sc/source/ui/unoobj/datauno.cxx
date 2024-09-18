@@ -1750,6 +1750,7 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
     ScDBData aNewData( *pData );
     aNewData.SetQueryParam(aParam);
     aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetQueryParam
+    aNewData.SetTotals(aParam.bHasTotals);      // not in ScDBData::SetQueryParam
     ScDBDocFunc aFunc(*pDocShell);
     aFunc.ModifyDBData(aNewData);
 }

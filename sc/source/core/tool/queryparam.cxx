@@ -68,6 +68,7 @@ ScQueryParamBase::const_iterator ScQueryParamBase::end() const
 ScQueryParamBase::ScQueryParamBase() :
     eSearchType(utl::SearchParam::SearchType::Normal),
     bHasHeader(true),
+    bHasTotals(false),
     bByRow(true),
     bInplace(true),
     bCaseSens(false),
@@ -78,9 +79,9 @@ ScQueryParamBase::ScQueryParamBase() :
 }
 
 ScQueryParamBase::ScQueryParamBase(const ScQueryParamBase& r) :
-    eSearchType(r.eSearchType), bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace),
-    bCaseSens(r.bCaseSens), bDuplicate(r.bDuplicate), mbRangeLookup(r.mbRangeLookup),
-    m_Entries(r.m_Entries)
+    eSearchType(r.eSearchType), bHasHeader(r.bHasHeader), bHasTotals(r.bHasTotals), bByRow(r.bByRow),
+    bInplace(r.bInplace), bCaseSens(r.bCaseSens), bDuplicate(r.bDuplicate),
+    mbRangeLookup(r.mbRangeLookup), m_Entries(r.m_Entries)
 {
 }
 
@@ -90,6 +91,7 @@ ScQueryParamBase& ScQueryParamBase::operator=(const ScQueryParamBase& r)
     {
         eSearchType = r.eSearchType;
         bHasHeader  = r.bHasHeader;
+        bHasTotals = r.bHasTotals;
         bByRow = r.bByRow;
         bInplace = r.bInplace;
         bCaseSens = r.bCaseSens;
@@ -337,7 +339,7 @@ void ScQueryParam::Clear()
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
     eSearchType = utl::SearchParam::SearchType::Normal;
-    bHasHeader = bCaseSens = false;
+    bHasHeader = bHasTotals = bCaseSens = false;
     bInplace = bByRow = bDuplicate = true;
 
     for (auto & itr : m_Entries)
@@ -379,6 +381,7 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
         && (nRow2       == rOther.nRow2)
         && (nTab        == rOther.nTab)
         && (bHasHeader  == rOther.bHasHeader)
+        && (bHasTotals  == rOther.bHasTotals)
         && (bByRow      == rOther.bByRow)
         && (bInplace    == rOther.bInplace)
         && (bCaseSens   == rOther.bCaseSens)

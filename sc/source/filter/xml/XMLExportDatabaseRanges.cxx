@@ -246,6 +246,9 @@ private:
         rData.GetQueryParam(aQueryParam);
         if (!aQueryParam.bHasHeader)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
+        if (mrExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
+            if (aQueryParam.bHasTotals)
+            mrExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_CONTAINS_FOOTER, XML_TRUE);
 
         ScSortParam aSortParam;
         rData.GetSortParam(aSortParam);

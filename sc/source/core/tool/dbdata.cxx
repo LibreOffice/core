@@ -423,7 +423,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
     rQueryParam.nTab  = nTable;
     rQueryParam.bByRow = bByRow;
     rQueryParam.bHasHeader = bHasHeader;
-    /* TODO: add Totals to ScQueryParam? */
+    rQueryParam.bHasTotals = bHasTotals;
 }
 
 void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
