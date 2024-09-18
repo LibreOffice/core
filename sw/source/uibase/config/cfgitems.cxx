@@ -126,6 +126,9 @@ SwElemItem::SwElemItem(const SwViewOption& rVOpt) :
     m_bShowChangesInMargin = rVOpt.IsShowChangesInMargin();
     m_bFieldHiddenText = rVOpt.IsShowHiddenField();
     m_bShowHiddenPara  = rVOpt.IsShowHiddenPara();
+    m_bDefaultZoom = false;
+    m_eDefaultZoomType = rVOpt.GetZoomType();
+    m_nDefaultZoomValue = rVOpt.GetZoom();
 }
 
 SwElemItem* SwElemItem::Clone( SfxItemPool* ) const
