@@ -2400,10 +2400,11 @@ void ScAttrArray::CopyArea(
     SCROW nDestEnd = std::min(static_cast<tools::Long>(static_cast<tools::Long>(nEndRow) + nDy), tools::Long(rDocument.MaxRow()));
     const bool bSameCellAttributeHelper(&rDocument.getCellAttributeHelper() == &rAttrArray.rDocument.getCellAttributeHelper());
 
+    const ScPatternAttr* pSourceDefaultPattern = &rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    const ScPatternAttr* pDestDefaultPattern = &rAttrArray.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
     if ( mvData.empty() )
     {
-        const ScPatternAttr* pNewPattern = &rAttrArray.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
-        rAttrArray.SetPatternArea(nDestStart, nDestEnd, pNewPattern);
+        rAttrArray.SetPatternArea(nDestStart, nDestEnd, pDestDefaultPattern);
         return;
     }
 
@@ -2414,10 +2415,10 @@ void ScAttrArray::CopyArea(
             const ScPatternAttr* pOldPattern = mvData[i].getScPatternAttr();
             CellAttributeHolder aNewPattern;
 
-            if (ScPatternAttr::areSame(&rDocument.getCellAttributeHelper().getDefaultCellAttribute(), pOldPattern ))
+            if (ScPatternAttr::areSame(pSourceDefaultPattern, pOldPattern ))
             {
                 // default: nothing changed
-                aNewPattern.setScPatternAttr(&rAttrArray.rDocument.getCellAttributeHelper().getDefaultCellAttribute());
+                aNewPattern.setScPatternAttr(pDestDefaultPattern);
             }
             else if ( nStripFlags != ScMF::NONE )
             {
