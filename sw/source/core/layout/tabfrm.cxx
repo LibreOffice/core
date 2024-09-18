@@ -1136,8 +1136,8 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     //                   table, or it will be set to false under certain
     //                   conditions that are not suitable for splitting
     //                   the row.
-    bool bSplitRowAllowed = true;
-    if (!pRow->IsRowSplitAllowed())
+    bool bSplitRowAllowed = bTryToSplit;
+    if (bSplitRowAllowed && !pRow->IsRowSplitAllowed())
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
         // otherwise it has hidden content and that makes no sense
@@ -1157,9 +1157,9 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     // a splitting of the table row.
     // Special DoNotSplit case 1:
     // Search for sections inside pRow:
-    if ( lcl_FindSectionsInRow( *pRow ) )
+    if (bSplitRowAllowed && lcl_FindSectionsInRow(*pRow))
     {
-        bTryToSplit = false;
+        bSplitRowAllowed = false;
     }
 
     SwFlyFrame* pFly = FindFlyFrame();
@@ -1217,7 +1217,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         // Second case: The first non-headline row does not fit to the page.
         // If it is not allowed to be split, or it contains a sub-row that
         // is not allowed to be split, we keep the row in this table:
-        if ( bTryToSplit && bSplitRowAllowed )
+        if (bSplitRowAllowed)
         {
             // Check if there are (first) rows inside this row,
             // which are not allowed to be split.
@@ -1262,9 +1262,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     // - the attributes of the row are set accordingly and
     // - we are allowed to do so
     // - it should not be kept with the next row
-    bSplitRowAllowed = bSplitRowAllowed && bTryToSplit &&
-                       ( !bTableRowKeep ||
-                         !pRow->ShouldRowKeepWithNext() );
+    bSplitRowAllowed = bSplitRowAllowed && (!bTableRowKeep || !pRow->ShouldRowKeepWithNext());
 
     // Adjust pRow according to the keep-with-next attribute:
     if ( !bSplitRowAllowed && bTableRowKeep )
