@@ -28,6 +28,7 @@
 #include <QtDragAndDrop.hxx>
 #include <QtFilePicker.hxx>
 #include <QtFrame.hxx>
+#include <QtInstanceBuilder.hxx>
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
@@ -795,6 +796,15 @@ void QtInstance::setActivePopup(QtFrame* pFrame)
 {
     assert(!pFrame || pFrame->isPopup());
     m_pActivePopup = pFrame;
+}
+
+std::unique_ptr<weld::Builder>
+QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
+{
+    if (!QtData::noWeldedWidgets() && QtInstanceBuilder::IsUIFileSupported(rUIFile))
+        return std::make_unique<QtInstanceBuilder>(nullptr, rUIRoot, rUIFile);
+    else
+        return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
 }
 
 weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
