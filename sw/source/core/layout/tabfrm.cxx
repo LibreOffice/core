@@ -207,16 +207,15 @@ static SwTwips lcl_GetHeightOfRows( const SwFrame* pStart, tools::Long nCount )
     if ( !nCount || !pStart)
         return 0;
 
-    SwTwips nRet = 0;
     SwRectFnSet aRectFnSet(pStart);
-    while ( pStart && nCount > 0 )
+    SwTwips nTop = aRectFnSet.GetTop(pStart->getFrameArea());
+    while (pStart->GetNext() && nCount > 1)
     {
-        nRet += aRectFnSet.GetHeight(pStart->getFrameArea());
         pStart = pStart->GetNext();
         --nCount;
     }
 
-    return nRet;
+    return -aRectFnSet.BottomDist(pStart->getFrameArea(), nTop);
 }
 
 // Local helper function to insert a new follow flow line
@@ -1096,18 +1095,25 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     const sal_uInt16 nRepeat = GetTable()->GetRowsToRepeat();
     sal_uInt16 nRowCount = 0;           // pRow currently points to the first row
 
-    SwTwips nRemainingSpaceForLastRow =
-        aRectFnSet.YDiff(nCutPos, aRectFnSet.GetTop(getFrameArea()));
-    nRemainingSpaceForLastRow -= aRectFnSet.GetTopMargin(*this) + aRectFnSet.GetBottomMargin(*this);
+    // Due to the comment above, about possibly invalid positions of cells due to position changes
+    // of the table, calculate the rows height subtracting last row's bottom from first row's top,
+    // and compare with the available height
+    SwTwips nRemainingSpaceForLastRow = aRectFnSet.YDiff(nCutPos, aRectFnSet.GetPrtTop(*this));
+    nRemainingSpaceForLastRow -= aRectFnSet.GetBottomMargin(*this);
+    auto getRemainingAfter = [aRectFnSet, nAvailable = nRemainingSpaceForLastRow,
+                              nFirstRowTop = aRectFnSet.GetTop(pRow->getFrameArea())](SwFrame* p)
+    { return nAvailable + (p ? aRectFnSet.BottomDist(p->getFrameArea(), nFirstRowTop) : 0); };
 
     // Make pRow point to the line that does not fit anymore:
-    while( pRow->GetNext() &&
-           nRemainingSpaceForLastRow >= ( aRectFnSet.GetHeight(pRow->getFrameArea()) ) )
+    while (pRow->GetNext())
     {
+        SwTwips nNewRemaining = getRemainingAfter(pRow);
+        if (nNewRemaining < 0)
+            break;
         if( bTryToSplit || !pRow->IsRowSpanLine() ||
             0 != aRectFnSet.GetHeight(pRow->getFrameArea()) )
             ++nRowCount;
-        nRemainingSpaceForLastRow -= aRectFnSet.GetHeight(pRow->getFrameArea());
+        nRemainingSpaceForLastRow = nNewRemaining;
         pRow = static_cast<SwRowFrame*>(pRow->GetNext());
     }
 
@@ -1384,7 +1390,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
             pFollowRow = lcl_InsertNewFollowFlowLine( *this, *pLastRow, true );
     }
 
-    SwTwips nShrink = 0;
+    const SwTwips nShrink = lcl_GetHeightOfRows(pRow, std::numeric_limits<tools::Long>::max());
 
     //Optimization: There is no paste needed for the new Follow and the
     //optimized insert can be used (large numbers of rows luckily only occur in
@@ -1396,7 +1402,6 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         while ( pRow )
         {
             SwFrame* pNxt = pRow->GetNext();
-            nShrink += aRectFnSet.GetHeight(pRow->getFrameArea());
             // The footnotes do not have to be moved, this is done in the
             // MoveFwd of the follow table!!!
             pRow->RemoveFromLayout();
@@ -1415,7 +1420,6 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         while ( pRow )
         {
             SwFrame* pNxt = pRow->GetNext();
-            nShrink += aRectFnSet.GetHeight(pRow->getFrameArea());
 
             // The footnotes have to be moved:
             lcl_MoveFootnotes( *this, *GetFollow(), *pRow );
