@@ -823,9 +823,14 @@ std::unique_ptr<weld::Builder>
 QtInstance::CreateBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile)
 {
     if (!QtData::noWeldedWidgets() && QtInstanceBuilder::IsUIFileSupported(rUIFile))
-        return std::make_unique<QtInstanceBuilder>(nullptr, rUIRoot, rUIFile);
+    {
+        QWidget* pQtParent = GetNativeParentFromWeldParent(pParent);
+        return std::make_unique<QtInstanceBuilder>(pQtParent, rUIRoot, rUIFile);
+    }
     else
+    {
         return SalInstance::CreateBuilder(pParent, rUIRoot, rUIFile);
+    }
 }
 
 weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
