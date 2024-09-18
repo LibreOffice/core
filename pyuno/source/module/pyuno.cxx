@@ -1529,6 +1529,10 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     return result;
 }
 
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
 static PyMethodDef PyUNOMethods[] =
 {
 #if defined __clang__
@@ -1545,6 +1549,9 @@ static PyMethodDef PyUNOMethods[] =
 #endif
     {nullptr,         nullptr,                                        0,            nullptr}
 };
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 static PyNumberMethods PyUNONumberMethods[] =
 {

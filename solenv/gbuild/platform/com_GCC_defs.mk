@@ -146,13 +146,6 @@ gb_CXXFLAGS_COMMON += \
     -Wunused-const-variable=1
 endif
 
-# GCC 8 -Wcast-function-type (included in -Wextra) unhelpfully even warns on reinterpret_cast
-# between incompatible function types:
-ifeq ($(shell expr '$(GCC_VERSION)' '>=' 800),1)
-gb_CXXFLAGS_COMMON += \
-    -Wno-cast-function-type
-endif
-
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
 gb_VISIBILITY_FLAGS := -fvisibility=hidden

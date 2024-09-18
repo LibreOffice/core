@@ -907,6 +907,10 @@ static PyObject *sal_debug(
 
 }
 
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type"
+#endif
 struct PyMethodDef PyUNOModule_methods [] =
 {
     {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, nullptr},
@@ -942,6 +946,9 @@ struct PyMethodDef PyUNOModule_methods [] =
     {"sal_debug", sal_debug, METH_VARARGS, nullptr},
     {nullptr, nullptr, 0, nullptr}
 };
+#if defined __GNUC__ && !defined __clang__
+#pragma GCC diagnostic pop
+#endif
 
 }
 
