@@ -277,7 +277,7 @@ void marshal_data(void* pUnoData, void* pNetData, typelib_TypeDescriptionReferen
                     typelib_InterfaceTypeDescription* pTD
                         = reinterpret_cast<typelib_InterfaceTypeDescription*>(type.get());
 
-                    // TODO: check whether liftime control is correct
+                    // TODO: check whether lifetime control is correct
                     bridge.acquire();
                     (*pUnoI->acquire)(pUnoI);
                     typelib_typedescription_acquire(&pTD->aBase);
