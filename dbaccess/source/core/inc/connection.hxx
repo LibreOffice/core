@@ -210,7 +210,7 @@ private:
             if the implementation cannot be loaded
 
         @postcond
-            m_xConnectionTools is nol <NULL/>
+            m_xConnectionTools is not <NULL/>
     */
     void    impl_loadConnectionTools_throw();
 
