@@ -1096,14 +1096,11 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
 
     SwTwips nRemainingSpaceForLastRow =
         aRectFnSet.YDiff(nCutPos, aRectFnSet.GetTop(getFrameArea()));
-    nRemainingSpaceForLastRow -= aRectFnSet.GetTopMargin(*this);
+    nRemainingSpaceForLastRow -= aRectFnSet.GetTopMargin(*this) + aRectFnSet.GetBottomMargin(*this);
 
     // Make pRow point to the line that does not fit anymore:
     while( pRow->GetNext() &&
-           nRemainingSpaceForLastRow >= ( aRectFnSet.GetHeight(pRow->getFrameArea()) +
-                                           (IsCollapsingBorders() ?
-                                            pRow->GetBottomLineSize() :
-                                            0 ) ) )
+           nRemainingSpaceForLastRow >= ( aRectFnSet.GetHeight(pRow->getFrameArea()) ) )
     {
         if( bTryToSplit || !pRow->IsRowSpanLine() ||
             0 != aRectFnSet.GetHeight(pRow->getFrameArea()) )
