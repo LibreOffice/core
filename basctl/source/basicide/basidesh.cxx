@@ -262,8 +262,8 @@ Shell::~Shell()
     aWindowTable.clear();
 
     // Destroy all ContainerListeners for Basic Container.
-    if (ContainerListenerImpl* pListener = static_cast<ContainerListenerImpl*>(m_xLibListener.get()))
-        pListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
+    if (m_xLibListener)
+        m_xLibListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
 
     GetExtraData()->ShellInCriticalSection() = false;
 
@@ -940,16 +940,14 @@ void Shell::SetCurLib( const ScriptDocument& rDocument, const OUString& aLibName
     if ( bCheck && rDocument == m_aCurDocument && aLibName == m_aCurLibName )
         return;
 
-    ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
-
-    if (pListener)
-        pListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
+    if (m_xLibListener)
+        m_xLibListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
 
     m_aCurDocument = rDocument;
     m_aCurLibName = aLibName;
 
-    if ( pListener )
-        pListener->addContainerListener( m_aCurDocument, aLibName );
+    if ( m_xLibListener )
+        m_xLibListener->addContainerListener( m_aCurDocument, aLibName );
 
     if ( bUpdateWindows )
         UpdateWindows();

@@ -55,6 +55,7 @@ class TabBar;
 class BaseWindow;
 class LocalizationMgr;
 class BasicColorConfig;
+class ContainerListenerImpl;
 
 class Shell :
     public SfxViewShell,
@@ -98,7 +99,7 @@ private:
     DocumentEventNotifier m_aNotifier;
 
     friend class ContainerListenerImpl;
-    css::uno::Reference< css::container::XContainerListener > m_xLibListener;
+    rtl::Reference<ContainerListenerImpl> m_xLibListener;
     std::unique_ptr<SvxSearchItem> mpSearchItem;
 
     void                Init();

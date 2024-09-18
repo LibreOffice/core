@@ -2045,7 +2045,7 @@ typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;
 class StarBasicAccess_Impl : public StarBasicAccessHelper
 {
     BasicManager* mpMgr;
-    uno::Reference< container::XNameContainer > mxLibContainer;
+    rtl::Reference< LibraryContainer_Impl > mxLibContainer;
 
 public:
     explicit StarBasicAccess_Impl( BasicManager* pMgr )
