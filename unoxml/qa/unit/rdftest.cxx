@@ -10,6 +10,8 @@
 #include <test/unoapi_test.hxx>
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
@@ -618,6 +620,282 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     catch (com::sun::star::container::NoSuchElementException&)
     {
     }
+}
+
+std::vector<rdf::Statement>
+sortStatementsByPredicate(const uno::Sequence<rdf::Statement>& rStatements)
+{
+    std::vector<rdf::Statement> aStatements
+        = comphelper::sequenceToContainer<std::vector<rdf::Statement>>(rStatements);
+    std::sort(aStatements.begin(), aStatements.end(),
+              [](const rdf::Statement& a, const rdf::Statement& b) {
+                  return a.Predicate->getStringValue() < b.Predicate->getStringValue();
+              });
+    return aStatements;
+}
+
+CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa2)
+{
+    auto verify = [this](bool bIsExport) {
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                      uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
+                                                                             uno::UNO_QUERY);
+        uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
+        uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xDocRepo);
+
+        const uno::Reference<uno::XComponentContext> xContext(
+            comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
+        uno::Reference<css::rdf::XURI> xFoo = rdf::URI::create(xContext, "uri:foo");
+        uno::Reference<css::rdf::XURI> xBase = rdf::URI::create(xContext, "base-uri:");
+        uno::Reference<css::rdf::XURI> xBar = rdf::URI::create(xContext, "uri:bar");
+        uno::Reference<css::rdf::XURI> xBaz = rdf::URI::create(xContext, "uri:baz");
+        uno::Reference<css::rdf::XBlankNode> xBlank = rdf::BlankNode::create(xContext, "_:uno");
+
+        {
+            // RDFa: 1
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "1");
+            rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 2
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "2");
+            rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+
+        OUString aSubject3;
+        OUString aSubject4;
+        OUString aSubject5;
+        {
+            // RDFa: 3
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            aSubject3 = aStatements[0].Subject->getStringValue();
+            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(OUString("3"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 4
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            aSubject4 = aStatements[0].Subject->getStringValue();
+            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(OUString("4"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 5
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            aSubject5 = aStatements[0].Subject->getStringValue();
+            CPPUNIT_ASSERT_EQUAL(OUString("uri:bar"), aStatements[0].Predicate->getStringValue());
+            CPPUNIT_ASSERT_EQUAL(OUString("5"), aStatements[0].Object->getStringValue());
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+
+        CPPUNIT_ASSERT(aSubject3 != aSubject4);
+        CPPUNIT_ASSERT_EQUAL(aSubject3, aSubject5);
+
+        {
+            // RDFa: 6
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            std::vector<rdf::Statement> aStatements = sortStatementsByPredicate(xResult.First);
+            CPPUNIT_ASSERT_EQUAL(size_t(2), aStatements.size());
+
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "6");
+            rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
+            rdf::Statement aFooBazLit(xFoo, xBaz, xLit, nullptr);
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBazLit, aStatements[1]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 7
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            std::vector<rdf::Statement> aStatements = sortStatementsByPredicate(xResult.First);
+            CPPUNIT_ASSERT_EQUAL(size_t(3), aStatements.size());
+
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "7");
+            rdf::Statement aFooBarLit(xFoo, xBar, xLit, nullptr);
+            rdf::Statement aFooBazLit(xFoo, xBaz, xLit, nullptr);
+            rdf::Statement aFooFooLit(xFoo, xFoo, xLit, nullptr);
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit, aStatements[0]);
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBazLit, aStatements[1]);
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooFooLit, aStatements[2]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        uno::Reference<css::rdf::XLiteral> xLit2 = rdf::Literal::create(xContext, "a fooish bar");
+        uno::Reference<css::rdf::XLiteral> xLitType
+            = rdf::Literal::createWithType(xContext, "a fooish bar", xBar);
+        rdf::Statement aFooBarLit2(xFoo, xBar, xLit2, nullptr);
+        rdf::Statement aFooBarLitType(xFoo, xBar, xLitType, nullptr);
+
+        {
+            // RDFa: 8
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
+            CPPUNIT_ASSERT(xResult.Second);
+        }
+        {
+            // RDFa: 9
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
+            CPPUNIT_ASSERT(xResult.Second);
+        }
+        {
+            // RDFa: 10
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLitType, aStatements[0]);
+            CPPUNIT_ASSERT(xResult.Second);
+        }
+        {
+            // RDFa: 11
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+            uno::Reference<css::rdf::XLiteral> xLitType11
+                = rdf::Literal::createWithType(xContext, "11", xBar);
+            rdf::Statement aFooBarLitType11(xFoo, xBar, xLitType11, nullptr);
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLitType11, aStatements[0]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 12
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            OUString aURL;
+            if (bIsExport)
+                aURL = maTempFile.GetURL();
+            else
+                aURL = createFileURL(u"TESTRDFA.odt");
+            uno::Reference<css::rdf::XURI> xFile
+                = rdf::URI::createNS(xContext, aURL, "/content.xml");
+            uno::Reference<css::rdf::XLiteral> xLit = rdf::Literal::create(xContext, "12");
+            rdf::Statement aFileBarLitType(xFile, xBar, xLit, nullptr);
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFileBarLitType, aStatements[0]);
+            CPPUNIT_ASSERT(!xResult.Second);
+        }
+        {
+            // RDFa: 13
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
+            CPPUNIT_ASSERT(xResult.Second);
+        }
+        {
+            // RDFa: 14
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aStatements.getLength());
+
+            CPPUNIT_ASSERT_STATEMENT_EQUAL(aFooBarLit2, aStatements[0]);
+            CPPUNIT_ASSERT(xResult.Second);
+        }
+
+        // Remaining rdfs should be empty
+        do
+        {
+            uno::Reference<rdf::XMetadatable> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+            ::beans::Pair<uno::Sequence<rdf::Statement>, sal_Bool> xResult
+                = xDocRepo->getStatementRDFa(xPara);
+            uno::Sequence<rdf::Statement> aStatements = xResult.First;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aStatements.getLength());
+        } while (xParaEnum->hasMoreElements());
+    };
+
+    loadFromFile(u"TESTRDFA.odt");
+    verify(/*bIsExport*/ false);
+    saveAndReload(u"writer8"_ustr);
+    verify(/*bIsExport*/ true);
+}
+
+CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
+{
+    const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
+                                                          css::uno::UNO_SET_THROW);
+    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        xContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
+        uno::UNO_QUERY_THROW);
+    const uno::Reference<io::XInputStream> xInputStream(
+        xFileAccess->openFileRead(createFileURL(u"TESTRDFA.odt")), uno::UNO_SET_THROW);
+    uno::Sequence<beans::PropertyValue> aLoadArgs{ comphelper::makePropertyValue("InputStream",
+                                                                                 xInputStream) };
+    mxComponent
+        = mxDesktop->loadComponentFromURL(u"private:stream"_ustr, u"_blank"_ustr, 0, aLoadArgs);
+    CPPUNIT_ASSERT(mxComponent.is());
+    uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
+                                                                         uno::UNO_QUERY);
+    uno::Reference<rdf::XRepository> xRepo = xDocumentMetadataAccess->getRDFRepository();
+    uno::Reference<rdf::XDocumentRepository> xDocRepo(xRepo, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDocRepo);
 }
 }
 
