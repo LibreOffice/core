@@ -27,6 +27,7 @@
 #include "PresenterViewFactory.hxx"
 #include "PresenterWindowManager.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
@@ -257,7 +258,6 @@ PresenterScreen::PresenterScreen (
 : PresenterScreenInterfaceBase(m_aMutex)
 , mxModel(std::move(xModel))
 , mxController()
-, mxConfigurationControllerWeak()
 , mxContextWeak(rxContext)
 , mpPresenterController()
 , mxSavedConfiguration()
@@ -298,12 +298,12 @@ bool PresenterScreen::isPresenterScreenFullScreen(const css::uno::Reference<css:
 
 void SAL_CALL PresenterScreen::disposing()
 {
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is() && mxSavedConfiguration.is())
     {
         xCC->restoreConfiguration(mxSavedConfiguration);
     }
-    mxConfigurationControllerWeak = Reference<XConfigurationController>(nullptr);
+    mxConfigurationControllerWeak.clear();
 
     Reference<lang::XComponent> xViewFactoryComponent (mxViewFactory, UNO_QUERY);
     if (xViewFactoryComponent.is())
@@ -359,8 +359,8 @@ void PresenterScreen::InitializePresenterScreen()
         }
         // Get the XController from the first argument.
 
-        Reference<XConfigurationController> xCC( mxController->getConfigurationController());
-        mxConfigurationControllerWeak = xCC;
+        rtl::Reference<::sd::framework::ConfigurationController> xCC( mxController->getConfigurationControllerImpl());
+        mxConfigurationControllerWeak = xCC.get();
 
         Reference<drawing::framework::XResourceId> xMainPaneId(
             GetMainPaneId(xPresentation, xContext));
@@ -590,7 +590,7 @@ void PresenterScreen::RequestShutdownPresenterScreen()
     // Restore the configuration that was active before the presenter screen
     // has been activated.  Now, that the presenter screen is displayed in
     // its own top level window this probably not necessary, but one never knows.
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is() && mxSavedConfiguration.is())
     {
         xCC->restoreConfiguration(mxSavedConfiguration);
@@ -842,7 +842,7 @@ void PresenterScreen::SetupView(
     const OUString& rsViewURL,
     const PresenterPaneContainer::ViewInitializationFunction& rViewInitialization)
 {
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (!xCC.is())
         return;
 

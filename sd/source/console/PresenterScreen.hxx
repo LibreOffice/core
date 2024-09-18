@@ -31,11 +31,13 @@
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <map>
 #include <string_view>
 
 namespace sd { class DrawController; }
+namespace sd::framework { class ConfigurationController; }
 
 namespace sdext::presenter {
 
@@ -132,7 +134,7 @@ public:
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;
     rtl::Reference<::sd::DrawController> mxController;
-    css::uno::WeakReference<css::drawing::framework::XConfigurationController>
+    unotools::WeakReference<::sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     css::uno::WeakReference<css::uno::XComponentContext> mxContextWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;

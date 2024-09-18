@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sddllapi.h>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -48,7 +49,7 @@ typedef ::cppu::WeakComponentImplHelper <
     @see css::drawing::framework::XConfigurationController
         for an extended documentation.
 */
-class ConfigurationController final
+class SD_DLLPUBLIC ConfigurationController final
     : private cppu::BaseMutex,
       public ConfigurationControllerInterfaceBase
 {

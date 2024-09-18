@@ -28,10 +28,12 @@
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 #include <map>
 #include <memory>
 
 namespace sd { class DrawController; }
+namespace sd::framework { class ConfigurationController; }
 
 namespace sdext::presenter {
 
@@ -88,7 +90,7 @@ public:
 
 private:
     css::uno::WeakReference<css::uno::XComponentContext> mxComponentContextWeak;
-    css::uno::WeakReference<css::drawing::framework::XConfigurationController>
+    unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ::rtl::Reference<PresenterController> mpPresenterController;
     typedef ::std::map<OUString, css::uno::Reference<css::drawing::framework::XResource> >

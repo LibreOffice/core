@@ -24,6 +24,7 @@
 #include "PresenterPaneContainer.hxx"
 #include "PresenterSpritePane.hxx"
 #include <DrawController.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <utility>
 
@@ -58,12 +59,12 @@ PresenterPaneFactory::PresenterPaneFactory (
 
 void PresenterPaneFactory::Register (const rtl::Reference<::sd::DrawController>& rxController)
 {
-    Reference<XConfigurationController> xCC;
+    rtl::Reference<::sd::framework::ConfigurationController> xCC;
     try
     {
         // Get the configuration controller.
-        xCC.set(rxController->getConfigurationController());
-        mxConfigurationControllerWeak = xCC;
+        xCC = rxController->getConfigurationControllerImpl();
+        mxConfigurationControllerWeak = xCC.get();
         if ( ! xCC.is())
         {
             throw RuntimeException();
@@ -77,7 +78,7 @@ void PresenterPaneFactory::Register (const rtl::Reference<::sd::DrawController>&
         OSL_ASSERT(false);
         if (xCC.is())
             xCC->removeResourceFactoryForReference(this);
-        mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
+        mxConfigurationControllerWeak.clear();
 
         throw;
     }
@@ -89,10 +90,10 @@ PresenterPaneFactory::~PresenterPaneFactory()
 
 void SAL_CALL PresenterPaneFactory::disposing()
 {
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
         xCC->removeResourceFactoryForReference(this);
-    mxConfigurationControllerWeak = WeakReference<XConfigurationController>();
+    mxConfigurationControllerWeak.clear();
 
     // Dispose the panes in the cache.
     if (mpResourceCache != nullptr)
@@ -190,7 +191,7 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
     if ( ! rxPaneId.is())
         return nullptr;
 
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<::sd::framework::ConfigurationController> xCC (mxConfigurationControllerWeak);
     if ( ! xCC.is())
         return nullptr;
 
