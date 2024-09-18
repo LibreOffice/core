@@ -19,7 +19,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
 {
     // set of supported UI files - none yet
     //
-    // The idea is to implement funcationality needed for a specific UI file/dialog
+    // The idea is to implement functionality needed for a specific UI file/dialog
     // in QtInstanceBuilder, then add it to the set of supported UI files here.
     // This allows looking at one .ui file at a time and only having to implement
     // what is relevant for that particular one, without having to implement the full
