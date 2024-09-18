@@ -356,7 +356,8 @@ double get_time(timeval* time)
 OString generateTestName(std::u16string_view rPath)
 {
     size_t nPathSep = rPath.rfind('/');
-    std::u16string_view aTestName = rPath.substr(nPathSep+1);
+    size_t nAfterPathSep = (nPathSep != std::string_view::npos) ? (nPathSep + 1) : 0;
+    std::u16string_view aTestName = rPath.substr(nAfterPathSep);
     return OUStringToOString(aTestName, RTL_TEXTENCODING_UTF8);
 }
 
