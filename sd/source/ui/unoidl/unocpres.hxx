@@ -90,7 +90,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
-class SdXCustomPresentationAccess : public ::cppu::WeakImplHelper< css::container::XNameContainer,
+class SdXCustomPresentationAccess final : public ::cppu::WeakImplHelper< css::container::XNameContainer,
                                                                     css::lang::XSingleServiceFactory,
                                                                     css::lang::XServiceInfo >
 {

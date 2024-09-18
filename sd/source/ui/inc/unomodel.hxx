@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
@@ -52,6 +53,12 @@ namespace com::sun::star::presentation { class XPresentation; }
 class SdDrawDocument;
 class SdPage;
 class SvxItemPropertySet;
+class SdUnoForbiddenCharsTable;
+class SdDrawPagesAccess;
+class SdMasterPagesAccess;
+class SdLayerManager;
+class SdXCustomPresentationAccess;
+class SdDocLinkTargets;
 
 namespace sd {
 class DrawDocShell;
@@ -96,12 +103,12 @@ private:
     const bool mbImpressDoc;
     bool mbClipBoard;
 
-    css::uno::WeakReference< css::drawing::XDrawPages > mxDrawPagesAccess;
-    css::uno::WeakReference< css::drawing::XDrawPages > mxMasterPagesAccess;
-    css::uno::WeakReference< css::container::XNameAccess > mxLayerManager;
-    css::uno::WeakReference< css::container::XNameContainer > mxCustomPresentationAccess;
-    css::uno::WeakReference< css::i18n::XForbiddenCharacters > mxForbiddenCharacters;
-    css::uno::Reference< css::container::XNameAccess > mxLinks;
+    unotools::WeakReference< SdDrawPagesAccess > mxDrawPagesAccess;
+    unotools::WeakReference< SdMasterPagesAccess > mxMasterPagesAccess;
+    unotools::WeakReference< SdLayerManager > mxLayerManager;
+    unotools::WeakReference< SdXCustomPresentationAccess > mxCustomPresentationAccess;
+    unotools::WeakReference< SdUnoForbiddenCharsTable > mxForbiddenCharacters;
+    unotools::WeakReference< SdDocLinkTargets > mxLinks;
 
     css::uno::Reference< css::uno::XInterface > mxDashTable;
     css::uno::Reference< css::uno::XInterface > mxGradientTable;

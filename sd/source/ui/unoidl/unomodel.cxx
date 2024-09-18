@@ -182,8 +182,6 @@ TranslateId SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
     return {};
 }
 
-namespace {
-
 class SdUnoForbiddenCharsTable : public SvxUnoForbiddenCharsTable,
                                  public SfxListener
 {
@@ -199,6 +197,8 @@ protected:
 private:
     SdrModel*   mpModel;
 };
+
+namespace {
 
 class SlideBackgroundInfo
 {
@@ -858,12 +858,13 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
+    rtl::Reference< SdDrawPagesAccess > xDrawPages( mxDrawPagesAccess );
 
     if( !xDrawPages.is() )
     {
         initializeDocument();
-        mxDrawPagesAccess = xDrawPages = new SdDrawPagesAccess(*this);
+        xDrawPages = new SdDrawPagesAccess(*this);
+        mxDrawPagesAccess = xDrawPages.get();
     }
 
     return xDrawPages;
@@ -877,13 +878,14 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getMasterPage
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< drawing::XDrawPages >  xMasterPages( mxMasterPagesAccess );
+    rtl::Reference< SdMasterPagesAccess > xMasterPages( mxMasterPagesAccess );
 
     if( !xMasterPages.is() )
     {
         if ( !hasControllersLocked() )
             initializeDocument();
-        mxMasterPagesAccess = xMasterPages = new SdMasterPagesAccess(*this);
+        xMasterPages = new SdMasterPagesAccess(*this);
+        mxMasterPagesAccess = xMasterPages.get();
     }
 
     return xMasterPages;
@@ -897,10 +899,13 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getLayerMa
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess >  xLayerManager( mxLayerManager );
+    rtl::Reference< SdLayerManager >  xLayerManager( mxLayerManager );
 
     if( !xLayerManager.is() )
-        mxLayerManager = xLayerManager = new SdLayerManager(*this);
+    {
+        xLayerManager = new SdLayerManager(*this);
+        mxLayerManager = xLayerManager.get();
+    }
 
     return xLayerManager;
 }
@@ -913,10 +918,13 @@ uno::Reference< container::XNameContainer > SAL_CALL SdXImpressDocument::getCust
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameContainer >  xCustomPres( mxCustomPresentationAccess );
+    rtl::Reference< SdXCustomPresentationAccess >  xCustomPres( mxCustomPresentationAccess );
 
     if( !xCustomPres.is() )
-        mxCustomPresentationAccess = xCustomPres = new SdXCustomPresentationAccess(*this);
+    {
+        xCustomPres = new SdXCustomPresentationAccess(*this);
+        mxCustomPresentationAccess = xCustomPres.get();
+    }
 
     return xCustomPres;
 }
@@ -1591,9 +1599,12 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getLinks()
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
-    uno::Reference< container::XNameAccess > xLinks( mxLinks );
+    rtl::Reference< SdDocLinkTargets > xLinks( mxLinks );
     if( !xLinks.is() )
-        mxLinks = xLinks = new SdDocLinkTargets( *this );
+    {
+        xLinks = new SdDocLinkTargets( *this );
+        mxLinks = xLinks.get();
+    }
     return xLinks;
 }
 
@@ -3001,12 +3012,13 @@ PointerStyle SdXImpressDocument::getPointer()
 
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
-    uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbiddenCharacters);
-
-    if( !xForb.is() )
-        mxForbiddenCharacters = xForb = new SdUnoForbiddenCharsTable( mpDoc );
-
-    return xForb;
+    rtl::Reference<SdUnoForbiddenCharsTable> xRef = mxForbiddenCharacters.get();
+    if( !xRef )
+    {
+        xRef = new SdUnoForbiddenCharsTable( mpDoc );
+        mxForbiddenCharacters = xRef.get();
+    }
+    return xRef;
 }
 
 void SdXImpressDocument::initializeDocument()
@@ -3307,54 +3319,32 @@ void SAL_CALL SdXImpressDocument::dispose()
     SfxBaseModel::dispose();
     mbDisposed = true;
 
-    uno::Reference< container::XNameAccess > xLinks( mxLinks );
+    rtl::Reference< SdDocLinkTargets > xLinks( mxLinks );
     if( xLinks.is() )
     {
-        uno::Reference< lang::XComponent > xComp( xLinks, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-
+        xLinks->dispose();
         xLinks = nullptr;
     }
 
-    uno::Reference< drawing::XDrawPages > xDrawPagesAccess( mxDrawPagesAccess );
+    rtl::Reference< SdDrawPagesAccess > xDrawPagesAccess( mxDrawPagesAccess );
     if( xDrawPagesAccess.is() )
     {
-        uno::Reference< lang::XComponent > xComp( xDrawPagesAccess, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-
+        xDrawPagesAccess->dispose();
         xDrawPagesAccess = nullptr;
     }
 
-    uno::Reference< drawing::XDrawPages > xMasterPagesAccess( mxMasterPagesAccess );
+    rtl::Reference< SdMasterPagesAccess > xMasterPagesAccess( mxMasterPagesAccess );
     if( xDrawPagesAccess.is() )
     {
-        uno::Reference< lang::XComponent > xComp( xMasterPagesAccess, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-
-        xDrawPagesAccess = nullptr;
+        xMasterPagesAccess->dispose();
+        xMasterPagesAccess = nullptr;
     }
 
-    uno::Reference< container::XNameAccess > xLayerManager( mxLayerManager );
+    rtl::Reference< SdLayerManager > xLayerManager( mxLayerManager );
     if( xLayerManager.is() )
     {
-        uno::Reference< lang::XComponent > xComp( xLayerManager, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-
+        xLayerManager->dispose();
         xLayerManager = nullptr;
-    }
-
-    uno::Reference< container::XNameContainer > xCustomPresentationAccess( mxCustomPresentationAccess );
-    if( xCustomPresentationAccess.is() )
-    {
-        uno::Reference< lang::XComponent > xComp( xCustomPresentationAccess, uno::UNO_QUERY );
-        if( xComp.is() )
-            xComp->dispose();
-
-        xCustomPresentationAccess = nullptr;
     }
 
     mxDashTable = nullptr;
