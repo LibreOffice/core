@@ -137,14 +137,13 @@ void ScHeaderFooterContentObj::Init( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
                                                     const EditTextObject* pRight )
 {
-    uno::Reference<css::sheet::XHeaderFooterContent> xThis(this);
-    mxLeftText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, ScHeaderFooterPart::LEFT, pLeft));
-    mxCenterText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, ScHeaderFooterPart::CENTER, pCenter));
-    mxRightText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(xThis, ScHeaderFooterPart::RIGHT, pRight));
+    mxLeftText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::LEFT, pLeft));
+    mxCenterText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::CENTER, pCenter));
+    mxRightText = rtl::Reference<ScHeaderFooterTextObj>(new ScHeaderFooterTextObj(this, ScHeaderFooterPart::RIGHT, pRight));
 }
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
-    uno::WeakReference<sheet::XHeaderFooterContent> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
+    unotools::WeakReference<ScHeaderFooterContentObj> xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     mpTextObj(pTextObj ? pTextObj->Clone() : nullptr),
     xContentObj(std::move( xContent )),
     nPart( nP ),
@@ -233,7 +232,7 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
 }
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
-    const uno::WeakReference<sheet::XHeaderFooterContent>& xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
+    const unotools::WeakReference<ScHeaderFooterContentObj>& xContent, ScHeaderFooterPart nP, const EditTextObject* pTextObj) :
     aTextData(xContent, nP, pTextObj)
 {
     //  ScHeaderFooterTextData acquires rContent
@@ -299,23 +298,21 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString()
     OUString aRet;
     const EditTextObject* pData;
 
-    uno::Reference<css::sheet::XHeaderFooterContent> xContentObj = aTextData.GetContentObj();
+    rtl::Reference<ScHeaderFooterContentObj> xContentObj = aTextData.GetContentObj();
     if (!xContentObj.is())
         throw css::uno::RuntimeException(
             u"ScHeaderFooterTextObj::getString: no ContentObj"_ustr);
 
-    rtl::Reference<ScHeaderFooterContentObj> pObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
-
     switch ( aTextData.GetPart() )
     {
         case ScHeaderFooterPart::LEFT:
-            pData = pObj->GetLeftEditObject();
+            pData = xContentObj->GetLeftEditObject();
         break;
         case ScHeaderFooterPart::CENTER:
-            pData = pObj->GetCenterEditObject();
+            pData = xContentObj->GetCenterEditObject();
         break;
         case ScHeaderFooterPart::RIGHT:
-            pData = pObj->GetRightEditObject();
+            pData = xContentObj->GetRightEditObject();
         break;
         default:
             SAL_WARN("sc.ui","unexpected enum value of ScHeaderFooterPart");

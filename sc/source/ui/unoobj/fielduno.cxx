@@ -449,23 +449,22 @@ uno::Reference<text::XTextField> ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_In
 
     // Get the parent text range instance.
     uno::Reference<text::XTextRange> xTextRange;
-    uno::Reference<sheet::XHeaderFooterContent> xContentObj = mrData.GetContentObj();
+    rtl::Reference<ScHeaderFooterContentObj> xContentObj = mrData.GetContentObj();
     if (!xContentObj.is())
         throw uno::RuntimeException(u""_ustr);
 
-    rtl::Reference<ScHeaderFooterContentObj> pContentObj = ScHeaderFooterContentObj::getImplementation(xContentObj);
     uno::Reference<text::XText> xText;
 
     switch ( mrData.GetPart() )
     {
         case ScHeaderFooterPart::LEFT:
-            xText = pContentObj->getLeftText();
+            xText = xContentObj->getLeftText();
         break;
         case ScHeaderFooterPart::CENTER:
-            xText = pContentObj->getCenterText();
+            xText = xContentObj->getCenterText();
         break;
         case ScHeaderFooterPart::RIGHT:
-            xText = pContentObj->getRightText();
+            xText = xContentObj->getRightText();
         break;
     }
 
