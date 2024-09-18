@@ -611,7 +611,8 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
 void OP_ApplyPatternArea123(LotusContext& rContext, SvStream& rStream)
 {
     sal_uInt16 nOpcode, nLength;
-    sal_uInt16 nCol = 0, nColCount = 0, nRow = 0, nRowCount = 0, nTab = 0, nData, nTabCount = 0, nLevel = 0;
+    sal_uInt16 nCol = 0, nColCount = 0, nRow = 0, nRowCount = 0, nTab = 0, nData, nTabCount = 0;
+    int nLevel = 0;
 
     do
     {
@@ -676,7 +677,7 @@ void OP_ApplyPatternArea123(LotusContext& rContext, SvStream& rStream)
                 break;
         }
     }
-    while( nLevel && rStream.good() );
+    while (nLevel > 0 && rStream.good());
 
     rContext.aLotusPatternPool.clear();
 }
