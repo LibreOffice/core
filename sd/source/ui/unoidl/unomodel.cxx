@@ -4504,12 +4504,18 @@ OString SdXImpressDocument::getPresentationInfo() const
             }
             else
             {
-                SdrPage* pPage = pSlide->GetSdrPage();
+                SdPage* pPage = SdPage::getImplementation(pSlide);
 
                 auto aSlideNode = aJsonWriter.startStruct();
                 std::string sSlideHash = GetInterfaceHash(cppu::getXWeak(pSlide));
                 aJsonWriter.put("hash", sSlideHash);
                 aJsonWriter.put("index", i);
+
+                if (pPage)
+                {
+                    auto aName = SdDrawPage::getPageApiNameFromUiName(pPage->GetName());
+                    aJsonWriter.put("name", aName);
+                }
 
                 bool bIsDrawPageEmpty = pSlide->getCount() == 0;
                 aJsonWriter.put("empty", bIsDrawPageEmpty);
