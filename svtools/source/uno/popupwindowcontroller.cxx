@@ -212,6 +212,16 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
     {
         mxPopoverContainer->unsetPopover();
         mxPopoverContainer->setPopover(weldPopupWindow());
+
+        // tdf#141577 setPopover might GrabFocus, which may cause the ActiveFrame to be
+        // unset. So explicitly set this frame as the active frame of its parent when
+        // this popup is created.
+        if (uno::Reference<frame::XFrame> xFrame = getFrameInterface())
+        {
+            if (uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator())
+                xParentFrame->setActiveFrame(xFrame);
+        }
+
         return Reference<awt::XWindow>();
     }
 
