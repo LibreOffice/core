@@ -9914,6 +9914,17 @@ private:
     {
         GtkInstanceButton* pThis = static_cast<GtkInstanceButton*>(widget);
         SolarMutexGuard aGuard;
+        // tdf#162538, SpinButtons update on losing focus, and use of keyboard
+        // short cuts to activate buttons doesn't guarantee the button gains
+        // focus when activated, so ensure that explicitly so spinbuttons are
+        // updated.
+        if (!gtk_widget_has_focus(pThis->m_pWidget))
+        {
+            GtkWindow* pWindow = GTK_WINDOW(widget_get_toplevel(pThis->m_pWidget));
+            GtkWidget* pFocus = pWindow ? gtk_window_get_focus(pWindow) : nullptr;
+            if (pFocus && GTK_IS_SPIN_BUTTON(pFocus))
+                gtk_widget_grab_focus(pThis->m_pWidget);
+        }
         pThis->signal_clicked();
     }
 
