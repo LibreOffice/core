@@ -27,10 +27,12 @@
 
 namespace pcr
 {
+    class OSimpleTabModel;
+
     //= TabOrderDialog
     class TabOrderDialog : public weld::GenericDialogController
     {
-        css::uno::Reference< css::awt::XTabControllerModel >
+        rtl::Reference< OSimpleTabModel >
                                     m_xTempModel;
         css::uno::Reference< css::awt::XTabControllerModel >
                                     m_xModel;

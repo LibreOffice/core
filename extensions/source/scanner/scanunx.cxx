@@ -83,7 +83,7 @@ namespace {
 struct SaneHolder
 {
     Sane                m_aSane;
-    Reference< css::awt::XBitmap > m_xBitmap;
+    rtl::Reference< BitmapTransporter > m_xBitmap;
     osl::Mutex          m_aProtector;
     ScanError           m_nError;
     bool                m_bBusy;
