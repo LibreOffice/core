@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libtiff,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libtiff,\
     external/libtiff/libtiff.linknolibs.patch \
     external/libtiff/0001-ofz-54685-Timeout.patch \
-    external/libtiff/ofz65182.patch \
     external/libtiff/ofz68840.patch \
 ))
 
