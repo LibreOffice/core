@@ -561,7 +561,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
     if( pLayer == nullptr )
         throw container::NoSuchElementException();
 
-    return uno::Any( GetLayer (pLayer) );
+    return uno::Any( css::uno::Reference< css::drawing::XLayer>(GetLayer(pLayer)) );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getElementNames()
@@ -644,57 +644,23 @@ void SdLayerManager::UpdateLayerView() const noexcept
     return nullptr;
 }
 
-namespace
-{
-/** Compare two pointers to <type>SdrLayer</type> objects.
-    @param xRef
-        The implementing SdLayer class provides the first pointer by the
-        <member>SdLayer::GetSdrLayer</member> method.
-    @param pSearchData
-        This void pointer is the second pointer to an <type>SdrLayer</type>
-        object.
-    @return
-        Return </True> if both pointers point to the same object.
-*/
-bool compare_layers (const uno::WeakReference<uno::XInterface>& xRef, void const * pSearchData)
-{
-    uno::Reference<uno::XInterface> xLayer (xRef);
-    if (xLayer.is())
-    {
-        SdLayer* pSdLayer = dynamic_cast<SdLayer*> (xLayer.get());
-        if (pSdLayer != nullptr)
-        {
-            SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
-            if (pSdrLayer == static_cast<SdrLayer const *>(pSearchData))
-                return true;
-        }
-    }
-    return false;
-}
-}
-
 /** Use the <member>mpLayers</member> container of weak references to either
     retrieve and return a previously created <type>XLayer</type> object for
     the given <type>SdrLayer</type> object or create and remember a new one.
 */
-uno::Reference<drawing::XLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
+rtl::Reference<SdLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
 {
-    uno::WeakReference<uno::XInterface> xRef;
-    uno::Reference<drawing::XLayer>  xLayer;
+    rtl::Reference<SdLayer> xLayer;
 
     // Search existing xLayer for the given pLayer.
-    if (mpLayers->findRef (xRef, static_cast<void*>(pLayer), compare_layers))
-        xLayer.set(xRef, uno::UNO_QUERY);
+    if (mpLayers->findRef(xLayer, pLayer))
+        return xLayer;
 
     // Create the xLayer if necessary.
-    if ( ! xLayer.is())
-    {
-        xLayer = new SdLayer (this, pLayer);
+    xLayer = new SdLayer (this, pLayer);
 
-        // Remember the new xLayer for future calls.
-        uno::WeakReference<uno::XInterface> wRef(xLayer);
-        mpLayers->insert(wRef);
-    }
+    // Remember the new xLayer for future calls.
+    mpLayers->insert(xLayer);
 
     return xLayer;
 }

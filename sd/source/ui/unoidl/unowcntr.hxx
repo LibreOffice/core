@@ -19,27 +19,27 @@
 
 #pragma once
 
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <vector>
 
-typedef bool (*weakref_searchfunc)( const css::uno::WeakReference< css::uno::XInterface >& xRef, void const * pSearchData );
+class SdLayer;
+class SdrLayer;
 
 class SvUnoWeakContainer
 {
 private:
-    std::vector< css::uno::WeakReference< css::uno::XInterface > > maVector;
+    std::vector< unotools::WeakReference< SdLayer > > maVector;
 
 public:
     SvUnoWeakContainer() noexcept;
     ~SvUnoWeakContainer() noexcept;
 
     /** inserts the given ref into this container */
-    void insert( const css::uno::WeakReference< css::uno::XInterface >& xRef ) noexcept;
+    void insert( const rtl::Reference< SdLayer >& xRef ) noexcept;
 
-    /** searches the container for a ref that returns true on the given
-        search function
+    /** searches the container for a matching SdrLayer
     */
-    bool findRef( css::uno::WeakReference< css::uno::XInterface >& rRef, void const * pSearchData, weakref_searchfunc pSearchFunc );
+    bool findRef( rtl::Reference< SdLayer >& rRef, const SdrLayer * pSearchData );
 
     void dispose();
 };

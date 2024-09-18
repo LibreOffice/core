@@ -142,7 +142,7 @@ public:
             associated with the specified argument.  If no layer can be
             created for the argument than an empty reference is returned.
     */
-    css::uno::Reference< css::drawing::XLayer> GetLayer (SdrLayer* pLayer);
+    rtl::Reference<SdLayer> GetLayer (SdrLayer* pLayer);
 
     // XComponent
     virtual void SAL_CALL dispose(  ) override;

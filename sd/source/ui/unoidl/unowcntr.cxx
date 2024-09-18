@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include "unowcntr.hxx"
+#include "unolayer.hxx"
 
 using namespace ::com::sun::star;
 
@@ -32,19 +33,19 @@ SvUnoWeakContainer::~SvUnoWeakContainer() noexcept
 }
 
 /** inserts the given ref into this container */
-void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xRef ) noexcept
+void SvUnoWeakContainer::insert( const rtl::Reference< SdLayer >& xRef ) noexcept
 {
     for ( auto it = maVector.begin(); it != maVector.end(); )
     {
-        uno::WeakReference< uno::XInterface > & rWeakRef = *it;
-        uno::Reference< uno::XInterface > xTestRef( rWeakRef );
+        unotools::WeakReference< SdLayer > & rWeakRef = *it;
+        rtl::Reference< SdLayer > xTestRef( rWeakRef );
         if ( !xTestRef.is() )
         {
             it = maVector.erase( it );
         }
         else
         {
-            if ( rWeakRef == xRef )
+            if ( xTestRef == xRef )
                 return;
             ++it;
         }
@@ -56,24 +57,24 @@ void SvUnoWeakContainer::insert( const uno::WeakReference< uno::XInterface >& xR
     search function
 */
 bool SvUnoWeakContainer::findRef(
-    uno::WeakReference< uno::XInterface >& rRef,
-    void const * pSearchData,
-    weakref_searchfunc pSearchFunc
+    rtl::Reference< SdLayer >& rRef,
+    SdrLayer const * pSearchData
 )
 {
     for ( auto it = maVector.begin(); it != maVector.end(); )
     {
-        uno::WeakReference< uno::XInterface > & itRef = *it;
-        uno::Reference< uno::XInterface > xTestRef( itRef );
-        if ( !xTestRef.is() )
+        unotools::WeakReference< SdLayer > & itRef = *it;
+        rtl::Reference< SdLayer > pSdLayer( itRef );
+        if ( !pSdLayer.is() )
         {
             it = maVector.erase( it );
         }
         else
         {
-            if( (*pSearchFunc)( itRef, pSearchData ) )
+            SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
+            if (pSdrLayer == pSearchData)
             {
-                rRef = itRef;
+                rRef = pSdLayer;
                 return true;
             }
             ++it;
