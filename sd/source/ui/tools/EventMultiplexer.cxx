@@ -24,6 +24,7 @@
 #include <DrawController.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
@@ -122,7 +123,7 @@ private:
     css::uno::WeakReference<css::frame::XController> mxControllerWeak;
     css::uno::WeakReference<css::frame::XFrame> mxFrameWeak;
     SdDrawDocument* mpDocument;
-    css::uno::WeakReference<css::drawing::framework::XConfigurationController>
+    unotools::WeakReference<sd::framework::ConfigurationController>
          mxConfigurationControllerWeak;
 
     void ReleaseListeners();
@@ -214,15 +215,13 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     // Listen for configuration changes.
     DrawController& rDrawController = *mrBase.GetDrawController();
 
-    Reference<XConfigurationController> xConfigurationController (
-        rDrawController.getConfigurationController());
-    mxConfigurationControllerWeak = xConfigurationController;
+    rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
+        rDrawController.getConfigurationControllerImpl());
+    mxConfigurationControllerWeak = xConfigurationController.get();
     if (!xConfigurationController.is())
         return;
 
-    Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->addEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+    xConfigurationController->addEventListener(static_cast<beans::XPropertyChangeListener*>(this));
 
     xConfigurationController->addConfigurationChangeListener(
         this,
@@ -268,13 +267,10 @@ void EventMultiplexer::Implementation::ReleaseListeners()
     }
 
     // Stop listening for configuration changes.
-    Reference<XConfigurationController> xConfigurationController (mxConfigurationControllerWeak);
+    rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (mxConfigurationControllerWeak.get());
     if (xConfigurationController.is())
     {
-        Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->removeEventListener(static_cast<beans::XPropertyChangeListener*>(this));
-
+        xConfigurationController->removeEventListener(static_cast<beans::XPropertyChangeListener*>(this));
         xConfigurationController->removeConfigurationChangeListener(this);
     }
 }
@@ -418,10 +414,10 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
         }
     }
 
-    Reference<XConfigurationController> xConfigurationController (
+    rtl::Reference<sd::framework::ConfigurationController> xConfigurationController (
         mxConfigurationControllerWeak);
     if (xConfigurationController.is()
-        && rEventObject.Source == xConfigurationController)
+        && rEventObject.Source == cppu::getXWeak(xConfigurationController.get()))
     {
         mxConfigurationControllerWeak.clear();
     }

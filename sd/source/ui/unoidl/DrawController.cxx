@@ -561,6 +561,14 @@ Reference<XConfigurationController> SAL_CALL
     return mxConfigurationController;
 }
 
+rtl::Reference<sd::framework::ConfigurationController>
+    DrawController::getConfigurationControllerImpl()
+{
+    ThrowIfDisposed();
+
+    return mxConfigurationController;
+}
+
 Reference<XModuleController> SAL_CALL
     DrawController::getModuleController()
 {

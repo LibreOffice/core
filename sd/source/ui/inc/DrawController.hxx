@@ -223,6 +223,8 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController() override;
 
+    rtl::Reference<sd::framework::ConfigurationController> getConfigurationControllerImpl();
+
 private:
     /** This method must return the name to index table. This table
         contains all property names and types of this object.
