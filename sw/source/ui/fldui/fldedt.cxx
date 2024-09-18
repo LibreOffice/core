@@ -37,6 +37,7 @@
 
 #include <cmdid.h>
 #include <swabstdlg.hxx>
+#include <comphelper/dispatchcommand.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -156,11 +157,6 @@ void SwFieldEditDlg::Init()
         if( bMove )
             rMgr.GoNext();
         m_xPrevBT->set_sensitive( bMove );
-
-        if (pCurField->GetTypeId() == SwFieldTypesEnum::ExtendedUser)
-            m_xAddressBT->set_sensitive(true);
-        else
-            m_xAddressBT->set_sensitive(false);
 
         m_pSh->DestroyCursor();
         m_pSh->EndAction();
@@ -297,38 +293,43 @@ IMPL_LINK_NOARG(SwFieldEditDlg, AddressHdl, weld::Button&, void)
     SwFieldMgr& rMgr = pTabPage->GetFieldMgr();
     SwField *pCurField = rMgr.GetCurField();
 
-    SfxItemSetFixed<SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS> aSet( m_pSh->GetAttrPool() );
-
-    EditPosition nEditPos = EditPosition::UNKNOWN;
-
-    switch(pCurField->GetSubType())
+    if (pCurField->GetTypeId() == SwFieldTypesEnum::DocumentInfo)
+        comphelper::dispatchCommand(u".uno:SetDocumentProperties"_ustr, {});
+    else
     {
-        case EU_FIRSTNAME:  nEditPos = EditPosition::FIRSTNAME;  break;
-        case EU_NAME:       nEditPos = EditPosition::LASTNAME;   break;
-        case EU_SHORTCUT:   nEditPos = EditPosition::SHORTNAME;  break;
-        case EU_COMPANY:    nEditPos = EditPosition::COMPANY;    break;
-        case EU_STREET:     nEditPos = EditPosition::STREET;     break;
-        case EU_TITLE:      nEditPos = EditPosition::TITLE;      break;
-        case EU_POSITION:   nEditPos = EditPosition::POSITION;   break;
-        case EU_PHONE_PRIVATE:nEditPos = EditPosition::TELPRIV;  break;
-        case EU_PHONE_COMPANY:nEditPos = EditPosition::TELCOMPANY;   break;
-        case EU_FAX:        nEditPos = EditPosition::FAX;        break;
-        case EU_EMAIL:      nEditPos = EditPosition::EMAIL;      break;
-        case EU_COUNTRY:    nEditPos = EditPosition::COUNTRY;    break;
-        case EU_ZIP:        nEditPos = EditPosition::PLZ;        break;
-        case EU_CITY:       nEditPos = EditPosition::CITY;       break;
-        case EU_STATE:      nEditPos = EditPosition::STATE;      break;
+        SfxItemSetFixed<SID_FIELD_GRABFOCUS, SID_FIELD_GRABFOCUS> aSet( m_pSh->GetAttrPool() );
 
-        default:            nEditPos = EditPosition::UNKNOWN;    break;
+        EditPosition nEditPos = EditPosition::UNKNOWN;
 
-    }
-    aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, static_cast<sal_uInt16>(nEditPos)));
-    SwAbstractDialogFactory& rFact = swui::GetFactory();
+        switch(pCurField->GetSubType())
+        {
+            case EU_FIRSTNAME:  nEditPos = EditPosition::FIRSTNAME;  break;
+            case EU_NAME:       nEditPos = EditPosition::LASTNAME;   break;
+            case EU_SHORTCUT:   nEditPos = EditPosition::SHORTNAME;  break;
+            case EU_COMPANY:    nEditPos = EditPosition::COMPANY;    break;
+            case EU_STREET:     nEditPos = EditPosition::STREET;     break;
+            case EU_TITLE:      nEditPos = EditPosition::TITLE;      break;
+            case EU_POSITION:   nEditPos = EditPosition::POSITION;   break;
+            case EU_PHONE_PRIVATE:nEditPos = EditPosition::TELPRIV;  break;
+            case EU_PHONE_COMPANY:nEditPos = EditPosition::TELCOMPANY;   break;
+            case EU_FAX:        nEditPos = EditPosition::FAX;        break;
+            case EU_EMAIL:      nEditPos = EditPosition::EMAIL;      break;
+            case EU_COUNTRY:    nEditPos = EditPosition::COUNTRY;    break;
+            case EU_ZIP:        nEditPos = EditPosition::PLZ;        break;
+            case EU_CITY:       nEditPos = EditPosition::CITY;       break;
+            case EU_STATE:      nEditPos = EditPosition::STATE;      break;
 
-    ScopedVclPtr<SfxAbstractDialog> pDlg(rFact.CreateSwAddressAbstractDlg(m_xDialog.get(), aSet));
-    if (RET_OK == pDlg->Execute())
-    {
-        m_pSh->UpdateOneField(*pCurField);
+            default:            nEditPos = EditPosition::UNKNOWN;    break;
+
+        }
+        aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, static_cast<sal_uInt16>(nEditPos)));
+
+        SwAbstractDialogFactory& rFact = swui::GetFactory();
+        ScopedVclPtr<SfxAbstractDialog> pDlg(rFact.CreateSwAddressAbstractDlg(m_xDialog.get(), aSet));
+        if (RET_OK == pDlg->Execute())
+        {
+            m_pSh->UpdateOneField(*pCurField);
+        }
     }
 }
 
