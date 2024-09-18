@@ -4826,7 +4826,7 @@ static SwTwips lcl_CalcMinRowHeight( const SwRowFrame* _pRow,
     if ( !_pRow->IsRowSpanLine() )
     {
         const SwFormatFrameSize &rSz = _pRow->GetFormat()->GetFrameSize();
-        if ( _pRow->HasFixSize() )
+        if (_pRow->HasFixSize() && !_pRow->IsForceRowSplitAllowed())
         {
             OSL_ENSURE(SwFrameSize::Fixed == rSz.GetHeightSizeType(), "pRow claims to have fixed size");
             return rSz.GetHeight();
