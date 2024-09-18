@@ -1254,6 +1254,26 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         while ( pTmpRow && pTmpRow->ShouldRowKeepWithNext() &&
                 nRowCount > nRepeat )
         {
+            // Special case: pTmpRow wants to keep with pRow, but allows splitting, and some its
+            // cells span several rows, including pRow. In this case, the "split" of the spanning
+            // cells of the pTmpRow may still happen by moving pRow to the next page, even here
+            // with !bSplitRowAllowed.
+            if (pTmpRow->IsRowSplitAllowed())
+            {
+                bool bCellSpanCanSplit = false;
+                for (auto pCellFrame = static_cast<const SwCellFrame*>(pTmpRow->GetLower());
+                     pCellFrame;
+                     pCellFrame = static_cast<const SwCellFrame*>(pCellFrame->GetNext()))
+                {
+                    if (pCellFrame->GetTabBox()->getRowSpan() > 1) // Master cell
+                    {
+                        bCellSpanCanSplit = true;
+                        break;
+                    }
+                }
+                if (bCellSpanCanSplit)
+                    break;
+            }
             pRow = pTmpRow;
             --nRowCount;
             pTmpRow = static_cast<SwRowFrame*>(pTmpRow->GetPrev());
@@ -2255,9 +2275,31 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         const SwRowFrame* pTmpRow = static_cast<const SwRowFrame*>(GetLastLower());
         if ( pTmpRow && pTmpRow->ShouldRowKeepWithNext() )
         {
-            if ( HasFollowFlowLine() )
-                RemoveFollowFlowLine();
-            Join();
+            // Special case: pTmpRow wants to keep with next, but allows splitting, and some its
+            // cells span several rows - i.e., also the next row. In this case, the "split" of the
+            // spanning cells of the pTmpRow may still happen by moving next row to the next page,
+            // even here with bTableRowKeep.
+            bool bCellSpanCanSplit = false;
+            if (pTmpRow->IsRowSplitAllowed())
+            {
+                for (auto pCellFrame = static_cast<const SwCellFrame*>(pTmpRow->GetLower());
+                     pCellFrame;
+                     pCellFrame = static_cast<const SwCellFrame*>(pCellFrame->GetNext()))
+                {
+                    if (pCellFrame->GetTabBox()->getRowSpan() > 1) // Master cell
+                    {
+                        bCellSpanCanSplit = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!bCellSpanCanSplit)
+            {
+                if (HasFollowFlowLine())
+                    RemoveFollowFlowLine();
+                Join();
+            }
         }
     }
 
@@ -2947,8 +2989,18 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                     oAccess.reset();
                     bool isFootnoteGrowth(false);
+                    bool bEffectiveTableRowKeep;
+                    if (bTryToSplit == true)
+                    {
+                        bEffectiveTableRowKeep = bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed);
+                    }
+                    else
+                    {
+                        // The second attempt; ignore all the flags allowing to split the row
+                        bEffectiveTableRowKeep = bTableRowKeep;
+                    }
                     const bool bSplitError = !Split(nDeadLine, bTryToSplit,
-                        (bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed)),
+                        bEffectiveTableRowKeep,
                         isFootnoteGrowth);
 
                     // tdf#130639 don't start table on a new page after the fallback "switch off repeating header"
