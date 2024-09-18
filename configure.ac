@@ -3153,7 +3153,6 @@ if test "$enable_wasm_strip" = "yes"; then
     with_x=no
 
     test "${with_fonts+set}" = set || with_fonts=yes
-    test "${with_locales+set}" = set || with_locales=en
 
     AC_DEFINE(ENABLE_WASM_STRIP_ACCESSIBILITY)
     AC_DEFINE(ENABLE_WASM_STRIP_WRITER)
