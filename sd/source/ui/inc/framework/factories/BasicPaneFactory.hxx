@@ -23,7 +23,7 @@
 #include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <unotools/weakref.hxx>
 #include <rtl/ref.hxx>
 
 #include <memory>
@@ -37,6 +37,7 @@ class ViewShellBase;
 }
 
 namespace sd::framework {
+class ConfigurationController;
 
 typedef comphelper::WeakComponentImplHelper <
     css::drawing::framework::XResourceFactory,
@@ -85,7 +86,7 @@ public:
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
-    css::uno::WeakReference<css::drawing::framework::XConfigurationController>
+    unotools::WeakReference<sd::framework::ConfigurationController>
         mxConfigurationControllerWeak;
     ViewShellBase* mpViewShellBase;
     class PaneDescriptor;

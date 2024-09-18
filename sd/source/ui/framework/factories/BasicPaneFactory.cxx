@@ -28,6 +28,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <framework/FrameworkHelper.hxx>
+#include <framework/ConfigurationController.hxx>
 #include <PaneShells.hxx>
 #include <ViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
@@ -96,8 +97,8 @@ BasicPaneFactory::BasicPaneFactory (
         // Tunnel through the controller to obtain access to the ViewShellBase.
         mpViewShellBase = rxController->GetViewShellBase();
 
-        Reference<XConfigurationController> xCC (rxController->getConfigurationController());
-        mxConfigurationControllerWeak = xCC;
+        rtl::Reference<sd::framework::ConfigurationController> xCC (rxController->getConfigurationControllerImpl());
+        mxConfigurationControllerWeak = xCC.get();
 
         // Add pane factories for the two left panes (one for Impress and one for
         // Draw) and the center pane.
@@ -146,7 +147,7 @@ BasicPaneFactory::BasicPaneFactory (
     }
     catch (RuntimeException&)
     {
-        Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+        rtl::Reference<ConfigurationController> xCC (mxConfigurationControllerWeak);
         if (xCC.is())
             xCC->removeResourceFactoryForReference(this);
     }
@@ -158,7 +159,7 @@ BasicPaneFactory::~BasicPaneFactory()
 
 void BasicPaneFactory::disposing(std::unique_lock<std::mutex>&)
 {
-    Reference<XConfigurationController> xCC (mxConfigurationControllerWeak);
+    rtl::Reference<ConfigurationController> xCC (mxConfigurationControllerWeak);
     if (xCC.is())
     {
         xCC->removeResourceFactoryForReference(this);
@@ -310,7 +311,7 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 void SAL_CALL BasicPaneFactory::disposing (
     const lang::EventObject& rEventObject)
 {
-    if (mxConfigurationControllerWeak.get() == rEventObject.Source)
+    if (uno::Reference<XInterface>(cppu::getXWeak(mxConfigurationControllerWeak.get().get())) == rEventObject.Source)
     {
         mxConfigurationControllerWeak.clear();
     }
