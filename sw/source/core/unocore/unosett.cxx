@@ -283,7 +283,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"Footnote's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -404,7 +404,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     uno::Any aRet;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"Footnote's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -765,7 +765,7 @@ void SwXLineNumberingProperties::setPropertyValue(
 {
     SolarMutexGuard aGuard;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"Numbering's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -879,7 +879,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
     SolarMutexGuard aGuard;
     Any aRet;
     if(!m_pDoc)
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"Numbering's document is not set."_ustr);
 
     const SfxItemPropertyMapEntry*  pEntry = m_pPropertySet->getPropertyMap().getByName( rPropertyName );
     if(!pEntry)
@@ -1191,7 +1191,7 @@ uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
         aVal <<= aRet;
     }
     else
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(u"Could not get numbering rule."_ustr);
     return aVal;
 }
 
@@ -2206,7 +2206,7 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     }
     if(!m_pNumRule && !pDocRule && !pCreatedRule)
-        throw RuntimeException();
+        throw RuntimeException(u"Could not set numbering rule property \'"_ustr + rPropertyName + u"\'."_ustr);
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
@@ -2265,7 +2265,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     else if(m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
     if(!pRule)
-        throw RuntimeException();
+        throw RuntimeException(u"Could not get numbering rule property \'"_ustr + rPropertyName + u"\'."_ustr);
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
