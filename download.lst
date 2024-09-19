@@ -150,8 +150,8 @@ FONT_GENTIUM_TARBALL := 1725634df4bb3dcb1b2c91a6175f8789-GentiumBasic_1102.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_KARLA_SHA256SUM := 0cba83e7d555ae792d98a657b847cff1ccb198ecf740117a610f76d66e48eaba
-FONT_KARLA_TARBALL := 506757f768adb2331881d5186f7286bd-karla.zip
+FONT_KARLA_SHA256SUM := c64cdbc55389c1bfb320dcef41a19f156bad271a99bc9253be118564dbb738b5
+FONT_KARLA_TARBALL := 2024-09-19-karla-main.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
