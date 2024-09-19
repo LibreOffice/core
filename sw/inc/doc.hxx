@@ -1455,6 +1455,9 @@ public:
     /// Iterate over all RES_CHRATR_BACKGROUND SvxBrushItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachCharacterBrushItem(const std::function<bool(const SvxBrushItem&)>&  ) const;
 
+    /// Iterate over all RES_CHRATR_FONT/RES_CHRATR_CJK_FONT/RES_CHRATR_CTL_FONT SvxFontItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachCharacterFontItem(TypedWhichId<SvxFontItem> nWhich, bool bIgnoreAutoStyles, const std::function<bool(const SvxFontItem&)>&  );
+
     /// Iterate over all RES_TXTATR_UNKNOWN_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
 

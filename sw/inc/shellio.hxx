@@ -392,7 +392,7 @@ class SW_DLLPUBLIC Writer
     OUString       m_sBaseURL;
 
     void AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
-    void AddFontItems_( SfxItemPool& rPool, sal_uInt16 nWhichId );
+    void AddFontItems_( SfxItemPool& rPool, TypedWhichId<SvxFontItem> nWhichId );
 
     std::unique_ptr<Writer_Impl> m_pImpl;
 

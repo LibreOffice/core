@@ -944,17 +944,16 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
     if (!m_bLoadAllFonts)
         return;
 
-    const sal_uInt16 aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };
-    for (const sal_uInt16* pId = aTypes; *pId; ++pId)
+    const TypedWhichId<SvxFontItem> aTypes[] { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT };
+    for (const TypedWhichId<SvxFontItem> & pId : aTypes)
     {
-        ItemSurrogates aSurrogates;
-        rPool.GetItemSurrogates(aSurrogates, *pId);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pFont = static_cast<const SvxFontItem*>(pItem);
-            GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
-                         pFont->GetFamily(), pFont->GetCharSet()));
-        }
+        const_cast<SwDoc&>(rDoc).ForEachCharacterFontItem(pId, /*bIgnoreAutoStyles*/false,
+            [this] (const SvxFontItem& rFontItem) -> bool
+            {
+                GetId(wwFont(rFontItem.GetFamilyName(), rFontItem.GetPitch(),
+                             rFontItem.GetFamily(), rFontItem.GetCharSet()));
+                return true;
+            });
     }
 }
 

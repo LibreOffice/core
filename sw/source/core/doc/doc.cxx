@@ -54,6 +54,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/xmlcnitm.hxx>
+#include <editeng/fontitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <officecfg/Office/Writer.hxx>
@@ -1518,6 +1519,50 @@ void SwDoc::ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrC
                 if (!rFunc(*pItem))
                     return;
         }
+    }
+}
+
+/// Iterate over all RES_CHRATR_FONT/RES_CHRATR_CJK_FONT/RES_CHRATR_CTL_FONT SvxFontItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterFontItem(TypedWhichId<SvxFontItem> nWhich, bool bIgnoreAutoStyles, const std::function<bool(const SvxFontItem&)>& rFunc )
+{
+    assert(nWhich == RES_CHRATR_FONT || nWhich == RES_CHRATR_CJK_FONT || nWhich == RES_CHRATR_CTL_FONT);
+    for(const SwCharFormat* pFormat : *GetCharFormats())
+    {
+        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+        if (const SvxFontItem* pItem = rAttrSet.GetItemIfSet(nWhich))
+            if (!rFunc(*pItem))
+                return;
+    }
+    for(const SwTextFormatColl* pFormat : *GetTextFormatColls())
+    {
+        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+        if (const SvxFontItem* pItem = rAttrSet.GetItemIfSet(nWhich))
+            if (!rFunc(*pItem))
+                return;
+    }
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        const SwNode* pNode = GetNodes()[i];
+        if (pNode->IsContentNode())
+        {
+            const SwContentNode* pTextNode = pNode->GetContentNode();
+            if (pTextNode->HasSwAttrSet())
+                if (const SvxFontItem* pItem = pTextNode->GetSwAttrSet().GetItemIfSet(nWhich))
+                    if (!rFunc(*pItem))
+                        return;
+        }
+    }
+    // ignore auto styles when called from the code that is constructing the auto style pool
+    if (!bIgnoreAutoStyles)
+    {
+        // auto styles
+        std::vector<std::shared_ptr<SfxItemSet>> aStyles;
+        GetIStyleAccess().getAllStyles(aStyles, IStyleAccess::AUTO_STYLE_CHAR);
+        for (const auto & rxItemSet : aStyles)
+            if (const SvxFontItem* pItem = rxItemSet->GetItemIfSet(nWhich))
+                if (!rFunc(*pItem))
+                    return;
     }
 }
 

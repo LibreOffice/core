@@ -360,19 +360,32 @@ void Writer::PutEditEngFontsInAttrPool()
     }
 }
 
-void Writer::AddFontItems_( SfxItemPool& rPool, sal_uInt16 nW )
+void Writer::AddFontItems_( SfxItemPool& rPool, TypedWhichId<SvxFontItem> nWhich )
 {
-    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetUserOrPoolDefaultItem( nW ));
+    const SvxFontItem* pFont = &rPool.GetUserOrPoolDefaultItem( nWhich );
     AddFontItem( rPool, *pFont );
 
-    pFont = static_cast<const SvxFontItem*>(rPool.GetUserDefaultItem( nW ));
+    pFont = rPool.GetUserDefaultItem( nWhich );
     if( nullptr != pFont )
         AddFontItem( rPool, *pFont );
 
-    ItemSurrogates aSurrogates;
-    rPool.GetItemSurrogates(aSurrogates, nW);
-    for (const SfxPoolItem* pItem : aSurrogates)
-        AddFontItem( rPool, *static_cast<const SvxFontItem*>(pItem) );
+    if (nWhich == RES_CHRATR_FONT || nWhich == RES_CHRATR_CJK_FONT || nWhich == RES_CHRATR_CTL_FONT)
+    {
+        m_pDoc->ForEachCharacterFontItem(nWhich, /*bIgnoreAutoStyles*/false,
+            [this, &rPool] (const SvxFontItem& rFontItem) -> bool
+            {
+                AddFontItem( rPool, rFontItem );
+                return true;
+            });
+    }
+    else
+    {
+        // nWhich is one of EE_CHAR_FONTINFO /  EE_CHAR_FONTINFO_CJK / rPool, EE_CHAR_FONTINFO_CTL
+        ItemSurrogates aSurrogates;
+        rPool.GetItemSurrogates(aSurrogates, nWhich);
+        for (const SfxPoolItem* pItem : aSurrogates)
+            AddFontItem( rPool, *static_cast<const SvxFontItem*>(pItem) );
+    }
 }
 
 void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )

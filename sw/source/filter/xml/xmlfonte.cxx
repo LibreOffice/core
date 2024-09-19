@@ -21,6 +21,9 @@
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <editeng/fontitem.hxx>
 #include <doc.hxx>
+#include <docsh.hxx>
+#include <ndtxt.hxx>
+#include <txatbase.hxx>
 #include "xmlexp.hxx"
 #include "xmlimp.hxx"
 #include <IDocumentSettingAccess.hxx>
@@ -56,23 +59,21 @@ sal_Int32 CompareTo(sal_Int32 nA, sal_Int32 nB)
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, bool bFontEmbedding)
     : XMLFontAutoStylePool(_rExport, bFontEmbedding)
 {
-    sal_uInt16 const aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+    TypedWhichId<SvxFontItem> const aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                       RES_CHRATR_CTL_FONT };
 
     const SfxItemPool& rPool = _rExport.getDoc()->GetAttrPool();
     std::vector<const SvxFontItem *> aFonts;
-    for(sal_uInt16 nWhichId : aWhichIds)
+    for(const TypedWhichId<SvxFontItem> & nWhichId : aWhichIds)
     {
-        const SvxFontItem& rFont =
-            static_cast<const SvxFontItem&>(rPool.GetUserOrPoolDefaultItem( nWhichId ));
+        const SvxFontItem& rFont = rPool.GetUserOrPoolDefaultItem( nWhichId );
         aFonts.push_back(&rFont);
-        ItemSurrogates aSurrogates;
-        rPool.GetItemSurrogates(aSurrogates, nWhichId);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            auto pFont = static_cast<const SvxFontItem *>(pItem);
-            aFonts.push_back(pFont);
-        }
+        _rExport.getDoc()->ForEachCharacterFontItem(nWhichId, /*bIgnoreAutoStyles*/true,
+            [&aFonts] (const SvxFontItem& rFontItem) -> bool
+            {
+                aFonts.push_back(&rFontItem);
+                return true;
+            });
     }
 
     std::sort(aFonts.begin(), aFonts.end(),
