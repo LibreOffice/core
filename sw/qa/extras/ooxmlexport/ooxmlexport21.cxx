@@ -439,6 +439,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
     assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "width"_ostr, u"9360"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
+{
+    loadAndSave("comment_with_children.odt");
+    // commentsExtended should exist
+    xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
+    CPPUNIT_ASSERT(pXmlCommExt);
+    // And it should contain the same parent-child relations
+    OUString sExChild1
+        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]"_ostr, "paraId"_ostr);
+    OUString sExParent1
+        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]"_ostr, "paraIdParent"_ostr);
+    OUString sExChild2
+        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]"_ostr, "paraId"_ostr);
+    OUString sExParent2
+        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]"_ostr, "paraIdParent"_ostr);
+    std::map<OUString, OUString> parents;
+    parents[sExChild1] = sExParent1;
+    parents[sExChild2] = sExParent2;
+    xmlDocUniquePtr pXmlComments = parseExport("word/comments.xml");
+    OUString sComment1Id
+        = getXPath(pXmlComments, "/w:comments/w:comment[1]/w:p[1]"_ostr, "paraId"_ostr);
+    OUString sComment2Id
+        = getXPath(pXmlComments, "/w:comments/w:comment[2]/w:p[1]"_ostr, "paraId"_ostr);
+    OUString sComment3Id
+        = getXPath(pXmlComments, "/w:comments/w:comment[3]/w:p[1]"_ostr, "paraId"_ostr);
+    CPPUNIT_ASSERT_EQUAL(parents[sComment2Id], sComment1Id);
+    CPPUNIT_ASSERT_EQUAL(parents[sComment3Id], sComment2Id);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
