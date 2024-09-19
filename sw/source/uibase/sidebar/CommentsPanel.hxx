@@ -37,7 +37,6 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/time.hxx>
-#include <svtools/ctrlbox.hxx>
 
 class SwWrtShell;
 class SwView;
