@@ -31,9 +31,14 @@ set -e
 
 root="$PWD"
 algo="RSA"
+pass="y"
 
 if [ -n "$1" ]; then
     algo="$1"
+fi
+
+if [ "$2" == "NOPASS" ]; then
+    pass="n"
 fi
 
 if [ -d "$root/ca" ]; then
@@ -130,29 +135,50 @@ do
         openssl ecparam -name secp256r1 -genkey \
             -out intermediate/private/example-xmlsecurity-${i}.key.pem
     else
-        openssl genrsa -aes256 \
-            -out intermediate/private/example-xmlsecurity-${i}.key.pem \
-            -passout env:SSLPASS 2048
+        if [ "$pass" == "y" ]; then
+            openssl genrsa -aes256 \
+                -out intermediate/private/example-xmlsecurity-${i}.key.pem \
+                -passout env:SSLPASS 2048
+        else
+            openssl genrsa \
+                -out intermediate/private/example-xmlsecurity-${i}.key.pem \
+                2048
+        fi
     fi
     chmod 400 intermediate/private/example-xmlsecurity-${i}.key.pem
 
     # Create a certificate signing request (CSR).
 
     cd "$root/ca"
-    openssl req -config intermediate/openssl.cnf \
-        -key intermediate/private/example-xmlsecurity-${i}.key.pem \
-        -new -sha256 -out intermediate/csr/example-xmlsecurity-${i}.csr.pem \
-        -passin env:SSLPASS \
-        -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity ${algo} Test example ${i}"
+    if [ "$pass" == "y" ]; then
+        openssl req -config intermediate/openssl.cnf \
+            -key intermediate/private/example-xmlsecurity-${i}.key.pem \
+            -new -sha256 -out intermediate/csr/example-xmlsecurity-${i}.csr.pem \
+            -passin env:SSLPASS \
+            -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity ${algo} Test example ${i}"
+    else
+        openssl req -config intermediate/openssl.cnf \
+            -key intermediate/private/example-xmlsecurity-${i}.key.pem \
+            -new -sha256 -out intermediate/csr/example-xmlsecurity-${i}.csr.pem \
+            -subj "/C=UK/ST=England/O=Xmlsecurity ${algo} Test/CN=Xmlsecurity ${algo} Test example ${i}"
+    fi
 
     # To create a certificate, use the intermediate CA to sign the CSR.
     cd "$root/ca"
     # usr_cert: the cert will be used for signing.
-    openssl ca -batch -config intermediate/openssl.cnf \
-        -extensions usr_cert -days 36500 -notext -md sha256 \
-        -in intermediate/csr/example-xmlsecurity-${i}.csr.pem \
-        -passin env:SSLPASS \
-        -out intermediate/certs/example-xmlsecurity-${i}.cert.pem
+    if [ "$pass" == "y" ]; then
+        openssl ca -batch -config intermediate/openssl.cnf \
+            -extensions usr_cert -days 36500 -notext -md sha256 \
+            -in intermediate/csr/example-xmlsecurity-${i}.csr.pem \
+            -passin env:SSLPASS \
+            -out intermediate/certs/example-xmlsecurity-${i}.cert.pem
+    else
+        openssl ca -batch -config intermediate/openssl.cnf \
+            -extensions usr_cert -days 36500 -notext -md sha256 \
+            -in intermediate/csr/example-xmlsecurity-${i}.csr.pem \
+            -passin env:SSLPASS \
+            -out intermediate/certs/example-xmlsecurity-${i}.cert.pem
+    fi
     chmod 444 intermediate/certs/example-xmlsecurity-${i}.cert.pem
 
     # Export it in PKCS#12 format.
@@ -165,14 +191,16 @@ do
             -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
             -certfile intermediate/certs/ca-chain.cert.pem
     else
-        openssl pkcs12 -export \
-            -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
-            -passout env:SSLPASS \
-            -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
-            -passin env:SSLPASS \
-            -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
-            -certfile intermediate/certs/ca-chain.cert.pem \
-            -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
+        if [ "$pass" == "y" ]; then
+            openssl pkcs12 -export \
+                -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
+                -passout env:SSLPASS \
+                -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
+                -passin env:SSLPASS \
+                -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
+                -certfile intermediate/certs/ca-chain.cert.pem \
+                -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
+        fi
     fi
 done
 
@@ -181,7 +209,12 @@ echo "Authority certificate is at: <$root/ca/intermediate/certs/ca-chain.cert.pe
 echo "To be able to import it in Windows, rename the '.pem' extension to '.cer'."
 for i in Alice Bob
 do
-    echo "Signing certificate is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.cert.p12>."
+    if [ "$pass" == "y" ]; then
+        echo "Signing certificate is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.cert.p12>."
+    else
+        echo "Cert file is at <$root/ca/intermediate/certs/example-xmlsecurity-${i}.cert.pem>."
+        echo "Key file is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.key.pem>."
+    fi
 done
 
 # vim:set shiftwidth=4 expandtab:
