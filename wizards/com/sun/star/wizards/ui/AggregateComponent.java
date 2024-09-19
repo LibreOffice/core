@@ -152,7 +152,7 @@ public class AggregateComponent extends ControlScroller
         {
             try
             {
-                int iKey = CurUnoDialog.getControlKey(actionEvent.Source, CurUnoDialog.ControlList);
+                int iKey = CurUnoDialog.getControlKey(actionEvent.Source);
                 switch (iKey)
                 {
                     case SOADDROW:

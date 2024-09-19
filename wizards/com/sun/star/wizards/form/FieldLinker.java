@@ -297,7 +297,7 @@ public class FieldLinker extends DBLimitedFieldSelection
             if (EventObject == null) {
                 return;
             }
-            int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            int ikey = CurUnoDialog.getControlKey(EventObject.Source);
             enableNextControlRow(ikey);
         }
 

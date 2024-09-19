@@ -60,7 +60,7 @@ public class FieldSelection
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
             com.sun.star.wizards.common.Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-            int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            int iKey = CurUnoDialog.getControlKey(EventObject.Source);
             switch (iKey)
             {
                 case SOFLDSLST:
@@ -90,7 +90,7 @@ public class FieldSelection
         {
             try
             {
-                int iKey = CurUnoDialog.getControlKey(actionEvent.Source, CurUnoDialog.ControlList);
+                int iKey = CurUnoDialog.getControlKey(actionEvent.Source);
                 switch (iKey)
                 {
                     case SOCMDMOVESEL:

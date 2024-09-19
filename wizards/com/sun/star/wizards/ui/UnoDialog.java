@@ -47,7 +47,7 @@ public class UnoDialog
     public XInterface xDialogModel;
     private XInterface xUnoDialog;
     private XVclWindowPeer xVclWindowPeer;
-    public HashMap<String, Integer> ControlList;
+    private HashMap<String, Integer> ControlList;
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
@@ -78,7 +78,7 @@ public class UnoDialog
         }
     }
 
-    public int getControlKey(Object EventObject, HashMap<String, Integer> ControlList)
+    public int getControlKey(Object EventObject)
     {
         int iKey;
         XControl xContrl = UnoRuntime.queryInterface(XControl.class, EventObject);

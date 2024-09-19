@@ -110,7 +110,7 @@ public class FilterComponent
                 return;
             }
 
-            int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            int iKey = CurUnoDialog.getControlKey(EventObject.Source);
             String sControlName = PropertyNames.EMPTY_STRING;
             switch (iKey)
             {

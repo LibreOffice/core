@@ -227,7 +227,7 @@ public class ReportLayouter
                 Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
                 // LLA: should we lock controllers here?
                 //                    CurReportDocument.getDoc().xTextDocument.lockControllers();
-                int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+                int iKey = CurUnoDialog.getControlKey(EventObject.Source);
                 switch (iKey)
                 {
                     case SOCONTENTLST:

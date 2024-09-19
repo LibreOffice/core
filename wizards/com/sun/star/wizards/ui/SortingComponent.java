@@ -51,7 +51,7 @@ public class SortingComponent
         public void itemStateChanged(ItemEvent EventObject)
         {
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-            int ikey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+            int ikey = CurUnoDialog.getControlKey(EventObject.Source);
             enableNextSortListBox(ikey);
             Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         }
