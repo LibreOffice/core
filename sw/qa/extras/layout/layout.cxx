@@ -603,6 +603,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     discardDumpedLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestI94666)
+{
+    SwDoc* pDoc = createDoc("i94666.odt");
+    CPPUNIT_ASSERT(pDoc);
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page", 2);
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt[1]/Text[1]", "Portion", "pulled off ");
+        discardDumpedLayout();
+    }
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoPage(2, false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 11, /*bBasicCall=*/false);
+    pWrtShell->SetMark();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 11, /*bBasicCall=*/false);
+    pWrtShell->DelToEndOfPara();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // the problem was that the last paragraph moved to page 3
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt[1]/Text[1]", "Portion", "Widows & orphans He heard quiet steps behind him. That didn't bode well. Who could be following");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt[1]/Text[4]", "Portion", "pulled off ");
+        assertXPath(pXmlDoc, "/root/page[2]/body/section/txt[2]/Text[1]", "Portion", "Moved paragraph");
+        assertXPath(pXmlDoc, "/root/page[2]//txt", 3);
+        assertXPath(pXmlDoc, "/root/page", 2);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 {
     SwDoc* pDoc = createDoc("tdf134472.odt");
