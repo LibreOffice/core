@@ -14,9 +14,9 @@
 #include <osl/detail/component-mapping.h>
 
 extern "C" {
-void * com_sun_star_comp_uui_UUIInteractionHandler_get_implementation( void *, void * );
-void * com_sun_star_i18n_CharacterClassification_Unicode_get_implementation( void *, void * );
-void * com_sun_star_i18n_CharacterClassification_get_implementation( void *, void * );
+void com_sun_star_comp_uui_UUIInteractionHandler_get_implementation(void);
+void com_sun_star_i18n_CharacterClassification_Unicode_get_implementation(void);
+void com_sun_star_i18n_CharacterClassification_get_implementation(void);
 }
 
 const lib_to_factory_mapping *

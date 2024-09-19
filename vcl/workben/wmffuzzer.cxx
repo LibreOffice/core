@@ -16,10 +16,10 @@
 #include <osl/detail/component-mapping.h>
 
 extern "C" {
-void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
-void * com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void *, void * );
-void * com_sun_star_i18n_BreakIterator_get_implementation( void *, void * );
-void * emfio_emfreader_XEmfParser_get_implementation( void *, void * );
+void com_sun_star_i18n_LocaleDataImpl_get_implementation( void );
+void com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void );
+void com_sun_star_i18n_BreakIterator_get_implementation( void );
+void emfio_emfreader_XEmfParser_get_implementation( void );
 }
 
 const lib_to_factory_mapping *

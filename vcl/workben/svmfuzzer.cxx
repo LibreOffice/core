@@ -16,18 +16,18 @@
 extern "C" bool TestImportSVM(SvStream &rStream);
 
 extern "C" {
-void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
-void * com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void *, void * );
-void * com_sun_star_i18n_BreakIterator_get_implementation( void *, void * );
-void * com_sun_star_i18n_NativeNumberSupplier_get_implementation( void *, void * );
-void * com_sun_star_i18n_NumberFormatCodeMapper_get_implementation( void *, void * );
-void * com_sun_star_comp_rendering_CanvasFactory_get_implementation( void *, void * );
-void * com_sun_star_comp_rendering_Canvas_VCL_get_implementation( void *, void * );
-void * linguistic_ConvDicList_get_implementation( void *, void * );
-void * linguistic_DicList_get_implementation( void *, void * );
-void * linguistic_LinguProps_get_implementation( void *, void * );
-void * linguistic_LngSvcMgr_get_implementation( void *, void * );
-void * linguistic_GrammarCheckingIterator_get_implementation( void *, void * );
+void com_sun_star_i18n_LocaleDataImpl_get_implementation( void );
+void com_sun_star_i18n_BreakIterator_Unicode_get_implementation( void );
+void com_sun_star_i18n_BreakIterator_get_implementation( void );
+void com_sun_star_i18n_NativeNumberSupplier_get_implementation( void );
+void com_sun_star_i18n_NumberFormatCodeMapper_get_implementation( void );
+void com_sun_star_comp_rendering_CanvasFactory_get_implementation( void );
+void com_sun_star_comp_rendering_Canvas_VCL_get_implementation( void );
+void linguistic_ConvDicList_get_implementation( void );
+void linguistic_DicList_get_implementation( void );
+void linguistic_LinguProps_get_implementation( void );
+void linguistic_LngSvcMgr_get_implementation( void );
+void linguistic_GrammarCheckingIterator_get_implementation( void );
 }
 
 const lib_to_factory_mapping *
