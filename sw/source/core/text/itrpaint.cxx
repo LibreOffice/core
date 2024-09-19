@@ -531,7 +531,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     delete GetInfo().GetUnderFnt();
     GetInfo().SetUnderFnt( nullptr );
 
-    // paint remaining stuff
+    // paint remaining stuff, e.g. the line ending symbols, pilcrow (¶) and the line break
     if( bDrawInWindow )
     {
         // If special vertical alignment is enabled, GetInfo().Y() is the
@@ -564,6 +564,12 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 GetInfo().Y( GetInfo().GetPos().Y()
                            + AdjustBaseLine( *m_pCurr, &aEnd ) );
             GetInfo().X( GetInfo().X() +
+                // tdf#163042 In the case of shrunk lines with a single portion, adjust
+                // the line width (if needed, i.e. if the shrunk line doesn't end in a space)
+                // to show the terminating pilcrow at the correct position, and not before that
+                ( ( !( pEndTempl->GetNextPortion() && pEndTempl->GetNextPortion()->IsHolePortion() ) &&
+                    std::abs( m_pCurr->Width() - m_pCurr->GetFirstPortion()->Width() ) <= 1 && m_pCurr->ExtraShrunkWidth() > 0 )
+                        ? m_pCurr->ExtraShrunkWidth() - m_pCurr->Width() : 0 ) +
                     ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : 0 ) );
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
