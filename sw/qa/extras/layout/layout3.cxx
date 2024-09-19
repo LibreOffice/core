@@ -342,6 +342,48 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(156), aPosition.GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163042)
+{
+    createSwDoc("tdf163042.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // 1-line paragraph
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    SwPosition aPosition(*pWrtShell->GetCursor()->Start());
+    SwTwips nParaLeft
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "left"_ostr).toInt32();
+    SwTwips nParaWidth
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "width"_ostr).toInt32();
+    SwTwips nParaTop
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    SwTwips nParaHeight
+        = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    Point aPoint;
+
+    // click before the last but one character of the paragraph
+    // (in a line shrunk by the new space shrinking justification)
+
+    aPoint.setX(nParaLeft + nParaWidth - 2 * nParaWidth / 160);
+    aPoint.setY(nParaTop + nParaHeight * 0.5);
+    SwCursorMoveState aState(CursorMoveState::NONE);
+    pLayout->GetModelPositionForViewPoint(&aPosition, aPoint, &aState);
+    // Without the accompanying fix in place, this test would have failed: character position was 160,
+    // i.e. cursor was at the end of the paragraph instead of the last but one character
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(158), aPosition.GetContentIndex());
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162109)
 {
     createSwDoc("tdf162109.fodt");
