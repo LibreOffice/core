@@ -1551,7 +1551,7 @@ void QtFrame::handleDrop(QDropEvent* pEvent)
     // inform the drag source of the drag-origin frame of the drop result
     if (pEvent->source())
     {
-        QtWidget* pWidget = dynamic_cast<QtWidget*>(pEvent->source());
+        QtWidget* pWidget = qobject_cast<QtWidget*>(pEvent->source());
         assert(pWidget); // AFAIK there shouldn't be any non-Qt5Widget as source in LO itself
         if (pWidget)
             pWidget->frame().m_pDragSource->fire_dragEnd(nDropAction, bDropSuccessful);

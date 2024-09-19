@@ -263,7 +263,7 @@ QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
     {
         if (pAbstractButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt() == nResponse)
         {
-            QPushButton* pButton = dynamic_cast<QPushButton*>(pAbstractButton);
+            QPushButton* pButton = qobject_cast<QPushButton*>(pAbstractButton);
             assert(pButton);
             return pButton;
         }
