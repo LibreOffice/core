@@ -1282,7 +1282,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     {
                         SwAccessibleObjShape_Impl  *pShape = pShapes.get();
                         size_t nNumShapes = nShapes;
-                        while( nNumShapes )
+                        while (nNumShapes > 0)
                         {
                             if( pShape < pSelShape && (pShape->first==(*aIter).first) )
                             {

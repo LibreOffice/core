@@ -168,7 +168,7 @@ bool ONDXPage::Find(const ONDXKey& rKey)
     else if (i == nCount)
     {
         rIndex.m_aCurLeaf = this;
-        rIndex.m_nCurNode = i - 1;
+        rIndex.m_nCurNode = sal_uInt16(i - 1);
         bResult = false;
     }
     else

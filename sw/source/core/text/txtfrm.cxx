@@ -933,7 +933,7 @@ void RemoveFootnotesForNode(
     rFootnoteIdxs.SeekEntry( rTextNode, &nPos );
     if (nPos < rFootnoteIdxs.size())
     {
-        while (nPos && rTextNode == (rFootnoteIdxs[ nPos ]->GetTextNode()))
+        while (nPos > 0 && rTextNode == (rFootnoteIdxs[ nPos ]->GetTextNode()))
             --nPos;
         if (nPos || rTextNode != (rFootnoteIdxs[ nPos ]->GetTextNode()))
             ++nPos;

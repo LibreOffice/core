@@ -79,8 +79,10 @@ void SwNavigationPI::MoveOutline(SwOutlineNodes::size_type nSource, SwOutlineNod
     if (!pView)
         return;
     SwWrtShell &rSh = pView->GetWrtShell();
-    if(nTarget < nSource || nTarget == SwOutlineNodes::npos)
-        nTarget ++;
+    if (nTarget == SwOutlineNodes::npos)
+        nTarget = 0;
+    else if (nTarget < nSource)
+        nTarget++;
     if ( !rSh.IsOutlineMovable( nSource ))
         return;
 
