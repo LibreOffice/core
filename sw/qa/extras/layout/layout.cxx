@@ -850,6 +850,52 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     discardDumpedLayout();
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestI94666)
+{
+    createSwDoc("i94666.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+        assertXPath(
+            pXmlDoc,
+            "/root/page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr,
+            "portion"_ostr, "pulled off ");
+        discardDumpedLayout();
+    }
+
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoPage(2, false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 11, /*bBasicCall=*/false);
+    pWrtShell->SetMark();
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 11, /*bBasicCall=*/false);
+    pWrtShell->DelToEndOfPara();
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // the problem was that the last paragraph moved to page 3
+        assertXPath(
+            pXmlDoc,
+            "/root/page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout[1]/SwLinePortion[1]"_ostr,
+            "portion"_ostr,
+            "Widows & orphans He heard quiet steps behind him. That didn't bode well. Who could be "
+            "following");
+        assertXPath(
+            pXmlDoc,
+            "/root/page[2]/body/section/txt[1]/SwParaPortion/SwLineLayout[3]/SwLinePortion[1]"_ostr,
+            "portion"_ostr, "pulled off ");
+        assertXPath(
+            pXmlDoc,
+            "/root/page[2]/body/section/txt[2]/SwParaPortion/SwLineLayout[1]/SwParaPortion[1]"_ostr,
+            "portion"_ostr, "Moved paragraph");
+        assertXPath(pXmlDoc, "/root/page[2]//txt"_ostr, 3);
+        assertXPath(pXmlDoc, "/root/page"_ostr, 2);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 {
     createSwDoc("tdf134472.odt");

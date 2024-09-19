@@ -2276,7 +2276,10 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         if( nRstHeight < 0 )
         {
             SwTwips nNextHeight = 0;
-            if( GetUpper()->IsSctFrame() && nDist > LONG_MAX/2 )
+            // i#94666 if WIDOW_MAGIC was set as height, nDist is wrong, need
+            // to take into account all the frames in the section.
+            if (GetUpper()->IsSctFrame()
+                && sw::WIDOW_MAGIC - 20000 - getFrameArea().Top() < nDist)
             {
                 SwFrame *pNxt = GetNext();
                 while( pNxt )
