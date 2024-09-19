@@ -1015,17 +1015,22 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 SetAllScriptItem(aSet, SvxFontHeightItem(PT_10, 100, RES_CHRATR_FONTSIZE));
 
-                // Left margin (i.e. Before text indent)
-                aSet.Put(SvxTextLeftMarginItem (0, RES_MARGIN_TEXTLEFT));
-
-                // Right margin (i.e. After text indent)
-                aSet.Put(SvxRightMarginItem(0, RES_MARGIN_RIGHT));
+                // tdf#159531: Paddings added to ease readability on comments
+                // Left and Right margin (i.e. Before and After text indent)
+                auto const aIndent(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxTextLeftMarginItem const leftMargin(aIndent, RES_MARGIN_TEXTLEFT);
+                SvxRightMarginItem const rightMargin(aIndent, RES_MARGIN_RIGHT);
+                aSet.Put(leftMargin);
+                aSet.Put(rightMargin);
 
                 // First line indent
                 aSet.Put(SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE));
 
+                // Added as part of tdf#159531
                 // Top/bottom spacing (i.e. Above/Below paragraph spacing)
-                aSet.Put(SvxULSpaceItem(0, 0, RES_UL_SPACE));
+                auto const aSpacing(o3tl::convert(0.1, o3tl::Length::cm, o3tl::Length::twip));
+                SvxULSpaceItem topSpacing(aSpacing, 0, RES_UL_SPACE);
+                aSet.Put(topSpacing);
 
                 // Line spacing = SINGLE
                 aSet.Put(SvxLineSpacingItem(0, RES_PARATR_LINESPACING));
