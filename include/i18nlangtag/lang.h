@@ -90,10 +90,13 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 
 namespace o3tl
 {
+// when compiling LO on macOS, debug builds will display a linking error
+#if !(defined MACOSX && defined __clang__ && __clang_major__ == 16)
     // delete "sal_Int16" constructor via specialization: values > 0x7FFF are
     // actually used, and unfortunately passed around in the API as signed
     // "short", so use this to find all places where casts must be inserted
     template<> template<> constexpr strong_int<unsigned short,LanguageTypeTag>::strong_int(short, std::enable_if<std::is_integral<short>::value, int>::type) = delete;
+#endif
 }
 
 #define LANGUAGE_MASK_PRIMARY 0x03ff

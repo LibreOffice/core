@@ -84,6 +84,14 @@ template <typename UNDERLYING_TYPE, typename PHANTOM_TYPE>
 struct strong_int
 {
 public:
+// when compiling LO on macOS, debug builds will display a linking error
+#if defined MACOSX && defined __clang__ && __clang_major__ == 16
+    explicit constexpr strong_int(unsigned long long value) : m_value(value) {}
+    explicit constexpr strong_int(unsigned long value) : m_value(value) {}
+    explicit constexpr strong_int(long value) : m_value(value) {}
+    explicit constexpr strong_int(int value) : m_value(value) {}
+    explicit constexpr strong_int(unsigned int value) : m_value(value) {}
+#else
     template<typename T> explicit constexpr strong_int(
         T value,
         typename std::enable_if<std::is_integral<T>::value, int>::type = 0):
@@ -95,6 +103,7 @@ public:
                && "out of range");
 #endif
     }
+#endif
     strong_int() : m_value(0) {}
 
     explicit constexpr operator UNDERLYING_TYPE() const { return m_value; }
