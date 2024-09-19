@@ -566,9 +566,9 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                     {
                         const sal_uInt8 alpha = pScanline[i + 3];
 #if ENABLE_WASM_STRIP_PREMULTIPLY
-                        pScanline[i + 3] = vcl::bitmap::premultiply(alpha, pScanline[i + 2]);
-                        pScanline[i + 2] = vcl::bitmap::premultiply(alpha, pScanline[i + 1]);
-                        pScanline[i + 1] = vcl::bitmap::premultiply(alpha, pScanline[i]);
+                        pScanline[i + 3] = vcl::bitmap::premultiply(pScanline[i + 2], alpha);
+                        pScanline[i + 2] = vcl::bitmap::premultiply(pScanline[i + 1], alpha);
+                        pScanline[i + 1] = vcl::bitmap::premultiply(pScanline[i], alpha);
 #else
                         pScanline[i + 3] = premultiply[alpha][pScanline[i + 2]];
                         pScanline[i + 2] = premultiply[alpha][pScanline[i + 1]];
@@ -587,9 +587,9 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                     {
                         const sal_uInt8 alpha = pScanline[i + 3];
 #if ENABLE_WASM_STRIP_PREMULTIPLY
-                        pScanline[i] = vcl::bitmap::premultiply(alpha, pScanline[i]);
-                        pScanline[i + 1] = vcl::bitmap::premultiply(alpha, pScanline[i + 1]);
-                        pScanline[i + 2] = vcl::bitmap::premultiply(alpha, pScanline[i + 2]);
+                        pScanline[i] = vcl::bitmap::premultiply(pScanline[i], alpha);
+                        pScanline[i + 1] = vcl::bitmap::premultiply(pScanline[i + 1], alpha);
+                        pScanline[i + 2] = vcl::bitmap::premultiply(pScanline[i + 2], alpha);
 #else
                         pScanline[i] = premultiply[alpha][pScanline[i]];
                         pScanline[i + 1] = premultiply[alpha][pScanline[i + 1]];
