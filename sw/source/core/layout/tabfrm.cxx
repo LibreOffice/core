@@ -1440,7 +1440,7 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
         // we also don't shrink here, because we will be doing that in lcl_RecalcSplitLine
 
         // recalculate the split line
-        bRet = lcl_RecalcSplitLine(*pLastRow, *pFollowRow, nRemainingSpaceForLastRow, nShrink, rIsFootnoteGrowth);
+        bRet = lcl_RecalcSplitLine(*pLastRow, *pFollowRow, getRemainingAfter(pLastRow->GetPrev()), nShrink, rIsFootnoteGrowth);
 
         // RecalcSplitLine did not work. In this case we conceal the split error:
         if (!bRet && !bSplitRowAllowed)
@@ -5058,6 +5058,7 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     OSL_ENSURE( pAttrs, "SwRowFrame::Format without Attrs." );
 
     const bool bFix = mbFixSize;
+    SwTabFrame* pTabFrame = FindTabFrame();
 
     if ( !isFramePrintAreaValid() )
     {
@@ -5075,7 +5076,6 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
 
         // #i29550#
         // Here we calculate the top-printing area for the lower cell frames
-        SwTabFrame* pTabFrame = FindTabFrame();
         if ( pTabFrame->IsCollapsingBorders() )
         {
             const sal_uInt16 nTopSpace        = lcl_GetTopSpace(       *this );
@@ -5212,6 +5212,11 @@ void SwRowFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
     {   nDiff -= aRectFnSet.GetHeight(pSibling->getFrameArea());
         pSibling = pSibling->GetNext();
     } while ( pSibling );
+    if (nDiff > 0 && pTabFrame->IsCollapsingBorders())
+    {
+        // In SwTabFrame::Format, this value will be added to the table's bottom margin
+        nDiff -= GetBottomLineSize();
+    }
     if ( nDiff > 0 )
     {
         mbFixSize = false;
