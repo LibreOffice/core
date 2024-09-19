@@ -1521,6 +1521,18 @@ void SwDoc::ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrC
     }
 }
 
+/// Iterate over all RES_PARATR_TABSTOP SvXMLAttrContainerItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>& rFunc ) const
+{
+    for(SwCharFormat* pFormat : *GetCharFormats())
+    {
+        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+        if (const SvxTabStopItem* pItem = rAttrSet.GetItemIfSet(RES_PARATR_TABSTOP))
+            if (!rFunc(*pItem))
+                return;
+    }
+}
+
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();

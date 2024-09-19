@@ -636,18 +636,15 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                     nOldWidth = aOld.Get(RES_PARATR_TABSTOP)[ 0 ].GetTabPos();
 
             bool bChg = false;
-            ItemSurrogates aSurrogates;
-            GetAttrPool().GetItemSurrogates(aSurrogates, RES_PARATR_TABSTOP);
-            for (const SfxPoolItem* pItem2 : aSurrogates)
-            {
+            ForEachParaAtrTabStopItem([&bChg, &nOldWidth, &nNewWidth](const SvxTabStopItem& rTabStopItem) -> bool {
                 // pItem2 and thus pTabStopItem is a evtl. shared & RefCounted
                 // Item and *should* not be changed that way. lcl_SetNewDefTabStops
                 // seems to change pTabStopItem (!). This may need to be changed
                 // to use iterateItemSurrogates and a defined write cycle.
-                const auto & rTabStopItem = static_cast<const SvxTabStopItem&>(*pItem2);
                 bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
                                                const_cast<SvxTabStopItem&>(rTabStopItem) );
-            }
+                return true;
+            });
 
             aNew.ClearItem( RES_PARATR_TABSTOP );
             aOld.ClearItem( RES_PARATR_TABSTOP );
