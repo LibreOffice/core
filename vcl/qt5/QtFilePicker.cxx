@@ -108,7 +108,7 @@ QtFilePicker::QtFilePicker(css::uno::Reference<css::uno::XComponentContext> cont
         m_pFileDialog->setWindowTitle(toQString(FpsResId(STR_SVT_FOLDERPICKER_DEFAULT_TITLE)));
     }
 
-    m_pLayout = dynamic_cast<QGridLayout*>(m_pFileDialog->layout());
+    m_pLayout = qobject_cast<QGridLayout*>(m_pFileDialog->layout());
 
     setMultiSelectionMode(false);
 
@@ -508,12 +508,12 @@ void SAL_CALL QtFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlActi
     if (m_aCustomWidgetsMap.contains(controlId))
     {
         QWidget* widget = m_aCustomWidgetsMap.value(controlId);
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
+        QCheckBox* cb = qobject_cast<QCheckBox*>(widget);
         if (cb)
             cb->setChecked(value.get<bool>());
         else
         {
-            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            QComboBox* combo = qobject_cast<QComboBox*>(widget);
             if (combo)
                 handleSetListValue(combo, nControlAction, value);
         }
@@ -540,12 +540,12 @@ uno::Any SAL_CALL QtFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControl
     if (m_aCustomWidgetsMap.contains(controlId))
     {
         QWidget* widget = m_aCustomWidgetsMap.value(controlId);
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(widget);
+        QCheckBox* cb = qobject_cast<QCheckBox*>(widget);
         if (cb)
             res <<= cb->isChecked();
         else
         {
-            QComboBox* combo = dynamic_cast<QComboBox*>(widget);
+            QComboBox* combo = qobject_cast<QComboBox*>(widget);
             if (combo)
                 res = handleGetListValue(combo, nControlAction);
         }
@@ -582,7 +582,7 @@ void SAL_CALL QtFilePicker::setLabel(sal_Int16 controlId, const OUString& label)
 
     if (m_aCustomWidgetsMap.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
+        QCheckBox* cb = qobject_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
         if (cb)
             cb->setText(toQString(label));
     }
@@ -605,7 +605,7 @@ OUString SAL_CALL QtFilePicker::getLabel(sal_Int16 controlId)
     QString label;
     if (m_aCustomWidgetsMap.contains(controlId))
     {
-        QCheckBox* cb = dynamic_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
+        QCheckBox* cb = qobject_cast<QCheckBox*>(m_aCustomWidgetsMap.value(controlId));
         if (cb)
             label = cb->text();
     }
