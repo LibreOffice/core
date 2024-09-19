@@ -67,7 +67,7 @@ void QtClipboard::flushClipboard()
 
         QClipboard* pClipboard = QApplication::clipboard();
         const QtMimeData* pQtMimeData
-            = dynamic_cast<const QtMimeData*>(pClipboard->mimeData(m_aClipboardMode));
+            = qobject_cast<const QtMimeData*>(pClipboard->mimeData(m_aClipboardMode));
         assert(pQtMimeData);
 
         QMimeData* pMimeCopy = nullptr;
@@ -164,7 +164,7 @@ void QtClipboard::handleChanged(QClipboard::Mode aMode)
     // it. So ignore any signal, which still delivers the internal QtMimeData
     // as the clipboard content and is no "advertised" change.
     if (!m_bOwnClipboardChange && isOwner(aMode)
-        && dynamic_cast<const QtMimeData*>(QApplication::clipboard()->mimeData(aMode)))
+        && qobject_cast<const QtMimeData*>(QApplication::clipboard()->mimeData(aMode)))
         return;
 
     css::uno::Reference<css::datatransfer::clipboard::XClipboardOwner> xOldOwner(m_aOwner);

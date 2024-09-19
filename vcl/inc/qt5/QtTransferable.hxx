@@ -114,6 +114,8 @@ typedef QtTransferable QtDnDTransferable;
  **/
 class QtMimeData final : public QMimeData
 {
+    Q_OBJECT
+
     friend class QtClipboardTransferable;
 
     const css::uno::Reference<css::datatransfer::XTransferable> m_aContents;
