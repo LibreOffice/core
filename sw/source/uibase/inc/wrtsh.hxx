@@ -291,7 +291,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     // also deletes the frame or sets the cursor in the frame when bDelFrame == false
     SW_DLLPUBLIC bool DelRight(bool isReplaceHeuristic = false);
-    void    DelToEndOfPara();
+    SW_DLLPUBLIC void DelToEndOfPara();
     void    DelToStartOfPara();
     SW_DLLPUBLIC bool DelToEndOfSentence();
     void    DelToStartOfSentence();
