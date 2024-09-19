@@ -9,6 +9,7 @@
  */
 
 #include <QtTransferable.hxx>
+#include <QtTransferable.moc>
 
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>

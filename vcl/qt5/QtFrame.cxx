@@ -1391,7 +1391,7 @@ static css::uno::Reference<css::datatransfer::XTransferable>
 lcl_getXTransferable(const QMimeData* pMimeData)
 {
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
-    const QtMimeData* pQtMimeData = dynamic_cast<const QtMimeData*>(pMimeData);
+    const QtMimeData* pQtMimeData = qobject_cast<const QtMimeData*>(pMimeData);
     if (!pQtMimeData)
         xTransferable = new QtDnDTransferable(pMimeData);
     else
@@ -1423,7 +1423,7 @@ static sal_Int8 lcl_getUserDropAction(const QDropEvent* pEvent, const sal_Int8 n
     if (0 == nUserDropAction)
     {
         // default LO internal action is move, but default external action is copy
-        nUserDropAction = dynamic_cast<const QtMimeData*>(pMimeData)
+        nUserDropAction = qobject_cast<const QtMimeData*>(pMimeData)
                               ? css::datatransfer::dnd::DNDConstants::ACTION_MOVE
                               : css::datatransfer::dnd::DNDConstants::ACTION_COPY;
         nUserDropAction &= nSourceActions;

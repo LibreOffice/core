@@ -275,7 +275,7 @@ void QtWidget::wheelEvent(QWheelEvent* pEvent)
 
 void QtWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (dynamic_cast<const QtMimeData*>(event->mimeData()))
+    if (qobject_cast<const QtMimeData*>(event->mimeData()))
         event->accept();
     else
         event->acceptProposedAction();

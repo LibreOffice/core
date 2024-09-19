@@ -16,6 +16,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstance.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMenu.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtTransferable.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtObject.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtTimer.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtWidget.moc \
