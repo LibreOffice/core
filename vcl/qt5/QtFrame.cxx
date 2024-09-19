@@ -410,32 +410,36 @@ void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed *
 
 void QtFrame::Show(bool bVisible, bool bNoActivate)
 {
+    SolarMutexGuard g;
+    QtInstance* pQtInstance = GetQtInstance();
+    assert(pQtInstance);
+    if (!pQtInstance->IsMainThread())
+    {
+        pQtInstance->RunInMainThread([&] { Show(bVisible, bNoActivate); });
+        return;
+    }
+
     assert(m_pQWidget);
     if (bVisible == asChild()->isVisible())
         return;
 
-    auto* pSalInst(GetQtInstance());
-    assert(pSalInst);
-
     if (!bVisible) // hide
     {
-        pSalInst->RunInMainThread([this]() { asChild()->setVisible(false); });
+        asChild()->setVisible(false);
         return;
     }
 
     // show
     SetDefaultSize();
 
-    pSalInst->RunInMainThread([this, bNoActivate]() {
-        QWidget* const pChild = asChild();
-        pChild->setVisible(true);
-        pChild->raise();
-        if (!bNoActivate)
-        {
-            pChild->activateWindow();
-            pChild->setFocus();
-        }
-    });
+    QWidget* const pChild = asChild();
+    pChild->setVisible(true);
+    pChild->raise();
+    if (!bNoActivate)
+    {
+        pChild->activateWindow();
+        pChild->setFocus();
+    }
 }
 
 void QtFrame::SetMinClientSize(tools::Long nWidth, tools::Long nHeight)
