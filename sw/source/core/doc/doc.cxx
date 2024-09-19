@@ -53,6 +53,7 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <officecfg/Office/Writer.hxx>
@@ -1491,6 +1492,32 @@ void SwDoc::ForEachCharacterBrushItem( const std::function<bool(const SvxBrushIt
             if (const SvxBrushItem* pItem = rxItemSet->GetItemIfSet(RES_CHRATR_BACKGROUND))
                 if (!rFunc(*pItem))
                     return;
+    }
+}
+
+/// Iterate over all RES_TXTATR_UNKNOWN_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTextNode())
+            continue;
+        SwTextNode* pTextNode = pNode->GetTextNode();
+        if (!pTextNode->HasHints())
+            continue;
+        SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t j = 0; j < rHints.Count(); ++j)
+        {
+            const SwTextAttr* pTextAttr = rHints.Get(j);
+            if (pTextAttr->Which() != RES_TXTATR_AUTOFMT)
+                continue;
+            const SwFormatAutoFormat& rFmt = pTextAttr->GetAutoFormat();
+            if (const SvXMLAttrContainerItem* pItem = rFmt.GetStyleHandle()->GetItemIfSet(RES_TXTATR_UNKNOWN_CONTAINER))
+                if (!rFunc(*pItem))
+                    return;
+        }
     }
 }
 

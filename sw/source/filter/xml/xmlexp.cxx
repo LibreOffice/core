@@ -135,14 +135,27 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
         GetTextParagraphExport()->SetBlockMode( m_bBlock );
 
+        pDoc->ForEachTxtAtrContainerItem([this](const SvXMLAttrContainerItem& rUnknown) -> bool {
+            if( rUnknown.GetAttrCount() > 0 )
+            {
+                sal_uInt16 nIdx = rUnknown.GetFirstNamespaceIndex();
+                while( USHRT_MAX != nIdx )
+                {
+                    GetNamespaceMap_().Add( rUnknown.GetPrefix( nIdx ),
+                                        rUnknown.GetNamespace( nIdx ) );
+                    nIdx = rUnknown.GetNextNamespaceIndex( nIdx );
+                }
+            }
+            return true;
+        });
+
         const SfxItemPool& rPool = pDoc->GetAttrPool();
-        sal_uInt16 aWhichIds[5] = { RES_UNKNOWNATR_CONTAINER,
-                                    RES_TXTATR_UNKNOWN_CONTAINER,
+        sal_uInt16 aWhichIds[4] = { RES_UNKNOWNATR_CONTAINER,
                                     SDRATTR_XMLATTRIBUTES,
                                     EE_PARA_XMLATTRIBS,
                                     EE_CHAR_XMLATTRIBS };
 
-        const int nWhichIds = rPool.GetSecondaryPool() ? 5 : 2;
+        const int nWhichIds = rPool.GetSecondaryPool() ? 4 : 1;
         for( int j=0; j < nWhichIds; ++j )
         {
             const sal_uInt16 nWhichId = aWhichIds[j];
