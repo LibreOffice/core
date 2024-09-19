@@ -10,10 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_karla,font_karla))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_karla,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	Karla-Italic.ttf \
-	Karla-Regular.ttf \
-	Karla-BoldItalic.ttf \
-	Karla-Bold.ttf \
+	fonts/ttf/Karla-Italic.ttf \
+	fonts/ttf/Karla-Regular.ttf \
+	fonts/ttf/Karla-BoldItalic.ttf \
+	fonts/ttf/Karla-Bold.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
