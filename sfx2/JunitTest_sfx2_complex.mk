@@ -31,7 +31,6 @@ $(eval $(call gb_JunitTest_use_jars,sfx2_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
-    sfx2/qa/complex/sfx2/DocumentMetadataAccess \
     sfx2/qa/complex/sfx2/DocumentProperties \
     sfx2/qa/complex/sfx2/GlobalEventBroadcaster \
     sfx2/qa/complex/sfx2/UndoManager \
@@ -50,7 +49,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
 
 $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
     complex.sfx2.DocumentProperties \
-    complex.sfx2.DocumentMetadataAccess \
     complex.sfx2.DocumentEvents \
     complex.sfx2.UndoManager \
 ))
