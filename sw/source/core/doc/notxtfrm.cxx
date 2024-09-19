@@ -1417,12 +1417,13 @@ void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
     const Point aPosition(rAlignedGrfArea.Pos());
     const Size aSize(rAlignedGrfArea.SSize());
 
+    uno::Reference<embed::XEmbeddedObject> xObj = pOLENd->GetOLEObj().GetOleRef();
+
     if ( pGraphic && pGraphic->GetType() != GraphicType::NONE )
     {
         pGraphic->Draw(*pOut, aPosition, aSize);
 
         // shade the representation if the object is activated outplace
-        uno::Reference < embed::XEmbeddedObject > xObj = pOLENd->GetOLEObj().GetOleRef();
         if ( xObj.is() && xObj->getCurrentState() == embed::EmbedStates::ACTIVE )
         {
 
@@ -1441,7 +1442,7 @@ void SwNoTextFrame::ImplPaintPictureBitmap( vcl::RenderContext* pOut,
             pOut);
     }
 
-    sal_Int64 nMiscStatus = pOLENd->GetOLEObj().GetOleRef()->getStatus( pOLENd->GetAspect() );
+    sal_Int64 nMiscStatus = xObj ? xObj->getStatus(pOLENd->GetAspect()) : 0;
     if ( !bPrn && dynamic_cast< const SwCursorShell *>( pShell ) !=  nullptr &&
             (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
     {
