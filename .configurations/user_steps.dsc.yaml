@@ -1,0 +1,229 @@
+# yaml-language-server: $schema=https://aka.ms/configuration-dsc-schema/0.2
+
+# configuration to setup the dependencies in ~/lo and add make, jom and clang-format to ~/bin
+# and install a wsl distro with the required packages
+# this configuration is meant to be applied as the build user, and after the admin_java_and_deps one
+# has been applied. It also creates a ~/lo/autogen.input with some sensible defaults that can be
+# used as a template for own modifications
+
+properties:
+  assertions:
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: prerequisitecheck
+      directives:
+        description: check that everything had been downloaded by the admin-step
+      settings:
+        GetScript: return $false
+        SetSCript: return $false
+        # the empty string element is so that each file can be specified with trailing comma
+        TestScript: |
+          $files = @(
+              "WindowsUCRT.zip",
+              "apache-ant-1.10.15-bin.zip",
+              "clang-format-5.0.0-win.exe",
+              "jom_1_1_4.zip",
+              "junit-4.10.jar",
+              "make-4.2.1-msvc.exe",
+              "strawberry-perl-5.40.0.1-64bit-portable.zip",
+          "")
+          !(($files | foreach {Test-Path "$env:PUBLIC/Downloads/$_"}) -contains $false)
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: wsl-check
+      directives:
+        description: check that wsl utility is avilable/working - i.e. whehter wsl is installed
+      settings:
+        TestScript: wsl.exe --status ; return ![bool]$LASTEXITCODE
+        GetScript: return $false
+        SetScript: return $false
+  resources:
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: bindir
+      directives:
+        description: create the ~/bin directory
+      settings:
+        TestScript: Test-Path -Path "$env:UserProfile/bin" -PathType "Container"
+        GetScript:  Test-Path -Path "$env:UserProfile/bin" -PathType "Container"
+        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name "bin"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: lodir
+      directives:
+        description: create the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:UserProfile/lo" -PathType "Container"
+        GetScript:  Test-Path -Path "$env:UserProfile/lo" -PathType "Container"
+        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name "lo"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: make
+      dependsOn:
+        - bindir
+      directives:
+        description: copy make.exe to the ~/bin directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/bin/make.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/bin/make.exe"
+        SetScript: Copy-Item -Path "$env:PUBLIC/Downloads/make-4.2.1-msvc.exe" -Destination "$env:USERPROFILE/bin/make.exe"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: clang-format
+      dependsOn:
+        - bindir
+      directives:
+        description: copy clang-format.exe to the ~/bin directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/bin/clang-format.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/bin/clang-format.exe"
+        SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/clang-format-5.0.0-win.exe" -Destination "$env:USERPROFILE/bin/clang-format.exe"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: junit
+      dependsOn:
+        - lodir
+      directives:
+        description: copy junit to the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/junit-4.10.jar"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/junit-4.10.jar"
+        SetScript: Copy-Item -LiteralPath "$env:PUBLIC/Downloads/junit-4.10.jar" -Destination "$env:USERPROFILE/lo/junit-4.10.jar"
+    # the DSC Archive module doesn't operate with $env:FOO / would need hardcoded paths
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: ant-extract
+      dependsOn:
+        - lodir
+      directives:
+        description: extract ant to the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/apache-ant-1.10.15/bin/ant"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/apache-ant-1.10.15-bin.zip" -Destination "$env:USERPROFILE/lo/"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: ucrt-extract
+      dependsOn:
+        - lodir
+      directives:
+        description: extract ucrts to the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/ucrt/Windows8.1-KB2999226-x64.msu"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/ucrt/Windows8.1-KB2999226-x64.msu"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/WindowsUCRT.zip" -Destination "$env:USERPROFILE/lo/ucrt"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: spp-extract
+      dependsOn:
+        - lodir
+      directives:
+        description: extract strawberry-perl-portable to the ~/lo directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/spp/perl/bin/perl.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/spp/perl/bin/perl.exe"
+        SetScript: Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/strawberry-perl-5.40.0.1-64bit-portable.zip" -Destination "$env:USERPROFILE/lo/spp"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: spp-install-font-ttf
+      dependsOn:
+        - spp-extract
+      directives:
+        description: install perl-font-TTF to spp via cpan
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/spp/perl/site/lib/Font/TTF.pm"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/spp/perl/site/lib/Font/TTF.pm"
+        SetScript: |
+          $env:Path = "$env:USERPROFILE/lo/spp/c/bin;$env:USERPROFILE/lo/spp/perl/bin;$env:path"
+          cpanm Font::TTF
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: jom
+      dependsOn:
+        - bindir
+        - lodir
+      directives:
+        description: extract and copy jom to the ~/bin directory
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/bin/jom.exe"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/bin/jom.exe"
+        SetScript: |
+          Expand-Archive -LiteralPath "$env:PUBLIC/Downloads/jom_1_1_4.zip" -Destination "$env:USERPROFILE/lo/jom_unpack"
+          Copy-Item -LiteralPath "$env:USERPROFILE/lo/jom_unpack/jom.exe" -Destination "$env:USERPROFILE/bin/jom.exe"
+          Remove-Item -LiteralPath "$env:USERPROFILE/lo/jom_unpack" -Recurse
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: gitsettings
+      directives:
+        description: configure git to use protocol.version 2 and core.autocrlf false
+      settings:
+        TestScript: return $false
+        GetScript:  return $false
+        SetScript: |
+          git config --global core.autocrlf false
+          git config --global protocol.version 2
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: autogensnippet
+      dependsOn:
+        - lodir
+      directives:
+        description: create an autogen.input snippet with some sensible defaults
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/lo/autogen.input"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/lo/autogen.input"
+        SetScript: |
+          New-Item -Path "$env:USERPROFILE/lo" -Name "autogen.input" -ItemType "file" -Value "# adjust to your needs
+          --host=x86_64-pc-cygwin
+          #--host=i686-pc-cygwin
+          --disable-ccache
+          --with-visual-studio=2022
+          --enable-python=fully-internal
+          --without-lxml
+          --disable-online-update
+          --with-external-tar=$env:USERPROFILE\lo\lo-externaltar
+          --with-strawberry-perl-portable=$env:USERPROFILE\lo\spp
+          --with-ant-home=$env:USERPROFILE\lo\apache-ant-1.10.15
+          --with-junit=$env:USERPROFILE\lo\junit-4.10.jar
+          --with-doxygen=$env:USERPROFILE\lo\spp\c\bin\doxygen.exe
+          --with-ucrt-dir=$env:USERPROFILE\lo\ucrt
+          #--enable-odk
+          #--disable-dependency-tracking
+          #--enable-dbgutil
+          #--with-lang=fr ja
+          "
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: cloud-init-dir
+      directives:
+        description: create the ~/.cloud-init directory
+      settings:
+        TestScript: Test-Path -Path "$env:UserProfile/.cloud-init" -PathType "Container"
+        GetScript:  Test-Path -Path "$env:UserProfile/.cloud-init" -PathType "Container"
+        SetScript: New-Item -ItemType "directory" -Path "$env:UserProfile" -Name ".cloud-init"
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: cloud-init-config
+      dependsOn:
+        - cloud-init-dir
+      directives:
+        description: create a cloud-init configuration to automate the installation of Ubuntu 24.04
+      settings:
+        TestScript: Test-Path -Path "$env:USERPROFILE/.cloud-init/Ubuntu-24.04.user-data"
+        GetScript:  Test-Path -Path "$env:USERPROFILE/.cloud-init/Ubuntu-24.04.user-data"
+        SetScript: |
+          New-Item -Path "$env:USERPROFILE/.cloud-init" -Name "Ubuntu-24.04.user-data" -ItemType "file" -Value '#cloud-config
+          users:
+            - name: ubuntu
+              # ubuntu
+              password: "$6$exDY1mhS4KUYCE/2$zmn9ToZwTKLhCw.b4/b.ZRTIZM30JZ4QrOQ2aOXJ8yk96xpcCof0kxKwuX1kqLG/ygbJ1f8wxED22bTL4F46P0"
+              groups: [user, adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev]
+              shell: /bin/bash
+
+          write_files:
+          - path: /etc/wsl.conf
+            append: true
+            content: |
+              [user]
+              default=ubuntu
+
+          packages: [pkg-config, automake, make, gperf, bison, nasm, flex, zip, libfont-ttf-perl]
+          '
+    - resource: xPSDesiredStateConfiguration/xScript
+      id: install-Ubuntu
+      dependsOn:
+        - cloud-init-config
+      directives:
+        description: installs Ubuntu with help of the cloud-init file
+      settings:
+        TestScript: wsl.exe --list ; return ![bool]$LASTEXITCODE
+        GetScript:  wsl.exe --list ; return ![bool]$LASTEXITCODE
+        SetScript: |
+          wsl.exe --install --no-launch --distribution Ubuntu-24.04
+          ubuntu2404.exe install --root
+          ubuntu2404.exe run cloud-init status --wait
+  configurationVersion: 0.2.0
