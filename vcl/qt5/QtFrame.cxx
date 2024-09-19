@@ -178,16 +178,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
 
-    QWindow* pChildWindow = windowHandle();
-    connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
-
-    if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
-    {
-        QWindow* pParentWindow = pParent->windowHandle();
-        if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
-            pChildWindow->setTransientParent(pParentWindow);
-    }
-
     SetIcon(SV_ICON_ID_OFFICE);
 }
 
@@ -427,6 +417,17 @@ void QtFrame::Show(bool bVisible, bool bNoActivate)
     {
         asChild()->setVisible(false);
         return;
+    }
+
+    QWindow* pChildWindow = windowHandle();
+    connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged,
+            Qt::UniqueConnection);
+
+    if (m_pParent && !(m_pParent->m_nStyle & SalFrameStyleFlags::PLUG))
+    {
+        QWindow* pParentWindow = m_pParent->windowHandle();
+        if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
+            pChildWindow->setTransientParent(pParentWindow);
     }
 
     // show
