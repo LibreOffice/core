@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963_ODF)
                 0);
 
     // Save to ODF_LATEST which is currently (Sep 2024) ODF 1.3 extended.
-    // Adapt to a concrete version when attribute contains-footer is availabe in ODF strict.
+    // Adapt to a concrete version when attribute contains-footer is available in ODF strict.
     // Make sure attribute is written in calcext namespace
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
     save(u"calc8"_ustr);
