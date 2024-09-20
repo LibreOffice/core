@@ -42,7 +42,7 @@ public class CommandMetaData extends DBMetaData
     public FieldColumn[] FieldColumns = new FieldColumn[]
     {
     };
-    public String[] GroupFieldNames = new String[]
+    private String[] GroupFieldNames = new String[]
     {
     };
     private String[][] SortFieldNames = new String[][]

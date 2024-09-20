@@ -280,8 +280,8 @@ public class QueryWizard extends DatabaseObjectWizard
                 if (m_DBMetaData.xDBMetaData.supportsGroupBy())
                 {
                     m_DBMetaData.setGroupFieldNames(m_groupFieldSelection.getSelectedFieldNames());
-                    m_DBMetaData.GroupFieldNames = JavaTools.removeOutdatedFields(m_DBMetaData.GroupFieldNames, m_DBMetaData.NonAggregateFieldNames);
-                    m_DBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.GroupFieldNames);
+                    m_DBMetaData.setGroupFieldNames(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupFieldNames(), m_DBMetaData.NonAggregateFieldNames));
+                    m_DBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
                 }
             }
             switch (nNewStep)

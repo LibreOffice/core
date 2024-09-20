@@ -63,7 +63,7 @@ public class SQLQueryComposer
 
     private boolean addtoSelectClause(String DisplayFieldName) throws SQLException
     {
-        return !(bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.GroupFieldNames != null && JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, DisplayFieldName) > -1);
+        return !(bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.getGroupFieldNames() != null && JavaTools.FieldInList(CurDBMetaData.getGroupFieldNames(), DisplayFieldName) > -1);
         }
 
     public String getSelectClause(boolean _baddAliasFieldNames) throws SQLException
@@ -199,9 +199,9 @@ public class SQLQueryComposer
 
     private void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
     {
-        for (int i = 0; i < CurDBMetaData.GroupFieldNames.length; i++)
+        for (int i = 0; i < CurDBMetaData.getGroupFieldNames().length; i++)
         {
-            XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.GroupFieldNames[i], _baddAliasFieldNames);
+            XPropertySet xColumn = CurDBMetaData.getColumnObjectByFieldName(CurDBMetaData.getGroupFieldNames()[i], _baddAliasFieldNames);
             m_queryComposer.appendGroupByColumn(xColumn);
         }
     }

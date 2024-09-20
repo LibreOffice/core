@@ -193,7 +193,7 @@ public class RecordParser extends QueryMetaData
                     throw new InvalidQueryException(xMSF, Command);
                 }
             }
-            GroupFieldColumns = getFieldColumnList(GroupFieldNames);
+            GroupFieldColumns = getFieldColumnList(getGroupFieldNames());
             RecordFieldColumns = getFieldColumnList(getRecordFieldNames());
             return true;
         }

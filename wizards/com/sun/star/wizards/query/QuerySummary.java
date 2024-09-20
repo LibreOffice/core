@@ -64,7 +64,7 @@ public class QuerySummary extends QueryMetaData
             sFilterFraction = combineFilterNameFraction(this.getFilterConditions(), "RID_QUERY_53", "RID_QUERY_54") + sReturnChar;
             if (xDBMetaData.supportsGroupBy())
             {
-                sGroupByFraction = combinePartString("RID_QUERY_57", GroupFieldNames, "RID_QUERY_58") + sReturnChar;
+                sGroupByFraction = combinePartString("RID_QUERY_57", getGroupFieldNames(), "RID_QUERY_58") + sReturnChar;
                 sHavingFraction = combineFilterNameFraction(getGroupByFilterConditions(), "RID_QUERY_59", "RID_QUERY_60");
             }
             // TODO: remove the last return from the string

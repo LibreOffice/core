@@ -143,7 +143,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         m_aDoc.setLayoutSectionsVisible(false);
         XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.xTextDocument.getText());
         xTextCursor.gotoStart(false);
-        for (int i = 0; i < getRecordParser().GroupFieldNames.length; i++)
+        for (int i = 0; i < getRecordParser().getGroupFieldNames().length; i++)
         {
             XNamed xNamedTextSection = addLinkedTextSection(xTextCursor, ReportTextDocument.GROUPSECTION + Integer.toString(i + 1), null, null);
             xNamedTextSection.setName(ReportTextDocument.COPYOFGROUPSECTION + (i + 1));
@@ -237,7 +237,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                     getRecordParser().setSortFieldNames(sortFieldNames);
                 }
                 getRecordParser().setRecordFieldNames(sNewList);
-                getRecordParser().GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, PropertyNames.SEMI_COLON);
+                getRecordParser().setGroupFieldNames(JavaTools.ArrayoutofString(sGroupFieldNames, PropertyNames.SEMI_COLON));
                 int nOrigCommandType = Integer.parseInt(sCommandType);
                 getRecordParser().setCommandType(nOrigCommandType);
 
@@ -330,7 +330,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             getDoc().removeNonLayoutTextTables();
             addTextSectionCopies();
             getDoc().getallDBColumns();
-            int GroupFieldCount = getRecordParser().GroupFieldNames.length;
+            int GroupFieldCount = getRecordParser().getGroupFieldNames().length;
             int FieldCount = getRecordParser().FieldColumns.length;
             Object[] OldGroupFieldValues = new Object[GroupFieldCount];
             int RecordFieldCount = FieldCount - GroupFieldCount;

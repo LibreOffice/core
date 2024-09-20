@@ -67,7 +67,7 @@ public class GroupFieldHandler extends FieldSelection
 
     private boolean isGroupField(String _FieldName)
     {
-        return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
+        return (JavaTools.FieldInList(CurDBMetaData.getGroupFieldNames(), _FieldName) != -1);
     }
 
     public void initialize()
@@ -112,7 +112,7 @@ public class GroupFieldHandler extends FieldSelection
     {
         String[] GroupFieldNames = new String[GroupFieldVector.size()];
         GroupFieldVector.toArray(GroupFieldNames);
-        CurDBMetaData.GroupFieldNames = GroupFieldNames;
+        CurDBMetaData.setGroupFieldNames(GroupFieldNames);
     }
     // @Override
     @Override

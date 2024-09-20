@@ -318,7 +318,7 @@ public class AggregateComponent extends ControlScroller
         boolean benabletherest = true;
         boolean benableGroupPage = isGroupingpossible();
         CurUnoDialog.setStepEnabled(UIConsts.SOGROUPSELECTIONPAGE, benableGroupPage);
-        CurUnoDialog.setStepEnabled(UIConsts.SOGROUPFILTERPAGE, benableGroupPage && CurDBMetaData.GroupFieldNames.length > 0);
+        CurUnoDialog.setStepEnabled(UIConsts.SOGROUPFILTERPAGE, benableGroupPage && CurDBMetaData.getGroupFieldNames().length > 0);
         if (isAggregateComponentEnabled())
         {
             benabletherest = hasonlycompletefunctions();
