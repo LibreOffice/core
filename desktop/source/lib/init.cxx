@@ -803,48 +803,6 @@ static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
 namespace {
 
-std::string extractCertificate(const std::string & certificate)
-{
-    static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
-    static constexpr std::string_view footer("-----END CERTIFICATE-----");
-
-    std::string result;
-
-    size_t pos1 = certificate.find(header);
-    if (pos1 == std::string::npos)
-        return result;
-
-    size_t pos2 = certificate.find(footer, pos1 + 1);
-    if (pos2 == std::string::npos)
-        return result;
-
-    pos1 = pos1 + header.length();
-    pos2 = pos2 - pos1;
-
-    return certificate.substr(pos1, pos2);
-}
-
-std::string extractPrivateKey(const std::string & privateKey)
-{
-    static constexpr std::string_view header("-----BEGIN PRIVATE KEY-----");
-    static constexpr std::string_view footer("-----END PRIVATE KEY-----");
-
-    std::string result;
-
-    size_t pos1 = privateKey.find(header);
-    if (pos1 == std::string::npos)
-        return result;
-
-    size_t pos2 = privateKey.find(footer, pos1 + 1);
-    if (pos2 == std::string::npos)
-        return result;
-
-    pos1 = pos1 + header.length();
-    pos2 = pos2 - pos1;
-
-    return privateKey.substr(pos1, pos2);
-}
-
 OUString lcl_getCurrentDocumentMimeType(const LibLODocument_Impl* pDocument)
 {
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
@@ -3177,47 +3135,9 @@ static bool lo_signDocument(LibreOfficeKit* /*pThis*/,
     if (!xContext.is())
         return false;
 
-    uno::Sequence<sal_Int8> aCertificateSequence;
-
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aCertificateBase64String = extractCertificate(aCertificateString);
-    if (!aCertificateBase64String.empty())
-    {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
-        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
-    }
-    else
-    {
-        aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
-    }
-
-    uno::Sequence<sal_Int8> aPrivateKeySequence;
     std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeyBinarySize);
-    std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
-    if (!aPrivateKeyBase64String.empty())
-    {
-        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
-        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
-    }
-    else
-    {
-        aPrivateKeySequence.realloc(nPrivateKeyBinarySize);
-        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeyBinarySize, aPrivateKeySequence.getArray());
-    }
-
-    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-    if (!xSecurityContext.is())
-        return false;
-
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
-    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
-
-    if (!xCertificateCreator.is())
-        return false;
-
-    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
+    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
 
     if (!xCertificate.is())
         return false;
@@ -7302,48 +7222,9 @@ static bool doc_insertCertificate(LibreOfficeKitDocument* pThis,
     if (!pObjectShell)
         return false;
 
-    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
-    if (!xSecurityContext.is())
-        return false;
-
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
-    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
-
-    if (!xCertificateCreator.is())
-        return false;
-
-    uno::Sequence<sal_Int8> aCertificateSequence;
-
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aCertificateBase64String = extractCertificate(aCertificateString);
-    if (!aCertificateBase64String.empty())
-    {
-        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
-        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
-    }
-    else
-    {
-        aCertificateSequence.realloc(nCertificateBinarySize);
-        std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
-    }
-
-    uno::Sequence<sal_Int8> aPrivateKeySequence;
     std::string aPrivateKeyString(reinterpret_cast<const char*>(pPrivateKeyBinary), nPrivateKeySize);
-    std::string aPrivateKeyBase64String = extractPrivateKey(aPrivateKeyString);
-    if (!aPrivateKeyBase64String.empty())
-    {
-        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
-        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
-    }
-    else
-    {
-        aPrivateKeySequence.realloc(nPrivateKeySize);
-        std::copy(pPrivateKeyBinary, pPrivateKeyBinary + nPrivateKeySize, aPrivateKeySequence.getArray());
-    }
-
-    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
-
+    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aCertificateString, aPrivateKeyString);
     if (!xCertificate.is())
         return false;
 
@@ -7388,7 +7269,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
     uno::Sequence<sal_Int8> aCertificateSequence;
 
     std::string aCertificateString(reinterpret_cast<const char*>(pCertificateBinary), nCertificateBinarySize);
-    std::string aCertificateBase64String = extractCertificate(aCertificateString);
+    std::string aCertificateBase64String = SfxLokHelper::extractCertificate(aCertificateString);
     if (!aCertificateBase64String.empty())
     {
         OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
