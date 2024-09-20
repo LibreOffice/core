@@ -1160,15 +1160,17 @@ void AddressMultiLineEdit::SetText( const OUString& rStr )
 
     }
     // add two empty paragraphs at the end
-    if(m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW ||
-            m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT)
+    if (nParaCount > 0)
     {
-        sal_Int32 nLastLen = m_xEditEngine->GetText(nParaCount - 1).getLength();
-        if(nLastLen)
+        if(m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_NEW ||
+                m_pParentDialog->m_eType == SwCustomizeAddressBlockDialog::ADDRESSBLOCK_EDIT)
         {
-            int nPara = nParaCount ? nParaCount - 1 : 0;
-            ESelection aPaM(nPara, nLastLen, nPara, nLastLen);
-            m_xEditEngine->QuickInsertText(u"\n \n "_ustr, aPaM);
+            sal_Int32 nLastLen = m_xEditEngine->GetText(nParaCount - 1).getLength();
+            if (nLastLen)
+            {
+                ESelection aPaM(nParaCount - 1, nLastLen, nParaCount - 1, nLastLen);
+                m_xEditEngine->QuickInsertText(u"\n \n "_ustr, aPaM);
+            }
         }
     }
 
