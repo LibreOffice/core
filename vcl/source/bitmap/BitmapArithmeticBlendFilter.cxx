@@ -26,8 +26,8 @@ BitmapArithmeticBlendFilter::BitmapArithmeticBlendFilter(BitmapEx const& rBitmap
 
 BitmapArithmeticBlendFilter::~BitmapArithmeticBlendFilter() {}
 
-static sal_uInt8 lcl_calculate(sal_uInt8 cColor, sal_uInt8 cColor2, double nK1, double nK2,
-                               double nK3, double nK4)
+static sal_uInt8 lcl_calculate(const sal_uInt8 cColor, const sal_uInt8 cColor2, const double nK1,
+                               const double nK2, const double nK3, const double nK4)
 {
     const double i1 = cColor / 255.0;
     const double i2 = cColor2 / 255.0;
@@ -41,10 +41,10 @@ BitmapEx BitmapArithmeticBlendFilter::execute(BitmapEx const& rBitmapEx) const
     if (rBitmapEx.IsEmpty() || maBitmapEx2.IsEmpty())
         return BitmapEx();
 
-    Size aSize = rBitmapEx.GetBitmap().GetSizePixel();
-    Size aSize2 = maBitmapEx2.GetBitmap().GetSizePixel();
-    sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
-    sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
+    const Size aSize = rBitmapEx.GetBitmap().GetSizePixel();
+    const Size aSize2 = maBitmapEx2.GetBitmap().GetSizePixel();
+    const sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
+    const sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
 
     Bitmap aDstBitmap(Size(nWidth, nHeight), vcl::PixelFormat::N24_BPP);
     Bitmap aDstAlpha(AlphaMask(Size(nWidth, nHeight)).GetBitmap());
@@ -56,14 +56,16 @@ BitmapEx BitmapArithmeticBlendFilter::execute(BitmapEx const& rBitmapEx) const
     {
         Scanline pScanline = pWriteAccess->GetScanline(y);
         Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
+
         for (tools::Long x = 0; x < nWidth; ++x)
         {
-            BitmapColor i1 = vcl::bitmap::premultiply(rBitmapEx.GetPixelColor(x, y));
-            BitmapColor i2 = vcl::bitmap::premultiply(maBitmapEx2.GetPixelColor(x, y));
-            sal_uInt8 r(lcl_calculate(i1.GetRed(), i2.GetRed(), mnK1, mnK2, mnK3, mnK4));
-            sal_uInt8 g(lcl_calculate(i1.GetGreen(), i2.GetGreen(), mnK1, mnK2, mnK3, mnK4));
-            sal_uInt8 b(lcl_calculate(i1.GetBlue(), i2.GetBlue(), mnK1, mnK2, mnK3, mnK4));
-            sal_uInt8 a(lcl_calculate(i1.GetAlpha(), i2.GetAlpha(), mnK1, mnK2, mnK3, mnK4));
+            const BitmapColor i1 = vcl::bitmap::premultiply(rBitmapEx.GetPixelColor(x, y));
+            const BitmapColor i2 = vcl::bitmap::premultiply(maBitmapEx2.GetPixelColor(x, y));
+
+            const sal_uInt8 r(lcl_calculate(i1.GetRed(), i2.GetRed(), mnK1, mnK2, mnK3, mnK4));
+            const sal_uInt8 g(lcl_calculate(i1.GetGreen(), i2.GetGreen(), mnK1, mnK2, mnK3, mnK4));
+            const sal_uInt8 b(lcl_calculate(i1.GetBlue(), i2.GetBlue(), mnK1, mnK2, mnK3, mnK4));
+            const sal_uInt8 a(lcl_calculate(i1.GetAlpha(), i2.GetAlpha(), mnK1, mnK2, mnK3, mnK4));
 
             pWriteAccess->SetPixelOnData(
                 pScanline, x, vcl::bitmap::unpremultiply(BitmapColor(ColorAlpha, r, g, b, a)));
