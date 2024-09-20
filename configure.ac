@@ -3582,7 +3582,6 @@ if test "$_os" != "WINNT"; then
         GCC_HOME="$with_gcc_home"
     fi
     AC_MSG_RESULT($GCC_HOME)
-    AC_SUBST(GCC_HOME)
 
     if test "$GCC_HOME_SET" = "true"; then
         if test -z "$CC"; then
