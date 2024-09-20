@@ -37,6 +37,8 @@ constexpr OUStringLiteral STR_INTEGER = u"Integer";
 constexpr OUStringLiteral STR_TIMEOUT = u"Timeout";
 constexpr OUStringLiteral STR_EPSILONLEVEL = u"EpsilonLevel";
 constexpr OUStringLiteral STR_LIMITBBDEPTH = u"LimitBBDepth";
+constexpr OUStringLiteral STR_GEN_SENSITIVITY = u"GenSensitivityReport";
+constexpr OUStringLiteral STR_SENSITIVITY_REPORT = u"SensitivityReport";
 
 
 //  Resources from tools are used for translated strings
@@ -64,7 +66,9 @@ namespace
         PROP_INTEGER,
         PROP_TIMEOUT,
         PROP_EPSILONLEVEL,
-        PROP_LIMITBBDEPTH
+        PROP_LIMITBBDEPTH,
+        PROP_GEN_SENSITIVITY,
+        PROP_SENSITIVITY_REPORT
     };
 }
 
@@ -95,15 +99,20 @@ SolverComponent::SolverComponent() :
     mnTimeout( 100 ),
     mnEpsilonLevel( 0 ),
     mbLimitBBDepth( true ),
+    mbGenSensitivity(false),
     mbSuccess( false ),
     mfResultValue( 0.0 )
 {
     // for XPropertySet implementation:
-    registerProperty( STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,  cppu::UnoType<decltype(mbNonNegative)>::get()  );
-    registerProperty( STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,      cppu::UnoType<decltype(mbInteger)>::get()      );
-    registerProperty( STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,      cppu::UnoType<decltype(mnTimeout)>::get()      );
-    registerProperty( STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel, cppu::UnoType<decltype(mnEpsilonLevel)>::get() );
-    registerProperty( STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth, cppu::UnoType<decltype(mbLimitBBDepth)>::get() );
+    registerProperty(STR_NONNEGATIVE,  PROP_NONNEGATIVE,  0, &mbNonNegative,    cppu::UnoType<decltype(mbNonNegative)>::get());
+    registerProperty(STR_INTEGER,      PROP_INTEGER,      0, &mbInteger,        cppu::UnoType<decltype(mbInteger)>::get());
+    registerProperty(STR_TIMEOUT,      PROP_TIMEOUT,      0, &mnTimeout,        cppu::UnoType<decltype(mnTimeout)>::get());
+    registerProperty(STR_EPSILONLEVEL, PROP_EPSILONLEVEL, 0, &mnEpsilonLevel,   cppu::UnoType<decltype(mnEpsilonLevel)>::get());
+    registerProperty(STR_LIMITBBDEPTH, PROP_LIMITBBDEPTH, 0, &mbLimitBBDepth,   cppu::UnoType<decltype(mbLimitBBDepth)>::get());
+    registerProperty(STR_GEN_SENSITIVITY, PROP_GEN_SENSITIVITY, 0, &mbGenSensitivity, cppu::UnoType<decltype(mbGenSensitivity)>::get());
+
+    // Sensitivity report
+    registerProperty(STR_SENSITIVITY_REPORT, PROP_SENSITIVITY_REPORT, 0, &m_aSensitivityReport, cppu::UnoType<decltype(m_aSensitivityReport)>::get());
 }
 
 SolverComponent::~SolverComponent()
@@ -157,6 +166,9 @@ OUString SAL_CALL SolverComponent::getPropertyDescription( const OUString& rProp
             break;
         case PROP_LIMITBBDEPTH:
             pResId = RID_PROPERTY_LIMITBBDEPTH;
+            break;
+        case PROP_GEN_SENSITIVITY:
+            pResId = RID_PROPERTY_SENSITIVITY;
             break;
         default:
             {

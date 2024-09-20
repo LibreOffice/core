@@ -24,6 +24,7 @@
 #include "docsh.hxx"
 #include <SolverSettings.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/table/CellAddress.hpp>
 
 #include <string_view>
 #include <vector>
@@ -156,6 +157,9 @@ private:
     bool    IsEngineAvailable(std::u16string_view sEngineName);
 
     static sc::ConstraintOperator OperatorIndexToConstraintOperator(sal_Int32 nIndex);
+
+    // Return the string representation of a css::table::CellAddress
+    OUString GetCellStrAddress(css::table::CellAddress aUnoAddress);
 
     DECL_LINK( BtnHdl, weld::Button&, void );
     DECL_LINK( DelBtnHdl, weld::Button&, void );

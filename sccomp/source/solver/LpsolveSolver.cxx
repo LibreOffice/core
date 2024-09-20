@@ -37,6 +37,7 @@
  ************************************************************************/
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #undef LANGUAGE_NONE
 #if defined _WIN32
@@ -106,6 +107,10 @@ void SAL_CALL LpsolveSolver::solve()
     const auto & aVariableCells = maVariables;
     size_t nVariables = aVariableCells.size();
     size_t nVar = 0;
+
+    // Store all RHS values
+    sal_uInt32 nConstraints = maConstraints.size();
+    m_aConstrRHS.realloc(nConstraints);
 
     // collect all dependent cells
 
@@ -197,6 +202,9 @@ void SAL_CALL LpsolveSolver::solve()
 
     set_add_rowmode(lp, TRUE);
 
+    sal_uInt32 nConstrCount(0);
+    double* pConstrRHS = m_aConstrRHS.getArray();
+
     for (const auto& rConstr : maConstraints)
     {
         // integer constraints are set later
@@ -237,6 +245,9 @@ void SAL_CALL LpsolveSolver::solve()
             else
                 fRightValue += fDirectValue;
 
+            // Remember the RHS value used for sensitivity analysis later
+            pConstrRHS[nConstrCount] = fRightValue;
+
             int nConstrType = LE;
             switch ( eOp )
             {
@@ -247,6 +258,7 @@ void SAL_CALL LpsolveSolver::solve()
                     OSL_FAIL( "unexpected enum type" );
             }
             add_constraint( lp, pValues.get(), nConstrType, fRightValue );
+            nConstrCount++;
         }
     }
 
@@ -311,6 +323,112 @@ void SAL_CALL LpsolveSolver::solve()
         std::copy_n(pResultVar, nVariables, maSolution.getArray());
 
         mfResultValue = get_objective( lp );
+
+        // Initially set to false because getting the report might fail
+        m_aSensitivityReport.HasReport = false;
+
+        // Get sensitivity report if the user set SensitivityReport parameter to true
+        if (mbGenSensitivity)
+        {
+            // Get sensitivity data about the objective function
+            // LpSolve returns an interval for the coefficients of the objective function
+            // instead of returning an allowable increase/decrease (which is what we want to show
+            // in the sensitivity report; so we these from/till values are converted into increase
+            // and decrease values later)
+            REAL* pObjFrom = nullptr;
+            REAL* pObjTill = nullptr;
+            bool bHasObjReport = false;
+            bHasObjReport = get_ptr_sensitivity_obj(lp, &pObjFrom, &pObjTill);
+
+            // Get sensitivity data about constraints
+            // Similarly to the objective function, the sensitivity values returned for the
+            // constraints are in the form from/till and are later converted to increase and
+            // decrease values later
+            REAL* pConstrValue = nullptr;
+            REAL* pConstrDual = nullptr;
+            REAL* pConstrFrom = nullptr;
+            REAL* pConstrTill = nullptr;
+            bool bHasConstrReport = false;
+            bHasConstrReport = get_ptr_sensitivity_rhs(lp, &pConstrDual, &pConstrFrom, &pConstrTill);
+
+            // When successfull, store sensitivity data in the solver component
+            if (bHasObjReport && bHasConstrReport)
+            {
+                m_aSensitivityReport.HasReport = true;
+                m_aObjDecrease.realloc(nVariables);
+                m_aObjIncrease.realloc(nVariables);
+                double* pObjDecrease = m_aObjDecrease.getArray();
+                double* pObjIncrease = m_aObjIncrease.getArray();
+                for (size_t i = 0; i < nVariables; i++)
+                {
+                    // Allowed decrease. Note that the indices of rObjCoeff are offset by 1
+                    // because of the objective function
+                    if (static_cast<bool>(is_infinite(lp, pObjFrom[i])))
+                        pObjDecrease[i] = get_infinite(lp);
+                    else
+                        pObjDecrease[i] = rObjCoeff[i + 1] - pObjFrom[i];
+
+                    // Allowed increase
+                    if (static_cast<bool>(is_infinite(lp, pObjTill[i])))
+                        pObjIncrease[i] = get_infinite(lp);
+                    else
+                        pObjIncrease[i] = pObjTill[i] - rObjCoeff[i + 1];
+                }
+
+                // Save objective coefficients for the sensitivity report
+                double* pObjCoefficients(new double[nVariables]);
+                for (size_t i = 0; i < nVariables; i++)
+                    pObjCoefficients[i] = rObjCoeff[i + 1];
+                m_aObjCoefficients.realloc(nVariables);
+                std::copy_n(pObjCoefficients, nVariables, m_aObjCoefficients.getArray());
+
+                // The reduced costs are in pConstrDual after the constraints
+                double* pObjRedCost(new double[nVariables]);
+                for (size_t i = 0; i < nVariables; i++)
+                    pObjRedCost[i] = pConstrDual[nConstraints + i];
+                m_aObjRedCost.realloc(nVariables);
+                std::copy_n(pObjRedCost, nVariables, m_aObjRedCost.getArray());
+
+                // Final value of constraints
+                get_ptr_constraints(lp, &pConstrValue);
+                m_aConstrValue.realloc(nConstraints);
+                std::copy_n(pConstrValue, nConstraints, m_aConstrValue.getArray());
+
+                // The RHS contains information for each constraint
+                m_aConstrDual.realloc(nConstraints);
+                m_aConstrDecrease.realloc(nConstraints);
+                m_aConstrIncrease.realloc(nConstraints);
+                std::copy_n(pConstrDual, nConstraints, m_aConstrDual.getArray());
+                double* pConstrDecrease = m_aConstrDecrease.getArray();
+                double* pConstrIncrease = m_aConstrIncrease.getArray();
+
+                for (sal_uInt32 i = 0; i < nConstraints; i++)
+                {
+                    // Allowed decrease
+                    pConstrDecrease[i] = m_aConstrRHS[i] - pConstrFrom[i];
+                    if (static_cast<bool>(is_infinite(lp, pConstrFrom[i]))
+                        && maConstraints[i].Operator == sheet::SolverConstraintOperator_LESS_EQUAL)
+                        pConstrDecrease[i] = m_aConstrRHS[i] - m_aConstrValue[i];
+
+                    // Allowed increase
+                    pConstrIncrease[i] = pConstrTill[i] - m_aConstrRHS[i];
+                    if (static_cast<bool>(is_infinite(lp, pConstrTill[i]))
+                        && maConstraints[i].Operator == sheet::SolverConstraintOperator_GREATER_EQUAL)
+                        pConstrIncrease[i] = m_aConstrValue[i] - m_aConstrRHS[i];
+                }
+
+                // Set all values of the SensitivityReport object
+                m_aSensitivityReport.ObjCoefficients = m_aObjCoefficients;
+                m_aSensitivityReport.ObjReducedCosts = m_aObjRedCost;
+                m_aSensitivityReport.ObjAllowableDecreases = m_aObjDecrease;
+                m_aSensitivityReport.ObjAllowableIncreases = m_aObjIncrease;
+                m_aSensitivityReport.ConstrValues = m_aConstrValue;
+                m_aSensitivityReport.ConstrRHS = m_aConstrRHS;
+                m_aSensitivityReport.ConstrShadowPrices = m_aConstrDual;
+                m_aSensitivityReport.ConstrAllowableDecreases = m_aConstrDecrease;
+                m_aSensitivityReport.ConstrAllowableIncreases = m_aConstrIncrease;
+            }
+        }
     }
     else if ( nResult == INFEASIBLE )
         maStatus = SolverComponent::GetResourceString( RID_ERROR_INFEASIBLE );

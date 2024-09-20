@@ -21,6 +21,7 @@
 
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
+#include <com/sun/star/sheet/SensitivityReport.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -76,11 +77,24 @@ protected:
     sal_Int32                                               mnTimeout;
     sal_Int32                                               mnEpsilonLevel;
     bool                                                    mbLimitBBDepth;
+    bool                                                    mbGenSensitivity;
     // results
     bool                                                    mbSuccess;
     double                                                  mfResultValue;
     css::uno::Sequence< double >                            maSolution;
     OUString                                                maStatus;
+
+    // Sensitivity report
+    css::uno::Sequence<double> m_aObjCoefficients;
+    css::uno::Sequence<double> m_aObjDecrease;
+    css::uno::Sequence<double> m_aObjIncrease;
+    css::uno::Sequence<double> m_aObjRedCost;
+    css::uno::Sequence<double> m_aConstrValue;
+    css::uno::Sequence<double> m_aConstrRHS;
+    css::uno::Sequence<double> m_aConstrDual;
+    css::uno::Sequence<double> m_aConstrIncrease;
+    css::uno::Sequence<double> m_aConstrDecrease;
+    css::sheet::SensitivityReport m_aSensitivityReport;
 
     static OUString GetResourceString(TranslateId aId);
     static css::uno::Reference<css::table::XCell> GetCell(

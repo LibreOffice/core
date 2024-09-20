@@ -1,0 +1,55 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+
+module com {  module sun {  module star {  module sheet {
+
+
+/** Stores all the information related to the sensitivity report of a linear programming model
+ *
+ *  @since LibreOffice 25.2
+ */
+struct SensitivityReport
+{
+    // Indicates whether a sensitivity report was successfully generated
+    boolean HasReport;
+
+    // Coefficients of the objective function
+    sequence<double> ObjCoefficients;
+
+    // Reduced costs of the variables in the objective function
+    sequence<double> ObjReducedCosts;
+
+    // Allowable decrease in the coefficients of the objective function
+    sequence<double> ObjAllowableDecreases;
+
+    // Allowable increase in the coefficients of the objective function
+    sequence<double> ObjAllowableIncreases;
+
+    // Value of the constraint at the solution
+    sequence<double> ConstrValues;
+
+    // Right-hand side of the constraints
+    sequence<double> ConstrRHS;
+
+    // Shadow prices of constraints
+    sequence<double> ConstrShadowPrices;
+
+    // Allowable decrease in the constraint resources
+    sequence<double> ConstrAllowableDecreases;
+
+    // Allowable increase in the constraint resources
+    sequence<double> ConstrAllowableIncreases;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,11 +38,14 @@
 #include <comphelper/sequence.hxx>
 #include <optsolver.hxx>
 #include <table.hxx>
+#include <TableFillingAndNavigationTools.hxx>
 
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sheet/SolverConstraint.hpp>
 #include <com/sun/star/sheet/SolverConstraintOperator.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
+#include <com/sun/star/sheet/SensitivityReport.hpp>
 
 using namespace com::sun::star;
 
@@ -916,6 +919,14 @@ bool ScOptSolverDlg::FindTimeout( sal_Int32& rTimeout )
     return bFound;
 }
 
+OUString ScOptSolverDlg::GetCellStrAddress(css::table::CellAddress aUnoAddress)
+{
+    ScAddress aScAddr;
+    ScUnoConversion::FillScAddress(aScAddr, aUnoAddress);
+    ScRange aRange(aScAddr);
+    return aRange.Format(mrDoc, ScRefFlags::RANGE_ABS);
+}
+
 bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after calling
 {
     // show progress dialog
@@ -1187,6 +1198,147 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             rFunc.SetValueCell(aCellPos, aOldValues[nVarPos], false);
         }
         mpDocShell->UnlockPaint();
+    }
+
+    // Generate sensitivity report if user wants it
+    uno::Reference<css::beans::XPropertySetInfo> xInfo = xOptProp->getPropertySetInfo();
+    bool bUserWantsReport = false;
+    if (xInfo->hasPropertyByName("GenSensitivityReport"))
+        xOptProp->getPropertyValue("GenSensitivityReport") >>= bUserWantsReport;
+
+    if (bSuccess && bUserWantsReport)
+    {
+        // Retrieve the sensitivity analysis report
+        css::sheet::SensitivityReport aSensitivity;
+        bool bHasReportObj = xOptProp->getPropertyValue("SensitivityReport") >>= aSensitivity;
+
+        if (bHasReportObj && aSensitivity.HasReport)
+        {
+            // Define the Tab name where the sensitivity analysis will be written to
+            OUString sNewTabName;
+            SCTAB nNewTab;
+            mrDoc.GetName(mnCurTab, sNewTabName);
+            sNewTabName += "_" + ScResId(STR_SENSITIVITY);
+            // Chech if the new Tab name exists
+            if (mrDoc.GetTable(sNewTabName, nNewTab))
+            {
+                // Add numbers to the end of the Tab name to make it unique
+                SCTAB i = 1;
+                OUString aName;
+                do
+                {
+                    i++;
+                    aName = sNewTabName + "_" + OUString::number(static_cast<sal_Int32>(i));
+                }
+                while(mrDoc.GetTable(aName, nNewTab));
+                sNewTabName = aName;
+            }
+
+            // Insert new sheet to the document and start writing the report
+            ScDocFunc &rFunc = mpDocShell->GetDocFunc();
+            rFunc.InsertTable(mnCurTab + 1, sNewTabName, false, false);
+            SCTAB nReportTab;
+            mrDoc.GetTable(sNewTabName, nReportTab);
+
+            // Used to input data in the new sheet
+            ScAddress aOutputAddress(0, 0, nReportTab);
+            ScAddress::Details mAddressDetails(mrDoc, aOutputAddress);
+            AddressWalkerWriter aOutput(aOutputAddress, mpDocShell, mrDoc,
+                                        formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
+            aOutput.writeBoldString(ScResId(STR_SENSITIVITY_TITLE));
+            aOutput.newLine();
+            aOutput.writeString(ScResId(STR_SOLVER_ENGINE) + " " + maEngine);
+            aOutput.newLine();
+            aOutput.newLine();
+
+            // Objective cell section
+            aOutput.writeBoldString(ScResId(STR_SENSITIVITY_OBJCELL));
+            aOutput.newLine();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
+            aOutput.newLine();
+            aOutput.writeString(GetCellStrAddress(xSolver->getObjective()));
+            aOutput.nextColumn();
+            aOutput.writeValue(xSolver->getResultValue());
+            aOutput.newLine();
+            aOutput.newLine();
+
+            // Variable cell section
+            aOutput.writeBoldString(ScResId(STR_SENSITIVITY_VARCELLS));
+            aOutput.newLine();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_REDUCED));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_OBJCOEFF));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_DECREASE));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_INCREASE));
+            aOutput.newLine();
+
+            uno::Sequence<double> aSolution = xSolver->getSolution();
+            uno::Sequence<double> aObjCoefficients = aSensitivity.ObjCoefficients;
+            uno::Sequence<double> aObjReducedCosts = aSensitivity.ObjReducedCosts;
+            uno::Sequence<double> aObjAllowableDecreases = aSensitivity.ObjAllowableDecreases;
+            uno::Sequence<double> aObjAllowableIncreases = aSensitivity.ObjAllowableIncreases;
+            for (sal_Int32 i = 0; i < aVariables.getLength(); i++)
+            {
+                aOutput.writeString(GetCellStrAddress(aVariables[i]));
+                aOutput.nextColumn();
+                aOutput.writeValue(aSolution[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aObjReducedCosts[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aObjCoefficients[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aObjAllowableDecreases[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aObjAllowableIncreases[i]);
+                aOutput.newLine();
+            }
+            aOutput.newLine();
+
+            // Constraints section
+            aOutput.writeBoldString(ScResId(STR_SENSITIVITY_CONSTRAINTS));
+            aOutput.newLine();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_CELL));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_FINALVALUE));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_SHADOWPRICE));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_RHS));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_DECREASE));
+            aOutput.nextColumn();
+            aOutput.writeString(ScResId(STR_SENSITIVITY_INCREASE));
+            aOutput.newLine();
+
+            uno::Sequence<double> aConstrValues = aSensitivity.ConstrValues;
+            uno::Sequence<double> aConstrRHS = aSensitivity.ConstrRHS;
+            uno::Sequence<double> aConstrShadowPrices = aSensitivity.ConstrShadowPrices;
+            uno::Sequence<double> aConstrAllowableDecreases = aSensitivity.ConstrAllowableDecreases;
+            uno::Sequence<double> aConstrAllowableIncreases = aSensitivity.ConstrAllowableIncreases;
+            for (sal_Int32 i = 0; i < aConstraints.getLength(); i++)
+            {
+                aOutput.writeString(GetCellStrAddress(aConstraints[i].Left));
+                aOutput.nextColumn();
+                aOutput.writeValue(aConstrValues[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aConstrShadowPrices[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aConstrRHS[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aConstrAllowableDecreases[i]);
+                aOutput.nextColumn();
+                aOutput.writeValue(aConstrAllowableIncreases[i]);
+                aOutput.newLine();
+            }
+        }
     }
 
     return bClose;

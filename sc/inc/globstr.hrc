@@ -575,6 +575,20 @@
 #define STR_UNDO_THEME_CHANGE                   NC_("STR_UNDO_THEME_CHANGE", "Theme Change")
 #define STR_UNDO_THEME_COLOR_CHANGE             NC_("STR_UNDO_THEME_COLOR_CHANGE", "Theme Color Change")
 #define STR_ERR_INSERT_CELLS                    NC_("STR_ERR_INSERT_CELLS", "Failed to insert cells")
+#define STR_SOLVER_ENGINE                       NC_("STR_SOLVER_ENGINE", "Solver Engine:")
+#define STR_SENSITIVITY                         NC_("STR_SENSITIVITY", "Sensitivity")
+#define STR_SENSITIVITY_TITLE                   NC_("STR_SENSITIVITY_TITLE", "Sensitivity Report")
+#define STR_SENSITIVITY_OBJCELL                 NC_("STR_SENSITIVITY_OBJCELL", "Objective Cell")
+#define STR_SENSITIVITY_VARCELLS                NC_("STR_SENSITIVITY_VARCELLS", "Variable Cells")
+#define STR_SENSITIVITY_CONSTRAINTS             NC_("STR_SENSITIVITY_CONSTRAINTS", "Constraints")
+#define STR_SENSITIVITY_CELL                    NC_("STR_SENSITIVITY_CELL", "Cell")
+#define STR_SENSITIVITY_FINALVALUE              NC_("STR_SENSITIVITY_CELL", "Final Value")
+#define STR_SENSITIVITY_REDUCED                 NC_("STR_SENSITIVITY_CELL", "Reduced Cost")
+#define STR_SENSITIVITY_OBJCOEFF                NC_("STR_SENSITIVITY_CELL", "Objective Coefficient")
+#define STR_SENSITIVITY_DECREASE                NC_("STR_SENSITIVITY_CELL", "Allowable Decrease")
+#define STR_SENSITIVITY_INCREASE                NC_("STR_SENSITIVITY_CELL", "Allowable Increase")
+#define STR_SENSITIVITY_SHADOWPRICE             NC_("STR_SENSITIVITY_SHADOWPRICE", "Shadow Price")
+#define STR_SENSITIVITY_RHS                     NC_("STR_SENSITIVITY_RHS", "Constraint R.H. Side")
 
 #endif
 

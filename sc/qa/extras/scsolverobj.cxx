@@ -148,14 +148,16 @@ void ScSolverSettingsObj::testXSolverSettings()
     uno::Sequence<beans::PropertyValue> aEngProps = xSolverModel->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(OUString("EpsilonLevel"), aEngProps[0].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps[0].Value);
-    CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps[1].Name);
+    CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps[1].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps[1].Value);
-    CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps[2].Value);
-    CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps[3].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps[2].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps[2].Value);
+    CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps[3].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps[3].Value);
-    CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps[4].Value);
+    CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps[4].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps[4].Value);
+    CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps[5].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps[5].Value);
 
     // Save file and reload to check if solver settings are still there
     saveAndReload(u"calc8"_ustr);
@@ -191,14 +193,16 @@ void ScSolverSettingsObj::testXSolverSettings()
     uno::Sequence<beans::PropertyValue> aEngProps2 = xSolverModel2->getEngineOptions();
     CPPUNIT_ASSERT_EQUAL(OUString("EpsilonLevel"), aEngProps2[0].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(0)), aEngProps2[0].Value);
-    CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps2[1].Name);
+    CPPUNIT_ASSERT_EQUAL(u"GenSensitivityReport"_ustr, aEngProps2[1].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps2[1].Value);
-    CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps2[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[2].Value);
-    CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps2[3].Name);
+    CPPUNIT_ASSERT_EQUAL(u"Integer"_ustr, aEngProps2[2].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(false), aEngProps2[2].Value);
+    CPPUNIT_ASSERT_EQUAL(u"LimitBBDepth"_ustr, aEngProps2[3].Name);
     CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[3].Value);
-    CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps2[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps2[4].Value);
+    CPPUNIT_ASSERT_EQUAL(u"NonNegative"_ustr, aEngProps2[4].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(true), aEngProps2[4].Value);
+    CPPUNIT_ASSERT_EQUAL(u"Timeout"_ustr, aEngProps2[5].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(static_cast<sal_Int32>(10)), aEngProps2[5].Value);
 }
 
 void ScSolverSettingsObj::setUp()
