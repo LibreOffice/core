@@ -18,6 +18,7 @@
  */
 
 #include "documenteventexecutor.hxx"
+#include "databasedocument.hxx"
 
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -60,11 +61,11 @@ namespace dbaccess
     namespace
     {
         void lcl_dispatchScriptURL_throw(
-            css::uno::WeakReference< css::document::XEventsSupplier > const & xWeakDocument,
+            ::unotools::WeakReference< ODatabaseDocument > const & xWeakDocument,
             css::uno::Reference< css::util::XURLTransformer > const & xURLTransformer,
             const OUString& _rScriptURL, const DocumentEvent& _rTrigger )
         {
-            Reference< XModel > xDocument( xWeakDocument.get(), UNO_QUERY_THROW );
+            rtl::Reference< ODatabaseDocument > xDocument( xWeakDocument.get() );
 
             Reference< XController > xController( xDocument->getCurrentController() );
             Reference< XDispatchProvider > xDispProv;
@@ -102,14 +103,12 @@ namespace dbaccess
 
     // DocumentEventExecutor
     DocumentEventExecutor::DocumentEventExecutor( const Reference<XComponentContext> & _rContext,
-            const Reference< XEventsSupplier >& _rxDocument )
+            const rtl::Reference< ODatabaseDocument >& _rxDocument )
         :mxDocument( _rxDocument )
     {
-        Reference< XDocumentEventBroadcaster > xBroadcaster( _rxDocument, UNO_QUERY_THROW );
-
         osl_atomic_increment( &m_refCount );
         {
-            xBroadcaster->addDocumentEventListener( this );
+            _rxDocument->addDocumentEventListener( this );
         }
         osl_atomic_decrement( &m_refCount );
 
@@ -129,18 +128,16 @@ namespace dbaccess
 
     void SAL_CALL DocumentEventExecutor::documentEventOccured( const DocumentEvent& Event )
     {
-        Reference< XEventsSupplier > xEventsSupplier( mxDocument.get(), UNO_QUERY );
-        if ( !xEventsSupplier )
+        rtl::Reference< ODatabaseDocument > xDocument( mxDocument.get() );
+        if ( !xDocument )
         {
             OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
             return;
         }
 
-        Reference< XModel > xDocument( xEventsSupplier, UNO_QUERY_THROW );
-
         try
         {
-            Reference< XNameAccess > xDocEvents( xEventsSupplier->getEvents(), UNO_SET_THROW );
+            Reference< XNameAccess > xDocEvents( xDocument->getEvents(), UNO_SET_THROW );
             if ( !xDocEvents->hasByName( Event.EventName ) )
             {
                 // this is worth an assertion: We are listener at the very same document which we just asked
