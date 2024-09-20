@@ -3779,13 +3779,13 @@ void BuilderBase::handleInterfaceDomain(xmlreader::XmlReader& rReader)
 
 void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
-    xmlreader::Span name;
-    int nsId;
-
     int nLevel = 1;
 
     while(true)
     {
+        xmlreader::Span name;
+        int nsId;
+
         xmlreader::XmlReader::Result res = reader.nextItem(
             xmlreader::XmlReader::Text::NONE, &name, &nsId);
 
