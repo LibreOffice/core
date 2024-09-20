@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <unotools/weakref.hxx>
 
 #include "EApi.h"
 #include "NConnection.hxx"
@@ -44,6 +45,8 @@
 
 namespace connectivity::evoab
 {
+        class OEvoabResultSet;
+
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XWarningsSupplier
                                                ,   css::sdbc::XCloseable
                                                >   OCommonStatement_IBase;
@@ -149,7 +152,7 @@ namespace connectivity::evoab
                                 ,public ::comphelper::OPropertyArrayUsageHelper< OCommonStatement >
         {
         private:
-            css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            unotools::WeakReference< OEvoabResultSet> m_xResultSet;   // The last ResultSet created
             rtl::Reference<OEvoabConnection>      m_xConnection;
             connectivity::OSQLParser              m_aParser;
             connectivity::OSQLParseTreeIterator   m_aSQLIterator;

@@ -160,7 +160,7 @@ OCommonStatement::~OCommonStatement()
 void OCommonStatement::disposeResultSet()
 {
     // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    rtl::Reference< OEvoabResultSet > xComp(m_xResultSet);
     if (xComp.is())
         xComp->dispose();
     m_xResultSet.clear();
@@ -613,7 +613,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
     pResult->construct( _rQueryData );
 
     // done
-    m_xResultSet = Reference<XWeak>(pResult);
+    m_xResultSet = pResult.get();
     return pResult;
 }
 
