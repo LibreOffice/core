@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_BUILDER_HXX
-#define INCLUDED_VCL_BUILDER_HXX
+#pragma once
 
 #include <typeinfo>
 #include <sal/log.hxx>
@@ -382,7 +381,5 @@ inline T* VclBuilder::get(const OUString& sID)
  * @return true if rValue is "True", "true", "1", etc.
  */
 VCL_DLLPUBLIC bool toBool(std::u16string_view rValue);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
