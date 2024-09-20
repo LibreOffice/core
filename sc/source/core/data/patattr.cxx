@@ -47,8 +47,6 @@
 #include <editeng/justifyitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>
-#include <svl/whiter.hxx>
-#include <svl/itemiter.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <tools/fract.hxx>
@@ -1506,66 +1504,24 @@ bool ScPatternAttr::CalcVisible() const
     return false;
 }
 
+static bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt16 nId )
+{
+    const SfxPoolItem* pItem1 = &rSet1.Get(nId);
+    const SfxPoolItem* pItem2 = &rSet2.Get(nId);
+    return ( pItem1 == pItem2 || *pItem1 == *pItem2 );
+}
+
 bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
 {
-    // This method is hot, so we do an optimised comparison here, by
-    // walking the two itemsets in parallel, avoiding doing repeated searches.
-    auto IsInterestingWhich = [](sal_uInt16 n)
-    {
-        return n == ATTR_BORDER_TLBR || n == ATTR_BORDER_BLTR || n == ATTR_BACKGROUND
-               || n == ATTR_BORDER || n == ATTR_SHADOW;
-    };
-    SfxWhichIter aIter1(GetItemSet());
-    SfxWhichIter aIter2(rOther.GetItemSet());
-    sal_uInt16 nWhich1 = aIter1.FirstWhich();
-    sal_uInt16 nWhich2 = aIter2.FirstWhich();
-    for (;;)
-    {
-        while (nWhich1 != nWhich2)
-        {
-            SfxWhichIter* pIterToIncrement;
-            sal_uInt16* pSmallerWhich;
-            if (nWhich1 == 0 || nWhich1 > nWhich2)
-            {
-                pSmallerWhich = &nWhich2;
-                pIterToIncrement = &aIter2;
-            }
-            else
-            {
-                pSmallerWhich = &nWhich1;
-                pIterToIncrement = &aIter1;
-            }
+    const SfxItemSet& rThisSet = GetItemSet();
+    const SfxItemSet& rOtherSet = rOther.GetItemSet();
 
-            if (IsInterestingWhich(*pSmallerWhich))
-            {
-                // the iter with larger which has already passed this point, and has no interesting
-                // item available in the other - so indeed these are unequal
-                return false;
-            }
+    return OneEqual( rThisSet, rOtherSet, ATTR_BACKGROUND ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_TLBR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
+            OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
 
-            *pSmallerWhich = pIterToIncrement->NextWhich();
-        }
-
-        // Here nWhich1 == nWhich2
-
-        if (!nWhich1 /* && !nWhich2*/)
-            return true;
-
-        if (IsInterestingWhich(nWhich1))
-        {
-            const SfxPoolItem* pItem1 = nullptr;
-            const SfxPoolItem* pItem2 = nullptr;
-            SfxItemState state1 = aIter1.GetItemState(true, &pItem1);
-            SfxItemState state2 = aIter2.GetItemState(true, &pItem2);
-            if (state1 != state2
-                && (state1 < SfxItemState::DEFAULT || state2 < SfxItemState::DEFAULT))
-                return false;
-            if (!SfxPoolItem::areSame(pItem1, pItem2))
-                return false;
-        }
-        nWhich1 = aIter1.NextWhich();
-        nWhich2 = aIter2.NextWhich();
-    }
     //TODO: also here only check really visible values !!!
 }
 
