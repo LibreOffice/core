@@ -12,7 +12,7 @@
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
-
+#include <ucbhelper/commandenvironment.hxx>
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/weld.hxx>
@@ -118,7 +118,7 @@ class CmisDetailsContainer final : public DetailsContainer
     private:
         OUString m_sUsername;
         OUString m_sPassword;
-        css::uno::Reference< css::ucb::XCommandEnvironment > m_xCmdEnv;
+        rtl::Reference< ucbhelper::CommandEnvironment > m_xCmdEnv;
         std::vector< OUString > m_aRepoIds;
         OUString m_sRepoId;
         OUString m_sBinding;

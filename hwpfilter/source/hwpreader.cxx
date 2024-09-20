@@ -4744,7 +4744,7 @@ public:
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 private:
-    Reference< XFilter > rFilter;
+    rtl::Reference< HwpReader > rFilter;
     Reference< XImporter > rImporter;
 };
 

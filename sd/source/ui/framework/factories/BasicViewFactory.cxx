@@ -57,7 +57,7 @@ namespace sd::framework {
 class BasicViewFactory::ViewDescriptor
 {
 public:
-    Reference<XResource> mxView;
+    rtl::Reference<ViewShellWrapper> mxView;
     std::shared_ptr<sd::ViewShell> mpViewShell;
     Reference<XResourceId> mxViewId;
     static bool CompareView (const std::shared_ptr<ViewDescriptor>& rpDescriptor,
@@ -386,11 +386,10 @@ void BasicViewFactory::ReleaseView (
 
     if (bIsCacheable)
     {
-        Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
-        if (xResource.is())
+        if (rpDescriptor->mxView)
         {
             if (mxLocalPane.is())
-                if (xResource->relocateToAnchor(mxLocalPane))
+                if (rpDescriptor->mxView->relocateToAnchor(mxLocalPane))
                     mpViewCache->push_back(rpDescriptor);
                 else
                     bIsCacheable = false;
@@ -410,9 +409,8 @@ void BasicViewFactory::ReleaseView (
         mpBase->GetDocShell()->Disconnect(rpDescriptor->mpViewShell.get());
         mpBase->GetViewShellManager()->DeactivateViewShell(rpDescriptor->mpViewShell.get());
 
-        Reference<XComponent> xComponent (rpDescriptor->mxView, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
+        if (rpDescriptor->mxView)
+            rpDescriptor->mxView->dispose();
     }
 }
 
@@ -420,8 +418,7 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
 {
     bool bIsCacheable (false);
 
-    Reference<XRelocatableResource> xResource (rpDescriptor->mxView, UNO_QUERY);
-    if (xResource.is())
+    if (rpDescriptor->mxView)
     {
         static ::std::vector<Reference<XResourceId> > s_aCacheableResources = [&]()
         {
@@ -463,10 +460,9 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::GetViewFromC
     if (pDescriptor != nullptr)
     {
         bool bRelocationSuccessful (false);
-        Reference<XRelocatableResource> xResource (pDescriptor->mxView, UNO_QUERY);
-        if (xResource.is() && rxPane.is())
+        if (pDescriptor->mxView && rxPane.is())
         {
-            if (xResource->relocateToAnchor(rxPane))
+            if (pDescriptor->mxView->relocateToAnchor(rxPane))
                 bRelocationSuccessful = true;
         }
 

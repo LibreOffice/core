@@ -34,6 +34,8 @@
 
 namespace rptui
 {
+    class OObjectListener;
+
 typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
     enum DlgEdHintKind
     {
@@ -64,7 +66,7 @@ class UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) SAL_LOPLUGIN_ANNOTATE("cross
 {
 protected:
     mutable rtl::Reference<OPropertyMediator>                         m_xMediator;
-    mutable css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
+    mutable rtl::Reference< OObjectListener >                         m_xPropertyChangeListener;
     mutable css::uno::Reference< css::report::XReportComponent>       m_xReportComponent;
     css::uno::Reference< css::uno::XInterface >                       m_xKeepShapeAlive;
     OUString m_sComponentName;
