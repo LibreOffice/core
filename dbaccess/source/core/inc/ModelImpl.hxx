@@ -88,6 +88,7 @@ typedef ::utl::SharedUNOComponent< css::embed::XStorage >  SharedStorage;
 class ODatabaseContext;
 class DocumentStorageAccess;
 class ODatabaseSource;
+class ODatabaseDocument;
 
 
 /** The class OSharedConnectionManager implements a structure to share connections.
@@ -174,7 +175,7 @@ public:
     };
 
 private:
-    css::uno::WeakReference< css::frame::XModel >                     m_xModel;
+    unotools::WeakReference< ODatabaseDocument >                      m_xModel;
     unotools::WeakReference< ODatabaseSource >                        m_xDataSource;
 
     rtl::Reference<DocumentStorageAccess>                             m_pStorageAccess;
@@ -346,7 +347,7 @@ public:
 
     /** returns the model, if there already exists one
     */
-    css::uno::Reference< css::frame::XModel > getModel_noCreate() const;
+    rtl::Reference< ODatabaseDocument > getModel_noCreate() const;
 
     /** returns a new ->ODatabaseDocument
 
@@ -356,7 +357,7 @@ public:
         @seealso
             getModel_noCreate
     */
-    css::uno::Reference< css::frame::XModel > createNewModel_deliverOwnership();
+    rtl::Reference< ODatabaseDocument > createNewModel_deliverOwnership();
 
     struct ResetModelAccess { friend class ODatabaseDocument; private: ResetModelAccess() { } };
 

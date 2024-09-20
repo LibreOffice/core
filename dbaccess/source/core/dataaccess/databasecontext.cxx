@@ -25,6 +25,7 @@
 #include <databasecontext.hxx>
 #include "databaseregistrations.hxx"
 #include "datasource.hxx"
+#include "databasedocument.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -138,14 +139,11 @@ namespace dbaccess
             {
                 try
                 {
-                    const Reference< XModel2 > xMod( pCopy->getModel_noCreate(),
-                                                     UNO_QUERY_THROW );
+                    const rtl::Reference< ODatabaseDocument > xMod( pCopy->getModel_noCreate() );
+                    if (!xMod)
+                        throw uno::RuntimeException();
                     if( !xMod->getControllers()->hasMoreElements() )
-                    {
-                        Reference< util::XCloseable > xClose( xMod,
-                                                              UNO_QUERY_THROW );
-                        xClose->close( false );
-                    }
+                        xMod->close( false );
                 }
                 catch( const CloseVetoException& )
                 {

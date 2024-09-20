@@ -18,6 +18,7 @@
  */
 
 #include "documentdefinition.hxx"
+#include "databasedocument.hxx"
 #include <ModelImpl.hxx>
 #include <stringconstants.hxx>
 #include <sdbcoretools.hxx>
@@ -461,7 +462,7 @@ void SAL_CALL ODocumentDefinition::disposing()
     ::comphelper::disposeComponent(m_xListener);
     if ( m_bRemoveListener )
     {
-        Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
+        rtl::Reference<ODatabaseDocument> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate());
         if ( xCloseable.is() )
             xCloseable->removeCloseListener(this);
     }
@@ -1488,7 +1489,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     { // i87957 we need a parent frame
         Reference< XDesktop2 > xDesktop = Desktop::create( m_aContext );
         xParentFrame.set( xDesktop, UNO_QUERY_THROW );
-        Reference<util::XCloseable> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate(),UNO_QUERY);
+        rtl::Reference<ODatabaseDocument> xCloseable(m_pImpl->m_pDataSource->getModel_noCreate());
         if ( xCloseable.is() )
         {
             xCloseable->addCloseListener(this);
@@ -2023,12 +2024,12 @@ void ODocumentDefinition::updateDocumentTitle()
                 sName = DBA_RES( RID_STR_FORM );
             else
                 sName = DBA_RES( RID_STR_REPORT );
-            Reference< XUntitledNumbers > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate(), UNO_QUERY      );
+            rtl::Reference< ODatabaseDocument > xUntitledProvider(m_pImpl->m_pDataSource->getModel_noCreate() );
             if ( xUntitledProvider.is() )
                 sName += OUString::number( xUntitledProvider->leaseNumber(getComponent()) );
         }
 
-        Reference< XTitle > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate(),uno::UNO_QUERY);
+        rtl::Reference< ODatabaseDocument > xDatabaseDocumentModel(m_pImpl->m_pDataSource->getModel_noCreate());
         if ( xDatabaseDocumentModel.is() )
             sName = xDatabaseDocumentModel->getTitle() + " : " + sName;
     }

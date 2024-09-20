@@ -2200,9 +2200,9 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
     
     rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));
-    css::uno::Reference<XInterface> inst(pImpl->createNewModel_deliverOwnership());
+    rtl::Reference<dbaccess::ODatabaseDocument> inst(pImpl->createNewModel_deliverOwnership());
     inst->acquire();
-    return inst.get();
+    return cppu::getXWeak(inst.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

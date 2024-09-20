@@ -631,15 +631,19 @@ void ODatabaseModelImpl::dispose()
             m_xDataSource.clear();
         }
 
-        Reference< XModel > xModel( m_xModel );
-        ::comphelper::disposeComponent( xModel );
+        rtl::Reference< ODatabaseDocument > xModel( m_xModel );
+        if (xModel)
+        {
+            xModel->dispose();
+            m_xModel.clear();
+        }
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
     m_xDataSource.clear();
-    m_xModel = WeakReference< XModel >();
+    m_xModel.clear();
 
     for (auto const& elem : m_aContainer)
     {
@@ -932,7 +936,7 @@ void ODatabaseModelImpl::setModified( bool _bModified )
 
     try
     {
-        Reference< XModifiable > xModi( m_xModel.get(), UNO_QUERY );
+        rtl::Reference< ODatabaseDocument > xModi( m_xModel );
         if ( xModi.is() )
             xModi->setModified( _bModified );
         else
@@ -955,26 +959,26 @@ Reference<XDataSource> ODatabaseModelImpl::getOrCreateDataSource()
     return xDs;
 }
 
-Reference< XModel> ODatabaseModelImpl::getModel_noCreate() const
+rtl::Reference<ODatabaseDocument> ODatabaseModelImpl::getModel_noCreate() const
 {
-    return m_xModel;
+    return m_xModel.get();
 }
 
-Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
+rtl::Reference< ODatabaseDocument > ODatabaseModelImpl::createNewModel_deliverOwnership()
 {
-    Reference< XModel > xModel( m_xModel );
+    rtl::Reference< ODatabaseDocument > xModel( m_xModel );
     OSL_PRECOND( !xModel.is(), "ODatabaseModelImpl::createNewModel_deliverOwnership: not to be called if there already is a model!" );
     if ( !xModel.is() )
     {
         bool bHadModelBefore = m_bDocumentInitialized;
 
         xModel = ODatabaseDocument::createDatabaseDocument( this, ODatabaseDocument::FactoryAccess() );
-        m_xModel = xModel;
+        m_xModel = xModel.get();
 
         try
         {
             Reference< XGlobalEventBroadcaster > xModelCollection = theGlobalEventBroadcaster::get( m_aContext );
-            xModelCollection->insert( Any( xModel ) );
+            xModelCollection->insert( Any( Reference< XModel >(xModel) ) );
         }
         catch( const Exception& )
         {
@@ -1134,7 +1138,9 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
     if ( rxContainer.is() )
         return rxContainer;
 
-    Reference< XStorageBasedDocument > xDocument( getModel_noCreate(), UNO_QUERY_THROW );
+    rtl::Reference< ODatabaseDocument > xDocument( getModel_noCreate() );
+    if (!xDocument)
+        throw uno::RuntimeException();
         // this is only to be called if there already exists a document model - in fact, it is
         // to be called by the document model only
 
@@ -1156,7 +1162,7 @@ Reference< XStorageBasedLibraryContainer > ODatabaseModelImpl::getLibraryContain
     {
         throw WrappedTargetRuntimeException(
             OUString(),
-            xDocument,
+            cppu::getXWeak(xDocument.get()),
             ::cppu::getCaughtException()
         );
     }
@@ -1347,7 +1353,7 @@ bool ODatabaseModelImpl::macroCallsSeenWhileLoading() const
 
 Reference< XEmbeddedScripts > ODatabaseModelImpl::getEmbeddedDocumentScripts() const
 {
-    return Reference< XEmbeddedScripts >( getModel_noCreate(), UNO_QUERY );
+    return getModel_noCreate();
 }
 
 SignatureState ODatabaseModelImpl::getScriptingSignatureState()
