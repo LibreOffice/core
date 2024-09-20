@@ -49,7 +49,7 @@ public class TextDocument
 {
 
     public XComponent xComponent;
-    public com.sun.star.text.XTextDocument xTextDocument;
+    protected com.sun.star.text.XTextDocument xTextDocument;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
@@ -225,7 +225,11 @@ public class TextDocument
         myFieldHandler.updateDocInfoFields();
 
         return xTextDocument;
+    }
 
+    public com.sun.star.text.XTextDocument getTextDocument()
+    {
+        return xTextDocument;
     }
 
     private Size getPageSize()

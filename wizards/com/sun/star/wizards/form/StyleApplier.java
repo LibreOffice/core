@@ -66,7 +66,7 @@ public class StyleApplier
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
 
-            TextStyleHandler oTextStyleHandler = new TextStyleHandler(curFormDocument.xTextDocument);
+            TextStyleHandler oTextStyleHandler = new TextStyleHandler(curFormDocument.getTextDocument());
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             short curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
             Integer IStyleStep = Integer.valueOf(FormWizard.SOSTYLE_PAGE);
@@ -239,7 +239,7 @@ public class StyleApplier
     {
         try
         {
-            curFormDocument.xTextDocument.lockControllers();
+            curFormDocument.getTextDocument().lockControllers();
 
             if (optNoBorder.getState())
             {

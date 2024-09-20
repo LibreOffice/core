@@ -141,7 +141,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     private void addTextSectionCopies()
     {
         m_aDoc.setLayoutSectionsVisible(false);
-        XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.xTextDocument.getText());
+        XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.getTextDocument().getText());
         xTextCursor.gotoStart(false);
         for (int i = 0; i < getRecordParser().getGroupFieldNames().length; i++)
         {
@@ -334,8 +334,8 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             int FieldCount = getRecordParser().FieldColumns.length;
             Object[] OldGroupFieldValues = new Object[GroupFieldCount];
             int RecordFieldCount = FieldCount - GroupFieldCount;
-            XTextDocument xTextDocument = getDoc().xTextDocument;
-            XTextCursor xTextCursor = ReportTextDocument.createTextCursor(getDoc().xTextDocument.getText());
+            XTextDocument xTextDocument = getDoc().getTextDocument();
+            XTextCursor xTextCursor = ReportTextDocument.createTextCursor(getDoc().getTextDocument().getText());
             xTextDocument.lockControllers();
 
             if (getRecordParser().getResultSet().next())
