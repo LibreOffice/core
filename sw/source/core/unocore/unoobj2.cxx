@@ -307,7 +307,7 @@ void SwUnoCursorHelper::SetCursorAttr(SwPaM & rPam,
 void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
         SfxItemSet & rSet, const bool bOnlyTextAttr, const bool bGetFromChrFormat)
 {
-    static const sal_uLong nMaxLookup = 1000;
+    static constexpr sal_Int32 nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
     for(SwPaM& rCurrent : rPam.GetRingContainer())

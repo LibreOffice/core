@@ -636,7 +636,7 @@ SwUnoCursorHelper::SetCursorPropertyValue(
 SwFormatColl *
 SwUnoCursorHelper::GetCurTextFormatColl(SwPaM & rPaM, const bool bConditional)
 {
-    static const sal_uLong nMaxLookup = 1000;
+    static constexpr sal_Int32 nMaxLookup = 1000;
     SwFormatColl *pFormat = nullptr;
     bool bError = false;
     SwPaM *pTmpCursor = &rPaM;
