@@ -22,44 +22,45 @@ BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
     if (!pWriteAccess)
         return rBitmapEx;
 
-    BitmapColor aBitmapColor;
-    const sal_Int32 nW = pWriteAccess->Width();
-    const sal_Int32 nH = pWriteAccess->Height();
     std::vector<sal_uInt8> aMapR(256);
     std::vector<sal_uInt8> aMapG(256);
     std::vector<sal_uInt8> aMapB(256);
-    sal_Int32 nX;
-    sal_Int32 nY;
 
     const sal_uInt8 cR = maColor.GetRed();
     const sal_uInt8 cG = maColor.GetGreen();
     const sal_uInt8 cB = maColor.GetBlue();
 
-    for (nX = 0; nX < 256; ++nX)
+    for (sal_Int32 nX = 0; nX < 256; ++nX)
     {
         aMapR[nX] = std::clamp((nX + cR) / 2, sal_Int32(0), sal_Int32(255));
         aMapG[nX] = std::clamp((nX + cG) / 2, sal_Int32(0), sal_Int32(255));
         aMapB[nX] = std::clamp((nX + cB) / 2, sal_Int32(0), sal_Int32(255));
     }
 
+    BitmapColor aBitmapColor;
+
     if (pWriteAccess->HasPalette())
     {
-        for (sal_uInt16 i = 0, nCount = pWriteAccess->GetPaletteEntryCount(); i < nCount; i++)
+        for (sal_uInt16 nPaletteIdx = 0, nCount = pWriteAccess->GetPaletteEntryCount();
+             nPaletteIdx < nCount; nPaletteIdx++)
         {
-            const BitmapColor& rCol = pWriteAccess->GetPaletteColor(i);
+            const BitmapColor& rCol = pWriteAccess->GetPaletteColor(nPaletteIdx);
             aBitmapColor.SetRed(aMapR[rCol.GetRed()]);
             aBitmapColor.SetGreen(aMapG[rCol.GetGreen()]);
             aBitmapColor.SetBlue(aMapB[rCol.GetBlue()]);
-            pWriteAccess->SetPaletteColor(i, aBitmapColor);
+            pWriteAccess->SetPaletteColor(nPaletteIdx, aBitmapColor);
         }
     }
     else if (pWriteAccess->GetScanlineFormat() == ScanlineFormat::N24BitTcBgr)
     {
-        for (nY = 0; nY < nH; ++nY)
+        const sal_Int32 nW = pWriteAccess->Width();
+        const sal_Int32 nH = pWriteAccess->Height();
+
+        for (sal_Int32 nY = 0; nY < nH; ++nY)
         {
             Scanline pScan = pWriteAccess->GetScanline(nY);
 
-            for (nX = 0; nX < nW; ++nX)
+            for (sal_Int32 nX = 0; nX < nW; ++nX)
             {
                 *pScan = aMapB[*pScan];
                 pScan++;
@@ -72,10 +73,13 @@ BitmapEx BitmapColorizeFilter::execute(BitmapEx const& rBitmapEx) const
     }
     else
     {
-        for (nY = 0; nY < nH; ++nY)
+        const sal_Int32 nW = pWriteAccess->Width();
+        const sal_Int32 nH = pWriteAccess->Height();
+
+        for (sal_Int32 nY = 0; nY < nH; ++nY)
         {
             Scanline pScanline = pWriteAccess->GetScanline(nY);
-            for (nX = 0; nX < nW; ++nX)
+            for (sal_Int32 nX = 0; nX < nW; ++nX)
             {
                 aBitmapColor = pWriteAccess->GetPixelFromData(pScanline, nX);
                 aBitmapColor.SetRed(aMapR[aBitmapColor.GetRed()]);
