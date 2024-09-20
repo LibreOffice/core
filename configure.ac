@@ -2188,6 +2188,16 @@ AC_ARG_ENABLE(customtarget-components,
     AS_HELP_STRING([--enable-customtarget-components],
         [Generates the static UNO object constructor mapping from the build.]))
 
+AC_ARG_WITH(extra-cc-flags,
+    AS_HELP_STRING([--with-extra-cc-flags=...],
+        [Specify extra flags (like GCC's -fdiagnostics-color=always, which is useful in combination
+         with the GNU Make --output-sync option) to add to the end of the CC variable.]))
+
+AC_ARG_WITH(extra-cxx-flags,
+    AS_HELP_STRING([--with-extra-cxx-flags=...],
+        [Specify extra flags (like GCC's -fdiagnostics-color=always, which is useful in combination
+         with the GNU Make --output-sync option) to add to the end of the CXX variable.]))
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -7163,6 +7173,9 @@ if test "$_os" != "WINNT"; then
         CXX_BASE=`first_arg_basename "$CXX"`
     fi
 fi
+
+CC="$CC $with_extra_cc_flags"
+CXX="$CXX $with_extra_cxx_flags"
 
 dnl check for GNU C++ compiler version
 if test "$GXX" = "yes" -a -z "$COM_IS_CLANG"; then
