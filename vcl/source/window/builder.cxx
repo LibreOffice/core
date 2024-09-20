@@ -89,11 +89,6 @@
 #include <dlfcn.h>
 #endif
 
-static bool toBool(std::string_view rValue)
-{
-    return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
-}
-
 bool toBool(std::u16string_view rValue)
 {
     return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
@@ -3845,13 +3840,13 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
         if (name == "name")
         {
             name = reader.getAttributeValue(false);
-            OString sKey(name.begin, name.length);
+            OUString sKey(name.begin, name.length, RTL_TEXTENCODING_UTF8);
             sKey = sKey.replace('_', '-');
             (void)reader.nextItem(
                 xmlreader::XmlReader::Text::Raw, &name, &nsId);
-            OString sValue(name.begin, name.length);
+            OUString sValue(name.begin, name.length, RTL_TEXTENCODING_UTF8);
 
-            if (sKey == "expand" || sKey == "resize")
+            if (sKey == u"expand"_ustr || sKey == u"resize"_ustr)
             {
                 bool bTrue = (!sValue.isEmpty() && (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1'));
                 if (pToolBoxParent)
@@ -3864,45 +3859,45 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
             if (pToolBoxParent)
                 continue;
 
-            if (sKey == "fill")
+            if (sKey == u"fill"_ustr)
             {
                 bool bTrue = (!sValue.isEmpty() && (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1'));
                 pCurrent->set_fill(bTrue);
             }
-            else if (sKey == "pack-type")
+            else if (sKey == u"pack-type"_ustr)
             {
                 VclPackType ePackType = (!sValue.isEmpty() && (sValue[0] == 'e' || sValue[0] == 'E')) ? VclPackType::End : VclPackType::Start;
                 pCurrent->set_pack_type(ePackType);
             }
-            else if (sKey == "left-attach")
+            else if (sKey == u"left-attach"_ustr)
             {
                 pCurrent->set_grid_left_attach(sValue.toInt32());
             }
-            else if (sKey == "top-attach")
+            else if (sKey == u"top-attach"_ustr)
             {
                 pCurrent->set_grid_top_attach(sValue.toInt32());
             }
-            else if (sKey == "width")
+            else if (sKey == u"width"_ustr)
             {
                 pCurrent->set_grid_width(sValue.toInt32());
             }
-            else if (sKey == "height")
+            else if (sKey == u"height"_ustr)
             {
                 pCurrent->set_grid_height(sValue.toInt32());
             }
-            else if (sKey == "padding")
+            else if (sKey == u"padding"_ustr)
             {
                 pCurrent->set_padding(sValue.toInt32());
             }
-            else if (sKey == "position")
+            else if (sKey == u"position"_ustr)
             {
                 set_window_packing_position(pCurrent, sValue.toInt32());
             }
-            else if (sKey == "secondary")
+            else if (sKey == u"secondary"_ustr)
             {
                 pCurrent->set_secondary(toBool(sValue));
             }
-            else if (sKey == "non-homogeneous")
+            else if (sKey == u"non-homogeneous"_ustr)
             {
                 pCurrent->set_non_homogeneous(toBool(sValue));
             }
