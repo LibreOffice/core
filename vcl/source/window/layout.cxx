@@ -1434,11 +1434,6 @@ void VclGrid::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", "grid");
 }
 
-bool toBool(std::u16string_view rValue)
-{
-    return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
-}
-
 bool VclGrid::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "row-spacing")

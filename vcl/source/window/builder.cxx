@@ -94,6 +94,11 @@ static bool toBool(std::string_view rValue)
     return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
+bool toBool(std::u16string_view rValue)
+{
+    return (!rValue.empty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
+}
+
 namespace
 {
     OUString mapStockToImageResource(std::u16string_view sType)
