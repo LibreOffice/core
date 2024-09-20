@@ -3967,7 +3967,15 @@ endef
 
 endif # SYSTEM_JFREEREPORT
 
-# no known distro packaged Java-Websocket at present
+# As a guide, Java-Websocket was packaged for Fedora 35
+# https://src.fedoraproject.org/rpms/Java-WebSocket/tree/f35
+ifneq ($(SYSTEM_JAVA_WEBSOCKET),)
+
+define gb_Jar__use_java_websocket
+$(call gb_Jar_use_system_jar,$(1),$(JAVA_WEBSOCKET_JAR))
+endef
+
+else # !SYSTEM_JAVA_WEBSOCKET
 
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
@@ -3978,6 +3986,8 @@ endif
 define gb_Jar__use_java_websocket
 $(call gb_Jar_use_jar,$(1),java_websocket)
 endef
+
+endif # SYSTEM_JAVA_WEBSOCKET
 
 # Executables
 

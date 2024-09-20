@@ -13155,17 +13155,47 @@ AC_SUBST(LIBASSUAN_LIBS)
 AC_SUBST(GPGMEPP_CFLAGS)
 AC_SUBST(GPGMEPP_LIBS)
 
+AC_ARG_WITH(system-java-websocket,
+    AS_HELP_STRING([--with-system-java-websocket],
+        [Use Java-WebSocket already on system.]),,
+    [with_system_java_websocket="$with_system_jars"])
+
+AC_ARG_WITH(java-websocket-jar,
+    AS_HELP_STRING([--with-java-websocket-jar=JARFILE],
+        [Specify path to jarfile manually.]),
+    JAVA_WEBSOCKET_JAR=$withval)
+
 AC_MSG_CHECKING([whether to build Java Websocket for the UNO remote websocket client])
 if test "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_JAVA_WEBSOCKET=TRUE
-    BUILD_TYPE="$BUILD_TYPE JAVA_WEBSOCKET"
-    NEED_ANT=TRUE
+
+    dnl ===================================================================
+    dnl Check for system Java-WebSocket
+    dnl ===================================================================
+    AC_MSG_CHECKING([which Java-WebSocket to use])
+    if test "$with_system_java_websocket" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_JAVA_WEBSOCKET=TRUE
+        if test -z $JAVA_WEBSOCKET_JAR; then
+            JAVA_WEBSOCKET_JAR=/usr/share/java/Java-WebSocket/Java-WebSocket.jar
+        fi
+        if ! test -f $JAVA_WEBSOCKET_JAR; then
+            AC_MSG_ERROR(Java-WebSocket.jar not found.)
+        fi
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_JAVA_WEBSOCKET=
+        BUILD_TYPE="$BUILD_TYPE JAVA_WEBSOCKET"
+        NEED_ANT=TRUE
+    fi
 else
     AC_MSG_RESULT([no])
     ENABLE_JAVA_WEBSOCKET=
 fi
 AC_SUBST(ENABLE_JAVA_WEBSOCKET)
+AC_SUBST(SYSTEM_JAVA_WEBSOCKET)
+AC_SUBST(JAVA_WEBSOCKET_JAR)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
