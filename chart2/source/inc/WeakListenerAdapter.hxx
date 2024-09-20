@@ -38,47 +38,31 @@ namespace chart
     the same wrapper that you added, i.e., you should store the adapter as a
     member in the adapted class for later use.</p>
  */
-template< class Listener >
-    class WeakListenerAdapter : public
-    ::cppu::WeakImplHelper< Listener >
-{
-public:
-    explicit WeakListenerAdapter( const css::uno::Reference< Listener > & xListener ) :
-            m_xListener( xListener )
-    {}
-
-protected:
-    // ____ XEventListener (base of all listeners) ____
-    virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source ) override
-    {
-        css::uno::Reference< css::lang::XEventListener > xEventListener(
-                  css::uno::Reference< Listener >( m_xListener), css::uno::UNO_QUERY );
-        if( xEventListener.is())
-            xEventListener->disposing( Source );
-    }
-
-    css::uno::Reference< Listener > getListener() const
-    {
-        return m_xListener;
-    }
-
-private:
-    css::uno::WeakReference< Listener > m_xListener;
-};
-
 class WeakSelectionChangeListenerAdapter final :
-        public WeakListenerAdapter< css::view::XSelectionChangeListener >
+        public ::cppu::WeakImplHelper< css::view::XSelectionChangeListener >
 {
 public:
     explicit WeakSelectionChangeListenerAdapter(
-        const css::uno::Reference< css::view::XSelectionChangeListener > & xListener );
+        const css::uno::Reference< css::view::XSelectionChangeListener > & xListener )
+            : m_xListener( xListener ) {}
     virtual ~WeakSelectionChangeListenerAdapter() override;
 
 protected:
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
         const css::lang::EventObject& aEvent ) override;
+
+    // ____ XEventListener (base of all listeners) ____
+    virtual void SAL_CALL disposing(
+        const css::lang::EventObject& Source ) override
+    {
+        css::uno::Reference< css::view::XSelectionChangeListener > xEventListener( m_xListener );
+        if( xEventListener.is())
+            xEventListener->disposing( Source );
+    }
+
+private:
+    css::uno::WeakReference< css::view::XSelectionChangeListener > m_xListener;
 };
 
 } //  namespace chart

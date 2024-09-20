@@ -26,17 +26,12 @@ using ::com::sun::star::uno::Reference;
 namespace chart
 {
 
-WeakSelectionChangeListenerAdapter::WeakSelectionChangeListenerAdapter(
-    const Reference< view::XSelectionChangeListener > & xListener ) :
-        WeakListenerAdapter< css::view::XSelectionChangeListener >( xListener )
-{}
-
 WeakSelectionChangeListenerAdapter::~WeakSelectionChangeListenerAdapter()
 {}
 
 void SAL_CALL WeakSelectionChangeListenerAdapter::selectionChanged( const lang::EventObject& aEvent )
 {
-    Reference< view::XSelectionChangeListener > xSelChgListener( getListener() );
+    Reference< view::XSelectionChangeListener > xSelChgListener( m_xListener );
     if( xSelChgListener.is())
         xSelChgListener->selectionChanged( aEvent );
 }
