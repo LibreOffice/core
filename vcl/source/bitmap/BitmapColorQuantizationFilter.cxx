@@ -27,17 +27,11 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
     if (!pRAcc)
         return BitmapEx();
 
-    auto const cappedNewColorCount = std::min(mnNewColorCount, sal_uInt16(256));
-
     const sal_uInt32 nValidBits = 4;
-    const sal_uInt32 nRightShiftBits = 8 - nValidBits;
-    const sal_uInt32 nLeftShiftBits1 = nValidBits;
-    const sal_uInt32 nLeftShiftBits2 = nValidBits << 1;
     const sal_uInt32 nColorsPerComponent = 1 << nValidBits;
     const sal_uInt32 nColorOffset = 256 / nColorsPerComponent;
     const sal_uInt32 nTotalColors = nColorsPerComponent * nColorsPerComponent * nColorsPerComponent;
-    const sal_Int32 nWidth = pRAcc->Width();
-    const sal_Int32 nHeight = pRAcc->Height();
+
     std::unique_ptr<PopularColorCount[]> pCountTable(new PopularColorCount[nTotalColors]);
 
     memset(pCountTable.get(), 0, nTotalColors * sizeof(PopularColorCount));
@@ -53,6 +47,13 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
             }
         }
     }
+
+    const sal_uInt32 nRightShiftBits = 8 - nValidBits;
+    const sal_uInt32 nLeftShiftBits1 = nValidBits;
+    const sal_uInt32 nLeftShiftBits2 = nValidBits << 1;
+
+    const sal_Int32 nWidth = pRAcc->Width();
+    const sal_Int32 nHeight = pRAcc->Height();
 
     if (pRAcc->HasPalette())
     {
@@ -89,6 +90,8 @@ BitmapEx BitmapColorQuantizationFilter::execute(BitmapEx const& aBitmapEx) const
             }
         }
     }
+
+    auto const cappedNewColorCount = std::min(mnNewColorCount, sal_uInt16(256));
 
     BitmapPalette aNewPal(cappedNewColorCount);
 
