@@ -11,6 +11,7 @@
 #define INCLUDED_SFX2_LOKHELPER_HXX
 
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -236,6 +237,9 @@ public:
     static void sendNetworkAccessError(std::string_view rAction);
 
     static void notifyLog(const std::ostringstream& stream);
+
+    static std::string extractCertificate(const std::string& rCert);
+    static css::uno::Reference<css::security::XCertificate> getSigningCertificate(const std::string& rCert, const std::string& rKey);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);

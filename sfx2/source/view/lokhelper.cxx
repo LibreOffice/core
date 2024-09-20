@@ -18,6 +18,8 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <o3tl/string_view.hxx>
@@ -37,6 +39,7 @@
 #include <comphelper/lok.hxx>
 #include <sfx2/msgpool.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/base64.hxx>
 #include <tools/json_writer.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
@@ -821,6 +824,100 @@ void SfxLokHelper::notifyLog(const std::ostringstream& stream)
             g_logNotifierCache.pop_front();
         g_logNotifierCache.push_back(stream.str());
     }
+}
+
+std::string SfxLokHelper::extractCertificate(const std::string & certificate)
+{
+    static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
+    static constexpr std::string_view footer("-----END CERTIFICATE-----");
+
+    std::string result;
+
+    size_t pos1 = certificate.find(header);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = certificate.find(footer, pos1 + 1);
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 = pos1 + header.length();
+    pos2 = pos2 - pos1;
+
+    return certificate.substr(pos1, pos2);
+}
+
+namespace
+{
+std::string extractKey(const std::string & privateKey)
+{
+    static constexpr std::string_view header("-----BEGIN PRIVATE KEY-----");
+    static constexpr std::string_view footer("-----END PRIVATE KEY-----");
+
+    std::string result;
+
+    size_t pos1 = privateKey.find(header);
+    if (pos1 == std::string::npos)
+        return result;
+
+    size_t pos2 = privateKey.find(footer, pos1 + 1);
+    if (pos2 == std::string::npos)
+        return result;
+
+    pos1 = pos1 + header.length();
+    pos2 = pos2 - pos1;
+
+    return privateKey.substr(pos1, pos2);
+}
+}
+
+css::uno::Reference<css::security::XCertificate> SfxLokHelper::getSigningCertificate(const std::string& rCert, const std::string& rKey)
+{
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+    {
+        return {};
+    }
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
+
+    if (!xCertificateCreator.is())
+    {
+        return {};
+    }
+
+    uno::Sequence<sal_Int8> aCertificateSequence;
+
+    std::string aCertificateBase64String = extractCertificate(rCert);
+    if (!aCertificateBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aCertificateBase64String);
+        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+    }
+    else
+    {
+        aCertificateSequence.realloc(rCert.size());
+        std::copy(rCert.c_str(), rCert.c_str() + rCert.size(), aCertificateSequence.getArray());
+    }
+
+    uno::Sequence<sal_Int8> aPrivateKeySequence;
+    std::string aPrivateKeyBase64String = extractKey(rKey);
+    if (!aPrivateKeyBase64String.empty())
+    {
+        OUString aBase64OUString = OUString::createFromAscii(aPrivateKeyBase64String);
+        comphelper::Base64::decode(aPrivateKeySequence, aBase64OUString);
+    }
+    else
+    {
+        aPrivateKeySequence.realloc(rKey.size());
+        std::copy(rKey.c_str(), rKey.c_str() + rKey.size(), aPrivateKeySequence.getArray());
+    }
+
+    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
+    return xCertificate;
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)
