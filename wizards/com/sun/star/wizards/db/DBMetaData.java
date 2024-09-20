@@ -87,7 +87,7 @@ public class DBMetaData
     private XPropertySet xDataSourcePropertySet;
     private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
     private Locale aLocale;
-    public String DataSourceName;
+    private String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
@@ -196,7 +196,10 @@ public class DBMetaData
         }
     }
 
-
+    public String getDataSourceName()
+    {
+        return DataSourceName;
+    }
 
     public boolean hasTableByName(String _stablename)
     {

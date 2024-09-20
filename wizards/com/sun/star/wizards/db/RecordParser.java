@@ -155,7 +155,7 @@ public class RecordParser extends QueryMetaData
     {
         try
         {
-            Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
+            Helper.setUnoPropertyValue(xRowSet, "DataSourceName", getDataSourceName());
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.ACTIVE_CONNECTION, DBConnection);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND, Command);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, Integer.valueOf(_nCommandType)); // CommandType

@@ -98,7 +98,7 @@ public class FormDocument extends TextDocument
 
     private String getDataSourceName()
     {
-        return this.oMainFormDBMetaData.DataSourceName;
+        return this.oMainFormDBMetaData.getDataSourceName();
     }
 
     private void adjustPageStyle()
