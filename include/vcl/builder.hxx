@@ -189,8 +189,8 @@ private:
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
-    void insertComboBoxOrListBoxItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap,
-                                      const std::vector<ComboBoxTextItem>& rItems);
+    void insertComboBoxOrListBoxItems(vcl::Window* pWindow, stringmap& rMap,
+                                      const std::vector<ComboBoxTextItem>& rItems) override;
 
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
@@ -269,10 +269,9 @@ private:
     void tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentChild,
                             std::string_view sType, std::string_view sInternalChild) override;
 
-    VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
-                    const OUString &rClass, const OUString &rID,
-                    stringmap &rProps, stringmap &rPangoAttributes,
-                    stringmap &rAtkProps);
+    VclPtr<vcl::Window> insertObject(vcl::Window* pParent, const OUString& rClass,
+                                     const OUString& rID, stringmap& rProps,
+                                     stringmap& rPangoAttributes, stringmap& rAtkProps) override;
 
     VclPtr<vcl::Window> makeObject(vcl::Window *pParent,
                     const OUString &rClass, const OUString &rID,
@@ -289,8 +288,6 @@ private:
     static bool extractAdjustmentToMap(const OUString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
     void        extractButtonImage(const OUString &id, stringmap &rMap, bool bRadio);
     void        extractMnemonicWidget(const OUString &id, stringmap &rMap);
-
-    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem) override;
 
     void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
                                 const stringmap& rPackingProperties) override;
@@ -309,13 +306,15 @@ private:
 
     void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader) override;
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
-                    bool bMenuBar);
+                    bool bMenuBar) override;
 
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
-    void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties, bool bToolbarItem);
+    void applyAtkProperties(vcl::Window* pWindow, const stringmap& rProperties,
+                            bool bToolbarItem) override;
 
-    static void setPriority(vcl::Window* pWindow, int nPriority);
-    static void setContext(vcl::Window* pWindow, std::vector<vcl::EnumContext::Context>&& aContext);
+    void setPriority(vcl::Window* pWindow, int nPriority) override;
+    void setContext(vcl::Window* pWindow,
+                    std::vector<vcl::EnumContext::Context>&& aContext) override;
 
     PackingData get_window_packing_data(const vcl::Window *pWindow) const;
     void        set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition);

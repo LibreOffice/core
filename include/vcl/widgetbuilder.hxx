@@ -9,8 +9,8 @@
 
 #pragma once
 
+#include <sal/log.hxx>
 #include <vcl/builderbase.hxx>
-
 #include <xmlreader/span.hxx>
 #include <xmlreader/xmlreader.hxx>
 
@@ -114,12 +114,158 @@ protected:
         }
     }
 
+    WidgetPtr handleObject(Widget* pParent, stringmap* pAtkProps, xmlreader::XmlReader& reader,
+                           bool bToolbarItem)
+    {
+        OUString sClass;
+        OUString sID;
+        OUString sCustomProperty;
+        extractClassAndIdAndCustomProperty(reader, sClass, sID, sCustomProperty);
+
+        if (sClass == "GtkListStore" || sClass == "GtkTreeStore")
+        {
+            handleListStore(reader, sID, sClass);
+            return nullptr;
+        }
+        else if (sClass == "GtkMenu")
+        {
+            handleMenu(reader, pParent, sID, false);
+            return nullptr;
+        }
+        else if (sClass == "GtkMenuBar")
+        {
+            handleMenu(reader, pParent, sID, true);
+            return nullptr;
+        }
+        else if (sClass == "GtkSizeGroup")
+        {
+            handleSizeGroup(reader);
+            return nullptr;
+        }
+        else if (sClass == "AtkObject")
+        {
+            assert((pParent || pAtkProps) && "must have one set");
+            assert(!(pParent && pAtkProps) && "must not have both");
+            auto aAtkProperties = handleAtkObject(reader);
+            if (pParent)
+                applyAtkProperties(pParent, aAtkProperties, bToolbarItem);
+            if (pAtkProps)
+                *pAtkProps = std::move(aAtkProperties);
+            return nullptr;
+        }
+
+        int nLevel = 1;
+
+        stringmap aProperties, aPangoAttributes;
+        stringmap aAtkAttributes;
+        std::vector<ComboBoxTextItem> aItems;
+
+        if (!sCustomProperty.isEmpty())
+            aProperties[u"customproperty"_ustr] = sCustomProperty;
+
+        WidgetPtr pCurrentChild = nullptr;
+        while (true)
+        {
+            xmlreader::Span name;
+            int nsId;
+            xmlreader::XmlReader::Result res
+                = reader.nextItem(xmlreader::XmlReader::Text::NONE, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::Result::Done)
+                break;
+
+            if (res == xmlreader::XmlReader::Result::Begin)
+            {
+                if (name == "child")
+                {
+                    if (!pCurrentChild)
+                    {
+                        pCurrentChild = insertObject(pParent, sClass, sID, aProperties,
+                                                     aPangoAttributes, aAtkAttributes);
+                    }
+                    handleChild(pCurrentChild, nullptr, reader, isToolbarItemClass(sClass));
+                }
+                else if (name == "items")
+                    aItems = handleItems(reader);
+                else if (name == "style")
+                {
+                    int nPriority = 0;
+                    std::vector<vcl::EnumContext::Context> aContext
+                        = handleStyle(reader, nPriority);
+                    if (nPriority != 0)
+                        setPriority(pCurrentChild, nPriority);
+                    if (!aContext.empty())
+                        setContext(pCurrentChild, std::move(aContext));
+                }
+                else
+                {
+                    ++nLevel;
+                    if (name == "property")
+                        collectProperty(reader, aProperties);
+                    else if (name == "attribute")
+                        collectPangoAttribute(reader, aPangoAttributes);
+                    else if (name == "relation")
+                        collectAtkRelationAttribute(reader, aAtkAttributes);
+                    else if (name == "role")
+                        collectAtkRoleAttribute(reader, aAtkAttributes);
+                    else if (name == "action-widget")
+                        handleActionWidget(reader);
+                }
+            }
+
+            if (res == xmlreader::XmlReader::Result::End)
+            {
+                --nLevel;
+            }
+
+            if (!nLevel)
+                break;
+        }
+
+        if (sClass == "GtkAdjustment")
+        {
+            addAdjustment(sID, aProperties);
+            return nullptr;
+        }
+        else if (sClass == "GtkTextBuffer")
+        {
+            addTextBuffer(sID, aProperties);
+            return nullptr;
+        }
+
+        if (!pCurrentChild)
+        {
+            pCurrentChild
+                = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes, aAtkAttributes);
+        }
+
+        if (!aItems.empty())
+            insertComboBoxOrListBoxItems(pCurrentChild, aProperties, aItems);
+
+        return pCurrentChild;
+    }
+
+    virtual void applyAtkProperties(Widget* pWidget, const stringmap& rProperties,
+                                    bool bToolbarItem)
+        = 0;
     virtual void applyPackingProperties(Widget* pCurrentChild, Widget* pParent,
                                         const stringmap& rPackingProperties)
         = 0;
+    virtual void insertComboBoxOrListBoxItems(Widget* pWidget, stringmap& rMap,
+                                              const std::vector<ComboBoxTextItem>& rItems)
+        = 0;
+
+    virtual WidgetPtr insertObject(Widget* pParent, const OUString& rClass, const OUString& rID,
+                                   stringmap& rProps, stringmap& rPangoAttributes,
+                                   stringmap& rAtkProps)
+        = 0;
+
     virtual void tweakInsertedChild(Widget* pParent, Widget* pCurrentChild, std::string_view sType,
                                     std::string_view sInternalChild)
         = 0;
+
+    virtual void setPriority(Widget* pWidget, int nPriority) = 0;
+    virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 
     // These methods are currently only implemented by VclBuilder and should be
     // refactored as described in the class documentation above (split into
@@ -128,13 +274,14 @@ protected:
     //
     // Until that's done, other subclasses can be used to handle only those .ui files
     // not using the corresponding features (attributes/objects in the .ui file).
-    virtual WidgetPtr handleObject(Widget* /*pParent*/, stringmap* /*pAtkProps*/,
-                                   xmlreader::XmlReader& /*reader*/, bool /*bToolbarItem*/)
+    virtual void handleMenu(xmlreader::XmlReader& /*reader*/, Widget* /*pParent*/,
+                            const OUString& /*rID*/, bool /*bMenuBar*/)
     {
         assert(false && "Functionality not implemented by this subclass yet.");
-        return nullptr;
     }
+
     virtual void handleTabChild(Widget* /*pParent*/, xmlreader::XmlReader& /*reader*/)
+
     {
         assert(false && "Functionality not implemented by this subclass yet.");
     }
