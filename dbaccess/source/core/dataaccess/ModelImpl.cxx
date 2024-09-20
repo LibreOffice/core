@@ -624,8 +624,12 @@ void ODatabaseModelImpl::dispose()
     // dispose the data source and the model
     try
     {
-        Reference< XDataSource > xDS( m_xDataSource );
-        ::comphelper::disposeComponent( xDS );
+        rtl::Reference< ODatabaseSource > xDS( m_xDataSource );
+        if (xDS)
+        {
+            xDS->dispose();
+            m_xDataSource.clear();
+        }
 
         Reference< XModel > xModel( m_xModel );
         ::comphelper::disposeComponent( xModel );
@@ -634,7 +638,7 @@ void ODatabaseModelImpl::dispose()
     {
         DBG_UNHANDLED_EXCEPTION("dbaccess");
     }
-    m_xDataSource = WeakReference<XDataSource>();
+    m_xDataSource.clear();
     m_xModel = WeakReference< XModel >();
 
     for (auto const& elem : m_aContainer)
@@ -942,11 +946,11 @@ void ODatabaseModelImpl::setModified( bool _bModified )
 
 Reference<XDataSource> ODatabaseModelImpl::getOrCreateDataSource()
 {
-    Reference<XDataSource> xDs = m_xDataSource;
+    rtl::Reference<ODatabaseSource> xDs = m_xDataSource;
     if ( !xDs.is() )
     {
         xDs = new ODatabaseSource(this);
-        m_xDataSource = xDs;
+        m_xDataSource = xDs.get();
     }
     return xDs;
 }

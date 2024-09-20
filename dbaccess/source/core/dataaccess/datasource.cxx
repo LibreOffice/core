@@ -1200,12 +1200,12 @@ Reference< XNameAccess >  ODatabaseSource::getTables()
 {
     ModelMethodGuard aGuard( *this );
 
-    Reference< XNameAccess > xContainer = m_pImpl->m_xTableDefinitions;
+    rtl::Reference< OCommandContainer > xContainer = m_pImpl->m_xTableDefinitions;
     if ( !xContainer.is() )
     {
         TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::ObjectType::Table ) );
         xContainer = new OCommandContainer( m_pImpl->m_aContext, *this, rContainerData, true );
-        m_pImpl->m_xTableDefinitions = xContainer;
+        m_pImpl->m_xTableDefinitions = xContainer.get();
     }
     return xContainer;
 }

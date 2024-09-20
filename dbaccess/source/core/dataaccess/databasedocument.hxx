@@ -74,6 +74,7 @@ namespace dbaccess
 class DocumentEvents;
 class DocumentEventExecutor;
 class DocumentGuard;
+class OCommandContainer;
 
 typedef std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
 
@@ -439,6 +440,8 @@ public:
     */
     static void clearObjectContainer(
                 css::uno::WeakReference< css::container::XNameAccess >& _rxContainer);
+    static void clearObjectContainer(
+                unotools::WeakReference< OCommandContainer >& _rxContainer);
 
     /** checks whether the component is already initialized, throws a NotInitializedException if not
     */

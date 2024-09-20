@@ -44,6 +44,7 @@
 #include <rtl/digest.h>
 #include <rtl/ref.hxx>
 #include <o3tl/enumarray.hxx>
+#include <unotools/weakref.hxx>
 
 #include <span>
 
@@ -54,6 +55,7 @@ namespace comphelper
 
 namespace dbaccess
 {
+class OCommandContainer;
 
 typedef std::vector< css::uno::WeakReference< css::sdbc::XConnection > > OWeakConnectionArray;
 
@@ -173,7 +175,7 @@ public:
 
 private:
     css::uno::WeakReference< css::frame::XModel >                     m_xModel;
-    css::uno::WeakReference< css::sdbc::XDataSource >                 m_xDataSource;
+    unotools::WeakReference< ODatabaseSource >                        m_xDataSource;
 
     rtl::Reference<DocumentStorageAccess>                             m_pStorageAccess;
     o3tl::enumarray< ObjectType, TContentPtr >                        m_aContainer;   // one for each ObjectType
@@ -221,7 +223,7 @@ public:
 
 public:
     css::uno::WeakReference< css::container::XNameAccess >    m_xCommandDefinitions;
-    css::uno::WeakReference< css::container::XNameAccess >    m_xTableDefinitions;
+    unotools::WeakReference< ::dbaccess::OCommandContainer > m_xTableDefinitions;
 
     css::uno::Reference< css::util::XNumberFormatsSupplier >
                                                               m_xNumberFormatsSupplier;

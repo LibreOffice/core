@@ -23,6 +23,7 @@
 #include "documenteventexecutor.hxx"
 #include <databasecontext.hxx>
 #include "documentcontainer.hxx"
+#include "commandcontainer.hxx"
 #include <sdbcoretools.hxx>
 #include <strings.hxx>
 #include <recovery/dbdocrecovery.hxx>
@@ -149,7 +150,8 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     {
         impl_reparent_nothrow( m_xForms );
         impl_reparent_nothrow( m_xReports );
-        impl_reparent_nothrow( m_pImpl->m_xTableDefinitions );
+        if (auto xTableDef = m_pImpl->m_xTableDefinitions.get())
+            xTableDef->setParent(*this);
         impl_reparent_nothrow( m_pImpl->m_xCommandDefinitions );
 
         m_pEventExecutor = new DocumentEventExecutor( m_pImpl->m_aContext, this );
@@ -1392,6 +1394,17 @@ void ODatabaseDocument::clearObjectContainer( WeakReference< XNameAccess >& _rxC
     Reference< XChild > xChild( _rxContainer.get(),UNO_QUERY );
     if ( xChild.is() )
         xChild->setParent( nullptr );
+    _rxContainer.clear();
+}
+
+void ODatabaseDocument::clearObjectContainer( unotools::WeakReference< OCommandContainer >& _rxContainer)
+{
+    rtl::Reference< OCommandContainer > xContainer = _rxContainer;
+    if ( xContainer.is() )
+    {
+        xContainer->dispose();
+        xContainer->setParent( nullptr );
+    }
     _rxContainer.clear();
 }
 
