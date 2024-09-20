@@ -303,7 +303,7 @@ public class QueryWizard extends DatabaseObjectWizard
                     m_groupFilterComponent.initialize(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
                     break;
                 case SOTITLES_PAGE:
-                    m_titlesComponent.initialize(m_DBMetaData.getDisplayFieldNames(), m_DBMetaData.FieldTitleSet);
+                    m_titlesComponent.initialize(m_DBMetaData.getDisplayFieldNames(), m_DBMetaData.getFieldTitleSet());
                     break;
                 case SOSUMMARY_PAGE:
                     m_finalizer.initialize();

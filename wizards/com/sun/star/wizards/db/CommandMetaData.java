@@ -34,8 +34,7 @@ import java.util.Map;
 
 public class CommandMetaData extends DBMetaData
 {
-
-    public Map<String, String> FieldTitleSet = new HashMap<String, String>();
+    protected Map<String, String> FieldTitleSet = new HashMap<String, String>();
     public String[] m_aAllFieldNames = new String[]
     {
     };
