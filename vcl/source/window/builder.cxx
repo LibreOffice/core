@@ -3141,12 +3141,13 @@ void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProp
     {
         if (bToolbarItem)
         {
-            // apply accessible name to the toolbar item
-            if (rKey == u"AtkObject::accessible-name")
+            // apply property to the corresponding toolbar item (which is not a vcl::Window itself)
+            // rather than the toolbar itself
+            ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
+            if (pToolBox)
             {
-                ToolBox* pToolBox = dynamic_cast<ToolBox*>(pWindow);
-                assert(pToolBox);
-                pToolBox->SetAccessibleName(m_pVclParserState->m_nLastToolbarId, rValue);
+                if (rKey == u"AtkObject::accessible-name")
+                    pToolBox->SetAccessibleName(m_pVclParserState->m_nLastToolbarId, rValue);
             }
         }
         else if (pWindow && rKey.match("AtkObject::"))
@@ -3695,8 +3696,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
                     pCurrentChild = insertObject(pParent, sClass, sID,
                         aProperties, aPangoAttributes, aAtkAttributes);
                 }
-                const bool bToolItem = pCurrentChild == pParent && pCurrentChild->GetType() == WindowType::TOOLBOX && isToolbarItemClass(sClass);
-                handleChild(pCurrentChild, nullptr, reader, bToolItem);
+                handleChild(pCurrentChild, nullptr, reader, isToolbarItemClass(sClass));
             }
             else if (name == "items")
                 aItems = handleItems(reader);
