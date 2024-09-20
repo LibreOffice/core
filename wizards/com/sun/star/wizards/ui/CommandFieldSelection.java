@@ -223,11 +223,12 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             if (binitialize)
             {
                 CurDBMetaData.setCommandName(curCommandName);
-                if (CurDBMetaData.m_aAllFieldNames != null)
+                String[] allFieldNames = CurDBMetaData.getAllFieldNames();
+                if (allFieldNames != null)
                 {
-                    if (CurDBMetaData.m_aAllFieldNames.length > 0)
+                    if (allFieldNames.length > 0)
                     {
-                        initialize(CurDBMetaData.m_aAllFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
+                        initialize(allFieldNames, AppendMode, CurDBMetaData.getMaxColumnsInSelect());
                         return;
                     }
                 }

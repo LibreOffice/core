@@ -35,7 +35,7 @@ import java.util.Map;
 public class CommandMetaData extends DBMetaData
 {
     protected Map<String, String> FieldTitleSet = new HashMap<String, String>();
-    public String[] m_aAllFieldNames = new String[]
+    protected String[] m_aAllFieldNames = new String[]
     {
     };
     public FieldColumn[] FieldColumns = new FieldColumn[]
@@ -108,6 +108,11 @@ public class CommandMetaData extends DBMetaData
     public Map<String, String> getFieldTitleSet()
     {
         return FieldTitleSet;
+    }
+
+    public String[] getAllFieldNames()
+    {
+        return m_aAllFieldNames;
     }
 
     public XPropertySet getColumnObjectByFieldName(String _FieldName, boolean _bgetByDisplayName)
