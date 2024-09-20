@@ -265,7 +265,8 @@ static void printConstructor(
     rtl::Reference< unoidl::Entity > const & entity, std::u16string_view name,
     std::vector< OUString > const & arguments)
 {
-    o << "public " << OUString(name.substr(name.rfind('.') + 1)) << '(';
+    std::u16string_view::size_type pos = name.rfind('.');
+    o << "public " << OUString(name.substr((pos != std::u16string_view::npos) ? pos + 1 : 0)) << '(';
     printConstructorParameters(
         o, options, manager, sort, entity, name, arguments);
     o << ");\n";

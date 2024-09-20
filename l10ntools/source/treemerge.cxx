@@ -71,9 +71,12 @@ namespace
         const auto nAfterSlash = (nFirstSlash != std::string_view::npos) ? (nFirstSlash + 1) : 0;
         // Update id attribute of topic
         {
+            std::u16string_view::size_type nXhpSlash = rXhpRoot.rfind('/');
+            const auto nAfterXhpSlash = (nXhpSlash != std::u16string_view::npos) ? (nXhpSlash + 1) : 0;
+
             OString sNewID =
                 OString::Concat(sID.subView( 0, nAfterSlash )) +
-                rXhpRoot.substr( rXhpRoot.rfind('/') + 1 ) +
+                rXhpRoot.substr( nAfterXhpSlash ) +
                 sID.subView( sID.indexOf( '/', nAfterSlash ) );
             xmlSetProp(
                 pReturn, reinterpret_cast<const xmlChar*>("id"),
