@@ -2882,7 +2882,8 @@ void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlread
             }
             else if (name == "packing")
             {
-                handlePacking(pCurrentChild, pParent, reader);
+                const stringmap aPackingProperties = collectPackingProperties(reader);
+                applyPackingProperties(pCurrentChild, pParent, aPackingProperties);
             }
             else if (name == "interface")
             {
@@ -3777,7 +3778,7 @@ void BuilderBase::handleInterfaceDomain(xmlreader::XmlReader& rReader)
     m_pParserState->m_aResLocale = Translate::Create(sPrefixName);
 }
 
-void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
+BuilderBase::stringmap BuilderBase::collectPackingProperties(xmlreader::XmlReader& reader)
 {
     int nLevel = 1;
     stringmap aPackingProperties;
@@ -3809,7 +3810,7 @@ void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlr
             break;
     }
 
-    applyPackingProperties(pCurrent, pParent, aPackingProperties);
+    return aPackingProperties;
 }
 
 void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,

@@ -62,6 +62,7 @@ protected:
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap);
+    stringmap collectPackingProperties(xmlreader::XmlReader& reader);
     void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
     void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
                                             OUString& rId, OUString& rCustomProperty);
