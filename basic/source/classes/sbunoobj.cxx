@@ -4470,7 +4470,7 @@ void disposeComVariablesForBasic( StarBASIC const * pBasic )
     ComponentRefVector& rv = pItem->m_vComImplementsObjects;
     for (auto const& elem : rv)
     {
-        Reference< XComponent > xComponent( elem.get(), UNO_QUERY );
+        Reference< XComponent > xComponent( elem );
         if (xComponent.is())
             xComponent->dispose();
     }
