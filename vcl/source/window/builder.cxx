@@ -3780,6 +3780,7 @@ void BuilderBase::handleInterfaceDomain(xmlreader::XmlReader& rReader)
 void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader)
 {
     int nLevel = 1;
+    stringmap aPackingProperties;
 
     while(true)
     {
@@ -3796,7 +3797,7 @@ void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlr
         {
             ++nLevel;
             if (name == "property")
-                applyPackingProperty(pCurrent, pParent, reader);
+                collectProperty(reader, aPackingProperties);
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -3807,11 +3808,12 @@ void VclBuilder::handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlr
         if (!nLevel)
             break;
     }
+
+    applyPackingProperties(pCurrent, pParent, aPackingProperties);
 }
 
-void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
-    vcl::Window *pParent,
-    xmlreader::XmlReader &reader)
+void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
+                                        const stringmap& rPackingProperties)
 {
     if (!pCurrent)
         return;
@@ -3821,9 +3823,6 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
     ToolBox *pToolBoxParent = nullptr;
     if (pCurrent == pParent)
         pToolBoxParent = dynamic_cast<ToolBox*>(pParent);
-
-    xmlreader::Span name;
-    int nsId;
 
     if (pCurrent->GetType() == WindowType::SCROLLWINDOW)
     {
@@ -3835,79 +3834,69 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
         }
     }
 
-    while (reader.nextAttribute(&nsId, &name))
+    for (auto const& [rKey, rValue] : rPackingProperties)
     {
-        if (name == "name")
+        if (rKey == u"expand"_ustr || rKey == u"resize"_ustr)
         {
-            name = reader.getAttributeValue(false);
-            OUString sKey(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-            sKey = sKey.replace('_', '-');
-            (void)reader.nextItem(
-                xmlreader::XmlReader::Text::Raw, &name, &nsId);
-            OUString sValue(name.begin, name.length, RTL_TEXTENCODING_UTF8);
-
-            if (sKey == u"expand"_ustr || sKey == u"resize"_ustr)
-            {
-                bool bTrue = toBool(sValue);
-                if (pToolBoxParent)
-                    pToolBoxParent->SetItemExpand(m_pVclParserState->m_nLastToolbarId, bTrue);
-                else
-                    pCurrent->set_expand(bTrue);
-                continue;
-            }
-
+            bool bTrue = toBool(rValue);
             if (pToolBoxParent)
-                continue;
-
-            if (sKey == u"fill"_ustr)
-            {
-                pCurrent->set_fill(toBool(sValue));
-            }
-            else if (sKey == u"pack-type"_ustr)
-            {
-                VclPackType ePackType = (!sValue.isEmpty() && (sValue[0] == 'e' || sValue[0] == 'E')) ? VclPackType::End : VclPackType::Start;
-                pCurrent->set_pack_type(ePackType);
-            }
-            else if (sKey == u"left-attach"_ustr)
-            {
-                pCurrent->set_grid_left_attach(sValue.toInt32());
-            }
-            else if (sKey == u"top-attach"_ustr)
-            {
-                pCurrent->set_grid_top_attach(sValue.toInt32());
-            }
-            else if (sKey == u"width"_ustr)
-            {
-                pCurrent->set_grid_width(sValue.toInt32());
-            }
-            else if (sKey == u"height"_ustr)
-            {
-                pCurrent->set_grid_height(sValue.toInt32());
-            }
-            else if (sKey == u"padding"_ustr)
-            {
-                pCurrent->set_padding(sValue.toInt32());
-            }
-            else if (sKey == u"position"_ustr)
-            {
-                set_window_packing_position(pCurrent, sValue.toInt32());
-            }
-            else if (sKey == u"secondary"_ustr)
-            {
-                pCurrent->set_secondary(toBool(sValue));
-            }
-            else if (sKey == u"non-homogeneous"_ustr)
-            {
-                pCurrent->set_non_homogeneous(toBool(sValue));
-            }
-            else if (sKey == "homogeneous")
-            {
-                pCurrent->set_non_homogeneous(!toBool(sValue));
-            }
+                pToolBoxParent->SetItemExpand(m_pVclParserState->m_nLastToolbarId, bTrue);
             else
-            {
-                SAL_WARN_IF(sKey != "shrink", "vcl.builder", "unknown packing: " << sKey);
-            }
+                pCurrent->set_expand(bTrue);
+            continue;
+        }
+
+        if (pToolBoxParent)
+            continue;
+
+        if (rKey == u"fill"_ustr)
+        {
+            pCurrent->set_fill(toBool(rValue));
+        }
+        else if (rKey == u"pack-type"_ustr)
+        {
+            VclPackType ePackType = (!rValue.isEmpty() && (rValue[0] == 'e' || rValue[0] == 'E')) ? VclPackType::End : VclPackType::Start;
+            pCurrent->set_pack_type(ePackType);
+        }
+        else if (rKey == u"left-attach"_ustr)
+        {
+            pCurrent->set_grid_left_attach(rValue.toInt32());
+        }
+        else if (rKey == u"top-attach"_ustr)
+        {
+            pCurrent->set_grid_top_attach(rValue.toInt32());
+        }
+        else if (rKey == u"width"_ustr)
+        {
+            pCurrent->set_grid_width(rValue.toInt32());
+        }
+        else if (rKey == u"height"_ustr)
+        {
+            pCurrent->set_grid_height(rValue.toInt32());
+        }
+        else if (rKey == u"padding"_ustr)
+        {
+            pCurrent->set_padding(rValue.toInt32());
+        }
+        else if (rKey == u"position"_ustr)
+        {
+            set_window_packing_position(pCurrent, rValue.toInt32());
+        }
+        else if (rKey == u"secondary"_ustr)
+        {
+            pCurrent->set_secondary(toBool(rValue));
+        }
+        else if (rKey == u"non-homogeneous"_ustr)
+        {
+            pCurrent->set_non_homogeneous(toBool(rValue));
+        }
+        else if (rKey == "homogeneous")
+        {
+            pCurrent->set_non_homogeneous(!toBool(rValue));
+        }
+        else
+        {
+            SAL_WARN_IF(rKey != "shrink", "vcl.builder", "unknown packing: " << rKey);
         }
     }
 }

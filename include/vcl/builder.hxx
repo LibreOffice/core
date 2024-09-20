@@ -295,7 +295,8 @@ private:
     VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem);
 
     void        handlePacking(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
-    void        applyPackingProperty(vcl::Window *pCurrent, vcl::Window *pParent, xmlreader::XmlReader &reader);
+    void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
+                                const stringmap& rPackingProperties);
 
     void        insertMenuObject(
                    Menu *pParent,
