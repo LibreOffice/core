@@ -109,7 +109,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
             pFoundKey = nullptr;
 
         m_aCurLeaf = pPage;
-        m_nCurNode = pFoundKey ? i : i - 1;
+        m_nCurNode = pFoundKey ? i : sal_uInt16(i - 1);
     }
     return pFoundKey;
 }
