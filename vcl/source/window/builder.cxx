@@ -3848,7 +3848,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
 
             if (sKey == u"expand"_ustr || sKey == u"resize"_ustr)
             {
-                bool bTrue = (!sValue.isEmpty() && (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1'));
+                bool bTrue = toBool(sValue);
                 if (pToolBoxParent)
                     pToolBoxParent->SetItemExpand(m_pVclParserState->m_nLastToolbarId, bTrue);
                 else
@@ -3861,8 +3861,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
 
             if (sKey == u"fill"_ustr)
             {
-                bool bTrue = (!sValue.isEmpty() && (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1'));
-                pCurrent->set_fill(bTrue);
+                pCurrent->set_fill(toBool(sValue));
             }
             else if (sKey == u"pack-type"_ustr)
             {
