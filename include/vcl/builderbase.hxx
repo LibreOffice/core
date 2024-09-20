@@ -44,6 +44,7 @@ public:
 
 protected:
     BuilderBase(const OUString& rUIFile, bool bLegacy);
+    virtual ~BuilderBase() = default;
 
     struct ListStore
     {

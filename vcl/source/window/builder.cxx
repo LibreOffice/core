@@ -491,7 +491,7 @@ void BuilderBase::resetParserState() { m_pParserState.reset(); }
 VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
                        bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
-    : BuilderBase(sUIFile, bLegacy)
+    : WidgetBuilder(sUIFile, bLegacy)
     , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
                                    ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
                                    : new NotebookBarAddonsItem{})
@@ -2834,78 +2834,6 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
         //between controls goes in a visually sensible sequence
         std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
         BuilderUtils::reorderWithinParent(aChilds, bIsButtonBox);
-    }
-}
-
-void VclBuilder::handleChild(vcl::Window *pParent, stringmap* pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem)
-{
-    xmlreader::Span name;
-    int nsId;
-    OString sType, sInternalChild;
-
-    while (reader.nextAttribute(&nsId, &name))
-    {
-        if (name == "type")
-        {
-            name = reader.getAttributeValue(false);
-            sType = OString(name.begin, name.length);
-        }
-        else if (name == "internal-child")
-        {
-            name = reader.getAttributeValue(false);
-            sInternalChild = OString(name.begin, name.length);
-        }
-    }
-
-    if (sType == "tab")
-    {
-        handleTabChild(pParent, reader);
-        return;
-    }
-
-    VclPtr<vcl::Window> pCurrentChild;
-    int nLevel = 1;
-    while(true)
-    {
-        xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::Text::NONE, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::Result::Begin)
-        {
-            if (name == "object" || name == "placeholder")
-            {
-                pCurrentChild = handleObject(pParent, pAtkProps, reader, bToolbarItem);
-
-                bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
-                if (bObjectInserted)
-                    tweakInsertedChild(pParent, pCurrentChild, sType, sInternalChild);
-            }
-            else if (name == "packing")
-            {
-                const stringmap aPackingProperties = collectPackingProperties(reader);
-                applyPackingProperties(pCurrentChild, pParent, aPackingProperties);
-            }
-            else if (name == "interface")
-            {
-                while (reader.nextAttribute(&nsId, &name))
-                {
-                    if (name == "domain")
-                        handleInterfaceDomain(reader);
-                }
-                ++nLevel;
-            }
-            else
-                ++nLevel;
-        }
-
-        if (res == xmlreader::XmlReader::Result::End)
-            --nLevel;
-
-        if (!nLevel)
-            break;
-
-        if (res == xmlreader::XmlReader::Result::Done)
-            break;
     }
 }
 

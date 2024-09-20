@@ -15,7 +15,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <utility>
-#include <vcl/builderbase.hxx>
+#include <vcl/widgetbuilder.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/toolboxid.hxx>
@@ -54,7 +54,7 @@ namespace xmlreader { class XmlReader; }
 namespace com::sun::star::frame { class XFrame; }
 
 /// Creates a hierarchy of vcl::Windows (widgets) from a .ui file for dialogs, sidebar, etc.
-class VCL_DLLPUBLIC VclBuilder : public BuilderBase
+class VCL_DLLPUBLIC VclBuilder : public WidgetBuilder<vcl::Window, VclPtr<vcl::Window>>
 {
 public:
     /// These functions create a new widget with parent pParent and return it in rRet
@@ -267,7 +267,7 @@ private:
 private:
     // tweak newly inserted child depending on window type
     void tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentChild,
-                            std::string_view sType, std::string_view sInternalChild);
+                            std::string_view sType, std::string_view sInternalChild) override;
 
     VclPtr<vcl::Window> insertObject(vcl::Window *pParent,
                     const OUString &rClass, const OUString &rID,
@@ -290,15 +290,10 @@ private:
     void        extractButtonImage(const OUString &id, stringmap &rMap, bool bRadio);
     void        extractMnemonicWidget(const OUString &id, stringmap &rMap);
 
-    // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
-    // collecting the atk info for a GtkMenuItem,
-    // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
-    void        handleChild(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem = false);
-    // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
-    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem);
+    VclPtr<vcl::Window> handleObject(vcl::Window *pParent, stringmap *pAtkProps, xmlreader::XmlReader &reader, bool bToolbarItem) override;
 
     void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
-                                const stringmap& rPackingProperties);
+                                const stringmap& rPackingProperties) override;
 
     void        insertMenuObject(
                    Menu *pParent,
@@ -312,7 +307,7 @@ private:
     void        handleMenuChild(Menu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(Menu *pParent, xmlreader::XmlReader &reader);
 
-    void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader);
+    void        handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &reader) override;
     void handleMenu(xmlreader::XmlReader& reader, vcl::Window* pParent, const OUString& rID,
                     bool bMenuBar);
 
