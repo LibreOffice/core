@@ -1649,13 +1649,10 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
     if (TrySaveFormulaAsPDF(rWrt, rFrameFormat, pOLENd, bWriteReplacementGraphic, bInCntnr))
         return rWrt;
 
-    if ( !pOLENd->GetGraphic() )
-    {
-        SAL_WARN("sw.html", "Unexpected missing OLE fallback graphic");
-        return rWrt;
-    }
-
-    Graphic aGraphic( *pOLENd->GetGraphic() );
+    // Missing fallback graphic must not give up exporting the document, and also must produce
+    // valid output (see OutHTMLGraphic)
+    const Graphic* pFallbackGraphic = pOLENd->GetGraphic();
+    Graphic aGraphic(pFallbackGraphic ? *pFallbackGraphic : Graphic());
 
     SwDocShell* pDocSh = rWrt.m_pDoc->GetDocShell();
     bool bObjectOpened = false;

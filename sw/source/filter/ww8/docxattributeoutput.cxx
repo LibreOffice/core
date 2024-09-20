@@ -5226,8 +5226,8 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         Graphic aGraphic;
         if (pGrfNode)
             aGraphic = pGrfNode->GetGrf();
-        else
-            aGraphic = *pOLENode->GetGraphic();
+        else if (const Graphic* pGraphic = pOLENode->GetGraphic())
+            aGraphic = *pGraphic;
 
         m_rDrawingML.SetFS(m_pSerializer); // to be sure that we write to the right stream
         auto pGraphicExport = m_rDrawingML.createGraphicExport();
@@ -5876,8 +5876,9 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
 
     // write preview image
     const Graphic* pGraphic = rNode.GetGraphic();
+    Graphic aGraphic = pGraphic ? *pGraphic : Graphic();
     m_rDrawingML.SetFS(m_pSerializer);
-    OUString sImageId = m_rDrawingML.writeGraphicToStorage(*pGraphic);
+    OUString sImageId = m_rDrawingML.writeGraphicToStorage(aGraphic);
 
     if ( sDrawAspect == "Content" )
     {

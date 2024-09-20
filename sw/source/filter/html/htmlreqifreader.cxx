@@ -223,7 +223,8 @@ OString InsertOLE1HeaderFromOle10NativeStream(const rtl::Reference<SotStorage>& 
         return aClassName;
     }
 
-    const Graphic& rGraphic = *rOLENode.GetGraphic();
+    const Graphic* pGraphic = rOLENode.GetGraphic();
+    const Graphic rGraphic = pGraphic ? *pGraphic : Graphic();
     Size aSize = rOLENode.GetTwipSize();
     SvMemoryStream aGraphicStream;
     if (GraphicConverter::Export(aGraphicStream, rGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)

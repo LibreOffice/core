@@ -2989,10 +2989,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         }
                     }
 
-                    if(pOle2 && pOle2->GetGraphic())
-                    {
-                         nCount += pOle2->GetGraphic()->GetGDIMetaFile().GetActionSize();
-                    }
+                    if (pOle2)
+                        if (const Graphic* pGraphic = pOle2->GetGraphic())
+                            nCount += pGraphic->GetGDIMetaFile().GetActionSize();
                 }
 
                 // decide with the sum of all meta objects if we should show a dialog

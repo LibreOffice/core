@@ -4389,12 +4389,13 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     aRendered.setWidth(rSize.Width());
     aRendered.setHeight(rSize.Height());
     const Graphic* pGraphic = rOLENode.GetGraphic();
-    Size aMapped(pGraphic->GetPrefSize());
+    Graphic aGraphic = pGraphic ? *pGraphic : Graphic();
+    Size aMapped(aGraphic.GetPrefSize());
     auto& rCr = rOLENode.GetAttr(RES_GRFATR_CROPGRF);
     const char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
     const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
-    if (GraphicConverter::Export(aStream, *pGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
+    if (GraphicConverter::Export(aStream, aGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the graphic");
     sal_uInt64 nSize = aStream.TellEnd();
     pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
@@ -4404,7 +4405,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
     pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
     SvMemoryStream aWmfStream;
-    if (GraphicConverter::Export(aWmfStream, *pGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)
+    if (GraphicConverter::Export(aWmfStream, aGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the graphic");
     nSize = aWmfStream.TellEnd();
     pGraphicAry = static_cast<sal_uInt8 const*>(aWmfStream.GetData());

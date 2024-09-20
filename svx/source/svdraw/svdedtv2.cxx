@@ -2185,11 +2185,14 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         }
 
         SdrOle2Obj* pOle2 = dynamic_cast<SdrOle2Obj*>(pObj);
-        if (pOle2 != nullptr && pOle2->GetGraphic())
+        if (pOle2)
         {
-            aLogicRect = pOle2->GetLogicRect();
-            ImpSdrGDIMetaFileImport aFilter(GetModel(), pObj->GetLayer(), aLogicRect);
-            nInsCnt = aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
+            if (const Graphic* pGraphic = pOle2->GetGraphic())
+            {
+                aLogicRect = pOle2->GetLogicRect();
+                ImpSdrGDIMetaFileImport aFilter(GetModel(), pObj->GetLayer(), aLogicRect);
+                nInsCnt = aFilter.DoImport(pGraphic->GetGDIMetaFile(), *pOL, nInsPos, pProgrInfo);
+            }
         }
 
         if (nInsCnt != 0)

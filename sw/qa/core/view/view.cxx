@@ -60,10 +60,11 @@ CPPUNIT_TEST_FIXTURE(Test, testUpdateOleObjectPreviews)
         SwOLENode* pOleNode = pNode->GetOLENode();
         CPPUNIT_ASSERT(pOleNode);
         SwOLEObj& rOleObj = pOleNode->GetOLEObj();
-        svt::EmbeddedObjectRef& rObject = rOleObj.GetObject();
+        const Graphic* pGraphic = rOleObj.GetObject().GetGraphic();
         // Without the accompanying fix in place, this test would have failed, the update broke the
         // preview of the second embedded object.
-        CPPUNIT_ASSERT(!rObject.GetGraphic()->IsNone());
+        CPPUNIT_ASSERT(pGraphic);
+        CPPUNIT_ASSERT(!pGraphic->IsNone());
     }
 }
 

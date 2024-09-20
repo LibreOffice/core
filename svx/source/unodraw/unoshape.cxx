@@ -2918,7 +2918,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
                 if ( !bIsWMF )
                 {
                     // #119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
-                    GDIMetaFile aMtf(pObj->GetGraphic()->GetGDIMetaFile());
+                    GDIMetaFile aMtf(pGraphic->GetGDIMetaFile());
                     SvMemoryStream aDestStrm( 65535, 65535 );
                     ConvertGDIMetaFileToWMF( aMtf, aDestStrm, nullptr, false );
                     const uno::Sequence<sal_Int8> aSeq(

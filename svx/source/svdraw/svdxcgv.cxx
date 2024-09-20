@@ -611,9 +611,9 @@ Graphic SdrExchangeView::GetObjGraphic(const SdrObject& rSdrObject, bool bSVG)
         }
         else if (pSdrOle2Obj)
         {
-            if (pSdrOle2Obj->GetGraphic())
+            if (const Graphic* pGraphic = pSdrOle2Obj->GetGraphic())
             {
-                aRet = *pSdrOle2Obj->GetGraphic();
+                aRet = *pGraphic;
             }
         }
         else

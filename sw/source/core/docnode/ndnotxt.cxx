@@ -231,7 +231,8 @@ Graphic SwNoTextNode::GetGraphic() const
     else
     {
         OSL_ENSURE( GetOLENode(), "new type of Node?" );
-        aRet = *const_cast<SwOLENode*>(static_cast<const SwOLENode*>(this))->SwOLENode::GetGraphic();
+        if (const Graphic* pGraphic = const_cast<SwOLENode*>(static_cast<const SwOLENode*>(this))->SwOLENode::GetGraphic())
+            aRet = *pGraphic;
     }
     return aRet;
 }
