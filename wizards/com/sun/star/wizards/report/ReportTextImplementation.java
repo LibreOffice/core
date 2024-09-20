@@ -338,7 +338,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             XTextCursor xTextCursor = ReportTextDocument.createTextCursor(getDoc().xTextDocument.getText());
             xTextDocument.lockControllers();
 
-            if (getRecordParser().ResultSet.next())
+            if (getRecordParser().getResultSet().next())
             {
                 replaceUserFields();
                 Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
@@ -354,7 +354,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 if (getRecordParser().getcurrentRecordData(DataVector))
                 {
                     m_bStopProcess = false;
-                    while ((getRecordParser().ResultSet.next()) && (!m_bStopProcess))
+                    while ((getRecordParser().getResultSet().next()) && (!m_bStopProcess))
                     {
                         breset = false;
                         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++)

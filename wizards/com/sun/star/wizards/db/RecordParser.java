@@ -40,7 +40,7 @@ public class RecordParser extends QueryMetaData
 
     private XNameAccess xColumns;
     private com.sun.star.sdbc.XRow xResultSetRow;
-    public XResultSet ResultSet;
+    private XResultSet ResultSet;
     private XInterface xRowSet;
     private XCompletedExecution xExecute;
     private XComponent xRowSetComponent;
@@ -230,6 +230,11 @@ public class RecordParser extends QueryMetaData
         }
         DataVector.add(RecordValueArray);
         return true;
+    }
+
+    public XResultSet getResultSet()
+    {
+        return ResultSet;
     }
 
     @Override
