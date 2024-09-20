@@ -807,6 +807,11 @@ void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 }
 
+void lcl_LogWarning(std::string sWarning)
+{
+    std::cerr << "Warning: "  << sWarning << "\n";
+}
+
 bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,
                                 bool bInsert, bool bResize = false)
 {
@@ -2289,8 +2294,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
             boost::property_tree::ptree aTree;
             std::stringstream aStream(
                 (std::string(OUStringToOString(aDataJson, RTL_TEXTENCODING_UTF8))));
-            boost::property_tree::read_json(aStream, aTree);
-            // Todo: try catch - in case of fail: log wrong JSON format
+            try
+            {
+                boost::property_tree::read_json(aStream, aTree);
+            }
+            catch (...)
+            {
+                lcl_LogWarning("FillApi Transform parameter, Wrong JSON format. ");
+                throw;
+            }
 
             // get the loaded content controls
             uno::Reference<text::XContentControlsSupplier> xCCSupplier(
@@ -2360,6 +2372,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             }
                             if (iKeyId != ChartFilterType::ERROR)
                             {
+                                // A chart transformation filter can match multiple charts
+                                // In that case every matching charts will be transformed
+                                // If no chart match to the filter, then we show warning
+                                bool bChartFound = false;
                                 for (int i = 0; i < nEOcount; ++i)
                                 {
                                     uno::Reference<beans::XPropertySet> xShapeProps(
@@ -2475,6 +2491,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                                     // We have a match, this chart need to be transformed
                                     // Set all the values (of the chart) what is needed
+                                    bChartFound = true;
 
                                     // Check if the InternalDataProvider is row or column based.
                                     bool bChartUseColumns = false;
@@ -2549,6 +2566,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 int nIndex = 0;
                                                 int nX = nId;
                                                 int nY = nId;
+                                                bool bIndexWarning = false;
                                                 for (const auto& aItem4 : aItem3.second)
                                                 {
                                                     if (bSetColumn)
@@ -2566,8 +2584,29 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         pCols[nX]
                                                             = aItem4.second.get_value<double>();
                                                     }
-                                                    // else log: set invalid cell: index [nY,Nx]
+                                                    else
+                                                    {
+                                                        bIndexWarning = true;
+                                                    }
+
                                                     nIndex++;
+                                                }
+                                                if (bIndexWarning)
+                                                {
+                                                    std::string sValues = "";
+                                                    for (const auto& atemp : aItem3.second)
+                                                    {
+                                                        if (sValues != "")
+                                                        {
+                                                            sValues += ", ";
+                                                        }
+                                                        sValues += atemp.second
+                                                                       .get_value<std::string>();
+                                                    }
+                                                    lcl_LogWarning(
+                                                        "FillApi chart: Invalid Cell Index at: '"
+                                                        + aItem3.first + ": " + sValues
+                                                        + "' (probably too many parameters)");
                                                 }
 
                                                 xDataArray->setData(aData);
@@ -2590,7 +2629,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         aItem3.second.get_value<std::string>(),
                                                         RTL_TEXTENCODING_UTF8);
                                                 }
-                                                // Todo: else log: wrong index at setcolumndesc.
+                                                else
+                                                {
+                                                    lcl_LogWarning("FillApi chart setrowdesc: "
+                                                                   "invalid Index at: '"
+                                                                   + aItem3.first + "'");
+                                                }
                                             }
                                             else
                                             {
@@ -2600,7 +2644,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 {
                                                     if (nIndex >= aRowDesc.getLength())
                                                     {
-                                                        // Todo log: too many parameters
+                                                        lcl_LogWarning("FillApi chart setrowdesc: "
+                                                                       "too many params");
                                                         break;
                                                     }
                                                     aRowdata[nIndex] = OStringToOUString(
@@ -2627,7 +2672,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         aItem3.second.get_value<std::string>(),
                                                         RTL_TEXTENCODING_UTF8);
                                                 }
-                                                // Todo: else log: wrong index at setcolumndesc.
+                                                else
+                                                {
+                                                    lcl_LogWarning("FillApi chart setcolumndesc: "
+                                                                   "invalid Index at: '"
+                                                                   + aItem3.first + "'");
+                                                }
                                             }
                                             else
                                             {
@@ -2636,7 +2686,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 {
                                                     if (nIndex >= aColDesc.getLength())
                                                     {
-                                                        // Todo log: too many parameters
+                                                        lcl_LogWarning(
+                                                            "FillApi chart setcolumndesc:"
+                                                            " too many parameters");
                                                         break;
                                                     }
                                                     aColdata[nIndex] = OStringToOUString(
@@ -2657,7 +2709,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                                                 if (nX < 1 || nY < 1)
                                                 {
-                                                    // Todo log: wrong resize argument
+                                                    lcl_LogWarning(
+                                                        "FillApi chart resize: wrong param"
+                                                        " (Needed: x,y >= 1)");
                                                     continue;
                                                 }
                                                 // here we need to use the new insert column thing
@@ -2680,7 +2734,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 }
                                                 xDataArray->setData(aData);
                                             }
-                                            // Todo: else log: not enought parameter for resize
+                                            else
+                                            {
+                                                lcl_LogWarning(
+                                                    "FillApi chart resize: not enought parameters"
+                                                    " (x,y is needed)");
+                                            }
                                         }
                                         else if (aItem3.first.starts_with("data"))
                                         {
@@ -2694,6 +2753,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                 int nPoint = aItem3.first.find('.', 7);
                                                 int nY = stoi(aItem3.first.substr(7, nPoint - 7));
                                                 int nX = stoi(aItem3.first.substr(nPoint + 1));
+                                                bool bValidIndex = false;
                                                 if (nY < aData.getLength() && nY >= 0)
                                                 {
                                                     uno::Sequence<double>* pRows = aData.getArray();
@@ -2702,7 +2762,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         double* pCols = pRows[nY].getArray();
                                                         pCols[nX]
                                                             = aItem3.second.get_value<double>();
+                                                        bValidIndex = true;
                                                     }
+                                                }
+                                                if (!bValidIndex)
+                                                {
+                                                    lcl_LogWarning(
+                                                        "FillApi chart datayx: invalid Index at: '"
+                                                        + aItem3.first + "'");
                                                 }
                                             }
                                             else
@@ -2748,6 +2815,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                         {
                                                             if (nX >= nColsCount)
                                                             {
+                                                                // This should never happen
                                                                 break;
                                                             }
                                                             pCols[nX]
@@ -2760,12 +2828,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             }
                                             xDataArray->setData(aData);
                                         }
-                                        // Todo: else Log that this chart command was not recognised
+                                        else
+                                        {
+                                            lcl_LogWarning("FillApi chart command not recognised: '"
+                                                           + aItem3.first + "'");
+                                        }
                                         xModi->setModified(true);
                                     }
                                 }
+                                if (!bChartFound)
+                                {
+                                    lcl_LogWarning("FillApi: No chart match the filter: '"
+                                                   + aItem2.first + "'");
+                                }
                             }
-                            // todo: else log chart transfrom not recognised
+                            else
+                            {
+                                lcl_LogWarning("FillApi chart filtter type not recognised: '"
+                                               + aItem2.first + "'");
+                            }
                         }
 
                         if (aItem2.first.starts_with("ContentControls"))
@@ -2786,6 +2867,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             if (iKeyId != ContentFilterType::ERROR)
                             {
                                 // Check all the content controls, if they match
+                                bool bCCFound = false;
                                 for (int i = 0; i < iCCcount; ++i)
                                 {
                                     uno::Reference<text::XTextContent> xContentControl;
@@ -2840,6 +2922,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                                     // We have a match, this content control need to be transformed
                                     // Set all the values (of the content control) what is needed
+                                    bCCFound = true;
                                     for (const auto& aItem3 : aItem2.second)
                                     {
                                         if (aItem3.first == "content")
@@ -2963,8 +3046,25 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                                     aItem3.second.get_value<std::string>(),
                                                     RTL_TEXTENCODING_UTF8)));
                                         }
+                                        else
+                                        {
+                                            lcl_LogWarning(
+                                                "FillApi contentControl command not recognised: '"
+                                                + aItem3.first + "'");
+                                        }
                                     }
                                 }
+                                if (!bCCFound)
+                                {
+                                    lcl_LogWarning("FillApi: No contentControl match the filter: '"
+                                                   + aItem2.first + "'");
+                                }
+                            }
+                            else
+                            {
+                                lcl_LogWarning(
+                                    "FillApi contentControl filtter type not recognised: '"
+                                    + aItem2.first + "'");
                             }
                         }
                     }
