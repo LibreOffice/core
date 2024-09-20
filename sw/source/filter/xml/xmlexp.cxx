@@ -148,31 +148,42 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             }
             return true;
         });
-
-        const SfxItemPool& rPool = pDoc->GetAttrPool();
-        sal_uInt16 aWhichIds[4] = { RES_UNKNOWNATR_CONTAINER,
-                                    SDRATTR_XMLATTRIBUTES,
-                                    EE_PARA_XMLATTRIBS,
-                                    EE_CHAR_XMLATTRIBS };
-
-        const int nWhichIds = rPool.GetSecondaryPool() ? 4 : 1;
-        for( int j=0; j < nWhichIds; ++j )
-        {
-            const sal_uInt16 nWhichId = aWhichIds[j];
-            ItemSurrogates aSurrogates;
-            rPool.GetItemSurrogates(aSurrogates, nWhichId);
-            for (const SfxPoolItem* pItem : aSurrogates)
+        pDoc->ForEachUnknownAtrContainerItem([this](const SvXMLAttrContainerItem& rUnknown) -> bool {
+            if( rUnknown.GetAttrCount() > 0 )
             {
-                auto pUnknown = dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
-                OSL_ENSURE( pUnknown, "illegal attribute container item" );
-                if( pUnknown && (pUnknown->GetAttrCount() > 0) )
+                sal_uInt16 nIdx = rUnknown.GetFirstNamespaceIndex();
+                while( USHRT_MAX != nIdx )
                 {
-                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
-                    while( USHRT_MAX != nIdx )
+                    GetNamespaceMap_().Add( rUnknown.GetPrefix( nIdx ),
+                                        rUnknown.GetNamespace( nIdx ) );
+                    nIdx = rUnknown.GetNextNamespaceIndex( nIdx );
+                }
+            }
+            return true;
+        });
+        const SfxItemPool& rPool = pDoc->GetAttrPool();
+        if (rPool.GetSecondaryPool())
+        {
+            sal_uInt16 aWhichIds[3] = { SDRATTR_XMLATTRIBUTES,
+                                        EE_PARA_XMLATTRIBS,
+                                        EE_CHAR_XMLATTRIBS };
+            for( sal_uInt16 nWhichId : aWhichIds )
+            {
+                ItemSurrogates aSurrogates;
+                rPool.GetItemSurrogates(aSurrogates, nWhichId);
+                for (const SfxPoolItem* pItem : aSurrogates)
+                {
+                    auto pUnknown = dynamic_cast<const SvXMLAttrContainerItem*>( pItem  );
+                    OSL_ENSURE( pUnknown, "illegal attribute container item" );
+                    if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {
-                        GetNamespaceMap_().Add( pUnknown->GetPrefix( nIdx ),
-                                            pUnknown->GetNamespace( nIdx ) );
-                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                        sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
+                        while( USHRT_MAX != nIdx )
+                        {
+                            GetNamespaceMap_().Add( pUnknown->GetPrefix( nIdx ),
+                                                pUnknown->GetNamespace( nIdx ) );
+                            nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                        }
                     }
                 }
             }

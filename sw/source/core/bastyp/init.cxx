@@ -457,7 +457,7 @@ ItemInfoPackage& getItemInfoPackageSwAttributes()
             { RES_BOXATR_FORMAT, new SwTableBoxNumFormat, 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_FORMULA, new SwTableBoxFormula( OUString() ), 0, SFX_ITEMINFOFLAG_NONE },
             { RES_BOXATR_VALUE, new SwTableBoxValue, 0, SFX_ITEMINFOFLAG_NONE },
-            { RES_UNKNOWNATR_CONTAINER, new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER ), 0, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE }
+            { RES_UNKNOWNATR_CONTAINER, new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER ), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }

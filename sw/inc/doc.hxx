@@ -1461,6 +1461,9 @@ public:
     /// Iterate over all RES_PARATR_TABSTOP SvxTabStopItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>&  ) const;
 
+    /// Iterate over all RES_UNKNOWNATR_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachUnknownAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
