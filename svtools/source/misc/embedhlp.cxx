@@ -453,15 +453,18 @@ const Link<LinkParamNone*, bool> & EmbeddedObjectRef::GetIsProtectedHdl() const
 void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 {
     Graphic aOldGraphic;
+    OUString aOldMediaType;
 
     if ( bUpdate )
     {
         if (mpImpl->oGraphic)
             aOldGraphic = *mpImpl->oGraphic;
+        aOldMediaType = mpImpl->aMediaType;
 
-        mpImpl->oGraphic.reset();
+        // Do not clear / reset mpImpl->oGraphic, because it would appear as no replacement
+        // on any call to getReplacementGraphic during the external calls to the OLE object,
+        // which may release mutexes. Only replace it when done.
         mpImpl->aMediaType.clear();
-        mpImpl->oGraphic.emplace();
         mpImpl->mnGraphicVersion++;
     }
     else if ( !mpImpl->oGraphic )
@@ -501,6 +504,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         // failed. Go back to the old graphic instead of having no graphic at
         // all.
         mpImpl->oGraphic.emplace(aOldGraphic);
+        mpImpl->aMediaType = aOldMediaType;
         SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: failed to update graphic");
     }
 }
