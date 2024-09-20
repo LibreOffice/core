@@ -477,6 +477,10 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         return;
     }
 
+    // Missing graphic can crash
+    if (!mpImpl->oGraphic)
+        mpImpl->oGraphic.emplace();
+
     std::unique_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
     if (!pGraphicStream && aOldGraphic.IsNone())
     {
