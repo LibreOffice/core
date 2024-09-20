@@ -169,8 +169,8 @@ void SvgFeBlendNode::apply(drawinglayer::primitive2d::Primitive2DContainer& rTar
         }
         case Mode::Darken:
         {
-            BitmapDarkenBlendFilter aDarkenBlendFilter(aBmpEx, aBmpEx2);
-            aResBmpEx = aDarkenBlendFilter.execute();
+            BitmapDarkenBlendFilter aDarkenBlendFilter(aBmpEx2);
+            aResBmpEx = aDarkenBlendFilter.execute(aBmpEx);
             break;
         }
         case Mode::Lighten:

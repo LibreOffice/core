@@ -14,14 +14,10 @@
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/BitmapTools.hxx>
 
-BitmapDarkenBlendFilter::BitmapDarkenBlendFilter(BitmapEx const& rBitmapEx,
-                                                 BitmapEx const& rBitmapEx2)
-    : maBitmapEx(rBitmapEx)
-    , maBitmapEx2(rBitmapEx2)
+BitmapDarkenBlendFilter::BitmapDarkenBlendFilter(BitmapEx const& rBitmapBlendEx)
+    : maBlendBitmapBitmapEx(rBitmapBlendEx)
 {
 }
-
-BitmapDarkenBlendFilter::~BitmapDarkenBlendFilter() {}
 
 static sal_uInt8 lcl_calculate(const sal_uInt8 aColor, const sal_uInt8 aAlpha,
                                const sal_uInt8 aColor2, const sal_uInt8 aAlpha2)
@@ -34,13 +30,13 @@ static sal_uInt8 lcl_calculate(const sal_uInt8 aColor, const sal_uInt8 aAlpha,
     return result * 255.0;
 }
 
-BitmapEx BitmapDarkenBlendFilter::execute()
+BitmapEx BitmapDarkenBlendFilter::execute(BitmapEx const& rBitmapBlendEx) const
 {
-    if (maBitmapEx.IsEmpty() || maBitmapEx2.IsEmpty())
+    if (rBitmapBlendEx.IsEmpty() || maBlendBitmapBitmapEx.IsEmpty())
         return BitmapEx();
 
-    Size aSize = maBitmapEx.GetBitmap().GetSizePixel();
-    Size aSize2 = maBitmapEx2.GetBitmap().GetSizePixel();
+    Size aSize = rBitmapBlendEx.GetBitmap().GetSizePixel();
+    Size aSize2 = maBlendBitmapBitmapEx.GetBitmap().GetSizePixel();
     sal_Int32 nHeight = std::min(aSize.getHeight(), aSize2.getHeight());
     sal_Int32 nWidth = std::min(aSize.getWidth(), aSize2.getWidth());
 
@@ -56,8 +52,8 @@ BitmapEx BitmapDarkenBlendFilter::execute()
         Scanline pScanAlpha = pAlphaWriteAccess->GetScanline(y);
         for (tools::Long x(0); x < nWidth; ++x)
         {
-            BitmapColor i1 = vcl::bitmap::premultiply(maBitmapEx.GetPixelColor(x, y));
-            BitmapColor i2 = vcl::bitmap::premultiply(maBitmapEx2.GetPixelColor(x, y));
+            BitmapColor i1 = vcl::bitmap::premultiply(rBitmapBlendEx.GetPixelColor(x, y));
+            BitmapColor i2 = vcl::bitmap::premultiply(maBlendBitmapBitmapEx.GetPixelColor(x, y));
             sal_uInt8 r(lcl_calculate(i1.GetRed(), i1.GetAlpha(), i2.GetRed(), i2.GetAlpha()));
             sal_uInt8 g(lcl_calculate(i1.GetGreen(), i1.GetAlpha(), i2.GetGreen(), i2.GetAlpha()));
             sal_uInt8 b(lcl_calculate(i1.GetBlue(), i1.GetAlpha(), i2.GetBlue(), i2.GetAlpha()));
@@ -74,4 +70,5 @@ BitmapEx BitmapDarkenBlendFilter::execute()
 
     return BitmapEx(aDstBitmap, AlphaMask(aDstAlpha));
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
