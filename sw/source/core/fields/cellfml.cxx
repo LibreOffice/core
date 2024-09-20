@@ -852,7 +852,7 @@ static const SwTableBox* lcl_RelToBox( const SwTable& rTable,
         {
             nSttBox = SwTable::GetBoxNum( sGetName );
             pLines = &pBox->GetTabLines();
-            if( nSttBox )
+            if (nSttBox > 0)
                 --nSttBox;
 
             nSttLine = SwTable::GetBoxNum( sGetName );

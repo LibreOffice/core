@@ -92,7 +92,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
     {
         case VT_LPSTR :
         {
-            if (nItemSize)
+            if (nItemSize > 0)
             {
                 auto nMaxSizePossible = remainingSize();
                 if (nItemSize > nMaxSizePossible)
@@ -102,7 +102,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                 }
             }
 
-            if (nItemSize)
+            if (nItemSize > 0)
             {
                 try
                 {
