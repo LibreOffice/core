@@ -316,15 +316,13 @@ private:
     // if bToolbarItem=true, pParent is the ToolBox that the item belongs to, since there's no widget for the item itself
     void applyAtkProperties(vcl::Window *pWindow, const stringmap& rProperties, bool bToolbarItem);
 
-    void        handleActionWidget(xmlreader::XmlReader &reader);
-
     PackingData get_window_packing_data(const vcl::Window *pWindow) const;
     void        set_window_packing_position(const vcl::Window *pWindow, sal_Int32 nPosition);
 
     static vcl::Window* prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits &rWinStyle);
     void        cleanupWidgetOwnScrolling(vcl::Window *pScrollParent, vcl::Window *pWindow, stringmap &rMap);
 
-    void        set_response(std::u16string_view sID, short nResponse);
+    void set_response(std::u16string_view sID, short nResponse) override;
 
     OUString        get_by_window(const vcl::Window *pWindow) const;
     void            delete_by_window(vcl::Window *pWindow);

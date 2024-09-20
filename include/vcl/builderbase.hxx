@@ -66,6 +66,8 @@ protected:
     void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
     void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
                                             OUString& rId, OUString& rCustomProperty);
+
+    void handleActionWidget(xmlreader::XmlReader& reader);
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);
     static bool isToolbarItemClass(std::u16string_view sClass);
     static std::vector<vcl::EnumContext::Context> handleStyle(xmlreader::XmlReader& reader,
@@ -94,6 +96,8 @@ protected:
     const TextBuffer* get_buffer_by_name(const OUString& sID) const;
 
     const ListStore* get_model_by_name(const OUString& sID) const;
+
+    virtual void set_response(std::u16string_view sID, short nResponse) = 0;
 
     void handleSizeGroup(xmlreader::XmlReader& reader);
 

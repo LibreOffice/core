@@ -4023,7 +4023,7 @@ void BuilderBase::collectProperty(xmlreader::XmlReader& reader, stringmap& rMap)
     }
 }
 
-void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
+void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
