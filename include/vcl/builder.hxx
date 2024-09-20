@@ -189,6 +189,9 @@ private:
     void     mungeModel(ComboBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
     void     mungeModel(SvTabListBox &rTarget, const ListStore &rStore, sal_uInt16 nActiveId);
 
+    void insertComboBoxOrListBoxItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap,
+                                      const std::vector<ComboBoxTextItem>& rItems);
+
     static void     mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rTextBuffer);
 
     static void     mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment);

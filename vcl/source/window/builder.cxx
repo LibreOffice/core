@@ -3767,11 +3767,7 @@ VclPtr<vcl::Window> VclBuilder::handleObject(vcl::Window *pParent, stringmap *pA
     }
 
     if (!aItems.empty())
-    {
-        // try to fill-in the items
-        if (!insertItems<ComboBox>(pCurrentChild, aProperties, m_aUserData, aItems))
-            insertItems<ListBox>(pCurrentChild, aProperties, m_aUserData, aItems);
-    }
+        insertComboBoxOrListBoxItems(pCurrentChild, aProperties, aItems);
 
     return pCurrentChild;
 }
@@ -4347,6 +4343,14 @@ void VclBuilder::mungeModel(SvTabListBox& rTarget, const ListStore &rStore, sal_
         SvTreeListEntry* pEntry = rTarget.GetEntry(nullptr, nActiveId);
         rTarget.Select(pEntry);
     }
+}
+
+void VclBuilder::insertComboBoxOrListBoxItems(vcl::Window *pWindow, VclBuilder::stringmap &rMap,
+                                  const std::vector<ComboBoxTextItem>& rItems)
+{
+    // try to fill-in the items
+    if (!insertItems<ComboBox>(pWindow, rMap, m_aUserData, rItems))
+        insertItems<ListBox>(pWindow, rMap, m_aUserData, rItems);
 }
 
 void VclBuilder::mungeAdjustment(NumericFormatter &rTarget, const Adjustment &rAdjustment)
