@@ -154,6 +154,9 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(u"IgnoreTabsAndBlanksForLineCalculation"_ustr,uno::Any(true));
         // calculate table row height with 'atLeast' including horizontal border width
         m_pImpl->SetDocumentSettingsProperty(u"MinRowHeightInclBorder"_ustr,uno::Any(true));
+
+        // tdf#129808 Enable compatible grid font metrics for documents with noLeading
+        m_pImpl->SetDocumentSettingsProperty(u"MsWordCompGridMetrics"_ustr, uno::Any(true));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.

@@ -1496,6 +1496,7 @@
 #define STR_COMPAT_OPT_TABOVERMARGIN            NC_("STR_COMPAT_OPT_TABOVERMARGIN", "Allow tabs to extend beyond the right margin")
 #define STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS NC_("STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS", "Do not mirror drawing objects anchored in paragraphs with an RTL writing direction")
 #define STR_COMPAT_OPT_CONTINUOUS_ENDNOTES NC_("STR_COMPAT_OPT_CONTINUOUS_ENDNOTES", "Render endnotes at the end of document inline, rather than on a separate page")
+#define STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS NC_("STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS", "Use Word-compatible font metrics for text grid")
 
 #define STR_TABLE_PANEL_ALIGN_AUTO              NC_("sidebartableedit|alignautolabel", "Automatic")
 #define STR_TABLE_PANEL_ALIGN_LEFT              NC_("sidebartableedit|alignleftlabel", "Left")

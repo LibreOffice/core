@@ -64,6 +64,7 @@ constexpr std::pair<OUString, TranslateId> options_list[]{
     { u"TabOverMargin"_ustr, STR_COMPAT_OPT_TABOVERMARGIN },
     { u"DoNotMirrorRtlDrawObjs"_ustr, STR_COMPAT_OPT_DO_NOT_MIRROR_RTL_DRAW_OBJS },
     { u"ContinuousEndnotes"_ustr, STR_COMPAT_OPT_CONTINUOUS_ENDNOTES },
+    { u"MsWordCompGridMetrics"_ustr, STR_COMPAT_OPT_MSWORDCOMPGRIDMETRICS },
 };
 
 // DocumentSettingId, negate?
@@ -91,6 +92,7 @@ std::pair<DocumentSettingId, bool> DocumentSettingForOption(const OUString& opti
         { u"DoNotMirrorRtlDrawObjs"_ustr, { DocumentSettingId::DO_NOT_MIRROR_RTL_DRAW_OBJS, false } },
         { u"ContinuousEndnotes"_ustr, { DocumentSettingId::CONTINUOUS_ENDNOTES, false } },
 //        { u"AddTableLineSpacing"_ustr, { DocumentSettingId::ADD_PARA_LINE_SPACING_TO_TABLE_CELLS, false } },
+        { u"MsWordCompGridMetrics"_ustr, { DocumentSettingId::MS_WORD_COMP_GRID_METRICS, false } },
     };
     return map.at(option);
 }
@@ -328,6 +330,10 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 
                     case DocumentSettingId::CONTINUOUS_ENDNOTES:
                         m_pWrtShell->SetContinuousEndnotes(bChecked);
+                        break;
+
+                    case DocumentSettingId::MS_WORD_COMP_GRID_METRICS:
+                        m_pWrtShell->SetMsWordCompGridMetrics(bChecked);
                         break;
 
                     default:

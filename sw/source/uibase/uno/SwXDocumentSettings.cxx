@@ -162,7 +162,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
     HANDLE_PAINT_HELL_OVER_HEADER_FOOTER,
-    HANDLE_MIN_ROW_HEIGHT_INCL_BORDER
+    HANDLE_MIN_ROW_HEIGHT_INCL_BORDER,
+    HANDLE_MS_WORD_COMP_GRID_METRICS
 };
 
 }
@@ -272,6 +273,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"DoNotMirrorRtlDrawObjs"_ustr, HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
         { u"PaintHellOverHeaderFooter"_ustr, HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
         { u"MinRowHeightInclBorder"_ustr, HANDLE_MIN_ROW_HEIGHT_INCL_BORDER, cppu::UnoType<bool>::get(), 0 },
+        { u"MsWordCompGridMetrics"_ustr, HANDLE_MS_WORD_COMP_GRID_METRICS, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1172,6 +1174,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, bTmp);
         }
         break;
+        case HANDLE_MS_WORD_COMP_GRID_METRICS:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::MS_WORD_COMP_GRID_METRICS,
+                                                       bTmp);
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1758,6 +1770,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
+        }
+        break;
+        case HANDLE_MS_WORD_COMP_GRID_METRICS:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
         }
         break;
         default:

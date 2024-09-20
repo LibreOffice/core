@@ -561,8 +561,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                                     nPosHeight += nTmp - nPosAscent;
                                     nPosAscent = nTmp;
                                 }
-                                nTmp = rInf.GetFont()->GetHeight( rInf.GetVsh(),
-                                                                 *rInf.GetOut() );
+                                nTmp = rInf.GetTextHeight();
                                 if( nTmp > nPosHeight )
                                     nPosHeight = nTmp;
                             }
@@ -667,7 +666,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
             if( bOnlyPostIts && !( bHasBlankPortion && bHasOnlyBlankPortions ) )
             {
-                Height( rInf.GetFont()->GetHeight( rInf.GetVsh(), *rInf.GetOut() ) );
+                Height(rInf.GetTextHeight());
                 mnAscent = rInf.GetFont()->GetAscent( rInf.GetVsh(), *rInf.GetOut() );
             }
         }

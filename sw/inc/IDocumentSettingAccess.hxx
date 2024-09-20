@@ -137,6 +137,8 @@ enum class DocumentSettingId
     PAINT_HELL_OVER_HEADER_FOOTER,
     // tdf#155229 calculate minimum row height including horizontal border width
     MIN_ROW_HEIGHT_INCL_BORDER,
+    // tdf#129808 MS Word always includes ext leading for text grid line height
+    MS_WORD_COMP_GRID_METRICS,
 };
 
 /** Provides access to settings of a document

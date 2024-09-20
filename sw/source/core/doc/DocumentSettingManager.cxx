@@ -109,7 +109,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbDropCapPunctuation(true),
     mbUseVariableWidthNBSP(false),
     mbPaintHellOverHeaderFooter(false),
-    mbMinRowHeightInclBorder(false)
+    mbMinRowHeightInclBorder(false),
+    mbMsWordCompGridMetrics(false) // tdf#129808
 
     // COMPATIBILITY FLAGS END
 {
@@ -143,6 +144,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbTabOverMargin                     = aOptions.get(u"TabOverMargin"_ustr);
         mbDoNotMirrorRtlDrawObjs            = aOptions.get(u"DoNotMirrorRtlDrawObjs"_ustr);
         mbContinuousEndnotes                = aOptions.get(u"ContinuousEndnotes"_ustr);
+        mbMsWordCompGridMetrics             = aOptions.get(u"MsWordCompGridMetrics"_ustr);
     }
     else
     {
@@ -270,6 +272,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
         case DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER: return mbPaintHellOverHeaderFooter;
         case DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER: return mbMinRowHeightInclBorder;
+        // tdf#129808
+        case DocumentSettingId::MS_WORD_COMP_GRID_METRICS: return mbMsWordCompGridMetrics;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -586,6 +590,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND:
             mbFootnoteInColumnToPageEnd = value;
             break;
+        // tdf#129808
+        case DocumentSettingId::MS_WORD_COMP_GRID_METRICS:
+            mbMsWordCompGridMetrics = value;
+            break;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -765,6 +773,7 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbFootnoteInColumnToPageEnd = rSource.mbFootnoteInColumnToPageEnd;
     mbDropCapPunctuation = rSource.mbDropCapPunctuation;
     mbUseVariableWidthNBSP = rSource.mbUseVariableWidthNBSP;
+    mbMsWordCompGridMetrics = rSource.mbMsWordCompGridMetrics;
 }
 
 sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
@@ -1138,6 +1147,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotMirrorRtlDrawObjs"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbDoNotMirrorRtlDrawObjs).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbMsWordCompGridMetrics"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(OString::boolean(mbMsWordCompGridMetrics).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);

@@ -164,6 +164,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="MsWordCompGridMetrics" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Use Word-compatible font metrics for text grid</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

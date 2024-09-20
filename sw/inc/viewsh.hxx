@@ -455,6 +455,8 @@ public:
 
     SW_DLLPUBLIC void SetContinuousEndnotes(bool bContinuousEndnotes);
 
+    SW_DLLPUBLIC void SetMsWordCompGridMetrics(bool bMsWordCompGridMetrics);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.

@@ -1108,6 +1108,20 @@ void SwViewShell::SetContinuousEndnotes(bool bContinuousEndnotes)
     }
 }
 
+void SwViewShell::SetMsWordCompGridMetrics(bool _bMsWordCompGridMetrics)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS) != _bMsWordCompGridMetrics)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::MS_WORD_COMP_GRID_METRICS, _bMsWordCompGridMetrics);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::PrtArea | SwInvalidateFlags::Pos
+                                       | SwInvalidateFlags::Size | SwInvalidateFlags::Table
+                                       | SwInvalidateFlags::Section;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );
