@@ -57,7 +57,7 @@ public class DBColumn
     private XTextTable xTextTable;
     private XTableColumns xTableColumns;
     private XCellRange xCellRange;
-    public XNamed xTableName;
+    private XNamed xTableName;
     private boolean bIsGroupColumn;
     private RecordParser CurDBMetaData;
     private RecordTable CurRecordTable;
@@ -233,7 +233,10 @@ public class DBColumn
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
-
+    public XNamed getTableName()
+    {
+        return xTableName;
+    }
 
     public void formatValueCell()
     {

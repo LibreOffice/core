@@ -315,10 +315,10 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         String TableName = TBLGROUPSECTION + (TableIndex + 1);
         // Note: for some reason the table might lose its name and has to be renamed therefore
-        String OldTableName = CurDBColumn.xTableName.getName();
+        String OldTableName = CurDBColumn.getTableName().getName();
         if (OldTableName.compareTo(TableName) != 0)
         {
-            CurDBColumn.xTableName.setName(TableName);
+            CurDBColumn.getTableName().setName(TableName);
         }
         CurDBColumn.insertColumnData(oTextFieldHandler, this.bIsCurLandscape);
         CurDBColumn.setCellFont();
