@@ -70,11 +70,11 @@ public class StyleApplier
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             short curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
             Integer IStyleStep = Integer.valueOf(FormWizard.SOSTYLE_PAGE);
-            String sPageStyles = CurUnoDialog.m_oResource.getResText("RID_FORM_86");
-            String sNoBorder = CurUnoDialog.m_oResource.getResText("RID_FORM_29");
-            String s3DLook = CurUnoDialog.m_oResource.getResText("RID_FORM_30");
-            String sFlat = CurUnoDialog.m_oResource.getResText("RID_FORM_31");
-            String sFieldBorder = CurUnoDialog.m_oResource.getResText("RID_FORM_28");
+            String sPageStyles = CurUnoDialog.getResource().getResText("RID_FORM_86");
+            String sNoBorder = CurUnoDialog.getResource().getResText("RID_FORM_29");
+            String s3DLook = CurUnoDialog.getResource().getResText("RID_FORM_30");
+            String sFlat = CurUnoDialog.getResource().getResText("RID_FORM_31");
+            String sFieldBorder = CurUnoDialog.getResource().getResText("RID_FORM_28");
             setStyles();
             short[] SelLayoutPos;
             SelLayoutPos = new short[]

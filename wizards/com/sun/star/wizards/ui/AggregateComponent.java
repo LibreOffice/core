@@ -180,18 +180,18 @@ public class AggregateComponent extends ControlScroller
     {
         if (i == 0)
         {
-            soptDetailQuery = CurUnoDialog.m_oResource.getResText("RID_QUERY_11");
-            soptSummaryQuery = CurUnoDialog.m_oResource.getResText("RID_QUERY_12");
-            slblAggregate = CurUnoDialog.m_oResource.getResText("RID_QUERY_16");
-            slblFieldNames = CurUnoDialog.m_oResource.getResText("RID_QUERY_17");
+            soptDetailQuery = CurUnoDialog.getResource().getResText("RID_QUERY_11");
+            soptSummaryQuery = CurUnoDialog.getResource().getResText("RID_QUERY_12");
+            slblAggregate = CurUnoDialog.getResource().getResText("RID_QUERY_16");
+            slblFieldNames = CurUnoDialog.getResource().getResText("RID_QUERY_17");
             sFunctions = new String[5];
-            sFunctions[0] = CurUnoDialog.m_oResource.getResText("RID_QUERY_40");
-            sFunctions[1] = CurUnoDialog.m_oResource.getResText("RID_QUERY_41");
-            sFunctions[2] = CurUnoDialog.m_oResource.getResText("RID_QUERY_42");
-            sFunctions[3] = CurUnoDialog.m_oResource.getResText("RID_QUERY_43");
-            sFunctions[4] = CurUnoDialog.m_oResource.getResText("RID_QUERY_44");
+            sFunctions[0] = CurUnoDialog.getResource().getResText("RID_QUERY_40");
+            sFunctions[1] = CurUnoDialog.getResource().getResText("RID_QUERY_41");
+            sFunctions[2] = CurUnoDialog.getResource().getResText("RID_QUERY_42");
+            sFunctions[3] = CurUnoDialog.getResource().getResText("RID_QUERY_43");
+            sFunctions[4] = CurUnoDialog.getResource().getResText("RID_QUERY_44");
 
-            sDuplicateAggregateFunction = CurUnoDialog.m_oResource.getResText("RID_QUERY_90");
+            sDuplicateAggregateFunction = CurUnoDialog.getResource().getResText("RID_QUERY_90");
         }
         if (ControlRowVector == null)
         {

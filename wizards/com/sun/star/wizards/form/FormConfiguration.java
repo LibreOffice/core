@@ -56,11 +56,11 @@ public class FormConfiguration
         this.CurUnoDialog = _CurUnoDialog;
         short curtabindex = (short) (FormWizard.SOSUBFORM_PAGE * 100);
         Integer ISubFormStep = Integer.valueOf(FormWizard.SOSUBFORM_PAGE);
-        String sOnExistingRelation = CurUnoDialog.m_oResource.getResText("RID_FORM_5");
-        String sOnManualRelation = CurUnoDialog.m_oResource.getResText("RID_FORM_7");
-        String sSelectManually = CurUnoDialog.m_oResource.getResText("RID_FORM_4");
-        String sSelectRelation = CurUnoDialog.m_oResource.getResText("RID_FORM_8");
-        String sSubFormDescription = CurUnoDialog.m_oResource.getResText("RID_FORM_3");
+        String sOnExistingRelation = CurUnoDialog.getResource().getResText("RID_FORM_5");
+        String sOnManualRelation = CurUnoDialog.getResource().getResText("RID_FORM_7");
+        String sSelectManually = CurUnoDialog.getResource().getResText("RID_FORM_4");
+        String sSelectRelation = CurUnoDialog.getResource().getResText("RID_FORM_8");
+        String sSubFormDescription = CurUnoDialog.getResource().getResText("RID_FORM_3");
 
         // CheckBox 'Add sub form'
         chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", new XItemListenerAdapter() {

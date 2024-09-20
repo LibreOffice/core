@@ -143,12 +143,12 @@ public class FieldSelection
     {
         try
         {
-            final String AccessTextMoveSelected = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_39");
-            final String AccessTextRemoveSelected = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_40");
-            final String AccessTextMoveAll = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_41");
-            final String AccessTextRemoveAll = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_42");
-            final String AccessMoveFieldUp = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_43");
-            final String AccessMoveFieldDown = CurUnoDialog.m_oResource.getResText("RID_DB_COMMON_44");
+            final String AccessTextMoveSelected = CurUnoDialog.getResource().getResText("RID_DB_COMMON_39");
+            final String AccessTextRemoveSelected = CurUnoDialog.getResource().getResText("RID_DB_COMMON_40");
+            final String AccessTextMoveAll = CurUnoDialog.getResource().getResText("RID_DB_COMMON_41");
+            final String AccessTextRemoveAll = CurUnoDialog.getResource().getResText("RID_DB_COMMON_42");
+            final String AccessMoveFieldUp = CurUnoDialog.getResource().getResText("RID_DB_COMMON_43");
+            final String AccessMoveFieldDown = CurUnoDialog.getResource().getResText("RID_DB_COMMON_44");
 
             FirstHelpIndex = _FirstHelpIndex;
             short curtabindex = UnoDialog.setInitialTabindex(_iStep);

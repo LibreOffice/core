@@ -48,7 +48,7 @@ public class UnoDialog
     private XInterface xUnoDialog;
     private XVclWindowPeer xVclWindowPeer;
     private HashMap<String, Integer> ControlList;
-    public Resource m_oResource;
+    protected Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
 

@@ -62,15 +62,15 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         bAutoPrimaryKeysupportsAutoIncrementation = curTableDescriptor.oTypeInspector.isAutoIncrementationSupported();
         short curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = Integer.valueOf(TableWizard.SOPRIMARYKEYPAGE);
-        final String sExplanations = CurUnoDialog.m_oResource.getResText("RID_TABLE_26");
-        final String screatePrimaryKey = CurUnoDialog.m_oResource.getResText("RID_TABLE_27");
-        final String slblPrimeFieldName = CurUnoDialog.m_oResource.getResText("RID_TABLE_31");
-        final String sApplyAutoValue = CurUnoDialog.m_oResource.getResText("RID_TABLE_33");
-        final String sAddAutomatically = CurUnoDialog.m_oResource.getResText("RID_TABLE_28");
-        final String sUseExisting = CurUnoDialog.m_oResource.getResText("RID_TABLE_29");
-        final String sUseSeveral = CurUnoDialog.m_oResource.getResText("RID_TABLE_30");
-        final String slblAvailableFields = CurUnoDialog.m_oResource.getResText("RID_QUERY_4");
-        final String slblSelPrimaryFields = CurUnoDialog.m_oResource.getResText("RID_TABLE_32");
+        final String sExplanations = CurUnoDialog.getResource().getResText("RID_TABLE_26");
+        final String screatePrimaryKey = CurUnoDialog.getResource().getResText("RID_TABLE_27");
+        final String slblPrimeFieldName = CurUnoDialog.getResource().getResText("RID_TABLE_31");
+        final String sApplyAutoValue = CurUnoDialog.getResource().getResText("RID_TABLE_33");
+        final String sAddAutomatically = CurUnoDialog.getResource().getResText("RID_TABLE_28");
+        final String sUseExisting = CurUnoDialog.getResource().getResText("RID_TABLE_29");
+        final String sUseSeveral = CurUnoDialog.getResource().getResText("RID_TABLE_30");
+        final String slblAvailableFields = CurUnoDialog.getResource().getResText("RID_QUERY_4");
+        final String slblSelPrimaryFields = CurUnoDialog.getResource().getResText("RID_TABLE_32");
         CurUnoDialog.insertLabel("lblExplanation",
                 new String[]
                 {

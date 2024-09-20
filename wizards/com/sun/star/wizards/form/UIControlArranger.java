@@ -63,9 +63,9 @@ public class UIControlArranger
         this.curFormDocument = _curFormDocument;
         curtabindex = (short) (FormWizard.SOCONTROL_PAGE * 100);
         IControlStep = Integer.valueOf(FormWizard.SOCONTROL_PAGE);
-        String sLabelPlacment = CurUnoDialog.m_oResource.getResText("RID_FORM_32");
-        String sAlignLeft = CurUnoDialog.m_oResource.getResText("RID_FORM_33");
-        String sAlignRight = CurUnoDialog.m_oResource.getResText("RID_FORM_34");
+        String sLabelPlacment = CurUnoDialog.getResource().getResText("RID_FORM_32");
+        String sAlignLeft = CurUnoDialog.getResource().getResText("RID_FORM_33");
+        String sAlignRight = CurUnoDialog.getResource().getResText("RID_FORM_34");
 
         // Label "Label Placement" -----------------
         flnLabelPlacement = CurUnoDialog.insertFixedLine("lnLabelPlacement",
@@ -116,21 +116,21 @@ public class UIControlArranger
         imageModel.addElement(ARRANGEFREE);
 
         // "Columnar - Labels Left"
-        helpTexts.put(ARRANGELISTSIDE, CurUnoDialog.m_oResource.getResText("RID_FORM_36"));
+        helpTexts.put(ARRANGELISTSIDE, CurUnoDialog.getResource().getResText("RID_FORM_36"));
 
         // "Columnar - Labels of Top"
-        helpTexts.put(ARRANGELISTTOP, CurUnoDialog.m_oResource.getResText("RID_FORM_37"));
+        helpTexts.put(ARRANGELISTTOP, CurUnoDialog.getResource().getResText("RID_FORM_37"));
 
         // "As Data Sheet"
-        helpTexts.put(ARRANGETABLE, CurUnoDialog.m_oResource.getResText("RID_FORM_40"));
+        helpTexts.put(ARRANGETABLE, CurUnoDialog.getResource().getResText("RID_FORM_40"));
 
         // "In Blocks - Labels Above"
-        helpTexts.put(ARRANGEFREE, CurUnoDialog.m_oResource.getResText("RID_FORM_39"));
+        helpTexts.put(ARRANGEFREE, CurUnoDialog.getResource().getResText("RID_FORM_39"));
 
-        String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText("RID_FORM_41"); // "Arrangement of the main form"
+        String sMainArrangementHeader = CurUnoDialog.getResource().getResText("RID_FORM_41"); // "Arrangement of the main form"
         m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
 
-        String sSubArrangementHeader = CurUnoDialog.m_oResource.getResText("RID_FORM_42"); // "Arrangement of the sub form"
+        String sSubArrangementHeader = CurUnoDialog.getResource().getResText("RID_FORM_42"); // "Arrangement of the sub form"
         m_aArrangeList[1] = new ArrangeButtonList(1, imageModel, sSubArrangementHeader);
         enableAlignControlGroup(false);
     }

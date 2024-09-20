@@ -376,23 +376,23 @@ public class FilterComponent
         boolean bEnabled;
         sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "optMatchAll");
 
-        String soptMatchAll = CurUnoDialog.m_oResource.getResText("RID_QUERY_9");
-        String soptMatchAny = CurUnoDialog.m_oResource.getResText("RID_QUERY_10");
-        slblFieldNames = CurUnoDialog.m_oResource.getResText("RID_QUERY_17");
-        slblOperators = CurUnoDialog.m_oResource.getResText("RID_QUERY_24");
-        slblValue = CurUnoDialog.m_oResource.getResText("RID_QUERY_25");
+        String soptMatchAll = CurUnoDialog.getResource().getResText("RID_QUERY_9");
+        String soptMatchAny = CurUnoDialog.getResource().getResText("RID_QUERY_10");
+        slblFieldNames = CurUnoDialog.getResource().getResText("RID_QUERY_17");
+        slblOperators = CurUnoDialog.getResource().getResText("RID_QUERY_24");
+        slblValue = CurUnoDialog.getResource().getResText("RID_QUERY_25");
         sLogicOperators = new String[10]; // =, <>, <, >, <=, >=, like, !like, is null, !is null
-        sLogicOperators[0] = CurUnoDialog.m_oResource.getResText("RID_QUERY_26");
-        sLogicOperators[1] = CurUnoDialog.m_oResource.getResText("RID_QUERY_27");
-        sLogicOperators[2] = CurUnoDialog.m_oResource.getResText("RID_QUERY_28");
-        sLogicOperators[3] = CurUnoDialog.m_oResource.getResText("RID_QUERY_29");
-        sLogicOperators[4] = CurUnoDialog.m_oResource.getResText("RID_QUERY_30");
-        sLogicOperators[5] = CurUnoDialog.m_oResource.getResText("RID_QUERY_31");
-        sLogicOperators[6] = CurUnoDialog.m_oResource.getResText("RID_QUERY_32");
-        sLogicOperators[7] = CurUnoDialog.m_oResource.getResText("RID_QUERY_33");
-        sLogicOperators[8] = CurUnoDialog.m_oResource.getResText("RID_QUERY_34");
-        sLogicOperators[9] = CurUnoDialog.m_oResource.getResText("RID_QUERY_35");
-        sDuplicateCondition = CurUnoDialog.m_oResource.getResText("RID_QUERY_89");
+        sLogicOperators[0] = CurUnoDialog.getResource().getResText("RID_QUERY_26");
+        sLogicOperators[1] = CurUnoDialog.getResource().getResText("RID_QUERY_27");
+        sLogicOperators[2] = CurUnoDialog.getResource().getResText("RID_QUERY_28");
+        sLogicOperators[3] = CurUnoDialog.getResource().getResText("RID_QUERY_29");
+        sLogicOperators[4] = CurUnoDialog.getResource().getResText("RID_QUERY_30");
+        sLogicOperators[5] = CurUnoDialog.getResource().getResText("RID_QUERY_31");
+        sLogicOperators[6] = CurUnoDialog.getResource().getResText("RID_QUERY_32");
+        sLogicOperators[7] = CurUnoDialog.getResource().getResText("RID_QUERY_33");
+        sLogicOperators[8] = CurUnoDialog.getResource().getResText("RID_QUERY_34");
+        sLogicOperators[9] = CurUnoDialog.getResource().getResText("RID_QUERY_35");
+        sDuplicateCondition = CurUnoDialog.getResource().getResText("RID_QUERY_89");
 
         // create Radiobuttons
         // * match all

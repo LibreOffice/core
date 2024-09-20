@@ -58,13 +58,13 @@ public class FieldFormatter implements XItemListener
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);
         IFieldFormatStep = Integer.valueOf(TableWizard.SOFIELDSFORMATPAGE);
-        String sFieldName = CurUnoDialog.m_oResource.getResText("RID_TABLE_23");
-        String sFieldNames = CurUnoDialog.m_oResource.getResText("RID_TABLE_25");
-        String sfieldinfo = CurUnoDialog.m_oResource.getResText("RID_TABLE_20");
-        String sbtnplushelptext = CurUnoDialog.m_oResource.getResText("RID_TABLE_45");
-        String sbtnminushelptext = CurUnoDialog.m_oResource.getResText("RID_TABLE_46");
+        String sFieldName = CurUnoDialog.getResource().getResText("RID_TABLE_23");
+        String sFieldNames = CurUnoDialog.getResource().getResText("RID_TABLE_25");
+        String sfieldinfo = CurUnoDialog.getResource().getResText("RID_TABLE_20");
+        String sbtnplushelptext = CurUnoDialog.getResource().getResText("RID_TABLE_45");
+        String sbtnminushelptext = CurUnoDialog.getResource().getResText("RID_TABLE_46");
 
-        suntitled = CurUnoDialog.m_oResource.getResText("RID_TABLE_43");
+        suntitled = CurUnoDialog.getResource().getResText("RID_TABLE_43");
 
         CurUnoDialog.insertLabel("lblFieldNames",
                 new String[]
