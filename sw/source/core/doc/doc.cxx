@@ -1566,10 +1566,23 @@ void SwDoc::ForEachCharacterFontItem(TypedWhichId<SvxFontItem> nWhich, bool bIgn
     }
 }
 
-/// Iterate over all RES_PARATR_TABSTOP SvXMLAttrContainerItem, if the function returns false, iteration is stopped
-void SwDoc::ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>& rFunc ) const
+/// Iterate over all RES_PARATR_TABSTOP SvxTabStopItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>& rFunc )
 {
-    for(SwCharFormat* pFormat : *GetCharFormats())
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        const SwNode* pNode = GetNodes()[i];
+        if (pNode->IsContentNode())
+        {
+            const SwContentNode* pTextNode = pNode->GetContentNode();
+            if (pTextNode->HasSwAttrSet())
+                if (const SvxTabStopItem* pItem = pTextNode->GetSwAttrSet().GetItemIfSet(RES_PARATR_TABSTOP))
+                    if (!rFunc(*pItem))
+                        return;
+        }
+    }
+    for(const SwTextFormatColl* pFormat : *GetTextFormatColls())
     {
         const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
         if (const SvxTabStopItem* pItem = rAttrSet.GetItemIfSet(RES_PARATR_TABSTOP))

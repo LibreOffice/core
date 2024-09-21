@@ -1463,7 +1463,7 @@ public:
     SW_DLLPUBLIC void ForEachTxtAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
 
     /// Iterate over all RES_PARATR_TABSTOP SvxTabStopItem, if the function returns false, iteration is stopped
-    SW_DLLPUBLIC void ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>&  ) const;
+    SW_DLLPUBLIC void ForEachParaAtrTabStopItem(const std::function<bool(const SvxTabStopItem&)>&  );
 
     /// Iterate over all RES_UNKNOWNATR_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachUnknownAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
