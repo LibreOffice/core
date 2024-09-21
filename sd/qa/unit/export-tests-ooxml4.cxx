@@ -721,6 +721,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143222_embeddedWorksheet)
 
     pGraphic = pOleObj->GetGraphic();
     CPPUNIT_ASSERT_MESSAGE("no graphic after the export", pGraphic != nullptr);
+    CPPUNIT_ASSERT_MESSAGE("no graphic after the export", !pGraphic->IsNone());
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143315)
