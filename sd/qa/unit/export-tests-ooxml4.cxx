@@ -734,8 +734,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143222_embeddedWorksheet)
     CPPUNIT_ASSERT_MESSAGE("no graphic", pGraphic != nullptr);
     CPPUNIT_ASSERT_MESSAGE("no graphic", !pGraphic->IsNone());
 
-    // TODO: this currently fails - see tdf#163064
-#if 0
     // Check export of embedded worksheet in slide.
     saveAndReload(u"Impress Office Open XML"_ustr);
 
@@ -746,7 +744,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143222_embeddedWorksheet)
     pGraphic = pOleObj->GetGraphic();
     CPPUNIT_ASSERT_MESSAGE("no graphic after the export", pGraphic != nullptr);
     CPPUNIT_ASSERT_MESSAGE("no graphic after the export", !pGraphic->IsNone());
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf143315)
