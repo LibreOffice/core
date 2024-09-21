@@ -47,6 +47,8 @@
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="commentspanel|authorlabel">author</property>
+                    <property name="wrap">True</property>
+                    <property name="wrap-mode">word-char</property>
                     <property name="mnemonic-widget">resolvebutton</property>
                   </object>
                   <packing>
@@ -144,6 +146,7 @@
                             <property name="valign">start</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
+                            <property name="wrap-mode">word-char</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>

@@ -29,6 +29,7 @@
             <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="label" translatable="yes" context="commentspanel|referencetext">commentedtext</property>
+            <property name="ellipsize">end</property>
           </object>
         </child>
       </object>
