@@ -8,7 +8,7 @@
     <property name="can-focus">False</property>
     <property name="margin-bottom">10</property>
     <child>
-      <object class="GtkExpander">
+      <object class="GtkExpander" id="expander">
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="hexpand">True</property>

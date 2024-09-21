@@ -101,13 +101,14 @@ class Thread final
 private:
     std::unique_ptr<weld::Builder> mxBuilder;
     std::unique_ptr<weld::Container> mxContainer;
+    std::unique_ptr<weld::Expander> mxExpander;
     std::unique_ptr<weld::Box> mxCommentBox;
-    std::unique_ptr<weld::Label> mxText;
 
 public:
     Thread(weld::Container* pParent);
     ~Thread();
     weld::Widget* get_widget() const { return mxContainer.get(); }
+    weld::Expander* getExpander() const { return mxExpander.get(); }
     weld::Box* getCommentBoxWidget() const { return mxCommentBox.get(); }
 
     sal_uInt16 mnComments = 0;

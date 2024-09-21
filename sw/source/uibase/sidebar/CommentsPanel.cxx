@@ -172,8 +172,8 @@ IMPL_LINK_NOARG(Comment, ReplyClicked, weld::Button&, void) { mrCommentsPanel.Re
 Thread::Thread(weld::Container* pParent)
     : mxBuilder(Application::CreateBuilder(pParent, "modules/swriter/ui/commentsthread.ui"))
     , mxContainer(mxBuilder->weld_container("Thread"))
+    , mxExpander(mxBuilder->weld_expander("expander"))
     , mxCommentBox(mxBuilder->weld_box("comments_box"))
-    , mxText(mxBuilder->weld_label("commentedtext"))
 {
     // mxContainer->set_size_request(-1, mxContainer->get_preferred_size().Height());
 }
@@ -597,7 +597,7 @@ void CommentsPanel::setReferenceText(sal_uInt32 nRootId)
     sw::mark::MarkManager& rMarkManager = mpDoc->GetMarkManager();
     sw::mark::AnnotationMark* pMark = rMarkManager.getAnnotationMarkFor(pAnchor);
     OUString sText = getReferenceText(pTextNode, pMark);
-    pThread->mxText->set_label(sText);
+    pThread->getExpander()->set_label(sText);
 }
 
 void CommentsPanel::EditComment(Comment* pComment)
