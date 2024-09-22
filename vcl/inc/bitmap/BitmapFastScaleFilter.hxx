@@ -28,7 +28,6 @@ public:
 private:
     double mfScaleX;
     double mfScaleY;
-    Size maSize;
 };
 
 #endif
