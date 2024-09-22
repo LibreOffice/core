@@ -228,20 +228,6 @@ void ZipPackage::parseManifest()
                 {
                     uno::Reference < XManifestReader > xReader = ManifestReader::create( m_xContext );
 
-                    static constexpr OUStringLiteral sPropFullPath (u"FullPath");
-                    static constexpr OUStringLiteral sPropVersion (u"Version");
-                    static constexpr OUStringLiteral sPropMediaType (u"MediaType");
-                    static constexpr OUStringLiteral sPropInitialisationVector (u"InitialisationVector");
-                    static constexpr OUStringLiteral sPropSalt (u"Salt");
-                    static constexpr OUStringLiteral sPropIterationCount (u"IterationCount");
-                    static constexpr OUStringLiteral sPropSize (u"Size");
-                    static constexpr OUStringLiteral sPropDigest (u"Digest");
-                    static constexpr OUStringLiteral sPropDerivedKeySize (u"DerivedKeySize");
-                    static constexpr OUStringLiteral sPropDigestAlgorithm (u"DigestAlgorithm");
-                    static constexpr OUStringLiteral sPropEncryptionAlgorithm (u"EncryptionAlgorithm");
-                    static constexpr OUStringLiteral sPropStartKeyAlgorithm (u"StartKeyAlgorithm");
-                    static constexpr OUStringLiteral sKeyInfo (u"KeyInfo");
-
                     const uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence = xReader->readManifestSequence ( xSink->getInputStream() );
                     const Any *pKeyInfo = nullptr;
 
@@ -253,9 +239,9 @@ void ZipPackage::parseManifest()
                         uno::Any const* pArgon2Args = nullptr;
                         for ( const PropertyValue& rValue : rSequence )
                         {
-                            if ( rValue.Name == sPropFullPath )
+                            if ( rValue.Name == u"FullPath" )
                                 rValue.Value >>= sPath;
-                            else if ( rValue.Name == sPropVersion )
+                            else if ( rValue.Name == u"Version" )
                             {
                                 rValue.Value >>= sVersion;
                                 if (!oFirstVersion)
@@ -263,31 +249,31 @@ void ZipPackage::parseManifest()
                                     oFirstVersion.emplace(sVersion);
                                 }
                             }
-                            else if ( rValue.Name == sPropMediaType )
+                            else if ( rValue.Name == u"MediaType" )
                                 rValue.Value >>= sMediaType;
-                            else if ( rValue.Name == sPropSalt )
+                            else if ( rValue.Name == u"Salt" )
                                 pSalt = &( rValue.Value );
-                            else if ( rValue.Name == sPropInitialisationVector )
+                            else if ( rValue.Name == u"InitialisationVector" )
                                 pVector = &( rValue.Value );
-                            else if ( rValue.Name == sPropIterationCount )
+                            else if ( rValue.Name == u"IterationCount" )
                                 pCount = &( rValue.Value );
-                            else if ( rValue.Name == sPropSize )
+                            else if ( rValue.Name == u"Size" )
                                 pSize = &( rValue.Value );
-                            else if ( rValue.Name == sPropDigest )
+                            else if ( rValue.Name == u"Digest" )
                                 pDigest = &( rValue.Value );
-                            else if ( rValue.Name == sPropDigestAlgorithm )
+                            else if ( rValue.Name == u"DigestAlgorithm" )
                                 pDigestAlg = &( rValue.Value );
-                            else if ( rValue.Name == sPropEncryptionAlgorithm )
+                            else if ( rValue.Name == u"EncryptionAlgorithm" )
                                 pEncryptionAlg = &( rValue.Value );
-                            else if ( rValue.Name == sPropStartKeyAlgorithm )
+                            else if ( rValue.Name == u"StartKeyAlgorithm" )
                                 pStartKeyAlg = &( rValue.Value );
-                            else if ( rValue.Name == sPropDerivedKeySize )
+                            else if ( rValue.Name == u"DerivedKeySize" )
                                 pDerivedKeySize = &( rValue.Value );
-                            else if ( rValue.Name == sKeyInfo )
+                            else if ( rValue.Name == u"KeyInfo" )
                                 pKeyInfo = &( rValue.Value );
-                            else if (rValue.Name == "KeyDerivationFunction") {
+                            else if (rValue.Name == u"KeyDerivationFunction") {
                                 pKDF = &rValue.Value;
-                            } else if (rValue.Name == "Argon2Args") {
+                            } else if (rValue.Name == u"Argon2Args") {
                                 pArgon2Args = &rValue.Value;
                             }
                         }
