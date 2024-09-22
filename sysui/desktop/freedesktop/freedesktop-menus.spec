@@ -60,7 +60,7 @@ export KDEMAINDIR=/usr
 export PREFIXDIR=/usr
 export BINDIR=/usr/bin
 
-./create_tree.sh
+(cd %libo_start_dir && ./create_tree.sh)
 
 cd $RPM_BUILD_ROOT
 

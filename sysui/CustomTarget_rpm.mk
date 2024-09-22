@@ -36,6 +36,7 @@ $(rpm_WORKDIR)/$(1)/$(1)$(PKGVERSIONSHORT)-$(2)-menus-$(PKGVERSION)-$(LIBO_VERSI
 			--define "version $(PKGVERSION)" \
 			--define "release $(LIBO_VERSION_PATCH)" \
 			--define "__debug_install_post %nil" \
+			--define "libo_start_dir $(gb_CustomTarget_workdir)/sysui/share/$(1)" \
 		, $$@.log \
 	)
 endef
