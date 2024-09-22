@@ -445,11 +445,11 @@ public class QueryWizard extends DatabaseObjectWizard
                 {
                     showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
                     m_groupFieldSelection.xSelectedFieldsListBox.addItems(SelItems, m_groupFieldSelection.xSelectedFieldsListBox.getItemCount());
-                    String FieldList[] = m_groupFieldSelection.xFieldsListBox.getItems();
+                    String FieldList[] = m_groupFieldSelection.getFieldsListBox().getItems();
                     int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)
                     {
-                        m_groupFieldSelection.xFieldsListBox.removeItems((short) index, (short) 1);
+                        m_groupFieldSelection.getFieldsListBox().removeItems((short) index, (short) 1);
                     }
                 }
                 else

@@ -25,7 +25,7 @@ import java.util.*;
 
 public class FieldSelection
 {
-    public XListBox xFieldsListBox;                 // Left ListBox
+    protected XListBox xFieldsListBox;                 // Left ListBox
     public XListBox xSelectedFieldsListBox;         // right (selected) ListBox
 
     protected UnoDialog CurUnoDialog;
@@ -621,6 +621,11 @@ public class FieldSelection
         CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, _sfieldnames);
         String[] sleftboxfieldnames = JavaTools.removefromList(xFieldsListBox.getItems(), _sfieldnames);
         CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, sleftboxfieldnames);
+    }
+
+    public XListBox getFieldsListBox()
+    {
+        return xFieldsListBox;
     }
 
     public void setModified(boolean _bModified)
