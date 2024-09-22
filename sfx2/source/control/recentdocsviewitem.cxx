@@ -147,6 +147,21 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
 
+    // tdf#163086 downscale excessively large pinned document icons
+    // For some unknown reason to me, some of the SVG icon sets have their
+    // pinned document icons set to a viewport of 64x64. So downscale such
+    // icons to more closely match the size of the pinned document icons
+    // in the PNG icon sets.
+    const double nMaxWidthAndHeight = 24;
+    const Size aPinnedBmpSize(m_aPinnedDocumentBitmap.GetSizePixel());
+    const double nPinnedBmpMaxWidthAndHeight = std::max(aPinnedBmpSize.Width(), aPinnedBmpSize.Height());
+    if (nPinnedBmpMaxWidthAndHeight > nMaxWidthAndHeight)
+    {
+        const double fScale = nMaxWidthAndHeight / nPinnedBmpMaxWidthAndHeight;
+        m_aPinnedDocumentBitmap.Scale(fScale, fScale);
+        m_aPinnedDocumentBitmapHiglighted.Scale(fScale, fScale);
+    }
+
     BitmapEx aThumbnail;
 
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
