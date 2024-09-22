@@ -3838,7 +3838,7 @@ void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pPar
 
     for (auto const& [rKey, rValue] : rPackingProperties)
     {
-        if (rKey == u"expand"_ustr || rKey == u"resize"_ustr)
+        if (rKey == u"expand" || rKey == u"resize")
         {
             bool bTrue = toBool(rValue);
             if (pToolBoxParent)
@@ -3851,54 +3851,54 @@ void VclBuilder::applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pPar
         if (pToolBoxParent)
             continue;
 
-        if (rKey == u"fill"_ustr)
+        if (rKey == u"fill")
         {
             pCurrent->set_fill(toBool(rValue));
         }
-        else if (rKey == u"pack-type"_ustr)
+        else if (rKey == u"pack-type")
         {
             VclPackType ePackType = (!rValue.isEmpty() && (rValue[0] == 'e' || rValue[0] == 'E')) ? VclPackType::End : VclPackType::Start;
             pCurrent->set_pack_type(ePackType);
         }
-        else if (rKey == u"left-attach"_ustr)
+        else if (rKey == u"left-attach")
         {
             pCurrent->set_grid_left_attach(rValue.toInt32());
         }
-        else if (rKey == u"top-attach"_ustr)
+        else if (rKey == u"top-attach")
         {
             pCurrent->set_grid_top_attach(rValue.toInt32());
         }
-        else if (rKey == u"width"_ustr)
+        else if (rKey == u"width")
         {
             pCurrent->set_grid_width(rValue.toInt32());
         }
-        else if (rKey == u"height"_ustr)
+        else if (rKey == u"height")
         {
             pCurrent->set_grid_height(rValue.toInt32());
         }
-        else if (rKey == u"padding"_ustr)
+        else if (rKey == u"padding")
         {
             pCurrent->set_padding(rValue.toInt32());
         }
-        else if (rKey == u"position"_ustr)
+        else if (rKey == u"position")
         {
             set_window_packing_position(pCurrent, rValue.toInt32());
         }
-        else if (rKey == u"secondary"_ustr)
+        else if (rKey == u"secondary")
         {
             pCurrent->set_secondary(toBool(rValue));
         }
-        else if (rKey == u"non-homogeneous"_ustr)
+        else if (rKey == u"non-homogeneous")
         {
             pCurrent->set_non_homogeneous(toBool(rValue));
         }
-        else if (rKey == "homogeneous")
+        else if (rKey == u"homogeneous")
         {
             pCurrent->set_non_homogeneous(!toBool(rValue));
         }
         else
         {
-            SAL_WARN_IF(rKey != "shrink", "vcl.builder", "unknown packing: " << rKey);
+            SAL_WARN_IF(rKey != u"shrink", "vcl.builder", "unknown packing: " << rKey);
         }
     }
 }
