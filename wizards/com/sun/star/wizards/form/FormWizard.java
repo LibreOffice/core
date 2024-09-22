@@ -215,7 +215,7 @@ public class FormWizard extends DatabaseObjectWizard
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-        curFormDocument.xProgressBar.setValue(20);
+        curFormDocument.getProgressBar().setValue(20);
         // Label Help Text
         insertLabel("lblBinaryHelpText",
                 new String[]
@@ -231,7 +231,7 @@ public class FormWizard extends DatabaseObjectWizard
                 });
 
         curFormConfiguration = new FormConfiguration(this);
-        curFormDocument.xProgressBar.setValue(30);
+        curFormDocument.getProgressBar().setValue(30);
 
         curSubFormFieldSelection = new CommandFieldSelection(this, curFormDocument.oSubFormDBMetaData, SOSUBFORMFIELDS_PAGE, 92, slblFields, slblSelFields, slblTables, true, 34431);
         curSubFormFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
@@ -248,27 +248,27 @@ public class FormWizard extends DatabaseObjectWizard
                     28, sShowBinaryFields, Boolean.TRUE, 95, 154, Integer.valueOf(SOSUBFORMFIELDS_PAGE), 210
                 });
 
-        curFormDocument.xProgressBar.setValue(40);
+        curFormDocument.getProgressBar().setValue(40);
 
         curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 30, 34441);
-        curFormDocument.xProgressBar.setValue(50);
+        curFormDocument.getProgressBar().setValue(50);
 
         curControlArranger = new UIControlArranger(this, curFormDocument);
         curFormDocument.addUIFormController(curControlArranger);
-        curFormDocument.xProgressBar.setValue(60);
+        curFormDocument.getProgressBar().setValue(60);
 
         CurDataEntrySetter = new DataEntrySetter(this);
-        curFormDocument.xProgressBar.setValue(70);
+        curFormDocument.getProgressBar().setValue(70);
 
         curStyleApplier = new StyleApplier(this, curFormDocument);
         curFormDocument.addStyleApplier(curStyleApplier);
-        curFormDocument.xProgressBar.setValue(80);
+        curFormDocument.getProgressBar().setValue(80);
 
         curFinalizer = new Finalizer(this);
-        curFormDocument.xProgressBar.setValue(100);
+        curFormDocument.getProgressBar().setValue(100);
 
         enableNavigationButtons(false, false, false);
-        curFormDocument.xProgressBar.end();
+        curFormDocument.getProgressBar().end();
     }
 
     // @Override
@@ -340,7 +340,7 @@ public class FormWizard extends DatabaseObjectWizard
                         {
                             Properties.createProperty(PropertyNames.ACTIVE_CONNECTION, curFormDocument.oMainFormDBMetaData.DBConnection)
                         });
-                curFormDocument.xProgressBar.setValue(20);
+                curFormDocument.getProgressBar().setValue(20);
                 buildSteps();
                 this.curDBCommandFieldSelection.preselectCommand(m_wizardContext, false);
                 XWindowPeer xWindowPeer2 = createWindowPeer(curFormDocument.xWindowPeer);

@@ -50,7 +50,7 @@ public class TextDocument
 
     public XComponent xComponent;
     protected com.sun.star.text.XTextDocument xTextDocument;
-    public com.sun.star.task.XStatusIndicator xProgressBar;
+    protected com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
     public XMultiServiceFactory xMSFDoc;
@@ -230,6 +230,11 @@ public class TextDocument
     public com.sun.star.text.XTextDocument getTextDocument()
     {
         return xTextDocument;
+    }
+
+    public com.sun.star.task.XStatusIndicator getProgressBar()
+    {
+        return xProgressBar;
     }
 
     private Size getPageSize()
