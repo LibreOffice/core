@@ -80,7 +80,7 @@ public class FormControlArranger
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize)
     {
-        FieldColumns = oDBMetaData.FieldColumns;
+        FieldColumns = oDBMetaData.getFieldColumns();
         xMSF = oDBMetaData.xMSF;
         xFormName = _xFormName;
         xProgressBar = _xProgressBar;

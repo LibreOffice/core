@@ -38,7 +38,7 @@ public class CommandMetaData extends DBMetaData
     protected String[] m_aAllFieldNames = new String[]
     {
     };
-    public FieldColumn[] FieldColumns = new FieldColumn[]
+    protected FieldColumn[] FieldColumns = new FieldColumn[]
     {
     };
     private String[] GroupFieldNames = new String[]
@@ -259,6 +259,16 @@ public class CommandMetaData extends DBMetaData
             }
         }
         throw new com.sun.star.uno.RuntimeException();
+    }
+
+    public FieldColumn[] getFieldColumns()
+    {
+        return FieldColumns;
+    }
+
+    public void setFieldColumns(FieldColumn[] _fieldColumns)
+    {
+        FieldColumns = _fieldColumns;
     }
 
     public boolean getFieldNamesOfCommand(String _commandname, int _commandtype)

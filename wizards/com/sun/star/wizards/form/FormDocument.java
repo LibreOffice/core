@@ -513,11 +513,15 @@ public class FormDocument extends TextDocument
                 curArrangement = FormWizard.AS_GRID;
                 if (Name.equals(SOMAINFORM))
                 {
-                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getMainFormSize(FormWizard.AS_GRID));
+                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer,
+                                                   oDBMetaData.getFieldColumns(), aStartPoint,
+                                                   getMainFormSize(FormWizard.AS_GRID));
                 }
                 else
                 {
-                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getSubFormSize());
+                    oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer,
+                                                   oDBMetaData.getFieldColumns(), aStartPoint,
+                                                   getSubFormSize());
                 }
                 oGridControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, _NBorderType);
             }

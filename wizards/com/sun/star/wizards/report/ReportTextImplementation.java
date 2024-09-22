@@ -331,7 +331,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             addTextSectionCopies();
             getDoc().getallDBColumns();
             int GroupFieldCount = getRecordParser().getGroupFieldNames().length;
-            int FieldCount = getRecordParser().FieldColumns.length;
+            int FieldCount = getRecordParser().getFieldColumns().length;
             Object[] OldGroupFieldValues = new Object[GroupFieldCount];
             int RecordFieldCount = FieldCount - GroupFieldCount;
             XTextDocument xTextDocument = getDoc().getTextDocument();

@@ -434,7 +434,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         try
         {
             DBColumn CurDBColumn;
-            for (int i = 0; i < CurDBMetaData.FieldColumns.length; i++)
+            for (int i = 0; i < CurDBMetaData.getFieldColumns().length; i++)
             {
                 if (i < CurDBMetaData.getGroupFieldNames().length)
                 {
@@ -473,7 +473,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                                 });
                         CurDBMetaData.setRecordFieldNames(aNewList);
                         CurDBMetaData.RecordFieldColumns = removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.RecordFieldColumns);
-                        CurDBMetaData.FieldColumns = removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.FieldColumns);
+                        CurDBMetaData.setFieldColumns(removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.getFieldColumns()));
 
                     }
                     i--;

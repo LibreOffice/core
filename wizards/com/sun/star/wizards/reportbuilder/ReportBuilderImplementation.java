@@ -454,8 +454,8 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         int[] FieldWidths = new int[FieldNames.length];
         for (int i = 0; i < FieldNames.length; i++)
         {
-            FieldTypes[i] = a.FieldColumns[i].getFieldType();
-            FieldWidths[i] = a.FieldColumns[i].getFieldWidth();
+            FieldTypes[i] = a.getFieldColumns()[i].getFieldType();
+            FieldWidths[i] = a.getFieldColumns()[i].getFieldWidth();
         }
         getReportBuilderLayouter().setTableName(_nType, TableName);
         getReportBuilderLayouter().insertFieldNames(FieldNames);
