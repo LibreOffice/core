@@ -135,8 +135,12 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNode& rStt )
         {
             // Step forward until the Index is not the same anymore
             const SwNode* pCmpNd = &rStt;
-            while( nPos && pCmpNd == &((*this)[ --nPos ]->GetTextNode()) )
-                ;
+            while (nPos > 0)
+            {
+                --nPos;
+                if (pCmpNd != &((*this)[nPos]->GetTextNode()))
+                    break;
+            }
             ++nPos;
         }
 
@@ -146,7 +150,7 @@ void SwFootnoteIdxs::UpdateFootnote( const SwNode& rStt )
         if( rOutlNds.empty() )
         {
             nFootnoteNo = nPos+1;
-            if (nPos)
+            if (nPos > 0)
             {
                 nFootnoteNoHidden = (*this)[nPos - 1]->GetFootnote().GetNumberRLHidden() + 1;
             }

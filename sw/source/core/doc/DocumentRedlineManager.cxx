@@ -1404,7 +1404,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
     bool bCompress = false;
     SwRedlineTable::size_type n = 0;
     // look up the first Redline for the starting position
-    if( !GetRedline( *pStt, &n ) && n )
+    if( !GetRedline( *pStt, &n ) && n > 0 )
         --n;
     const SwRedlineTable::size_type nStartPos = n;
     bool bDec = false;

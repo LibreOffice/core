@@ -1618,7 +1618,7 @@ OTableFieldDescRef OSelectionBrowseBox::FindFirstFreeCol(sal_uInt16& _rColumnPos
 
     for (auto const& field : getFields())
     {
-        ++_rColumnPosition;
+        _rColumnPosition = static_cast<sal_uInt16>(_rColumnPosition + 1);
         OTableFieldDescRef pEntry = field;
         if ( pEntry.is() && pEntry->IsEmpty() )
             return pEntry;
