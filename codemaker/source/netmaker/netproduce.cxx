@@ -1204,7 +1204,8 @@ OString NetProducer::getNetName(std::string_view name)
     // if polymorphic, process parameters too
     if (fullNameView.ends_with('>'))
     {
-        size_t start = fullNameView.find_first_of('<') + 1;
+        const std::string_view::size_type nFirstAngle = fullNameView.find_first_of('<');
+        size_t start = (nFirstAngle != std::string_view::npos) ? (nFirstAngle + 1) : 0;
         size_t end = fullNameView.size() - 1;
         buffer.append(fullNameView.substr(0, start));
         OString params(fullNameView.substr(start, end - start));

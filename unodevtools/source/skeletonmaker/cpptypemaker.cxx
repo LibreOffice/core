@@ -68,7 +68,9 @@ static void printType(
         if (sort == codemaker::UnoType::Sort::Enum) {
             auto pEnumTypeEntity(dynamic_cast<unoidl::EnumTypeEntity *>(entity.get()));
             assert(pEnumTypeEntity);
-            o << OUString(nucleus.substr(nucleus.rfind('.') + 1)) << "_"
+            const std::string_view::size_type nLastDot = nucleus.rfind('.');
+            const auto nAfterDot = (nLastDot != std::string_view::npos) ? (nLastDot + 1) : 0;
+            o << OUString(nucleus.substr(nAfterDot)) << "_"
               << pEnumTypeEntity->getMembers()[0].name;
         }
         return;

@@ -415,7 +415,9 @@ char const PERIOD[] = ". ";
 
 static void addFileError(OUStringBuffer& _rBuf, std::u16string_view _aPath, AsciiString _sWhat)
 {
-    std::u16string_view sSimpleFileName = _aPath.substr(1 +_aPath.rfind(cURLSeparator));
+    const std::string_view::size_type nLastSep = _aPath.rfind(cURLSeparator);
+    const auto nAfterSep = (nLastSep != std::string_view::npos) ? (nLastSep + 1) : 0;
+    std::u16string_view sSimpleFileName = _aPath.substr(nAfterSep);
 
     _rBuf.append("The configuration file");
     _rBuf.append(OUString::Concat(" '") + sSimpleFileName + "' ");

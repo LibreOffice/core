@@ -31,7 +31,9 @@ namespace
         OUString sMimeType;
         if (o3tl::starts_with(rString, u"vnd.sun.star.Package"))
         {
-            OString aExtension = OUStringToOString(rString.substr(rString.rfind('.') + 1), RTL_TEXTENCODING_ASCII_US);
+            const std::string_view::size_type nLastDot = rString.rfind('.');
+            const auto nAfterDot = (nLastDot != std::string_view::npos) ? (nLastDot + 1) : 0;
+            OString aExtension = OUStringToOString(rString.substr(nAfterDot), RTL_TEXTENCODING_ASCII_US);
             sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aExtension);
         }
         return sMimeType;
