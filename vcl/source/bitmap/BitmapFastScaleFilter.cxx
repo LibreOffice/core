@@ -115,7 +115,7 @@ BitmapEx BitmapFastScaleFilter::execute(BitmapEx const& rBitmapEx) const
     AlphaMask aMask(rBitmapEx.GetAlphaMask());
 
     if (bRet && !aMask.IsEmpty())
-        bRet = aMask.Scale(maSize, BmpScaleFlag::Fast);
+        bRet = aMask.Scale(Size(nNewWidth, nNewHeight), BmpScaleFlag::Fast);
 
     SAL_WARN_IF(!aMask.IsEmpty() && aBitmap.GetSizePixel() != aMask.GetSizePixel(), "vcl",
                 "BitmapEx::Scale(): size mismatch for bitmap and alpha mask.");
