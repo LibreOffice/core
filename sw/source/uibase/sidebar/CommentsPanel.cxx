@@ -557,6 +557,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
         mxThreadsContainer->move(pThread->get_widget(), nullptr);
         if (mpThreadsMap.find(nRootId) != mpThreadsMap.end())
             mpThreadsMap.erase(nRootId);
+        mnThreads--;
     }
 }
 
