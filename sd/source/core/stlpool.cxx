@@ -923,7 +923,7 @@ void SdStyleSheetPool::UpdateStdNames()
         if( !pStyle->IsUserDefined() )
         {
             OUString aOldName   = pStyle->GetName();
-            sal_uLong nHelpId   = pStyle->GetHelpId( aHelpFile );
+            sal_uInt32 nHelpId   = pStyle->GetHelpId( aHelpFile );
             SfxStyleFamily eFam = pStyle->GetFamily();
 
             bool bHelpKnown = true;
@@ -1060,7 +1060,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          vcl::Font& rBulletFont )
 {
     OUString aHelpFile;
-    sal_uLong nHelpId = pSheet->GetHelpId( aHelpFile );
+    sal_uInt32 nHelpId = pSheet->GetHelpId( aHelpFile );
     SfxItemSet& rSet = pSheet->GetItemSet();
 
     switch ( nHelpId )
