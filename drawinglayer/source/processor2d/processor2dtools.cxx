@@ -45,7 +45,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
         // possibility to deactivate for easy test/request testing
         nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER")
 
-        // Use this if all is stable/teste for a while
+        // Use this if all is stable/tested for a while
         // true
 
         // Also possible: make dependent on ExperimentalMode
