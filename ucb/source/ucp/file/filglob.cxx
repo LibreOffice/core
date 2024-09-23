@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
@@ -365,7 +366,9 @@ namespace fileaccess {
                 ioErrorCode,
                 generateErrorArguments(aUncPath),
                 xEnv,
-                u"an error occurred during file opening"_ustr,
+                "an error occurred during file opening ("
+                    + OUString::number(o3tl::to_underlying(errorCode)) + "/"
+                    + OUString::number(minorCode) + ")",
                 xComProc);
         }
         else if( errorCode == TaskHandlerErr::OPEN_FOR_DIRECTORYLISTING  ||
