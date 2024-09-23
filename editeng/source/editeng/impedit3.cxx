@@ -68,6 +68,7 @@
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/kashida.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/lok.hxx>
@@ -231,93 +232,6 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
             bWrong = false;
     }
 }
-
-// For Kashidas from sw/source/core/text/porlay.cxx
-
-#define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
-#define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
-#define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
-#define isDalChar(c)        IS_JOINING_GROUP((c), DAL)
-#define isFehChar(c)       (IS_JOINING_GROUP((c), FEH) || IS_JOINING_GROUP((c), AFRICAN_FEH))
-#define isGafChar(c)        IS_JOINING_GROUP((c), GAF)
-#define isHehChar(c)        IS_JOINING_GROUP((c), HEH)
-#define isKafChar(c)        IS_JOINING_GROUP((c), KAF)
-#define isLamChar(c)        IS_JOINING_GROUP((c), LAM)
-#define isQafChar(c)       (IS_JOINING_GROUP((c), QAF) || IS_JOINING_GROUP((c), AFRICAN_QAF))
-#define isRehChar(c)        IS_JOINING_GROUP((c), REH)
-#define isTahChar(c)        IS_JOINING_GROUP((c), TAH)
-#define isTehMarbutaChar(c) IS_JOINING_GROUP((c), TEH_MARBUTA)
-#define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
-#define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
-
-// Beh and characters that behave like Beh in medial form.
-static bool isBehChar(sal_Unicode cCh)
-{
-    bool bRet = false;
-    switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
-    {
-    case U_JG_BEH:
-    case U_JG_NOON:
-    case U_JG_AFRICAN_NOON:
-    case U_JG_NYA:
-    case U_JG_YEH:
-    case U_JG_FARSI_YEH:
-    case U_JG_BURUSHASKI_YEH_BARREE:
-        bRet = true;
-        break;
-    default:
-        bRet = false;
-        break;
-    }
-
-    return bRet;
-}
-
-// Yeh and characters that behave like Yeh in final form.
-static bool isYehChar(sal_Unicode cCh)
-{
-    bool bRet = false;
-    switch (u_getIntPropertyValue(cCh, UCHAR_JOINING_GROUP))
-    {
-    case U_JG_YEH:
-    case U_JG_FARSI_YEH:
-    case U_JG_YEH_BARREE:
-    case U_JG_BURUSHASKI_YEH_BARREE:
-    case U_JG_YEH_WITH_TAIL:
-        bRet = true;
-        break;
-    default:
-        bRet = false;
-        break;
-    }
-
-    return bRet;
-}
-
-static bool isTransparentChar ( sal_Unicode cCh )
-{
-    return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
-}
-
-static bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
-{
-            // Lam + Alef
-    return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
-}
-
-static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
-{
-    const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
-    bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
-
-    // check for ligatures cPrevChar + cChar
-    if ( bRet )
-        bRet = ! lcl_IsLigature( cPrevCh, cCh );
-
-    return bRet;
-}
-
-
 
 void ImpEditEngine::UpdateViews( EditView* pCurView )
 {
@@ -2317,9 +2231,6 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
     {
         EditPaM aPaM( pNode, nChar+1 );
         sal_uInt16 nScript = GetI18NScriptType(aPaM);
-        // Arabic script is handled above, but if no Kashida positions are found, use blanks.
-        if (nKashidas)
-            continue;
 
         if ( pNode->GetChar(nChar) == ' ' )
         {
@@ -2460,154 +2371,12 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
         // restore selection for proper iteration at the end of the function
         aWordSel.Max().SetIndex( nSavPos );
 
-        sal_Int32 nIdx = 0, nPrevIdx = 0;
-        sal_Int32 nKashidaPos = -1;
-        sal_Unicode cCh, cPrevCh = 0;
+        auto stKashidaPos = i18nutil::GetWordKashidaPosition(aWord);
 
-        int nPriorityLevel = 7;    // 0..6 = level found
-                                   // 7 not found
-
-        sal_Int32 nWordLen = aWord.getLength();
-
-        // ignore trailing vowel chars
-        while( nWordLen && isTransparentChar( aWord[ nWordLen - 1 ] ))
-            --nWordLen;
-
-        while ( nIdx < nWordLen )
+        if (stKashidaPos.has_value())
         {
-            cCh = aWord[ nIdx ];
+            sal_Int32 nKashidaPos = aWordSel.Min().GetIndex() + stKashidaPos->nIndex;
 
-            // 1. Priority:
-            // after user inserted kashida
-            if ( 0x640 == cCh )
-            {
-                nKashidaPos = aWordSel.Min().GetIndex() + nIdx;
-                nPriorityLevel = 0;
-            }
-
-            // 2. Priority:
-            // after a Seen or Sad
-            if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
-            {
-                if( isSeenOrSadChar( cCh )
-                 && (aWord[ nIdx+1 ] != 0x200C) ) // #i98410#: prevent ZWNJ expansion
-                {
-                    nKashidaPos = aWordSel.Min().GetIndex() + nIdx;
-                    nPriorityLevel = 1;
-                }
-            }
-
-            // 3. Priority:
-            // before final form of Teh Marbuta, Heh, Dal
-            if ( nPriorityLevel >= 2 && nIdx > 0 )
-            {
-                if ( isTehMarbutaChar ( cCh ) || // Teh Marbuta (right joining)
-                     isDalChar ( cCh ) ||        // Dal (right joining) final form may appear in the middle of word
-                     ( isHehChar ( cCh ) && nIdx == nWordLen - 1))  // Heh (dual joining) only at end of word
-                {
-
-                    SAL_WARN_IF( 0 == cPrevCh, "editeng", "No previous character" );
-                    // check if character is connectable to previous character,
-                    if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
-                    {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
-                        nPriorityLevel = 2;
-                    }
-                }
-            }
-
-            // 4. Priority:
-            // before final form of Alef, Tah, Lam, Kaf or Gaf
-            if ( nPriorityLevel >= 3 && nIdx > 0 )
-            {
-                if ( isAlefChar ( cCh ) ||   // Alef (right joining) final form may appear in the middle of word
-                     (( isLamChar ( cCh ) || // Lam,
-                      isTahChar ( cCh )   || // Tah,
-                      isKafChar ( cCh )   || // Kaf (all dual joining)
-                      isGafChar ( cCh ) )
-                      && nIdx == nWordLen - 1))  // only at end of word
-                {
-                    SAL_WARN_IF( 0 == cPrevCh, "editeng", "No previous character" );
-                    // check if character is connectable to previous character,
-                    if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
-                    {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
-                        nPriorityLevel = 3;
-                    }
-                }
-            }
-
-            // 5. Priority:
-            // before medial Beh-like
-            if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
-            {
-                if ( isBehChar ( cCh ) )
-                {
-                    // check if next character is Reh or Yeh-like
-                    sal_Unicode cNextCh = aWord[ nIdx + 1 ];
-                    if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
-                    {
-                        SAL_WARN_IF( 0 == cPrevCh, "editeng", "No previous character" );
-                        // check if character is connectable to previous character,
-                        if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
-                        {
-                            nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
-                            nPriorityLevel = 4;
-                        }
-                    }
-                }
-            }
-
-            // 6. Priority:
-            // before the final form of Waw, Ain, Qaf and Feh
-            if ( nPriorityLevel >= 5 && nIdx > 0 )
-            {
-                if ( isWawChar ( cCh )   || // Wav (right joining)
-                                            // final form may appear in the middle of word
-                     (( isAinChar ( cCh ) ||  // Ain (dual joining)
-                        isQafChar ( cCh ) ||  // Qaf (dual joining)
-                        isFehChar ( cCh ) )   // Feh (dual joining)
-                        && nIdx == nWordLen - 1))  // only at end of word
-                {
-                    SAL_WARN_IF( 0 == cPrevCh, "editeng", "No previous character" );
-                    // check if character is connectable to previous character,
-                    if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
-                    {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
-                        nPriorityLevel = 5;
-                    }
-                }
-            }
-
-            // other connecting possibilities
-            if ( nPriorityLevel >= 6 && nIdx > 0 )
-            {
-                // Reh, Zain
-                if ( isRehChar ( cCh ) )
-                {
-                    SAL_WARN_IF( 0 == cPrevCh, "editeng", "No previous character" );
-                    // check if character is connectable to previous character,
-                    if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
-                    {
-                        nKashidaPos = aWordSel.Min().GetIndex() + nPrevIdx;
-                        nPriorityLevel = 6;
-                    }
-                }
-            }
-
-            // Do not consider vowel marks when checking if a character
-            // can be connected to previous character.
-            if ( !isTransparentChar ( cCh) )
-            {
-                cPrevCh = cCh;
-                nPrevIdx = nIdx;
-            }
-
-            ++nIdx;
-        } // end of current word
-
-        if (nKashidaPos >= 0)
-        {
             SeekCursor(pNode, nKashidaPos + 1, aTmpFont);
             aTmpFont.SetPhysFont(*GetRefDevice());
 
