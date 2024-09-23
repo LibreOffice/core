@@ -306,7 +306,6 @@ IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     if (rCEvt.GetCommand() == CommandEventId::ContextMenu)
     {
-        m_bMouseReleased = false;
         m_xTreeView->grab_focus();
 
         // select clicked entry
@@ -321,7 +320,6 @@ IMPL_LINK(SdPageObjsTLV, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
 
         bool bRet = m_aPopupMenuHdl.Call(rCEvt);
-        m_bMouseReleased = true;
         return bRet;
     }
 
@@ -362,7 +360,6 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
-    m_bMouseReleased = false;
     m_bEditing = false;
     m_bSelectionHandlerNavigates = rMEvt.GetClicks() == 1;
     m_bNavigationGrabsFocus = rMEvt.GetClicks() != 1;
@@ -371,7 +368,6 @@ IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK_NOARG(SdPageObjsTLV, MouseReleaseHdl, const MouseEvent&, bool)
 {
-    m_bMouseReleased = true;
     if (m_aMouseReleaseHdl.IsSet() && m_aMouseReleaseHdl.Call(MouseEvent()))
         return false;
 
@@ -850,8 +846,7 @@ void SdPageObjsTLV::Select()
 {
     m_nSelectEventId = nullptr;
 
-    // m_bMouseReleased is a hack to make inplace editing work for X11
-    if (m_bMouseReleased)
+    if (IsEditingActive())
         return;
 
     m_bLinkableSelected = true;

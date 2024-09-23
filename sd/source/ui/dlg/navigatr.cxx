@@ -463,33 +463,27 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl, weld::TreeView&, bool)
                 // state update.
                 mpBindings->Update();
 
-                // moved here from SetGetFocusHdl. Reset the
-                // focus only if something has been selected in the
-                // document.
-                SfxViewShell* pCurSh = SfxViewShell::Current();
-
-                if ( pCurSh )
+                if (mxTlbObjects->IsNavigationGrabsFocus())
                 {
-                    vcl::Window* pShellWnd = pCurSh->GetWindow();
-                    if ( pShellWnd )
-                        pShellWnd->GrabFocus();
-                }
+                    // moved here from SetGetFocusHdl. Reset the
+                    // focus only if something has been selected in the
+                    // document.
+                    SfxViewShell* pCurSh = SfxViewShell::Current();
 
-                // We navigated to an object, but the current shell may be
-                // still the slide sorter. Explicitly try to grab the draw
-                // shell focus, so follow-up operations work with the object
-                // and not with the whole slide.
-                vcl::Window* pWindow = pViewShell->GetActiveWindow();
-                if (pWindow)
-                    pWindow->GrabFocus();
+                    if ( pCurSh )
+                    {
+                        vcl::Window* pShellWnd = pCurSh->GetWindow();
+                        if ( pShellWnd )
+                            pShellWnd->GrabFocus();
+                    }
 
-                if (!mxTlbObjects->IsNavigationGrabsFocus())
-                {
-                    // This is the case when keyboard navigation inside the
-                    // navigator should continue to work.
-                    if (mxNavigatorDlg)
-                        mxNavigatorDlg->GrabFocus();
-                    mxTlbObjects->grab_focus();
+                    // We navigated to an object, but the current shell may be
+                    // still the slide sorter. Explicitly try to grab the draw
+                    // shell focus, so follow-up operations work with the object
+                    // and not with the whole slide.
+                    vcl::Window* pWindow = pViewShell->GetActiveWindow();
+                    if (pWindow)
+                        pWindow->GrabFocus();
                 }
             }
         }
