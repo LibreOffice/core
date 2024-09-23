@@ -5105,6 +5105,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                         rCheckboxFm.Invalidate();
                                         rSh.InvalidateWindows( SwRect(m_rView.GetVisArea()) );
                                     }
+                                    else if ( fieldBM->GetFieldname( ) == ODF_FORMTEXT &&
+                                        aContentAtPos.aFnd.pFieldmark->HasDefaultContent() )
+                                    {
+                                        rSh.GotoFieldmark( aContentAtPos.aFnd.pFieldmark );
+                                    }
+
                                 }
                             }
                             else if ( IsAttrAtPos::InetAttr == aContentAtPos.eContentAtPos )

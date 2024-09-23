@@ -106,6 +106,7 @@ namespace sw::mark
             virtual OUString GetContent() const { return OUString(); }
             virtual void ReplaceContent(const OUString& /*sNewContent*/) {}
 
+            virtual bool HasDefaultContent() const = 0;
         private:
             IFieldmark(IFieldmark const &) = delete;
             IFieldmark &operator =(IFieldmark const&) = delete;

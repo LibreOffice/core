@@ -246,6 +246,7 @@ namespace sw::mark {
 
             OUString GetContent() const override;
             void ReplaceContent(const OUString& sNewContent) override;
+            bool HasDefaultContent() const override;
 
         private:
             sw::DocumentContentOperationsManager* m_pDocumentContentOperationsManager;
@@ -259,6 +260,8 @@ namespace sw::mark {
             NonTextFieldmark(const SwPaM& rPaM);
             void InitDoc(SwDoc& io_rDoc, sw::mark::InsertMode eMode, SwPosition const* pSepPos) override;
             void ReleaseDoc(SwDoc& rDoc) override;
+
+            bool HasDefaultContent() const override;
         };
 
         /// Fieldmark representing a checkbox form field.
@@ -307,6 +310,7 @@ namespace sw::mark {
             void DelContent(sal_Int32 nDelIndex = -1) override;
             void ReplaceContent(const OUString* pText, sal_Int32* pIndex) override;
             void ReplaceContent(const OUString& sNewContent) override;
+            bool HasDefaultContent() const override;
 
             // This method should be called only by the portion so we can now the portion's painting area
             void SetPortionPaintArea(const SwRect& rPortionPaintArea);
@@ -345,6 +349,7 @@ namespace sw::mark {
             std::pair<bool, double> GetCurrentDate() const override;
             void SetCurrentDate(double fDate) override;
             OUString GetDateInStandardDateFormat(double fDate) const override;
+            bool HasDefaultContent() const override;
 
         private:
             OUString GetDateInCurrentDateFormat(double fDate) const;

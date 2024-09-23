@@ -672,6 +672,11 @@ namespace sw::mark
         }
         Invalidate();
     }
+    bool TextFieldmark::HasDefaultContent() const
+    {
+        return GetContent() == vEnSpaces;
+    }
+
 
     NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)
@@ -703,6 +708,11 @@ namespace sw::mark
                 CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT);
     }
 
+
+    bool NonTextFieldmark::HasDefaultContent() const
+    {
+        return false;
+    }
 
     CheckboxFieldmark::CheckboxFieldmark(const SwPaM& rPaM, const OUString& rName)
         : NonTextFieldmark(rPaM)
@@ -1033,6 +1043,11 @@ namespace sw::mark
             "{\"action\": \"hide\", \"type\": \"drop-down\"}"_ostr);
     }
 
+    bool DropDownFieldmark::HasDefaultContent() const
+    {
+        return false;
+    }
+
     DateFieldmark::DateFieldmark(const SwPaM& rPaM)
         : FieldmarkWithDropDownButton(rPaM)
         , m_pNumberFormatter(nullptr)
@@ -1324,6 +1339,12 @@ namespace sw::mark
             (*pParameters)[ODF_FORMDATE_CURRENTDATE] <<= OUString();
         }
     }
+
+    bool DateFieldmark::HasDefaultContent() const
+    {
+        return false;
+    }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
