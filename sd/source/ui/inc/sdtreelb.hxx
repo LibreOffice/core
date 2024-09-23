@@ -102,7 +102,6 @@ private:
      */
     bool m_bNavigationGrabsFocus;
 
-    bool m_bMouseReleased = true; // hack for x11 inplace editing
     bool m_bEditing = false;
 
     SelectionMode m_eSelectionMode;
