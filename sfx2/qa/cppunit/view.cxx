@@ -19,6 +19,7 @@
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/lokhelper.hxx>
 
 using namespace com::sun::star;
 
@@ -57,6 +58,22 @@ CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testReloadPage)
     // - Actual  : 1
     // i.e. the document was opened on page 1, not page 2, SID_PAGE_NUMBER was ignored.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nPage);
+}
+
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperExtractCertificates)
+{
+    std::string signatureCa = R"(-----BEGIN CERTIFICATE-----
+foo
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+bar
+-----END CERTIFICATE-----)";
+
+    std::vector<std::string> aRet = SfxLokHelper::extractCertificates(signatureCa);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aRet.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("\nfoo\n"), aRet[0]);
+    CPPUNIT_ASSERT_EQUAL(std::string("\nbar\n"), aRet[1]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -826,14 +826,16 @@ void SfxLokHelper::notifyLog(const std::ostringstream& stream)
     }
 }
 
-std::string SfxLokHelper::extractCertificate(const std::string & certificate)
+namespace
+{
+std::string extractCertificateWithOffset(const std::string& certificate, size_t& rOffset)
 {
     static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
     static constexpr std::string_view footer("-----END CERTIFICATE-----");
 
     std::string result;
 
-    size_t pos1 = certificate.find(header);
+    size_t pos1 = certificate.find(header, rOffset);
     if (pos1 == std::string::npos)
         return result;
 
@@ -842,9 +844,34 @@ std::string SfxLokHelper::extractCertificate(const std::string & certificate)
         return result;
 
     pos1 = pos1 + header.length();
-    pos2 = pos2 - pos1;
+    size_t len = pos2 - pos1;
 
-    return certificate.substr(pos1, pos2);
+    rOffset = pos2;
+    return certificate.substr(pos1, len);
+}
+}
+
+std::string SfxLokHelper::extractCertificate(const std::string & certificate)
+{
+    size_t nOffset = 0;
+    return extractCertificateWithOffset(certificate, nOffset);
+}
+
+std::vector<std::string> SfxLokHelper::extractCertificates(const std::string& rCerts)
+{
+    std::vector<std::string> aRet;
+    size_t nOffset = 0;
+    while (true)
+    {
+        std::string aNext = extractCertificateWithOffset(rCerts, nOffset);
+        if (aNext.empty())
+        {
+            break;
+        }
+
+        aRet.push_back(aNext);
+    }
+    return aRet;
 }
 
 namespace
@@ -918,6 +945,40 @@ css::uno::Reference<css::security::XCertificate> SfxLokHelper::getSigningCertifi
 
     uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->createDERCertificateWithPrivateKey(aCertificateSequence, aPrivateKeySequence);
     return xCertificate;
+}
+
+uno::Reference<security::XCertificate> SfxLokHelper::addCertificate(
+    const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator,
+    const css::uno::Sequence<sal_Int8>& rCert)
+{
+    // Trust arg is handled by CERT_DecodeTrustString(), see 'man certutil'.
+    return xCertificateCreator->addDERCertificateToTheDatabase(rCert, u"TCu,Cu,Tu"_ustr);
+}
+
+void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
+{
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
+    if (!xSecurityContext.is())
+    {
+        return;
+    }
+
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment = xSecurityContext->getSecurityEnvironment();
+    uno::Reference<xml::crypto::XCertificateCreator> xCertificateCreator(xSecurityEnvironment, uno::UNO_QUERY);
+    if (!xCertificateCreator.is())
+    {
+        return;
+    }
+
+    for (const auto& rCert : rCerts)
+    {
+        uno::Sequence<sal_Int8> aCertificateSequence;
+        OUString aBase64OUString = OUString::fromUtf8(rCert);
+        comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
+        addCertificate(xCertificateCreator, aCertificateSequence);
+    }
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

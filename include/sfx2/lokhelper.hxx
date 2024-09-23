@@ -12,6 +12,7 @@
 
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
+#include <com/sun/star/xml/crypto/XCertificateCreator.hpp>
 
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
@@ -238,7 +239,15 @@ public:
 
     static void notifyLog(const std::ostringstream& stream);
 
+    /// Extracts base64 data inside begin/end markers.
     static std::string extractCertificate(const std::string& rCert);
+    /// Extracts multiple certificates in base64 from inside begin/end markers.
+    static std::vector<std::string> extractCertificates(const std::string& rCerts);
+    /// Takes a single CA certificate to add them to the list of trusted certificates.
+    static css::uno::Reference<css::security::XCertificate> addCertificate(const css::uno::Reference<css::xml::crypto::XCertificateCreator>& xCertificateCreator, const css::uno::Sequence<sal_Int8>& rCert);
+    /// Takes a CA chain to add them to the list of trusted certificates.
+    static void addCertificates(const std::vector<std::string>& rCerts);
+    /// Parses a private key + certificate pair.
     static css::uno::Reference<css::security::XCertificate> getSigningCertificate(const std::string& rCert, const std::string& rKey);
 
 private:

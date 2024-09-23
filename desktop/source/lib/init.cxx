@@ -4732,8 +4732,37 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
     if (pDoc)
     {
         doc_iniUnoCommands();
-        pDoc->initializeForTiledRendering(
-                comphelper::containerToSequence(jsonToPropertyValuesVector(pArguments)));
+        std::vector<beans::PropertyValue> aArgs = jsonToPropertyValuesVector(pArguments);
+        std::string aSignatureCert;
+        std::string aSignatureKey;
+        for (const auto& rArg : aArgs)
+        {
+            if (rArg.Name == ".uno:SignatureCert" && rArg.Value.has<OUString>())
+            {
+                aSignatureCert = rArg.Value.get<OUString>().toUtf8();
+            }
+            else if (rArg.Name == ".uno:SignatureKey" && rArg.Value.has<OUString>())
+            {
+                aSignatureKey = rArg.Value.get<OUString>().toUtf8();
+            }
+            else if (rArg.Name == ".uno:SignatureCa" && rArg.Value.has<OUString>())
+            {
+                std::string aSignatureCa;
+                aSignatureCa = rArg.Value.get<OUString>().toUtf8();
+                std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aSignatureCa);
+                SfxLokHelper::addCertificates(aCerts);
+            }
+        }
+        if (!aSignatureCert.empty() && !aSignatureKey.empty())
+        {
+            uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+            if (!xCertificate.is())
+            {
+                SAL_WARN("lok", "doc_initializeForRendering: cert/key didn't result in an XCertificate");
+            }
+        }
+
+        pDoc->initializeForTiledRendering(comphelper::containerToSequence(aArgs));
     }
 }
 
@@ -7311,7 +7340,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
         std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
-    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, u"TCu,Cu,Tu"_ustr);
+    uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::addCertificate(xCertificateCreator, aCertificateSequence);
 
     if (!xCertificate.is())
         return false;
