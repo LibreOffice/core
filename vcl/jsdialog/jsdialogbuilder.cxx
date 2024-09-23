@@ -492,9 +492,9 @@ OUString JSInstanceBuilder::getMapIdFromWindowId() const
 }
 
 // used for dialogs
-JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const std::u16string_view sUIRoot,
                                      const OUString& rUIFile, bool bPopup)
-    : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
+    : SalInstanceBuilder(extract_sal_widget(pParent), sUIRoot, rUIFile)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
@@ -526,9 +526,9 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 }
 
 // used for sidebar panels
-JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot,
+JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile, sal_uInt64 nLOKWindowId)
-    : SalInstanceBuilder(extract_sal_widget(pParent), rUIRoot, rUIFile)
+    : SalInstanceBuilder(extract_sal_widget(pParent), sUIRoot, rUIFile)
     , m_nWindowId(nLOKWindowId)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
@@ -568,11 +568,11 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
 }
 
 // used for notebookbar
-JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile,
                                      const css::uno::Reference<css::frame::XFrame>& rFrame,
                                      sal_uInt64 nWindowId)
-    : SalInstanceBuilder(pParent, rUIRoot, rUIFile, rFrame)
+    : SalInstanceBuilder(pParent, sUIRoot, rUIFile, rFrame)
     , m_nWindowId(0)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
@@ -601,9 +601,9 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
 }
 
 // used for formulabar
-JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile, sal_uInt64 nLOKWindowId)
-    : SalInstanceBuilder(pParent, rUIRoot, rUIFile)
+    : SalInstanceBuilder(pParent, sUIRoot, rUIFile)
     , m_nWindowId(nLOKWindowId)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)

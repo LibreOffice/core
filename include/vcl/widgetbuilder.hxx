@@ -33,8 +33,8 @@
 template <typename Widget, typename WidgetPtr> class WidgetBuilder : public BuilderBase
 {
 protected:
-    WidgetBuilder(const OUString& rUIFile, bool bLegacy)
-        : BuilderBase(rUIFile, bLegacy)
+    WidgetBuilder(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy)
+        : BuilderBase(sUIDir, rUIFile, bLegacy)
     {
     }
     virtual ~WidgetBuilder() = default;

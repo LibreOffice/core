@@ -7078,11 +7078,11 @@ void SalInstancePopover::resize_to_request()
 
 IMPL_LINK_NOARG(SalInstancePopover, PopupModeEndHdl, FloatingWindow*, void) { signal_closed(); }
 
-SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+SalInstanceBuilder::SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot,
                                        const OUString& rUIFile,
                                        const css::uno::Reference<css::frame::XFrame>& rFrame)
     : weld::Builder()
-    , m_xBuilder(new VclBuilder(pParent, rUIRoot, rUIFile, {}, rFrame, false))
+    , m_xBuilder(new VclBuilder(pParent, sUIRoot, rUIFile, {}, rFrame, false))
 {
 }
 

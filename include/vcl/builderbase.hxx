@@ -43,7 +43,7 @@ public:
     typedef stringmap TextBuffer;
 
 protected:
-    BuilderBase(const OUString& rUIFile, bool bLegacy);
+    BuilderBase(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy);
     virtual ~BuilderBase() = default;
 
     struct ListStore
@@ -76,6 +76,7 @@ protected:
     static OUString getStyleClass(xmlreader::XmlReader& reader);
     static bool hasOrientationVertical(stringmap& rMap);
 
+    OUString getUIFileUrl() { return m_sUIFileUrl; }
     OUString getHelpRoot() { return m_sHelpRoot; }
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
@@ -118,6 +119,7 @@ private:
 
     std::unique_ptr<ParserState> m_pParserState;
 
+    OUString m_sUIFileUrl;
     OUString m_sHelpRoot;
     bool m_bLegacy;
 };

@@ -444,8 +444,9 @@ namespace weld
     }
 }
 
-BuilderBase::BuilderBase(const OUString& rUIFile, bool bLegacy)
+BuilderBase::BuilderBase(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy)
     : m_pParserState(new ParserState)
+    , m_sUIFileUrl(sUIDir + rUIFile)
     , m_sHelpRoot(rUIFile)
     , m_bLegacy(bLegacy)
 {
@@ -487,10 +488,10 @@ OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rVal
 
 void BuilderBase::resetParserState() { m_pParserState.reset(); }
 
-VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUString& sUIFile,
+VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const OUString& sUIFile,
                        OUString sID, css::uno::Reference<css::frame::XFrame> xFrame,
                        bool bLegacy, const NotebookBarAddonsItem* pNotebookBarAddonsItem)
-    : WidgetBuilder(sUIFile, bLegacy)
+    : WidgetBuilder(sUIDir, sUIFile, bLegacy)
     , m_pNotebookBarAddonsItem(pNotebookBarAddonsItem
                                    ? new NotebookBarAddonsItem(*pNotebookBarAddonsItem)
                                    : new NotebookBarAddonsItem{})
@@ -507,13 +508,13 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
 
     try
     {
-        xmlreader::XmlReader reader(sUIDir + sUIFile);
+        xmlreader::XmlReader reader(getUIFileUrl());
 
         handleChild(pParent, nullptr, reader);
     }
     catch (const css::uno::Exception &rExcept)
     {
-        TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << sUIDir << sUIFile);
+        TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
         CrashReporter::addKeyValue(u"VclBuilderException"_ustr, "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
         assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
         throw;

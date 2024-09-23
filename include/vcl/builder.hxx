@@ -61,7 +61,7 @@ public:
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, const VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
 public:
-    VclBuilder(vcl::Window* pParent, const OUString& sUIRootDir, const OUString& sUIFile,
+    VclBuilder(vcl::Window* pParent, std::u16string_view sUIRootDir, const OUString& sUIFile,
                OUString sID = {},
                css::uno::Reference<css::frame::XFrame> xFrame
                = css::uno::Reference<css::frame::XFrame>(),

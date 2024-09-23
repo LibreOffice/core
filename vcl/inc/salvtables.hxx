@@ -46,7 +46,7 @@ protected:
     VclPtr<vcl::Window> m_aOwnedToplevel;
 
 public:
-    SalInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    SalInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
                        const css::uno::Reference<css::frame::XFrame>& rFrame
                        = css::uno::Reference<css::frame::XFrame>());
 

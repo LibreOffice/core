@@ -249,17 +249,17 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
 
 public:
     /// used for dialogs or popups
-    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
                       bool bPopup = false);
     /// used for sidebar panels
-    JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    JSInstanceBuilder(weld::Widget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
                       sal_uInt64 nLOKWindowId);
     /// used for notebookbar, optional nWindowId is used if getting parent id failed
-    JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
                       const css::uno::Reference<css::frame::XFrame>& rFrame,
                       sal_uInt64 nWindowId = 0);
     /// used for formulabar
-    JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+    JSInstanceBuilder(vcl::Window* pParent, std::u16string_view sUIRoot, const OUString& rUIFile,
                       sal_uInt64 nLOKWindowId);
 
     static std::unique_ptr<JSInstanceBuilder>
