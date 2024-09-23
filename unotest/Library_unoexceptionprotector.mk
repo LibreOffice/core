@@ -13,6 +13,7 @@ $(eval $(call gb_Library_Library,unoexceptionprotector))
 $(eval $(call gb_Library_use_sdk_api,unoexceptionprotector))
 
 $(eval $(call gb_Library_use_libraries,unoexceptionprotector,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	sal \
