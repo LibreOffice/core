@@ -124,6 +124,7 @@ void printUnoValue(
     case css::uno::TypeClass_STRUCT:
     case css::uno::TypeClass_EXCEPTION:
         {
+            out << '{';
             auto first = true;
             for (auto const & f: css::uno::Reference<css::reflection::XIdlClass>(
                      reflections->forName(type.getTypeName()),
@@ -137,6 +138,7 @@ void printUnoValue(
                 out << f->getName() << ": ";
                 printUnoValue(out, reflections, translateType(f->getType()), f->get(value));
             }
+            out << '}';
             break;
         }
     case css::uno::TypeClass_INTERFACE:
