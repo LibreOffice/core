@@ -93,7 +93,7 @@ CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoubleDecompositionSolid)
 
 CPPUNIT_TEST_FIXTURE(DrawinglayerBorderTest, testDoublePixelProcessing)
 {
-    // Creating a pixel-processor and after that attacing a metafile
+    // Creating a pixel-processor and after that attaching a metafile
     // recording is not possible anymore, the pixel-processor may be
     // a SDPR, e.g. a CairoSDPR, and *not* a VclPixelProcessor2D anymore.
     // Since the intention had changed already (see comments below
