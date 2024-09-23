@@ -257,16 +257,16 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     m_nCurrentSwPos = SearchNext(1);
 }
 
-static sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
+static bool pos_less( sal_Int32 pos1, sal_Int32 pos2 )
 {
     if ( pos1 >= 0 && pos2 >= 0 )
     {
         // both valid: return minimum one
-        return std::min(pos1, pos2);
+        return pos1 < pos2;
     }
 
     // return the valid one, if any, or -1
-    return std::max(pos1, pos2);
+    return pos1 > pos2;
 }
 
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
@@ -289,9 +289,8 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         ++formElementPos; // tdf#133604 put this in its own run
     }
 
-    const sal_Int32 pos = lcl_getMinPos(
-        lcl_getMinPos(lcl_getMinPos(fieldEndPos, fieldSepPos), fieldStartPos),
-        formElementPos );
+    const sal_Int32 pos
+        = std::min({ fieldEndPos, fieldSepPos, fieldStartPos, formElementPos }, pos_less);
 
     sal_Int32 nMinPos = (pos>=0) ? pos : SAL_MAX_INT32;
 
