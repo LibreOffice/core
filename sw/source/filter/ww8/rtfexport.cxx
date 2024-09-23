@@ -1401,12 +1401,10 @@ void RtfExport::OutColorTable()
         const SvxBoxItem* pBox = rPool.GetUserDefaultItem(RES_BOX);
         if (nullptr != pBox)
             InsColorLine(*pBox);
-        rPool.GetItemSurrogates(aSurrogates, RES_BOX);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pBox = &static_cast<const SvxBoxItem&>(*pItem);
-            InsColorLine(*pBox);
-        }
+        m_rDoc.ForEachBoxItem([this](const SvxBoxItem& rBox) -> bool {
+            InsColorLine(rBox);
+            return true;
+        });
     }
 
     {

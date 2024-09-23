@@ -1603,6 +1603,24 @@ void SwDoc::ForEachUnknownAtrContainerItem(const std::function<bool(const SvXMLA
     }
 }
 
+/// Iterate over all RES_BOX SvxBoxItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachBoxItem(const std::function<bool(const SvxBoxItem&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        const SwNode* pNode = GetNodes()[i];
+        if (pNode->IsContentNode())
+        {
+            const SwContentNode* pTextNode = pNode->GetContentNode();
+            if (pTextNode->HasSwAttrSet())
+                if (const SvxBoxItem* pItem = pTextNode->GetSwAttrSet().GetItemIfSet(RES_BOX))
+                    if (!rFunc(*pItem))
+                        return;
+        }
+    }
+}
+
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();

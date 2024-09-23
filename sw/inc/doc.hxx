@@ -1468,6 +1468,9 @@ public:
     /// Iterate over all RES_UNKNOWNATR_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachUnknownAtrContainerItem(const std::function<bool(const SvXMLAttrContainerItem&)>&  ) const;
 
+    /// Iterate over all RES_BOX SvxBoxItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachBoxItem(const std::function<bool(const SvxBoxItem&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 
