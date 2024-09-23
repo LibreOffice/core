@@ -257,42 +257,30 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     m_nCurrentSwPos = SearchNext(1);
 }
 
-static bool pos_less( sal_Int32 pos1, sal_Int32 pos2 )
-{
-    if ( pos1 >= 0 && pos2 >= 0 )
-    {
-        // both valid: return minimum one
-        return pos1 < pos2;
-    }
-
-    // return the valid one, if any, or -1
-    return pos1 > pos2;
-}
-
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    const OUString aText = m_rNode.GetText();
-    sal_Int32 fieldEndPos = aText.indexOf(CH_TXT_ATR_FIELDEND, nStartPos - 1);
+    assert(nStartPos > 0); // it uses nStartPos - 1 in searches
+    std::u16string_view aText = m_rNode.GetText();
+    auto fieldEndPos = aText.find(CH_TXT_ATR_FIELDEND, nStartPos - 1);
     // HACK: for (so far) mysterious reasons the sdtContent element closes
     // too late in testDateFormField() unless an empty run is exported at
     // the end of the fieldmark; hence find *also* the position after the
     // CH_TXT_ATR_FIELDEND here
-    if (0 <= fieldEndPos && fieldEndPos < nStartPos)
+    if (fieldEndPos < o3tl::make_unsigned(nStartPos))
     {
         ++fieldEndPos;
     }
-    sal_Int32 fieldSepPos = aText.indexOf(CH_TXT_ATR_FIELDSEP, nStartPos);
-    sal_Int32 fieldStartPos = aText.indexOf(CH_TXT_ATR_FIELDSTART, nStartPos);
-    sal_Int32 formElementPos = aText.indexOf(CH_TXT_ATR_FORMELEMENT, nStartPos - 1);
-    if (0 <= formElementPos && formElementPos < nStartPos)
+    auto fieldSepPos = aText.find(CH_TXT_ATR_FIELDSEP, nStartPos);
+    auto fieldStartPos = aText.find(CH_TXT_ATR_FIELDSTART, nStartPos);
+    auto formElementPos = aText.find(CH_TXT_ATR_FORMELEMENT, nStartPos - 1);
+    if (formElementPos < o3tl::make_unsigned(nStartPos))
     {
         ++formElementPos; // tdf#133604 put this in its own run
     }
 
-    const sal_Int32 pos
-        = std::min({ fieldEndPos, fieldSepPos, fieldStartPos, formElementPos }, pos_less);
+    const auto pos = std::min({ fieldEndPos, fieldSepPos, fieldStartPos, formElementPos });
 
-    sal_Int32 nMinPos = (pos>=0) ? pos : SAL_MAX_INT32;
+    sal_Int32 nMinPos = (pos != std::u16string_view::npos) ? pos : SAL_MAX_INT32;
 
     // first the redline, then the attributes
     if( m_pCurRedline )
