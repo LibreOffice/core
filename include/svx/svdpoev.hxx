@@ -28,11 +28,11 @@ class SVXCORE_DLLPUBLIC SdrPolyEditView : public SdrEditView, public IPolyPolygo
 {
     friend class SdrEditView;
 
-    bool bSetMarkedPointsSmoothPossible : 1;
-    bool bSetMarkedSegmentsKindPossible : 1;
+    bool m_bSetMarkedPointsSmoothPossible : 1;
+    bool m_bSetMarkedSegmentsKindPossible : 1;
 
-    SdrPathSmoothKind eMarkedPointsSmooth;
-    SdrPathSegmentKind eMarkedSegmentsKind;
+    SdrPathSmoothKind m_eMarkedPointsSmooth;
+    SdrPathSegmentKind m_eMarkedSegmentsKind;
 
 private:
     SVX_DLLPRIVATE void ImpResetPolyPossibilityFlags();

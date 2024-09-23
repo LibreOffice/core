@@ -39,10 +39,10 @@ using namespace sdr;
 
 void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
-    eMarkedPointsSmooth=SdrPathSmoothKind::DontCare;
-    eMarkedSegmentsKind=SdrPathSegmentKind::DontCare;
-    bSetMarkedPointsSmoothPossible=false;
-    bSetMarkedSegmentsKindPossible=false;
+    m_eMarkedPointsSmooth=SdrPathSmoothKind::DontCare;
+    m_eMarkedSegmentsKind=SdrPathSegmentKind::DontCare;
+    m_bSetMarkedPointsSmoothPossible=false;
+    m_bSetMarkedSegmentsKindPossible=false;
 }
 
 SdrPolyEditView::SdrPolyEditView(
@@ -93,11 +93,11 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
         return;
 
     const bool bClosed(pPath->IsClosed());
-    bSetMarkedPointsSmoothPossible = true;
+    m_bSetMarkedPointsSmoothPossible = true;
 
     if (bClosed)
     {
-        bSetMarkedSegmentsKindPossible = true;
+        m_bSetMarkedSegmentsKindPossible = true;
     }
 
     for (const auto& rPt : rPts)
@@ -110,9 +110,9 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
             const basegfx::B2DPolygon aLocalPolygon(pPath->GetPathPoly().getB2DPolygon(nPolyNum));
             bool bCanSegment(bClosed || nPntNum < aLocalPolygon.count() - 1);
 
-            if(!bSetMarkedSegmentsKindPossible && bCanSegment)
+            if(!m_bSetMarkedSegmentsKindPossible && bCanSegment)
             {
-                bSetMarkedSegmentsKindPossible = true;
+                m_bSetMarkedSegmentsKindPossible = true;
             }
 
             if(!bSmoothFuz)
@@ -149,23 +149,23 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
     {
         if(basegfx::B2VectorContinuity::NONE == eSmooth)
         {
-            eMarkedPointsSmooth = SdrPathSmoothKind::Angular;
+            m_eMarkedPointsSmooth = SdrPathSmoothKind::Angular;
         }
 
         if(basegfx::B2VectorContinuity::C1 == eSmooth)
         {
-            eMarkedPointsSmooth = SdrPathSmoothKind::Asymmetric;
+            m_eMarkedPointsSmooth = SdrPathSmoothKind::Asymmetric;
         }
 
         if(basegfx::B2VectorContinuity::C2 == eSmooth)
         {
-            eMarkedPointsSmooth = SdrPathSmoothKind::Symmetric;
+            m_eMarkedPointsSmooth = SdrPathSmoothKind::Symmetric;
         }
     }
 
     if(!b1stSegm && !bSegmFuz)
     {
-        eMarkedSegmentsKind = bCurve ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
+        m_eMarkedSegmentsKind = bCurve ? SdrPathSegmentKind::Curve : SdrPathSegmentKind::Line;
     }
 }
 
@@ -260,25 +260,25 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
 bool SdrPolyEditView::IsSetMarkedPointsSmoothPossible() const
 {
     ForcePossibilities();
-    return bSetMarkedPointsSmoothPossible;
+    return m_bSetMarkedPointsSmoothPossible;
 }
 
 SdrPathSmoothKind SdrPolyEditView::GetMarkedPointsSmooth() const
 {
     ForcePossibilities();
-    return eMarkedPointsSmooth;
+    return m_eMarkedPointsSmooth;
 }
 
 bool SdrPolyEditView::IsSetMarkedSegmentsKindPossible() const
 {
     ForcePossibilities();
-    return bSetMarkedSegmentsKindPossible;
+    return m_bSetMarkedSegmentsKindPossible;
 }
 
 SdrPathSegmentKind SdrPolyEditView::GetMarkedSegmentsKind() const
 {
     ForcePossibilities();
-    return eMarkedSegmentsKind;
+    return m_eMarkedSegmentsKind;
 }
 
 bool SdrPolyEditView::IsDeleteMarkedPointsPossible() const
