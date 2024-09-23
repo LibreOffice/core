@@ -991,6 +991,8 @@ void SwAnnotationWin::ActivatePostIt()
     //ctrl+tab cycles between text and button so we don't waste time searching
     //thousands of SwAnnotationWins
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
+
+    mrView.GetDocShell()->Broadcast(SfxHint(SfxHintId::SwNavigatorUpdateTracking));
 }
 
 void SwAnnotationWin::DeactivatePostIt()

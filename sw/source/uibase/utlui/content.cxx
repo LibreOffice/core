@@ -4499,6 +4499,18 @@ void SwContentTree::UpdateTracking()
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, eCntTypeId, pField);
             return;
         }
+        if (SwPostItMgr* pPostItMgr = m_pActiveShell->GetPostItMgr();
+            pPostItMgr && pPostItMgr->HasActiveAnnotationWin()
+            && !(m_bIsRoot && m_nRootType != ContentTypeId::POSTIT))
+        {
+            if (mTrackContentType[ContentTypeId::POSTIT])
+            {
+                if (const SwField* pField = pPostItMgr->GetActiveSidebarWin()->GetPostItField())
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::POSTIT,
+                                                      pField);
+            }
+            return;
+        }
         // table
         if (m_pActiveShell->IsCursorInTable() &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
