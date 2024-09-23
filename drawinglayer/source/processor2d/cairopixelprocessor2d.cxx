@@ -1372,7 +1372,7 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
                 unsigned char* pBackData(pBackDataRoot + (nBackStride * (y + nBackOffY))
                                          + (nBackOffX * 4));
 
-                // added advance mem to for-expression to be able to to coninue calls inside
+                // added advance mem to for-expression to be able to continue calls inside
                 for (sal_uInt32 x(0); x < nFrontWidth; ++x, pBackData += 4, pFrontData += 4)
                 {
                     // do not forget pre-multiply. Use 255 for non-premultiplied to
