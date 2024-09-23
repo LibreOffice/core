@@ -672,6 +672,11 @@ namespace sw::mark
         }
         Invalidate();
     }
+    bool TextFieldmark::HasDefaultContent() const
+    {
+        return GetContent() == vEnSpaces;
+    }
+
 
     NonTextFieldmark::NonTextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)

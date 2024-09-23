@@ -279,6 +279,8 @@ namespace sw::mark
         OUString GetContent() const override;
         void ReplaceContent(const OUString& sNewContent) override;
 
+        bool HasDefaultContent() const;
+
     private:
         sw::DocumentContentOperationsManager* m_pDocumentContentOperationsManager;
     };
