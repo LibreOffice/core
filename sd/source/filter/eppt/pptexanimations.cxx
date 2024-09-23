@@ -118,6 +118,8 @@ static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTran
 
         while( *ps )
         {
+            if (nIndex == -1)
+                nIndex = 0;
             const OUString aSearch( OUString::createFromAscii( *ps ) );
             while( (nIndex = rString.indexOf( aSearch, nIndex )) != -1  )
             {

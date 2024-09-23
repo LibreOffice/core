@@ -940,12 +940,14 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     bool match( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.data(), str.size(), str.size() ) == 0;
     }
 #else
     bool match( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
     }
@@ -962,6 +964,7 @@ public:
         RTL_STRING_CONST_FUNCTION
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(fromIndex >= 0);
         return
             rtl_str_shortenedCompare_WithLength(
                 pData->buffer + fromIndex, pData->length - fromIndex,
@@ -992,6 +995,7 @@ public:
         char const * str, sal_Int32 strLength, sal_Int32 fromIndex = 0)
         const
     {
+        assert(fromIndex >= 0);
         return rtl_str_shortenedCompare_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex,
             str, strLength, strLength) == 0;
@@ -1026,6 +1030,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     bool matchIgnoreAsciiCase( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.data(), str.size(),
                                                                    str.size() ) == 0;
@@ -1033,6 +1038,7 @@ public:
 #else
     bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.pData->buffer, str.pData->length,
                                                                    str.pData->length ) == 0;
@@ -1049,6 +1055,7 @@ public:
         RTL_STRING_CONST_FUNCTION
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(fromIndex >= 0);
         return
             rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
                 pData->buffer+fromIndex, pData->length-fromIndex,
@@ -1747,6 +1754,7 @@ public:
     */
     sal_Int32 indexOf( char ch, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         sal_Int32 ret = rtl_str_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
     }
@@ -1800,6 +1808,7 @@ public:
 #if defined LIBO_INTERNAL_ONLY
     sal_Int32 indexOf( std::string_view str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.data(), str.size() );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -1807,6 +1816,7 @@ public:
 #else
     sal_Int32 indexOf( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
+        assert(fromIndex >= 0);
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -1823,6 +1833,7 @@ public:
         RTL_STRING_CONST_FUNCTION
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert(fromIndex >= 0);
         sal_Int32 n = rtl_str_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
@@ -1851,6 +1862,7 @@ public:
     sal_Int32 indexOfL(char const * str, sal_Int32 len, sal_Int32 fromIndex = 0)
         const
     {
+        assert(fromIndex >= 0);
         sal_Int32 n = rtl_str_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, str, len);
         return n < 0 ? n : n + fromIndex;
