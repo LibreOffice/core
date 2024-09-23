@@ -470,7 +470,7 @@ bool DataProviderHandler::impl_dialogLinkedFields_nothrow( ::osl::ClearableMutex
         {"ParentWindow", m_xContext->getValueByName(u"DialogParentWindow"_ustr)},
         {"Detail", uno::Any(m_xDataProvider)},
         {"Master", uno::Any(m_xReportComponent->getSection()->getReportDefinition())},
-        {"Explanation", uno::Any(RptResId(TranslateId(nullptr, RID_STR_EXPLANATION)))},
+        {"Explanation", uno::Any(RptResId(RID_STR_EXPLANATION))},
         {"DetailLabel", uno::Any(RptResId(RID_STR_DETAILLABEL))},
         {"MasterLabel", uno::Any(RptResId(RID_STR_MASTERLABEL))},
     }));

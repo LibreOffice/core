@@ -64,7 +64,7 @@
 #define RID_STR_TYPE                            NC_("RID_STR_TYPE", "Data Field Type")
 #define RID_STR_MASTERFIELDS                    NC_("RID_STR_MASTERFIELDS", "Link master fields")
 #define RID_STR_DETAILFIELDS                    NC_("RID_STR_DETAILFIELDS", "Link slave fields")
-#define RID_STR_EXPLANATION                     ("Charts can be used to display detailed data about the current record of the report. To do this, you can specify which columns in the chart match which columns in the report.")
+#define RID_STR_EXPLANATION                     NC_("RID_STR_EXPLANATION", "Charts can be used to display detailed data about the current record of the report. To do this, you can specify which columns in the chart match which columns in the report.")
 #define RID_STR_DETAILLABEL                     NC_("RID_STR_DETAILLABEL", "Chart")
 #define RID_STR_MASTERLABEL                     NC_("RID_STR_MASTERLABEL", "Report")
 #define RID_STR_PREVIEW_COUNT                   NC_("RID_STR_PREVIEW_COUNT", "Preview Row(s)")
