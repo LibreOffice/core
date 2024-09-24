@@ -1686,7 +1686,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UUser-Defined%7Ctoxmark"_ustr, url);
+        CPPUNIT_ASSERT_EQUAL(u"#1%19the%20udmark%19UUser-Defined%20Index%7Ctoxmark"_ustr,
+                             url); // User-Defined => User-Defined Index, tdf#161574
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the first"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());
@@ -1701,7 +1702,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
         CPPUNIT_ASSERT(aSet.HasItem(RES_TXTATR_INETFMT));
         pWrtShell->Push();
         OUString const url(aSet.GetItem<SwFormatINetFormat>(RES_TXTATR_INETFMT)->GetValue());
-        CPPUNIT_ASSERT_EQUAL(u"#2%19the%20udmark%19UUser-Defined%7Ctoxmark"_ustr, url);
+        CPPUNIT_ASSERT_EQUAL(u"#2%19the%20udmark%19UUser-Defined%20Index%7Ctoxmark"_ustr,
+                             url); // User-Defined => User-Defined Index, tdf#161574
         rView.JumpToSwMark(url.subView(1));
         CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(CH_TXTATR_INWORD) + "udmark the 2nd"),
                              pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText());

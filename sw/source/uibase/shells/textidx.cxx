@@ -34,6 +34,8 @@
 #include <idxmrk.hxx>
 #include <toxmgr.hxx>
 #include <swabstdlg.hxx>
+#include <strings.hrc>
+#include <svl/whiter.hxx>
 
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
@@ -270,6 +272,12 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
         else
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, true));
 
+        SfxWhichIter aIter(rSet);
+        if (aIter.FirstWhich() == FN_REMOVE_CUR_TOX)
+        {
+            const OUString sLabel = SwResId(STR_DELETEINDEX).replaceAll("%1", pBase->GetTypeName());
+            rSet.Put(SfxStringItem(FN_REMOVE_CUR_TOX, sLabel));
+        }
     }
     else if ( rSh.CursorInsideInputField() )
     {

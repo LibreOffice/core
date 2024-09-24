@@ -288,6 +288,13 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(nullptr == (pBase = m_pWrtShell->GetCurTOX()) ||
                     (FN_EDIT_CURRENT_TOX == nWhich && pBase->IsTOXBaseInReadonly()))
                     rSet.DisableItem(nWhich);
+                else
+                {
+                    const OUString sLabel
+                        = SwResId(nWhich == FN_EDIT_CURRENT_TOX ? STR_EDITINDEX : STR_UPDATEINDEX)
+                              .replaceAll("%1", pBase->GetTypeName());
+                    rSet.Put(SfxStringItem(nWhich, sLabel));
+                }
             }
             break;
             case SID_TWAIN_SELECT:

@@ -142,7 +142,7 @@
                       <item id="2" translatable="yes" context="tocindexpage|liststore1">Alphabetical Index</item>
                       <item id="4" translatable="yes" context="tocindexpage|liststore1">Table of Figures</item>
                       <item id="8" translatable="yes" context="tocindexpage|liststore1">Index of Tables</item>
-                      <item id="16" translatable="yes" context="tocindexpage|liststore1">User-Defined</item>
+                      <item id="16" translatable="yes" context="tocindexpage|liststore1">User-Defined Index</item>
                       <item id="32" translatable="yes" context="tocindexpage|liststore1">Table of Objects</item>
                       <item id="64" translatable="yes" context="tocindexpage|liststore1">Bibliography</item>
                     </items>

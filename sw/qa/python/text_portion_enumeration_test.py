@@ -3446,7 +3446,7 @@ class TextPortionEnumerationTest(unittest.TestCase):
         xIndex5 = xIndexes["User-Defined1"]
         self.assertTrue(self.eq(xIndex5.MetadataReference,
                         StringPair("content.xml", "idUD")), "idUD")
-        xIndex5s = xSections["User-Defined1"]
+        xIndex5s = xSections["User-Defined Index1"] # User-Defined => User-Defined Index, tdf#161574
         self.assertTrue(self.eq(xIndex5s.MetadataReference,
                         StringPair("content.xml", "idUD")), "idUD")
         xIndex6 = xIndexes["Table of Objects1"]

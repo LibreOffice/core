@@ -424,6 +424,9 @@
 #define STR_HYPERLINK                           NC_("STR_HYPERLINK", "Hyperlink")
 #define STR_SECTIONLINK                         NC_("STR_SECTIONLINK", "Section Link")
 #define STR_SECTIONCOPY                         NC_("STR_SECTIONCOPY", "Section Copy")
+#define STR_EDITINDEX                           NC_("STR_EDITINDEX", "Edit %1")
+#define STR_UPDATEINDEX                         NC_("STR_UPDATEINDEX", "Update %1")
+#define STR_DELETEINDEX                         NC_("STR_DELETEINDEX", "Delete %1")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")
@@ -753,7 +756,7 @@
 #define STR_FIELD_FIXED                         NC_("STR_FIELD_FIXED", "(fixed)")
 #define STR_DURATION_FORMAT                     NC_("STR_DURATION_FORMAT", " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6")
 #define STR_TOI                                 NC_("STR_TOI", "Alphabetical Index")
-#define STR_TOU                                 NC_("STR_TOU", "User-Defined")
+#define STR_TOU                                 NC_("STR_TOU", "User-Defined Index")
 #define STR_TOC                                 NC_("STR_TOC", "Table of Contents")
 #define STR_TOX_AUTH                            NC_("STR_TOX_AUTH", "Bibliography")
 #define STR_TOX_CITATION                        NC_("STR_TOX_CITATION", "Citation")
