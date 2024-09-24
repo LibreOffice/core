@@ -242,15 +242,18 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
 void TitleHelper::impl_sendTitleChangedEvent ()
 {
     css::uno::Reference<css::uno::XInterface> xOwner;
+    OUString sTitle;
     // SYNCHRONIZED ->
     {
         std::unique_lock aLock(m_aMutex);
 
         xOwner = m_xOwner;
+
+        sTitle = m_sTitle;
     }
     // <- SYNCHRONIZED
 
-    css::frame::TitleChangedEvent aEvent(xOwner, m_sTitle);
+    css::frame::TitleChangedEvent aEvent(xOwner, sTitle);
 
     if( ! aEvent.Source.is() )
         return;
