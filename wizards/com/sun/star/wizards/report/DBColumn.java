@@ -51,7 +51,7 @@ public class DBColumn
     private boolean bAlignLeft;
     private String CharFontName;
     private PropertyState PropertyState;
-    public int ValColumn = 1;
+    private int ValColumn = 1;
     private int ValRow = 0;
     public FieldColumn CurDBField;
     private XTextTable xTextTable;
@@ -444,5 +444,10 @@ public class DBColumn
             exception.printStackTrace(System.err);
             return true;    //most probably this is really the Namecell!!!!
         }
+    }
+
+    public int getValColumn()
+    {
+        return ValColumn;
     }
 }

@@ -491,11 +491,11 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         DBColumn oDBColumn1 = getDBColumnByName(oFieldColumn1.getFieldName());
         DBColumn oDBColumn2 = getDBColumnByName(oFieldColumn2.getFieldName());
-        if (oDBColumn1.ValColumn < oDBColumn2.ValColumn)
+        if (oDBColumn1.getValColumn() < oDBColumn2.getValColumn())
         {
             return -1;
         }
-        else if (oDBColumn1.ValColumn == oDBColumn2.ValColumn)
+        else if (oDBColumn1.getValColumn() == oDBColumn2.getValColumn())
         {
             return 0;
         }
