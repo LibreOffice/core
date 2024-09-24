@@ -995,6 +995,7 @@ uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL ChartModel::createClone()
 {
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
     return Reference< util::XCloneable >( new ChartModel( *this ));
 }
 
