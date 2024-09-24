@@ -42,7 +42,7 @@ public class UnoDialog
     public XControl xControl;
     protected XDialog xDialog;
     public XReschedule xReschedule;
-    public XWindow xWindow;
+    protected XWindow xWindow;
     public XComponent xComponent;
     public XInterface xDialogModel;
     private XInterface xUnoDialog;
@@ -149,6 +149,11 @@ public class UnoDialog
     public Resource getResource()
     {
         return m_oResource;
+    }
+
+    public XWindow getWindow()
+    {
+        return xWindow;
     }
 
     public void setControlProperties(String ControlName, String[] PropertyNames, Object[] PropertyValues)
