@@ -6768,7 +6768,8 @@ void DomainMapper_Impl::handleAuthor
 }
 
 static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   const uno::Sequence< beans::PropertyValues >& aLevel, const std::optional<style::TabStop> numtab)
+                                   const uno::Sequence< beans::PropertyValues >& aLevel, const std::optional<style::TabStop> numtab,
+                                   bool bSkipPageNumberAndTab)
 {
     //create a copy of the level and add new entries
 
@@ -6778,8 +6779,8 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
     static constexpr OUString tokType(u"TokenType"_ustr);
     static constexpr OUString tokHStart(u"TokenHyperlinkStart"_ustr);
     static constexpr OUString tokHEnd(u"TokenHyperlinkEnd"_ustr);
-    static constexpr OUStringLiteral tokPNum(u"TokenPageNumber");
-    static constexpr OUStringLiteral tokENum(u"TokenEntryNumber");
+    static constexpr OUString tokPNum(u"TokenPageNumber"_ustr);
+    static constexpr OUString tokENum(u"TokenEntryNumber"_ustr);
 
     if (bHyperlinks)
         aNewLevel.push_back({ comphelper::makePropertyValue(tokType, tokHStart) });
@@ -6805,7 +6806,23 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
                                   comphelper::makePropertyValue("Text", sChapterNoSeparator) });
         }
 
-        aNewLevel.push_back(item);
+        if (bSkipPageNumberAndTab && tokenType == tokPNum)
+        {
+            // also skip the preceding tabstop
+            if (aNewLevel.size())
+            {
+                OUString aPrevTokenType;
+                const auto& rPrevLevel = aNewLevel.back();
+                auto it = std::find_if(rPrevLevel.begin(), rPrevLevel.end(),
+                              [](const auto& p) { return p.Name == tokType; });
+                if (it != rPrevLevel.end())
+                    it->Value >>= aPrevTokenType;
+                if (aPrevTokenType == u"TokenTabStop"_ustr)
+                    aNewLevel.pop_back();
+            }
+        }
+        else
+            aNewLevel.push_back(item);
 
         if (numtab && tokenType == tokENum)
         {
@@ -6967,6 +6984,10 @@ void DomainMapper_Impl::handleToc
     bool bIsTabEntry = false ;
     bool bNewLine = false ;
     bool bParagraphOutlineLevel = false;
+    // some levels (optionally specified via a single range) might not display the page number
+    sal_uInt8 nStartNoPageNumber = 0;
+    sal_uInt8 nEndNoPageNumber = 0;
+
 
     sal_Int16 nMaxLevel = 10;
     OUString sTemplate;
@@ -7016,10 +7037,32 @@ void DomainMapper_Impl::handleToc
                             //todo: entries can only be included completely
 //                    }
 //                  \n Builds a table of contents or a range of entries, such as 1-9 in a table of contents without page numbers
-//                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
-//                    {
-                        //todo: what does the description mean?
-//                    }
+    if (lcl_FindInCommand(pContext->GetCommand(), 'n', sValue))
+    {
+        // skip the tabstop and page-number on the specified levels
+        sValue = sValue.replaceAll("\"", "").trim();
+        if (sValue.isEmpty())
+        {
+            nStartNoPageNumber = 1;
+            nEndNoPageNumber = WW_OUTLINE_MAX;
+        }
+        else
+        {
+            // valid command format is fairly strict, requiring # <dash> #: TOC \n "2-3"
+            sal_Int32 nIndex = 0;
+            o3tl::getToken(sValue, 0, '-', nIndex);
+            if (nIndex > 1)
+            {
+                const sal_Int32 nStartLevel = o3tl::toInt32(sValue.subView(0, nIndex - 1));
+                const sal_Int32 nEndLevel = o3tl::toInt32(sValue.subView(nIndex));
+                if (nStartLevel > 0 && nStartLevel <= nEndLevel && nEndLevel <= WW_OUTLINE_MAX)
+                {
+                    nStartNoPageNumber = static_cast<sal_uInt8>(nStartLevel);
+                    nEndNoPageNumber = static_cast<sal_uInt8>(nEndLevel);
+                }
+            }
+        }
+    }
 //                  \o  Builds a table of contents by using outline levels instead of TC entries
     if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
     {
@@ -7246,10 +7289,10 @@ void DomainMapper_Impl::handleToc
                     }
                 }
             }
-
+            bool bSkipPageNumberAndTab = nLevel >= nStartNoPageNumber && nLevel <= nEndNoPageNumber;
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
-                                                aLevel, numTab);
+                                                aLevel, numTab, bSkipPageNumberAndTab);
             xLevelFormats->replaceByIndex( nLevel, uno::Any( aNewLevel ) );
         }
     }
@@ -7274,7 +7317,7 @@ void DomainMapper_Impl::handleToc
 
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
-                                                aLevel, {});
+                                                aLevel, {}, /*SkipPageNumberAndTab=*/false);
             xLevelFormats->replaceByIndex( 1, uno::Any( aNewLevel ) );
         }
     }
