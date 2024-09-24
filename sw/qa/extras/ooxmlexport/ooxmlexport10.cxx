@@ -35,6 +35,8 @@
 #include <officecfg/Office/Common.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 
+#include <unotxdoc.hxx>
+
 class Test : public SwModelTestBase
 {
 public:
@@ -216,6 +218,57 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120412_400PercentSubscript, "tdf120412_400Percen
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 0.f, getProperty<float>(getRun(xPara, 1, u"Base"_ustr), u"CharEscapement"_ustr), 0);
     // The word "Subscript" should be 12pt, subscripted by 400% (48pt).
     CPPUNIT_ASSERT_DOUBLES_EQUAL( -400.f, getProperty<float>(getRun(xPara, 2, u"Subscript"_ustr), u"CharEscapement"_ustr), 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf162916_nastyTOC, "tdf162916_nastyTOC.docx")
+{
+    // given a TOC that wants to skip the 1st level, and not show a page number for level 2
+    // (which looked fine on import, but not after manually updating the index...)
+
+    // todo: enhancement to start at something other than level 1.
+
+    auto xSupplier(mxComponent.queryThrow<css::text::XDocumentIndexesSupplier>());
+    auto xIndexes = xSupplier->getDocumentIndexes();
+    auto xTOCIndex(xIndexes->getByIndex(0).queryThrow<css::beans::XPropertySet>());
+    css::uno::Reference<css::container::XIndexReplace> xLevelFormats;
+    CPPUNIT_ASSERT(xTOCIndex->getPropertyValue(u"LevelFormat"_ustr) >>= xLevelFormats);
+
+    const auto checkPropVal = [](const auto& expected, const css::beans::PropertyValues& entry,
+                                 const OUString& name, sal_Int32 level) {
+        auto it
+            = std::find_if(entry.begin(), entry.end(),
+                           [&name](const css::beans::PropertyValue& p) { return p.Name == name; });
+        OString msg = "Property: " + name.toUtf8() + ", level: " + OString::number(level);
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), it != entry.end());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::uno::Any(expected), it->Value);
+    };
+
+    //start with level 1, 0 is the header level
+    for (sal_Int32 nLevel = 1; nLevel < xLevelFormats->getCount(); ++nLevel)
+    {
+        css::uno::Sequence<css::beans::PropertyValues> aLevel;
+        xLevelFormats->getByIndex(nLevel) >>= aLevel;
+
+        // level 2 does not display the page number with its separating tabstop.
+        sal_Int32 nExpectedTokens = nLevel == 2 ? 4 : 6;
+        CPPUNIT_ASSERT_EQUAL(nExpectedTokens ,aLevel.getLength());
+
+        sal_Int32 nIndex = 0;
+        checkPropVal(u"TokenHyperlinkStart"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+
+        checkPropVal(u"TokenEntryNumber"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+
+        checkPropVal(u"TokenEntryText"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+
+        if (nLevel != 2)
+        {
+            checkPropVal(u"TokenTabStop"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+
+            checkPropVal(u"TokenPageNumber"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+        }
+
+        checkPropVal(u"TokenHyperlinkEnd"_ustr, aLevel[nIndex++], u"TokenType"_ustr, nLevel);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontEsc)
