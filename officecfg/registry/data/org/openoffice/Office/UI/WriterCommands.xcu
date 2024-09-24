@@ -4280,6 +4280,11 @@
           <value xml:lang="en-US">Open the Accessibility Check Deck</value>
         </prop>
       </node>
+      <node oor:name=".uno:SidebarDeck.FindDeck" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Open the Find Deck</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SpotlightMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Spotlight</value>
