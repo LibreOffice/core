@@ -1,7 +1,7 @@
 {
     "id": "org.libreoffice.LibreOffice",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "23.08",
+    "runtime-version": "24.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk21"
@@ -51,8 +51,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.54/gvfs-1.54.2.tar.xz",
-                    "sha256": "54908f4e10b5f1c231e90330c8c15b7f21f2bb610f194c034b338e379c508e3c",
+                    "url": "https://download.gnome.org/sources/gvfs/1.56/gvfs-1.56.0.tar.xz",
+                    "sha256": "441d2356c72616364cdb420af96199113a13ed9e146f2175fe373989adada39e",
                     "x-checker-data": {
                         "type": "gnome",
                         "name": "gvfs",
