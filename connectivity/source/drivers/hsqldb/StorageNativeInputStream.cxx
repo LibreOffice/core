@@ -134,9 +134,12 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Stor
 #endif
 
     if ( n < 0 )
+    {
         ThrowException( env,
                         "java/io/IOException",
                         "n < 0");
+        return 0;
+    }
 
     std::shared_ptr<StreamHelper> pHelper = StorageContainer::getRegisteredStream(env,name,key);
     OSL_ENSURE(pHelper,"No stream helper!");
