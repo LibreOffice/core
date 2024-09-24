@@ -261,7 +261,10 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
          FindFlyFrame()->GetContour( aPoly, true )
        )
     {
-        rRenderContext.SetClipRegion(vcl::Region(aPoly));
+        // don't clip if related compatibility flag is set
+        const IDocumentSettingAccess& rIDSA = pSh->GetDoc()->getIDocumentSettingAccess();
+        if (!rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON))
+            rRenderContext.SetClipRegion(vcl::Region(aPoly));
         bClip = false;
     }
 

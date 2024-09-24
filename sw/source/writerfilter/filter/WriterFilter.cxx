@@ -336,6 +336,8 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
 
     xSettings->setPropertyValue("DoNotMirrorRtlDrawObjs", uno::Any(true));
     xSettings->setPropertyValue("ContinuousEndnotes", uno::Any(true));
+    // tdf#161233 pictures with wrap polygon should not be clipped
+    xSettings->setPropertyValue(u"NoClippingWithWrapPolygon"_ustr, uno::Any(true));
 }
 
 void WriterFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)

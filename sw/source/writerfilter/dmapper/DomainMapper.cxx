@@ -153,6 +153,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         m_pImpl->SetDocumentSettingsProperty(u"IgnoreTabsAndBlanksForLineCalculation"_ustr,uno::Any(true));
         // calculate table row height with 'atLeast' including horizontal border width
         m_pImpl->SetDocumentSettingsProperty(u"MinRowHeightInclBorder"_ustr,uno::Any(true));
+        // tdf#161233 pictures with wrap polygon should not be clipped
+        m_pImpl->SetDocumentSettingsProperty(u"NoClippingWithWrapPolygon"_ustr, uno::Any(true));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.

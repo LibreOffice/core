@@ -164,7 +164,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
     HANDLE_PAINT_HELL_OVER_HEADER_FOOTER,
-    HANDLE_MIN_ROW_HEIGHT_INCL_BORDER
+    HANDLE_MIN_ROW_HEIGHT_INCL_BORDER,
+    HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON,
 };
 
 }
@@ -276,6 +277,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("DoNotMirrorRtlDrawObjs"), HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
         { OUString("PaintHellOverHeaderFooter"), HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
         { OUString("MinRowHeightInclBorder"), HANDLE_MIN_ROW_HEIGHT_INCL_BORDER, cppu::UnoType<bool>::get(), 0 },
+        { u"NoClippingWithWrapPolygon"_ustr, HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1192,6 +1194,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER, bTmp);
         }
         break;
+        case HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON:
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON,
+                                                       bTmp);
+            }
+            break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -1789,6 +1799,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::MIN_ROW_HEIGHT_INCL_BORDER);
+        }
+        break;
+        case HANDLE_NO_CLIPPING_WITH_WRAP_POLYGON:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
         }
         break;
         default:

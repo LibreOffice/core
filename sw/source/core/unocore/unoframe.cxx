@@ -1379,9 +1379,13 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
         const ::SwFormatSurround& rSurround = rFormat.GetSurround();
         const IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
         bool isPaintHellOverHF = rIDSA.get(DocumentSettingId::PAINT_HELL_OVER_HEADER_FOOTER);
+        bool bNoClippingWithWrapPolygon = rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
 
-        //TODO: HeaderFooterHellId only appropriate if object is anchored in body
-        pObject->SetLayer(
+        if (bNoClippingWithWrapPolygon && rSurround.IsContour())
+            pObject->SetLayer(pDoc->getIDocumentDrawModelAccess().GetHellId());
+        else
+            //TODO: HeaderFooterHellId only appropriate if object is anchored in body
+            pObject->SetLayer(
             ( css::text::WrapTextMode_THROUGH == rSurround.GetSurround() &&
               !rFormat.GetOpaque().GetValue() )
                               ? isPaintHellOverHF

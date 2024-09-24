@@ -188,6 +188,7 @@ class DocumentSettingManager final :
     bool mbUseVariableWidthNBSP : 1; // tdf#41652
     bool mbPaintHellOverHeaderFooter : 1; // tdf#160198
     bool mbMinRowHeightInclBorder : 1; // tdf#155229
+    bool mbNoClippingWithWrapPolygon : 1; // tdf#161233
 
 public:
 
