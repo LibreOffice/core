@@ -31,6 +31,10 @@
 
 #include <app.hrc>
 
+#include <comphelper/lok.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <drawdoc.hxx>
 #include <sdmod.hxx>
 #include <optsitem.hxx>
@@ -119,12 +123,24 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         case SID_GRID_VISIBLE: // not here yet!
         {
             pOptions->SetGridVisible( !mpDrawView->IsGridVisible() );
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                OString state = !mpDrawView->IsGridVisible() ? ".uno:GridVisible=true"_ostr: ".uno:GridVisible=false"_ostr;
+                SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, state);
+            }
         }
         break;
 
         case SID_GRID_USE:
         {
             pOptions->SetUseGridSnap( !mpDrawView->IsGridSnap() );
+
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                OString state = !mpDrawView->IsGridSnap() ? ".uno:GridUse=true"_ostr: ".uno:GridUse=false"_ostr;
+                SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, state);
+            }
         }
         break;
 
