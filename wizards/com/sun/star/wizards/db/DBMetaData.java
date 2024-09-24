@@ -132,7 +132,7 @@ public class DBMetaData
     private boolean bPasswordIsRequired;
     private static final int NOLIMIT = 9999999;
     private static final int INVALID = 9999999;
-    public TypeInspector oTypeInspector;
+    protected TypeInspector oTypeInspector;
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;

@@ -59,7 +59,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
     {
         this.CurUnoDialog = _CurUnoDialog;
         curTableDescriptor = _curTableDescriptor;
-        bAutoPrimaryKeysupportsAutoIncrementation = curTableDescriptor.oTypeInspector.isAutoIncrementationSupported();
+        bAutoPrimaryKeysupportsAutoIncrementation = curTableDescriptor.getDBDataTypeInspector().isAutoIncrementationSupported();
         short curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = Integer.valueOf(TableWizard.SOPRIMARYKEYPAGE);
         final String sExplanations = CurUnoDialog.getResource().getResText("RID_TABLE_26");
