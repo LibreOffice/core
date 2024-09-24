@@ -280,7 +280,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 if (m_DBMetaData.xDBMetaData.supportsGroupBy())
                 {
                     m_DBMetaData.setGroupFieldNames(m_groupFieldSelection.getSelectedFieldNames());
-                    m_DBMetaData.setGroupFieldNames(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupFieldNames(), m_DBMetaData.NonAggregateFieldNames));
+                    m_DBMetaData.setGroupFieldNames(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupFieldNames(), m_DBMetaData.getNonAggregateFieldNames()));
                     m_DBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
                 }
             }
@@ -361,9 +361,9 @@ public class QueryWizard extends DatabaseObjectWizard
                     {
                         m_DBMetaData.setNonAggregateFieldNames();
                         m_groupFieldSelection.initialize(m_DBMetaData.getUniqueAggregateFieldNames(), false, m_DBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
-                        m_groupFieldSelection.initializeSelectedFields(m_DBMetaData.NonAggregateFieldNames);
+                        m_groupFieldSelection.initializeSelectedFields(m_DBMetaData.getNonAggregateFieldNames());
                         m_groupFieldSelection.setMultipleMode(false);
-                        setStepEnabled(SOGROUPFILTER_PAGE, m_aggregateComponent.isGroupingpossible() && m_DBMetaData.NonAggregateFieldNames.length > 0);
+                        setStepEnabled(SOGROUPFILTER_PAGE, m_aggregateComponent.isGroupingpossible() && m_DBMetaData.getNonAggregateFieldNames().length > 0);
                     }
                 }
             }
@@ -441,7 +441,7 @@ public class QueryWizard extends DatabaseObjectWizard
             {
                 boolean bEnabled = (m_groupFieldSelection.getSelectedFieldNames().length > 0);
                 String CurDisplayFieldName = SelItems[0];
-                if (JavaTools.FieldInList(m_DBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
+                if (JavaTools.FieldInList(m_DBMetaData.getNonAggregateFieldNames(), CurDisplayFieldName) > -1)
                 {
                     showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
                     m_groupFieldSelection.getSelectedFieldsListBox().addItems(SelItems, m_groupFieldSelection.getSelectedFieldsListBox().getItemCount());

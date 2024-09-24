@@ -56,7 +56,7 @@ public class CommandMetaData extends DBMetaData
     public String[] NumericFieldNames = new String[]
     {
     };
-    public String[] NonAggregateFieldNames;
+    protected String[] NonAggregateFieldNames;
     private int CommandType;
     private String Command;
     private String sIdentifierQuote = PropertyNames.EMPTY_STRING;
@@ -113,6 +113,11 @@ public class CommandMetaData extends DBMetaData
     public String[] getAllFieldNames()
     {
         return m_aAllFieldNames;
+    }
+
+    public String[] getNonAggregateFieldNames()
+    {
+        return NonAggregateFieldNames;
     }
 
     public XPropertySet getColumnObjectByFieldName(String _FieldName, boolean _bgetByDisplayName)
