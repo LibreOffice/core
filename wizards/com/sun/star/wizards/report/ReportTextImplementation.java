@@ -454,7 +454,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     private XMultiServiceFactory getDocumentServiceFactory()
     {
-        return m_aDoc.xMSFDoc;
+        return m_aDoc.getMSFDoc();
     }
 
     public void store(String _sName, int _nOpenMode) throws com.sun.star.uno.Exception

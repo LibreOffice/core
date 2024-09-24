@@ -53,7 +53,7 @@ public class TextDocument
     protected com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
-    public XMultiServiceFactory xMSFDoc;
+    protected XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public com.sun.star.awt.XWindowPeer xWindowPeer;
 
@@ -235,6 +235,11 @@ public class TextDocument
     public com.sun.star.task.XStatusIndicator getProgressBar()
     {
         return xProgressBar;
+    }
+
+    public XMultiServiceFactory getMSFDoc()
+    {
+        return xMSFDoc;
     }
 
     private Size getPageSize()
