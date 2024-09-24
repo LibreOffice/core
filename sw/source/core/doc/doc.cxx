@@ -1621,6 +1621,24 @@ void SwDoc::ForEachBoxItem(const std::function<bool(const SvxBoxItem&)>& rFunc )
     }
 }
 
+/// Iterate over all RES_SHADOW SvxBoxItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachShadowItem(const std::function<bool(const SvxShadowItem&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        const SwNode* pNode = GetNodes()[i];
+        if (pNode->IsContentNode())
+        {
+            const SwContentNode* pTextNode = pNode->GetContentNode();
+            if (pTextNode->HasSwAttrSet())
+                if (const SvxShadowItem* pItem = pTextNode->GetSwAttrSet().GetItemIfSet(RES_SHADOW))
+                    if (!rFunc(*pItem))
+                        return;
+        }
+    }
+}
+
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();

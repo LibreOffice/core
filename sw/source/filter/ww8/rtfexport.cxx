@@ -1388,12 +1388,10 @@ void RtfExport::OutColorTable()
         {
             InsColor(pShadow->GetColor());
         }
-        rPool.GetItemSurrogates(aSurrogates, RES_SHADOW);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pShadow = &static_cast<const SvxShadowItem&>(*pItem);
-            InsColor(pShadow->GetColor());
-        }
+        m_rDoc.ForEachShadowItem([this](const SvxShadowItem& rShadow) -> bool {
+            InsColor(rShadow.GetColor());
+            return true;
+        });
     }
 
     // frame border color
