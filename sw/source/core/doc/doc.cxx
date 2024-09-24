@@ -1634,6 +1634,45 @@ void SwDoc::ForEachShadowItem(const std::function<bool(const SvxShadowItem&)>& r
     }
 }
 
+/// Iterate over all RES_BACKGROUND SvxBrushItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachBackgroundBrushItem(const std::function<bool(const SvxBrushItem&)>& rFunc ) const
+{
+    SwNodeOffset nCount = GetNodes().Count();
+    for (SwNodeOffset i(0); i < nCount; ++i)
+    {
+        const SwNode* pNode = GetNodes()[i];
+        if (!pNode->IsTableNode())
+            continue;
+        const SwTableNode* pTableNode = pNode->GetTableNode();
+        const SwTable& rTable = pTableNode->GetTable();
+        if (const SwTableFormat* pFormat = rTable.GetFrameFormat())
+        {
+            const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+            if (const SvxBrushItem* pItem = rAttrSet.GetItemIfSet(RES_BACKGROUND))
+                if (!rFunc(*pItem))
+                    return;
+        }
+        for (const SwTableLine* pTableLine : rTable.GetTabLines())
+        {
+            if (const SwTableLineFormat* pFormat = pTableLine->GetFrameFormat())
+            {
+                const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+                if (const SvxBrushItem* pItem = rAttrSet.GetItemIfSet(RES_BACKGROUND))
+                    if (!rFunc(*pItem))
+                        return;
+            }
+            for (const SwTableBox* pTableBox : pTableLine->GetTabBoxes())
+                if (SwTableBoxFormat* pFormat = pTableBox->GetFrameFormat())
+                {
+                    const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
+                    if (const SvxBrushItem* pItem = rAttrSet.GetItemIfSet(RES_BACKGROUND))
+                        if (!rFunc(*pItem))
+                            return;
+                }
+        }
+    }
+}
+
 void SwDoc::Summary(SwDoc& rExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress)
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();

@@ -1474,6 +1474,9 @@ public:
     /// Iterate over all RES_SHADOW SvxShadowItem, if the function returns false, iteration is stopped
     SW_DLLPUBLIC void ForEachShadowItem(const std::function<bool(const SvxShadowItem&)>&  ) const;
 
+    /// Iterate over all RES_BACKGROUND SvxBrushItem, if the function returns false, iteration is stopped
+    SW_DLLPUBLIC void ForEachBackgroundBrushItem(const std::function<bool(const SvxBrushItem&)>&  ) const;
+
     // Call into intransparent Basic; expect possible Return String.
     void ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs );
 

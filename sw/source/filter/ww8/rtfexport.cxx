@@ -1316,7 +1316,6 @@ void RtfExport::OutColorTable()
     InsColor(COL_BROWN);
     InsColor(COL_GRAY);
     InsColor(COL_LIGHTGRAY);
-    ItemSurrogates aSurrogates;
 
     // char color
     {
@@ -1355,15 +1354,10 @@ void RtfExport::OutColorTable()
         {
             InsColor(pBackground->GetColor());
         }
-        rPool.GetItemSurrogates(aSurrogates, RES_BACKGROUND);
-        for (const SfxPoolItem* pItem : aSurrogates)
-        {
-            pBackground = static_cast<const SvxBrushItem*>(pItem);
-            if (pBackground)
-            {
-                InsColor(pBackground->GetColor());
-            }
-        }
+        m_rDoc.ForEachBackgroundBrushItem([this](const SvxBrushItem& rBrush) -> bool {
+            InsColor(rBrush.GetColor());
+            return true;
+        });
     }
     {
         const SvxBrushItem* pBackground = GetDfltAttr(RES_CHRATR_BACKGROUND);
@@ -1416,6 +1410,7 @@ void RtfExport::OutColorTable()
     }
 
     // TextFrame or paragraph background solid fill.
+    ItemSurrogates aSurrogates;
     rPool.GetItemSurrogatesForItem(aSurrogates, SfxItemType::XFillColorItemType);
     for (const SfxPoolItem* pItem : aSurrogates)
     {
