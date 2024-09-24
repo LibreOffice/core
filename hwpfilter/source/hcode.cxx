@@ -522,19 +522,16 @@ static int KsSearch(hchar c)
 
 static hchar cdkssm2ks_han(hchar kssm)
 {
-    unsigned int index;
-    unsigned char lo, hi;
-
 /* "One" */
     if (kssm == 0xd3c5)
         return 0xc7d1;
 
-    index = KsSearch(kssm);
+    unsigned int index = KsSearch(kssm);
     if (kssm != ksTbl[index])
         return jaso2ks(kssm);
-    hi = sal::static_int_cast<char>(index / (0xFE - 0xA1 + 1) + 0xB0);
-    lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
-    return lo | (hi << 8);
+    unsigned char hi(index / (0xFE - 0xA1 + 1) + 0xB0);
+    unsigned char lo(index % (0xFE - 0xA1 + 1) + 0xA1);
+    return hchar(lo | (hi << 8));
 }
 
 

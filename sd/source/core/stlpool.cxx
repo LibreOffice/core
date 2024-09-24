@@ -978,12 +978,10 @@ void SdStyleSheetPool::UpdateStdNames()
             if( bHelpKnown )
             {
                 OUString aNewName;
-                if (pNameId)
+                if (pNameId && pNameId == STR_PSEUDOSHEET_OUTLINE)
                 {
-                    if (pNameId == STR_PSEUDOSHEET_OUTLINE)
-                    {
-                        aNewName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ) );
-                    }
+                    assert(nHelpId >= HID_PSEUDOSHEET_OUTLINE1 && nHelpId <= HID_PSEUDOSHEET_OUTLINE9);
+                    aNewName += " " + OUString::number( sal_Int32( nHelpId - HID_PSEUDOSHEET_OUTLINE ) );
                 }
 
                 if( !aNewName.isEmpty() && aNewName != aOldName )
