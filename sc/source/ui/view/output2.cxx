@@ -933,6 +933,7 @@ void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, const ScRefCellValue
             aColor = *mxValueColor;
             break;
         case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
             aColor = *mxTextColor;
             break;
         case CELLTYPE_FORMULA:
