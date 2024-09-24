@@ -212,7 +212,7 @@ public class FieldFormatter implements XItemListener
                         82, 158, 52, IFieldFormatStep, Short.valueOf(curtabindex++), 166, 50
                     });  //, "HID:WIZARDS_HID_DLGTABLE_COLMODIFIER"
             curTableDescriptor = _curTableDescriptor;
-            Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.ACTIVE_CONNECTION, _curTableDescriptor.DBConnection);
+            Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.ACTIVE_CONNECTION, _curTableDescriptor.getDBConnection());
             txtfieldname.setMaxTextLen((short) this.curTableDescriptor.getMaxColumnNameLength());
         }
         else

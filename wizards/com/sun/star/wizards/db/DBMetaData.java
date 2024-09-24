@@ -88,7 +88,7 @@ public class DBMetaData
     private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
     private Locale aLocale;
     private String DataSourceName;
-    public com.sun.star.sdbc.XConnection DBConnection;
+    private com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     private XComponent xConnectionComponent;
@@ -136,6 +136,11 @@ public class DBMetaData
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
+
+    public com.sun.star.sdbc.XConnection getDBConnection()
+    {
+        return DBConnection;
+    }
 
     public XPropertySet getDataSourcePropertySet()
     {

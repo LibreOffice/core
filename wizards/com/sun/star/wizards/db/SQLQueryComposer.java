@@ -50,7 +50,7 @@ public class SQLQueryComposer
         try
         {
             setDBMetaData(_CurDBMetaData);
-            xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.DBConnection);
+            xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, CurDBMetaData.getDBConnection());
             final Object oQueryComposer = xMSF.createInstance("com.sun.star.sdb.SingleSelectQueryComposer");
             m_xQueryAnalyzer = UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class, oQueryComposer);
             m_queryComposer = UnoRuntime.queryInterface(XSingleSelectQueryComposer.class, m_xQueryAnalyzer);

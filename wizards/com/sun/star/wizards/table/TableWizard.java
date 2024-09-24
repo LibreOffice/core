@@ -298,7 +298,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
             Object oFormWizard = this.xMSF.createInstance("com.sun.star.wizards.form.CallFormWizard");
 
             NamedValueCollection wizardContext = new NamedValueCollection();
-            wizardContext.put( PropertyNames.ACTIVE_CONNECTION, curTableDescriptor.DBConnection );
+            wizardContext.put( PropertyNames.ACTIVE_CONNECTION, curTableDescriptor.getDBConnection() );
             wizardContext.put( "DataSource", curTableDescriptor.getDataSource() );
             wizardContext.put( PropertyNames.COMMAND_TYPE, CommandType.TABLE );
             wizardContext.put( PropertyNames.COMMAND, scomposedtablename );

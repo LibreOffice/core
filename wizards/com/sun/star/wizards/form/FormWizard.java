@@ -338,7 +338,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]
                         {
-                            Properties.createProperty(PropertyNames.ACTIVE_CONNECTION, curFormDocument.oMainFormDBMetaData.DBConnection)
+                            Properties.createProperty(PropertyNames.ACTIVE_CONNECTION, curFormDocument.oMainFormDBMetaData.getDBConnection())
                         });
                 curFormDocument.getProgressBar().setValue(20);
                 buildSteps();

@@ -99,7 +99,7 @@ public class Finalizer
                     String sCatalog = PropertyNames.EMPTY_STRING;
                     try
                     {
-                        sCatalog = curtabledescriptor.DBConnection.getCatalog();
+                        sCatalog = curtabledescriptor.getDBConnection().getCatalog();
                     }
                     catch (SQLException e1)
                     {
