@@ -378,6 +378,14 @@ IMPL_LINK_NOARG(QuickFindPanel, SearchFindsListSelectionChangedHandler, weld::Tr
     }
     m_pWrtShell->EndAction();
 
+    // tdf#163100 Need more FIND details
+    // Set the found times label to show "Match X of N matches found."
+    auto nSearchFindFoundTimes = m_vPaMs.size();
+    OUString sText = SwResId(STR_SEARCH_KEY_FOUND_XOFN, nSearchFindFoundTimes);
+    sText = sText.replaceFirst("%1", OUString::number(sId.toUInt32() + 1));
+    sText = sText.replaceFirst("%2", OUString::number(nSearchFindFoundTimes));
+    m_xSearchFindFoundTimesLabel->set_label(sText);
+
     SwShellCursor* pShellCursor = m_pWrtShell->GetCursor_();
     std::vector<basegfx::B2DRange> vRanges;
     for (const SwRect& rRect : *pShellCursor)
