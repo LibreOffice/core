@@ -684,8 +684,8 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
     Reference<XEnumerationAccess>   getXEnumerationAccess();
     Reference<XIdlArray>            getXIdlArray();
 
-    void cacheXNameContainer();
-    void cacheXIndexContainer();
+    void cacheXNameContainer(const std::unique_lock<std::mutex>& rGuard);
+    void cacheXIndexContainer(const std::unique_lock<std::mutex>& rGuard);
 
 public:
     ImplIntrospectionAccess( Any obj, rtl::Reference< IntrospectionAccessStatic_Impl >  pStaticImpl_ );
@@ -796,7 +796,7 @@ Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
     return mxObjElementAccess;
 }
 
-void ImplIntrospectionAccess::cacheXNameContainer()
+void ImplIntrospectionAccess::cacheXNameContainer(const std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference<XNameContainer> xNameContainer;
     Reference<XNameReplace> xNameReplace;
@@ -818,7 +818,6 @@ void ImplIntrospectionAccess::cacheXNameContainer()
     }
 
     {
-        std::unique_lock aGuard( m_aMutex );
         if( !mxObjNameContainer.is() )
             mxObjNameContainer = xNameContainer;
         if( !mxObjNameReplace.is() )
@@ -833,10 +832,8 @@ Reference<XNameContainer> ImplIntrospectionAccess::getXNameContainer()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjNameContainer.is() )
-    {
-        aGuard.unlock();
-        cacheXNameContainer();
-    }
+        cacheXNameContainer(aGuard);
+
     return mxObjNameContainer;
 }
 
@@ -845,10 +842,8 @@ Reference<XNameReplace> ImplIntrospectionAccess::getXNameReplace()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjNameReplace.is() )
-    {
-        aGuard.unlock();
-        cacheXNameContainer();
-    }
+        cacheXNameContainer(aGuard);
+
     return mxObjNameReplace;
 }
 
@@ -857,14 +852,12 @@ Reference<XNameAccess> ImplIntrospectionAccess::getXNameAccess()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjNameAccess.is() )
-    {
-        aGuard.unlock();
-        cacheXNameContainer();
-    }
+        cacheXNameContainer(aGuard);
+
     return mxObjNameAccess;
 }
 
-void ImplIntrospectionAccess::cacheXIndexContainer()
+void ImplIntrospectionAccess::cacheXIndexContainer(const std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference<XIndexContainer> xIndexContainer;
     Reference<XIndexReplace> xIndexReplace;
@@ -886,7 +879,6 @@ void ImplIntrospectionAccess::cacheXIndexContainer()
     }
 
     {
-        std::unique_lock aGuard( m_aMutex );
         if( !mxObjIndexContainer.is() )
             mxObjIndexContainer = xIndexContainer;
         if( !mxObjIndexReplace.is() )
@@ -901,10 +893,8 @@ Reference<XIndexContainer> ImplIntrospectionAccess::getXIndexContainer()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjIndexContainer.is() )
-    {
-        aGuard.unlock();
-        cacheXIndexContainer();
-    }
+        cacheXIndexContainer(aGuard);
+
     return mxObjIndexContainer;
 }
 
@@ -913,10 +903,8 @@ Reference<XIndexReplace> ImplIntrospectionAccess::getXIndexReplace()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjIndexReplace.is() )
-    {
-        aGuard.unlock();
-        cacheXIndexContainer();
-    }
+        cacheXIndexContainer(aGuard);
+
     return mxObjIndexReplace;
 }
 
@@ -925,10 +913,8 @@ Reference<XIndexAccess> ImplIntrospectionAccess::getXIndexAccess()
     std::unique_lock aGuard( m_aMutex );
 
     if( !mxObjIndexAccess.is() )
-    {
-        aGuard.unlock();
-        cacheXIndexContainer();
-    }
+        cacheXIndexContainer(aGuard);
+
     return mxObjIndexAccess;
 }
 
