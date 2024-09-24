@@ -45,9 +45,6 @@ void OutputDevice::SetClipRegion()
         mpMetaFile->AddAction( new MetaClipRegionAction( vcl::Region(), false ) );
 
     SetDeviceClipRegion( nullptr );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetClipRegion();
 }
 
 void OutputDevice::SetClipRegion( const vcl::Region& rRegion )
@@ -65,9 +62,6 @@ void OutputDevice::SetClipRegion( const vcl::Region& rRegion )
         vcl::Region aRegion = LogicToPixel( rRegion );
         SetDeviceClipRegion( &aRegion );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetClipRegion( rRegion );
 }
 
 bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pGraphics )
@@ -88,7 +82,6 @@ bool OutputDevice::SelectClipRegion( const vcl::Region& rRegion, SalGraphics* pG
 
 void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove )
 {
-
     if ( mbClipRegion )
     {
         if( mpMetaFile )
@@ -98,14 +91,10 @@ void OutputDevice::MoveClipRegion( tools::Long nHorzMove, tools::Long nVertMove 
                        ImplLogicHeightToDevicePixel( nVertMove ) );
         mbInitClipRegion = true;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->MoveClipRegion( nHorzMove, nVertMove );
 }
 
 void OutputDevice::IntersectClipRegion( const tools::Rectangle& rRect )
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaISectRectClipRegionAction( rRect ) );
 
@@ -113,14 +102,10 @@ void OutputDevice::IntersectClipRegion( const tools::Rectangle& rRect )
     maRegion.Intersect( aRect );
     mbClipRegion        = true;
     mbInitClipRegion    = true;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRect );
 }
 
 void OutputDevice::IntersectClipRegion( const vcl::Region& rRegion )
 {
-
     if(!rRegion.IsNull())
     {
         if ( mpMetaFile )
@@ -131,9 +116,6 @@ void OutputDevice::IntersectClipRegion( const vcl::Region& rRegion )
         mbClipRegion        = true;
         mbInitClipRegion    = true;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->IntersectClipRegion( rRegion );
 }
 
 void OutputDevice::InitClipRegion()

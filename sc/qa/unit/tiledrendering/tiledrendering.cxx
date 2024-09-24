@@ -1404,6 +1404,7 @@ static Bitmap getTile(ScModelObj* pModelObj, int nTilePosX, int nTilePosY, tools
 {
     size_t nCanvasSize = 1024;
     size_t nTileSize = 256;
+    // BGRA format data
     std::vector<unsigned char> aPixmap(nCanvasSize * nCanvasSize * 4, 0);
     ScopedVclPtrInstance<VirtualDevice> xDevice(DeviceFormat::WITHOUT_ALPHA);
     xDevice->SetBackground(Wallpaper(COL_TRANSPARENT));

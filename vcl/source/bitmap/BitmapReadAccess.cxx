@@ -53,8 +53,6 @@ BitmapReadAccess::BitmapReadAccess(const Bitmap& rBitmap, BitmapAccessMode nMode
 
 BitmapReadAccess::~BitmapReadAccess() {}
 
-bool Bitmap32IsPreMultipled() { return ImplGetSVData()->mpDefInst->supportsBitmap32(); }
-
 FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
 {
     switch (nFormat)
@@ -68,28 +66,20 @@ FncGetPixel BitmapReadAccess::GetPixelFunction(ScanlineFormat nFormat)
         case ScanlineFormat::N24BitTcRgb:
             return GetPixelForN24BitTcRgb;
         case ScanlineFormat::N32BitTcAbgr:
-            assert(Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcAbgr;
         case ScanlineFormat::N32BitTcXbgr:
-            assert(!Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcXbgr;
         case ScanlineFormat::N32BitTcArgb:
-            assert(Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcArgb;
         case ScanlineFormat::N32BitTcXrgb:
-            assert(!Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcXrgb;
         case ScanlineFormat::N32BitTcBgra:
-            assert(Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcBgra;
         case ScanlineFormat::N32BitTcBgrx:
-            assert(!Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcBgrx;
         case ScanlineFormat::N32BitTcRgba:
-            assert(Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcRgba;
         case ScanlineFormat::N32BitTcRgbx:
-            assert(!Bitmap32IsPreMultipled());
             return GetPixelForN32BitTcRgbx;
 
         default:
@@ -110,28 +100,20 @@ FncSetPixel BitmapReadAccess::SetPixelFunction(ScanlineFormat nFormat)
         case ScanlineFormat::N24BitTcRgb:
             return SetPixelForN24BitTcRgb;
         case ScanlineFormat::N32BitTcAbgr:
-            assert(Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcAbgr;
         case ScanlineFormat::N32BitTcXbgr:
-            assert(!Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcXbgr;
         case ScanlineFormat::N32BitTcArgb:
-            assert(Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcArgb;
         case ScanlineFormat::N32BitTcXrgb:
-            assert(!Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcXrgb;
         case ScanlineFormat::N32BitTcBgra:
-            assert(Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcBgra;
         case ScanlineFormat::N32BitTcBgrx:
-            assert(!Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcBgrx;
         case ScanlineFormat::N32BitTcRgba:
-            assert(Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcRgba;
         case ScanlineFormat::N32BitTcRgbx:
-            assert(!Bitmap32IsPreMultipled());
             return SetPixelForN32BitTcRgbx;
 
         default:

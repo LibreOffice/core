@@ -146,17 +146,9 @@ void BitmapRenderTest::testDrawAlphaBitmapEx()
     BitmapEx aBitmapEx;
     aPngReader.read(aBitmapEx);
 
-    // Check backend capabilities, if the backend support 32-bit bitmap
-    if (ImplGetSVData()->mpDefInst->supportsBitmap32())
-    {
-        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N32_BPP, aBitmapEx.GetBitmap().getPixelFormat());
-    }
-    else
-    {
-        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmapEx.GetBitmap().getPixelFormat());
-        CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
-        CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlphaMask().getPixelFormat());
-    }
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N24_BPP, aBitmapEx.GetBitmap().getPixelFormat());
+    CPPUNIT_ASSERT_EQUAL(true, aBitmapEx.IsAlpha());
+    CPPUNIT_ASSERT_EQUAL(vcl::PixelFormat::N8_BPP, aBitmapEx.GetAlphaMask().getPixelFormat());
 
     // Check the bitmap has pixels we expect
     CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFF, 0x00, 0x00, 0x00),
@@ -190,15 +182,21 @@ void BitmapRenderTest::testAlphaVirtualDevice()
 
     // Set it up
     pAlphaVirtualDevice->SetOutputSizePixel(Size(4, 4));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff),
+                         pAlphaVirtualDevice->GetPixel(Point(1, 1)));
     pAlphaVirtualDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
     pAlphaVirtualDevice->Erase();
+    // the backends use pre-multipled alpha, so pure transparency does not round-trip properly
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00),
+                         pAlphaVirtualDevice->GetPixel(Point(1, 1)));
 
     // Get a BitmapEx from the VirDev -> Colors should have alpha
     BitmapEx aBitmap = pAlphaVirtualDevice->GetBitmapEx(Point(), Size(4, 4));
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Width());
     CPPUNIT_ASSERT_EQUAL(tools::Long(4), aBitmap.GetSizePixel().Height());
     Color aColor = aBitmap.GetPixelColor(1, 1);
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, aColor);
+    // the backends use pre-multipled alpha, so pure transparency does not round-trip properly
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x00, 0x00, 0x00), aColor);
 
     // Draw an opaque pixel to the VirDev
     pAlphaVirtualDevice->DrawPixel(Point(1, 1), Color(0x0022ff55));

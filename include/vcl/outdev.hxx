@@ -184,9 +184,6 @@ private:
     // The canvas interface for this output device. Is persistent after the first GetCanvas() call
     mutable css::uno::WeakReference< css::rendering::XCanvas >    mxCanvas;
 
-    // TEMP TEMP TEMP
-    VclPtr<VirtualDevice>           mpAlphaVDev;
-
     /// Additional output pixel offset, applied in LogicToPixel (used by SetPixelOffset/GetPixelOffset)
     tools::Long                            mnOutOffOrigX;
     /// Additional output offset in _logical_ coordinates, applied in PixelToLogic (used by SetPixelOffset/GetPixelOffset)
@@ -1357,7 +1354,10 @@ public:
 
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const;
 
-    bool HasAlpha() const { return bool(mpAlphaVDev); }
+    /**
+     * Does this device support alpha?
+     */
+    virtual bool HasAlpha() const = 0;
 
     /** Query extended bitmap (with alpha channel, if available).
      */
@@ -1460,14 +1460,11 @@ private:
                                     const sal_Int32*         pMapX,
                                     const sal_Int32*         pMapY );
 
-    SAL_DLLPRIVATE Bitmap       BlendBitmapWithAlpha(
+    static SAL_DLLPRIVATE Bitmap BlendBitmapWithAlpha(
                                     Bitmap&             aBmp,
                                     BitmapReadAccess const *   pP,
                                     BitmapReadAccess const *   pA,
-                                    const tools::Rectangle&    aDstRect,
-                                    const sal_Int32     nOffY,
                                     const sal_Int32     nDstHeight,
-                                    const sal_Int32     nOffX,
                                     const sal_Int32     nDstWidth,
                                     const sal_Int32*         pMapX,
                                     const sal_Int32*         pMapY );

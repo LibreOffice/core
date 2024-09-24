@@ -72,7 +72,6 @@ void exportBitmapExToImage(OUString const& rImageName, const BitmapEx& rBitmapEx
     SvFileStream aStream(rImageName, StreamMode::WRITE | StreamMode::TRUNC);
     GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
 }
-bool is32bppSupported() { return ImplGetSVData()->mpDefInst->supportsBitmap32(); }
 
 // Some tests need special handling in drawing code (for example, not smoothscaling
 // when handling HiDPI bitmaps). Temporarily set up the test name to get such special
@@ -1787,7 +1786,7 @@ void GraphicsRenderTests::testDrawBitmap32bpp()
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
-    if (!SHOULD_ASSERT || !is32bppSupported())
+    if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
@@ -1809,7 +1808,7 @@ void GraphicsRenderTests::testDrawTransformedBitmap32bpp()
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
-    if (!SHOULD_ASSERT || !is32bppSupported())
+    if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
@@ -1831,7 +1830,7 @@ void GraphicsRenderTests::testDrawBitmapExWithAlpha32bpp()
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
-    if (!SHOULD_ASSERT || !is32bppSupported())
+    if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
@@ -1853,7 +1852,7 @@ void GraphicsRenderTests::testDrawMask32bpp()
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
-    if (!SHOULD_ASSERT || !is32bppSupported())
+    if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;
@@ -1874,7 +1873,7 @@ void GraphicsRenderTests::testDrawBlend32bpp()
     GraphicsTestZone zone(aTestName);
     vcl::test::OutputDeviceTestBitmap aOutDevTest;
     BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
-    if (!SHOULD_ASSERT || !is32bppSupported())
+    if (!SHOULD_ASSERT)
     {
         appendTestResult(aTestName, u"SKIPPED"_ustr);
         return;

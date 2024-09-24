@@ -156,6 +156,8 @@ public:
 
     css::awt::DeviceInfo GetDeviceInfo() const override;
 
+    virtual bool HasAlpha() const override { return false; }
+
 protected:
     virtual void                DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
                                     const Point& rDestPt, const Size& rDestSize,

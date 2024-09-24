@@ -83,9 +83,6 @@ void OutputDevice::Push(vcl::PushFlags nFlags)
 
     if (nFlags & vcl::PushFlags::REFPOINT && mbRefPoint)
         rState.mpRefPoint = maRefPoint;
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->Push();
 }
 
 void OutputDevice::Pop()
@@ -102,9 +99,6 @@ void OutputDevice::Pop()
         return;
     }
     const vcl::State& rState = maOutDevStateStack.back();
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->Pop();
 
     if ( rState.mnFlags & vcl::PushFlags::LINECOLOR )
     {

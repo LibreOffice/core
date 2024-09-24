@@ -1639,9 +1639,6 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
         if (eRasterOp != RasterOp::OverPaint)
             rRenderContext.SetRasterOp(eRasterOp);
     }
-
-    if (GetOutDev()->mpAlphaVDev)
-        GetOutDev()->mpAlphaVDev->Erase();
 }
 
 void Window::ImplScroll( const tools::Rectangle& rRect,

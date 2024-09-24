@@ -43,8 +43,11 @@ void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
     delete pGraphics;
 }
 
-bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY)
+bool QtVirtualDevice::SetSize(tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent)
 {
+    assert(!bAlphaMaskTransparent && "TODO");
+    (void)bAlphaMaskTransparent;
+
     if (nNewDX == 0)
         nNewDX = 1;
     if (nNewDY == 0)

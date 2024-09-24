@@ -36,7 +36,6 @@
 
 void OutputDevice::SetLineColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaLineColorAction( Color(), false ) );
 
@@ -46,9 +45,6 @@ void OutputDevice::SetLineColor()
         mbLineColor = false;
         maLineColor = COL_TRANSPARENT;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor();
 }
 
 void OutputDevice::SetLineColor( const Color& rColor )
@@ -76,9 +72,6 @@ void OutputDevice::SetLineColor( const Color& rColor )
             maLineColor = aColor;
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::InitLineColor()
@@ -152,9 +145,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt,
     {
         mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawLine( rStartPt, rEndPt, rLineInfo );
 }
 
 void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
@@ -214,9 +204,6 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
         const Point aEndPt(ImplLogicToDevicePixel(rEndPt));
         mpGraphics->DrawLine( aStartPt.X(), aStartPt.Y(), aEndPt.X(), aEndPt.Y(), *this );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawLine( rStartPt, rEndPt );
 }
 
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )

@@ -919,14 +919,10 @@ void OutputDevice::ImplDrawMnemonicLine( tools::Long nX, tools::Long nY, tools::
 
 void OutputDevice::SetTextLineColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLineColorAction( Color(), false ) );
 
     maTextLineColor = COL_TRANSPARENT;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor();
 }
 
 void OutputDevice::SetTextLineColor( const Color& rColor )
@@ -937,21 +933,14 @@ void OutputDevice::SetTextLineColor( const Color& rColor )
         mpMetaFile->AddAction( new MetaTextLineColorAction( aColor, true ) );
 
     maTextLineColor = aColor;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextLineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetOverlineColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaOverlineColorAction( Color(), false ) );
 
     maOverlineColor = COL_TRANSPARENT;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetOverlineColor();
 }
 
 void OutputDevice::SetOverlineColor( const Color& rColor )
@@ -962,9 +951,6 @@ void OutputDevice::SetOverlineColor( const Color& rColor )
         mpMetaFile->AddAction( new MetaOverlineColorAction( aColor, true ) );
 
     maOverlineColor = aColor;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetOverlineColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
@@ -1002,9 +988,6 @@ void OutputDevice::DrawTextLine( const Point& rPos, tools::Long nWidth,
     double fWidth = ImplLogicWidthToDeviceSubPixel(nWidth);
     aPos += Point( mnTextOffX, mnTextOffY );
     ImplDrawTextLine( aPos.X(), aPos.X(), 0, fWidth, fWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
 void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, tools::Long nLineWidth, tools::Long nWaveHeight)
@@ -1149,9 +1132,6 @@ void OutputDevice::ImplDrawWaveLineBezier(tools::Long nStartX, tools::Long nStar
             basegfx::deg2rad(15.0),
             bPixelSnapHairline,
             *this);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->ImplDrawWaveLineBezier(nStartX, nStartY, nEndX, nEndY, nWaveHeight, fOrientation, nLineWidth);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -78,8 +78,10 @@ SalGraphics* X11SkiaSalVirtualDevice::AcquireGraphics()
 
 void X11SkiaSalVirtualDevice::ReleaseGraphics(SalGraphics*) { mbGraphicsAcquired = false; }
 
-bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY)
+bool X11SkiaSalVirtualDevice::SetSize(tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent)
 {
+    assert(!bAlphaMaskTransparent && "TODO");
+    (void)bAlphaMaskTransparent;
     if (!nDX)
         nDX = 1;
     if (!nDY)

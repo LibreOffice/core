@@ -25,8 +25,6 @@
 #include <vcl/BitmapColor.hxx>
 #include <vcl/BitmapAccessMode.hxx>
 
-bool Bitmap32IsPreMultipled();
-
 typedef BitmapColor (*FncGetPixel)(ConstScanline pScanline, tools::Long nX);
 typedef void (*FncSetPixel)(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor);
 

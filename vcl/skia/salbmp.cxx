@@ -58,16 +58,13 @@ SkiaSalBitmap::SkiaSalBitmap() {}
 
 SkiaSalBitmap::~SkiaSalBitmap() {}
 
-SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image)
+SkiaSalBitmap::SkiaSalBitmap(const sk_sp<SkImage>& image, bool bWithoutAlpha)
 {
     ResetAllData();
     mImage = image;
     mPalette = BitmapPalette();
-#if SKIA_USE_BITMAP32
     mBitCount = 32;
-#else
-    mBitCount = 24;
-#endif
+    m_bWithoutAlpha = bWithoutAlpha;
     mSize = mPixelsSize = Size(image->width(), image->height());
     ComputeScanlineSize();
     mReadAccessCount = 0;
@@ -300,14 +297,16 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
                                                       : ScanlineFormat::N24BitTcRgb;
             break;
         case 32:
-#if SKIA_USE_BITMAP32
-            // this tracks the m_bSupportsBitmap32 field
-            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
-                                                      : ScanlineFormat::N32BitTcRgba;
-#else
-            buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgrx
-                                                      : ScanlineFormat::N32BitTcRgbx;
-#endif
+            if (m_bWithoutAlpha)
+            {
+                buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgrx
+                                                          : ScanlineFormat::N32BitTcRgbx;
+            }
+            else
+            {
+                buffer->meFormat = kN32_SkColorTypeIsBGRA ? ScanlineFormat::N32BitTcBgra
+                                                          : ScanlineFormat::N32BitTcRgba;
+            }
             break;
         default:
             abort();
@@ -1125,12 +1124,8 @@ SkAlphaType SkiaSalBitmap::alphaType() const
 {
     if (mEraseColorSet)
         return mEraseColor.IsTransparent() ? kPremul_SkAlphaType : kOpaque_SkAlphaType;
-#if SKIA_USE_BITMAP32
-    // The bitmap's alpha matters only if SKIA_USE_BITMAP32 is set, otherwise
-    // the alpha is in a separate bitmap.
     if (mBitCount == 32)
         return kPremul_SkAlphaType;
-#endif
     return kOpaque_SkAlphaType;
 }
 
@@ -1251,18 +1246,12 @@ void SkiaSalBitmap::EnsureBitmapData()
     // Try to fill mBuffer from mImage.
     assert(mImage->colorType() == kN32_SkColorType);
     SkiaZone zone;
-    // If the source image has no alpha, then use no alpha (faster to convert), otherwise
-    // use kUnpremul_SkAlphaType to make Skia convert from premultiplied alpha when reading
-    // from the SkImage (the alpha will be ignored if converting to bpp<32 formats, but
-    // the color channels must be unpremultiplied. Unless bpp==32 and SKIA_USE_BITMAP32,
-    // in which case use kPremul_SkAlphaType, since SKIA_USE_BITMAP32 implies premultiplied alpha.
+    // If the source image has no alpha, then use no alpha (faster to convert).
     SkAlphaType alphaType = kUnpremul_SkAlphaType;
     if (mImage->imageInfo().alphaType() == kOpaque_SkAlphaType)
         alphaType = kOpaque_SkAlphaType;
-#if SKIA_USE_BITMAP32
     if (mBitCount == 32)
         alphaType = kPremul_SkAlphaType;
-#endif
     SkBitmap bitmap;
     SkPixmap pixmap;
     if (imageSize(mImage) == mSize && mImage->imageInfo().alphaType() == alphaType

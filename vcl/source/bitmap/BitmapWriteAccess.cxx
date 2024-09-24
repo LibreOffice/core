@@ -101,35 +101,27 @@ void BitmapWriteAccess::CopyScanline(tools::Long nY, ConstScanline aSrcScanline,
                 pFncGetPixel = GetPixelForN24BitTcRgb;
                 break;
             case ScanlineFormat::N32BitTcAbgr:
-                assert(Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcAbgr;
                 break;
             case ScanlineFormat::N32BitTcXbgr:
-                assert(!Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcXbgr;
                 break;
             case ScanlineFormat::N32BitTcArgb:
-                assert(Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcArgb;
                 break;
             case ScanlineFormat::N32BitTcXrgb:
-                assert(!Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcXrgb;
                 break;
             case ScanlineFormat::N32BitTcBgra:
-                assert(Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcBgra;
                 break;
             case ScanlineFormat::N32BitTcBgrx:
-                assert(!Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcBgrx;
                 break;
             case ScanlineFormat::N32BitTcRgba:
-                assert(Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcRgba;
                 break;
             case ScanlineFormat::N32BitTcRgbx:
-                assert(!Bitmap32IsPreMultipled());
                 pFncGetPixel = GetPixelForN32BitTcRgbx;
                 break;
 

@@ -73,7 +73,7 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
 
     /// Set new size, without saving the old contents
-    virtual bool        SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
+    virtual bool        SetSize( tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent ) override;
 
     // SalGeometryProvider
     virtual tools::Long GetWidth() const override { return nDX_; }

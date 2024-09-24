@@ -28,7 +28,6 @@
 
 void OutputDevice::SetFillColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaFillColorAction( Color(), false ) );
 
@@ -38,9 +37,6 @@ void OutputDevice::SetFillColor()
         mbFillColor = false;
         maFillColor = COL_TRANSPARENT;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetFillColor();
 }
 
 void OutputDevice::SetFillColor( const Color& rColor )
@@ -55,12 +51,6 @@ void OutputDevice::SetFillColor( const Color& rColor )
         mbInitFillColor = true;
         mbFillColor = true;
         maFillColor = aColor;
-    }
-
-    if( mpAlphaVDev )
-    {
-        sal_uInt8 nAlpha = rColor.GetAlpha();
-        mpAlphaVDev->SetFillColor( Color(nAlpha, nAlpha, nAlpha) );
     }
 }
 

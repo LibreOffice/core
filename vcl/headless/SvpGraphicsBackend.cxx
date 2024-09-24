@@ -182,9 +182,10 @@ void SvpGraphicsBackend::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBi
 }
 
 std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long nX, tools::Long nY,
-                                                         tools::Long nWidth, tools::Long nHeight)
+                                                         tools::Long nWidth, tools::Long nHeight,
+                                                         bool bWithoutAlpha)
 {
-    return m_rCairoCommon.getBitmap(nX, nY, nWidth, nHeight);
+    return m_rCairoCommon.getBitmap(nX, nY, nWidth, nHeight, bWithoutAlpha);
 }
 
 void SvpGraphicsBackend::drawBitmapBuffer(const SalTwoRect& rTR, const BitmapBuffer* pBuffer,

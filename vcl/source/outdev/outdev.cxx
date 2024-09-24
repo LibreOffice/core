@@ -70,7 +70,6 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpFontInstance                  = nullptr;
     mpForcedFallbackInstance        = nullptr;
     mpFontFaceCollection            = nullptr;
-    mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
     mnOutOffY                       = 0;
@@ -178,7 +177,6 @@ void OutputDevice::dispose()
     // release ImplFontList specific to this OutputDevice
     mxFontCollection.reset();
 
-    mpAlphaVDev.disposeAndClear();
     mpPrevGraphics.reset();
     mpNextGraphics.reset();
     VclReferenceBase::dispose();
@@ -217,9 +215,6 @@ void OutputDevice::SetConnectMetaFile( GDIMetaFile* pMtf )
 void OutputDevice::SetSettings( const AllSettings& rSettings )
 {
     *moSettings = rSettings;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetSettings( rSettings );
 }
 
 SystemGraphicsData OutputDevice::GetSystemGfxData() const
@@ -307,9 +302,6 @@ void OutputDevice::SetRefPoint()
     mbRefPoint = false;
     maRefPoint.setX(0);
     maRefPoint.setY(0);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRefPoint();
 }
 
 void OutputDevice::SetRefPoint( const Point& rRefPoint )
@@ -319,9 +311,6 @@ void OutputDevice::SetRefPoint( const Point& rRefPoint )
 
     mbRefPoint = true;
     maRefPoint = rRefPoint;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRefPoint( rRefPoint );
 }
 
 void OutputDevice::SetRasterOp( RasterOp eRasterOp )
@@ -340,17 +329,11 @@ void OutputDevice::SetRasterOp( RasterOp eRasterOp )
             mpGraphics->SetXORMode( (RasterOp::Invert == meRasterOp) || (RasterOp::Xor == meRasterOp), RasterOp::Invert == meRasterOp );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRasterOp( eRasterOp );
 }
 
 void OutputDevice::EnableOutput( bool bEnable )
 {
     mbOutput = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableOutput( bEnable );
 }
 
 void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
@@ -363,17 +346,11 @@ void OutputDevice::SetAntialiasing( AntialiasingFlags nMode )
         if (mpGraphics)
             mpGraphics->setAntiAlias(bool(mnAntialiasing & AntialiasingFlags::Enable));
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetAntialiasing( nMode );
 }
 
 void OutputDevice::SetDrawMode(DrawModeFlags nDrawMode)
 {
     mnDrawMode = nDrawMode;
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->SetDrawMode(nDrawMode);
 }
 
 sal_uInt16 OutputDevice::GetBitCount() const
@@ -469,9 +446,6 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
             mpGraphics->CopyBits(aPosAry, *this);
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawOutDev( rDestPt, rDestSize, rSrcPt, rSrcSize );
 }
 
 void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
@@ -489,16 +463,8 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if ( mpMetaFile )
     {
-        if (rOutDev.mpAlphaVDev)
-        {
-            const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
-            mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
-        }
-        else
-        {
-            const Bitmap aBmp(rOutDev.GetBitmap(rSrcPt, rSrcSize));
-            mpMetaFile->AddAction(new MetaBmpScaleAction(rDestPt, rDestSize, aBmp));
-        }
+        const BitmapEx aBmpEx(rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
+        mpMetaFile->AddAction(new MetaBmpExScaleAction(rDestPt, rDestSize, aBmpEx));
     }
 
     if ( !IsDeviceOutputNecessary() )
@@ -514,28 +480,17 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    if (rOutDev.mpAlphaVDev)
-    {
-        // alpha-blend source over destination
-        DrawBitmapEx(rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize));
-    }
-    else
-    {
-        SalTwoRect aPosAry(rOutDev.ImplLogicXToDevicePixel(rSrcPt.X()),
-                           rOutDev.ImplLogicYToDevicePixel(rSrcPt.Y()),
-                           rOutDev.ImplLogicWidthToDevicePixel(rSrcSize.Width()),
-                           rOutDev.ImplLogicHeightToDevicePixel(rSrcSize.Height()),
-                           ImplLogicXToDevicePixel(rDestPt.X()),
-                           ImplLogicYToDevicePixel(rDestPt.Y()),
-                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
-                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
+    SalTwoRect aPosAry(rOutDev.ImplLogicXToDevicePixel(rSrcPt.X()),
+                             rOutDev.ImplLogicYToDevicePixel(rSrcPt.Y()),
+                             rOutDev.ImplLogicWidthToDevicePixel(rSrcSize.Width()),
+                             rOutDev.ImplLogicHeightToDevicePixel(rSrcSize.Height()),
+                             ImplLogicXToDevicePixel(rDestPt.X()),
+                             ImplLogicYToDevicePixel(rDestPt.Y()),
+                             ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                             ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
-        drawOutDevDirect(rOutDev, aPosAry);
-
-        // #i32109#: make destination rectangle opaque - source has no alpha
-        if (mpAlphaVDev)
-            mpAlphaVDev->ImplFillOpaqueRectangle(tools::Rectangle(rDestPt, rDestSize));
-    }
+    // if we have alpha, this will blend source over destination
+    drawOutDevDirect(rOutDev, aPosAry);
 }
 
 void OutputDevice::CopyArea( const Point& rDestPt,
@@ -576,9 +531,6 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     }
 
     SetRasterOp( eOldRop );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->CopyArea( rDestPt, rSrcPt, rSrcSize, bWindowInvalidate );
 }
 
 // Direct OutputDevice drawing protected function
@@ -654,9 +606,6 @@ tools::Rectangle OutputDevice::GetBackgroundComponentBounds() const
 void OutputDevice::EnableRTL( bool bEnable )
 {
     mbEnableRTL = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableRTL( bEnable );
 }
 
 bool OutputDevice::ImplIsAntiparallel() const

@@ -135,7 +135,8 @@ public:
     SAL_DLLPRIVATE virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long nDX, tools::Long nDY,
-                                                     DeviceFormat eFormat ) override;
+                                                     DeviceFormat eFormat,
+                                                     bool bAlphaMaskTransparent = false ) override;
 
     // VirtualDevice
     // nDX and nDY in Pixel

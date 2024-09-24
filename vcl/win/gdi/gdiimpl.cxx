@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <comphelper/windowserrorstring.hxx>
 #include <win/wincomp.hxx>
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
@@ -54,6 +55,7 @@
 #include <gdiplus.h>
 #include <gdiplusenums.h>
 #include <gdipluscolor.h>
+#include <Gdipluspixelformats.h>
 
 #include <postwin.h>
 
@@ -717,7 +719,7 @@ void WinSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry,
         ImplDrawBitmap( hDC, aPosAry, rSalBitmap, false, 0x00B8074AUL );// raster operation PSDPxax
 }
 
-std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
+std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY, bool bWithoutAlpha )
 {
     SAL_WARN_IF( mrParent.isPrinter(), "vcl", "No ::GetBitmap() from printer possible!" );
 
@@ -727,12 +729,34 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools:
     nDY = std::abs( nDY );
 
     HDC     hDC = mrParent.getHDC();
-    HBITMAP hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
-    bool    bRet;
+    HBITMAP hBmpBitmap;
+    if (bWithoutAlpha && GetBitCount() == 32)
+    {
+        BITMAPINFO aBitmapInfo;
+        aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
+        aBitmapInfo.bmiHeader.biWidth = nDX;
+        aBitmapInfo.bmiHeader.biHeight = -nDY; // negative for top down
+        aBitmapInfo.bmiHeader.biPlanes = 1;
+        aBitmapInfo.bmiHeader.biBitCount = 24;
+        aBitmapInfo.bmiHeader.biCompression = BI_RGB;
+        aBitmapInfo.bmiHeader.biSizeImage = 0;
+        aBitmapInfo.bmiHeader.biXPelsPerMeter = 0;
+        aBitmapInfo.bmiHeader.biYPelsPerMeter = 0;
+        aBitmapInfo.bmiHeader.biClrUsed = 0;
+        aBitmapInfo.bmiHeader.biClrImportant = 0;
 
+        void* pData;
+        hBmpBitmap = CreateDIBSection( hDC, &aBitmapInfo,
+                                    DIB_RGB_COLORS, &pData, nullptr,
+                                    0 );
+        SAL_WARN_IF( !hBmpBitmap, "vcl", "CreateDIBSection failed: " << comphelper::WindowsErrorString( GetLastError() ) );
+    }
+    else
+        hBmpBitmap = CreateCompatibleBitmap( hDC, nDX, nDY );
+
+    bool    bRet;
     {
         ScopedCachedHDC<CACHED_HDC_1> hBmpDC(hBmpBitmap);
-
         bRet = BitBlt(hBmpDC.get(), 0, 0,
                       static_cast<int>(nDX), static_cast<int>(nDY), hDC,
                       static_cast<int>(nX), static_cast<int>(nY), SRCCOPY) ? TRUE : FALSE;
@@ -758,14 +782,38 @@ std::shared_ptr<SalBitmap> WinSalGraphicsImpl::getBitmap( tools::Long nX, tools:
 
 Color WinSalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
 {
-    COLORREF aWinCol = ::GetPixel( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY) );
+    // The only way to read a pixel color with alpha is via GDI+
+    // This is all hideously inefficient, but we only really use it for unit tests.
+    Gdiplus::Bitmap screenPixel(1, 1, PixelFormat32bppARGB);
+    Gdiplus::Graphics gdest(&screenPixel);
+    auto hDestDC = gdest.GetHDC();
+    BOOL retval = BitBlt(hDestDC, 0, 0, 1, 1,
+                        mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY),
+                        SRCCOPY);
+    gdest.ReleaseHDC(hDestDC);
 
-    if ( CLR_INVALID == aWinCol )
-        return Color( 0, 0, 0 );
+    if (!retval)
+    {
+        SAL_WARN("vcl", "GetPixel failed1");
+        return Color(0, 0, 0);
+    }
+    Gdiplus::Color nGdiColor;
+    if (screenPixel.GetPixel(0, 0, &nGdiColor) != Gdiplus::Ok)
+    {
+        SAL_WARN("vcl", "GetPixel failed2");
+        return Color(0, 0, 0);
+    }
+    // seems to be returning premultiplied color, despite the pixel format that I pass in the constructor
+    if (nGdiColor.GetAlpha() == 0)
+        return Color(ColorAlpha, nGdiColor.GetAlpha(),
+                     nGdiColor.GetRed(),
+                     nGdiColor.GetGreen(),
+                     nGdiColor.GetBlue());
     else
-        return Color( GetRValue( aWinCol ),
-                              GetGValue( aWinCol ),
-                              GetBValue( aWinCol ) );
+        return Color(ColorAlpha, nGdiColor.GetAlpha(),
+                     nGdiColor.GetRed() * 255 / nGdiColor.GetAlpha(),
+                     nGdiColor.GetGreen() * 255 / nGdiColor.GetAlpha(),
+                     nGdiColor.GetBlue() * 255 / nGdiColor.GetAlpha());
 }
 
 namespace
@@ -1379,11 +1427,42 @@ void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY )
 
 void WinSalGraphicsImpl::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
 {
-    COLORREF nCol = RGB( nColor.GetRed(),
+    COLORREF nColorRef = RGB( nColor.GetRed(),
                         nColor.GetGreen(),
                         nColor.GetBlue() );
 
-    DrawPixelImpl( nX, nY, nCol );
+    if (nColor.GetAlpha() != 255)
+    {
+        const HDC hDC = mrParent.getHDC();
+
+        if (!mbXORMode)
+        {
+            // the only way to draw a pixel with alpha is via GDI+
+            Gdiplus::Graphics g (hDC);
+            g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy);
+            Gdiplus::SolidBrush brush(Gdiplus::Color(nColor.GetAlpha(), nColor.GetRed(), nColor.GetGreen(), nColor.GetBlue()));
+            g.FillRectangle(&brush, static_cast<int>(nX), static_cast<int>(nY), 1, 1);
+        }
+        else
+        {
+            assert(false && "I am not even sure what it would mean to use alpha in this mode");
+            ScopedSelectedHBRUSH hBrush(hDC, CreateSolidBrush(nColorRef));
+            PatBlt(hDC, static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
+        }
+    }
+    else
+    {
+        const HDC hDC = mrParent.getHDC();
+
+        if (!mbXORMode)
+        {
+            SetPixel(hDC, static_cast<int>(nX), static_cast<int>(nY), nColorRef);
+            return;
+        }
+
+        ScopedSelectedHBRUSH hBrush(hDC, CreateSolidBrush(nColorRef));
+        PatBlt(hDC, static_cast<int>(nX), static_cast<int>(nY), int(1), int(1), PATINVERT);
+    }
 }
 
 void WinSalGraphicsImpl::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
@@ -1403,8 +1482,24 @@ void WinSalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
     {
         if ( !mrParent.isPrinter() )
         {
-            PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nWidth), static_cast<int>(nHeight),
-                    mbXORMode ? PATINVERT : PATCOPY );
+            if (maFillColor.GetAlpha() == 255)
+            {
+                PatBlt( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nWidth), static_cast<int>(nHeight),
+                        mbXORMode ? PATINVERT : PATCOPY );
+            }
+            else if (mbXORMode)
+                assert(false && "don't even know what this would mean");
+            else
+            {
+                // the only way to draw with alpha is via GDI+
+                Gdiplus::Graphics g(mrParent.getHDC());
+                if (g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy) != Gdiplus::Ok)
+                    SAL_WARN("vcl", "SetCompositingMode failed");
+                Gdiplus::SolidBrush brush(
+                    Gdiplus::Color(maFillColor.GetAlpha(), maFillColor.GetRed(),
+                                   maFillColor.GetGreen(), maFillColor.GetBlue()));
+                g.FillRectangle(&brush, static_cast<int>(nX), static_cast<int>(nY), nWidth, nHeight);
+            }
         }
         else
         {
@@ -1417,7 +1512,25 @@ void WinSalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
         }
     }
     else
-        Rectangle( mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY), static_cast<int>(nX+nWidth), static_cast<int>(nY+nHeight) );
+    {
+        if (maFillColor.GetAlpha() == 255)
+            Rectangle(mrParent.getHDC(), static_cast<int>(nX), static_cast<int>(nY),
+                        static_cast<int>(nX + nWidth), static_cast<int>(nY + nHeight));
+        else if (mbXORMode)
+            assert(false && "don't even know what this would mean");
+        else
+        {
+            // the only way to draw with alpha is via GDI+
+            Gdiplus::Graphics g(mrParent.getHDC());
+            if (g.SetCompositingMode(Gdiplus::CompositingModeSourceCopy) != Gdiplus::Ok)
+                SAL_WARN("vcl", "SetCompositingMode failed");
+            Gdiplus::SolidBrush brush(
+                Gdiplus::Color(maFillColor.GetAlpha(), maFillColor.GetRed(),
+                                maFillColor.GetGreen(), maFillColor.GetBlue()));
+            g.FillRectangle(&brush, static_cast<int>(nX), static_cast<int>(nY), nWidth,
+                            nHeight);
+        }
+    }
 }
 
 void WinSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
@@ -2266,30 +2379,15 @@ static void paintToGdiPlus(
     const SalTwoRect& rTR,
     Gdiplus::Bitmap& rBitmap)
 {
-    // only parts of source are used
-    Gdiplus::PointF aDestPoints[3];
-    Gdiplus::ImageAttributes aAttributes;
-
-    // define target region as parallelogram
-    aDestPoints[0].X = Gdiplus::REAL(rTR.mnDestX);
-    aDestPoints[0].Y = Gdiplus::REAL(rTR.mnDestY);
-    aDestPoints[1].X = Gdiplus::REAL(rTR.mnDestX + rTR.mnDestWidth);
-    aDestPoints[1].Y = Gdiplus::REAL(rTR.mnDestY);
-    aDestPoints[2].X = Gdiplus::REAL(rTR.mnDestX);
-    aDestPoints[2].Y = Gdiplus::REAL(rTR.mnDestY + rTR.mnDestHeight);
-
-    aAttributes.SetWrapMode(Gdiplus::WrapModeTileFlipXY);
+    Gdiplus::Rect aDestRect{ INT(rTR.mnDestX), INT(rTR.mnDestY),
+                             INT(rTR.mnDestWidth), INT(rTR.mnDestHeight) };
 
     rGraphics.DrawImage(
         &rBitmap,
-        aDestPoints,
-        3,
-        Gdiplus::REAL(rTR.mnSrcX),
-        Gdiplus::REAL(rTR.mnSrcY),
-        Gdiplus::REAL(rTR.mnSrcWidth),
-        Gdiplus::REAL(rTR.mnSrcHeight),
+        aDestRect,
+        rTR.mnSrcX, rTR.mnSrcY, rTR.mnSrcWidth, rTR.mnSrcHeight,
         Gdiplus::UnitPixel,
-        &aAttributes);
+        nullptr);
 }
 
 static void setInterpolationMode(
@@ -2372,6 +2470,10 @@ bool WinSalGraphicsImpl::drawAlphaBitmap(
     const SalBitmap& rAlphaBmp)
 {
     if(!rTR.mnSrcWidth || !rTR.mnSrcHeight || !rTR.mnDestWidth || !rTR.mnDestHeight)
+        return false;
+
+    // neither GDI nor GDI+ can properly blend to a surface that has alpha
+    if (GetBitCount() == 32)
         return false;
 
     assert(dynamic_cast<const WinSalBitmap*>(&rSrcBitmap));

@@ -159,9 +159,9 @@ public:
                                     bool bShow) override;
     virtual void DestroyObject(SalObject* pObject) override;
 
-    virtual std::unique_ptr<SalVirtualDevice> CreateVirtualDevice(SalGraphics& rGraphics,
-                                                                  tools::Long nDX, tools::Long nDY,
-                                                                  DeviceFormat eFormat) override;
+    virtual std::unique_ptr<SalVirtualDevice>
+    CreateVirtualDevice(SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
+                        DeviceFormat eFormat, bool bAlphaMaskTransparent = false) override;
 
     virtual std::unique_ptr<SalVirtualDevice>
     CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools::Long& nDY,

@@ -39,19 +39,20 @@
 
 std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraphics& rGraphics,
                                                         tools::Long nDX, tools::Long nDY,
-                                                        DeviceFormat eFormat )
+                                                        DeviceFormat eFormat,
+                                                        bool bAlphaMaskTransparent)
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
     (void)rGraphics;
-    std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( nullptr, nDX, nDY, eFormat ));
+    std::unique_ptr<SalVirtualDevice> pNew(new AquaSalVirtualDevice( nullptr, nDX, nDY, eFormat, bAlphaMaskTransparent ));
     pNew->SetSize( nDX, nDY );
     return pNew;
 #else
     return std::unique_ptr<SalVirtualDevice>(new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >(&rGraphics),
-                                     nDX, nDY, eFormat ));
+                                     nDX, nDY, eFormat, bAlphaMaskTransparent ));
 #endif
 }
 
@@ -69,7 +70,7 @@ std::unique_ptr<SalVirtualDevice> AquaSalInstance::CreateVirtualDevice( SalGraph
 
 AquaSalVirtualDevice::AquaSalVirtualDevice(
     AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY,
-    DeviceFormat eFormat )
+    DeviceFormat eFormat, bool bAlphaMaskTransparent )
   : mbGraphicsUsed( false )
   , mnBitmapDepth( 0 )
   , mnWidth(0)
@@ -109,7 +110,7 @@ AquaSalVirtualDevice::AquaSalVirtualDevice(
 #endif
     if( nDX && nDY )
     {
-        SetSize( nDX, nDY );
+        SetSize( nDX, nDY, bAlphaMaskTransparent );
     }
     // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
 }

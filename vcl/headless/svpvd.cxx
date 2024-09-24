@@ -63,7 +63,7 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
+bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent )
 {
     if (nNewDX == 0)
         nNewDX = 1;
@@ -78,7 +78,7 @@ bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
     m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
 
     if (m_bOwnsSurface)
-        bSuccess = CreateSurface(nNewDX, nNewDY);
+        bSuccess = CreateSurface(nNewDX, nNewDY, bAlphaMaskTransparent);
 
     assert(m_pSurface);
 
@@ -112,7 +112,7 @@ bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     return cairo_surface_status(m_pSurface) == CAIRO_STATUS_SUCCESS;
 }
 
-bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY)
+bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent)
 {
     if (m_pSurface)
     {
@@ -132,11 +132,25 @@ bool SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY)
         // in software (which should be fairly cheap for small surfaces anyway).
         m_pSurface = cairo_surface_create_similar_image(m_pRefSurface, CAIRO_FORMAT_ARGB32, nNewDX, nNewDY);
         dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+
+        cairo_t* cr = cairo_create(m_pSurface);
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+        cairo_rectangle(cr, 0, 0, nNewDX, nNewDY);
+        cairo_set_source_rgba(cr, 0, 0, 0, bAlphaMaskTransparent ? 0 : 1);
+        cairo_fill(cr);
+        cairo_destroy(cr);
     }
     else
     {
         m_pSurface = cairo_surface_create_similar(m_pRefSurface, CAIRO_CONTENT_COLOR_ALPHA, nNewDX, nNewDY);
         // Device scale is inherited in this case.
+
+        cairo_t* cr = cairo_create(m_pSurface);
+        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+        cairo_rectangle(cr, 0, 0, nNewDX, nNewDY);
+        cairo_set_source_rgba(cr, 1, 1, 1, bAlphaMaskTransparent ? 0 : 1);
+        cairo_fill(cr);
+        cairo_destroy(cr);
     }
 
     SAL_WARN_IF(cairo_surface_status(m_pSurface) != CAIRO_STATUS_SUCCESS, "vcl", "surface of size " << nNewDX << " by " << nNewDY << " creation failed with status of: " << cairo_status_to_string(cairo_surface_status(m_pSurface)));

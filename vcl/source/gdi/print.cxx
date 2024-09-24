@@ -221,13 +221,6 @@ void Printer::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
 void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                        sal_uInt16 nTransparencePercent )
 {
-    // #110958# Disable alpha VDev, we perform the necessary
-    VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
-
-    // operation explicitly further below.
-    if( mpAlphaVDev )
-        mpAlphaVDev = nullptr;
-
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = nullptr;
 
@@ -285,9 +278,6 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     Pop();
 
     mpMetaFile = pOldMetaFile;
-
-    // #110958# Restore disabled alpha VDev
-    mpAlphaVDev = pOldAlphaVDev;
 }
 
 void Printer::DrawOutDev( const Point& /*rDestPt*/, const Size& /*rDestSize*/,

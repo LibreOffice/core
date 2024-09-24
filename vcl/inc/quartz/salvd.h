@@ -51,13 +51,13 @@ private:
     void Destroy();
 
 public:
-    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY, DeviceFormat eFormat );
+    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, tools::Long nDX, tools::Long nDY, DeviceFormat eFormat, bool bAlphaMaskTransparent );
     AquaSalVirtualDevice( tools::Long &nDX, tools::Long &nDY, DeviceFormat eFormat, const SystemGraphicsData& rData );
     virtual ~AquaSalVirtualDevice() override;
 
     virtual SalGraphics*            AcquireGraphics() override;
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool                    SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
+    virtual bool                    SetSize( tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent ) override;
 
     tools::Long GetWidth() const override
     {

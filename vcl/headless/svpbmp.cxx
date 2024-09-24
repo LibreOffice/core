@@ -42,7 +42,8 @@ static std::optional<BitmapBuffer> ImplCreateDIB(
     const Size& rSize,
     vcl::PixelFormat ePixelFormat,
     const BitmapPalette& rPal,
-    bool bClear)
+    bool bClear,
+    bool bWithoutAlpha)
 {
     if (!rSize.Width() || !rSize.Height())
         return std::nullopt;
@@ -58,7 +59,13 @@ static std::optional<BitmapBuffer> ImplCreateDIB(
             pDIB->meFormat = SVP_24BIT_FORMAT;
             break;
         case vcl::PixelFormat::N32_BPP:
-            pDIB->meFormat = SVP_CAIRO_FORMAT;
+#if ENABLE_CAIRO_RGBA
+            pDIB->meFormat = bWithoutAlpha ? ScanlineFormat::N32BitTcRgbx : SVP_CAIRO_FORMAT;
+#elif defined OSL_BIGENDIAN
+            pDIB->meFormat = bWithoutAlpha ? ScanlineFormat::N32BitTcXrgb : SVP_CAIRO_FORMAT;
+#else
+            pDIB->meFormat = bWithoutAlpha ? ScanlineFormat::N32BitTcBgrx : SVP_CAIRO_FORMAT;
+#endif
             break;
         case vcl::PixelFormat::INVALID:
             assert(false);
@@ -132,10 +139,10 @@ void SvpSalBitmap::Create(const std::optional<BitmapBuffer>& pBuf)
 }
 
 bool SvpSalBitmap::ImplCreate(const Size& rSize, vcl::PixelFormat ePixelFormat,
-                              const BitmapPalette& rPal, bool bClear)
+                              const BitmapPalette& rPal, bool bClear, bool bWithoutAlpha)
 {
     Destroy();
-    moDIB = ImplCreateDIB(rSize, ePixelFormat, rPal, bClear);
+    moDIB = ImplCreateDIB(rSize, ePixelFormat, rPal, bClear, bWithoutAlpha);
     return moDIB.has_value();
 }
 

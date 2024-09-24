@@ -40,12 +40,6 @@ Color OutputDevice::GetPixel(const Point& rPoint) const
             const tools::Long nX = ImplLogicXToDevicePixel(rPoint.X());
             const tools::Long nY = ImplLogicYToDevicePixel(rPoint.Y());
             aColor = mpGraphics->GetPixel(nX, nY, *this);
-
-            if (mpAlphaVDev)
-            {
-                Color aAlphaColor = mpAlphaVDev->GetPixel(rPoint);
-                aColor.SetAlpha(aAlphaColor.GetBlue());
-            }
         }
     }
     return aColor;
@@ -77,9 +71,6 @@ void OutputDevice::DrawPixel( const Point& rPt )
         InitLineColor();
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), *this );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPixel( rPt );
 }
 
 void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
@@ -107,12 +98,6 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
         return;
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), aColor, *this );
-
-    if (mpAlphaVDev)
-    {
-        Color aAlphaColor(rColor.GetAlpha(), rColor.GetAlpha(), rColor.GetAlpha());
-        mpAlphaVDev->DrawPixel(rPt, aAlphaColor);
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

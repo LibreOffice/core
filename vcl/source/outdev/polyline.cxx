@@ -99,9 +99,6 @@ void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly )
             mpGraphics->DrawPolyLine( nPoints, pPtAry, *this );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolyLine( rPoly );
 }
 
 void OutputDevice::DrawPolyLine( const tools::Polygon& rPoly, const LineInfo& rLineInfo )
@@ -298,9 +295,6 @@ void OutputDevice::drawPolyLine(const tools::Polygon& rPoly, const LineInfo& rLi
 
         mpGraphics->DrawPolyLine(nPoints, aPoly.GetPointAry(), *this);
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolyLine( rPoly, rLineInfo );
 }
 
 bool OutputDevice::DrawPolyLineDirect(
@@ -374,12 +368,11 @@ bool OutputDevice::DrawPolyLineDirectInternal(
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation() * rObjectTransform);
         const bool bPixelSnapHairline((mnAntialiasing & AntialiasingFlags::PixelSnapHairline) && rB2DPolygon.count() < 1000);
 
-        const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
         // draw the polyline
-        bool bDrawSuccess = mpGraphics->DrawPolyLine(
+        return mpGraphics->DrawPolyLine(
             aTransform,
             rB2DPolygon,
-            fAdjustedTransparency,
+            fTransparency,
             fLineWidth, // tdf#124848 use LineWidth direct, do not try to solve for zero-case (aka hairline)
             pStroke, // MM01
             eLineJoin,
@@ -387,16 +380,6 @@ bool OutputDevice::DrawPolyLineDirectInternal(
             fMiterMinimumAngle,
             bPixelSnapHairline,
             *this);
-
-        if( bDrawSuccess )
-        {
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawPolyLineDirect(rObjectTransform, rB2DPolygon, fLineWidth,
-                                                fTransparency, pStroke, eLineJoin, eLineCap,
-                                                fMiterMinimumAngle);
-
-            return true;
-        }
     }
     return false;
 }

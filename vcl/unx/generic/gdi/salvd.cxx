@@ -36,8 +36,9 @@
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const SalGraphics& rGraphics,
         tools::Long nDX, tools::Long nDY, DeviceFormat eFormat,
-        std::unique_ptr<X11SalGraphics> pNewGraphics)
+        std::unique_ptr<X11SalGraphics> pNewGraphics, bool bAlphaMaskTransparent)
 {
+    assert(!bAlphaMaskTransparent && "TODO"); (void)bAlphaMaskTransparent;
     assert(pNewGraphics);
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
@@ -61,9 +62,9 @@ std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateX11VirtualDevice(const S
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
-        tools::Long nDX, tools::Long nDY, DeviceFormat eFormat)
+        tools::Long nDX, tools::Long nDY, DeviceFormat eFormat, bool bAlphaMaskTransparent)
 {
-    return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, std::make_unique<X11SalGraphics>());
+    return CreateX11VirtualDevice(rGraphics, nDX, nDY, eFormat, std::make_unique<X11SalGraphics>(), bAlphaMaskTransparent);
 }
 
 std::unique_ptr<SalVirtualDevice> X11SalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
@@ -229,8 +230,9 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
 
-bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
+bool X11SalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent )
 {
+    assert(!bAlphaMaskTransparent && "TODO"); (void)bAlphaMaskTransparent;
     if( bExternPixmap_ )
         return false;
 

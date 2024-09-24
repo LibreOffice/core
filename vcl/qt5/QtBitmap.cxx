@@ -136,13 +136,9 @@ BitmapBuffer* QtBitmap::AcquireBuffer(BitmapAccessMode /*nMode*/)
         case 32:
         {
 #ifdef OSL_BIGENDIAN
-            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32()
-                                    ? ScanlineFormat::N32BitTcArgb
-                                    : ScanlineFormat::N32BitTcXrgb;
+            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
 #else
-            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32()
-                                    ? ScanlineFormat::N32BitTcBgra
-                                    : ScanlineFormat::N32BitTcBgrx;
+            pBuffer->meFormat = ScanlineFormat::N32BitTcBgra;
 #endif
             pBuffer->maPalette = aEmptyPalette;
             break;

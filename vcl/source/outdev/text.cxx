@@ -56,9 +56,6 @@ void OutputDevice::SetLayoutMode( vcl::text::ComplexTextLayoutFlags nTextLayoutM
         mpMetaFile->AddAction( new MetaLayoutModeAction( nTextLayoutMode ) );
 
     mnTextLayoutMode = nTextLayoutMode;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetLayoutMode( nTextLayoutMode );
 }
 
 void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
@@ -67,9 +64,6 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
         mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
 
     meTextLanguage = eTextLanguage;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetDigitLanguage( eTextLanguage );
 }
 
 void OutputDevice::ImplInitTextColor()
@@ -483,14 +477,10 @@ void OutputDevice::SetTextColor( const Color& rColor )
         maTextColor = aColor;
         mbInitTextColor = true;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE );
 }
 
 void OutputDevice::SetTextFillColor()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
 
@@ -499,9 +489,6 @@ void OutputDevice::SetTextFillColor()
     }
     if ( !maFont.IsTransparent() )
         maFont.SetTransparent( true );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor();
 }
 
 void OutputDevice::SetTextFillColor( const Color& rColor )
@@ -515,9 +502,6 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
         maFont.SetFillColor( aColor );
     if ( maFont.IsTransparent() != rColor.IsTransparent() )
         maFont.SetTransparent( rColor.IsTransparent() );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextFillColor( COL_ALPHA_OPAQUE );
 }
 
 Color OutputDevice::GetTextFillColor() const
@@ -530,7 +514,6 @@ Color OutputDevice::GetTextFillColor() const
 
 void OutputDevice::SetTextAlign( TextAlign eAlign )
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextAlignAction( eAlign ) );
 
@@ -539,9 +522,6 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
         maFont.SetAlignment( eAlign );
         mbNewFont = true;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetTextAlign( eAlign );
 }
 
 vcl::Region OutputDevice::GetOutputBoundsClipRegion() const
@@ -635,9 +615,6 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
     {
         ImplDrawText( *pSalLayout );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawText( rStartPt, rStr, nIndex, nLen, pVector, pDisplayText );
 }
 
 tools::Long OutputDevice::GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen,
@@ -740,12 +717,6 @@ void OutputDevice::DrawPartialTextArray(const Point& rStartPt, const OUString& r
     {
         ImplDrawText(*pSalLayout);
     }
-
-    if (mpAlphaVDev)
-    {
-        mpAlphaVDev->DrawPartialTextArray(rStartPt, rStr, pDXArray, pKashidaArray, nIndex, nLen,
-                                          nPartIndex, nPartLen, flags, pLayoutCache);
-    }
 }
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
@@ -778,9 +749,6 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
     {
         ImplDrawText( *pSalLayout );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawTextArray( rStartPt, rStr, pDXAry, pKashidaAry, nIndex, nLen, flags );
 }
 
 double
@@ -992,9 +960,6 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
     {
         ImplDrawText( *pSalLayout );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
 vcl::text::ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
@@ -1790,9 +1755,6 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
 
     // and enable again
     mpMetaFile = pMtf;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawText( rRect, rOrigStr, nStyle, pVector, pDisplayText );
 }
 
 tools::Rectangle OutputDevice::GetTextRect( const tools::Rectangle& rRect,
@@ -2041,9 +2003,6 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         SetTextColor( *oOldTextColor );
     if (oOldTextFillColor)
         SetTextFillColor(*oOldTextFillColor);
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawCtrlText( rPos, rStr, nIndex, nLen, nStyle, pVector, pDisplayText );
 }
 
 tools::Long OutputDevice::GetCtrlTextWidth( const OUString& rStr, const SalLayoutGlyphs* pGlyphs ) const

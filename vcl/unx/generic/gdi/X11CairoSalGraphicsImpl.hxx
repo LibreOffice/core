@@ -149,7 +149,7 @@ public:
                   Color nMaskColor) override;
 
     std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                         tools::Long nHeight) override;
+                                         tools::Long nHeight, bool bWithoutAlpha) override;
 
     bool drawPolyLineBezier(sal_uInt32 nPoints, const Point* pPtAry,
                             const PolyFlags* pFlgAry) override;

@@ -62,6 +62,8 @@ public:
     virtual css::uno::Reference<css::rendering::XCanvas>
     ImplGetCanvas(bool bSpriteCanvas) const override;
 
+    virtual bool HasAlpha() const override { return true; }
+
 private:
     virtual void InitClipRegion() override;
 

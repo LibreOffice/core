@@ -523,8 +523,11 @@ void QtGraphicsBackend::drawMask(const SalTwoRect& rPosAry, const SalBitmap& /*r
 }
 
 std::shared_ptr<SalBitmap> QtGraphicsBackend::getBitmap(tools::Long nX, tools::Long nY,
-                                                        tools::Long nWidth, tools::Long nHeight)
+                                                        tools::Long nWidth, tools::Long nHeight,
+                                                        bool bWithoutAlpha)
 {
+    assert(!bWithoutAlpha && "not supported here");
+    (void)bWithoutAlpha;
     return std::make_shared<QtBitmap>(m_pQImage->copy(nX, nY, nWidth, nHeight));
 }
 

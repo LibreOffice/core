@@ -82,14 +82,12 @@ private:
     css::uno::Reference<css::datatransfer::clipboard::XClipboard> m_clipboard;
 
 protected:
-    bool m_bSupportsBitmap32 = false;
     bool m_bSupportsOpenGL = false;
 
 public:
     SalInstance(std::unique_ptr<comphelper::SolarMutex> pMutex);
     virtual ~SalInstance();
 
-    bool supportsBitmap32() const { return m_bSupportsBitmap32; }
     bool supportsOpenGL() const { return m_bSupportsOpenGL; }
 
     //called directly after Application::Init
@@ -114,7 +112,8 @@ public:
     virtual std::unique_ptr<SalVirtualDevice>
                             CreateVirtualDevice( SalGraphics& rGraphics,
                                                  tools::Long nDX, tools::Long nDY,
-                                                 DeviceFormat eFormat ) = 0;
+                                                 DeviceFormat eFormat,
+                                                 bool bAlphaMaskTransparent = false ) = 0;
 
     // VirtualDevice
     // nDX and nDY in pixels

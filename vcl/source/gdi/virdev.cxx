@@ -203,21 +203,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( mpNext )
         mpNext->mpPrev = this;
     pSVData->maGDIData.mpFirstVirDev = this;
-
-    // initialise alpha layer
-    if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
-    {
-        mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::WITHOUT_ALPHA);
-        mpAlphaVDev->InnerImplSetOutputSizePixel(Size(nDX, nDY), bErase);
-        mpAlphaVDev->SetBackground( Wallpaper(COL_ALPHA_OPAQUE) );
-        mpAlphaVDev->Erase();
-        if( GetLineColor() != COL_TRANSPARENT )
-            mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
-        if( GetFillColor() != COL_TRANSPARENT )
-            mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
-        mpAlphaVDev->SetMapMode( GetMapMode() );
-        mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
-    }
 }
 
 VirtualDevice::VirtualDevice(const OutputDevice* pCompDev, DeviceFormat eFormatAndAlpha,
@@ -269,7 +254,7 @@ void VirtualDevice::dispose()
     OutputDevice::dispose();
 }
 
-bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase)
+bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent)
 {
     SAL_INFO( "vcl.virdev",
               "VirtualDevice::InnerImplSetOutputSizePixel( " << rNewSize.Width() << ", "
@@ -296,7 +281,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
     if ( bErase )
     {
-        bRet = mpVirDev->SetSize( nNewWidth, nNewHeight );
+        bRet = mpVirDev->SetSize( nNewWidth, nNewHeight, bAlphaMaskTransparent );
         if ( bRet )
         {
             mnOutWidth  = rNewSize.Width();
@@ -315,7 +300,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         assert(mpGraphics);
 
-        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormatAndAlpha);
+        pNewVirDev = pSVData->mpDefInst->CreateVirtualDevice(*mpGraphics, nNewWidth, nNewHeight, meFormatAndAlpha, bAlphaMaskTransparent);
         if ( pNewVirDev )
         {
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
@@ -368,40 +353,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const tools::Rectangle& rRect )
 
 bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, bool bErase, bool bAlphaMaskTransparent )
 {
-    if( InnerImplSetOutputSizePixel(rNewSize, bErase) )
-    {
-        if (meFormatAndAlpha != DeviceFormat::WITHOUT_ALPHA)
-        {
-            // #110958# Setup alpha bitmap
-            if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
-            {
-                mpAlphaVDev.disposeAndClear();
-            }
-
-            if( !mpAlphaVDev )
-            {
-                mpAlphaVDev = VclPtr<VirtualDevice>::Create(*this, DeviceFormat::WITHOUT_ALPHA);
-                mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase);
-                mpAlphaVDev->SetBackground( Wallpaper(bAlphaMaskTransparent ? COL_ALPHA_TRANSPARENT : COL_ALPHA_OPAQUE) );
-                mpAlphaVDev->Erase();
-            }
-
-            // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
-            if( GetLineColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetLineColor( COL_ALPHA_OPAQUE );
-
-            if( GetFillColor() != COL_TRANSPARENT )
-                mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
-
-            mpAlphaVDev->SetMapMode( GetMapMode() );
-
-            mpAlphaVDev->SetAntialiasing( GetAntialiasing() );
-        }
-
-        return true;
-    }
-
-    return false;
+    return InnerImplSetOutputSizePixel(rNewSize, bErase, bAlphaMaskTransparent);
 }
 
 void VirtualDevice::EnableRTL( bool bEnable )

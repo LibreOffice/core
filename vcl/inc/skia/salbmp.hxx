@@ -32,7 +32,7 @@ class VCL_PLUGIN_PUBLIC SkiaSalBitmap final : public SalBitmap
 {
 public:
     SkiaSalBitmap();
-    SkiaSalBitmap(const sk_sp<SkImage>& image);
+    SkiaSalBitmap(const sk_sp<SkImage>& image, bool bWithoutAlpha);
     virtual ~SkiaSalBitmap() override;
 
     // SalBitmap methods
@@ -199,6 +199,7 @@ private:
 
     BitmapPalette mPalette;
     int mBitCount = 0; // bpp
+    bool m_bWithoutAlpha = false;
     Size mSize;
     // The contents of the bitmap may be stored in several different ways:
     // As mBuffer buffer, which normally stores pixels in the given format.

@@ -26,51 +26,18 @@ Color OutputDevice::GetBackgroundColor() const
 
 void OutputDevice::SetBackground()
 {
-
     maBackground = Wallpaper();
     mbBackground = false;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetBackground();
 }
 
 void OutputDevice::SetBackground( const Wallpaper& rBackground )
 {
-
     maBackground = rBackground;
 
     if( rBackground.GetStyle() == WallpaperStyle::NONE )
         mbBackground = false;
     else
         mbBackground = true;
-
-    if( !mpAlphaVDev )
-        return;
-
-    // Some of these are probably wrong (e.g. if the gradient has transparency),
-    // but hopefully nobody uses that. If you do, feel free to implement it properly.
-    if( rBackground.GetStyle() == WallpaperStyle::NONE )
-    {
-        mpAlphaVDev->SetBackground( rBackground );
-    }
-    else if( rBackground.IsBitmap())
-    {
-        const BitmapEx& bitmap = rBackground.GetBitmap();
-        if( bitmap.IsAlpha())
-            mpAlphaVDev->SetBackground( Wallpaper( BitmapEx( bitmap.GetAlphaMask().GetBitmap() ) ) );
-        else
-            mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
-    }
-    else if( rBackground.IsGradient())
-    {
-        mpAlphaVDev->SetBackground( Wallpaper( COL_ALPHA_OPAQUE ));
-    }
-    else
-    {
-        // Color background.
-        int alpha = rBackground.GetColor().GetAlpha();
-        mpAlphaVDev->SetBackground( Wallpaper( Color( alpha, alpha, alpha )));
-    }
 }
 
 

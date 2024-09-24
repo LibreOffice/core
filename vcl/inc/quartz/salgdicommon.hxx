@@ -39,7 +39,8 @@ public:
     RGBAColor( ::Color );
     RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
     const CGFloat* AsArray() const { return m_fRGBA; }
-    bool IsVisible() const { return m_fRGBA[3] > 0; }
+    bool IsActive() const { return m_bActive; }
+    void SetActive(bool b) { m_bActive = b; }
     void SetAlpha( float fAlpha ) { m_fRGBA[3] = fAlpha; }
 
     CGFloat GetRed() const   { return m_fRGBA[0]; }
@@ -47,6 +48,7 @@ public:
     CGFloat GetBlue() const  { return m_fRGBA[2]; }
     CGFloat GetAlpha() const { return m_fRGBA[3]; }
 private:
+    bool m_bActive { true };
     CGFloat m_fRGBA[4]; // red, green, blue, alpha
 };
 
@@ -55,7 +57,7 @@ inline RGBAColor::RGBAColor( ::Color nColor )
     m_fRGBA[0] = nColor.GetRed() * (1.0/255);
     m_fRGBA[1] = nColor.GetGreen() * (1.0/255);
     m_fRGBA[2] = nColor.GetBlue() * (1.0/255);
-    m_fRGBA[3] = 1.0; // opaque
+    m_fRGBA[3] = nColor.GetAlpha() * (1.0/255);
 }
 
 inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )

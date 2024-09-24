@@ -642,6 +642,27 @@ void CairoCommon::applyColor(cairo_t* cr, Color aColor, double fTransparency)
     }
 }
 
+void CairoCommon::applyColor2(cairo_t* cr, Color aColor)
+{
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_content_t eContentType = cairo_surface_get_content(cairo_get_target(cr));
+    if (eContentType == CAIRO_CONTENT_COLOR_ALPHA)
+    {
+        cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
+                              aColor.GetBlue() / 255.0, aColor.GetAlpha() / 255.0);
+    }
+    else if (eContentType == CAIRO_CONTENT_COLOR)
+    {
+        cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0,
+                              aColor.GetBlue() / 255.0, 1.0);
+    }
+    else // CAIRO_CONTENT_ALPHA
+    {
+        double fSet = aColor == COL_BLACK ? 1.0 : 0.0;
+        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+    }
+}
+
 void CairoCommon::clipRegion(cairo_t* cr, const vcl::Region& rClipRegion)
 {
     RectangleVector aRectangles;
@@ -713,7 +734,25 @@ void CairoCommon::drawPixel(const std::optional<Color>& rLineColor, tools::Long 
     clipRegion(cr);
 
     cairo_rectangle(cr, nX, nY, 1, 1);
-    CairoCommon::applyColor(cr, *rLineColor, 0.0);
+
+    cairo_content_t eContentType = cairo_surface_get_content(cairo_get_target(cr));
+    if (eContentType == CAIRO_CONTENT_COLOR_ALPHA)
+    {
+        cairo_set_source_rgba(cr, rLineColor->GetRed() / 255.0, rLineColor->GetGreen() / 255.0,
+                              rLineColor->GetBlue() / 255.0, rLineColor->GetAlpha() / 255.0);
+    }
+    else if (eContentType == CAIRO_CONTENT_COLOR)
+    {
+        cairo_set_source_rgba(cr, rLineColor->GetRed() / 255.0, rLineColor->GetGreen() / 255.0,
+                              rLineColor->GetBlue() / 255.0, 1.0);
+    }
+    else // eContentType == CAIRO_CONTENT_ALPHA
+    {
+        double fSet = *rLineColor == COL_BLACK ? 1.0 : 0.0;
+        cairo_set_source_rgba(cr, 1, 1, 1, fSet);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    }
+
     cairo_fill(cr);
 
     basegfx::B2DRange extents = getClippedFillDamage(cr);
@@ -801,7 +840,6 @@ void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, 
     // fast path for the common case of simply creating a solid block of color
     if (onlyFillRect(m_oFillColor, m_oLineColor))
     {
-        double fTransparency = 0;
         // don't bother trying to draw stuff which is effectively invisible
         if (nWidth < 0.1 || nHeight < 0.1)
             return;
@@ -820,7 +858,7 @@ void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, 
         }
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        CairoCommon::applyColor(cr, *m_oFillColor, fTransparency);
+        CairoCommon::applyColor2(cr, *m_oFillColor);
         // Get FillDamage
         basegfx::B2DRange extents = getClippedFillDamage(cr);
 
@@ -1876,14 +1914,15 @@ void CairoCommon::drawMask(const SalTwoRect& rTR, const SalBitmap& rSalBitmap, C
 }
 
 std::shared_ptr<SalBitmap> CairoCommon::getBitmap(tools::Long nX, tools::Long nY,
-                                                  tools::Long nWidth, tools::Long nHeight)
+                                                  tools::Long nWidth, tools::Long nHeight,
+                                                  bool bWithoutAlpha)
 {
     std::shared_ptr<SvpSalBitmap> pBitmap = std::make_shared<SvpSalBitmap>();
     BitmapPalette aPal;
     assert(GetBitCount() != 1 && "not supported anymore");
     vcl::PixelFormat ePixelFormat = vcl::PixelFormat::N32_BPP;
 
-    if (!pBitmap->ImplCreate(Size(nWidth, nHeight), ePixelFormat, aPal, false))
+    if (!pBitmap->ImplCreate(Size(nWidth, nHeight), ePixelFormat, aPal, false, bWithoutAlpha))
     {
         SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
         return nullptr;
@@ -2023,8 +2062,8 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
         for (tools::Long x = 0; x < nWidth; ++x)
         {
 #if ENABLE_CAIRO_RGBA
-            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcRgbx,
-                          "Expected SVP_CAIRO_FORMAT set to N32BitTcRgbx");
+            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcRgba,
+                          "Expected SVP_CAIRO_FORMAT set to N32BitTcRgba");
             static_assert(SVP_24BIT_FORMAT == ScanlineFormat::N24BitTcRgb,
                           "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
             pD[0] = pS[0];
@@ -2032,8 +2071,8 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
             pD[2] = pS[2];
             pD[3] = 0xff; // Alpha
 #elif defined OSL_BIGENDIAN
-            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcXrgb,
-                          "Expected SVP_CAIRO_FORMAT set to N32BitTcXrgb");
+            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcArgb,
+                          "Expected SVP_CAIRO_FORMAT set to N32BitTcArgb");
             static_assert(SVP_24BIT_FORMAT == ScanlineFormat::N24BitTcRgb,
                           "Expected SVP_24BIT_FORMAT set to N24BitTcRgb");
             pD[0] = 0xff; // Alpha
@@ -2041,8 +2080,8 @@ std::optional<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* 
             pD[2] = pS[1];
             pD[3] = pS[2];
 #else
-            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcBgrx,
-                          "Expected SVP_CAIRO_FORMAT set to N32BitTcBgrx");
+            static_assert(SVP_CAIRO_FORMAT == ScanlineFormat::N32BitTcBgra,
+                          "Expected SVP_CAIRO_FORMAT set to N32BitTcAgrx");
             static_assert(SVP_24BIT_FORMAT == ScanlineFormat::N24BitTcBgr,
                           "Expected SVP_24BIT_FORMAT set to N24BitTcBgr");
             pD[0] = pS[0];

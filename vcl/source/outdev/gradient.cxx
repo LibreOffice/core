@@ -143,14 +143,6 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
             }
         }
     }
-
-    if( mpAlphaVDev )
-    {
-        mpAlphaVDev->Push(vcl::PushFlags::FILLCOLOR);
-        mpAlphaVDev->SetFillColor( COL_ALPHA_OPAQUE );
-        mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
-        mpAlphaVDev->Pop();
-    }
 }
 
 void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, const tools::PolyPolygon &rPolyPoly )

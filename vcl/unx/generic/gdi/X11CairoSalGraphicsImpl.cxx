@@ -186,9 +186,10 @@ void X11CairoSalGraphicsImpl::drawMask(const SalTwoRect& rTR, const SalBitmap& r
 
 std::shared_ptr<SalBitmap> X11CairoSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
                                                               tools::Long nWidth,
-                                                              tools::Long nHeight)
+                                                              tools::Long nHeight,
+                                                              bool bWithoutAlpha)
 {
-    return mrCairoCommon.getBitmap(nX, nY, nWidth, nHeight);
+    return mrCairoCommon.getBitmap(nX, nY, nWidth, nHeight, bWithoutAlpha);
 }
 
 bool X11CairoSalGraphicsImpl::drawPolyLineBezier(sal_uInt32, const Point*, const PolyFlags*)

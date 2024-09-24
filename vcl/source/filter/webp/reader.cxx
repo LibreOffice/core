@@ -72,21 +72,10 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     if (width > SAL_MAX_INT32 / 8 || height > SAL_MAX_INT32 / 8)
         return false; // avoid overflows later
 
-    const bool bFuzzing = comphelper::IsFuzzing();
-    const bool bSupportsBitmap32 = bFuzzing || ImplGetSVData()->mpDefInst->supportsBitmap32();
-
-    Bitmap bitmap;
     AlphaMask bitmapAlpha;
-    if (bSupportsBitmap32 && has_alpha)
-    {
-        bitmap = Bitmap(Size(width, height), vcl::PixelFormat::N32_BPP);
-    }
-    else
-    {
-        bitmap = Bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
-        if (has_alpha)
-            bitmapAlpha = AlphaMask(Size(width, height));
-    }
+    Bitmap bitmap(Size(width, height), vcl::PixelFormat::N24_BPP);
+    if (has_alpha)
+        bitmapAlpha = AlphaMask(Size(width, height));
 
     BitmapScopedWriteAccess access(bitmap);
     if (!access)
@@ -104,25 +93,17 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     config.output.width = width;
     config.output.height = height;
     config.output.is_external_memory = 1;
-    if (bSupportsBitmap32 && has_alpha)
+    if (has_alpha)
     {
         switch (access->GetScanlineFormat())
         {
-            // Our bitmap32 code expects premultiplied.
-            case ScanlineFormat::N32BitTcRgba:
-            case ScanlineFormat::N32BitTcRgbx:
-                config.output.colorspace = MODE_rgbA;
-                pixelMode = PixelMode::DirectRead;
+            case ScanlineFormat::N24BitTcRgb:
+                config.output.colorspace = MODE_RGBA;
+                pixelMode = PixelMode::Split;
                 break;
-            case ScanlineFormat::N32BitTcBgra:
-            case ScanlineFormat::N32BitTcBgrx:
-                config.output.colorspace = MODE_bgrA;
-                pixelMode = PixelMode::DirectRead;
-                break;
-            case ScanlineFormat::N32BitTcArgb:
-            case ScanlineFormat::N32BitTcXrgb:
-                config.output.colorspace = MODE_Argb;
-                pixelMode = PixelMode::DirectRead;
+            case ScanlineFormat::N24BitTcBgr:
+                config.output.colorspace = MODE_BGRA;
+                pixelMode = PixelMode::Split;
                 break;
             default:
                 config.output.colorspace = MODE_RGBA;
@@ -132,43 +113,23 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     }
     else
     {
-        if (has_alpha)
+        switch (access->GetScanlineFormat())
         {
-            switch (access->GetScanlineFormat())
-            {
-                case ScanlineFormat::N24BitTcRgb:
-                    config.output.colorspace = MODE_RGBA;
-                    pixelMode = PixelMode::Split;
-                    break;
-                case ScanlineFormat::N24BitTcBgr:
-                    config.output.colorspace = MODE_BGRA;
-                    pixelMode = PixelMode::Split;
-                    break;
-                default:
-                    config.output.colorspace = MODE_RGBA;
-                    pixelMode = PixelMode::SetPixel;
-                    break;
-            }
-        }
-        else
-        {
-            switch (access->GetScanlineFormat())
-            {
-                case ScanlineFormat::N24BitTcRgb:
-                    config.output.colorspace = MODE_RGB;
-                    pixelMode = PixelMode::DirectRead;
-                    break;
-                case ScanlineFormat::N24BitTcBgr:
-                    config.output.colorspace = MODE_BGR;
-                    pixelMode = PixelMode::DirectRead;
-                    break;
-                default:
-                    config.output.colorspace = MODE_RGB;
-                    pixelMode = PixelMode::SetPixel;
-                    break;
-            }
+            case ScanlineFormat::N24BitTcRgb:
+                config.output.colorspace = MODE_RGB;
+                pixelMode = PixelMode::DirectRead;
+                break;
+            case ScanlineFormat::N24BitTcBgr:
+                config.output.colorspace = MODE_BGR;
+                pixelMode = PixelMode::DirectRead;
+                break;
+            default:
+                config.output.colorspace = MODE_RGB;
+                pixelMode = PixelMode::SetPixel;
+                break;
         }
     }
+
     if (pixelMode == PixelMode::DirectRead)
     {
         config.output.u.RGBA.rgba = access->GetBuffer();
@@ -286,15 +247,10 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     }
 
     access.reset(); // Flush BitmapScopedWriteAccess.
-    if (bSupportsBitmap32 && has_alpha)
-        graphic = BitmapEx(bitmap);
+    if (has_alpha)
+        graphic = BitmapEx(bitmap, bitmapAlpha);
     else
-    {
-        if (has_alpha)
-            graphic = BitmapEx(bitmap, bitmapAlpha);
-        else
-            graphic = BitmapEx(bitmap);
-    }
+        graphic = BitmapEx(bitmap);
     return success;
 }
 

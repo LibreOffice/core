@@ -78,10 +78,6 @@ X11SalInstance::X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex)
     m_bSupportsOpenGL = true;
 #if HAVE_FEATURE_SKIA
     X11SkiaSalGraphicsImpl::prepareSkia();
-#if SKIA_USE_BITMAP32
-    if (SkiaHelper::isVCLSkiaEnabled())
-        m_bSupportsBitmap32 = true;
-#endif
 #endif
 }
 

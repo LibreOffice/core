@@ -1452,7 +1452,8 @@ void SkiaSalGraphicsImpl::drawMask(const SalTwoRect& rPosAry, const SalBitmap& r
 }
 
 std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools::Long nY,
-                                                          tools::Long nWidth, tools::Long nHeight)
+                                                          tools::Long nWidth, tools::Long nHeight,
+                                                          bool bWithoutAlpha)
 {
     SkiaZone zone;
     checkSurface();
@@ -1464,7 +1465,7 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
     // in blendAlphaBitmap(), where we could simply use the proper rect of the image.
     sk_sp<SkImage> image = makeCheckedImageSnapshot(
         mSurface, scaleRect(SkIRect::MakeXYWH(nX, nY, nWidth, nHeight), mScaling));
-    std::shared_ptr<SkiaSalBitmap> bitmap = std::make_shared<SkiaSalBitmap>(image);
+    std::shared_ptr<SkiaSalBitmap> bitmap = std::make_shared<SkiaSalBitmap>(image, bWithoutAlpha);
     // If the surface is scaled for HiDPI, the bitmap needs to be scaled down, otherwise
     // it would have incorrect size from the API point of view. The DirectImage::Yes handling
     // in mergeCacheBitmaps() should access the original unscaled bitmap data to avoid

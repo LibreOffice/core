@@ -748,7 +748,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 
         pBuffer->meFormat = pBIH->biBitCount == 8 ? ScanlineFormat::N8BitPal :
                             pBIH->biBitCount == 24 ? ScanlineFormat::N24BitTcBgr :
-                            pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcBgrx :
+                            pBIH->biBitCount == 32 ? ScanlineFormat::N32BitTcBgra :
                             ScanlineFormat::NONE;
         assert (pBuffer->meFormat != ScanlineFormat::NONE);
 

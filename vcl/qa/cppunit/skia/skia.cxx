@@ -365,7 +365,7 @@ void SkiaTest::testDelayedScale()
     CPPUNIT_ASSERT_EQUAL(tools::Long(20), buffer1->mnHeight);
     skiaBitmap1->ReleaseBuffer(buffer1, BitmapAccessMode::Read);
     // Do scaling based on mImage.
-    SkiaSalBitmap skiaBitmap2(skiaBitmap1->GetSkImage());
+    SkiaSalBitmap skiaBitmap2(skiaBitmap1->GetSkImage(), /*bWithoutAlpha*/ false);
     CPPUNIT_ASSERT(!skiaBitmap2.unittestHasBuffer());
     CPPUNIT_ASSERT(skiaBitmap2.unittestHasImage());
     CPPUNIT_ASSERT(skiaBitmap2.Scale(2, 3, BmpScaleFlag::Default));
@@ -388,7 +388,7 @@ void SkiaTest::testDelayedScaleAlphaImage()
     CPPUNIT_ASSERT(bitmapTmp->Create(Size(10, 10), vcl::PixelFormat::N24_BPP, BitmapPalette()));
     bitmapTmp->Erase(COL_RED);
     // Create a bitmap that has only an image, not a pixel buffer.
-    SkiaSalBitmap bitmap(bitmapTmp->GetSkImage());
+    SkiaSalBitmap bitmap(bitmapTmp->GetSkImage(), /*bWithoutAlpha*/ false);
     bitmapTmp.release();
     CPPUNIT_ASSERT(!bitmap.unittestHasBuffer());
     CPPUNIT_ASSERT(bitmap.unittestHasImage());

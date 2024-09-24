@@ -276,7 +276,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
         aSrcBuf.mnBitCount = nSrcBits;
         aSrcBuf.mnScanlineSize = nSrcBytesPerRow;
         BitmapBuffer aDstBuf;
-        aDstBuf.meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32() ? ScanlineFormat::N32BitTcArgb : ScanlineFormat::N32BitTcXrgb;
+        aDstBuf.meFormat = ScanlineFormat::N32BitTcArgb;
         aDstBuf.mpBits = pDestData;
         aDstBuf.mnBitCount = nDestBits;
         aDstBuf.mnScanlineSize = nDestBytesPerRow;
@@ -439,10 +439,8 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
             pBuffer->meFormat = ScanlineFormat::N24BitTcBgr;
             break;
         case 32:
-        {
-            pBuffer->meFormat = ImplGetSVData()->mpDefInst->supportsBitmap32() ? ScanlineFormat::N32BitTcArgb : ScanlineFormat::N32BitTcXrgb;
+            pBuffer->meFormat = ScanlineFormat::N32BitTcArgb;
             break;
-        }
         default: assert(false);
     }
 

@@ -51,14 +51,16 @@ public:
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
     static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long nDX, tools::Long nDY,
-            DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics);
+            DeviceFormat eFormat, std::unique_ptr<X11SalGraphics> pNewGraphics,
+            bool bAlphaMaskTransparent);
     static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
             DeviceFormat eFormat, const SystemGraphicsData& rData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long nDX, tools::Long nDY,
-                                                     DeviceFormat eFormat ) override;
+                                                     DeviceFormat eFormat,
+                                                     bool bAlphaMaskTransparent = false ) override;
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics& rGraphics,
                                                      tools::Long &nDX, tools::Long &nDY,

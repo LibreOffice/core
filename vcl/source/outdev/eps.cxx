@@ -75,9 +75,6 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
         }
     }
 
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
-
     return bDrawn;
 }
 

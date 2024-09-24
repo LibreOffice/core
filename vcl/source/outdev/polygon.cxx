@@ -105,11 +105,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         }
 
         if(bSuccess)
-        {
-            if( mpAlphaVDev )
-                mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
             return;
-        }
     }
 
     if ( nPoly == 1 )
@@ -133,8 +129,6 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         // ImplLogicToDevicePixel calls
         ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
     }
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolyPolygon( rPolyPoly );
 }
 
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
@@ -218,11 +212,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         }
 
         if(bSuccess)
-        {
-            if( mpAlphaVDev )
-                mpAlphaVDev->DrawPolygon( rPoly );
             return;
-        }
     }
 
     tools::Polygon aPoly = ImplLogicToDevicePixel( rPoly );
@@ -243,8 +233,6 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
     {
         mpGraphics->DrawPolygon( nPoints, pPtAry, *this );
     }
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPolygon( rPoly );
 }
 
 // Caution: This method is nearly the same as
@@ -338,9 +326,6 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
         const tools::PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel(aToolsPolyPolygon);
         ImplDrawPolyPolygon(aPixelPolyPolygon.Count(), aPixelPolyPolygon);
     }
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->ImplDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
 }
 
 // #100127# Extracted from OutputDevice::DrawPolyPolygon()

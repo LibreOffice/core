@@ -128,14 +128,13 @@ void OutputDevice::DrawTransparent(
         const basegfx::B2DHomMatrix aFullTransform(ImplGetDeviceTransformation() * rObjectTransform);
         // TODO: this must not drop transparency for mpAlphaVDev case, but instead use premultiplied
         // alpha... but that requires using premultiplied alpha also for already drawn data
-        const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
 
         if (IsFillColor())
         {
             mpGraphics->DrawPolyPolygon(
                 aFullTransform,
                 aB2DPolyPolygon,
-                fAdjustedTransparency,
+                fTransparency,
                 *this);
         }
 
@@ -148,7 +147,7 @@ void OutputDevice::DrawTransparent(
                 mpGraphics->DrawPolyLine(
                     aFullTransform,
                     rPolygon,
-                    fAdjustedTransparency,
+                    fTransparency,
                     0.0, // tdf#124848 hairline
                     nullptr, // MM01
                     basegfx::B2DLineJoin::NONE,
@@ -169,9 +168,6 @@ void OutputDevice::DrawTransparent(
                     tools::PolyPolygon(aB2DPolyPoly),
                     static_cast< sal_uInt16 >(fTransparency * 100.0)));
         }
-
-        if (mpAlphaVDev)
-            mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
 
         return;
     }
@@ -273,13 +269,6 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
 void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
                                             sal_uInt16 nTransparencePercent )
 {
-    // #110958# Disable alpha VDev, we perform the necessary
-    VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
-
-    // operation explicitly further below.
-    if( mpAlphaVDev )
-        mpAlphaVDev = nullptr;
-
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = nullptr;
 
@@ -297,9 +286,7 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
 
         // #i66849# Added fast path for exactly rectangular
         // polygons
-        // #i83087# Naturally, system alpha blending cannot
-        // work with separate alpha VDev
-        if( !mpAlphaVDev && aPolyPoly.IsRect() )
+        if( aPolyPoly.IsRect() )
         {
             // setup Graphics only here (other cases delegate
             // to basic OutDev methods)
@@ -500,9 +487,6 @@ void OutputDevice::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     }
 
     mpMetaFile = pOldMetaFile;
-
-    // #110958# Restore disabled alpha VDev
-    mpAlphaVDev = pOldAlphaVDev;
 }
 
 void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
@@ -539,18 +523,6 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
 
     if (!bDrawn)
         EmulateDrawTransparent( rPolyPoly, nTransparencePercent );
-
-    // #110958# Apply alpha value also to VDev alpha channel
-    if( mpAlphaVDev )
-    {
-        const Color aFillCol( mpAlphaVDev->GetFillColor() );
-        sal_uInt8 nAlpha = 255 - sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100);
-        mpAlphaVDev->SetFillColor( Color(nAlpha, nAlpha, nAlpha) );
-
-        mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
-
-        mpAlphaVDev->SetFillColor( aFillCol );
-    }
 }
 
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,

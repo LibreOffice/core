@@ -104,9 +104,18 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp ) :
-        maBitmap     ( rBmp ),
-        maBitmapSize ( maBitmap.GetSizePixel() )
+        maBitmapSize ( rBmp.GetSizePixel() )
 {
+    if (rBmp.getPixelFormat() == vcl::PixelFormat::N32_BPP)
+    {
+        std::pair<Bitmap, AlphaMask> aPair = rBmp.SplitIntoColorAndAlpha();
+        maBitmap = std::move(aPair.first);
+        maAlphaMask = std::move(aPair.second);
+    }
+    else
+    {
+        maBitmap = rBmp;
+    }
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :

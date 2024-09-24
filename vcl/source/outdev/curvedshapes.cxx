@@ -64,9 +64,6 @@ void OutputDevice::DrawEllipse( const tools::Rectangle& rRect )
             mpGraphics->DrawPolygon( aRectPoly.GetSize(), pPtAry, *this );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawEllipse( rRect );
 }
 
 void OutputDevice::DrawArc( const tools::Rectangle& rRect,
@@ -106,9 +103,6 @@ void OutputDevice::DrawArc( const tools::Rectangle& rRect,
         Point* pPtAry = aArcPoly.GetPointAry();
         mpGraphics->DrawPolyLine( aArcPoly.GetSize(), pPtAry, *this );
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawArc( rRect, rStartPt, rEndPt );
 }
 
 void OutputDevice::DrawPie( const tools::Rectangle& rRect,
@@ -155,9 +149,6 @@ void OutputDevice::DrawPie( const tools::Rectangle& rRect,
             mpGraphics->DrawPolygon( aPiePoly.GetSize(), pPtAry, *this );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawPie( rRect, rStartPt, rEndPt );
 }
 
 void OutputDevice::DrawChord( const tools::Rectangle& rRect,
@@ -204,9 +195,6 @@ void OutputDevice::DrawChord( const tools::Rectangle& rRect,
             mpGraphics->DrawPolygon( aChordPoly.GetSize(), pPtAry, *this );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawChord( rRect, rStartPt, rEndPt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

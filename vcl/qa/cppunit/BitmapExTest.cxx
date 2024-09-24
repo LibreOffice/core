@@ -58,11 +58,6 @@ void BitmapExTest::testGetPixelColor24_8()
 
 void BitmapExTest::testGetPixelColor32()
 {
-    // Check backend capabilities and return from the test successfully
-    // if the backend doesn't support 32-bit bitmap
-    if (!ImplGetSVData()->mpDefInst->supportsBitmap32())
-        return;
-
     Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N32_BPP);
     {
         BitmapScopedWriteAccess pWriteAccess(aBitmap);

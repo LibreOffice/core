@@ -152,6 +152,7 @@ struct VCL_DLLPUBLIC CairoCommon
     cairo_t* createTmpCompatibleCairoContext() const;
 
     static void applyColor(cairo_t* cr, Color rColor, double fTransparency = 0.0);
+    static void applyColor2(cairo_t* cr, Color rColor);
     void clipRegion(cairo_t* cr);
     static void clipRegion(cairo_t* cr, const vcl::Region& rClipRegion);
 
@@ -224,7 +225,7 @@ struct VCL_DLLPUBLIC CairoCommon
                   bool bAntiAlias);
 
     std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                         tools::Long nHeight);
+                                         tools::Long nHeight, bool bWithoutAlpha);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
 

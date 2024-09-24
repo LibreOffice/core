@@ -150,16 +150,7 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
 
 BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) const
 {
-    if (!mpAlphaVDev)
-        return BitmapEx(GetBitmap(rSrcPt, rSize));
-
-    // #110958# Extract alpha value from VDev, if any
-    Bitmap aAlphaBitmap(mpAlphaVDev->GetBitmap(rSrcPt, rSize));
-
-    if (aAlphaBitmap.getPixelFormat() > vcl::PixelFormat::N8_BPP)
-        aAlphaBitmap.Convert(BmpConversion::N8BitNoConversion);
-
-    return BitmapEx(GetBitmap(rSrcPt, rSize), AlphaMask(aAlphaBitmap));
+    return BitmapEx(GetBitmap( rSrcPt, rSize ));
 }
 
 void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
@@ -198,12 +189,6 @@ void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSi
             && "I removed some code here that will need to be restored");
 
     mpGraphics->DrawBitmap(aPosAry, *pSalSrcBmp, *this);
-
-    if (mpAlphaVDev)
-    {
-        // #i32109#: Make bitmap area opaque
-        mpAlphaVDev->ImplFillOpaqueRectangle(tools::Rectangle(rDestPt, rDestSize));
-    }
 }
 
 bool OutputDevice::DrawTransformBitmapExDirect(
@@ -224,33 +209,17 @@ bool OutputDevice::DrawTransformBitmapExDirect(
     {
         aAlphaBitmap = rBitmapEx.GetAlphaMask();
     }
-    else if (mpAlphaVDev)
-    {
-        aAlphaBitmap = AlphaMask(rBitmapEx.GetSizePixel());
-        aAlphaBitmap.Erase(0); // opaque
-    }
 
     SalBitmap* pSalAlphaBmp = aAlphaBitmap.GetBitmap().ImplGetSalBitmap().get();
 
-    if (!mpGraphics->DrawTransformedBitmap(
+    return mpGraphics->DrawTransformedBitmap(
         aNull,
         aTopX,
         aTopY,
         *pSalSrcBmp,
         pSalAlphaBmp,
         fAlpha,
-        *this))
-            return false;
-
-    if (mpAlphaVDev)
-    {
-        // Merge bitmap alpha to alpha device
-        AlphaMask aAlpha(rBitmapEx.GetSizePixel());
-        aAlpha.Erase( ( 1 - fAlpha ) * 255 );
-        mpAlphaVDev->DrawTransformBitmapExDirect(aFullTransform, BitmapEx(aAlpha.GetBitmap(), aAlphaBitmap));
-    }
-
-    return true;
+        *this);
 };
 
 bool OutputDevice::TransformAndReduceBitmapExToTargetRange(

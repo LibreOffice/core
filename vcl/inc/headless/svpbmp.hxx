@@ -35,7 +35,7 @@ public:
     SAL_DLLPRIVATE bool        ImplCreate(const Size& rSize,
                            vcl::PixelFormat ePixelFormat,
                            const BitmapPalette& rPalette,
-                           bool bClear);
+                           bool bClear, bool bWithoutAlpha = false);
 
     // SalBitmap
     SAL_DLLPRIVATE virtual bool            Create(const Size& rSize,

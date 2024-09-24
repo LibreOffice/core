@@ -274,7 +274,8 @@ public:
     SAL_DLLPRIVATE std::shared_ptr<SalBitmap>  GetBitmap(
                                     tools::Long nX, tools::Long nY,
                                     tools::Long nWidth, tools::Long nHeight,
-                                    const OutputDevice& rOutDev );
+                                    const OutputDevice& rOutDev,
+                                    bool bWithoutAlpha );
 
     SAL_DLLPRIVATE Color                       GetPixel(
                                     tools::Long nX, tools::Long nY,
@@ -497,7 +498,7 @@ protected:
                                     const SalBitmap& rSalBitmap,
                                     Color nMaskColor ) = 0;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
+    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, bool bWithoutAlpha ) = 0;
 
     virtual Color               getPixel( tools::Long nX, tools::Long nY ) = 0;
 
@@ -812,9 +813,9 @@ public:
         GetImpl()->drawMask(rPosAry, rSalBitmap, nMaskColor);
     }
 
-    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight) override
+    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, bool bWithoutAlpha) override
     {
-        return GetImpl()->getBitmap(nX, nY, nWidth, nHeight);
+        return GetImpl()->getBitmap(nX, nY, nWidth, nHeight, bWithoutAlpha);
     }
 
     Color getPixel(tools::Long nX, tools::Long nY) override

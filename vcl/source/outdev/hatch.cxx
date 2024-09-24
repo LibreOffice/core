@@ -92,9 +92,6 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         EnableMapMode( bOldMap );
         mpMetaFile = pOldMetaFile;
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawHatch( rPolyPoly, rHatch );
 }
 
 void OutputDevice::AddHatchActions( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch,

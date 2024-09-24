@@ -1655,7 +1655,7 @@ TestResult OutputDeviceTestBitmap::checkBlend(const BitmapEx& rBitmapEx)
 
     std::vector<Color> aExpected
     {
-        COL_WHITE, COL_WHITE, COL_YELLOW, constBackgroundColor,
+        COL_BLACK, COL_BLACK, COL_YELLOW, constBackgroundColor,
         constBackgroundColor, aBlendedColor, constBackgroundColor
     };
     Bitmap aBitmap(rBitmapEx.GetBitmap());

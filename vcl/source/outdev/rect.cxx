@@ -81,9 +81,6 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
         InitFillColor();
 
     mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), *this );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect );
 }
 
 void OutputDevice::DrawRect( const tools::Rectangle& rRect,
@@ -140,9 +137,6 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect,
                 mpGraphics->DrawPolygon( aRoundRectPoly.GetSize(), pPtAry, *this );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawRect( rRect, nHorzRound, nVertRound );
 }
 
 void OutputDevice::Invert( const tools::Rectangle& rRect, InvertFlags nFlags )
@@ -332,9 +326,6 @@ void OutputDevice::DrawGrid( const tools::Rectangle& rRect, const Size& rDist, D
     }
 
     EnableMapMode( bOldMap );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
 }
 
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix )

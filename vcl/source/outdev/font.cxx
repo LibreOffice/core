@@ -82,21 +82,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
     }
     maFont      = aFont;
     mbNewFont   = true;
-
-    if( !mpAlphaVDev )
-        return;
-
-    // #i30463#
-    // Since SetFont might change the text color, apply that only
-    // selectively to alpha vdev (which normally paints opaque text
-    // with COL_BLACK)
-    if( aFont.GetColor() != COL_TRANSPARENT )
-    {
-        mpAlphaVDev->SetTextColor( COL_ALPHA_OPAQUE  );
-        aFont.SetColor( COL_TRANSPARENT );
-    }
-
-    mpAlphaVDev->SetFont( aFont );
 }
 
 FontMetric OutputDevice::GetFontMetricFromCollection(int nDevFontIndex) const
@@ -147,9 +132,6 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     bool bRC = mpGraphics->AddTempDevFont( mxFontCollection.get(), rFileURL, rFontName );
     if( !bRC )
         return false;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
 
     return true;
 }

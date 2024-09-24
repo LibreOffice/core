@@ -31,12 +31,13 @@
 #include <sal/log.hxx>
 #include <o3tl/temporary.hxx>
 
-HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppData)
+HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppData, bool bAlphaMaskTransparent)
 {
     HBITMAP hBitmap;
 
     if ( nBitCount == 1 )
     {
+        assert(!bAlphaMaskTransparent && "does not make sense here");
         hBitmap = CreateBitmap( static_cast<int>(nDX), static_cast<int>(nDY), 1, 1, nullptr );
         SAL_WARN_IF( !hBitmap, "vcl", "CreateBitmap failed: " << comphelper::WindowsErrorString( GetLastError() ) );
         ppData = nullptr;
@@ -52,7 +53,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
         BITMAPINFO aBitmapInfo;
         aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
         aBitmapInfo.bmiHeader.biWidth = nDX;
-        aBitmapInfo.bmiHeader.biHeight = nDY;
+        aBitmapInfo.bmiHeader.biHeight = -nDY; // negative for top-down bitmap
         aBitmapInfo.bmiHeader.biPlanes = 1;
         aBitmapInfo.bmiHeader.biBitCount = nBitCount;
         aBitmapInfo.bmiHeader.biCompression = BI_RGB;
@@ -62,10 +63,23 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
         aBitmapInfo.bmiHeader.biClrUsed = 0;
         aBitmapInfo.bmiHeader.biClrImportant = 0;
 
+        void* pData = nullptr;
         hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
-                                    DIB_RGB_COLORS, ppData, nullptr,
+                                    DIB_RGB_COLORS, &pData, nullptr,
                                     0 );
         SAL_WARN_IF( !hBitmap, "vcl", "CreateDIBSection failed: " << comphelper::WindowsErrorString( GetLastError() ) );
+
+        if (hBitmap)
+        {
+            if (bAlphaMaskTransparent)
+            {
+                assert(nBitCount == 32);
+                memset(pData, nDX * nDY * 4, 0);
+            }
+
+            if (ppData)
+                *ppData = pData;
+        }
     }
 
     return hBitmap;
@@ -73,7 +87,8 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, to
 
 std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphics& rSGraphics,
                                                        tools::Long nDX, tools::Long nDY,
-                                                       DeviceFormat /*eFormat*/ )
+                                                       DeviceFormat eFormat,
+                                                       bool bAlphaMaskTransparent )
 {
     WinSalGraphics& rGraphics = static_cast<WinSalGraphics&>(rSGraphics);
 
@@ -83,13 +98,14 @@ std::unique_ptr<SalVirtualDevice> WinSalInstance::CreateVirtualDevice( SalGraphi
     if (!hDC)
         return nullptr;
 
-    const sal_uInt16 nBitCount = 0;
+    const sal_uInt16 nBitCount = eFormat == DeviceFormat::WITHOUT_ALPHA ? 0 : 32;
     // #124826# continue even if hBmp could not be created
     // if we would return a failure in this case, the process
     // would terminate which is not required
     HBITMAP hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(rGraphics.getHDC(),
                                                            nDX, nDY, nBitCount,
-                                                           &o3tl::temporary<void*>(nullptr));
+                                                           &o3tl::temporary<void*>(nullptr),
+                                                           bAlphaMaskTransparent);
 
     auto pVDev = std::make_unique<WinSalVirtualDevice>(hDC, hBmp, nBitCount,
                                                        /*bForeignDC*/false, nDX, nDY, rGraphics.isScreen());
@@ -195,13 +211,13 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
     mbGraphicsAcquired = false;
 }
 
-bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY )
+bool WinSalVirtualDevice::SetSize( tools::Long nDX, tools::Long nDY, bool bAlphaMaskTransparent )
 {
     if( mbForeignDC || !mhBmp )
         return true;    // ???
 
     HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount,
-                                             &o3tl::temporary<void*>(nullptr));
+                                             &o3tl::temporary<void*>(nullptr), bAlphaMaskTransparent);
     if (!hNewBmp)
     {
         mnWidth = 0;

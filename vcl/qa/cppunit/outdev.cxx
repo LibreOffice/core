@@ -890,6 +890,7 @@ public:
     void ReleaseGraphics(bool) override {}
     bool UsePolyPolygonForComplexGradient() override { return false; }
     bool CanAnimate() const override { return false; }
+    virtual bool HasAlpha() const override { return false; }
 
     bool testShouldDrawWavePixelAsRect(tools::Long nLineWidth)
     {

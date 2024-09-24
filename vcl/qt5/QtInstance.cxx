@@ -404,7 +404,8 @@ void QtInstance::DestroyObject(SalObject* pObject)
 
 std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& rGraphics,
                                                                   tools::Long nDX, tools::Long nDY,
-                                                                  DeviceFormat /*eFormat*/)
+                                                                  DeviceFormat /*eFormat*/,
+                                                                  bool bAlphaMaskTransparent)
 {
     if (m_bUseCairo)
     {
@@ -413,13 +414,13 @@ std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& r
         // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
         std::unique_ptr<SalVirtualDevice> pVD(
             new QtSvpVirtualDevice(pSvpSalGraphics->getSurface(), /*pPreExistingTarget*/ nullptr));
-        pVD->SetSize(nDX, nDY);
+        pVD->SetSize(nDX, nDY, bAlphaMaskTransparent);
         return pVD;
     }
     else
     {
         std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
-        pVD->SetSize(nDX, nDY);
+        pVD->SetSize(nDX, nDY, bAlphaMaskTransparent);
         return pVD;
     }
 }
@@ -436,13 +437,13 @@ QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, tools::Long& nDX, tools:
         cairo_surface_t* pPreExistingTarget = static_cast<cairo_surface_t*>(rGd.pSurface);
         std::unique_ptr<SalVirtualDevice> pVD(
             new QtSvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
-        pVD->SetSize(nDX, nDY);
+        pVD->SetSize(nDX, nDY, /*bAlphaMaskTransparent*/ false);
         return pVD;
     }
     else
     {
         std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(/*scale*/ 1));
-        pVD->SetSize(nDX, nDY);
+        pVD->SetSize(nDX, nDY, /*bAlphaMaskTransparent*/ false);
         return pVD;
     }
 }

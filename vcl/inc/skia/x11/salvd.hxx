@@ -41,7 +41,8 @@ public:
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
     // Set new size, without saving the old contents
-    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
+    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY,
+                         bool bAlphaMaskTransparent) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

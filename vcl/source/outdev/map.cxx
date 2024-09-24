@@ -620,14 +620,10 @@ vcl::Region OutputDevice::ImplPixelToDevicePixel( const vcl::Region& rRegion ) c
 void OutputDevice::EnableMapMode( bool bEnable )
 {
     mbMap = bEnable;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->EnableMapMode( bEnable );
 }
 
 void OutputDevice::SetMapMode()
 {
-
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaMapModeAction( MapMode() ) );
 
@@ -648,9 +644,6 @@ void OutputDevice::SetMapMode()
         // #i75163#
         ImplInvalidateViewTransform();
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetMapMode();
 }
 
 void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
@@ -666,9 +659,6 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     // do nothing if MapMode was not changed
     if ( maMapMode == rNewMapMode )
         return;
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetMapMode( rNewMapMode );
 
      // if default MapMode calculate nothing
     bool bOldMap = mbMap;
@@ -815,9 +805,6 @@ void OutputDevice::SetRelativeMapMode( const MapMode& rNewMapMode )
                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX );
     mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetRelativeMapMode( rNewMapMode );
 }
 
 // #i75163#
@@ -1867,9 +1854,6 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
                                        maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX );
     mnOutOffLogicY = ImplPixelToLogic( mnOutOffOrigY, mnDPIY,
                                        maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY );
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->SetPixelOffset( rOffset );
 }
 
 

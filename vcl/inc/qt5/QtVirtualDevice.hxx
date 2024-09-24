@@ -44,7 +44,8 @@ public:
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
 
-    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY) override;
+    virtual bool SetSize(tools::Long nNewDX, tools::Long nNewDY,
+                         bool bAlphaMaskTransparent) override;
 
     // SalGeometryProvider
     virtual tools::Long GetWidth() const override;

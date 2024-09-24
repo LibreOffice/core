@@ -61,8 +61,6 @@ class BackendTest : public test::BootstrapFixture
         }
     }
 
-    bool is32bppSupported() { return ImplGetSVData()->mpDefInst->supportsBitmap32(); }
-
 public:
     BackendTest()
         : BootstrapFixture(true, false)
@@ -543,7 +541,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawBitmap(vcl::PixelFormat::N32_BPP);
         exportImage(u"09-01_bitmap_test_32bpp.png"_ustr, aBitmap);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
-        if (SHOULD_ASSERT && is32bppSupported())
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -555,7 +553,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawTransformedBitmap(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkTransformedBitmap(aBitmap);
         exportImage(u"09-02_transformed_bitmap_test_32bpp.png"_ustr, aBitmap);
-        if (SHOULD_ASSERT && is32bppSupported())
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -567,7 +565,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawBitmapExWithAlpha(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBitmapExWithAlpha(aBitmap);
         exportImage(u"09-03_bitmapex_with_alpha_test_32bpp.png"_ustr, aBitmap);
-        if (SHOULD_ASSERT && is32bppSupported())
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -579,7 +577,7 @@ public:
         Bitmap aBitmap = aOutDevTest.setupDrawMask(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkMask(aBitmap);
         exportImage(u"09-04_mask_test_32bpp.png"_ustr, aBitmap);
-        if (SHOULD_ASSERT && is32bppSupported())
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 
@@ -591,7 +589,7 @@ public:
         BitmapEx aBitmapEx = aOutDevTest.setupDrawBlend(vcl::PixelFormat::N32_BPP);
         auto eResult = vcl::test::OutputDeviceTestBitmap::checkBlend(aBitmapEx);
         exportImage(u"09-05_blend_test_32bpp.png"_ustr, aBitmapEx);
-        if (SHOULD_ASSERT && is32bppSupported())
+        if (SHOULD_ASSERT)
             CPPUNIT_ASSERT(eResult != vcl::test::TestResult::Failed);
     }
 

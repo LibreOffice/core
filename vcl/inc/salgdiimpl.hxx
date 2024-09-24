@@ -163,7 +163,7 @@ public:
                 const SalBitmap& rSalBitmap,
                 Color nMaskColor ) = 0;
 
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
+    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, bool bWithoutAlpha ) = 0;
 
     virtual Color getPixel( tools::Long nX, tools::Long nY ) = 0;
 

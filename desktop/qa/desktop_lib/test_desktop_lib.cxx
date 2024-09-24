@@ -2522,6 +2522,7 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
     constexpr int nPixelX = 128;
     constexpr int nPixelY = 128 * nCanvasWidth;
 
+    // this is BGRA format data
     std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
 
     // Both parts should be painted with dark scheme

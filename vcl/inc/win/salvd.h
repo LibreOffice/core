@@ -54,9 +54,10 @@ public:
 
     virtual SalGraphics*    AcquireGraphics() override;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) override;
-    virtual bool            SetSize( tools::Long nNewDX, tools::Long nNewDY ) override;
+    virtual bool            SetSize( tools::Long nNewDX, tools::Long nNewDY, bool bAlphaMaskTransparent ) override;
 
-    static HBITMAP ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount, void **ppDummy);
+    static HBITMAP ImplCreateVirDevBitmap(HDC hDC, tools::Long nDX, tools::Long nDY, sal_uInt16 nBitCount,
+                                           void **ppDummy, bool bAlphaMaskTransparent = false);
 
     // SalGeometryProvider
     virtual tools::Long GetWidth() const override { return mnWidth; }

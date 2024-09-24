@@ -139,7 +139,7 @@ public:
                           Color nMaskColor) override;
 
     virtual std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                                 tools::Long nHeight) override;
+                                                 tools::Long nHeight, bool bWithoutAlpha) override;
 
     virtual Color getPixel(tools::Long nX, tools::Long nY) override;
 
@@ -387,6 +387,8 @@ inline SkPaint SkiaSalGraphicsImpl::makePaintInternal() const
         SkiaHelper::setBlenderInvert(&paint);
     else if (mXorMode == XorMode::Xor)
         SkiaHelper::setBlenderXor(&paint);
+    else
+        paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
     return paint;
 }
 
@@ -415,7 +417,19 @@ inline SkPaint SkiaSalGraphicsImpl::makeFillPaint(double transparency) const
     return paint;
 }
 
-inline SkPaint SkiaSalGraphicsImpl::makeBitmapPaint() const { return makePaintInternal(); }
+inline SkPaint SkiaSalGraphicsImpl::makeBitmapPaint() const
+{
+    SkPaint paint;
+    // Invert could be done using a blend mode like invert() does, but
+    // intentionally use SkBlender to make sure it's not overwritten
+    // by a blend mode set later (which would be probably a mistake),
+    // and so that the drawing color does not actually matter.
+    if (mXorMode == XorMode::Invert)
+        SkiaHelper::setBlenderInvert(&paint);
+    else if (mXorMode == XorMode::Xor)
+        SkiaHelper::setBlenderXor(&paint);
+    return paint;
+}
 
 inline SkPaint SkiaSalGraphicsImpl::makeGradientPaint() const { return makePaintInternal(); }
 

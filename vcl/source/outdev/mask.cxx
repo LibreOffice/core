@@ -140,23 +140,6 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
 
         }
     }
-
-    // TODO: Use mask here
-    if( !mpAlphaVDev )
-        return;
-
-    const Bitmap aAlphaMask( rMask.CreateMask( rMaskColor ) );
-
-    // #i25167# Restrict mask painting to _opaque_ areas
-    // of the mask, otherwise we spoil areas where no
-    // bitmap content was ever visible. Interestingly
-    // enough, this can be achieved by taking the mask as
-    // the transparency mask of itself
-    mpAlphaVDev->DrawBitmapEx( rDestPt,
-                               rDestSize,
-                               rSrcPtPixel,
-                               rSrcSizePixel,
-                               BitmapEx( aAlphaMask, rMask ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

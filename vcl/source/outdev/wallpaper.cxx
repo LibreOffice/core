@@ -54,9 +54,6 @@ void OutputDevice::DrawWallpaper( const tools::Rectangle& rRect,
                                rWallpaper );
         }
     }
-
-    if( mpAlphaVDev )
-        mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
 void OutputDevice::DrawWallpaper( tools::Long nX, tools::Long nY,
@@ -117,9 +114,6 @@ void OutputDevice::Erase()
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( eRasterOp );
     }
-    // If we went into the "if ( mbBackground )" section, then we have already erased the mpAlphaDev.
-    else if( mpAlphaVDev )
-        mpAlphaVDev->Erase();
 }
 
 void OutputDevice::Erase(const tools::Rectangle& rRect)
@@ -130,9 +124,6 @@ void OutputDevice::Erase(const tools::Rectangle& rRect)
     DrawWallpaper(rRect, GetBackground());
     if ( eRasterOp != RasterOp::OverPaint )
         SetRasterOp( eRasterOp );
-
-    if (mpAlphaVDev)
-        mpAlphaVDev->Erase(rRect);
 }
 
 void OutputDevice::DrawBitmapWallpaper( tools::Long nX, tools::Long nY,

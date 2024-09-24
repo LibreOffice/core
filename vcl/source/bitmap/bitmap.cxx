@@ -1777,4 +1777,40 @@ const basegfx::SystemDependentDataHolder* Bitmap::accessSystemDependentDataHolde
     return mxSalBmp.get();
 }
 
+std::pair<Bitmap, AlphaMask> Bitmap::SplitIntoColorAndAlpha() const
+{
+    assert(getPixelFormat() == vcl::PixelFormat::N32_BPP && "only valid to call this when this is a 32-bit combined color+alpha bitmap");
+    Bitmap aColorBmp(GetSizePixel(), vcl::PixelFormat::N24_BPP);
+    AlphaMask aAlphaBmp(GetSizePixel());
+
+    // We will probably need to make this more efficient by pushing it down to the *SalBitmap implementations,
+    // but for now, do the simple and safe thing.
+    {
+        BitmapScopedReadAccess pThisAcc(*this);
+        BitmapScopedWriteAccess pColorAcc(aColorBmp);
+        BitmapScopedWriteAccess pAlphaAcc(aAlphaBmp);
+
+        const tools::Long nHeight(pThisAcc->Height());
+        const tools::Long nWidth(pThisAcc->Width());
+
+        for (tools::Long y = 0; y < nHeight; ++y)
+        {
+            Scanline pScanlineRead = pThisAcc->GetScanline( y );
+            Scanline pScanlineColor = pColorAcc->GetScanline( y );
+            Scanline pScanlineAlpha = pAlphaAcc->GetScanline( y );
+            for (tools::Long x = 0; x < nWidth; ++x)
+            {
+                BitmapColor aColor = pThisAcc->GetPixelFromData(pScanlineRead, x);
+
+                // write result back
+                pColorAcc->SetPixelOnData(pScanlineColor, x, aColor);
+                pAlphaAcc->SetPixelOnData(pScanlineAlpha, x, BitmapColor(aColor.GetAlpha()));
+            }
+        }
+    }
+
+    return { std::move(aColorBmp), std::move(aAlphaBmp) };
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

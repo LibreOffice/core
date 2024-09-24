@@ -681,11 +681,11 @@ void SalGraphics::DrawMask( const SalTwoRect& rPosAry,
         drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 
-std::shared_ptr<SalBitmap> SalGraphics::GetBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice& rOutDev )
+std::shared_ptr<SalBitmap> SalGraphics::GetBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, const OutputDevice& rOutDev, bool bWithoutAlpha )
 {
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
         mirror( nX, nWidth, rOutDev );
-    return getBitmap( nX, nY, nWidth, nHeight );
+    return getBitmap( nX, nY, nWidth, nHeight, bWithoutAlpha );
 }
 
 Color SalGraphics::GetPixel( tools::Long nX, tools::Long nY, const OutputDevice& rOutDev )

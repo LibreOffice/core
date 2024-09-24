@@ -566,6 +566,12 @@ public:
     // access to SystemDependentDataHolder, to support overload in derived class(es)
     const basegfx::SystemDependentDataHolder* accessSystemDependentDataHolder() const;
 
+
+    /**
+      Can only be called on 32-bit bitmaps. Returns data split into color bitmap and alpha bitmap.
+    */
+    std::pair<Bitmap, AlphaMask> SplitIntoColorAndAlpha() const;
+
 public:
     /** ReassignWithSize and recalculate bitmap.
 
