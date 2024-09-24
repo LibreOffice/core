@@ -3366,9 +3366,9 @@ void CairoPixelProcessor2D::processSvgLinearGradientPrimitive2D(
 
     for (const auto& entry : rGradientEntries)
     {
-        const basegfx::BColor& rColor(entry.getColor());
-        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), rColor.getRed(),
-                                          rColor.getGreen(), rColor.getBlue(), entry.getOpacity());
+        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(entry.getColor()));
+        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), aColor.getRed(),
+                                          aColor.getGreen(), aColor.getBlue(), entry.getOpacity());
     }
 
     // set SpreadMethod. Note that we have no SpreadMethod::None because the
@@ -3462,9 +3462,9 @@ void CairoPixelProcessor2D::processSvgRadialGradientPrimitive2D(
 
     for (const auto& entry : rGradientEntries)
     {
-        const basegfx::BColor& rColor(entry.getColor());
-        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), rColor.getRed(),
-                                          rColor.getGreen(), rColor.getBlue(), entry.getOpacity());
+        const basegfx::BColor aColor(maBColorModifierStack.getModifiedColor(entry.getColor()));
+        cairo_pattern_add_color_stop_rgba(pPattern, entry.getOffset(), aColor.getRed(),
+                                          aColor.getGreen(), aColor.getBlue(), entry.getOpacity());
     }
 
     // set SpreadMethod
