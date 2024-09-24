@@ -157,6 +157,8 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 
         // tdf#129808 Enable compatible grid font metrics for documents with noLeading
         m_pImpl->SetDocumentSettingsProperty(u"MsWordCompGridMetrics"_ustr, uno::Any(true));
+        // tdf#161233 pictures with wrap polygon should not be clipped
+        m_pImpl->SetDocumentSettingsProperty(u"NoClippingWithWrapPolygon"_ustr, uno::Any(true));
     }
 
     // Initialize RDF metadata, to be able to add statements during the import.

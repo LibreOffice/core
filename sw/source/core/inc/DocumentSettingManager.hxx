@@ -189,6 +189,7 @@ class DocumentSettingManager final :
     bool mbPaintHellOverHeaderFooter : 1; // tdf#160198
     bool mbMinRowHeightInclBorder : 1; // tdf#155229
     bool mbMsWordCompGridMetrics : 1; // tdf#129808
+    bool mbNoClippingWithWrapPolygon : 1; // tdf#161233
 
 public:
 

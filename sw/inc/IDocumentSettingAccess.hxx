@@ -141,6 +141,8 @@ enum class DocumentSettingId
     MIN_ROW_HEIGHT_INCL_BORDER,
     // tdf#129808 MS Word always includes ext leading for text grid line height
     MS_WORD_COMP_GRID_METRICS,
+    // tdf#161233 pictures with wrap polygon should not be clipped
+    NO_CLIPPING_WITH_WRAP_POLYGON,
 };
 
 /** Provides access to settings of a document

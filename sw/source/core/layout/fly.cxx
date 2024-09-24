@@ -443,7 +443,16 @@ void SwFlyFrame::InitDrawObj(SwFrame& rAnchorFrame)
         if (!rAnchorFrame.FindFooterOrHeader())
             nHellId = rIDDMA.GetHeaderFooterHellId();
     }
+    bool bNoClippingWithWrapPolygon = rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
+    if (bNoClippingWithWrapPolygon && isOpaque)
+    {
+        if (GetFrameFormat()->GetSurround().IsContour())
+        {
+            GetVirtDrawObj()->SetLayer(nHellId);
+            return;
+        }
 
+    }
     GetVirtDrawObj()->SetLayer( isOpaque ? nHeavenId :nHellId );
 }
 
@@ -1050,10 +1059,11 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 nHellId = rIDDMA.GetHeaderFooterHellId();
             }
-
-            const SdrLayerID nId = GetFormat()->GetOpaque().GetValue() ?
-                             rIDDMA.GetHeavenId() :
-                             nHellId;
+            bool bNoClippingWithWrapPolygon = rIDSA.get(DocumentSettingId::NO_CLIPPING_WITH_WRAP_POLYGON);
+            SdrLayerID nId = nHellId;
+            if (GetFormat()->GetOpaque().GetValue() &&
+                !(bNoClippingWithWrapPolygon && GetFrameFormat()->GetSurround().IsContour()))
+                nId = rIDDMA.GetHeavenId();
             GetVirtDrawObj()->SetLayer( nId );
 
             if ( Lower() )
