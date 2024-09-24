@@ -41,6 +41,12 @@ namespace
    7. before the final form of other characters that can be connected.
 */
 
+/*
+   The LibreOffice implementation modifies the above rules, as follows:
+
+   - tdf#65344: Kashida must not be inserted before the final form of Yeh.
+*/
+
 #define IS_JOINING_GROUP(c, g) (u_getIntPropertyValue((c), UCHAR_JOINING_GROUP) == U_JG_##g)
 #define isAinChar(c) IS_JOINING_GROUP((c), AIN)
 #define isAlefChar(c) IS_JOINING_GROUP((c), ALEF)
@@ -145,6 +151,26 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         --nWordLen;
     }
 
+    auto fnTryInsertBefore = [&rWord, &nIdx, &nPrevIdx, &nKashidaPos, &nPriorityLevel,
+                              &nWordLen](sal_Int32 nNewPriority) {
+        // Exclusions:
+
+        // #i98410#: prevent ZWNJ expansion
+        if (rWord[nPrevIdx] == 0x200C || rWord[nPrevIdx + 1] == 0x200C)
+        {
+            return;
+        }
+
+        // tdf#65344: Do not insert kashida before a final Yeh
+        if (nIdx == (nWordLen - 1) && isYehChar(rWord[nIdx]))
+        {
+            return;
+        }
+
+        nKashidaPos = nPrevIdx;
+        nPriorityLevel = nNewPriority;
+    };
+
     while (nIdx < nWordLen)
     {
         cCh = rWord[nIdx];
@@ -153,19 +179,18 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         // after user inserted kashida
         if (0x640 == cCh)
         {
+            // Always respect a user-inserted kashida
             nKashidaPos = nIdx;
             nPriorityLevel = 0;
         }
 
         // 2. Priority:
         // after a Seen or Sad
-        if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
+        if (nPriorityLevel >= 1)
         {
-            if (isSeenOrSadChar(cCh)
-                && (rWord[nIdx + 1] != 0x200C)) // #i98410#: prevent ZWNJ expansion
+            if (isSeenOrSadChar(cPrevCh))
             {
-                nKashidaPos = nIdx;
-                nPriorityLevel = 1;
+                fnTryInsertBefore(1);
             }
         }
 
@@ -182,8 +207,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
                 // check if character is connectable to previous character,
                 if (CanConnectToPrev(cCh, cPrevCh))
                 {
-                    nKashidaPos = nPrevIdx;
-                    nPriorityLevel = 2;
+                    fnTryInsertBefore(2);
                 }
             }
         }
@@ -202,8 +226,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
                 // check if character is connectable to previous character,
                 if (CanConnectToPrev(cCh, cPrevCh))
                 {
-                    nKashidaPos = nPrevIdx;
-                    nPriorityLevel = 3;
+                    fnTryInsertBefore(3);
                 }
             }
         }
@@ -222,8 +245,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
                     // check if character is connectable to previous character,
                     if (CanConnectToPrev(cCh, cPrevCh))
                     {
-                        nKashidaPos = nPrevIdx;
-                        nPriorityLevel = 4;
+                        fnTryInsertBefore(4);
                     }
                 }
             }
@@ -242,8 +264,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
                 // check if character is connectable to previous character,
                 if (CanConnectToPrev(cCh, cPrevCh))
                 {
-                    nKashidaPos = nPrevIdx;
-                    nPriorityLevel = 5;
+                    fnTryInsertBefore(5);
                 }
             }
         }
@@ -251,15 +272,15 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         // other connecting possibilities
         if (nPriorityLevel >= 6 && nIdx > 0)
         {
-            // Reh, Zain
-            if (isRehChar(cCh))
+            // Reh, Zain (right joining) final form may appear in the middle of word
+            // All others except Yeh - only at end of word
+            if (isRehChar(cCh) || (0x60C <= cCh && 0x6FE >= cCh && nIdx == nWordLen - 1))
             {
                 SAL_WARN_IF(0 == cPrevCh, "i18n", "No previous character");
                 // check if character is connectable to previous character,
                 if (CanConnectToPrev(cCh, cPrevCh))
                 {
-                    nKashidaPos = nPrevIdx;
-                    nPriorityLevel = 6;
+                    fnTryInsertBefore(6);
                 }
             }
         }
