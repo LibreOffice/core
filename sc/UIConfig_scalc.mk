@@ -95,6 +95,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/autoformattable \
 	sc/uiconfig/scalc/ui/autosum \
 	sc/uiconfig/scalc/ui/cellprotectionpage \
+	sc/uiconfig/scalc/ui/duplicaterecordsdlg \
 	sc/uiconfig/scalc/ui/changesourcedialog \
 	sc/uiconfig/scalc/ui/chardialog \
 	sc/uiconfig/scalc/ui/checkwarningdialog \

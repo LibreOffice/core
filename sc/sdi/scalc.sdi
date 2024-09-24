@@ -6054,6 +6054,32 @@ SfxBoolItem ViewValueHighlighting FID_TOGGLESYNTAX
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem HandleDuplicateRecords FID_HANDLEDUPLICATERECORDS
+(
+    SfxBoolItem Remove FID_HANDLEDUPLICATERECORDS,
+    SfxBoolItem IncludesHeaders FN_PARAM_1,
+    SfxBoolItem DuplicateRows FN_PARAM_2,
+    SfxInt32Item StartColumn FN_PARAM_3,
+    SfxInt32Item StartRow FN_PARAM_4,
+    SfxInt32Item EndColumn FN_PARAM_5,
+    SfxInt32Item EndRow FN_PARAM_6,
+    SfxInt32Item TabNo FN_PARAM_7
+)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 SfxBoolItem ViewColumnRowHighlighting FID_TOGGLECOLROWHIGHLIGHTING
 
 [

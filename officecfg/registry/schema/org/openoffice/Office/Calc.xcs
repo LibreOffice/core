@@ -1791,6 +1791,36 @@
       <info>
         <desc>Contains miscellaneous settings.</desc>
       </info>
+      <group oor:name="HandleDuplicateRecords">
+        <info>
+          <desc>Defines the settings for 'handle duplicate records' dialog.</desc>
+          <label>Handle duplicate records settings</label>
+        </info>
+        <prop oor:name="DataIncludesHeaders" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether selected data includes headers in the 'handle duplicate records' dialog.</desc>
+            <label>Data includes row/column headers</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveDuplicateRows" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether to remove rows, or columns in the 'handle duplicate records' dialog.</desc>
+            <label>Data includes row/column headers</label>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="RemoveRecords" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Data - Duplicate Records... -->
+          <info>
+            <desc>Indicates whether to select or remove records in the 'handle duplicate records' dialog.</desc>
+            <label>Select or remove</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
       <group oor:name="DefaultObjectSize">
         <info>
           <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at an object creating Button.</desc>

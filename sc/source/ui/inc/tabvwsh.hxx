@@ -31,6 +31,7 @@
 #include <shellids.hxx>
 #include <tabprotection.hxx>
 #include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <dragdata.hxx>
 
 #include <memory>
@@ -266,6 +267,13 @@ public:
 
     SC_DLLPUBLIC bool IsRefInputMode() const;
     void            ExecuteInputDirect();
+
+    void HandleDuplicateRecords(css::uno::Reference<css::sheet::XSpreadsheet> ActiveSheet,
+                                const css::table::CellRangeAddress& aRange, bool bRemove,
+                                bool bIncludesHeaders, bool bDuplicateRows,
+                                const std::vector<int>& rSelectedEntries);
+    css::uno::Reference<css::sheet::XSpreadsheet> GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments);
+    void            ExtendSingleSelection(css::table::CellRangeAddress& rRangeData);
 
     const ScInputHandler* GetInputHandler() const { return mpInputHandler.get(); }
     ScInputHandler* GetInputHandler() { return mpInputHandler.get(); }

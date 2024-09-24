@@ -80,6 +80,9 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/sheet/XCellRangeMovement.hpp>
+#include <com/sun/star/sheet/XCellRangeData.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <comphelper/flagguard.hxx>
@@ -1773,6 +1776,242 @@ ScViewOptiChangesListener::ScViewOptiChangesListener(ScTabViewShell& rViewShell)
 
     if (m_xColorSchemeChangesNotifier)
         m_xColorSchemeChangesNotifier->addChangesListener(this);
+}
+
+static void lcl_RemoveCells(uno::Reference<sheet::XSpreadsheet>& rSheet, sal_uInt16 nSheet,
+                     sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn,
+                     sal_uInt32 nEndRow, bool bRows)
+{
+    table::CellRangeAddress aCellRange(nSheet, nStartColumn, nStartRow, nEndColumn, nEndRow);
+    uno::Reference<sheet::XCellRangeMovement> xCRM(rSheet, uno::UNO_QUERY);
+
+    if (xCRM.is())
+    {
+        if (bRows)
+            xCRM->removeRange(aCellRange, sheet::CellDeleteMode_UP);
+        else
+            xCRM->removeRange(aCellRange, sheet::CellDeleteMode_LEFT);
+    }
+}
+
+/*  For rows (bool bRows), I am passing reference to already existing sequence, and comparing the required
+ *  columns, whereas for columns, I am creating a sequence for each, with only the checked entries
+ *  in the dialog.
+ */
+static bool lcl_CheckInArray(std::vector<uno::Sequence<uno::Any>>& nUniqueRecords,
+                             const uno::Sequence<uno::Any>& nCurrentRecord,
+                             const std::vector<int>& rSelectedEntries, bool bRows)
+{
+    for (size_t m = 0; m < nUniqueRecords.size(); ++m)
+    {
+        bool bIsDuplicate = true;
+        for (size_t n = 0; n < rSelectedEntries.size(); ++n)
+        {
+            // when the first different element is found
+            int nColumn = (bRows ? rSelectedEntries[n] : n);
+            if (nUniqueRecords[m][nColumn] != (bRows ? nCurrentRecord[rSelectedEntries[n]] : nCurrentRecord[n]))
+            {
+                bIsDuplicate = false;
+                break;
+            }
+        }
+
+        if (bIsDuplicate)
+            return true;
+    }
+    return false;
+}
+
+uno::Reference<css::sheet::XSpreadsheet> ScTabViewShell::GetRangeWithSheet(css::table::CellRangeAddress& rRangeData, bool& bHasData, bool bHasUnoArguments)
+{
+    // get spreadsheet document model & controller
+    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+    uno::Reference<frame::XController> xController(xModel->getCurrentController());
+
+    // spreadsheet's extension of com.sun.star.frame.Controller service
+    uno::Reference<sheet::XSpreadsheetView> SpreadsheetDocument(xController, uno::UNO_QUERY);
+    uno::Reference<sheet::XSpreadsheet> ActiveSheet = SpreadsheetDocument->getActiveSheet();
+
+    if (!bHasUnoArguments)
+    {
+        // get the selection supplier, extract selection in XSheetCellRange
+        uno::Reference<view::XSelectionSupplier> xSelectionSupplier(SpreadsheetDocument, uno::UNO_QUERY);
+        uno::Any Selection = xSelectionSupplier->getSelection();
+        uno::Reference<sheet::XSheetCellRange> SelectedCellRange;
+        Selection >>= SelectedCellRange;
+
+        // Get the Selected Range Address.
+        uno::Reference<sheet::XCellRangeAddressable> xAddressable( SelectedCellRange, uno::UNO_QUERY);
+        if (xAddressable.is())
+            rRangeData = xAddressable->getRangeAddress();
+        else
+        {
+            bHasData = false;
+            return ActiveSheet;
+        }
+    }
+
+    SCCOL nStartColumn = rRangeData.StartColumn;
+    SCCOL nEndColumn = rRangeData.EndColumn;
+    SCROW nStartRow = rRangeData.StartRow;
+    SCROW nEndRow = rRangeData.EndRow;
+
+    // shrink to inersection of data and selection. If no intersection ==> return
+    bHasData = GetViewData().GetDocument().ShrinkToDataArea(rRangeData.Sheet, nStartColumn, nStartRow, nEndColumn, nEndRow);
+
+    rRangeData.StartColumn = nStartColumn;
+    rRangeData.StartRow = nStartRow;
+    rRangeData.EndColumn = nEndColumn;
+    rRangeData.EndRow = nEndRow;
+
+    return ActiveSheet;
+}
+
+void ScTabViewShell::ExtendSingleSelection(css::table::CellRangeAddress& rRangeData)
+{
+    SCCOL aStartCol(rRangeData.StartColumn);
+    SCCOL aEndCol(rRangeData.EndColumn);
+    SCROW aStartRow(rRangeData.StartRow);
+    SCROW aEndRow(rRangeData.EndRow);
+
+    GetViewData().GetDocument().GetDataArea(rRangeData.Sheet, aStartCol, aStartRow, aEndCol,
+                                            aEndRow, true, false);
+    MarkRange(ScRange(ScAddress(aStartCol, aStartRow, rRangeData.Sheet),
+                      ScAddress(aEndCol, aEndRow, rRangeData.Sheet)));
+
+    rRangeData.StartRow = aStartRow;
+    rRangeData.StartColumn = aStartCol;
+    rRangeData.EndRow = aEndRow;
+    rRangeData.EndColumn = aEndCol;
+}
+
+/* bool bRemove == false ==> highlight duplicate rows */
+void ScTabViewShell::HandleDuplicateRecords(css::uno::Reference<css::sheet::XSpreadsheet> ActiveSheet,
+                                const css::table::CellRangeAddress& aRange, bool bRemove,
+                                bool bIncludesHeaders, bool bDuplicateRows,
+                                const std::vector<int>& rSelectedEntries)
+{
+    if (rSelectedEntries.size() == 0)
+    {
+        Unmark();
+        return;
+    }
+
+    uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+    uno::Reference<sheet::XSheetCellRange> xSheetRange(
+            ActiveSheet->getCellRangeByPosition(aRange.StartColumn, aRange.StartRow, aRange.EndColumn, aRange.EndRow),
+            uno::UNO_QUERY);
+
+
+    uno::Reference<sheet::XCellRangeData> xCellRangeData(xSheetRange, uno::UNO_QUERY);
+    uno::Sequence<uno::Sequence<uno::Any>> aDataArray = xCellRangeData->getDataArray();
+
+    uno::Reference< document::XUndoManagerSupplier > xUndoManager( xModel, uno::UNO_QUERY );
+    uno::Reference<document::XActionLockable> xLockable(xModel, uno::UNO_QUERY);
+
+    uno::Reference<sheet::XCalculatable> xCalculatable(xModel, uno::UNO_QUERY);
+    bool bAutoCalc = xCalculatable->isAutomaticCalculationEnabled();
+
+    comphelper::ScopeGuard aUndoContextGaurd(
+        [&xUndoManager, &xLockable, &xModel, &xCalculatable, &bAutoCalc, &bRemove] {
+        xUndoManager->getUndoManager()->leaveUndoContext();
+        if (bRemove)
+            xCalculatable->enableAutomaticCalculation(bAutoCalc);
+        xLockable->removeActionLock();
+        if (xModel->hasControllersLocked())
+            xModel->unlockControllers();
+    });
+
+    xModel->lockControllers();
+    xLockable->addActionLock();
+    if (bRemove)
+        xCalculatable->enableAutomaticCalculation(true);
+    xUndoManager->getUndoManager()->enterUndoContext("HandleDuplicateRecords");
+
+    bool nModifier = false;         // modifier key pressed?
+    bool bNoDuplicatesForSelection = true;
+
+    if (bDuplicateRows)
+    {
+        std::vector<uno::Sequence<uno::Any>> aUnionArray;
+        sal_uInt32 nRow = bIncludesHeaders ? 1 : 0;
+        sal_uInt32 lRows = aDataArray.getLength();
+        sal_uInt32 nDeleteCount = 0;
+
+        while (nRow < lRows)
+        {
+            if (lcl_CheckInArray(aUnionArray, aDataArray[nRow], rSelectedEntries, true))
+            {
+                if (bRemove)
+                {
+                    lcl_RemoveCells(ActiveSheet, aRange.Sheet, aRange.StartColumn,
+                                    aRange.StartRow + nRow - nDeleteCount, aRange.EndColumn,
+                                    aRange.StartRow + nRow - nDeleteCount, true);
+                    ++nDeleteCount;
+                }
+                else
+                {
+                    for (int nCol = aRange.StartColumn; nCol <= aRange.EndColumn; ++nCol)
+                    {
+                        bNoDuplicatesForSelection = false;
+                        DoneBlockMode( nModifier );
+                        nModifier = true;
+                        InitBlockMode( nCol, aRange.StartRow + nRow, aRange.Sheet, false, false);
+                    }
+                }
+            }
+            else
+            {
+                aUnionArray.push_back(aDataArray[nRow]);
+            }
+            ++nRow;
+        }
+    }
+    else
+    {
+        std::vector<uno::Sequence<uno::Any>> aUnionArray;
+        sal_uInt32 nDeleteCount = 0;
+        sal_uInt32 nColumn = bIncludesHeaders ? 1 : 0;
+        sal_uInt32 lColumns = aDataArray[0].getLength();
+
+        while (nColumn < lColumns)
+        {
+            uno::Sequence<uno::Any> aSeq;
+            aSeq.realloc(rSelectedEntries.size());
+            for (size_t i = 0; i < rSelectedEntries.size(); ++i)
+                aSeq.getArray()[i] = aDataArray[rSelectedEntries[i]][nColumn];
+
+            if (lcl_CheckInArray(aUnionArray, aSeq, rSelectedEntries, false))
+            {
+                if (bRemove)
+                {
+                    lcl_RemoveCells(ActiveSheet, aRange.Sheet,
+                                    aRange.StartColumn + nColumn - nDeleteCount, aRange.StartRow,
+                                    aRange.StartColumn + nColumn - nDeleteCount, aRange.EndRow, false);
+                    ++nDeleteCount;
+                }
+                else
+                {
+                    for (int nRow = aRange.StartRow; nRow <= aRange.EndRow; ++nRow)
+                    {
+                        bNoDuplicatesForSelection = false;
+                        DoneBlockMode( nModifier );
+                        nModifier = true;
+                        InitBlockMode( aRange.StartColumn + nColumn, nRow, aRange.Sheet, false, false);
+                    }
+                }
+            }
+            else
+            {
+                aUnionArray.push_back(aSeq);
+            }
+            ++nColumn;
+        }
+
+    }
+
+    if (bNoDuplicatesForSelection && !bRemove)
+        Unmark();
 }
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame& rViewFrame,

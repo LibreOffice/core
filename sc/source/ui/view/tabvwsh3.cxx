@@ -45,6 +45,7 @@
 #include <reffact.hxx>
 #include <tabprotection.hxx>
 #include <protectiondlg.hxx>
+#include <duplicaterecordsdlg.hxx>
 #include <markdata.hxx>
 
 #include <svl/ilstitem.hxx>
@@ -54,6 +55,8 @@
 #include <svx/svxdlg.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <sfx2/lokhelper.hxx>
 #include <scabstdlg.hxx>
 #include <officecfg/Office/Calc.hxx>
@@ -806,6 +809,115 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 PaintGrid();
                 rBindings.Invalidate( FID_TOGGLESYNTAX );
                 rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
+                rReq.Done();
+            }
+            break;
+        case FID_HANDLEDUPLICATERECORDS:
+            {
+                using namespace com::sun::star;
+                table::CellRangeAddress aCellRange;
+                uno::Reference<sheet::XSpreadsheet> xActiveSheet;
+                DuplicatesResponse aResponse;
+                bool bHasData = true;
+
+                if (pReqArgs)
+                {
+                    const SfxPoolItem* pItem;
+
+                    if (pReqArgs->HasItem(FID_HANDLEDUPLICATERECORDS, &pItem))
+                        aResponse.bRemove = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
+                        aResponse.bIncludesHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
+                        aResponse.bDuplicatRows = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_3, &pItem))
+                        aCellRange.StartColumn = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_4, &pItem))
+                        aCellRange.StartRow = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_5, &pItem))
+                        aCellRange.EndColumn = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_6, &pItem))
+                        aCellRange.EndRow = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                    if (pReqArgs->HasItem(FN_PARAM_7, &pItem))
+                        aCellRange.Sheet = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+
+                    // check for the tab range here
+                    if (aCellRange.StartColumn < 0 || aCellRange.StartRow < 0
+                        || aCellRange.EndColumn < 0 || aCellRange.EndRow < 0
+                        || aCellRange.StartRow > aCellRange.EndRow
+                        || aCellRange.StartColumn > aCellRange.EndColumn || aCellRange.Sheet < 0
+                        || aCellRange.Sheet >= GetViewData().GetDocument().GetTableCount())
+                    {
+                        rReq.Done();
+                        break;
+                    }
+                    xActiveSheet = GetViewData().GetViewShell()->GetRangeWithSheet(aCellRange,
+                                                                                   bHasData, true);
+                    if (!bHasData)
+                    {
+                        rReq.Done();
+                        break;
+                    }
+                    int nLenEntries
+                        = (aResponse.bDuplicatRows ? aCellRange.EndColumn - aCellRange.StartColumn
+                                                   : aCellRange.EndRow - aCellRange.StartRow);
+                    for (int i = 0; i <= nLenEntries; ++i)
+                        aResponse.vEntries.push_back(i);
+                }
+                else
+                {
+                    xActiveSheet = GetViewData().GetViewShell()->GetRangeWithSheet(aCellRange,
+                                                                                   bHasData, false);
+                    if (bHasData)
+                    {
+                        if (!GetViewData().GetMarkData().IsMarked())
+                            GetViewData().GetViewShell()->ExtendSingleSelection(aCellRange);
+
+                        uno::Reference<frame::XModel> xModel(GetViewData().GetDocShell()->GetModel());
+                        uno::Reference<sheet::XSheetCellRange> xSheetRange(
+                                xActiveSheet->getCellRangeByPosition(
+                                    aCellRange.StartColumn, aCellRange.StartRow, aCellRange.EndColumn,
+                                    aCellRange.EndRow),
+                                uno::UNO_QUERY);
+
+                        ScRange aRange(ScAddress(aCellRange.StartColumn, aCellRange.StartRow,
+                                    GetViewData().GetTabNo()),
+                                ScAddress(aCellRange.EndColumn, aCellRange.EndRow,
+                                    GetViewData().GetTabNo()));
+
+                        uno::Reference<sheet::XCellRangeData> xCellRangeData(xSheetRange,
+                                uno::UNO_QUERY);
+                        uno::Sequence<uno::Sequence<uno::Any>> aDataArray
+                            = xCellRangeData->getDataArray();
+
+                        ScDuplicateRecordsDlg aDlg(GetFrameWeld(), aDataArray, GetViewData(), aRange);
+
+                        bHasData = aDlg.run();
+                        if (bHasData)
+                            aResponse = aDlg.GetDialogData();
+                        else
+                        {
+                            rReq.Done();
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        std::unique_ptr<weld::MessageDialog> aDialog(
+                            Application::CreateMessageDialog(GetFrameWeld(),
+                                                             VclMessageType::Warning,
+                                                             VclButtonsType::Ok,
+                                                             ScResId(STR_DUPLICATERECORDSDLG_NODATAFOUND)));
+                        aDialog->set_title(ScResId(STR_DUPLICATERECORDSDLG_WARNING));
+                        aDialog->run();
+                    }
+                }
+
+                if (bHasData)
+                    GetViewData().GetViewShell()->HandleDuplicateRecords(
+                            xActiveSheet, aCellRange, aResponse.bRemove, aResponse.bIncludesHeaders,
+                            aResponse.bDuplicatRows, aResponse.vEntries);
+
                 rReq.Done();
             }
             break;

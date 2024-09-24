@@ -437,6 +437,10 @@
 #define STR_CONDITION_THISYEAR                     NC_("STR_CONDITION_THISYEAR", "date is in this year")
 #define STR_CONDITION_LASTYEAR                     NC_("STR_CONDITION_LASTYEAR", "date is in last year")
 #define STR_CONDITION_NEXTYEAR                     NC_("STR_CONDITION_NEXTYEAR", "date is in next year")
+#define STR_DUPLICATERECORDSDLG_WARNING                NC_("STR_DUPLICATERECORDS_WARNING", "Warning!")
+#define STR_DUPLICATERECORDSDLG_NODATAFOUND            NC_("STR_DUPLICATERECORDS_NODATAFOUND", "No data found to operate on.")
+#define STR_DUPLICATERECORDS_DATACONATINSROWHEADERS    NC_("STR_DUPLICATERECORDS_DATACONATINSROWHEADERS", "Data contains row headers")
+#define STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS NC_("STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS", "Data contains column headers")
 
 
 #define STR_CONTENT_WITH_UNKNOWN_ENCRYPTION NC_("STR_CONTENT_WITH_UNKNOWN_ENCRYPTION", "Document contains DRM content that is encrypted with an unknown encryption method. Only the un-encrypted content will be shown.")

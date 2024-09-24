@@ -604,6 +604,7 @@
           <menu:menuitem menu:id=".uno:DataFilterHideAutoFilter"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menuitem menu:id=".uno:HandleDuplicateRecords"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:DefineDBName"/>
       <menu:menuitem menu:id=".uno:SelectDB"/>
