@@ -74,6 +74,7 @@
 #include <stlsheet.hxx>
 #include <spellcheckcontext.hxx>
 #include <scopetools.hxx>
+#include <tabvwsh.hxx>
 
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/scopeguard.hxx>
@@ -2484,6 +2485,13 @@ bool ScOutputData::DrawEditParam::readCellContent(
     return true;
 }
 
+static Color GetConfBackgroundColor()
+{
+    if (const ScTabViewShell* pTabViewShellBg = ScTabViewShell::GetActiveViewShell())
+        return pTabViewShellBg->GetViewRenderingData().GetDocColor();
+    return SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+}
+
 void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
 {
     // syntax highlighting mode is ignored here
@@ -2492,7 +2500,7 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     if (SfxPoolItem::areSame(mpPattern, mpOldPattern) && mpCondSet == mpOldCondSet && mpPreviewFontSet == mpOldPreviewFontSet )
         return;
 
-    Color nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    Color nConfBackColor = GetConfBackgroundColor();
     bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -4581,8 +4589,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
         if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
             nRotMax = pRowInfo[nRotY].nRotMaxCol;
 
-    ScModule* pScMod = SC_MOD();
-    Color nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+    Color nConfBackColor = GetConfBackgroundColor();
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
