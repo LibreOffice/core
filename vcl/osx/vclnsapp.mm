@@ -443,6 +443,11 @@
     return YES;
 }
 
+- (BOOL)applicationSupportsSecureRestorableState: (NSApplication *)pApp
+{
+    return YES;
+}
+
 -(void)setDockIconClickHandler: (NSObject*)pHandler
 {
     GetSalData()->mpDockIconClickHandler = pHandler;
