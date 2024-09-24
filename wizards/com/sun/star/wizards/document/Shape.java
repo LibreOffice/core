@@ -36,8 +36,7 @@ import com.sun.star.wizards.common.Helper;
  */
 public class Shape
 {
-
-    public XShape xShape;
+    protected XShape xShape;
     protected FormHandler oFormHandler;
     public XServiceInfo xServiceInfo;
     protected Point aPoint;
@@ -127,5 +126,10 @@ public class Shape
     public void setPosition(Point _aPoint)
     {
         xShape.setPosition(_aPoint);
+    }
+
+    public XShape getShape()
+    {
+        return xShape;
     }
 }
