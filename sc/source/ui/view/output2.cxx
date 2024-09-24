@@ -3069,8 +3069,8 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             }
         }
 
-
-        if ( rParam.mbCellIsValue && ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip ) )
+        if (rParam.mnX >= nX1 && rParam.mbCellIsValue
+            && (aAreaParam.mbLeftClip || aAreaParam.mbRightClip))
         {
             SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
