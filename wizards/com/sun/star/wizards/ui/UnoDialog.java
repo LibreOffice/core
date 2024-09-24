@@ -40,7 +40,7 @@ public class UnoDialog
     XControlContainer xDlgContainer;
     private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
-    public XDialog xDialog;
+    protected XDialog xDialog;
     public XReschedule xReschedule;
     public XWindow xWindow;
     public XComponent xComponent;
