@@ -73,6 +73,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace com::sun::star::ui { class XContextMenuInterceptor; }
 namespace com::sun::star::ui { struct ContextMenuExecuteEvent; }
 namespace com::sun::star::view { class XRenderable; }
+namespace com::sun::star::security { class XCertificate; }
 namespace tools { class Rectangle; }
 namespace svtools { enum ColorConfigEntry : int; }
 
@@ -495,6 +496,8 @@ public:
 
     OUString getA11yFocusedParagraph() const;
     int getA11yCaretPosition() const;
+    void SetSigningCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
+    css::uno::Reference<css::security::XCertificate> GetSigningCertificate() const;
 };
 
 #endif // INCLUDED_SFX2_VIEWSH_HXX

@@ -2807,6 +2807,16 @@ int SfxViewShell::getA11yCaretPosition() const
     return rDocFocusListener.getCaretPosition();
 }
 
+void SfxViewShell::SetSigningCertificate(const uno::Reference<security::XCertificate>& xCertificate)
+{
+    pImpl->m_xSigningCertificate = xCertificate;
+}
+
+uno::Reference<security::XCertificate> SfxViewShell::GetSigningCertificate() const
+{
+    return pImpl->m_xSigningCertificate;
+}
+
 bool SfxViewShell::PrepareClose
 (
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode

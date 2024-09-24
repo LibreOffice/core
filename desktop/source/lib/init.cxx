@@ -4723,9 +4723,9 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
         if (!aSignatureCert.empty() && !aSignatureKey.empty())
         {
             uno::Reference<security::XCertificate> xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
-            if (!xCertificate.is())
+            if (SfxViewShell* pViewShell = SfxViewShell::Current())
             {
-                SAL_WARN("lok", "doc_initializeForRendering: cert/key didn't result in an XCertificate");
+                pViewShell->SetSigningCertificate(xCertificate);
             }
         }
 
