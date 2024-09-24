@@ -43,6 +43,11 @@ using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
+static TextFrameIndex lcl_AddSpace_Latin(const SwTextSizeInfo& rInf, const OUString* pStr,
+                                         const SwLinePortion& rPor, TextFrameIndex nPos,
+                                         TextFrameIndex nEnd, const SwScriptInfo* pSI,
+                                         sal_uInt8 nScript);
+
 // Returns for how many characters an extra space has to be added
 // (for justified alignment).
 static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
@@ -117,7 +122,11 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
             // i60591: need to check result of KashidaJustify
             // determine if kashida justification is applicable
             if (nKashRes != -1)
-                return TextFrameIndex(nKashRes);
+            {
+                // tdf#163105: For kashida justification, also expand whitespace.
+                auto nCntLatin = lcl_AddSpace_Latin(rInf, pStr, rPor, nPos, nEnd, pSI, nScript);
+                return nCntLatin + TextFrameIndex{ nKashRes };
+            }
         }
     }
 
@@ -143,6 +152,16 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
             return nCnt;
         }
     }
+
+    return lcl_AddSpace_Latin(rInf, pStr, rPor, nPos, nEnd, pSI, nScript);
+}
+
+static TextFrameIndex lcl_AddSpace_Latin(const SwTextSizeInfo& rInf, const OUString* pStr,
+                                         const SwLinePortion& rPor, TextFrameIndex nPos,
+                                         TextFrameIndex nEnd, const SwScriptInfo* pSI,
+                                         sal_uInt8 nScript)
+{
+    TextFrameIndex nCnt(0);
 
     // Here starts the good old "Look for blanks and add space to them" part.
     // Note: We do not want to add space to an isolated latin blank in front

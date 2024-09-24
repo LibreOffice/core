@@ -1135,7 +1135,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                  rInf.GetLen(), nSpaceAdd ) != -1 )
                         {
                             bSpecialJust = true;
-                            nSpaceAdd = 0;
+
+                            // Intentionally do not clear nSpaceAdd for kashida justification.
+                            // The rest of the space will be handled below.
                         }
                         else
                             aKashidaArray.clear();
@@ -1348,7 +1350,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( pSI && pSI->CountKashida() &&
                          pSI->KashidaJustify( &aKernArray, aKashidaArray.data(), rInf.GetIdx(),
                                               rInf.GetLen(), nSpaceAdd ) != -1 )
-                        nSpaceAdd = 0;
+                    {
+                        // Intentionally do not clear nSpaceAdd for kashida justification.
+                        // The rest of the space will be handled below.
+                    }
                     else
                     {
                         aKashidaArray.clear();
@@ -1838,7 +1843,10 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
                 if ( pSI && pSI->CountKashida() &&
                     pSI->KashidaJustify( &aKernArray, nullptr, rInf.GetIdx(), rInf.GetLen(),
                                          nSpaceAdd ) != -1 )
-                    nSpaceAdd = 0;
+                {
+                    // Intentionally do not clear nSpaceAdd for kashida justification.
+                    // The rest of the space will be handled below.
+                }
             }
         }
 
