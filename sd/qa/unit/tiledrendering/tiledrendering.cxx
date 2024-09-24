@@ -1338,6 +1338,32 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aLastCell.mnRow);
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testShowAndUseGridCallbacks)
+{
+    /*
+        Showing and hiding grid is done via one command. Command toggles the grid state.
+        Also "snapping the objects to grid" feature is toggled via one command.
+        Here we switch on and off these 2 features and check the callbacks.
+    */
+
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    ViewCallback aView;
+
+    dispatchCommand(mxComponent, ".uno:GridVisible", uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=true") != aView.m_aStateChanged.end());
+
+    dispatchCommand(mxComponent, ".uno:GridVisible", uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridVisible=false") != aView.m_aStateChanged.end());
+
+    dispatchCommand(mxComponent, ".uno:GridUse", uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=false") != aView.m_aStateChanged.end());
+
+    dispatchCommand(mxComponent, ".uno:GridUse", uno::Sequence<beans::PropertyValue>());
+    CPPUNIT_ASSERT(std::find(aView.m_aStateChanged.begin(), aView.m_aStateChanged.end(), ".uno:GridUse=true") != aView.m_aStateChanged.end());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCommentCallbacks)
 {
     // Load the document.

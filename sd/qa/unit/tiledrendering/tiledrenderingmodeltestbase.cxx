@@ -248,6 +248,7 @@ public:
     bool m_bViewSelectionSet;
     boost::property_tree::ptree m_aCommentCallbackResult;
     OString m_ShapeSelection;
+    std::vector<std::string> m_aStateChanged;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
     TestLokCallbackWrapper m_callbackWrapper;
 
@@ -367,6 +368,7 @@ public:
                 std::stringstream aStream(pPayload);
                 if (!aStream.str().starts_with("{"))
                 {
+                    m_aStateChanged.push_back(aStream.str());
                     break;
                 }
 
