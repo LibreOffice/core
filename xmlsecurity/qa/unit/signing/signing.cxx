@@ -1154,10 +1154,12 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSignatureLineODF)
 CPPUNIT_TEST_FIXTURE(SigningTest, testImplicitScriptSign)
 {
     // Given an ODT file with macros, and two signature managers to create macro + doc signatures:
-    OUString aFileURL = createFileURL(u"macro.odt");
+    createTempCopy(u"macro.odt");
+    OUString aFileURL = maTempFile.GetURL();
     uno::Reference<embed::XStorage> xWriteableZipStor
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aFileURL,
                                                                 embed::ElementModes::READWRITE);
+
     uno::Reference<embed::XStorage> xMetaInf
         = xWriteableZipStor->openStorageElement(u"META-INF"_ustr, embed::ElementModes::READWRITE);
     uno::Reference<io::XStream> xStream = xMetaInf->openStreamElement(
