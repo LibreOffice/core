@@ -649,10 +649,27 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         {
             bHasBlankPortion = true;
         }
+        else
+        {
+            bHasOnlyBlankPortions = false;
+            //bHasNonBlankPortions = true;
+        }
     }
 
+    if (!rInf.IsNewLine()
+        && TextFrameIndex(rInf.GetText().getLength()) <= rInf.GetIdx()
+        && bHasOnlyBlankPortions
+        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+    {
+        // Word: for empty last line, line height is based on paragraph marker
+        // formatting, ignoring blanks/tabs
+        rLine.SeekAndChg(rInf);
+        SetAscent(rInf.GetAscent());
+        Height(rInf.GetTextHeight());
+    }
     // #i3952# Whitespace does not increase line height
-    if ( bHasBlankPortion && bHasOnlyBlankPortions )
+    else if (bHasBlankPortion && bHasOnlyBlankPortions)
     {
         sal_uInt16 nTmpAscent = GetAscent();
         sal_uInt16 nTmpHeight = Height();

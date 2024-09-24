@@ -640,6 +640,8 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     // Shared between DOCX and RTF, unconditional flags.
     xDocumentSettings->setPropertyValue(u"TableRowKeep"_ustr, uno::Any(true));
     xDocumentSettings->setPropertyValue(u"AddVerticalFrameOffsets"_ustr, uno::Any(true));
+    xDocumentSettings->setPropertyValue(u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr,
+                                uno::Any(true));
 
     if (GetWordCompatibilityMode() <= 14)
     {

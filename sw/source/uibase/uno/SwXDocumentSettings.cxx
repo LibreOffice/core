@@ -160,6 +160,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DROP_CAP_PUNCTUATION,
     HANDLE_USE_VARIABLE_WIDTH_NBSP,
     HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
+    HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH,
     HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS,
     HANDLE_PAINT_HELL_OVER_HEADER_FOOTER
 };
@@ -268,6 +269,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
         { OUString("UseVariableWidthNBSP"), HANDLE_USE_VARIABLE_WIDTH_NBSP, cppu::UnoType<bool>::get(), 0 },
         { OUString("ApplyTextAttrToEmptyLineAtEndOfParagraph"), HANDLE_APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool>::get(), 0 },
+        { u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr, HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, cppu::UnoType<bool >::get(), 0 },
         { OUString("DoNotMirrorRtlDrawObjs"), HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS, cppu::UnoType<bool>::get(), 0 },
         { OUString("PaintHellOverHeaderFooter"), HANDLE_PAINT_HELL_OVER_HEADER_FOOTER, cppu::UnoType<bool>::get(), 0 },
 
@@ -1090,6 +1092,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH, bTmp);
+            }
+        }
+        break;
         case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:
         {
             bool bTmp;
@@ -1694,6 +1706,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::APPLY_TEXT_ATTR_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH);
+        }
+        break;
+        case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH);
         }
         break;
         case HANDLE_DO_NOT_MIRROR_RTL_DRAW_OBJS:
