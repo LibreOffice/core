@@ -444,7 +444,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 if (JavaTools.FieldInList(m_DBMetaData.NonAggregateFieldNames, CurDisplayFieldName) > -1)
                 {
                     showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, resmsgNonNumericAsGroupBy);
-                    m_groupFieldSelection.xSelectedFieldsListBox.addItems(SelItems, m_groupFieldSelection.xSelectedFieldsListBox.getItemCount());
+                    m_groupFieldSelection.getSelectedFieldsListBox().addItems(SelItems, m_groupFieldSelection.getSelectedFieldsListBox().getItemCount());
                     String FieldList[] = m_groupFieldSelection.getFieldsListBox().getItems();
                     int index = JavaTools.FieldInList(FieldList, CurDisplayFieldName);
                     if (index > -1)

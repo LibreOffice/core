@@ -26,7 +26,7 @@ import java.util.*;
 public class FieldSelection
 {
     protected XListBox xFieldsListBox;                 // Left ListBox
-    public XListBox xSelectedFieldsListBox;         // right (selected) ListBox
+    protected XListBox xSelectedFieldsListBox;         // right (selected) ListBox
 
     protected UnoDialog CurUnoDialog;
     protected String sIncSuffix;
@@ -626,6 +626,11 @@ public class FieldSelection
     public XListBox getFieldsListBox()
     {
         return xFieldsListBox;
+    }
+
+    public XListBox getSelectedFieldsListBox()
+    {
+        return xSelectedFieldsListBox;
     }
 
     public void setModified(boolean _bModified)
