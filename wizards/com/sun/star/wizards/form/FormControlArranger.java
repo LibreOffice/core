@@ -143,7 +143,7 @@ public class FormControlArranger
                 short nTextLen;
                 try
                 {
-                    nTextLen = AnyConverter.toShort(DBControlList[_index].xPropertySet.getPropertyValue("MaxTextLen"));
+                    nTextLen = AnyConverter.toShort(DBControlList[_index].getPropertySet().getPropertyValue("MaxTextLen"));
                     if ((nTextLen == 0) || (nTextLen > 20))
                     {
                         bisreducable = true;
@@ -352,7 +352,7 @@ public class FormControlArranger
                     insertLabel(i, _iAlign);
                     insertDBControl(i);
                     bIsVeryFirstRun = false;
-                    DBControlList[i].setPropertyValue(LABELCONTROL, LabelControlList[i].xPropertySet);
+                    DBControlList[i].setPropertyValue(LABELCONTROL, LabelControlList[i].getPropertySet());
                     resetPosSizes(i);
                     xProgressBar.setValue(i + 1);
                 }
@@ -566,11 +566,11 @@ public class FormControlArranger
             {
                 m_currentControlPosX = m_currentLabelPosX;
                 m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) com.sun.star.awt.TextAlign.LEFT));
+                curLabelControl.getPropertySet().setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) com.sun.star.awt.TextAlign.LEFT));
             }
             else
             {
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) _iAlign));
+                curLabelControl.getPropertySet().setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) _iAlign));
             }
             if (!bControlsareCreated)
             {
@@ -628,7 +628,7 @@ public class FormControlArranger
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
             {
-                Helper.setUnoPropertyValue(aDBControl.xPropertySet, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
+                Helper.setUnoPropertyValue(aDBControl.getPropertySet(), PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
             checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
             aDBControl.setPropertyValue(PropertyNames.PROPERTY_BORDER, NBorderType);

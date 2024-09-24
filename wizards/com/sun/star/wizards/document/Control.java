@@ -41,7 +41,7 @@ public class Control extends Shape
 
     XControlModel xControlModel;
     private XControl xControl;
-    public XPropertySet xPropertySet;
+    protected XPropertySet xPropertySet;
     XWindowPeer xWindowPeer;
     private static final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
@@ -342,5 +342,10 @@ public class Control extends Shape
     public int getControlType()
     {
         return icontroltype;
+    }
+
+    public XPropertySet getPropertySet()
+    {
+        return xPropertySet;
     }
 }

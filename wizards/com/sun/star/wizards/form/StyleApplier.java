@@ -283,9 +283,9 @@ public class StyleApplier
                         }
                         else
                         {
-                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
+                            if (DBControls[n].getPropertySet().getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                             {
-                                DBControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
+                                DBControls[n].getPropertySet().setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                             }
                         }
                     }
@@ -419,7 +419,7 @@ public class StyleApplier
                                 }
                                 else
                                 {
-                                    setDBControlColors(aDBControl.xPropertySet, _iStyleColors);
+                                    setDBControlColors(aDBControl.getPropertySet(), _iStyleColors);
                                 }
                             }
                         }
@@ -429,7 +429,7 @@ public class StyleApplier
                     {
                         if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                         {
-                            LabelControls[n].xPropertySet.setPropertyValue("TextColor", Integer.valueOf(_iStyleColors[SOLABELTEXTCOLOR]));
+                            LabelControls[n].getPropertySet().setPropertyValue("TextColor", Integer.valueOf(_iStyleColors[SOLABELTEXTCOLOR]));
                         }
                     }
                 }

@@ -180,7 +180,7 @@ public class UIControlArranger
                     }
                     for (int n = 0; n < LabelControls.length; n++)
                     {
-                        LabelControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf(iAlignValue));
+                        LabelControls[n].getPropertySet().setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf(iAlignValue));
                     }
                 }
             }
