@@ -59,6 +59,7 @@ struct SfxViewShell_Impl
     static sal_uInt32 m_nLastViewShellId;
     const ViewShellId m_nViewShellId;
     const ViewShellDocId m_nDocId;
+    css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
 
     explicit SfxViewShell_Impl(SfxViewShellFlags const nFlags, ViewShellDocId nDocId);
     ~SfxViewShell_Impl();
