@@ -25,6 +25,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <comphelper/configuration.hxx>
 #include <swmodule.hxx>
@@ -1539,6 +1540,22 @@ bool SwTextFrame::IsHiddenNow() const
     {
         bHiddenCharsHidePara = static_cast<SwTextNode const*>(SwFrame::GetDep())->HasHiddenCharAttribute( true );
         bHiddenParaField = static_cast<SwTextNode const*>(SwFrame::GetDep())->IsHiddenByParaField();
+    }
+    if (bHiddenCharsHidePara && GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+    {
+        // apparently in Word it's always the last para marker that determines hidden?
+        // even in case when they are merged by delete redline (it's obvious when they are merged by hidden-attribute
+        SwTextNode const*const pNode{ m_pMergedPara
+            ? m_pMergedPara->pLastNode
+            : static_cast<SwTextNode const*>(SwFrame::GetDep()) };
+        SwFormatAutoFormat const& rListAutoFormat{pNode->GetAttr(RES_PARATR_LIST_AUTOFMT)};
+        std::shared_ptr<SfxItemSet> const pSet{rListAutoFormat.GetStyleHandle()};
+        SvxCharHiddenItem const*const pItem{pSet ? pSet->GetItemIfSet(RES_CHRATR_HIDDEN) : nullptr};
+        if (!pItem || !pItem->GetValue())
+        {
+            bHiddenCharsHidePara = false;
+        }
     }
     const SwViewShell* pVsh = getRootFrame()->GetCurrShell();
 

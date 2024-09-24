@@ -38,6 +38,7 @@
 #include <fmtfld.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <txatbase.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -301,7 +302,33 @@ void SwAttrIter::SeekFwd(const sal_Int32 nOldPos, const sal_Int32 nNewPos)
         if ( pTextAttr->GetAnyEnd() > nNewPos )  Chg( pTextAttr );
         m_nStartIndex++;
     }
+}
 
+void SwAttrIter::SeekToEnd()
+{
+    if (m_pTextNode->GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+    {
+        SfxItemPool & rPool{const_cast<SwAttrPool&>(m_pTextNode->GetDoc().GetAttrPool())};
+        SwFormatAutoFormat const& rListAutoFormat{m_pTextNode->GetAttr(RES_PARATR_LIST_AUTOFMT)};
+        std::shared_ptr<SfxItemSet> const pSet{rListAutoFormat.GetStyleHandle()};
+        if (!pSet)
+        {
+            return;
+        }
+        if (pSet->HasItem(RES_TXTATR_CHARFMT))
+        {
+            SwFormatCharFormat const& rCharFormat{pSet->Get(RES_TXTATR_CHARFMT)};
+            m_pEndCharFormatAttr.reset(new SwTextAttrEnd{
+                    SfxPoolItemHolder{rPool, &rCharFormat}, -1, -1});
+            Chg(m_pEndCharFormatAttr.get());
+        }
+        // note: RES_TXTATR_CHARFMT should be cleared here but it looks like
+        // SwAttrHandler only looks at RES_CHRATR_* anyway
+        m_pEndAutoFormatAttr.reset(new SwTextAttrEnd{
+                SfxPoolItemHolder{rPool, &rListAutoFormat}, -1, -1});
+        Chg(m_pEndAutoFormatAttr.get());
+    }
 }
 
 bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
@@ -368,7 +395,8 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
                                        m_pMergedPara->mergedText, nullptr, nullptr);
             }
         }
-        if (m_pMergedPara || m_pTextNode->GetpSwpHints())
+        // also reset it if the RES_PARATR_LIST_AUTOFMT has been applied!
+        if (m_pMergedPara || m_pTextNode->GetpSwpHints() || m_pEndAutoFormatAttr)
         {
             if( m_pRedline )
                 m_pRedline->Clear( nullptr );
@@ -376,6 +404,8 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
             // reset font to its original state
             m_aAttrHandler.Reset();
             m_aAttrHandler.ResetFont( *m_pFont );
+            m_pEndCharFormatAttr.reset();
+            m_pEndAutoFormatAttr.reset();
 
             if( m_nPropFont )
                 m_pFont->SetProportion( m_nPropFont );
@@ -393,6 +423,24 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
                 ++m_nChgCnt;
             }
         }
+    }
+
+    bool isToEnd{false};
+    if (m_pMergedPara)
+    {
+        if (!m_pMergedPara->extents.empty())
+        {
+            auto const& rLast{m_pMergedPara->extents.back()};
+            isToEnd = rLast.pNode == newPos.first && rLast.nEnd == newPos.second;
+        }
+        else
+        {
+            isToEnd = true;
+        }
+    }
+    else
+    {
+        isToEnd = newPos.second == m_pTextNode->Len();
     }
 
     if (m_pTextNode->GetpSwpHints())
@@ -422,6 +470,11 @@ bool SwAttrIter::Seek(TextFrameIndex const nNewPos)
         {
             SeekFwd(m_nPosition, newPos.second);
         }
+    }
+
+    if (isToEnd && !m_pEndAutoFormatAttr)
+    {
+        SeekToEnd();
     }
 
     m_pFont->SetActual( m_pScriptInfo->WhichFont(nNewPos) );

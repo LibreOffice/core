@@ -341,15 +341,19 @@ void SwAttrHandler::PushAndChg( const SwTextAttr& rAttr, SwFont& rFnt )
     // they have to be pushed to each stack they belong to
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
          RES_TXTATR_CHARFMT == rAttr.Which() ||
+         RES_PARATR_LIST_AUTOFMT == rAttr.Which() ||
          RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
-        const SfxItemSet* pSet = CharFormat::GetItemSet( rAttr.GetAttr() );
+        const SfxItemSet* pSet = rAttr.Which() == RES_PARATR_LIST_AUTOFMT
+            ? rAttr.GetAttr().StaticWhichCast(RES_PARATR_LIST_AUTOFMT).GetStyleHandle().get()
+            : CharFormat::GetItemSet( rAttr.GetAttr() );
         if ( !pSet ) return;
 
+        bool const inParent{rAttr.Which() != RES_TXTATR_AUTOFMT && rAttr.Which() != RES_PARATR_LIST_AUTOFMT};
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            bool bRet = SfxItemState::SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
+            bool bRet = SfxItemState::SET == pSet->GetItemState(i, inParent, &pItem);
 
             if ( bRet )
             {

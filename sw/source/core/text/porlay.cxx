@@ -569,9 +569,26 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         {
             bHasBlankPortion = true;
         }
+        else
+        {
+            bHasOnlyBlankPortions = false;
+            bHasNonBlankPortions = true;
+        }
     }
 
-    if (bIgnoreBlanksAndTabsForLineHeightCalculation && !bHasNonBlankPortions &&
+    if (!rInf.IsNewLine()
+        && TextFrameIndex(rInf.GetText().getLength()) <= rInf.GetIdx()
+        && !bHasNonBlankPortions
+        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+            DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_EMPTY_LINE_AT_END_OF_PARAGRAPH))
+    {
+        // Word: for empty last line, line height is based on paragraph marker
+        // formatting, ignoring blanks/tabs
+        rLine.SeekAndChg(rInf);
+        SetAscent(rInf.GetAscent());
+        Height(rInf.GetTextHeight());
+    }
+    else if (bIgnoreBlanksAndTabsForLineHeightCalculation && !bHasNonBlankPortions &&
         (bHasTabPortions || (bHasBlankPortion && (nSpacePortionAscent > 0 || nSpacePortionHeight > 0))))
     {
         //Word increases line height if _only_ spaces and|or tabstops are in a line

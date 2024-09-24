@@ -21,6 +21,7 @@
 #include <o3tl/deleter.hxx>
 #include "atrhndl.hxx"
 #include <swfont.hxx>
+#include <txatbase.hxx>
 
 namespace sw { struct MergedPara; }
 class SwTextAttr;
@@ -33,6 +34,9 @@ class SAL_DLLPUBLIC_RTTI SwAttrIter
 {
     friend class SwFontSave;
 protected:
+    struct Destr{ void operator()(SwTextAttr *const pAttr) { SwTextAttr::Destroy(pAttr); } };
+    ::std::unique_ptr<SwTextAttr, Destr> m_pEndCharFormatAttr;
+    ::std::unique_ptr<SwTextAttr, Destr> m_pEndAutoFormatAttr;
 
     SwAttrHandler m_aAttrHandler;
     SwViewShell *m_pViewShell;
@@ -58,6 +62,7 @@ private:
     sw::MergedPara const* m_pMergedPara;
 
     void SeekFwd(sal_Int32 nOldPos, sal_Int32 nNewPos);
+    void SeekToEnd();
     void SetFnt( SwFont* pNew ) { m_pFont = pNew; }
     void InitFontAndAttrHandler(
         SwTextNode const& rPropsNode, SwTextNode const& rTextNode,

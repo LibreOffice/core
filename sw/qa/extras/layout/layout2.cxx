@@ -13,8 +13,10 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -2201,6 +2203,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
     // so the right side of the shape must be greater than the right side of
     // textframe:
     CPPUNIT_ASSERT(sTextRightSidePosition.toInt32() < sShapeRightSidePosition.toInt32());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkLineHeight)
+{
+    createSwDoc("A020-min.rtf");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xViewSettings(xViewSettingsSupplier->getViewSettings());
+    uno::Any aOldHidden{ xViewSettings->getPropertyValue(u"ShowHiddenCharacters"_ustr) };
+    uno::Any aOldNon{ xViewSettings->getPropertyValue(u"ShowNonprintingCharacters"_ustr) };
+    comphelper::ScopeGuard g([&] {
+        xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, aOldHidden);
+        xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, aOldNon);
+    });
+
+    xViewSettings->setPropertyValue(u"ShowHiddenCharacters"_ustr, uno::Any(true));
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(true));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[3]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[2]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[3]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[4]"_ostr,
+                    "height"_ostr, "184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[5]"_ostr,
+                    "height"_ostr, "253");
+    }
+
+    xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(false));
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
+                    "height"_ostr, "184"); // FIXME should be 253, but better than 0
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
