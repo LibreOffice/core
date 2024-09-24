@@ -472,14 +472,14 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                                     DelFieldName
                                 });
                         CurDBMetaData.setRecordFieldNames(aNewList);
-                        CurDBMetaData.RecordFieldColumns = removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.RecordFieldColumns);
+                        CurDBMetaData.setRecordFieldColumns(removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.getRecordFieldColumns()));
                         CurDBMetaData.setFieldColumns(removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.getFieldColumns()));
 
                     }
                     i--;
                 }
             }
-            java.util.Arrays.sort(CurDBMetaData.RecordFieldColumns, this);
+            java.util.Arrays.sort(CurDBMetaData.getRecordFieldColumns(), this);
         }
         catch (Exception exception)
         {

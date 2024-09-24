@@ -79,9 +79,9 @@ public class DBColumn
         this.CurDBMetaData = _CurDBMetaData;
         this.CurRecordTable = _CurRecordTable;
         bIsGroupColumn = false;
-        if (CurDBMetaData.RecordFieldColumns != null)
+        if (CurDBMetaData.getRecordFieldColumns() != null)
         {
-            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].getFieldName());
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.getRecordFieldColumns()[i].getFieldName());
         }
         else
         {

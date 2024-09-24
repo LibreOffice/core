@@ -46,13 +46,23 @@ public class RecordParser extends QueryMetaData
     private XComponent xRowSetComponent;
     private XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
-    public FieldColumn[] RecordFieldColumns;
+    private FieldColumn[] RecordFieldColumns;
 
     /** Creates a new instance of RecordParser */
     public RecordParser(XMultiServiceFactory _xMSF)
     {
         super(_xMSF);
         getInterfaces();
+    }
+
+    public FieldColumn[] getRecordFieldColumns()
+    {
+        return RecordFieldColumns;
+    }
+
+    public void setRecordFieldColumns(FieldColumn[] recordFieldColumns)
+    {
+        RecordFieldColumns = recordFieldColumns;
     }
 
     private void getInterfaces()
