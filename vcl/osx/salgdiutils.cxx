@@ -381,17 +381,12 @@ void AquaSalGraphics::UpdateWindow( NSRect& rRect )
 
         CGContextSetBlendMode(rCGContextHolder.get(), kCGBlendModeCopy);
 
-        NSWindow *pWindow = maShared.mpFrame->getNSWindow();
-        if (pWindow)
-        {
-            CGImageRef displayColorSpaceImage = CGImageCreateCopyWithColorSpace(img, [[maShared.mpFrame->getNSWindow() colorSpace] CGColorSpace]);
-            CGContextDrawImage(rCGContextHolder.get(), aRect, displayColorSpaceImage);
-            CGImageRelease(displayColorSpaceImage);
-        }
-        else
-        {
-            CGContextDrawImage(rCGContextHolder.get(), aRect, img);
-        }
+        // tdf#163152 don't convert image's sRGB colorspace
+        // Converting the image's colorspace to match the window's
+        // colorspace causes more than an expected amount of color
+        // saturation so let the window's underlying CGContext handle
+        // any necessary colorspace conversion in CGContextDrawImage().
+        CGContextDrawImage(rCGContextHolder.get(), aRect, img);
 
         rCGContextHolder.restoreState();
 
