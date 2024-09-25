@@ -1582,4 +1582,48 @@ void QtFrame::handleMoveEvent(QMoveEvent* pEvent)
     CallCallback(SalEvent::Move, nullptr);
 }
 
+void QtFrame::handleResizeEvent(QResizeEvent* pEvent)
+{
+    const qreal fRatio = devicePixelRatioF();
+    const int nWidth = ceil(pEvent->size().width() * fRatio);
+    const int nHeight = ceil(pEvent->size().height() * fRatio);
+
+    maGeometry.setSize({ nWidth, nHeight });
+
+    if (m_bUseCairo)
+    {
+        if (m_pSurface)
+        {
+            const int nOldWidth = cairo_image_surface_get_width(m_pSurface.get());
+            const int nOldHeight = cairo_image_surface_get_height(m_pSurface.get());
+            if (nOldWidth != nWidth || nOldHeight != nHeight)
+            {
+                cairo_surface_t* pSurface
+                    = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+                cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
+                                            &m_aDamageHandler, nullptr);
+                m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
+                UniqueCairoSurface old_surface(m_pSurface.release());
+                m_pSurface.reset(pSurface);
+
+                const int nMinWidth = qMin(nOldWidth, nWidth);
+                const int nMinHeight = qMin(nOldHeight, nHeight);
+                SalTwoRect rect(0, 0, nMinWidth, nMinHeight, 0, 0, nMinWidth, nMinHeight);
+                m_pSvpGraphics->copySource(rect, old_surface.get());
+            }
+        }
+    }
+    else
+    {
+        if (m_pQImage && m_pQImage->size() != QSize(nWidth, nHeight))
+        {
+            QImage* pImage = new QImage(m_pQImage->copy(0, 0, nWidth, nHeight));
+            m_pQtGraphics->ChangeQImage(pImage);
+            m_pQImage.reset(pImage);
+        }
+    }
+
+    CallCallback(SalEvent::Resize, nullptr);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

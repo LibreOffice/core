@@ -87,49 +87,7 @@ void QtWidget::paintEvent(QPaintEvent* pEvent)
     p.drawImage(pEvent->rect(), aImage, source);
 }
 
-void QtWidget::resizeEvent(QResizeEvent* pEvent)
-{
-    const qreal fRatio = m_rFrame.devicePixelRatioF();
-    const int nWidth = ceil(pEvent->size().width() * fRatio);
-    const int nHeight = ceil(pEvent->size().height() * fRatio);
-
-    m_rFrame.maGeometry.setSize({ nWidth, nHeight });
-
-    if (m_rFrame.m_bUseCairo)
-    {
-        if (m_rFrame.m_pSurface)
-        {
-            const int nOldWidth = cairo_image_surface_get_width(m_rFrame.m_pSurface.get());
-            const int nOldHeight = cairo_image_surface_get_height(m_rFrame.m_pSurface.get());
-            if (nOldWidth != nWidth || nOldHeight != nHeight)
-            {
-                cairo_surface_t* pSurface
-                    = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
-                cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
-                                            &m_rFrame.m_aDamageHandler, nullptr);
-                m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
-                UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
-                m_rFrame.m_pSurface.reset(pSurface);
-
-                const int nMinWidth = qMin(nOldWidth, nWidth);
-                const int nMinHeight = qMin(nOldHeight, nHeight);
-                SalTwoRect rect(0, 0, nMinWidth, nMinHeight, 0, 0, nMinWidth, nMinHeight);
-                m_rFrame.m_pSvpGraphics->copySource(rect, old_surface.get());
-            }
-        }
-    }
-    else
-    {
-        if (m_rFrame.m_pQImage && m_rFrame.m_pQImage->size() != QSize(nWidth, nHeight))
-        {
-            QImage* pImage = new QImage(m_rFrame.m_pQImage->copy(0, 0, nWidth, nHeight));
-            m_rFrame.m_pQtGraphics->ChangeQImage(pImage);
-            m_rFrame.m_pQImage.reset(pImage);
-        }
-    }
-
-    m_rFrame.CallCallback(SalEvent::Resize, nullptr);
-}
+void QtWidget::resizeEvent(QResizeEvent* pEvent) { m_rFrame.handleResizeEvent(pEvent); }
 
 void QtWidget::fakeResize()
 {
