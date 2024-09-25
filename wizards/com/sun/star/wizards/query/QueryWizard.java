@@ -164,7 +164,7 @@ public class QueryWizard extends DatabaseObjectWizard
                         bEnabled = false;
                         if (_bEnabled)
                         {
-                            bEnabled = (m_DBMetaData.GroupByFilterConditions.length > 0);
+                            bEnabled = (m_DBMetaData.getGroupByFilterConditions().length > 0);
                         }
 
                         break;
@@ -281,7 +281,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 {
                     m_DBMetaData.setGroupFieldNames(m_groupFieldSelection.getSelectedFieldNames());
                     m_DBMetaData.setGroupFieldNames(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupFieldNames(), m_DBMetaData.getNonAggregateFieldNames()));
-                    m_DBMetaData.GroupByFilterConditions = JavaTools.removeOutdatedFields(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
+                    m_DBMetaData.setGroupByFilterConditions(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupByFilterConditions(), m_DBMetaData.getGroupFieldNames()));
                 }
             }
             switch (nNewStep)
@@ -300,7 +300,7 @@ public class QueryWizard extends DatabaseObjectWizard
                 case SOGROUPSELECTION_PAGE:
                     break;
                 case SOGROUPFILTER_PAGE:
-                    m_groupFilterComponent.initialize(m_DBMetaData.GroupByFilterConditions, m_DBMetaData.getGroupFieldNames());
+                    m_groupFilterComponent.initialize(m_DBMetaData.getGroupByFilterConditions(), m_DBMetaData.getGroupFieldNames());
                     break;
                 case SOTITLES_PAGE:
                     m_titlesComponent.initialize(m_DBMetaData.getDisplayFieldNames(), m_DBMetaData.getFieldTitleSet());

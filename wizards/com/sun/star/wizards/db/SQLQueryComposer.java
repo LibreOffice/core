@@ -296,9 +296,9 @@ public class SQLQueryComposer
             if (_bincludeGrouping)
             {
                 appendGroupByColumns(_baddAliasFieldNames);
-                if (CurDBMetaData.GroupByFilterConditions.length > 0)
+                if (CurDBMetaData.getGroupByFilterConditions().length > 0)
                 {
-                    m_queryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
+                    m_queryComposer.setStructuredHavingClause(CurDBMetaData.getGroupByFilterConditions());
                 }
             }
             if (prependSortingCriteria)

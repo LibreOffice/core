@@ -31,7 +31,7 @@ public class QueryMetaData extends CommandMetaData
     // Vector CommandNamesV;
     private PropertyValue[][] m_aFilterConditions; /* = new PropertyValue[][] {}; */
 
-    public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][]
+    private PropertyValue[][] GroupByFilterConditions = new PropertyValue[][]
     {
     };
     public int Type = QueryType.SODETAILQUERY;
