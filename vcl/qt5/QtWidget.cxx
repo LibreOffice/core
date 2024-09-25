@@ -62,30 +62,7 @@
 
 using namespace com::sun::star;
 
-void QtWidget::paintEvent(QPaintEvent* pEvent)
-{
-    QPainter p(this);
-    if (!m_rFrame.m_bNullRegion)
-        p.setClipRegion(m_rFrame.m_aRegion);
-
-    QImage aImage;
-    if (m_rFrame.m_bUseCairo)
-    {
-        cairo_surface_t* pSurface = m_rFrame.m_pSurface.get();
-        cairo_surface_flush(pSurface);
-
-        aImage = QImage(cairo_image_surface_get_data(pSurface),
-                        cairo_image_surface_get_width(pSurface),
-                        cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
-    }
-    else
-        aImage = *m_rFrame.m_pQImage;
-
-    const qreal fRatio = m_rFrame.devicePixelRatioF();
-    aImage.setDevicePixelRatio(fRatio);
-    QRectF source(pEvent->rect().topLeft() * fRatio, pEvent->rect().size() * fRatio);
-    p.drawImage(pEvent->rect(), aImage, source);
-}
+void QtWidget::paintEvent(QPaintEvent* pEvent) { m_rFrame.handlePaintEvent(pEvent, this); }
 
 void QtWidget::resizeEvent(QResizeEvent* pEvent) { m_rFrame.handleResizeEvent(pEvent); }
 

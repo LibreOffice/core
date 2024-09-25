@@ -1582,6 +1582,31 @@ void QtFrame::handleMoveEvent(QMoveEvent* pEvent)
     CallCallback(SalEvent::Move, nullptr);
 }
 
+void QtFrame::handlePaintEvent(QPaintEvent* pEvent, QWidget* pWidget)
+{
+    QPainter p(pWidget);
+    if (!m_bNullRegion)
+        p.setClipRegion(m_aRegion);
+
+    QImage aImage;
+    if (m_bUseCairo)
+    {
+        cairo_surface_t* pSurface = m_pSurface.get();
+        cairo_surface_flush(pSurface);
+
+        aImage = QImage(cairo_image_surface_get_data(pSurface),
+                        cairo_image_surface_get_width(pSurface),
+                        cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
+    }
+    else
+        aImage = *m_pQImage;
+
+    const qreal fRatio = devicePixelRatioF();
+    aImage.setDevicePixelRatio(fRatio);
+    QRectF source(pEvent->rect().topLeft() * fRatio, pEvent->rect().size() * fRatio);
+    p.drawImage(pEvent->rect(), aImage, source);
+}
+
 void QtFrame::handleResizeEvent(QResizeEvent* pEvent)
 {
     const qreal fRatio = devicePixelRatioF();
