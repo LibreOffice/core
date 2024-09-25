@@ -3260,6 +3260,132 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animati
     pXImpressDocument->postSlideshowCleanup();
 }
 
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_TextBox)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_TextBox.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(4, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(5, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    // Check we are done
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayeredRendering_Animation_TextBox_SecondParagraphMultipleEffects)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest_Animations_SecondParagraphMultipleEffects.odp");
+    pXImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    SdPage* pPage = pViewShell->GetActualPage();
+    CPPUNIT_ASSERT(pPage);
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+
+    std::string sHash = GetInterfaceHash(GetXDrawPageForSdrPage(pPage));
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(sHash.c_str(), 0, nViewWidth, nViewHeight, true, true));
+    CPPUNIT_ASSERT_EQUAL(2000, nViewWidth);
+    CPPUNIT_ASSERT_EQUAL(1125, nViewHeight);
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(1, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(2, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(!pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+
+        debugWriteImageToFile(3, pBuffer, nViewWidth, nViewHeight, rJsonMsg.toUtf8().getStr());
+    }
+
+    // Check we are done
+    {
+        std::vector<sal_uInt8> pBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        OUString rJsonMsg;
+        CPPUNIT_ASSERT(pXImpressDocument->renderNextSlideLayer(pBuffer.data(), bIsBitmapLayer, rJsonMsg));
+    }
+
+    pXImpressDocument->postSlideshowCleanup();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

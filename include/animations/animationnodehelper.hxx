@@ -79,36 +79,42 @@ namespace anim
         }
     }
 
+    inline bool getVisibilityPropertyForAny(css::uno::Any const& rAny)
+    {
+        bool bVisible = false;
+        css::uno::Any aAny(rAny);
+
+        // try to extract bool value
+        if (!(aAny >>= bVisible))
+        {
+            // try to extract string
+            OUString aString;
+            if (aAny >>= aString)
+            {
+                // we also take the strings "true" and "false",
+                // as well as "on" and "off" here
+                if (aString.equalsIgnoreAsciiCase("true") ||
+                    aString.equalsIgnoreAsciiCase("on"))
+                {
+                    bVisible = true;
+                }
+                if (aString.equalsIgnoreAsciiCase("false") ||
+                    aString.equalsIgnoreAsciiCase("off"))
+                {
+                    bVisible = false;
+                }
+            }
+        }
+        return bVisible;
+    }
+
     inline bool getVisibilityProperty(
         const css::uno::Reference< css::animations::XAnimate >& xAnimateNode, bool& bReturn)
     {
-        if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
+        if (xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility"))
         {
-            bool bVisible( false );
-            css::uno::Any aAny( xAnimateNode->getTo() );
-
-            // try to extract bool value
-            if( !(aAny >>= bVisible) )
-            {
-                // try to extract string
-                OUString aString;
-                if( aAny >>= aString )
-                {
-                    // we also take the strings "true" and "false",
-                    // as well as "on" and "off" here
-                    if( aString.equalsIgnoreAsciiCase("true") ||
-                        aString.equalsIgnoreAsciiCase("on") )
-                    {
-                        bVisible = true;
-                    }
-                    if( aString.equalsIgnoreAsciiCase("false") ||
-                        aString.equalsIgnoreAsciiCase("off") )
-                    {
-                        bVisible = false;
-                    }
-                }
-            }
-            bReturn = bVisible;
+            css::uno::Any aAny(xAnimateNode->getTo());
+            bReturn = getVisibilityPropertyForAny(aAny);
             return true;
         }
 
