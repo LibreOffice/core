@@ -154,7 +154,7 @@ public class QueryWizard extends DatabaseObjectWizard
                     case SOAGGREGATE_PAGE:
                         if (_bEnabled)
                         {
-                            bEnabled = ((m_DBMetaData.hasNumericalFields()) && (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar()));
+                            bEnabled = ((m_DBMetaData.hasNumericalFields()) && (m_DBMetaData.getDBMetaData().supportsCoreSQLGrammar()));
                         }
                         break;
                     case SOGROUPSELECTION_PAGE:
@@ -198,11 +198,11 @@ public class QueryWizard extends DatabaseObjectWizard
             i = insertRoadmapItem(0, true, SOFIELDSELECTION_PAGE - 1, SOFIELDSELECTION_PAGE);
             i = insertRoadmapItem(i, false, SOSORTING_PAGE - 1, SOSORTING_PAGE); // Orderby is always supported
             i = insertRoadmapItem(i, false, SOFILTER_PAGE - 1, SOFILTER_PAGE);
-            if (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            if (m_DBMetaData.getDBMetaData().supportsCoreSQLGrammar())
             {
                 i = insertRoadmapItem(i, m_DBMetaData.hasNumericalFields(), SOAGGREGATE_PAGE - 1, SOAGGREGATE_PAGE);
             }
-            if (m_DBMetaData.xDBMetaData.supportsGroupBy())
+            if (m_DBMetaData.getDBMetaData().supportsGroupBy())
             {
                 i = insertRoadmapItem(i, false, SOGROUPSELECTION_PAGE - 1, SOGROUPSELECTION_PAGE);
                 i = insertRoadmapItem(i, false, SOGROUPFILTER_PAGE - 1, SOGROUPFILTER_PAGE);
@@ -232,11 +232,11 @@ public class QueryWizard extends DatabaseObjectWizard
             m_filterComponent = new FilterComponent(this, SOFILTER_PAGE, 97, 27, 3, m_DBMetaData, 40878);
             m_filterComponent.addNumberFormats();
 
-            if (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar())
+            if (m_DBMetaData.getDBMetaData().supportsCoreSQLGrammar())
             {
                 m_aggregateComponent = new AggregateComponent(this, m_DBMetaData, SOAGGREGATE_PAGE, 97, 69, 209, 5, 40895);
             }
-            if (m_DBMetaData.xDBMetaData.supportsGroupBy())
+            if (m_DBMetaData.getDBMetaData().supportsGroupBy())
             {
                 m_groupFieldSelection = new FieldSelection(this, SOGROUPSELECTION_PAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
                 m_groupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
@@ -277,7 +277,7 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             if (nOldStep <= SOGROUPSELECTION_PAGE && nNewStep > SOGROUPSELECTION_PAGE)
             {
-                if (m_DBMetaData.xDBMetaData.supportsGroupBy())
+                if (m_DBMetaData.getDBMetaData().supportsGroupBy())
                 {
                     m_DBMetaData.setGroupFieldNames(m_groupFieldSelection.getSelectedFieldNames());
                     m_DBMetaData.setGroupFieldNames(JavaTools.removeOutdatedFields(m_DBMetaData.getGroupFieldNames(), m_DBMetaData.getNonAggregateFieldNames()));
@@ -357,10 +357,10 @@ public class QueryWizard extends DatabaseObjectWizard
             {
                 if (m_DBMetaData.Type == QueryMetaData.QueryType.SOSUMMARYQUERY)
                 {
-                    if (m_DBMetaData.xDBMetaData.supportsGroupBy())
+                    if (m_DBMetaData.getDBMetaData().supportsGroupBy())
                     {
                         m_DBMetaData.setNonAggregateFieldNames();
-                        m_groupFieldSelection.initialize(m_DBMetaData.getUniqueAggregateFieldNames(), false, m_DBMetaData.xDBMetaData.getMaxColumnsInGroupBy());
+                        m_groupFieldSelection.initialize(m_DBMetaData.getUniqueAggregateFieldNames(), false, m_DBMetaData.getDBMetaData().getMaxColumnsInGroupBy());
                         m_groupFieldSelection.initializeSelectedFields(m_DBMetaData.getNonAggregateFieldNames());
                         m_groupFieldSelection.setMultipleMode(false);
                         setStepEnabled(SOGROUPFILTER_PAGE, m_aggregateComponent.isGroupingpossible() && m_DBMetaData.getNonAggregateFieldNames().length > 0);

@@ -55,7 +55,7 @@ public class RelationController extends CommandName
         try
         {
             ArrayList<String> aReferencedTableVector = new ArrayList<String>();
-            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getExportedKeys(getCatalogName(this), getSchemaName(), getTableName());
+            XResultSet xResultSet = super.getCommandMetaData().getDBMetaData().getExportedKeys(getCatalogName(this), getSchemaName(), getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
             {
@@ -96,7 +96,7 @@ public class RelationController extends CommandName
         try
         {
             CommandName oLocCommandName = new CommandName(super.getCommandMetaData(), _sreferencedtablename);
-            XResultSet xResultSet = super.getCommandMetaData().xDBMetaData.getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), oLocCommandName.getTableName());
+            XResultSet xResultSet = super.getCommandMetaData().getDBMetaData().getImportedKeys(getCatalogName(oLocCommandName), oLocCommandName.getSchemaName(), oLocCommandName.getTableName());
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             boolean bleaveLoop = false;
             ArrayList<String> aMasterFieldNamesVector = new ArrayList<String>();
@@ -105,11 +105,11 @@ public class RelationController extends CommandName
             {
                 String sPrimaryCatalog = null;
                 String sPrimarySchema = null;
-                if (super.getCommandMetaData().xDBMetaData.supportsCatalogsInDataManipulation())
+                if (super.getCommandMetaData().getDBMetaData().supportsCatalogsInDataManipulation())
                 {
                     sPrimaryCatalog = xRow.getString(PKTABLE_CAT);
                 }
-                if (super.getCommandMetaData().xDBMetaData.supportsSchemasInDataManipulation())
+                if (super.getCommandMetaData().getDBMetaData().supportsSchemasInDataManipulation())
                 {
                     sPrimarySchema = xRow.getString(PKTABLE_SCHEM);
                 }

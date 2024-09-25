@@ -292,7 +292,7 @@ public class AggregateComponent extends ControlScroller
     {
         try
         {
-            boolean benableGroupPage = isAggregateComponentEnabled() && CurDBMetaData.xDBMetaData.supportsGroupBy() && hasonlycompletefunctions();
+            boolean benableGroupPage = isAggregateComponentEnabled() && CurDBMetaData.getDBMetaData().supportsGroupBy() && hasonlycompletefunctions();
             String[][] sAggregateFieldNames = this.getAggregateFieldNames();
             if (benableGroupPage)
             {

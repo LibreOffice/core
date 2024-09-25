@@ -80,7 +80,7 @@ import com.sun.star.wizards.common.SystemDialog;
 public class DBMetaData
 {
     private XNameAccess xQueryNames;
-    public XDatabaseMetaData xDBMetaData;
+    private XDatabaseMetaData xDBMetaData;
     private XDataSource m_dataSource;
     private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
@@ -136,6 +136,11 @@ public class DBMetaData
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
+
+    public XDatabaseMetaData getDBMetaData()
+    {
+        return xDBMetaData;
+    }
 
     public com.sun.star.sdbc.XConnection getDBConnection()
     {

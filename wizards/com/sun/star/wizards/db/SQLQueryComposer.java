@@ -63,7 +63,7 @@ public class SQLQueryComposer
 
     private boolean addtoSelectClause(String DisplayFieldName) throws SQLException
     {
-        return !(bincludeGrouping && CurDBMetaData.xDBMetaData.supportsGroupByUnrelated() && CurDBMetaData.getGroupFieldNames() != null && JavaTools.FieldInList(CurDBMetaData.getGroupFieldNames(), DisplayFieldName) > -1);
+        return !(bincludeGrouping && CurDBMetaData.getDBMetaData().supportsGroupByUnrelated() && CurDBMetaData.getGroupFieldNames() != null && JavaTools.FieldInList(CurDBMetaData.getGroupFieldNames(), DisplayFieldName) > -1);
         }
 
     public String getSelectClause(boolean _baddAliasFieldNames) throws SQLException

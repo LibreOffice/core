@@ -48,14 +48,14 @@ public class CommandName
         {
             baddQuotation = _baddQuotation;
             oCommandMetaData = _CommandMetaData;
-            if ((_CatalogName != null) && (oCommandMetaData.xDBMetaData.supportsCatalogsInTableDefinitions()))
+            if ((_CatalogName != null) && (oCommandMetaData.getDBMetaData().supportsCatalogsInTableDefinitions()))
             {
                 if (!_CatalogName.equals(PropertyNames.EMPTY_STRING))
                 {
                     CatalogName = _CatalogName;
                 }
             }
-            if ((_SchemaName != null) && (oCommandMetaData.xDBMetaData.supportsSchemasInTableDefinitions()))
+            if ((_SchemaName != null) && (oCommandMetaData.getDBMetaData().supportsSchemasInTableDefinitions()))
             {
                 if (!_SchemaName.equals(PropertyNames.EMPTY_STRING))
                 {
@@ -86,7 +86,7 @@ public class CommandName
 
             this.DisplayName = _DisplayName;
             int iIndex;
-            if (oCommandMetaData.xDBMetaData.supportsCatalogsInDataManipulation())
+            if (oCommandMetaData.getDBMetaData().supportsCatalogsInDataManipulation())
             { // ...then Catalog also in TableName
                 iIndex = _DisplayName.indexOf(sCatalogSep);
                 if (iIndex >= 0)
@@ -103,7 +103,7 @@ public class CommandName
                     }
                 }
             }
-            if (oCommandMetaData.xDBMetaData.supportsSchemasInDataManipulation())
+            if (oCommandMetaData.getDBMetaData().supportsSchemasInDataManipulation())
             {
                 String[] NameList = JavaTools.ArrayoutofString(_DisplayName, ".");
                 if (NameList.length > 1)
@@ -171,9 +171,9 @@ public class CommandName
     {
         try
         {
-            bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
-            sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
-            oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
+            bCatalogAtStart = oCommandMetaData.getDBMetaData().isCatalogAtStart();
+            sCatalogSep = oCommandMetaData.getDBMetaData().getCatalogSeparator();
+            oCommandMetaData.getDBMetaData().getIdentifierQuoteString();
             return true;
         }
         catch (SQLException e)

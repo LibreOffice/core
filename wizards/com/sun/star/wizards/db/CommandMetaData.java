@@ -539,8 +539,8 @@ public class CommandMetaData extends DBMetaData
     {
         try
         {
-            xDBMetaData.getCatalogSeparator();
-            sIdentifierQuote = xDBMetaData.getIdentifierQuoteString();
+            getDBMetaData().getCatalogSeparator();
+            sIdentifierQuote = getDBMetaData().getIdentifierQuoteString();
             bCommandComposerAttributesalreadyRetrieved = true;
         }
         catch (SQLException e)

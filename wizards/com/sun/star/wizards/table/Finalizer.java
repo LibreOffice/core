@@ -91,7 +91,7 @@ public class Finalizer
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
-            if (this.curtabledescriptor.xDBMetaData.supportsCatalogsInTableDefinitions())
+            if (this.curtabledescriptor.getDBMetaData().supportsCatalogsInTableDefinitions())
             {
                 if (sCatalogNames != null && sCatalogNames.length > 0)
                 {
@@ -143,7 +143,7 @@ public class Finalizer
                     nListBoxPosX = 200;
                 }
             }
-            if (this.curtabledescriptor.xDBMetaData.supportsSchemasInTableDefinitions())
+            if (this.curtabledescriptor.getDBMetaData().supportsSchemasInTableDefinitions())
             {
                 if (sSchemaNames != null && sSchemaNames.length > 0)
                 {
