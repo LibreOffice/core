@@ -167,8 +167,8 @@ FONT_NOTO_KUFI_ARABIC_TARBALL := NotoKufiArabic-v2.109.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-FONT_NOTO_SANS_SHA256SUM := 9fd595dd701d7ea103a9ba8a9cfdcf0c35c5574ef754fecabe718eadad8bccde
-FONT_NOTO_SANS_TARBALL := NotoSans-v2.013.zip
+FONT_NOTO_SANS_SHA256SUM := 1dffbaf31a0a699ee2c57dfb60c1a628010425301dd076cfb485adbe017352c1
+FONT_NOTO_SANS_TARBALL := NotoSans-v2.014.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
