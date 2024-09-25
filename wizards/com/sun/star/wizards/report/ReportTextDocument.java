@@ -462,7 +462,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                                 {
                                     DelFieldName
                                 }));
-                        CurDBMetaData.GroupFieldColumns = removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.GroupFieldColumns);
+                        CurDBMetaData.setGroupFieldColumns(removeFieldColumnByFieldName(DelFieldName, CurDBMetaData.getGroupFieldColumns()));
                     }
                     else
                     {

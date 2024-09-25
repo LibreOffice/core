@@ -45,7 +45,7 @@ public class RecordParser extends QueryMetaData
     private XCompletedExecution xExecute;
     private XComponent xRowSetComponent;
     private XInteractionHandler xInteraction;
-    public FieldColumn[] GroupFieldColumns;
+    private FieldColumn[] GroupFieldColumns;
     private FieldColumn[] RecordFieldColumns;
 
     /** Creates a new instance of RecordParser */
@@ -63,6 +63,16 @@ public class RecordParser extends QueryMetaData
     public void setRecordFieldColumns(FieldColumn[] recordFieldColumns)
     {
         RecordFieldColumns = recordFieldColumns;
+    }
+
+    public FieldColumn[] getGroupFieldColumns()
+    {
+        return GroupFieldColumns;
+    }
+
+    public void setGroupFieldColumns(FieldColumn[] groupFieldColumns)
+    {
+        GroupFieldColumns = groupFieldColumns;
     }
 
     private void getInterfaces()
