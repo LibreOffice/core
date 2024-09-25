@@ -1157,23 +1157,14 @@ uno::Any SwXNumberingRules::getPropertyByIndex(sal_Int32 nIndex, const OUString&
     if(nIndex < 0 || MAXLEVEL <= nIndex)
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aVal;
     const SwNumRule* pRule = m_pNumRule;
     if(!pRule && m_pDoc && !m_sCreatedNumRuleName.isEmpty())
         pRule = m_pDoc->FindNumRulePtr( m_sCreatedNumRuleName );
-    if(pRule)
-    {
-        aVal = GetNumberingRuleByIndex( *pRule, nIndex, rPropName);
-
-    }
-    else if(m_pDocShell)
-    {
-        aVal = GetNumberingRuleByIndex(
-                *m_pDocShell->GetDoc()->GetOutlineNumRule(), nIndex, rPropName);
-    }
-    else
+    if (!pRule && m_pDocShell)
+        pRule = m_pDocShell->GetDoc()->GetOutlineNumRule();
+    if (!pRule)
         throw uno::RuntimeException();
-    return aVal;
+    return GetNumberingRuleByIndex(*pRule, nIndex, rPropName);
 }
 
 uno::Any SwXNumberingRules::getByIndex(sal_Int32 nIndex)
