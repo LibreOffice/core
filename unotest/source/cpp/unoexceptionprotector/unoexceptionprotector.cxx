@@ -88,9 +88,13 @@ void printUnoValue(
         out << std::uppercase << *o3tl::forceAccess<double>(value);
         break;
     case css::uno::TypeClass_CHAR:
+    {
+        std::ios_base::fmtflags origfmt = out.flags();
         out << "\\u" << std::hex << std::uppercase << std::setw(4) << std::setfill('0')
-            << std::uint_least16_t(*o3tl::forceAccess<char16_t>(value)) << std::dec;
+            << std::uint_least16_t(*o3tl::forceAccess<char16_t>(value));
+        out.setf(origfmt);
         break;
+    }
     case css::uno::TypeClass_STRING:
         out << '"' << *o3tl::forceAccess<OUString>(value) << '"'; //TODO: encode content
         break;
