@@ -119,12 +119,11 @@ private:
     SALFRAMEPROC            m_pProc;
     Link<bool, void>        m_aModalHierarchyHdl;
 protected:
+    SalFrameGeometry maGeometry; ///< absolute, unmirrored values
     mutable std::unique_ptr<weld::Window> m_xFrameWeld;
 public:
                             SalFrame();
     virtual                 ~SalFrame() override;
-
-    SalFrameGeometry maGeometry; ///< absolute, unmirrored values
 
     // SalGeometryProvider
     virtual tools::Long GetWidth() const override { return maGeometry.width(); }
