@@ -475,7 +475,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
 
 #if GTK_CHECK_VERSION(4, 0, 0)
     AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
-    aFloatRect.Move(-mpFrame->maGeometry.x(), -mpFrame->maGeometry.y());
+    aFloatRect.Move(-mpFrame->GetUnmirroredGeometry().x(), -mpFrame->GetUnmirroredGeometry().y());
     GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                        static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 
@@ -496,7 +496,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     if (gtk_check_version(3, 22, 0) == nullptr)
     {
         AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
-        aFloatRect.Move(-mpFrame->maGeometry.x(), -mpFrame->maGeometry.y());
+        aFloatRect.Move(-mpFrame->GetUnmirroredGeometry().x(), -mpFrame->GetUnmirroredGeometry().y());
         GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                            static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
 

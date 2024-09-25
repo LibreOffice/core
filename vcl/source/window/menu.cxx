@@ -1600,7 +1600,7 @@ Size Menu::ImplCalcSize( vcl::Window* pWin )
         // except on rather small screens
         // TODO: move GetScreenNumber from SystemWindow to Window ?
         // currently we rely on internal privileges
-        unsigned int nDisplayScreen = pWin->ImplGetWindowImpl()->mpFrame->maGeometry.screen();
+        unsigned int nDisplayScreen = pWin->ImplGetWindowImpl()->mpFrame->GetUnmirroredGeometry().screen();
         tools::Rectangle aDispRect( Application::GetScreenPosSizePixel( nDisplayScreen ) );
         tools::Long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
         if( nMaxWidth > nScreenWidth/2 )

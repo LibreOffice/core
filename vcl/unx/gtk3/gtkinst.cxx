@@ -2257,7 +2257,7 @@ namespace
             // this is the relatively unusual case where pParent is the toplevel GtkSalFrame and not a stock GtkWidget
             // so use the same style of logic as GtkSalMenu::ShowNativePopupMenu to get the right position
             AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(pFrame->GetWindow(), rInRect);
-            aFloatRect.Move(-pFrame->maGeometry.x(), -pFrame->maGeometry.y());
+            aFloatRect.Move(-pFrame->GetUnmirroredGeometry().x(), -pFrame->GetUnmirroredGeometry().y());
 
             rOutRect = GdkRectangle{static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                                     static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};

@@ -954,7 +954,7 @@ bool SystemWindow::ImplIsInTaskPaneList( vcl::Window* pWin )
 
 unsigned int SystemWindow::GetScreenNumber() const
 {
-    return mpWindowImpl->mpFrame->maGeometry.screen();
+    return mpWindowImpl->mpFrame->GetUnmirroredGeometry().screen();
 }
 
 void SystemWindow::SetScreenNumber(unsigned int nDisplayScreen)
