@@ -906,6 +906,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -927,6 +928,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -947,6 +949,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -968,6 +971,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">3</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -989,6 +993,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">4</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
@@ -1010,6 +1015,7 @@
                       <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">5</property>
+                        <property name="width">2</property>
                       </packing>
                     </child>
                     <child>
