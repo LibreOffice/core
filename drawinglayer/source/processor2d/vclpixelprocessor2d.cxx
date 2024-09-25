@@ -192,6 +192,10 @@ bool VclPixelProcessor2D::tryDrawPolygonStrokePrimitive2DDirect(
 
 void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
 {
+    // Skip, if not visible
+    if (!rCandidate.getVisible())
+        return;
+
     switch (rCandidate.getPrimitive2DID())
     {
         case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
