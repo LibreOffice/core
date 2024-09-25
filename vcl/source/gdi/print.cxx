@@ -221,11 +221,6 @@ void Printer::EmulateDrawTransparent ( const tools::PolyPolygon& rPolyPoly,
     GDIMetaFile* pOldMetaFile = mpMetaFile;
     mpMetaFile = nullptr;
 
-    mpMetaFile = pOldMetaFile;
-
-    // #110958# Restore disabled alpha VDev
-    mpAlphaVDev = pOldAlphaVDev;
-
     tools::Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
     const Size      aDPISize( LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)) );
     const tools::Long      nBaseExtent = std::max<tools::Long>( basegfx::fround<tools::Long>( aDPISize.Width() / 300. ), 1 );
