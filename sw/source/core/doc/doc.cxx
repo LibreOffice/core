@@ -1433,46 +1433,41 @@ void SwDoc::ForEachCharacterBoxItem( const std::function<bool(const SvxBoxItem&)
     }
 }
 
-/// Iterate over all SvxColorItem, if the function returns false, iteration is stopped
-void SwDoc::ForEachCharacterColorItem( const std::function<bool(const SvxColorItem&)>& rFunc ) const
+namespace
 {
-    for(SwCharFormat* pFormat : *GetCharFormats())
+/// Iterate over all pool item of type T, if the function returns false, iteration is stopped
+template<typename T>
+void ForEachCharacterItem(const SwDoc* pDoc, TypedWhichId<T> nWhich, const std::function<bool(const T&)>& rFunc )
+{
+    for(SwCharFormat* pFormat : *pDoc->GetCharFormats())
     {
         const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
-        if (const SvxColorItem* pColorItem = rAttrSet.GetItemIfSet(RES_CHRATR_COLOR))
+        if (const T* pColorItem = rAttrSet.GetItemIfSet(nWhich))
             if (!rFunc(*pColorItem))
                 return;
     }
     std::vector<std::shared_ptr<SfxItemSet>> aStyles;
     for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
     {
-        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
+        const_cast<SwDoc*>(pDoc)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
         for (const auto & rxItemSet : aStyles)
-            if (const SvxColorItem* pColorItem = rxItemSet->GetItemIfSet(RES_CHRATR_COLOR))
+            if (const T* pColorItem = rxItemSet->GetItemIfSet(nWhich))
                 if (!rFunc(*pColorItem))
                     return;
     }
+}
+}
+
+/// Iterate over all SvxColorItem, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterColorItem( const std::function<bool(const SvxColorItem&)>& rFunc ) const
+{
+    ForEachCharacterItem(this, RES_CHRATR_COLOR, rFunc);
 }
 
 /// Iterate over all SvxUnderlineItem, if the function returns false, iteration is stopped
 void SwDoc::ForEachCharacterUnderlineItem( const std::function<bool(const SvxUnderlineItem&)>& rFunc ) const
 {
-    for(SwCharFormat* pFormat : *GetCharFormats())
-    {
-        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
-        if (const SvxUnderlineItem* pItem = rAttrSet.GetItemIfSet(RES_CHRATR_UNDERLINE))
-            if (!rFunc(*pItem))
-                return;
-    }
-    std::vector<std::shared_ptr<SfxItemSet>> aStyles;
-    for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
-    {
-        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
-        for (const auto & rxItemSet : aStyles)
-            if (const SvxUnderlineItem* pItem = rxItemSet->GetItemIfSet(RES_CHRATR_UNDERLINE))
-                if (!rFunc(*pItem))
-                    return;
-    }
+    ForEachCharacterItem(this, RES_CHRATR_UNDERLINE, rFunc);
 }
 
 /// Iterate over all SvxBrushItem, if the function returns false, iteration is stopped
