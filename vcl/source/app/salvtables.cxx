@@ -7428,7 +7428,7 @@ std::unique_ptr<weld::SizeGroup> SalInstanceBuilder::create_size_group()
 
 OUString SalInstanceBuilder::get_current_page_help_id() const
 {
-    vcl::Window* pCtrl = m_xBuilder->get(u"tabcontrol"_ustr);
+    vcl::Window* pCtrl = m_xBuilder->get(u"tabcontrol");
     if (!pCtrl)
         return {};
     VclPtr<vcl::Window> xTabPage;

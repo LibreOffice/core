@@ -818,7 +818,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
         officecfg::Office::Common::Help::HelpRootURL::get().isEmpty();
     if (bHideHelp)
     {
-        if (vcl::Window *pHelpButton = get(u"help"_ustr))
+        if (vcl::Window *pHelpButton = get(u"help"))
             pHelpButton->Hide();
     }
 }

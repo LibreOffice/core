@@ -72,7 +72,7 @@ public:
     void disposeBuilder();
 
     //sID may not exist, but must be of type T if it does
-    template <typename T = vcl::Window> T* get(const OUString& sID);
+    template <typename T = vcl::Window> T* get(std::u16string_view sID);
 
     vcl::Window*    get_widget_root();
 
@@ -351,11 +351,12 @@ namespace BuilderUtils
 
 //sID may not exist, but must be of type T if it does
 template <typename T>
-inline T* VclBuilder::get(const OUString& sID)
+inline T* VclBuilder::get(std::u16string_view sID)
 {
     vcl::Window *w = get_by_name(sID);
-    SAL_WARN_IF(w && !dynamic_cast<T*>(w),
-        "vcl.layout", ".ui widget \"" << sID << "\" needs to correspond to vcl type " << typeid(T).name());
+    SAL_WARN_IF(w && !dynamic_cast<T*>(w), "vcl.layout",
+                ".ui widget \"" << OUStringToOString(sID, RTL_TEXTENCODING_UTF8)
+                                << "\" needs to correspond to vcl type " << typeid(T).name());
     assert(!w || dynamic_cast<T*>(w));
     return static_cast<T*>(w);
 }
