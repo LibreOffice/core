@@ -116,7 +116,6 @@ bool WinSalFrame::mbInReparent = false;
 #define Uni_SupplementaryPlanesStart    0x10000
 
 static void UpdateFrameGeometry(WinSalFrame* pFrame);
-static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect = nullptr );
 
 static void SetGeometrySize(vcl::WindowPosSize& rWinPosSize, const Size& rSize)
 {
@@ -524,7 +523,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         // #96084 set a useful internal window size because
         // the window will not be maximized (and the size updated) before show()
 
-        SetMaximizedFrameGeometry( hWnd, pFrame );
+        pFrame->SetMaximizedFrameGeometry(hWnd);
     }
 
     return pFrame;
@@ -1755,7 +1754,7 @@ void WinSalFrame::SetWindowState(const vcl::WindowData* pState)
             aStateRect.bottom = nY+nHeight;
             // #96084 set a useful internal window size because
             // the window will not be maximized (and the size updated) before show()
-            SetMaximizedFrameGeometry( mhWnd, this, &aStateRect );
+            SetMaximizedFrameGeometry(mhWnd, &aStateRect);
             SetWindowPos( mhWnd, nullptr,
                           maGeometry.x(), maGeometry.y(), maGeometry.width(), maGeometry.height(),
                           SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
@@ -4206,7 +4205,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     return bPaintSuccessful;
 }
 
-static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pParentRect )
+void WinSalFrame::SetMaximizedFrameGeometry(HWND hWnd, RECT* pParentRect )
 {
     // calculate and set frame geometry of a maximized window - useful if the window is still hidden
 
@@ -4229,11 +4228,11 @@ static void SetMaximizedFrameGeometry( HWND hWnd, WinSalFrame* pFrame, RECT* pPa
     ImplSalGetWorkArea( hWnd, &aRect, pParentRect );
 
     // a maximized window has no other borders than the caption
-    pFrame->maGeometry.setDecorations(0, pFrame->mbCaption ? GetSystemMetrics(SM_CYCAPTION) : 0, 0, 0);
+    maGeometry.setDecorations(0, mbCaption ? GetSystemMetrics(SM_CYCAPTION) : 0, 0, 0);
 
-    aRect.top += pFrame->maGeometry.topDecoration();
-    pFrame->maGeometry.setPos({ aRect.left, aRect.top });
-    SetGeometrySize(pFrame->maGeometry, { aRect.right - aRect.left, aRect.bottom - aRect.top });
+    aRect.top += maGeometry.topDecoration();
+    maGeometry.setPos({ aRect.left, aRect.top });
+    SetGeometrySize(maGeometry, { aRect.right - aRect.left, aRect.bottom - aRect.top });
 }
 
 static void UpdateFrameGeometry(WinSalFrame* pFrame)
