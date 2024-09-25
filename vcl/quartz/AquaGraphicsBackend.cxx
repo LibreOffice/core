@@ -264,7 +264,7 @@ tools::Long AquaGraphicsBackend::GetGraphicsWidth() const
     {
         if (mrShared.mbWindow && mrShared.mpFrame)
         {
-            width = mrShared.mpFrame->maGeometry.width();
+            width = mrShared.mpFrame->GetWidth();
         }
     }
 #endif

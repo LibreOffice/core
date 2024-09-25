@@ -223,8 +223,9 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     mbInWindowDidResize = NO;
     mpLiveResizeTimer = nil;
     mpFrame = pFrame;
-    NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
-                     { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
+    const SalFrameGeometry& rFrameGeometry = pFrame->GetUnmirroredGeometry();
+    NSRect aRect = { { static_cast<CGFloat>(rFrameGeometry.x()), static_cast<CGFloat>(rFrameGeometry.y()) },
+                     { static_cast<CGFloat>(rFrameGeometry.width()), static_cast<CGFloat>(rFrameGeometry.height()) } };
     pFrame->VCLToCocoa( aRect );
     NSWindow* pNSWindow = [super initWithContentRect: aRect
                                  styleMask: mpFrame->getStyleMask()
@@ -744,7 +745,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
         // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        const NSRect aRect = { NSZeroPoint, NSMakeSize(mpFrame->maGeometry.width(), mpFrame->maGeometry.height()) };
+        const NSRect aRect = { NSZeroPoint, NSMakeSize(mpFrame->GetUnmirroredGeometry().width(), mpFrame->GetUnmirroredGeometry().height()) };
         [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
     }
 }
@@ -865,13 +866,13 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         SalMouseEvent aEvent;
         aEvent.mnTime   = pDispatchFrame->mnLastEventTime;
-        aEvent.mnX = static_cast<tools::Long>(aPt.x) - pDispatchFrame->maGeometry.x();
-        aEvent.mnY = static_cast<tools::Long>(aPt.y) - pDispatchFrame->maGeometry.y();
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - pDispatchFrame->GetUnmirroredGeometry().x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - pDispatchFrame->GetUnmirroredGeometry().y();
         aEvent.mnButton = nButton;
         aEvent.mnCode   =  aEvent.mnButton | nModMask;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = pDispatchFrame->maGeometry.width() - 1 - aEvent.mnX;
+            aEvent.mnX = pDispatchFrame->GetWidth() - 1 - aEvent.mnX;
 
         pDispatchFrame->CallCallback( nEvent, &aEvent );
 
@@ -1029,14 +1030,14 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
-        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mnCode           |= KEY_MOD1; // we want zooming, no scrolling
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
+            aEvent.mnX = mpFrame->GetWidth() - 1 - aEvent.mnX;
 
         aEvent.mnDelta = nDeltaZ;
         aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
@@ -1086,13 +1087,13 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
-        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
         aEvent.mnCode           = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel   = true;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
+            aEvent.mnX = mpFrame->GetWidth() - 1 - aEvent.mnX;
 
         if( dX != 0.0 )
         {
@@ -1145,13 +1146,13 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
         SalWheelMouseEvent aEvent;
         aEvent.mnTime         = mpFrame->mnLastEventTime;
-        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->maGeometry.x();
-        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->maGeometry.y();
+        aEvent.mnX = static_cast<tools::Long>(aPt.x) - mpFrame->GetUnmirroredGeometry().x();
+        aEvent.mnY = static_cast<tools::Long>(aPt.y) - mpFrame->GetUnmirroredGeometry().y();
         aEvent.mnCode         = ImplGetModifierMask( mpFrame->mnLastModifierFlags );
         aEvent.mbDeltaIsPixel = false;
 
         if( AllSettings::GetLayoutRTL() )
-            aEvent.mnX = mpFrame->maGeometry.width() - 1 - aEvent.mnX;
+            aEvent.mnX = mpFrame->GetWidth() - 1 - aEvent.mnX;
 
         if( dX != 0.0 )
         {
@@ -2135,8 +2136,8 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
     if ( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
     {
-        rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.x();
-        rect.origin.y = aPosEvent.mnY + mpFrame->maGeometry.y() + 4; // add some space for underlines
+        rect.origin.x = aPosEvent.mnX + mpFrame->GetUnmirroredGeometry().x();
+        rect.origin.y = aPosEvent.mnY + mpFrame->GetUnmirroredGeometry().y() + 4; // add some space for underlines
         rect.size.width = aPosEvent.mnWidth;
         rect.size.height = aPosEvent.mnHeight;
 

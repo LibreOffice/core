@@ -1065,11 +1065,11 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
                         // strange effects start to happen when HIThemeDrawFrame meets the border of the window.
                         // These can be avoided by clipping to the boundary of the frame (see issue 84756)
 
-                        if (rc.origin.y + rc.size.height >= mpFrame->maGeometry.height() - 3)
+                        if (rc.origin.y + rc.size.height >= mpFrame->GetHeight() - 3)
                         {
                             CGMutablePathRef rPath = CGPathCreateMutable();
                             CGPathAddRect(rPath, nullptr,
-                                          CGRectMake(0, 0, mpFrame->maGeometry.width() - 1, mpFrame->maGeometry.height() - 1));
+                                          CGRectMake(0, 0, mpFrame->GetWidth() - 1, mpFrame->GetHeight() - 1));
                             CGContextBeginPath(context);
                             CGContextAddPath(context, rPath);
                             CGContextClip(context);
