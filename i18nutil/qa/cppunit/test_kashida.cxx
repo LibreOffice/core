@@ -37,7 +37,7 @@ void KashidaTest::testCharacteristic()
     // Characteristic tests for kashida candidate selection.
     // Uses words from sample documents.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(u"متن"_ustr).value().nIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(u"فارسی"_ustr).value().nIndex);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), GetWordKashidaPosition(u"فارسی"_ustr).value().nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(u"با"_ustr).value().nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), GetWordKashidaPosition(u"نویسه"_ustr).value().nIndex);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(u"کشیده"_ustr).value().nIndex);
@@ -58,7 +58,9 @@ void KashidaTest::testCharacteristic()
 void KashidaTest::testFinalYeh()
 {
     CPPUNIT_ASSERT(!GetWordKashidaPosition(u"نیمِي"_ustr).has_value());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(u"كرسي"_ustr).value().nIndex);
+
+    // Should always insert kashida after Seen, even before a final Yeh
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), GetWordKashidaPosition(u"كرسي"_ustr).value().nIndex);
 }
 
 // #i98410#: Do not insert kashida under a ZWNJ

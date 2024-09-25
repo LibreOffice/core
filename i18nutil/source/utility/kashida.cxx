@@ -44,7 +44,8 @@ namespace
 /*
    The LibreOffice implementation modifies the above rules, as follows:
 
-   - tdf#65344: Kashida must not be inserted before the final form of Yeh.
+   - tdf#65344: Kashida must not be inserted before the final form of Yeh, unless
+                preceded by an initial or medial Seen.
 */
 
 #define IS_JOINING_GROUP(c, g) (u_getIntPropertyValue((c), UCHAR_JOINING_GROUP) == U_JG_##g)
@@ -152,7 +153,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
     }
 
     auto fnTryInsertBefore = [&rWord, &nIdx, &nPrevIdx, &nKashidaPos, &nPriorityLevel,
-                              &nWordLen](sal_Int32 nNewPriority) {
+                              &nWordLen](sal_Int32 nNewPriority, bool bIgnoreFinalYeh = false) {
         // Exclusions:
 
         // #i98410#: prevent ZWNJ expansion
@@ -162,7 +163,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         }
 
         // tdf#65344: Do not insert kashida before a final Yeh
-        if (nIdx == (nWordLen - 1) && isYehChar(rWord[nIdx]))
+        if (!bIgnoreFinalYeh && nIdx == (nWordLen - 1) && isYehChar(rWord[nIdx]))
         {
             return;
         }
@@ -190,7 +191,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         {
             if (isSeenOrSadChar(cPrevCh))
             {
-                fnTryInsertBefore(1);
+                fnTryInsertBefore(1, /*bIgnoreFinalYeh*/ true);
             }
         }
 
