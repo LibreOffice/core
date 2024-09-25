@@ -315,31 +315,12 @@ namespace vclcanvas
             ::basegfx::B2DPolyPolygon aPolyPoly(
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon) );
 
-            std::vector<double> aDashArray;
-            if( strokeAttributes.DashArray.hasElements() )
-                aDashArray = ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray);
-
-            // First try to draw directly using VCL.
-            bool directFailed = false;
-            setupOutDevState( viewState, renderState, LINE_COLOR );
-            for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
-            {
-                if( !mpOutDevProvider->getOutDev().DrawPolyLineDirect( aMatrix, aPolyPoly.getB2DPolygon(i),
-                    strokeAttributes.StrokeWidth, 0, !aDashArray.empty() ? &aDashArray : nullptr,
-                    b2DJoineFromJoin(strokeAttributes.JoinType), unoCapeFromCap(strokeAttributes.StartCapType)))
-                {
-                    directFailed = true;
-                    break;
-                }
-            }
-            if(!directFailed)
-                return uno::Reference< rendering::XCachedPrimitive >(nullptr);
-
-            // Do it all manually.
-
             // apply dashing, if any
             if( strokeAttributes.DashArray.hasElements() )
             {
+                const std::vector<double>& aDashArray(
+                    ::comphelper::sequenceToContainer< std::vector<double> >(strokeAttributes.DashArray) );
+
                 ::basegfx::B2DPolyPolygon aDashedPolyPoly;
 
                 for( sal_uInt32 i=0; i<aPolyPoly.count(); ++i )
