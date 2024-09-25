@@ -100,6 +100,8 @@ $(eval $(call gb_Module_add_slowcheck_targets,sw,\
         CppunitTest_sw_uiwriter \
     ) \
     CppunitTest_sw_layoutwriter \
+    CppunitTest_sw_layoutwriter2 \
+    CppunitTest_sw_layoutwriter3 \
     CppunitTest_sw_mailmerge \
     CppunitTest_sw_globalfilter \
     CppunitTest_sw_accessible_relation_set \
