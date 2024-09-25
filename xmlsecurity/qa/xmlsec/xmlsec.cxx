@@ -45,7 +45,7 @@ OString ReadToString(const OUString& rUrl)
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
 {
-    // Given a view that has CA/cert/key data data associated:
+    // Given a view that has CA/cert/key data associated:
     uno::Reference<xml::crypto::XSEInitializer> mxSEInitializer
         = xml::crypto::SEInitializer::create(getComponentContext());
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
