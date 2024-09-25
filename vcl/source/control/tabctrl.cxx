@@ -1129,7 +1129,7 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         const bool bPaneWithHeader = mbShowTabs && rRenderContext.IsNativeControlSupported(ControlType::TabPane, ControlPart::TabPaneWithHeader);
         tools::Rectangle aHeaderRect(aRect.Left(), 0, aRect.Right(), aRect.Top());
 
-        if (mpTabCtrlData->maItemList.size())
+        if (!mpTabCtrlData->maItemList.empty())
         {
             tools::Long nLeft = LONG_MAX;
             tools::Long nRight = 0;
@@ -1213,7 +1213,8 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         }
     }
 
-    if (mbShowTabs && !mpTabCtrlData->maItemList.empty() && mpTabCtrlData->mpListBox == nullptr)
+    const size_t nItemListSize = mpTabCtrlData->maItemList.size();
+    if (mbShowTabs && nItemListSize > 0 && mpTabCtrlData->mpListBox == nullptr)
     {
         // Some native toolkits (GTK+) draw tabs right-to-left, with an
         // overlap between adjacent tabs
@@ -1227,17 +1228,17 @@ void TabControl::Paint( vcl::RenderContext& rRenderContext, const tools::Rectang
         if (bDrawTabsRTL)
         {
             pFirstTab = mpTabCtrlData->maItemList.data();
-            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size() - 1;
-            idx = mpTabCtrlData->maItemList.size() - 1;
+            pLastTab = pFirstTab + nItemListSize - 1;
+            idx = nItemListSize - 1;
         }
         else
         {
             pLastTab = mpTabCtrlData->maItemList.data();
-            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size() - 1;
+            pFirstTab = pLastTab + nItemListSize - 1;
             idx = 0;
         }
 
-        while (idx < mpTabCtrlData->maItemList.size())
+        while (idx < nItemListSize)
         {
             ImplTabItem* pItem = &mpTabCtrlData->maItemList[idx];
 
