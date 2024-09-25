@@ -281,7 +281,7 @@ sal_Int32 Decompression::explode()
             //       if LENGTH == 2
             //              D1 = D1 << 2
             //              read 2 bits -> D2
-            D1 = D1 << 2;
+            D1 = (D1 & 0x3fffffff) << 2;
             if (0 != ReadBits(2, D2))
                 break;
         }
