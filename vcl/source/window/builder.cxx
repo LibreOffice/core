@@ -3934,20 +3934,12 @@ void VclBuilder::set_response(std::u16string_view sID, short nResponse)
             break;
     }
 
-    for (const auto & child : m_aChildren)
-    {
-        if (child.m_sID == sID)
-        {
-            PushButton* pPushButton = dynamic_cast<PushButton*>(child.m_pWindow.get());
-            assert(pPushButton);
-            Dialog* pDialog = pPushButton->GetParentDialog();
-            assert(pDialog);
-            pDialog->add_button(pPushButton, nResponse, false);
-            return;
-        }
-    }
-
-    assert(false);
+    PushButton* pPushButton = get<PushButton>(sID);
+    assert(pPushButton);
+    Dialog* pDialog = pPushButton->GetParentDialog();
+    assert(pDialog);
+    pDialog->add_button(pPushButton, nResponse, false);
+    return;
 }
 
 void VclBuilder::delete_by_name(const OUString& sID)
