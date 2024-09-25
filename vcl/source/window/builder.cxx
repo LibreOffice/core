@@ -3830,7 +3830,34 @@ void BuilderBase::handleActionWidget(xmlreader::XmlReader &reader)
     sal_Int32 nDelim = sID.indexOf(':');
     if (nDelim != -1)
         sID = sID.copy(0, nDelim);
-    set_response(sID, sResponse.toInt32());
+
+    short nResponse = sResponse.toInt32();
+    switch (nResponse)
+    {
+        case -5:
+            nResponse = RET_OK;
+            break;
+        case -6:
+            nResponse = RET_CANCEL;
+            break;
+        case -7:
+            nResponse = RET_CLOSE;
+            break;
+        case -8:
+            nResponse = RET_YES;
+            break;
+        case -9:
+            nResponse = RET_NO;
+            break;
+        case -11:
+            nResponse = RET_HELP;
+            break;
+        default:
+            assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
+            break;
+    }
+
+    set_response(sID, nResponse);
 }
 
 void BuilderBase::collectAccelerator(xmlreader::XmlReader& reader, accelmap& rMap)
@@ -3909,31 +3936,6 @@ PopupMenu *VclBuilder::get_menu(std::u16string_view sID)
 
 void VclBuilder::set_response(std::u16string_view sID, short nResponse)
 {
-    switch (nResponse)
-    {
-        case -5:
-            nResponse = RET_OK;
-            break;
-        case -6:
-            nResponse = RET_CANCEL;
-            break;
-        case -7:
-            nResponse = RET_CLOSE;
-            break;
-        case -8:
-            nResponse = RET_YES;
-            break;
-        case -9:
-            nResponse = RET_NO;
-            break;
-        case -11:
-            nResponse = RET_HELP;
-            break;
-        default:
-            assert(nResponse >= 100 && "keep non-canned responses in range 100+ to avoid collision with vcl RET_*");
-            break;
-    }
-
     PushButton* pPushButton = get<PushButton>(sID);
     assert(pPushButton);
     Dialog* pDialog = pPushButton->GetParentDialog();
