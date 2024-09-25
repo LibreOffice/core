@@ -18,36 +18,6 @@
  
  namespace window_context_factory {
  
---- tools/sk_app/mac/MetalWindowContext_mac.mm	2021-11-25 10:39:27.000000000 -0500
-+++ tools/sk_app/mac/MetalWindowContext_mac.mm	2023-01-28 14:55:57.000000000 -0500
-@@ -11,6 +11,8 @@
- #import <Cocoa/Cocoa.h>
- #import <QuartzCore/CAConstraintLayoutManager.h>
- 
-+#include <sal/log.hxx>
-+
- using sk_app::DisplayParams;
- using sk_app::window_context_factory::MacWindowInfo;
- using sk_app::MetalWindowContext;
-@@ -87,6 +89,18 @@
-     fMetalLayer.drawableSize = backingSize;
-     fMetalLayer.contentsScale = backingScaleFactor;
- 
-+    // Related: tdf#147342 Copy layer's colorspace to window's colorspace
-+    // This method is now called when the window's backing properties have
-+    // changed so copy any colorspace changes.
-+    NSColorSpace* cs = fMainView.window.colorSpace;
-+    fMetalLayer.colorspace = cs.CGColorSpace;
-+    // Related tdf#145988 Reset layer's pixel format to MTLPixelFormatBGRA8Unorm
-+    // Skia initally sets the layer's pixel format to be BGRA8888 but macOS
-+    // may change the layer's pixel format when a window has moved to a screen
-+    // with 30-bit color depth so reset it back to BGRA8888.
-+    SAL_WARN_IF(fMetalLayer.pixelFormat != MTLPixelFormatBGRA8Unorm, "vcl.skia.metal", "CAMetalLayer pixel format is " << fMetalLayer.pixelFormat << " but should be " << MTLPixelFormatBGRA8Unorm << " (MTLPixelFormatBGRA8Unorm)");
-+    fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-+
-     fWidth = backingSize.width;
-     fHeight = backingSize.height;
- }
 --- /dev/null	2023-01-25 09:20:55.000000000 -0500
 +++ tools/sk_app/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
 @@ -0,0 +1,57 @@
@@ -108,3 +78,43 @@
 +}
 +
 +}  // namespace sk_app
+--- tools/sk_app/mac/MetalWindowContext_mac.mm	2024-08-31 15:49:57
++++ tools/sk_app/mac/MetalWindowContext_mac.mm	2024-09-25 20:09:32
+@@ -11,6 +11,8 @@
+ #import <Cocoa/Cocoa.h>
+ #import <QuartzCore/CAConstraintLayoutManager.h>
+ 
++#include <sal/log.hxx>
++
+ using sk_app::DisplayParams;
+ using sk_app::window_context_factory::MacWindowInfo;
+ using sk_app::MetalWindowContext;
+@@ -66,8 +68,7 @@
+     fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
+     fMetalLayer.contentsGravity = kCAGravityTopLeft;
+     fMetalLayer.magnificationFilter = kCAFilterNearest;
+-    NSColorSpace* cs = fMainView.window.colorSpace;
+-    fMetalLayer.colorspace = cs.CGColorSpace;
++    fMetalLayer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+ 
+     fMainView.layer = fMetalLayer;
+     fMainView.wantsLayer = YES;
+@@ -86,6 +87,18 @@
+     fMetalLayer.drawableSize = backingSize;
+     fMetalLayer.contentsScale = backingScaleFactor;
+ 
++    // Related: tdf#147342 Copy layer's colorspace to window's colorspace
++    // This method is now called when the window's backing properties have
++    // changed so copy any colorspace changes.
++    fMetalLayer.colorspace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
++
++    // Related tdf#145988 Reset layer's pixel format to MTLPixelFormatBGRA8Unorm
++    // Skia initally sets the layer's pixel format to be BGRA8888 but macOS
++    // may change the layer's pixel format when a window has moved to a screen
++    // with 30-bit color depth so reset it back to BGRA8888.
++    SAL_WARN_IF(fMetalLayer.pixelFormat != MTLPixelFormatBGRA8Unorm, "vcl.skia.metal", "CAMetalLayer pixel format is " << fMetalLayer.pixelFormat << " but should be " << MTLPixelFormatBGRA8Unorm << " (MTLPixelFormatBGRA8Unorm)");
++    fMetalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
++
+     fWidth = backingSize.width;
+     fHeight = backingSize.height;
+ }
