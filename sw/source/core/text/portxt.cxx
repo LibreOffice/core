@@ -495,7 +495,7 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
 bool SwTextPortion::Format( SwTextFormatInfo &rInf )
 {
     // GetLineWidth() takes care of DocumentSettingId::TAB_OVER_MARGIN.
-    if( rInf.GetLineWidth() < 0 || (!GetLen() && !InExpGrp()) )
+    if( rInf.GetLineWidth() + rInf.GetExtraSpace() < 0 || (!GetLen() && !InExpGrp()) )
     {
         Height( 0 );
         Width( 0 );

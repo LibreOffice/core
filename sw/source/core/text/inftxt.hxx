@@ -175,6 +175,7 @@ protected:
     bool m_bForbiddenChars : 1; // Forbidden start/endline characters
     bool m_bSnapToGrid : 1;   // paragraph snaps to grid
     sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
+    SwTwips m_nExtraSpace;    // extra space before shrinking = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth)
 
 protected:
     void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrame *pFrame,
@@ -299,6 +300,10 @@ public:
     const SwTextFrame *GetTextFrame() const { return m_pFrame; }
 
     bool HasHint(TextFrameIndex nPos) const;
+
+    // extra space before shrinking = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth)
+    void SetExtraSpace(SwTwips nVal) { m_nExtraSpace = nVal; }
+    SwTwips GetExtraSpace() const { return m_nExtraSpace; }
 
     // If Kana Compression is enabled, a minimum and maximum portion width
     // is calculated. We format lines with minimal size and share remaining
