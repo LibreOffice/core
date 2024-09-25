@@ -186,7 +186,9 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
     {
         static constexpr OUStringLiteral STR_BLANK = u" ";
         sal_Int16 nSpaceWidth = rInf.GetTextSize(STR_BLANK).Width();
-        nLineWidth += nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth);
+        SwTwips nExtraSpace = nSpacesInLine * (nSpaceWidth/0.8 - nSpaceWidth);
+        nLineWidth += nExtraSpace;
+        rInf.SetExtraSpace(nExtraSpace);
     }
 
     if ( rInf.GetLen() < nMaxLen )

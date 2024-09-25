@@ -384,6 +384,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163042)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(158), aPosition.GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163060)
+{
+    createSwDoc("tdf163060.fodt");
+
+    // Ensure that all text portions are calculated before testing.
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwViewShell* pViewShell
+        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    pViewShell->Reformat();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // There is only a single shrunk line 1, without breaking the last word
+    // before the last text portion "i"
+
+    // This ends in "dolorsi" (not "dolors", as before)
+    assertXPath(
+        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
+        u"Quis pretium semper. Proin luctus orci a neque venenatis, quis commodo dolorsi"_ustr);
+
+    // no second line (there was a second line with the text portion "i").
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162109)
 {
     createSwDoc("tdf162109.fodt");
