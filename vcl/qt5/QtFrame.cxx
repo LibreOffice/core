@@ -1575,4 +1575,11 @@ void QtFrame::handleDragLeave()
     m_bInDrag = false;
 }
 
+void QtFrame::handleMoveEvent(QMoveEvent* pEvent)
+{
+    const qreal fRatio = devicePixelRatioF();
+    maGeometry.setPos(toPoint(pEvent->pos() * fRatio));
+    CallCallback(SalEvent::Move, nullptr);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

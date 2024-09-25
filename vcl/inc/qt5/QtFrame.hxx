@@ -169,6 +169,7 @@ public:
     void handleDragLeave();
     void handleDragMove(QDragMoveEvent* pEvent);
     void handleDrop(QDropEvent* pEvent);
+    void handleMoveEvent(QMoveEvent* pEvent);
 
     virtual void SetExtendedFrameStyle(SalExtStyle nExtStyle) override;
     virtual void Show(bool bVisible, bool bNoActivate = false) override;

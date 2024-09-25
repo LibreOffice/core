@@ -294,8 +294,7 @@ void QtWidget::moveEvent(QMoveEvent* pEvent)
     if (m_rFrame.m_pTopLevel)
         return;
 
-    m_rFrame.maGeometry.setPos(toPoint(pEvent->pos() * m_rFrame.devicePixelRatioF()));
-    m_rFrame.CallCallback(SalEvent::Move, nullptr);
+    m_rFrame.handleMoveEvent(pEvent);
 }
 
 void QtWidget::showEvent(QShowEvent*)

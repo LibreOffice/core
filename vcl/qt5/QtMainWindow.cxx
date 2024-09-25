@@ -38,9 +38,4 @@ void QtMainWindow::closeEvent(QCloseEvent* pEvent)
         pEvent->ignore();
 }
 
-void QtMainWindow::moveEvent(QMoveEvent* pEvent)
-{
-    const qreal fRatio = m_rFrame.devicePixelRatioF();
-    m_rFrame.maGeometry.setPos(toPoint(pEvent->pos() * fRatio));
-    m_rFrame.CallCallback(SalEvent::Move, nullptr);
-}
+void QtMainWindow::moveEvent(QMoveEvent* pEvent) { m_rFrame.handleMoveEvent(pEvent); }
