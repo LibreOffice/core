@@ -41,7 +41,7 @@ public class UnoDialog
     private XNameAccess m_xDlgNameAccess;
     public XControl xControl;
     protected XDialog xDialog;
-    public XReschedule xReschedule;
+    protected XReschedule xReschedule;
     protected XWindow xWindow;
     public XComponent xComponent;
     public XInterface xDialogModel;
