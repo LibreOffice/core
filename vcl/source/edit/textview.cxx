@@ -1215,7 +1215,19 @@ TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
         css::uno::Reference < css::i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
-        aPaM.GetIndex() = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), css::i18n::WordType::ANYWORD_IGNOREWHITESPACES ).endPos;
+        // tdf#160202 - NextWord unexpectedly skips two words at the start of any word
+        const auto aWordBoundary = xBI->getWordBoundary(
+            pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(),
+            css::i18n::WordType::ANYWORD_IGNOREWHITESPACES, true);
+
+        // Check if the current index is inside the word boundary
+        if (aWordBoundary.startPos <= aPaM.GetIndex() && aPaM.GetIndex() < aWordBoundary.endPos)
+            aPaM.GetIndex() = aWordBoundary.startPos;
+        else
+            aPaM.GetIndex() = xBI->nextWord(pNode->GetText(), aPaM.GetIndex(),
+                                            mpImpl->mpTextEngine->GetLocale(),
+                                            css::i18n::WordType::ANYWORD_IGNOREWHITESPACES)
+                                  .endPos;
         mpImpl->mpTextEngine->GetWord( aPaM, nullptr, &aPaM );
     }
     else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().size()-1) )
