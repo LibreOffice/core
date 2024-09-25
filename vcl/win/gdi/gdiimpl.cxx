@@ -957,11 +957,11 @@ tools::Long WinSalGraphicsImpl::GetGraphicsWidth() const
         WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
         if( pFrame )
         {
-            if (pFrame->maGeometry.width())
-                return pFrame->maGeometry.width();
+            if (pFrame->GetWidth())
+                return pFrame->GetWidth();
             else
             {
-                // TODO: perhaps not needed, maGeometry should always be up-to-date
+                // TODO: perhaps not needed, width should always be up-to-date
                 RECT aRect;
                 GetClientRect( mrParent.gethWnd(), &aRect );
                 return aRect.right;

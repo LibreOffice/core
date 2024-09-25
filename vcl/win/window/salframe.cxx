@@ -3367,7 +3367,7 @@ static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
             UpdateWindow( hWnd );
 
         if( AllSettings::GetLayoutRTL() )
-            aMouseEvt.mnX = pFrame->maGeometry.width() - 1 - aMouseEvt.mnX;
+            aMouseEvt.mnX = pFrame->GetWidth() - 1 - aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -3450,7 +3450,7 @@ static bool ImplHandleWheelMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             aWheelEvt.mnCode |= KEY_MOD2;
 
         if( AllSettings::GetLayoutRTL() )
-            aWheelEvt.mnX = pFrame->maGeometry.width() - 1 - aWheelEvt.mnX;
+            aWheelEvt.mnX = pFrame->GetWidth() - 1 - aWheelEvt.mnX;
 
         nRet = pFrame->CallCallback( SalEvent::WheelMouse, &aWheelEvt );
     }
@@ -4315,13 +4315,13 @@ static void ImplHandleMoveMsg(HWND hWnd, LPARAM lParam)
 #ifdef NDEBUG
     (void) lParam;
 #endif
-    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->maGeometry.x() != static_cast<sal_Int16>(LOWORD(lParam)),
+    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->GetUnmirroredGeometry().x() != static_cast<sal_Int16>(LOWORD(lParam)),
                 "vcl",
-                "Unexpected X: " << pFrame->maGeometry.x() << " instead of "
+                "Unexpected X: " << pFrame->GetUnmirroredGeometry().x() << " instead of "
                                  << static_cast<sal_Int16>(LOWORD(lParam)));
-    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->maGeometry.y() != static_cast<sal_Int16>(HIWORD(lParam)),
+    SAL_WARN_IF(!IsIconic(hWnd) && pFrame->GetUnmirroredGeometry().y() != static_cast<sal_Int16>(HIWORD(lParam)),
                 "vcl",
-                "Unexpected Y: " << pFrame->maGeometry.y() << " instead of "
+                "Unexpected Y: " << pFrame->GetUnmirroredGeometry().y() << " instead of "
                                  << static_cast<sal_Int16>(HIWORD(lParam)));
 
     if (GetWindowStyle(hWnd) & WS_VISIBLE)
@@ -4370,8 +4370,8 @@ static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM lParam)
 #ifdef NDEBUG
     (void) lParam;
 #endif
-    assert(pFrame->maGeometry.width() == static_cast<sal_Int16>(LOWORD(lParam)));
-    assert(pFrame->maGeometry.height() == static_cast<sal_Int16>(HIWORD(lParam)));
+    assert(pFrame->GetWidth() == static_cast<sal_Int16>(LOWORD(lParam)));
+    assert(pFrame->GetHeight() == static_cast<sal_Int16>(HIWORD(lParam)));
 
     pFrame->UpdateFrameState();
 
