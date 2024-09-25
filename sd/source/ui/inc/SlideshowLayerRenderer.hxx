@@ -16,15 +16,23 @@
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 
+#include <CustomAnimationEffect.hxx>
+
 #include <deque>
-#include <map>
+#include <vector>
+#include <optional>
+#include <unordered_map>
 #include <unordered_set>
 
 class SdrPage;
 class SdrModel;
 class SdrObject;
-
 class Size;
+
+namespace com::sun::star::animations
+{
+class XAnimate;
+}
 
 namespace sd
 {
@@ -39,6 +47,19 @@ enum class RenderStage
     Count
 };
 
+struct AnimationLayerInfo
+{
+    OString msHash;
+    std::optional<bool> moInitiallyVisible;
+};
+
+struct AnimationRenderInfo
+{
+    std::optional<AnimationLayerInfo> moObjectInfo;
+    std::vector<sal_Int32> maParagraphs;
+    std::unordered_map<sal_Int32, AnimationLayerInfo> maParagraphInfos;
+};
+
 /** Holds rendering state, properties and switches through all rendering passes */
 struct RenderState
 {
@@ -47,17 +68,20 @@ struct RenderState
     bool mbStopRenderingWhenField = true;
 
     std::unordered_set<SdrObject*> maObjectsDone;
-    std::unordered_set<SdrObject*> maInAnimation;
-    std::map<SdrObject*, OString> maAnimationTargetHash;
-    std::map<SdrObject*, bool> maInitiallyVisible;
+
+    std::unordered_map<SdrObject*, AnimationRenderInfo> maAnimationRenderInfoList;
+
     sal_Int32 mnIndex[static_cast<unsigned>(RenderStage::Count)] = { 0, 0, 0, 0 };
     SdrObject* mpCurrentTarget = nullptr;
+    sal_Int32 mnCurrentTargetParagraph = -1;
 
-    bool mbFirstObjectInPass = true;
-    bool mbPassHasOutput = false;
+    sal_Int32 mnRenderedObjectsInPass = 0;
+
     bool mbSkipAllInThisPass = false;
 
     sal_Int32 mnCurrentPass = 0;
+
+    std::deque<sal_Int32> maParagraphsToRender;
 
     /// increments index depending on the current render stage
     void incrementIndex() { mnIndex[static_cast<unsigned>(meStage)]++; }
@@ -80,20 +104,28 @@ struct RenderState
     /// returns the current target element for which layer is created if any
     SdrObject* currentTarget() const { return mpCurrentTarget; }
 
+    /// returns the current target paragraph index or -1 if paragraph is not relevant
+    sal_Int32 currentTargetParagraph() const { return mnCurrentTargetParagraph; }
+
     /// resets properties that are valid for one pass
     void resetPass()
     {
-        mbFirstObjectInPass = true;
-        mbPassHasOutput = false;
+        mnRenderedObjectsInPass = 0;
         mbSkipAllInThisPass = false;
         mpCurrentTarget = nullptr;
+        mnCurrentTargetParagraph = -1;
     }
+
+    bool hasPassAnyRenderedOutput() const { return mnRenderedObjectsInPass > 0; }
+
+    /// is first rendered object in pass
+    bool isFirstObjectInPass() const { return mnRenderedObjectsInPass == 0; }
 
     /// return if there was no rendering output in the pass
     bool noMoreOutput() const
     {
-        // no output and we don't skip anything
-        return !mbPassHasOutput && !mbSkipAllInThisPass;
+        // no output and we didn't skip anything and nothing was rendered
+        return !hasPassAnyRenderedOutput() && !mbSkipAllInThisPass;
     }
 
     /// should include background in rendering
@@ -102,19 +134,6 @@ struct RenderState
     bool isObjectAlreadyRendered(SdrObject* pObject) const
     {
         return maObjectsDone.find(pObject) != maObjectsDone.end();
-    }
-
-    bool isObjectInAnimation(SdrObject* pObject) const
-    {
-        return maInAnimation.find(pObject) != maInAnimation.end();
-    }
-
-    bool isObjectInitiallyVisible(SdrObject* pObject) const
-    {
-        bool bInitiallyVisible = true;
-        if (maInitiallyVisible.contains(pObject))
-            bInitiallyVisible = maInitiallyVisible.at(pObject);
-        return bInitiallyVisible;
     }
 
     static std::string getObjectHash(SdrObject* pObject)
@@ -144,7 +163,9 @@ private:
 
     void createViewAndDraw(RenderContext& rRenderContext);
     void writeJSON(OString& rJsonMsg);
+
     void setupAnimations();
+    void resolveEffect(CustomAnimationEffectPtr const& rEffect);
 
 public:
     SlideshowLayerRenderer(SdrPage& rPage);
