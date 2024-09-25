@@ -25,6 +25,7 @@
 #include <cassert>
 #include <type_traits>
 #include <compare>
+#include <config_options.h>
 
 namespace o3tl
 {
@@ -84,8 +85,10 @@ template <typename UNDERLYING_TYPE, typename PHANTOM_TYPE>
 struct strong_int
 {
 public:
-// when compiling LO on macOS, debug builds will display a linking error
-#if defined MACOSX && defined __clang__ && __clang_major__ == 16
+// when compiling LO on macOS, debug builds will display a linking error where, see
+// <https://lists.freedesktop.org/archives/libreoffice/2024-February/091564.html>, "Our Clang
+// --enable-pch setup is known broken":
+#if defined MACOSX && defined __clang__ && __clang_major__ == 16 && ENABLE_PCH
     explicit constexpr strong_int(unsigned long long value) : m_value(value) {}
     explicit constexpr strong_int(unsigned long value) : m_value(value) {}
     explicit constexpr strong_int(long value) : m_value(value) {}

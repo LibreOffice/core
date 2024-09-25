@@ -80,6 +80,7 @@
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
  */
 
+#include <config_options.h>
 #include <sal/types.h>
 #include <o3tl/strong_int.hxx>
 #include <ostream>
@@ -90,8 +91,10 @@ constexpr LanguageType primary(LanguageType lt) { return LanguageType(sal_uInt16
 
 namespace o3tl
 {
-// when compiling LO on macOS, debug builds will display a linking error
-#if !(defined MACOSX && defined __clang__ && __clang_major__ == 16)
+// when compiling LO on macOS, debug builds will display a linking error where, see
+// <https://lists.freedesktop.org/archives/libreoffice/2024-February/091564.html>, "Our Clang
+// --enable-pch setup is known broken":
+#if !(defined MACOSX && defined __clang__ && __clang_major__ == 16 && ENABLE_PCH)
     // delete "sal_Int16" constructor via specialization: values > 0x7FFF are
     // actually used, and unfortunately passed around in the API as signed
     // "short", so use this to find all places where casts must be inserted

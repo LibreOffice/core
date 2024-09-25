@@ -6595,6 +6595,9 @@ else
     AC_MSG_ERROR([Unknown value for --enable-pch])
 fi
 AC_SUBST(ENABLE_PCH)
+if test -n "$ENABLE_PCH"; then
+    AC_DEFINE(ENABLE_PCH)
+fi
 # ccache 3.7.1 and older do not properly detect/handle -include .gch in CCACHE_DEPEND mode
 if test -n "$ENABLE_PCH" -a -n "$CCACHE_DEPEND_MODE" -a "$GCC" = "yes" -a "$COM_IS_CLANG" != "TRUE"; then
     AC_PATH_PROG([CCACHE_BIN],[ccache],[not found])

@@ -9,6 +9,8 @@
 
 #define ENABLE_MERGELIBS_MORE 0
 
+#define ENABLE_PCH 0
+
 #define ENABLE_RUNTIME_OPTIMIZATIONS 0
 
 // Used to turn off visibility for some classes/symbols when linking with --enable-mergelibs
