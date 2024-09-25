@@ -4704,8 +4704,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         if ( rProp.Value >>= fExtrusionSpecularity )
                                         {
                                             SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
-                                            if (fExtrusionSpecularity > 100.0 && eVersion >= SvtSaveOptions::ODFSVER_012
-                                                && (eVersion & SvtSaveOptions::ODFSVER_EXTENDED))
+                                            if (fExtrusionSpecularity > 100.0 && eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                                             {
                                                 // tdf#147580 write values > 100% in loext
                                                 ::sax::Converter::convertDouble(
@@ -4719,18 +4718,13 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                                 rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXTRUSION_SPECULARITY_LOEXT, aStr );
                                             }
                                             // tdf#147580 ODF 1 allows arbitrary percent, later versions not
-                                            if (eVersion >= SvtSaveOptions::ODFSVER_012)
+                                            if (eVersion >= SvtSaveOptions::ODFSVER_012 && eVersion < SvtSaveOptions::ODFSVER_014)
                                             {
                                                 fExtrusionSpecularity = std::clamp<double>(fExtrusionSpecularity, 0.0, 100.0);
                                             }
-                                            ::sax::Converter::convertDouble(
-                                                aStrBuffer,
-                                                fExtrusionSpecularity,
-                                                false,
-                                                util::MeasureUnit::PERCENT,
-                                                util::MeasureUnit::PERCENT);
-                                            aStrBuffer.append( '%' );
+                                            ::sax::Converter::convertDouble( aStrBuffer, fExtrusionSpecularity );
                                             aStr = aStrBuffer.makeStringAndClear();
+
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SPECULARITY, aStr );
                                         }
                                     }
