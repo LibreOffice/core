@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "QtBuilder.hxx"
+
 #include <string_view>
 
 #include <QtWidgets/QWidget>
@@ -18,9 +20,11 @@
 
 class QtInstanceBuilder : public weld::Builder
 {
+private:
+    std::unique_ptr<QtBuilder> m_xBuilder;
+
 public:
-    QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
-                      const std::u16string_view sUIFile);
+    QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot, const OUString& rUIFile);
     ~QtInstanceBuilder();
 
     static bool IsUIFileSupported(const OUString& rUIFile);

@@ -33,7 +33,7 @@ struct ComboBoxTextItem
     }
 };
 
-class UNLESS_MERGELIBS(VCL_DLLPUBLIC) BuilderBase
+class VCL_DLLPUBLIC BuilderBase
 {
 public:
     typedef std::map<OUString, OUString> stringmap;

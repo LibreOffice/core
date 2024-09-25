@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_qt5,\
     cppu \
     sal \
     salhelper \
+    xmlreader \
 ))
 
 $(eval $(call gb_Library_use_externals,vclplug_qt5,\
@@ -79,6 +80,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtAccessibleRegistry \
     vcl/qt5/QtAccessibleWidget \
     vcl/qt5/QtBitmap \
+    vcl/qt5/QtBuilder \
     vcl/qt5/QtClipboard \
     vcl/qt5/QtData \
     vcl/qt5/QtDragAndDrop \

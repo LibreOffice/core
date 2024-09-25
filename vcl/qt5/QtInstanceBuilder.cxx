@@ -11,31 +11,39 @@
 
 #include <unordered_set>
 
-QtInstanceBuilder::QtInstanceBuilder(QWidget*, std::u16string_view, std::u16string_view) {}
+#include <QtBuilder.hxx>
+#include <QtInstanceMessageDialog.hxx>
+
+QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
+                                     const OUString& rUIFile)
+    : m_xBuilder(std::make_unique<QtBuilder>(pParent, sUIRoot, rUIFile))
+{
+}
 
 QtInstanceBuilder::~QtInstanceBuilder() {}
 
 bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
 {
-    // set of supported UI files - none yet
+    // set of supported UI files
     //
     // The idea is to implement functionality needed for a specific UI file/dialog
     // in QtInstanceBuilder, then add it to the set of supported UI files here.
     // This allows looking at one .ui file at a time and only having to implement
     // what is relevant for that particular one, without having to implement the full
     // weld API at once.
-    //
-    // see demo/WIP change: https://gerrit.libreoffice.org/c/core/+/161831
-    // for an example
-    static std::unordered_set<OUString> aSupportedUIFiles = {};
+    static std::unordered_set<OUString> aSupportedUIFiles = {
+        u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
+    };
 
     return aSupportedUIFiles.contains(rUIFile);
 }
 
-std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString&)
+std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(const OUString& id)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QMessageBox* pMessageBox = m_xBuilder->get<QMessageBox>(id);
+    std::unique_ptr<weld::MessageDialog> xRet(
+        pMessageBox ? std::make_unique<QtInstanceMessageDialog>(pMessageBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString&)
