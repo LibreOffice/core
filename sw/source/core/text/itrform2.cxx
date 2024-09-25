@@ -2123,6 +2123,7 @@ TextFrameIndex SwTextFormatter::FormatLine(TextFrameIndex const nStartPos)
                     }
                 }
                 GetInfo().ResetMaxWidthDiff();
+                GetInfo().SetExtraSpace(0);
 
                 // delete old rest
                 if ( GetInfo().GetRest() )
