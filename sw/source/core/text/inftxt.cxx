@@ -217,6 +217,7 @@ SwTextSizeInfo::SwTextSizeInfo()
 , m_bForbiddenChars(false)
 , m_bSnapToGrid(false)
 , m_nDirection(0)
+, m_nExtraSpace(0)
 {}
 
 SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
@@ -247,7 +248,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
       m_bScriptSpace( rNew.HasScriptSpace() ),
       m_bForbiddenChars( rNew.HasForbiddenChars() ),
       m_bSnapToGrid( rNew.SnapToGrid() ),
-      m_nDirection( rNew.GetDirection() )
+      m_nDirection( rNew.GetDirection() ),
+      m_nExtraSpace( rNew.GetExtraSpace() )
 {
 #if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
@@ -259,6 +261,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
 {
     m_pKanaComp = nullptr;
     m_nKanaIdx = 0;
+    m_nExtraSpace = 0;
     m_pFrame = pFrame;
     CtorInitTextInfo( m_pFrame );
     SwDoc const& rDoc(m_pFrame->GetDoc());
@@ -359,7 +362,8 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
       m_bScriptSpace( rNew.HasScriptSpace() ),
       m_bForbiddenChars( rNew.HasForbiddenChars() ),
       m_bSnapToGrid( rNew.SnapToGrid() ),
-      m_nDirection( rNew.GetDirection() )
+      m_nDirection( rNew.GetDirection() ),
+      m_nExtraSpace( rNew.GetExtraSpace() )
 {
 #if OSL_DEBUG_LEVEL > 0
     ChkOutDev( *this );
