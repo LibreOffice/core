@@ -9,6 +9,7 @@
 
 #include <QtBuilder.hxx>
 
+#include <QtInstanceMessageDialog.hxx>
 #include <QtTools.hxx>
 
 #include <rtl/ustrbuf.hxx>
@@ -149,9 +150,11 @@ void QtBuilder::applyPackingProperties(QObject*, QObject*, const stringmap&)
     SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not implemented yet");
 }
 
-void QtBuilder::set_response(std::u16string_view, short)
+void QtBuilder::set_response(std::u16string_view sID, short nResponse)
 {
-    SAL_WARN("vcl.qt", "QtBuilder::set_response not implemented yet");
+    QPushButton* pPushButton = get<QPushButton>(sID);
+    assert(pPushButton);
+    pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, int(nResponse));
 }
 
 void QtBuilder::setProperties(QObject* obj, stringmap& rProps)

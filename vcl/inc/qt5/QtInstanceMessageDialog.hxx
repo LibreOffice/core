@@ -52,6 +52,12 @@ public:
                           const std::function<void(sal_Int32)>& func) override;
     virtual void response(int nResponse) override;
 
+    /**
+    * Name of the property to set on a QPushButton that holds the
+    * int VCL response code of that button.
+    */
+    static const char* const PROPERTY_VCL_RESPONSE_CODE;
+
 private:
     virtual QPushButton* buttonForResponseCode(int nResponse);
 

@@ -12,11 +12,7 @@
 
 #include <QtWidgets/QPushButton>
 
-/**
- * Name of the property to set on a QPushButton that holds the
- * VCL response code of that button.
- */
-const char* const PROPERTY_VCL_RESPONSE_CODE = "response-code";
+const char* const QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code";
 
 QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)
     : QtInstanceDialog(pMessageDialog)
