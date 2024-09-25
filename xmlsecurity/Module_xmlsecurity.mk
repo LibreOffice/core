@@ -23,6 +23,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_pdfsigning \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
+    CppunitTest_xmlsecurity_xmlsec \
+))
+endif
+
 $(eval $(call gb_Module_add_subsequentcheck_targets,xmlsecurity,\
     CppunitTest_xmlsecurity_signing \
     CppunitTest_xmlsecurity_signing2 \

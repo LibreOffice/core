@@ -843,7 +843,9 @@ SECKEYPrivateKey* SecurityEnvironment_NssImpl::insertPrivateKey(css::uno::Sequen
     const unsigned int aKeyUsage = KU_ALL;
     SECKEYPrivateKey* pPrivateKey = nullptr;
 
-    bool bPermanent = PR_FALSE;
+    // If the import is not permanent, then later we won't be able to find the private key when
+    // searching for keys and signing will fail.
+    bool bPermanent = PR_TRUE;
     bool bPrivate = PR_TRUE;
 
     SECStatus nStatus = PK11_ImportDERPrivateKeyInfoAndReturnKey(
