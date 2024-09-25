@@ -548,7 +548,7 @@ constexpr bool convertEnum(OStringBuffer& rBuffer, EnumT nValue,
                            const frozen::unordered_map<EnumT, std::string_view, N>& rMap)
 {
     auto iterator = rMap.find(nValue);
-    if (iterator == constAnimationNodeTypeToString.end())
+    if (iterator == rMap.end())
         return false;
     rBuffer.append(iterator->second);
     return true;
