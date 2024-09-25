@@ -70,8 +70,6 @@ public:
     virtual ~VclBuilder();
     ///releases references and disposes all children.
     void disposeBuilder();
-    //sID must exist and be of type T
-    template <typename T> T* get(VclPtr<T>& ret, const OUString& sID);
 
     //sID may not exist, but must be of type T if it does
     template <typename T = vcl::Window> T* get(const OUString& sID);
@@ -349,19 +347,6 @@ namespace BuilderUtils
 
     //Convert an accessibility role name to accessibility role number
     sal_Int16 getRoleFromName(const OUString& roleName);
-}
-
-template <typename T>
-inline T* VclBuilder::get(VclPtr<T>& ret, const OUString& sID)
-{
-    vcl::Window *w = get_by_name(sID);
-    SAL_WARN_IF(!w, "vcl.layout", "widget \"" << sID << "\" not found in .ui");
-    SAL_WARN_IF(!dynamic_cast<T*>(w),
-       "vcl.layout", ".ui widget \"" << sID << "\" needs to correspond to vcl type " << typeid(T).name());
-    assert(w);
-    assert(dynamic_cast<T*>(w));
-    ret = static_cast<T*>(w);
-    return ret.get();
 }
 
 //sID may not exist, but must be of type T if it does

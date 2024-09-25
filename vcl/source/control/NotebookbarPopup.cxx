@@ -17,7 +17,7 @@ NotebookbarPopup::NotebookbarPopup(const VclPtr<VclHBox>& pParent)
     : FloatingWindow(pParent, u"Popup"_ustr, u"sfx/ui/notebookbarpopup.ui"_ustr)
     , m_pParent(pParent)
 {
-    m_pUIBuilder->get(m_pBox, u"box"_ustr);
+    m_pBox = m_pUIBuilder->get<VclHBox>(u"box"_ustr);
     m_pBox->SetSizePixel(Size(100, 75));
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     const BitmapEx& aPersona = rStyleSettings.GetPersonaHeader();
