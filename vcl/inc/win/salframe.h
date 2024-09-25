@@ -148,6 +148,7 @@ public:
 
     constexpr vcl::WindowState state() const { return m_eState; }
     void SetMaximizedFrameGeometry(HWND hWnd, RECT* pParentRect = nullptr);
+    void UpdateFrameGeometry();
     void UpdateFrameState();
     constexpr bool isFullScreen() const { return bool(m_eState & vcl::WindowState::FullScreen); }
 

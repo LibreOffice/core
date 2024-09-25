@@ -115,8 +115,6 @@ bool WinSalFrame::mbInReparent = false;
 // Macros for support of WM_UNICHAR & Keyman 6.0
 #define Uni_SupplementaryPlanesStart    0x10000
 
-static void UpdateFrameGeometry(WinSalFrame* pFrame);
-
 static void SetGeometrySize(vcl::WindowPosSize& rWinPosSize, const Size& rSize)
 {
     rWinPosSize.setWidth(rSize.Width() < 0 ? 0 : rSize.Width());
@@ -515,7 +513,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     GetClientRect( hWnd, &aRect );
     pFrame->mbDefPos = true;
 
-    UpdateFrameGeometry(pFrame);
+    pFrame->UpdateFrameGeometry();
     pFrame->UpdateFrameState();
 
     if( pFrame->mnShowState == SW_SHOWMAXIMIZED )
@@ -1462,7 +1460,7 @@ void WinSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
 
     SetWindowPos( mhWnd, HWND_TOP, nX, nY, static_cast<int>(nWidth), static_cast<int>(nHeight), nPosFlags  );
 
-    UpdateFrameGeometry(this);
+    UpdateFrameGeometry();
 
     // Notification -- really ???
     if( nEvent != SalEvent::NONE )
@@ -4235,52 +4233,48 @@ void WinSalFrame::SetMaximizedFrameGeometry(HWND hWnd, RECT* pParentRect )
     SetGeometrySize(maGeometry, { aRect.right - aRect.left, aRect.bottom - aRect.top });
 }
 
-static void UpdateFrameGeometry(WinSalFrame* pFrame)
+void WinSalFrame::UpdateFrameGeometry()
 {
-    if( !pFrame )
-        return;
-    const HWND hWnd = pFrame->mhWnd;
-
     RECT aRect;
-    GetWindowRect( hWnd, &aRect );
-    pFrame->maGeometry.setPosSize({ 0, 0 }, { 0, 0 });
-    pFrame->maGeometry.setDecorations(0, 0, 0, 0);
-    pFrame->maGeometry.setScreen(0);
+    GetWindowRect(mhWnd, &aRect);
+    maGeometry.setPosSize({ 0, 0 }, { 0, 0 });
+    maGeometry.setDecorations(0, 0, 0, 0);
+    maGeometry.setScreen(0);
 
-    if ( IsIconic( hWnd ) )
+    if (IsIconic(mhWnd))
         return;
 
     POINT aPt;
     aPt.x=0;
     aPt.y=0;
-    ClientToScreen(hWnd, &aPt);
+    ClientToScreen(mhWnd, &aPt);
     int cx = aPt.x - aRect.left;
 
-    pFrame->maGeometry.setDecorations(cx, aPt.y - aRect.top, cx, 0);
-    pFrame->maGeometry.setPos({ aPt.x, aPt.y });
+    maGeometry.setDecorations(cx, aPt.y - aRect.top, cx, 0);
+    maGeometry.setPos({ aPt.x, aPt.y });
 
     RECT aInnerRect;
-    GetClientRect( hWnd, &aInnerRect );
+    GetClientRect(mhWnd, &aInnerRect);
     if( aInnerRect.right )
     {
         // improve right decoration
         aPt.x=aInnerRect.right;
         aPt.y=aInnerRect.top;
-        ClientToScreen(hWnd, &aPt);
-        pFrame->maGeometry.setRightDecoration(aRect.right - aPt.x);
+        ClientToScreen(mhWnd, &aPt);
+        maGeometry.setRightDecoration(aRect.right - aPt.x);
     }
     if( aInnerRect.bottom ) // may be zero if window was not shown yet
-        pFrame->maGeometry.setBottomDecoration(aRect.bottom - aPt.y - aInnerRect.bottom);
+        maGeometry.setBottomDecoration(aRect.bottom - aPt.y - aInnerRect.bottom);
     else
         // bottom border is typically the same as left/right
-        pFrame->maGeometry.setBottomDecoration(pFrame->maGeometry.leftDecoration());
+        maGeometry.setBottomDecoration(maGeometry.leftDecoration());
 
     int nWidth  = aRect.right - aRect.left
-        - pFrame->maGeometry.rightDecoration() - pFrame->maGeometry.leftDecoration();
+        - maGeometry.rightDecoration() - maGeometry.leftDecoration();
     int nHeight = aRect.bottom - aRect.top
-        - pFrame->maGeometry.bottomDecoration() - pFrame->maGeometry.topDecoration();
-    SetGeometrySize(pFrame->maGeometry, { nWidth, nHeight });
-    pFrame->updateScreenNumber();
+        - maGeometry.bottomDecoration() - maGeometry.topDecoration();
+    SetGeometrySize(maGeometry, { nWidth, nHeight });
+    updateScreenNumber();
 }
 
 static void ImplCallClosePopupsHdl( HWND hWnd )
@@ -4309,7 +4303,7 @@ static void ImplHandleMoveMsg(HWND hWnd, LPARAM lParam)
     if (!pFrame)
         return;
 
-    UpdateFrameGeometry(pFrame);
+    pFrame->UpdateFrameGeometry();
 
 #ifdef NDEBUG
     (void) lParam;
@@ -4364,7 +4358,7 @@ static void ImplHandleSizeMsg(HWND hWnd, WPARAM wParam, LPARAM lParam)
     if (!pFrame)
         return;
 
-    UpdateFrameGeometry(pFrame);
+    pFrame->UpdateFrameGeometry();
 
 #ifdef NDEBUG
     (void) lParam;
