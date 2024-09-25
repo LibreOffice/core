@@ -670,6 +670,15 @@ OUString Primitive2dXmlDump::idToString(sal_uInt32 nId)
     return drawinglayer::primitive2d::idToString(nId);
 }
 
+void Primitive2dXmlDump::runDecomposeAndRecurse(const BasePrimitive2D* pBasePrimitive,
+                                                ::tools::XmlWriter& rWriter)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
+    pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
+                                       drawinglayer::geometry::ViewInformation2D());
+    decomposeAndWrite(aPrimitiveContainer, rWriter);
+}
+
 void Primitive2dXmlDump::decomposeAndWrite(
     const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence,
     ::tools::XmlWriter& rWriter)
@@ -691,8 +700,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
         {
             case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D:
             {
-                const BitmapPrimitive2D& rBitmapPrimitive2D
-                    = dynamic_cast<const BitmapPrimitive2D&>(*pBasePrimitive);
+                const auto& rBitmapPrimitive2D
+                    = static_cast<const BitmapPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("bitmap");
                 writeMatrix(rWriter, rBitmapPrimitive2D.getTransform());
 
@@ -721,8 +730,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             break;
             case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D:
             {
-                const HiddenGeometryPrimitive2D& rHiddenGeometryPrimitive2D
-                    = dynamic_cast<const HiddenGeometryPrimitive2D&>(*pBasePrimitive);
+                const auto& rHiddenGeometryPrimitive2D
+                    = static_cast<const HiddenGeometryPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("hiddengeometry");
                 decomposeAndWrite(rHiddenGeometryPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
@@ -731,8 +740,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
             {
-                const TransformPrimitive2D& rTransformPrimitive2D
-                    = dynamic_cast<const TransformPrimitive2D&>(*pBasePrimitive);
+                const auto& rTransformPrimitive2D
+                    = static_cast<const TransformPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("transform");
                 writeMatrix(rWriter, rTransformPrimitive2D.getTransformation());
                 decomposeAndWrite(rTransformPrimitive2D.getChildren(), rWriter);
@@ -742,8 +751,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
             {
-                const PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D
-                    = dynamic_cast<const PolyPolygonColorPrimitive2D&>(*pBasePrimitive);
+                const auto& rPolyPolygonColorPrimitive2D
+                    = static_cast<const PolyPolygonColorPrimitive2D&>(*pBasePrimitive);
 
                 rWriter.startElement("polypolygoncolor");
                 rWriter.attribute("color",
@@ -758,8 +767,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             break;
             case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D:
             {
-                const PointArrayPrimitive2D& rPointArrayPrimitive2D
-                    = dynamic_cast<const PointArrayPrimitive2D&>(*pBasePrimitive);
+                const auto& rPointArrayPrimitive2D
+                    = static_cast<const PointArrayPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("pointarray");
 
                 rWriter.attribute("color",
@@ -782,8 +791,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D:
             {
-                const PolygonStrokeArrowPrimitive2D& rPolygonStrokeArrowPrimitive2D
-                    = dynamic_cast<const PolygonStrokeArrowPrimitive2D&>(*pBasePrimitive);
+                const auto& rPolygonStrokeArrowPrimitive2D
+                    = static_cast<const PolygonStrokeArrowPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polygonstrokearrow");
 
                 rWriter.startElement("polygon");
@@ -824,8 +833,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
             {
-                const PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D
-                    = dynamic_cast<const PolygonStrokePrimitive2D&>(*pBasePrimitive);
+                const auto& rPolygonStrokePrimitive2D
+                    = static_cast<const PolygonStrokePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polygonstroke");
 
                 rWriter.startElement("polygon");
@@ -840,8 +849,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             break;
             case PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D:
             {
-                const PolyPolygonStrokePrimitive2D& rPolyPolygonStrokePrimitive2D
-                    = dynamic_cast<const PolyPolygonStrokePrimitive2D&>(*pBasePrimitive);
+                const auto& rPolyPolygonStrokePrimitive2D
+                    = static_cast<const PolyPolygonStrokePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polypolygonstroke");
 
                 writeLineAttribute(rWriter, rPolyPolygonStrokePrimitive2D.getLineAttribute());
@@ -854,8 +863,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
             {
-                const PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D
-                    = dynamic_cast<const PolygonHairlinePrimitive2D&>(*pBasePrimitive);
+                const auto& rPolygonHairlinePrimitive2D
+                    = static_cast<const PolygonHairlinePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("polygonhairline");
 
                 rWriter.attribute("color",
@@ -872,8 +881,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D:
             {
-                const TextDecoratedPortionPrimitive2D& rTextDecoratedPortionPrimitive2D
-                    = dynamic_cast<const TextDecoratedPortionPrimitive2D&>(*pBasePrimitive);
+                const auto& rTextDecoratedPortionPrimitive2D
+                    = static_cast<const TextDecoratedPortionPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("textdecoratedportion");
                 writeMatrix(rWriter, rTextDecoratedPortionPrimitive2D.getTextTransform());
 
@@ -891,8 +900,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D:
             {
-                const TextLinePrimitive2D& rTextLinePrimitive2D
-                    = dynamic_cast<const TextLinePrimitive2D&>(*pBasePrimitive);
+                const auto& rTextLinePrimitive2D
+                    = static_cast<const TextLinePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("textline");
                 writeMatrix(rWriter, rTextLinePrimitive2D.getObjectTransformation());
 
@@ -907,8 +916,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D:
             {
-                const TextSimplePortionPrimitive2D& rTextSimplePortionPrimitive2D
-                    = dynamic_cast<const TextSimplePortionPrimitive2D&>(*pBasePrimitive);
+                const auto& rTextSimplePortionPrimitive2D
+                    = static_cast<const TextSimplePortionPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("textsimpleportion");
 
                 basegfx::B2DVector aScale, aTranslate;
@@ -951,8 +960,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_GROUPPRIMITIVE2D:
             {
-                const GroupPrimitive2D& rGroupPrimitive2D
-                    = dynamic_cast<const GroupPrimitive2D&>(*pBasePrimitive);
+                const auto& rGroupPrimitive2D
+                    = static_cast<const GroupPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("group");
                 decomposeAndWrite(rGroupPrimitive2D.getChildren(), rWriter);
                 rWriter.endElement();
@@ -961,8 +970,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_MASKPRIMITIVE2D:
             {
-                const MaskPrimitive2D& rMaskPrimitive2D
-                    = dynamic_cast<const MaskPrimitive2D&>(*pBasePrimitive);
+                const auto& rMaskPrimitive2D = static_cast<const MaskPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("mask");
                 writePolyPolygon(rWriter, rMaskPrimitive2D.getMask());
                 decomposeAndWrite(rMaskPrimitive2D.getChildren(), rWriter);
@@ -972,8 +980,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D:
             {
-                const UnifiedTransparencePrimitive2D& rUnifiedTransparencePrimitive2D
-                    = dynamic_cast<const UnifiedTransparencePrimitive2D&>(*pBasePrimitive);
+                const auto& rUnifiedTransparencePrimitive2D
+                    = static_cast<const UnifiedTransparencePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("unifiedtransparence");
                 rWriter.attribute(
                     "transparence",
@@ -985,8 +993,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D:
             {
-                const ObjectInfoPrimitive2D& rObjectInfoPrimitive2D
-                    = dynamic_cast<const ObjectInfoPrimitive2D&>(*pBasePrimitive);
+                const auto& rObjectInfoPrimitive2D
+                    = static_cast<const ObjectInfoPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("objectinfo");
 
                 decomposeAndWrite(rObjectInfoPrimitive2D.getChildren(), rWriter);
@@ -996,8 +1004,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_STRUCTURETAGPRIMITIVE2D:
             {
-                const StructureTagPrimitive2D& rStructureTagPrimitive2D
-                    = dynamic_cast<const StructureTagPrimitive2D&>(*pBasePrimitive);
+                const auto& rStructureTagPrimitive2D
+                    = static_cast<const StructureTagPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("structuretag");
                 rWriter.attribute("structureelement",
                                   rStructureTagPrimitive2D.getStructureElement());
@@ -1009,8 +1017,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_SVGRADIALGRADIENTPRIMITIVE2D:
             {
-                const SvgRadialGradientPrimitive2D& rSvgRadialGradientPrimitive2D
-                    = dynamic_cast<const SvgRadialGradientPrimitive2D&>(*pBasePrimitive);
+                const auto& rSvgRadialGradientPrimitive2D
+                    = static_cast<const SvgRadialGradientPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("svgradialgradient");
                 if (rSvgRadialGradientPrimitive2D.isFocalSet())
                 {
@@ -1040,8 +1048,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_SVGLINEARGRADIENTPRIMITIVE2D:
             {
-                const SvgLinearGradientPrimitive2D& rSvgLinearGradientPrimitive2D
-                    = dynamic_cast<const SvgLinearGradientPrimitive2D&>(*pBasePrimitive);
+                const auto& rSvgLinearGradientPrimitive2D
+                    = static_cast<const SvgLinearGradientPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("svglineargradient");
                 basegfx::B2DPoint aStartAttribute = rSvgLinearGradientPrimitive2D.getStart();
                 basegfx::B2DPoint aEndAttribute = rSvgLinearGradientPrimitive2D.getEnd();
@@ -1067,14 +1075,9 @@ void Primitive2dXmlDump::decomposeAndWrite(
 
             case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D:
             {
-                const MetafilePrimitive2D& rMetafilePrimitive2D
-                    = dynamic_cast<const MetafilePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("metafile");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
                 // since the graphic is not rendered in a document, we do not need a concrete view information
-                rMetafilePrimitive2D.get2DDecomposition(
-                    aPrimitiveContainer, drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
             }
 
@@ -1084,10 +1087,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 // SdrRectanglePrimitive2D is private to us.
                 rWriter.startElement("sdrrectangle");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
                 break;
             }
@@ -1096,10 +1096,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 // SdrBlockTextPrimitive2D is private to us.
                 rWriter.startElement("sdrblocktext");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
                 break;
             }
@@ -1108,10 +1105,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 // TextHierarchyBlockPrimitive2D.
                 rWriter.startElement("texthierarchyblock");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
                 break;
             }
@@ -1120,10 +1114,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 // TextHierarchyParagraphPrimitive2D.
                 rWriter.startElement("texthierarchyparagraph");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
                 break;
             }
@@ -1132,10 +1123,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             {
                 // TextHierarchyLinePrimitive2D.
                 rWriter.startElement("texthierarchyline");
-                drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                decomposeAndWrite(aPrimitiveContainer, rWriter);
+                runDecomposeAndRecurse(pBasePrimitive, rWriter);
                 rWriter.endElement();
                 break;
             }
@@ -1143,8 +1131,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_SHADOWPRIMITIVE2D:
             {
                 // ShadowPrimitive2D.
-                const ShadowPrimitive2D& rShadowPrimitive2D
-                    = dynamic_cast<const ShadowPrimitive2D&>(*pBasePrimitive);
+                const auto& rShadowPrimitive2D
+                    = static_cast<const ShadowPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("shadow");
                 rWriter.attribute("color",
                                   convertColorToString(rShadowPrimitive2D.getShadowColor()));
@@ -1161,8 +1149,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D:
             {
                 // ModifiedColorPrimitive2D.
-                const ModifiedColorPrimitive2D& rModifiedColorPrimitive2D
-                    = dynamic_cast<const ModifiedColorPrimitive2D&>(*pBasePrimitive);
+                const auto& rModifiedColorPrimitive2D
+                    = static_cast<const ModifiedColorPrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("modifiedColor");
                 const basegfx::BColorModifierSharedPtr& aColorModifier
                     = rModifiedColorPrimitive2D.getColorModifier();
@@ -1175,8 +1163,8 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_SOFTEDGEPRIMITIVE2D:
             {
                 // SoftEdgePrimitive2D.
-                const SoftEdgePrimitive2D& rSoftEdgePrimitive2D
-                    = dynamic_cast<const SoftEdgePrimitive2D&>(*pBasePrimitive);
+                const auto& rSoftEdgePrimitive2D
+                    = static_cast<const SoftEdgePrimitive2D&>(*pBasePrimitive);
                 rWriter.startElement("softedge");
                 rWriter.attribute("radius", OUString::number(rSoftEdgePrimitive2D.getRadius()));
 
@@ -1188,7 +1176,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
             case PRIMITIVE2D_ID_SCENEPRIMITIVE2D:
             {
                 const auto& rScenePrimitive2D
-                    = dynamic_cast<const drawinglayer::primitive2d::ScenePrimitive2D&>(
+                    = static_cast<const drawinglayer::primitive2d::ScenePrimitive2D&>(
                         *pBasePrimitive);
                 rWriter.startElement("scene");
 

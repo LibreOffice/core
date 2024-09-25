@@ -28,6 +28,7 @@ private:
     std::vector<bool> maFilter;
 
 protected:
+    void runDecomposeAndRecurse(const drawinglayer::primitive2d::BasePrimitive2D* pBasePrimitive, tools::XmlWriter& rWriter);
     void decomposeAndWrite(const drawinglayer::primitive2d::Primitive2DContainer& rPrimitive2DSequence, tools::XmlWriter& rWriter);
     static OUString idToString(sal_uInt32 nId);
 
