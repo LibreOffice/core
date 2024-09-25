@@ -909,12 +909,12 @@ void SwNavigationPI::NotifyItemUpdate(sal_uInt16 nSID, SfxItemState /*eState*/,
                 if (pView)
                 {
                     SwWrtShell& rSh = pView->GetWrtShell();
-                    // GetPageNum - return current page number:
-                    // true: in which cursor is located.
-                    // false: which is visible at the upper margin.
-                    sal_uInt16 nPhyNum, nVirtNum;
-                    rSh.GetPageNum(nPhyNum, nVirtNum, false);
-                    m_xGotoPageSpinButton->set_text(OUString::number(nPhyNum));
+                    if (rSh.GetViewOptions()->IsMultipageView())
+                        // maybe set the spin button text to the page that has the cursor?
+                        break;
+                    SwVisiblePageNumbers aVisiblePageNumbers;
+                    rSh.GetFirstLastVisPageNumbers(aVisiblePageNumbers, *pView);
+                    m_xGotoPageSpinButton->set_text(OUString::number(aVisiblePageNumbers.nFirstPhy));
                 }
             }
         }
