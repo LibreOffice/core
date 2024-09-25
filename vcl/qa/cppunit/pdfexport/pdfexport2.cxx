@@ -5627,7 +5627,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf151748KashidaSpace)
 // tdf#163105 - Writer kashida justification should expand spaces
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105SwKashidaSpaceExpansion)
 {
-    saveAsPDF(u"tdf163105.fodt");
+    saveAsPDF(u"tdf163105-kashida-spaces.fodt");
 
     auto pPdfDocument = parsePDFExport();
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
@@ -5666,6 +5666,99 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105SwKashidaSpaceExpansion)
 
     // Without the fix, this will be less than 25
     CPPUNIT_ASSERT_GREATER(150.0, aRect.at(2).getWidth());
+}
+
+// tdf#163105 - Writer should use font information when choosing kashida positions
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105Writer)
+{
+    saveAsPDF(u"tdf163105-writer.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    // The fix allows kashida justification in this document.
+    // Without the fix, this will be 1.
+    CPPUNIT_ASSERT_EQUAL(5, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(5, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"ارسی"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"تن ف"_ustr, aText.at(2).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
+    CPPUNIT_ASSERT_EQUAL(u"م"_ustr, aText.at(4).trim());
+
+    // Without the fix, this will be greater than X
+    CPPUNIT_ASSERT_LESS(170.0, aRect.at(2).getWidth());
+}
+
+// tdf#163105 - Edit Engine should use font information when choosing kashida positions
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105Editeng)
+{
+    saveAsPDF(u"tdf163105-editeng.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    // The fix allows kashida justification in this document.
+    // Without the fix, this will be 1.
+    CPPUNIT_ASSERT_EQUAL(5, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(5, nTextObjectCount);
+
+    CPPUNIT_ASSERT_EQUAL(u"ارسی"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"تن ف"_ustr, aText.at(2).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
+    CPPUNIT_ASSERT_EQUAL(u"م"_ustr, aText.at(4).trim());
+
+    CPPUNIT_ASSERT_LESS(170.0, aRect.at(2).getWidth());
 }
 
 } // end anonymous namespace

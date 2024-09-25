@@ -22,13 +22,17 @@ class KashidaTest : public CppUnit::TestFixture
 {
 public:
     void testCharacteristic();
+    void testManualKashida();
     void testFinalYeh();
     void testNoZwnjExpansion();
+    void testExcludeInvalid();
 
     CPPUNIT_TEST_SUITE(KashidaTest);
     CPPUNIT_TEST(testCharacteristic);
+    CPPUNIT_TEST(testManualKashida);
     CPPUNIT_TEST(testFinalYeh);
     CPPUNIT_TEST(testNoZwnjExpansion);
+    CPPUNIT_TEST(testExcludeInvalid);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -54,6 +58,14 @@ void KashidaTest::testCharacteristic()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), GetWordKashidaPosition(u"تمثیل"_ustr).value().nIndex);
 }
 
+void KashidaTest::testManualKashida()
+{
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), GetWordKashidaPosition(u"برـای"_ustr).value().nIndex);
+
+    // Normally, a kashida would not be inserted after a final Yeh.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), GetWordKashidaPosition(u"نیمِـي"_ustr).value().nIndex);
+}
+
 // tdf#65344: Do not insert kashida before a final Yeh
 void KashidaTest::testFinalYeh()
 {
@@ -71,6 +83,32 @@ void KashidaTest::testNoZwnjExpansion()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(u"متن"_ustr).value().nIndex);
     CPPUNIT_ASSERT(!GetWordKashidaPosition(u"مت\u200Cن"_ustr).has_value());
+}
+
+// tdf#163105: Do not insert kashida if the position is invalid
+void KashidaTest::testExcludeInvalid()
+{
+    std::vector<bool> aValid;
+    aValid.resize(5, true);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         GetWordKashidaPosition(u"نویسه"_ustr, aValid).value().nIndex);
+
+    aValid[3] = false;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         GetWordKashidaPosition(u"نویسه"_ustr, aValid).value().nIndex);
+
+    // Calls after this use the last resort (positions in aValid from end to start)
+    aValid[0] = false;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
+                         GetWordKashidaPosition(u"نویسه"_ustr, aValid).value().nIndex);
+
+    aValid[2] = false;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         GetWordKashidaPosition(u"نویسه"_ustr, aValid).value().nIndex);
+
+    aValid[1] = false;
+    CPPUNIT_ASSERT(!GetWordKashidaPosition(u"نویسه"_ustr, aValid).has_value());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(KashidaTest);

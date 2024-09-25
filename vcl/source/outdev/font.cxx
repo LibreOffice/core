@@ -1214,6 +1214,35 @@ sal_Int32 OutputDevice::ValidateKashidas(const OUString& rTxt, sal_Int32 nIdx, s
     return nDropped;
 }
 
+// tdf#163105: Get map of valid kashida positions for a single word
+void OutputDevice::GetWordKashidaPositions(const OUString& rText,
+                                           std::vector<bool>* pOutMap) const
+{
+    pOutMap->clear();
+
+    auto nEnd = rText.getLength();
+
+    // do layout
+    std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rText, 0, nEnd);
+    if (!pSalLayout)
+        return;
+
+    pOutMap->resize(nEnd, false);
+    for (sal_Int32 i = 0; i < nEnd; ++i)
+    {
+        auto nNextPos = i + 1;
+
+        // Skip combining marks to find the next character after this position.
+        while (nNextPos < nEnd
+               && u_getIntPropertyValue(rText[nNextPos], UCHAR_JOINING_TYPE) == U_JT_TRANSPARENT)
+        {
+            ++nNextPos;
+        }
+
+        pOutMap->at(i) = pSalLayout->IsKashidaPosValid(i, nNextPos);
+    }
+}
+
 bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr,
                                            int nIndex, int nLen, std::vector< tools::Rectangle >& rVector ) const
 {

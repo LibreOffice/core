@@ -20,6 +20,9 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <com/sun/star/i18n/WordType.hpp>
+#include <swscanner.hxx>
+#include <i18nutil/kashida.hxx>
 
 #include <IDocumentSettingAccess.hxx>
 #include <doc.hxx>
@@ -135,12 +138,63 @@ void SwTextAdjuster::FormatBlock( )
     GetInfo().GetParaPortion()->GetRepaint().SetOffset(0);
 }
 
-static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
-            sal_Int32& rKashidas, TextFrameIndex& nGluePortion)
+static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwTextIter& rItr,
+                                      sal_Int32& rKashidas, TextFrameIndex& nGluePortion,
+                                      bool& rRemovedAllKashida)
 {
+    rRemovedAllKashida = true;
+
     // i60594 validate Kashida justification
     TextFrameIndex nIdx = rItr.GetStart();
     TextFrameIndex nEnd = rItr.GetEnd();
+
+    // Get the initial kashida position set, for invalidation
+    std::vector<TextFrameIndex> aOldKashidaPositions;
+    rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aOldKashidaPositions);
+
+    std::vector<TextFrameIndex> aNewKashidaPositions;
+    std::vector<bool> aValidPositions;
+
+    // Reparse the text, and reapply the kashida insertion rules
+    std::function<LanguageType(sal_Int32, sal_Int32, bool)> const pGetLangOfChar(
+        [&rInf](sal_Int32 const nBegin, sal_uInt16 const nScript, bool const bNoChar)
+        { return rInf.GetTextFrame()->GetLangOfChar(TextFrameIndex{ nBegin }, nScript, bNoChar); });
+    SwScanner aScanner(pGetLangOfChar, rInf.GetText(), nullptr, ModelToViewHelper(),
+                       i18n::WordType::DICTIONARY_WORD, sal_Int32(nIdx), sal_Int32(nEnd));
+
+    while (aScanner.NextWord())
+    {
+        const OUString& rWord = aScanner.GetWord();
+
+        // Fetch the set of valid positions from VCL, where possible
+        aValidPositions.clear();
+        if ( SwScriptInfo::IsArabicText( rInf.GetText(), TextFrameIndex{aScanner.GetBegin()}, TextFrameIndex{aScanner.GetLen()} ) )
+        {
+            rItr.SeekAndChgAttrIter(TextFrameIndex{ aScanner.GetBegin() }, rInf.GetRefDev());
+
+            vcl::text::ComplexTextLayoutFlags nOldLayout = rInf.GetRefDev()->GetLayoutMode();
+            rInf.GetRefDev()->SetLayoutMode(nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl);
+
+            rInf.GetRefDev()->GetWordKashidaPositions(rWord, &aValidPositions);
+
+            rInf.GetRefDev()->SetLayoutMode(nOldLayout);
+        }
+
+        auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord, aValidPositions);
+        if (stKashidaPos.has_value())
+        {
+            TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
+            aNewKashidaPositions.push_back(nNewKashidaPos);
+        }
+    }
+
+    if (aOldKashidaPositions != aNewKashidaPositions)
+    {
+        // Kashida positions have changed; restart CalcNewBlock
+        rSI.ReplaceKashidaPositions(nIdx, nEnd, aNewKashidaPositions);
+        rRemovedAllKashida = aNewKashidaPositions.empty();
+        return false;
+    }
 
     // Note on calling KashidaJustify():
     // Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
@@ -154,12 +208,10 @@ static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTextSizeInfo& rInf, 
 
     // kashida positions found in SwScriptInfo are not necessarily valid in every font
     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-    std::vector<TextFrameIndex> aUncastKashidaPos;
-    rSI.GetKashidaPositions(nIdx, rItr.GetLength(), aUncastKashidaPos);
-    assert(aUncastKashidaPos.size() >= o3tl::make_unsigned(rKashidas));
+    assert(aNewKashidaPositions.size() >= o3tl::make_unsigned(rKashidas));
 
     std::vector<sal_Int32> aKashidaPos;
-    std::transform(std::cbegin(aUncastKashidaPos), std::cend(aUncastKashidaPos),
+    std::transform(std::cbegin(aNewKashidaPositions), std::cend(aNewKashidaPositions),
                    std::back_inserter(aKashidaPos),
                    [](TextFrameIndex nPos) { return static_cast<sal_Int32>(nPos); });
 
@@ -404,13 +456,15 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 {
                     // kashida positions found in SwScriptInfo are not necessarily valid in every font
                     // if two characters are replaced by a ligature glyph, there will be no place for a kashida
-                    if ( !lcl_CheckKashidaPositions ( rSI, aInf, aItr, nKashidas, nGluePortion ))
+                    bool bRemovedAllKashida = false;
+                    if (!lcl_CheckKashidaPositions(rSI, aInf, aItr, nKashidas, nGluePortion,
+                                                   bRemovedAllKashida))
                     {
                         // all kashida positions are invalid
                         // do regular blank justification
                         pCurrent->FinishSpaceAdd();
                         GetInfo().SetIdx( m_nStart );
-                        CalcNewBlock( pCurrent, pStopAt, nReal, true );
+                        CalcNewBlock(pCurrent, pStopAt, nReal, bRemovedAllKashida);
                         return;
                     }
                 }

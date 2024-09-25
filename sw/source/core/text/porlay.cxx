@@ -2314,6 +2314,27 @@ void SwScriptInfo::GetKashidaPositions(
     }
 }
 
+void SwScriptInfo::ReplaceKashidaPositions(TextFrameIndex const nStt, TextFrameIndex const nEnd,
+                                           const std::vector<TextFrameIndex>& rKashidaPositions)
+{
+    auto it = m_Kashida.begin();
+    while (it != m_Kashida.end() && *it < nStt)
+    {
+        ++it;
+    }
+
+    it = m_Kashida.insert(it, rKashidaPositions.begin(), rKashidaPositions.end());
+
+    it += rKashidaPositions.size();
+    auto jt = it;
+    while (jt != m_Kashida.end() && *jt < nEnd)
+    {
+        ++jt;
+    }
+
+    m_Kashida.erase(it, jt);
+}
+
 void SwScriptInfo::SetNoKashidaLine(TextFrameIndex const nStt, TextFrameIndex const nLen)
 {
     m_NoKashidaLine.push_back( nStt );

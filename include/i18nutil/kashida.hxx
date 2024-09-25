@@ -10,6 +10,7 @@
 #include <i18nutil/i18nutildllapi.h>
 #include <rtl/ustring.hxx>
 #include <optional>
+#include <vector>
 
 namespace i18nutil
 {
@@ -18,7 +19,8 @@ struct KashidaPosition
     sal_Int32 nIndex;
 };
 
-I18NUTIL_DLLPUBLIC std::optional<KashidaPosition> GetWordKashidaPosition(const OUString& rWord);
+I18NUTIL_DLLPUBLIC std::optional<KashidaPosition>
+GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>& pValidPositions = {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

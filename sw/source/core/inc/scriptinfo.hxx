@@ -322,6 +322,14 @@ public:
     void GetKashidaPositions(TextFrameIndex nStt, TextFrameIndex nLen,
                              std::vector<TextFrameIndex>& rKashidaPosition);
 
+/** replaces kashida opportunities for a given text range.
+
+   rKashidaPositions: buffer containing char indices of the
+                      kashida opportunities relative to the paragraph
+*/
+    void ReplaceKashidaPositions(TextFrameIndex nStt, TextFrameIndex nEnd,
+                                 const std::vector<TextFrameIndex>& rKashidaPositions);
+
 /** Use regular blank justification instead of kashdida justification for the given line of text.
    nStt Start char index of the line referring to the paragraph.
    nLen Number of characters in the line

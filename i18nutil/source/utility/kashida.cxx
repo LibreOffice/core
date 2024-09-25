@@ -46,6 +46,7 @@ namespace
 
    - tdf#65344: Kashida must not be inserted before the final form of Yeh, unless
                 preceded by an initial or medial Seen.
+   - tdf#163105: As a last resort, use the last valid insertion position from VCL.
 */
 
 #define IS_JOINING_GROUP(c, g) (u_getIntPropertyValue((c), UCHAR_JOINING_GROUP) == U_JG_##g)
@@ -134,7 +135,8 @@ bool CanConnectToPrev(sal_Unicode cCh, sal_Unicode cPrevCh)
 }
 }
 
-std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const OUString& rWord)
+std::optional<i18nutil::KashidaPosition>
+i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>& pValidPositions)
 {
     sal_Int32 nIdx = 0;
     sal_Int32 nPrevIdx = 0;
@@ -142,9 +144,12 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
     sal_Unicode cCh = 0;
     sal_Unicode cPrevCh = 0;
 
-    int nPriorityLevel = 7; // 0..6 = level found, 7 not found
+    int nPriorityLevel = 8; // 0..7 = level found, 8 not found
 
     sal_Int32 nWordLen = rWord.getLength();
+
+    SAL_WARN_IF(!pValidPositions.empty() && pValidPositions.size() != static_cast<size_t>(nWordLen),
+                "i18n", "Kashida valid position array wrong size");
 
     // ignore trailing vowel chars
     while (nWordLen && isTransparentChar(rWord[nWordLen - 1]))
@@ -152,25 +157,32 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
         --nWordLen;
     }
 
-    auto fnTryInsertBefore = [&rWord, &nIdx, &nPrevIdx, &nKashidaPos, &nPriorityLevel,
-                              &nWordLen](sal_Int32 nNewPriority, bool bIgnoreFinalYeh = false) {
-        // Exclusions:
+    auto fnTryInsertBefore
+        = [&rWord, &nIdx, &nPrevIdx, &nKashidaPos, &nPriorityLevel, &nWordLen,
+           &pValidPositions](sal_Int32 nNewPriority, bool bIgnoreFinalYeh = false) {
+              // Exclusions:
 
-        // #i98410#: prevent ZWNJ expansion
-        if (rWord[nPrevIdx] == 0x200C || rWord[nPrevIdx + 1] == 0x200C)
-        {
-            return;
-        }
+              // tdf#163105: Do not insert kashida if the position is invalid
+              if (!pValidPositions.empty() && !pValidPositions[nPrevIdx])
+              {
+                  return;
+              }
 
-        // tdf#65344: Do not insert kashida before a final Yeh
-        if (!bIgnoreFinalYeh && nIdx == (nWordLen - 1) && isYehChar(rWord[nIdx]))
-        {
-            return;
-        }
+              // #i98410#: prevent ZWNJ expansion
+              if (rWord[nPrevIdx] == 0x200C || rWord[nPrevIdx + 1] == 0x200C)
+              {
+                  return;
+              }
 
-        nKashidaPos = nPrevIdx;
-        nPriorityLevel = nNewPriority;
-    };
+              // tdf#65344: Do not insert kashida before a final Yeh
+              if (!bIgnoreFinalYeh && nIdx == (nWordLen - 1) && isYehChar(rWord[nIdx]))
+              {
+                  return;
+              }
+
+              nKashidaPos = nPrevIdx;
+              nPriorityLevel = nNewPriority;
+          };
 
     while (nIdx < nWordLen)
     {
@@ -270,7 +282,7 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
             }
         }
 
-        // other connecting possibilities
+        // 7. Other connecting possibilities
         if (nPriorityLevel >= 6 && nIdx > 0)
         {
             // Reh, Zain (right joining) final form may appear in the middle of word
@@ -284,6 +296,12 @@ std::optional<i18nutil::KashidaPosition> i18nutil::GetWordKashidaPosition(const 
                     fnTryInsertBefore(6);
                 }
             }
+        }
+
+        // 8. If valid position data exists, use the last legal position
+        if (nPriorityLevel >= 7 && nIdx > 0 && !pValidPositions.empty())
+        {
+            fnTryInsertBefore(7);
         }
 
         // Do not consider vowel marks when checking if a character

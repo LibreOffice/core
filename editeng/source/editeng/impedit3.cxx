@@ -60,6 +60,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 
 #include <comphelper/configuration.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <math.h>
 #include <vcl/metric.hxx>
@@ -2344,10 +2345,17 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
 void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd,
                                     std::vector<sal_Int32>& rArray, sal_Int32 nRemainingSpace)
 {
+    auto nOldLayout = GetRefDevice()->GetLayoutMode();
+    comphelper::ScopeGuard stGuard{ [this, nOldLayout]
+                                    { GetRefDevice()->SetLayoutMode(nOldLayout); } };
+
+    GetRefDevice()->SetLayoutMode(nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl);
+
     // Kashida glyph looks suspicious, skip Kashida justification
     if (GetRefDevice()->GetMinKashida() <= 0)
         return;
 
+    std::vector<bool> aValidPositions;
     std::vector<sal_Int32> aKashidaArray;
     std::vector<sal_Int32> aMinKashidaArray;
     sal_Int32 nTotalMinKashida = 0U;
@@ -2367,11 +2375,12 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
            aWordSel.Max().SetIndex( nEnd );
 
         OUString aWord = GetSelected( aWordSel );
+        GetRefDevice()->GetWordKashidaPositions(aWord, &aValidPositions);
 
         // restore selection for proper iteration at the end of the function
         aWordSel.Max().SetIndex( nSavPos );
 
-        auto stKashidaPos = i18nutil::GetWordKashidaPosition(aWord);
+        auto stKashidaPos = i18nutil::GetWordKashidaPosition(aWord, aValidPositions);
 
         if (stKashidaPos.has_value())
         {
@@ -2406,12 +2415,9 @@ void ImpEditEngine::ImpFindKashidas(ContentNode* pNode, sal_Int32 nStart, sal_In
 
     // Validate
     std::vector<sal_Int32> aDropped;
-    auto nOldLayout = GetRefDevice()->GetLayoutMode();
-    GetRefDevice()->SetLayoutMode(nOldLayout | vcl::text::ComplexTextLayoutFlags::BiDiRtl);
     GetRefDevice()->ValidateKashidas(pNode->GetString(), nStart, nEnd - nStart,
                                      /*nPartIdx=*/nStart, /*nPartLen=*/nEnd - nStart, aKashidaArray,
                                      &aDropped);
-    GetRefDevice()->SetLayoutMode(nOldLayout);
 
     for (auto const& pos : aKashidaArray)
         if (std::find(aDropped.begin(), aDropped.end(), pos) == aDropped.end())

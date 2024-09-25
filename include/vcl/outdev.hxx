@@ -1171,6 +1171,9 @@ public:
                      std::vector<sal_Int32>* pKashidaPosDropped // invalid kashida positions (out)
     ) const;
 
+    // tdf#163105: Get map of valid kashida positions for a single word
+    void GetWordKashidaPositions(const OUString& rText, std::vector<bool>* pOutMap) const;
+
     static void                 BeginFontSubstitution();
     static void                 EndFontSubstitution();
     static void                 AddFontSubstitute( const OUString& rFontName,
