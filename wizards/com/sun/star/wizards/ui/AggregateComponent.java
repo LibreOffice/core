@@ -296,9 +296,9 @@ public class AggregateComponent extends ControlScroller
             String[][] sAggregateFieldNames = this.getAggregateFieldNames();
             if (benableGroupPage)
             {
-                for (int i = 0; i < CurDBMetaData.NumericFieldNames.length; i++)
+                for (int i = 0; i < CurDBMetaData.getNumericFieldNames().length; i++)
                 {
-                    boolean bisthere = (JavaTools.FieldInTable(sAggregateFieldNames, CurDBMetaData.NumericFieldNames[i]) > -1);
+                    boolean bisthere = (JavaTools.FieldInTable(sAggregateFieldNames, CurDBMetaData.getNumericFieldNames()[i]) > -1);
                     if (!bisthere)
                     {
                         return true;
@@ -362,7 +362,7 @@ public class AggregateComponent extends ControlScroller
                             if ((iselfield.length > 0) && (iselfunction.length > 0))
                             {
                                 String[] curaggregatename = new String[] {
-                                    CurDBMetaData.NumericFieldNames[iselfield[0]],
+                                    CurDBMetaData.getNumericFieldNames()[iselfield[0]],
                                     this.sFunctionOperators[iselfunction[0]] };
                                 aggregatevector.add(curaggregatename);
                             }
@@ -446,7 +446,7 @@ public class AggregateComponent extends ControlScroller
         PropertyValue[] currowproperties = new PropertyValue[2];
         if (_index < CurDBMetaData.AggregateFieldNames.length)
         {
-            short iselfieldsindex = (short) JavaTools.FieldInList(CurDBMetaData.NumericFieldNames, CurDBMetaData.AggregateFieldNames[_index][0]);
+            short iselfieldsindex = (short) JavaTools.FieldInList(CurDBMetaData.getNumericFieldNames(), CurDBMetaData.AggregateFieldNames[_index][0]);
             iselfieldslist = new short[]
                     {
                         iselfieldsindex
@@ -535,7 +535,7 @@ public class AggregateComponent extends ControlScroller
 
         private void insertFieldNames()
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xFieldListBox), PropertyNames.STRING_ITEM_LIST, CurDBMetaData.NumericFieldNames);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xFieldListBox), PropertyNames.STRING_ITEM_LIST, CurDBMetaData.getNumericFieldNames());
         }
 
         private boolean isComplete()

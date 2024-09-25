@@ -53,7 +53,7 @@ public class CommandMetaData extends DBMetaData
     public String[][] AggregateFieldNames = new String[][]
     {
     };
-    public String[] NumericFieldNames = new String[]
+    private String[] NumericFieldNames = new String[]
     {
     };
     protected String[] NonAggregateFieldNames;
@@ -103,6 +103,11 @@ public class CommandMetaData extends DBMetaData
                 }
             }
         }
+    }
+
+    public String[] getNumericFieldNames()
+    {
+        return NumericFieldNames;
     }
 
     public Map<String, String> getFieldTitleSet()
