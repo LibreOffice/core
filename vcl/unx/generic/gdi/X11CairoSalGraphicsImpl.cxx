@@ -32,7 +32,7 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, CairoC
 tools::Long X11CairoSalGraphicsImpl::GetGraphicsWidth() const
 {
     if (mrParent.m_pFrame)
-        return mrParent.m_pFrame->maGeometry.width();
+        return mrParent.m_pFrame->GetWidth();
     return mrCairoCommon.m_pSurface ? mrCairoCommon.m_aFrameSize.getX() : 0;
 }
 

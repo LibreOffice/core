@@ -2727,7 +2727,7 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
         }
         if( !comphelper::LibreOfficeKit::isActive() &&
             !(nFlags & PosSizeFlags::X) && bHasValidSize &&
-            pWindow->mpWindowImpl->mpFrame->maGeometry.width() )
+            pWindow->mpWindowImpl->mpFrame->GetWidth())
         {
             // RTL: make sure the old right aligned position is not changed
             // system windows will always grow to the right
@@ -3606,7 +3606,7 @@ bool Window::IsScrollable() const
 
 void Window::ImplMirrorFramePos( Point &pt ) const
 {
-    pt.setX( mpWindowImpl->mpFrame->maGeometry.width()-1-pt.X() );
+    pt.setX(mpWindowImpl->mpFrame->GetWidth() - 1 - pt.X());
 }
 
 // frame based modal counter (dialogs are not modal to the whole application anymore)
