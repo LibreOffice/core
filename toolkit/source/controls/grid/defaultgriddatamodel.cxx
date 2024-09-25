@@ -496,6 +496,7 @@ private:
 
     Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  )
     {
+        std::unique_lock aGuard(m_aMutex);
         return new DefaultGridDataModel( *this );
     }
 
