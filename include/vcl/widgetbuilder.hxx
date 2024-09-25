@@ -9,6 +9,9 @@
 
 #pragma once
 
+#include <com/sun/star/uno/Exception.hpp>
+#include <comphelper/diagnose_ex.hxx>
+#include <desktop/crashreport.hxx>
 #include <sal/log.hxx>
 #include <vcl/builderbase.hxx>
 #include <xmlreader/span.hxx>
@@ -38,6 +41,24 @@ protected:
     {
     }
     virtual ~WidgetBuilder() = default;
+
+    void processUIFile(Widget* pParent)
+    {
+        try
+        {
+            xmlreader::XmlReader reader(getUIFileUrl());
+            handleChild(pParent, nullptr, reader);
+        }
+        catch (const css::uno::Exception& rExcept)
+        {
+            TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
+            CrashReporter::addKeyValue(u"VclBuilderException"_ustr,
+                                       "Unable to read .ui file: " + rExcept.Message,
+                                       CrashReporter::Write);
+            assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
+            throw;
+        }
+    }
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
     // collecting the atk info for a GtkMenuItem or tab child

@@ -72,13 +72,11 @@
 #include <PriorityHBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
-#include <desktop/crashreport.hxx>
 #include <calendar.hxx>
 #include <menutogglebutton.hxx>
 #include <salinst.hxx>
 #include <strings.hrc>
 #include <treeglue.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 #include <tools/svlibrary.h>
@@ -506,19 +504,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
          (pParent->IsDockingWindow() && static_cast<DockingWindow*>(pParent)->isDeferredInit()));
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
-    try
-    {
-        xmlreader::XmlReader reader(getUIFileUrl());
-
-        handleChild(pParent, nullptr, reader);
-    }
-    catch (const css::uno::Exception &rExcept)
-    {
-        TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
-        CrashReporter::addKeyValue(u"VclBuilderException"_ustr, "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
-        assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
-        throw;
-    }
+    processUIFile(pParent);
 
     //Set Mnemonic widgets when everything has been imported
     for (auto const& mnemonicWidget : m_pVclParserState->m_aMnemonicWidgetMaps)
