@@ -82,11 +82,19 @@ void printUnoValue(
         out << *o3tl::forceAccess<sal_uInt64>(value);
         break;
     case css::uno::TypeClass_FLOAT:
+    {
+        std::ios_base::fmtflags origfmt = out.flags();
         out << std::uppercase << *o3tl::forceAccess<float>(value);
+        out.setf(origfmt);
         break;
+    }
     case css::uno::TypeClass_DOUBLE:
+    {
+        std::ios_base::fmtflags origfmt = out.flags();
         out << std::uppercase << *o3tl::forceAccess<double>(value);
+        out.setf(origfmt);
         break;
+    }
     case css::uno::TypeClass_CHAR:
     {
         std::ios_base::fmtflags origfmt = out.flags();
