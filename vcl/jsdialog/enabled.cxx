@@ -413,6 +413,20 @@ bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
 
     return false;
 }
+
+bool isBuilderEnabledForAddressInput(std::u16string_view rUIFile)
+{
+    if (rUIFile == u"modules/scalc/ui/posbox.ui")
+        return true;
+    return false;
+}
+
+bool isBuilderEnabledForFormulabar(std::u16string_view rUIFile)
+{
+    if (rUIFile == u"modules/scalc/ui/inputbar.ui")
+        return true;
+    return false;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

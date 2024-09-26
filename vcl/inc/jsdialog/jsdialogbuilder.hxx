@@ -279,6 +279,11 @@ public:
                                                                       const OUString& rUIFile,
                                                                       sal_uInt64 nLOKWindowId);
 
+    static std::unique_ptr<JSInstanceBuilder> CreateAddressInputBuilder(vcl::Window* pParent,
+                                                                        const OUString& rUIRoot,
+                                                                        const OUString& rUIFile,
+                                                                        sal_uInt64 nLOKWindowId);
+
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OUString& id) override;
     virtual std::unique_ptr<weld::Dialog> weld_dialog(const OUString& id) override;

@@ -144,7 +144,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 }
 
 
-static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
+static ScTabViewShell* lcl_chooseRuntimeImpl( const SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -154,15 +154,14 @@ static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, cons
         if ( pViewFrm )
             pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
     }
-
-    return VclPtr<ScInputBarGroup>::Create( pParent, pViewSh );
+    return pViewSh;
 }
 
 ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN | WB_BORDER | WB_NOSHADOW) ),
-        aWndPos         ( !comphelper::LibreOfficeKit::isActive() ? VclPtr<ScPosWnd>::Create(this) : nullptr ),
-        mxTextWindow    ( lcl_chooseRuntimeImpl( this, pBind ) ),
+        aWndPos         ( VclPtr<ScPosWnd>::Create( this, lcl_chooseRuntimeImpl(pBind)) ),
+        mxTextWindow    ( VclPtr<ScInputBarGroup>::Create( this, lcl_chooseRuntimeImpl(pBind)) ),
         pInputHdl       ( nullptr ),
         mpViewShell     ( nullptr ),
         mnMaxY          (0),
@@ -2253,8 +2252,9 @@ void ScTextWnd::TextGrabFocus()
 }
 
 // Position window
-ScPosWnd::ScPosWnd(vcl::Window* pParent)
-    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr)
+ScPosWnd::ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewShell)
+    : InterimItemWindow(pParent, u"modules/scalc/ui/posbox.ui"_ustr, u"PosBox"_ustr, false,
+                        reinterpret_cast<sal_uInt64>(pViewShell))
     , m_xWidget(m_xBuilder->weld_combo_box(u"pos_window"_ustr))
     , m_nAsyncGetFocusId(nullptr)
     , nTipVisible(nullptr)

@@ -662,6 +662,15 @@ JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString&
     return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
 }
 
+std::unique_ptr<JSInstanceBuilder>
+JSInstanceBuilder::CreateAddressInputBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                             const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+{
+    return std::make_unique<JSInstanceBuilder>(nullptr, pParent, rUIRoot, rUIFile,
+                                               JSInstanceBuilder::Type::Formulabar, nLOKWindowId,
+                                               u"addressinputfield");
+}
+
 JSInstanceBuilder::~JSInstanceBuilder()
 {
     // tab page closed -> refresh parent window
