@@ -30,6 +30,7 @@
 #include <svx/txencbox.hxx>
 #include <o3tl/string_view.hxx>
 #include <utility>
+#include <vcl/svapp.hxx>
 
 // ScDelimiterTable
 
@@ -258,6 +259,13 @@ ScImportOptionsDlg::ScImportOptionsDlg(weld::Window* pParent, bool bAscii,
     // optional title:
     if (pStrTitle)
         m_xDialog->set_title(*pStrTitle);
+
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, ScImportOptionsDlg, InstallLOKNotifierHdl));
+}
+
+IMPL_STATIC_LINK_NOARG(ScImportOptionsDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
 }
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
