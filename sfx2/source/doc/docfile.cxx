@@ -4301,6 +4301,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
 void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                                   bool bSignScriptingContent,
                                   bool bHasValidDocumentSignature,
+                                  SfxViewShell* pViewShell,
                                   const std::function<void(bool)>& rCallback,
                                   const OUString& aSignatureLineId,
                                   const Reference<XCertificate>& xCert,
@@ -4490,7 +4491,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 
                     // Async, all code before return has to go into the callback.
                     xModelSigner->SignDocumentContentAsync(GetZipStorageToSign_Impl(),
-                                                            xStream, [onODFSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
+                                                            xStream, pViewShell, [onODFSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
                         if (bRet)
                         {
                             onODFSignDocumentContentFinished();
@@ -4530,7 +4531,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 {
                     // We need read-write to be able to add the signature relation.
                     xModelSigner->SignDocumentContentAsync(
-                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, [onOOXMLSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
+                        GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream, pViewShell, [onOOXMLSignDocumentContentFinished, onSignDocumentContentFinished](bool bRet) {
                         if (bRet)
                         {
                             onOOXMLSignDocumentContentFinished();
@@ -4552,7 +4553,7 @@ void SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
                 // Something not ZIP based: e.g. PDF.
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
                 uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
-                xModelSigner->SignDocumentContentAsync(uno::Reference<embed::XStorage>(), xStream, [onSignDocumentContentFinished](bool bRet) {
+                xModelSigner->SignDocumentContentAsync(uno::Reference<embed::XStorage>(), xStream, pViewShell, [onSignDocumentContentFinished](bool bRet) {
                     onSignDocumentContentFinished(bRet);
                 });
                 return;

@@ -38,6 +38,7 @@ namespace com::sun::star {
 
 class HeaderBar;
 class CertificateViewer;
+class SfxViewShell;
 
 class DigitalSignaturesDialog final : public weld::GenericDialogController
 {
@@ -104,7 +105,8 @@ private:
 public:
     DigitalSignaturesDialog(weld::Window* pParent, const css::uno::Reference<
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-        bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature);
+        bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature,
+        SfxViewShell* pViewShell);
     virtual ~DigitalSignaturesDialog() override;
 
     // Initialize the dialog and the security environment, returns TRUE on success

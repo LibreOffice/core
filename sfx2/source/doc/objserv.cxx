@@ -2145,8 +2145,10 @@ void SfxObjectShell::SignDocumentContent(weld::Window* pDialogParent, const std:
         return;
     }
 
+    SfxViewFrame* pFrame = GetFrame();
+    SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
     // Async, all code before the end has to go into the callback.
-    GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures(), [this, rCallback](bool bSignSuccess) {
+    GetMedium()->SignContents_Impl(pDialogParent, false, HasValidSignatures(), pViewShell, [this, rCallback](bool bSignSuccess) {
             AfterSigning(bSignSuccess, false);
 
             rCallback(bSignSuccess);
@@ -2261,13 +2263,15 @@ void SfxObjectShell::SignSignatureLine(weld::Window* pDialogParent,
     if (CheckIsReadonly(false, pDialogParent))
         return;
 
+    SfxViewFrame* pFrame = GetFrame();
+    SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
     GetMedium()->SignContents_Impl(pDialogParent,
-        false, HasValidSignatures(), [this](bool bSignSuccess) {
+        false, HasValidSignatures(), pViewShell, [this, pFrame](bool bSignSuccess) {
         AfterSigning(bSignSuccess, false);
 
         // Reload the document to get the updated graphic
         // FIXME: Update just the signature line graphic instead of reloading the document
-        if (SfxViewFrame* pFrame = GetFrame())
+        if (pFrame)
             pFrame->GetDispatcher()->Execute(SID_RELOAD);
     }, aSignatureLineId, xCert, xValidGraphic, xInvalidGraphic, aComment);
 }
@@ -2291,7 +2295,9 @@ void SfxObjectShell::SignScriptingContent(weld::Window* pDialogParent, const std
         return;
     }
 
-    GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures(), [this, rCallback](bool bSignSuccess) {
+    SfxViewFrame* pFrame = GetFrame();
+    SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
+    GetMedium()->SignContents_Impl(pDialogParent, true, HasValidSignatures(), pViewShell, [this, rCallback](bool bSignSuccess) {
         AfterSigning(bSignSuccess, true);
 
         rCallback(bSignSuccess);
