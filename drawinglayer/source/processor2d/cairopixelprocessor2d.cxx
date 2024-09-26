@@ -866,9 +866,12 @@ basegfx::B2DRange getDiscreteViewRange(cairo_t* pRT)
 namespace drawinglayer::processor2d
 {
 CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                             cairo_surface_t* pTarget)
+                                             cairo_surface_t* pTarget, tools::Long nOffsetPixelX,
+                                             tools::Long nOffsetPixelY, tools::Long nWidthPixel,
+                                             tools::Long nHeightPixel)
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
+    , mpCreateForRectangle(nullptr)
     , mpRT(nullptr)
     , mbRenderSimpleTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
@@ -878,19 +881,64 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
 {
     if (pTarget)
     {
-        cairo_t* pRT = cairo_create(pTarget);
-        cairo_set_antialias(pRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
-                                                                       : CAIRO_ANTIALIAS_NONE);
-        cairo_set_fill_rule(pRT, CAIRO_FILL_RULE_EVEN_ODD);
-        cairo_set_operator(pRT, CAIRO_OPERATOR_OVER);
-        setRenderTarget(pRT);
+        bool bClipNeeded(false);
+
+        if (0 != nOffsetPixelX || 0 != nOffsetPixelY || 0 != nWidthPixel || 0 != nHeightPixel)
+        {
+            if (0 != nOffsetPixelX || 0 != nOffsetPixelY)
+            {
+                // if offset is used we need initial clip
+                bClipNeeded = true;
+            }
+            else
+            {
+                // no offset used, compare to real pixel size
+                const tools::Long nRealPixelWidth(cairo_image_surface_get_width(pTarget));
+                const tools::Long nRealPixelHeight(cairo_image_surface_get_height(pTarget));
+
+                if (nRealPixelWidth != nWidthPixel || nRealPixelHeight != nHeightPixel)
+                {
+                    // if size differs we need initial clip
+                    bClipNeeded = true;
+                }
+            }
+        }
+
+        if (bClipNeeded)
+        {
+            // optional: if the possibility to add an initial clip relative
+            // to the real pixel dimensions of the target surface is used,
+            // aplly it here using that nice existing method of cairo
+            mpCreateForRectangle = cairo_surface_create_for_rectangle(
+                pTarget, nOffsetPixelX, nOffsetPixelY, nWidthPixel, nHeightPixel);
+
+            if (nullptr != mpCreateForRectangle)
+                mpRT = cairo_create(mpCreateForRectangle);
+        }
+        else
+        {
+            // create RenderTarget for full target
+            mpRT = cairo_create(pTarget);
+        }
+
+        if (nullptr != mpRT)
+        {
+            // initialize some basic used values/settings
+            cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing()
+                                          ? CAIRO_ANTIALIAS_DEFAULT
+                                          : CAIRO_ANTIALIAS_NONE);
+            cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
+            cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+        }
     }
 }
 
 CairoPixelProcessor2D::~CairoPixelProcessor2D()
 {
-    if (mpRT)
+    if (nullptr != mpRT)
         cairo_destroy(mpRT);
+    if (nullptr != mpCreateForRectangle)
+        cairo_surface_destroy(mpCreateForRectangle);
 }
 
 void CairoPixelProcessor2D::processBitmapPrimitive2D(

@@ -36,31 +36,18 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     OutputDevice& rTargetOutDev,
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
 {
-    static bool bUsePrimitiveRenderer(
 #if defined(_WIN32)
-        // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
-        nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER")
-#elif USE_HEADLESS_CODE
-        // Linux/Cairo: activate to check tests/builds. Leave a
-        // possibility to deactivate for easy test/request testing
-        nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER")
+    // Windows: make dependent on TEST_SYSTEM_PRIMITIVE_RENDERER
+    static bool bUsePrimitiveRenderer(nullptr != std::getenv("TEST_SYSTEM_PRIMITIVE_RENDERER"));
 
-        // Use this if all is stable/tested for a while
-        // true
-
-        // Also possible: make dependent on ExperimentalMode
-        // officecfg::Office::Common::Misc::ExperimentalMode::get()
-#else
-        // all others: do not use, not (yet) supported
-        false
-#endif
-    );
-
-    if(bUsePrimitiveRenderer)
+    if (bUsePrimitiveRenderer)
     {
         drawinglayer::geometry::ViewInformation2D aViewInformation2D(rViewInformation2D);
 
         // if mnOutOffX/mnOutOffY is set (a 'hack' to get a cheap additional offset), apply it additionally
+        // NOTE: This will also need to take extended size of target device into
+        //       consideration, using D2DPixelProcessor2D *will* have to clip
+        //       against that. Thus for now this is *not* sufficient (see tdf#163125)
         if(0 != rTargetOutDev.GetOutOffXPixel() || 0 != rTargetOutDev.GetOutOffYPixel())
         {
             basegfx::B2DHomMatrix aTransform(aViewInformation2D.getViewTransformation());
@@ -68,22 +55,45 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             aViewInformation2D.setViewTransformation(aTransform);
         }
 
-#if defined(_WIN32)
         SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
         std::unique_ptr<D2DPixelProcessor2D> aRetval(
             std::make_unique<D2DPixelProcessor2D>(aViewInformation2D, aData.hDC));
         if (aRetval->valid())
             return aRetval;
+    }
 #elif USE_HEADLESS_CODE
+    // Linux/Cairo: now globally activated in master. Leave a
+    // possibility to deactivate for easy test/request testing
+    static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
+
+    if (bUsePrimitiveRenderer)
+    {
         SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
+        const Size aSizePixel(rTargetOutDev.GetOutputSizePixel());
+
+        // create CairoPixelProcessor2D, make use of the possibility to
+        // add an initial clip relative to the real pixel dimensions of
+        // the target surface. This is e.g. needed here due to the
+        // existance of 'virtual' target surfaces that internally use an
+        // offset and limitied pixel size, mainly used for UI elements.
+        // let the CairoPixelProcessor2D do this, it has internal,
+        // system-specific possibilities to do that in an elegant and
+        // efficient way (using cairo_surface_create_for_rectangle).
         std::unique_ptr<CairoPixelProcessor2D> aRetval(
-            std::make_unique<CairoPixelProcessor2D>(aViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface)));
+            std::make_unique<CairoPixelProcessor2D>(
+                rViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface),
+                rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel(),
+                aSizePixel.getWidth(), aSizePixel.getHeight()));
+
         if (aRetval->valid())
             return aRetval;
-#endif
     }
+#endif
 
-    // default: create Pixel Vcl-Processor
+    // default: create VclPixelProcessor2D
+    // NOTE: Since this uses VCL OutputDevice in the VclPixelProcessor2D
+    //       taking care of virtual devices is not needed, OutputDevice
+    //       and VclPixelProcessor2D will traditionally take care of it
     return std::make_unique<VclPixelProcessor2D>(rViewInformation2D, rTargetOutDev);
 }
 

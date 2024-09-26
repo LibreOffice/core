@@ -11,6 +11,7 @@
 
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
+#include <tools/long.hxx>
 #include <sal/config.h>
 
 // cairo-specific
@@ -67,6 +68,10 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 {
     // the modifiedColorPrimitive stack
     basegfx::BColorModifierStack maBColorModifierStack;
+
+    // cairo_surface_t created when initial clip from the constructor
+    // parameters is requested
+    cairo_surface_t* mpCreateForRectangle;
 
     // cairo specific data
     cairo_t* mpRT;
@@ -173,13 +178,22 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
 
 protected:
     bool hasError() const { return cairo_status(mpRT) != CAIRO_STATUS_SUCCESS; }
-    void setRenderTarget(cairo_t* mpNewRT) { mpRT = mpNewRT; }
     bool hasRenderTarget() const { return nullptr != mpRT; }
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
-    CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                          cairo_surface_t* pTarget);
+    CairoPixelProcessor2D(
+        // the initial ViewInformation
+        const geometry::ViewInformation2D& rViewInformation,
+
+        // the cairo render target
+        cairo_surface_t* pTarget,
+
+        // optional: possibility to add an initial clip relative to
+        // the real pixel dimensions of the target surface
+        tools::Long nOffsetPixelX = 0, tools::Long nOffsetPixelY = 0, tools::Long nWidthPixel = 0,
+        tools::Long nHeightPixel = 0);
+
     virtual ~CairoPixelProcessor2D() override;
 
     // access to BColorModifierStack
