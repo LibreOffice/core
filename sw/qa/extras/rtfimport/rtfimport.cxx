@@ -28,6 +28,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/table/TableBorderDistances.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -1954,6 +1955,22 @@ CPPUNIT_TEST_FIXTURE(Test, test153192Tdf)
     createSwDoc("read-only-protect.rtf");
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable->isReadonly());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, test162198Tdf)
+{
+    createSwDoc("tdf162198.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable1(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<table::XCell> xCell = xTable1->getCellByName(u"A1"_ustr);
+    uno::Reference<beans::XPropertySet> xCellPropSet(xCell, uno::UNO_QUERY_THROW);
+    sal_Int32 nLeftDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
+    sal_Int32 nRightDistance = getProperty<sal_Int32>(xCellPropSet, u"LeftBorderDistance"_ustr);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("left cell spacing to contents", sal_Int32(9), nLeftDistance);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("right cell spacing to contents", sal_Int32(9), nRightDistance);
 }
 
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
