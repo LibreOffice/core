@@ -122,6 +122,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/groupdialog.ui"
         || rUIFile == u"modules/scalc/ui/headerfootercontent.ui"
         || rUIFile == u"modules/scalc/ui/headerfooterdialog.ui"
+        || rUIFile == u"modules/scalc/ui/imoptdialog.ui"
         || rUIFile == u"modules/scalc/ui/insertcells.ui"
         || rUIFile == u"modules/scalc/ui/managenamesdialog.ui"
         || rUIFile == u"modules/scalc/ui/movingaveragedialog.ui"

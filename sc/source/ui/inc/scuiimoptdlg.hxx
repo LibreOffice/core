@@ -69,6 +69,7 @@ private:
 
     DECL_LINK(FixedWidthHdl, weld::Toggleable&, void);
     DECL_LINK(DoubleClickHdl, weld::TreeView&, bool);
+    DECL_STATIC_LINK(ScImportOptionsDlg, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
