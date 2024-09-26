@@ -38,7 +38,7 @@ public class Shape
 {
     protected XShape xShape;
     protected FormHandler oFormHandler;
-    public XServiceInfo xServiceInfo;
+    private XServiceInfo xServiceInfo;
     protected Point aPoint;
     private Size aSize;
     protected XControlShape xControlShape;
@@ -131,5 +131,10 @@ public class Shape
     public XShape getShape()
     {
         return xShape;
+    }
+
+    public XServiceInfo getServiceInfo()
+    {
+        return xServiceInfo;
     }
 }

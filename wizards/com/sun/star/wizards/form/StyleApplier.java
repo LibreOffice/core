@@ -266,7 +266,7 @@ public class StyleApplier
                     DatabaseControl[] DBControls = curControlForm.getDatabaseControls();
                     for (int n = 0; n < DBControls.length; n++)
                     {
-                        if (DBControls[n].xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
+                        if (DBControls[n].getServiceInfo().supportsService("com.sun.star.drawing.ShapeCollection"))
                         {
                             TimeStampControl oTimeStampControl = (TimeStampControl) DBControls[n];
                             for (int i = 0; i < 2; i++)
@@ -405,7 +405,7 @@ public class StyleApplier
                             DatabaseControl aDBControl = DBControls[n];
                             if (aDBControl != null)
                             {
-                                if (aDBControl.xServiceInfo.supportsService("com.sun.star.drawing.ShapeCollection"))
+                                if (aDBControl.getServiceInfo().supportsService("com.sun.star.drawing.ShapeCollection"))
                                 {
                                     TimeStampControl oTimeStampControl = (TimeStampControl) aDBControl;
                                     for (int i = 0; i < 2; i++)
