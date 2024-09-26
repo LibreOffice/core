@@ -1059,6 +1059,7 @@ CONDITIONAL_REGISTER_DOC_EXTENSION( Vsd,  gid_Module_Prg_Draw_MSO_Reg, vsd,  VSD
 CONDITIONAL_REGISTER_DOC_EXTENSION( Vdx,  gid_Module_Prg_Draw_MSO_Reg, vdx,  VDX,  MS_VISIO_DOCUMENT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Vsdm,  gid_Module_Prg_Draw_MSO_Reg, vsdm,  VSDM,  MS_VISIO_DOCUMENT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Vsdx,  gid_Module_Prg_Draw_MSO_Reg, vsdx,  VSDX,  MS_VISIO_DOCUMENT, 5, sdraw.exe, open, Draw )
+CONDITIONAL_REGISTER_DOC_EXTENSION( Vstx,  gid_Module_Prg_Draw_MSO_Reg, vstx,  VSTX,  MS_VISIO_DOCUMENT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOC_EXTENSION( Pub,  gid_Module_Prg_Draw_MSO_Reg, pub,  PUB,  MS_PUBLISHER_DOCUMENT, 5, sdraw.exe, open, Draw )
 CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION( Vst,  gid_Module_Prg_Draw_MSO_Reg, vst,  VST,  MS_VISIO_TEMPLATE, 6, sdraw.exe, new, Draw )
 
