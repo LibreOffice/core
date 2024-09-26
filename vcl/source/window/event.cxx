@@ -269,6 +269,9 @@ void Window::CallEventListeners( VclEventId nEvent, void* pData )
         if ( !bIgnoreDisposed && xWindow->isDisposed() )
             return;
 
+        if (!xWindow->mpWindowImpl)
+            break;
+
         auto& rWindowImpl = *xWindow->mpWindowImpl;
         if (!rWindowImpl.maChildEventListeners.empty())
         {
