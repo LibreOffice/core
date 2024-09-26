@@ -49,7 +49,7 @@ public class UnoDialog
     private XVclWindowPeer xVclWindowPeer;
     private HashMap<String, Integer> ControlList;
     protected Resource m_oResource;
-    public XWindowPeer xWindowPeer = null;
+    protected XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
 
     public UnoDialog(XMultiServiceFactory xMSF)
