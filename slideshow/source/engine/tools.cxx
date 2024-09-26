@@ -776,6 +776,14 @@ namespace slideshow::internal
                 basegfx::fround( aTmpRect.getRange().getX() ) + 1,
                 basegfx::fround( aTmpRect.getRange().getY() ) + 1 );
         }
+
+#if defined(DBG_UTIL)
+bool isShowingMoreDebugInfo()
+{
+    static const bool bMoreInfo = getenv("SLIDESHOW_MORE_DEBUG_INFO") != nullptr;
+    return bMoreInfo;
+}
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

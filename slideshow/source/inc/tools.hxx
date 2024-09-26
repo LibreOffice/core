@@ -77,6 +77,10 @@ namespace slideshow
                 return hash_value(val);
             }
         };
+
+#if defined(DBG_UTIL)
+        bool isShowingMoreDebugInfo();
+#endif
     }
 }
 

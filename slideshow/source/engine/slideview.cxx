@@ -23,6 +23,7 @@
 #include <eventqueue.hxx>
 #include <eventmultiplexer.hxx>
 #include <slideview.hxx>
+#include <tools.hxx>
 #include <delayevent.hxx>
 #include <unoview.hxx>
 
@@ -591,18 +592,17 @@ private:
                 mpSprite->setPriority(
                     maSpriteContainer.getLayerPriority().getMinimum() );
 
+                basegfx::B2DPoint pos(maLayerBoundsPixel.getMinimum());
+                double alpha = 1.0;
 #if defined(DBG_UTIL)
-                mpSprite->movePixel(
-                    basegfx::B2DPoint(maLayerBoundsPixel.getMinimum()) +
-                    basegfx::B2DPoint(10,10) );
-
-                mpSprite->setAlpha(0.5);
-#else
-                mpSprite->movePixel(
-                    basegfx::B2DPoint(maLayerBoundsPixel.getMinimum()) );
-
-                mpSprite->setAlpha(1.0);
+                if (isShowingMoreDebugInfo())
+                {
+                    pos += basegfx::B2DPoint(10, 10);
+                    alpha = 0.5;
+                }
 #endif
+                mpSprite->movePixel(pos);
+                mpSprite->setAlpha(alpha);
                 mpSprite->show();
             }
 
