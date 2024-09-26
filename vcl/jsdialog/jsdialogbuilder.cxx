@@ -489,8 +489,10 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
 OUString JSInstanceBuilder::getMapIdFromWindowId() const
 {
     if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar"
-        || m_sTypeOfJSON == "formulabar")
+        || m_sTypeOfJSON == "formulabar" || m_sTypeOfJSON == "addressinputfield")
+    {
         return OUString::number(m_nWindowId) + m_sTypeOfJSON;
+    }
     else
         return OUString::number(m_nWindowId);
 }
@@ -604,14 +606,15 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-// used for formulabar
+// used for formulabar and addressinputfield
 JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId,
+                                     const OUString& sTypeOfJSON)
     : SalInstanceBuilder(pParent, rUIRoot, rUIFile)
     , m_nWindowId(nLOKWindowId)
     , m_aParentDialog(nullptr)
     , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("formulabar")
+    , m_sTypeOfJSON(sTypeOfJSON)
     , m_bHasTopLevelDialog(false)
     , m_bIsNotebookbar(false)
     , m_bSentInitialUpdate(false)
@@ -662,7 +665,16 @@ std::unique_ptr<JSInstanceBuilder>
 JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString& rUIRoot,
                                            const OUString& rUIFile, sal_uInt64 nLOKWindowId)
 {
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId,
+                                               "formulabar");
+}
+
+std::unique_ptr<JSInstanceBuilder>
+JSInstanceBuilder::CreateAddressInputBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                             const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+{
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId,
+                                               "addressinputfield");
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
