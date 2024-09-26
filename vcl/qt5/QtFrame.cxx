@@ -546,9 +546,9 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
         if (isChild(false) || !m_pQWidget->isMaximized())
         {
             if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
-                nWidth = maGeometry.width();
+                nWidth = GetWidth();
             else if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
-                nHeight = maGeometry.height();
+                nHeight = GetHeight();
 
             if (nWidth > 0 && nHeight > 0)
             {
@@ -579,18 +579,18 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
 
     if (m_pParent)
     {
-        const SalFrameGeometry& aParentGeometry = m_pParent->maGeometry;
+        const SalFrameGeometry aParentGeometry = m_pParent->GetUnmirroredGeometry();
         if (QGuiApplication::isRightToLeft())
-            nX = aParentGeometry.x() + aParentGeometry.width() - nX - maGeometry.width() - 1;
+            nX = aParentGeometry.x() + aParentGeometry.width() - nX - GetWidth() - 1;
         else
             nX += aParentGeometry.x();
         nY += aParentGeometry.y() + menuBarOffset();
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
-        nX = maGeometry.x();
+        nX = GetUnmirroredGeometry().x();
     else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
-        nY = maGeometry.y();
+        nY = GetUnmirroredGeometry().y();
 
     // assume the reposition happened
     // needed for calculations and will eventually be corrected by events later
@@ -856,7 +856,7 @@ bool QtFrame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpAr
 {
     QRect aHelpArea(toQRect(rHelpArea));
     if (QGuiApplication::isRightToLeft())
-        aHelpArea.moveLeft(maGeometry.width() - aHelpArea.width() - aHelpArea.left() - 1);
+        aHelpArea.moveLeft(GetWidth() - aHelpArea.width() - aHelpArea.left() - 1);
     m_aTooltipText = rText;
     m_aTooltipArea = aHelpArea;
     return true;
@@ -1273,7 +1273,8 @@ SalFrame::SalPointerState QtFrame::GetPointerState()
 {
     SalPointerState aState;
     aState.maPos = toPoint(QCursor::pos() * devicePixelRatioF());
-    aState.maPos.Move(-maGeometry.x(), -maGeometry.y());
+    SalFrameGeometry aGeometry = GetUnmirroredGeometry();
+    aState.maPos.Move(-aGeometry.x(), -aGeometry.y());
     aState.mnState = GetMouseModCode(QGuiApplication::mouseButtons())
                      | GetKeyModCode(QGuiApplication::keyboardModifiers());
     return aState;
