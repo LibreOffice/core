@@ -52,6 +52,7 @@
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
+#include <sfx2/viewsh.hxx>
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -192,7 +193,8 @@ bool IsThereCertificateMgr()
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
     const uno::Reference< uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
-    bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature)
+    bool bReadOnly, OUString sODFVersion, bool bHasDocumentSignature,
+    SfxViewShell* pViewShell)
     : GenericDialogController(pParent, u"xmlsec/ui/digitalsignaturesdialog.ui"_ustr, u"DigitalSignaturesDialog"_ustr)
     , maSignatureManager(rxCtx, eMode)
     , m_sODFVersion (std::move(sODFVersion))
@@ -259,7 +261,11 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        m_xAddBtn->hide();
+        // If the view has a signing certificate, then allow adding a signature.
+        if (!pViewShell || !pViewShell->GetSigningCertificate().is())
+        {
+            m_xAddBtn->hide();
+        }
         m_xStartCertMgrBtn->hide();
     }
 

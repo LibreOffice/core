@@ -85,6 +85,7 @@ private:
     void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                             const css::uno::Reference<css::io::XStream>& xSignStream,
                             DocumentSignatureMode eMode, bool bReadOnly,
+                            SfxViewShell* pViewShell,
                             const std::function<void(bool)>& rCallback);
     /// @throws css::uno::RuntimeException
     void ImplViewSignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
@@ -195,6 +196,7 @@ public:
     /// See sfx2::DigitalSignatures::SignDocumentContentAsync().
     void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
                                   const css::uno::Reference<css::io::XStream>& xSignStream,
+                                  SfxViewShell* pViewShell,
                                   const std::function<void(bool)>& rCallback) override;
     /// See sfx2::DigitalSignatures::SignScriptingContentAsync().
     void SignScriptingContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
@@ -364,17 +366,17 @@ void DocumentDigitalSignatures::ImplViewSignatures(
     Reference< io::XStream > xStream;
     if ( xSignStream.is() )
         xStream.set( xSignStream, UNO_QUERY );
-    ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly, [](bool /*bSuccess*/){} );
+    ImplViewSignatures( rxStorage, xStream, eMode, bReadOnly, nullptr, [](bool /*bSuccess*/){} );
 }
 
 void DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage, const Reference< css::io::XStream >& xSignStream,
-    DocumentSignatureMode eMode, bool bReadOnly, const std::function<void(bool)>& rCallback )
+    DocumentSignatureMode eMode, bool bReadOnly, SfxViewShell* pViewShell, const std::function<void(bool)>& rCallback )
 {
     bool bChanges = false;
     auto xSignaturesDialog = std::make_shared<DigitalSignaturesDialog>(
         Application::GetFrameWeld(mxParentWindow), mxCtx, eMode, bReadOnly, m_sODFVersion,
-        m_bHasDocumentSignature);
+        m_bHasDocumentSignature, pViewShell);
     bool bInit = xSignaturesDialog->Init();
     SAL_WARN_IF( !bInit, "xmlsecurity.comp", "Error initializing security context!" );
     if ( bInit )
@@ -773,10 +775,11 @@ bool DocumentDigitalSignatures::SignModelWithCertificate(
 
 void DocumentDigitalSignatures::SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& rxStorage,
                               const css::uno::Reference<css::io::XStream>& xSignStream,
+                              SfxViewShell* pViewShell,
                               const std::function<void(bool)>& rCallback)
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(), "DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
-    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false, rCallback );
+    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Content, false, pViewShell, rCallback );
 }
 
 void DocumentDigitalSignatures::SignScriptingContentAsync(
@@ -785,7 +788,7 @@ void DocumentDigitalSignatures::SignScriptingContentAsync(
 {
     OSL_ENSURE(!m_sODFVersion.isEmpty(),"DocumentDigitalSignatures: ODF Version not set, assuming minimum 1.2");
     OSL_ENSURE(m_nArgumentsCount == 2, "DocumentDigitalSignatures: Service was not initialized properly");
-    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false, rCallback );
+    ImplViewSignatures( rxStorage, xSignStream, DocumentSignatureMode::Macros, false, nullptr, rCallback );
 }
 
 void DocumentDigitalSignatures::SetSignScriptingContent(

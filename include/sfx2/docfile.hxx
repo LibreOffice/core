@@ -53,6 +53,7 @@ class SfxFilter;
 class SfxMedium_Impl;
 class INetURLObject;
 class SfxFrame;
+class SfxViewShell;
 class DateTime;
 struct ImplSVEvent;
 
@@ -275,6 +276,7 @@ public:
     SAL_DLLPRIVATE void
     SignContents_Impl(weld::Window* pDialogParent,
                       bool bSignScriptingContent, bool bHasValidDocumentSignature,
+                      SfxViewShell* pViewShell,
                       const std::function<void(bool)>& rCallback,
                       const OUString& aSignatureLineId = OUString(),
                       const css::uno::Reference<css::security::XCertificate>& xCert

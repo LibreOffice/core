@@ -18,6 +18,8 @@
 
 #include <sal/types.h>
 
+class SfxViewShell;
+
 namespace sfx2
 {
 /// Extension of css::security::XDocumentDigitalSignatures for internal purposes.
@@ -35,6 +37,7 @@ public:
     /// Async replacement for signDocumentContent().
     virtual void SignDocumentContentAsync(const css::uno::Reference<css::embed::XStorage>& xStorage,
                                           const css::uno::Reference<css::io::XStream>& xSignStream,
+                                          SfxViewShell* pViewShell,
                                           const std::function<void(bool)>& rCallback)
         = 0;
 
