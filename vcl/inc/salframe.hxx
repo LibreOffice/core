@@ -126,8 +126,8 @@ public:
     virtual                 ~SalFrame() override;
 
     // SalGeometryProvider
-    virtual tools::Long GetWidth() const override { return maGeometry.width(); }
-    virtual tools::Long GetHeight() const override { return maGeometry.height(); }
+    virtual tools::Long GetWidth() const override { return GetUnmirroredGeometry().width(); }
+    virtual tools::Long GetHeight() const override { return GetUnmirroredGeometry().height(); }
     virtual bool IsOffScreen() const override { return false; }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames

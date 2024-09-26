@@ -36,17 +36,18 @@
 
 SalFrameGeometry SalFrame::GetGeometry() const
 {
+    SalFrameGeometry aGeometry = GetUnmirroredGeometry();
+
     // mirror frame coordinates at parent
     SalFrame *pParent = GetParent();
     if( pParent && AllSettings::GetLayoutRTL() )
     {
-        SalFrameGeometry aGeom = maGeometry;
-        const int nParentX = aGeom.x() - pParent->maGeometry.x();
-        aGeom.setX(pParent->maGeometry.x() + pParent->maGeometry.width() - maGeometry.width() - nParentX);
-        return aGeom;
+        SalFrameGeometry aParentGeometry = pParent->GetUnmirroredGeometry();
+        const int nParentX = aGeometry.x() - aParentGeometry.x();
+        aGeometry.setX(aParentGeometry.x() + aParentGeometry.width() - aGeometry.width() - nParentX);
     }
-    else
-        return maGeometry;
+
+    return aGeometry;
 }
 
 SalGraphics::SalGraphics()
