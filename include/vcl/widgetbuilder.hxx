@@ -291,7 +291,7 @@ protected:
     // These methods are currently only implemented by VclBuilder and should be
     // refactored as described in the class documentation above (split into
     // parsing done in this class + overridable methods that don't need XmlReader
-    // that get implemented in the sublasses)
+    // that get implemented in the subclasses)
     //
     // Until that's done, other subclasses can be used to handle only those .ui files
     // not using the corresponding features (attributes/objects in the .ui file).
