@@ -1150,7 +1150,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
         }
     }
     if (oSpecularityValue)
-        GetDoublePercentage( maExtrusion, *oSpecularityValue, EAS_Specularity );
+        GetDouble( maExtrusion, *oSpecularityValue, EAS_Specularity );
     if (oPathValue)
         GetEnhancedPath(maPath, *oPathValue, sType);
 }

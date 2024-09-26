@@ -611,12 +611,16 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
-    save(u"writer8"_ustr);
+    saveAndReload(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125']"_ostr);
+
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload(getShape(0));
+    lcl_assertSpecularityProperty("from ODF 1.4", xShapeReload);
 
     SetODFDefaultVersion(nCurrentODFVersion);
 }
