@@ -109,6 +109,7 @@ namespace basctl
         if ( !impl_isDisposed_nothrow(aGuard) )
         {
             acquire();
+            aGuard.unlock(); // dispose locks m_aMutex
             dispose();
         }
     }
