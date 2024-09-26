@@ -61,6 +61,7 @@ mimetypes = {
     'application/vnd.visio': 'vsd',
     'application/visio.drawing': 'vsd',
     'application/vnd.visio2013': 'vsdx',
+    'application/vnd.visio2013': 'vstx',
     'application/vnd.visio.xml': 'vdx',
     'application/x-mspublisher': 'pub',
 #WPS Office
