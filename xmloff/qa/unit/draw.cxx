@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 {
     // Given a document that refers to a theme color:
     loadFromFile(u"Reference-ThemeColors-TextAndFill.pptx");
-    save(u"impress8"_ustr);
+    saveAndReload(u"impress8"_ustr);
 
     // Make sure the export result has the theme reference:
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -344,9 +344,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
     assertXPath(pXmlDoc, aShape3, "theme-type"_ostr, u"accent2"_ustr);
     assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
     assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value"_ostr, u"5000"_ustr);
-
-    // reload
-    load(maTempFile.GetURL());
 
     // check fill color theme
     {
@@ -463,9 +460,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColor_ShapeFill)
 {
     loadFromFile(u"ReferenceShapeFill.pptx");
-    save(u"impress8"_ustr);
-    // reload
-    load(maTempFile.GetURL());
+    saveAndReload(u"impress8"_ustr);
 
     // check fill color theme
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -535,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    save(u"writer8"_ustr);
+    saveAndReload(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -544,8 +539,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
         pXmlDoc,
         "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']"_ostr);
 
-    // reload
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
@@ -596,7 +589,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
-    save(u"writer8"_ustr);
+    saveAndReload(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
@@ -604,8 +597,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']"_ostr);
 
-    // reload and verify, that the loext value is used
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
