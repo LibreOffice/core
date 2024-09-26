@@ -72,6 +72,7 @@
 #include <PriorityHBox.hxx>
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
+#include <desktop/crashreport.hxx>
 #include <calendar.hxx>
 #include <menutogglebutton.hxx>
 #include <salinst.hxx>
@@ -440,6 +441,13 @@ namespace weld
         }  while (rTreeView.iter_parent(*xEntry) && rTreeView.get_row_expanded(*xEntry));
         return bRetVal;
     }
+}
+
+// static
+void BuilderBase::reportException(const css::uno::Exception& rExcept)
+{
+    CrashReporter::addKeyValue(u"VclBuilderException"_ustr,
+                               "Unable to read .ui file: " + rExcept.Message, CrashReporter::Write);
 }
 
 BuilderBase::BuilderBase(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy)

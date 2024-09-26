@@ -11,7 +11,6 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <comphelper/diagnose_ex.hxx>
-#include <desktop/crashreport.hxx>
 #include <sal/log.hxx>
 #include <vcl/builderbase.hxx>
 #include <xmlreader/span.hxx>
@@ -52,9 +51,7 @@ protected:
         catch (const css::uno::Exception& rExcept)
         {
             TOOLS_WARN_EXCEPTION("vcl.builder", "Unable to read .ui file " << getUIFileUrl());
-            CrashReporter::addKeyValue(u"VclBuilderException"_ustr,
-                                       "Unable to read .ui file: " + rExcept.Message,
-                                       CrashReporter::Write);
+            reportException(rExcept);
             assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
             throw;
         }

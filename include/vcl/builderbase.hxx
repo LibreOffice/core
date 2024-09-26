@@ -14,6 +14,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/EnumContext.hxx>
 
+#include <com/sun/star/uno/Exception.hpp>
+
 #include <map>
 #include <vector>
 
@@ -104,6 +106,8 @@ protected:
     void handleSizeGroup(xmlreader::XmlReader& reader);
 
     virtual void resetParserState();
+
+    static void reportException(const css::uno::Exception& rExcept);
 
 private:
     struct ParserState
