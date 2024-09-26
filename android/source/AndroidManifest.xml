@@ -60,6 +60,7 @@
                 <data android:mimeType="application/vnd.ms-powerpoint" />
                 <data android:mimeType="application/vnd.ms-excel"/>
                 <data android:mimeType="application/vnd.visio" />
+                <data android:mimeType="application/vnd.visio2013" />
                 <data android:mimeType="application/vnd.visio.xml" />
                 <data android:mimeType="application/x-mspublisher" />
 

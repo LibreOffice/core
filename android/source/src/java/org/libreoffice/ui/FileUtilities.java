@@ -70,6 +70,7 @@ public class FileUtilities {
         mExtnMap.put(".dot",  DOC);
         mExtnMap.put(".pot",  IMPRESS);
         mExtnMap.put(".xlt",  CALC);
+        mExtnMap.put(".vstx", DRAWING);
 
         // OOXML
         mExtnMap.put(".docx", DOC);
