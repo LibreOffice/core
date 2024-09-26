@@ -479,7 +479,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     mrDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
+    tools::Long  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
     // get rectangle and remove borderspace
     tools::Rectangle  aTmp ( pNode->AsRectangle( ) + maPosition - pNode->GetTopLeft( ) );

@@ -114,7 +114,7 @@ public:
 
             void SetItalicSpaces(tools::Long nLeftSpace, tools::Long nRightSpace);
 
-            void SetWidth(sal_uLong nWidth)     { aSize.setWidth(nWidth); }
+            void SetWidth(tools::Long nWidth)     { aSize.setWidth(nWidth); }
 
             void SetLeft(tools::Long nLeft);
             void SetRight(tools::Long nRight);

@@ -240,12 +240,12 @@ void SmNode::Move(const Point& rVector)
     ForEachNonNull(this, [&rVector](SmNode *pNode){pNode->Move(rVector);});
 }
 
-void SmNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong /*nWidth*/)
+void SmNode::AdaptToX(OutputDevice &/*rDev*/, tools::Long /*nWidth*/)
 {
 }
 
 
-void SmNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong /*nHeight*/)
+void SmNode::AdaptToY(OutputDevice &/*rDev*/, tools::Long /*nHeight*/)
 {
 }
 
@@ -1715,13 +1715,13 @@ SmPolyLineNode::SmPolyLineNode(const SmToken &rNodeToken)
 }
 
 
-void SmPolyLineNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nNewWidth)
+void SmPolyLineNode::AdaptToX(OutputDevice &/*rDev*/, tools::Long nNewWidth)
 {
     maToSize.setWidth( nNewWidth );
 }
 
 
-void SmPolyLineNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong nNewHeight)
+void SmPolyLineNode::AdaptToY(OutputDevice &/*rDev*/, tools::Long nNewHeight)
 {
     GetFont().FreezeBorderWidth();
     maToSize.setHeight( nNewHeight );
@@ -1769,13 +1769,13 @@ void SmPolyLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 
-void SmRootSymbolNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
+void SmRootSymbolNode::AdaptToX(OutputDevice &/*rDev*/, tools::Long nWidth)
 {
     mnBodyWidth = nWidth;
 }
 
 
-void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
+void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, tools::Long nHeight)
 {
     // some additional length so that the horizontal
     // bar will be positioned above the argument
@@ -1786,13 +1786,13 @@ void SmRootSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
 /**************************************************************************/
 
 
-void SmRectangleNode::AdaptToX(OutputDevice &/*rDev*/, sal_uLong nWidth)
+void SmRectangleNode::AdaptToX(OutputDevice &/*rDev*/, tools::Long nWidth)
 {
     maToSize.setWidth( nWidth );
 }
 
 
-void SmRectangleNode::AdaptToY(OutputDevice &/*rDev*/, sal_uLong nHeight)
+void SmRectangleNode::AdaptToY(OutputDevice &/*rDev*/, tools::Long nHeight)
 {
     GetFont().FreezeBorderWidth();
     maToSize.setHeight( nHeight );
@@ -1813,7 +1813,7 @@ void SmRectangleNode::Arrange(OutputDevice &rDev, const SmFormat &/*rFormat*/)
     aTmpDev.SetFont(GetFont());
 
     // add some borderspace
-    sal_uLong  nTmpBorderWidth = GetFont().GetBorderWidth();
+    tools::Long  nTmpBorderWidth = GetFont().GetBorderWidth();
     nHeight += 2 * nTmpBorderWidth;
 
     //! use this method in order to have 'SmRect::HasAlignInfo() == true'
@@ -2068,7 +2068,7 @@ SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
     SetText(GetToken().cMathChar);
 }
 
-void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)
+void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, tools::Long nWidth)
 {
     // Since there is no function to do this, we try to approximate it:
     Size  aFntSize (GetFont().GetFontSize());
@@ -2091,7 +2091,7 @@ void SmMathSymbolNode::AdaptToX(OutputDevice &rDev, sal_uLong nWidth)
     GetFont().SetSize(aFntSize);
 }
 
-void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, sal_uLong nHeight)
+void SmMathSymbolNode::AdaptToY(OutputDevice &rDev, tools::Long nHeight)
 {
     GetFont().FreezeBorderWidth();
     Size  aFntSize (GetFont().GetFontSize());
