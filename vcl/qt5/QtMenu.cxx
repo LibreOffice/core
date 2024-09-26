@@ -881,10 +881,8 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& r
     const VclPtr<vcl::Window> xParent = pWin->ImplGetWindowImpl()->mpRealParent;
     AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
 
-    // tdf#154447 Menu bar height has to be added
     QtFrame* pFrame = static_cast<QtFrame*>(pWin->ImplGetFrame());
     assert(pFrame);
-    aFloatRect.SetPosY(aFloatRect.getY() + pFrame->menuBarOffset());
 
     const QRect aRect = toQRect(aFloatRect, 1 / pFrame->devicePixelRatioF());
     mpQMenu->exec(aRect.bottomLeft());

@@ -119,7 +119,10 @@ private:
     SALFRAMEPROC            m_pProc;
     Link<bool, void>        m_aModalHierarchyHdl;
 protected:
+    // subclasses need to either keep this up to date
+    // or override GetUnmirroredGeometry()
     SalFrameGeometry maGeometry; ///< absolute, unmirrored values
+
     mutable std::unique_ptr<weld::Window> m_xFrameWeld;
 public:
                             SalFrame();
@@ -161,7 +164,10 @@ public:
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active
     SalFrameGeometry        GetGeometry() const;
-    const SalFrameGeometry& GetUnmirroredGeometry() const { return maGeometry; }
+
+    // subclasses either have to keep maGeometry up to date or override this
+    // method to return an up-to-date SalFrameGeometry
+    virtual SalFrameGeometry GetUnmirroredGeometry() const { return maGeometry; }
 
     virtual void SetWindowState(const vcl::WindowData*) = 0;
     // return the absolute, unmirrored system frame state

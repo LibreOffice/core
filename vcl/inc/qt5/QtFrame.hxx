@@ -147,7 +147,6 @@ public:
     QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;
-    int menuBarOffset() const;
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
@@ -180,6 +179,7 @@ public:
     virtual void SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                             sal_uInt16 nFlags) override;
     virtual void GetClientSize(tools::Long& rWidth, tools::Long& rHeight) override;
+    SalFrameGeometry GetUnmirroredGeometry() const override;
     virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect) override;
     virtual SalFrame* GetParent() const override;
     virtual void SetModal(bool bModal) override;

@@ -461,14 +461,6 @@ void QtFrame::SetMaxClientSize(tools::Long nWidth, tools::Long nHeight)
     }
 }
 
-int QtFrame::menuBarOffset() const
-{
-    QtMainWindow* pTopLevel = m_pParent->GetTopLevelWindow();
-    if (pTopLevel && pTopLevel->menuBar() && pTopLevel->menuBar()->isVisible())
-        return round(pTopLevel->menuBar()->geometry().height() * devicePixelRatioF());
-    return 0;
-}
-
 void QtFrame::SetDefaultPos()
 {
     if (!m_bDefaultPos)
@@ -481,7 +473,6 @@ void QtFrame::SetDefaultPos()
         QWidget* const pParentWin = m_pParent->asChild()->window();
         QWidget* const pChildWin = asChild()->window();
         QPoint aPos = (pParentWin->rect().center() - pChildWin->rect().center()) * fRatio;
-        aPos.ry() -= menuBarOffset();
         SetPosSize(aPos.x(), aPos.y(), 0, 0, SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y);
         assert(!m_bDefaultPos);
     }
@@ -560,13 +551,6 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
                 else
                     asChild()->setFixedSize(nNewWidth, nNewHeight);
             }
-
-            // assume the resize happened
-            // needed for calculations and will eventually be corrected by events
-            if (nWidth > 0)
-                maGeometry.setWidth(nWidth);
-            if (nHeight > 0)
-                maGeometry.setHeight(nHeight);
         }
     }
 
@@ -584,17 +568,13 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
             nX = aParentGeometry.x() + aParentGeometry.width() - nX - GetWidth() - 1;
         else
             nX += aParentGeometry.x();
-        nY += aParentGeometry.y() + menuBarOffset();
+        nY += aParentGeometry.y();
     }
 
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
         nX = GetUnmirroredGeometry().x();
     else if (!(nFlags & SAL_FRAME_POSSIZE_Y))
         nY = GetUnmirroredGeometry().y();
-
-    // assume the reposition happened
-    // needed for calculations and will eventually be corrected by events later
-    maGeometry.setPos({ nX, nY });
 
     m_bDefaultPos = false;
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
@@ -604,6 +584,20 @@ void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
 {
     rWidth = round(m_pQWidget->width() * devicePixelRatioF());
     rHeight = round(m_pQWidget->height() * devicePixelRatioF());
+}
+
+SalFrameGeometry QtFrame::GetUnmirroredGeometry() const
+{
+    SalFrameGeometry aGeometry = maGeometry;
+
+    const qreal fRatio = devicePixelRatioF();
+    const QPoint aScreenPos = m_pQWidget->mapToGlobal(QPoint(0, 0));
+    aGeometry.setX(aScreenPos.x() * fRatio);
+    aGeometry.setY(aScreenPos.y() * fRatio);
+    aGeometry.setWidth(m_pQWidget->width() * fRatio);
+    aGeometry.setHeight(m_pQWidget->height() * fRatio);
+
+    return aGeometry;
 }
 
 void QtFrame::GetWorkArea(AbsoluteScreenPixelRectangle& rRect)
@@ -1576,12 +1570,7 @@ void QtFrame::handleDragLeave()
     m_bInDrag = false;
 }
 
-void QtFrame::handleMoveEvent(QMoveEvent* pEvent)
-{
-    const qreal fRatio = devicePixelRatioF();
-    maGeometry.setPos(toPoint(pEvent->pos() * fRatio));
-    CallCallback(SalEvent::Move, nullptr);
-}
+void QtFrame::handleMoveEvent(QMoveEvent*) { CallCallback(SalEvent::Move, nullptr); }
 
 void QtFrame::handlePaintEvent(QPaintEvent* pEvent, QWidget* pWidget)
 {
@@ -1613,8 +1602,6 @@ void QtFrame::handleResizeEvent(QResizeEvent* pEvent)
     const qreal fRatio = devicePixelRatioF();
     const int nWidth = ceil(pEvent->size().width() * fRatio);
     const int nHeight = ceil(pEvent->size().height() * fRatio);
-
-    maGeometry.setSize({ nWidth, nHeight });
 
     if (m_bUseCairo)
     {
