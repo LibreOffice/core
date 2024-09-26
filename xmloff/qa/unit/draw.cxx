@@ -618,7 +618,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertSpecularityProperty("from doc", xShape);
 
-    skipValidation();
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
     save(u"writer8"_ustr);
