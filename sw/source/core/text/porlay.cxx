@@ -2194,16 +2194,18 @@ sal_Int32 SwScriptInfo::KashidaJustify( KernArray* pKernArray,
     return 0;
 }
 
-// Checks if the current text is 'Arabic' text. Note that only the first
+// Checks if the text is in Arabic or Syriac. Note that only the first
 // character has to be checked because a ctl portion only contains one
 // script, see NewTextPortion
-bool SwScriptInfo::IsArabicText(const OUString& rText,
+bool SwScriptInfo::IsKashidaScriptText(const OUString& rText,
         TextFrameIndex const nStt, TextFrameIndex const nLen)
 {
     using namespace ::com::sun::star::i18n;
     static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, sal_Int16(UnicodeScript_kArabic) },        // 11,
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, sal_Int16(UnicodeScript_kScriptCount) }    // 88
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, sal_Int16(UnicodeScript_kArabic) }, // 11,
+        { UnicodeScript_kSyriac, UnicodeScript_kSyriac, sal_Int16(UnicodeScript_kSyriac) }, // 12,
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,
+          sal_Int16(UnicodeScript_kScriptCount) } // 88
     };
 
     // go forward if current position does not hold a regular character:
@@ -2229,7 +2231,7 @@ bool SwScriptInfo::IsArabicText(const OUString& rText,
     {
         const sal_Unicode cCh = rText[nIdx];
         const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, sal_Int16(UnicodeScript_kScriptCount) );
-        return type == sal_Int16(UnicodeScript_kArabic);
+        return type == sal_Int16(UnicodeScript_kArabic) || type == sal_Int16(UnicodeScript_kSyriac);
     }
     return false;
 }

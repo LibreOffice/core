@@ -347,16 +347,17 @@ public:
 */
     bool IsKashidaLine(TextFrameIndex nCharIdx) const;
 
-/** Checks if text is Arabic text.
+/** Checks if text is in a script that allows kashida justification.
 
-     @descr  Checks if text is Arabic text.
+     @descr  Checks if text is in a language that allows kashida justification.
      @param  rText
                  The text to check
      @param  nStt
                  Start index of the text
-     @return Returns if the language is an Arabic language
+     @return Returns true if the script is Arabic or Syriac
  */
-    static bool IsArabicText(const OUString& rText, TextFrameIndex nStt, TextFrameIndex nLen);
+    static bool IsKashidaScriptText(const OUString& rText, TextFrameIndex nStt,
+                                    TextFrameIndex nLen);
 
 /** Performs a thai justification on the kerning array
 

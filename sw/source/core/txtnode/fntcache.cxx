@@ -1127,7 +1127,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // Kashida Justification
                 if ( SwFontScript::CTL == nActual && nSpaceAdd )
                 {
-                    if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                    if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), rInf.GetIdx(),
+                                                          rInf.GetLen()))
                     {
                         aKashidaArray.resize(aKernArray.size(), false);
                         if ( pSI && pSI->CountKashida() &&
@@ -1344,7 +1345,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             // Kashida Justification
             if ( SwFontScript::CTL == nActual && nSpaceAdd )
             {
-                if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+                if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), rInf.GetIdx(), rInf.GetLen()))
                 {
                     aKashidaArray.resize(aKernArray.size(), false);
                     if ( pSI && pSI->CountKashida() &&
@@ -1838,7 +1839,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
         // Kashida Justification
         if ( SwFontScript::CTL == nActual && rInf.GetSpace() )
         {
-            if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
+            if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), rInf.GetIdx(), rInf.GetLen()))
             {
                 if ( pSI && pSI->CountKashida() &&
                     pSI->KashidaJustify( &aKernArray, nullptr, rInf.GetIdx(), rInf.GetLen(),

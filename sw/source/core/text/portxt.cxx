@@ -116,7 +116,7 @@ static TextFrameIndex lcl_AddSpace(const SwTextSizeInfo &rInf,
     // Kashida Justification: Insert Kashidas
     if ( nEnd > nPos && pSI && COMPLEX == nScript )
     {
-        if ( SwScriptInfo::IsArabicText( *pStr, nPos, nEnd - nPos ) && pSI->CountKashida() )
+        if (SwScriptInfo::IsKashidaScriptText(*pStr, nPos, nEnd - nPos) && pSI->CountKashida())
         {
             const sal_Int32 nKashRes = pSI->KashidaJustify(nullptr, nullptr, nPos, nEnd - nPos);
             // i60591: need to check result of KashidaJustify

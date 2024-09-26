@@ -168,7 +168,8 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
 
         // Fetch the set of valid positions from VCL, where possible
         aValidPositions.clear();
-        if ( SwScriptInfo::IsArabicText( rInf.GetText(), TextFrameIndex{aScanner.GetBegin()}, TextFrameIndex{aScanner.GetLen()} ) )
+        if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), TextFrameIndex{ aScanner.GetBegin() },
+                                              TextFrameIndex{ aScanner.GetLen() }))
         {
             rItr.SeekAndChgAttrIter(TextFrameIndex{ aScanner.GetBegin() }, rInf.GetRefDev());
 
@@ -250,7 +251,7 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
             }
 
             sal_Int32 nKashidasDropped = 0;
-            if ( !SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
+            if (!SwScriptInfo::IsKashidaScriptText(rInf.GetText(), nIdx, nNext - nIdx))
             {
                 nKashidasDropped = nKashidasInAttr;
                 rKashidas -= nKashidasDropped;
@@ -314,7 +315,8 @@ static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTextSizeInfo& rInf, SwT
             sal_Int32 nKashidasInAttr = rSI.KashidaJustify(nullptr, nullptr, nIdx, nNext - nIdx);
 
             tools::Long nFontMinKashida = rInf.GetRefDev()->GetMinKashida();
-            if ( nFontMinKashida && nKashidasInAttr > 0 && SwScriptInfo::IsArabicText( rInf.GetText(), nIdx, nNext - nIdx ) )
+            if (nFontMinKashida && nKashidasInAttr > 0
+                && SwScriptInfo::IsKashidaScriptText(rInf.GetText(), nIdx, nNext - nIdx))
             {
                 sal_Int32 nKashidasDropped = 0;
                 while ( rKashidas && nGluePortion && nKashidasInAttr > 0 &&

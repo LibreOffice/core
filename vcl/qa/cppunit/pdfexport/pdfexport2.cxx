@@ -5761,6 +5761,67 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf163105Editeng)
     CPPUNIT_ASSERT_LESS(170.0, aRect.at(2).getWidth());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf140767SyriacJustification)
+{
+    saveAsPDF(u"tdf140767.odt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(11, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    int nTextObjectCount = 0;
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+            ++nTextObjectCount;
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(11, nTextObjectCount);
+
+    std::cout << "Strings" << std::endl;
+    for (auto const& em : aText)
+    {
+        std::cout << em << std::endl;
+        for (sal_Int32 i = 0; i < em.getLength(); ++i)
+        {
+            std::cout << std::hex << static_cast<uint32_t>(em[i]) << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    CPPUNIT_ASSERT_EQUAL(u"ܝ"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܺܛ"_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(3).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܰܚ"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܕ"_ustr, aText.at(5).trim()); // This span is whitespace justified
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(6).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܰܓ"_ustr, aText.at(7).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܒ"_ustr, aText.at(8).trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aText.at(9).trim());
+    CPPUNIT_ASSERT_EQUAL(u"ܰܐ"_ustr, aText.at(10).trim());
+
+    // Without kashida justification, this space will be 224.328
+    CPPUNIT_ASSERT_LESS(90.0, aRect.at(5).getWidth());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

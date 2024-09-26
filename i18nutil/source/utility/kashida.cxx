@@ -133,10 +133,9 @@ bool CanConnectToPrev(sal_Unicode cCh, sal_Unicode cPrevCh)
 
     return bRet;
 }
-}
 
 std::optional<i18nutil::KashidaPosition>
-i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>& pValidPositions)
+GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pValidPositions)
 {
     sal_Int32 nIdx = 0;
     sal_Int32 nPrevIdx = 0;
@@ -147,9 +146,6 @@ i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>&
     int nPriorityLevel = 8; // 0..7 = level found, 8 not found
 
     sal_Int32 nWordLen = rWord.getLength();
-
-    SAL_WARN_IF(!pValidPositions.empty() && pValidPositions.size() != static_cast<size_t>(nWordLen),
-                "i18n", "Kashida valid position array wrong size");
 
     // ignore trailing vowel chars
     while (nWordLen && isTransparentChar(rWord[nWordLen - 1]))
@@ -298,8 +294,8 @@ i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>&
             }
         }
 
-        // 8. If valid position data exists, use the last legal position
-        if (nPriorityLevel >= 7 && nIdx > 0 && !pValidPositions.empty())
+        // 8. Try any valid position
+        if (nPriorityLevel >= 7 && nIdx > 0)
         {
             fnTryInsertBefore(7);
         }
@@ -317,10 +313,86 @@ i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>&
 
     if (-1 != nKashidaPos)
     {
-        return KashidaPosition{ nKashidaPos };
+        return i18nutil::KashidaPosition{ nKashidaPos };
     }
 
     return std::nullopt;
+}
+
+std::optional<i18nutil::KashidaPosition>
+GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pValidPositions)
+{
+    sal_Int32 nWordLen = rWord.getLength();
+
+    // Search for a user-inserted kashida
+    for (sal_Int32 i = nWordLen - 1; i >= 0; --i)
+    {
+        if (0x640 == rWord[i])
+        {
+            return i18nutil::KashidaPosition{ i };
+        }
+    }
+
+    // Always insert kashida from the outside-in:
+    // - First, work from the end of the word toward the midpoint
+    // - Then, work from the beginning of the word toward the midpoint
+
+    sal_Int32 nWordMidpoint = nWordLen / 2;
+
+    auto fnPositionValid = [&pValidPositions](sal_Int32 nIdx) {
+        // Exclusions:
+
+        // tdf#163105: Do not insert kashida if the position is invalid
+        if (!pValidPositions.empty() && !pValidPositions[nIdx])
+        {
+            return false;
+        }
+
+        return true;
+    };
+
+    // End to midpoint
+    for (sal_Int32 i = nWordLen - 2; i > nWordMidpoint; --i)
+    {
+        if (fnPositionValid(i))
+        {
+            return i18nutil::KashidaPosition{ i };
+        }
+    }
+
+    // Beginning to midpoint
+    for (sal_Int32 i = 0; i <= nWordMidpoint; ++i)
+    {
+        if (fnPositionValid(i))
+        {
+            return i18nutil::KashidaPosition{ i };
+        }
+    }
+
+    return std::nullopt;
+}
+}
+
+std::optional<i18nutil::KashidaPosition>
+i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>& pValidPositions)
+{
+    sal_Int32 nWordLen = rWord.getLength();
+
+    SAL_WARN_IF(!pValidPositions.empty() && pValidPositions.size() != static_cast<size_t>(nWordLen),
+                "i18n", "Kashida valid position array wrong size");
+
+    for (sal_Int32 nIdx = 0; nIdx < nWordLen; ++nIdx)
+    {
+        auto cCh = rWord[nIdx];
+
+        if ((cCh >= 0x700 && cCh <= 0x74F) || (cCh >= 0x860 && cCh <= 0x86A))
+        {
+            // This word contains Syriac characters.
+            return GetWordKashidaPositionSyriac(rWord, pValidPositions);
+        }
+    }
+
+    return GetWordKashidaPositionArabic(rWord, pValidPositions);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
