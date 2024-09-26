@@ -18,7 +18,7 @@
         <node oor:name="draw_Visio_Document" oor:op="replace" >
             <prop oor:name="DetectService"><value>com.sun.star.comp.Draw.VisioImportFilter</value></prop>
             <prop oor:name="URLPattern"/>
-            <prop oor:name="Extensions"><value>vdx vsd vsdm vsdx</value></prop>
+            <prop oor:name="Extensions"><value>vdx vsd vsdm vsdx vstx</value></prop>
             <prop oor:name="MediaType"><value>application/vnd.visio</value></prop>
             <prop oor:name="Preferred"><value>true</value></prop>
             <prop oor:name="PreferredFilter"><value>Visio Document</value></prop>

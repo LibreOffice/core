@@ -99,6 +99,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             "application/vnd.ms-powerpoint",
             "application/vnd.ms-excel",
             "application/vnd.visio",
+            "application/vnd.visio2013",
             "application/vnd.visio.xml",
             "application/x-mspublisher",
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
