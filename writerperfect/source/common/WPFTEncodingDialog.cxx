@@ -25,6 +25,8 @@
 
 #include <WPFTEncodingDialog.hxx>
 
+#include <vcl/svapp.hxx>
+
 namespace writerperfect
 {
 namespace
@@ -105,6 +107,14 @@ WPFTEncodingDialog::WPFTEncodingDialog(weld::Window* pParent, const OUString& ti
     selectEncoding(*m_xLbCharset, encoding);
 
     m_xDialog->set_title(title);
+
+    m_xDialog->SetInstallLOKNotifierHdl(LINK(this, WPFTEncodingDialog, InstallLOKNotifierHdl));
+}
+
+IMPL_STATIC_LINK_NOARG(WPFTEncodingDialog, InstallLOKNotifierHdl, void*,
+                       vcl::ILibreOfficeKitNotifier*)
+{
+    return GetpApp();
 }
 
 WPFTEncodingDialog::~WPFTEncodingDialog() {}

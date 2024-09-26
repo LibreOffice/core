@@ -280,6 +280,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"filter/ui/warnpdfdialog.ui"
         // writerperfect
         || rUIFile == u"writerperfect/ui/exportepub.ui"
+        || rUIFile == u"writerperfect/ui/wpftencodingdialog.ui"
         // xmlsec
         || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui"
