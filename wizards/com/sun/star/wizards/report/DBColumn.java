@@ -53,7 +53,7 @@ public class DBColumn
     private PropertyState PropertyState;
     private int ValColumn = 1;
     private int ValRow = 0;
-    public FieldColumn CurDBField;
+    private FieldColumn CurDBField;
     private XTextTable xTextTable;
     private XTableColumns xTableColumns;
     private XCellRange xCellRange;
@@ -449,5 +449,15 @@ public class DBColumn
     public int getValColumn()
     {
         return ValColumn;
+    }
+
+    public FieldColumn getCurDBField()
+    {
+        return CurDBField;
+    }
+
+    public void setCurDBField(FieldColumn _curDBField)
+    {
+        CurDBField = _curDBField;;
     }
 }

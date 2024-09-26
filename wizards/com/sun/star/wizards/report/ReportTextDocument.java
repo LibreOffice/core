@@ -284,10 +284,10 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         for (int i = 0; i < nSize; i++)
         {
             DBColumn CurDBColumn = DBColumnsVector.get(i);
-            String sFieldName = CurDBColumn.CurDBField.getFieldName();
+            String sFieldName = CurDBColumn.getCurDBField().getFieldName();
             if (!sFieldName.equals(_sNewNames[i]))
             {
-                CurDBColumn.CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_sNewNames[i]);
+                CurDBColumn.setCurDBField(CurDBMetaData.getFieldColumnByDisplayName(_sNewNames[i]));
                 CurDBColumn.insertColumnData(oTextFieldHandler, bIsCurLandscape);
             }
         }
@@ -510,7 +510,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         for (int i = 0; i < DBColumnsVector.size(); i++)
         {
             DBColumn oDBColumn = DBColumnsVector.get(i);
-            if (oDBColumn.CurDBField.getFieldName().equals(_FieldName))
+            if (oDBColumn.getCurDBField().getFieldName().equals(_FieldName))
             {
                 return oDBColumn;
             }
