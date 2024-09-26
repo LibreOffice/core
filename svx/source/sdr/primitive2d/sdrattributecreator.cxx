@@ -246,10 +246,10 @@ namespace drawinglayer
 
             if (nFontSize)
             {
-                // Rendering_glow_size = Original_glow_size / (154.39 * FontSize ^ -0,621)
+                // Rendering_glow_size = Original_glow_size / (154.39 * FontSize ^ -0,575)
                 // This is an approximate calculation similar to MSO text glow size which is
                 // depending on font size
-                nRadius = nTextRadius / (154.39 * pow(nFontSize, -0.621));
+                nRadius = nTextRadius / (154.39 * pow(nFontSize, -0.575));
                 nTextRadius = std::round(nRadius);
             }
 
