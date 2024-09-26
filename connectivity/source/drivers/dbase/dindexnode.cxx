@@ -969,28 +969,28 @@ bool ONDXPage::IsFull() const
     return Count() == rIndex.getHeader().db_maxkeys;
 }
 
-
 sal_uInt16 ONDXPage::Search(const ONDXKey& rSearch)
 {
     // binary search later
-    sal_uInt16 i = NODE_NOTFOUND;
-    while (++i < Count())
-        if ((*this)[i].GetKey() == rSearch)
-            break;
+    for (sal_uInt16 i = 0, nSize = Count(); i < nSize; ++i)
+    {
+        if (((*this)[i]).GetKey() == rSearch)
+            return i;
+    }
 
-    return (i < Count()) ? i : NODE_NOTFOUND;
+    return NODE_NOTFOUND;
 }
-
 
 sal_uInt16 ONDXPage::Search(const ONDXPage* pPage)
 {
-    sal_uInt16 i = NODE_NOTFOUND;
-    while (++i < Count())
+    for (sal_uInt16 i = 0, nSize = Count(); i < nSize; ++i)
+    {
         if (((*this)[i]).GetChild() == pPage)
-            break;
+            return i;
+    }
 
     // if not found, then we assume, that the page itself points to the page
-    return (i < Count()) ? i : NODE_NOTFOUND;
+    return NODE_NOTFOUND;
 }
 
 // runs recursively
