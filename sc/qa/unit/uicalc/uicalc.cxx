@@ -2224,6 +2224,45 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf141440)
     CPPUNIT_ASSERT_EQUAL(u"Note in A1"_ustr, pDoc->GetNote(ScAddress(0, 0, 0))->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf163019)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    // Insert test data and formulas to create a sample crash document
+    insertStringToCell(u"B1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"1");
+    insertStringToCell(u"A3"_ustr, u"1");
+    insertStringToCell(u"B2"_ustr, u"=B1-A2");
+    insertStringToCell(u"B3"_ustr, u"=B2-A3");
+
+    // Copy content from B2 to B2 using paste special command as a number (Flags ????)
+    goToCell(u"B2"_ustr);
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+    goToCell(u"B2"_ustr);
+    uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence(
+        { { "Flags", uno::Any(u"V"_ustr) },
+          { "FormulaCommand", uno::Any(sal_uInt16(ScPasteFunc::NONE)) },
+          { "SkipEmptyCells", uno::Any(false) },
+          { "Transpose", uno::Any(false) },
+          { "AsLink", uno::Any(false) },
+          { "MoveMode", uno::Any(sal_uInt16(InsCellCmd::INS_NONE)) } });
+    //  Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, u".uno:InsertContents"_ustr, aArgs);
+    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, pDoc->GetString(ScAddress(1, 1, 0)));
+
+    // Restore previous replace cell warning status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf158551)
 {
     createScDoc();

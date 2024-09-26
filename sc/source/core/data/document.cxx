@@ -2900,7 +2900,13 @@ void ScDocument::CopyFromClip(
         these cells. In this case, just delete old notes from the
         destination area. */
     InsertDeleteFlags nDelFlag = nInsFlag;
-    if ( (nInsFlag & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES)) == (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES) )
+    // tdf#163019 - remove formula of the cell to update formula listeners
+    if (nInsFlag & InsertDeleteFlags::CONTENTS)
+        nDelFlag |= InsertDeleteFlags::FORMULA;
+
+    // tdf#161189 - remove the note deletion flag if no notes are included
+    if ((nInsFlag & (InsertDeleteFlags::CONTENTS | InsertDeleteFlags::ADDNOTES))
+        == (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES))
         nDelFlag &= ~InsertDeleteFlags::NOTE;
 
     if (nInsFlag & InsertDeleteFlags::ATTRIB)
