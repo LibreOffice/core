@@ -1658,7 +1658,11 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
         GetODFSaneDefaultVersion();
     // older versions can not have this property set,
     // it exists only starting from ODF1.2
-    if (nDefVersion >= SvtSaveOptions::ODFSVER_013)
+    if (nDefVersion >= SvtSaveOptions::ODFSVER_014)
+    {
+        aVersion = ODFVER_014_TEXT;
+    }
+    else if (nDefVersion >= SvtSaveOptions::ODFSVER_013)
     {
         aVersion = ODFVER_013_TEXT;
     }
@@ -2197,7 +2201,7 @@ com_sun_star_comp_dba_ODatabaseDocument(css::uno::XComponentContext* context,
     rtl::Reference<dbaccess::ODatabaseContext> pContext
         = dynamic_cast<dbaccess::ODatabaseContext*>(xDBContextTunnel.get());
     assert(pContext);
-    
+
     rtl::Reference pImpl(
             new dbaccess::ODatabaseModelImpl(context, *pContext));
     rtl::Reference<dbaccess::ODatabaseDocument> inst(pImpl->createNewModel_deliverOwnership());

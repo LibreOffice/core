@@ -351,7 +351,11 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             bool const isBaseForm(xModule.is() &&
                 xModule->getIdentifier() == "com.sun.star.sdb.FormDesign");
             SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
-            if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
+            if (!isBaseForm && SvtSaveOptions::ODFSVER_014 <= nDefVersion)
+            {
+                xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_014_TEXT));
+            }
+            else if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
             {
                 xProps->setPropertyValue(u"Version"_ustr, uno::Any(ODFVER_013_TEXT));
             }
