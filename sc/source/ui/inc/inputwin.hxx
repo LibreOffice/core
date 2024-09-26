@@ -172,7 +172,7 @@ private:
     bool            bFormulaMode;
 
 public:
-                    ScPosWnd( vcl::Window* pParent );
+    ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewSh);
     virtual         ~ScPosWnd() override;
     virtual void    dispose() override;
 
