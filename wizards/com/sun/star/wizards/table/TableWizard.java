@@ -265,7 +265,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         scomposedtablename = curFinalizer.getComposedTableName(tablename);
         if (this.curTableDescriptor.isSQL92CheckEnabled())
         {
-            Desktop.removeSpecialCharacters(curTableDescriptor.xMSF, Configuration.getLocale(this.curTableDescriptor.xMSF), tablename);
+            Desktop.removeSpecialCharacters(curTableDescriptor.getMSF(), Configuration.getLocale(this.curTableDescriptor.getMSF()), tablename);
         }
         if ( tablename.length() > 0 )
         {
@@ -405,7 +405,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         {
             Object otextcomponent = UnoDialog.getModel(aTextEvent.Source);
             String sName = (String) Helper.getUnoPropertyValue(otextcomponent, "Text");
-            sName = Desktop.removeSpecialCharacters(curTableDescriptor.xMSF, Configuration.getLocale(curTableDescriptor.xMSF), sName);
+            sName = Desktop.removeSpecialCharacters(curTableDescriptor.getMSF(), Configuration.getLocale(curTableDescriptor.getMSF()), sName);
             Helper.setUnoPropertyValue(otextcomponent, "Text", sName);
         }
     }

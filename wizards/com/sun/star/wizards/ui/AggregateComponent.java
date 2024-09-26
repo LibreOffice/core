@@ -125,7 +125,7 @@ public class AggregateComponent extends ControlScroller
         }
         catch (com.sun.star.uno.Exception exception)
         {
-            Resource.showCommonResourceError(CurDBMetaData.xMSF);
+            Resource.showCommonResourceError(CurDBMetaData.getMSF());
         }
     }
 

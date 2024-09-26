@@ -90,7 +90,7 @@ public class DBMetaData
     private String DataSourceName;
     private com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
-    public com.sun.star.lang.XMultiServiceFactory xMSF;
+    protected com.sun.star.lang.XMultiServiceFactory xMSF;
     private XComponent xConnectionComponent;
 
     private XNameAccess xNameAccess;
@@ -136,6 +136,11 @@ public class DBMetaData
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
+
+    public com.sun.star.lang.XMultiServiceFactory getMSF()
+    {
+        return xMSF;
+    }
 
     public XDatabaseMetaData getDBMetaData()
     {

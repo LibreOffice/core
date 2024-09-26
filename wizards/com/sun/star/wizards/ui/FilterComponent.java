@@ -220,7 +220,7 @@ public class FilterComponent
             try
             {
                 final String serviceName = "com.sun.star.beans.PropertyBag";
-                final XPropertyContainer column = UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
+                final XPropertyContainer column = UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.getMSF().createInstance(serviceName));
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
                 column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, PropertyNames.EMPTY_STRING);

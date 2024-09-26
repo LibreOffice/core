@@ -290,7 +290,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     {
         if (this.aCollator == null)
         {
-            com.sun.star.lang.Locale aOfficeLocale = Configuration.getLocale(this.CurDBMetaData.xMSF);
+            com.sun.star.lang.Locale aOfficeLocale = Configuration.getLocale(this.CurDBMetaData.getMSF());
             java.util.Locale aJavaLocale = new java.util.Locale(aOfficeLocale.Language, aOfficeLocale.Country, aOfficeLocale.Variant);
             //Get the Collator for US English and set its strength to PRIMARY
             this.aCollator = Collator.getInstance(aJavaLocale);

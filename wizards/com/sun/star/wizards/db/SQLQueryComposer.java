@@ -417,7 +417,7 @@ public class SQLQueryComposer
     {
         try
         {
-            Object oErrorDialog = CurDBMetaData.xMSF.createInstance("com.sun.star.sdb.ErrorMessageDialog");
+            Object oErrorDialog = CurDBMetaData.getMSF().createInstance("com.sun.star.sdb.ErrorMessageDialog");
             XInitialization xInitialize = UnoRuntime.queryInterface(XInitialization.class, oErrorDialog);
             XExecutableDialog xExecute = UnoRuntime.queryInterface(XExecutableDialog.class, oErrorDialog);
             PropertyValue[] rDispatchArguments = new PropertyValue[3];
