@@ -3342,12 +3342,12 @@
         <value>
           <it>•</it>
           <it>●</it>
-          <it></it>
-          <it></it>
-          <it>➔</it>
-          <it>➢</it>
-          <it>✗</it>
-          <it>✔</it>
+          <it>○</it>
+          <it>□</it>
+          <it>►</it>
+          <it>→</it>
+          <it>-</it>
+          <it>–</it>
         </value>
       </prop>
       <prop oor:name="DefaultBulletsFonts" oor:type="oor:string-list" oor:nillable="false">
