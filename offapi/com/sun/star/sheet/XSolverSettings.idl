@@ -71,7 +71,7 @@ interface XSolverSettings: com::sun::star::uno::XInterface
      */
     [attribute, readonly] string ErrorMessage;
 
-    /** Set this attrivute to True to suppress dialogs shown the method "solve()"
+    /** Set this attribute to True to suppress dialogs shown the method "solve()"
      */
     [attribute] boolean SuppressDialog;
 
