@@ -74,15 +74,6 @@ static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExten
     pThis->Damage(nExtentsX, nExtentsY, nExtentsWidth, nExtentsHeight);
 }
 
-namespace
-{
-sal_Int32 screenNumber(QScreen* pScreen)
-{
-    const QList<QScreen*> screens = QApplication::screens();
-    return screens.indexOf(pScreen);
-}
-}
-
 QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     : m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
@@ -291,6 +282,13 @@ QWindow* QtFrame::windowHandle() const
 }
 
 QScreen* QtFrame::screen() const { return asChild()->screen(); }
+
+sal_Int32 QtFrame::screenNumber() const
+{
+    QScreen* pScreen = screen();
+    const QList<QScreen*> screens = QApplication::screens();
+    return screens.indexOf(pScreen);
+}
 
 bool QtFrame::GetUseDarkMode() const
 {
@@ -1308,7 +1306,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
             screenGeo = pScreen->availableVirtualGeometry();
             pWindow->setScreen(pScreen);
             pWindow->setGeometry(screenGeo);
-            nScreen = screenNumber(pScreen);
+            nScreen = screenNumber();
         }
 
         // setScreen by itself has no effect, explicitly move the widget to
@@ -1320,7 +1318,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         // index outta bounds, use primary screen
         QScreen* primaryScreen = QApplication::primaryScreen();
         pWindow->setScreen(primaryScreen);
-        nScreen = static_cast<sal_uInt32>(screenNumber(primaryScreen));
+        nScreen = static_cast<sal_uInt32>(screenNumber());
     }
 
     maGeometry.setScreen(nScreen);

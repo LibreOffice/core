@@ -132,6 +132,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isWindow() const;
     QWindow* windowHandle() const;
     QScreen* screen() const;
+    sal_Int32 screenNumber() const;
     bool isMinimized() const;
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
