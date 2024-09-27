@@ -468,7 +468,10 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 // Ignore drop portion height
                 // tdf#130804 ... and bookmark portions
                 if ((pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
-                    || pPos->GetWhichPor() == PortionType::Bookmark)
+                    || pPos->GetWhichPor() == PortionType::Bookmark
+                    || (pPos->GetWhichPor() == PortionType::HiddenText
+                        && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                            DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION)))
                 {
                     pLast = pPos;
                     pPos = pPos->GetNextPortion();
