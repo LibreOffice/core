@@ -542,11 +542,19 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
     sal_uInt32 nRootId = getPostItId(pRootNote);
 
     if (mpThreadsMap.find(nRootId) == mpThreadsMap.end())
-        throw std::runtime_error("Cannot delete comment: Thread does not exist");
+    {
+        SAL_WARN("sw",
+                 "Comments Panel is unable to delete comment: Referenced thread does not exist!");
+        return;
+    }
     auto& pComment = mpCommentsMap[nId];
     auto& pThread = mpThreadsMap[nRootId];
     if (!pComment)
-        throw std::runtime_error("Cannot delete comment: Comment does not exist");
+    {
+        SAL_WARN("sw",
+                 "Comments Panel is unable to delete comment: Referenced comment does not exist!");
+        return;
+    }
 
     pThread->getCommentBoxWidget()->move(pComment->get_widget(), nullptr);
     mpCommentsMap.erase(nId);
