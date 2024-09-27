@@ -24,6 +24,8 @@
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -40,10 +42,12 @@ using namespace comphelper;
 using namespace css;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
+                                       SfxViewShell* pViewShell,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                                        UserAction eAction)
     : GenericDialogController(_pParent, "xmlsec/ui/selectcertificatedialog.ui", "SelectCertificateDialog")
     , meAction(eAction)
+    , m_pViewShell(pViewShell)
     , m_xFTSign(m_xBuilder->weld_label("sign"))
     , m_xFTEncrypt(m_xBuilder->weld_label("encrypt"))
     , m_xCertLB(m_xBuilder->weld_tree_view("signatures"))
@@ -196,7 +200,21 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             else
             {
                 if (meAction == UserAction::Sign || meAction == UserAction::SelectSign)
-                    xCerts = secEnvironment->getPersonalCertificates();
+                {
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        // The LOK case takes the signing certificate from the view.
+                        if (m_pViewShell && m_pViewShell->GetSigningCertificate().is())
+                        {
+                            xCerts = { m_pViewShell->GetSigningCertificate() };
+                        }
+                    }
+                    else
+                    {
+                        // Otherwise working from the system cert store is OK.
+                        xCerts = secEnvironment->getPersonalCertificates();
+                    }
+                }
                 else
                     xCerts = secEnvironment->getAllCertificates();
 

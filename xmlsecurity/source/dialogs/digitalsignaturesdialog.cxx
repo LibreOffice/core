@@ -243,6 +243,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     , m_sODFVersion (std::move(sODFVersion))
     , m_bHasDocumentSignature(bHasDocumentSignature)
     , m_bWarningShowSignMacro(false)
+    , m_pViewShell(pViewShell)
     , m_xHintDocFT(m_xBuilder->weld_label("dochint"))
     , m_xHintBasicFT(m_xBuilder->weld_label("macrohint"))
     , m_xHintPackageFT(m_xBuilder->weld_label("packagehint"))
@@ -539,7 +540,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        std::unique_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), std::move(xSecContexts), UserAction::Sign);
+        std::unique_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), m_pViewShell, std::move(xSecContexts), UserAction::Sign);
         if (aChooser->run() == RET_OK)
         {
             sal_Int32 nSecurityId;
