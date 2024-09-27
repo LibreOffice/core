@@ -1297,7 +1297,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         if (!m_bFullScreenSpanAll)
         {
             screenGeo = QGuiApplication::screens().at(nScreen)->geometry();
-            pWindow->setScreen(QApplication::screens()[nScreen]);
+            pWindow->setScreen(QApplication::screens().at(nScreen));
         }
         else // special case: fullscreen over all available screens
         {
