@@ -70,6 +70,10 @@ QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, const
 QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, const OUString& sID,
                                stringmap& rMap)
 {
+    // ignore placeholders
+    if (sName.empty())
+        return nullptr;
+
     QWidget* pParentWidget = qobject_cast<QWidget*>(pParent);
 
     QObject* pObject = nullptr;
