@@ -1288,38 +1288,34 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         return;
 
     QList<QScreen*> screens = QApplication::screens();
-    if (static_cast<int>(nScreen) < screens.size() || m_bFullScreenSpanAll)
+    if (static_cast<int>(nScreen) >= screens.size() && !m_bFullScreenSpanAll)
     {
-        QRect screenGeo;
-
-        if (!m_bFullScreenSpanAll)
-        {
-            screenGeo = QGuiApplication::screens().at(nScreen)->geometry();
-            pWindow->setScreen(QApplication::screens().at(nScreen));
-        }
-        else // special case: fullscreen over all available screens
-        {
-            assert(m_bFullScreen);
-            // left-most screen
-            QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
-            // entire virtual desktop
-            screenGeo = pScreen->availableVirtualGeometry();
-            pWindow->setScreen(pScreen);
-            pWindow->setGeometry(screenGeo);
-            nScreen = screenNumber();
-        }
-
-        // setScreen by itself has no effect, explicitly move the widget to
-        // the new screen
-        asChild()->move(screenGeo.topLeft());
+        SAL_WARN("vcl.qt", "Ignoring request to set invalid screen number");
+        return;
     }
-    else
+
+    QRect screenGeo;
+
+    if (!m_bFullScreenSpanAll)
     {
-        // index outta bounds, use primary screen
-        QScreen* primaryScreen = QApplication::primaryScreen();
-        pWindow->setScreen(primaryScreen);
-        nScreen = static_cast<sal_uInt32>(screenNumber());
+        screenGeo = QGuiApplication::screens().at(nScreen)->geometry();
+        pWindow->setScreen(QApplication::screens().at(nScreen));
     }
+    else // special case: fullscreen over all available screens
+    {
+        assert(m_bFullScreen);
+        // left-most screen
+        QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
+        // entire virtual desktop
+        screenGeo = pScreen->availableVirtualGeometry();
+        pWindow->setScreen(pScreen);
+        pWindow->setGeometry(screenGeo);
+        nScreen = screenNumber();
+    }
+
+    // setScreen by itself has no effect, explicitly move the widget to
+    // the new screen
+    asChild()->move(screenGeo.topLeft());
 
     maGeometry.setScreen(nScreen);
 }
