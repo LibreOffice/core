@@ -70,7 +70,7 @@ public:
 private:
     static void setProperties(QObject* obj, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
-    static QDialogButtonBox* findButtonBox(QMessageBox* pMessageBox);
+    static QDialogButtonBox* findButtonBox(QDialog* pDialog);
 };
 
 template <typename T> inline T* QtBuilder::get(std::u16string_view sID)

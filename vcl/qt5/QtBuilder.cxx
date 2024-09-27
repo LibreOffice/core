@@ -236,11 +236,13 @@ QWidget* QtBuilder::windowForObject(QObject* pObject)
     return nullptr;
 }
 
-QDialogButtonBox* QtBuilder::findButtonBox(QMessageBox* pMessageBox)
+QDialogButtonBox* QtBuilder::findButtonBox(QDialog* pDialog)
 {
-    assert(pMessageBox);
-    QLayout* pLayout = pMessageBox->layout();
-    assert(pLayout && "QMessageBox has no layout");
+    assert(pDialog);
+    QLayout* pLayout = pDialog->layout();
+    if (!pLayout)
+        return nullptr;
+
     for (int i = 0; i < pLayout->count(); i++)
     {
         QLayoutItem* pItem = pLayout->itemAt(i);
