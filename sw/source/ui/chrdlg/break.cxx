@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
+#include <bitmaps.hlst>
 
 #include <uitool.hxx>
 #include <swtypes.hxx>
@@ -61,11 +62,17 @@ void SwBreakDlg::rememberResult()
 IMPL_LINK_NOARG(SwBreakDlg, ToggleHdl, weld::Toggleable&, void)
 {
     CheckEnable();
+    UpdateImage();
 }
 
 IMPL_LINK_NOARG(SwBreakDlg, ChangeHdl, weld::ComboBox&, void)
 {
     CheckEnable();
+}
+
+IMPL_LINK_NOARG(SwBreakDlg, LineClearHdl, weld::ComboBox&, void)
+{
+    UpdateImage();
 }
 
 // Handler for Change Page Number
@@ -137,6 +144,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     , m_xPageNumBox(m_xBuilder->weld_check_button(u"pagenumcb"_ustr))
     , m_xPageNumEdit(m_xBuilder->weld_spin_button(u"pagenumsb"_ustr))
     , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
+    , m_xTypeImage(m_xBuilder->weld_image(u"imType"_ustr))
     , m_rSh(rS)
     , m_nKind(0)
     , m_bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
@@ -146,6 +154,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     m_xLineBtn->connect_toggled(aLk);
     m_xColumnBtn->connect_toggled(aLk);
     m_xPageCollBox->connect_changed(LINK(this, SwBreakDlg, ChangeHdl));
+    m_xLineClearBox->connect_changed(LINK(this, SwBreakDlg, LineClearHdl));
 
     m_xOkBtn->connect_clicked(LINK(this, SwBreakDlg, OkHdl));
     m_xPageNumBox->connect_toggled(LINK(this, SwBreakDlg, PageNumHdl));
@@ -172,6 +181,7 @@ SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
         ::InsertStringSorted(u""_ustr, aFormatName, *m_xPageCollBox, 1);
     CheckEnable();
     m_xPageNumEdit->set_text(OUString());
+    UpdateImage();
 }
 
 void SwBreakDlg::CheckEnable()
@@ -208,6 +218,34 @@ void SwBreakDlg::CheckEnable()
     }
     m_xPageNumBox->set_sensitive(bEnable);
     m_xPageNumEdit->set_sensitive(bEnable);
+}
+
+void SwBreakDlg::UpdateImage()
+{
+    if (m_xLineBtn->get_active())
+    {
+        switch (m_xLineClearBox->get_active())
+        {
+            case 0:
+                m_xTypeImage->set_from_icon_name(RID_BMP_LINEBREAK_NONE);
+                break;
+            case 1:
+                m_xTypeImage->set_from_icon_name(RID_BMP_LINEBREAK_LEFT);
+                break;
+            case 2:
+                m_xTypeImage->set_from_icon_name(RID_BMP_LINEBREAK_RIGHT);
+                break;
+            case 3:
+                m_xTypeImage->set_from_icon_name(RID_BMP_LINEBREAK_FULL);
+                break;
+        }
+    }
+    else if (m_xColumnBtn->get_active())
+        m_xTypeImage->set_from_icon_name(RID_BMP_COLBREAK);
+    else if (m_xPageBtn->get_active())
+        m_xTypeImage->set_from_icon_name(RID_BMP_PAGEBREAK);
+    else
+        m_xTypeImage->set_from_icon_name(""); //clear
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
