@@ -908,7 +908,7 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
         {
             // optional: if the possibility to add an initial clip relative
             // to the real pixel dimensions of the target surface is used,
-            // aplly it here using that nice existing method of cairo
+            // apply it here using that nice existing method of cairo
             mpCreateForRectangle = cairo_surface_create_for_rectangle(
                 pTarget, nOffsetPixelX, nOffsetPixelY, nWidthPixel, nHeightPixel);
 
