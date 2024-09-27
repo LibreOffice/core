@@ -219,7 +219,7 @@ sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 /// Get reserved slot number during building the style table.
 static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
 {
-    switch (sal_uInt16 nRet = rFormat.GetPoolFormatId())
+    switch (sal_uInt16 nId = rFormat.GetPoolFormatId())
     {
         case RES_POOLCOLL_STANDARD:
             return 0;
@@ -233,9 +233,11 @@ static sal_uInt16 BuildGetSlot(const SwFormat& rFormat)
         case RES_POOLCOLL_HEADLINE7:
         case RES_POOLCOLL_HEADLINE8:
         case RES_POOLCOLL_HEADLINE9:
-            nRet -= RES_POOLCOLL_HEADLINE1-1;
+        {
+            sal_uInt16 nRet = nId - (RES_POOLCOLL_HEADLINE1 - 1);
             assert(nRet < WW8_RESERVED_SLOTS);
             return nRet;
+        }
     }
     return 0xfff;
 }
