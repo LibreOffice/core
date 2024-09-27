@@ -801,6 +801,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
     xRunEnum->nextElement(); //Text
     uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
 
+    CPPUNIT_ASSERT_EQUAL(u"Bookmark"_ustr,
+                         getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
+
+    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"TextFieldStart"_ustr,
                          getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
     uno::Reference<container::XNamed> xBookmark(
@@ -821,7 +825,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textContr
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
                                                             uno::UNO_QUERY);
     // TextFields should not be turned into real bookmarks.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
 
     // The actual name isn't critical, but if it fails, it is worth asking why.
     CPPUNIT_ASSERT_EQUAL(u"Text1"_ustr, sTextFieldName);
