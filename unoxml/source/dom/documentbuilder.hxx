@@ -104,7 +104,6 @@ namespace DOM
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::xml::sax::XEntityResolver > getEntityResolver();
 
-
         /**
         Specify the ErrorHandler to be used to report errors present in
         the XML document to be parsed.
@@ -115,12 +114,7 @@ namespace DOM
         Get the ErrorHandler to be used to report errors present in
         the XML document to be parsed.
         */
-
-        const css::uno::Reference< css::xml::sax::XErrorHandler >& getErrorHandler() const
-        {
-            return m_xErrorHandler;
-        }
-
+        css::uno::Reference< css::xml::sax::XErrorHandler > getErrorHandler();
     };
 }
 

@@ -254,14 +254,15 @@ namespace DOM
 
             CDocumentBuilder * const pDocBuilder = static_cast<CDocumentBuilder*>(pctx->_private);
 
-            if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
+            Reference<XErrorHandler> xErrorHandler = pDocBuilder->getErrorHandler();
+            if (xErrorHandler.is())   // if custom error handler is set (using setErrorHandler ())
             {
                 // Prepare SAXParseException to be passed to custom XErrorHandler::warning function
                 css::xml::sax::SAXParseException saxex(make_error_message(pctx), {}, {}, {}, {},
                                                        pctx->lastError.line, pctx->lastError.int2);
 
                 // Call custom warning function
-                pDocBuilder->getErrorHandler()->warning(::css::uno::Any(saxex));
+                xErrorHandler->warning(::css::uno::Any(saxex));
             }
         }
         catch (const css::uno::Exception &)
@@ -284,14 +285,15 @@ namespace DOM
 
             CDocumentBuilder * const pDocBuilder = static_cast<CDocumentBuilder*>(pctx->_private);
 
-            if (pDocBuilder->getErrorHandler().is())   // if custom error handler is set (using setErrorHandler ())
+            Reference<XErrorHandler> xErrorHandler = pDocBuilder->getErrorHandler();
+            if (xErrorHandler.is())   // if custom error handler is set (using setErrorHandler ())
             {
                 // Prepare SAXParseException to be passed to custom XErrorHandler::error function
                 css::xml::sax::SAXParseException saxex(make_error_message(pctx), {}, {}, {}, {},
                                                        pctx->lastError.line, pctx->lastError.int2);
 
                 // Call custom warning function
-                pDocBuilder->getErrorHandler()->error(::css::uno::Any(saxex));
+                xErrorHandler->error(::css::uno::Any(saxex));
             }
         }
         catch (const css::uno::Exception &)
@@ -411,6 +413,13 @@ namespace DOM
         std::scoped_lock const g(m_Mutex);
 
         m_xErrorHandler = xEH;
+    }
+
+    Reference< XErrorHandler > CDocumentBuilder::getErrorHandler()
+    {
+        std::scoped_lock const g(m_Mutex);
+
+        return m_xErrorHandler;
     }
 }
 
