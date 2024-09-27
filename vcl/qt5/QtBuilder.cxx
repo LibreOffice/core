@@ -125,6 +125,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
             pObject = new QPushButton(pParentWidget);
         }
     }
+    else
+    {
+        SAL_WARN("vcl.qt", "Widget type not supported yet: "
+                               << OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
+        assert(false && "Widget type not supported yet");
+    }
 
     m_aChildren.emplace_back(sID, pObject);
 
