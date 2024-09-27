@@ -75,6 +75,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         return nullptr;
 
     QWidget* pParentWidget = qobject_cast<QWidget*>(pParent);
+    QLayout* pParentLayout = qobject_cast<QLayout*>(pParent);
 
     QObject* pObject = nullptr;
 
@@ -94,9 +95,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         {
             const bool bVertical = hasOrientationVertical(rMap);
             if (bVertical)
-                pObject = new QVBoxLayout();
+                pObject = new QVBoxLayout(pParentWidget);
             else
-                pObject = new QHBoxLayout();
+                pObject = new QHBoxLayout(pParentWidget);
         }
     }
     else if (sName == u"GtkButtonBox")
@@ -108,6 +109,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
             QDialogButtonBox* pButtonBox = findButtonBox(pMessageBox);
             assert(pButtonBox && "Could not find QMessageBox's button box");
             pObject = pButtonBox;
+
+            // skip adding to layout below, button box is already contained in dialog
+            pParentLayout = nullptr;
         }
         else
         {
@@ -134,6 +138,14 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         SAL_WARN("vcl.qt", "Widget type not supported yet: "
                                << OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
         assert(false && "Widget type not supported yet");
+    }
+
+    // add widgets to parent layout
+    if (pParentLayout)
+    {
+        QWidget* pWidget = qobject_cast<QWidget*>(pObject);
+        if (pWidget)
+            pParentLayout->addWidget(pWidget);
     }
 
     m_aChildren.emplace_back(sID, pObject);
