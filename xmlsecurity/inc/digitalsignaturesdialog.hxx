@@ -52,6 +52,8 @@ private:
 
     bool m_bAdESCompliant = true;
 
+    SfxViewShell* m_pViewShell;
+
     std::unique_ptr<weld::Label>       m_xHintDocFT;
     std::unique_ptr<weld::Label>       m_xHintBasicFT;
     std::unique_ptr<weld::TreeView>    m_xSignaturesLB;

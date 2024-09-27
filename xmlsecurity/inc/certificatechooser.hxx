@@ -33,6 +33,8 @@ namespace com::sun::star {
 
 namespace com::sun::star::xml::crypto { class XXMLSecurityContext; }
 
+class SfxViewShell;
+
 struct CertificateChooserUserData
 {
     css::uno::Reference<css::security::XCertificate> xCertificate;
@@ -55,6 +57,7 @@ private:
 
     bool                    mbInitialized;
     CertificateChooserUserAction const meAction;
+    SfxViewShell* m_pViewShell;
     OUString                msPreferredKey;
     css::uno::Reference<css::security::XCertificate> mxEncryptToSelf;
 
@@ -85,11 +88,13 @@ private:
 
 public:
     CertificateChooser(weld::Window* pParent,
+                       SfxViewShell* pViewShell,
                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                        CertificateChooserUserAction eAction);
     virtual ~CertificateChooser() override;
 
     static std::unique_ptr<CertificateChooser> getInstance(weld::Window* _pParent,
+                        SfxViewShell* pViewShell,
                         std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                         CertificateChooserUserAction eAction) {
         // Don't reuse CertificateChooser instances
@@ -100,7 +105,7 @@ public:
         //    in the Digital Signatures dialog
         // 2. File > Save As the document, check the "Encrypt with GPG key"
         //    checkbox, press Encrypt, and crash in Dialog::ImplStartExecute()
-        return std::make_unique<CertificateChooser>(_pParent, std::move(rxSecurityContexts), eAction);
+        return std::make_unique<CertificateChooser>(_pParent, pViewShell, std::move(rxSecurityContexts), eAction);
     }
 
     short run() override;

@@ -26,6 +26,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmlsechelper.hxx>
+#include <comphelper/lok.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
@@ -42,10 +44,12 @@ using namespace comphelper;
 using namespace css;
 
 CertificateChooser::CertificateChooser(weld::Window* _pParent,
+                                       SfxViewShell* pViewShell,
                                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                                        CertificateChooserUserAction eAction)
     : GenericDialogController(_pParent, u"xmlsec/ui/selectcertificatedialog.ui"_ustr, u"SelectCertificateDialog"_ustr)
     , meAction(eAction)
+    , m_pViewShell(pViewShell)
     , m_xFTSign(m_xBuilder->weld_label(u"sign"_ustr))
     , m_xFTEncrypt(m_xBuilder->weld_label(u"encrypt"_ustr))
     , m_xFTLoadedCerts(m_xBuilder->weld_label(u"loaded-certs"_ustr))
@@ -206,7 +210,21 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             else
             {
                 if (meAction == CertificateChooserUserAction::Sign || meAction == CertificateChooserUserAction::SelectSign)
-                    xCerts = secEnvironment->getPersonalCertificates();
+                {
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        // The LOK case takes the signing certificate from the view.
+                        if (m_pViewShell && m_pViewShell->GetSigningCertificate().is())
+                        {
+                            xCerts = { m_pViewShell->GetSigningCertificate() };
+                        }
+                    }
+                    else
+                    {
+                        // Otherwise working from the system cert store is OK.
+                        xCerts = secEnvironment->getPersonalCertificates();
+                    }
+                }
                 else
                     // Currently (master 2024-07) all X.509 implementations (nss+mscrypt) give an empty list.
                     xCerts = secEnvironment->getAllCertificates();
