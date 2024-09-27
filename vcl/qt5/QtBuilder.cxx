@@ -16,6 +16,7 @@
 
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
 
@@ -133,6 +134,14 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
             pObject = new QPushButton(pParentWidget);
         }
     }
+    else if (sName == u"GtkDialog")
+    {
+        pObject = new QDialog(pParentWidget);
+    }
+    else if (sName == u"GtkLabel")
+    {
+        pObject = new QLabel(pParentWidget);
+    }
     else
     {
         SAL_WARN("vcl.qt", "Widget type not supported yet: "
@@ -210,6 +219,16 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 else
                     assert(false && "Unhandled message-type");
             }
+        }
+    }
+    else if (QLabel* pLabel = qobject_cast<QLabel*>(pObject))
+    {
+        for (auto const & [ rKey, rValue ] : rProps)
+        {
+            if (rKey == u"label")
+                pLabel->setText(toQString(rValue));
+            else if (rKey == u"wrap")
+                pLabel->setWordWrap(toBool(rValue));
         }
     }
     else if (QPushButton* pButton = qobject_cast<QPushButton*>(pObject))

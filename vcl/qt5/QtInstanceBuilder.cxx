@@ -47,10 +47,12 @@ std::unique_ptr<weld::MessageDialog> QtInstanceBuilder::weld_message_dialog(cons
     return xRet;
 }
 
-std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString&)
+std::unique_ptr<weld::Dialog> QtInstanceBuilder::weld_dialog(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QDialog* pDialog = m_xBuilder->get<QDialog>(rId);
+    std::unique_ptr<weld::Dialog> xRet(pDialog ? std::make_unique<QtInstanceDialog>(pDialog)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Assistant> QtInstanceBuilder::weld_assistant(const OUString&)
