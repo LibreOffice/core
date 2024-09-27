@@ -326,7 +326,7 @@ uno::Any SAL_CALL ScSolverSettings::getGoalValue()
     if (bValid)
         return uno::Any(fValue);
 
-    // If the conversion was not successfull, return "empty"
+    // If the conversion was not successful, return "empty"
     return uno::Any();
 }
 
