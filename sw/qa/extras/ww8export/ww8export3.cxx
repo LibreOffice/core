@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 {
     loadAndReload("tdf79435_legacyInputFields.docx");
     //using .docx input file to verify cross-format compatibility.
-    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(5), 3), "Bookmark");
+    uno::Reference<text::XFormField> xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(5), 4), "Bookmark");
     uno::Reference<container::XNameContainer> xParameters(xFormField->getParameters());
 
     OUString sTmp;
@@ -439,27 +439,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Max Length", sal_uInt16(10), nMaxLength);
 
     // too bad this is based on character runs - just found try trial and error.
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(6), 2), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(6), 3), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("calculated"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 2), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 3), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("currentDate"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 7), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(7), 10), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("currentTime"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 2), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 3), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("number"), sTmp);
 
-    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 7), "Bookmark");
+    xFormField = getProperty< uno::Reference<text::XFormField> >(getRun(getParagraph(8), 10), "Bookmark");
     xParameters.set(xFormField->getParameters());
     xParameters->getByName("Type") >>= sTmp;
     CPPUNIT_ASSERT_EQUAL(OUString("date"), sTmp);
