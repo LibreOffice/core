@@ -6145,6 +6145,10 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     aTree.put("commandName", pCommand);
     uno::Reference<css::style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(pDocument->mxComponent, uno::UNO_QUERY);
     const uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
+    if (!xStyleFamilies.is())
+    {
+        return nullptr;
+    }
     const uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
     static constexpr OUString aWriterStyles[] =
