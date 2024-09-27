@@ -1847,8 +1847,8 @@ void X11SalFrame::SetScreenNumber( unsigned int nNewScreen )
         if( nNewScreen >= GetDisplay()->GetXineramaScreens().size() )
             return;
 
-        tools::Rectangle aOldScreenRect( GetDisplay()->GetXineramaScreens()[maGeometry.screen()] );
-        tools::Rectangle aNewScreenRect( GetDisplay()->GetXineramaScreens()[nNewScreen] );
+        tools::Rectangle aOldScreenRect(GetDisplay()->GetXineramaScreens().at(maGeometry.screen()));
+        tools::Rectangle aNewScreenRect(GetDisplay()->GetXineramaScreens().at(nNewScreen));
         bool bVisible = bMapped_;
         if( bVisible )
             Show( false );
@@ -1910,7 +1910,7 @@ void X11SalFrame::ShowFullScreen( bool bFullScreen, sal_Int32 nScreen )
             if( nScreen < 0 || o3tl::make_unsigned(nScreen) >= GetDisplay()->GetXineramaScreens().size() )
                 aRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint(0,0), GetDisplay()->GetScreenSize( m_nXScreen ) );
             else
-                aRect = GetDisplay()->GetXineramaScreens()[nScreen];
+                aRect = GetDisplay()->GetXineramaScreens().at(nScreen);
             m_bIsPartialFullScreen = true;
             bool bVisible = bMapped_;
             if( bVisible )
