@@ -2661,16 +2661,16 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
         if (!m_bDisposed)
             m_bDisposed = true;
     }
-    if (bMustDispose)
-    {
-        m_bDisposed = true;
+    if (!bMustDispose)
+        return;
 
-        // require listeners to release references to this object
-        lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
-        std::unique_lock aGuard( GetChartMutex() );
-        m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
-        m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
-    }
+    m_bDisposed = true;
+
+    // require listeners to release references to this object
+    lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
+    std::unique_lock aGuard( GetChartMutex() );
+    m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
+    m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
 }
 
 void SAL_CALL SwChartLabeledDataSequence::addEventListener(
