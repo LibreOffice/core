@@ -72,7 +72,7 @@ void Chart2TrendCalculators::tearDown()
 
 void Chart2TrendCalculators::loadCalculatorFromSheet(sal_Int32 nSheet)
 {
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(nSheet, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(nSheet);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
     CPPUNIT_ASSERT(xChartDoc.is());
 

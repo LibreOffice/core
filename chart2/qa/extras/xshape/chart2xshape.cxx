@@ -84,8 +84,7 @@ bool checkDumpAgainstFile(std::u16string_view rDump, std::u16string_view aFilePa
 
 OUString Chart2XShapeTest::getXShapeDumpString()
 {
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                    UNO_QUERY_THROW);
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
     return getShapeDump(xChartDoc);
 }
 

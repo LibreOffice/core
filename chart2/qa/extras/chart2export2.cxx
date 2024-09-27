@@ -32,7 +32,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testSetSeriesToSecondaryAxisXLSX)
 {
     loadFromFile(u"xlsx/add_series_secondary_axis.xlsx");
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     // Second series
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xChartDoc, 1);
     CPPUNIT_ASSERT(xSeries.is());
@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
     {
         loadFromFile(u"ods/ser_labels.ods");
         saveAndReload(u"calc8"_ustr);
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
         CPPUNIT_ASSERT(xDataSeries.is());
         uno::Reference<beans::XPropertySet> xPropertySet;
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataSeriesName)
     {
         loadFromFile(u"xlsx/ser_labels.xlsx");
         saveAndReload(u"Calc Office Open XML"_ustr);
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
         CPPUNIT_ASSERT(xDataSeries.is());
         uno::Reference<beans::XPropertySet> xPropertySet;
@@ -439,7 +439,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomPositionofDataLabel)
     {
         saveAndReload(u"calc8"_ustr);
         // tdf#136024: test custom position of pie chart data label after an ods export
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
 
         Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
@@ -971,7 +971,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
     loadFromFile(u"xlsx/deleted_legend_entry.xlsx");
     {
         saveAndReload(u"Calc Office Open XML"_ustr);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 1));
         CPPUNIT_ASSERT(xDataSeries.is());
@@ -985,7 +985,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
     loadFromFile(u"xlsx/deleted_legend_entry2.xlsx");
     {
         saveAndReload(u"Calc Office Open XML"_ustr);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
         CPPUNIT_ASSERT(xDataSeries.is());
@@ -995,7 +995,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDeletedLegendEntries)
                        >>= bShowLegendEntry);
         CPPUNIT_ASSERT(!bShowLegendEntry);
 
-        Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(1);
         CPPUNIT_ASSERT(xChartDoc.is());
         Reference<chart2::XDataSeries> xDataSeries2(getDataSeriesFromDoc(xChartDoc2, 0));
         CPPUNIT_ASSERT(xDataSeries2.is());
@@ -1070,7 +1070,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf75330)
     loadFromFile(u"ods/legend_overlay.ods");
     saveAndReload(u"calc8"_ustr);
     {
-        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
         uno::Reference<chart::XChartDocument> xChartDoc(xChart2Doc, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
         Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
@@ -1080,7 +1080,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf75330)
     }
     saveAndReload(u"Calc Office Open XML"_ustr);
     {
-        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
         uno::Reference<chart::XChartDocument> xChartDoc(xChart2Doc, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xLegend = xChartDoc->getLegend();
         Reference<beans::XPropertySet> xPropertySet(xLegend, uno::UNO_QUERY_THROW);
@@ -1110,7 +1110,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
     loadFromFile(u"ods/tdf131115.ods");
     {
         saveAndReload(u"calc8"_ustr);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
         CPPUNIT_ASSERT(xDataSeries.is());
@@ -1126,7 +1126,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf131979)
     loadFromFile(u"ods/tdf131979.ods");
     {
         saveAndReload(u"calc8"_ustr);
-        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
         CPPUNIT_ASSERT(xDataSeries.is());
@@ -1271,7 +1271,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf134977)
     loadFromFile(u"xlsx/custom_data_label.xlsx");
 
     //import test
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());
@@ -1327,8 +1327,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataLabelPlacementPieChart)
 {
     loadFromFile(u"xlsx/tdf134978.xlsx");
     saveAndReload(u"calc8"_ustr);
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                    UNO_QUERY_THROW);
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
     // test the placement of the manually positioned label
     Reference<beans::XPropertySet> xDataPointPropSet(
         xChartDoc->getDiagram()->getDataPointProperties(2, 0), uno::UNO_SET_THROW);
@@ -1366,7 +1365,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138204)
 {
     loadFromFile(u"xlsx/tdf138204.xlsx");
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     struct CustomLabelsTestData
@@ -1438,8 +1437,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138204)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf138181)
 {
     loadFromFile(u"xlsx/piechart_deleted_legendentry.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -1465,8 +1463,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testCustomShapeText)
 {
     loadFromFile(u"ods/tdf72776.ods");
     saveAndReload(u"calc8"_ustr);
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     // test that the text of custom shape exists inside the chart
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -1482,7 +1479,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testuserShapesXLSX)
     loadFromFile(u"xlsx/tdf128621.xlsx");
     saveAndReload(u"Calc Office Open XML"_ustr);
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // test that the custom shape exists
@@ -1538,7 +1535,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testGraphicBlipXLSX)
     loadFromFile(u"xlsx/tdf143127.xlsx");
     saveAndReload(u"Calc Office Open XML"_ustr);
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     // test that the Graphic shape exists
@@ -1581,7 +1578,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testTdf143942)
 {
     loadFromFile(u"xlsx/tdf143942.xlsx");
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
@@ -1693,7 +1690,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataTableImportExport)
 {
     loadFromFile(u"xlsx/ChartDataTable.xlsx");
     {
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         auto xDiagram = xChartDoc->getFirstDiagram();
         CPPUNIT_ASSERT(xDiagram.is());
@@ -1716,7 +1713,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest2, testDataTableImportExport)
     }
     saveAndReload(u"calc8"_ustr);
     {
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
         CPPUNIT_ASSERT(xChartDoc.is());
         auto xDiagram = xChartDoc->getFirstDiagram();
         CPPUNIT_ASSERT(xDiagram.is());

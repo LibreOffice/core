@@ -352,7 +352,7 @@ void Chart2GeometryTest::testTdf135366LabelOnSeries()
     // Error was, that the fill and line properties of a <chart:data-label> were not
     // imported at all. Here they should be at the series.
     loadFromFile(u"ods/tdf135366_data_label_series.ods");
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries.is());

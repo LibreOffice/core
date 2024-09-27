@@ -163,13 +163,8 @@ void checkMovingAverageTrendline(
         /*aExpectedShowEquation*/false, /*aExpectedR2*/false, /*aExpectedMayHaveR2*/false);
 }
 
-void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > const & xChartDoc)
+void checkTrendlinesInChart(uno::Reference< chart2::XDataSeries > const & xDataSeries )
 {
-    CPPUNIT_ASSERT(xChartDoc.is());
-
-    Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
-    CPPUNIT_ASSERT( xDataSeries.is() );
-
     Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer( xDataSeries, UNO_QUERY );
     CPPUNIT_ASSERT( xRegressionCurveContainer.is() );
 
@@ -199,7 +194,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarXLSX)
     loadFromFile(u"ods/error_bar.ods");
     {
         // make sure the ODS import was successful
-        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
         CPPUNIT_ASSERT(xChartDoc.is());
 
         Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
@@ -215,7 +210,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarXLSX)
 
     saveAndReload(u"Calc Office Open XML"_ustr);
     {
-        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
         CPPUNIT_ASSERT(xChartDoc.is());
 
         Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
@@ -256,25 +251,25 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendline)
     // Error: tag name "chart:symbol-image" is not allowed. Possible tag names are: <label-separator>
     skipValidation();
     loadFromFile(u"ods/trendline.ods");
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
     saveAndReload(u"calc8"_ustr);
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineOOXML)
 {
     loadFromFile(u"ods/trendline.ods");
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
     saveAndReload(u"Calc Office Open XML"_ustr);
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTrendlineXLS)
 {
     loadFromFile(u"ods/trendline.ods");
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
     saveAndReload(u"MS Excel 97"_ustr);
-    checkTrendlinesInChart(getChartDocFromSheet( 0, mxComponent));
+    checkTrendlinesInChart(getDataSeriesFromDoc( getChartDocFromSheet( 0), 0 ));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testMovingAverage)
@@ -282,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testMovingAverage)
     loadFromFile(u"ods/moving-type.ods");
     saveAndReload(u"calc8"_ustr);
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent);
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
@@ -649,107 +644,95 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf126115IndividualMarker)
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatODS)
 {
-    struct
+    auto verify = [this]( const Reference<chart2::XChartDocument>& xChartDoc )
     {
-        void check( const Reference<chart2::XChartDocument>& xChartDoc )
-        {
-            Reference<chart2::XAxis> xAxisX = getAxisFromDoc(xChartDoc, 0, 0, 0);
-            Reference<chart2::XTitled> xTitle(xAxisX, UNO_QUERY_THROW);
-            OUString aTitleText = getTitleString(xTitle);
-            CPPUNIT_ASSERT_EQUAL(u"Linked To Source"_ustr, aTitleText);
+        Reference<chart2::XAxis> xAxisX = getAxisFromDoc(xChartDoc, 0, 0, 0);
+        Reference<chart2::XTitled> xTitle(xAxisX, UNO_QUERY_THROW);
+        OUString aTitleText = getTitleString(xTitle);
+        CPPUNIT_ASSERT_EQUAL(u"Linked To Source"_ustr, aTitleText);
 
-            sal_Int32 nNumFmt = getNumberFormatFromAxis(xAxisX);
-            sal_Int16 nType = getNumberFormatType(xChartDoc, nNumFmt);
-            CPPUNIT_ASSERT_MESSAGE("X axis should be percentage format.", (nType & util::NumberFormat::PERCENT));
+        sal_Int32 nNumFmt = getNumberFormatFromAxis(xAxisX);
+        sal_Int16 nType = getNumberFormatType(xChartDoc, nNumFmt);
+        CPPUNIT_ASSERT_MESSAGE("X axis should be percentage format.", (nType & util::NumberFormat::PERCENT));
 
-            bool bNumFmtLinked = false;
-            Reference<beans::XPropertySet> xPS(xAxisX, uno::UNO_QUERY_THROW);
-            xPS->getPropertyValue(u"LinkNumberFormatToSource"_ustr) >>= bNumFmtLinked;
-            CPPUNIT_ASSERT_MESSAGE("X axis should have its number format linked to source.", bNumFmtLinked);
+        bool bNumFmtLinked = false;
+        Reference<beans::XPropertySet> xPS(xAxisX, uno::UNO_QUERY_THROW);
+        xPS->getPropertyValue(u"LinkNumberFormatToSource"_ustr) >>= bNumFmtLinked;
+        CPPUNIT_ASSERT_MESSAGE("X axis should have its number format linked to source.", bNumFmtLinked);
 
-            Reference<chart2::XAxis> xAxisY = getAxisFromDoc(xChartDoc, 0, 1, 0);
-            xTitle.set(xAxisY, UNO_QUERY_THROW);
-            aTitleText = getTitleString(xTitle);
-            CPPUNIT_ASSERT_EQUAL(u"Not Linked"_ustr, aTitleText);
+        Reference<chart2::XAxis> xAxisY = getAxisFromDoc(xChartDoc, 0, 1, 0);
+        xTitle.set(xAxisY, UNO_QUERY_THROW);
+        aTitleText = getTitleString(xTitle);
+        CPPUNIT_ASSERT_EQUAL(u"Not Linked"_ustr, aTitleText);
 
-            nNumFmt = getNumberFormatFromAxis(xAxisY);
-            nType = getNumberFormatType(xChartDoc, nNumFmt);
-            CPPUNIT_ASSERT_MESSAGE("Y axis should be a normal number format.", (nType & util::NumberFormat::NUMBER));
+        nNumFmt = getNumberFormatFromAxis(xAxisY);
+        nType = getNumberFormatType(xChartDoc, nNumFmt);
+        CPPUNIT_ASSERT_MESSAGE("Y axis should be a normal number format.", (nType & util::NumberFormat::NUMBER));
 
-            bNumFmtLinked = true;
-            xPS.set(xAxisY, uno::UNO_QUERY_THROW);
-            xPS->getPropertyValue(u"LinkNumberFormatToSource"_ustr) >>= bNumFmtLinked;
-            CPPUNIT_ASSERT_MESSAGE("Y axis should not have its number format linked to source.", !bNumFmtLinked);
-        }
-
-    } aTest;
+        bNumFmtLinked = true;
+        xPS.set(xAxisY, uno::UNO_QUERY_THROW);
+        xPS->getPropertyValue(u"LinkNumberFormatToSource"_ustr) >>= bNumFmtLinked;
+        CPPUNIT_ASSERT_MESSAGE("Y axis should not have its number format linked to source.", !bNumFmtLinked);
+    };
 
     loadFromFile(u"ods/axis-numformats-linked.ods");
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
-    aTest.check(xChartDoc);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
+    verify(xChartDoc);
 
     // Reload the document and make sure everything remains intact.
     saveAndReload(u"calc8"_ustr);
-    xChartDoc = getChartDocFromSheet(0, mxComponent);
-    aTest.check(xChartDoc);
+    xChartDoc = getChartDocFromSheet(0);
+    verify(xChartDoc);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatXLS)
 {
-    struct
+    auto verify = [this]( const Reference<chart2::XChartDocument>& xChartDoc, bool bNumFmtLinkedActual, sal_Int16 nNumFmtTypeFlag )
     {
-        void check( const Reference<chart2::XChartDocument>& xChartDoc, bool bNumFmtLinkedActual, sal_Int16 nNumFmtTypeFlag ) const
-        {
-            Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
-            bool bNumFmtLinked = false;
-            Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
-            xPS->getPropertyValue( u"LinkNumberFormatToSource"_ustr ) >>= bNumFmtLinked;
+        Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
+        bool bNumFmtLinked = false;
+        Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
+        xPS->getPropertyValue( u"LinkNumberFormatToSource"_ustr ) >>= bNumFmtLinked;
 
-            if ( bNumFmtLinkedActual )
-                CPPUNIT_ASSERT_MESSAGE( "Y axis should have its number format linked to source.", bNumFmtLinked );
+        if ( bNumFmtLinkedActual )
+            CPPUNIT_ASSERT_MESSAGE( "Y axis should have its number format linked to source.", bNumFmtLinked );
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE( "Y axis should not have its number format linked to source.", !bNumFmtLinked );
+
+            sal_Int32 nNumFmt = getNumberFormatFromAxis( xAxisY );
+            sal_Int16 nType = getNumberFormatType( xChartDoc, nNumFmt );
+            if ( nNumFmtTypeFlag == util::NumberFormat::PERCENT )
+                CPPUNIT_ASSERT_MESSAGE( "Y axis should be percentage format.", ( nType & util::NumberFormat::PERCENT ) );
             else
-            {
-                CPPUNIT_ASSERT_MESSAGE( "Y axis should not have its number format linked to source.", !bNumFmtLinked );
-
-                sal_Int32 nNumFmt = getNumberFormatFromAxis( xAxisY );
-                sal_Int16 nType = getNumberFormatType( xChartDoc, nNumFmt );
-                if ( nNumFmtTypeFlag == util::NumberFormat::PERCENT )
-                    CPPUNIT_ASSERT_MESSAGE( "Y axis should be percentage format.", ( nType & util::NumberFormat::PERCENT ) );
-                else
-                    CPPUNIT_ASSERT_MESSAGE( "Y axis should be number format.", ( nType & util::NumberFormat::NUMBER ) );
-            }
+                CPPUNIT_ASSERT_MESSAGE( "Y axis should be number format.", ( nType & util::NumberFormat::NUMBER ) );
         }
-
-        void change( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int16 nNumFmtTypeFlag )
-        {
-            Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
-            Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
-            Any aAny( false );
-            xPS->setPropertyValue( u"LinkNumberFormatToSource"_ustr, aAny );
-
-            Reference<util::XNumberFormatsSupplier> xNFS( xChartDoc, uno::UNO_QUERY_THROW );
-            Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
-            CPPUNIT_ASSERT( xNumberFormats.is() );
-            lang::Locale aLocale{ u"en"_ustr, u"US"_ustr, u""_ustr };
-            Sequence<sal_Int32> aNumFmts = xNumberFormats->queryKeys( nNumFmtTypeFlag, aLocale, false );
-            CPPUNIT_ASSERT( aNumFmts.hasElements() );
-            aAny <<= aNumFmts[0];
-            xPS->setPropertyValue( CHART_UNONAME_NUMFMT, aAny );
-        }
-
-    } aTest;
+    };
 
     loadFromFile(u"xls/axis_sourceformatting.xls" );
 
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    aTest.check( xChartDoc, true, util::NumberFormat::PERCENT );
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet( 0 );
+    verify( xChartDoc, true, util::NumberFormat::PERCENT );
 
-    aTest.change( xChartDoc, util::NumberFormat::NUMBER );
+    Reference<chart2::XAxis> xAxisY = getAxisFromDoc( xChartDoc, 0, 1, 0 );
+    Reference<beans::XPropertySet> xPS( xAxisY, uno::UNO_QUERY_THROW );
+    Any aAny( false );
+    xPS->setPropertyValue( u"LinkNumberFormatToSource"_ustr, aAny );
+
+    Reference<util::XNumberFormatsSupplier> xNFS( xChartDoc, uno::UNO_QUERY_THROW );
+    Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+    CPPUNIT_ASSERT( xNumberFormats.is() );
+    lang::Locale aLocale{ u"en"_ustr, u"US"_ustr, u""_ustr };
+    Sequence<sal_Int32> aNumFmts = xNumberFormats->queryKeys( util::NumberFormat::NUMBER, aLocale, false );
+    CPPUNIT_ASSERT( aNumFmts.hasElements() );
+    aAny <<= aNumFmts[0];
+    xPS->setPropertyValue( CHART_UNONAME_NUMFMT, aAny );
+
     // Write the document(xls) with changes made close it, load it and check if changes are intact
     saveAndReload( u"MS Excel 97"_ustr );
-    xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    aTest.check( xChartDoc, false, util::NumberFormat::NUMBER );
+    xChartDoc = getChartDocFromSheet( 0 );
+    verify( xChartDoc, false, util::NumberFormat::NUMBER );
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
@@ -761,72 +744,39 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
         Color mnColor;
     };
 
-    struct
+    auto verify = [this]( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nShape )
     {
-        /**
-         * Chart 1 has 4 bars of which 1st and 3rd have labels with borders
-         * around them.
-         */
-        void checkObject1( const Reference<chart2::XChartDocument>& xChartDoc )
+        CPPUNIT_ASSERT(xChartDoc.is());
+
+        Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
+        CPPUNIT_ASSERT(xDataSeries.is());
+
+        // Check to make sure that data points 0 and 2 have local properties.
+        Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xPropSet.is());
+
+        Sequence<sal_Int32> aIndices;
+        xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aIndices;
+        /*
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 2 data points with local properties.", sal_Int32(2), aIndices.getLength());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aIndices[0]);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aIndices[1]);
+        */
+
+        static const Check aDataPoints[] =
         {
-            CPPUNIT_ASSERT(xChartDoc.is());
+            { 0, css::drawing::LineStyle_SOLID, 0x00FFFF00 }, // solid yellow
+            { 2, css::drawing::LineStyle_SOLID, 0x00FF0000 }  // solid red
+        };
 
-            Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-            CPPUNIT_ASSERT(xDataSeries.is());
-
-            // Check to make sure that data points 0 and 2 have local properties.
-            Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
-            CPPUNIT_ASSERT(xPropSet.is());
-
-            Sequence<sal_Int32> aIndices;
-            xPropSet->getPropertyValue(u"AttributedDataPoints"_ustr) >>= aIndices;
-            /*
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 2 data points with local properties.", sal_Int32(2), aIndices.getLength());
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aIndices[0]);
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aIndices[1]);
-            */
-
-            static const Check aDataPoints[] =
-            {
-                { 0, css::drawing::LineStyle_SOLID, 0x00FFFF00 }, // solid yellow
-                { 2, css::drawing::LineStyle_SOLID, 0x00FF0000 }  // solid red
-            };
-
-            for (size_t i = 0; i < std::size(aDataPoints); ++i)
-            {
-                xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
-                CPPUNIT_ASSERT(xPropSet.is());
-
-                css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
-                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
-                CPPUNIT_ASSERT_EQUAL(aDataPoints[i].meStyle, eLineStyle);
-
-                sal_Int32 nWidth = -1;
-                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
-                CPPUNIT_ASSERT(nWidth > 0);
-
-                Color nColor;
-                xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-                CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color is wrong.", aDataPoints[i].mnColor, nColor);
-            }
-        }
-
-        /**
-         * Chart 2 has all its data labels with identical borders.
-         */
-        void checkObject2( const Reference<chart2::XChartDocument>& xChartDoc )
+        for (size_t i = 0; i < std::size(aDataPoints); ++i)
         {
-            CPPUNIT_ASSERT(xChartDoc.is());
-
-            Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
-            CPPUNIT_ASSERT(xDataSeries.is());
-
-            Reference<beans::XPropertySet> xPropSet(xDataSeries, uno::UNO_QUERY);
+            xPropSet = xDataSeries->getDataPointByIndex(aDataPoints[i].mnIndex);
             CPPUNIT_ASSERT(xPropSet.is());
 
             css::drawing::LineStyle eLineStyle = css::drawing::LineStyle_NONE;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_STYLE) >>= eLineStyle;
-            CPPUNIT_ASSERT_EQUAL(css::drawing::LineStyle_SOLID, eLineStyle);
+            CPPUNIT_ASSERT_EQUAL(aDataPoints[i].meStyle, eLineStyle);
 
             sal_Int32 nWidth = -1;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_WIDTH) >>= nWidth;
@@ -834,10 +784,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
 
             Color nColor;
             xPropSet->getPropertyValue(CHART_UNONAME_LABEL_BORDER_COLOR) >>= nColor;
-            CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", COL_LIGHTGREEN, nColor);
+            if (nShape == 0)
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color is wrong.", aDataPoints[i].mnColor, nColor);
+            else
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Border color should be green.", COL_LIGHTGREEN, nColor);
         }
-
-    } aTest;
+    };
 
     loadFromFile(u"docx/data-label-borders.docx");
 
@@ -853,9 +805,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in docx should be loaded as solid white.",
          sal_Int32(0x00FFFFFF), sal_Int32(nColor & 0x00FFFFFF)); // highest 2 bytes are transparency which we ignore here.
 
-    aTest.checkObject1(xChartDoc);
+     // Chart 1 has 4 bars of which 1st and 3rd have labels with borders around them.
+    verify(xChartDoc, 0);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
-    aTest.checkObject2(xChartDoc);
+
+    // Chart 2 has all its data labels with identical borders.
+    verify(xChartDoc, 1);
 
     // FIXME: validation error in OOXML export: Errors: 3
     skipValidation();
@@ -863,9 +818,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBordersDOCX)
     saveAndReload(u"Office Open XML Text"_ustr);
 
     xChartDoc.set(getChartDocFromWriter(0), uno::UNO_QUERY);
-    aTest.checkObject1(xChartDoc);
+    verify(xChartDoc , 0);
     xChartDoc.set(getChartDocFromWriter(1), uno::UNO_QUERY);
-    aTest.checkObject2(xChartDoc);
+    verify(xChartDoc, 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
@@ -1108,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarDataRangeODS)
     loadFromFile(u"ods/ErrorBarRange.ods");
     saveAndReload(u"calc8"_ustr);
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
@@ -1137,7 +1092,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_barOfPie)
     loadFromFile(u"ods/tdf50934_barOfPie.ods");
     saveAndReload(u"calc8"_ustr);
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
@@ -1160,7 +1115,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, tdf50934_pieOfPie)
     loadFromFile(u"ods/tdf50934_pieOfPie.ods");
     saveAndReload(u"calc8"_ustr);
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
@@ -1255,18 +1210,12 @@ void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nVa
     CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
 }
 
-void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > const & xChartDoc,
+void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartType > const & xChartType,
         sal_Int32 nExpectedGapWidth, sal_Int32 nExpectedOverlap)
 {
-    CPPUNIT_ASSERT(xChartDoc.is());
-
-    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
-    CPPUNIT_ASSERT(xChartType.is());
-
     Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
     checkGapWidth(xPropSet, nExpectedGapWidth);
     checkOverlap(xPropSet, nExpectedOverlap);
-
 }
 
 }
@@ -1275,19 +1224,40 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testGapWidthXLSX)
 {
     loadFromFile(u"xlsx/gapWidth.xlsx");
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 120, -60);
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 120, -60);
 
-    xChartDoc = getChartDocFromSheet( 1, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
+    xChartDoc = getChartDocFromSheet( 1 );
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 50, 30);
 
     saveAndReload(u"Calc Office Open XML"_ustr);
 
-    xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 120, -60);
+    xChartDoc = getChartDocFromSheet( 0 );
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 120, -60);
 
-    xChartDoc = getChartDocFromSheet( 1, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 50, 30);
+    xChartDoc = getChartDocFromSheet( 1 );
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 50, 30);
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataseriesOverlapStackedChartXLSX)
+{
+    loadFromFile(u"xlsx/testDataseriesOverlapStackedChart.xlsx");
+
+    // test the overlap value of a simple Stacked Column Chart
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0);
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 100, 0);
+
+    // test the overlap value of a Percent Stacked Bar Chart
+    xChartDoc = getChartDocFromSheet( 1);
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 100, 35);
+
+    saveAndReload(u"Calc Office Open XML"_ustr);
+
+    xChartDoc = getChartDocFromSheet( 0);
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 100, 100);
+
+    xChartDoc = getChartDocFromSheet( 1);
+    checkSheetForGapWidthAndOverlap(getChartTypeFromDoc( xChartDoc, 0 ), 100, 100);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSmoothedLines)
@@ -1303,7 +1273,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)
 {
     loadFromFile(u"ods/labelString.ods");
 
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
     Reference< chart2::data::XDataSequence > xLabelSeq =
         getLabelDataSequenceFromDoc(xChartDoc);
     CPPUNIT_ASSERT(xLabelSeq.is());
@@ -1313,7 +1283,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)
 
     saveAndReload(u"calc8"_ustr);
 
-    xChartDoc = getChartDocFromSheet( 0, mxComponent );
+    xChartDoc = getChartDocFromSheet( 0 );
     xLabelSeq = getLabelDataSequenceFromDoc(xChartDoc);
     CPPUNIT_ASSERT(xLabelSeq.is());
 
@@ -1328,7 +1298,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testInvertNegative)
     {
         loadFromFile(u"xlsx/invertIfNeg_bar.xlsx");
         // make sure the import was successful
-        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
         CPPUNIT_ASSERT(xChartDoc.is());
 
         Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );
@@ -1346,7 +1316,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testInvertNegative)
     {
         loadFromFile(u"xlsx/invertIfNeg_bubble.xlsx");
         // make sure the import was successful
-        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
+        uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0 );
         CPPUNIT_ASSERT(xChartDoc.is());
 
         Reference< chart2::XDataSeries > xDataSeries = getDataSeriesFromDoc( xChartDoc, 0 );

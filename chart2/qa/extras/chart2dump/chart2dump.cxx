@@ -270,7 +270,7 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
     {
         setTestFileName(aTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc (getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc (getChartDocFromSheet(0), UNO_QUERY_THROW);
 
         // Check title
         uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
@@ -477,7 +477,7 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
     {
         setTestFileName(sTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -705,7 +705,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
     {
         setTestFileName(sTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -840,7 +840,7 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
     {
         setTestFileName(sTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -913,7 +913,7 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
     {
         setTestFileName(sTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -986,7 +986,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
     {
         setTestFileName(sTestFile);
         loadFromFile(getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -1080,7 +1080,7 @@ DECLARE_DUMP_TEST( PivotChartDataButtonTest, Chart2DumpTest, false )
     loadFromFile(getTestFileName());
 
     // Check that we have pivot chart in the document
-    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet( 1, mxComponent );
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet( 1);
     uno::Reference<container::XIndexAccess> xIndexAccess( xTablePivotCharts, UNO_QUERY_THROW );
     CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xIndexAccess->getCount() );
 

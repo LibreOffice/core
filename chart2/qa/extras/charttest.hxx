@@ -13,9 +13,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -28,7 +25,6 @@
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <o3tl/string_view.hxx>
-#include <unotools/tempfile.hxx>
 #include <rtl/math.hxx>
 #include <svx/charthelper.hxx>
 
@@ -56,21 +52,12 @@
 
 #include <unonames.hxx>
 
-#include <iostream>
-#include <memory>
-#include <string_view>
-
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 
 using namespace css;
 using namespace css::uno;
-
-namespace com::sun::star::chart2 { class XDataSeries; }
-namespace com::sun::star::chart2 { class XDiagram; }
-namespace com::sun::star::table { class XTableCharts; }
-namespace com::sun::star::table { class XTablePivotCharts; }
 
 class ChartTest : public UnoApiXmlTest
 {
@@ -80,23 +67,55 @@ public:
     {
     }
 
-    uno::Sequence < OUString > getImpressChartColumnDescriptions(sal_Int32 nPage, sal_Int32 nShape);
 
-    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
-    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpressNamed( sal_Int32 nPage, std::u16string_view rName);
-
-
-    uno::Reference<chart::XChartDocument> getChartDocFromWriter( sal_Int32 nShape );
-    Sequence< OUString > getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc );
-    awt::Size getPageSize( const Reference< chart2::XChartDocument > & xChartDoc );
-    awt::Size getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize);
+    Reference<lang::XComponent> getChartCompFromSheet(sal_Int32 nSheet, sal_Int32 nChart);
+    Reference<chart2::XChartDocument> getChartDocFromSheet(sal_Int32 nSheet);
+    uno::Reference<table::XTablePivotCharts> getTablePivotChartsFromSheet(sal_Int32 nSheet);
+    Reference<chart2::XChartDocument> getPivotChartDocFromSheet(sal_Int32 nSheet);
+    uno::Reference<chart2::XChartDocument>
+    getPivotChartDocFromSheet(uno::Reference<table::XTablePivotCharts> const& xTablePivotCharts,
+                              sal_Int32 nIndex);
+    Reference<chart2::XChartType>
+    getChartTypeFromDoc(Reference<chart2::XChartDocument> const& xChartDoc, sal_Int32 nChartType,
+                        sal_Int32 nCooSys = 0);
+    Reference<chart2::XAxis> getAxisFromDoc(const Reference<chart2::XChartDocument>& xChartDoc,
+                                            sal_Int32 nCooSys, sal_Int32 nAxisDim,
+                                            sal_Int32 nAxisIndex);
+    sal_Int32 getNumberOfDataSeries(uno::Reference<chart2::XChartDocument> const& xChartDoc,
+                                    sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0);
+    Reference<chart2::XDataSeries>
+    getDataSeriesFromDoc(uno::Reference<chart2::XChartDocument> const& xChartDoc,
+                         sal_Int32 nDataSeries, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0);
+    Reference<chart2::data::XDataSequence>
+    getLabelDataSequenceFromDoc(Reference<chart2::XChartDocument> const& xChartDoc,
+                                sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0);
+    Reference<chart2::data::XDataSequence>
+    getDataSequenceFromDocByRole(Reference<chart2::XChartDocument> const& xChartDoc,
+                                 std::u16string_view rRole, sal_Int32 nDataSeries = 0,
+                                 sal_Int32 nChartType = 0);
+    uno::Sequence<OUString> getWriterChartColumnDescriptions();
+    std::vector<std::vector<double>>
+    getDataSeriesYValuesFromChartType(const Reference<chart2::XChartType>& xCT);
+    std::vector<uno::Sequence<uno::Any>>
+    getDataSeriesLabelsFromChartType(const Reference<chart2::XChartType>& xCT);
+    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress(sal_Int32 nPage,
+                                                                     sal_Int32 nShape);
+    uno::Reference<chart::XChartDocument> getChartDocFromWriter(sal_Int32 nShape);
+    OUString getTitleString(const Reference<chart2::XTitled>& xTitled);
+    sal_Int32 getNumberFormatFromAxis(const Reference<chart2::XAxis>& xAxis);
+    sal_Int16 getNumberFormatType(const Reference<chart2::XChartDocument>& xChartDoc,
+                                  sal_Int32 nNumberFormat);
+    uno::Reference<drawing::XShape>
+    getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
+                   const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
+                   = nullptr);
 };
 
-Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart, uno::Reference< lang::XComponent > const & xComponent )
+Reference< lang::XComponent > ChartTest::getChartCompFromSheet( sal_Int32 nSheet, sal_Int32 nChart )
 {
     // let us assume that we only have one chart per sheet
 
-    uno::Reference< sheet::XSpreadsheetDocument > xDoc(xComponent, UNO_QUERY_THROW);
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
 
@@ -116,9 +135,9 @@ Reference< lang::XComponent > getChartCompFromSheet( sal_Int32 nSheet, sal_Int32
 
 }
 
-Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno::Reference< lang::XComponent > const & xComponent )
+Reference< chart2::XChartDocument > ChartTest::getChartDocFromSheet( sal_Int32 nSheet )
 {
-    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, 0, xComponent), UNO_QUERY_THROW );
+    uno::Reference< chart2::XChartDocument > xChartDoc ( getChartCompFromSheet(nSheet, 0), UNO_QUERY_THROW );
 
     // Update the chart view, so that its draw page is updated and ready for the test
     css::uno::Reference<css::frame::XModel> xModel(xChartDoc, css::uno::UNO_QUERY_THROW);
@@ -127,9 +146,9 @@ Reference< chart2::XChartDocument > getChartDocFromSheet( sal_Int32 nSheet, uno:
     return xChartDoc;
 }
 
-uno::Reference<table::XTablePivotCharts> getTablePivotChartsFromSheet(sal_Int32 nSheet, uno::Reference<lang::XComponent> const & xComponent)
+uno::Reference<table::XTablePivotCharts> ChartTest::getTablePivotChartsFromSheet(sal_Int32 nSheet)
 {
-    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
 
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
 
@@ -141,9 +160,9 @@ uno::Reference<table::XTablePivotCharts> getTablePivotChartsFromSheet(sal_Int32 
     return xTablePivotCharts;
 }
 
-Reference<lang::XComponent> getPivotChartCompFromSheet(sal_Int32 nSheet, uno::Reference<lang::XComponent> const & xComponent)
+Reference<chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(sal_Int32 nSheet)
 {
-    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(nSheet, xComponent);
+    uno::Reference<table::XTablePivotCharts> xTablePivotCharts = getTablePivotChartsFromSheet(nSheet);
 
     uno::Reference<container::XIndexAccess> xIACharts(xTablePivotCharts, UNO_QUERY_THROW);
     uno::Reference<table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(0), UNO_QUERY_THROW);
@@ -151,17 +170,11 @@ Reference<lang::XComponent> getPivotChartCompFromSheet(sal_Int32 nSheet, uno::Re
     uno::Reference<document::XEmbeddedObjectSupplier> xEmbObjectSupplier(xTablePivotChart, UNO_QUERY_THROW);
 
     uno::Reference<lang::XComponent> xChartComp(xEmbObjectSupplier->getEmbeddedObject(), UNO_SET_THROW);
-
-    return xChartComp;
-}
-
-Reference<chart2::XChartDocument> getPivotChartDocFromSheet(sal_Int32 nSheet, uno::Reference<lang::XComponent> const & xComponent)
-{
-    uno::Reference<chart2::XChartDocument> xChartDoc(getPivotChartCompFromSheet(nSheet, xComponent), UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(xChartComp, UNO_QUERY_THROW);
     return xChartDoc;
 }
 
-Reference<chart2::XChartDocument> getPivotChartDocFromSheet(uno::Reference<table::XTablePivotCharts> const & xTablePivotCharts, sal_Int32 nIndex)
+Reference<chart2::XChartDocument> ChartTest::getPivotChartDocFromSheet(uno::Reference<table::XTablePivotCharts> const & xTablePivotCharts, sal_Int32 nIndex)
 {
     uno::Reference<container::XIndexAccess> xIACharts(xTablePivotCharts, UNO_QUERY_THROW);
     uno::Reference<table::XTablePivotChart> xTablePivotChart(xIACharts->getByIndex(nIndex), UNO_QUERY_THROW);
@@ -174,8 +187,8 @@ Reference<chart2::XChartDocument> getPivotChartDocFromSheet(uno::Reference<table
     return xChartDoc;
 }
 
-Reference< chart2::XChartType > getChartTypeFromDoc( Reference< chart2::XChartDocument > const & xChartDoc,
-                                                                sal_Int32 nChartType, sal_Int32 nCooSys = 0 )
+Reference< chart2::XChartType > ChartTest::getChartTypeFromDoc( Reference< chart2::XChartDocument > const & xChartDoc,
+                                                                sal_Int32 nChartType, sal_Int32 nCooSys )
 {
     CPPUNIT_ASSERT( xChartDoc.is() );
 
@@ -195,7 +208,7 @@ Reference< chart2::XChartType > getChartTypeFromDoc( Reference< chart2::XChartDo
     return xChartTypeSequence[nChartType];
 }
 
-Reference<chart2::XAxis> getAxisFromDoc(
+Reference<chart2::XAxis> ChartTest::getAxisFromDoc(
     const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nCooSys, sal_Int32 nAxisDim, sal_Int32 nAxisIndex )
 {
     Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
@@ -215,8 +228,8 @@ Reference<chart2::XAxis> getAxisFromDoc(
     return xAxis;
 }
 
-sal_Int32 getNumberOfDataSeries(uno::Reference<chart2::XChartDocument> const & xChartDoc,
-                                sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0)
+sal_Int32 ChartTest::getNumberOfDataSeries(uno::Reference<chart2::XChartDocument> const & xChartDoc,
+                                sal_Int32 nChartType, sal_Int32 nCooSys)
 {
     Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, nChartType, nCooSys);
     Reference<chart2::XDataSeriesContainer> xDataSeriesContainer(xChartType, UNO_QUERY_THROW);
@@ -225,9 +238,9 @@ sal_Int32 getNumberOfDataSeries(uno::Reference<chart2::XChartDocument> const & x
     return xSeriesSequence.getLength();
 }
 
-Reference< chart2::XDataSeries > getDataSeriesFromDoc(uno::Reference<chart2::XChartDocument> const & xChartDoc,
-                                                      sal_Int32 nDataSeries, sal_Int32 nChartType = 0,
-                                                      sal_Int32 nCooSys = 0)
+Reference< chart2::XDataSeries > ChartTest::getDataSeriesFromDoc(uno::Reference<chart2::XChartDocument> const & xChartDoc,
+                                                      sal_Int32 nDataSeries, sal_Int32 nChartType,
+                                                      sal_Int32 nCooSys)
 {
     Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, nChartType, nCooSys );
     Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, UNO_QUERY_THROW );
@@ -240,9 +253,9 @@ Reference< chart2::XDataSeries > getDataSeriesFromDoc(uno::Reference<chart2::XCh
     return xSeries;
 }
 
-Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
+Reference< chart2::data::XDataSequence > ChartTest::getLabelDataSequenceFromDoc(
         Reference< chart2::XChartDocument > const & xChartDoc,
-        sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0 )
+        sal_Int32 nDataSeries, sal_Int32 nChartType )
 {
     Reference< chart2::XDataSeries > xDataSeries =
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
@@ -262,9 +275,9 @@ Reference< chart2::data::XDataSequence > getLabelDataSequenceFromDoc(
     CPPUNIT_FAIL("no Label sequence found");
 }
 
-Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
+Reference< chart2::data::XDataSequence > ChartTest::getDataSequenceFromDocByRole(
         Reference< chart2::XChartDocument > const & xChartDoc, std::u16string_view rRole,
-        sal_Int32 nDataSeries = 0, sal_Int32 nChartType = 0 )
+        sal_Int32 nDataSeries, sal_Int32 nChartType )
 {
     Reference< chart2::XDataSeries > xDataSeries =
         getDataSeriesFromDoc( xChartDoc, nDataSeries, nChartType );
@@ -288,7 +301,7 @@ Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
     return Reference< chart2::data::XDataSequence > ();
 }
 
-uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XComponent > const & mxComponent )
+uno::Sequence < OUString > ChartTest::getWriterChartColumnDescriptions()
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -304,7 +317,7 @@ uno::Sequence < OUString > getWriterChartColumnDescriptions( Reference< lang::XC
     return seriesList;
 }
 
-std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Reference<chart2::XChartType>& xCT )
+std::vector<std::vector<double> > ChartTest::getDataSeriesYValuesFromChartType( const Reference<chart2::XChartType>& xCT )
 {
     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
@@ -347,7 +360,7 @@ std::vector<std::vector<double> > getDataSeriesYValuesFromChartType( const Refer
     return aRet;
 }
 
-std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Reference<chart2::XChartType>& xCT )
+std::vector<uno::Sequence<uno::Any> > ChartTest::getDataSeriesLabelsFromChartType( const Reference<chart2::XChartType>& xCT )
 {
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
@@ -411,41 +424,6 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
     return xChartDoc;
 }
 
-uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpressNamed(sal_Int32 nPage, std::u16string_view rName)
-{
-    uno::Reference<chart::XChartDocument> xChart;
-
-    uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY);
-    if (!xPages.is())
-        return xChart;
-
-    uno::Reference<drawing::XDrawPage> xPage(xPages->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY);
-    if (!xPage.is())
-        return xChart;
-
-    for (sal_Int32 i=0; i < xPage->getCount(); ++i)
-    {
-        uno::Reference<container::XNamed> xNamedShape(xPage->getByIndex(i), uno::UNO_QUERY);
-        if (!xNamedShape.is())
-            continue;
-
-        if (xNamedShape->getName() != rName)
-            continue;
-
-        uno::Reference<beans::XPropertySet> xShapeProps(xNamedShape, uno::UNO_QUERY);
-        if (!xShapeProps.is())
-            continue;
-
-        uno::Reference<frame::XModel> xDocModel;
-        xShapeProps->getPropertyValue(u"Model"_ustr) >>= xDocModel;
-        if (!xDocModel.is())
-            continue;
-
-        return uno::Reference<chart::XChartDocument>(xDocModel, uno::UNO_QUERY);
-    }
-
-    return xChart;
-}
 
 uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int32 nShape )
 {
@@ -467,15 +445,7 @@ uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromWriter( sal_Int3
     return xChartDoc;
 }
 
-uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions(sal_Int32 nPage, sal_Int32 nShape)
-{
-    uno::Reference< chart::XChartDocument > xChartDoc = getChartDocFromDrawImpress( nPage, nShape );
-    uno::Reference< chart::XChartDataArray > xChartData ( xChartDoc->getData(), uno::UNO_QUERY_THROW);
-    uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
-    return seriesList;
-}
-
-OUString getTitleString( const Reference<chart2::XTitled>& xTitled )
+OUString ChartTest::getTitleString( const Reference<chart2::XTitled>& xTitled )
 {
     uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
     CPPUNIT_ASSERT(xTitle.is());
@@ -487,16 +457,7 @@ OUString getTitleString( const Reference<chart2::XTitled>& xTitled )
     return aText;
 }
 
-sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, const OUString& sFormat )
-{
-    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
-    Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
-    CPPUNIT_ASSERT(xNumberFormats.is());
-
-    return xNumberFormats->queryKey(sFormat, css::lang::Locale(), false);
-}
-
-sal_Int32 getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )
+sal_Int32 ChartTest::getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )
 {
     Reference<beans::XPropertySet> xPS(xAxis, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPS.is());
@@ -507,7 +468,7 @@ sal_Int32 getNumberFormatFromAxis( const Reference<chart2::XAxis>& xAxis )
     return nNumberFormat;
 }
 
-sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nNumberFormat )
+sal_Int16 ChartTest::getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nNumberFormat )
 {
     Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
     Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
@@ -522,65 +483,9 @@ sal_Int16 getNumberFormatType( const Reference<chart2::XChartDocument>& xChartDo
     return nType;
 }
 
-Sequence< double > getDateCategories(const Reference<chart2::XChartDocument>& xChartDoc)
-{
-    CPPUNIT_ASSERT(xChartDoc->hasInternalDataProvider());
-    uno::Reference< chart2::XInternalDataProvider > xDataProvider( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
-    uno::Reference< chart::XDateCategories > xDateCategories( xDataProvider, uno::UNO_QUERY_THROW );
-    CPPUNIT_ASSERT(xDateCategories.is());
-    return xDateCategories->getDateCategories();
-}
-
-Sequence< OUString > ChartTest::getFormattedDateCategories( const Reference<chart2::XChartDocument>& xChartDoc )
-{
-    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
-    Reference< util::XNumberFormatter > xNumFormatter(
-        util::NumberFormatter::create(comphelper::getComponentContext(m_xSFactory)), uno::UNO_QUERY_THROW );
-    xNumFormatter->attachNumberFormatsSupplier(xNFS);
-
-    Reference<chart2::XAxis> xAxisX = getAxisFromDoc(xChartDoc, 0, 0, 0);
-    chart2::ScaleData aScaleData = xAxisX->getScaleData();
-    CPPUNIT_ASSERT_EQUAL(chart2::AxisType::DATE, aScaleData.AxisType);
-
-    sal_Int32 nNumFmt = getNumberFormatFromAxis(xAxisX);
-
-    Sequence<double> aDateSeq = getDateCategories(xChartDoc);
-    const sal_Int32 nNumCategories = aDateSeq.getLength();
-    Sequence<OUString> aFormattedDates(nNumCategories);
-    auto aFormattedDatesRange = asNonConstRange(aFormattedDates);
-
-    for (sal_Int32 nIdx = 0; nIdx < nNumCategories; ++nIdx)
-        aFormattedDatesRange[nIdx] = xNumFormatter->convertNumberToString(nNumFmt, aDateSeq[nIdx]);
-
-    return aFormattedDates;
-}
-
-awt::Size ChartTest::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc )
-{
-    awt::Size aSize( 0, 0 );
-    uno::Reference< com::sun::star::embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
-    CPPUNIT_ASSERT( xVisualObject.is() );
-    aSize = xVisualObject->getVisualAreaSize( com::sun::star::embed::Aspects::MSOLE_CONTENT );
-    return aSize;
-}
-
-awt::Size ChartTest::getSize(css::uno::Reference<chart2::XDiagram> xDiagram, const awt::Size& rPageSize)
-{
-    Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
-    chart2::RelativeSize aRelativeSize;
-    xProp->getPropertyValue( u"RelativeSize"_ustr ) >>= aRelativeSize;
-    double fX = aRelativeSize.Primary * rPageSize.Width;
-    double fY = aRelativeSize.Secondary * rPageSize.Height;
-    awt::Size aSize;
-    aSize.Width = static_cast< sal_Int32 >( ::rtl::math::round( fX ) );
-    aSize.Height = static_cast< sal_Int32 >( ::rtl::math::round( fY ) );
-    return aSize;
-}
-
 uno::Reference<drawing::XShape>
-getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
-               const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition
-               = nullptr)
+ChartTest::getShapeByName(const uno::Reference<drawing::XShapes>& rShapes, const OUString& rName,
+               const std::function<bool(const uno::Reference<drawing::XShape>&)>& pCondition)
 {
     for (sal_Int32 i = 0; i < rShapes->getCount(); ++i)
     {

@@ -36,10 +36,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf114179)
     css::uno::Reference<chart2::XDiagram> xDiagram;
     xDiagram.set(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT_MESSAGE("There is a Diagram.", xDiagram.is());
-    awt::Size aPage = getPageSize(xChartDoc);
-    awt::Size aSize = getSize(xDiagram, aPage);
-    CPPUNIT_ASSERT(aSize.Width > 0);
-    CPPUNIT_ASSERT(aSize.Height > 0);
+    awt::Size aPage(0, 0);
+    uno::Reference<com::sun::star::embed::XVisualObject> xVisualObject(xChartDoc, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xVisualObject.is());
+    aPage = xVisualObject->getVisualAreaSize(com::sun::star::embed::Aspects::MSOLE_CONTENT);
+    Reference<beans::XPropertySet> xProp(xDiagram, uno::UNO_QUERY);
+    chart2::RelativeSize aRelativeSize;
+    xProp->getPropertyValue(u"RelativeSize"_ustr) >>= aRelativeSize;
+    double fX = aRelativeSize.Primary * aPage.Width;
+    double fY = aRelativeSize.Secondary * aPage.Height;
+    CPPUNIT_ASSERT(static_cast<sal_Int32>(::rtl::math::round(fX)) > 0);
+    CPPUNIT_ASSERT(static_cast<sal_Int32>(::rtl::math::round(fY)) > 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf124243)
@@ -105,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128432)
 {
     loadFromFile(u"ods/tdf128432.ods");
 
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -120,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128627)
 {
     loadFromFile(u"xlsx/tdf128627.xlsx");
     // Test ShiftedCategoryPosition for Radar Chart
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -135,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf128634)
 {
     loadFromFile(u"xlsx/tdf128634.xlsx");
     // Test ShiftedCategoryPosition for 3D Charts
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -150,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130657)
 {
     loadFromFile(u"xlsx/tdf130657.xlsx");
     // Test ShiftedCategoryPosition for charts which is not contain a "crossbetween" OOXML tag.
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -178,8 +185,7 @@ void checkDataLabelProperties(const Reference<chart2::XDataSeries>& xDataSeries,
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDeletedDataLabel)
 {
     loadFromFile(u"xlsx/deleted_data_labels.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
     Reference<chart2::XDataSeries> xDataSeries0 = getDataSeriesFromDoc(xChartDoc, 0);
     CPPUNIT_ASSERT(xDataSeries0.is());
     checkDataLabelProperties(xDataSeries0, 0, true);
@@ -210,8 +216,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointInheritedColorDOCX)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
 {
     loadFromFile(u"xlsx/external_str_ref.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -224,8 +229,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testExternalStrRefsXLSX)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testSourceNumberFormatComplexCategoriesXLS)
 {
     loadFromFile(u"xls/source_number_format_axis.xls");
-    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
-                                                     UNO_QUERY_THROW);
+    uno::Reference<chart2::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0), UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
 
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
@@ -311,8 +315,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testXaxisValues)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf123504)
 {
     loadFromFile(u"ods/pie_chart_100_and_0.ods");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
     Reference<chart2::XChartDocument> xChartDoc2(xChartDoc, UNO_QUERY_THROW);
     Reference<chart2::XChartType> xChartType(getChartTypeFromDoc(xChartDoc2, 0), UNO_SET_THROW);
@@ -403,7 +406,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testDataPointLabelCustomPos)
 {
     // test CustomLabelPosition on Bar chart
     loadFromFile(u"xlsx/testDataPointLabelCustomPos.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
@@ -426,7 +429,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf130032)
 {
     // test CustomLabelPosition on Line chart
     loadFromFile(u"xlsx/testTdf130032.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
@@ -449,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134978)
 {
     // test CustomLabelPosition on Pie chart
     loadFromFile(u"xlsx/tdf134978.xlsx");
-    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
     CPPUNIT_ASSERT(xDataSeries.is());
@@ -467,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134978)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf119138MissingAutoTitleDeleted)
 {
     loadFromFile(u"xlsx/tdf119138-missing-autotitledeleted.xlsx");
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
     Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
@@ -499,8 +502,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
         return;
 
     loadFromFile(u"xlsx/tdf133376.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -520,8 +522,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf133376)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134225)
 {
     loadFromFile(u"xlsx/tdf134225.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -559,8 +560,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136105)
     loadFromFile(u"xlsx/tdf136105.xlsx");
     // 1st chart with fix inner position and size
     {
-        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                                   UNO_QUERY_THROW);
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
         Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
         Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -578,8 +578,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136105)
     }
     // 2nd chart with auto inner position and size
     {
-        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(1, mxComponent),
-                                                   UNO_QUERY_THROW);
+        Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(1), UNO_QUERY_THROW);
 
         Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
         Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -638,8 +637,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf134111)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136752)
 {
     loadFromFile(u"xlsx/tdf136752.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -659,8 +657,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf136752)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137505)
 {
     loadFromFile(u"xlsx/tdf137505.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
 
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
@@ -679,7 +676,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137505)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
 {
     loadFromFile(u"xlsx/tdf137734.xlsx");
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XDataSeries> xDataSeries = getDataSeriesFromDoc(xChartDoc, 0);
@@ -706,8 +703,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137734)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137874)
 {
     loadFromFile(u"xlsx/piechart_legend.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -720,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf137874)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146463)
 {
     loadFromFile(u"ods/tdf146463.ods");
-    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent));
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromSheet(0));
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -775,8 +771,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdfCustomShapePos)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf121281)
 {
     loadFromFile(u"xlsx/incorrect_label_position.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -814,8 +809,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf139658)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
 {
     loadFromFile(u"ods/tdf146066.ods");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -860,8 +854,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf146066)
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf150434)
 {
     loadFromFile(u"xlsx/tdf150434.xlsx");
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -878,8 +871,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testChartDataTableWithMultipleLegendEntr
     loadFromFile(u"xlsx/DataTable-MultipleLegendEntriesForOneDataSeries.xlsx");
     // Loading this file caused a crash in the data table code
 
-    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
-                                               UNO_QUERY_THROW);
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0), UNO_QUERY_THROW);
     Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
     Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
     Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
@@ -922,7 +914,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testAngleUnits)
     // Without fix, the values with unit grad and rad were read as if they are in degrees.
     for (size_t i = 0; i < 4; i++)
     {
-        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(i, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(i);
         CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
 
         // x-axis

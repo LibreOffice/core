@@ -262,7 +262,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataPointLabelNumberFormatXLSX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelDefaultValuesXLSX)
 {
     loadFromFile(u"xlsx/data_label.xlsx");
-    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0, mxComponent);
+    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0);
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue(u"Label"_ustr);
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelDefaultValuesXLSX)
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataLabelFillColor)
 {
     loadFromFile(u"xlsx/data_labels_fill_color.xlsx");
-    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0, mxComponent);
+    Reference< chart2::XChartDocument> xDoc = getChartDocFromSheet(0);
     Reference<chart2::XDataSeries> xSeries = getDataSeriesFromDoc(xDoc, 0);
     Reference<beans::XPropertySet> xPropSet(xSeries, uno::UNO_QUERY_THROW);
     uno::Any aAny = xPropSet->getPropertyValue(u"LabelFillColor"_ustr);
@@ -531,65 +531,6 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testBarChartDataPointPropXLSX)
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser/c:dPt[2]/c:spPr/a:ln/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"70ad47"_ustr);
 }
 
-namespace {
-
-void checkGapWidth(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
-{
-    uno::Any aAny = xPropSet->getPropertyValue(u"GapwidthSequence"_ustr);
-    CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence< sal_Int32 > aSequence;
-    aAny >>= aSequence;
-    CPPUNIT_ASSERT(aSequence.hasElements());
-    CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
-}
-
-void checkOverlap(Reference<beans::XPropertySet> const & xPropSet, sal_Int32 nValue)
-{
-    uno::Any aAny = xPropSet->getPropertyValue(u"OverlapSequence"_ustr);
-    CPPUNIT_ASSERT(aAny.hasValue());
-    uno::Sequence< sal_Int32 > aSequence;
-    aAny >>= aSequence;
-    CPPUNIT_ASSERT(aSequence.hasElements());
-    CPPUNIT_ASSERT_EQUAL(nValue, aSequence[0]);
-}
-
-void checkSheetForGapWidthAndOverlap(uno::Reference< chart2::XChartDocument > const & xChartDoc,
-        sal_Int32 nExpectedGapWidth, sal_Int32 nExpectedOverlap)
-{
-    CPPUNIT_ASSERT(xChartDoc.is());
-
-    Reference< chart2::XChartType > xChartType = getChartTypeFromDoc( xChartDoc, 0 );
-    CPPUNIT_ASSERT(xChartType.is());
-
-    Reference< beans::XPropertySet > xPropSet( xChartType, uno::UNO_QUERY_THROW );
-    checkGapWidth(xPropSet, nExpectedGapWidth);
-    checkOverlap(xPropSet, nExpectedOverlap);
-
-}
-
-}
-
-CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testDataseriesOverlapStackedChartXLSX)
-{
-    loadFromFile(u"xlsx/testDataseriesOverlapStackedChart.xlsx");
-
-    // test the overlap value of a simple Stacked Column Chart
-    uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 0);
-
-    // test the overlap value of a Percent Stacked Bar Chart
-    xChartDoc = getChartDocFromSheet( 1, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 35);
-
-    saveAndReload(u"Calc Office Open XML"_ustr);
-
-    xChartDoc = getChartDocFromSheet( 0, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 100);
-
-    xChartDoc = getChartDocFromSheet( 1, mxComponent );
-    checkSheetForGapWidthAndOverlap(xChartDoc, 100, 100);
-}
-
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testAxisCharacterPropertiesXLSX)
 {
     loadFromFile(u"xlsx/axis_character_properties.xlsx");
@@ -749,7 +690,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148142)
 {
     // The document contains a line chart with "Between tick marks" X axis position.
     loadFromFile(u"ods/tdf148142.ods");
-    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc.is());
     Reference<chart2::XAxis> xAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
     CPPUNIT_ASSERT(xAxis.is());
@@ -762,7 +703,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testTdf148142)
 
     // Check the X axis position after export.
     saveAndReload(u"calc8"_ustr);
-    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc2.is());
     Reference<chart2::XAxis> xAxis2 = getAxisFromDoc(xChartDoc2, 0, 0, 0);
     CPPUNIT_ASSERT(xAxis2.is());
@@ -930,7 +871,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest3, testODSFormattedChartTitles)
     // Check formatted strings after export.
     saveAndReload(u"calc8"_ustr);
 
-    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0, mxComponent);
+    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChart2Doc.is());
     Reference< chart::XChartDocument > xChartDoc(xChart2Doc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());

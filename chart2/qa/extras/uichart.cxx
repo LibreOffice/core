@@ -54,7 +54,7 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc2.is());
 
     uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
@@ -106,7 +106,7 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
 {
     loadFromFile(u"ods/tdf99969.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
     sal_Int32 nColumns = 2;
     sal_Int32 nRows = 6;
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0, mxComponent);
+    uno::Reference<chart2::XChartDocument> xChartDoc2 = getChartDocFromSheet(0);
     CPPUNIT_ASSERT(xChartDoc2.is());
 
     uno::Reference<chart::XChartDataArray> xDataArray(xChartDoc2->getDataProvider(),
@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 {
     loadFromFile(u"ods/tdf120348.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
 
     // Without the fix in place, this test would have failed with
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
         = { u"Ωφέλιμο"_ustr, u"Επικίνδυνο"_ustr, u"Απόσταση"_ustr, u"Μάσκα"_ustr, u"Εμβόλιο"_ustr };
 
     loadFromFile(u"ods/tdf151091.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc.is());
     uno::Reference<chart::XChartDataArray> xChartData(xChartDoc->getData(), uno::UNO_QUERY_THROW);
@@ -219,7 +219,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    aSeriesList = getWriterChartColumnDescriptions(mxComponent);
+    aSeriesList = getWriterChartColumnDescriptions();
 
     // Without the fix in place, this test would have failed with
     // - Expected: 5
@@ -233,7 +233,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
 {
     loadFromFile(u"ods/tdf107097.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getPivotChartDocFromSheet(1, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getPivotChartDocFromSheet(1),
                                                     uno::UNO_QUERY_THROW);
     testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 4, 12);
 }
@@ -241,12 +241,12 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf107097)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
 {
     loadFromFile(u"ods/tdf136011.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
     testCopyPasteToNewSheet(xChartDoc, u"Object 1"_ustr, 3, 9);
 
     loadFromFile(u"ods/tdf136011.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 1),
                                                      uno::UNO_QUERY_THROW);
 
     // Without the fix in place, this test would have failed with
@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf136011)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
 {
     loadFromFile(u"ods/tdf62057.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
 
     // Without the fix in place, this test would have failed with
@@ -272,7 +272,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf62057)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 {
     loadFromFile(u"xlsx/tdf98690.xlsx");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -292,7 +292,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(0, 0),
                                                      uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xChartDoc2.is());
     uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(), uno::UNO_QUERY_THROW);
@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 {
     loadFromFile(u"ods/tdf101894.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -337,8 +337,8 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 
     for (sal_Int32 sheetIndex = 0; sheetIndex < 2; ++sheetIndex)
     {
-        uno::Reference<chart::XChartDocument> xChartDoc2(
-            getChartCompFromSheet(sheetIndex, 0, mxComponent), uno::UNO_QUERY_THROW);
+        uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(sheetIndex, 0),
+                                                         uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xChartDoc2.is());
         uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(),
                                                            uno::UNO_QUERY_THROW);
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf101894)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
 {
     loadFromFile(u"ods/chartWithDotInSheetName.ods");
-    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
+    uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0),
                                                     uno::UNO_QUERY_THROW);
 
     CPPUNIT_ASSERT(xChartDoc.is());
@@ -419,8 +419,8 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testCopyPasteChartWithDotInSheetName)
 
     for (sal_Int32 sheetIndex = 0; sheetIndex < 2; ++sheetIndex)
     {
-        uno::Reference<chart::XChartDocument> xChartDoc2(
-            getChartCompFromSheet(sheetIndex, 0, mxComponent), uno::UNO_QUERY_THROW);
+        uno::Reference<chart::XChartDocument> xChartDoc2(getChartCompFromSheet(sheetIndex, 0),
+                                                         uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xChartDoc2.is());
         uno::Reference<chart::XChartDataArray> xChartData2(xChartDoc2->getData(),
                                                            uno::UNO_QUERY_THROW);
@@ -474,8 +474,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
     {
         OUString sExpectedValuesX("$Tabelle" + OUString::number(sheetIndex + 1) + ".$A$2:$A$11");
         OUString sExpectedValuesY("$Tabelle" + OUString::number(sheetIndex + 1) + ".$B$2:$B$11");
-        uno::Reference<chart2::XChartDocument> xChartDoc
-            = getChartDocFromSheet(sheetIndex, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(sheetIndex);
         Reference<chart2::data::XDataSequence> xValuesX
             = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
         CPPUNIT_ASSERT_EQUAL(sExpectedValuesX, xValuesX->getSourceRangeRepresentation());
@@ -495,8 +494,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf158223)
     {
         OUString sExpectedValuesX("$Tabelle" + OUString::number(sheetIndex + 1) + ".$A$2:$A$11");
         OUString sExpectedValuesY("$Tabelle" + OUString::number(sheetIndex + 1) + ".$B$2:$B$11");
-        uno::Reference<chart2::XChartDocument> xChartDoc
-            = getChartDocFromSheet(sheetIndex, mxComponent);
+        uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(sheetIndex);
         Reference<chart2::data::XDataSequence> xValuesX
             = getDataSequenceFromDocByRole(xChartDoc, u"values-x");
 
@@ -526,7 +524,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     // Paste; this must create a chart with own data source having a proper copy of the data
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    css::uno::Reference xChartDoc(getChartDocFromSheet(0, mxComponent), css::uno::UNO_SET_THROW);
+    css::uno::Reference xChartDoc(getChartDocFromSheet(0), css::uno::UNO_SET_THROW);
     auto xDataArray(xChartDoc->getDataProvider().queryThrow<chart::XChartDataArray>());
 
     css::uno::Sequence<Sequence<double>> aData = xDataArray->getData();
