@@ -165,20 +165,36 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
 void QtBuilder::tweakInsertedChild(QObject*, QObject* pCurrentChild, std::string_view,
                                    std::string_view)
 {
-    // ensure that button box is the last item in QDialog's layout
-    // (that seems to be implicitly the case for GtkDialog)
-    // no action needed for QMessageBox, where the default button box is used,
-    // which is at the right place
     if (QDialog* pDialog = qobject_cast<QDialog*>(pCurrentChild))
     {
+        // no action needed for QMessageBox, where the default button box is used
+        // and button click is handled in QtInstanceMessageDialog
         if (!qobject_cast<QMessageBox*>(pDialog))
         {
             if (QDialogButtonBox* pButtonBox = findButtonBox(pDialog))
             {
+                // ensure that button box is the last item in QDialog's layout
+                // (that seems to be implicitly the case for GtkDialog in GTK)
                 QLayout* pLayout = pDialog->layout();
                 assert(pLayout && "dialog has no layout");
                 pLayout->removeWidget(pButtonBox);
                 pLayout->addWidget(pButtonBox);
+
+                // let button click close dialog if response code is set
+                const QList<QAbstractButton*> aButtons = pButtonBox->buttons();
+                for (const QAbstractButton* pButton : aButtons)
+                {
+                    QVariant aResponseProperty
+                        = pButton->property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
+                    if (aResponseProperty.isValid())
+                    {
+                        assert(aResponseProperty.canConvert<int>());
+                        const int nResponseCode = aResponseProperty.toInt();
+                        QObject::connect(
+                            pButton, &QAbstractButton::clicked, pDialog,
+                            [pDialog, nResponseCode] { pDialog->done(nResponseCode); });
+                    }
+                }
             }
         }
     }
