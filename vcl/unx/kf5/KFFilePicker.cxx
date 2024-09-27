@@ -85,12 +85,11 @@ void SAL_CALL KFFilePicker::setValue(sal_Int16 controlId, sal_Int16 nControlActi
 uno::Any SAL_CALL KFFilePicker::getValue(sal_Int16 controlId, sal_Int16 nControlAction)
 {
     SolarMutexGuard g;
-    auto* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         uno::Any ret;
-        pSalInst->RunInMainThread([&ret, this, controlId, nControlAction]() {
+        rQtInstance.RunInMainThread([&ret, this, controlId, nControlAction]() {
             ret = getValue(controlId, nControlAction);
         });
         return ret;

@@ -436,11 +436,10 @@ void QtMenu::SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned n
 
 void QtMenu::SetFrame(const SalFrame* pFrame)
 {
-    auto* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pSalInst->RunInMainThread([this, pFrame]() { SetFrame(pFrame); });
+        rQtInstance.RunInMainThread([this, pFrame]() { SetFrame(pFrame); });
         return;
     }
 

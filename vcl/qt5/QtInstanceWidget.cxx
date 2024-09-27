@@ -20,10 +20,10 @@ QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
 void QtInstanceWidget::set_sensitive(bool bSensitive)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_sensitive(bSensitive); });
+        rQtInstance.RunInMainThread([&] { set_sensitive(bSensitive); });
         return;
     }
 
@@ -34,11 +34,11 @@ void QtInstanceWidget::set_sensitive(bool bSensitive)
 bool QtInstanceWidget::get_sensitive() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bSensitive = false;
-        pQtInstance->RunInMainThread([&] { bSensitive = get_sensitive(); });
+        rQtInstance.RunInMainThread([&] { bSensitive = get_sensitive(); });
         return bSensitive;
     }
 
@@ -49,11 +49,11 @@ bool QtInstanceWidget::get_sensitive() const
 bool QtInstanceWidget::get_visible() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bVisible = false;
-        pQtInstance->RunInMainThread([&] { bVisible = get_visible(); });
+        rQtInstance.RunInMainThread([&] { bVisible = get_visible(); });
         return bVisible;
     }
 
@@ -64,11 +64,11 @@ bool QtInstanceWidget::get_visible() const
 bool QtInstanceWidget::is_visible() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bVisible = false;
-        pQtInstance->RunInMainThread([&] { bVisible = is_visible(); });
+        rQtInstance.RunInMainThread([&] { bVisible = is_visible(); });
         return bVisible;
     }
 
@@ -82,10 +82,10 @@ bool QtInstanceWidget::is_visible() const
 void QtInstanceWidget::set_can_focus(bool bCanFocus)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_can_focus(bCanFocus); });
+        rQtInstance.RunInMainThread([&] { set_can_focus(bCanFocus); });
         return;
     }
 
@@ -99,10 +99,10 @@ void QtInstanceWidget::set_can_focus(bool bCanFocus)
 void QtInstanceWidget::grab_focus()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { grab_focus(); });
+        rQtInstance.RunInMainThread([&] { grab_focus(); });
         return;
     }
 
@@ -113,11 +113,11 @@ void QtInstanceWidget::grab_focus()
 bool QtInstanceWidget::has_focus() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bFocus = false;
-        pQtInstance->RunInMainThread([&] { bFocus = has_focus(); });
+        rQtInstance.RunInMainThread([&] { bFocus = has_focus(); });
         return bFocus;
     }
 
@@ -130,11 +130,11 @@ bool QtInstanceWidget::is_active() const { return has_focus(); }
 bool QtInstanceWidget::has_child_focus() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bChildFocus = false;
-        pQtInstance->RunInMainThread([&] { bChildFocus = has_child_focus(); });
+        rQtInstance.RunInMainThread([&] { bChildFocus = has_child_focus(); });
         return bChildFocus;
     }
 
@@ -154,10 +154,10 @@ bool QtInstanceWidget::has_child_focus() const
 void QtInstanceWidget::show()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { show(); });
+        rQtInstance.RunInMainThread([&] { show(); });
         return;
     }
 
@@ -168,10 +168,10 @@ void QtInstanceWidget::show()
 void QtInstanceWidget::hide()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { hide(); });
+        rQtInstance.RunInMainThread([&] { hide(); });
         return;
     }
 
@@ -238,10 +238,10 @@ int QtInstanceWidget::get_margin_end() const { return 1; }
 void QtInstanceWidget::set_accessible_name(const OUString& rName)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_accessible_name(rName); });
+        rQtInstance.RunInMainThread([&] { set_accessible_name(rName); });
         return;
     }
 
@@ -252,10 +252,10 @@ void QtInstanceWidget::set_accessible_name(const OUString& rName)
 void QtInstanceWidget::set_accessible_description(const OUString& rDescription)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_accessible_description(rDescription); });
+        rQtInstance.RunInMainThread([&] { set_accessible_description(rDescription); });
         return;
     }
 
@@ -266,11 +266,11 @@ void QtInstanceWidget::set_accessible_description(const OUString& rDescription)
 OUString QtInstanceWidget::get_accessible_name() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         OUString sName;
-        pQtInstance->RunInMainThread([&] { sName = get_accessible_name(); });
+        rQtInstance.RunInMainThread([&] { sName = get_accessible_name(); });
         return sName;
     }
 
@@ -281,11 +281,11 @@ OUString QtInstanceWidget::get_accessible_name() const
 OUString QtInstanceWidget::get_accessible_description() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         OUString sDescription;
-        pQtInstance->RunInMainThread([&] { sDescription = get_accessible_description(); });
+        rQtInstance.RunInMainThread([&] { sDescription = get_accessible_description(); });
         return sDescription;
     }
 
@@ -296,11 +296,11 @@ OUString QtInstanceWidget::get_accessible_description() const
 OUString QtInstanceWidget::get_accessible_id() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         OUString sId;
-        pQtInstance->RunInMainThread([&] { sId = get_accessible_id(); });
+        rQtInstance.RunInMainThread([&] { sId = get_accessible_id(); });
         return sId;
     }
 
@@ -317,10 +317,10 @@ void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*) {}
 void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_tooltip_text(rTip); });
+        rQtInstance.RunInMainThread([&] { set_tooltip_text(rTip); });
         return;
     }
 
@@ -331,11 +331,11 @@ void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
 OUString QtInstanceWidget::get_tooltip_text() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         OUString sToolTipText;
-        pQtInstance->RunInMainThread([&] { sToolTipText = get_tooltip_text(); });
+        rQtInstance.RunInMainThread([&] { sToolTipText = get_tooltip_text(); });
         return sToolTipText;
     }
 

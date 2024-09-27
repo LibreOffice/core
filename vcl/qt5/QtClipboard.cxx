@@ -59,9 +59,9 @@ css::uno::Reference<css::uno::XInterface> QtClipboard::create(const OUString& aM
 
 void QtClipboard::flushClipboard()
 {
-    auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
-    pSalInst->RunInMainThread([this]() {
+    QtInstance& rQtInstance = GetQtInstance();
+    rQtInstance.RunInMainThread([this]() {
         if (!isOwner(m_aClipboardMode))
             return;
 

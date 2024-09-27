@@ -240,7 +240,7 @@ void QtWidget::showEvent(QShowEvent*)
     // resulting in a hidden / unmapped window
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height());
     if (m_rFrame.isPopup())
-        GetQtInstance()->setActivePopup(&m_rFrame);
+        GetQtInstance().setActivePopup(&m_rFrame);
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
 }
 
@@ -248,8 +248,8 @@ void QtWidget::hideEvent(QHideEvent* pEvent)
 {
     if (m_rFrame.isPopup())
     {
-        if (GetQtInstance()->activePopup() == &m_rFrame)
-            GetQtInstance()->setActivePopup(nullptr);
+        if (GetQtInstance().activePopup() == &m_rFrame)
+            GetQtInstance().setActivePopup(nullptr);
 
         // destroy the QWindow as the popup would otherwise still show up
         // as a top-level child of the app on the a11y level
@@ -664,7 +664,7 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
     {
         // Qt's POV on the active popup is wrong due to our fake popup, so check LO's state.
         // Otherwise Qt will continue handling ToolTip events from the "parent" window.
-        const QtFrame* pPopupFrame = GetQtInstance()->activePopup();
+        const QtFrame* pPopupFrame = GetQtInstance().activePopup();
         if (!rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &rFrame))
         {
             // tdf#162297 Use a dummy style to ensure the tooltip is wrapped
@@ -963,9 +963,7 @@ void QtWidget::changeEvent(QEvent* pEvent)
             [[fallthrough]];
         case QEvent::StyleChange:
         {
-            auto* pSalInst(GetQtInstance());
-            assert(pSalInst);
-            pSalInst->UpdateStyle(QEvent::FontChange == pEvent->type());
+            GetQtInstance().UpdateStyle(QEvent::FontChange == pEvent->type());
             break;
         }
         default:

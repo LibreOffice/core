@@ -135,9 +135,8 @@ void lcl_setStandardButtons(QtInstanceMessageDialog& rMessageDialog, VclButtonsT
 
 bool QtYieldMutex::IsCurrentThread() const
 {
-    auto const* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    QtInstance& rQtInstance = GetQtInstance();
+    if (rQtInstance.IsMainThread() && m_bNoYieldLock)
     {
         return true; // main thread has borrowed SolarMutex
     }
@@ -146,9 +145,8 @@ bool QtYieldMutex::IsCurrentThread() const
 
 void QtYieldMutex::doAcquire(sal_uInt32 nLockCount)
 {
-    auto const* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         SalYieldMutex::doAcquire(nLockCount);
         return;
@@ -192,9 +190,8 @@ void QtYieldMutex::doAcquire(sal_uInt32 nLockCount)
 
 sal_uInt32 QtYieldMutex::doRelease(bool const bUnlockAll)
 {
-    auto const* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (pSalInst->IsMainThread() && m_bNoYieldLock)
+    QtInstance& rQtInstance = GetQtInstance();
+    if (rQtInstance.IsMainThread() && m_bNoYieldLock)
     {
         return 1; // dummy value
     }
@@ -203,7 +200,7 @@ sal_uInt32 QtYieldMutex::doRelease(bool const bUnlockAll)
     // read m_nCount before doRelease (it's guarded by m_aMutex)
     bool const isReleased(bUnlockAll || m_nCount == 1);
     sal_uInt32 nCount = SalYieldMutex::doRelease(bUnlockAll);
-    if (isReleased && !pSalInst->IsMainThread())
+    if (isReleased && !rQtInstance.IsMainThread())
     {
         m_isWakeUpMain = true;
         m_InMainCondition.notify_all(); // unblock main thread

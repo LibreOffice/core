@@ -114,8 +114,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
 {
-    QtInstance* pInst = GetQtInstance();
-    pInst->insertFrame(this);
+    GetQtInstance().insertFrame(this);
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::SvpDamageHandler;
@@ -208,8 +207,7 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidge
 
 QtFrame::~QtFrame()
 {
-    QtInstance* pInst = GetQtInstance();
-    pInst->eraseFrame(this);
+    GetQtInstance().eraseFrame(this);
     delete asChild();
     m_aSystemData.aShellWindow = 0;
 }
@@ -269,8 +267,7 @@ void QtFrame::ReleaseGraphics(SalGraphics* pSalGraph)
 
 bool QtFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
 {
-    QtInstance* pInst = GetQtInstance();
-    pInst->PostEvent(this, pData.release(), SalEvent::UserEvent);
+    GetQtInstance().PostEvent(this, pData.release(), SalEvent::UserEvent);
     return true;
 }
 
@@ -336,19 +333,16 @@ void QtFrame::SetWindowStateImpl(Qt::WindowStates eState)
 
 void QtFrame::SetTitle(const OUString& rTitle)
 {
-    QtInstance* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    pSalInst->RunInMainThread(
+    GetQtInstance().RunInMainThread(
         [this, rTitle]() { m_pQWidget->window()->setWindowTitle(toQString(rTitle)); });
 }
 
 void QtFrame::SetIcon(sal_uInt16 nIcon)
 {
-    QtInstance* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pSalInst->RunInMainThread([this, nIcon]() { SetIcon(nIcon); });
+        rQtInstance.RunInMainThread([this, nIcon]() { SetIcon(nIcon); });
         return;
     }
 
@@ -401,11 +395,10 @@ void QtFrame::SetExtendedFrameStyle(SalExtStyle /*nExtStyle*/) { /* not needed *
 void QtFrame::Show(bool bVisible, bool bNoActivate)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    assert(pQtInstance);
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { Show(bVisible, bNoActivate); });
+        rQtInstance.RunInMainThread([&] { Show(bVisible, bNoActivate); });
         return;
     }
 
@@ -523,10 +516,10 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
                          sal_uInt16 nFlags)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { SetPosSize(nX, nY, nWidth, nHeight, nFlags); });
+        rQtInstance.RunInMainThread([&] { SetPosSize(nX, nY, nWidth, nHeight, nFlags); });
     }
 
     if (!isWindow() || isChild(true, false))
@@ -619,9 +612,7 @@ void QtFrame::SetModal(bool bModal)
     if (!isWindow() || asChild()->isModal() == bModal)
         return;
 
-    auto* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    pSalInst->RunInMainThread([this, bModal]() {
+    GetQtInstance().RunInMainThread([this, bModal]() {
 
         QWidget* const pChild = asChild();
         const bool bWasVisible = pChild->isVisible();
@@ -650,11 +641,10 @@ bool QtFrame::GetModal() const { return isWindow() && windowHandle()->isModal();
 
 void QtFrame::SetWindowState(const vcl::WindowData* pState)
 {
-    QtInstance* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    if (!pSalInst->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pSalInst->RunInMainThread([this, pState]() { SetWindowState(pState); });
+        rQtInstance.RunInMainThread([this, pState]() { SetWindowState(pState); });
         return;
     }
 
@@ -787,9 +777,7 @@ void QtFrame::SetAlwaysOnTop(bool bOnTop)
 
 void QtFrame::ToTop(SalFrameToTop nFlags)
 {
-    QtInstance* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    pSalInst->RunInMainThread([this, nFlags]() {
+    GetQtInstance().RunInMainThread([this, nFlags]() {
         QWidget* const pWidget = asChild();
         if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
             pWidget->raise();
@@ -1382,7 +1370,7 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
     }
 }
 
-bool QtFrame::GetUseReducedAnimation() const { return GetQtInstance()->GetUseReducedAnimation(); }
+bool QtFrame::GetUseReducedAnimation() const { return GetQtInstance().GetUseReducedAnimation(); }
 
 // Drag'n'drop foo
 
@@ -1404,9 +1392,7 @@ void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
     assert(!m_pDropTarget);
     m_pDropTarget = pDropTarget;
 
-    QtInstance* pSalInst(GetQtInstance());
-    assert(pSalInst);
-    pSalInst->RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
+    GetQtInstance().RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
 }
 
 void QtFrame::deregisterDropTarget(QtDropTarget const* pDropTarget)

@@ -190,9 +190,8 @@ css::uno::Any SAL_CALL
 QtClipboardTransferable::getTransferData(const css::datatransfer::DataFlavor& rFlavor)
 {
     css::uno::Any aAny;
-    auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
-    pSalInst->RunInMainThread([&, this]() {
+    GetQtInstance().RunInMainThread([&, this]() {
         ensureConsistencyWithSystemClipboard();
         aAny = QtTransferable::getTransferData(rFlavor);
     });
@@ -203,9 +202,8 @@ css::uno::Sequence<css::datatransfer::DataFlavor>
     SAL_CALL QtClipboardTransferable::getTransferDataFlavors()
 {
     css::uno::Sequence<css::datatransfer::DataFlavor> aSeq;
-    auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
-    pSalInst->RunInMainThread([&, this]() {
+    GetQtInstance().RunInMainThread([&, this]() {
         ensureConsistencyWithSystemClipboard();
         aSeq = QtTransferable::getTransferDataFlavors();
     });
@@ -216,9 +214,8 @@ sal_Bool SAL_CALL
 QtClipboardTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
 {
     bool bIsSupported = false;
-    auto* pSalInst(GetQtInstance());
     SolarMutexGuard g;
-    pSalInst->RunInMainThread([&, this]() {
+    GetQtInstance().RunInMainThread([&, this]() {
         ensureConsistencyWithSystemClipboard();
         bIsSupported = QtTransferable::isDataFlavorSupported(rFlavor);
     });

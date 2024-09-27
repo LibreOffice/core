@@ -741,12 +741,11 @@ bool QtGraphics_Controls::getNativeControlRegion(
     ControlState controlState, const ImplControlValue& val, const OUString& rCaption,
     tools::Rectangle& nativeBoundingRegion, tools::Rectangle& nativeContentRegion)
 {
-    QtInstance* pQtInstance(GetQtInstance());
-    assert(pQtInstance);
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bRet;
-        pQtInstance->RunInMainThread([&]() {
+        rQtInstance.RunInMainThread([&]() {
             bRet = getNativeControlRegion(type, part, controlRegion, controlState, val, rCaption,
                                           nativeBoundingRegion, nativeContentRegion);
         });

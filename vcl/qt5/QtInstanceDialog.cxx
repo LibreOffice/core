@@ -18,8 +18,7 @@ QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
 QtInstanceDialog::~QtInstanceDialog()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    pQtInstance->RunInMainThread([&] { m_pDialog.reset(); });
+    GetQtInstance().RunInMainThread([&] { m_pDialog.reset(); });
 }
 
 bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const&,
@@ -45,11 +44,11 @@ void QtInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOff
 int QtInstanceDialog::run()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         int nResult = 0;
-        pQtInstance->RunInMainThread([&] { nResult = run(); });
+        rQtInstance.RunInMainThread([&] { nResult = run(); });
         return nResult;
     }
 
@@ -63,10 +62,10 @@ void QtInstanceDialog::add_button(const OUString&, int, const OUString&) {}
 void QtInstanceDialog::set_modal(bool bModal)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_modal(bModal); });
+        rQtInstance.RunInMainThread([&] { set_modal(bModal); });
         return;
     }
 
@@ -76,11 +75,11 @@ void QtInstanceDialog::set_modal(bool bModal)
 bool QtInstanceDialog::get_modal() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bModal = false;
-        pQtInstance->RunInMainThread([&] { bModal = get_modal(); });
+        rQtInstance.RunInMainThread([&] { bModal = get_modal(); });
         return bModal;
     }
 

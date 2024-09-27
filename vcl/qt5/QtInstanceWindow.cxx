@@ -17,10 +17,10 @@ QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
 void QtInstanceWindow::set_title(const OUString& rTitle)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_title(rTitle); });
+        rQtInstance.RunInMainThread([&] { set_title(rTitle); });
         return;
     }
 
@@ -30,11 +30,11 @@ void QtInstanceWindow::set_title(const OUString& rTitle)
 OUString QtInstanceWindow::get_title() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         OUString sTitle;
-        pQtInstance->RunInMainThread([&] { sTitle = get_title(); });
+        rQtInstance.RunInMainThread([&] { sTitle = get_title(); });
         return sTitle;
     }
 

@@ -25,10 +25,10 @@ QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)
 void QtInstanceMessageDialog::set_primary_text(const rtl::OUString& rText)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_primary_text(rText); });
+        rQtInstance.RunInMainThread([&] { set_primary_text(rText); });
         return;
     }
 
@@ -38,10 +38,10 @@ void QtInstanceMessageDialog::set_primary_text(const rtl::OUString& rText)
 void QtInstanceMessageDialog::set_secondary_text(const rtl::OUString& rText)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_secondary_text(rText); });
+        rQtInstance.RunInMainThread([&] { set_secondary_text(rText); });
         return;
     }
 
@@ -53,11 +53,11 @@ weld::Container* QtInstanceMessageDialog::weld_message_area() { return nullptr; 
 OUString QtInstanceMessageDialog::get_primary_text() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
+    QtInstance& rQtInstance = GetQtInstance();
     OUString sText;
-    if (!pQtInstance->IsMainThread())
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { sText = get_primary_text(); });
+        rQtInstance.RunInMainThread([&] { sText = get_primary_text(); });
         return sText;
     }
 
@@ -68,11 +68,11 @@ OUString QtInstanceMessageDialog::get_primary_text() const
 OUString QtInstanceMessageDialog::get_secondary_text() const
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
+    QtInstance& rQtInstance = GetQtInstance();
     OUString sText;
-    if (!pQtInstance->IsMainThread())
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { sText = get_secondary_text(); });
+        rQtInstance.RunInMainThread([&] { sText = get_secondary_text(); });
         return sText;
     }
 
@@ -83,10 +83,10 @@ OUString QtInstanceMessageDialog::get_secondary_text() const
 void QtInstanceMessageDialog::add_button(const OUString& rText, int nResponse, const OUString&)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { add_button(rText, nResponse); });
+        rQtInstance.RunInMainThread([&] { add_button(rText, nResponse); });
         return;
     }
 
@@ -99,10 +99,10 @@ void QtInstanceMessageDialog::add_button(const OUString& rText, int nResponse, c
 void QtInstanceMessageDialog::set_default_response(int nResponse)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { set_default_response(nResponse); });
+        rQtInstance.RunInMainThread([&] { set_default_response(nResponse); });
         return;
     }
 
@@ -116,11 +116,11 @@ void QtInstanceMessageDialog::set_default_response(int nResponse)
 QtInstanceButton* QtInstanceMessageDialog::weld_widget_for_response(int nResponse)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         QtInstanceButton* pButton;
-        pQtInstance->RunInMainThread([&] { pButton = weld_widget_for_response(nResponse); });
+        rQtInstance.RunInMainThread([&] { pButton = weld_widget_for_response(nResponse); });
         return pButton;
     }
 
@@ -133,11 +133,11 @@ QtInstanceButton* QtInstanceMessageDialog::weld_widget_for_response(int nRespons
 int QtInstanceMessageDialog::run()
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         int nRet = 0;
-        pQtInstance->RunInMainThread([&] { nRet = run(); });
+        rQtInstance.RunInMainThread([&] { nRet = run(); });
         return nRet;
     }
 
@@ -152,11 +152,11 @@ bool QtInstanceMessageDialog::runAsync(const std::shared_ptr<weld::DialogControl
                                        const std::function<void(sal_Int32)>& func)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bRet = false;
-        pQtInstance->RunInMainThread([&] { bRet = runAsync(rxOwner, func); });
+        rQtInstance.RunInMainThread([&] { bRet = runAsync(rxOwner, func); });
         return bRet;
     }
 
@@ -174,11 +174,11 @@ bool QtInstanceMessageDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
                                        const std::function<void(sal_Int32)>& func)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         bool bRet;
-        pQtInstance->RunInMainThread([&] { bRet = runAsync(rxSelf, func); });
+        rQtInstance.RunInMainThread([&] { bRet = runAsync(rxSelf, func); });
         return bRet;
     }
 
@@ -196,10 +196,10 @@ bool QtInstanceMessageDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
 void QtInstanceMessageDialog::response(int nResponse)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { response(nResponse); });
+        rQtInstance.RunInMainThread([&] { response(nResponse); });
         return;
     }
 
@@ -210,10 +210,10 @@ void QtInstanceMessageDialog::response(int nResponse)
 void QtInstanceMessageDialog::dialogFinished(int nResult)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        pQtInstance->RunInMainThread([&] { dialogFinished(nResult); });
+        rQtInstance.RunInMainThread([&] { dialogFinished(nResult); });
         return;
     }
 
@@ -244,11 +244,11 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
 QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
 {
     SolarMutexGuard g;
-    QtInstance* pQtInstance = GetQtInstance();
-    if (!pQtInstance->IsMainThread())
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
         QPushButton* pButton;
-        pQtInstance->RunInMainThread([&] { pButton = buttonForResponseCode(nResponse); });
+        rQtInstance.RunInMainThread([&] { pButton = buttonForResponseCode(nResponse); });
         return pButton;
     }
 

@@ -197,6 +197,11 @@ public:
     void setActivePopup(QtFrame*);
 };
 
-inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }
+inline QtInstance& GetQtInstance()
+{
+    QtInstance* pInstance = static_cast<QtInstance*>(GetSalInstance());
+    assert(pInstance);
+    return *pInstance;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
