@@ -162,7 +162,27 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     return pObject;
 }
 
-void QtBuilder::tweakInsertedChild(QObject*, QObject*, std::string_view, std::string_view) {}
+void QtBuilder::tweakInsertedChild(QObject*, QObject* pCurrentChild, std::string_view,
+                                   std::string_view)
+{
+    // ensure that button box is the last item in QDialog's layout
+    // (that seems to be implicitly the case for GtkDialog)
+    // no action needed for QMessageBox, where the default button box is used,
+    // which is at the right place
+    if (QDialog* pDialog = qobject_cast<QDialog*>(pCurrentChild))
+    {
+        if (!qobject_cast<QMessageBox*>(pDialog))
+        {
+            if (QDialogButtonBox* pButtonBox = findButtonBox(pDialog))
+            {
+                QLayout* pLayout = pDialog->layout();
+                assert(pLayout && "dialog has no layout");
+                pLayout->removeWidget(pButtonBox);
+                pLayout->addWidget(pButtonBox);
+            }
+        }
+    }
+}
 
 void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priority"); }
 
