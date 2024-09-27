@@ -183,10 +183,8 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
 {
     if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pObject))
     {
-        for (auto const & [ Key, rValue ] : rProps)
+        for (auto const & [ rKey, rValue ] : rProps)
         {
-            OUString rKey = Key;
-
             if (rKey == u"text")
             {
                 pMessageBox->setText(toQString(rValue));
