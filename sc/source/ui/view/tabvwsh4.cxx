@@ -1856,7 +1856,7 @@ uno::Reference<css::sheet::XSpreadsheet> ScTabViewShell::GetRangeWithSheet(css::
     SCROW nStartRow = rRangeData.StartRow;
     SCROW nEndRow = rRangeData.EndRow;
 
-    // shrink to inersection of data and selection. If no intersection ==> return
+    // shrink to intersection of data and selection. If no intersection ==> return
     bHasData = GetViewData().GetDocument().ShrinkToDataArea(rRangeData.Sheet, nStartColumn, nStartRow, nEndColumn, nEndRow);
 
     rRangeData.StartColumn = nStartColumn;
