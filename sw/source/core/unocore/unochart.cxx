@@ -2215,7 +2215,6 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     if (!bMustDispose)
         return;
 
-    m_bDisposed = true;
     if (m_xDataProvider.is())
     {
         const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
@@ -2663,8 +2662,6 @@ void SAL_CALL SwChartLabeledDataSequence::dispose(  )
     }
     if (!bMustDispose)
         return;
-
-    m_bDisposed = true;
 
     // require listeners to release references to this object
     lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
