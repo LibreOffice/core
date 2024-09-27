@@ -179,9 +179,9 @@ void QtBuilder::set_response(std::u16string_view sID, short nResponse)
     pPushButton->setProperty(QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE, int(nResponse));
 }
 
-void QtBuilder::setProperties(QObject* obj, stringmap& rProps)
+void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
 {
-    if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(obj))
+    if (QMessageBox* pMessageBox = qobject_cast<QMessageBox*>(pObject))
     {
         for (auto const & [ Key, rValue ] : rProps)
         {
@@ -214,7 +214,7 @@ void QtBuilder::setProperties(QObject* obj, stringmap& rProps)
             }
         }
     }
-    else if (QPushButton* pButton = qobject_cast<QPushButton*>(obj))
+    else if (QPushButton* pButton = qobject_cast<QPushButton*>(pObject))
     {
         for (auto const & [ rKey, rValue ] : rProps)
         {
