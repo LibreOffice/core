@@ -106,6 +106,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,
     HANDLE_TABLE_ROW_KEEP,
     HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,
+    HANDLE_IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION,
     HANDLE_LOAD_READONLY,
     HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
     HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
@@ -217,6 +218,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { u"DoNotResetParaAttrsForNumFont"_ustr,   HANDLE_DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT,         cppu::UnoType<bool>::get(),           0},
         { u"TableRowKeep"_ustr,               HANDLE_TABLE_ROW_KEEP,         cppu::UnoType<bool>::get(),           0},
         { u"IgnoreTabsAndBlanksForLineCalculation"_ustr,   HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION,         cppu::UnoType<bool>::get(),           0},
+        { u"IgnoreHiddenCharsForLineCalculation"_ustr,   HANDLE_IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION,         cppu::UnoType<bool>::get(),           0},
         { u"LoadReadonly"_ustr,               HANDLE_LOAD_READONLY,                   cppu::UnoType<bool>::get(),           0},
         { u"DoNotCaptureDrawObjsOnPage"_ustr,   HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, cppu::UnoType<bool>::get(), 0},
         { u"ClipAsCharacterAnchoredWriterFlyFrames"_ustr, HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES, cppu::UnoType<bool>::get(), 0},
@@ -741,6 +743,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, bTmp);
+        }
+        break;
+        case HANDLE_IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION:
+        {
+            bool bTmp = *o3tl::doAccess<bool>(rValue);
+            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION, bTmp);
         }
         break;
         case HANDLE_LOAD_READONLY:
@@ -1478,6 +1486,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
+        }
+        break;
+        case HANDLE_IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION);
         }
         break;
         case HANDLE_LOAD_READONLY:

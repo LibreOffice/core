@@ -202,6 +202,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER: return mbNoGapAfterNoteNumber;
         case DocumentSettingId::TABLE_ROW_KEEP: return mbTableRowKeep;
         case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
+        case DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION: return mbIgnoreHiddenCharsForLineCalculation;
         case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
         // #i68949#
         case DocumentSettingId::CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAME: return mbClipAsCharacterAnchoredWriterFlyFrames;
@@ -365,6 +366,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION:
             mbIgnoreTabsAndBlanksForLineCalculation = value;
+            break;
+
+        case DocumentSettingId::IGNORE_HIDDEN_CHARS_FOR_LINE_CALCULATION:
+            mbIgnoreHiddenCharsForLineCalculation = value;
             break;
 
         case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
@@ -955,6 +960,12 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("value"),
         BAD_CAST(OString::boolean(mbIgnoreTabsAndBlanksForLineCalculation).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbIgnoreHiddenCharsForLineCalculation"));
+    (void)xmlTextWriterWriteAttribute(
+        pWriter, BAD_CAST("value"),
+        BAD_CAST(OString::boolean(mbIgnoreHiddenCharsForLineCalculation).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotCaptureDrawObjsOnPage"));

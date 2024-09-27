@@ -2248,7 +2248,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkLineHeight)
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                    "height"_ostr, "184"); // FIXME should be 253, but better than 0
+                    "height"_ostr, "253");
     }
 }
 

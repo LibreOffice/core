@@ -180,6 +180,7 @@ class DocumentSettingManager final :
     bool mbJustifyLinesWithShrinking = false;
     bool mbApplyTextAttrToEmptyLineAtEndOfParagraph = false; // this was a mistake
     bool mbApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph = false;
+    bool mbIgnoreHiddenCharsForLineCalculation = true;
     bool mbDoNotMirrorRtlDrawObjs = false;
     // If this is on as_char flys wrapping will be handled the same like in Word
     bool mbNoNumberingShowFollowBy;

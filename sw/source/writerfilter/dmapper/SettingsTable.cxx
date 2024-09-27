@@ -645,6 +645,8 @@ void SettingsTable::ApplyProperties(rtl::Reference<SwXTextDocument> const& xDoc)
     xDocumentSettings->setPropertyValue(u"AddVerticalFrameOffsets"_ustr, uno::Any(true));
     xDocumentSettings->setPropertyValue(u"ApplyParagraphMarkFormatToEmptyLineAtEndOfParagraph"_ustr,
                                 uno::Any(true));
+    // rely on default for HyphenateURLs=false
+    // rely on default for IgnoreHiddenCharsForLineCalculation=true
 
     if (GetWordCompatibilityMode() <= 14)
     {

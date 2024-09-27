@@ -335,7 +335,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     xSettings->setPropertyValue(u"DropCapPunctuation"_ustr, uno::Any(true));
     xSettings->setPropertyValue(u"PaintHellOverHeaderFooter"_ustr, uno::Any(true));
 
-    // rely on default for HyphenateURLs=false
     xSettings->setPropertyValue(u"DoNotMirrorRtlDrawObjs"_ustr, uno::Any(true));
     xSettings->setPropertyValue(u"ContinuousEndnotes"_ustr, uno::Any(true));
 }

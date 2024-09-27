@@ -1316,6 +1316,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bAllowTextAfterFloatingTableBreak = false;
     bool bDropCapPunctuation = false;
     bool bDoNotMirrorRtlDrawObjs = false;
+    bool bIgnoreHiddenCharsForLineCalculation = false;
 
     const PropertyValue* currentDatabaseDataSource = nullptr;
     const PropertyValue* currentDatabaseCommand = nullptr;
@@ -1426,6 +1427,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                 else if (rValue.Name == "DoNotMirrorRtlDrawObjs")
                 {
                     rValue.Value >>= bDoNotMirrorRtlDrawObjs;
+                }
+                else if (rValue.Name == "IgnoreHiddenCharsForLineCalculation")
+                {
+                    bIgnoreHiddenCharsForLineCalculation = true;
                 }
             }
             catch( Exception& )
@@ -1592,6 +1597,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if (!bHyphenateURLs)
     {
         xProps->setPropertyValue(u"HyphenateURLs"_ustr, Any(true));
+    }
+
+    if (!bIgnoreHiddenCharsForLineCalculation)
+    {
+        xProps->setPropertyValue(u"IgnoreHiddenCharsForLineCalculation"_ustr, Any(false));
     }
 
     if (bDoNotMirrorRtlDrawObjs)
