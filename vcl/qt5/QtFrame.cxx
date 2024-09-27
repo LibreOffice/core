@@ -566,7 +566,7 @@ void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
 
 SalFrameGeometry QtFrame::GetUnmirroredGeometry() const
 {
-    SalFrameGeometry aGeometry = maGeometry;
+    SalFrameGeometry aGeometry;
 
     const qreal fRatio = devicePixelRatioF();
     const QPoint aScreenPos = m_pQWidget->mapToGlobal(QPoint(0, 0));
