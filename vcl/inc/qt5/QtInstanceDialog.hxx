@@ -47,6 +47,12 @@ public:
     virtual void set_default_response(int) override;
 
     virtual weld::Container* weld_content_area() override;
+
+    /**
+    * Name of the property to set on a QPushButton that holds the
+    * int VCL response code of that button.
+    */
+    static const char* const PROPERTY_VCL_RESPONSE_CODE;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

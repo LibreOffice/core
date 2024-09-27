@@ -9,6 +9,8 @@
 
 #include <QtInstanceDialog.hxx>
 
+const char* const QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code";
+
 QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
     : QtInstanceWindow(pDialog)
     , m_pDialog(pDialog)

@@ -12,8 +12,6 @@
 
 #include <QtWidgets/QPushButton>
 
-const char* const QtInstanceMessageDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code";
-
 QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)
     : QtInstanceDialog(pMessageDialog)
     , m_pMessageDialog(pMessageDialog)
