@@ -51,10 +51,10 @@ public:
     const css::uno::Reference< css::embed::XStorage >&
     getParentStorage() const
     { return m_xParentStorage; }
-    void setParentStorage( const css::uno::Reference< css::embed::XStorage > & xStg )
+    void clearParentStorage()
     {
         std::scoped_lock aGuard( m_aMutex );
-        m_xParentStorage = xStg;
+        m_xParentStorage = nullptr;
     }
 
 private:

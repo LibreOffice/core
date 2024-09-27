@@ -574,7 +574,7 @@ OutputStream::closeOutput(  )
 
     // Release parent storage.
     // Now, that the stream is closed/disposed it is not needed any longer.
-    setParentStorage( uno::Reference< embed::XStorage >() );
+    clearParentStorage();
 }
 
 
@@ -589,7 +589,7 @@ OutputStream::dispose()
 
     // Release parent storage.
     // Now, that the stream is closed/disposed it is not needed any longer.
-    setParentStorage( uno::Reference< embed::XStorage >() );
+    clearParentStorage();
 }
 
 
@@ -768,7 +768,7 @@ void SAL_CALL Stream::closeOutput()
 
     // Release parent storage.
     // Now, that the stream is closed/disposed it is not needed any longer.
-    setParentStorage( uno::Reference< embed::XStorage >() );
+    clearParentStorage();
 }
 
 
@@ -836,7 +836,7 @@ void SAL_CALL Stream::dispose()
 
     // Release parent storage.
     // Now, that the stream is closed/disposed it is not needed any longer.
-    setParentStorage( uno::Reference< embed::XStorage >() );
+    clearParentStorage();
 }
 
 
