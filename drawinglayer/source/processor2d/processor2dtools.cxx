@@ -74,8 +74,8 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
         // create CairoPixelProcessor2D, make use of the possibility to
         // add an initial clip relative to the real pixel dimensions of
         // the target surface. This is e.g. needed here due to the
-        // existance of 'virtual' target surfaces that internally use an
-        // offset and limitied pixel size, mainly used for UI elements.
+        // existence of 'virtual' target surfaces that internally use an
+        // offset and limited pixel size, mainly used for UI elements.
         // let the CairoPixelProcessor2D do this, it has internal,
         // system-specific possibilities to do that in an elegant and
         // efficient way (using cairo_surface_create_for_rectangle).
