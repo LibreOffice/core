@@ -474,7 +474,7 @@ Size QtFrame::CalcDefaultSize()
     {
         if (!m_bFullScreenSpanAll)
         {
-            aSize = toSize(QGuiApplication::screens().at(maGeometry.screen())->size());
+            aSize = toSize(screen()->size());
         }
         else
         {
@@ -574,6 +574,8 @@ SalFrameGeometry QtFrame::GetUnmirroredGeometry() const
     aGeometry.setY(aScreenPos.y() * fRatio);
     aGeometry.setWidth(m_pQWidget->width() * fRatio);
     aGeometry.setHeight(m_pQWidget->height() * fRatio);
+
+    aGeometry.setScreen(std::max(sal_Int32(0), screenNumber()));
 
     return aGeometry;
 }
@@ -712,7 +714,7 @@ void QtFrame::ShowFullScreen(bool bFullScreen, sal_Int32 nScreen)
     if (m_bFullScreen)
     {
         m_aRestoreGeometry = m_pTopLevel->geometry();
-        m_nRestoreScreen = maGeometry.screen();
+        m_nRestoreScreen = std::max(sal_Int32(0), screenNumber());
         SetScreenNumber(m_bFullScreenSpanAll ? m_nRestoreScreen : nScreen);
         if (!m_bFullScreenSpanAll)
             windowHandle()->showFullScreen();
@@ -1310,14 +1312,11 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         screenGeo = pScreen->availableVirtualGeometry();
         pWindow->setScreen(pScreen);
         pWindow->setGeometry(screenGeo);
-        nScreen = screenNumber();
     }
 
     // setScreen by itself has no effect, explicitly move the widget to
     // the new screen
     asChild()->move(screenGeo.topLeft());
-
-    maGeometry.setScreen(nScreen);
 }
 
 void QtFrame::SetApplicationID(const OUString& rWMClass)
