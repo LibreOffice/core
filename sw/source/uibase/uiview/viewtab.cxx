@@ -732,8 +732,18 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         rSh.GetCurAttr( aLRSpaceSet );
         SvxFirstLineIndentItem firstLine(aLRSpaceSet.Get(RES_MARGIN_FIRSTLINE));
         SvxTextLeftMarginItem leftMargin(aLRSpaceSet.Get(RES_MARGIN_TEXTLEFT));
-        leftMargin.SetTextLeft(leftMargin.GetTextLeft() + firstLine.GetTextFirstLineOffset());
-        firstLine.SetTextFirstLineOffset((firstLine.GetTextFirstLineOffset()) * -1);
+
+        tools::Long nIndentDist = firstLine.GetTextFirstLineOffset();
+
+        if (nIndentDist == 0)
+        {
+            const SvxTabStopItem& rDefTabItem = rSh.GetDefault(RES_PARATR_TABSTOP);
+            nIndentDist = ::GetTabDist(rDefTabItem);
+        }
+
+        leftMargin.SetTextLeft(leftMargin.GetTextLeft() + nIndentDist);
+        firstLine.SetTextFirstLineOffset(nIndentDist * -1);
+
         firstLine.SetAutoFirst(false); // old code would do this, is it wanted?
         rSh.SetAttrItem(firstLine);
         rSh.SetAttrItem(leftMargin);

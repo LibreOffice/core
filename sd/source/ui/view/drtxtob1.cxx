@@ -47,6 +47,7 @@
 #include <editeng/writingmodeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/cmapitem.hxx>
+#include <editeng/tstpitem.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -81,6 +82,9 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
     const SfxItemSet* pArgs = rReq.GetArgs();
     sal_uInt16 nSlot = rReq.GetSlot();
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
+    // Default indent used e.g. in SID_DEC_INDENT, SID_INC_INDENT and SID_HANGING_INDENT
+    const ::tools::Long nIndentDefaultDist = 1000; // 1000 twips
 
     std::unique_ptr<OutlineViewModelChangeGuard, o3tl::default_delete<OutlineViewModelChangeGuard>> aGuard;
 
@@ -155,10 +159,10 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
 
                         ::tools::Long nLeft = pNewItem->GetLeft();
                         if( nSlot == SID_INC_INDENT )
-                            nLeft += 1000;
+                            nLeft += nIndentDefaultDist;
                         else
                         {
-                            nLeft -= 1000;
+                            nLeft -= nIndentDefaultDist;
                             nLeft = std::max<::tools::Long>( nLeft, 0 );
                         }
                         pNewItem->SetLeftValue( static_cast<sal_uInt16>(nLeft) );
@@ -341,9 +345,16 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( EE_PARA_LRSPACE ) );
 
             SvxLRSpaceItem aNewMargin( EE_PARA_LRSPACE );
-            aNewMargin.SetTextLeft( aParaMargin.GetTextLeft() + aParaMargin.GetTextFirstLineOffset() );
-            aNewMargin.SetRight( aParaMargin.GetRight() );
-            aNewMargin.SetTextFirstLineOffset( ( aParaMargin.GetTextFirstLineOffset() ) * -1 );
+
+            ::tools::Long nIndentDist = aParaMargin.GetTextFirstLineOffset();
+
+            if (nIndentDist == 0)
+                nIndentDist = nIndentDefaultDist;
+
+            aNewMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
+            aNewMargin.SetRight(aParaMargin.GetRight());
+            aNewMargin.SetTextFirstLineOffset(nIndentDist * -1);
+
             aLRSpaceSet.Put( aNewMargin );
             mpView->SetAttributes( aLRSpaceSet );
 

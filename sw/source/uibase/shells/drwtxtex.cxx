@@ -209,10 +209,19 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 {
                     SvxLRSpaceItem aParaMargin = aEditAttr.Get( EE_PARA_LRSPACE );
                     aParaMargin.SetWhich( EE_PARA_LRSPACE );
-                    short int nFirstLineOffset = aParaMargin.GetTextFirstLineOffset();
-                    aParaMargin.SetTextLeft( aParaMargin.GetTextLeft() + nFirstLineOffset );
-                    aParaMargin.SetRight( aParaMargin.GetRight() );
-                    aParaMargin.SetTextFirstLineOffset( nFirstLineOffset * -1 );
+
+                    tools::Long nIndentDist = aParaMargin.GetTextFirstLineOffset();
+
+                    if (nIndentDist == 0)
+                    {
+                        const SvxTabStopItem& rDefTabItem = rSh.GetDefault(RES_PARATR_TABSTOP);
+                        nIndentDist = ::GetTabDist(rDefTabItem);
+                    }
+
+                    aParaMargin.SetTextLeft(aParaMargin.GetTextLeft() + nIndentDist);
+                    aParaMargin.SetRight(aParaMargin.GetRight());
+                    aParaMargin.SetTextFirstLineOffset(nIndentDist * -1);
+
                     aNewAttr.Put(aParaMargin);
                     rReq.Done();
                 }
