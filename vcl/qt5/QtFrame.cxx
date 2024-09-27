@@ -76,23 +76,10 @@ static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExten
 
 namespace
 {
-sal_Int32 screenNumber(const QScreen* pScreen)
+sal_Int32 screenNumber(QScreen* pScreen)
 {
     const QList<QScreen*> screens = QApplication::screens();
-
-    sal_Int32 nScreen = 0;
-    bool bFound = false;
-    for (const QScreen* pCurScreen : screens)
-    {
-        if (pScreen == pCurScreen)
-        {
-            bFound = true;
-            break;
-        }
-        nScreen++;
-    }
-
-    return bFound ? nScreen : -1;
+    return screens.indexOf(pScreen);
 }
 }
 
