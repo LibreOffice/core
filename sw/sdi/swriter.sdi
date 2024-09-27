@@ -2797,7 +2797,7 @@ SfxImageItem InsertColumnsBefore FN_TABLE_INSERT_COL_BEFORE
     GroupId = SfxGroupId::Table;
 ]
 
-/* 2015/06 Deprecated, replaced by InsertColumsAfter */
+/* 2015/06 Deprecated, replaced by InsertColumnsAfter */
 SfxVoidItem InsertColumns FN_TABLE_INSERT_COL
 ()
 [
