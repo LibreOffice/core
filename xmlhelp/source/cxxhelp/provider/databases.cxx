@@ -592,7 +592,7 @@ void KeywordInfo::KeywordElement::init( Databases const *pDatabases,helpdatafile
         if( idx == std::u16string_view::npos )
             break;
         size_t h = ids.find( '#', k );
-        if( h == std::u16string_view::npos || h < idx )
+        if( h != std::u16string_view::npos && h < idx )
         {
             // found an anchor
             id.push_back( OUString(ids.substr( k, h-k )) );
