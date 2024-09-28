@@ -98,7 +98,7 @@ def retry(delays=(0, 1, 5, 30, 180, 600, 3600),
 def bootstrap(soffice=None, delays=(1, 3, 5, 7), report=lambda *args: None):
     # 4 connection attempts; sleeping 1, 3, 5 and 7 seconds
     # no report to console
-    """Bootstrap PyUNO Runtime.
+    r"""Bootstrap PyUNO Runtime.
     The soffice process is started opening a named pipe of random name,
     then the local context is used to access the pipe. This function
     directly returns the remote component context, from whereon you can
