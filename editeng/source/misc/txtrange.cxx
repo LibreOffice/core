@@ -456,7 +456,7 @@ void SvxBoundArgs::Add()
                 nBoolIdx = nBoolIdx - next;
                 nCount = nCount - next;
                 aBoolArr.erase( aBoolArr.begin() + nBoolIdx, aBoolArr.begin() + (nBoolIdx + next) );
-                if( nBoolIdx )
+                if (nBoolIdx > 0)
                     aBoolArr[ nBoolIdx - 1 ] = false;
 #if OSL_DEBUG_LEVEL > 1
                 else

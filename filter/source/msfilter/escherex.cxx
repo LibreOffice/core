@@ -2507,7 +2507,7 @@ static void ConvertEnhancedCustomShapeEquation(
                     OSL_ENSURE(false, "Attempted out of bound access to rEquationOrder of CustomShape (!)");
                 }
             }
-            nMask <<= 1;
+            nMask = sal_uInt32(nMask << 1);
         }
     }
 }
