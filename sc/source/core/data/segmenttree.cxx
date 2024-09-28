@@ -25,6 +25,7 @@
 #include <limits>
 #include <string_view>
 #include <global.hxx>
+#include <rtl/strbuf.hxx>
 
 using ::std::numeric_limits;
 
@@ -492,23 +493,19 @@ void ScFlatBoolRowSegments::makeReady()
 
 OString ScFlatBoolRowSegments::dumpAsString()
 {
-    OString aOutput;
-    OString aSegment;
+    OStringBuffer aOutput(4096);
     RangeData aRange;
     SCROW nRow = 0;
     while (getRangeData(nRow, aRange))
     {
         if (!nRow)
-            aSegment = (aRange.mbValue ? std::string_view("1") : std::string_view("0")) + OString::Concat(":");
-        else
-            aSegment.clear();
+            aOutput.append(aRange.mbValue ? '1' : '0').append(':');
 
-        aSegment += OString::number(aRange.mnRow2) + " ";
-        aOutput += aSegment;
+        aOutput.append(OString::number(aRange.mnRow2) + " ");
         nRow = aRange.mnRow2 + 1;
     }
 
-    return aOutput;
+    return aOutput.makeStringAndClear();
 }
 
 ScFlatBoolColSegments::ScFlatBoolColSegments(SCCOL nMaxCol) :
@@ -564,23 +561,19 @@ void ScFlatBoolColSegments::makeReady()
 
 OString ScFlatBoolColSegments::dumpAsString()
 {
-    OString aOutput;
-    OString aSegment;
+    OStringBuffer aOutput(4096);
     RangeData aRange;
     SCCOL nCol = 0;
     while (getRangeData(nCol, aRange))
     {
         if (!nCol)
-            aSegment = (aRange.mbValue ? OString::Concat("1") : OString::Concat("0")) + OString::Concat(":");
-        else
-            aSegment.clear();
+            aOutput.append(aRange.mbValue ? '1' : '0').append(':');
 
-        aSegment += OString::number(aRange.mnCol2) + " ";
-        aOutput += aSegment;
+        aOutput.append(OString::number(aRange.mnCol2) + " ");
         nCol = aRange.mnCol2 + 1;
     }
 
-    return aOutput;
+    return aOutput.makeStringAndClear();
 }
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
@@ -693,19 +686,16 @@ void ScFlatUInt16RowSegments::makeReady()
 
 OString ScFlatUInt16RowSegments::dumpAsString()
 {
-    OString aOutput;
-    OString aSegment;
+    OStringBuffer aOutput(4096);
     RangeData aRange;
     SCROW nRow = 0;
     while (getRangeData(nRow, aRange))
     {
-        aSegment = OString::number(aRange.mnValue) + ":" +
-            OString::number(aRange.mnRow2) + " ";
-        aOutput += aSegment;
+        aOutput.append(OString::number(aRange.mnValue) + ":" + OString::number(aRange.mnRow2) + " ");
         nRow = aRange.mnRow2 + 1;
     }
 
-    return aOutput;
+    return aOutput.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
