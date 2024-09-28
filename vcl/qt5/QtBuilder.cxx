@@ -149,12 +149,16 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         assert(false && "Widget type not supported yet");
     }
 
-    // add widgets to parent layout
-    if (pParentLayout)
+    if (QWidget* pWidget = qobject_cast<QWidget*>(pObject))
     {
-        QWidget* pWidget = qobject_cast<QWidget*>(pObject);
-        if (pWidget)
+        // add widget to parent layout
+        if (pParentLayout)
             pParentLayout->addWidget(pWidget);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+        // Set GtkBuilder ID as accessible ID
+        pWidget->setAccessibleIdentifier(toQString(sID));
+#endif
     }
 
     m_aChildren.emplace_back(sID, pObject);
