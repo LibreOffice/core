@@ -124,12 +124,12 @@ private:
 
 constexpr size_t nMaxTreeArraySize = 64;
 
-size_t lcl_round_down_pow2(size_t nNum)
+size_t lcl_tree_array_size(size_t nNum)
 {
     size_t nPow2;
     for (nPow2 = 1; nPow2 <= nNum; nPow2 <<= 1)
         ;
-    return std::min((nPow2 >> 1), nMaxTreeArraySize);
+    return std::clamp((nPow2 >> 1), size_t(1), nMaxTreeArraySize);
 }
 
 template <class RandItr> struct Sampler
@@ -171,7 +171,7 @@ public:
     size_t maBinEnds[nMaxTreeArraySize];
 
     Binner(const ValueType* pSamples, size_t nSamples, size_t nBins, bool bThreaded)
-        : mnTreeArraySize(lcl_round_down_pow2(nBins))
+        : mnTreeArraySize(lcl_tree_array_size(nBins))
         , mnDividers(mnTreeArraySize - 1)
         , mbThreaded(bThreaded)
     {
@@ -299,7 +299,7 @@ void s3sort(const RandItr aBegin, const RandItr aEnd, Compare aComp = Compare(),
     using ValueType = typename std::iterator_traits<RandItr>::value_type;
     auto pOut = std::make_unique<ValueType[]>(nLen);
 
-    const size_t nBins = lcl_round_down_pow2(nThreadCount);
+    const size_t nBins = lcl_tree_array_size(nThreadCount);
     assert(nBins >= 1);
     const size_t nOverSamplingFactor = std::max(1.0, std::sqrt(static_cast<double>(nLen) / 64));
     const size_t nSamples = nOverSamplingFactor * nBins;
