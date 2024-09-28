@@ -828,7 +828,7 @@ namespace
         // iterate over relevant redlines and decide for each whether it should
         // be saved, or split + saved
         SwRedlineTable& rRedlineTable = rDoc.getIDocumentRedlineAccess().GetRedlineTable();
-        for( ; nCurrentRedline < rRedlineTable.size(); nCurrentRedline++ )
+        for( ; nCurrentRedline < rRedlineTable.size(); )
         {
             SwRangeRedline* pCurrent = rRedlineTable[ nCurrentRedline ];
             SwComparePosition eCompare =
@@ -843,7 +843,7 @@ namespace
                 eCompare == SwComparePosition::Inside ||
                 eCompare == SwComparePosition::Equal )
             {
-                rRedlineTable.Remove( nCurrentRedline-- );
+                rRedlineTable.Remove( nCurrentRedline );
 
                 // split beginning, if necessary
                 if( eCompare == SwComparePosition::OverlapBefore  ||
@@ -868,6 +868,8 @@ namespace
                 // save the current redline
                 rArr.emplace_back( pCurrent, *pStart );
             }
+            else
+                nCurrentRedline++;
         }
 
         // restore old redline mode
