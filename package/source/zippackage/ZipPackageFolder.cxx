@@ -175,7 +175,12 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::
 
 void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
 {
-    ContentHash::iterator aIter = maContents.find ( Name );
+    return removeByName(std::u16string_view(Name));
+}
+
+void ZipPackageFolder::removeByName( std::u16string_view aName )
+{
+    ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end() )
         throw NoSuchElementException(THROW_WHERE );
     maContents.erase( aIter );
@@ -195,7 +200,7 @@ sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
     return !maContents.empty();
 }
     // XNameAccess
-ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
+ZipContentInfo& ZipPackageFolder::doGetByName( std::u16string_view aName )
 {
     ContentHash::iterator aIter = maContents.find ( aName );
     if ( aIter == maContents.end())
@@ -205,6 +210,10 @@ ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 {
+    return getByName(std::u16string_view(aName));
+}
+uno::Any ZipPackageFolder::getByName( std::u16string_view aName )
+{
     return uno::Any ( uno::Reference(cppu::getXWeak(doGetByName ( aName ).xPackageEntry.get())) );
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
@@ -212,6 +221,10 @@ uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
     return comphelper::mapKeysToSequence(maContents);
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
+{
+    return hasByName( std::u16string_view( aName ));
+}
+bool ZipPackageFolder::hasByName( std::u16string_view aName )
 {
     return maContents.find ( aName ) != maContents.end ();
 }

@@ -80,6 +80,8 @@
 #include <comphelper/servicehelper.hxx>
 #include <utility>
 
+using namespace std::literals;
+
 using namespace osl;
 using namespace cppu;
 using namespace ucbhelper;
@@ -515,7 +517,7 @@ void ZipPackage::parseManifest()
                 // if there is an encrypted inner package, there is no root
                 // document, because instead there is a package, and it is not
                 // an error
-                if (!m_xRootFolder->hasByName(u"encrypted-package"_ustr))
+                if (!m_xRootFolder->hasByName(u"encrypted-package"sv))
                 {
                     m_bMediaTypeFallbackUsed = true;
                 }
@@ -524,8 +526,8 @@ void ZipPackage::parseManifest()
         else if ( !m_bForceRecovery )
         {
             // the mimetype stream should contain the same information as manifest.xml
-            OUString const mediaTypeXML(m_xRootFolder->hasByName(u"encrypted-package"_ustr)
-                ? m_xRootFolder->doGetByName(u"encrypted-package"_ustr).xPackageEntry->GetMediaType()
+            OUString const mediaTypeXML(m_xRootFolder->hasByName(u"encrypted-package"sv)
+                ? m_xRootFolder->doGetByName(u"encrypted-package").xPackageEntry->GetMediaType()
                 : m_xRootFolder->GetMediaType());
             if (mediaTypeXML != aPackageMediatype)
             {
@@ -541,7 +543,7 @@ void ZipPackage::parseManifest()
     }
 
     m_bInconsistent = m_xRootFolder->LookForUnexpectedODF12Streams(
-        std::u16string_view(), m_xRootFolder->hasByName(u"encrypted-package"_ustr));
+        std::u16string_view(), m_xRootFolder->hasByName(u"encrypted-package"sv));
 
     bool bODF12AndNewer = ( m_xRootFolder->GetVersion().compareTo( ODFVER_012_TEXT ) >= 0 );
     if ( !m_bForceRecovery && bODF12AndNewer )
@@ -571,7 +573,7 @@ void ZipPackage::parseContentType()
         return;
 
     try {
-        static constexpr OUString aContentTypes(u"[Content_Types].xml"_ustr);
+        static constexpr std::u16string_view aContentTypes(u"[Content_Types].xml");
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
             throw io::IOException(THROW_WHERE "Wrong format!" );
@@ -661,14 +663,14 @@ void ZipPackage::getZipFileContents()
             sal_Int32 nOldIndex = 0;
             while ( ( nIndex = rName.indexOf( '/', nOldIndex ) ) != -1 )
             {
-                OUString sTemp = rName.copy ( nOldIndex, nIndex - nOldIndex );
+                std::u16string_view sTemp = rName.subView( nOldIndex, nIndex - nOldIndex );
                 if ( nIndex == nOldIndex )
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
                     rtl::Reference<ZipPackageFolder> pPkgFolder = new ZipPackageFolder(m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                     try {
-                        pPkgFolder->setName( sTemp );
+                        pPkgFolder->setName( OUString(sTemp) );
                     } catch (uno::RuntimeException const& e) {
                         throw css::packages::zip::ZipIOException(e.Message);
                     }
@@ -690,14 +692,14 @@ void ZipPackage::getZipFileContents()
         if ( rName.getLength() -1 != nStreamIndex )
         {
             nStreamIndex++;
-            OUString sTemp = rName.copy( nStreamIndex );
+            std::u16string_view sTemp = rName.subView( nStreamIndex );
 
             if (!pCurrent->hasByName(sTemp))
             {
                 rtl::Reference<ZipPackageStream> pPkgStream = new ZipPackageStream(*this, m_xContext, m_nFormat, m_bAllowRemoveOnInsert);
                 pPkgStream->SetPackageMember(true);
                 pPkgStream->setZipEntryOnLoading(rEntry);
-                pPkgStream->setName(sTemp);
+                pPkgStream->setName(OUString(sTemp));
                 pPkgStream->doSetParent(pCurrent);
             }
         }
@@ -961,7 +963,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
             else
             {
                 // Determine the file name.
-                OUString sTemp = aName.copy ( nStreamIndex + 1 );
+                std::u16string_view sTemp = aName.subView( nStreamIndex + 1 );
 
                 if (pFolder && pFolder->hasByName(sTemp))
                     return pFolder->getByName(sTemp);
@@ -984,7 +986,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     while ( ( nIndex = aName.indexOf( '/', nOldIndex )) != -1 )
     {
-        OUString sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
+        std::u16string_view sTemp = aName.subView ( nOldIndex, nIndex - nOldIndex );
         if ( nIndex == nOldIndex )
             break;
         if ( !pCurrent->hasByName( sTemp ) )
@@ -1005,7 +1007,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         return Any ( uno::Reference( cppu::getXWeak(pCurrent) ) );
     }
 
-    OUString sTemp = aName.copy( nOldIndex );
+    std::u16string_view sTemp = aName.subView( nOldIndex );
 
     if ( pCurrent->hasByName ( sTemp ) )
     {
@@ -1046,7 +1048,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
                 }
                 else
                 {
-                    OUString sTemp = aName.copy ( nStreamIndex + 1 );
+                    std::u16string_view sTemp = aName.subView( nStreamIndex + 1 );
                     if ( ( *aIter ).second->hasByName( sTemp ) )
                         return true;
                     else
@@ -1068,7 +1070,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
             if ( nIndex == nOldIndex )
                 break;
 
-            OUString sTemp = aName.copy ( nOldIndex, nIndex - nOldIndex );
+            std::u16string_view sTemp = aName.subView ( nOldIndex, nIndex - nOldIndex );
 
             if ( pCurrent->hasByName( sTemp ) )
             {
@@ -1089,7 +1091,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
         }
         else
         {
-            OUString sTemp = aName.copy( nOldIndex );
+            std::u16string_view sTemp = aName.subView( nOldIndex );
 
             if ( pCurrent->hasByName( sTemp ) )
             {
@@ -1132,7 +1134,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
 
 void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 {
-    static constexpr OUString sMime (u"mimetype"_ustr);
+    static constexpr std::u16string_view sMime (u"mimetype" );
     if ( m_xRootFolder->hasByName( sMime ) )
         m_xRootFolder->removeByName( sMime );
 
@@ -1328,7 +1330,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
             // META-INF directory implicitly created if does not exist
-            static constexpr OUString sMeta (u"META-INF"_ustr);
+            static constexpr std::u16string_view sMeta (u"META-INF");
 
             if ( m_xRootFolder->hasByName( sMeta ) )
             {
@@ -1349,7 +1351,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
 
-            static constexpr OUString aContentTypes(u"[Content_Types].xml"_ustr);
+            static constexpr std::u16string_view aContentTypes(u"[Content_Types].xml");
 
             if ( m_xRootFolder->hasByName( aContentTypes ) )
                 m_xRootFolder->removeByName( aContentTypes );
@@ -1393,7 +1395,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             {
                 if (m_nKeyDerivationFunctionID == xml::crypto::KDFID::PBKDF2)
                 {   // if there is only one KDF invocation, increase the safety margin
-                    oPBKDF2IterationCount.emplace(m_xRootFolder->hasByName(u"encrypted-package"_ustr) ? 600000 : 100000);
+                    oPBKDF2IterationCount.emplace(m_xRootFolder->hasByName(u"encrypted-package"sv) ? 600000 : 100000);
                 }
                 else
                 {
