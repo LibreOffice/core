@@ -39,7 +39,7 @@ struct Entry;
 class PageCache :
     public store::OStoreObject
 {
-    static size_t const theTableSize = 32;
+    static size_t constexpr theTableSize = 32;
     static_assert((theTableSize & (theTableSize-1)) == 0, "table size should be a power of 2");
 
     Entry **     m_hash_table;

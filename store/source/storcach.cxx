@@ -123,7 +123,7 @@ void EntryCache::destroy (Entry * entry)
 }
 
 // highbit():= log2() + 1 (complexity O(1))
-static int highbit(std::size_t n)
+static constexpr int highbit(std::size_t n)
 {
     int k = 1;
 
