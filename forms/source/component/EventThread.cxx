@@ -76,10 +76,10 @@ void OComponentEventThread::impl_clearEventQueue()
 
 void OComponentEventThread::disposing( const EventObject& evt )
 {
+    std::unique_lock aGuard( m_aMutex );
+
     if( evt.Source != static_cast<XWeak*>(m_xComp.get()) )
         return;
-
-    std::unique_lock aGuard( m_aMutex );
 
     // Remove EventListener
     Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
