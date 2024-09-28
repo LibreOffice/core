@@ -397,7 +397,7 @@ void ScDocument::FillInfo(
     {
         //TODO: check Conditionals also for HasAttrFlags::Rotate ????
 
-        OSL_ENSURE( nArrCount>2, "nArrCount too small" );
+        assert( nArrCount>2 && "nArrCount too small" );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nCol1, nCol2 );
         //  FindMaxRotCol sets nRotMaxCol
 
