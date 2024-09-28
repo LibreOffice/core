@@ -748,31 +748,27 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
         pVirDev->SetLineColor( rColor );
     aLineInfo.SetWidth( nLineWidth );
 
-    sal_uInt16 nDotCount = 0;
-    sal_uInt16 nDashCount = 0;
-    switch ( ePenStyle )
+    if (ePenStyle == PEN_NULL)
+        eLineStyle = LineStyle::NONE;
+    else if (ePenStyle == PEN_DASHDOT || ePenStyle == PEN_DOT || ePenStyle == PEN_DASH)
     {
-        case PEN_NULL :
-            eLineStyle = LineStyle::NONE;
-        break;
-        case PEN_DASHDOT :
+        sal_uInt16 nDotCount = 0;
+        sal_uInt16 nDashCount = 0;
+        if (ePenStyle == PEN_DASHDOT)
+        {
             nDashCount++;
-            [[fallthrough]];
-        case PEN_DOT :
             nDotCount++;
-            nDashCount--;
-            [[fallthrough]];
-        case PEN_DASH :
+        }
+        else if (ePenStyle == PEN_DOT)
+            nDotCount++;
+        else  // (ePenStyle == PEN_DASH)
             nDashCount++;
-            aLineInfo.SetDotCount( nDotCount );
-            aLineInfo.SetDashCount( nDashCount );
-            aLineInfo.SetDistance( nLineWidth );
-            aLineInfo.SetDotLen( nLineWidth );
-            aLineInfo.SetDashLen( nLineWidth << 2 );
-            eLineStyle = LineStyle::Dash;
-        break;
-        case PEN_SOLID:
-        break;  // -Wall not handled...
+        aLineInfo.SetDotCount( nDotCount );
+        aLineInfo.SetDashCount( nDashCount );
+        aLineInfo.SetDistance( nLineWidth );
+        aLineInfo.SetDotLen( nLineWidth );
+        aLineInfo.SetDashLen( nLineWidth << 2 );
+        eLineStyle = LineStyle::Dash;
     }
     aLineInfo.SetStyle( eLineStyle );
 }
