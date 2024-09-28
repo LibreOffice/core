@@ -777,7 +777,7 @@ void SAL_CALL ScSolverSettings::solve()
             else
             {
                 // Test if the right side is a numeric value
-                sal_uInt32 nFormat;
+                sal_uInt32 nFormat = 0;
                 double fValue(0);
                 if (m_rDoc.GetFormatTable()->IsNumberFormat(rConstr.aRightStr, nFormat, fValue))
                     aConstraint.Right <<= fValue;
@@ -834,7 +834,7 @@ void SAL_CALL ScSolverSettings::solve()
         else
         {
             // Test if the right side is a numeric value
-            sal_uInt32 nFormat;
+            sal_uInt32 nFormat = 0;
             double fValue(0);
             if (m_rDoc.GetFormatTable()->IsNumberFormat(aValStr, nFormat, fValue))
                 aConstraint.Right <<= fValue;
