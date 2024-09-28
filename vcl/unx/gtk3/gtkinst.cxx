@@ -17676,14 +17676,14 @@ public:
         max = fromGtk(gtkmax);
     }
 
-    virtual void set_increments(int step, int page) override
+    virtual void set_increments(sal_Int64 step, sal_Int64 page) override
     {
         disable_notify_events();
         gtk_spin_button_set_increments(m_pButton, toGtk(step), toGtk(page));
         enable_notify_events();
     }
 
-    virtual void get_increments(int& step, int& page) const override
+    virtual void get_increments(sal_Int64& step, sal_Int64& page) const override
     {
         double gtkstep, gtkpage;
         gtk_spin_button_get_increments(m_pButton, &gtkstep, &gtkpage);

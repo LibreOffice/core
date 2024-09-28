@@ -335,7 +335,7 @@ namespace weld
 
     void MetricSpinButton::set_digits(unsigned int digits)
     {
-        int step, page;
+        sal_Int64 step, page;
         get_increments(step, page, m_eSrcUnit);
         sal_Int64 value = get_value(m_eSrcUnit);
         m_xSpinButton->set_digits(digits);
@@ -348,7 +348,7 @@ namespace weld
     {
         if (eUnit != m_eSrcUnit)
         {
-            int step, page;
+            sal_Int64 step, page;
             get_increments(step, page, m_eSrcUnit);
             sal_Int64 value = get_value(m_eSrcUnit);
             m_eSrcUnit = eUnit;

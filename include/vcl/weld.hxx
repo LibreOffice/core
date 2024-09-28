@@ -1864,8 +1864,8 @@ public:
         get_range(dummy, max);
         return max;
     }
-    virtual void set_increments(int step, int page) = 0;
-    virtual void get_increments(int& step, int& page) const = 0;
+    virtual void set_increments(sal_Int64 step, sal_Int64 page) = 0;
+    virtual void get_increments(sal_Int64& step, sal_Int64& page) const = 0;
     virtual void set_digits(unsigned int digits) = 0;
     virtual unsigned int get_digits() const = 0;
 
@@ -2137,14 +2137,14 @@ public:
         return max;
     }
 
-    void set_increments(int step, int page, FieldUnit eValueUnit)
+    void set_increments(sal_Int64 step, sal_Int64 page, FieldUnit eValueUnit)
     {
         step = convert_value_from(step, eValueUnit);
         page = convert_value_from(page, eValueUnit);
         m_xSpinButton->set_increments(step, page);
     }
 
-    void get_increments(int& step, int& page, FieldUnit eDestUnit) const
+    void get_increments(sal_Int64& step, sal_Int64& page, FieldUnit eDestUnit) const
     {
         m_xSpinButton->get_increments(step, page);
         step = convert_value_to(step, eDestUnit);

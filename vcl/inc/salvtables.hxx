@@ -709,9 +709,9 @@ public:
 
     virtual void get_range(sal_Int64& min, sal_Int64& max) const override;
 
-    virtual void set_increments(int step, int /*page*/) override;
+    virtual void set_increments(sal_Int64 step, sal_Int64 /*page*/) override;
 
-    virtual void get_increments(int& step, int& page) const override;
+    virtual void get_increments(sal_Int64& step, sal_Int64& page) const override;
 
     virtual void set_digits(unsigned int digits) override;
 

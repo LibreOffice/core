@@ -5792,12 +5792,12 @@ void SalInstanceSpinButton::get_range(sal_Int64& min, sal_Int64& max) const
     max = fromField(m_rFormatter.GetMaxValue());
 }
 
-void SalInstanceSpinButton::set_increments(int step, int /*page*/)
+void SalInstanceSpinButton::set_increments(sal_Int64 step, sal_Int64 /*page*/)
 {
     m_rFormatter.SetSpinSize(toField(step));
 }
 
-void SalInstanceSpinButton::get_increments(int& step, int& page) const
+void SalInstanceSpinButton::get_increments(sal_Int64& step, sal_Int64& page) const
 {
     step = fromField(m_rFormatter.GetSpinSize());
     page = fromField(m_rFormatter.GetSpinSize());

@@ -30,8 +30,8 @@ class SW_DLLPUBLIC SwPercentField
     sal_Int64 m_nRefValue;      // 100% value for conversion (in Twips)
     sal_Int64 m_nOldMax;
     sal_Int64 m_nOldMin;
-    int m_nOldSpinSize;
-    int m_nOldPageSize;
+    sal_Int64 m_nOldSpinSize;
+    sal_Int64 m_nOldPageSize;
     sal_Int64 m_nLastPercent;
     sal_Int64 m_nLastValue;
     sal_uInt16  m_nOldDigits;
