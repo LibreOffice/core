@@ -535,7 +535,7 @@ uno::Sequence<sheet::ModelConstraint> SAL_CALL ScSolverSettings::getConstraints(
         // Adds the constraint to the sequence
         aRet.realloc(nCount + 1);
         auto pArrConstraints = aRet.getArray();
-        pArrConstraints[nCount] = aConstraint;
+        pArrConstraints[nCount] = std::move(aConstraint);
         nCount++;
     }
 
