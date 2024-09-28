@@ -45,13 +45,9 @@ void BaseContainer::init(const OUString&                                        
                          const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                FilterCache::EItemType                                  eType              )
 {
-    // SAFE ->
-    std::unique_lock aLock(m_aMutex);
-
     m_sImplementationName = sImplementationName;
     m_lServiceNames       = lServiceNames      ;
     m_eType               = eType              ;
-    // <- SAFE
 }
 
 
