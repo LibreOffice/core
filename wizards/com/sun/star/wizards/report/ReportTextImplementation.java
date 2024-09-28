@@ -436,7 +436,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         for (int i = 0; i < iCount; i++)
         {
             CurDBColumn = getDoc().DBColumnsVector.get(i);
-            xNameCellCursor = ReportTextDocument.createTextCursor(CurDBColumn.xNameCell);
+            xNameCellCursor = ReportTextDocument.createTextCursor(CurDBColumn.getNameCell());
             xNameCellCursor.gotoStart(false);
             FieldContent = getDoc().oTextFieldHandler.getUserFieldContent(xNameCellCursor);
             if (!FieldContent.equals(PropertyNames.EMPTY_STRING))

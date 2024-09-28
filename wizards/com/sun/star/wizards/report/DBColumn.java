@@ -46,7 +46,7 @@ public class DBColumn
     private XCell xValCell;
     private XTextRange xValTextCell;
     private XTextCursor xValCellCursor;
-    public XCell xNameCell;
+    private XCell xNameCell;
     private XTextRange xNameTextCell;
     private boolean bAlignLeft;
     private String CharFontName;
@@ -181,6 +181,11 @@ public class DBColumn
                 }
             }
         }
+    }
+
+    public XCell getNameCell()
+    {
+        return xNameCell;
     }
 
     private void getTableColumns(String TableName)

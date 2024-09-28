@@ -448,7 +448,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                     }
                     CurDBColumn = new DBColumn(CurRecordTable, oTextTableHandler, CurDBMetaData, i - CurDBMetaData.getGroupFieldNames().length);
                 }
-                if (CurDBColumn.xNameCell != null)
+                if (CurDBColumn.getNameCell() != null)
                 {
                     DBColumnsVector.add(CurDBColumn);
                 }
