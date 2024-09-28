@@ -198,9 +198,9 @@ IMPL_LINK_NOARG(ScDuplicateRecordsDlg, AllCheckBtnHdl, weld::Toggleable&, void)
 IMPL_LINK_NOARG(ScDuplicateRecordsDlg, OkHdl, weld::Button&, void)
 {
     maResponse.bRemove = m_xRadioRemove->get_active();
-    maResponse.bDuplicatRows = m_xRadioRow->get_active();
+    maResponse.bDuplicateRows = m_xRadioRow->get_active();
     maResponse.bIncludesHeaders = m_xIncludesHeaders->get_active();
-    int nCount = (maResponse.bDuplicatRows ? mrCellData[0].size() : mrCellData.size());
+    int nCount = (maResponse.bDuplicateRows ? mrCellData[0].size() : mrCellData.size());
 
     for (int i = 0; i < nCount; ++i)
     {

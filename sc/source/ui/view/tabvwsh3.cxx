@@ -829,7 +829,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (pReqArgs->HasItem(FN_PARAM_1, &pItem))
                         aResponse.bIncludesHeaders = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     if (pReqArgs->HasItem(FN_PARAM_2, &pItem))
-                        aResponse.bDuplicatRows = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+                        aResponse.bDuplicateRows = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     if (pReqArgs->HasItem(FN_PARAM_3, &pItem))
                         aCellRange.StartColumn = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                     if (pReqArgs->HasItem(FN_PARAM_4, &pItem))
@@ -859,7 +859,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         break;
                     }
                     int nLenEntries
-                        = (aResponse.bDuplicatRows ? aCellRange.EndColumn - aCellRange.StartColumn
+                        = (aResponse.bDuplicateRows ? aCellRange.EndColumn - aCellRange.StartColumn
                                                    : aCellRange.EndRow - aCellRange.StartRow);
                     for (int i = 0; i <= nLenEntries; ++i)
                         aResponse.vEntries.push_back(i);
@@ -916,7 +916,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if (bHasData)
                     GetViewData().GetViewShell()->HandleDuplicateRecords(
                             xActiveSheet, aCellRange, aResponse.bRemove, aResponse.bIncludesHeaders,
-                            aResponse.bDuplicatRows, aResponse.vEntries);
+                            aResponse.bDuplicateRows, aResponse.vEntries);
 
                 rReq.Done();
             }

@@ -29,7 +29,7 @@ struct DuplicatesResponse
     std::vector<int> vEntries;
     bool bRemove; // false ==> Select
     bool bIncludesHeaders;
-    bool bDuplicatRows; // false ==> DuplicateColumns
+    bool bDuplicateRows; // false ==> DuplicateColumns
 };
 
 class ScDuplicateRecordsDlg : public weld::GenericDialogController
