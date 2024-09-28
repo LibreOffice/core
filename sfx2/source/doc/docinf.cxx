@@ -116,6 +116,7 @@ ErrCode LoadOlePropertySet(
                  && aDateTime.Day == 0 && aDateTime.Month == 0
                  && aDateTime.Year == 0) )
         {
+            assert(aDateTime.Day <= 31);
             // subtract offset 1601-01-01
             aDateTime.Year  -= 1601;
             aDateTime.Month -= 1;
