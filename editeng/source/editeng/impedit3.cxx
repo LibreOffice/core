@@ -4383,7 +4383,11 @@ const ParaPortion* ImpEditEngine::GetPrevVisPortion( const ParaPortion* pCurPort
 const ParaPortion* ImpEditEngine::GetNextVisPortion( const ParaPortion* pCurPortion ) const
 {
     sal_Int32 nPara = GetParaPortions().GetPos( pCurPortion );
-    DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisNode" );
+    if (nPara == EE_PARA_NOT_FOUND)
+    {
+        SAL_WARN("editeng", "Portion not found: GetPrevVisNode" );
+        return nullptr;
+    }
     const ParaPortion* pPortion = GetParaPortions().SafeGetObject( ++nPara );
     while ( pPortion && !pPortion->IsVisible() )
         pPortion = GetParaPortions().SafeGetObject( ++nPara );
