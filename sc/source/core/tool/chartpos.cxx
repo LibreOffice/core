@@ -142,6 +142,7 @@ void ScChartPositioner::GlueState()
         if ( i < nRanges )
             pR = &(*aRangeListRef)[i];
     }
+    assert(nEndCol >= nStartCol);
     SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
     {
