@@ -257,6 +257,16 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
             }
         }
     }
+    else if (QDialog* pDialog = qobject_cast<QDialog*>(pObject))
+    {
+        for (auto const & [ rKey, rValue ] : rProps)
+        {
+            if (rKey == u"modal")
+                pDialog->setModal(toBool(rValue));
+            else if (rKey == u"title")
+                pDialog->setWindowTitle(toQString(rValue));
+        }
+    }
     else if (QLabel* pLabel = qobject_cast<QLabel*>(pObject))
     {
         for (auto const & [ rKey, rValue ] : rProps)
