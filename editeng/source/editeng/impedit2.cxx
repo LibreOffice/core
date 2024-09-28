@@ -2490,8 +2490,8 @@ EditPaM ImpEditEngine::ImpDeleteSelection(const EditSelection& rCurSel)
     sal_Int32 nStartNode = maEditDoc.GetPos( aStartPaM.GetNode() );
     sal_Int32 nEndNode = maEditDoc.GetPos( aEndPaM.GetNode() );
 
-    OSL_ENSURE( nEndNode != EE_PARA_NOT_FOUND, "Start > End ?!" );
-    OSL_ENSURE( nStartNode <= nEndNode, "Start > End ?!" );
+    assert( nEndNode != EE_PARA_NOT_FOUND && "Start > End ?!" );
+    assert( nStartNode <= nEndNode && "Start > End ?!" );
 
     // Remove all nodes in between...
     for ( sal_Int32 z = nStartNode+1; z < nEndNode; z++ )
