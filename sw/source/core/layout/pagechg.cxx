@@ -411,6 +411,7 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
     // formats are in the special table of the document
     for(size_t i = 0; i < rSpzs.size(); ++i )
     {
+        LOOP_START:
         auto pSpz = rSpzs[i];
         const SwFormatAnchor &rAnch = pSpz->GetAnchor();
         if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
@@ -434,8 +435,7 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
             {
                 OSL_FAIL( "DrawObject not found." );
                 pSpz->GetDoc()->DelFrameFormat( pSpz );
-                --i;
-                continue;
+                goto LOOP_START;
             }
             // The object might be anchored to another page, e.g. when inserting
             // a new page due to a page descriptor change. In such cases, the
