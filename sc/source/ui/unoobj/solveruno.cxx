@@ -620,7 +620,7 @@ ScSolverSettings::setConstraints(const uno::Sequence<sheet::ModelConstraint>& aC
         vRetConstraints.push_back(aNewConst);
     }
 
-    m_pSettings->SetConstraints(vRetConstraints);
+    m_pSettings->SetConstraints(std::move(vRetConstraints));
 }
 
 sal_Int32 SAL_CALL ScSolverSettings::getConstraintCount()
