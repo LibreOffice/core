@@ -124,6 +124,7 @@ ScSolverSettings::ScSolverSettings(ScDocShell* pDocSh, uno::Reference<container:
     , m_xSheet(std::move(xSheet))
     , m_nStatus(sheet::SolverStatus::NONE)
     , m_bSuppressDialog(false)
+    , m_pTable(nullptr)
 {
     // Initialize member variables with information about the current sheet
     OUString aName = m_xSheet->getName();
