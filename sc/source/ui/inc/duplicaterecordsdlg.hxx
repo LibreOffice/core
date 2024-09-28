@@ -30,6 +30,12 @@ struct DuplicatesResponse
     bool bRemove; // false ==> Select
     bool bIncludesHeaders;
     bool bDuplicateRows; // false ==> DuplicateColumns
+    DuplicatesResponse()
+        : bRemove(false)
+        , bIncludesHeaders(false)
+        , bDuplicateRows(false)
+    {
+    }
 };
 
 class ScDuplicateRecordsDlg : public weld::GenericDialogController
