@@ -118,6 +118,10 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
         virtual ~BaseContainer() override;
 
 
+    // helper
+
+    protected:
+
         /** @short  initialize this generic instance with some specialized values
                     from our derived object.
 
@@ -145,11 +149,6 @@ class BaseContainer : public ::cppu::WeakImplHelper< css::lang::XServiceInfo    
         void init( const OUString&                                        sImplementationName,
                    const css::uno::Sequence< OUString >&                  lServiceNames      ,
                    FilterCache::EItemType                                 eType              );
-
-
-    // helper
-
-    protected:
 
 
         /** @short  check if the underlying configuration data was already loaded
