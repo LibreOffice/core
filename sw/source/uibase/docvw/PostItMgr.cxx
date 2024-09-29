@@ -229,7 +229,9 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     StartListening(*mpView->GetDocShell());
     // listen to stylesheet pool to update on stylesheet rename,
     // as EditTextObject references styles by name.
-    StartListening(*static_cast<SwDocStyleSheetPool*>(mpView->GetDocShell()->GetStyleSheetPool())->GetEEStyleSheetPool());
+    SfxStyleSheetBasePool* pStyleSheetPool = mpView->GetDocShell()->GetStyleSheetPool();
+    if (pStyleSheetPool)
+        StartListening(*static_cast<SwDocStyleSheetPool*>(pStyleSheetPool)->GetEEStyleSheetPool());
     if (!mvPostItFields.empty())
     {
         mbWaitingForCalcRects = true;
