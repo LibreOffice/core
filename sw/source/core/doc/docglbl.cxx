@@ -369,7 +369,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                             // If FlyFrames are still around, delete these too
                             auto& rSpzs = *GetSpzFrameFormats();
-                            for(sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0; n < GetSpzFrameFormats()->size(); ++n)
+                            for(sw::FrameFormats<sw::SpzFrameFormat*>::size_type n = 0; n < GetSpzFrameFormats()->size(); )
                             {
                                 auto pFly = rSpzs[n];
                                 const SwFormatAnchor* pAnchor = &pFly->GetAnchor();
@@ -382,8 +382,9 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                     *pAnchorNode < aEIdx.GetNode() )
                                 {
                                     getIDocumentLayoutAccess().DelLayoutFormat( pFly );
-                                    --n;
                                 }
+                                else
+                                    ++n;
                             }
 
                             GetNodes().Delete( aSIdx, nNodeDiff );
