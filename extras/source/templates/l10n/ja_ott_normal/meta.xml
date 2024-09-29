@@ -7,7 +7,8 @@
   xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.3">
   <office:meta>
     <dc:language>ja-JP</dc:language>
-    <dc:title></dc:title>
-    <dc:description></dc:description>
+    <dc:title>Japanese normal</dc:title>
+    <dc:creator>Jun Nogata</dc:creator>
+    <dc:description>This is a general purpose text document template for the Japanese language.</dc:description>
   </office:meta>
 </office:document-meta>
