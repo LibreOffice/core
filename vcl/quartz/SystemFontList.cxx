@@ -205,6 +205,34 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
 {
     CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
 
+    // tdf#163000 don't add any fonts in the system "reserved fonts" folder
+    // macOS Sequoia added a new PingFangUI.ttc font file which
+    // contains all of the PingFang font families. However, any
+    // fonts loaded from this font file result in the following
+    // failures:
+    // - Skia renders font with wrong glyphs
+    // - Export to PDF contain a damaged embedded font
+    // macOS Sequoia still has separate, downloadable Type 3
+    // bitmap fonts for the PingFang font family so ignore
+    // any fonts in the PingFangUI.ttc font file and, just to
+    // be safe, ignore any other font files in the system
+    // "reserved fonts" folder that may be added in the future.
+    CFURLRef pFontURL = static_cast<CFURLRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontURLAttribute));
+    if (pFontURL)
+    {
+        bool bSkipFont = false;
+        CFStringRef pFontPath = CFURLCopyFileSystemPath(pFontURL, kCFURLPOSIXPathStyle);
+        if (pFontPath)
+        {
+            bSkipFont = CFStringHasPrefix(pFontPath, CFSTR("/System/Library/PrivateFrameworks/FontServices.framework/Resources/Reserved/"));
+            CFRelease(pFontPath);
+        }
+        CFRelease(pFontURL);
+
+        if (bSkipFont)
+            return;
+    }
+
     bool bFontEnabled;
     FontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
 
