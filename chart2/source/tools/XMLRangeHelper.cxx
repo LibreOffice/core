@@ -112,15 +112,15 @@ void lcl_getSingleCellAddressFromXMLString(
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aLetterA( 'A' );
 
-    OUString aCellStr = OUString(rXMLString.substr( nStartPos, nEndPos - nStartPos + 1 )).toAsciiUpperCase();
-    const sal_Unicode* pStrArray = aCellStr.getStr();
-    sal_Int32 nLength = aCellStr.getLength();
+    std::u16string_view aCellStr = rXMLString.substr( nStartPos, nEndPos - nStartPos + 1 );
+    const sal_Unicode* pStrArray = aCellStr.data();
+    sal_Int32 nLength = aCellStr.size();
     sal_Int32 i = nLength - 1, nColumn = 0;
 
     // parse number for row
     while( rtl::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
         i--;
-    rOutCell.nRow = (o3tl::toInt32(aCellStr.subView( i + 1 ))) - 1;
+    rOutCell.nRow = (o3tl::toInt32(aCellStr.substr( i + 1 ))) - 1;
     // a dollar in XML means absolute (whereas in UI it means relative)
     if( pStrArray[ i ] == aDollar )
     {
@@ -134,7 +134,7 @@ void lcl_getSingleCellAddressFromXMLString(
     sal_Int32 nPower = 1;
     while( rtl::isAsciiAlpha( pStrArray[ i ] ))
     {
-        nColumn += (pStrArray[ i ] - aLetterA + 1) * nPower;
+        nColumn += (rtl::toAsciiUpperCase(pStrArray[ i ]) - aLetterA + 1) * nPower;
         i--;
         nPower *= 26;
     }
