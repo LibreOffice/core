@@ -70,14 +70,14 @@ ResultSetDataSupplier::~ResultSetDataSupplier()
 
 // virtual
 OUString
-ResultSetDataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    return queryContentIdentifierStringImpl(aGuard, nIndex);
+    return queryContentIdentifierStringImpl(rResultSetGuard, aGuard, nIndex);
 }
 
 OUString
-ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < m_aResults.size() )
     {
@@ -89,7 +89,7 @@ ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::m
         }
     }
 
-    if ( getResultImpl(rGuard, nIndex) )
+    if ( getResultImpl(rResultSetGuard, rGuard, nIndex) )
     {
         // Note: getResult fills m_pImpl->m_aResults[ nIndex ]->aURL.
         return m_aResults[ nIndex ].aURL;
@@ -99,14 +99,14 @@ ResultSetDataSupplier::queryContentIdentifierStringImpl( std::unique_lock<std::m
 
 // virtual
 uno::Reference< ucb::XContentIdentifier >
-ResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    return queryContentIdentifierImpl(aGuard, nIndex);
+    return queryContentIdentifierImpl(rResultSetGuard, aGuard, nIndex);
 }
 
 uno::Reference< ucb::XContentIdentifier >
-ResultSetDataSupplier::queryContentIdentifierImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContentIdentifierImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < m_aResults.size() )
     {
@@ -119,7 +119,7 @@ ResultSetDataSupplier::queryContentIdentifierImpl( std::unique_lock<std::mutex>&
         }
     }
 
-    OUString aId = queryContentIdentifierStringImpl( rGuard, nIndex );
+    OUString aId = queryContentIdentifierStringImpl( rResultSetGuard, rGuard, nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -132,7 +132,7 @@ ResultSetDataSupplier::queryContentIdentifierImpl( std::unique_lock<std::mutex>&
 
 // virtual
 uno::Reference< ucb::XContent >
-ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
+ResultSetDataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -148,7 +148,7 @@ ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
     }
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = queryContentIdentifierImpl( aGuard, nIndex );
+        = queryContentIdentifierImpl( rResultSetGuard, aGuard, nIndex );
     if ( xId.is() )
     {
         try
@@ -167,13 +167,13 @@ ResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 }
 
 // virtual
-bool ResultSetDataSupplier::getResult( sal_uInt32 nIndex )
+bool ResultSetDataSupplier::getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    return getResultImpl(aGuard, nIndex);
+    return getResultImpl(rResultSetGuard, aGuard, nIndex);
 }
 
-bool ResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
+bool ResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
 {
     if ( m_aResults.size() > nIndex )
     {
@@ -231,10 +231,10 @@ bool ResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rGuard,
         rGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
-            xResultSet->rowCountChanged( nOldCount, m_aResults.size() );
+            xResultSet->rowCountChanged( rResultSetGuard, nOldCount, m_aResults.size() );
 
         if ( m_bCountFinal )
-            xResultSet->rowCountFinal();
+            xResultSet->rowCountFinal(rResultSetGuard);
 
         rGuard.lock();
     }
@@ -243,7 +243,7 @@ bool ResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rGuard,
 }
 
 // virtual
-sal_uInt32 ResultSetDataSupplier::totalCount()
+sal_uInt32 ResultSetDataSupplier::totalCount(std::unique_lock<std::mutex>& rResultSetGuard)
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -284,9 +284,9 @@ sal_uInt32 ResultSetDataSupplier::totalCount()
         aGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
-            xResultSet->rowCountChanged( nOldCount, m_aResults.size() );
+            xResultSet->rowCountChanged( rResultSetGuard, nOldCount, m_aResults.size() );
 
-        xResultSet->rowCountFinal();
+        xResultSet->rowCountFinal(rResultSetGuard);
     }
 
     return m_aResults.size();
@@ -306,7 +306,7 @@ bool ResultSetDataSupplier::isCountFinal()
 
 // virtual
 uno::Reference< sdbc::XRow >
-ResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+ResultSetDataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -320,13 +320,13 @@ ResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         }
     }
 
-    if ( getResultImpl( aGuard, nIndex ) )
+    if ( getResultImpl( rResultSetGuard, aGuard, nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow = Content::getPropertyValues(
                         m_xContext,
                         getResultSet()->getProperties(),
                         m_xContent->getContentProvider().get(),
-                        queryContentIdentifierStringImpl( aGuard, nIndex ) );
+                        queryContentIdentifierStringImpl( rResultSetGuard, aGuard, nIndex ) );
         m_aResults[ nIndex ].xRow = xRow;
         return xRow;
     }

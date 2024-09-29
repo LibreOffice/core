@@ -50,27 +50,27 @@ namespace cmis
     {
     }
 
-    OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+    OUString DataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
     {
-        auto const xTemp(queryContentIdentifier(nIndex));
+        auto const xTemp(queryContentIdentifier(rResultSetGuard, nIndex));
         return (xTemp.is()) ? xTemp->getContentIdentifier() : OUString();
     }
 
-    uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+    uno::Reference< ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
     {
-        auto const xTemp(queryContent(nIndex));
+        auto const xTemp(queryContent(rResultSetGuard, nIndex));
         return (xTemp.is()) ? xTemp->getIdentifier() : uno::Reference<ucb::XContentIdentifier>();
     }
 
-    uno::Reference< ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
+    uno::Reference< ucb::XContent > DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
     {
-        if (!getResult(nIndex))
+        if (!getResult(rResultSetGuard, nIndex))
             return uno::Reference<ucb::XContent>();
 
         return maResults[ nIndex ].xContent;
     }
 
-    bool DataSupplier::getResult( sal_uInt32 nIndex )
+    bool DataSupplier::getResult( std::unique_lock<std::mutex>& /*rResultSetGuard*/, sal_uInt32 nIndex )
     {
         if ( maResults.size() > nIndex ) // Result already present.
             return true;
@@ -79,7 +79,7 @@ namespace cmis
         return maResults.size() > nIndex;
     }
 
-    sal_uInt32 DataSupplier::totalCount()
+    sal_uInt32 DataSupplier::totalCount(std::unique_lock<std::mutex>& /*rResultSetGuard*/)
     {
         getData();
         return maResults.size();
@@ -95,7 +95,7 @@ namespace cmis
         return mbCountFinal;
     }
 
-    uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+    uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  )
     {
         if ( nIndex < maResults.size() )
         {
@@ -107,10 +107,10 @@ namespace cmis
             }
         }
 
-        if ( !getResult( nIndex ) )
+        if ( !getResult( rResultSetGuard, nIndex ) )
             return {};
 
-        uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
+        uno::Reference< ucb::XContent > xContent( queryContent( rResultSetGuard, nIndex ) );
         if ( !xContent )
             return {};
         try

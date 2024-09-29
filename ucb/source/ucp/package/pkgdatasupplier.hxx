@@ -37,20 +37,20 @@ public:
                   const rtl::Reference< Content >& rContent );
     virtual ~DataSupplier() override;
 
-    virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) override;
+    virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
     virtual css::uno::Reference< css::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_uInt32 nIndex ) override;
+    queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
     virtual css::uno::Reference< css::ucb::XContent >
-    queryContent( sal_uInt32 nIndex ) override;
+    queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
-    virtual bool getResult( sal_uInt32 nIndex ) override;
+    virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) override;
 
-    virtual sal_uInt32 totalCount() override;
+    virtual sal_uInt32 totalCount(std::unique_lock<std::mutex>& rResultSetGuard) override;
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
     virtual css::uno::Reference< css::sdbc::XRow >
-    queryPropertyValues( sal_uInt32 nIndex  ) override;
+    queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) override;
     virtual void releasePropertyValues( sal_uInt32 nIndex ) override;
 
     virtual void close() override;
@@ -60,9 +60,9 @@ public:
     OUString assembleChildURL( const OUString& aName );
 
 private:
-    bool getResultImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
-    OUString queryContentIdentifierStringImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
-    css::uno::Reference< css::ucb::XContentIdentifier > queryContentIdentifierImpl( std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+    bool getResultImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+    OUString queryContentIdentifierStringImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
+    css::uno::Reference< css::ucb::XContentIdentifier > queryContentIdentifierImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>&, sal_uInt32 nIndex );
 
     struct ResultListEntry
     {

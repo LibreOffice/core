@@ -92,7 +92,7 @@ DataSupplier::~DataSupplier()
 
 
 // virtual
-OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -106,7 +106,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResult( rResultSetGuard, nIndex ) )
     {
         OUString aId = m_xContent->getResourceAccess().getURL();
 
@@ -129,7 +129,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 
 // virtual
 uno::Reference< ucb::XContentIdentifier >
-DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+DataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -144,7 +144,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( rResultSetGuard, nIndex );
     if ( aId.getLength() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -158,7 +158,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 
 // virtual
 uno::Reference< ucb::XContent >
-DataSupplier::queryContent( sal_uInt32 nIndex )
+DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -174,7 +174,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     }
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = queryContentIdentifier( nIndex );
+        = queryContentIdentifier( rResultSetGuard, nIndex );
     if ( xId.is() )
     {
         try
@@ -194,7 +194,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
 
 
 // virtual
-bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -205,7 +205,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     }
 
     // Obtain values...
-    if ( getData() )
+    if ( getData(rResultSetGuard) )
     {
         if (nIndex < m_Results.size())
         {
@@ -219,10 +219,10 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
 
 
 // virtual
-sal_uInt32 DataSupplier::totalCount()
+sal_uInt32 DataSupplier::totalCount(std::unique_lock<std::mutex>& rResultSetGuard)
 {
   // Obtain values...
-  getData();
+  getData(rResultSetGuard);
 
   return m_Results.size();
 }
@@ -243,7 +243,7 @@ bool DataSupplier::isCountFinal()
 
 
 // virtual
-uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
+uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(std::unique_lock<std::mutex>& rResultSetGuard,
                                                     sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -258,7 +258,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResult( rResultSetGuard, nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow
             = Content::getPropertyValues(
@@ -266,7 +266,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                 getResultSet()->getProperties(),
                 *(m_Results[ nIndex ]->pData),
                 m_xContent->getProvider(),
-                queryContentIdentifierString( nIndex ) );
+                queryContentIdentifierString( rResultSetGuard, nIndex ) );
         m_Results[ nIndex ]->xRow = xRow;
         return xRow;
     }
@@ -298,7 +298,7 @@ void DataSupplier::validate()
         throw ucb::ResultSetException();
 }
 
-bool DataSupplier::getData()
+bool DataSupplier::getData(std::unique_lock<std::mutex>& rResultSetGuard)
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -433,7 +433,7 @@ bool DataSupplier::getData()
 
         // Callback possible, because listeners may be informed!
         aGuard.clear();
-        getResultSet()->rowCountFinal();
+        getResultSet()->rowCountFinal(rResultSetGuard);
     }
     return !m_bThrowException;
 }

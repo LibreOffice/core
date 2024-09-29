@@ -58,13 +58,15 @@ HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 
 // virtual
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
+                                                        std::unique_lock<std::mutex>& rResultSetGuard,
                                                         sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    return queryContentIdentifierStringImpl(aGuard, nIndex);
+    return queryContentIdentifierStringImpl(rResultSetGuard, aGuard, nIndex);
 }
 
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierStringImpl(
+                                            std::unique_lock<std::mutex>& rResultSetGuard,
                                             std::unique_lock<std::mutex>& rGuard,
                                             sal_uInt32 nIndex )
 {
@@ -78,7 +80,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierStringImpl(
         }
     }
 
-    if ( getResultImpl( rGuard, nIndex ) )
+    if ( getResultImpl( rResultSetGuard, rGuard, nIndex ) )
     {
         OUString aId
             = m_xContent->getIdentifier()->getContentIdentifier();
@@ -97,7 +99,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierStringImpl(
 
 // virtual
 uno::Reference< ucb::XContentIdentifier >
-HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+HierarchyResultSetDataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -112,7 +114,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    OUString aId = queryContentIdentifierStringImpl( aGuard, nIndex );
+    OUString aId = queryContentIdentifierStringImpl( rResultSetGuard, aGuard, nIndex );
     if ( !aId.isEmpty() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
@@ -126,7 +128,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 
 // virtual
 uno::Reference< ucb::XContent >
-HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
+HierarchyResultSetDataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -142,7 +144,7 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
     }
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = queryContentIdentifier( nIndex );
+        = queryContentIdentifier( rResultSetGuard, nIndex );
     if ( xId.is() )
     {
         try
@@ -162,13 +164,13 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 
 
 // virtual
-bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
+bool HierarchyResultSetDataSupplier::getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     std::unique_lock aGuard( m_aMutex );
-    return getResultImpl(aGuard, nIndex);
+    return getResultImpl(rResultSetGuard, aGuard, nIndex);
 }
 
-bool HierarchyResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
+bool HierarchyResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>& rResultSetGuard, std::unique_lock<std::mutex>& rGuard, sal_uInt32 nIndex )
 {
     if ( m_aResults.size() > nIndex )
     {
@@ -214,11 +216,11 @@ bool HierarchyResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>
         rGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
-            xResultSet->rowCountChanged(
+            xResultSet->rowCountChanged(rResultSetGuard,
                                     nOldCount, m_aResults.size() );
 
         if ( m_bCountFinal )
-            xResultSet->rowCountFinal();
+            xResultSet->rowCountFinal(rResultSetGuard);
 
         rGuard.lock();
     }
@@ -228,7 +230,7 @@ bool HierarchyResultSetDataSupplier::getResultImpl( std::unique_lock<std::mutex>
 
 
 // virtual
-sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
+sal_uInt32 HierarchyResultSetDataSupplier::totalCount(std::unique_lock<std::mutex>& rResultSetGuard)
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -253,10 +255,10 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
         aGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
-            xResultSet->rowCountChanged(
+            xResultSet->rowCountChanged(rResultSetGuard,
                                     nOldCount, m_aResults.size() );
 
-        xResultSet->rowCountFinal();
+        xResultSet->rowCountFinal(rResultSetGuard);
     }
 
     return m_aResults.size();
@@ -279,7 +281,7 @@ bool HierarchyResultSetDataSupplier::isCountFinal()
 
 // virtual
 uno::Reference< sdbc::XRow >
-HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+HierarchyResultSetDataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  )
 {
     std::unique_lock aGuard( m_aMutex );
 
@@ -294,7 +296,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         }
     }
 
-    if ( getResultImpl( aGuard, nIndex ) )
+    if ( getResultImpl( rResultSetGuard, aGuard, nIndex ) )
     {
         HierarchyContentProperties aData(
             m_aResults[ nIndex ]->aData );
@@ -306,7 +308,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
                 aData,
                 static_cast< HierarchyContentProvider * >(
                     m_xContent->getProvider().get() ),
-                queryContentIdentifierStringImpl( aGuard, nIndex ) );
+                queryContentIdentifierStringImpl( rResultSetGuard, aGuard, nIndex ) );
         m_aResults[ nIndex ]->xRow = xRow;
         return xRow;
     }

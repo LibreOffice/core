@@ -52,18 +52,23 @@ public:
     explicit DataSupplier(const rtl::Reference<ODocumentContainer>& rxContent);
     virtual ~DataSupplier() override;
 
-    virtual OUString queryContentIdentifierString(sal_uInt32 nIndex) override;
+    virtual OUString queryContentIdentifierString(std::unique_lock<std::mutex>& rResultSetGuard,
+                                                  sal_uInt32 nIndex) override;
     virtual css::uno::Reference<css::ucb::XContentIdentifier>
-    queryContentIdentifier(sal_uInt32 nIndex) override;
-    virtual css::uno::Reference<css::ucb::XContent> queryContent(sal_uInt32 nIndex) override;
+    queryContentIdentifier(std::unique_lock<std::mutex>& rResultSetGuard,
+                           sal_uInt32 nIndex) override;
+    virtual css::uno::Reference<css::ucb::XContent>
+    queryContent(std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex) override;
 
-    virtual bool getResult(sal_uInt32 nIndex) override;
+    virtual bool getResult(std::unique_lock<std::mutex>& rResultSetGuard,
+                           sal_uInt32 nIndex) override;
 
-    virtual sal_uInt32 totalCount() override;
+    virtual sal_uInt32 totalCount(std::unique_lock<std::mutex>& rResultSetGuard) override;
     virtual sal_uInt32 currentCount() override;
     virtual bool isCountFinal() override;
 
-    virtual css::uno::Reference<css::sdbc::XRow> queryPropertyValues(sal_uInt32 nIndex) override;
+    virtual css::uno::Reference<css::sdbc::XRow>
+    queryPropertyValues(std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex) override;
     virtual void releasePropertyValues(sal_uInt32 nIndex) override;
 
     virtual void close() override;

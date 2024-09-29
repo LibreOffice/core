@@ -42,7 +42,7 @@ DataSupplier::~DataSupplier()
 {
 }
 
-OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -56,7 +56,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResult( rResultSetGuard, nIndex ) )
     {
         OUString aId = m_xContent->getIdentifier()->getContentIdentifier();
 
@@ -72,7 +72,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 }
 
 Reference< XContentIdentifier >
-DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+DataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -86,7 +86,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
         }
     }
 
-    OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( rResultSetGuard, nIndex );
     if ( !aId.isEmpty() )
     {
         Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( aId );
@@ -97,7 +97,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 }
 
 Reference< XContent >
-DataSupplier::queryContent( sal_uInt32 _nIndex )
+DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 _nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -111,7 +111,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
         }
     }
 
-    Reference< XContentIdentifier > xId = queryContentIdentifier( _nIndex );
+    Reference< XContentIdentifier > xId = queryContentIdentifier( rResultSetGuard, _nIndex );
     if ( xId.is() )
     {
         try
@@ -133,7 +133,7 @@ DataSupplier::queryContent( sal_uInt32 _nIndex )
     return Reference< XContent >();
 }
 
-bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -177,16 +177,16 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
         aGuard.clear();
 
         if ( static_cast<size_t>(nOldCount) < m_aResults.size() )
-            xResultSet->rowCountChanged( nOldCount, m_aResults.size() );
+            xResultSet->rowCountChanged( rResultSetGuard, nOldCount, m_aResults.size() );
 
         if ( m_bCountFinal )
-            xResultSet->rowCountFinal();
+            xResultSet->rowCountFinal(rResultSetGuard);
     }
 
     return bFound;
 }
 
-sal_uInt32 DataSupplier::totalCount()
+sal_uInt32 DataSupplier::totalCount(std::unique_lock<std::mutex>& rResultSetGuard)
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -212,9 +212,9 @@ sal_uInt32 DataSupplier::totalCount()
         aGuard.clear();
 
         if ( static_cast<size_t>(nOldCount) < m_aResults.size() )
-            xResultSet->rowCountChanged( nOldCount, m_aResults.size() );
+            xResultSet->rowCountChanged( rResultSetGuard, nOldCount, m_aResults.size() );
 
-        xResultSet->rowCountFinal();
+        xResultSet->rowCountFinal(rResultSetGuard);
     }
 
     return m_aResults.size();
@@ -231,7 +231,7 @@ bool DataSupplier::isCountFinal()
 }
 
 Reference< XRow >
-DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+DataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -245,10 +245,10 @@ DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResult( rResultSetGuard, nIndex ) )
     {
         if ( !m_aResults[ nIndex ]->xContent.is() )
-            queryContent(nIndex);
+            queryContent(rResultSetGuard, nIndex);
 
         Reference< XRow > xRow = m_aResults[ nIndex ]->xContent->getPropertyValues(getResultSet()->getProperties());
         m_aResults[ nIndex ]->xRow = xRow;

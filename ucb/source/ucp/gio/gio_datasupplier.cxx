@@ -81,7 +81,7 @@ DataSupplier::~DataSupplier()
 {
 }
 
-OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
+OUString DataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
@@ -93,7 +93,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         }
     }
 
-    if ( getResult( nIndex ) )
+    if ( getResult( rResultSetGuard, nIndex ) )
     {
         GFile *pFile = mxContent->getGFile();
         char* parent = g_file_get_uri(pFile);
@@ -117,7 +117,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-css::uno::Reference< css::ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
+css::uno::Reference< css::ucb::XContentIdentifier > DataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
@@ -129,7 +129,7 @@ css::uno::Reference< css::ucb::XContentIdentifier > DataSupplier::queryContentId
         }
     }
 
-    OUString aId = queryContentIdentifierString( nIndex );
+    OUString aId = queryContentIdentifierString( rResultSetGuard, nIndex );
     if ( aId.getLength() )
     {
         css::uno::Reference< css::ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( aId );
@@ -140,7 +140,7 @@ css::uno::Reference< css::ucb::XContentIdentifier > DataSupplier::queryContentId
     return css::uno::Reference< css::ucb::XContentIdentifier >();
 }
 
-css::uno::Reference< css::ucb::XContent > DataSupplier::queryContent( sal_uInt32 nIndex )
+css::uno::Reference< css::ucb::XContent > DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex )
 {
     if ( nIndex < maResults.size() )
     {
@@ -152,7 +152,7 @@ css::uno::Reference< css::ucb::XContent > DataSupplier::queryContent( sal_uInt32
         }
     }
 
-    css::uno::Reference< css::ucb::XContentIdentifier > xId = queryContentIdentifier( nIndex );
+    css::uno::Reference< css::ucb::XContentIdentifier > xId = queryContentIdentifier( rResultSetGuard, nIndex );
     if ( xId.is() )
     {
         try
@@ -168,7 +168,7 @@ css::uno::Reference< css::ucb::XContent > DataSupplier::queryContent( sal_uInt32
     return css::uno::Reference< css::ucb::XContent >();
 }
 
-bool DataSupplier::getResult( sal_uInt32 nIndex )
+bool DataSupplier::getResult( std::unique_lock<std::mutex>& /*rResultSetGuard*/, sal_uInt32 nIndex )
 {
     if ( maResults.size() > nIndex ) // Result already present.
         return true;
@@ -179,7 +179,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     return false;
 }
 
-sal_uInt32 DataSupplier::totalCount()
+sal_uInt32 DataSupplier::totalCount(std::unique_lock<std::mutex>& /*rResultSetGuard*/)
 {
     getData();
     return maResults.size();
@@ -195,7 +195,7 @@ bool DataSupplier::isCountFinal()
     return mbCountFinal;
 }
 
-css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
+css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  )
 {
     if ( nIndex < maResults.size() )
     {
@@ -207,10 +207,10 @@ css::uno::Reference< css::sdbc::XRow > DataSupplier::queryPropertyValues( sal_uI
         }
     }
 
-    if ( !getResult( nIndex ) )
+    if ( !getResult( rResultSetGuard, nIndex ) )
         return {};
 
-    css::uno::Reference< css::ucb::XContent > xContent( queryContent( nIndex ) );
+    css::uno::Reference< css::ucb::XContent > xContent( queryContent( rResultSetGuard, nIndex ) );
     if ( !xContent )
         return {};
 

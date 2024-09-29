@@ -303,7 +303,7 @@ sal_Bool SAL_CALL ResultSet::next()
     }
 
     // getResult works zero-based!
-    if ( !m_pImpl->m_xDataSupplier->getResult( m_pImpl->m_nPos ) )
+    if ( !m_pImpl->m_xDataSupplier->getResult( aGuard, m_pImpl->m_nPos ) )
     {
         m_pImpl->m_bAfterLast = true;
         m_pImpl->m_xDataSupplier->validate();
@@ -319,6 +319,7 @@ sal_Bool SAL_CALL ResultSet::next()
 // virtual
 sal_Bool SAL_CALL ResultSet::isBeforeFirst()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_xDataSupplier->validate();
@@ -326,7 +327,7 @@ sal_Bool SAL_CALL ResultSet::isBeforeFirst()
     }
 
     // getResult works zero-based!
-    if ( !m_pImpl->m_xDataSupplier->getResult( 0 ) )
+    if ( !m_pImpl->m_xDataSupplier->getResult( aGuard, 0 ) )
     {
         m_pImpl->m_xDataSupplier->validate();
         return false;
@@ -340,6 +341,7 @@ sal_Bool SAL_CALL ResultSet::isBeforeFirst()
 // virtual
 sal_Bool SAL_CALL ResultSet::isAfterLast()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     m_pImpl->m_xDataSupplier->validate();
     return m_pImpl->m_bAfterLast;
 }
@@ -348,6 +350,7 @@ sal_Bool SAL_CALL ResultSet::isAfterLast()
 // virtual
 sal_Bool SAL_CALL ResultSet::isFirst()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_xDataSupplier->validate();
@@ -362,13 +365,14 @@ sal_Bool SAL_CALL ResultSet::isFirst()
 // virtual
 sal_Bool SAL_CALL ResultSet::isLast()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_xDataSupplier->validate();
         return false;
     }
 
-    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
     if ( !nCount )
     {
         m_pImpl->m_xDataSupplier->validate();
@@ -402,10 +406,11 @@ void SAL_CALL ResultSet::afterLast()
 // virtual
 sal_Bool SAL_CALL ResultSet::first()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     // getResult works zero-based!
-    if ( m_pImpl->m_xDataSupplier->getResult( 0 ) )
+    if ( m_pImpl->m_xDataSupplier->getResult( aGuard, 0 ) )
     {
-        std::unique_lock aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = 1;
         m_pImpl->m_xDataSupplier->validate();
@@ -420,10 +425,11 @@ sal_Bool SAL_CALL ResultSet::first()
 // virtual
 sal_Bool SAL_CALL ResultSet::last()
 {
-    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
+    sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
     if ( nCount )
     {
-        std::unique_lock aGuard( m_pImpl->m_aMutex );
         m_pImpl->m_bAfterLast = false;
         m_pImpl->m_nPos = nCount;
         m_pImpl->m_xDataSupplier->validate();
@@ -438,6 +444,7 @@ sal_Bool SAL_CALL ResultSet::last()
 // virtual
 sal_Int32 SAL_CALL ResultSet::getRow()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_xDataSupplier->validate();
@@ -469,13 +476,14 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
 
     Calling absolute( -1 ) is the same as calling last().
 */
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( row < 0 )
     {
-        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
 
         if ( ( row * -1 ) > nCount )
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -483,7 +491,6 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // |row| <= nCount
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( nCount + row + 1 );
             m_pImpl->m_xDataSupplier->validate();
@@ -498,11 +505,10 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
     }
     else // row > 0
     {
-        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
 
         if ( row <= nCount )
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = row;
             m_pImpl->m_xDataSupplier->validate();
@@ -510,7 +516,6 @@ sal_Bool SAL_CALL ResultSet::absolute( sal_Int32 row )
         }
         else // row > nCount
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return false;
@@ -535,6 +540,8 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     the cursor is positioned before the first row or after the last row of
     the result set.
 */
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_bAfterLast || ( m_pImpl->m_nPos == 0 ) )
     {
         // "No current row".
@@ -545,7 +552,6 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     {
         if ( ( m_pImpl->m_nPos + rows ) > 0 )
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -553,7 +559,6 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = 0;
             m_pImpl->m_xDataSupplier->validate();
@@ -568,10 +573,9 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
     }
     else // rows > 0
     {
-        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
         if ( ( m_pImpl->m_nPos + rows ) <= nCount )
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = false;
             m_pImpl->m_nPos = ( m_pImpl->m_nPos + rows );
             m_pImpl->m_xDataSupplier->validate();
@@ -579,7 +583,6 @@ sal_Bool SAL_CALL ResultSet::relative( sal_Int32 rows )
         }
         else
         {
-            std::unique_lock aGuard( m_pImpl->m_aMutex );
             m_pImpl->m_bAfterLast = true;
             m_pImpl->m_xDataSupplier->validate();
             return false;
@@ -602,7 +605,7 @@ sal_Bool SAL_CALL ResultSet::previous()
     if ( m_pImpl->m_bAfterLast )
     {
         m_pImpl->m_bAfterLast = false;
-        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount();
+        sal_Int32 nCount = m_pImpl->m_xDataSupplier->totalCount(aGuard);
         m_pImpl->m_nPos = nCount;
     }
     else if ( m_pImpl->m_nPos )
@@ -677,10 +680,12 @@ sal_Bool SAL_CALL ResultSet::wasNull()
     // threads doing a getXYZ - wasNull calling sequence on the same
     // implementation object...
 
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -697,10 +702,12 @@ sal_Bool SAL_CALL ResultSet::wasNull()
 // virtual
 OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -719,10 +726,12 @@ OUString SAL_CALL ResultSet::getString( sal_Int32 columnIndex )
 // virtual
 sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -741,10 +750,12 @@ sal_Bool SAL_CALL ResultSet::getBoolean( sal_Int32 columnIndex )
 // virtual
 sal_Int8 SAL_CALL ResultSet::getByte( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -763,10 +774,12 @@ sal_Int8 SAL_CALL ResultSet::getByte( sal_Int32 columnIndex )
 // virtual
 sal_Int16 SAL_CALL ResultSet::getShort( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -785,10 +798,12 @@ sal_Int16 SAL_CALL ResultSet::getShort( sal_Int32 columnIndex )
 // virtual
 sal_Int32 SAL_CALL ResultSet::getInt( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -807,10 +822,12 @@ sal_Int32 SAL_CALL ResultSet::getInt( sal_Int32 columnIndex )
 // virtual
 sal_Int64 SAL_CALL ResultSet::getLong( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -829,10 +846,12 @@ sal_Int64 SAL_CALL ResultSet::getLong( sal_Int32 columnIndex )
 // virtual
 float SAL_CALL ResultSet::getFloat( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -851,10 +870,12 @@ float SAL_CALL ResultSet::getFloat( sal_Int32 columnIndex )
 // virtual
 double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -874,10 +895,12 @@ double SAL_CALL ResultSet::getDouble( sal_Int32 columnIndex )
 uno::Sequence< sal_Int8 > SAL_CALL
 ResultSet::getBytes( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -896,10 +919,12 @@ ResultSet::getBytes( sal_Int32 columnIndex )
 // virtual
 util::Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -918,10 +943,12 @@ util::Date SAL_CALL ResultSet::getDate( sal_Int32 columnIndex )
 // virtual
 util::Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -941,10 +968,12 @@ util::Time SAL_CALL ResultSet::getTime( sal_Int32 columnIndex )
 util::DateTime SAL_CALL
 ResultSet::getTimestamp( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -964,10 +993,12 @@ ResultSet::getTimestamp( sal_Int32 columnIndex )
 uno::Reference< io::XInputStream > SAL_CALL
 ResultSet::getBinaryStream( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -987,10 +1018,12 @@ ResultSet::getBinaryStream( sal_Int32 columnIndex )
 uno::Reference< io::XInputStream > SAL_CALL
 ResultSet::getCharacterStream( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1011,10 +1044,12 @@ uno::Any SAL_CALL ResultSet::getObject(
         sal_Int32 columnIndex,
         const uno::Reference< container::XNameAccess >& typeMap )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1034,10 +1069,12 @@ uno::Any SAL_CALL ResultSet::getObject(
 uno::Reference< sdbc::XRef > SAL_CALL
 ResultSet::getRef( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1057,10 +1094,12 @@ ResultSet::getRef( sal_Int32 columnIndex )
 uno::Reference< sdbc::XBlob > SAL_CALL
 ResultSet::getBlob( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1080,10 +1119,12 @@ ResultSet::getBlob( sal_Int32 columnIndex )
 uno::Reference< sdbc::XClob > SAL_CALL
 ResultSet::getClob( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1103,10 +1144,12 @@ ResultSet::getClob( sal_Int32 columnIndex )
 uno::Reference< sdbc::XArray > SAL_CALL
 ResultSet::getArray( sal_Int32 columnIndex )
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
     {
         uno::Reference< sdbc::XRow > xValues
-            = m_pImpl->m_xDataSupplier->queryPropertyValues(
+            = m_pImpl->m_xDataSupplier->queryPropertyValues(aGuard,
                                                         m_pImpl->m_nPos - 1 );
         if ( xValues.is() )
         {
@@ -1139,8 +1182,10 @@ void SAL_CALL ResultSet::close()
 // virtual
 OUString SAL_CALL ResultSet::queryContentIdentifierString()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
-        return m_pImpl->m_xDataSupplier->queryContentIdentifierString(
+        return m_pImpl->m_xDataSupplier->queryContentIdentifierString(aGuard,
                                                         m_pImpl->m_nPos - 1 );
 
     return OUString();
@@ -1151,8 +1196,10 @@ OUString SAL_CALL ResultSet::queryContentIdentifierString()
 uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
 ResultSet::queryContentIdentifier()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
-        return m_pImpl->m_xDataSupplier->queryContentIdentifier(
+        return m_pImpl->m_xDataSupplier->queryContentIdentifier(aGuard,
                                                         m_pImpl->m_nPos - 1 );
 
     return uno::Reference< css::ucb::XContentIdentifier >();
@@ -1163,8 +1210,10 @@ ResultSet::queryContentIdentifier()
 uno::Reference< css::ucb::XContent > SAL_CALL
 ResultSet::queryContent()
 {
+    std::unique_lock aGuard( m_pImpl->m_aMutex );
+
     if ( m_pImpl->m_nPos && !m_pImpl->m_bAfterLast )
-        return m_pImpl->m_xDataSupplier->queryContent( m_pImpl->m_nPos - 1 );
+        return m_pImpl->m_xDataSupplier->queryContent( aGuard, m_pImpl->m_nPos - 1 );
 
     return uno::Reference< css::ucb::XContent >();
 }
@@ -1293,41 +1342,44 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 
 // Non-interface methods.
 
-
 void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
 {
     std::unique_lock aGuard( m_pImpl->m_aMutex );
+    propertyChanged(aGuard, rEvt);
+}
 
+void ResultSet::propertyChanged( std::unique_lock<std::mutex>& rGuard, const beans::PropertyChangeEvent& rEvt ) const
+{
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
     // Notify listeners interested especially in the changed property.
     comphelper::OInterfaceContainerHelper4<beans::XPropertyChangeListener>* pPropsContainer
-        = m_pImpl->m_pPropertyChangeListeners->getContainer(aGuard,
+        = m_pImpl->m_pPropertyChangeListeners->getContainer(rGuard,
                                                         rEvt.PropertyName );
     if ( pPropsContainer )
     {
-        pPropsContainer->notifyEach(aGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
+        pPropsContainer->notifyEach(rGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 
     // Notify listeners interested in all properties.
     pPropsContainer
-        = m_pImpl->m_pPropertyChangeListeners->getContainer( aGuard, OUString() );
+        = m_pImpl->m_pPropertyChangeListeners->getContainer( rGuard, OUString() );
     if ( pPropsContainer )
     {
-        pPropsContainer->notifyEach( aGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
+        pPropsContainer->notifyEach( rGuard, &beans::XPropertyChangeListener::propertyChange, rEvt);
     }
 }
 
 
-void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
+void ResultSet::rowCountChanged( std::unique_lock<std::mutex>& rGuard, sal_uInt32 nOld, sal_uInt32 nNew )
 {
     OSL_ENSURE( nOld < nNew, "ResultSet::rowCountChanged - nOld >= nNew!" );
 
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
-    propertyChanged(
+    propertyChanged( rGuard,
         beans::PropertyChangeEvent(
             getXWeak(),
             u"RowCount"_ustr,
@@ -1338,12 +1390,12 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
 }
 
 
-void ResultSet::rowCountFinal()
+void ResultSet::rowCountFinal(std::unique_lock<std::mutex>& rGuard)
 {
     if ( !m_pImpl->m_pPropertyChangeListeners )
         return;
 
-    propertyChanged(
+    propertyChanged( rGuard,
         beans::PropertyChangeEvent(
             getXWeak(),
             u"IsRowCountFinal"_ustr,

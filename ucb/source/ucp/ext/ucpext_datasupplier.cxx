@@ -149,7 +149,7 @@ namespace ucb::ucp::ext
     }
 
 
-    OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
+    OUString DataSupplier::queryContentIdentifierString( std::unique_lock<std::mutex>& /*rResultSetGuard*/, sal_uInt32 i_nIndex )
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -165,7 +165,7 @@ namespace ucb::ucp::ext
     }
 
 
-    Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 i_nIndex )
+    Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 i_nIndex )
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -176,7 +176,7 @@ namespace ucb::ucp::ext
                 return xId;
         }
 
-        OUString sId = queryContentIdentifierString( i_nIndex );
+        OUString sId = queryContentIdentifierString( rResultSetGuard, i_nIndex );
         if ( !sId.isEmpty() )
         {
             Reference< XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( sId );
@@ -188,7 +188,7 @@ namespace ucb::ucp::ext
     }
 
 
-    Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
+    Reference< XContent > DataSupplier::queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 i_nIndex )
     {
         std::unique_lock aGuard( m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "illegal index!", nullptr );
@@ -198,7 +198,7 @@ namespace ucb::ucp::ext
         if ( pContent.is() )
             return pContent;
 
-        Reference< XContentIdentifier > xId( queryContentIdentifier( i_nIndex ) );
+        Reference< XContentIdentifier > xId( queryContentIdentifier( rResultSetGuard, i_nIndex ) );
         if ( xId.is() )
         {
             try
@@ -220,7 +220,7 @@ namespace ucb::ucp::ext
     }
 
 
-    bool DataSupplier::getResult( sal_uInt32 i_nIndex )
+    bool DataSupplier::getResult( std::unique_lock<std::mutex>& /*rResultSetGuard*/, sal_uInt32 i_nIndex )
     {
         std::unique_lock aGuard( m_aMutex );
 
@@ -229,7 +229,7 @@ namespace ucb::ucp::ext
     }
 
 
-    sal_uInt32 DataSupplier::totalCount()
+    sal_uInt32 DataSupplier::totalCount(std::unique_lock<std::mutex>& /*rResultSetGuard*/)
     {
         std::unique_lock aGuard( m_aMutex );
         return m_aResults.size();
@@ -248,7 +248,7 @@ namespace ucb::ucp::ext
     }
 
 
-    Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
+    Reference< XRow > DataSupplier::queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 i_nIndex  )
     {
         std::unique_lock aGuard( m_aMutex );
         ENSURE_OR_RETURN( i_nIndex < m_aResults.size(), "DataSupplier::queryPropertyValues: illegal index!", nullptr );
@@ -257,7 +257,7 @@ namespace ucb::ucp::ext
         if ( xRow.is() )
             return xRow;
 
-        ENSURE_OR_RETURN( queryContent( i_nIndex ).is(), "could not retrieve the content", nullptr );
+        ENSURE_OR_RETURN( queryContent( rResultSetGuard, i_nIndex ).is(), "could not retrieve the content", nullptr );
 
         switch ( m_xContent->getExtensionContentType() )
         {

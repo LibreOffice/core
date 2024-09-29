@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
 #include <memory>
+#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::ucb { class XCommandEnvironment; }
@@ -245,6 +246,8 @@ public:
       */
     void propertyChanged(
                 const css::beans::PropertyChangeEvent& rEvt ) const;
+    void propertyChanged(std::unique_lock<std::mutex>& rGuard,
+                const css::beans::PropertyChangeEvent& rEvt ) const;
 
     /**
       * This method should be called by the data supplier for the result set
@@ -253,13 +256,13 @@ public:
       * @param nOld is the old count of rows; must be non-negative.
       * @param nnew is the new count of rows; must be non-negative.
       */
-    UCBHELPER_DLLPUBLIC void rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew );
+    UCBHELPER_DLLPUBLIC void rowCountChanged( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nOld, sal_uInt32 nNew );
 
     /**
       * This method should be called by the data supplier for the result set
       * to indicate that there were all rows obtained from the data source.
       */
-    UCBHELPER_DLLPUBLIC void rowCountFinal();
+    UCBHELPER_DLLPUBLIC void rowCountFinal(std::unique_lock<std::mutex>& rResultSetGuard);
 
     /**
       * This method returns a sequence containing all properties ( not the
@@ -312,7 +315,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return the content's identifier string.
      */
-    virtual OUString queryContentIdentifierString( sal_uInt32 nIndex ) = 0;
+    virtual OUString queryContentIdentifierString( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the identifier of the content at the specified index.
@@ -322,7 +325,7 @@ public:
      * @return the content's identifier.
      */
     virtual css::uno::Reference< css::ucb::XContentIdentifier >
-    queryContentIdentifier( sal_uInt32 nIndex ) = 0;
+    queryContentIdentifier( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the content at the specified index.
@@ -332,7 +335,7 @@ public:
      * @return the content.
      */
     virtual css::uno::Reference< css::ucb::XContent >
-    queryContent( sal_uInt32 nIndex ) = 0;
+    queryContent( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns whether there is a content at the specified index.
@@ -341,7 +344,7 @@ public:
      *               of the supplier; must be non-negative.
      * @return true, if there is a content at the given index.
      */
-    virtual bool getResult( sal_uInt32 nIndex ) = 0;
+    virtual bool getResult( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex ) = 0;
 
     /**
      * This method returns the total count of objects in the logical data array
@@ -352,7 +355,7 @@ public:
      *
      * @return the total count of objects; will always be non-negative.
      */
-    virtual sal_uInt32 totalCount() = 0;
+    virtual sal_uInt32 totalCount(std::unique_lock<std::mutex>& rResultSetGuard) = 0;
 
     /**
      * This method returns the count of objects obtained so far. There is no
@@ -390,7 +393,7 @@ public:
      * @return the object for accessing the property values.
      */
     virtual css::uno::Reference< css::sdbc::XRow >
-    queryPropertyValues( sal_uInt32 nIndex  ) = 0;
+    queryPropertyValues( std::unique_lock<std::mutex>& rResultSetGuard, sal_uInt32 nIndex  ) = 0;
 
     /**
      * This method is called to instruct the supplier to release the (possibly
