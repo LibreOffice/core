@@ -48,8 +48,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="okaybtn">
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|okaybtn">_Okay</property>
+              <object class="GtkButton" id="okbtn">
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|okbtn">_OK</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -90,11 +90,11 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">6</property>
             <child>
-              <object class="GtkLabel" id="orientation">
+              <object class="GtkLabel" id="compare">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|orientation">Orientation:</property>
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|compare">Compare:</property>
                 <property name="mnemonic-widget">row</property>
               </object>
               <packing>
@@ -196,10 +196,11 @@
                 <property name="can-focus">False</property>
                 <child>
                   <object class="GtkRadioButton" id="row">
-                    <property name="label" translatable="yes" context="duplicaterecordsdialog|row">By _Row</property>
+                    <property name="label" translatable="yes" context="duplicaterecordsdialog|row">_Rows</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|row">Compare rows.</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -212,10 +213,11 @@
                 </child>
                 <child>
                   <object class="GtkRadioButton" id="column">
-                    <property name="label" translatable="yes" context="duplicaterecordsdialog|column">By _Column</property>
+                    <property name="label" translatable="yes" context="duplicaterecordsdialog|column">_Columns</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|column">Compare columns.</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -243,6 +245,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|select">Select duplicate records.</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -259,6 +262,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|remove">Remove duplicate records.</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -282,6 +286,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|includesheaders">Select to exclude the row/column headers from duplicate comparison.</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -291,12 +296,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="items">
+              <object class="GtkLabel" id="records">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|items">Items:</property>
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|records">Records:</property>
                 <property name="mnemonic-widget">allcheckbtn</property>
               </object>
               <packing>
@@ -310,6 +315,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="duplicaterecordsdialog|allcheckbtn">Select/unselect all records.</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
               </object>
@@ -332,7 +338,7 @@
     </child>
     <action-widgets>
       <action-widget response="-11">helpbutton</action-widget>
-      <action-widget response="-5">okaybtn</action-widget>
+      <action-widget response="-5">okbtn</action-widget>
       <action-widget response="-6">cancelbtn</action-widget>
     </action-widgets>
   </object>

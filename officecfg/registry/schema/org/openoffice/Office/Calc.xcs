@@ -1808,9 +1808,9 @@
           <!-- UIHints: Data - Duplicate Records... -->
           <info>
             <desc>Indicates whether to remove rows, or columns in the 'handle duplicate records' dialog.</desc>
-            <label>Data includes row/column headers</label>
+            <label>Compare rows</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="RemoveRecords" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Data - Duplicate Records... -->

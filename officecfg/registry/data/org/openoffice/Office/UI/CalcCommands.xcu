@@ -1380,7 +1380,10 @@
       </node>
       <node oor:name=".uno:HandleDuplicateRecords" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-        <value xml:lang="en-US">Duplicate Records...</value>
+          <value xml:lang="en-US">Handle Duplicate Records...</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Remove or select duplicate records from the selection</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
