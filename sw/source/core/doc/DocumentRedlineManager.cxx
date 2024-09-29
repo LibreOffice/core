@@ -1204,15 +1204,13 @@ void DocumentRedlineManager::SetRedlineFlags( RedlineFlags eMode )
         }
 
         for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
-            for (size_t i = 0; i < maRedlineTable.size(); ++i)
+            for (size_t i = 0; i < maRedlineTable.size(); )
             {
                 SwRangeRedline *const pRedline = maRedlineTable[i];
                 (pRedline->*pFnc)(nLoop, i, false);
-                while (maRedlineTable.size() <= i
-                    || maRedlineTable[i] != pRedline)
-                {        // ensure current position
-                    --i; // a previous redline may have been deleted
-                }
+                // a previous redline may have been deleted
+                if (i < maRedlineTable.size() && maRedlineTable[i] == pRedline)
+                    ++i;
             }
 
         //SwRangeRedline::MoveFromSection routinely changes
