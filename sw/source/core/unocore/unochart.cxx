@@ -2205,15 +2205,12 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
 
 void SAL_CALL SwChartDataSequence::dispose(  )
 {
-    bool bMustDispose( false );
     {
         std::unique_lock aGuard( GetChartMutex() );
-        bMustDispose = !m_bDisposed;
-        if (!m_bDisposed)
-            m_bDisposed = true;
+        if (m_bDisposed)
+            return;
+        m_bDisposed = true;
     }
-    if (!bMustDispose)
-        return;
 
     if (m_xDataProvider.is())
     {
@@ -2653,19 +2650,13 @@ void SAL_CALL SwChartLabeledDataSequence::removeModifyListener(
 
 void SAL_CALL SwChartLabeledDataSequence::dispose(  )
 {
-    bool bMustDispose( false );
-    {
-        std::unique_lock aGuard( GetChartMutex() );
-        bMustDispose = !m_bDisposed;
-        if (!m_bDisposed)
-            m_bDisposed = true;
-    }
-    if (!bMustDispose)
+    std::unique_lock aGuard( GetChartMutex() );
+    if (m_bDisposed)
         return;
+    m_bDisposed = true;
 
     // require listeners to release references to this object
     lang::EventObject aEvtObj( static_cast< chart2::data::XLabeledDataSequence * >(this) );
-    std::unique_lock aGuard( GetChartMutex() );
     m_aModifyListeners.disposeAndClear( aGuard, aEvtObj );
     m_aEventListeners.disposeAndClear( aGuard, aEvtObj );
 }
