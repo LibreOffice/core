@@ -62,7 +62,7 @@ sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSiz
         len = maxSize / 2;
     }
 
-    for (i = 0; i < (len - 1); i++)
+    for (i = 0; i <= len; i++)
     {
         sal_uInt16 aChar;
 
