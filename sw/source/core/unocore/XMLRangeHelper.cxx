@@ -129,8 +129,9 @@ void lcl_getSingleCellAddressFromXMLString(
         rOutCell.bRelativeRow = true;
 
     // parse rest for column
+    assert(i <= 6);
     sal_Int32 nPower = 1;
-    while( rtl::isAsciiAlpha( pStrArray[ i ] ))
+    while( i >= 0 && rtl::isAsciiAlpha( pStrArray[ i ] ))
     {
         nColumn += (pStrArray[ i ] - aLetterA + 1) * nPower;
         i--;
