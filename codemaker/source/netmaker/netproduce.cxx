@@ -881,7 +881,7 @@ void NetProducer::produceConstantGroup(std::string_view name,
                 break;
             case unoidl::ConstantValue::TYPE_FLOAT:
                 type = "float"_ostr;
-                value = OString::number(member.value.floatValue);
+                value = OString::number(member.value.floatValue) + "f";
                 break;
             case unoidl::ConstantValue::TYPE_DOUBLE:
                 type = "double"_ostr;
