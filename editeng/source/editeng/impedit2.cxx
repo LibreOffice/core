@@ -790,6 +790,7 @@ void ImpEditEngine::ParaAttribsChanged( ContentNode const * pNode, bool bIgnoreU
     pPortion->MarkSelectionInvalid( 0 );
 
     sal_Int32 nPara = maEditDoc.GetPos( pNode );
+    assert( nPara != EE_PARA_NOT_FOUND );
     if (bIgnoreUndoCheck || mpEditEngine->IsInUndo())
         mpEditEngine->ParaAttribsChanged( nPara );
 
