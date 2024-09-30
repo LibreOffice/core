@@ -3268,7 +3268,7 @@ namespace
  * 3. Paint the document content (text)
  * 4. Paint the draw layer that is above the document
 |*/
-void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode, SwPrintData const*const pPrintData) const
+void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrame(), "Lower of root is no page." );
 
@@ -3479,7 +3479,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     gProp.pSLines->LockLines( true );
                     const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( rIDDMA.GetHellId(),
-                                            pPrintData,
+                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -3496,7 +3496,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                     gProp.pSLines->LockLines( true );
                     const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( rIDDMA.GetHeaderFooterHellId(),
-                                            pPrintData,
+                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -3542,7 +3542,7 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 if ( pSh->Imp()->HasDrawView() )
                 {
                     pSh->Imp()->PaintLayer( pSh->GetDoc()->getIDocumentDrawModelAccess().GetHeavenId(),
-                                            pPrintData,
+                                            /*pPrintData*/nullptr,
                                             *pPage, pPage->getFrameArea(),
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
@@ -3716,7 +3716,7 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode ePaintFrameMode, SwPrintData const*const) const
+void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode ePaintFrameMode) const
 {
     if (!getFramePrintArea().HasArea())
     {
@@ -4255,7 +4255,7 @@ bool SwFlyFrame::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode, SwPrintData const*const) const
+void SwCellFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrame::PaintSwFrame( rRenderContext, rRect );
@@ -4294,7 +4294,7 @@ void SwFrame::SetDrawObjsAsDeleted( bool bDeleted )
     }
 }
 
-void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode, SwPrintData const*const) const
+void SwFlyFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
     SwViewShell *pShell = getRootFrame()->GetCurrShell();
@@ -4671,7 +4671,7 @@ void SwTextFrame::PaintOutlineContentVisibilityButton() const
         UpdateOutlineContentVisibilityButton(pWrtSh);
 }
 
-void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode, SwPrintData const*const) const
+void SwTabFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode) const
 {
     if (!getFramePrintArea().HasArea())
     {
