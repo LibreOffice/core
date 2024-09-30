@@ -101,7 +101,7 @@ rtl::Reference<OResultSet> OPreparedStatement::makeResultSet()
     closeResultSet();
 
     rtl::Reference<OResultSet> xResultSet(createResultSet());
-    m_xResultSet = uno::Reference<uno::XWeak>(xResultSet);
+    m_xResultSet = xResultSet.get();
     initializeResultSet(xResultSet.get());
     initResultSet(xResultSet.get());
     return xResultSet;

@@ -93,7 +93,7 @@ void OStatement_Base::disposeResultSet()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposeResultSet" );
     // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    rtl::Reference< OResultSet > xComp(m_xResultSet.get());
     assert(xComp.is() || !m_xResultSet.get().is());
     if (xComp.is())
         xComp->dispose();
@@ -175,7 +175,7 @@ void OStatement_Base::closeResultSet()
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference< XCloseable > xCloseable(m_xResultSet.get(), UNO_QUERY);
+    rtl::Reference< OResultSet > xCloseable(m_xResultSet.get());
     assert(xCloseable.is() || !m_xResultSet.get().is());
     if (xCloseable.is())
     {
@@ -252,15 +252,13 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
     construct(sql);
-    Reference< XResultSet > xRS;
     rtl::Reference<OResultSet> pResult = createResultSet();
-    xRS = pResult;
     initializeResultSet(pResult.get());
-    m_xResultSet = xRS;
+    m_xResultSet = pResult.get();
 
     pResult->OpenImpl();
 
-    return xRS;
+    return pResult;
 }
 
 Reference< XConnection > SAL_CALL OStatement::getConnection(  )

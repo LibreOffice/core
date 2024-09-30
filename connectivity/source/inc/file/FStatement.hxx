@@ -36,6 +36,7 @@
 #include <comphelper/propertycontainer.hxx>
 #include <file/fanalyzer.hxx>
 #include <TSortIndex.hxx>
+#include <unotools/weakref.hxx>
 
 namespace connectivity::file
     {
@@ -62,7 +63,7 @@ namespace connectivity::file
             std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
             css::sdbc::SQLWarning                              m_aLastWarning;
-            css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            unotools::WeakReference< OResultSet>               m_xResultSet;   // The last ResultSet created
             css::uno::Reference< css::sdbc::XDatabaseMetaData> m_xDBMetaData;
             css::uno::Reference< css::container::XNameAccess>  m_xColNames; // table columns                                                          //  for this Statement
 
