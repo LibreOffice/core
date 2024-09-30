@@ -273,7 +273,6 @@ void SAL_CALL ExportDocumentHandler::setDocumentLocator(const uno::Reference< xm
 }
 void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >& _aArguments )
 {
-    std::unique_lock aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
     m_xDelegatee = aArgs.getUnpackedValueOrDefault(u"DocumentHandler"_ustr,m_xDelegatee);
     m_xModel = aArgs.getUnpackedValueOrDefault(u"Model"_ustr,m_xModel);
