@@ -180,14 +180,15 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     OUString sCommand = impl_ts_findCommand(aAWTKey);
 
     // No Command found? Do nothing! User is not interested on any error handling .-)
-    // or for some reason m_xContext is NULL (which would crash impl_ts_getURLParser()
-    if (sCommand.isEmpty() || !m_xContext.is())
-    {
+    if (sCommand.isEmpty())
         return false;
-    }
 
     // SAFE -> ----------------------------------
     std::unique_lock aLock(m_aLock);
+
+    // or for some reason m_xContext is NULL (which would crash impl_ts_getURLParser()
+    if (!m_xContext.is())
+        return false;
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
 
