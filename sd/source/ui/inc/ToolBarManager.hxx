@@ -178,13 +178,10 @@ public:
             The group is used for the actual tool bars.
         @param nToolBarId
             Id of the tool bar shell.
-        @param bAddBar
-            Add the toolbar itself with the shell. When false only adds the shell.
     */
     void AddToolBarShell (
         ToolBarGroup eGroup,
-        ShellId nToolBarId,
-        bool bAddBar = true);
+        ShellId nToolBarId);
 
     /** Remove the tool bar with the given name from the specified group.
         If the tool bar is not visible then nothing happens.

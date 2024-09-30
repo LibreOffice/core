@@ -349,7 +349,7 @@ void BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 }
 
 void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBullet,
-                                     std::u16string_view sFont, sal_uInt16 mLevel, bool isResetSize)
+                                     std::u16string_view sFont, sal_uInt16 mLevel)
 {
     sal_uInt16 nMask = 1;
     OUString sBulletCharFormatName = GetBulletCharFmtName();
@@ -364,8 +364,6 @@ void BulletsTypeMgr::ApplyCustomRule(SvxNumRule& aNum, std::u16string_view sBull
             aFmt.SetBulletChar(sBullet[0]);
             aFmt.SetCharFormatName(sBulletCharFormatName);
             aFmt.SetListFormat("");
-            if (isResetSize)
-                aFmt.SetBulletRelSize(45);
             aNum.SetLevel(i, aFmt);
         }
         nMask <<= 1;

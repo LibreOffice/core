@@ -389,13 +389,12 @@ void ToolBarManager::AddToolBar (
 
 void ToolBarManager::AddToolBarShell (
     ToolBarGroup eGroup,
-    ShellId nToolBarId,
-    bool bAddBar)
+    ShellId nToolBarId)
 {
     if (mpImpl != nullptr)
     {
         UpdateLock aLock (shared_from_this());
-        mpImpl->AddToolBarShell(eGroup,nToolBarId,bAddBar);
+        mpImpl->AddToolBarShell(eGroup,nToolBarId,/*bAddBar*/true);
     }
 }
 
