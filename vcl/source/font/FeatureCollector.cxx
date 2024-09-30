@@ -14,6 +14,7 @@
 #include <font/OpenTypeFeatureStrings.hrc>
 #include <svdata.hxx>
 
+#include <hb-aat.h>
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 
@@ -195,7 +196,9 @@ bool FeatureCollector::collect()
     }
     else
     {
-        collectForTable(HB_OT_TAG_GSUB); // substitution
+        // tdf#163213: Font Features dialog should not show OpenType features if the font has "morx" table
+        if (!hb_aat_layout_has_substitution(m_pHbFace))
+            collectForTable(HB_OT_TAG_GSUB); // substitution
         collectForTable(HB_OT_TAG_GPOS); // positioning
         return true;
     }
