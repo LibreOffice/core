@@ -295,7 +295,11 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     awt::Size aSize( 0, 0 ); // default size
 
     AVAsset* pMovie = [[mpPlayer currentItem] asset];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'tracksWithMediaType:' is deprecated: first deprecated in macOS 15.0 - Use
+        // loadTracksWithMediaType:completionHandler: instead
     NSArray* pVideoTracks = [pMovie tracksWithMediaType:AVMediaTypeVideo];
+SAL_WNODEPRECATED_DECLARATIONS_POP
     if ([pVideoTracks count] > 0)
     {
         AVAssetTrack* pFirstVideoTrack = static_cast<AVAssetTrack*>([pVideoTracks objectAtIndex:0]);

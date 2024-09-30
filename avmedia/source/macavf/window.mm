@@ -42,7 +42,11 @@ Window::Window( Player& i_rPlayer, NSView* i_pParentView )
     // check the media asset for video content
     AVPlayer* pAVPlayer = mrPlayer.getAVPlayer();
     AVAsset* pMovie = [[pAVPlayer currentItem] asset];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'tracksWithMediaType:' is deprecated: first deprecated in macOS 15.0 - Use
+        // loadTracksWithMediaType:completionHandler: instead
     const int nVideoCount = [pMovie tracksWithMediaType:AVMediaTypeVideo].count;
+SAL_WNODEPRECATED_DECLARATIONS_POP
     if( nVideoCount <= 0 )
         return;
 

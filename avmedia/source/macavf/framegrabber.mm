@@ -44,7 +44,11 @@ FrameGrabber::~FrameGrabber()
 
 bool FrameGrabber::create( AVAsset* pMovie )
 {
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'tracksWithMediaType:' is deprecated: first deprecated in macOS 15.0 - Use
+        // loadTracksWithMediaType:completionHandler: instead
     if( [[pMovie tracksWithMediaType:AVMediaTypeVideo] count] == 0)
+SAL_WNODEPRECATED_DECLARATIONS_POP
     {
         SAL_WARN("avmedia", "AVGrabber::create() found no video content!" );
         return false;
@@ -63,7 +67,12 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
         return xRet;
 
     // get the requested image from the movie
+
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        // 'copyCGImageAtTime:actualTime:error:' is deprecated: first deprecated in macOS 15.0 -
+        // Use generateCGImageAsynchronouslyForTime:completionHandler: instead
     CGImage* pCGImage = [mpImageGen copyCGImageAtTime:CMTimeMakeWithSeconds(fMediaTime,1000) actualTime:nullptr error:nullptr];
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
 
     // convert the image to a TIFF-formatted byte-array
     CFMutableDataRef pCFData = CFDataCreateMutable( kCFAllocatorDefault, 0 );
