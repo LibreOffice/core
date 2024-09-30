@@ -526,8 +526,8 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         return STATE_SYSTEM_FOCUSED;
     case AccessibleStateType::EXPANDABLE:
         {
-            sal_Bool isExpanded = true;
-            sal_Bool isExpandable = true;
+            bool isExpanded = true;
+            bool isExpandable = true;
             if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
                 return STATE_SYSTEM_HASPOPUP;
 
@@ -853,7 +853,7 @@ void AccObject::unsetFocus()
     m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
 }
 
-void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
+void AccObject::GetExpandedState(bool* isExpandable, bool* isExpanded)
 {
     *isExpanded = false;
     *isExpandable = false;
