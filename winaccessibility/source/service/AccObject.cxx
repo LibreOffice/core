@@ -49,7 +49,6 @@
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
-using namespace com::sun::star::accessibility::AccessibleRole;
 
 constexpr DWORD MSAA_NO_STATE = 0x00000000;
 
@@ -366,14 +365,14 @@ void  AccObject::SetValue( Any pAny )
     OUString val;
     switch(m_accRole)
     {
-    case SPIN_BOX:
+    case AccessibleRole::SPIN_BOX:
         // 3. date editor's msaa value should be the same as spinbox
-    case DATE_EDITOR:
-    case TEXT:
-    case BLOCK_QUOTE:
-    case PARAGRAPH:
-    case HEADING:
-    case TABLE_CELL:
+    case AccessibleRole::DATE_EDITOR:
+    case AccessibleRole::TEXT:
+    case AccessibleRole::BLOCK_QUOTE:
+    case AccessibleRole::PARAGRAPH:
+    case AccessibleRole::HEADING:
+    case AccessibleRole::TABLE_CELL:
 
         if(pRText)
         {
@@ -381,16 +380,16 @@ void  AccObject::SetValue( Any pAny )
         }
         m_pIMAcc->Put_XAccValue( o3tl::toW(val.getStr()) );
         break;
-    case TREE_ITEM:
+    case AccessibleRole::TREE_ITEM:
     //case CHECK_BOX:   //Commented by Li Xing to disable the value for general checkbox
-    case COMBO_BOX:
-    case NOTE:
-    case SCROLL_BAR:
+    case AccessibleRole::COMBO_BOX:
+    case AccessibleRole::NOTE:
+    case AccessibleRole::SCROLL_BAR:
         m_pIMAcc->Put_XAccValue( o3tl::toW(GetMAccessibleValueFromAny(pAny).getStr()) );
         break ;
     // Added by Li Xing, only the checkbox in tree should have the value.
-    case CHECK_BOX:
-        if( ( m_pParentObj !=nullptr ) && (TREE == m_pParentObj->m_accRole || TREE_ITEM == m_pParentObj->m_accRole ))
+    case AccessibleRole::CHECK_BOX:
+        if( ( m_pParentObj !=nullptr ) && (AccessibleRole::TREE == m_pParentObj->m_accRole || AccessibleRole::TREE_ITEM == m_pParentObj->m_accRole ))
             m_pIMAcc->Put_XAccValue( o3tl::toW(GetMAccessibleValueFromAny(pAny).getStr()) );
         break;
     default:
@@ -486,7 +485,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     case AccessibleStateType::BUSY:
         return STATE_SYSTEM_BUSY;
     case AccessibleStateType::CHECKED:
-        if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON)
+        if (m_accRole == AccessibleRole::PUSH_BUTTON || m_accRole == AccessibleRole::TOGGLE_BUTTON)
             return STATE_SYSTEM_PRESSED;
         return STATE_SYSTEM_CHECKED;
     case AccessibleStateType::DEFUNC:
@@ -506,18 +505,20 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     case AccessibleStateType::RESIZABLE:
         return STATE_SYSTEM_SIZEABLE;
     case AccessibleStateType::SELECTABLE:
-        if (m_accRole == MENU || m_accRole == MENU_ITEM)
+        if (m_accRole == AccessibleRole::MENU || m_accRole == AccessibleRole::MENU_ITEM)
             return MSAA_NO_STATE;
         return STATE_SYSTEM_SELECTABLE;
     case AccessibleStateType::SELECTED:
-        if (m_accRole == MENU || m_accRole == MENU_ITEM)
+        if (m_accRole == AccessibleRole::MENU || m_accRole == AccessibleRole::MENU_ITEM)
             return MSAA_NO_STATE;
         return STATE_SYSTEM_SELECTED;
     case AccessibleStateType::ARMED:
         return STATE_SYSTEM_FOCUSED;
     case AccessibleStateType::EXPANDABLE:
         {
-            if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
+            if (m_accRole == AccessibleRole::PUSH_BUTTON
+                || m_accRole == AccessibleRole::TOGGLE_BUTTON
+                || m_accRole == AccessibleRole::BUTTON_DROPDOWN)
                 return STATE_SYSTEM_HASPOPUP;
 
             if (!(m_xAccContextRef->getAccessibleStateSet() & AccessibleStateType::EXPANDED))
@@ -554,13 +555,17 @@ void  AccObject::DecreaseState( sal_Int64 xState )
 {
     if (xState == AccessibleStateType::FOCUSABLE)
     {
-        if (m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM)
+        if (m_accRole == AccessibleRole::MENU_ITEM || m_accRole == AccessibleRole::RADIO_MENU_ITEM
+            || m_accRole == AccessibleRole::CHECK_MENU_ITEM)
             return;
         else
         {
-            if (m_accRole == TOGGLE_BUTTON || m_accRole == PUSH_BUTTON || m_accRole == BUTTON_DROPDOWN)
+            if (m_accRole == AccessibleRole::TOGGLE_BUTTON
+                || m_accRole == AccessibleRole::PUSH_BUTTON
+                || m_accRole == AccessibleRole::BUTTON_DROPDOWN)
             {
-                if( ( m_pParentObj !=nullptr ) && (TOOL_BAR == m_pParentObj->m_accRole ) )
+                if ((m_pParentObj != nullptr)
+                    && (AccessibleRole::TOOL_BAR == m_pParentObj->m_accRole))
                     return;
             }
         }
@@ -639,7 +644,7 @@ void AccObject::UpdateState()
 
     m_pIMAcc->SetState(0);
 
-    if ( m_accRole == POPUP_MENU )
+    if (m_accRole == AccessibleRole::POPUP_MENU)
     {
         return;
     }
@@ -668,7 +673,9 @@ void AccObject::UpdateState()
         IncreaseState(nState);
     }
 
-    bool bIsMenuItem = m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM;
+    bool bIsMenuItem = m_accRole == AccessibleRole::MENU_ITEM
+                       || m_accRole == AccessibleRole::RADIO_MENU_ITEM
+                       || m_accRole == AccessibleRole::CHECK_MENU_ITEM;
 
     if(bIsMenuItem)
     {
@@ -685,31 +692,31 @@ void AccObject::UpdateState()
 
     switch(m_accRole)
     {
-    case LABEL:
-    case STATIC:
-    case NOTIFICATION:
-    case TEXT:
+    case AccessibleRole::LABEL:
+    case AccessibleRole::STATIC:
+    case AccessibleRole::NOTIFICATION:
+    case AccessibleRole::TEXT:
         // 2. editable combobox -> readonly ------ bridge
-    case EMBEDDED_OBJECT:
-    case END_NOTE:
-    case FOOTER:
-    case FOOTNOTE:
-    case GRAPHIC:
-    case HEADER:
-    case HEADING:
+    case AccessibleRole::EMBEDDED_OBJECT:
+    case AccessibleRole::END_NOTE:
+    case AccessibleRole::FOOTER:
+    case AccessibleRole::FOOTNOTE:
+    case AccessibleRole::GRAPHIC:
+    case AccessibleRole::HEADER:
+    case AccessibleRole::HEADING:
 
         //Image Map
-    case BLOCK_QUOTE:
-    case PARAGRAPH:
-    case PASSWORD_TEXT:
-    case SHAPE:
-    case SPIN_BOX:
-    case TABLE:
-    case TABLE_CELL:
-    case TEXT_FRAME:
-    case DATE_EDITOR:
-    case DOCUMENT:
-    case COLUMN_HEADER:
+    case AccessibleRole::BLOCK_QUOTE:
+    case AccessibleRole::PARAGRAPH:
+    case AccessibleRole::PASSWORD_TEXT:
+    case AccessibleRole::SHAPE:
+    case AccessibleRole::SPIN_BOX:
+    case AccessibleRole::TABLE:
+    case AccessibleRole::TABLE_CELL:
+    case AccessibleRole::TEXT_FRAME:
+    case AccessibleRole::DATE_EDITOR:
+    case AccessibleRole::DOCUMENT:
+    case AccessibleRole::COLUMN_HEADER:
         {
             if(!isEditable)
                 m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
@@ -727,12 +734,12 @@ void AccObject::UpdateState()
 
     switch(m_accRole)
     {
-    case POPUP_MENU:
-    case MENU:
+    case AccessibleRole::POPUP_MENU:
+    case AccessibleRole::MENU:
         if( pContext->getAccessibleChildCount() > 0 )
             m_pIMAcc->IncreaseState( STATE_SYSTEM_HASPOPUP );
         break;
-    case PASSWORD_TEXT:
+    case AccessibleRole::PASSWORD_TEXT:
         m_pIMAcc->IncreaseState( STATE_SYSTEM_PROTECTED );
         break;
     default:
