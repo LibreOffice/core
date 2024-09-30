@@ -83,13 +83,21 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
 
     // disable buttons
     CertificateHighlightHdl(*m_xCertLB);
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // Single certificate doesn't change during the lifetime of a LOK view: no need to search or
+        // reload it.
+        m_xSearchBox->hide();
+        m_xReloadBtn->hide();
+    }
 }
 
 CertificateChooser::~CertificateChooser()
 {
 }
 
-short CertificateChooser::run()
+void CertificateChooser::BeforeRun()
 {
     // #i48432#
     // We can't check for personal certificates before raising this dialog,
@@ -106,6 +114,11 @@ short CertificateChooser::run()
 
     m_xDialog->show();
     ImplInitialize();
+}
+
+short CertificateChooser::run()
+{
+    BeforeRun();
     return GenericDialogController::run();
 }
 
@@ -435,8 +448,8 @@ void CertificateChooser::ImplShowCertificateDetails()
     if (!userData->xSecurityEnvironment.is() || !userData->xCertificate.is())
         return;
 
-    CertificateViewer aViewer(m_xDialog.get(), userData->xSecurityEnvironment, userData->xCertificate, true, this);
-    aViewer.run();
+    auto xViewer = std::make_shared<CertificateViewer>(m_xDialog.get(), userData->xSecurityEnvironment, userData->xCertificate, true, this);
+    weld::DialogController::runAsync(xViewer, [] (int) {});
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
