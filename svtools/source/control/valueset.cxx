@@ -32,6 +32,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -804,25 +805,29 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         }
     }
 
-    // focus event (select)
-    const size_t nPos = GetItemPos( mnSelItemId );
-
-    ValueSetItem* pItem;
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-        pItem = mItemList[nPos].get();
-    else
-        pItem = mpNoneItem.get();
-
-    ValueItemAcc* pItemAcc = nullptr;
-    if (pItem != nullptr)
-        pItemAcc = ValueItemAcc::getImplementation( pItem->GetAccessible( false/*bIsTransientChildrenDisabled*/ ) );
-
-    if( pItemAcc )
+    if (mxAccessible->getAccessibleStateSet() & css::accessibility::AccessibleStateType::FOCUSED)
     {
-        Any aOldAny;
-        Any aNewAny;
-        aNewAny <<= Reference(getXWeak(pItemAcc));
-        ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
+        // focus event (select)
+        const size_t nPos = GetItemPos(mnSelItemId);
+
+        ValueSetItem* pItem;
+        if (nPos != VALUESET_ITEM_NOTFOUND)
+            pItem = mItemList[nPos].get();
+        else
+            pItem = mpNoneItem.get();
+
+        ValueItemAcc* pItemAcc = nullptr;
+        if (pItem != nullptr)
+            pItemAcc = ValueItemAcc::getImplementation(
+                pItem->GetAccessible(false /*bIsTransientChildrenDisabled*/));
+
+        if (pItemAcc)
+        {
+            Any aOldAny;
+            Any aNewAny;
+            aNewAny <<= Reference(getXWeak(pItemAcc));
+            ImplFireAccessibleEvent(AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny);
+        }
     }
 
     // selection event
