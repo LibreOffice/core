@@ -29,14 +29,12 @@
 #include <comphelper/diagnose_ex.hxx>
 
 #include <drawinglayer/converters.hxx>
+#include <config_vclplug.h>
 
 #ifdef DBG_UTIL
 #include <tools/stream.hxx>
-// #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/dibtools.hxx>
 #endif
-
-// #include <vcl/BitmapReadAccess.hxx>
 
 namespace
 {
@@ -164,6 +162,27 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     {
         return BitmapEx();
     }
+
+#if USE_HEADLESS_CODE
+    // shortcut: try to directly create a PixelProcessor2D with
+    // RGBA support - that's what we need
+    // Currently only implemented for CairoSDPR, so add code only
+    // for USE_HEADLESS_CODE, but is designed as a general functionality
+    std::unique_ptr<processor2d::BaseProcessor2D> pRGBAProcessor
+        = processor2d::createPixelProcessor2DFromScratch(rViewInformation2D, nDiscreteWidth, nDiscreteHeight, true);
+    if (pRGBAProcessor)
+    {
+        // render content
+        pRGBAProcessor->process(aSequence);
+
+        // create final BitmapEx result (content)
+        const BitmapEx aRetval(processor2d::extractBitmapExFromBaseProcessor2D(pRGBAProcessor));
+
+        // check if we have a result and return if so
+        if (!aRetval.IsEmpty())
+            return aRetval;
+    }
+#endif
 
     const Point aEmptyPoint;
     const Size aSizePixel(nDiscreteWidth, nDiscreteHeight);

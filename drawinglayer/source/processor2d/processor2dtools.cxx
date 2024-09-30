@@ -32,6 +32,46 @@
 
 namespace drawinglayer::processor2d
 {
+std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromScratch(
+    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
+    sal_uInt32 nPixelWidth,
+    sal_uInt32 nPixelHeight,
+    bool bUseRGBA)
+{
+    if (0 == nPixelWidth || 0 == nPixelHeight)
+        // error: no size given
+        return nullptr;
+
+#if USE_HEADLESS_CODE
+    // Linux/Cairo: now globally activated in master. Leave a
+    // possibility to deactivate for easy test/request testing
+    static bool bUsePrimitiveRenderer(nullptr == std::getenv("DISABLE_SYSTEM_DEPENDENT_PRIMITIVE_RENDERER"));
+
+    if (bUsePrimitiveRenderer)
+    {
+        // create CairoPixelProcessor2D with given size
+        std::unique_ptr<CairoPixelProcessor2D> aRetval(
+            std::make_unique<CairoPixelProcessor2D>(
+                rViewInformation2D,
+                nPixelWidth,
+                nPixelHeight,
+                bUseRGBA));
+
+        if (aRetval->valid())
+            return aRetval;
+    }
+#endif
+
+    // avoid unused parameter errors
+    (void)rViewInformation2D;
+    (void)nPixelWidth;
+    (void)nPixelHeight;
+    (void)bUseRGBA;
+
+    // error: no result when no SDPR supported
+    return nullptr;
+}
+
 std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     OutputDevice& rTargetOutDev,
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D)
@@ -69,7 +109,6 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
     if (bUsePrimitiveRenderer)
     {
         SystemGraphicsData aData(rTargetOutDev.GetSystemGfxData());
-        const Size aSizePixel(rTargetOutDev.GetOutputSizePixel());
 
         // create CairoPixelProcessor2D, make use of the possibility to
         // add an initial clip relative to the real pixel dimensions of
@@ -83,7 +122,7 @@ std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromOutputDevice(
             std::make_unique<CairoPixelProcessor2D>(
                 rViewInformation2D, static_cast<cairo_surface_t*>(aData.pSurface),
                 rTargetOutDev.GetOutOffXPixel(), rTargetOutDev.GetOutOffYPixel(),
-                aSizePixel.getWidth(), aSizePixel.getHeight()));
+                rTargetOutDev.GetOutputWidthPixel(), rTargetOutDev.GetOutputHeightPixel()));
 
         if (aRetval->valid())
             return aRetval;
@@ -115,6 +154,25 @@ std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
         // create Pixel Vcl-Processor
         return createPixelProcessor2DFromOutputDevice(rTargetOutDev, rViewInformation2D);
     }
+}
+
+BitmapEx extractBitmapExFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor)
+{
+    BitmapEx aRetval;
+
+#if USE_HEADLESS_CODE
+    // currently only defined for cairo
+    CairoPixelProcessor2D* pSource(dynamic_cast<CairoPixelProcessor2D*>(rProcessor.get()));
+
+    if (nullptr != pSource)
+        aRetval = pSource->extractBitmapEx();
+#endif
+
+    // avoid unused parameter errors
+    (void)rProcessor;
+
+    // default: return empty BitmapEx
+    return aRetval;
 }
 
 } // end of namespace

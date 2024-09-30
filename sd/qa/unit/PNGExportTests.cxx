@@ -334,15 +334,28 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf158743)
     // make sure the bitmap is not empty and correct size (PNG export->import was successful)
     Size aSize = aBMPEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
+
+    // read RGB
     Bitmap aBMP = aBMPEx.GetBitmap();
     BitmapScopedReadAccess pReadAccess(aBMP);
+
+    // read Alpha
+    Bitmap aAlpha = aBMPEx.GetAlphaMask().GetBitmap();
+    BitmapScopedReadAccess pReadAccessAlpha(aAlpha);
+
     int nBlackCount = 0;
     for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColor = pReadAccess->GetColor(nY, nX);
-            if (aColor == COL_BLACK)
+            const Color aTrans = pReadAccessAlpha->GetColor(nY, nX);
+
+            // only count as black when *not* transparent, else
+            // the color is random/luck. Note that when accessing
+            // AlphaMask like this alpha is actually in R, G and B,
+            // *not* in GetAlpha() (sigh...)
+            if (0 != aTrans.GetRed() && aColor == COL_BLACK)
                 ++nBlackCount;
         }
     }

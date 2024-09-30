@@ -70,10 +70,11 @@ class UNLESS_MERGELIBS(DRAWINGLAYER_DLLPUBLIC) CairoPixelProcessor2D final : pub
     basegfx::BColorModifierStack maBColorModifierStack;
 
     // cairo_surface_t created when initial clip from the constructor
-    // parameters is requested
-    cairo_surface_t* mpCreateForRectangle;
+    // parameters is requested, or by the constructor that creates an
+    // owned surface
+    cairo_surface_t* mpOwnedSurface;
 
-    // cairo specific data
+    // cairo specific data, the render target
     cairo_t* mpRT;
 
     // get text render config settings
@@ -182,7 +183,29 @@ protected:
 
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
+
+    // construtcor to create a CairoPixelProcessor2D which
+    // allocates and owns a cairo surface of given size. You
+    // should check the result using valid()
     CairoPixelProcessor2D(
+
+        // the initial ViewInformation
+        const geometry::ViewInformation2D& rViewInformation,
+
+        // the pixel size
+        tools::Long nWidthPixel, tools::Long nHeightPixel,
+
+        // define RGBA (true) or RGB (false)
+        bool bUseRGBA);
+
+    // constructor to create a CairoPixelProcessor2D for
+    // the given cairo_surface_t pTarget. pTarget will not
+    // be owned and not destroyed, but be used as render
+    // target. If needed you can define a sub-rectangle
+    // to which the rendering will be limited (clipped).
+    // You should check the result using valid()
+    CairoPixelProcessor2D(
+
         // the initial ViewInformation
         const geometry::ViewInformation2D& rViewInformation,
 
@@ -205,6 +228,9 @@ public:
     {
         maBColorModifierStack = rStack;
     }
+
+    // try to extract current content as BitmapEx
+    BitmapEx extractBitmapEx() const;
 };
 }
 

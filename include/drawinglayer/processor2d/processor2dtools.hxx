@@ -20,6 +20,7 @@
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_PROCESSOR2DTOOLS_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <vcl/bitmapex.hxx>
 #include <memory>
 
 namespace drawinglayer::geometry { class ViewInformation2D; }
@@ -29,6 +30,28 @@ class OutputDevice;
 
 namespace drawinglayer::processor2d
     {
+        /** create the best available pixel based BaseProcessor2D
+            (which may be system-dependent) for a given pixel size
+            and format
+
+            @param rViewInformation2D
+            The ViewInformation to use
+
+            @param nPixelWidth, nPixelHeight
+            The dimensions in Pixles
+
+            @param bUseRGBA
+            Define RGBA (true) or RGB (false)
+
+            @return
+            the created BaseProcessor2D OR empty (ownership change)
+        */
+        DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createPixelProcessor2DFromScratch(
+            const drawinglayer::geometry::ViewInformation2D& rViewInformation2D,
+            sal_uInt32 nPixelWidth,
+            sal_uInt32 nPixelHeight,
+            bool bUseRGBA);
+
         /** create the best available pixel based BaseProcessor2D
             (which may be system-dependent)
 
@@ -62,6 +85,17 @@ namespace drawinglayer::processor2d
         DRAWINGLAYER_DLLPUBLIC std::unique_ptr<BaseProcessor2D> createProcessor2DFromOutputDevice(
             OutputDevice& rTargetOutDev,
             const drawinglayer::geometry::ViewInformation2D& rViewInformation2D);
+
+        /** extract the pixel data from a given BaseProcessor2D to
+            a BitmapEx. This may fail due to maybe system-dependent
+
+            @param rProcessor
+            A unique_ptr to a BaseProcessor2D from which to extract
+
+            @return
+            a BitmapEx, may be empty, so check result
+        */
+        DRAWINGLAYER_DLLPUBLIC BitmapEx extractBitmapExFromBaseProcessor2D(const std::unique_ptr<BaseProcessor2D>& rProcessor);
 
 
 } // end of namespace drawinglayer::processor2d

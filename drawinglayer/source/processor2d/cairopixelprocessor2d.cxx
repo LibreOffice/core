@@ -13,6 +13,8 @@
 #include <drawinglayer/processor2d/SDPRProcessor2dTools.hxx>
 #include <sal/log.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
+#include <vcl/alpha.hxx>
 #include <vcl/cairo.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -866,12 +868,50 @@ basegfx::B2DRange getDiscreteViewRange(cairo_t* pRT)
 namespace drawinglayer::processor2d
 {
 CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
+                                             tools::Long nWidthPixel, tools::Long nHeightPixel,
+                                             bool bUseRGBA)
+    : BaseProcessor2D(rViewInformation)
+    , maBColorModifierStack()
+    , mpOwnedSurface(nullptr)
+    , mpRT(nullptr)
+    , mbRenderSimpleTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
+    , mbRenderDecoratedTextDirect(
+          officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
+    , mnClipRecursionCount(0)
+{
+    if (nWidthPixel <= 0 || nHeightPixel <= 0)
+        // no size, invalid
+        return;
+
+    mpOwnedSurface = cairo_image_surface_create(bUseRGBA ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_RGB24,
+                                                nWidthPixel, nHeightPixel);
+
+    if (nullptr == mpOwnedSurface)
+        // error, invalid
+        return;
+
+    // create RenderTarget for full target
+    mpRT = cairo_create(mpOwnedSurface);
+
+    if (nullptr == mpRT)
+        // error, invalid
+        return;
+
+    // initialize some basic used values/settings
+    cairo_set_antialias(mpRT, rViewInformation.getUseAntiAliasing() ? CAIRO_ANTIALIAS_DEFAULT
+                                                                    : CAIRO_ANTIALIAS_NONE);
+    cairo_set_fill_rule(mpRT, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_operator(mpRT, CAIRO_OPERATOR_OVER);
+}
+
+CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                              cairo_surface_t* pTarget, tools::Long nOffsetPixelX,
                                              tools::Long nOffsetPixelY, tools::Long nWidthPixel,
                                              tools::Long nHeightPixel)
     : BaseProcessor2D(rViewInformation)
     , maBColorModifierStack()
-    , mpCreateForRectangle(nullptr)
+    , mpOwnedSurface(nullptr)
     , mpRT(nullptr)
     , mbRenderSimpleTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
@@ -909,11 +949,11 @@ CairoPixelProcessor2D::CairoPixelProcessor2D(const geometry::ViewInformation2D& 
             // optional: if the possibility to add an initial clip relative
             // to the real pixel dimensions of the target surface is used,
             // apply it here using that nice existing method of cairo
-            mpCreateForRectangle = cairo_surface_create_for_rectangle(
+            mpOwnedSurface = cairo_surface_create_for_rectangle(
                 pTarget, nOffsetPixelX, nOffsetPixelY, nWidthPixel, nHeightPixel);
 
-            if (nullptr != mpCreateForRectangle)
-                mpRT = cairo_create(mpCreateForRectangle);
+            if (nullptr != mpOwnedSurface)
+                mpRT = cairo_create(mpOwnedSurface);
         }
         else
         {
@@ -937,8 +977,129 @@ CairoPixelProcessor2D::~CairoPixelProcessor2D()
 {
     if (nullptr != mpRT)
         cairo_destroy(mpRT);
-    if (nullptr != mpCreateForRectangle)
-        cairo_surface_destroy(mpCreateForRectangle);
+    if (nullptr != mpOwnedSurface)
+        cairo_surface_destroy(mpOwnedSurface);
+}
+
+BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
+{
+    // default is empty BitmapEx
+    BitmapEx aRetval;
+
+    if (nullptr == mpRT)
+        // no RenderContext, not valid
+        return aRetval;
+
+    cairo_surface_t* pSource(cairo_get_target(mpRT));
+    if (nullptr == pSource)
+        // no surface, not valid
+        return aRetval;
+
+    // check pixel sizes
+    const sal_uInt32 nWidth(cairo_image_surface_get_width(pSource));
+    const sal_uInt32 nHeight(cairo_image_surface_get_height(pSource));
+    if (0 == nWidth || 0 == nHeight)
+        // no content, not valid
+        return aRetval;
+
+    // check format
+    const cairo_format_t aFormat(cairo_image_surface_get_format(pSource));
+    if (CAIRO_FORMAT_ARGB32 != aFormat && CAIRO_FORMAT_RGB24 != aFormat)
+        // we for now only support ARGB32 and RGB24, format not supported, not valid
+        return aRetval;
+
+    // ensure surface read access, wer need CAIRO_SURFACE_TYPE_IMAGE
+    cairo_surface_t* pReadSource(pSource);
+
+    if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pReadSource))
+    {
+        // create mapping for read access to source
+        pReadSource = cairo_surface_map_to_image(pReadSource, nullptr);
+    }
+
+    // prepare VCL/Bitmap stuff
+    const Size aBitmapSize(nWidth, nHeight);
+    Bitmap aBitmap(aBitmapSize, vcl::PixelFormat::N24_BPP);
+    BitmapWriteAccess aAccess(aBitmap);
+
+    // prepare VCL/AlphaMask stuff
+    const bool bHasAlpha(CAIRO_FORMAT_ARGB32 == aFormat);
+    std::optional<AlphaMask> aAlphaMask;
+    // NOTE: Tried to use std::optional for pAlphaWrite but
+    // BitmapWriteAccess does not have all needed operators
+    BitmapWriteAccess* pAlphaWrite(nullptr);
+    if (bHasAlpha)
+    {
+        aAlphaMask = AlphaMask(aBitmapSize);
+        pAlphaWrite = new BitmapWriteAccess(*aAlphaMask);
+    }
+
+    // prepare cairo stuff
+    const sal_uInt32 nStride(cairo_image_surface_get_stride(pReadSource));
+    unsigned char* pStartPixelData(cairo_image_surface_get_data(pReadSource));
+
+    // separate loops for bHasAlpha so that we have *no* branch in the
+    // loops itself
+    if (bHasAlpha)
+    {
+        for (sal_uInt32 y(0); y < nHeight; ++y)
+        {
+            // prepare scanline
+            unsigned char* pPixelData(pStartPixelData + (nStride * y));
+            Scanline pWriteRGB = aAccess.GetScanline(y);
+            Scanline pWriteA = pAlphaWrite->GetScanline(y);
+
+            for (sal_uInt32 x(0); x < nWidth; ++x)
+            {
+                // RGBA: Do not forget: it's pre-mulitiplied
+                sal_uInt8 nAlpha(pPixelData[SVP_CAIRO_ALPHA]);
+                aAccess.SetPixelOnData(
+                    pWriteRGB, x,
+                    BitmapColor(vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_RED], nAlpha),
+                                vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_GREEN], nAlpha),
+                                vcl::bitmap::unpremultiply(pPixelData[SVP_CAIRO_BLUE], nAlpha)));
+                pAlphaWrite->SetPixelOnData(pWriteA, x, BitmapColor(nAlpha));
+                pPixelData += 4;
+            }
+        }
+    }
+    else
+    {
+        for (sal_uInt32 y(0); y < nHeight; ++y)
+        {
+            // prepare scanline
+            unsigned char* pPixelData(pStartPixelData + (nStride * y));
+            Scanline pWriteRGB = aAccess.GetScanline(y);
+
+            for (sal_uInt32 x(0); x < nWidth; ++x)
+            {
+                aAccess.SetPixelOnData(pWriteRGB, x,
+                                       BitmapColor(pPixelData[SVP_CAIRO_RED],
+                                                   pPixelData[SVP_CAIRO_GREEN],
+                                                   pPixelData[SVP_CAIRO_BLUE]));
+                pPixelData += 4;
+            }
+        }
+    }
+
+    // cleanup optional BitmapWriteAccess pAlphaWrite
+    if (nullptr != pAlphaWrite)
+        delete pAlphaWrite;
+
+    if (bHasAlpha)
+        // construct and return BitmapEx
+        aRetval = BitmapEx(aBitmap, *aAlphaMask);
+    else
+        // reset BitmapEx to just Bitmap content
+        aRetval = aBitmap;
+
+    if (pReadSource != pSource)
+    {
+        // cleanup mapping for read/write access to source
+        cairo_surface_unmap_image(pSource, pReadSource);
+    }
+
+    return aRetval;
 }
 
 void CairoPixelProcessor2D::processBitmapPrimitive2D(
@@ -1394,6 +1555,7 @@ void CairoPixelProcessor2D::processInvertPrimitive2D(
 
         if (CAIRO_SURFACE_TYPE_IMAGE != cairo_surface_get_type(pRenderTarget))
         {
+            // create mapping for read/write access to pRenderTarget
             pRenderTarget = cairo_surface_map_to_image(pRenderTarget, nullptr);
         }
 
