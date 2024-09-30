@@ -38,7 +38,7 @@ namespace dbaui
     class OAsynchronousLink final
     {
         Link<void*,void>    m_aHandler;
-        std::mutex          m_aEventSafety;
+        mutable std::mutex  m_aEventSafety;
         std::mutex          m_aDestructionSafety;
         ImplSVEvent *       m_nEventId;
         DECL_LINK(OnAsyncCall, void*, void);
@@ -50,7 +50,11 @@ namespace dbaui
         OAsynchronousLink( const Link<void*,void>& _rHandler );
         ~OAsynchronousLink();
 
-        bool    IsRunning() const { return m_nEventId != nullptr; }
+        bool    IsRunning() const
+        {
+            std::unique_lock aEventGuard(m_aEventSafety);
+            return m_nEventId != nullptr;
+        }
 
         void Call( void* _pArgument = nullptr );
         void CancelCall();
