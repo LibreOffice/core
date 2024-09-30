@@ -168,6 +168,8 @@ std::vector<OUString> jfw_convertUserPathList(std::u16string_view sUserPath)
             }
         }
         result.emplace_back(sToken);
+        if (nextColon == std::u16string_view::npos)
+            break;
         nIdx = nextColon + 1;
     } while (nIdx > 0);
     return result;
