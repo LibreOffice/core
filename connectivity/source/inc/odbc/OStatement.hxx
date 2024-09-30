@@ -37,6 +37,7 @@
 #include <string_view>
 #include <vector>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <unotools/weakref.hxx>
 
 namespace connectivity::odbc
     {
@@ -61,7 +62,7 @@ namespace connectivity::odbc
         {
             css::sdbc::SQLWarning                             m_aLastWarning;
         protected:
-            css::uno::WeakReference< css::sdbc::XResultSet>   m_xResultSet;   // The last ResultSet created
+            unotools::WeakReference< OResultSet >             m_xResultSet;   // The last ResultSet created
             css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
             //  for this Statement
 
@@ -122,7 +123,7 @@ namespace connectivity::odbc
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            css::uno::Reference<css::sdbc::XResultSet> getResultSet(bool checkCount);
+            rtl::Reference<OResultSet> getResultSet(bool checkCount);
             /**
                 creates the driver specific resultset (factory)
             */

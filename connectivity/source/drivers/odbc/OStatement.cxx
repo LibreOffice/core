@@ -83,10 +83,12 @@ OStatement_Base::~OStatement_Base()
 void OStatement_Base::disposeResultSet()
 {
     // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    rtl::Reference< OResultSet > xComp(m_xResultSet.get());
     if (xComp.is())
+    {
         xComp->dispose();
-    m_xResultSet.clear();
+        m_xResultSet.clear();
+    }
 }
 
 void SAL_CALL OStatement_Base::disposing()
@@ -208,8 +210,7 @@ void OStatement_Base::clearMyResultSet()
 
     try
     {
-        Reference<XCloseable> xCloseable(
-            m_xResultSet.get(), css::uno::UNO_QUERY);
+        rtl::Reference<OResultSet> xCloseable(m_xResultSet.get());
         if ( xCloseable.is() )
             xCloseable->close();
     }
@@ -362,7 +363,7 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql )
 // getResultSet returns the current result as a ResultSet.  It
 // returns NULL if the current result is not a ResultSet.
 
-Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
+rtl::Reference< OResultSet > OStatement_Base::getResultSet(bool checkCount)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -427,15 +428,15 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    Reference< XResultSet > xRS;
+    rtl::Reference< OResultSet > xRS;
 
     // Execute the statement.  If execute returns true, a result
     // set exists.
 
     if (execute (sql))
     {
-        xRS = getResultSet (false);
-        m_xResultSet = xRS;
+        xRS = getResultSet(false);
+        m_xResultSet = xRS.get();
     }
     else
     {
@@ -542,8 +543,9 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    m_xResultSet = getResultSet(true);
-    return m_xResultSet;
+    rtl::Reference<OResultSet> xRS = getResultSet(true);
+    m_xResultSet = xRS.get();
+    return xRS;
 }
 
 
