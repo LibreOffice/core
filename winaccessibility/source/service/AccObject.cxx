@@ -50,7 +50,6 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
-using namespace com::sun::star::accessibility::AccessibleStateType;
 
 namespace {
 
@@ -493,10 +492,10 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
 
     switch( nState )
     {
-    case  BUSY:
+    case AccessibleStateType::BUSY:
         IState = STATE_SYSTEM_BUSY;
         break;
-    case  CHECKED:
+    case AccessibleStateType::CHECKED:
         if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON)
         {
             IState = STATE_SYSTEM_PRESSED;
@@ -504,31 +503,31 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         else
             IState = STATE_SYSTEM_CHECKED;
         break;
-    case  DEFUNC:
+    case AccessibleStateType::DEFUNC:
         IState = STATE_SYSTEM_UNAVAILABLE;
         break;
-    case  EXPANDED:
+    case AccessibleStateType::EXPANDED:
         IState = STATE_SYSTEM_EXPANDED;
         break;
-    case  FOCUSABLE:
+    case AccessibleStateType::FOCUSABLE:
         IState = STATE_SYSTEM_FOCUSABLE;
         break;
-    case  FOCUSED:
+    case AccessibleStateType::FOCUSED:
         IState = STATE_SYSTEM_FOCUSED;
         break;
-    case  INDETERMINATE:
+    case AccessibleStateType::INDETERMINATE:
         IState = STATE_SYSTEM_MIXED;
         break;
-    case  MULTI_SELECTABLE:
+    case AccessibleStateType::MULTI_SELECTABLE:
         IState = STATE_SYSTEM_MULTISELECTABLE;
         break;
-    case  PRESSED:
+    case AccessibleStateType::PRESSED:
         IState = STATE_SYSTEM_PRESSED;
         break;
-    case  RESIZABLE:
+    case AccessibleStateType::RESIZABLE:
         IState = STATE_SYSTEM_SIZEABLE;
         break;
-    case  SELECTABLE:
+    case AccessibleStateType::SELECTABLE:
         if( m_accRole == MENU || m_accRole == MENU_ITEM)
         {
             IState = UNO_MSAA_UNMAPPING;
@@ -538,7 +537,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
             IState = STATE_SYSTEM_SELECTABLE;
         }
         break;
-    case  SELECTED:
+    case AccessibleStateType::SELECTED:
         if( m_accRole == MENU || m_accRole == MENU_ITEM )
         {
             IState = UNO_MSAA_UNMAPPING;
@@ -548,10 +547,10 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
             IState = STATE_SYSTEM_SELECTED;
         }
         break;
-    case  ARMED:
+    case AccessibleStateType::ARMED:
         IState = STATE_SYSTEM_FOCUSED;
         break;
-    case  EXPANDABLE:
+    case AccessibleStateType::EXPANDABLE:
         {
             sal_Bool isExpanded = true;
             sal_Bool isExpandable = true;
@@ -570,19 +569,19 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     //Remove the SENSITIVE state mapping. There is no corresponding MSAA state.
     //case  SENSITIVE:
     //    IState = STATE_SYSTEM_PROTECTED;
-    case EDITABLE:
+    case AccessibleStateType::EDITABLE:
         m_pIMAcc->DecreaseState(STATE_SYSTEM_READONLY);
         break;
-    case OFFSCREEN:
+    case AccessibleStateType::OFFSCREEN:
         IState = STATE_SYSTEM_OFFSCREEN;
         break;
-    case MOVEABLE:
+    case AccessibleStateType::MOVEABLE:
         IState = STATE_SYSTEM_MOVEABLE;
         break;
-    case COLLAPSE:
+    case AccessibleStateType::COLLAPSE:
         IState = STATE_SYSTEM_COLLAPSED;
         break;
-    case DEFAULT:
+    case AccessibleStateType::DEFAULT:
         IState = STATE_SYSTEM_DEFAULT;
         break;
     default:
@@ -599,7 +598,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
    */
 void  AccObject::DecreaseState( sal_Int64 xState )
 {
-    if( xState == FOCUSABLE)
+    if (xState == AccessibleStateType::FOCUSABLE)
     {
         if (m_accRole == MENU_ITEM || m_accRole == RADIO_MENU_ITEM || m_accRole == CHECK_MENU_ITEM)
             return;
@@ -702,15 +701,15 @@ void AccObject::UpdateState()
         sal_Int64 nState = sal_Int64(1) << i;
         if (!(nState & nRState))
             continue;
-        if (nState == ENABLED)
+        if (nState == AccessibleStateType::ENABLED)
             isEnable = true;
-        else if (nState == SHOWING)
+        else if (nState == AccessibleStateType::SHOWING)
             isShowing = true;
-        else if (nState == VISIBLE)
+        else if (nState == AccessibleStateType::VISIBLE)
             isVisible = true;
-        else if (nState == EDITABLE)
+        else if (nState == AccessibleStateType::EDITABLE)
             isEditable = true;
-        else if (nState == FOCUSABLE)
+        else if (nState == AccessibleStateType::FOCUSABLE)
             isFocusable = true;
         IncreaseState(nState);
     }
@@ -780,27 +779,25 @@ void AccObject::UpdateState()
             if (m_accRole == SEPARATOR)
             {
                 if( ( m_pParentObj != nullptr ) && ( MENU == m_pParentObj->m_accRole  || POPUP_MENU == m_pParentObj->m_accRole ))
-                    IncreaseState( FOCUSABLE );
+                    IncreaseState(AccessibleStateType::FOCUSABLE);
             }
 
             else if (m_accRole == TABLE_CELL || m_accRole == TABLE || m_accRole == PANEL || m_accRole == OPTION_PANE ||
                      m_accRole == COLUMN_HEADER)
             {
                 if (isFocusable)
-                    IncreaseState( FOCUSABLE );
+                    IncreaseState(AccessibleStateType::FOCUSABLE);
             }
             else
             {
                 if(bIsMenuItem)
                 {
                     if ( isShowing && isVisible)
-                    {
-                        IncreaseState( FOCUSABLE );
-                    }
+                        IncreaseState(AccessibleStateType::FOCUSABLE);
                 }
                 else
                 {
-                    IncreaseState( FOCUSABLE );
+                    IncreaseState(AccessibleStateType::FOCUSABLE);
                 }
             }
         }
@@ -815,16 +812,16 @@ void AccObject::UpdateState()
             if  (m_accRole == TOGGLE_BUTTON || m_accRole == PUSH_BUTTON || m_accRole == BUTTON_DROPDOWN)
             {
                 if(( m_pParentObj != nullptr )&& (TOOL_BAR ==  m_pParentObj->m_accRole ) )
-                    IncreaseState( FOCUSABLE );
+                    IncreaseState(AccessibleStateType::FOCUSABLE);
                 else
-                    DecreaseState( FOCUSABLE );
+                    DecreaseState(AccessibleStateType::FOCUSABLE);
             }
             else
-                DecreaseState( FOCUSABLE );
+                DecreaseState(AccessibleStateType::FOCUSABLE);
         }
         else if( isShowing || isVisible )
         {
-            IncreaseState( FOCUSABLE );
+            IncreaseState(AccessibleStateType::FOCUSABLE);
         }
     }
 
@@ -873,7 +870,7 @@ bool AccObject::UpdateAccessibleInfoFromUnoToMSAA()
    */
 void AccObject::setFocus()
 {
-    IncreaseState(FOCUSED);
+    IncreaseState(AccessibleStateType::FOCUSED);
     m_pIMAcc->Put_XAccFocus(CHILDID_SELF);
 
     UpdateRole();
@@ -886,7 +883,7 @@ void AccObject::setFocus()
    */
 void AccObject::unsetFocus()
 {
-    DecreaseState(FOCUSED);
+    DecreaseState(AccessibleStateType::FOCUSED);
     m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
 }
 
@@ -901,9 +898,9 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
     }
     sal_Int64 nRState = m_xAccContextRef->getAccessibleStateSet();
 
-    if (nRState & EXPANDED)
+    if (nRState & AccessibleStateType::EXPANDED)
         *isExpanded = true;
-    if (nRState & EXPANDABLE)
+    if (nRState & AccessibleStateType::EXPANDABLE)
         *isExpandable = true;
 }
 
