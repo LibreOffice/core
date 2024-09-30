@@ -689,8 +689,6 @@ void AccObject::UpdateState()
     case LABEL:
     case STATIC:
     case NOTIFICATION:
-        m_pIMAcc->IncreaseState( STATE_SYSTEM_READONLY );
-        break;
     case TEXT:
         // 2. editable combobox -> readonly ------ bridge
     case EMBEDDED_OBJECT:
