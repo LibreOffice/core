@@ -675,7 +675,6 @@ void AccObject::UpdateState()
         if(!(isShowing && isVisible) )
         {
             m_pIMAcc->IncreaseState( STATE_SYSTEM_INVISIBLE );
-            m_pIMAcc->DecreaseState( STATE_SYSTEM_FOCUSABLE );
         }
     }
     else
@@ -720,62 +719,11 @@ void AccObject::UpdateState()
         break;
     }
 
-    if( isEnable )
-    {
+    if (isFocusable)
+        IncreaseState(STATE_SYSTEM_FOCUSABLE);
 
-        if (!(m_accRole == FILLER || m_accRole == END_NOTE || m_accRole == FOOTER || m_accRole == FOOTNOTE || m_accRole == GROUP_BOX || m_accRole == RULER
-                || m_accRole == HEADER || m_accRole == ICON || m_accRole == INTERNAL_FRAME || m_accRole == LABEL || m_accRole == LAYERED_PANE
-                || m_accRole == SCROLL_BAR || m_accRole == SCROLL_PANE || m_accRole == SPLIT_PANE || m_accRole == STATIC || m_accRole == STATUS_BAR
-                || m_accRole == TOOL_TIP || m_accRole == NOTIFICATION))
-        {
-            if (m_accRole == SEPARATOR)
-            {
-                if( ( m_pParentObj != nullptr ) && ( MENU == m_pParentObj->m_accRole  || POPUP_MENU == m_pParentObj->m_accRole ))
-                    IncreaseState(AccessibleStateType::FOCUSABLE);
-            }
-
-            else if (m_accRole == TABLE_CELL || m_accRole == TABLE || m_accRole == PANEL || m_accRole == OPTION_PANE ||
-                     m_accRole == COLUMN_HEADER)
-            {
-                if (isFocusable)
-                    IncreaseState(AccessibleStateType::FOCUSABLE);
-            }
-            else
-            {
-                if(bIsMenuItem)
-                {
-                    if ( isShowing && isVisible)
-                        IncreaseState(AccessibleStateType::FOCUSABLE);
-                }
-                else
-                {
-                    IncreaseState(AccessibleStateType::FOCUSABLE);
-                }
-            }
-        }
-    }
-    else
-    {
+    if (!isEnable)
         m_pIMAcc->IncreaseState( STATE_SYSTEM_UNAVAILABLE );
-        if( !((m_accRole == MENU_ITEM) ||
-                (m_accRole == RADIO_MENU_ITEM) ||
-                (m_accRole == CHECK_MENU_ITEM)) )
-        {
-            if  (m_accRole == TOGGLE_BUTTON || m_accRole == PUSH_BUTTON || m_accRole == BUTTON_DROPDOWN)
-            {
-                if(( m_pParentObj != nullptr )&& (TOOL_BAR ==  m_pParentObj->m_accRole ) )
-                    IncreaseState(AccessibleStateType::FOCUSABLE);
-                else
-                    DecreaseState(AccessibleStateType::FOCUSABLE);
-            }
-            else
-                DecreaseState(AccessibleStateType::FOCUSABLE);
-        }
-        else if( isShowing || isVisible )
-        {
-            IncreaseState(AccessibleStateType::FOCUSABLE);
-        }
-    }
 
     switch(m_accRole)
     {
