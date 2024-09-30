@@ -930,7 +930,7 @@ void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
     std::unique_lock aGuard( m_aMutex );
 
     Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
-    if( xFileAccess.is() && Handler.is() )
+    if( Handler.is() )
         xFileAccess->setInteractionHandler( Handler );
 
     implStoreAtLocation( URL, NameBase, Comment, xFileAccess, false/*bUsedForStore*/, true/*bStoreAll*/ );
@@ -2531,7 +2531,7 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
 void StringResourceWithLocationImpl::implScanLocales()
 {
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccessImpl();
-    if( xFileAccess.is() && xFileAccess->isFolder( m_aLocation ) )
+    if( xFileAccess->isFolder( m_aLocation ) )
     {
         Sequence< OUString > aContentSeq = xFileAccess->getFolderContents( m_aLocation, false );
         implScanLocaleNames( aContentSeq );
@@ -2544,23 +2544,20 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     bool bSuccess = false;
 
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccessImpl();
-    if( xFileAccess.is() )
-    {
-        OUString aCompleteFileName =
-            implGetPathForLocaleItem( pLocaleItem, m_aNameBase, m_aLocation );
+    OUString aCompleteFileName =
+        implGetPathForLocaleItem( pLocaleItem, m_aNameBase, m_aLocation );
 
-        Reference< io::XInputStream > xInputStream;
-        try
-        {
-            xInputStream = xFileAccess->openFileRead( aCompleteFileName );
-        }
-        catch( Exception& )
-        {}
-        if( xInputStream.is() )
-        {
-            bSuccess = StringResourcePersistenceImpl::implReadPropertiesFile( pLocaleItem, xInputStream );
-            xInputStream->closeInput();
-        }
+    Reference< io::XInputStream > xInputStream;
+    try
+    {
+        xInputStream = xFileAccess->openFileRead( aCompleteFileName );
+    }
+    catch( Exception& )
+    {}
+    if( xInputStream.is() )
+    {
+        bSuccess = StringResourcePersistenceImpl::implReadPropertiesFile( pLocaleItem, xInputStream );
+        xInputStream->closeInput();
     }
 
     return bSuccess;
@@ -2572,7 +2569,7 @@ const Reference< ucb::XSimpleFileAccess3 > & StringResourceWithLocationImpl::get
     {
         m_xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
-        if( m_xSFI.is() && m_xInteractionHandler.is() )
+        if( m_xInteractionHandler.is() )
             m_xSFI->setInteractionHandler( m_xInteractionHandler );
     }
     return m_xSFI;
