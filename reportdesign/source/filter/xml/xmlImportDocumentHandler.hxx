@@ -74,7 +74,6 @@ private:
 
     virtual ~ImportDocumentHandler() override;
 
-    std::mutex                                                        m_aMutex;
     bool                                                              m_bImportedChart;
     ::std::vector< OUString>                                          m_aMasterFields;
     ::std::vector< OUString>                                          m_aDetailFields;
