@@ -204,7 +204,6 @@ public:
 
     void                Clear( bool bInCtor );
     void                SetStyle( WinBits nWinStyle );
-    WinBits             GetStyle() const { return nWinBits; }
     void                InsertEntry( std::unique_ptr<SvxIconChoiceCtrlEntry>, size_t nPos );
     void                RemoveEntry( size_t nPos );
     void                FontModified();

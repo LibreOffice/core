@@ -37,15 +37,11 @@ public:
     static OOXMLValue createBoolean(bool);
     static OOXMLValue createBoolean(std::string_view);
     static OOXMLValue createInteger(int);
-    static OOXMLValue createUniversalMeasure(int);
     static OOXMLValue createUniversalMeasure(std::string_view pValue, sal_uInt32 npPt);
     /// Handles OOXML's ST_TwipsMeasure value.
-    static OOXMLValue createTwipsMeasure(int);
     static OOXMLValue createTwipsMeasure(std::string_view);
     /// Handles OOXML's ST_HpsMeasure value.
-    static OOXMLValue createHpsMeasure(int);
     static OOXMLValue createHpsMeasure(std::string_view);
-    static OOXMLValue createMeasurementOrPercent(int);
     static OOXMLValue createMeasurementOrPercent(std::string_view);
     static OOXMLValue createHex(sal_uInt32);
     static OOXMLValue createHex(std::string_view);

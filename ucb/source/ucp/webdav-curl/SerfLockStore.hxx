@@ -82,9 +82,6 @@ public:
 
     void refreshLocks();
 
-    void joinThread();
-    void restartThread();
-
     // comphelper::LibreOfficeKit::ThreadJoinable
     virtual bool joinThreads() override;
     virtual void startThreads() override;

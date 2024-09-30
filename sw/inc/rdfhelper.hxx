@@ -73,13 +73,6 @@ public:
                                 const css::uno::Reference<css::rdf::XResource>& xSubject,
                                 const OUString& rKey, const OUString& rValue);
 
-    /// Clone all statements in the graph of type rType, if any exists, from one subject to another.
-    static void cloneStatements(const rtl::Reference<SwXTextDocument>& xSrcModel,
-                                const rtl::Reference<SwXTextDocument>& xDstModel,
-                                const OUString& rType,
-                                const css::uno::Reference<css::rdf::XResource>& xSrcSubject,
-                                const css::uno::Reference<css::rdf::XResource>& xDstSubject);
-
     /// Remove all statements in the graph of type rType, if any exists.
     static void clearStatements(const rtl::Reference<SwXTextDocument>& xModel,
                                 const OUString& rType,
