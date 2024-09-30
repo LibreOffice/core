@@ -21,8 +21,6 @@
 
 #include "UAccCOMdllapi.h"
 
-#define UNO_MSAA_UNMAPPING 0x00000000
-
 struct IMAccessible;
 UACCCOM_DLLPUBLIC IMAccessible* UAccCOMCreateInstance();
 

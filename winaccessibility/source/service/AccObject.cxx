@@ -51,6 +51,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
 
+constexpr DWORD MSAA_NO_STATE = 0x00000000;
+
 namespace {
 
 /**
@@ -473,12 +475,10 @@ short AccObject::GetRole() const
    */
 DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
 {
-    DWORD IState = UNO_MSAA_UNMAPPING;
-
     if( !m_xAccContextRef.is() )
     {
         assert(false);
-        return IState;
+        return MSAA_NO_STATE;
     }
 
     switch( nState )
@@ -507,11 +507,11 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         return STATE_SYSTEM_SIZEABLE;
     case AccessibleStateType::SELECTABLE:
         if (m_accRole == MENU || m_accRole == MENU_ITEM)
-            return UNO_MSAA_UNMAPPING;
+            return MSAA_NO_STATE;
         return STATE_SYSTEM_SELECTABLE;
     case AccessibleStateType::SELECTED:
         if (m_accRole == MENU || m_accRole == MENU_ITEM)
-            return UNO_MSAA_UNMAPPING;
+            return MSAA_NO_STATE;
         return STATE_SYSTEM_SELECTED;
     case AccessibleStateType::ARMED:
         return STATE_SYSTEM_FOCUSED;
@@ -523,14 +523,14 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
             if (!(m_xAccContextRef->getAccessibleStateSet() & AccessibleStateType::EXPANDED))
                 return STATE_SYSTEM_COLLAPSED;
 
-            return UNO_MSAA_UNMAPPING;
+            return MSAA_NO_STATE;
         }
     //Remove the SENSITIVE state mapping. There is no corresponding MSAA state.
     //case  SENSITIVE:
     //    IState = STATE_SYSTEM_PROTECTED;
     case AccessibleStateType::EDITABLE:
         m_pIMAcc->DecreaseState(STATE_SYSTEM_READONLY);
-        return UNO_MSAA_UNMAPPING;
+        return MSAA_NO_STATE;
     case AccessibleStateType::OFFSCREEN:
         return STATE_SYSTEM_OFFSCREEN;
     case AccessibleStateType::MOVEABLE:
@@ -541,7 +541,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     case AccessibleStateType::DEFAULT:
         return STATE_SYSTEM_DEFAULT;
     default:
-        return UNO_MSAA_UNMAPPING;
+        return MSAA_NO_STATE;
     }
 }
 
@@ -576,7 +576,7 @@ void  AccObject::DecreaseState( sal_Int64 xState )
     }
 
     DWORD msState = GetMSAAStateFromUNO(xState);
-    if(msState!=UNO_MSAA_UNMAPPING)
+    if (msState != MSAA_NO_STATE)
         m_pIMAcc->DecreaseState(msState);
 }
 
@@ -598,7 +598,7 @@ void AccObject::IncreaseState( sal_Int64 xState )
 
 
     DWORD msState = GetMSAAStateFromUNO(xState);
-    if(msState!=UNO_MSAA_UNMAPPING)
+    if (msState != MSAA_NO_STATE)
         m_pIMAcc->IncreaseState( msState );
 }
 
