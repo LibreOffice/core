@@ -233,8 +233,6 @@ public:
 private:
     bool getFillStyleImpl(const uno::Reference<drawing::XDrawPage>& xDrawPage);
 private:
-    uno::Reference<drawing::XDrawPage> mxDrawPage;
-    uno::Reference<drawing::XDrawPage> mxMasterPage;
     uno::Reference<beans::XPropertySet> mxBackground;
     bool mbIsCustom;
     bool bHasBackground;
@@ -245,9 +243,7 @@ private:
 SlideBackgroundInfo::SlideBackgroundInfo(
         const uno::Reference<drawing::XDrawPage>& xDrawPage,
         const uno::Reference<drawing::XDrawPage>& xMasterPage)
-    : mxDrawPage(xDrawPage)
-    , mxMasterPage(xMasterPage)
-    , mbIsCustom(false)
+    : mbIsCustom(false)
     , bHasBackground(false)
     , mbIsSolidColor(false)
     , maFillStyle(drawing::FillStyle_NONE)

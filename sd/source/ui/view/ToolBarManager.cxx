@@ -180,8 +180,6 @@ private:
         things easier and does not waste too much memory.
     */
     GroupedShellList maCurrentList;
-
-    std::shared_ptr<ViewShell> pCurrentActiveShell;
 };
 
 /** This class concentrates the knowledge about when to show what tool bars
