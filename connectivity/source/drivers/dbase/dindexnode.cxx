@@ -207,8 +207,13 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
                 }
                 else  // position unknown
                 {
-                    sal_uInt16 nPos = NODE_NOTFOUND;
-                    while (++nPos < nCount && rNode.GetKey() > ((*this)[nPos]).GetKey()) ;
+                    sal_uInt16 nPos = 0;
+                    while (nPos < nCount)
+                    {
+                        if (rNode.GetKey() <= ((*this)[nPos]).GetKey())
+                            break;
+                        ++nPos;
+                    }
 
                     --nCount;   // (otherwise we might get Assertions and GPFs - 60593)
                     bResult = Insert(nPos, rNode);
