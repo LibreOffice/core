@@ -413,18 +413,6 @@ SwXFootnote::createXTextCursorByRange(
     return createXTextCursorByRangeImpl(aPam);
 }
 
-rtl::Reference< SwXTextCursor >
-SwXFootnote::createXTextCursorByRange(
-    const rtl::Reference< SwXTextCursor > & xTextPosition)
-{
-    SwUnoInternalPaM aPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-    {
-        throw uno::RuntimeException();
-    }
-    return createXTextCursorByRangeImpl(aPam);
-}
-
 rtl::Reference< SwXTextCursor > SwXFootnote::createXTextCursorByRangeImpl(
         SwUnoInternalPaM& rPam)
 {

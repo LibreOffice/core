@@ -928,15 +928,6 @@ rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(const uno::Refer
     return createXTextCursorByRangeImpl(aPam);
 }
 
-rtl::Reference<SwXTextCursor> SwXCell::createXTextCursorByRange(
-    const rtl::Reference< SwXTextCursor > & xTextPosition)
-{
-    SwUnoInternalPaM aPam(*GetDoc());
-    if(!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-        throw uno::RuntimeException();
-    return createXTextCursorByRangeImpl(aPam);
-}
-
 rtl::Reference< SwXTextCursor > SwXCell::createXTextCursorByRangeImpl(
         SwUnoInternalPaM& rPam)
 {

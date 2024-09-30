@@ -113,8 +113,6 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
-    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
     virtual void SAL_CALL  setString(const OUString& aString) override;
 
     //XPropertySet

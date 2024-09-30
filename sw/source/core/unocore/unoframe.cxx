@@ -3318,18 +3318,6 @@ rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRange(const uno
     return createXTextCursorByRangeImpl(*pFormat, aPam);
 }
 
-rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRange(
-    const rtl::Reference< SwXTextCursor > & aTextPosition)
-{
-    SwFrameFormat* pFormat = GetFrameFormat();
-    if (!pFormat)
-        throw uno::RuntimeException();
-    SwUnoInternalPaM aPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(aPam, aTextPosition))
-        throw uno::RuntimeException();
-    return createXTextCursorByRangeImpl(*pFormat, aPam);
-}
-
 rtl::Reference< SwXTextCursor > SwXTextFrame::createXTextCursorByRangeImpl(
         SwFrameFormat& rFormat,
         SwUnoInternalPaM& rPam)

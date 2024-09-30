@@ -2463,16 +2463,6 @@ SwXBodyText::createXTextCursorByRange(
     return createXTextCursorByRangeImpl(aPam);
 }
 
-rtl::Reference< SwXTextCursor >
-SwXBodyText::createXTextCursorByRange(
-    const rtl::Reference< SwXTextCursor > & xTextPosition)
-{
-    SwUnoInternalPaM aPam(*GetDoc());
-    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
-        throw uno::RuntimeException();
-    return createXTextCursorByRangeImpl(aPam);
-}
-
 rtl::Reference< SwXTextCursor > SwXBodyText::createXTextCursorByRangeImpl(
         SwUnoInternalPaM& rPam)
 {
@@ -2694,17 +2684,6 @@ SwXHeadFootText::createXTextCursor()
 
 rtl::Reference<SwXTextCursor> SwXHeadFootText::createXTextCursorByRange(
     const uno::Reference<text::XTextRange>& xTextPosition)
-{
-    SwUnoInternalPaM aPam(*GetDoc());
-    if (!sw::XTextRangeToSwPaM(aPam, xTextPosition))
-    {
-        throw uno::RuntimeException(cInvalidObject);
-    }
-    return createXTextCursorByRangeImpl(aPam);
-}
-
-rtl::Reference<SwXTextCursor> SwXHeadFootText::createXTextCursorByRange(
-    const rtl::Reference< SwXTextCursor >& xTextPosition)
 {
     SwUnoInternalPaM aPam(*GetDoc());
     if (!sw::XTextRangeToSwPaM(aPam, xTextPosition))

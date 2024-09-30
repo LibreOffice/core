@@ -53,8 +53,6 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
-    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
 
     //XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;
@@ -89,8 +87,6 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
-    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
 
     //XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;

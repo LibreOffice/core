@@ -206,8 +206,6 @@ public:
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() override;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override;
-    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const rtl::Reference< SwXTextCursor >& aTextPosition ) override;
 
     //XEnumerationAccess - was: XParagraphEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL createEnumeration() override;

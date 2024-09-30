@@ -150,8 +150,6 @@ public:
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
             const ::css::uno::Reference< ::css::text::XTextRange >& aTextPosition ) = 0;
-    virtual rtl::Reference< SwXTextCursor > createXTextCursorByRange(
-            const rtl::Reference< SwXTextCursor >& aTextPosition ) = 0;
     virtual css::uno::Reference< css::text::XTextCursor >  SAL_CALL createTextCursor() override final;
     virtual rtl::Reference< SwXTextCursor > createXTextCursor() = 0;
 
