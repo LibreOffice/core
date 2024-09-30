@@ -530,27 +530,32 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
 {
     if( ! canAdd())
         return;
-    try
+    std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts
     {
-        std::vector<uno::Reference<xml::crypto::XXMLSecurityContext>> xSecContexts
-        {
-            maSignatureManager.getSecurityContext()
-        };
-        // Gpg signing is only possible with ODF >= 1.2 documents
-        if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
-            xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
+        maSignatureManager.getSecurityContext()
+    };
+    // Gpg signing is only possible with ODF >= 1.2 documents
+    if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
+        xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        std::unique_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), m_pViewShell, std::move(xSecContexts), UserAction::Sign);
-        if (aChooser->run() == RET_OK)
+    std::shared_ptr<CertificateChooser> aChooser = CertificateChooser::getInstance(m_xDialog.get(), m_pViewShell, std::move(xSecContexts), UserAction::Sign);
+    aChooser->BeforeRun();
+    weld::DialogController::runAsync(aChooser, [this, aChooser](sal_Int32 nRet) {
+        if (nRet != RET_OK)
+        {
+            return;
+        }
+
+        try
         {
             sal_Int32 nSecurityId;
 
             if (moScriptSignatureManager)
             {
                 if (!moScriptSignatureManager->add(aChooser->GetSelectedCertificates()[0],
-                                                   aChooser->GetSelectedSecurityContext(),
-                                                   aChooser->GetDescription(), nSecurityId,
-                                                   m_bAdESCompliant))
+                            aChooser->GetSelectedSecurityContext(),
+                            aChooser->GetDescription(), nSecurityId,
+                            m_bAdESCompliant))
                 {
                     return;
                 }
@@ -562,7 +567,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
             }
 
             if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
-                                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
+                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 
@@ -585,18 +590,18 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
                 ImplFillSignaturesBox();
             }
         }
-    }
-    catch ( uno::Exception& )
-    {
-        TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "adding a signature!" );
-        std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
-                                                  VclMessageType::Error, VclButtonsType::Ok,
-                                                  XsResId(STR_XMLSECDLG_SIGNING_FAILED)));
-        xBox->run();
-        // Don't keep invalid entries...
-        ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
-        ImplFillSignaturesBox();
-    }
+        catch ( uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION( "xmlsecurity.dialogs", "adding a signature!" );
+            std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(m_xDialog.get(),
+                        VclMessageType::Error, VclButtonsType::Ok,
+                        XsResId(STR_XMLSECDLG_SIGNING_FAILED)));
+            xBox->run();
+            // Don't keep invalid entries...
+            ImplGetSignatureInformations(/*bUseTempStream=*/true, /*bCacheLastSignature=*/false);
+            ImplFillSignaturesBox();
+        }
+    });
 }
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)

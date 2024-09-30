@@ -286,6 +286,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui"
         || rUIFile == u"xmlsec/ui/digitalsignaturesdialog.ui"
+        || rUIFile == u"xmlsec/ui/selectcertificatedialog.ui"
         || rUIFile == u"xmlsec/ui/viewcertdialog.ui"
         )
     {

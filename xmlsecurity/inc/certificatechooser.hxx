@@ -93,7 +93,7 @@ public:
                        UserAction eAction);
     virtual ~CertificateChooser() override;
 
-    static std::unique_ptr<CertificateChooser> getInstance(weld::Window* _pParent,
+    static std::shared_ptr<CertificateChooser> getInstance(weld::Window* _pParent,
                         SfxViewShell* pViewShell,
                         std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                         UserAction eAction) {
@@ -105,9 +105,10 @@ public:
         //    in the Digital Signatures dialog
         // 2. File > Save As the document, check the "Encrypt with GPG key"
         //    checkbox, press Encrypt, and crash in Dialog::ImplStartExecute()
-        return std::make_unique<CertificateChooser>(_pParent, pViewShell, std::move(rxSecurityContexts), eAction);
+        return std::make_shared<CertificateChooser>(_pParent, pViewShell, std::move(rxSecurityContexts), eAction);
     }
 
+    void BeforeRun();
     short run() override;
 
     css::uno::Sequence<css::uno::Reference< css::security::XCertificate > > GetSelectedCertificates();
