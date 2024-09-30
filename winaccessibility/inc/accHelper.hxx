@@ -21,14 +21,6 @@
 
 #include "UAccCOMdllapi.h"
 
-enum DIRECTION
-{
-    FIRST_CHILD = 0,
-    LAST_CHILD = -1,
-    BEFORE_CHILD = 1,
-    AFTER_CHILD = 2
-};
-
 #define UNO_MSAA_UNMAPPING 0x00000000
 
 struct IMAccessible;

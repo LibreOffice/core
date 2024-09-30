@@ -86,7 +86,7 @@ public:
     void SetParentObj(AccObject* pParentAccObj);
     AccObject* GetParentObj();
 
-    void InsertChild( AccObject* pChild,short pos = LAST_CHILD);
+    void InsertChild(AccObject* pChild);
     void DeleteChild( AccObject* pChild );
     AccObject* NextChild();
 

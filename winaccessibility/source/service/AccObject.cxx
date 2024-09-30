@@ -286,25 +286,16 @@ AccObject::~AccObject()
 /**
    * Insert a child element.
    * @param pChild Child element that should be inserted into child list.
-   * @param pos Insert position.
    * @return
    */
-void AccObject::InsertChild( AccObject* pChild,short pos )
+void AccObject::InsertChild(AccObject* pChild)
 {
-
     std::vector<AccObject*>::iterator iter;
     iter = std::find(m_childrenList.begin(),m_childrenList.end(),pChild);
     if(iter!=m_childrenList.end())
         return;
-    if(LAST_CHILD==pos)
-    {
-        m_childrenList.push_back(pChild);
-    }
-    else
-    {
-        iter=m_childrenList.begin()+pos;
-        m_childrenList.insert(iter,pChild);
-    }
+
+    m_childrenList.push_back(pChild);
 
     pChild->SetParentObj(this);
 }
