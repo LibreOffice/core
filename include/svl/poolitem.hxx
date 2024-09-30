@@ -178,6 +178,7 @@ enum class SfxItemType : sal_uInt16 {
     SdrFractionItemType,
     SdrGrafBlueItemType,
     SdrGrafContrastItemType,
+    SdrGrafCropType,
     SdrGrafGamma100ItemType,
     SdrGrafGreenItemType,
     SdrGrafLuminanceItemType,
