@@ -529,8 +529,7 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
             if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
                 return STATE_SYSTEM_HASPOPUP;
 
-            const bool isExpanded = GetExpandedState();
-            if(!isExpanded)
+            if (!(m_xAccContextRef->getAccessibleStateSet() & AccessibleStateType::EXPANDED))
                 return STATE_SYSTEM_COLLAPSED;
 
             return UNO_MSAA_UNMAPPING;
@@ -849,17 +848,6 @@ void AccObject::unsetFocus()
 {
     DecreaseState(AccessibleStateType::FOCUSED);
     m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
-}
-
-bool AccObject::GetExpandedState()
-{
-    if( !m_xAccContextRef.is() )
-    {
-        return false;
-    }
-
-    sal_Int64 nRState = m_xAccContextRef->getAccessibleStateSet();
-    return (nRState & AccessibleStateType::EXPANDED);
 }
 
 void AccObject::NotifyDestroy() { m_pIMAcc->NotifyDestroy(); }

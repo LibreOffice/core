@@ -62,7 +62,6 @@ private:
 
     DWORD GetMSAAStateFromUNO(sal_Int64 xState);//translate state from UNO to MSAA value
     css::accessibility::XAccessibleSelection* GetXAccessibleSelection();
-    bool GetExpandedState();
     static OUString GetMAccessibleValueFromAny(css::uno::Any pAny);
 
 public:
