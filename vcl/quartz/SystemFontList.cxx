@@ -205,6 +205,62 @@ static void fontEnumCallBack( const void* pValue, void* pContext )
 {
     CTFontDescriptorRef pFD = static_cast<CTFontDescriptorRef>(pValue);
 
+    // tdf#163000 don't add any fonts with an 'hvgl' font table
+    // macOS Sequoia added a new PingFangUI.ttc font file which
+    // contains all of the PingFang font families. However, any
+    // fonts loaded from this font file result in the following
+    // failures:
+    // - Skia renders font with wrong glyphs
+    // - Export to PDF contain a damaged embedded font
+    // Despite the fact that the fonts in this new font file have
+    // a TrueType font type, they are missing a 'glyf' font table
+    // and, instead, have a new, undefined 'hvgl' font table. See
+    // the following link for more details about the new 'hvgl'
+    // font table:
+    // https://gitlab.freedesktop.org/freetype/freetype/-/issues/1281
+    CFNumberRef pFontFormat = static_cast<CFNumberRef>(CTFontDescriptorCopyAttribute(pFD, kCTFontFormatAttribute));
+    if (pFontFormat)
+    {
+        bool bSkipFont = false;
+        int nFontFormat;
+        // At least for the PingFangUI.ttc font file, the font format is
+        // different on macOS and iOS
+        if (CFNumberGetValue(pFontFormat, kCFNumberIntType, &nFontFormat) && (nFontFormat == kCTFontFormatOpenTypeTrueType || nFontFormat == kCTFontFormatTrueType))
+        {
+            CTFontRef pFont = CTFontCreateWithFontDescriptor(pFD, 0.0, nullptr);
+            if (pFont)
+            {
+                CFArrayRef pFontTableTags = CTFontCopyAvailableTables(pFont, kCTFontTableOptionNoOptions);
+                if (pFontTableTags)
+                {
+                    bool bGlyfTableFound = false;
+                    bool bHvglTableFound = false;
+                    CFIndex nFontTableTagCount = CFArrayGetCount(pFontTableTags);
+                    for (CFIndex i = 0; i < nFontTableTagCount; i++)
+                    {
+                        CTFontTableTag nTag = reinterpret_cast<uintptr_t>(CFArrayGetValueAtIndex(pFontTableTags, i));
+                        if (nTag == kCTFontTableGlyf)
+                        {
+                            bGlyfTableFound = true;
+                            break;
+                        }
+                        else if (nTag == 'hvgl')
+                        {
+                            bHvglTableFound = true;
+                        }
+                    }
+                    bSkipFont = !bGlyfTableFound && bHvglTableFound;
+                    CFRelease(pFontTableTags);
+                }
+                CFRelease(pFont);
+            }
+        }
+        CFRelease(pFontFormat);
+
+        if (bSkipFont)
+            return;
+    }
+
     bool bFontEnabled;
     FontAttributes rDFA = DevFontFromCTFontDescriptor( pFD, &bFontEnabled );
 
