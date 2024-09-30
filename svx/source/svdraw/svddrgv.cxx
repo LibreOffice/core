@@ -539,7 +539,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
     {
         sal_Int32 nSavedHdlCount=0;
 
-        if (bEliminatePolyPoints)
+        if (mbEliminatePolyPoints)
         {
             nSavedHdlCount=GetMarkablePointCount();
         }
@@ -558,7 +558,7 @@ bool SdrDragView::EndDragObj(bool bCopy)
 
         mpCurrentSdrDragMethod.reset();
 
-        if (bEliminatePolyPoints)
+        if (mbEliminatePolyPoints)
         {
             if (nSavedHdlCount!=GetMarkablePointCount())
             {

@@ -170,25 +170,25 @@ SdrSnapView::SdrSnapView(
 :   SdrPaintView(rSdrModel, pOut)
     ,mpPageOriginOverlay(nullptr)
     ,mpHelpLineOverlay(nullptr)
-    ,nMagnSizPix(4)
-    ,nSnapAngle(1500)
-    ,nEliminatePolyPointLimitAngle(0)
-    ,eCrookMode(SdrCrookMode::Rotate)
-    ,bSnapEnab(true)
-    ,bGridSnap(true)
-    ,bBordSnap(true)
-    ,bHlplSnap(true)
-    ,bOFrmSnap(true)
-    ,bOPntSnap(false)
-    ,bOConSnap(true)
-    ,bMoveSnapOnlyTopLeft(false)
-    ,bOrtho(false)
-    ,bBigOrtho(true)
-    ,bAngleSnapEnab(false)
-    ,bMoveOnlyDragging(false)
-    ,bSlantButShear(false)
-    ,bCrookNoContortion(false)
-    ,bEliminatePolyPoints(false)
+    ,mnMagnSizPix(4)
+    ,mnSnapAngle(1500)
+    ,mnEliminatePolyPointLimitAngle(0)
+    ,meCrookMode(SdrCrookMode::Rotate)
+    ,mbSnapEnab(true)
+    ,mbGridSnap(true)
+    ,mbBordSnap(true)
+    ,mbHlplSnap(true)
+    ,mbOFrmSnap(true)
+    ,mbOPntSnap(false)
+    ,mbOConSnap(true)
+    ,mbMoveSnapOnlyTopLeft(false)
+    ,mbOrtho(false)
+    ,mbBigOrtho(true)
+    ,mbAngleSnapEnab(false)
+    ,mbMoveOnlyDragging(false)
+    ,mbSlantButShear(false)
+    ,mbCrookNoContortion(false)
+    ,mbEliminatePolyPoints(false)
 {
 }
 
@@ -260,7 +260,7 @@ Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 #define NOT_SNAPPED 0x7FFFFFFF
 SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 {
-    if (!bSnapEnab) return SdrSnap::NOTSNAPPED;
+    if (!mbSnapEnab) return SdrSnap::NOTSNAPPED;
     tools::Long x=rPnt.X();
     tools::Long y=rPnt.Y();
     if (pPV==nullptr) {
@@ -271,9 +271,9 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     tools::Long dx=NOT_SNAPPED;
     tools::Long dy=NOT_SNAPPED;
     tools::Long dx1,dy1;
-    tools::Long mx=aMagnSiz.Width();
-    tools::Long my=aMagnSiz.Height();
-    if (mbHlplVisible && bHlplSnap && !IsDragHelpLine())
+    tools::Long mx=maMagnSiz.Width();
+    tools::Long my=maMagnSiz.Height();
+    if (mbHlplVisible && mbHlplSnap && !IsDragHelpLine())
     {
         const SdrHelpLineList& rHLL=pPV->GetHelpLines();
         sal_uInt16 nCount=rHLL.GetCount();
@@ -301,7 +301,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             } // switch
         }
     }
-    if (mbBordVisible && bBordSnap) {
+    if (mbBordVisible && mbBordSnap) {
         SdrPage* pPage=pPV->GetPage();
         tools::Long xs=pPage->GetWidth();
         tools::Long ys=pPage->GetHeight();
@@ -319,7 +319,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         a=y         ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // left edge of paper
         a=y- ys     ; if (std::abs(a)<=my) { dy1=-a; if (std::abs(dy1)<std::abs(dy)) dy=dy1; } // right edge of paper
     }
-    if (bOFrmSnap || bOPntSnap) {
+    if (mbOFrmSnap || mbOPntSnap) {
         sal_uInt32 nMaxPointSnapCount=200;
         sal_uInt32 nMaxFrameSnapCount=200;
 
@@ -334,7 +334,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             aRect.AdjustTop( -my );
             aRect.AdjustBottom(my );
             if (aRect.Contains(rPnt)) {
-                if (bOPntSnap && nMaxPointSnapCount>0)
+                if (mbOPntSnap && nMaxPointSnapCount>0)
                 {
                     sal_uInt32 nCount(pO->GetSnapPointCount());
                     for (sal_uInt32 i(0); i < nCount && nMaxPointSnapCount > 0; i++)
@@ -349,7 +349,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
                         nMaxPointSnapCount--;
                     }
                 }
-                if (bOFrmSnap && nMaxFrameSnapCount>0) {
+                if (mbOFrmSnap && nMaxFrameSnapCount>0) {
                     tools::Rectangle aLog(pO->GetSnapRect());
                     tools::Rectangle aR1(aLog);
                     aR1.AdjustLeft( -mx );
@@ -367,9 +367,9 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             }
         }
     }
-    if(bGridSnap)
+    if(mbGridSnap)
     {
-        double fSnapWidth(aSnapWdtX);
+        double fSnapWidth(maSnapWdtX);
         if(dx == NOT_SNAPPED && fSnapWidth != 0.0)
         {
             double fx = static_cast<double>(x);
@@ -384,7 +384,7 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             x = static_cast<tools::Long>(static_cast<double>(x) * fSnapWidth + static_cast<double>(pPV->GetPageOrigin().X()));
             dx = 0;
         }
-        fSnapWidth = double(aSnapWdtY);
+        fSnapWidth = double(maSnapWdtY);
         if(dy == NOT_SNAPPED && fSnapWidth)
         {
             double fy = static_cast<double>(y);

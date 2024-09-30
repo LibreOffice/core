@@ -99,31 +99,31 @@ protected:
     // #114409#-2 Migrate HelpLine
     class ImplHelpLineOverlay*              mpHelpLineOverlay;
 
-    Size aMagnSiz;
-    Fraction aSnapWdtX;
-    Fraction aSnapWdtY;
+    Size maMagnSiz;
+    Fraction maSnapWdtX;
+    Fraction maSnapWdtY;
 
-    sal_uInt16 nMagnSizPix;
-    Degree100 nSnapAngle;
-    Degree100 nEliminatePolyPointLimitAngle;
+    sal_uInt16 mnMagnSizPix;
+    Degree100 mnSnapAngle;
+    Degree100 mnEliminatePolyPointLimitAngle;
 
-    SdrCrookMode eCrookMode;
+    SdrCrookMode meCrookMode;
 
-    bool bSnapEnab : 1;
-    bool bGridSnap : 1;
-    bool bBordSnap : 1;
-    bool bHlplSnap : 1;
-    bool bOFrmSnap : 1;
-    bool bOPntSnap : 1;
-    bool bOConSnap : 1;
-    bool bMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
-    bool bOrtho : 1;
-    bool bBigOrtho : 1;
-    bool bAngleSnapEnab : 1;
-    bool bMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
-    bool bSlantButShear : 1;          // use slant instead of shear
-    bool bCrookNoContortion : 1;      // no contorsion while Crook
-    bool bEliminatePolyPoints : 1;
+    bool mbSnapEnab : 1;
+    bool mbGridSnap : 1;
+    bool mbBordSnap : 1;
+    bool mbHlplSnap : 1;
+    bool mbOFrmSnap : 1;
+    bool mbOPntSnap : 1;
+    bool mbOConSnap : 1;
+    bool mbMoveSnapOnlyTopLeft : 1;    //  Special for dialogeditor
+    bool mbOrtho : 1;
+    bool mbBigOrtho : 1;
+    bool mbAngleSnapEnab : 1;
+    bool mbMoveOnlyDragging : 1;       // only move objects while Resize/Rotate/...
+    bool mbSlantButShear : 1;          // use slant instead of shear
+    bool mbCrookNoContortion : 1;      // no contorsion while Crook
+    bool mbEliminatePolyPoints : 1;
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
@@ -141,16 +141,16 @@ public:
     virtual void BrkAction() override; // break actions for derived classes e.g. interrupt dragging.
     virtual void TakeActionRect(tools::Rectangle& rRect) const override;
 
-    void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { aSnapWdtX=rX; aSnapWdtY=rY; }
-    const Fraction& GetSnapGridWidthX() const { return aSnapWdtX; }
-    const Fraction& GetSnapGridWidthY() const { return aSnapWdtY; }
+    void SetSnapGridWidth(const Fraction& rX, const Fraction& rY) { maSnapWdtX=rX; maSnapWdtY=rY; }
+    const Fraction& GetSnapGridWidthX() const { return maSnapWdtX; }
+    const Fraction& GetSnapGridWidthY() const { return maSnapWdtY; }
 
-    void SetSnapMagnetic(const Size& rSiz) { if (rSiz!=aMagnSiz) { aMagnSiz=rSiz; } }
-    void SetSnapMagneticPixel(sal_uInt16 nPix) { nMagnSizPix=nPix; }
-    sal_uInt16 GetSnapMagneticPixel() const { return nMagnSizPix; }
+    void SetSnapMagnetic(const Size& rSiz) { if (rSiz!=maMagnSiz) { maMagnSiz=rSiz; } }
+    void SetSnapMagneticPixel(sal_uInt16 nPix) { mnMagnSizPix=nPix; }
+    sal_uInt16 GetSnapMagneticPixel() const { return mnMagnSizPix; }
 
     // RecalcLogicSnapMagnetic has to be called for every change of OutputDevices and every change of the MapMode!
-    void RecalcLogicSnapMagnetic(const OutputDevice& rOut) { SetSnapMagnetic(rOut.PixelToLogic(Size(nMagnSizPix,nMagnSizPix))); }
+    void RecalcLogicSnapMagnetic(const OutputDevice& rOut) { SetSnapMagnetic(rOut.PixelToLogic(Size(mnMagnSizPix,mnMagnSizPix))); }
     void SetActualWin(const OutputDevice* pWin) { SdrPaintView::SetActualWin(pWin); if (pWin!=nullptr) RecalcLogicSnapMagnetic(*pWin); }
 
     // Coordinates referred to the view!
@@ -161,26 +161,26 @@ public:
     void CheckSnap(const Point& rPt, tools::Long& nBestXSnap, tools::Long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const;
 
     // All attitudes to snap are persistent.
-    bool IsSnapEnabled() const { return bSnapEnab; }
-    bool IsGridSnap() const { return bGridSnap; } // Snap to grid
-    bool IsBordSnap() const { return bBordSnap; } // Snap to border
-    bool IsHlplSnap() const { return bHlplSnap; } // Snap to auxiliary line
-    bool IsOFrmSnap() const { return bOFrmSnap; } // Snap to LogFram from surrounding drawing objects
-    bool IsOPntSnap() const { return bOPntSnap; } // Snap to distinct points from surrounding drawing objects
-    bool IsOConSnap() const { return bOConSnap; } // Snap to connectors of the drawing objects
-    void SetSnapEnabled(bool bOn) { bSnapEnab=bOn; }
-    void SetGridSnap(bool bOn) { bGridSnap=bOn; }
-    void SetBordSnap(bool bOn) { bBordSnap=bOn; }
-    void SetHlplSnap(bool bOn) { bHlplSnap=bOn; }
-    void SetOFrmSnap(bool bOn) { bOFrmSnap=bOn; }
-    void SetOPntSnap(bool bOn) { bOPntSnap=bOn; }
-    void SetOConSnap(bool bOn) { bOConSnap=bOn; }
+    bool IsSnapEnabled() const { return mbSnapEnab; }
+    bool IsGridSnap() const { return mbGridSnap; } // Snap to grid
+    bool IsBordSnap() const { return mbBordSnap; } // Snap to border
+    bool IsHlplSnap() const { return mbHlplSnap; } // Snap to auxiliary line
+    bool IsOFrmSnap() const { return mbOFrmSnap; } // Snap to LogFram from surrounding drawing objects
+    bool IsOPntSnap() const { return mbOPntSnap; } // Snap to distinct points from surrounding drawing objects
+    bool IsOConSnap() const { return mbOConSnap; } // Snap to connectors of the drawing objects
+    void SetSnapEnabled(bool bOn) { mbSnapEnab=bOn; }
+    void SetGridSnap(bool bOn) { mbGridSnap=bOn; }
+    void SetBordSnap(bool bOn) { mbBordSnap=bOn; }
+    void SetHlplSnap(bool bOn) { mbHlplSnap=bOn; }
+    void SetOFrmSnap(bool bOn) { mbOFrmSnap=bOn; }
+    void SetOPntSnap(bool bOn) { mbOPntSnap=bOn; }
+    void SetOConSnap(bool bOn) { mbOConSnap=bOn; }
 
     // Usually every 4 corners of Object-SnapRects are snapped for Move-Dragging.
     // The following attitudes e.g. if you only want to snap the left corner on the top (e.g. DialogEditor)
     // persistent, Default=FALSE.
-    void SetMoveSnapOnlyTopLeft(bool bOn) { bMoveSnapOnlyTopLeft=bOn; }
-    bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
+    void SetMoveSnapOnlyTopLeft(bool bOn) { mbMoveSnapOnlyTopLeft=bOn; }
+    bool IsMoveSnapOnlyTopLeft() const { return mbMoveSnapOnlyTopLeft; }
 
     // #114409#-1 Migrate PageOrigin
     void BegSetPageOrg(const Point& rPnt);
@@ -218,10 +218,10 @@ public:
     // - Shear (Dragging)
     // - circular arc/-sector/-section angle (Create and Dragging)
     // persistent.
-    void SetAngleSnapEnabled(bool bOn) { bAngleSnapEnab=bOn; }
-    bool IsAngleSnapEnabled() const { return bAngleSnapEnab; }
-    void SetSnapAngle(Degree100 nAngle) { nSnapAngle=nAngle; }
-    Degree100 GetSnapAngle() const { return nSnapAngle; }
+    void SetAngleSnapEnabled(bool bOn) { mbAngleSnapEnab=bOn; }
+    bool IsAngleSnapEnabled() const { return mbAngleSnapEnab; }
+    void SetSnapAngle(Degree100 nAngle) { mnSnapAngle=nAngle; }
+    Degree100 GetSnapAngle() const { return mnSnapAngle; }
 
     // different effects from Ortho (depending on the context):
     // - Create
@@ -242,8 +242,8 @@ public:
     //     - circle object angle: nothing
     //     - line keeps while Dragging the angle and is only stretched/ contracted
     // Default value for Ortho is off. persistent.
-    void SetOrtho(bool bOn) { bOrtho=bOn; } // incomplete
-    bool IsOrtho() const { return bOrtho; }
+    void SetOrtho(bool bOn) { mbOrtho=bOn; } // incomplete
+    bool IsOrtho() const { return mbOrtho; }
 
     // BigOrtho is only relevant if Ortho is switched on.
     // Example: rectangle is created and ortho is switched on (--> square)
@@ -254,34 +254,34 @@ public:
     //   If BigOrtho is switched on, you get a square with edge length of 80.
     // The same also applies to Resize.
     // Default value for BigOrtho is on. persistent.
-    void SetBigOrtho(bool bOn) { bBigOrtho=bOn; }
-    bool IsBigOrtho() const { return bBigOrtho; }
+    void SetBigOrtho(bool bOn) { mbBigOrtho=bOn; }
+    bool IsBigOrtho() const { return mbBigOrtho; }
 
     // If MoveOnlyDragging=sal_True only the center of the marked objects is
     // transformed when Resize/Rotate/Shear/Mirror/Crook is executed.
     // Size, form and rotation angle of the objects are conserved only their positions
     // are changed. persistent. Default=FALSE. (ni)
-    void SetMoveOnlyDragging(bool bOn) { bMoveOnlyDragging=bOn; }
-    bool IsMoveOnlyDragging() const { return bMoveOnlyDragging; }
+    void SetMoveOnlyDragging(bool bOn) { mbMoveOnlyDragging=bOn; }
+    bool IsMoveOnlyDragging() const { return mbMoveOnlyDragging; }
 
     // Use Slant instead of Shear. persistent. Default=FALSE.
-    void SetSlantButShear(bool bOn) { bSlantButShear=bOn; }
-    bool IsSlantButShear() const { return bSlantButShear; }
+    void SetSlantButShear(bool bOn) { mbSlantButShear=bOn; }
+    bool IsSlantButShear() const { return mbSlantButShear; }
 
     // Don't contort object while Crook. persistent. Default=FALSE. (ni)
-    void SetCrookNoContortion(bool bOn) { bCrookNoContortion=bOn; }
-    bool IsCrookNoContortion() const { return bCrookNoContortion; }
+    void SetCrookNoContortion(bool bOn) { mbCrookNoContortion=bOn; }
+    bool IsCrookNoContortion() const { return mbCrookNoContortion; }
 
     // Crook-Mode. persistent. Default=SdrCrookMode::Rotate. (ni)
-    void SetCrookMode(SdrCrookMode eMode) { eCrookMode=eMode; }
-    SdrCrookMode GetCrookMode() const { return eCrookMode; }
+    void SetCrookMode(SdrCrookMode eMode) { meCrookMode=eMode; }
+    SdrCrookMode GetCrookMode() const { return meCrookMode; }
 
     // Special for IBM: While Dragging of a traverse station, it is deleted
     // if its adjacent lines are almost a solid line.
-    void SetEliminatePolyPoints(bool bOn) { bEliminatePolyPoints=bOn; }
-    bool IsEliminatePolyPoints() const { return bEliminatePolyPoints; }
-    void SetEliminatePolyPointLimitAngle(Degree100 nAngle) { nEliminatePolyPointLimitAngle=nAngle; }
-    Degree100 GetEliminatePolyPointLimitAngle() const { return nEliminatePolyPointLimitAngle; }
+    void SetEliminatePolyPoints(bool bOn) { mbEliminatePolyPoints=bOn; }
+    bool IsEliminatePolyPoints() const { return mbEliminatePolyPoints; }
+    void SetEliminatePolyPointLimitAngle(Degree100 nAngle) { mnEliminatePolyPointLimitAngle=nAngle; }
+    Degree100 GetEliminatePolyPointLimitAngle() const { return mnEliminatePolyPointLimitAngle; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
