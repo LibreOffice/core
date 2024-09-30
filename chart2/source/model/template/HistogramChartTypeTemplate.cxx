@@ -61,10 +61,10 @@ namespace chart
 {
 HistogramChartTypeTemplate::HistogramChartTypeTemplate(
     Reference<uno::XComponentContext> const& xContext, const OUString& rServiceName,
-    StackMode eStackMode, sal_Int32 nDim /* = 2 */)
+    StackMode eStackMode)
     : ChartTypeTemplate(xContext, rServiceName)
     , m_eStackMode(eStackMode)
-    , m_nDim(nDim)
+    , m_nDim(2)
 {
 }
 

@@ -426,22 +426,22 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
         case TEMPLATE_THREEDPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, false,
-                chart2::PieChartSubType_NONE, 2, 3 ));
+                chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDPIEALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, false,
-                chart2::PieChartSubType_NONE, 2, 3 ));
+                chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDDONUT:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_NONE, true,
-                chart2::PieChartSubType_NONE, 2, 3 ));
+                chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDDONUTALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
                 chart2::PieChartOffsetMode_ALL_EXPLODED, true,
-                chart2::PieChartSubType_NONE, 2, 3 ));
+                chart2::PieChartSubType_NONE, 3 ));
             break;
 
         case TEMPLATE_SCATTERLINESYMBOL:

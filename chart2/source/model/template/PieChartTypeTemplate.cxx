@@ -140,7 +140,6 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     chart2::PieChartOffsetMode eMode,
     bool bRings,
     chart2::PieChartSubType eSubType,
-    sal_Int32 nCompositeSize,
     sal_Int32 nDim         /* = 2 */    ) :
         ChartTypeTemplate( xContext, rServiceName )
 {
@@ -148,7 +147,7 @@ PieChartTypeTemplate::PieChartTypeTemplate(
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SUB_PIE_TYPE,   uno::Any( eSubType ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_COMPOSITE_SIZE, uno::Any( nCompositeSize ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_COMPOSITE_SIZE, uno::Any( sal_Int32(2) ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()

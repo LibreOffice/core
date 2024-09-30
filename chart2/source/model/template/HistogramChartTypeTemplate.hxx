@@ -21,7 +21,7 @@ class HistogramChartTypeTemplate : public ChartTypeTemplate, public ::property::
 public:
     explicit HistogramChartTypeTemplate(
         css::uno::Reference<css::uno::XComponentContext> const& xContext,
-        const OUString& rServiceName, StackMode eStackMode, sal_Int32 nDim = 2);
+        const OUString& rServiceName, StackMode eStackMode);
 
     /// merge XInterface implementations
     DECLARE_XINTERFACE()
