@@ -1573,11 +1573,6 @@ namespace comphelper
         mbExitWasCalled = true;
     }
 
-    bool BackupFileHelper::getExitWasCalled()
-    {
-        return mbExitWasCalled;
-    }
-
     void BackupFileHelper::reactOnSafeMode(bool bSafeMode)
     {
         // ensure existence of needed paths

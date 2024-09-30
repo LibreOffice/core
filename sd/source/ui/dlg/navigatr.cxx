@@ -158,42 +158,6 @@ static void lcl_select_marked_objects(sd::ViewShell* pViewShell, SdPageObjsTLV* 
     }
 }
 
-//when object is marked , fresh the corresponding entry tree .
-void SdNavigatorWin::FreshTree( const SdDrawDocument* pDoc )
-{
-    SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...
-    sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
-    ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-
-    // tdf#160190
-    if (!pViewShell)
-        return;
-
-    // tdf#139944 disable navigator in master mode
-    if (const sd::DrawViewShell* pDrawViewShell = static_cast<::sd::DrawViewShell*>(pViewShell))
-    {
-        if (pDrawViewShell->GetEditMode() == EditMode::MasterPage)
-        {
-            m_xContainer->set_sensitive(false);
-            mxTlbObjects->clear();
-            return;
-        }
-        else
-            m_xContainer->set_sensitive(true);
-    }
-
-    const OUString& aDocShName( pDocShell->GetName() );
-    OUString aDocName = pDocShell->GetMedium()->GetName();
-    if (!mxTlbObjects->IsEqualToDoc(pDoc))
-    {
-        mxTlbObjects->Fill( pDoc, false, aDocName ); // Only normal pages
-        RefreshDocumentLB();
-        mxLbDocs->set_active_text(aDocShName);
-    }
-
-    lcl_select_marked_objects(pViewShell, mxTlbObjects.get());
-}
-
 void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 {
     SdDrawDocument* pNonConstDoc = const_cast<SdDrawDocument*>(pDoc); // const as const can...

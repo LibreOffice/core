@@ -82,8 +82,6 @@ public:
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationTagContextMenu(rtl::Reference<sdr::annotation::Annotation> const& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect);
-
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
     static Color GetColor(sal_uInt16 aAuthorIndex);
@@ -104,8 +102,6 @@ public:
     SdPage* GetNextPage( SdPage const * pPage, bool bForward );
 
     SdPage* GetCurrentPage();
-
-    SdDrawDocument* GetDoc() { return mpDoc; }
 
     void ShowAnnotations(bool bShow);
 

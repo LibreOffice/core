@@ -30,12 +30,6 @@ public:
     virtual css::drawing::Direction3D getPreferredDiagramAspectRatio() const override;
 
 private:
-    css::awt::Point getLabelScreenPositionAndAlignment(LabelAlignment& rAlignment,
-                                                       sal_Int32 nLabelPlacement, double fScaledX,
-                                                       double fScaledLowerYValue,
-                                                       double fScaledUpperYValue, double fBaseValue,
-                                                       BarPositionHelper const* pPosHelper) const;
-
     virtual PlottingPositionHelper& getPlottingPositionHelper(sal_Int32 nAxisIndex) const override;
 
     void adaptGapWidthForHistogram();

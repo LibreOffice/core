@@ -170,9 +170,6 @@ private:
     void ExecuteContextMenuAction(std::u16string_view rSelectedPopupEntry);
 
 public:
-    //when object is marked , fresh the corresponding entry tree .
-    void                        FreshTree ( const  SdDrawDocument* pDoc );
-
     virtual weld::Window* GetFrameWeld() const override;
 };
 

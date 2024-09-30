@@ -81,47 +81,6 @@ PlottingPositionHelper& HistogramChart::getPlottingPositionHelper(sal_Int32 nAxi
     return rPosHelper;
 }
 
-awt::Point HistogramChart::getLabelScreenPositionAndAlignment(
-    LabelAlignment& rAlignment, sal_Int32 nLabelPlacement, double fScaledX,
-    double fScaledLowerYValue, double fScaledUpperYValue, double fBaseValue,
-    BarPositionHelper const* pPosHelper) const
-{
-    double fY = fScaledUpperYValue;
-    bool bReverse = !pPosHelper->isMathematicalOrientationY();
-    bool bNormalOutside = (!bReverse == (fBaseValue < fScaledUpperYValue));
-
-    switch (nLabelPlacement)
-    {
-        case css::chart::DataLabelPlacement::TOP:
-            fY = bReverse ? fScaledLowerYValue : fScaledUpperYValue;
-            rAlignment = LABEL_ALIGN_TOP;
-            break;
-        case css::chart::DataLabelPlacement::BOTTOM:
-            fY = bReverse ? fScaledUpperYValue : fScaledLowerYValue;
-            rAlignment = LABEL_ALIGN_BOTTOM;
-            break;
-        case css::chart::DataLabelPlacement::OUTSIDE:
-            fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
-            rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
-            break;
-        case css::chart::DataLabelPlacement::INSIDE:
-            fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
-            rAlignment = bNormalOutside ? LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
-            break;
-        case css::chart::DataLabelPlacement::CENTER:
-            fY -= (fScaledUpperYValue - fScaledLowerYValue) / 2.0;
-            rAlignment = LABEL_ALIGN_CENTER;
-            break;
-        default:
-            OSL_FAIL("this label alignment is not implemented yet");
-            break;
-    }
-
-    drawing::Position3D aScenePosition3D(
-        pPosHelper->transformScaledLogicToScene(fScaledX, fY, 0.0, true));
-    return LabelPositionHelper(2, m_xLogicTarget).transformSceneToScreenPosition(aScenePosition3D);
-}
-
 void HistogramChart::addSeries(std::unique_ptr<VDataSeries> pSeries, sal_Int32 zSlot,
                                sal_Int32 xSlot, sal_Int32 ySlot)
 {

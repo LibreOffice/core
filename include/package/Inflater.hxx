@@ -65,12 +65,9 @@ public:
     InflaterBytes(bool bNoWrap);
     ~InflaterBytes();
     void setInput( const sal_Int8* pBuffer, sal_Int32 nLen );
-    bool needsDictionary() const { return bNeedDict; }
     bool finished() const { return bFinished; }
     sal_Int32 doInflateSegment( sal_Int8* pOutBuffer, sal_Int32 nBufLen, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     void end(  );
-
-    sal_Int32 getLastInflateError() const { return nLastInflateError; }
 };
 
 }

@@ -171,7 +171,6 @@ public:
     OUString        GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
-    sal_Int64       GetHashCode() const;
     bool            RestoreDefaultText( SdrObject* pObj );
 
     /** @return true if the given SdrObject is inside the presentation object list */

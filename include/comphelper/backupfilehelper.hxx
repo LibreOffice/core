@@ -107,7 +107,6 @@ namespace comphelper
 
         // allow to set static global flag when app had to call _exit()
         static void setExitWasCalled();
-        static bool getExitWasCalled();
 
         // This call initializes the state of the UserDirectory as needed, it may
         // initialize to SafeMode configuration or return from it by moving files
