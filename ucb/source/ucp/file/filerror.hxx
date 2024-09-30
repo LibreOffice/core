@@ -76,7 +76,6 @@ enum class TaskHandlerErr {
     VALIDFILESTATUSWHILE_FOR_REMOVE   ,
     DIRECTORYEXHAUSTED_FOR_REMOVE     ,
 
-    TRANSFER_ACCESSINGROOT            ,
     TRANSFER_INVALIDSCHEME            ,
     TRANSFER_INVALIDURL               ,
     TRANSFER_DESTFILETYPE             ,

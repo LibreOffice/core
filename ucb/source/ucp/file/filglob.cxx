@@ -758,16 +758,6 @@ namespace fileaccess {
                 aMsg,
                 xComProc );
         }
-        else if( errorCode == TaskHandlerErr::TRANSFER_ACCESSINGROOT )
-        {
-            ioErrorCode = IOErrorCode_WRITE_PROTECTED;
-            cancelCommandExecution(
-                ioErrorCode,
-                generateErrorArguments(aUncPath),
-                xEnv,
-                u"accessing the root during transfer"_ustr,
-                xComProc );
-        }
         else if( errorCode == TaskHandlerErr::TRANSFER_INVALIDSCHEME )
         {
             aAny <<= InteractiveBadTransferURLException(
