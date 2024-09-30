@@ -333,6 +333,10 @@ public:
         m_len = p - m_buf.get();
         *p = 0;
     }
+    // Explicitly define a redundant overload for OUString to avoid certain loplugin warnings in
+    // code prepared to work with SQLWCHAR being either 16-bit unsigned short (Linux) or 32-bit
+    // wchar_t (macOS):
+    CHARS(OUString const & str): CHARS(static_cast<std::u16string_view>(str)) {}
     C* get() { return reinterpret_cast<C*>(m_buf.get()); }
 
 private:
