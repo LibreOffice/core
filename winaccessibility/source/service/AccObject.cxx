@@ -526,12 +526,10 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
         return STATE_SYSTEM_FOCUSED;
     case AccessibleStateType::EXPANDABLE:
         {
-            bool isExpanded = true;
-            bool isExpandable = true;
             if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
                 return STATE_SYSTEM_HASPOPUP;
 
-            GetExpandedState(&isExpandable,&isExpanded);
+            const bool isExpanded = GetExpandedState();
             if(!isExpanded)
                 return STATE_SYSTEM_COLLAPSED;
 
@@ -853,21 +851,15 @@ void AccObject::unsetFocus()
     m_pIMAcc->Put_XAccFocus(UACC_NO_FOCUS);
 }
 
-void AccObject::GetExpandedState(bool* isExpandable, bool* isExpanded)
+bool AccObject::GetExpandedState()
 {
-    *isExpanded = false;
-    *isExpandable = false;
-
     if( !m_xAccContextRef.is() )
     {
-        return;
+        return false;
     }
-    sal_Int64 nRState = m_xAccContextRef->getAccessibleStateSet();
 
-    if (nRState & AccessibleStateType::EXPANDED)
-        *isExpanded = true;
-    if (nRState & AccessibleStateType::EXPANDABLE)
-        *isExpandable = true;
+    sal_Int64 nRState = m_xAccContextRef->getAccessibleStateSet();
+    return (nRState & AccessibleStateType::EXPANDED);
 }
 
 void AccObject::NotifyDestroy() { m_pIMAcc->NotifyDestroy(); }
