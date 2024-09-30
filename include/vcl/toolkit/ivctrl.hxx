@@ -45,12 +45,6 @@ namespace o3tl
     template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x000f> {};
 }
 
-enum class SvxIconChoiceCtrlTextMode
-{
-    Full = 1,        //  Enlarge BoundRect southwards
-    Short            // Shorten with "..."
-};
-
 class SvxIconChoiceCtrlEntry
 {
     Image aImage;
@@ -65,7 +59,6 @@ class SvxIconChoiceCtrlEntry
 
     tools::Rectangle               aRect;              // Bounding-Rectangle of the entry
 
-    SvxIconChoiceCtrlTextMode       eTextMode;
     sal_uInt16                      nX,nY;      // for keyboard control
     SvxIconViewFlags                nFlags;
 
@@ -83,7 +76,6 @@ public:
     void                    SetQuickHelpText( const OUString& rText ) { aQuickHelpText = rText; }
     const OUString&         GetQuickHelpText() const { return aQuickHelpText; }
 
-    SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
     SvxIconViewFlags        GetFlags() const { return nFlags; }
     bool                    IsSelected() const { return bool(nFlags & SvxIconViewFlags::SELECTED); }
     bool                    IsFocused() const { return bool(nFlags & SvxIconViewFlags::FOCUSED); }

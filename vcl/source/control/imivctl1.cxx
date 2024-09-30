@@ -1560,8 +1560,7 @@ void SvxIconChoiceCtrl_Impl::SetGrid( const Size& rSize )
 }
 
 // Calculates the maximum size that the text rectangle may use within its
-// bounding rectangle. In WB_ICON mode with SvxIconChoiceCtrlTextMode::Full, Bottom is set to
-// LONG_MAX.
+// bounding rectangle.
 
 tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const
 {
@@ -1582,8 +1581,6 @@ tools::Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtr
         aBoundRect.AdjustRight( -1 );
         if( aBoundRect.Left() > aBoundRect.Right())
             aBoundRect.SetLeft( aBoundRect.Right() );
-        if( pEntry->GetTextMode() == SvxIconChoiceCtrlTextMode::Full )
-            aBoundRect.SetBottom( LONG_MAX );
     }
     else if (nWinBits & WB_SMALLICON)
     {
