@@ -84,7 +84,7 @@ ImplPolygon::ImplPolygon( const ImplPolygon& rImpPoly )
     mnPoints = rImpPoly.mnPoints;
 }
 
-ImplPolygon::ImplPolygon(ImplPolygon&& rImpPoly)
+ImplPolygon::ImplPolygon(ImplPolygon&& rImpPoly) noexcept
 {
     mxPointAry = std::move(rImpPoly.mxPointAry);
     mxFlagAry = std::move(rImpPoly.mxFlagAry);
