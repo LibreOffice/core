@@ -478,12 +478,12 @@ void BrowseBox::Resize()
     pDataWin->bResizeOnPaint = false;
 
     // calc the size of the scrollbars
-    sal_uLong nSBHeight = GetBarHeight();
-    sal_uLong nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+    tools::Long nSBHeight = GetBarHeight();
+    tools::Long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
     {
-        nSBHeight = static_cast<sal_uLong>(nSBHeight * static_cast<double>(GetZoom()));
-        nSBWidth = static_cast<sal_uLong>(nSBWidth * static_cast<double>(GetZoom()));
+        nSBHeight = static_cast<tools::Long>(nSBHeight * static_cast<double>(GetZoom()));
+        nSBWidth = static_cast<tools::Long>(nSBWidth * static_cast<double>(GetZoom()));
     }
 
     DoHideCursor();
@@ -800,12 +800,12 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     tools::Long nDataRowHeight = GetDataRowHeight();
 
     // compute relative rows to redraw
-    sal_uLong nRelTopRow = 0;
-    sal_uLong nRelBottomRow = aOverallAreaSize.Height();
+    sal_Int32 nRelTopRow = 0;
+    sal_Int32 nRelBottomRow = aOverallAreaSize.Height();
     if (!_bForeignDevice && nDataRowHeight)
     {
-        nRelTopRow = (static_cast<sal_uLong>(_rRect.Top()) / nDataRowHeight);
-        nRelBottomRow = static_cast<sal_uLong>(_rRect.Bottom()) / nDataRowHeight;
+        nRelTopRow = static_cast<sal_Int32>((_rRect.Top()) / nDataRowHeight);
+        nRelBottomRow = static_cast<sal_Int32>((_rRect.Bottom()) / nDataRowHeight);
     }
 
     // cache frequently used values
@@ -824,8 +824,8 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
     Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
 
     // redraw the invalid fields
-    for ( sal_uLong nRelRow = nRelTopRow;
-          nRelRow <= nRelBottomRow && static_cast<sal_uLong>(nTopRow)+nRelRow < o3tl::make_unsigned(nRowCount);
+    for ( sal_Int32 nRelRow = nRelTopRow;
+          nRelRow <= nRelBottomRow && nTopRow+nRelRow < nRowCount;
           ++nRelRow, aPos.AdjustY(nDataRowHeight ) )
     {
         // get row
@@ -835,7 +835,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
             continue;
 
         // prepare row
-        sal_uLong nRow = nTopRow+nRelRow;
+        sal_Int32 nRow = nTopRow+nRelRow;
         if ( !SeekRow( nRow) ) {
             OSL_FAIL("BrowseBox::ImplPaintData: SeekRow failed");
         }
@@ -897,7 +897,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const tools::Rectangle& _rRec
                 _rOut.DrawRect( aFieldRect );
             }
 
-            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == static_cast<sal_uLong>(GetCurRow())))
+            if (!m_bFocusOnlyCursor && (pCol->GetId() == GetCurColumnId()) && (nRow == GetCurRow()))
                 DrawCursor();
 
             // draw a single field.
@@ -1067,8 +1067,8 @@ void BrowseBox::UpdateScrollbars()
     m_nCornerWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
     if (IsZoom())
     {
-        m_nCornerHeight = static_cast<sal_uLong>(m_nCornerHeight * static_cast<double>(GetZoom()));
-        m_nCornerWidth = static_cast<sal_uLong>(m_nCornerWidth * static_cast<double>(GetZoom()));
+        m_nCornerHeight = static_cast<tools::Long>(m_nCornerHeight * static_cast<double>(GetZoom()));
+        m_nCornerWidth = static_cast<tools::Long>(m_nCornerWidth * static_cast<double>(GetZoom()));
     }
 
     bool bNeedsVScroll = false;
@@ -1100,7 +1100,7 @@ void BrowseBox::UpdateScrollbars()
     }
 
     // needs HScroll?
-    sal_uLong nLastCol = GetColumnAtXPosPixel( aDataWinSize.Width() - 1 );
+    sal_uInt16 nLastCol = GetColumnAtXPosPixel( aDataWinSize.Width() - 1 );
 
     sal_uInt16 nFrozenCols = FrozenColCount();
     bool bNeedsHScroll =    pDataWin->bAutoHScroll

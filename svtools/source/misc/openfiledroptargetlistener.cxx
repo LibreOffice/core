@@ -71,7 +71,7 @@ void SAL_CALL OpenFileDropTargetListener::drop( const css::datatransfer::dnd::Dr
             // at first check filelist format
             if ( aHelper.GetFileList( SotClipboardFormatId::FILE_LIST, aFileList ) )
             {
-                sal_uLong i, nCount = aFileList.Count();
+                size_t i, nCount = aFileList.Count();
                 for ( i = 0; i < nCount; ++i )
                     implts_OpenFile( aFileList.GetFile(i) );
                 bFormatFound = true;
