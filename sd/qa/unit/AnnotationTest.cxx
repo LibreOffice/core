@@ -420,6 +420,37 @@ CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePage)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationDuplicatePageAndUndo)
+{
+    // Insert annotation, duplicate, undo
+
+    createSdDrawDoc();
+
+    auto pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    auto* pDrawViewShell = dynamic_cast<sd::DrawViewShell*>(pViewShell);
+    CPPUNIT_ASSERT(pDrawViewShell);
+
+    SdDrawDocument* pDocument = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDocument);
+
+    // Inserted new annotation
+    uno::Sequence<beans::PropertyValue> aArgs;
+
+    aArgs = comphelper::InitPropertySequence({
+        { "Text", uno::Any(u"Comment"_ustr) },
+    });
+
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, aArgs);
+
+    // Duplicate
+    dispatchCommand(mxComponent, u".uno:DuplicatePage"_ustr, {});
+
+    // Undo
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+}
+
 CPPUNIT_TEST_FIXTURE(AnnotationTest, testAnnotationTextUpdate)
 {
     createSdDrawDoc();
