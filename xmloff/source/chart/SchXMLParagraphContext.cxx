@@ -102,11 +102,10 @@ void SchXMLParagraphContext::characters( const OUString& rChars )
 }
 
 SchXMLTitleParaContext::SchXMLTitleParaContext( SvXMLImport& rImport,
-                                                std::vector<std::pair<OUString, OUString>>& rParaText,
-                                                OUString * pOutId /* = 0 */ ) :
+                                                std::vector<std::pair<OUString, OUString>>& rParaText) :
     SvXMLImportContext( rImport ),
     mrParaText( rParaText ),
-    mpId( pOutId )
+    mpId( nullptr )
 {
 }
 

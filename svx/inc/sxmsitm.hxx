@@ -28,8 +28,8 @@
 class SdrMeasureScaleItem final : public SdrScaleItem
 {
 public:
-    SdrMeasureScaleItem(SfxItemType eItemType = SfxItemType::SdrMeasureScaleItemType)
-        : SdrScaleItem(SDRATTR_MEASURESCALE, Fraction(1, 1), eItemType)
+    SdrMeasureScaleItem()
+        : SdrScaleItem(SDRATTR_MEASURESCALE, Fraction(1, 1), SfxItemType::SdrMeasureScaleItemType)
     {
     }
     virtual SdrMeasureScaleItem* Clone(SfxItemPool*) const override

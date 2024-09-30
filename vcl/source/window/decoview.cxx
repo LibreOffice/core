@@ -821,8 +821,7 @@ void DecorationView::DrawFrame( const tools::Rectangle& rRect,
     mpOutDev->EnableMapMode( bOldMapMode );
 }
 
-void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
-                                         DrawHighlightFrameStyle nStyle )
+void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect )
 {
     const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
     Color aLightColor = rStyleSettings.GetLightColor();
@@ -858,9 +857,6 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
             }
         }
     }
-
-    if ( nStyle == DrawHighlightFrameStyle::In )
-        std::swap( aLightColor, aShadowColor );
 
     DrawFrame( rRect, aLightColor, aShadowColor );
 }

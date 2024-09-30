@@ -42,13 +42,6 @@ namespace o3tl
     template<> struct typed_flags<DrawSymbolFlags> : is_typed_flags<DrawSymbolFlags, 0x03> {};
 }
 
-// Flags for DrawHighlightFrame()
-enum class DrawHighlightFrameStyle
-{
-    In                  = 1,
-    Out                 = 2,
-};
-
 // Flags for DrawButton()
 enum class DrawButtonFlags
 {
@@ -82,8 +75,7 @@ public:
     void                DrawFrame( const tools::Rectangle& rRect,
                                    const Color& rLeftTopColor,
                                    const Color& rRightBottomColor );
-    void                DrawHighlightFrame( const tools::Rectangle& rRect,
-                                            DrawHighlightFrameStyle nStyle );
+    void                DrawHighlightFrame( const tools::Rectangle& rRect );
     tools::Rectangle           DrawFrame( const tools::Rectangle& rRect, DrawFrameStyle nStyle = DrawFrameStyle::Out, DrawFrameFlags nFlags = DrawFrameFlags::NONE );
     tools::Rectangle           DrawButton( const tools::Rectangle& rRect, DrawButtonFlags nStyle );
     void                DrawSeparator( const Point& rStart, const Point& rStop, bool bVertical = true );

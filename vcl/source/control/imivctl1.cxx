@@ -1848,7 +1848,7 @@ void SvxIconChoiceCtrl_Impl::DrawHighlightFrame(vcl::RenderContext& rRenderConte
                                                 const tools::Rectangle& rRect)
 {
     DecorationView aDecoView(&rRenderContext);
-    aDecoView.DrawHighlightFrame(rRect, DrawHighlightFrameStyle::Out);
+    aDecoView.DrawHighlightFrame(rRect);
 }
 
 void SvxIconChoiceCtrl_Impl::SetEntryHighlightFrame(SvxIconChoiceCtrlEntry* pEntry)

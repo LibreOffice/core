@@ -60,8 +60,7 @@ private:
 
 public:
     SchXMLTitleParaContext( SvXMLImport& rImport,
-                            std::vector<std::pair<OUString, OUString>>& rParaText,
-                            OUString * pOutId = nullptr );
+                            std::vector<std::pair<OUString, OUString>>& rParaText);
     virtual ~SchXMLTitleParaContext() override;
 
     virtual void SAL_CALL startFastElement(
