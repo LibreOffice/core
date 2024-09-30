@@ -368,17 +368,17 @@ void OConnection::disposing()
 
     m_xDir.clear();
     m_xContent.clear();
-    m_xCatalog  = WeakReference< XTablesSupplier>();
+    m_xCatalog.clear();
 }
 
 Reference< XTablesSupplier > OConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XTablesSupplier > xTab = m_xCatalog;
+    rtl::Reference< connectivity::sdbcx::OCatalog > xTab = m_xCatalog.get();
     if(!xTab.is())
     {
         xTab = new OFileCatalog(this);
-        m_xCatalog = xTab;
+        m_xCatalog = xTab.get();
     }
     return xTab;
 }

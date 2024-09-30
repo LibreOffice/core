@@ -198,11 +198,11 @@ uno::Reference<sdbc::XDatabaseMetaData> SAL_CALL OWriterConnection::getMetaData(
 css::uno::Reference<css::sdbcx::XTablesSupplier> OWriterConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference<css::sdbcx::XTablesSupplier> xTab = m_xCatalog;
+    rtl::Reference<connectivity::sdbcx::OCatalog> xTab = m_xCatalog;
     if (!xTab.is())
     {
         xTab = new OWriterCatalog(this);
-        m_xCatalog = xTab;
+        m_xCatalog = xTab.get();
     }
     return xTab;
 }

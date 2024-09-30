@@ -26,6 +26,9 @@
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <TConnection.hxx>
 #include <file/filedllapi.hxx>
+#include <unotools/weakref.hxx>
+
+namespace connectivity::sdbcx { class OCatalog; }
 
 namespace connectivity::file
     {
@@ -38,7 +41,7 @@ namespace connectivity::file
 
             // Data attributes
 
-            css::uno::WeakReference< css::sdbcx::XTablesSupplier>         m_xCatalog;
+            unotools::WeakReference< ::connectivity::sdbcx::OCatalog >         m_xCatalog;
 
             OUString                    m_aFilenameExtension;
             OFileDriver*                m_pDriver;      //  Pointer to the owning

@@ -132,11 +132,11 @@ Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  )
 css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XTablesSupplier > xTab = m_xCatalog;
+    rtl::Reference< connectivity::sdbcx::OCatalog > xTab = m_xCatalog;
     if(!xTab.is())
     {
         xTab = new OFlatCatalog(this);
-        m_xCatalog = xTab;
+        m_xCatalog = xTab.get();
     }
     return xTab;
 }

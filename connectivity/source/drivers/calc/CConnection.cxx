@@ -213,11 +213,11 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  )
 css::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XTablesSupplier > xTab = m_xCatalog;
+    rtl::Reference< connectivity::sdbcx::OCatalog > xTab = m_xCatalog;
     if(!xTab.is())
     {
         xTab = new OCalcCatalog(this);
-        m_xCatalog = xTab;
+        m_xCatalog = xTab.get();
     }
     return xTab;
 }

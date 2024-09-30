@@ -69,11 +69,11 @@ Reference< XDatabaseMetaData > SAL_CALL ODbaseConnection::getMetaData(  )
 css::uno::Reference< XTablesSupplier > ODbaseConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    Reference< XTablesSupplier > xTab = m_xCatalog;
+    rtl::Reference< connectivity::sdbcx::OCatalog > xTab = m_xCatalog;
     if(!xTab.is())
     {
         xTab = new ODbaseCatalog(this);
-        m_xCatalog = xTab;
+        m_xCatalog = xTab.get();
     }
     return xTab;
 }
