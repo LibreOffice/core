@@ -493,102 +493,68 @@ DWORD AccObject::GetMSAAStateFromUNO(sal_Int64 nState)
     switch( nState )
     {
     case AccessibleStateType::BUSY:
-        IState = STATE_SYSTEM_BUSY;
-        break;
+        return STATE_SYSTEM_BUSY;
     case AccessibleStateType::CHECKED:
         if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON)
-        {
-            IState = STATE_SYSTEM_PRESSED;
-        }
-        else
-            IState = STATE_SYSTEM_CHECKED;
-        break;
+            return STATE_SYSTEM_PRESSED;
+        return STATE_SYSTEM_CHECKED;
     case AccessibleStateType::DEFUNC:
-        IState = STATE_SYSTEM_UNAVAILABLE;
-        break;
+        return STATE_SYSTEM_UNAVAILABLE;
     case AccessibleStateType::EXPANDED:
-        IState = STATE_SYSTEM_EXPANDED;
-        break;
+        return STATE_SYSTEM_EXPANDED;
     case AccessibleStateType::FOCUSABLE:
-        IState = STATE_SYSTEM_FOCUSABLE;
-        break;
+        return STATE_SYSTEM_FOCUSABLE;
     case AccessibleStateType::FOCUSED:
-        IState = STATE_SYSTEM_FOCUSED;
-        break;
+        return STATE_SYSTEM_FOCUSED;
     case AccessibleStateType::INDETERMINATE:
-        IState = STATE_SYSTEM_MIXED;
-        break;
+        return STATE_SYSTEM_MIXED;
     case AccessibleStateType::MULTI_SELECTABLE:
-        IState = STATE_SYSTEM_MULTISELECTABLE;
-        break;
+        return STATE_SYSTEM_MULTISELECTABLE;
     case AccessibleStateType::PRESSED:
-        IState = STATE_SYSTEM_PRESSED;
-        break;
+        return STATE_SYSTEM_PRESSED;
     case AccessibleStateType::RESIZABLE:
-        IState = STATE_SYSTEM_SIZEABLE;
-        break;
+        return STATE_SYSTEM_SIZEABLE;
     case AccessibleStateType::SELECTABLE:
-        if( m_accRole == MENU || m_accRole == MENU_ITEM)
-        {
-            IState = UNO_MSAA_UNMAPPING;
-        }
-        else
-        {
-            IState = STATE_SYSTEM_SELECTABLE;
-        }
-        break;
+        if (m_accRole == MENU || m_accRole == MENU_ITEM)
+            return UNO_MSAA_UNMAPPING;
+        return STATE_SYSTEM_SELECTABLE;
     case AccessibleStateType::SELECTED:
-        if( m_accRole == MENU || m_accRole == MENU_ITEM )
-        {
-            IState = UNO_MSAA_UNMAPPING;
-        }
-        else
-        {
-            IState = STATE_SYSTEM_SELECTED;
-        }
-        break;
+        if (m_accRole == MENU || m_accRole == MENU_ITEM)
+            return UNO_MSAA_UNMAPPING;
+        return STATE_SYSTEM_SELECTED;
     case AccessibleStateType::ARMED:
-        IState = STATE_SYSTEM_FOCUSED;
-        break;
+        return STATE_SYSTEM_FOCUSED;
     case AccessibleStateType::EXPANDABLE:
         {
             sal_Bool isExpanded = true;
             sal_Bool isExpandable = true;
             if (m_accRole == PUSH_BUTTON || m_accRole == TOGGLE_BUTTON  || m_accRole == BUTTON_DROPDOWN)
-            {
-                IState = STATE_SYSTEM_HASPOPUP;
-            }
-            else
-            {
-                GetExpandedState(&isExpandable,&isExpanded);
-                if(!isExpanded)
-                    IState = STATE_SYSTEM_COLLAPSED;
-            }
+                return STATE_SYSTEM_HASPOPUP;
+
+            GetExpandedState(&isExpandable,&isExpanded);
+            if(!isExpanded)
+                return STATE_SYSTEM_COLLAPSED;
+
+            return UNO_MSAA_UNMAPPING;
         }
-        break;
     //Remove the SENSITIVE state mapping. There is no corresponding MSAA state.
     //case  SENSITIVE:
     //    IState = STATE_SYSTEM_PROTECTED;
     case AccessibleStateType::EDITABLE:
         m_pIMAcc->DecreaseState(STATE_SYSTEM_READONLY);
-        break;
+        return UNO_MSAA_UNMAPPING;
     case AccessibleStateType::OFFSCREEN:
-        IState = STATE_SYSTEM_OFFSCREEN;
-        break;
+        return STATE_SYSTEM_OFFSCREEN;
     case AccessibleStateType::MOVEABLE:
-        IState = STATE_SYSTEM_MOVEABLE;
-        break;
+        return STATE_SYSTEM_MOVEABLE;
     case AccessibleStateType::COLLAPSE:
-        IState = STATE_SYSTEM_COLLAPSED;
+        return STATE_SYSTEM_COLLAPSED;
         break;
     case AccessibleStateType::DEFAULT:
-        IState = STATE_SYSTEM_DEFAULT;
-        break;
+        return STATE_SYSTEM_DEFAULT;
     default:
-        break;
+        return UNO_MSAA_UNMAPPING;
     }
-
-    return IState;
 }
 
 /**
