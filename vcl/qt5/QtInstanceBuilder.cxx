@@ -12,6 +12,7 @@
 #include <unordered_set>
 
 #include <QtBuilder.hxx>
+#include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
@@ -239,10 +240,11 @@ std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString
     return nullptr;
 }
 
-std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString&)
+std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
+    std::unique_ptr<weld::Label> xRet(pLabel ? std::make_unique<QtInstanceLabel>(pLabel) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString&)
