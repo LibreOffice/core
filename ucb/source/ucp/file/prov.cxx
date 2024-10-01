@@ -300,9 +300,8 @@ XPropertySetInfoImpl2::hasPropertyByName(
 }
 
 
-void FileProvider::initProperties()
+void FileProvider::initProperties(std::unique_lock<std::mutex>& /*rGuard*/)
 {
-    std::scoped_lock aGuard( m_aMutex );
     if(  m_xPropertySetInfo.is() )
         return;
 
@@ -332,7 +331,8 @@ void FileProvider::initProperties()
 Reference< XPropertySetInfo > SAL_CALL
 FileProvider::getPropertySetInfo(  )
 {
-    initProperties();
+    std::unique_lock aGuard( m_aMutex );
+    initProperties(aGuard);
     return m_xPropertySetInfo;
 }
 
@@ -352,7 +352,8 @@ Any SAL_CALL
 FileProvider::getPropertyValue(
     const OUString& aPropertyName )
 {
-    initProperties();
+    std::unique_lock aGuard( m_aMutex );
+    initProperties(aGuard);
     if( aPropertyName == "FileSystemNotation" )
     {
         return Any(m_FileSystemNotation);

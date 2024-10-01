@@ -143,7 +143,7 @@ namespace fileaccess {
         // Members
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
 
-        void initProperties();
+        void initProperties(std::unique_lock<std::mutex>& rGuard);
         std::mutex   m_aMutex;
         OUString m_HostName;
         OUString m_HomeDirectory;
