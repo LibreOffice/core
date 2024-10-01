@@ -410,20 +410,17 @@ HierarchyDataSource::createInstanceWithArguments(
 uno::Reference< lang::XMultiServiceFactory >
 HierarchyDataSource::getConfigProvider()
 {
+    std::unique_lock aGuard( m_aMutex );
     if ( !m_xConfigProvider.is() )
     {
-        std::unique_lock aGuard( m_aMutex );
-        if ( !m_xConfigProvider.is() )
+        try
         {
-            try
-            {
-                m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
-            }
-            catch ( uno::Exception const & )
-            {
-                OSL_FAIL( "HierarchyDataSource::getConfigProvider - "
-                               "caught exception!" );
-            }
+            m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
+        }
+        catch ( uno::Exception const & )
+        {
+            OSL_FAIL( "HierarchyDataSource::getConfigProvider - "
+                           "caught exception!" );
         }
     }
 
