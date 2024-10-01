@@ -34,6 +34,7 @@ namespace reportdesign
 {
     class OFunctions;
     class OGroups;
+    class OSection;
     typedef ::cppu::WeakComponentImplHelper< css::report::XGroup
                                          ,   css::lang::XServiceInfo> GroupBase;
     typedef ::cppu::PropertySetMixin< css::report::XGroup> GroupPropertySet;
@@ -48,8 +49,8 @@ namespace reportdesign
     {
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
         unotools::WeakReference< OGroups >                    m_xParent;
-        css::uno::Reference< css::report::XSection>           m_xHeader;
-        css::uno::Reference< css::report::XSection>           m_xFooter;
+        rtl::Reference< OSection>                             m_xHeader;
+        rtl::Reference< OSection>                             m_xFooter;
         rtl::Reference< OFunctions >                          m_xFunctions;
         ::rptshared::GroupProperties                          m_aProps;
 
@@ -90,7 +91,7 @@ namespace reportdesign
         void setSection(     const OUString& _sProperty
                             ,bool _bOn
                             ,const OUString& _sName
-                            ,css::uno::Reference< css::report::XSection>& _member);
+                            ,rtl::Reference< OSection>& _member);
     protected:
         // TODO: VirtualFunctionFinder: This is virtual function!
 

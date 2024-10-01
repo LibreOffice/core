@@ -297,12 +297,12 @@ void SAL_CALL OGroup::removeVetoableChangeListener( const OUString& PropertyName
 void OGroup::setSection(     const OUString& _sProperty
                             ,bool _bOn
                             ,const OUString& _sName
-                            ,uno::Reference< report::XSection>& _member)
+                            ,rtl::Reference< OSection>& _member)
 {
     BoundListeners l;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        prepareSet(_sProperty, uno::Any(_member), uno::Any(_bOn), &l);
+        prepareSet(_sProperty, uno::Any(uno::Reference<report::XSection>(_member)), uno::Any(_bOn), &l);
 
         // create section if needed
         if ( _bOn && !_member.is() )

@@ -131,10 +131,10 @@ namespace reportdesign
                 ,const css::uno::Reference< css::uno::XComponentContext >& context,
                 css::uno::Sequence< OUString> const&);
     public:
-        static css::uno::Reference< css::report::XSection>
+        static rtl::Reference< OSection>
         createOSection(const rtl::Reference< OReportDefinition >& _xParent
                 ,const css::uno::Reference< css::uno::XComponentContext >& context,bool _bPageSection=false);
-        static css::uno::Reference< css::report::XSection>
+        static rtl::Reference< OSection>
         createOSection(const rtl::Reference< OGroup >& _xParent
                 ,const css::uno::Reference< css::uno::XComponentContext >& context);
 

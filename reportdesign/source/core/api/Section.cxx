@@ -75,7 +75,7 @@ static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
     return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
 }
 
-uno::Reference<report::XSection> OSection::createOSection(
+rtl::Reference<OSection> OSection::createOSection(
     const rtl::Reference< OReportDefinition >& xParentDef,
     const uno::Reference< uno::XComponentContext >& context,
     bool const bPageSection)
@@ -86,7 +86,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     return pNew;
 }
 
-uno::Reference<report::XSection> OSection::createOSection(
+rtl::Reference<OSection> OSection::createOSection(
     const rtl::Reference< OGroup >& xParentGroup,
     const uno::Reference< uno::XComponentContext >& context)
 {
