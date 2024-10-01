@@ -247,7 +247,7 @@ void SwVisibleCursor::SetPosAndShow(SfxViewShell const * pViewShell)
                     LOK_CALLBACK_INVALIDATE_VIEW_CURSOR);
             }
         }
-        else if (m_pCursorShell->m_bIsCursorPosChanged)
+        else
         {
             SfxLokHelper::notifyUpdatePerViewId(m_pCursorShell->GetSfxViewShell(), SfxViewShell::Current(),
                 m_pCursorShell->GetSfxViewShell(), LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR);
