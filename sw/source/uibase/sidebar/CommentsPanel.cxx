@@ -75,7 +75,7 @@ Comment::Comment(weld::Container* pParent, CommentsPanel& rCommentsPanel)
     , mbResolved(false)
 {
     mxTextView->set_editable(false);
-    mxTextView->set_tooltip_text("View Mode");
+    mxTextView->set_tooltip_text(SwResId(STR_COMMENT_VIEW_MODE));
     mxTextView->connect_focus_out(LINK(this, Comment, OnFocusOut));
     mxResolve->connect_toggled(LINK(this, Comment, ResolveClicked));
     mxReply->connect_clicked(LINK(this, Comment, ReplyClicked));
@@ -96,7 +96,7 @@ IMPL_LINK(Comment, ContextMenuHdl, const MouseEvent&, rMEvt, bool)
         if (sId == "edit")
         {
             this->makeEditable();
-            getTextView()->set_tooltip_text("Edit Mode");
+            getTextView()->set_tooltip_text(SwResId(STR_COMMENT_EDIT_MODE));
         }
         else if (sId == "reply")
             mrCommentsPanel.ReplyComment(this);
@@ -158,7 +158,7 @@ void Comment::InitControls(const SwPostItField* pPostItField)
 IMPL_LINK_NOARG(Comment, OnFocusOut, weld::Widget&, void)
 {
     mrCommentsPanel.EditComment(this);
-    getTextView()->set_tooltip_text("View Mode");
+    getTextView()->set_tooltip_text(SwResId(STR_COMMENT_VIEW_MODE));
 }
 
 IMPL_LINK_NOARG(Comment, ResolveClicked, weld::Toggleable&, void)
@@ -500,7 +500,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         pThread->getCommentBoxWidget()->reorder_child(pComment->get_widget(),
                                                       pThread->mnComments++);
         pComment->InitControls(pNote->GetPostItField());
-        pComment->getTextView()->set_tooltip_text("Edit Mode");
+        pComment->getTextView()->set_tooltip_text(SwResId(STR_COMMENT_EDIT_MODE));
         mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }
@@ -515,7 +515,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
         mpThreadsMap[nRootId] = std::move(pThread);
         setReferenceText(nRootId);
         pComment->InitControls(pNote->GetPostItField());
-        pComment->getTextView()->set_tooltip_text("Edit Mode");
+        pComment->getTextView()->set_tooltip_text(SwResId(STR_COMMENT_EDIT_MODE));
         mpAuthorSet.insert(pComment->GetAuthor());
         mpCommentsMap[nNoteId] = std::move(pComment);
     }

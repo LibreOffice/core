@@ -427,6 +427,8 @@
 #define STR_EDITINDEX                           NC_("STR_EDITINDEX", "Edit %1")
 #define STR_UPDATEINDEX                         NC_("STR_UPDATEINDEX", "Update %1")
 #define STR_DELETEINDEX                         NC_("STR_DELETEINDEX", "Delete %1")
+#define STR_COMMENT_VIEW_MODE                   NC_("STR_COMMENT_VIEW_MODE", "View Mode")
+#define STR_COMMENT_EDIT_MODE                   NC_("STR_COMMENT_EDIT_MODE", "Edit Mode")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")
