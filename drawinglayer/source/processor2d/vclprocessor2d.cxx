@@ -1602,10 +1602,10 @@ void VclProcessor2D::adaptTextToFillDrawMode() const
 // process support
 
 VclProcessor2D::VclProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                               OutputDevice& rOutDev, basegfx::BColorModifierStack aInitStack)
+                               OutputDevice& rOutDev)
     : BaseProcessor2D(rViewInformation)
     , mpOutputDevice(&rOutDev)
-    , maBColorModifierStack(std::move(aInitStack))
+    , maBColorModifierStack()
     , mnPolygonStrokePrimitive2D(0)
 {
     // set digit language, derived from SvtCTLOptions to have the correct

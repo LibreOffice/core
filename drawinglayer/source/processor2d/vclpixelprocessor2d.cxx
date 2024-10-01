@@ -69,9 +69,8 @@ using namespace com::sun::star;
 namespace drawinglayer::processor2d
 {
 VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation,
-                                         OutputDevice& rOutDev,
-                                         const basegfx::BColorModifierStack& rInitStack)
-    : VclProcessor2D(rViewInformation, rOutDev, rInitStack)
+                                         OutputDevice& rOutDev)
+    : VclProcessor2D(rViewInformation, rOutDev)
     , m_nOrigAntiAliasing(rOutDev.GetAntialiasing())
     , m_bRenderSimpleTextDirect(
           officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())

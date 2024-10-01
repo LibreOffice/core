@@ -110,8 +110,7 @@ protected:
 
 public:
     // constructor/destructor
-    VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev,
-                   basegfx::BColorModifierStack aInitStack = basegfx::BColorModifierStack());
+    VclProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev);
     virtual ~VclProcessor2D() override;
 
 private:
