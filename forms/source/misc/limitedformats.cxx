@@ -280,6 +280,7 @@ namespace frm
         _rConvertedValue.clear();
 
         _rOldValue <<= pFormats[nOldEnumValue].nKey;
+
         bool bModified = false;
         bool bFoundIt = false;
         // look for the entry with the given format key
@@ -294,12 +295,6 @@ namespace frm
                 break;
             }
             ++nTablePosition;
-        }
-
-        if (!_rOldValue.hasValue())
-        {   // did not reach the end of the table (means we found nNewFormat)
-            // -> go to the end to ensure that _rOldValue is set
-            _rOldValue <<= pFormats[nOldEnumValue].nKey;
         }
 
         OSL_ENSURE(_rOldValue.hasValue(), "OLimitedFormats::convertFormatKeyPropertyValue: did not find the old enum value in the table!");
