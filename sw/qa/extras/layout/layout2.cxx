@@ -3109,6 +3109,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTdf162614)
     // clang-format on
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTdf163230)
+{
+    createSwDoc("tdf163230.fodt");
+    auto pExportDump = parseLayoutDump();
+    // The first row must split across pages, despite its "do not break" attribute, because it
+    // doesn't fit on the page. Before the fix, the document had only two pages.
+    assertXPath(pExportDump, "//page", 3);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
