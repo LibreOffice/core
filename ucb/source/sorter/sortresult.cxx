@@ -236,6 +236,7 @@ sal_Bool SAL_CALL SortedResultSet::next()
 
 sal_Bool SAL_CALL SortedResultSet::isBeforeFirst()
 {
+    std::unique_lock aGuard( maMutex );
     if ( mnCurEntry )
         return false;
     else
@@ -245,6 +246,7 @@ sal_Bool SAL_CALL SortedResultSet::isBeforeFirst()
 
 sal_Bool SAL_CALL SortedResultSet::isAfterLast()
 {
+    std::unique_lock aGuard( maMutex );
     if ( mnCurEntry > mnCount )
         return true;
     else
@@ -254,6 +256,7 @@ sal_Bool SAL_CALL SortedResultSet::isAfterLast()
 
 sal_Bool SAL_CALL SortedResultSet::isFirst()
 {
+    std::unique_lock aGuard( maMutex );
     if ( mnCurEntry == 1 )
         return true;
     else
@@ -263,6 +266,7 @@ sal_Bool SAL_CALL SortedResultSet::isFirst()
 
 sal_Bool SAL_CALL SortedResultSet::isLast()
 {
+    std::unique_lock aGuard( maMutex );
     if ( mnCurEntry == mnCount )
         return true;
     else
@@ -324,6 +328,7 @@ sal_Bool SAL_CALL SortedResultSet::last()
 
 sal_Int32 SAL_CALL SortedResultSet::getRow()
 {
+    std::unique_lock aGuard( maMutex );
     return mnCurEntry;
 }
 
