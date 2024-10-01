@@ -2085,19 +2085,55 @@ public:
     bool OscillationDetected(const SwFrameAreaDefinition& rFrameArea);
 
 private:
-    std::vector<std::pair<SwRect, SwRect>> maFrameDatas;
+    // A partial copy of SwFrameAreaDefinition data
+    struct FrameData
+    {
+        SwRect frameArea;
+        SwRect framePrintArea;
+        bool frameAreaPositionValid;
+        bool frameAreaSizeValid;
+        bool framePrintAreaValid;
+
+        FrameData(const SwFrameAreaDefinition& src)
+            : frameArea(src.getFrameArea())
+            , framePrintArea(src.getFramePrintArea())
+            , frameAreaPositionValid(src.isFrameAreaPositionValid())
+            , frameAreaSizeValid(src.isFrameAreaSizeValid())
+            , framePrintAreaValid(src.isFramePrintAreaValid())
+        {
+        }
+
+        bool operator==(const SwFrameAreaDefinition& src) const
+        {
+            return frameArea == src.getFrameArea() && framePrintArea == src.getFramePrintArea()
+                   && frameAreaPositionValid == src.isFrameAreaPositionValid()
+                   && frameAreaSizeValid == src.isFrameAreaSizeValid()
+                   && framePrintAreaValid == src.isFramePrintAreaValid();
+        }
+    };
+    std::vector<FrameData> maFrameDatas;
 };
 
 bool PosSizeOscillationControl::OscillationDetected(const SwFrameAreaDefinition& rFrameArea)
 {
-    if (maFrameDatas.size() == 20) // stack is full -> oscillation
-        return true;
-
-    for (const auto& [area, printArea] : maFrameDatas)
-        if (rFrameArea.getFrameArea() == area && rFrameArea.getFramePrintArea() == printArea)
+    for (size_t i = 0; i < maFrameDatas.size(); ++i)
+    {
+        const auto& f = maFrameDatas[i];
+        if (f == rFrameArea)
+        {
+            SAL_WARN("sw.layout",
+                     "PosSize oscillation: frame " << i << " repeated; total frames " << maFrameDatas.size());
             return true;
+        }
+    }
 
-    maFrameDatas.emplace_back(rFrameArea.getFrameArea(), rFrameArea.getFramePrintArea());
+    if (maFrameDatas.size() == 20) // stack is full -> oscillation
+    {
+        SAL_WARN("sw.layout", "PosSize oscillation: max frames");
+        return true;
+    }
+
+    maFrameDatas.emplace_back(rFrameArea);
     return false;
 }
 }
