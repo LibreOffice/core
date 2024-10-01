@@ -38,7 +38,7 @@ namespace drawinglayer::processor2d
             The ViewInformation to use
 
             @param nPixelWidth, nPixelHeight
-            The dimensions in Pixles
+            The dimensions in Pixels
 
             @param bUseRGBA
             Define RGBA (true) or RGB (false)
