@@ -1051,7 +1051,7 @@ BitmapEx CairoPixelProcessor2D::extractBitmapEx() const
 
             for (sal_uInt32 x(0); x < nWidth; ++x)
             {
-                // RGBA: Do not forget: it's pre-mulitiplied
+                // RGBA: Do not forget: it's pre-multiplied
                 sal_uInt8 nAlpha(pPixelData[SVP_CAIRO_ALPHA]);
                 aAccess.SetPixelOnData(
                     pWriteRGB, x,
