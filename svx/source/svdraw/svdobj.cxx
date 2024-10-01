@@ -1016,7 +1016,7 @@ void SdrObject::RecalcBoundRect()
 
 void SdrObject::BroadcastObjectChange() const
 {
-    if ((getSdrModelFromSdrObject().isLocked()) || comphelper::IsFuzzing())
+    if ((getSdrModelFromSdrObject().isLocked()) || getSdrModelFromSdrObject().IsInDestruction() || comphelper::IsFuzzing())
         return;
 
     bool bPlusDataBroadcast(m_pPlusData && m_pPlusData->pBroadcast);
