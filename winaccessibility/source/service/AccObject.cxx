@@ -653,7 +653,6 @@ void AccObject::UpdateState()
     bool isShowing = false;
     bool isEditable = false;
     bool isVisible = false;
-    bool isFocusable = false;
 
     for (int i=0; i<63; ++i)
     {
@@ -668,8 +667,6 @@ void AccObject::UpdateState()
             isVisible = true;
         else if (nState == AccessibleStateType::EDITABLE)
             isEditable = true;
-        else if (nState == AccessibleStateType::FOCUSABLE)
-            isFocusable = true;
         IncreaseState(nState);
     }
 
@@ -725,9 +722,6 @@ void AccObject::UpdateState()
     default:
         break;
     }
-
-    if (isFocusable)
-        IncreaseState(STATE_SYSTEM_FOCUSABLE);
 
     if (!isEnable)
         m_pIMAcc->IncreaseState( STATE_SYSTEM_UNAVAILABLE );
