@@ -3723,6 +3723,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152298)
     assertXPathContent(pDump, "//page[2]/body/tab/row[2]/cell[1]/txt"_ostr, u"10"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf163230)
+{
+    createSwDoc("tdf163230.fodt");
+    auto pExportDump = parseLayoutDump();
+    // The first row must split across pages, despite its "do not break" attribute, because it
+    // doesn't fit on the page. Before the fix, the document had only two pages.
+    assertXPath(pExportDump, "//page"_ostr, 3);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
