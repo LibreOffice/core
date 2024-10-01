@@ -4715,8 +4715,7 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis,
             }
             else if (rArg.Name == ".uno:SignatureCa" && rArg.Value.has<OUString>())
             {
-                std::string aSignatureCa;
-                aSignatureCa = rArg.Value.get<OUString>().toUtf8();
+                std::string aSignatureCa(rArg.Value.get<OUString>().toUtf8());
                 std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aSignatureCa);
                 SfxLokHelper::addCertificates(aCerts);
             }
