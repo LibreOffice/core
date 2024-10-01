@@ -30,6 +30,21 @@ void SAL_CALL WeakComponentImplHelperBase::dispose()
     maEventListeners.disposeAndClear(aGuard, aEvt);
 }
 
+// This is only called from the destructor to do cleanup that
+// might not have occurred
+void WeakComponentImplHelperBase::disposeOnDestruct()
+{
+    std::unique_lock aGuard(m_aMutex);
+    assert(m_refCount == 0 && "only supposed to be called from the destructor");
+    if (m_bDisposed)
+        return;
+    m_bDisposed = true;
+    // bump the ref-count so we dont accidentally do a double delete
+    // if something else increases and then decreases our ref-count
+    cppu::OWeakObject::acquire();
+    disposing(aGuard);
+}
+
 void WeakComponentImplHelperBase::disposing(std::unique_lock<std::mutex>&) {}
 
 void SAL_CALL WeakComponentImplHelperBase::addEventListener(

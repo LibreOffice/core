@@ -105,13 +105,7 @@ namespace basctl
 
     DocumentEventNotifier::Impl::~Impl ()
     {
-        std::unique_lock aGuard(m_aMutex);
-        if ( !impl_isDisposed_nothrow(aGuard) )
-        {
-            acquire();
-            aGuard.unlock(); // dispose locks m_aMutex
-            dispose();
-        }
+        disposeOnDestruct();
     }
 
     void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent )

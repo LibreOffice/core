@@ -56,6 +56,9 @@ protected:
         if (m_bDisposed)
             throw css::lang::DisposedException(OUString(), static_cast<cppu::OWeakObject*>(this));
     }
+    // only to be called from the destructor, to run the dispose logic, if necessary
+    void disposeOnDestruct();
+
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maEventListeners;
 };
 
