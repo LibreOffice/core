@@ -184,7 +184,7 @@ protected:
 public:
     bool valid() const { return hasRenderTarget() && !hasError(); }
 
-    // construtcor to create a CairoPixelProcessor2D which
+    // constructor to create a CairoPixelProcessor2D which
     // allocates and owns a cairo surface of given size. You
     // should check the result using valid()
     CairoPixelProcessor2D(
