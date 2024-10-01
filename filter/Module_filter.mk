@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Configuration_filter \
 	CustomTarget_svg \
 	Library_filterconfig \
+	Library_flash \
     Library_icg \
 	Library_msfilter \
 	Library_odfflatxml \
