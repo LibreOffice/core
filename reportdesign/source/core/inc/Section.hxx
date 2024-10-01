@@ -25,6 +25,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <comphelper/interfacecontainer3.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
@@ -35,6 +36,9 @@
 
 namespace reportdesign
 {
+    class OGroup;
+    class OReportDefinition;
+
     typedef ::cppu::WeakComponentImplHelper
         <   css::report::XSection
         ,   css::lang::XServiceInfo
@@ -55,8 +59,8 @@ namespace reportdesign
         css::uno::Reference< css::drawing::XShapeGrouper >                                  m_xDrawPage_ShapeGrouper;
         css::uno::Reference< css::form::XFormsSupplier2 >                                   m_xDrawPage_FormSupplier;
         css::uno::Reference< css::lang::XUnoTunnel >                                        m_xDrawPage_Tunnel;
-        css::uno::WeakReference< css::report::XGroup >                                      m_xGroup;
-        css::uno::WeakReference< css::report::XReportDefinition >                           m_xReportDefinition;
+        unotools::WeakReference< OGroup >                                                   m_xGroup;
+        unotools::WeakReference< OReportDefinition >                                        m_xReportDefinition;
         OUString                                                                            m_sName;
         OUString                                                                            m_sConditionalPrintExpression;
         ::sal_uInt32                                                                        m_nHeight;
@@ -122,16 +126,16 @@ namespace reportdesign
 
         virtual void SAL_CALL disposing() override;
     private:
-        OSection(const css::uno::Reference< css::report::XReportDefinition >& xParentDef
-                ,const css::uno::Reference< css::report::XGroup >& xParentGroup
+        OSection(const rtl::Reference< OReportDefinition >& xParentDef
+                ,const rtl::Reference< OGroup >& xParentGroup
                 ,const css::uno::Reference< css::uno::XComponentContext >& context,
                 css::uno::Sequence< OUString> const&);
     public:
         static css::uno::Reference< css::report::XSection>
-        createOSection(const css::uno::Reference< css::report::XReportDefinition >& _xParent
+        createOSection(const rtl::Reference< OReportDefinition >& _xParent
                 ,const css::uno::Reference< css::uno::XComponentContext >& context,bool _bPageSection=false);
         static css::uno::Reference< css::report::XSection>
-        createOSection(const css::uno::Reference< css::report::XGroup >& _xParent
+        createOSection(const rtl::Reference< OGroup >& _xParent
                 ,const css::uno::Reference< css::uno::XComponentContext >& context);
 
         DECLARE_XINTERFACE( )

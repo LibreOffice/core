@@ -28,10 +28,12 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <rtl/ref.hxx>
+#include <unotools/weakref.hxx>
 
 namespace reportdesign
 {
     class OFunctions;
+    class OGroups;
     typedef ::cppu::WeakComponentImplHelper< css::report::XGroup
                                          ,   css::lang::XServiceInfo> GroupBase;
     typedef ::cppu::PropertySetMixin< css::report::XGroup> GroupPropertySet;
@@ -45,7 +47,7 @@ namespace reportdesign
                     ,public GroupPropertySet
     {
         css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-        css::uno::WeakReference< css::report::XGroups >       m_xParent;
+        unotools::WeakReference< OGroups >                    m_xParent;
         css::uno::Reference< css::report::XSection>           m_xHeader;
         css::uno::Reference< css::report::XSection>           m_xFooter;
         rtl::Reference< OFunctions >                          m_xFunctions;
@@ -100,7 +102,7 @@ namespace reportdesign
 
         virtual void SAL_CALL disposing() override;
     public:
-        OGroup(const css::uno::Reference< css::report::XGroups >& _xParent
+        OGroup(const rtl::Reference< OGroups >& _xParent
             ,const css::uno::Reference< css::uno::XComponentContext >& context);
 
         DECLARE_XINTERFACE( )
@@ -161,6 +163,7 @@ namespace reportdesign
         {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }
+        rtl::Reference< OGroups > getOGroups() const;
     };
 
 } // namespace reportdesign

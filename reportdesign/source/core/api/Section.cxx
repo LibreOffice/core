@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <Section.hxx>
+#include <Group.hxx>
+#include <Groups.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -74,7 +76,7 @@ static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
 }
 
 uno::Reference<report::XSection> OSection::createOSection(
-    const uno::Reference< report::XReportDefinition >& xParentDef,
+    const rtl::Reference< OReportDefinition >& xParentDef,
     const uno::Reference< uno::XComponentContext >& context,
     bool const bPageSection)
 {
@@ -85,7 +87,7 @@ uno::Reference<report::XSection> OSection::createOSection(
 }
 
 uno::Reference<report::XSection> OSection::createOSection(
-    const uno::Reference< report::XGroup >& xParentGroup,
+    const rtl::Reference< OGroup >& xParentGroup,
     const uno::Reference< uno::XComponentContext >& context)
 {
     rtl::Reference<OSection> pNew =
@@ -95,8 +97,8 @@ uno::Reference<report::XSection> OSection::createOSection(
 }
 
 
-OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
-                   ,const uno::Reference< report::XGroup >& xParentGroup
+OSection::OSection(const rtl::Reference< OReportDefinition >& xParentDef
+                   ,const rtl::Reference< OGroup >& xParentGroup
                    ,const uno::Reference< uno::XComponentContext >& context
                    ,uno::Sequence< OUString> const& rStrings)
 :SectionBase(m_aMutex)
@@ -282,7 +284,7 @@ void SAL_CALL OSection::setConditionalPrintExpression( const OUString& _conditio
 void OSection::checkNotPageHeaderFooter()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< report::XReportDefinition > xRet = m_xReportDefinition;
+    rtl::Reference< OReportDefinition > xRet = m_xReportDefinition;
     if ( xRet.is() )
     {
         if ( xRet->getPageHeaderOn() && xRet->getPageHeader() == *this )
@@ -368,7 +370,7 @@ void SAL_CALL OSection::setCanShrink( sal_Bool /*_canshrink*/ )
 sal_Bool SAL_CALL OSection::getRepeatSection()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< report::XGroup > xGroup = m_xGroup;
+    rtl::Reference< OGroup > xGroup = m_xGroup;
     if ( !xGroup.is() )
         throw beans::UnknownPropertyException();
     return m_bRepeatSection;
@@ -378,7 +380,7 @@ void SAL_CALL OSection::setRepeatSection( sal_Bool _repeatsection )
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        uno::Reference< report::XGroup > xGroup = m_xGroup;
+        rtl::Reference< OGroup > xGroup = m_xGroup;
         if ( !xGroup.is() )
             throw beans::UnknownPropertyException();
     }
@@ -388,22 +390,23 @@ void SAL_CALL OSection::setRepeatSection( sal_Bool _repeatsection )
 uno::Reference< report::XGroup > SAL_CALL OSection::getGroup()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return m_xGroup;
+    return m_xGroup.get();
 }
 
 uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefinition()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< report::XReportDefinition > xRet = m_xReportDefinition;
-    uno::Reference< report::XGroup > xGroup = m_xGroup;
-    if ( !xRet.is() && xGroup.is() )
+    rtl::Reference< OReportDefinition > xRet = m_xReportDefinition;
+    if (xRet.is())
+        return xRet;
+    rtl::Reference< OGroup > xGroup = m_xGroup;
+    if ( xGroup.is() )
     {
-        uno::Reference< report::XGroups> xGroups(xGroup->getGroups());
+        rtl::Reference< OGroups> xGroups(xGroup->getOGroups());
         if ( xGroups.is() )
-            xRet = xGroups->getReportDefinition();
+            return xGroups->getReportDefinition();
     }
-
-    return xRet;
+    return {};
 }
 
 // XChild

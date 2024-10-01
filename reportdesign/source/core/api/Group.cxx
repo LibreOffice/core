@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <Group.hxx>
+#include <Groups.hxx>
 #include <Section.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
@@ -35,7 +36,7 @@ namespace reportdesign
 
     using namespace com::sun::star;
 
-OGroup::OGroup(const uno::Reference< report::XGroups >& _xParent
+OGroup::OGroup(const rtl::Reference< OGroups >& _xParent
                ,const uno::Reference< uno::XComponentContext >& _xContext)
 :GroupBase(m_aMutex)
 ,GroupPropertySet(_xContext,IMPLEMENTS_PROPERTY_SET,uno::Sequence< OUString >())
@@ -205,7 +206,12 @@ void SAL_CALL OGroup::setKeepTogether( ::sal_Int16 _keeptogether )
 
 uno::Reference< report::XGroups > SAL_CALL OGroup::getGroups()
 {
-    return m_xParent;
+    return m_xParent.get();
+}
+
+rtl::Reference< OGroups > OGroup::getOGroups() const
+{
+    return m_xParent.get();
 }
 
 OUString SAL_CALL OGroup::getExpression()

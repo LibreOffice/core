@@ -192,7 +192,6 @@ namespace reportdesign
         static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
         UNLESS_MERGELIBS_MORE(REPORTDESIGN_DLLPUBLIC) static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
 
-    private:
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // css::lang::XServiceInfo
