@@ -168,11 +168,14 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
 void SAL_CALL
 SortedDynamicResultSet::connectToCache( const Reference< XDynamicResultSet > & xCache )
 {
-    if( mxListener.is() )
-        throw ListenerAlreadySetException();
+    {
+        std::unique_lock aGuard( maMutex );
+        if( mxListener.is() )
+            throw ListenerAlreadySetException();
 
-    if( mbStatic )
-        throw ListenerAlreadySetException();
+        if( mbStatic )
+            throw ListenerAlreadySetException();
+    }
 
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
     if( xTarget.is() && m_xContext.is() )
