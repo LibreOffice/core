@@ -34,11 +34,11 @@ class GDIMetaFile;
 // reimplement these im/exports to use primitives and not metafiles as base
 // information.
 
-void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);
+VCL_DLLPUBLIC void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);
 
 // Allow to check if a Metafile contains clipping or not
 
-bool usesClipActions(const GDIMetaFile& rSource);
+VCL_DLLPUBLIC bool usesClipActions(const GDIMetaFile& rSource);
 
 // hook to access metafile members in classes of modules above vcl. Currently
 // used in MetafilePrimitive2D to be able to access the local Metafile member

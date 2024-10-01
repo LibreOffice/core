@@ -370,6 +370,7 @@ constexpr ExtensionMap aImpressExtensionMap[] =
     { "svg",   u"impress_svg_Export"_ustr },
     { "xhtml", u"XHTML Impress File"_ustr },
     { "png",   u"impress_png_Export"_ustr },
+    { "swf",   u"impress_flash_Export"_ustr },
     { "bmp",   u"impress_bmp_Export"_ustr },
     { "gif",   u"impress_gif_Export"_ustr },
     { "tif",   u"impress_tif_Export"_ustr },

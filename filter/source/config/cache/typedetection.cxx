@@ -284,6 +284,7 @@ int getFlatTypeRank(std::u16string_view rType)
         // Export only
         "writer_layout_dump_xml",
         "writer_indexing_export",
+        "graphic_SWF",
         "graphic_HTML",
 
         // Internal use only

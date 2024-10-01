@@ -966,6 +966,7 @@ namespace sfx2
         sal_Int32                           nHTMLIndex  = -1;
         sal_Int32                           nXHTMLIndex  = -1;
         sal_Int32                           nPDFIndex   = -1;
+        sal_Int32                           nFlashIndex = -1;
         OUString                     sUIName;
         OUString                     sExtensions;
         std::vector< ExportFilter >         aImportantFilterGroup;
@@ -1004,6 +1005,18 @@ namespace sfx2
                     ++aIter;
                 aImportantFilterGroup.insert( aIter, aExportFilter );
                 nPDFIndex = 0;
+            }
+            else if ( nFlashIndex == -1 && sTypeName == "graphic_SWF" )
+            {
+                std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
+                if ( nHTMLIndex != -1 )
+                    ++aIter;
+                if ( nXHTMLIndex != -1 )
+                    ++aIter;
+                if ( nPDFIndex != -1 )
+                    ++aIter;
+                aImportantFilterGroup.insert( aIter, aExportFilter );
+                nFlashIndex = 0;
             }
             else
                 aFilterGroup.push_back( aExportFilter );

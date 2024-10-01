@@ -65,6 +65,8 @@
 #Impress/Draw
 @{libreoffice_ext} += [pP][pP][tTsS]{,x,X}
 @{libreoffice_ext} += [pP][oO][tT]{,m,M}
+#Flash
+@{libreoffice_ext} += [sS][wW][fF]
 #Photoshop
 @{libreoffice_ext} += [pP][sS][dD]
 

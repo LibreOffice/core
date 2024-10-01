@@ -80,6 +80,7 @@ public:
     void            GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle &rBoundRect, Point& rCenter ) const;
 
     void AddGradientActions(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile);
+    void AddGradientActionsConst(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const;
 
     Gradient&       operator=( const Gradient& rGradient );
     Gradient&       operator=( Gradient&& rGradient );

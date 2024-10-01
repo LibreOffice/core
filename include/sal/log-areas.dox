@@ -229,6 +229,7 @@ certain functionality.
 
 @li @c filter.config
 @li @c filter.eps
+@li @c filter.flash
 @li @c filter.hwp - Hangul word processor import
 @li @c filter.icgm
 @li @c filter.ms - escher import/export

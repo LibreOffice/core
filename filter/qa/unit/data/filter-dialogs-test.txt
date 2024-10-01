@@ -44,6 +44,7 @@ filter/ui/pdflinkspage.ui
 filter/ui/pdfsignpage.ui
 filter/ui/xmlfiltertabpagegeneral.ui
 filter/ui/xmlfiltertabpagetransformation.ui
+filter/ui/impswfdialog.ui
 filter/ui/testxmlfilter.ui
 filter/ui/warnpdfdialog.ui
 filter/ui/xmlfiltersettings.ui

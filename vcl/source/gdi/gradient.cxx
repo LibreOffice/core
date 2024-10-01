@@ -332,6 +332,37 @@ void Gradient::AddGradientActions(tools::Rectangle const& rRect, GDIMetaFile& rM
     rMetaFile.AddAction(new MetaPopAction());
 }
 
+void Gradient::AddGradientActionsConst(tools::Rectangle const& rRect, GDIMetaFile& rMetaFile) const
+{
+    tools::Rectangle aRect(rRect);
+    aRect.Normalize();
+
+    // do nothing if the rectangle is empty
+    if (aRect.IsEmpty())
+        return;
+
+    rMetaFile.AddAction(new MetaPushAction(vcl::PushFlags::ALL));
+    rMetaFile.AddAction(new MetaISectRectClipRegionAction(aRect));
+    rMetaFile.AddAction(new MetaLineColorAction(Color(), false));
+
+    // because we draw with no border line, we have to expand gradient
+    // rect to avoid missing lines on the right and bottom edge
+    aRect.AdjustLeft(-1);
+    aRect.AdjustTop(-1);
+    aRect.AdjustRight(1);
+    aRect.AdjustBottom(1);
+
+    // we can't mutate the stepcount as that would lose us our const qualifier, so we need it to already be set...
+    assert(GetSteps());
+
+    if (GetStyle() == css::awt::GradientStyle_LINEAR || GetStyle() == css::awt::GradientStyle_AXIAL)
+        DrawLinearGradientToMetafile(aRect, rMetaFile);
+    else
+        DrawComplexGradientToMetafile(aRect, rMetaFile);
+
+    rMetaFile.AddAction(new MetaPopAction());
+}
+
 tools::Long Gradient::GetMetafileSteps(tools::Rectangle const& rRect) const
 {
     // calculate step count

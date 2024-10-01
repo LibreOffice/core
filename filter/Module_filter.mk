@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	CustomTarget_svg \
 	CustomTarget_docbook \
 	Library_filterconfig \
+	Library_flash \
     Library_icg \
 	Library_msfilter \
 	Library_odfflatxml \
