@@ -243,8 +243,8 @@ namespace frm
         std::span<FormatEntry> pFormats = lcl_getFormatTable(m_nTableId);
 
         // seek to the nValue'th entry
-        OSL_ENSURE(pFormats.size() < o3tl::make_unsigned(nValue), "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
-        if (pFormats.size() < o3tl::make_unsigned(nValue))
+        OSL_ENSURE(o3tl::make_unsigned(nValue) < pFormats.size(), "OLimitedFormats::getFormatKeyPropertyValue: did not find the value!");
+        if (o3tl::make_unsigned(nValue) < pFormats.size())
             _rValue <<= pFormats[nValue].nKey;
 
         // TODO: should use a standard format for the control type we're working for
