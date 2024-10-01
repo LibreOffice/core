@@ -819,6 +819,8 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
     if ( !mnHalfCharWidth )
         mnHalfCharWidth = rInf.GetTextSize( aOutString ).Width() / 2;
 
+    auto nHeight = rInf.GetTextSize( aOutString ).Height();
+
     Point aOldPos = rInf.GetPos();
     Point aNewPos( aOldPos );
     auto const deltaX((Width() / 2) - mnHalfCharWidth);
@@ -858,6 +860,9 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
 
     const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
 
+    SwTwips nTypePos = 0; // shift to the position of the next rdf:type label
+    sal_Int32 nDirection = -1; // start with the closing brackets
+    bool bStart = true;
     for ( const auto& it : m_aColors )
     {
         // set bold for custom colored bookmark symbol
@@ -865,6 +870,17 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
         aTmpFont.SetWeight( COL_TRANSPARENT == std::get<1>(it) ? WEIGHT_THIN : WEIGHT_BOLD, aTmpFont.GetActual() );
         aTmpFont.SetColor( COL_TRANSPARENT == std::get<1>(it) ? rInf.GetOpt().GetFieldShadingsColor() : std::get<1>(it) );
         aOutString = OUString(std::get<0>(it) == SwScriptInfo::MarkKind::Start ? '[' : ']');
+
+        if (nDirection == -1 && std::get<0>(it) != SwScriptInfo::MarkKind::End)
+        {
+            nDirection = 1;
+            nTypePos = mnHalfCharWidth * 2; // start label after the opening bracket
+        }
+
+        // vertical rdf:type label position for the opening and closing brackets
+        sal_Int32 fPos = std::get<0>(it) == SwScriptInfo::MarkKind::Start
+                ? -0.6 * nHeight
+                : 0.3 * nHeight;
 
         // MarkKind::Point: drawn I-beam (e.g. U+2336) as overlapping ][
         if ( std::get<0>(it) == SwScriptInfo::MarkKind::Point )
@@ -880,6 +896,55 @@ void SwBookmarkPortion::Paint( const SwTextPaintInfo &rInf ) const
             aOutString = OUString('[');
         }
         rInf.DrawText( aOutString, *this );
+
+        // show rdf:type labels, left-aligned top position after the opening brackets
+        // right-aligned bottom position before the closing brackets
+        // if there are multiple opening or closing brackets, collect
+        // their length in nTypePos to show non-overlapping labels
+        OUString sType = std::get<3>(it);
+        if ( !sType.isEmpty() )
+        {
+            Size aTmpSz = aTmpFont.GetSize( SwFontScript::Latin );
+            auto origSize = aTmpSz;
+
+            // calculate label size
+            aTmpSz.setHeight( ( 100 * aTmpSz.Height() ) / 250 );
+            aTmpSz.setWidth( ( 100 * aTmpSz.Width() ) / 250 );
+
+            if ( aTmpSz.Width() || aTmpSz.Height() )
+            {
+                aTmpFont.SetSize( aTmpSz, SwFontScript::Latin );
+
+                aNewPos.AdjustY(fPos);
+                if ( nDirection == -1 )
+                {
+                    if (bStart)
+                    {
+                        nTypePos += rInf.GetTextSize( sType ).Width();
+                        bStart = false;
+                    }
+                    else
+                        nTypePos += rInf.GetTextSize( sType + " " ).Width() + 2 * mnHalfCharWidth;
+                }
+                aNewPos.AdjustX( nDirection * nTypePos );
+
+                const_cast< SwTextPaintInfo& >( rInf ).SetPos( aNewPos );
+
+                rInf.DrawText( sType, *this );
+
+                // restore original position
+                aNewPos.AdjustX( -nDirection * nTypePos );
+                if ( nDirection == 1 )
+                    nTypePos += rInf.GetTextSize( sType + " " ).Width() - mnHalfCharWidth * 2;
+
+                aNewPos.AdjustY(-fPos);
+            }
+            // restore original text size
+            aTmpSz.setHeight(origSize.Height());
+            aTmpSz.setWidth(origSize.Width());
+            aTmpFont.SetSize( origSize, SwFontScript::Latin );
+        }
+
         // place the next symbol after the previous one
         // TODO: fix orientation and start/end
         aNewPos.AdjustX(mnHalfCharWidth * 2);
