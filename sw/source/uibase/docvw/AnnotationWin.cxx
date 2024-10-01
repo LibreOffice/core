@@ -484,6 +484,16 @@ void SwAnnotationWin::UpdateText(const OUString& aText)
     UpdateData();
 }
 
+void SwAnnotationWin::UpdateHTML(const OUString& rHtml)
+{
+    mpOutliner->Clear();
+    OString sHtmlContent(rHtml.toUtf8());
+    SvMemoryStream aHTMLStream(const_cast<char*>(sHtmlContent.getStr()),
+                               sHtmlContent.getLength(), StreamMode::READ);
+    GetOutlinerView()->Read(aHTMLStream, EETextFormat::Html, nullptr);
+    UpdateData();
+}
+
 bool SwAnnotationWin::IsReadOnlyOrProtected() const
 {
     return mbReadonly ||

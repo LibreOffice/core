@@ -71,7 +71,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void    Delete();
         void    GotoPos();
         const SwPostItField* GetPostItField() const { return mpField; }
-        void UpdateText(const OUString& aText);
+        void UpdateText(const OUString& rText);
+        void UpdateHTML(const OUString& rHtml);
 
         OUString GetAuthor() const;
         Date     GetDate() const;

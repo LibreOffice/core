@@ -4684,7 +4684,10 @@ SfxVoidItem InPlaceObjectResize SID_OBJECTRESIZE
 
 
 SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
-(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
+ SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,
+ SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+ SvxPostItTextItem Html SID_ATTR_POSTIT_HTML)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -4705,6 +4708,7 @@ SfxVoidItem EditAnnotation SID_EDIT_POSTIT
  SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
  SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,
  SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+ SvxPostItTextItem Html SID_ATTR_POSTIT_HTML,
  SfxInt32Item PositionX SID_ATTR_POSTIT_POSITION_X
  SfxInt32Item PositionY SID_ATTR_POSTIT_POSITION_Y)
 [
@@ -4758,7 +4762,9 @@ SfxVoidItem ShowResolvedAnnotations SID_TOGGLE_RESOLVED_NOTES
 
 
 SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
-(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,
+ SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+ SvxPostItTextItem Html SID_ATTR_POSTIT_HTML)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

@@ -2519,7 +2519,10 @@ SfxVoidItem IndexMarkToIndex FN_IDX_MARK_TO_IDX
 ]
 
 SfxVoidItem InsertAnnotation FN_POSTIT
-(SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE)
+(SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+ SvxPostItTextItem Html SID_ATTR_POSTIT_HTML,
+ SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,
+ SvxPostItDateItem Date SID_ATTR_POSTIT_DATE)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -7702,7 +7705,9 @@ SfxBoolItem SelectionModeDefault FN_SELECTION_MODE_DEFAULT
 ]
 
 SfxVoidItem ReplyComment FN_REPLY
-(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,
+ SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT,
+ SvxPostItTextItem Html SID_ATTR_POSTIT_HTML)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
