@@ -702,6 +702,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	graphic_HTML \
+	graphic_SWF \
 	jpg_JPEG \
 	met_OS2_Metafile \
         mov_MOV \
@@ -767,6 +768,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_emf_Export \
 	draw_emz_Export \
 	draw_eps_Export \
+	draw_flash_Export \
 	draw_gif_Export \
 	draw_html_Export \
 	draw_jpg_Export \
@@ -787,6 +789,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impressgraphics_
 	eps_Encapsulated_PostScript \
 	gif_Graphics_Interchange \
 	graphic_HTML \
+	graphic_SWF \
 	impress_CGM_Computer_Graphics_Metafile \
 	jpg_JPEG \
 	met_OS2_Metafile \
@@ -812,6 +815,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_bmp_Export \
 	impress_emf_Export \
 	impress_eps_Export \
+	impress_flash_Export \
 	impress_gif_Export \
 	impress_html_Export \
 	impress_jpg_Export \

@@ -100,6 +100,7 @@ application/x-rad		rad
 application/x-rpm		rpm spm
 application/x-sh		sh
 application/x-shar		shar
+application/x-shockwave-flash	swf
 application/x-stuffit		sit
 application/x-sv4cpio		sv4cpio
 application/x-sv4crc		sv4crc
@@ -178,6 +179,8 @@ audio/vnd.rn-realaudio ra
 application/smil smi smil
 text/vnd.rn-realtext rt
 video/vnd.rn-realvideo rv
+image/vnd.rn-realflash rf swf
+application/x-shockwave-flash2-preview rf swf
 application/sdp sdp
 application/x-sdp sdp
 application/vnd.rn-realmedia rm

@@ -99,3 +99,9 @@ en-US = "SVG Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_SVG]
 en-US = "SVG Export Filter"
+
+[STR_NAME_MODULE_OPTIONAL_GRFFLT_FLASH]
+en-US = "Macromedia Flash (SWF)"
+
+[STR_DESC_MODULE_OPTIONAL_GRFFLT_FLASH]
+en-US = "Macromedia Flash (SWF) Export Filter"
