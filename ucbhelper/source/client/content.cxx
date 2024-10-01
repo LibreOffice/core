@@ -1241,13 +1241,10 @@ const Reference< XContent > & Content_Impl::getContent_NoLock()
 
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
-    if ( !m_xCommandProcessor.is() )
-    {
-        std::unique_lock aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-        if ( !m_xCommandProcessor.is() )
-            m_xCommandProcessor.set( getContent_NoLock(), UNO_QUERY );
-    }
+    if ( !m_xCommandProcessor.is() )
+        m_xCommandProcessor.set( getContent_NoLock(), UNO_QUERY );
 
     return m_xCommandProcessor;
 }
