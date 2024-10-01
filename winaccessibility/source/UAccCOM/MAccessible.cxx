@@ -88,6 +88,13 @@ enum class XInterfaceType {
     XI_ATTRIBUTE
 };
 
+enum class NavigationDirection {
+    FIRST_CHILD,
+    LAST_CHILD,
+    NEXT_CHILD,
+    PREVIOUS_CHILD,
+};
+
 template <class Interface>
 bool queryXInterface(XAccessible* pXAcc, XInterface** ppXI)
 {
@@ -1315,10 +1322,10 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 /**
 * for descendantmanager circumstance,provide child interface when navigate
 * @param    varCur, the current child.
-* @param    flags, the navigation direction.
+* @param eDirection, the navigation direction.
 * @return  IMAccessible*, the child of the end up node.
 */
-IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
+IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, NavigationDirection eDirection)
 {
 
     XAccessibleContext* pXContext = GetContextByXAcc(m_xAccessible.get());
@@ -1334,16 +1341,16 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
     }
 
     Reference<XAccessible> pRChildXAcc;
-    switch(flags)
+    switch(eDirection)
     {
-    case DM_FIRSTCHILD:
+    case NavigationDirection::FIRST_CHILD:
         pRChildXAcc = pXContext->getAccessibleChild(0);
         break;
-    case DM_LASTCHILD:
+    case NavigationDirection::LAST_CHILD:
         pRChildXAcc = pXContext->getAccessibleChild(count-1);
         break;
-    case DM_NEXTCHILD:
-    case DM_PREVCHILD:
+    case NavigationDirection::NEXT_CHILD:
+    case NavigationDirection::PREVIOUS_CHILD:
     {
         IMAccessible* pCurChild = GetChildInterface(varCur.lVal);
         if(pCurChild==nullptr)
@@ -1361,7 +1368,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         {
             return nullptr;
         }
-        const sal_Int64 delta = (flags == DM_NEXTCHILD) ? 1 : -1;
+        const sal_Int64 delta = (eDirection == NavigationDirection::NEXT_CHILD) ? 1 : -1;
         //currently, getAccessibleIndexInParent is error in UNO for
         //some kind of List,such as ValueSet, the index will be less 1 than
         //what should be, need to fix UNO code
@@ -1411,7 +1418,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
             return E_INVALIDARG;
         }
 
-        pvarEndUpAt->pdispVal = GetNavigateChildForDM(varStart, DM_FIRSTCHILD);
+        pvarEndUpAt->pdispVal = GetNavigateChildForDM(varStart, NavigationDirection::FIRST_CHILD);
         if(pvarEndUpAt->pdispVal)
         {
             pvarEndUpAt->pdispVal->AddRef();
@@ -1448,7 +1455,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
             return E_INVALIDARG;
         }
 
-        pvarEndUpAt->pdispVal = GetNavigateChildForDM(varStart, DM_LASTCHILD);
+        pvarEndUpAt->pdispVal = GetNavigateChildForDM(varStart, NavigationDirection::LAST_CHILD);
         if(pvarEndUpAt->pdispVal)
         {
             pvarEndUpAt->pdispVal->AddRef();

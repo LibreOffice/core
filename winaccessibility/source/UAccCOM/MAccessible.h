@@ -33,6 +33,7 @@
 
 namespace {
 enum class XInterfaceType;
+enum class NavigationDirection;
 }
 
 /**
@@ -183,7 +184,7 @@ private:
 
     // the helper methods in order to implement the above public methods
     IMAccessible* GetChildInterface(long dChildIndex);//notice here the parameter is child index,not child id
-    IMAccessible* GetNavigateChildForDM(VARIANT varCur,short flags);//for descendant manage
+    IMAccessible* GetNavigateChildForDM(VARIANT varCur, NavigationDirection eDirection);
     HRESULT GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation
     HRESULT GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt);//for accNavigate implementation

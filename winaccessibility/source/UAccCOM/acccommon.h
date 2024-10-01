@@ -46,13 +46,6 @@ struct ltComp
     }
 };
 
-enum DM_NIR {
-    DM_FIRSTCHILD = 0x00,
-    DM_LASTCHILD = 0x01,
-    DM_NEXTCHILD = 0x02,
-    DM_PREVCHILD = 0x03
-};
-
 template<typename T, typename Ifc> HRESULT
 createInstance(REFIID iid, Ifc ** ppIfc)
 {
