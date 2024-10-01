@@ -365,6 +365,10 @@ constexpr ExtensionMap aImpressExtensionMap[] =
     { "svg",   u"impress_svg_Export"_ustr },
     { "xhtml", u"XHTML Impress File"_ustr },
     { "png",   u"impress_png_Export"_ustr },
+    { "bmp",   u"impress_bmp_Export"_ustr },
+    { "gif",   u"impress_gif_Export"_ustr },
+    { "tif",   u"impress_tif_Export"_ustr },
+    { "tiff",  u"impress_tif_Export"_ustr }, // tif and tiff are the same format: see https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#tiff_tagged_image_file_format
 };
 
 constexpr ExtensionMap aDrawExtensionMap[] =
