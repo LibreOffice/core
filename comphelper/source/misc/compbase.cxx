@@ -39,7 +39,7 @@ void WeakComponentImplHelperBase::disposeOnDestruct()
     if (m_bDisposed)
         return;
     m_bDisposed = true;
-    // bump the ref-count so we dont accidentally do a double delete
+    // bump the ref-count so we don't accidentally do a double delete
     // if something else increases and then decreases our ref-count
     cppu::OWeakObject::acquire();
     disposing(aGuard);
