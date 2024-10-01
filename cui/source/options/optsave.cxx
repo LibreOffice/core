@@ -117,7 +117,9 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     m_xODFVersionLB->set_id(2, OUString::number(SvtSaveOptions::ODFVER_012_EXT_COMPAT)); // 1.2 Extended (compatibility mode)
     m_xODFVersionLB->set_id(3, OUString::number(SvtSaveOptions::ODFVER_012_EXTENDED)); // 1.2 Extended
     m_xODFVersionLB->set_id(4, OUString::number(SvtSaveOptions::ODFVER_013)); // 1.3
-    m_xODFVersionLB->set_id(5, OUString::number(SvtSaveOptions::ODFVER_LATEST)); // 1.3 Extended (recommended)
+    m_xODFVersionLB->set_id(5, OUString::number(SvtSaveOptions::ODFVER_013_EXTENDED)); // 1.3 Extended
+    m_xODFVersionLB->set_id(6, OUString::number(SvtSaveOptions::ODFVER_014)); // 1.4
+    m_xODFVersionLB->set_id(7, OUString::number(SvtSaveOptions::ODFVER_LATEST)); // 1.4 Extended (recommended)
 
     auto aFilterClassesNode = utl::OConfigurationTreeRoot::createWithComponentContext(
             comphelper::getProcessComponentContext(),

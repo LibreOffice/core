@@ -2235,6 +2235,16 @@
                 <desc>ODFVER_013</desc>
               </info>
             </enumeration>
+            <enumeration oor:value="11">
+              <info>
+                <desc>ODFVER_013_EXTENDED</desc>
+              </info>
+            </enumeration>
+            <enumeration oor:value="12">
+              <info>
+                <desc>ODFVER_014</desc>
+              </info>
+            </enumeration>
             <enumeration oor:value="3">
               <info>
                 <desc>ODFVER_LATEST</desc>
@@ -6094,9 +6104,9 @@
       <prop oor:name="AllowAnimatedOthers" oor:type="xs:short" oor:nillable="false">
         <!-- UIHints: Tools - Options - Accessibility Options -->
         <info>
-          <desc>Indicates whether to allow certain others animations 
+          <desc>Indicates whether to allow certain others animations
           (like "marching ants" animation when copying a cell in Calc)
-          in all SO/OO applications. 
+          in all SO/OO applications.
           Disabling animations makes a lot of sense on remote connections
           (VNC), where animations increase the (always limited) amount of
           bandwidth needed.</desc>

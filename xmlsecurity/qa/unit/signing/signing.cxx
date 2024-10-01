@@ -1399,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 
         // the loaded document is a OTT/ODT with a macro signature
         assertDocument(CPPUNIT_SOURCELINE(), sFormat, SignatureState::NOSIGNATURES,
-                       SignatureState::OK, ODFVER_013_TEXT);
+                       SignatureState::OK, ODFVER_014_TEXT);
 
         // save as new OTT template
         save(u"writer8_template"_ustr);
@@ -1410,7 +1410,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
 
         // the loaded document is a OTT with a valid macro signature
         assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
-                       SignatureState::OK, ODFVER_013_TEXT);
+                       SignatureState::OK, ODFVER_014_TEXT);
     }
 }
 
@@ -1441,7 +1441,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 
     // the loaded document is a 1.2 ODT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), u"writer8"_ustr, SignatureState::NOSIGNATURES,
-                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
+                   SignatureState::NOSIGNATURES, ODFVER_014_TEXT);
 
     // load the template as-is to validate signatures
     loadWithParams(aURL, comphelper::InitPropertySequence({ { "AsTemplate", uno::Any(false) } }));
@@ -1459,7 +1459,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 
     // the loaded document is a 1.2 OTT without any signatures
     assertDocument(CPPUNIT_SOURCELINE(), u"writer8_template"_ustr, SignatureState::NOSIGNATURES,
-                   SignatureState::NOSIGNATURES, ODFVER_013_TEXT);
+                   SignatureState::NOSIGNATURES, ODFVER_014_TEXT);
 }
 
 /// Test if a macro signature from a OTT 1.0 template is preserved for ODT 1.0

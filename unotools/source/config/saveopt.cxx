@@ -84,6 +84,8 @@ SvtSaveOptions::ODFSaneDefaultVersion GetODFSaneDefaultVersion(SvtSaveOptions::O
             return SvtSaveOptions::ODFSVER_012_EXTENDED;
         case SvtSaveOptions::ODFVER_013:
             return SvtSaveOptions::ODFSVER_013;
+        case SvtSaveOptions::ODFVER_013_EXTENDED:
+            return SvtSaveOptions::ODFSVER_013_EXTENDED;
         case SvtSaveOptions::ODFVER_014:
             return SvtSaveOptions::ODFSVER_014;
     }

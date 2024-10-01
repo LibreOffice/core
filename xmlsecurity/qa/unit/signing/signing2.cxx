@@ -176,7 +176,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         // using Zip Storage means the encrypted streams are signed, so
         // after encrypting again the signature didn't match and was dropped
         //        assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-        //                       SignatureState::OK, ODFVER_013_TEXT);
+        //                       SignatureState::OK, ODFVER_014_TEXT);
     }
 
     {
@@ -185,7 +185,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.4"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
                     u"encrypted-package"_ustr);
@@ -253,7 +253,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
+        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.4"_ustr);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
         assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
                     u"encrypted-package"_ustr);
@@ -300,7 +300,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         SfxObjectShell* pObjectShell(pBaseModel->GetObjectShell());
         uno::Reference<beans::XPropertySet> xPropSet(pObjectShell->GetStorage(),
                                                      uno::UNO_QUERY_THROW);
-        CPPUNIT_ASSERT_EQUAL(ODFVER_013_TEXT,
+        CPPUNIT_ASSERT_EQUAL(ODFVER_014_TEXT,
                              xPropSet->getPropertyValue(u"Version"_ustr).get<OUString>());
         CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetScriptingSignatureState());
     }
@@ -359,7 +359,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         // using Zip Storage means the encrypted streams are signed, so
         // after encrypting again the signature didn't match and was dropped
         //        assertDocument(CPPUNIT_SOURCELINE(), "writer8", SignatureState::NOSIGNATURES,
-        //                       SignatureState::OK, ODFVER_013_TEXT);
+        //                       SignatureState::OK, ODFVER_014_TEXT);
     }
 }
 

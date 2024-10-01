@@ -530,6 +530,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     saveAndReload(u"writer8"_ustr);
 
     // assert XML.
@@ -542,6 +544,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
+
+    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
@@ -549,16 +553,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
 
     // save ODF 1.4 strict and test that new attribute is written.
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
-    SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
     save(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, u"true"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-metal-type]"_ostr, 1);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 namespace
@@ -589,6 +589,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     saveAndReload(u"writer8"_ustr);
 
     // assert XML.
@@ -600,6 +602,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
+
+    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
@@ -609,8 +613,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertSpecularityProperty("from doc", xShape);
 
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
-    SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
     saveAndReload(u"writer8"_ustr);
 
     // assert XML.
@@ -621,8 +623,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.4", xShapeReload);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
