@@ -5265,6 +5265,7 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 
         OUString sMagicFileName = "file:///:FD:/" + OUString::number(fd);
 
+        SolarMutexGuard aGuard;
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(false);
         pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
