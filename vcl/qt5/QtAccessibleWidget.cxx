@@ -431,7 +431,16 @@ QAccessible::Role QtAccessibleWidget::role() const
             return QAccessible::Footer;
         case AccessibleRole::FOOTNOTE:
             return QAccessible::Note;
-        case AccessibleRole::FRAME: // top-level window with title bar
+        case AccessibleRole::FRAME:
+            // report Pane instead of Window role for a frame that's not actually
+            // an accessible frame (top-level window with title bar) itself,
+            // but a child of the real top-level
+            if (QAccessibleInterface* pParent = parent())
+            {
+                const QAccessible::Role eParentRole = pParent->role();
+                if (eParentRole == QAccessible::Window || eParentRole == QAccessible::Dialog)
+                    return QAccessible::Pane;
+            }
             return QAccessible::Window;
         case AccessibleRole::GLASS_PANE:
             return QAccessible::UserRole;
