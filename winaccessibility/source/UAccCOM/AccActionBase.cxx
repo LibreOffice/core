@@ -24,8 +24,6 @@
 
 #include "AccActionBase.h"
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 #include <vcl/svapp.hxx>
@@ -35,7 +33,6 @@
 
 #include "acccommon.h"
 
-using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::awt;
