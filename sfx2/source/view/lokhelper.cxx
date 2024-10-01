@@ -979,6 +979,15 @@ void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
         comphelper::Base64::decode(aCertificateSequence, aBase64OUString);
         addCertificate(xCertificateCreator, aCertificateSequence);
     }
+
+    // Update the signature state, perhaps the signing certificate is now trusted.
+    SfxObjectShell* pObjectShell = SfxObjectShell::Current();
+    if (!pObjectShell)
+    {
+        return;
+    }
+
+    pObjectShell->RecheckSignature(false);
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

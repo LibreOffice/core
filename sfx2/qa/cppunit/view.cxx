@@ -20,6 +20,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 using namespace com::sun::star;
 
@@ -30,6 +31,12 @@ public:
     Sfx2ViewTest()
         : UnoApiTest("/sfx2/qa/cppunit/data/")
     {
+    }
+
+    void setUp() override
+    {
+        UnoApiTest::setUp();
+        MacrosTest::setUpX509(m_directories, "sfx2_view");
     }
 };
 
@@ -75,6 +82,32 @@ bar
     CPPUNIT_ASSERT_EQUAL(std::string("\nfoo\n"), aRet[0]);
     CPPUNIT_ASSERT_EQUAL(std::string("\nbar\n"), aRet[1]);
 }
+
+#ifdef UNX
+CPPUNIT_TEST_FIXTURE(Sfx2ViewTest, testLokHelperAddCertifices)
+{
+    // Given a loaded and signed document, CA is not trusted by default:
+    loadFromFile(u"signed.odt");
+    auto pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    CPPUNIT_ASSERT_EQUAL(SignatureState::NOTVALIDATED, pObjectShell->GetDocumentSignatureState());
+
+    // When trusting the CA:
+    OUString aCaUrl = createFileURL(u"ca.pem");
+    SvFileStream aCaStream(aCaUrl, StreamMode::READ);
+    std::string aCa;
+    aCa = read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize());
+    std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aCa);
+    SfxLokHelper::addCertificates(aCerts);
+
+    // Then make sure the signature state is updated:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1 (OK)
+    // - Actual  : 4 (SignatureState::NOTVALIDATED)
+    // i.e. the signature status for an opened document was not updated when trusting a CA.
+    CPPUNIT_ASSERT_EQUAL(SignatureState::OK, pObjectShell->GetDocumentSignatureState());
+}
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
