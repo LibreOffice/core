@@ -18,6 +18,7 @@
  */
 #include <Groups.hxx>
 #include <Group.hxx>
+#include <ReportDefinition.hxx>
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <o3tl/safeint.hxx>
@@ -30,7 +31,7 @@ namespace reportdesign
 
     using namespace com::sun::star;
 
-OGroups::OGroups(const uno::Reference< report::XReportDefinition >& _xParent,uno::Reference< uno::XComponentContext > context)
+OGroups::OGroups(const rtl::Reference< OReportDefinition >& _xParent,uno::Reference< uno::XComponentContext > context)
 :GroupsBase(m_aMutex)
 ,m_aContainerListeners(m_aMutex)
 ,m_xContext(std::move(context))
@@ -64,7 +65,7 @@ void SAL_CALL OGroups::disposing()
 // XGroups
 uno::Reference< report::XReportDefinition > SAL_CALL OGroups::getReportDefinition()
 {
-    return m_xParent;
+    return m_xParent.get();
 }
 
 uno::Reference< report::XGroup > SAL_CALL OGroups::createGroup(  )

@@ -23,12 +23,15 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
+#include <unotools/weakref.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <vector>
 
 
 namespace reportdesign
 {
+    class OReportDefinition;
+
     typedef ::cppu::WeakComponentImplHelper< css::report::XGroups> GroupsBase;
     /** \class OGroups Defines the implementation of a \interface com:::sun::star::report::XGroups
      * \ingroup reportdesign_api
@@ -40,7 +43,7 @@ namespace reportdesign
         typedef ::std::vector< css::uno::Reference< css::report::XGroup > > TGroups;
         ::comphelper::OInterfaceContainerHelper3<css::container::XContainerListener> m_aContainerListeners;
         css::uno::Reference< css::uno::XComponentContext >            m_xContext;
-        css::uno::WeakReference< css::report::XReportDefinition >     m_xParent;
+        unotools::WeakReference< OReportDefinition >                  m_xParent;
         TGroups                                                       m_aGroups;
     private:
         OGroups& operator=(const OGroups&) = delete;
@@ -57,7 +60,7 @@ namespace reportdesign
 
         virtual void SAL_CALL disposing() override;
     public:
-        OGroups( const css::uno::Reference< css::report::XReportDefinition >& _xParent
+        OGroups( const rtl::Reference< OReportDefinition >& _xParent
                 ,css::uno::Reference< css::uno::XComponentContext > context);
 
     // XGroups
