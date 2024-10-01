@@ -533,15 +533,19 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
             if (pIdItem && !pIdItem->GetValue().isEmpty())
             {
-                const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
-                OUString sText;
-                if ( pTextItem )
-                    sText = pTextItem->GetValue();
-
                 sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                 if (pAnnotationWin && lcl_canUserModifyAnnotation(GetView(), pAnnotationWin))
                 {
-                    pAnnotationWin->UpdateText(sText);
+                    if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+                        pAnnotationWin->UpdateHTML(pHtmlItem->GetValue());
+                    else
+                    {
+                        const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                        OUString sText;
+                        if (pTextItem)
+                            sText = pTextItem->GetValue();
+                        pAnnotationWin->UpdateText(sText);
+                    }
 
                     // explicit state update to get the Undo state right
                     GetView().AttrChangedNotify(nullptr);
