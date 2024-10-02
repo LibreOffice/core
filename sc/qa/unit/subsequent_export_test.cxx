@@ -1812,33 +1812,6 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testRichTextCellFormatXLSX)
     assertXPath(pStyles, aXPath3, "val"_ostr, "true");
 }
 
-CPPUNIT_TEST_FIXTURE(ScExportTest, testWrapText)
-{
-    createScDoc("xlsx/wrap-text.xlsx");
-
-    save("Calc Office Open XML");
-
-    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
-    CPPUNIT_ASSERT(pStyles);
-
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs"_ostr, "count"_ostr, "7");
-
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[4]/x:alignment"_ostr, "wrapText"_ostr,
-                "false");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[5]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[6]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
-    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[7]/x:alignment"_ostr, "wrapText"_ostr,
-                "true");
-}
-
 CPPUNIT_TEST_FIXTURE(ScExportTest, testFormulaRefSheetNameODS)
 {
     createScDoc("ods/formula-quote-in-sheet-name.ods");

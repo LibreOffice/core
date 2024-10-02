@@ -14,9 +14,11 @@
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 
+#include <attrib.hxx>
 #include <userdat.hxx>
 #include <tokenstringcontext.hxx>
 #include <chgtrack.hxx>
+#include <scitems.hxx>
 #include <scmod.hxx>
 
 #include <svx/svdpage.hxx>
@@ -933,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
     // Load document and export it to a temporary file
     createScDoc("xlsx/customxml.xlsx");
 
-    save("Calc Office Open XML");
+    saveAndReload(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport("customXml/item1.xml");
     CPPUNIT_ASSERT(pXmlDoc);
     xmlDocUniquePtr pRelsDoc = parseExport("customXml/_rels/item1.xml.rels");
@@ -946,6 +948,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testCustomXml)
 
     std::unique_ptr<SvStream> pStream = parseExportStream(maTempFile.GetURL(), "ddp/ddpfile.xen");
     CPPUNIT_ASSERT(pStream);
+
+    // tdf#161453: ensure E1's wrap text attribute was round-tripped
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc->GetAttr(4, 0, 0, ATTR_LINEBREAK)->GetValue());
 }
 
 #ifdef _WIN32
