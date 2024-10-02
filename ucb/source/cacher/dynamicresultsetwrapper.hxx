@@ -79,13 +79,13 @@ protected:
     /// @throws css::lang::DisposedException
     /// @throws css::uno::RuntimeException
     void
-    impl_EnsureNotDisposed();
+    impl_EnsureNotDisposed(std::unique_lock<std::mutex>& rGuard);
 
     virtual void
-    impl_InitResultSetOne( const css::uno::Reference<
+    impl_InitResultSetOne( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference<
                 css::sdbc::XResultSet >& xResultSet );
     virtual void
-    impl_InitResultSetTwo( const css::uno::Reference<
+    impl_InitResultSetTwo( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference<
                 css::sdbc::XResultSet >& xResultSet );
 
 public:

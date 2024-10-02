@@ -34,9 +34,9 @@ class CachedDynamicResultSetStub
 {
 protected:
     virtual void
-    impl_InitResultSetOne( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetOne( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
     virtual void
-    impl_InitResultSetTwo( const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
+    impl_InitResultSetTwo( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::sdbc::XResultSet >& xResultSet ) override;
 
 public:
     CachedDynamicResultSetStub( css::uno::Reference< css::ucb::XDynamicResultSet > const & xOrigin

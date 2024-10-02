@@ -48,29 +48,27 @@ CachedDynamicResultSetStub::~CachedDynamicResultSetStub()
 
 //virtual
 void CachedDynamicResultSetStub
-    ::impl_InitResultSetOne( const Reference< XResultSet >& xResultSet )
+    ::impl_InitResultSetOne( std::unique_lock<std::mutex>& rGuard, const Reference< XResultSet >& xResultSet )
 {
-    DynamicResultSetWrapper::impl_InitResultSetOne( xResultSet );
+    DynamicResultSetWrapper::impl_InitResultSetOne( rGuard, xResultSet );
     OSL_ENSURE( m_xSourceResultOne.is(), "need source resultset" );
 
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultOne ) );
 
-    std::unique_lock aGuard( m_aMutex );
     m_xMyResultOne = std::move(xStub);
 }
 
 //virtual
 void CachedDynamicResultSetStub
-    ::impl_InitResultSetTwo( const Reference< XResultSet >& xResultSet )
+    ::impl_InitResultSetTwo( std::unique_lock<std::mutex>& rGuard, const Reference< XResultSet >& xResultSet )
 {
-    DynamicResultSetWrapper::impl_InitResultSetTwo( xResultSet );
+    DynamicResultSetWrapper::impl_InitResultSetTwo( rGuard, xResultSet );
     OSL_ENSURE( m_xSourceResultTwo.is(), "need source resultset" );
 
     Reference< XResultSet > xStub(
         new CachedContentResultSetStub( m_xSourceResultTwo ) );
 
-    std::unique_lock aGuard( m_aMutex );
     m_xMyResultTwo = std::move(xStub);
 }
 
