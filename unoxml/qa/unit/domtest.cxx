@@ -35,6 +35,7 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/xml/xpath/XPathObjectType.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 
@@ -317,6 +318,202 @@ public:
         mxDomBuilder->setErrorHandler(nullptr);
     }
 
+    void testXXPathAPI()
+    {
+        uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
+
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        Reference< xml::dom::XElement > xRoot = xDocument->createElement(u"root"_ustr);
+        Reference< xml::dom::XElement > xFoo1 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFoo2 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFooNs = xDocument->createElementNS(u"http://example.com/"_ustr, u"ns:foo"_ustr);
+        Reference< xml::dom::XElement > xBar = xDocument->createElement(u"bar"_ustr);
+
+        xDocument->appendChild(xRoot);
+        xRoot->appendChild(xFoo1);
+        xFoo1->appendChild(xBar);
+        xBar->appendChild(xFoo2);
+        xRoot->appendChild(xFooNs);
+
+        try
+        {
+            xXPathAPI->eval(xRoot, u"~/-$+&#_"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.eval");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->evalNS(xRoot, u"~/-$+&#_"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.evalNS");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectNodeList(xRoot, u"~/-$+&#_"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.selectNodeList");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectNodeListNS(xRoot, u"~/-$+&#_"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.selectNodeListNS");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectSingleNode(xRoot, u"~/-$+&#_"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.selectSingleNode");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectSingleNodeNS(xRoot, u"~/-$+&#_"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.selectSingleNodeNS");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->eval(nullptr, u"child::foo"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.eval(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->evalNS(nullptr, u"child::foo"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.evalNS(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectNodeList(nullptr, u"child::foo"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.selectNodeList(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectNodeListNS(nullptr, u"child::foo"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.selectNodeListNS(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectSingleNode(nullptr, u"child::foo"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.selectSingleNode(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xXPathAPI->selectSingleNodeNS(nullptr, u"child::foo"_ustr, xRoot);
+            CPPUNIT_FAIL("XXPathAPI.selectSingleNodeNS(null)");
+        }
+        catch (uno::RuntimeException&)
+        {
+        }
+
+        {
+            uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"count(child::foo)"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_NUMBER, xResult->getObjectType());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xResult->getLong());
+        }
+        {
+            uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->evalNS(xRoot, u"count(//ns:foo)"_ustr, xFooNs);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_NUMBER, xResult->getObjectType());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xResult->getLong());
+        }
+        {
+            uno::Reference<xml::dom::XNodeList> xResult = xXPathAPI->selectNodeList(xRoot, u"child::foo"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xResult->getLength());
+            CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo1, uno::UNO_QUERY),
+                    Reference< XInterface >(xResult->item(0), uno::UNO_QUERY));
+        }
+        {
+            uno::Reference<xml::dom::XNodeList> xResult = xXPathAPI->selectNodeListNS(xRoot, u".//ns:foo"_ustr, xFooNs);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xResult->getLength());
+            CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFooNs, uno::UNO_QUERY),
+                    Reference< XInterface >(xResult->item(0), uno::UNO_QUERY));
+        }
+        {
+            uno::Reference<xml::dom::XNode> xResult = xXPathAPI->selectSingleNode(xBar, u"child::foo"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo2, uno::UNO_QUERY),
+                    Reference< XInterface >(xResult, uno::UNO_QUERY));
+        }
+        {
+            uno::Reference<xml::dom::XNode> xResult = xXPathAPI->selectSingleNodeNS(xFoo2, u"//ns:foo"_ustr, xFooNs);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFooNs, uno::UNO_QUERY),
+                    Reference< XInterface >(xResult, uno::UNO_QUERY));
+        }
+
+        try
+        {
+            xXPathAPI->selectSingleNode(xDocument, u"//pre:foo"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.selectSingleNode");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+
+        xXPathAPI->registerNS(u"pre"_ustr, u"http://example.com/"_ustr);
+
+        {
+            uno::Reference<xml::dom::XNode> xResult = xXPathAPI->selectSingleNode(xRoot, u"//pre:foo"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFooNs, uno::UNO_QUERY),
+                    Reference< XInterface >(xResult, uno::UNO_QUERY));
+        }
+
+        xXPathAPI->unregisterNS(u"pre"_ustr, u"http://example.com/"_ustr);
+
+        try
+        {
+            xXPathAPI->selectSingleNode(xDocument, u"//pre:foo"_ustr);
+            CPPUNIT_FAIL("XXPathAPI.unregisterNS");
+        }
+        catch (xml::xpath::XPathException&)
+        {
+        }
+    }
+
     void testXXPathObject()
     {
         uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
@@ -442,6 +639,7 @@ public:
     CPPUNIT_TEST(warningInputTest);
     CPPUNIT_TEST(errorInputTest);
     CPPUNIT_TEST(testXDocumentBuilder);
+    CPPUNIT_TEST(testXXPathAPI);
     CPPUNIT_TEST(testXXPathObject);
     CPPUNIT_TEST(testXNodeList_NodeList);
     CPPUNIT_TEST(serializerTest);
