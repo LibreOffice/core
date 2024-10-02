@@ -908,7 +908,7 @@ namespace svgio::svgreader
             rMarkerTransform.identity();
             rClipRange.reset();
 
-            // Set the current style attibutes to the marker before calling getMarkerPrimitives,
+            // Set the current style attributes to the marker before calling getMarkerPrimitives,
             // which calls decomposeSvgNode to decompose the children of the marker.
             // If any children uses 'context-fill' or 'context-stroke',
             // then these style attributes will be used in add_fill or add_stroke
