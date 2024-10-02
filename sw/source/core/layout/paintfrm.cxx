@@ -3718,8 +3718,8 @@ SwShortCut::SwShortCut( const SwFrame& rFrame, const SwRect& rRect )
 
 void SwLayoutFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const& rRect, PaintFrameMode ePaintFrameMode) const
 {
-    if (!getFramePrintArea().HasArea())
-    {
+    if (!getFramePrintArea().HasArea() && !IsRowFrame())
+    {   // tdf#163032 row frame may contain rowspan>1 cell that must be painted
         return; // do not paint hidden frame
     }
 
