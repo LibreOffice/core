@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// Include this early, as it uses the identifier "Yield" which is defined as a macro in Windows
+// system files indirectly included via some of the later includes here:
+#include <vcl/svapp.hxx>
+
 #include "updater.hxx"
 
 #if UNX
@@ -47,8 +51,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <officecfg/Setup.hxx>
-
-#include <vcl/svapp.hxx>
 
 #include <functional>
 #include <memory>
