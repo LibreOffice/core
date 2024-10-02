@@ -232,48 +232,44 @@ ScMyStylesMap::iterator ScMyStylesImportHelper::GetIterator(const OUString & rSt
 void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 {
     OSL_ENSURE(aRowDefaultStyle != aCellStyles.end(), "no row default style");
-    if (aRowDefaultStyle->first.isEmpty())
-    {
-        SCCOL nStartCol(rRange.aStart.Col());
-        SCCOL nEndCol(rRange.aEnd.Col());
-        if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
-        {
-            ScMyStylesMap::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
-            {
-                if (aPrevItr != aColDefaultStyles[i])
-                {
-                    OSL_ENSURE(aPrevItr != aCellStyles.end(), "no column default style");
-                    ScRange aRange(rRange);
-                    aRange.aStart.SetCol(nStartCol);
-                    aRange.aEnd.SetCol(i - 1);
-                    pPrevStyleName = aPrevItr->first;
-                    AddSingleRange(aRange);
-                    nStartCol = i;
-                    aPrevItr = aColDefaultStyles[i];
-                }
-            }
-            if (aPrevItr != aCellStyles.end())
-            {
-                ScRange aRange(rRange);
-                aRange.aStart.SetCol(nStartCol);
-                pPrevStyleName = aPrevItr->first;
-                AddSingleRange(aRange);
-            }
-            else
-            {
-                OSL_FAIL("no column default style");
-            }
-        }
-        else
-        {
-            OSL_FAIL("too many columns");
-        }
-    }
-    else
+    if (!aRowDefaultStyle->first.isEmpty())
     {
         pPrevStyleName = aRowDefaultStyle->first;
         AddSingleRange(rRange);
+        return;
+    }
+    SCCOL nStartCol(rRange.aStart.Col());
+    SCCOL nEndCol(rRange.aEnd.Col());
+    if (aColDefaultStyles.size() <= sal::static_int_cast<sal_uInt32>(nStartCol))
+    {
+        OSL_FAIL("too many columns");
+        return;
+    }
+    ScMyStylesMap::iterator aPrevItr(aColDefaultStyles[nStartCol]);
+    for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
+    {
+        if (aPrevItr != aColDefaultStyles[i])
+        {
+            OSL_ENSURE(aPrevItr != aCellStyles.end(), "no column default style");
+            ScRange aRange(rRange);
+            aRange.aStart.SetCol(nStartCol);
+            aRange.aEnd.SetCol(i - 1);
+            pPrevStyleName = aPrevItr->first;
+            AddSingleRange(aRange);
+            nStartCol = i;
+            aPrevItr = aColDefaultStyles[i];
+        }
+    }
+    if (aPrevItr != aCellStyles.end())
+    {
+        ScRange aRange(rRange);
+        aRange.aStart.SetCol(nStartCol);
+        pPrevStyleName = aPrevItr->first;
+        AddSingleRange(aRange);
+    }
+    else
+    {
+        OSL_FAIL("no column default style");
     }
 }
 
