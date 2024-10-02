@@ -753,7 +753,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
 
     //extract
     tools::JsonWriter aJsonWriter;
-    std::string_view aCommand(".uno:ExtractDocumentStructure");
+    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=charts");
     getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
 
     OString aExpectedStr
@@ -768,6 +768,119 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
           "\"Object3\", \"title\": \"Employees from countries\", \"subtitle\": \"Subtitle3\", "
           "\"RowDescriptions\": [ \"\"], \"ColumnDescriptions\": [ \"Column 1\"], \"DataValues\": "
           "[ \"Row.0\": [ \"NaN\"]]}}}"_ostr;
+
+    CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureDocProperties)
+{
+    createSwDoc("docStructureChartExampleOriginal.odt");
+    OString aJson = R"json(
+{
+    "Transforms": {
+        "DocumentProperties": {
+            "Author":"Author TxT",
+            "Generator":"Generator TxT",
+            "CreationDate":"2024-01-21T14:45:00",
+            "Title":"Title TxT",
+            "Subject":"Subject TxT",
+            "Description":"Description TxT",
+            "Keywords": [ ],
+            "Language":"en-GB",
+            "ModifiedBy":"ModifiedBy TxT",
+            "ModificationDate":"2024-05-23T10:05:50.159530766",
+            "PrintedBy":"PrintedBy TxT",
+            "PrintDate":"0000-00-00T00:00:00",
+            "TemplateName":"TemplateName TxT",
+            "TemplateURL":"TemplateURL TxT",
+            "TemplateDate":"0000-00-00T00:00:00",
+            "AutoloadURL":"",
+            "AutoloadSecs": 0,
+            "DefaultTarget":"DefaultTarget TxT",
+            "DocumentStatistics": {
+                "PageCount": 300,
+                "TableCount": 60,
+                "ImageCount": 10,
+                "ObjectCount": 0,
+                "ParagraphCount": 2880,
+                "WordCount": 78680,
+                "CharacterCount": 485920,
+                "NonWhitespaceCharacterCount": 411520
+            },
+            "EditingCycles":12,
+            "EditingDuration":12345,
+            "Contributor":["Contributor1 TxT","Contributor2 TXT"],
+            "Coverage":"Coverage TxT",
+            "Identifier":"Identifier TxT",
+            "Publisher":["Publisher TxT","Publisher2 TXT"],
+            "Relation":["Relation TxT","Relation2 TXT"],
+            "Rights":"Rights TxT",
+            "Source":"Source TxT",
+            "Type":"Type TxT",
+            "UserDefinedProperties":{
+                "Add.NewPropName Str": {
+                    "type": "string",
+                    "value": "this is a string"
+                },
+                "Add.NewPropName Str": {
+                    "type": "boolean",
+                    "value": false
+                },
+                "Add.NewPropName Bool": {
+                    "type": "boolean",
+                    "value": true
+                },
+                "Add.NewPropName Numb": {
+                    "type": "long",
+                    "value": 1245
+                },
+                "Add.NewPropName float": {
+                    "type": "float",
+                    "value": 12.45
+                },
+                "Add.NewPropName Double": {
+                    "type": "double",
+                    "value": 124.578
+                },
+                "Delete": "NewPropName Double"
+            }
+        }
+    }
+}
+)json"_ostr;
+
+    uno::Sequence<css::beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue(u"DataJson"_ustr,
+                                      uno::Any(OStringToOUString(aJson, RTL_TEXTENCODING_UTF8))),
+    };
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr, aArgs);
+
+    tools::JsonWriter aJsonWriter;
+    std::string_view aCommand(".uno:ExtractDocumentStructure?filter=docprops");
+    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+
+    OString aExpectedStr
+        = "{ \"DocStructure\": { \"DocumentProperties\": { \"Author\": \"Author TxT\", "
+          "\"Generator\": \"Generator TxT\", \"CreationDate\": \"2024-01-21T14:45:00\", "
+          "\"Title\": \"Title TxT\", \"Subject\": \"Subject TxT\", \"Description\": "
+          "\"Description TxT\", \"Keywords\": [ ], \"Language\": \"en-GB\", "
+          "\"ModifiedBy\": \"ModifiedBy TxT\", \"ModificationDate\": "
+          "\"2024-05-23T10:05:50.159530766\", \"PrintedBy\": \"PrintedBy TxT\", \"PrintDate\": "
+          "\"0000-00-00T00:00:00\", \"TemplateName\": \"TemplateName TxT\", \"TemplateURL\": "
+          "\"TemplateURL TxT\", \"TemplateDate\": \"0000-00-00T00:00:00\", \"AutoloadURL\": \"\", "
+          "\"AutoloadSecs\": 0, \"DefaultTarget\": \"DefaultTarget TxT\", \"DocumentStatistics\": "
+          "{ \"PageCount\": 300, \"TableCount\": 60, \"ImageCount\": 10, \"ObjectCount\": 0, "
+          "\"ParagraphCount\": 2880, \"WordCount\": 78680, \"CharacterCount\": 485920, "
+          "\"NonWhitespaceCharacterCount\": 411520}, \"EditingCycles\": 12, \"EditingDuration\": "
+          "12345, \"Contributor\": [ \"Contributor1 TxT\", \"Contributor2 TXT\"], \"Coverage\": "
+          "\"Coverage TxT\", \"Identifier\": \"Identifier TxT\", \"Publisher\": [ "
+          "\"Publisher TxT\", \"Publisher2 TXT\"], \"Relation\": [ \"Relation TxT\", "
+          "\"Relation2 TXT\"], \"Rights\": \"Rights TxT\", \"Source\": \"Source TxT\", \"Type\": "
+          "\"Type TxT\", \"UserDefinedProperties\": { \"NewPropName Bool\": { \"type\": "
+          "\"boolean\", \"value\": true}, \"NewPropName Numb\": { \"type\": \"long\", "
+          "\"value\": 1245}, \"NewPropName Str\": { \"type\": \"boolean\", \"value\": false}, "
+          "\"NewPropName float\": { \"type\": \"float\", \"value\": 12.45}}}}}"_ostr;
 
     CPPUNIT_ASSERT_EQUAL(aExpectedStr, aJsonWriter.finishAndGetAsOString());
 }

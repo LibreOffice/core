@@ -52,6 +52,10 @@
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <com/sun/star/document/XDocumentProperties2.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+#include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -627,6 +631,208 @@ void GetDocStructureCharts(tools::JsonWriter& rJsonWriter, SwDocShell* /*pDocShe
     }
 }
 
+void GetDocStructureDocProps(tools::JsonWriter& rJsonWriter, SwDocShell* pDocShell,
+                             const std::map<OUString, OUString>& rArguments)
+{
+    auto it = rArguments.find(u"filter"_ustr);
+    if (it != rArguments.end())
+    {
+        // If filter is present but we are filtering not to document properties
+        if (!it->second.equals(u"docprops"_ustr))
+            return;
+    }
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropsSupplier(
+        pDocShell->GetModel(), uno::UNO_QUERY);
+    if (!xDocumentPropsSupplier.is())
+        return;
+
+    //uno::Reference<document::XDocumentProperties> xDocProps();
+    uno::Reference<document::XDocumentProperties2> xDocProps(
+        xDocumentPropsSupplier->getDocumentProperties(), uno::UNO_QUERY);
+    if (!xDocProps.is())
+        return;
+
+    auto aDocPropsNode = rJsonWriter.startNode("DocumentProperties");
+
+    // StringBuffer for converting DateTimes to String
+    OUStringBuffer aDateBuf(32);
+
+    //Properties from XDocumentProperties
+    OUString aAuthor = xDocProps->getAuthor();
+    rJsonWriter.put("Author", aAuthor);
+
+    OUString aGenerator = xDocProps->getGenerator();
+    rJsonWriter.put("Generator", aGenerator);
+
+    util::DateTime aCreationDate = xDocProps->getCreationDate();
+    sax::Converter::convertDateTime(aDateBuf, aCreationDate, nullptr, true);
+    rJsonWriter.put("CreationDate", aDateBuf.makeStringAndClear());
+
+    OUString aTitle = xDocProps->getTitle();
+    rJsonWriter.put("Title", aTitle);
+
+    OUString aSubject = xDocProps->getSubject();
+    rJsonWriter.put("Subject", aSubject);
+
+    OUString aDescription = xDocProps->getDescription();
+    rJsonWriter.put("Description", aDescription);
+
+    uno::Sequence<OUString> aKeywords = xDocProps->getKeywords();
+    {
+        auto aKeywordsNode = rJsonWriter.startArray("Keywords");
+        for (int i = 0; i < aKeywords.getLength(); i++)
+        {
+            rJsonWriter.putSimpleValue(aKeywords[i]);
+        }
+    }
+
+    lang::Locale aLanguage = xDocProps->getLanguage();
+    OUString aLanguageStr(LanguageTag::convertToBcp47(aLanguage, false));
+    rJsonWriter.put("Language", aLanguageStr);
+
+    OUString aModifiedBy = xDocProps->getModifiedBy();
+    rJsonWriter.put("ModifiedBy", aModifiedBy);
+
+    util::DateTime aModificationDate = xDocProps->getModificationDate();
+    sax::Converter::convertDateTime(aDateBuf, aModificationDate, nullptr, true);
+    rJsonWriter.put("ModificationDate", aDateBuf.makeStringAndClear());
+
+    OUString aPrintedBy = xDocProps->getPrintedBy();
+    rJsonWriter.put("PrintedBy", aPrintedBy);
+
+    util::DateTime aPrintDate = xDocProps->getPrintDate();
+    sax::Converter::convertDateTime(aDateBuf, aPrintDate, nullptr, true);
+    rJsonWriter.put("PrintDate", aDateBuf.makeStringAndClear());
+
+    OUString aTemplateName = xDocProps->getTemplateName();
+    rJsonWriter.put("TemplateName", aTemplateName);
+
+    OUString aTemplateURL = xDocProps->getTemplateURL();
+    rJsonWriter.put("TemplateURL", aTemplateURL);
+
+    util::DateTime aTemplateDate = xDocProps->getTemplateDate();
+    sax::Converter::convertDateTime(aDateBuf, aTemplateDate, nullptr, true);
+    rJsonWriter.put("TemplateDate", aDateBuf.makeStringAndClear());
+
+    OUString aAutoloadURL = xDocProps->getAutoloadURL();
+    rJsonWriter.put("AutoloadURL", aAutoloadURL);
+
+    sal_Int32 aAutoloadSecs = xDocProps->getAutoloadSecs();
+    rJsonWriter.put("AutoloadSecs", aAutoloadSecs);
+
+    OUString aDefaultTarget = xDocProps->getDefaultTarget();
+    rJsonWriter.put("DefaultTarget", aDefaultTarget);
+
+    uno::Sequence<beans::NamedValue> aDocumentStatistics = xDocProps->getDocumentStatistics();
+    {
+        auto aDocumentStatisticsNode = rJsonWriter.startNode("DocumentStatistics");
+        for (int i = 0; i < aDocumentStatistics.getLength(); i++)
+        {
+            // Todo check: do all stast are integer numbers?
+            sal_Int32 nValue = 0;
+            aDocumentStatistics[i].Value >>= nValue;
+            std::string aStr(OUStringToOString(aDocumentStatistics[i].Name, RTL_TEXTENCODING_UTF8));
+            rJsonWriter.put(aStr, nValue);
+        }
+    }
+
+    sal_Int16 aEditingCycles = xDocProps->getEditingCycles();
+    rJsonWriter.put("EditingCycles", aEditingCycles);
+
+    sal_Int32 aEditingDuration = xDocProps->getEditingDuration();
+    rJsonWriter.put("EditingDuration", aEditingDuration);
+
+    //Properties from XDocumentProperties2
+    uno::Sequence<OUString> aContributor = xDocProps->getContributor();
+    {
+        auto aContributorNode = rJsonWriter.startArray("Contributor");
+        for (int i = 0; i < aContributor.getLength(); i++)
+        {
+            rJsonWriter.putSimpleValue(aContributor[i]);
+        }
+    }
+
+    OUString aCoverage = xDocProps->getCoverage();
+    rJsonWriter.put("Coverage", aCoverage);
+
+    OUString aIdentifier = xDocProps->getIdentifier();
+    rJsonWriter.put("Identifier", aIdentifier);
+
+    uno::Sequence<OUString> aPublisher = xDocProps->getPublisher();
+    {
+        auto aPublisherNode = rJsonWriter.startArray("Publisher");
+        for (int i = 0; i < aPublisher.getLength(); i++)
+        {
+            rJsonWriter.putSimpleValue(aPublisher[i]);
+        }
+    }
+
+    uno::Sequence<OUString> aRelation = xDocProps->getRelation();
+    {
+        auto aRelationNode = rJsonWriter.startArray("Relation");
+        for (int i = 0; i < aRelation.getLength(); i++)
+        {
+            rJsonWriter.putSimpleValue(aRelation[i]);
+        }
+    }
+
+    OUString aRights = xDocProps->getRights();
+    rJsonWriter.put("Rights", aRights);
+
+    OUString aSource = xDocProps->getSource();
+    rJsonWriter.put("Source", aSource);
+
+    OUString aType = xDocProps->getType();
+    rJsonWriter.put("Type", aType);
+
+    // PropertySet -> JSON
+    css::uno::Reference<css::beans::XPropertyContainer> aUserDefinedProperties
+        = xDocProps->getUserDefinedProperties();
+    uno::Reference<beans::XPropertySet> aUserDefinedPropertySet(aUserDefinedProperties,
+                                                                uno::UNO_QUERY);
+    if (aUserDefinedPropertySet.is())
+    {
+        auto aRelationNode = rJsonWriter.startNode("UserDefinedProperties");
+        const uno::Sequence<beans::Property> aProperties
+            = aUserDefinedPropertySet->getPropertySetInfo()->getProperties();
+        for (const beans::Property& rProperty : aProperties)
+        {
+            const OUString& rKey = rProperty.Name;
+            auto aNode = rJsonWriter.startNode(OUStringToOString(rKey, RTL_TEXTENCODING_UTF8));
+            uno::Any aValue = aUserDefinedPropertySet->getPropertyValue(rKey);
+
+            OUString aAnyType = aValue.getValueTypeName();
+            rJsonWriter.put("type", aAnyType);
+
+            if (aAnyType == "boolean")
+                rJsonWriter.put("value", aValue.get<bool>());
+            else if (aAnyType == "double")
+                rJsonWriter.put("value", aValue.get<double>());
+            else if (aAnyType == "float")
+                rJsonWriter.put("value", aValue.get<float>());
+            else if (aAnyType == "long")
+                rJsonWriter.put("value", aValue.get<sal_Int32>());
+            else if (aAnyType == "short")
+                rJsonWriter.put("value", aValue.get<sal_Int16>());
+            else if (aValue.has<OUString>())
+                rJsonWriter.put("value", aValue.get<OUString>());
+            else if (aValue.has<sal_uInt64>())
+                rJsonWriter.put("value", aValue.get<sal_Int64>());
+            else
+            {
+                // Todo: some more types should be supported..
+                // AddProperty allow these 13 types:
+                // "com.sun.star.util.Date", "DateTime", "DateTimeWithTimezone",
+                // "DateWithTimezone", "Duration", "Time"
+                // typelib_TypeClass_BOOLEAN, typelib_TypeClass_DOUBLE, typelib_TypeClass_FLOAT
+                // typelib_TypeClass_HYPER, typelib_TypeClass_LONG, typelib_TypeClass_SHORT,
+                // typelib_TypeClass_STRING
+            }
+        }
+    }
+}
+
 /// Implements getCommandValues(".uno:Sections").
 ///
 /// Parameters:
@@ -728,6 +934,7 @@ void SwXTextDocument::getCommandValues(tools::JsonWriter& rJsonWriter, std::stri
 
         uno::Reference<container::XIndexAccess> xContentControls = getContentControls();
         GetDocStructure(rJsonWriter, m_pDocShell, aMap, xContentControls);
+        GetDocStructureDocProps(rJsonWriter, m_pDocShell, aMap);
     }
 }
 

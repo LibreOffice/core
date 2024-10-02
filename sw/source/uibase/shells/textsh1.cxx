@@ -28,6 +28,7 @@
 #include <hintids.hxx>
 #include <cmdid.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/propertysequence.hxx>
 
 #include <i18nutil/unicode.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -135,6 +136,7 @@
 #include <formatcontentcontrol.hxx>
 #include <rtl/uri.hxx>
 #include <unotxdoc.hxx>
+#include <sax/tools/converter.hxx>
 
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
@@ -150,6 +152,13 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+
+#include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <com/sun/star/document/XDocumentProperties2.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2466,6 +2475,318 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     // Handle all transformations
                     for (const auto& aItem2 : aItem.second)
                     {
+                        if (aItem2.first == "DocumentProperties")
+                        {
+                            uno::Reference<document::XDocumentPropertiesSupplier>
+                                xDocumentPropsSupplier(GetView().GetDocShell()->GetModel(),
+                                                       uno::UNO_QUERY);
+                            if (!xDocumentPropsSupplier.is())
+                                continue;
+                            uno::Reference<document::XDocumentProperties2> xDocProps(
+                                xDocumentPropsSupplier->getDocumentProperties(), uno::UNO_QUERY);
+                            if (!xDocProps.is())
+                                continue;
+
+                            for (const auto& aItem3 : aItem2.second)
+                            {
+                                if (aItem3.first == "Author")
+                                {
+                                    xDocProps->setAuthor(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Generator")
+                                {
+                                    xDocProps->setGenerator(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "CreationDate")
+                                {
+                                    util::DateTime aDateTime;
+                                    sax::Converter::parseDateTime(
+                                        aDateTime,
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                    xDocProps->setCreationDate(aDateTime);
+                                }
+                                else if (aItem3.first == "Title")
+                                {
+                                    xDocProps->setTitle(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Subject")
+                                {
+                                    xDocProps->setSubject(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Description")
+                                {
+                                    xDocProps->setDescription(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Keywords")
+                                {
+                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    auto aStringArray = aStringSeq.getArray();
+                                    int nId = 0;
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        aStringArray[nId++] = OStringToOUString(aItem4.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8);
+                                    }
+                                    xDocProps->setKeywords(aStringSeq);
+                                }
+                                else if (aItem3.first == "Language")
+                                {
+                                    OUString aLanguageStr
+                                        = OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                            RTL_TEXTENCODING_UTF8);
+                                    lang::Locale aLanguageLang
+                                        = LanguageTag::convertToLocale(aLanguageStr);
+                                    xDocProps->setLanguage(aLanguageLang);
+                                }
+                                else if (aItem3.first == "ModifiedBy")
+                                {
+                                    xDocProps->setModifiedBy(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "ModificationDate")
+                                {
+                                    util::DateTime aDateTime;
+                                    sax::Converter::parseDateTime(
+                                        aDateTime,
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                    xDocProps->setModificationDate(aDateTime);
+                                }
+                                else if (aItem3.first == "PrintedBy")
+                                {
+                                    xDocProps->setPrintedBy(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "PrintDate")
+                                {
+                                    util::DateTime aDateTime;
+                                    sax::Converter::parseDateTime(
+                                        aDateTime,
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                    xDocProps->setPrintDate(aDateTime);
+                                }
+                                else if (aItem3.first == "TemplateName")
+                                {
+                                    xDocProps->setTemplateName(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "TemplateURL")
+                                {
+                                    xDocProps->setTemplateURL(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "TemplateDate")
+                                {
+                                    util::DateTime aDateTime;
+                                    sax::Converter::parseDateTime(
+                                        aDateTime,
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                    xDocProps->setTemplateDate(aDateTime);
+                                }
+                                else if (aItem3.first == "AutoloadURL")
+                                {
+                                    // Warning: wrong data here, can froze LO.
+                                    xDocProps->setAutoloadURL(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "AutoloadSecs")
+                                {
+                                    //sal_Int32
+                                    xDocProps->setAutoloadSecs(aItem3.second.get_value<int>());
+                                }
+                                else if (aItem3.first == "DefaultTarget")
+                                {
+                                    xDocProps->setDefaultTarget(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "DocumentStatistics")
+                                {
+                                    uno::Sequence<beans::NamedValue> aNamedValueSeq(
+                                        aItem3.second.size());
+                                    auto aNamedValueArray = aNamedValueSeq.getArray();
+                                    int nId = 0;
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        OUString aName = OStringToOUString(aItem4.first,
+                                                                           RTL_TEXTENCODING_UTF8);
+                                        sal_Int32 nValue = aItem4.second.get_value<int>();
+                                        aNamedValueArray[nId].Name = aName;
+                                        aNamedValueArray[nId].Value <<= nValue;
+                                        nId++;
+                                    }
+                                    xDocProps->setDocumentStatistics(aNamedValueSeq);
+                                }
+                                else if (aItem3.first == "EditingCycles")
+                                {
+                                    //sal_Int16
+                                    xDocProps->setEditingCycles(aItem3.second.get_value<int>());
+                                }
+                                else if (aItem3.first == "EditingDuration")
+                                {
+                                    //sal_Int32
+                                    xDocProps->setEditingDuration(aItem3.second.get_value<int>());
+                                }
+                                else if (aItem3.first == "Contributor")
+                                {
+                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    auto aStringArray = aStringSeq.getArray();
+                                    int nId = 0;
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        aStringArray[nId++] = OStringToOUString(
+                                            aItem4.second.get_value<std::string>(),
+                                            RTL_TEXTENCODING_UTF8);
+                                    }
+                                    xDocProps->setContributor(aStringSeq);
+                                }
+                                else if (aItem3.first == "Coverage")
+                                {
+                                    xDocProps->setCoverage(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Identifier")
+                                {
+                                    xDocProps->setIdentifier(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Publisher")
+                                {
+                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    auto aStringArray = aStringSeq.getArray();
+                                    int nId = 0;
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        aStringArray[nId++] = OStringToOUString(
+                                            aItem4.second.get_value<std::string>(),
+                                            RTL_TEXTENCODING_UTF8);
+                                    }
+                                    xDocProps->setPublisher(aStringSeq);
+                                }
+                                else if (aItem3.first == "Relation")
+                                {
+                                    uno::Sequence<OUString> aStringSeq(aItem3.second.size());
+                                    auto aStringArray = aStringSeq.getArray();
+                                    int nId = 0;
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        aStringArray[nId++] = OStringToOUString(
+                                            aItem4.second.get_value<std::string>(),
+                                            RTL_TEXTENCODING_UTF8);
+                                    }
+                                    xDocProps->setRelation(aStringSeq);
+                                }
+                                else if (aItem3.first == "Rights")
+                                {
+                                    xDocProps->setRights(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Source")
+                                {
+                                    xDocProps->setSource(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "Type")
+                                {
+                                    xDocProps->setType(
+                                        OStringToOUString(aItem3.second.get_value<std::string>(),
+                                                          RTL_TEXTENCODING_UTF8));
+                                }
+                                else if (aItem3.first == "UserDefinedProperties")
+                                {
+                                    const uno::Reference<beans::XPropertyContainer> xUserProps
+                                        = xDocProps->getUserDefinedProperties();
+                                    if (!xUserProps.is())
+                                        continue;
+                                    uno::Reference<beans::XPropertyAccess> xUserPropsAccess(
+                                        xDocProps->getUserDefinedProperties(), uno::UNO_QUERY);
+                                    if (!xUserPropsAccess.is())
+                                        continue;
+
+                                    for (const auto& aItem4 : aItem3.second)
+                                    {
+                                        if (aItem4.first == "Delete")
+                                        {
+                                            std::string aPropName
+                                                = aItem4.second.get_value<std::string>();
+                                            try
+                                            {
+                                                xUserProps->removeProperty(OStringToOUString(
+                                                    aPropName, RTL_TEXTENCODING_UTF8));
+                                            }
+                                            catch (...)
+                                            {
+                                                lcl_LogWarning("FillApi DocumentProperties "
+                                                               "UserDefinedPropertieschart, failed "
+                                                               "to delete property: '"
+                                                               + aPropName + "'");
+                                            }
+                                        }
+                                        else if (aItem4.first.starts_with("Add."))
+                                        {
+                                            std::string aPropName = aItem4.first.substr(4);
+
+                                            comphelper::SequenceAsHashMap aUserDefinedProperties(
+                                                xUserPropsAccess->getPropertyValues());
+                                            comphelper::SequenceAsHashMap::iterator it
+                                                = aUserDefinedProperties.find(OStringToOUString(
+                                                    aPropName, RTL_TEXTENCODING_UTF8));
+                                            bool bToDelete = (it != aUserDefinedProperties.end());
+
+                                            try
+                                            {
+                                                std::stringstream aStreamPart;
+                                                aStreamPart << "{\n\"" << aPropName << "\" : ";
+                                                boost::property_tree::json_parser::write_json(
+                                                    aStreamPart, aItem4.second);
+                                                aStreamPart << "}";
+
+                                                OString aJSONPart(aStreamPart.str());
+                                                std::vector<beans::PropertyValue> aPropVec
+                                                    = comphelper::JsonToPropertyValues(aJSONPart);
+
+                                                if (bToDelete)
+                                                    xUserProps->removeProperty(aPropVec[0].Name);
+
+                                                xUserProps->addProperty(
+                                                    aPropVec[0].Name,
+                                                    beans::PropertyAttribute::REMOVABLE,
+                                                    aPropVec[0].Value);
+                                            }
+                                            catch(...)
+                                            {
+                                                lcl_LogWarning("FillApi DocumentProperties "
+                                                               "UserDefinedPropertieschart, failed "
+                                                               "to add property: '"
+                                                               + aPropName + "'");
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if (aItem2.first.starts_with("Charts"))
                         {
                             std::string aTextEnd = aItem2.first.substr(6);
