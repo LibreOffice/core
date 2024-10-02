@@ -61,8 +61,7 @@ struct ValueSetItem
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
-    css::uno::Reference< css::accessibility::XAccessible >
-                        GetAccessible( bool bIsTransientChildrenDisabled );
+    rtl::Reference< ValueItemAcc > GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
 typedef comphelper::WeakComponentImplHelper<
@@ -205,8 +204,6 @@ public:
     void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
-
-    static ValueItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
 
 public:
 

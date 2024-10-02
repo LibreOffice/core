@@ -53,7 +53,7 @@ ValueSetItem::~ValueSetItem()
     }
 }
 
-uno::Reference< accessibility::XAccessible > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
+rtl::Reference< ValueItemAcc > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );
@@ -76,13 +76,6 @@ void ValueItemAcc::ParentDestroyed()
     std::scoped_lock aGuard( maMutex );
     mpParent = nullptr;
 }
-
-ValueItemAcc* ValueItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    noexcept
-{
-    return dynamic_cast<ValueItemAcc*>(rxData.get());
-}
-
 
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueItemAcc::getAccessibleContext()
 {
