@@ -76,52 +76,40 @@ void SvxShapeCollection::dispose()
 
     // Guard dispose against multiple threading
     // Remark: It is an error to call dispose more than once
-    bool bDoDispose = false;
     {
         std::unique_lock aGuard( m_aMutex );
-        if( !bDisposed && !bInDispose )
-        {
-            // only one call go into this section
-            bInDispose = true;
-            bDoDispose = true;
-        }
+        if( bDisposed || bInDispose )
+            return;
+        // only one call go into this section
+        bInDispose = true;
     }
 
     // Do not hold the mutex because we are broadcasting
-    if( bDoDispose )
+    // Create an event with this as sender
+    try
     {
-        // Create an event with this as sender
-        try
-        {
-            document::EventObject aEvt;
-            aEvt.Source = uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) );
-            // inform all listeners to release this object
-            // The listener container are automatically cleared
-            std::unique_lock g(m_aMutex);
-            maEventListeners.disposeAndClear( g, aEvt );
-            maShapeContainer.clear();
-        }
-        catch(const css::uno::Exception&)
-        {
-            // catch exception and throw again but signal that
-            // the object was disposed. Dispose should be called
-            // only once.
-            bDisposed = true;
-            bInDispose = false;
-            throw;
-        }
-
-        // the values bDispose and bInDisposing must set in this order.
-        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+        document::EventObject aEvt;
+        aEvt.Source = uno::Reference< uno::XInterface >::query( static_cast<lang::XComponent *>(this) );
+        // inform all listeners to release this object
+        // The listener container are automatically cleared
+        std::unique_lock g(m_aMutex);
+        maEventListeners.disposeAndClear( g, aEvt );
+        maShapeContainer.clear();
+    }
+    catch(const css::uno::Exception&)
+    {
+        // catch exception and throw again but signal that
+        // the object was disposed. Dispose should be called
+        // only once.
         bDisposed = true;
         bInDispose = false;
+        throw;
     }
-    else
-    {
-        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
-        // However this condition is traced, because it MAY indicate an error.
-        SAL_INFO("svx", "dispose called twice" );
-    }
+
+    // the values bDispose and bInDisposing must set in this order.
+    // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
+    bDisposed = true;
+    bInDispose = false;
 }
 
 // XComponent
