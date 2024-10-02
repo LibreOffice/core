@@ -58,6 +58,7 @@
 #include <editeng/emphasismarkitem.hxx>
 #include "textconv.hxx"
 #include <rtl/tencinfo.h>
+#include <svtools/htmlout.hxx>
 #include <svtools/rtfout.hxx>
 #include <tools/stream.hxx>
 #include <edtspell.hxx>
@@ -1037,6 +1038,60 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         }
         break;
     }
+}
+
+// Currently not good enough to be used for a ::Write of EETextFormat::Html, it
+// only supports hyperlinks over plain text
+OString ImpEditEngine::GetSimpleHtml() const
+{
+    OStringBuffer aOutput;
+
+    sal_Int32 nStartNode = 0;
+    sal_Int32 nEndNode = maEditDoc.Count()-1;
+
+    // iterate over the paragraphs ...
+    for (sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++)
+    {
+        const ContentNode* pNode = maEditDoc.GetObject( nNode );
+
+        const ParaPortion* pParaPortion = FindParaPortion( pNode );
+
+        sal_Int32 nIndex = 0;
+        sal_Int32 nEndPortion = pParaPortion->GetTextPortions().Count() - 1;
+
+        aOutput.append("<div>");
+        for (sal_Int32 n = 0; n <= nEndPortion; n++)
+        {
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
+
+            const SvxURLField* pURLField = nullptr;
+            if ( rTextPortion.GetKind() == PortionKind::FIELD )
+            {
+                const EditCharAttrib* pAttr = pNode->GetCharAttribs().FindFeature(nIndex);
+                const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
+                if( pFieldItem )
+                {
+                    const SvxFieldData* pFieldData = pFieldItem->GetField();
+                    pURLField = dynamic_cast<const SvxURLField*>(pFieldData);
+                }
+            }
+
+            OUString aRTFStr = EditDoc::GetParaAsString(pNode, nIndex, nIndex + rTextPortion.GetLen());
+            if (pURLField)
+                aOutput.append("<a href=\"" + pURLField->GetURL().toUtf8() + "\">");
+
+            aOutput.append(HTMLOutFuncs::ConvertStringToHTML(aRTFStr));
+
+            if (pURLField)
+                aOutput.append("</a>");
+
+            nIndex = nIndex + rTextPortion.GetLen();
+        }
+
+        aOutput.append("</div>");
+    }
+
+    return aOutput.makeStringAndClear();
 }
 
 std::unique_ptr<EditTextObject> ImpEditEngine::GetEmptyTextObject()

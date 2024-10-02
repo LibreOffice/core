@@ -279,6 +279,7 @@ public:
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
     ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
+    OString             GetSimpleHtml() const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color const &   GetBackgroundColor() const;

@@ -3383,6 +3383,7 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
         rJsonWriter.put("parentId", pField->GetParentPostItId());
         rJsonWriter.put("author", pField->GetPar1());
         rJsonWriter.put("text", pField->GetPar2());
+        rJsonWriter.put("html", pWin->GetSimpleHtml());
         rJsonWriter.put("resolved", pField->GetResolved() ? "true" : "false");
         rJsonWriter.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
         rJsonWriter.put("anchorPos", aSVRect.toString());

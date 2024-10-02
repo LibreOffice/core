@@ -929,6 +929,7 @@ public:
 
     EditPaM         Read(SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, const EditSelection& rSel, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr);
     void            Write(SvStream& rOutput, EETextFormat eFormat, const EditSelection& rSel);
+    OString         GetSimpleHtml() const;
 
     std::unique_ptr<EditTextObject> CreateTextObject();
     std::unique_ptr<EditTextObject> CreateTextObject(const EditSelection& rSel);
