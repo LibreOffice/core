@@ -32,6 +32,7 @@
 #include <vcl/uitest/eventdescription.hxx>
 
 #include <svl/undo.hxx>
+#include <svtools/svparser.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svl/languageoptions.hxx>
@@ -490,7 +491,11 @@ void SwAnnotationWin::UpdateHTML(const OUString& rHtml)
     OString sHtmlContent(rHtml.toUtf8());
     SvMemoryStream aHTMLStream(const_cast<char*>(sHtmlContent.getStr()),
                                sHtmlContent.getLength(), StreamMode::READ);
-    GetOutlinerView()->Read(aHTMLStream, EETextFormat::Html, nullptr);
+    SvKeyValueIteratorRef xValues(new SvKeyValueIterator);
+    // Insert newlines for divs, not normally done, so to keep things simple
+    // only enable tthat for this case.
+    xValues->Append(SvKeyValue("newline-on-div", "true"));
+    GetOutlinerView()->Read(aHTMLStream, EETextFormat::Html, xValues.get());
     UpdateData();
 }
 
