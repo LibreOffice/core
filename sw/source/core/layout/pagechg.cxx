@@ -65,6 +65,7 @@
 #include <sortedobjs.hxx>
 #include <calbck.hxx>
 #include <txtfly.hxx>
+#include <frmatr.hxx>
 
 using namespace ::com::sun::star;
 
@@ -2561,7 +2562,10 @@ bool SwPageFrame::CheckPageHeightValidForHideWhitespace(SwTwips nDiff)
             // Content frame doesn't fit the actual size, check if it fits the nominal one.
             const SwFrameFormat* pPageFormat = static_cast<const SwFrameFormat*>(GetDep());
             const Size& rPageSize = pPageFormat->GetFrameSize().GetSize();
-            tools::Long nWhitespace = rPageSize.getHeight() - getFrameArea().Height();
+            // Count what would be the max size for the body frame, ignoring top/bottom margin.
+            const SvxULSpaceItem& rULSpace = pPageFormat->GetULSpace();
+            SwTwips nNominalHeight = rPageSize.getHeight() - rULSpace.GetUpper() - rULSpace.GetLower();
+            tools::Long nWhitespace = nNominalHeight - getFrameArea().Height();
             if (nWhitespace > -nDiff)
             {
                 // It does: don't move it and invalidate our page frame so
