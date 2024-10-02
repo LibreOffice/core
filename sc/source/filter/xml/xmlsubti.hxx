@@ -73,6 +73,7 @@ public:
     void                                AddRow();
     void                                SetRowStyle(const OUString& rCellStyleName);
     void                                AddColumn(bool bIsCovered);
+    void                                AddColumns(sal_Int32 nRepeat);
     void                                FixupOLEs() { aFixupOLEs.FixupOLEs(); }
     static bool                         IsOLE(const css::uno::Reference< css::drawing::XShape >& rShape)
                                             { return ScMyOLEFixer::IsOLE(rShape); }

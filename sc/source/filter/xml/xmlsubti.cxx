@@ -179,6 +179,11 @@ void ScMyTables::AddColumn(bool bIsCovered)
         rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab());
 }
 
+void ScMyTables::AddColumns(sal_Int32 nRepeat)
+{
+    maCurrentCellPos.SetCol( maCurrentCellPos.Col() + nRepeat );
+}
+
 void ScMyTables::DeleteTable()
 {
     ScXMLImport::MutexGuard aGuard(rImport);

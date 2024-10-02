@@ -1269,6 +1269,13 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
                     rTables.AddColumn(false);
                 }
             }
+            // if nothing else useful can happen in the loop, just exit early
+            if (i != 0 && bIsEmpty && rCurrentPos.Row() != 0)
+            {
+                rCurrentPos.SetCol( rCellPos.Col() + nColsRepeated - 1 );
+                rTables.AddColumns(nColsRepeated - i - 1);
+                break;
+            }
         }
     }
 }
