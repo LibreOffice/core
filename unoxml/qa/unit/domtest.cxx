@@ -34,6 +34,9 @@
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathObjectType.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -314,6 +317,37 @@ public:
         mxDomBuilder->setErrorHandler(nullptr);
     }
 
+    void testXNodeList_NodeList()
+    {
+        uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
+
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        Reference< xml::dom::XElement > xRoot = xDocument->createElement(u"root"_ustr);
+        Reference< xml::dom::XElement > xFoo1 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFoo2 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFooNs = xDocument->createElementNS(u"http://example.com/"_ustr, u"ns:foo"_ustr);
+        Reference< xml::dom::XElement > xBar = xDocument->createElement(u"bar"_ustr);
+
+        xDocument->appendChild(xRoot);
+        xRoot->appendChild(xFoo1);
+        xFoo1->appendChild(xBar);
+        xBar->appendChild(xFoo2);
+        xRoot->appendChild(xFooNs);
+
+        uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"//foo"_ustr);
+        CPPUNIT_ASSERT(xResult);
+        CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_NODESET, xResult->getObjectType());
+        uno::Reference<xml::dom::XNodeList> xNodeList = xResult->getNodeList();
+        CPPUNIT_ASSERT(xNodeList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xNodeList->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo1, uno::UNO_QUERY),
+                Reference< XInterface >(xNodeList->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo2, uno::UNO_QUERY),
+                Reference< XInterface >(xNodeList->item(1), uno::UNO_QUERY));
+    }
+
     void serializerTest ()
     {
         rtl::Reference<DocumentHandler> xHandler = new DocumentHandler;
@@ -362,6 +396,7 @@ public:
     CPPUNIT_TEST(warningInputTest);
     CPPUNIT_TEST(errorInputTest);
     CPPUNIT_TEST(testXDocumentBuilder);
+    CPPUNIT_TEST(testXNodeList_NodeList);
     CPPUNIT_TEST(serializerTest);
     CPPUNIT_TEST_SUITE_END();
 };

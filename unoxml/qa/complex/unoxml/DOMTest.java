@@ -2602,45 +2602,6 @@ public class DOMTest
         }
     }
 
-    @Test public void testXNodeList_NodeList() throws Exception
-    {
-        XXPathAPI xXPathAPI =
-            UnoRuntime.queryInterface(XXPathAPI.class,
-            m_xMSF.createInstance("com.sun.star.xml.xpath.XPathAPI"));
-        XDocumentBuilder xBuilder =
-            UnoRuntime.queryInterface(XDocumentBuilder.class,
-            m_xMSF.createInstance("com.sun.star.xml.dom.DocumentBuilder"));
-
-        String ns = "http://example.com/";
-
-        XDocument xDoc = xBuilder.newDocument();
-
-        XElement xRoot = xDoc.createElement("root");
-
-        XElement xFoo1 = xDoc.createElement("foo");
-        XElement xFoo2 = xDoc.createElement("foo");
-        XElement xFooNs = xDoc.createElementNS(ns, "ns:foo");
-        XElement xBar = xDoc.createElement("bar");
-
-        xDoc.appendChild(xRoot);
-        xRoot.appendChild(xFoo1);
-        xFoo1.appendChild(xBar);
-        xBar.appendChild(xFoo2);
-        xRoot.appendChild(xFooNs);
-
-        {
-            XXPathObject xResult = xXPathAPI.eval(xRoot, "//foo");
-            assertNotNull("XXPathAPI.eval", xResult);
-            assertEquals("XXPathObject.getObjectType",
-                    XPATH_NODESET, xResult.getObjectType());
-            XNodeList xNodeList = xResult.getNodeList();
-            assertNotNull("XXPathObject.getNodeList", xNodeList);
-            assertEquals("NodeList.getLength", 2, xNodeList.getLength());
-            assertEquals("NodeList.item", xFoo1, xNodeList.item(0));
-            assertEquals("NodeList.item", xFoo2, xNodeList.item(1));
-        }
-    }
-
     @Test public void testXSAXSerialize() throws Exception
     {
         String file =
