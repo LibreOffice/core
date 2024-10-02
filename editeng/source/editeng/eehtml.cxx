@@ -95,6 +95,14 @@ SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
     return _eState;
 }
 
+void EditHTMLParser::Newline()
+{
+    bool bHasText = HasTextInCurrentPara();
+    if ( bHasText )
+        ImpInsertParaBreak();
+    StartPara( false );
+}
+
 void EditHTMLParser::NextToken( HtmlTokenId nToken )
 {
     switch( nToken )
@@ -280,7 +288,8 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::TABLEHEADER_ON:
     case HtmlTokenId::TABLEDATA_ON:
         nInCell++;
-        [[fallthrough]];
+        Newline();
+    break;
     case HtmlTokenId::BLOCKQUOTE_ON:
     case HtmlTokenId::BLOCKQUOTE_OFF:
     case HtmlTokenId::BLOCKQUOTE30_ON:
@@ -291,28 +300,23 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::DT_ON:
     case HtmlTokenId::ORDERLIST_ON:
     case HtmlTokenId::UNORDERLIST_ON:
-    {
-        bool bHasText = HasTextInCurrentPara();
-        if ( bHasText )
-            ImpInsertParaBreak();
-        StartPara( false );
-    }
+        Newline();
     break;
 
     case HtmlTokenId::TABLEHEADER_OFF:
     case HtmlTokenId::TABLEDATA_OFF:
-    {
         if ( nInCell )
             nInCell--;
-        [[fallthrough]];
-    }
+        EndPara();
+    break;
     case HtmlTokenId::LISTHEADER_OFF:
     case HtmlTokenId::LI_OFF:
     case HtmlTokenId::DD_OFF:
     case HtmlTokenId::DT_OFF:
     case HtmlTokenId::ORDERLIST_OFF:
-    case HtmlTokenId::UNORDERLIST_OFF:  EndPara();
-                                break;
+    case HtmlTokenId::UNORDERLIST_OFF:
+        EndPara();
+    break;
 
     case HtmlTokenId::TABLEROW_ON:
     case HtmlTokenId::TABLEROW_OFF: // A RETURN only after a CELL, for Calc

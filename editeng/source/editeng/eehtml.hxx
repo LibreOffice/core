@@ -53,6 +53,7 @@ private:
     sal_uInt8               nDefListLevel;
 
     void                    StartPara( bool bReal );
+    void                    Newline();
     void                    EndPara();
     void                    AnchorStart();
     void                    AnchorEnd();
