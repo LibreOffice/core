@@ -499,6 +499,11 @@ void SwAnnotationWin::UpdateHTML(const OUString& rHtml)
     UpdateData();
 }
 
+OString SwAnnotationWin::GetSimpleHtml() const
+{
+    return GetOutlinerView()->GetEditView().GetSimpleHtml();
+}
+
 bool SwAnnotationWin::IsReadOnlyOrProtected() const
 {
     return mbReadonly ||

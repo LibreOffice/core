@@ -668,6 +668,11 @@ ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterat
     return rInput.GetError();
 }
 
+OString EditView::GetSimpleHtml() const
+{
+    return mpImpEditView->mpEditEngine->mpImpEditEngine->GetSimpleHtml();
+}
+
 void EditView::Cut()
 {
     Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());

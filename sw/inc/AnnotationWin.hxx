@@ -78,6 +78,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         OUString GetAuthor() const;
         Date     GetDate() const;
         tools::Time GetTime() const;
+        OString GetSimpleHtml() const;
         void GeneratePostItName();
 
         sal_uInt32 MoveCaret();
@@ -107,6 +108,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
 
         OutlinerView* GetOutlinerView() { return mpOutlinerView.get();}
+        const OutlinerView* GetOutlinerView() const { return mpOutlinerView.get();}
         Outliner* GetOutliner() { return mpOutliner.get();}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
