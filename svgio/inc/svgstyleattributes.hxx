@@ -248,17 +248,20 @@ namespace svgio::svgreader
             bool                        mbStrokeDasharraySet : 1;
 
             // tdf#155651 Defines if 'context-fill' is used in fill
-            bool                        mbContextFill : 1;
+            bool                        mbUseFillFromContextFill : 1;
+
+            // tdf#155651 Defines if 'context-stroke' is used in fill
+            bool                        mbUseFillFromContextStroke : 1;
+
+            // tdf#155651 Defines if 'context-fill' is used in stroke
+            bool                        mbUseStrokeFromContextFill : 1;
 
             // tdf#155651 Defines if 'context-stroke' is used in stroke
-            bool                        mbContextStroke : 1;
+            bool                        mbUseStrokeFromContextStroke : 1;
 
             // tdf#94765 Check id references in gradient/pattern getters
             OUString                    maNodeFillURL;
             OUString                    maNodeStrokeURL;
-
-            const basegfx::BColor*  maContextFill;
-            const basegfx::BColor*  maContextStroke;
 
             /// internal helpers
             void add_fillGradient(
@@ -319,6 +322,8 @@ namespace svgio::svgreader
             /// scan helpers
             void readCssStyle(std::u16string_view rCandidate);
             const SvgStyleAttributes* getCssStyleOrParentStyle() const;
+
+            const SvgMarkerNode* getMarkerParentNode() const;
 
             SvgStyleAttributes(SvgNode& rOwner);
             ~SvgStyleAttributes();

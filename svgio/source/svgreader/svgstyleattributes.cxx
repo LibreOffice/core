@@ -260,6 +260,23 @@ namespace svgio::svgreader
             return nullptr;
         }
 
+        const SvgMarkerNode* SvgStyleAttributes::getMarkerParentNode() const
+        {
+            if (SVGToken::Marker == mrOwner.getType())
+                return static_cast<const SvgMarkerNode *>(&mrOwner);
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
+            if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[32];
+                const SvgMarkerNode* ret = pSvgStyleAttributes->getMarkerParentNode();
+                --maResolvingParent[32];
+                return ret;
+            }
+
+            return nullptr;
+        }
+
         void SvgStyleAttributes::add_text(
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             drawinglayer::primitive2d::Primitive2DContainer&& rSource) const
@@ -601,9 +618,36 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DRange& rGeoRange) const
         {
-            const basegfx::BColor* pFill = getFill();
-            const SvgGradientNode* pFillGradient = getSvgGradientNodeFill();
-            const SvgPatternNode* pFillPattern = getSvgPatternNodeFill();
+            const basegfx::BColor* pFill = nullptr;
+            const SvgGradientNode* pFillGradient = nullptr;
+            const SvgPatternNode* pFillPattern = nullptr;
+
+            if (mbUseFillFromContextFill)
+            {
+                if (const SvgMarkerNode* pMarker = getMarkerParentNode())
+                {
+                    const SvgStyleAttributes* pStyle = pMarker->getContextStyleAttributes();
+                    pFill = pStyle->getFill();
+                    pFillGradient = pStyle->getSvgGradientNodeFill();
+                    pFillPattern = pStyle->getSvgPatternNodeFill();
+                }
+            }
+            else if (mbUseFillFromContextStroke)
+            {
+                if (const SvgMarkerNode* pMarker = getMarkerParentNode())
+                {
+                    const SvgStyleAttributes* pStyle = pMarker->getContextStyleAttributes();
+                    pFill = pStyle->getStroke();
+                    pFillGradient = pStyle->getSvgGradientNodeStroke();
+                    pFillPattern = pStyle->getSvgPatternNodeStroke();
+                }
+            }
+            else
+            {
+                pFill = getFill();
+                pFillGradient = getSvgGradientNodeFill();
+                pFillPattern = getSvgPatternNodeFill();
+            }
 
             if(!(pFill || pFillGradient || pFillPattern))
                 return;
@@ -670,9 +714,36 @@ namespace svgio::svgreader
             drawinglayer::primitive2d::Primitive2DContainer& rTarget,
             const basegfx::B2DRange& rGeoRange) const
         {
-            const basegfx::BColor* pStroke = getStroke();
-            const SvgGradientNode* pStrokeGradient = getSvgGradientNodeStroke();
-            const SvgPatternNode* pStrokePattern = getSvgPatternNodeStroke();
+            const basegfx::BColor* pStroke = nullptr;
+            const SvgGradientNode* pStrokeGradient = nullptr;
+            const SvgPatternNode* pStrokePattern = nullptr;
+
+            if(mbUseStrokeFromContextFill)
+            {
+                if (const SvgMarkerNode* pMarker = getMarkerParentNode())
+                {
+                    const SvgStyleAttributes* pStyle = pMarker->getContextStyleAttributes();
+                    pStroke = pStyle->getFill();
+                    pStrokeGradient = pStyle->getSvgGradientNodeFill();
+                    pStrokePattern = pStyle->getSvgPatternNodeFill();
+                }
+            }
+            else if(mbUseStrokeFromContextStroke)
+            {
+                if (const SvgMarkerNode* pMarker = getMarkerParentNode())
+                {
+                    const SvgStyleAttributes* pStyle = pMarker->getContextStyleAttributes();
+                    pStroke = pStyle->getStroke();
+                    pStrokeGradient = pStyle->getSvgGradientNodeStroke();
+                    pStrokePattern = pStyle->getSvgPatternNodeStroke();
+                }
+            }
+            else
+            {
+                pStroke = getStroke();
+                pStrokeGradient = getSvgGradientNodeStroke();
+                pStrokePattern = getSvgPatternNodeStroke();
+            }
 
             if(!(pStroke || pStrokeGradient || pStrokePattern))
                 return;
@@ -837,15 +908,11 @@ namespace svgio::svgreader
             rMarkerTransform.identity();
             rClipRange.reset();
 
-            // Set the current fill to the marker before calling getMarkerPrimitives,
+            // Set the current style attibutes to the marker before calling getMarkerPrimitives,
             // which calls decomposeSvgNode to decompose the children of the marker.
-            // If any of the children uses 'fill="context-fill"', then it will use it
-            const_cast<SvgStyleAttributes*>(rMarker.getSvgStyleAttributes())->maContextFill = getFill();
-
-            // Set the current stroke to the marker before calling getMarkerPrimitives,
-            // which calls decomposeSvgNode to decompose the children of the marker.
-            // If any of the children uses 'stroke="context-stroke"', then it will use it
-            const_cast<SvgStyleAttributes*>(rMarker.getSvgStyleAttributes())->maContextStroke = getStroke();
+            // If any children uses 'context-fill' or 'context-stroke',
+            // then these style attributes will be used in add_fill or add_stroke
+            const_cast<SvgMarkerNode&>(rMarker).setContextStyleAttributes(this);
 
             // get marker primitive representation
             rMarkerPrimitives = rMarker.getMarkerPrimitives();
@@ -1334,12 +1401,12 @@ namespace svgio::svgreader
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
             maDominantBaseline(DominantBaseline::Auto),
-            maResolvingParent(35, 0),
+            maResolvingParent(34, 0),
             mbStrokeDasharraySet(false),
-            mbContextFill(false),
-            mbContextStroke(false),
-            maContextFill(nullptr),
-            maContextStroke(nullptr)
+            mbUseFillFromContextFill(false),
+            mbUseFillFromContextStroke(false),
+            mbUseStrokeFromContextFill(false),
+            mbUseStrokeFromContextStroke(false)
         {
         }
 
@@ -1361,11 +1428,11 @@ namespace svgio::svgreader
 
                     if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-fill"))
                     {
-                        mbContextFill = true;
+                        mbUseFillFromContextFill = true;
                     }
                     else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-stroke"))
                     {
-                        mbContextStroke = true;
+                        mbUseFillFromContextStroke = true;
                     }
                     else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
@@ -1414,11 +1481,11 @@ namespace svgio::svgreader
 
                     if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-stroke"))
                     {
-                        mbContextStroke = true;
+                        mbUseStrokeFromContextStroke = true;
                     }
                     else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"context-fill"))
                     {
-                        mbContextFill = true;
+                        mbUseStrokeFromContextFill = true;
                     }
                     else if(readSvgPaint(aContent, aSvgPaint, aURL, aOpacity))
                     {
@@ -2063,40 +2130,6 @@ namespace svgio::svgreader
             }
         }
 
-        const basegfx::BColor* SvgStyleAttributes::getContextFill() const
-        {
-            if (SVGToken::Marker == mrOwner.getType())
-                return maContextFill;
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
-            if (pSvgStyleAttributes && maResolvingParent[33] < nStyleDepthLimit)
-            {
-                ++maResolvingParent[33];
-                auto ret = pSvgStyleAttributes->getContextFill();
-                --maResolvingParent[33];
-                return ret;
-            }
-
-            return nullptr;
-        }
-
-        const basegfx::BColor* SvgStyleAttributes::getContextStroke() const
-        {
-            if (SVGToken::Marker == mrOwner.getType())
-                return maContextStroke;
-
-            const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
-            if (pSvgStyleAttributes && maResolvingParent[32] < nStyleDepthLimit)
-            {
-                ++maResolvingParent[32];
-                auto ret = pSvgStyleAttributes->getContextStroke();
-                --maResolvingParent[32];
-                return ret;
-            }
-
-            return nullptr;
-        }
-
         bool SvgStyleAttributes::isClipPathContent() const
         {
             if (SVGToken::ClipPathNode == mrOwner.getType())
@@ -2165,14 +2198,6 @@ namespace svgio::svgreader
                     }
                 }
             }
-            else if (mbContextFill)
-            {
-                return getContextFill();
-            }
-            else if (mbContextStroke)
-            {
-                return getContextStroke();
-            }
             else if (maNodeFillURL.isEmpty())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
@@ -2217,14 +2242,6 @@ namespace svgio::svgreader
                 {
                     return &maStroke.getBColor();
                 }
-            }
-            else if (mbContextFill)
-            {
-                return getContextFill();
-            }
-            else if (mbContextStroke)
-            {
-                return getContextStroke();
             }
             else if (maNodeStrokeURL.isEmpty())
             {
@@ -2444,11 +2461,11 @@ namespace svgio::svgreader
 
             const SvgStyleAttributes* pSvgStyleAttributes = getCssStyleOrParentStyle();
 
-            if (pSvgStyleAttributes && maResolvingParent[34] < nStyleDepthLimit)
+            if (pSvgStyleAttributes && maResolvingParent[33] < nStyleDepthLimit)
             {
-                ++maResolvingParent[34];
+                ++maResolvingParent[33];
                 auto ret = pSvgStyleAttributes->getOpacity();
-                --maResolvingParent[34];
+                --maResolvingParent[33];
                 return ret;
             }
 

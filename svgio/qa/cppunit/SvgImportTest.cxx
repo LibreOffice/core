@@ -690,6 +690,17 @@ CPPUNIT_TEST_FIXTURE(Test, testContextStroke)
     assertXPath(pDocument, "/primitive2D/transform/transform[4]/polypolygonstroke/line"_ostr, "color"_ostr, u"#ff0000"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testContextStrokeGradient)
+{
+    xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/contextStrokeGradient.svg");
+
+    assertXPath(pDocument, "/primitive2D/transform/svglineargradient"_ostr);
+    assertXPath(pDocument, "/primitive2D/transform/transform[1]/svglineargradient"_ostr);
+    assertXPath(pDocument, "/primitive2D/transform/transform[2]/svglineargradient"_ostr);
+    assertXPath(pDocument, "/primitive2D/transform/transform[3]/svglineargradient"_ostr);
+    assertXPath(pDocument, "/primitive2D/transform/transform[4]/svglineargradient"_ostr);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMarkerInPresentation)
 {
     xmlDocUniquePtr pDocument = dumpAndParseSvg(u"/svgio/qa/cppunit/data/markerInPresentation.svg");
