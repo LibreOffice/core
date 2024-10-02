@@ -90,6 +90,7 @@ XRow_impl::~XRow_impl()
 sal_Bool SAL_CALL
 XRow_impl::wasNull()
 {
+  std::scoped_lock aGuard( m_aMutex );
   return m_nWasNull;
 }
 
