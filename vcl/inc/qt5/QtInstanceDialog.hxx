@@ -17,15 +17,20 @@ class QtInstanceDialog : public QObject, public QtInstanceWindow, public virtual
 
     std::unique_ptr<QDialog> m_pDialog;
 
+    // the DialogController/Dialog/function passed to the runAsync variants
+    std::shared_ptr<weld::DialogController> m_xRunAsyncDialogController;
+    std::shared_ptr<weld::Dialog> m_xRunAsyncDialog;
+    std::function<void(sal_Int32)> m_aRunAsyncFunc;
+
 public:
     QtInstanceDialog(QDialog* pDialog);
     ~QtInstanceDialog();
 
-    virtual bool runAsync(std::shared_ptr<Dialog> const&,
-                          const std::function<void(sal_Int32)>&) override;
+    virtual bool runAsync(const std::shared_ptr<weld::DialogController>& rxOwner,
+                          const std::function<void(sal_Int32)>& func) override;
 
-    virtual bool runAsync(const std::shared_ptr<weld::DialogController>&,
-                          const std::function<void(sal_Int32)>&) override;
+    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                          const std::function<void(sal_Int32)>& func) override;
 
     virtual void collapse(weld::Widget*, weld::Widget*) override;
 
@@ -55,6 +60,9 @@ public:
     * int VCL response code of that button.
     */
     static const char* const PROPERTY_VCL_RESPONSE_CODE;
+
+protected slots:
+    virtual void dialogFinished(int nResult);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

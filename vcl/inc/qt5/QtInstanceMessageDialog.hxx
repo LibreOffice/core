@@ -20,11 +20,6 @@ class QtInstanceMessageDialog : public QtInstanceDialog, public virtual weld::Me
 private:
     QMessageBox* m_pMessageDialog;
 
-    // the DialogController/Dialog/function passed to the runAsync variants
-    std::shared_ptr<weld::DialogController> m_xRunAsyncDialogController;
-    std::shared_ptr<weld::Dialog> m_xRunAsyncDialog;
-    std::function<void(sal_Int32)> m_aRunAsyncFunc;
-
 public:
     QtInstanceMessageDialog(QMessageBox* pMessageDialog);
 
@@ -44,17 +39,13 @@ public:
     virtual void set_default_response(int nResponse) override;
     QtInstanceButton* weld_widget_for_response(int nResponse) override;
     virtual int run() override;
-    virtual bool runAsync(std::shared_ptr<weld::DialogController> const& rxOwner,
-                          const std::function<void(sal_Int32)>& func) override;
-    virtual bool runAsync(std::shared_ptr<Dialog> const& rxSelf,
-                          const std::function<void(sal_Int32)>& func) override;
     virtual void response(int nResponse) override;
 
 private:
     virtual QPushButton* buttonForResponseCode(int nResponse);
 
-private slots:
-    void dialogFinished(int nResult);
+protected slots:
+    virtual void dialogFinished(int nResult) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

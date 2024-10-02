@@ -15,6 +15,7 @@ const char* const QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code"
 QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
     : QtInstanceWindow(pDialog)
     , m_pDialog(pDialog)
+    , m_aRunAsyncFunc(nullptr)
 {
 }
 
@@ -24,15 +25,48 @@ QtInstanceDialog::~QtInstanceDialog()
     GetQtInstance().RunInMainThread([&] { m_pDialog.reset(); });
 }
 
-bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const&,
-                                const std::function<void(sal_Int32)>&)
+bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>& rxOwner,
+                                const std::function<void(sal_Int32)>& func)
 {
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
+    {
+        bool bRet = false;
+        rQtInstance.RunInMainThread([&] { bRet = runAsync(rxOwner, func); });
+        return bRet;
+    }
+
+    assert(m_pDialog);
+
+    m_xRunAsyncDialogController = rxOwner;
+    m_aRunAsyncFunc = func;
+    connect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+    m_pDialog->open();
+
     return true;
 }
 
-bool QtInstanceDialog::runAsync(const std::shared_ptr<weld::DialogController>&,
-                                const std::function<void(sal_Int32)>&)
+bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
+                                const std::function<void(sal_Int32)>& func)
 {
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
+    {
+        bool bRet;
+        rQtInstance.RunInMainThread([&] { bRet = runAsync(rxSelf, func); });
+        return bRet;
+    }
+
+    assert(m_pDialog);
+    assert(rxSelf.get() == this);
+
+    m_xRunAsyncDialog = rxSelf;
+    m_aRunAsyncFunc = func;
+    connect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+    m_pDialog->open();
+
     return true;
 }
 
@@ -94,5 +128,33 @@ weld::Button* QtInstanceDialog::weld_widget_for_response(int) { return nullptr; 
 void QtInstanceDialog::set_default_response(int) {}
 
 weld::Container* QtInstanceDialog::weld_content_area() { return nullptr; }
+
+void QtInstanceDialog::dialogFinished(int nResult)
+{
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
+    {
+        rQtInstance.RunInMainThread([&] { dialogFinished(nResult); });
+        return;
+    }
+
+    assert(m_aRunAsyncFunc);
+
+    disconnect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
+
+    // use local variables for these, as members might have got de-allocated by the time they're reset
+    std::shared_ptr<weld::Dialog> xRunAsyncDialog = m_xRunAsyncDialog;
+    std::shared_ptr<weld::DialogController> xRunAsyncDialogController = m_xRunAsyncDialogController;
+    std::function<void(sal_Int32)> aFunc = m_aRunAsyncFunc;
+    m_aRunAsyncFunc = nullptr;
+    m_xRunAsyncDialogController.reset();
+    m_xRunAsyncDialog.reset();
+
+    aFunc(nResult);
+
+    xRunAsyncDialogController.reset();
+    xRunAsyncDialog.reset();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
