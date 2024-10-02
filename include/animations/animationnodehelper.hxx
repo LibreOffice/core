@@ -121,56 +121,36 @@ namespace anim
         return false;
     }
 
-    inline css::uno::Reference<css::uno::XInterface> getParagraphTarget(
-        const css::presentation::ParagraphTarget& pTarget)
-    {
-        try
-        {
-            css::uno::Reference<css::container::XEnumerationAccess> xParaEnumAccess(
-                pTarget.Shape, css::uno::UNO_QUERY_THROW);
-
-            css::uno::Reference<css::container::XEnumeration> xEnumeration(
-                                                xParaEnumAccess->createEnumeration(),
-                                                css::uno::UNO_SET_THROW);
-            sal_Int32 nParagraph = pTarget.Paragraph;
-
-            while (xEnumeration->hasMoreElements())
-            {
-                css::uno::Reference<css::uno::XInterface> xRef(
-                    xEnumeration->nextElement(), css::uno::UNO_QUERY);
-                if (nParagraph-- == 0)
-                    return xRef;
-            }
-        }
-        catch (const css::uno::RuntimeException&)
-        {
-            SAL_WARN("animations", "getParagraphTarget");
-        }
-
-        css::uno::Reference<css::uno::XInterface> xRef;
-        return xRef;
-    }
-
-    inline void convertTarget(OStringBuffer& sTmp, const css::uno::Any& rTarget)
+    inline void convertTarget(OStringBuffer& aStringBuffer, const css::uno::Any& rTarget)
     {
         if (!rTarget.hasValue())
             return;
 
         css::uno::Reference<css::uno::XInterface> xRef;
-        if (!(rTarget >>= xRef))
+        if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
         {
-            if (auto pt = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
+            if (xParagraphTarget->Shape.is())
             {
-                xRef = getParagraphTarget(*pt);
+                const std::string aIdentifier(GetInterfaceHash(xParagraphTarget->Shape));
+                if (!aIdentifier.empty())
+                {
+                    sal_Int32 nParagraph(xParagraphTarget->Paragraph);
+                    aStringBuffer.append(aIdentifier);
+                    aStringBuffer.append("_");
+                    aStringBuffer.append(nParagraph);
+                }
             }
         }
-
-        SAL_WARN_IF(!xRef.is(), "animations", "convertTarget(), invalid target type!");
-        if (xRef.is())
+        else
         {
-            const std::string aIdentifier(GetInterfaceHash(xRef));
-            if (!aIdentifier.empty())
-                sTmp.append(aIdentifier);
+            rTarget >>= xRef;
+            SAL_WARN_IF(!xRef.is(), "animations", "convertTarget(), invalid target type!");
+            if (xRef.is())
+            {
+                const std::string aIdentifier(GetInterfaceHash(xRef));
+                if (!aIdentifier.empty())
+                    aStringBuffer.append(aIdentifier);
+            }
         }
     }
 }
