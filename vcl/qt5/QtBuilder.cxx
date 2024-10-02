@@ -160,6 +160,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         pWidget->setAccessibleIdentifier(toQString(sID));
 #endif
     }
+    else if (QLayout* pLayout = qobject_cast<QLayout*>(pObject))
+    {
+        // add layout to parent layout
+        if (QBoxLayout* pParentBoxLayout = qobject_cast<QBoxLayout*>(pParentLayout))
+            pParentBoxLayout->addLayout(pLayout);
+    }
 
     m_aChildren.emplace_back(sID, pObject);
 
