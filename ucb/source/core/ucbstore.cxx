@@ -170,12 +170,9 @@ UcbStore::createPropertySetRegistry( const OUString& )
     // The URL parameter is ignored by this interface implementation. It always
     // uses the configuration server as storage medium.
 
+    std::unique_lock aGuard( m_aMutex );
     if ( !m_xTheRegistry.is() )
-    {
-        std::unique_lock aGuard( m_aMutex );
-        if ( !m_xTheRegistry.is() )
-            m_xTheRegistry = new PropertySetRegistry( m_xContext, m_aInitArgs );
-    }
+        m_xTheRegistry = new PropertySetRegistry( m_xContext, m_aInitArgs );
 
     return m_xTheRegistry;
 }
