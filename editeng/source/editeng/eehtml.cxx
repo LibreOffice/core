@@ -41,6 +41,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, OUString _aBaseURL, SvKeyValueIte
     mpEditEngine(nullptr),
     bInPara(false),
     bWasInPara(false),
+    mbBreakForDivs(false),
     bFieldsInserted(false),
     bInTitle(false),
     nInTable(0),
@@ -57,7 +58,25 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, OUString _aBaseURL, SvKeyValueIte
     SetSwitchToUCS2( true );
 
     if ( pHTTPHeaderAttrs )
+    {
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
+        SetBreakForDivs(*pHTTPHeaderAttrs);
+    }
+}
+
+void EditHTMLParser::SetBreakForDivs(SvKeyValueIterator& rHTTPHeader)
+{
+    SvKeyValue aKV;
+    bool bCont = rHTTPHeader.GetFirst(aKV);
+    while (bCont)
+    {
+        if (aKV.GetKey() == "newline-on-div")
+        {
+            mbBreakForDivs = aKV.GetValue() == "true";
+            break;
+        }
+        bCont = rHTTPHeader.GetNext(aKV);
+    }
 }
 
 EditHTMLParser::~EditHTMLParser()
@@ -290,6 +309,15 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
         nInCell++;
         Newline();
     break;
+
+    case HtmlTokenId::DIVISION_ON:
+    case HtmlTokenId::DIVISION_OFF:
+    {
+        if (mbBreakForDivs)
+            Newline();
+        break;
+    }
+
     case HtmlTokenId::BLOCKQUOTE_ON:
     case HtmlTokenId::BLOCKQUOTE_OFF:
     case HtmlTokenId::BLOCKQUOTE30_ON:
@@ -356,8 +384,6 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     // HTML 3.0
     case HtmlTokenId::BANNER_ON:
     case HtmlTokenId::BANNER_OFF:
-    case HtmlTokenId::DIVISION_ON:
-    case HtmlTokenId::DIVISION_OFF:
 //  case HtmlTokenId::LISTHEADER_ON:        //! special handling
 //  case HtmlTokenId::LISTHEADER_OFF:
     case HtmlTokenId::NOTE_ON:
