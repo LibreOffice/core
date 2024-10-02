@@ -192,15 +192,20 @@ struct TokenHandler : public sax_fastparser::FastTokenHandlerBase
     }
 };
 
-struct BasicTest : public test::BootstrapFixture
+class BasicTest : public test::BootstrapFixture
 {
+protected:
     uno::Reference<XDocumentBuilder>    mxDomBuilder;
     rtl::Reference<ErrorHandler>        mxErrHandler;
     rtl::Reference<SequenceInputStream> mxValidInStream;
     rtl::Reference<SequenceInputStream> mxWarningInStream;
     rtl::Reference<SequenceInputStream> mxErrorInStream;
 
-    virtual void setUp() override
+public:
+
+    BasicTest() {}
+
+    void setUp() override
     {
         test::BootstrapFixture::setUp();
 
@@ -309,39 +314,11 @@ struct BasicTest : public test::BootstrapFixture
         mxDomBuilder->setErrorHandler(nullptr);
     }
 
-        // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-    CPPUNIT_TEST_SUITE(BasicTest);
-    CPPUNIT_TEST(validInputTest);
-    CPPUNIT_TEST(warningInputTest);
-    CPPUNIT_TEST(errorInputTest);
-    CPPUNIT_TEST(testXDocumentBuilder);
-    CPPUNIT_TEST_SUITE_END();
-};
-
-struct SerializerTest : public test::BootstrapFixture
-{
-    uno::Reference<XDocumentBuilder>                         mxDomBuilder;
-    rtl::Reference<ErrorHandler>                             mxErrHandler;
-    rtl::Reference<SequenceInputStream>                      mxInStream;
-    rtl::Reference<DocumentHandler>                          mxHandler;
-    rtl::Reference<TokenHandler>                             mxTokHandler;
-    uno::Sequence< beans::Pair< OUString, sal_Int32 > > maRegisteredNamespaces;
-
-    void setUp() override
+    void serializerTest ()
     {
-        test::BootstrapFixture::setUp();
-
-        mxErrHandler.set( new ErrorHandler() );
-        uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.dom.DocumentBuilder"_ustr), uno::UNO_QUERY_THROW );
-        mxDomBuilder.set( xDB );
-        mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), std::size(validTestFile) - 1)) );
-        mxDomBuilder->setErrorHandler(mxErrHandler);
-        mxHandler.set( new DocumentHandler );
-        mxTokHandler.set( new TokenHandler );
-
-        maRegisteredNamespaces = {
+        rtl::Reference<DocumentHandler> xHandler = new DocumentHandler;
+        rtl::Reference<TokenHandler> xTokHandler = new TokenHandler;
+        uno::Sequence< beans::Pair< OUString, sal_Int32 > > aRegisteredNamespaces = {
             beans::make_Pair(
                 u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr,
                 xml::sax::FastToken::NAMESPACE),
@@ -349,14 +326,11 @@ struct SerializerTest : public test::BootstrapFixture
                 u"http://www.w3.org/1999/xlink"_ustr,
                 2*xml::sax::FastToken::NAMESPACE)
         };
-    }
 
-    void serializerTest ()
-    {
         try
         {
             uno::Reference< xml::dom::XDocument > xDoc =
-                mxDomBuilder->parse(mxInStream);
+                mxDomBuilder->parse(mxValidInStream);
             CPPUNIT_ASSERT_MESSAGE("Valid input file did not result in XDocument",
                 xDoc.is());
             CPPUNIT_ASSERT_MESSAGE("Valid input file resulted in parse errors",
@@ -372,10 +346,10 @@ struct SerializerTest : public test::BootstrapFixture
             CPPUNIT_ASSERT_MESSAGE("XFastSAXSerializable not supported",
                 xSaxSerializer.is());
 
-            xFastSaxSerializer->fastSerialize(mxHandler,
-                mxTokHandler,
+            xFastSaxSerializer->fastSerialize(xHandler,
+                xTokHandler,
                 uno::Sequence< beans::StringPair >(),
-                maRegisteredNamespaces);
+                aRegisteredNamespaces);
         }
         catch (const css::xml::sax::SAXParseException&)
         {
@@ -383,21 +357,18 @@ struct SerializerTest : public test::BootstrapFixture
         }
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
-    CPPUNIT_TEST_SUITE(SerializerTest);
+    CPPUNIT_TEST_SUITE(BasicTest);
+    CPPUNIT_TEST(validInputTest);
+    CPPUNIT_TEST(warningInputTest);
+    CPPUNIT_TEST(errorInputTest);
+    CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST(serializerTest);
     CPPUNIT_TEST_SUITE_END();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BasicTest);
-CPPUNIT_TEST_SUITE_REGISTRATION(SerializerTest);
 }
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
