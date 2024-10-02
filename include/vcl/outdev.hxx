@@ -978,7 +978,9 @@ public:
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
 
     bool                        GetTextOutline( tools::PolyPolygon&,
-                                                const OUString& rStr ) const;
+                                                const OUString& rStr,
+                                                sal_Int32 nLen = -1,
+                                                sal_uLong nLayoutWidth = 0, const KernArraySpan aDXArray = KernArraySpan() ) const;
 
     bool                        GetTextOutlines( PolyPolyVector&,
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,

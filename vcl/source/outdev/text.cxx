@@ -2203,7 +2203,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
 bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
-                                        sal_uLong nLayoutWidth, KernArraySpan pDXArray,
+                                        sal_uLong nTWidth, KernArraySpan pDXArray,
                                         std::span<const sal_Bool> pKashidaArray ) const
 {
     rResultVector.clear();
@@ -2211,7 +2211,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
     if( !GetTextOutlines( aB2DPolyPolyVector, rStr, nBase, nIndex, nLen,
-                         nLayoutWidth, pDXArray, pKashidaArray ) )
+                         nTWidth, pDXArray, pKashidaArray ) )
         return false;
 
     // convert to a tool polypolygon vector
@@ -2222,14 +2222,18 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     return true;
 }
 
-bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString& rStr ) const
+bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString& rStr,
+                                       sal_Int32 nLen,
+                                       sal_uLong nTWidth, const KernArraySpan aDXArray ) const
 {
     rPolyPoly.Clear();
 
     // get the basegfx polypolygon vector
     basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, 0/*nBase*/, 0/*nIndex*/, /*nLen*/-1,
-                         /*nLayoutWidth*/0, /*pDXArray*/{} ) )
+
+    if( !GetTextOutlines( aB2DPolyPolyVector, rStr, 0/*nBase*/, 0/*nIndex*/, nLen,
+                         nTWidth, aDXArray ) )
+
         return false;
 
     // convert and merge into a tool polypolygon
