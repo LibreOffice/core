@@ -41,6 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -809,7 +810,7 @@ void DeleteFields(SfxRequest& rReq, SwWrtShell& rWrtSh)
 
 void lcl_LogWarning(std::string sWarning)
 {
-    std::cerr << "Warning: "  << sWarning << "\n";
+    LOK_WARN("sw.transform",  sWarning);
 }
 
 bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,
