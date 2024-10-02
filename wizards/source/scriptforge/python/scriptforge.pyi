@@ -6095,7 +6095,7 @@ class SFDocuments:
             in the user interface can be read or modified.
             """
 
-        ChartType: Literal['Pi', 'Bar', 'Donut', 'Column', 'Area', 'Line', 'CY', 'Bubble', 'Net']
+        ChartType: Literal['Pie', 'Bar', 'Donut', 'Column', 'Area', 'Line', 'XY', 'Bubble', 'Net']
         """ Get/set the chart type as a string that can assume one of the following values: "Pie", "Bar", 
         "Donut", "Column", "Area", "Line", "XY", "Bubble", "Net". """
         Deep: bool
