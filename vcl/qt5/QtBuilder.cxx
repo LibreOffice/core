@@ -14,6 +14,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
@@ -133,6 +134,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         {
             pObject = new QPushButton(pParentWidget);
         }
+    }
+    else if (sName == u"GtkCheckButton")
+    {
+        pObject = new QCheckBox(pParentWidget);
     }
     else if (sName == u"GtkDialog")
     {
@@ -265,6 +270,16 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 else
                     assert(false && "Unhandled message-type");
             }
+        }
+    }
+    else if (QCheckBox* pCheckBox = qobject_cast<QCheckBox*>(pObject))
+    {
+        for (auto const & [ rKey, rValue ] : rProps)
+        {
+            if (rKey == u"active")
+                pCheckBox->setChecked(toBool(rValue));
+            else if (rKey == u"label")
+                pCheckBox->setText(toQString(rValue));
         }
     }
     else if (QDialog* pDialog = qobject_cast<QDialog*>(pObject))

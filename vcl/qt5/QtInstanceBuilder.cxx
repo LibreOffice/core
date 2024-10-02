@@ -12,6 +12,7 @@
 #include <unordered_set>
 
 #include <QtBuilder.hxx>
+#include <QtInstanceCheckButton.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
 
@@ -147,10 +148,12 @@ std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OU
     return nullptr;
 }
 
-std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OUString&)
+std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QCheckBox* pCheckBox = m_xBuilder->get<QCheckBox>(rId);
+    std::unique_ptr<weld::CheckButton> xRet(
+        pCheckBox ? std::make_unique<QtInstanceCheckButton>(pCheckBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Scale> QtInstanceBuilder::weld_scale(const OUString&)
