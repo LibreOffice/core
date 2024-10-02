@@ -251,6 +251,67 @@ BitmapChecksum BitmapEx::GetChecksum() const
     return nCrc;
 }
 
+// AS: Because JPEGs require the alpha channel provided separately (JPEG does not
+//  natively support alpha channel, but SWF lets you provide it separately), we
+//  extract the alpha channel into a separate array here.
+void BitmapEx::GetSplitData( std::vector<sal_uInt8>& rvColorData, std::vector<sal_uInt8>& rvAlphaData ) const
+{
+    if( IsEmpty() )
+        return;
+
+    BitmapScopedReadAccess pRAcc(maBitmap);
+
+    assert( pRAcc );
+
+    AlphaMask   aAlpha;
+    sal_uInt32 nWidth = pRAcc->Width();
+    sal_uInt32 nHeight = pRAcc->Height();
+    rvColorData.resize(nWidth*nHeight*4);
+    rvAlphaData.resize(nWidth*nHeight);
+    sal_uInt8* p = rvColorData.data(), *pAlpha = rvAlphaData.data();
+
+
+    if (IsAlpha())
+    {
+        aAlpha = GetAlphaMask();
+    }
+    else
+    {
+        sal_uInt8 cAlphaVal = 0;
+        aAlpha = AlphaMask(maBitmap.GetSizePixel(), &cAlphaVal);
+    }
+
+    BitmapScopedReadAccess pAAcc(aAlpha);
+
+    assert( pAAcc );
+
+    for( sal_uInt32 nY = 0; nY < nHeight; nY++ )
+    {
+        Scanline pScanlineAA = pAAcc->GetScanline( nY );
+        for( sal_uInt32 nX = 0; nX < nWidth; nX++ )
+        {
+            const sal_uInt8     nAlpha = pAAcc->GetIndexFromData( pScanlineAA, nX );
+            const BitmapColor   aPixelColor( pRAcc->GetColor( nY, nX ) );
+
+            if( nAlpha == 0xff )
+            {
+                *p++ = 0;
+                *p++ = 0;
+                *p++ = 0;
+                *p++ = 0;
+            }
+            else
+            {
+                *p++ = 0xff-nAlpha;
+                *p++ = aPixelColor.GetRed();
+                *p++ = aPixelColor.GetGreen();
+                *p++ = aPixelColor.GetBlue();
+            }
+            *pAlpha++ = 0xff - nAlpha;
+        }
+    }
+}
+
 bool BitmapEx::Invert()
 {
     if (!maBitmap.IsEmpty())
