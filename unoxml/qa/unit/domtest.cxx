@@ -317,6 +317,52 @@ public:
         mxDomBuilder->setErrorHandler(nullptr);
     }
 
+    void testXXPathObject()
+    {
+        uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
+
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        Reference< xml::dom::XElement > xRoot = xDocument->createElement(u"root"_ustr);
+        Reference< xml::dom::XElement > xFoo1 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFoo2 = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xFooNs = xDocument->createElementNS(u"http://example.com/"_ustr, u"ns:foo"_ustr);
+        Reference< xml::dom::XElement > xBar = xDocument->createElement(u"bar"_ustr);
+
+        xDocument->appendChild(xRoot);
+        xRoot->appendChild(xFoo1);
+        xFoo1->appendChild(xBar);
+        xBar->appendChild(xFoo2);
+        xRoot->appendChild(xFooNs);
+
+        {
+            uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"count(//foo)"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_NUMBER, xResult->getObjectType());
+            CPPUNIT_ASSERT_EQUAL(sal_Int8(2), xResult->getByte());
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xResult->getShort());
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xResult->getLong());
+            CPPUNIT_ASSERT_EQUAL(sal_Int64(2), xResult->getHyper());
+            CPPUNIT_ASSERT_EQUAL(float(2), xResult->getFloat());
+            CPPUNIT_ASSERT_EQUAL(double(2), xResult->getDouble());
+            CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xResult->getString());
+        }
+        {
+            uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"count(//foo) = 2"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_BOOLEAN, xResult->getObjectType());
+            CPPUNIT_ASSERT_EQUAL(sal_True, xResult->getBoolean());
+            CPPUNIT_ASSERT_EQUAL(u"true"_ustr, xResult->getString());
+        }
+        {
+            uno::Reference<xml::xpath::XXPathObject> xResult = xXPathAPI->eval(xRoot, u"local-name(foo)"_ustr);
+            CPPUNIT_ASSERT(xResult);
+            CPPUNIT_ASSERT_EQUAL(xml::xpath::XPathObjectType_XPATH_STRING, xResult->getObjectType());
+            CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, xResult->getString());
+        }
+    }
+
     void testXNodeList_NodeList()
     {
         uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
@@ -396,6 +442,7 @@ public:
     CPPUNIT_TEST(warningInputTest);
     CPPUNIT_TEST(errorInputTest);
     CPPUNIT_TEST(testXDocumentBuilder);
+    CPPUNIT_TEST(testXXPathObject);
     CPPUNIT_TEST(testXNodeList_NodeList);
     CPPUNIT_TEST(serializerTest);
     CPPUNIT_TEST_SUITE_END();
