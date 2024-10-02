@@ -11,8 +11,10 @@
 
 #include "QtInstanceWindow.hxx"
 
-class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
+class QtInstanceDialog : public QObject, public QtInstanceWindow, public virtual weld::Dialog
 {
+    Q_OBJECT
+
     std::unique_ptr<QDialog> m_pDialog;
 
 public:

@@ -13,11 +13,9 @@
 #include "QtInstanceDialog.hxx"
 #include <QtWidgets/QMessageBox>
 
-class QtInstanceMessageDialog : public QObject,
-                                public QtInstanceDialog,
-                                public virtual weld::MessageDialog
+class QtInstanceMessageDialog : public QtInstanceDialog, public virtual weld::MessageDialog
 {
-    Q_OBJECT;
+    Q_OBJECT
 
 private:
     QMessageBox* m_pMessageDialog;
