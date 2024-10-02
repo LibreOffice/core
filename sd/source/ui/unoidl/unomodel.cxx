@@ -1561,6 +1561,11 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
 {
     ::SolarMutexGuard aGuard;
 
+    return getSdDrawPages();
+}
+
+rtl::Reference< SdDrawPagesAccess > SdXImpressDocument::getSdDrawPages()
+{
     if( nullptr == mpDoc )
         throw lang::DisposedException();
 
@@ -3759,156 +3764,141 @@ OString SdXImpressDocument::getPresentationInfo() const
 
     try
     {
-        uno::Reference<drawing::XDrawPages> xDrawPages = const_cast<SdXImpressDocument*>(this)->getDrawPages();
-        uno::Reference<container::XIndexAccess> xSlides(xDrawPages, uno::UNO_QUERY_THROW);
-        if (xSlides.is())
+        rtl::Reference<SdDrawPagesAccess> xDrawPages = const_cast<SdXImpressDocument*>(this)->getSdDrawPages();
+        // size in twips
+        Size aDocSize = const_cast<SdXImpressDocument*>(this)->getDocumentSize();
+        aJsonWriter.put("docWidth", aDocSize.getWidth());
+        aJsonWriter.put("docHeight", aDocSize.getHeight());
+
+        auto aSlideList = aJsonWriter.startArray("slides");
+        sal_Int32 nSlideCount = xDrawPages->getCount();
+        for (sal_Int32 i = 0; i < nSlideCount; ++i)
         {
-            // size in twips
-            Size aDocSize = const_cast<SdXImpressDocument*>(this)->getDocumentSize();
-            aJsonWriter.put("docWidth", aDocSize.getWidth());
-            aJsonWriter.put("docHeight", aDocSize.getHeight());
-
-            auto aSlideList = aJsonWriter.startArray("slides");
-            sal_Int32 nSlideCount = xSlides->getCount();
-            for (sal_Int32 i = 0; i < nSlideCount; ++i)
+            SdGenericDrawPage* pSlide(xDrawPages->getDrawPageByIndex(i));
+            bool bIsVisible = true; // default visible
+            pSlide->getPropertyValue("Visible") >>= bIsVisible;
+            if (bIsVisible)
             {
-                uno::Reference<drawing::XDrawPage> xSlide(xSlides->getByIndex(i), uno::UNO_QUERY_THROW);
-                if (xSlide.is())
+                SdrPage* pPage = pSlide->GetSdrPage();
+
+                auto aSlideNode = aJsonWriter.startStruct();
+                std::string sSlideHash = GetInterfaceHash(cppu::getXWeak(pSlide));
+                aJsonWriter.put("hash", sSlideHash);
+                aJsonWriter.put("index", i);
+
+                bool bIsDrawPageEmpty = pSlide->getCount() == 0;
+                aJsonWriter.put("empty", bIsDrawPageEmpty);
+
+                SdMasterPage* pMasterPage = nullptr;
+                SdDrawPage* pMasterPageTarget(dynamic_cast<SdDrawPage*>(pSlide));
+                if (pMasterPageTarget)
                 {
-                    uno::Reference<XPropertySet> xPropSet(xSlide, uno::UNO_QUERY);
-                    if (xPropSet.is())
+                    pMasterPage = pMasterPageTarget->getSdMasterPage();
+                    if (pMasterPage)
                     {
-                        bool bIsVisible = true; // default visible
-                        xPropSet->getPropertyValue("Visible") >>= bIsVisible;
-                        if (bIsVisible)
+                        std::string sMPHash = GetInterfaceHash(cppu::getXWeak(pMasterPage));
+                        aJsonWriter.put("masterPage", sMPHash);
+
+                        bool bBackgroundObjectsVisibility = true; // default visible
+                        pSlide->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
+                        aJsonWriter.put("masterPageObjectsVisibility", bBackgroundObjectsVisibility);
+                    }
+                }
+
+                bool bBackgroundVisibility = true; // default visible
+                pSlide->getPropertyValue("IsBackgroundVisible")  >>= bBackgroundVisibility;
+                if (bBackgroundVisibility)
+                {
+                    SlideBackgroundInfo aSlideBackgroundInfo(pSlide, static_cast<SvxDrawPage*>(pMasterPage));
+                    if (aSlideBackgroundInfo.hasBackground())
+                    {
+                        auto aBackgroundNode = aJsonWriter.startNode("background");
+                        aJsonWriter.put("isCustom", aSlideBackgroundInfo.slideHasOwnBackground());
+                        if (aSlideBackgroundInfo.isSolidColor())
                         {
-                            SdrPage* pPage = SdPage::getImplementation(xSlide);
-
-                            auto aSlideNode = aJsonWriter.startStruct();
-                            std::string sSlideHash = GetInterfaceHash(xSlide);
-                            aJsonWriter.put("hash", sSlideHash);
-                            aJsonWriter.put("index", i);
-
-                            uno::Reference<drawing::XShapes> xSlideShapes(xSlide, uno::UNO_QUERY_THROW);
-                            bool bIsDrawPageEmpty = true;
-                            if (xSlideShapes.is()) {
-                                bIsDrawPageEmpty = xSlideShapes->getCount() == 0;
-                            }
-                            aJsonWriter.put("empty", bIsDrawPageEmpty);
-
-                            uno::Reference<drawing::XDrawPage> xMasterPage;
-                            uno::Reference<drawing::XMasterPageTarget> xMasterPageTarget(xSlide, uno::UNO_QUERY);
-                            if (xMasterPageTarget.is())
-                            {
-                                xMasterPage = xMasterPageTarget->getMasterPage();
-                                if (xMasterPage.is())
-                                {
-                                    std::string sMPHash = GetInterfaceHash(xMasterPage);
-                                    aJsonWriter.put("masterPage", sMPHash);
-
-                                    bool bBackgroundObjectsVisibility = true; // default visible
-                                    xPropSet->getPropertyValue("IsBackgroundObjectsVisible") >>= bBackgroundObjectsVisibility;
-                                    aJsonWriter.put("masterPageObjectsVisibility", bBackgroundObjectsVisibility);
-                                }
-                            }
-
-                            bool bBackgroundVisibility = true; // default visible
-                            xPropSet->getPropertyValue("IsBackgroundVisible")  >>= bBackgroundVisibility;
-                            if (bBackgroundVisibility)
-                            {
-                                SlideBackgroundInfo aSlideBackgroundInfo(xSlide, xMasterPage);
-                                if (aSlideBackgroundInfo.hasBackground())
-                                {
-                                    auto aBackgroundNode = aJsonWriter.startNode("background");
-                                    aJsonWriter.put("isCustom", aSlideBackgroundInfo.slideHasOwnBackground());
-                                    if (aSlideBackgroundInfo.isSolidColor())
-                                    {
-                                        aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
-                                    }
-                                }
-                            }
-
-                            {
-                                auto aVideoList = aJsonWriter.startArray("videos");
-                                SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
-                                while (aIterator.IsMore())
-                                {
-                                    auto* pObject = aIterator.Next();
-                                    if (pObject->GetObjIdentifier() == SdrObjKind::Media)
-                                    {
-                                        auto aVideosNode = aJsonWriter.startStruct();
-                                        auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
-                                        auto const& rRectangle = pMediaObject->GetLogicRect();
-                                        auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
-                                        aJsonWriter.put("id", reinterpret_cast<sal_uInt64>(pMediaObject));
-                                        aJsonWriter.put("url", pMediaObject->getTempURL());
-                                        aJsonWriter.put("x", aRectangle.Left());
-                                        aJsonWriter.put("y", aRectangle.Top());
-                                        aJsonWriter.put("width", aRectangle.GetWidth());
-                                        aJsonWriter.put("height", aRectangle.GetHeight());
-                                    }
-                                }
-                            }
-
-                            sal_Int32 nTransitionType = 0;
-                            xPropSet->getPropertyValue("TransitionType") >>= nTransitionType;
-
-                            if (nTransitionType != 0)
-                            {
-                                auto iterator = constTransitionTypeToString.find(nTransitionType);
-
-                                if (iterator != constTransitionTypeToString.end())
-                                {
-                                    aJsonWriter.put("transitionType", iterator->second);
-
-                                    sal_Int32 nTransitionSubtype = 0;
-                                    xPropSet->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
-
-                                    auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
-                                    if (iteratorSubType != constTransitionSubTypeToString.end())
-                                    {
-                                        aJsonWriter.put("transitionSubtype", iteratorSubType->second);
-                                    }
-                                    else
-                                    {
-                                        SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
-                                    }
-
-                                    bool nTransitionDirection = false;
-                                    xPropSet->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
-                                    aJsonWriter.put("transitionDirection", nTransitionDirection);
-                                }
-
-                                double nTransitionDuration(0.0);
-                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionDuration" ) &&
-                                    (xPropSet->getPropertyValue( "TransitionDuration" ) >>= nTransitionDuration ) && nTransitionDuration != 0.0 )
-                                {
-                                    // convert transitionDuration time to ms
-                                    aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
-                                }
-
-                                sal_Int32 nChange(0);
-                                if( xPropSet->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
-                                    (xPropSet->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
-                                {
-                                    double fSlideDuration(0);
-                                    if( xPropSet->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
-                                        (xPropSet->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
-                                    {
-                                        // convert slide duration time to ms
-                                        aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
-                                    }
-                                }
-                            }
-
-                            AnimationsExporter aAnimationExporter(aJsonWriter, xSlide);
-                            if (aAnimationExporter.hasEffects())
-                            {
-                                auto aAnimationsNode = aJsonWriter.startNode("animations");
-                                aAnimationExporter.exportAnimations();
-                            }
+                            aJsonWriter.put("fillColor", aSlideBackgroundInfo.getFillColorAsRGBA());
                         }
                     }
+                }
+
+                {
+                    auto aVideoList = aJsonWriter.startArray("videos");
+                    SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
+                    while (aIterator.IsMore())
+                    {
+                        auto* pObject = aIterator.Next();
+                        if (pObject->GetObjIdentifier() == SdrObjKind::Media)
+                        {
+                            auto aVideosNode = aJsonWriter.startStruct();
+                            auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
+                            auto const& rRectangle = pMediaObject->GetLogicRect();
+                            auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                            aJsonWriter.put("id", reinterpret_cast<sal_uInt64>(pMediaObject));
+                            aJsonWriter.put("url", pMediaObject->getTempURL());
+                            aJsonWriter.put("x", aRectangle.Left());
+                            aJsonWriter.put("y", aRectangle.Top());
+                            aJsonWriter.put("width", aRectangle.GetWidth());
+                            aJsonWriter.put("height", aRectangle.GetHeight());
+                        }
+                    }
+                }
+
+                sal_Int32 nTransitionType = 0;
+                pSlide->getPropertyValue("TransitionType") >>= nTransitionType;
+
+                if (nTransitionType != 0)
+                {
+                    auto iterator = constTransitionTypeToString.find(nTransitionType);
+
+                    if (iterator != constTransitionTypeToString.end())
+                    {
+                        aJsonWriter.put("transitionType", iterator->second);
+
+                        sal_Int32 nTransitionSubtype = 0;
+                        pSlide->getPropertyValue("TransitionSubtype") >>= nTransitionSubtype;
+
+                        auto iteratorSubType = constTransitionSubTypeToString.find(nTransitionSubtype);
+                        if (iteratorSubType != constTransitionSubTypeToString.end())
+                        {
+                            aJsonWriter.put("transitionSubtype", iteratorSubType->second);
+                        }
+                        else
+                        {
+                            SAL_WARN("sd", "Transition sub-type unknown: " << nTransitionSubtype);
+                        }
+
+                        bool nTransitionDirection = false;
+                        pSlide->getPropertyValue("TransitionDirection") >>= nTransitionDirection;
+                        aJsonWriter.put("transitionDirection", nTransitionDirection);
+                    }
+
+                    double nTransitionDuration(0.0);
+                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "TransitionDuration" ) &&
+                        (pSlide->getPropertyValue( "TransitionDuration" ) >>= nTransitionDuration ) && nTransitionDuration != 0.0 )
+                    {
+                        // convert transitionDuration time to ms
+                        aJsonWriter.put("transitionDuration", nTransitionDuration * 1000);
+                    }
+
+                    sal_Int32 nChange(0);
+                    if( pSlide->getPropertySetInfo()->hasPropertyByName( "Change" ) &&
+                        (pSlide->getPropertyValue( "Change" ) >>= nChange ) && nChange == 1 )
+                    {
+                        double fSlideDuration(0);
+                        if( pSlide->getPropertySetInfo()->hasPropertyByName( "HighResDuration" ) &&
+                            (pSlide->getPropertyValue( "HighResDuration" ) >>= fSlideDuration) )
+                        {
+                            // convert slide duration time to ms
+                            aJsonWriter.put("nextSlideDuration", fSlideDuration * 1000);
+                        }
+                    }
+                }
+
+                AnimationsExporter aAnimationExporter(aJsonWriter, pSlide);
+                if (aAnimationExporter.hasEffects())
+                {
+                    auto aAnimationsNode = aJsonWriter.startNode("animations");
+                    aAnimationExporter.exportAnimations();
                 }
             }
         }
@@ -4067,24 +4057,25 @@ sal_Int32 SAL_CALL SdDrawPagesAccess::getCount()
 
 uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
 {
+    uno::Reference< drawing::XDrawPage > xDrawPage( getDrawPageByIndex(Index) );
+    return uno::Any(xDrawPage);
+}
+
+SdGenericDrawPage* SdDrawPagesAccess::getDrawPageByIndex( sal_Int32 Index )
+{
     ::SolarMutexGuard aGuard;
 
     if( nullptr == mpModel )
         throw lang::DisposedException();
-
-    uno::Any aAny;
 
     if( (Index < 0) || (Index >= mpModel->mpDoc->GetSdPageCount( PageKind::Standard ) ) )
         throw lang::IndexOutOfBoundsException();
 
     SdPage* pPage = mpModel->mpDoc->GetSdPage( static_cast<sal_uInt16>(Index), PageKind::Standard );
     if( pPage )
-    {
-        uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
-        aAny <<= xDrawPage;
-    }
+        return dynamic_cast<SdGenericDrawPage*>( pPage->getUnoPage().get() );
 
-    return aAny;
+    return nullptr;
 }
 
 // XNameAccess

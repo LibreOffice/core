@@ -38,6 +38,7 @@
 
 class SdrObject;
 class SdXImpressDocument;
+class SdMasterPage;
 
 class SdGenericDrawPage : public SvxDrawPage,
                           public SdUnoSearchReplaceShape,
@@ -211,6 +212,8 @@ public:
     // XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
     virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+
+    SdMasterPage* getSdMasterPage();
 };
 
 /***********************************************************************

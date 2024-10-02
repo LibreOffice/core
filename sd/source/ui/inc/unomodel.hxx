@@ -59,6 +59,7 @@ class SdMasterPagesAccess;
 class SdLayerManager;
 class SdXCustomPresentationAccess;
 class SdDocLinkTargets;
+class SdGenericDrawPage;
 
 namespace sd {
 class DrawDocShell;
@@ -304,6 +305,8 @@ public:
     /// @see vcl::ITiledRenderable::renderNextSlideLayer().
     bool renderNextSlideLayer(unsigned char* pBuffer, bool& bIsBitmapLayer, OUString& rJsonMsg) override;
 
+    rtl::Reference< SdDrawPagesAccess > getSdDrawPages();
+
     // XComponent
 
     /** This dispose implementation releases the resources held by the
@@ -355,6 +358,8 @@ public:
     virtual void SAL_CALL dispose(  ) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+
+    SdGenericDrawPage* getDrawPageByIndex( sal_Int32 Index );
 };
 
 /***********************************************************************

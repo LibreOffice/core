@@ -2344,21 +2344,22 @@ OUString SAL_CALL SdDrawPage::getName()
 // XMasterPageTarget
 Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 {
+    return static_cast<SdGenericDrawPage*>(getSdMasterPage());
+}
+
+SdMasterPage* SdDrawPage::getSdMasterPage()
+{
     ::SolarMutexGuard aGuard;
 
     throwIfDisposed();
 
     if(GetPage())
     {
-        Reference< drawing::XDrawPage > xPage;
-
         if(SvxDrawPage::mpPage->TRG_HasMasterPage())
         {
             SdrPage& rMasterPage = SvxDrawPage::mpPage->TRG_GetMasterPage();
-            xPage.set( rMasterPage.getUnoPage(), uno::UNO_QUERY );
+            return dynamic_cast<SdMasterPage*>(rMasterPage.getUnoPage().get());
         }
-
-        return xPage;
     }
     return nullptr;
 }
