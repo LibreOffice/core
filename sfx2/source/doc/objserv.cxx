@@ -538,6 +538,12 @@ void SetDocProperties(const uno::Reference<document::XDocumentProperties>& xDP,
 
 void SfxObjectShell::AfterSignContent(bool bHaveWeSigned, weld::Window* pDialogParent)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // LOK signing certificates are per-view, don't store them in the model.
+        return;
+    }
+
     if ( bHaveWeSigned && HasValidSignatures() )
     {
         std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog( pDialogParent,
