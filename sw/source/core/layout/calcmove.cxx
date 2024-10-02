@@ -907,11 +907,18 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     setFramePrintAreaValid(true);
                     continue;
                 }
-                else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden() && pRootFrame->GetLastPage() != this)
+                else if (pSh && pSh->GetViewOptions()->IsWhitespaceHidden())
                 {
                     tools::Long height = 0;
                     SwLayoutFrame *pBody = FindBodyCont();
-                    if ( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
+                    SwTwips nFullBodyHeight = pAttrs->GetSize().Height() - pAttrs->CalcTop() - pAttrs->CalcBottom();
+                    if (pRootFrame->GetLastPage() == this)
+                    {
+                        // Last page is only reduced by the top/bottom margin, the body frame height
+                        // is not reduced.
+                        height = nFullBodyHeight;
+                    }
+                    else if ( pBody && pBody->Lower() && pBody->Lower()->IsColumnFrame() )
                     {
                         // Columns have a fixed height
                         height = pAttrs->GetSize().Height();
@@ -920,6 +927,12 @@ void SwPageFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     {
                         // No need for borders.
                         height = GetContentHeight(0, 0);
+                        if (height > nFullBodyHeight)
+                        {
+                            // Content height would be larger than the show-whitespace body height,
+                            // limit it.
+                            height = nFullBodyHeight;
+                        }
                     }
 
                     if (height > 0)

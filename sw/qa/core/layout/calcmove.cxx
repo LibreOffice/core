@@ -11,6 +11,9 @@
 
 #include <test/xmldocptr.hxx>
 
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+
 namespace
 {
 /// Covers sw/source/core/layout/calcmove.cxx fixes.
@@ -81,6 +84,34 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginFly)
     // i.e. the top margin was ignored inside shape text for Word compat, while multi-col shape text
     // is a Writer feature.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4000), nParaTopMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHideWhitespaceGrowingLastPage)
+{
+    // Given a document with a full first page, then hiding whitespace:
+    createSwDoc();
+    SwDocShell* pDocShell = getSwDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    while (getPages() == 1)
+    {
+        pWrtShell->SplitNode();
+    }
+    pWrtShell->DelLeft();
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetHideWhitespaceMode(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
+
+    // When adding a new paragraph at doc end:
+    pWrtShell->SplitNode();
+
+    // Then make sure a new page is created:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the page was growing instead of creating a new page when it already had a max size.
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 }
 
