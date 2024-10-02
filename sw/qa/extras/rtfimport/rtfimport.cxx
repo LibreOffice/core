@@ -1933,6 +1933,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163003)
                          getProperty<sal_Int32>(getShape(1), u"VertOrientPosition"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf152839)
+{
+    createSwDoc("tdf152839.rtf");
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getCellNames().getLength());
+}
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
