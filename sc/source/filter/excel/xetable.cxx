@@ -745,7 +745,7 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
        OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
-       bool bForceLineBreak = pPattern->GetItem(ATTR_LINEBREAK ).GetValue();
+       bool bForceLineBreak = mxText->IsWrapped();
        SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
 
