@@ -33,7 +33,8 @@ namespace svgio::svgreader
             maMarkerWidth(3),
             maMarkerHeight(3),
             mfAngle(0.0),
-            maMarkerOrient(MarkerOrient::notset)
+            maMarkerOrient(MarkerOrient::notset),
+            maContextStyleAttibutes(nullptr)
         {
         }
 

@@ -60,6 +60,8 @@ namespace svgio::svgreader
             double                  mfAngle;
             MarkerOrient            maMarkerOrient;
 
+            const SvgStyleAttributes* maContextStyleAttibutes;
+
         public:
             SvgMarkerNode(
                 SvgDocument& rDocument,
@@ -106,6 +108,8 @@ namespace svgio::svgreader
             MarkerOrient getMarkerOrient() const { return maMarkerOrient; }
             void setMarkerOrient(const MarkerOrient aMarkerOrient) { maMarkerOrient = aMarkerOrient; }
 
+            const SvgStyleAttributes* getContextStyleAttributes() const { return maContextStyleAttibutes; }
+            void setContextStyleAttributes(const SvgStyleAttributes* aContextStyleAttibutes) { maContextStyleAttibutes = aContextStyleAttibutes; }
         };
 
 } // end of namespace svgio::svgreader
