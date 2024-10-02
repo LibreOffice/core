@@ -917,10 +917,15 @@ namespace svxform
 
     void FormScriptingEnvironment::dispose()
     {
-        std::unique_lock aGuard( m_aMutex );
-        m_bDisposed = true;
-        m_pScriptListener->dispose();
-        m_pScriptListener.clear();
+        rtl::Reference<FormScriptListener> xListener;
+        {
+            std::unique_lock aGuard( m_aMutex );
+            if (m_bDisposed)
+                return;
+            m_bDisposed = true;
+            xListener = std::move(m_pScriptListener);
+        }
+        xListener->dispose();
     }
 
 }
