@@ -37,6 +37,7 @@
 #include <IMark.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <unotools/saveopt.hxx>
 
 namespace
 {
@@ -962,25 +963,17 @@ auto Test::verifyText13(char const*const pTestName) -> void
 // test ODF 1.3 new text document features
 void Test::testODF13()
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // import
     createSwDoc("text13e.odt");
 
     // check model
     verifyText13("import");
 
-    Resetter _([]() {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-            return pBatch->commit();
-        });
-
     {
         // export ODF 1.3
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
         saveAndReload(u"writer8"_ustr);
 
@@ -1004,10 +997,7 @@ void Test::testODF13()
     }
     {
         // export ODF 1.2 extended
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012_EXTENDED);
 
         // FIXME: it's not possible to use 'reload' here because the validation fails with
         // Error: unexpected attribute "loext:contextual-spacing"
@@ -1041,10 +1031,7 @@ void Test::testODF13()
     }
     {
         // export ODF 1.2
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012);
 
         // don't reload - no point
         save(u"writer8"_ustr);

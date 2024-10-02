@@ -33,6 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/sfxbasemodel.hxx>
@@ -50,7 +51,6 @@
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <comphelper/configuration.hxx>
 #include <svx/signaturelinehelper.hxx>
 #include <sfx2/viewsh.hxx>
@@ -1466,16 +1466,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
 CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
 {
     // set ODF version 1.0 / 1.1 as default
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
-    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-        comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Save::ODF::DefaultVersion::set(2, pBatch);
-    pBatch->commit();
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_011);
 
     const OUString aFormats[] = { u"writer8"_ustr, u"writer8_template"_ustr };
 

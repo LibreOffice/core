@@ -20,7 +20,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
-#include <officecfg/Office/Common.hxx>
 #include <rtl/character.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -171,25 +170,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRtlGutter)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Load document. It has a frame style with writing-mode bt-lr.
     // In ODF 1.3 extended it is written as loext:writing-mode="bt-lr".
     // In ODF 1.3 strict, there must not be an attribute at all.
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
 
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
-
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "bt-lr" is included in ODF strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        pBatch->commit();
         save(u"writer8"_ustr);
 
         // With applied fix for tdf150407 still loext:writing-mode="bt-lr" has to be written.
@@ -206,10 +196,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
     // Save to ODF 1.3 strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
         save(u"writer8"_ustr);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
@@ -224,25 +211,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Load document. It has a frame position with vertical position relative to bottom margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-bottom".
     // In ODF 1.3 strict, there must not be an attribute at all.
     loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
 
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
-
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-bottom" is included in ODF strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        pBatch->commit();
         save(u"writer8"_ustr);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-bottom" has to be
@@ -262,10 +240,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
     loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
     // Save to ODF 1.3 strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
         save(u"writer8"_ustr);
 
         // Without the fix an faulty 'vertical-rel="page-content-bottom"' attribute was written in
@@ -280,25 +255,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Load document. It has a frame position with vertical position relative to top margin.
     // In ODF 1.3 extended it is written as loext:vertical-rel="page-content-top".
     // In ODF 1.3 strict, there must not be an attribute at all.
     loadFromFile(u"tdf150407_PosRelTopMargin.docx");
 
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
-
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "page-content-top" is included in ODF strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        pBatch->commit();
         save(u"writer8"_ustr);
 
         // With applied fix for tdf150407 still loext:vertical-rel="page-content-top has to be
@@ -318,10 +284,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     loadFromFile(u"tdf150407_PosRelTopMargin.docx");
     // Save to ODF 1.3 strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
         save(u"writer8"_ustr);
 
         // Without the fix an faulty 'vertical-rel="page-content-top"' attribute was written in
@@ -522,6 +485,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Load document. It has a shape with color gradient build from color stop yellow at offset 0.5
     // and color stop red at offset 1.0. For better backward compatibility such gradient has to be
     // exported to ODF with a border of 50%.
@@ -530,11 +495,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     loadFromFile(u"MCGR_Border_restoration.pptx");
 
     // Backup original ODF default version
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
 
-    // Save to ODF_LATEST which is currently ODF 1.3 extended. Make sure gradient-stop elements have
+    // Save ODF 1.3 extended. Make sure gradient-stop elements have
     // offsets 0 and 1, and border is written as 50%.
-    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath
@@ -553,13 +516,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     assertXPath(pXmlDoc, sPath, "start-color"_ostr, u"#ffff00"_ustr);
     assertXPath(pXmlDoc, sPath, "end-color"_ostr, u"#ff0000"_ustr);
     assertXPath(pXmlDoc, sPath, "border"_ostr, u"50%"_ustr);
-
-    // Set back to original ODF default version.
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Load document. It has a shape with transparency gradient build from transparency 100% at
     // offset 0, transparency 100% at offset 0.4 and transparency 10% at offset 1.0. For better
     // backward compatibility such gradient is exported with a border of 40% in the transparency
@@ -567,12 +529,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     // When transparency gradient-stops are integrated in ODF strict, the test needs to be adapted.
     loadFromFile(u"MCGR_TransparencyBorder_restoration.pptx");
 
-    // Backup original ODF default version
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
-
-    // Save to ODF_LATEST which is currently ODF 1.3 extended. Make sure transparency gradient-stop
+    // Save to ODF 1.3 extended. Make sure transparency gradient-stop
     //elements are written with offset 0 and 1, and border is written as 40%.
-    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath = "/office:document-styles/office:styles/draw:opacity[1]"_ostr;
@@ -590,9 +548,6 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     assertXPath(pXmlDoc, sPath, "start"_ostr, u"0%"_ustr);
     assertXPath(pXmlDoc, sPath, "end"_ostr, u"90%"_ustr);
     assertXPath(pXmlDoc, sPath, "border"_ostr, u"40%"_ustr);
-
-    // Set back to original ODF default version.
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)

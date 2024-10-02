@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <officecfg/Office/Common.hxx>
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
 
@@ -19,6 +18,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
@@ -1138,12 +1138,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testPageWithTransparentBackground)
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
 {
     // Save behavior depends on whether ODF strict or extended is used.
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
 
     // The contained shape has a text rotation vert="vert" which corresponds to
     // loext:writing-mode="tb-rl90" in the graphic-properties of the style of the shape in ODF 1.3
@@ -1151,11 +1146,6 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
     // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
     // attribute value "tb-rl90" is included in ODF strict.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        pBatch->commit();
-
         createSdImpressDoc("pptx/shape-text-rotate.pptx");
         saveAndReload(u"impress8"_ustr);
 
@@ -1168,10 +1158,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTextRotation)
     }
     // In ODF 1.3 strict the workaround to use the TextRotateAngle is used instead.
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
         createSdImpressDoc("pptx/shape-text-rotate.pptx");
         saveAndReload(u"impress8"_ustr);

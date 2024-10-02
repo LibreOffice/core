@@ -10,7 +10,6 @@
 // core, please keep it alphabetically ordered
 #include <comphelper/configuration.hxx>
 #include "helper/qahelper.hxx"
-#include <officecfg/Office/Common.hxx>
 #include <test/unoapi_test.hxx>
 #include <unotools/saveopt.hxx>
 
@@ -73,6 +72,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963)
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963_ODF)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Verify, that calcext:contains-footer is only written in extended file format versions.
     // The parameter in DefaultVersion::set need to be adapted, when attribute contains-footer
     // is included in ODF strict, see issue OFFICE-4169 at OASIS.
@@ -87,31 +88,24 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963_ODF)
                                                         UNO_QUERY_THROW);
     xDBRangePropSet->setPropertyValue(u"TotalsRow"_ustr, uno::Any(true));
 
-    // Backup original ODF default version
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+    // Save to ODF 1.3 extended.
+    // Adapt to a concrete version when attribute contains-footer is available in ODF strict.
+    // Make sure attribute is written in calcext namespace
+    save(u"calc8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/office:document-content/office:body/office:spreadsheet/"
+                "table:database-ranges/table:database-range[@calcext:contains-footer='true']"_ostr);
 
     // Save to ODF 1.3 strict. Make sure attribute is not written.
     // Adapt to ODF 1.4 strict, when it is available.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
     save(u"calc8"_ustr); // this saves to .ods not to .fods
-    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/"
                 "table:database-ranges/table:database-range/contains-footer"_ostr,
                 0);
-
-    // Save to ODF_LATEST which is currently (Sep 2024) ODF 1.3 extended.
-    // Adapt to a concrete version when attribute contains-footer is available in ODF strict.
-    // Make sure attribute is written in calcext namespace
-    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_LATEST);
-    save(u"calc8"_ustr);
-    pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc,
-                "/office:document-content/office:body/office:spreadsheet/"
-                "table:database-ranges/table:database-range[@calcext:contains-footer='true']"_ostr);
-
-    // Set back to original ODF default version.
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

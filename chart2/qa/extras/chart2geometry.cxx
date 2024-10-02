@@ -464,9 +464,10 @@ void Chart2GeometryTest::testTdf135366LabelExport()
 
 void Chart2GeometryTest::testTdf135366_CustomLabelText()
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // Error was, that custom text in a data label was only exported in ODF extended,
     // although the used <chart:data-label> element exists since ODF 1.2.
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_012);
     loadFromFile(u"pptx/tdf135366_CustomLabelText.pptx");
     save(u"impress8"_ustr);
@@ -482,8 +483,6 @@ void Chart2GeometryTest::testTdf135366_CustomLabelText()
     // Verify text content
     const OUString sOUTextContent = getXPathContent(pXmlDoc, sCustomTextPath);
     CPPUNIT_ASSERT_EQUAL(u"Custom"_ustr, sOUTextContent);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2GeometryTest);

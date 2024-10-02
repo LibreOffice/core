@@ -22,12 +22,11 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
-#include <officecfg/Office/Common.hxx>
-
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/saveopt.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/storagehelper.hxx>
 
@@ -124,16 +123,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-            return pBatch->commit();
-        });
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
         saveAndReload(u"writer8"_ustr, "password");
 
@@ -307,16 +298,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
     {
         // test the old, standard ODF 1.2/1.3/1.4 encryption
-        Resetter resetter([]() {
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-            return pBatch->commit();
-        });
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+        SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
 
         saveAndReload(u"writer8"_ustr, "password");
 

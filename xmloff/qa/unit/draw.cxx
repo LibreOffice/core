@@ -524,13 +524,13 @@ void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::X
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
     lcl_assertMetalProperties("from doc", xShape);
 
     // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     saveAndReload(u"writer8"_ustr);
 
@@ -544,8 +544,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
@@ -582,6 +580,7 @@ void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawin
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
     // verify property
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -589,7 +588,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
     saveAndReload(u"writer8"_ustr);
 
@@ -602,8 +600,6 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
@@ -627,15 +623,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.
     // Save to ODF 1.3 strict and make sure it does not produce a validation error.
-    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
     save(u"writer8"_ustr);
-
-    SetODFDefaultVersion(nCurrentODFVersion);
 }
 
 namespace

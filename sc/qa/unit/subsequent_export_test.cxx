@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <officecfg/Office/Common.hxx>
 #include <config_fonts.h>
 
 #include "helper/debughelper.hxx"
@@ -39,6 +38,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <unotools/saveopt.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -707,6 +707,8 @@ static auto verifySpreadsheet13(char const* const pTestName, ScDocument& rDoc) -
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+
     // import
     createScDoc("ods/spreadsheet13e.ods");
     ScDocument* pDoc = getScDoc();
@@ -714,19 +716,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
     // check model
     verifySpreadsheet13("import", *pDoc);
 
-    Resetter _([]() {
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(3, pBatch);
-        return pBatch->commit();
-    });
-
     {
         // export ODF 1.3
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(10, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
 
         // FIXME: Error: unexpected attribute "loext:scale-to-X"
         skipValidation();
@@ -749,10 +741,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
     }
     {
         // export ODF 1.2 Extended
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012_EXTENDED);
 
         saveAndReload(u"calc8"_ustr);
         pDoc = getScDoc();
@@ -772,10 +761,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testODF13)
     }
     {
         // export ODF 1.2
-        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-            comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
-        pBatch->commit();
+        SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_012);
 
         save(u"calc8"_ustr);
 
