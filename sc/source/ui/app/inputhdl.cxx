@@ -47,7 +47,6 @@
 #include <sfx2/printer.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/svxids.hrc>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <utility>
@@ -3169,17 +3168,6 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     }
     lcl_RemoveTabs(aString);
     lcl_RemoveTabs(aPreAutoCorrectString);
-
-    if (bModified && aString.indexOf('\n') != -1)
-    {
-        // Cell contains line breaks, enable wrapping
-        ScLineBreakCell aBreakItem(true);
-        pActiveViewSh->ApplyAttr(aBreakItem);
-
-        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-        if (pViewFrm)
-            pViewFrm->GetBindings().Invalidate(SID_ATTR_ALIGN_LINEBREAK);
-    }
 
     // Test if valid (always with simple string)
     if (bModified && nValidation)
