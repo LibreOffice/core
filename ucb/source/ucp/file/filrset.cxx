@@ -128,42 +128,33 @@ XResultSet_impl::dispose()
 
 void XResultSet_impl::rowCountChanged(std::unique_lock<std::mutex>& rGuard)
 {
-    sal_Int32 aOldValue,aNewValue;
-    std::vector< uno::Reference< beans::XPropertyChangeListener > > seq = m_aRowCountListeners.getElements(rGuard);
-    aNewValue = m_aItems.size();
-    aOldValue = aNewValue-1;
+    sal_Int32 aNewValue = m_aItems.size();
+    sal_Int32 aOldValue = aNewValue-1;
     beans::PropertyChangeEvent aEv;
     aEv.PropertyName = "RowCount";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
     aEv.NewValue <<= aNewValue;
-    for( const auto& listener : seq )
-        listener->propertyChange( aEv );
+    m_aRowCountListeners.notifyEach(rGuard, &beans::XPropertyChangeListener::propertyChange, aEv);
 }
 
 
-void XResultSet_impl::isFinalChanged()
+void XResultSet_impl::isFinalChanged(std::unique_lock<std::mutex>& rGuard)
 {
-    std::vector< uno::Reference< beans::XPropertyChangeListener > > seq;
-    {
-        std::unique_lock aGuard( m_aMutex );
-        seq = m_aIsFinalListeners.getElements(aGuard);
-        m_bRowCountFinal = true;
-    }
+    m_bRowCountFinal = true;
     beans::PropertyChangeEvent aEv;
     aEv.PropertyName = "IsRowCountFinal";
     aEv.Further = false;
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= false;
     aEv.NewValue <<= true;
-    for( const auto& listener : seq )
-        listener->propertyChange( aEv );
+    m_aIsFinalListeners.notifyEach(rGuard, &beans::XPropertyChangeListener::propertyChange, aEv);
 }
 
 
 bool
-XResultSet_impl::OneMore()
+XResultSet_impl::OneMore(std::unique_lock<std::mutex>& rGuard)
 {
     if( ! m_nIsOpen )
         return false;
@@ -181,7 +172,7 @@ XResultSet_impl::OneMore()
         if( err == osl::FileBase::E_NOENT || err == osl::FileBase::E_INVAL )
         {
             m_aFolder.close();
-            isFinalChanged();
+            isFinalChanged(rGuard);
             m_nIsOpen = false;
             return m_nIsOpen;
         }
@@ -197,11 +188,10 @@ XResultSet_impl::OneMore()
 
             if( m_nOpenMode == ucb::OpenMode::DOCUMENTS && IsRegular )
             {
-                std::unique_lock aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
                 m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
-                rowCountChanged(aGuard);
+                rowCountChanged(rGuard);
                 return true;
 
             }
@@ -211,11 +201,10 @@ XResultSet_impl::OneMore()
             }
             else if( m_nOpenMode == ucb::OpenMode::FOLDERS && ! IsRegular )
             {
-                std::unique_lock aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
                 m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
-                rowCountChanged(aGuard);
+                rowCountChanged(rGuard);
                 return true;
             }
             else if( m_nOpenMode == ucb::OpenMode::FOLDERS && IsRegular )
@@ -224,11 +213,10 @@ XResultSet_impl::OneMore()
             }
             else
             {
-                std::unique_lock aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
                 m_aIdents.emplace_back( );
                 m_aUnqPath.push_back( aUnqPath );
-                rowCountChanged(aGuard);
+                rowCountChanged(rGuard);
                 return true;
             }
         }
@@ -243,10 +231,11 @@ XResultSet_impl::OneMore()
 sal_Bool SAL_CALL
 XResultSet_impl::next()
 {
+    std::unique_lock aGuard( m_aMutex );
     bool test;
     if( ++m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) ) test = true;
     else
-        test = OneMore();
+        test = OneMore(aGuard);
     return test;
 }
 
@@ -275,8 +264,9 @@ XResultSet_impl::isFirst()
 sal_Bool SAL_CALL
 XResultSet_impl::isLast()
 {
+    std::unique_lock aGuard( m_aMutex );
     if( m_nRow ==  sal::static_int_cast<sal_Int32>(m_aItems.size()) - 1 )
-        return ! OneMore();
+        return ! OneMore(aGuard);
     else
         return false;
 }
@@ -292,8 +282,9 @@ XResultSet_impl::beforeFirst()
 void SAL_CALL
 XResultSet_impl::afterLast()
 {
+    std::unique_lock aGuard( m_aMutex );
     m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size());
-    while( OneMore() )
+    while( OneMore(aGuard) )
         ++m_nRow;
 }
 
@@ -309,8 +300,9 @@ XResultSet_impl::first()
 sal_Bool SAL_CALL
 XResultSet_impl::last()
 {
+    std::unique_lock aGuard( m_aMutex );
     m_nRow = sal::static_int_cast<sal_Int32>(m_aItems.size()) - 1;
-    while( OneMore() )
+    while( OneMore(aGuard) )
         ++m_nRow;
     return true;
 }
@@ -329,11 +321,12 @@ XResultSet_impl::getRow()
 
 sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
 {
+    std::unique_lock aGuard( m_aMutex );
     if( row >= 0 )
     {
         m_nRow = row - 1;
         if( row >= sal::static_int_cast<sal_Int32>(m_aItems.size()) )
-            while( row-- && OneMore() )
+            while( row-- && OneMore(aGuard) )
                 ;
     }
     else
@@ -411,11 +404,11 @@ XResultSet_impl::getStatement()
 void SAL_CALL
 XResultSet_impl::close()
 {
+    std::unique_lock aGuard( m_aMutex );
     if( m_nIsOpen )
     {
         m_aFolder.close();
-        isFinalChanged();
-        std::unique_lock aGuard( m_aMutex );
+        isFinalChanged(aGuard);
         m_nIsOpen = false;
     }
 }
@@ -437,6 +430,7 @@ XResultSet_impl::queryContentIdentifierString()
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
 XResultSet_impl::queryContentIdentifier()
 {
+    std::unique_lock aGuard( m_aMutex );
     if( 0 <= m_nRow && m_nRow < sal::static_int_cast<sal_Int32>(m_aItems.size()) )
     {
         if( ! m_aIdents[m_nRow].is() )
@@ -518,9 +512,11 @@ void SAL_CALL
 XResultSet_impl::connectToCache(
     const uno::Reference< ucb::XDynamicResultSet > & xCache )
 {
-    if( m_xListener.is() )
-        throw ucb::ListenerAlreadySetException( THROW_WHERE );
-
+    {
+        std::unique_lock aGuard( m_aMutex );
+        if( m_xListener.is() )
+            throw ucb::ListenerAlreadySetException( THROW_WHERE );
+    }
     uno::Reference< ucb::XSourceInitialization > xTarget(
         xCache, uno::UNO_QUERY );
     if( xTarget.is() && m_pMyShell->m_xContext.is() )
@@ -608,6 +604,7 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
 uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
     const OUString& PropertyName )
 {
+    std::unique_lock aGuard( m_aMutex );
     if( PropertyName == "IsRowCountFinal" )
     {
         return uno::Any(m_bRowCountFinal);
