@@ -147,6 +147,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::FIX );
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                             m_bTableSizeTypeInserted = true;
+                            // add current row width to add 'hidden' before inserting the table
+                            TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
+                            pRowPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
+                            insertRowProps(pRowPropMap);
                         }
                         else if( sal::static_int_cast<Id>(pMeasureHandler->getUnit()) == NS_ooxml::LN_Value_ST_TblWidth_pct )
                         {

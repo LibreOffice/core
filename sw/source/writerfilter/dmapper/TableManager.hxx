@@ -332,6 +332,11 @@ private:
     void endRow();
 
     /**
+    * Handle rows smaller than the table width and add 'hidden' cells
+    */
+    void HandleSmallerRows();
+
+    /**
        Resolve the current table to the TableDataHandler.
      */
     void resolveCurrentTable();

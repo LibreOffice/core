@@ -23,7 +23,7 @@
 #include "DomainMapperTableHandler.hxx"
 #include "DomainMapper_Impl.hxx"
 #include "util.hxx"
-
+#include <comphelper/sequence.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 using namespace com::sun::star;
@@ -373,6 +373,62 @@ void TableManager::startParagraphGroup()
     mnTableDepthNew = 0;
 }
 
+void TableManager::HandleSmallerRows()
+{
+    TableData::Pointer_t pTableData = mTableDataStack.back();
+    unsigned int nRows = pTableData->getRowCount();
+    sal_Int32 nMaxRowWidth = 0;
+    bool bIsDiffRowWidth = false;
+    for (unsigned int nRow = 0; nRow < nRows; ++nRow)
+    {
+        RowData::Pointer_t pRowData = pTableData->getRow(nRow);
+        sal_Int32 nRowWidth = 0;
+        const TablePropertyMapPtr pRowProps = pRowData->getProperties();
+        if (pRowProps)
+            pRowProps->getValue(TablePropertyMap::TABLE_WIDTH, nRowWidth);
+        if (nRowWidth == 0)
+            return;
+        if (nRowWidth > nMaxRowWidth)
+        {
+            if (nMaxRowWidth > 0)
+                bIsDiffRowWidth = true;
+            nMaxRowWidth = nRowWidth;
+        }
+    }
+    //
+    if (bIsDiffRowWidth)
+    {
+        uno::Reference<text::XTextAppendAndConvert> xTextAppendAndConvert(
+            mpTableDataHandler->getDomainMapperImpl().GetTopTextAppend(), uno::UNO_QUERY);
+
+        for (unsigned int nRow = 0; nRow < nRows; ++nRow)
+        {
+            RowData::Pointer_t pRowData = pTableData->getRow(nRow);
+            sal_Int32 nRowWidth = 0;
+            pRowData->getProperties()->getValue(TablePropertyMap::TABLE_WIDTH, nRowWidth);
+            if (nRowWidth < nMaxRowWidth)
+            {
+                uno::Reference<text::XTextRange> xTextRange
+                    = pRowData->getCellEnd(pRowData->getCellCount() - 1);
+                std::vector<beans::PropertyValue> aProperties;
+                //TODO: is there a simpler way to create a new paragraph behind the current cell and get that range back?
+                uno::Reference<text::XTextRange> xNewCellTextRange
+                    = xTextAppendAndConvert->finishParagraphInsert(
+                        comphelper::containerToSequence(aProperties), xTextRange);
+                uno::Reference<text::XTextCursor> xNewCellTextCursor
+                    = xTextAppendAndConvert->createTextCursorByRange(xNewCellTextRange);
+                xNewCellTextCursor->collapseToEnd();
+                xNewCellTextCursor->goRight(1, false);
+
+                TablePropertyMapPtr pCellPropMap(new TablePropertyMap);
+                pRowData->addCell(xNewCellTextCursor, pCellPropMap);
+                pRowData->endCell(xNewCellTextCursor);
+                pRowData->getProperties()->setValue(TablePropertyMap::TABLE_WIDTH, nMaxRowWidth);
+            }
+        }
+    }
+}
+
 void TableManager::resolveCurrentTable()
 {
 #ifdef DBG_UTIL
@@ -383,6 +439,8 @@ void TableManager::resolveCurrentTable()
     {
         try
         {
+            // add cells to the rows that are smaller than the maximum width
+            HandleSmallerRows();
             TableData::Pointer_t pTableData = mTableDataStack.back();
 
             unsigned int nRows = pTableData->getRowCount();
