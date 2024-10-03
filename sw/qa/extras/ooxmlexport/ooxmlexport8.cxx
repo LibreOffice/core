@@ -188,8 +188,8 @@ Column break without columns on the page is a page break, so check those paragra
 are on page 2 and page 3
 */
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL( u"one"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/body/txt/text()"_ostr) );
-    CPPUNIT_ASSERT_EQUAL( u"two"_ustr, getXPathContent(pXmlDoc, "/root/page[3]/body/txt/text()"_ostr) );
+    assertXPathContent(pXmlDoc, "/root/page[2]/body/txt/text()", u"one");
+    assertXPathContent(pXmlDoc, "/root/page[3]/body/txt/text()", u"two");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN652364, "n652364.docx")
@@ -529,7 +529,7 @@ DECLARE_OOXMLEXPORT_TEST(testN780853, "n780853.docx")
 DECLARE_OOXMLEXPORT_TEST(testN780843, "n780843.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(u"shown footer"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()"_ostr));
+    assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt/text()", u"shown footer");
 
     //tdf64372 this document should only have one page break (2 pages, not 3)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -686,9 +686,9 @@ DECLARE_OOXMLEXPORT_TEST(testN793262, "n793262.docx")
 DECLARE_OOXMLEXPORT_TEST(testN793998, "n793998.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nTextPortion = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[1]"_ostr, "width"_ostr).toInt32(); // Width of the first (text) portion
-    sal_Int32 nTabPortion = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[2]"_ostr, "width"_ostr).toInt32(); // Width of the second (tab) portion
-    sal_Int32 nParagraph = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "width"_ostr).toInt32(); // Width of the paragraph
+    sal_Int32 nTextPortion = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[1]", "width").toInt32(); // Width of the first (text) portion
+    sal_Int32 nTabPortion = getXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[2]", "width").toInt32(); // Width of the second (tab) portion
+    sal_Int32 nParagraph = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "width").toInt32(); // Width of the paragraph
     sal_Int32 const nRightMargin = 3000;
     // The problem was that the tab portion didn't ignore the right margin, so text + tab width wasn't larger than body (paragraph - right margin) width.
     CPPUNIT_ASSERT(nTextPortion + nTabPortion > nParagraph - nRightMargin);

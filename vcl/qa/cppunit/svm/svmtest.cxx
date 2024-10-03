@@ -367,26 +367,26 @@ xmlDocUniquePtr SvmTest::dumpMeta(const GDIMetaFile& rMetaFile)
 
 void SvmTest::checkVirtualDevice(const xmlDocUniquePtr& pDoc)
 {
-    assertXPath(pDoc, "/metafile/linecolor[1]"_ostr, "color"_ostr, u"#000000"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[1]"_ostr, "color"_ostr, u"#ffffff"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[1]", "color", u"#000000");
+    assertXPath(pDoc, "/metafile/fillcolor[1]", "color", u"#ffffff");
 
-    assertXPathAttrs(pDoc, "/metafile/rect[1]"_ostr, {
-        {"left", "0"},  {"top", "0"},
-        {"right", "9"}, {"bottom", "9"}
+    assertXPathAttrs(pDoc, "/metafile/rect[1]", {
+        {"left", u"0"},  {"top", u"0"},
+        {"right", u"9"}, {"bottom", u"9"}
     });
 
-    assertXPath(pDoc, "/metafile/linecolor[2]"_ostr, "color"_ostr, u"#000000"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[2]"_ostr, "color"_ostr, u"#ffffff"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[2]", "color", u"#000000");
+    assertXPath(pDoc, "/metafile/fillcolor[2]", "color", u"#ffffff");
 }
 
 void SvmTest::checkErase(const xmlDocUniquePtr& pDoc)
 {
-    assertXPath(pDoc, "/metafile/linecolor[3]"_ostr, "color"_ostr, u"#000000"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[3]"_ostr, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[3]", "color", u"#000000");
+    assertXPath(pDoc, "/metafile/fillcolor[3]", "color", u"#ff0000");
 
-    assertXPathAttrs(pDoc, "/metafile/rect[2]"_ostr, {
-        {"left", "0"},  {"top", "0"},
-        {"right", "9"}, {"bottom", "9"}
+    assertXPathAttrs(pDoc, "/metafile/rect[2]", {
+        {"left", u"0"},  {"top", u"0"},
+        {"right", u"9"}, {"bottom", u"9"}
     });
 }
 
@@ -394,12 +394,12 @@ void SvmTest::checkPixel(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/pixel[1]"_ostr, {
-        {"x", "8"}, {"y", "1"}, {"color", "#008000"},
+    assertXPathAttrs(pDoc, "/metafile/pixel[1]", {
+        {"x", u"8"}, {"y", u"1"}, {"color", u"#008000"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/pixel[2]"_ostr, {
-        {"x", "1"}, {"y", "8"}, {"color", "#000080"},
+    assertXPathAttrs(pDoc, "/metafile/pixel[2]", {
+        {"x", u"1"}, {"y", u"8"}, {"color", u"#000080"},
     });
 }
 
@@ -420,8 +420,8 @@ void SvmTest::checkPoint(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/point[1]"_ostr, {
-        {"x", "4"}, {"y", "4"}
+    assertXPathAttrs(pDoc, "/metafile/point[1]", {
+        {"x", u"4"}, {"y", u"4"}
     });
 }
 
@@ -441,30 +441,30 @@ void SvmTest::checkLine(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/line[1]"_ostr, {
-        {"startx", "1"}, {"starty", "1"},
-        {"endx", "8"},   {"endy", "8"},
+    assertXPathAttrs(pDoc, "/metafile/line[1]", {
+        {"startx", u"1"}, {"starty", u"1"},
+        {"endx", u"8"},   {"endy", u"8"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/line[1]"_ostr, {
-        {"style", "solid"}, {"width", "0"},
-        {"dashlen", "0"},   {"dashcount", "0"},
-        {"dotlen", "0"},    {"dotcount", "0"},
-        {"distance", "0"},
-        {"join", "round"},  {"cap", "butt"}
+    assertXPathAttrs(pDoc, "/metafile/line[1]", {
+        {"style", u"solid"}, {"width", u"0"},
+        {"dashlen", u"0"},   {"dashcount", u"0"},
+        {"dotlen", u"0"},    {"dotcount", u"0"},
+        {"distance", u"0"},
+        {"join", u"round"},  {"cap", u"butt"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/line[2]"_ostr, {
-        {"startx", "1"}, {"starty", "8"},
-        {"endx", "8"},   {"endy", "1"},
+    assertXPathAttrs(pDoc, "/metafile/line[2]", {
+        {"startx", u"1"}, {"starty", u"8"},
+        {"endx", u"8"},   {"endy", u"1"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/line[2]"_ostr, {
-        {"style", "dash"},  {"width", "7"},
-        {"dashlen", "5"},   {"dashcount", "4"},
-        {"dotlen", "3"},    {"dotcount", "2"},
-        {"distance", "1"},
-        {"join", "miter"},  {"cap", "round"}
+    assertXPathAttrs(pDoc, "/metafile/line[2]", {
+        {"style", u"dash"},  {"width", u"7"},
+        {"dashlen", u"5"},   {"dashcount", u"4"},
+        {"dotlen", u"3"},    {"dotcount", u"2"},
+        {"distance", u"1"},
+        {"join", u"miter"},  {"cap", u"round"}
     });
 }
 
@@ -494,12 +494,12 @@ void SvmTest::checkRect(const GDIMetaFile& rMetaFile)
 
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/rect[3]"_ostr, {
-        {"left", "1"}, {"top", "2"},
-        {"right", "4"},   {"bottom", "5"},
+    assertXPathAttrs(pDoc, "/metafile/rect[3]", {
+        {"left", u"1"}, {"top", u"2"},
+        {"right", u"4"},   {"bottom", u"5"},
     });
 }
 
@@ -522,13 +522,13 @@ void SvmTest::checkRoundRect(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/roundrect[1]"_ostr, {
-        {"left", "1"}, {"top", "2"},
-        {"right", "4"},   {"bottom", "5"},
-        {"horizontalround", "1"}, {"verticalround", "2"}
+    assertXPathAttrs(pDoc, "/metafile/roundrect[1]", {
+        {"left", u"1"}, {"top", u"2"},
+        {"right", u"4"},   {"bottom", u"5"},
+        {"horizontalround", u"1"}, {"verticalround", u"2"}
     });
 }
 
@@ -551,12 +551,12 @@ void SvmTest::checkEllipse(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/ellipse[1]"_ostr, {
-        {"left", "1"}, {"top", "2"},
-        {"right", "4"},   {"bottom", "5"},
+    assertXPathAttrs(pDoc, "/metafile/ellipse[1]", {
+        {"left", u"1"}, {"top", u"2"},
+        {"right", u"4"},   {"bottom", u"5"},
     });
 }
 
@@ -579,15 +579,15 @@ void SvmTest::checkArc(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/arc[1]"_ostr, {
-        {"left",  "1"}, {"top",    "2"},
-        {"right", "4"}, {"bottom", "5"},
+    assertXPathAttrs(pDoc, "/metafile/arc[1]", {
+        {"left",  u"1"}, {"top",    u"2"},
+        {"right", u"4"}, {"bottom", u"5"},
 
-        {"startx", "10"}, {"starty", "11"},
-        {"endx",   "12"}, {"endy",   "13"},
+        {"startx", u"10"}, {"starty", u"11"},
+        {"endx",   u"12"}, {"endy",   u"13"},
     });
 }
 
@@ -610,15 +610,15 @@ void SvmTest::checkPie(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/pie[1]"_ostr, {
-        {"left",  "11"}, {"top",    "12"},
-        {"right", "14"}, {"bottom", "15"},
+    assertXPathAttrs(pDoc, "/metafile/pie[1]", {
+        {"left",  u"11"}, {"top",    u"12"},
+        {"right", u"14"}, {"bottom", u"15"},
 
-        {"startx", "20"}, {"starty", "21"},
-        {"endx",   "22"}, {"endy",   "23"},
+        {"startx", u"20"}, {"starty", u"21"},
+        {"endx",   u"22"}, {"endy",   u"23"},
     });
 }
 
@@ -641,15 +641,15 @@ void SvmTest::checkChord(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPath(pDoc, "/metafile/linecolor[5]"_ostr, "color"_ostr, u"#123456"_ustr);
-    assertXPath(pDoc, "/metafile/fillcolor[5]"_ostr, "color"_ostr, u"#654321"_ustr);
+    assertXPath(pDoc, "/metafile/linecolor[5]", "color", u"#123456");
+    assertXPath(pDoc, "/metafile/fillcolor[5]", "color", u"#654321");
 
-    assertXPathAttrs(pDoc, "/metafile/chord[1]"_ostr, {
-        {"left",  "21"}, {"top",    "22"},
-        {"right", "24"}, {"bottom", "25"},
+    assertXPathAttrs(pDoc, "/metafile/chord[1]", {
+        {"left",  u"21"}, {"top",    u"22"},
+        {"right", u"24"}, {"bottom", u"25"},
 
-        {"startx", "30"}, {"starty", "31"},
-        {"endx",   "32"}, {"endy",   "33"},
+        {"startx", u"30"}, {"starty", u"31"},
+        {"endx",   u"32"}, {"endy",   u"33"},
     });
 }
 
@@ -672,29 +672,29 @@ void SvmTest::checkPolyLine(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/polyline[1]"_ostr, {
-        {"style", "solid"}, {"width", "0"},
-        {"dashlen", "0"},   {"dashcount", "0"},
-        {"dotlen", "0"},    {"dotcount", "0"},
-        {"distance", "0"},
-        {"join", "round"},  {"cap", "butt"}
+    assertXPathAttrs(pDoc, "/metafile/polyline[1]", {
+        {"style", u"solid"}, {"width", u"0"},
+        {"dashlen", u"0"},   {"dashcount", u"0"},
+        {"dotlen", u"0"},    {"dotcount", u"0"},
+        {"distance", u"0"},
+        {"join", u"round"},  {"cap", u"butt"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[1]"_ostr, {{"x", "1"}, {"y", "8"}});
-    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[2]"_ostr, {{"x", "2"}, {"y", "7"}});
-    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[3]"_ostr, {{"x", "3"}, {"y", "6"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[1]", {{"x", u"1"}, {"y", u"8"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[2]", {{"x", u"2"}, {"y", u"7"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[1]/point[3]", {{"x", u"3"}, {"y", u"6"}});
 
-    assertXPathAttrs(pDoc, "/metafile/polyline[2]"_ostr, {
-        {"style", "dash"},  {"width", "7"},
-        {"dashlen", "5"},   {"dashcount", "4"},
-        {"dotlen", "3"},    {"dotcount", "2"},
-        {"distance", "1"},
-        {"join", "miter"},  {"cap", "round"}
+    assertXPathAttrs(pDoc, "/metafile/polyline[2]", {
+        {"style", u"dash"},  {"width", u"7"},
+        {"dashlen", u"5"},   {"dashcount", u"4"},
+        {"dotlen", u"3"},    {"dotcount", u"2"},
+        {"distance", u"1"},
+        {"join", u"miter"},  {"cap", u"round"}
     });
-    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[1]"_ostr, {{"x", "8"}, {"y", "1"}, {"flags", "normal"}});
-    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[2]"_ostr, {{"x", "7"}, {"y", "2"}, {"flags", "control"}});
-    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[3]"_ostr, {{"x", "6"}, {"y", "3"}, {"flags", "smooth"}});
-    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[4]"_ostr, {{"x", "5"}, {"y", "4"}, {"flags", "symmetric"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[1]", {{"x", u"8"}, {"y", u"1"}, {"flags", u"normal"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[2]", {{"x", u"7"}, {"y", u"2"}, {"flags", u"control"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[3]", {{"x", u"6"}, {"y", u"3"}, {"flags", u"smooth"}});
+    assertXPathAttrs(pDoc, "/metafile/polyline[2]/point[4]", {{"x", u"5"}, {"y", u"4"}, {"flags", u"symmetric"}});
 }
 
 void SvmTest::testPolyLine()
@@ -740,14 +740,14 @@ void SvmTest::checkPolygon(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[1]"_ostr, {{"x", "1"}, {"y", "8"}});
-    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[2]"_ostr, {{"x", "2"}, {"y", "7"}});
-    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[3]"_ostr, {{"x", "3"}, {"y", "6"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[1]", {{"x", u"1"}, {"y", u"8"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[2]", {{"x", u"2"}, {"y", u"7"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[1]/point[3]", {{"x", u"3"}, {"y", u"6"}});
 
-    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[1]"_ostr, {{"x", "8"}, {"y", "1"}, {"flags", "normal"}});
-    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[2]"_ostr, {{"x", "7"}, {"y", "2"}, {"flags", "control"}});
-    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[3]"_ostr, {{"x", "6"}, {"y", "3"}, {"flags", "smooth"}});
-    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[4]"_ostr, {{"x", "5"}, {"y", "4"}, {"flags", "symmetric"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[1]", {{"x", u"8"}, {"y", u"1"}, {"flags", u"normal"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[2]", {{"x", u"7"}, {"y", u"2"}, {"flags", u"control"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[3]", {{"x", u"6"}, {"y", u"3"}, {"flags", u"smooth"}});
+    assertXPathAttrs(pDoc, "/metafile/polygon[2]/point[4]", {{"x", u"5"}, {"y", u"4"}, {"flags", u"symmetric"}});
 }
 
 void SvmTest::testPolygon()
@@ -784,14 +784,14 @@ void SvmTest::checkPolyPolygon(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[1]"_ostr, {{"x", "1"}, {"y", "8"}});
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[2]"_ostr, {{"x", "2"}, {"y", "7"}});
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[3]"_ostr, {{"x", "3"}, {"y", "6"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[1]", {{"x", u"1"}, {"y", u"8"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[2]", {{"x", u"2"}, {"y", u"7"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[1]/point[3]", {{"x", u"3"}, {"y", u"6"}});
 
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[1]"_ostr, {{"x", "8"}, {"y", "1"}, {"flags", "normal"}});
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[2]"_ostr, {{"x", "7"}, {"y", "2"}, {"flags", "control"}});
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[3]"_ostr, {{"x", "6"}, {"y", "3"}, {"flags", "smooth"}});
-    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[4]"_ostr, {{"x", "5"}, {"y", "4"}, {"flags", "symmetric"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[1]", {{"x", u"8"}, {"y", u"1"}, {"flags", u"normal"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[2]", {{"x", u"7"}, {"y", u"2"}, {"flags", u"control"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[3]", {{"x", u"6"}, {"y", u"3"}, {"flags", u"smooth"}});
+    assertXPathAttrs(pDoc, "/metafile/polypolygon[1]/polygon[2]/point[4]", {{"x", u"5"}, {"y", u"4"}, {"flags", u"symmetric"}});
 }
 
 void SvmTest::testPolyPolygon()
@@ -830,11 +830,11 @@ void SvmTest::checkText(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/text[1]"_ostr, {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "2"},
+    assertXPathAttrs(pDoc, "/metafile/text[1]", {
+        {"x", u"4"}, {"y", u"6"}, {"index", u"1"}, {"length", u"2"},
     });
 
-    assertXPathContent(pDoc, "/metafile/text[1]/textcontent"_ostr, u"xABC"_ustr);
+    assertXPathContent(pDoc, "/metafile/text[1]/textcontent", u"xABC");
 }
 
 void SvmTest::testText()
@@ -853,11 +853,11 @@ void SvmTest::checkTextArray(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textarray[1]"_ostr, {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"},
+    assertXPathAttrs(pDoc, "/metafile/textarray[1]", {
+        {"x", u"4"}, {"y", u"6"}, {"index", u"1"}, {"length", u"4"},
     });
-    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, u"15 20 25 "_ustr);
-    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, u"123456"_ustr);
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray", u"15 20 25 ");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text", u"123456");
 }
 
 void SvmTest::testTextArray()
@@ -876,15 +876,15 @@ void SvmTest::checkTextArrayWithContext(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textarray[1]"_ostr,
-                     { { "x", "4" },
-                       { "y", "6" },
-                       { "index", "1" },
-                       { "length", "4" },
-                       { "layoutcontextindex", "0" },
-                       { "layoutcontextlength", "5" } });
-    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray"_ostr, u"15 20 25 "_ustr);
-    assertXPathContent(pDoc, "/metafile/textarray[1]/text"_ostr, u"123456"_ustr);
+    assertXPathAttrs(pDoc, "/metafile/textarray[1]",
+                     { { "x", u"4" },
+                       { "y", u"6" },
+                       { "index", u"1" },
+                       { "length", u"4" },
+                       { "layoutcontextindex", u"0" },
+                       { "layoutcontextlength", u"5" } });
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray", u"15 20 25 ");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text", u"123456");
 }
 
 void SvmTest::testTextArrayWithContext()
@@ -903,11 +903,11 @@ void SvmTest::checkstretchText(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/stretchtext[1]"_ostr, {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"}, {"width", "10"}
+    assertXPathAttrs(pDoc, "/metafile/stretchtext[1]", {
+        {"x", u"4"}, {"y", u"6"}, {"index", u"1"}, {"length", u"4"}, {"width", u"10"}
     });
 
-    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent"_ostr, u"123456"_ustr);
+    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent", u"123456");
 }
 
 void SvmTest::teststretchText()
@@ -925,11 +925,11 @@ void SvmTest::checkTextRect(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textrect[1]"_ostr, {
-        {"left", "0"}, {"top", "0"}, {"right", "4"}, {"bottom", "4"}
+    assertXPathAttrs(pDoc, "/metafile/textrect[1]", {
+        {"left", u"0"}, {"top", u"0"}, {"right", u"4"}, {"bottom", u"4"}
     });
-    assertXPathContent(pDoc, "/metafile/textrect[1]/textcontent"_ostr, u"123456"_ustr);
-    assertXPathContent(pDoc, "/metafile/textrect[1]/style"_ostr, u"Center"_ustr);
+    assertXPathContent(pDoc, "/metafile/textrect[1]/textcontent", u"123456");
+    assertXPathContent(pDoc, "/metafile/textrect[1]/style", u"Center");
 }
 
 void SvmTest::testTextRect()
@@ -947,9 +947,9 @@ void SvmTest::checkTextLine(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textline[1]"_ostr, {
-        {"x", "4"}, {"y", "6"}, {"width", "10"},
-        {"strikeout", "single"}, {"underline", "single"}, {"overline", "single"}
+    assertXPathAttrs(pDoc, "/metafile/textline[1]", {
+        {"x", u"4"}, {"y", u"6"}, {"width", u"10"},
+        {"strikeout", u"single"}, {"underline", u"single"}, {"overline", u"single"}
     });
 }
 
@@ -971,31 +971,31 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    assertXPathAttrs(pDoc, "/metafile/bmp[1]"_ostr, {{"x", "1"}, {"y", "2"}, {"crc",
+    assertXPathAttrs(pDoc, "/metafile/bmp[1]", {{"x", u"1"}, {"y", u"2"}, {"crc",
 #if defined OSL_BIGENDIAN
-        "5e01ddcc"
+        u"5e01ddcc"
 #else
 #if !ENABLE_CAIRO_RGBA
-        "469f0820"  // typical BGRA little-endian config
+        u"469f0820"  // typical BGRA little-endian config
 #else
-        "3789377b"  // atypical RGBA little-endian config
+        u"3789377b"  // atypical RGBA little-endian config
 #endif
 #endif
         }});
-    assertXPathAttrs(pDoc, "/metafile/bmpscale[1]"_ostr, {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "4937e32d"}
+    assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
+        {"x", u"1"}, {"y", u"2"}, {"width", u"3"}, {"height", u"4"}, {"crc", u"4937e32d"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]"_ostr, {
-        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
+    assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]", {
+        {"destx", u"1"}, {"desty", u"2"}, {"destwidth", u"3"}, {"destheight", u"4"},
+        {"srcx", u"2"},  {"srcy", u"1"},  {"srcwidth", u"4"},  {"srcheight", u"3"},
         {"crc",
 #if defined OSL_BIGENDIAN
-         "b8dee5da"
+         u"b8dee5da"
 #else
 #if !ENABLE_CAIRO_RGBA
-         "3789377b"  // typical BGRA little-endian config
+         u"3789377b"  // typical BGRA little-endian config
 #else
-         "469f0820"  // atypical RGBA little-endian config
+         u"469f0820"  // atypical RGBA little-endian config
 #endif
 #endif
         }
@@ -1046,83 +1046,83 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile, bool bIsSvmFile)
     if (SkiaHelper::isVCLSkiaEnabled())
         return; // TODO SKIA using CRCs is broken (the idea of it)
 
-    static const std::vector<OUString> aExpectedCRC
+    static const std::vector<std::u16string_view> aExpectedCRC
     {
 #if defined OSL_BIGENDIAN
-        "08feb5d3",
-        "281fc589",
-        "b8dee5da",
-        "4df0e464",
-        "186ff868", // 1-bit
-        "33b4a07c", // 4-bit color bitmap - same as 8-bit color bitmap
-        "33b4a07c",
-        "742c3e35",
+        u"08feb5d3",
+        u"281fc589",
+        u"b8dee5da",
+        u"4df0e464",
+        u"186ff868", // 1-bit
+        u"33b4a07c", // 4-bit color bitmap - same as 8-bit color bitmap
+        u"33b4a07c",
+        u"742c3e35",
 #else
 #if !ENABLE_CAIRO_RGBA
-        u"ac936607"_ustr, // typical BGRA little-endian config
+        u"ac936607", // typical BGRA little-endian config
 #else
         "ecd75a28", // atypical RGBA little-endian config
 #endif
-        u"4937e32d"_ustr,
+        u"4937e32d",
 #if !ENABLE_CAIRO_RGBA
-        u"3789377b"_ustr, // typical BGRA little-endian config
+        u"3789377b", // typical BGRA little-endian config
 #else
         "469f0820", // atypical RGBA little-endian config
 #endif
-        u"839e8cce"_ustr,
-        u"236aaf55"_ustr, // 1-bit
-        u"2949ccc7"_ustr, // 4-bit color bitmap - same as 8-bit color bitmap
-        u"2949ccc7"_ustr,
-        u"e5df8aad"_ustr,
+        u"839e8cce",
+        u"236aaf55", // 1-bit
+        u"2949ccc7", // 4-bit color bitmap - same as 8-bit color bitmap
+        u"2949ccc7",
+        u"e5df8aad",
 #endif
     };
 
-    static const std::array<OUString, 8> aExpectedContentChecksum
+    static const std::array<std::u16string_view, 8> aExpectedContentChecksum
     {
-        u"26bdebd04e5b18d685cea04982179e273ee3b659"_ustr,
-        u"f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5"_ustr,
-        u"7c953a06d34bbd38897f950d595df2880dbb0f75"_ustr,
-        u"ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249"_ustr,
-        u"8a1ebc46f890eb0879464c6e293bffd4ce7fadc0"_ustr, // 1-bit
-        u"23611fc9f484c23e45bbd457730adb8ab5355509"_ustr, // 4-bit color bitmap - same as 8-bit color bitmap
-        u"23611fc9f484c23e45bbd457730adb8ab5355509"_ustr,
-        u"97e499b74104debf12f99a774a2c4edc914d8900"_ustr,
+        u"26bdebd04e5b18d685cea04982179e273ee3b659",
+        u"f4f52df6ef965a2f0fbccbe6aca35ba3457cf9d5",
+        u"7c953a06d34bbd38897f950d595df2880dbb0f75",
+        u"ca3e5cdde1c395e1ee76d339a5bf6e46fbac3249",
+        u"8a1ebc46f890eb0879464c6e293bffd4ce7fadc0", // 1-bit
+        u"23611fc9f484c23e45bbd457730adb8ab5355509", // 4-bit color bitmap - same as 8-bit color bitmap
+        u"23611fc9f484c23e45bbd457730adb8ab5355509",
+        u"97e499b74104debf12f99a774a2c4edc914d8900",
     };
 
-    assertXPathAttrs(pDoc, "/metafile/bmpex[1]"_ostr, {
-        {"x", "1"}, {"y", "1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[0]}, {"pixelformat", "24BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[1]", {
+        {"x", u"1"}, {"y", u"1"}, {"crc", aExpectedCRC[0]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[0]}, {"pixelformat", u"24BPP"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]"_ostr, {
-        {"x", "5"}, {"y", "0"}, {"width", "2"}, {"height", "3"},
-        {"crc", aExpectedCRC[1]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[1]}, {"pixelformat", "24BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpexscale[1]", {
+        {"x", u"5"}, {"y", u"0"}, {"width", u"2"}, {"height", u"3"},
+        {"crc", aExpectedCRC[1]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[1]}, {"pixelformat", u"24BPP"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]"_ostr, {
-        {"destx", "7"}, {"desty", "1"}, {"destwidth", "2"}, {"destheight", "2"},
-        {"srcx", "0"},  {"srcy", "0"},  {"srcwidth", "3"},  {"srcheight", "4"},
-        {"crc", aExpectedCRC[2]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[2]}, {"pixelformat", "24BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpexscalepart[1]", {
+        {"destx", u"7"}, {"desty", u"1"}, {"destwidth", u"2"}, {"destheight", u"2"},
+        {"srcx", u"0"},  {"srcy", u"0"},  {"srcwidth", u"3"},  {"srcheight", u"4"},
+        {"crc", aExpectedCRC[2]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[2]}, {"pixelformat", u"24BPP"}
     });
 
 #ifndef MACOSX
-    assertXPathAttrs(pDoc, "/metafile/bmpex[2]"_ostr, {
-        {"x", "6"}, {"y", "6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[3]}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[2]", {
+        {"x", u"6"}, {"y", u"6"}, {"crc", aExpectedCRC[3]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[3]}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[3]"_ostr, {
-            {"x", "0"}, {"y", "6"}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[4]}, {"pixelformat", "8BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
+            {"x", u"0"}, {"y", u"6"}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[4]}, {"pixelformat", u"8BPP"}
     });
     if (!bIsSvmFile)
     {
-        assertXPathAttrs(pDoc, "/metafile/bmpex[3]"_ostr, {
+        assertXPathAttrs(pDoc, "/metafile/bmpex[3]", {
             {"crc", aExpectedCRC[4]}
         });
     }
-    assertXPathAttrs(pDoc, "/metafile/bmpex[4]"_ostr, {
-        {"x", "2"}, {"y", "6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[5]}, {"pixelformat", "8BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[4]", {
+        {"x", u"2"}, {"y", u"6"}, {"crc", aExpectedCRC[5]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[5]}, {"pixelformat", u"8BPP"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[5]"_ostr, {
-        {"x", "0"}, {"y", "8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[6]}, {"pixelformat", "8BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[5]", {
+        {"x", u"0"}, {"y", u"8"}, {"crc", aExpectedCRC[6]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[6]}, {"pixelformat", u"8BPP"}
     });
-    assertXPathAttrs(pDoc, "/metafile/bmpex[6]"_ostr, {
-        {"x", "2"}, {"y", "8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", "bitmap"}, {"contentchecksum", aExpectedContentChecksum[7]}, {"pixelformat", "8BPP"}
+    assertXPathAttrs(pDoc, "/metafile/bmpex[6]", {
+        {"x", u"2"}, {"y", u"8"}, {"crc", aExpectedCRC[7]}, {"transparenttype", u"bitmap"}, {"contentchecksum", aExpectedContentChecksum[7]}, {"pixelformat", u"8BPP"}
     });
 #else
     (void)bIsSvmFile;
@@ -1240,18 +1240,18 @@ void SvmTest::checkMasks(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/mask[1]"_ostr, {
-        {"x", "1"}, {"y", "2"},
-        {"color", "#000000"}
+    assertXPathAttrs(pDoc, "/metafile/mask[1]", {
+        {"x", u"1"}, {"y", u"2"},
+        {"color", u"#000000"}
     });
-    assertXPathAttrs(pDoc, "/metafile/maskscale[1]"_ostr, {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"},
-        {"color", "#000000"}
+    assertXPathAttrs(pDoc, "/metafile/maskscale[1]", {
+        {"x", u"1"}, {"y", u"2"}, {"width", u"3"}, {"height", u"4"},
+        {"color", u"#000000"}
     });
-    assertXPathAttrs(pDoc, "/metafile/maskscalepart[1]"_ostr, {
-        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
-        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
-        {"color", "#ff0000"}
+    assertXPathAttrs(pDoc, "/metafile/maskscalepart[1]", {
+        {"destx", u"1"}, {"desty", u"2"}, {"destwidth", u"3"}, {"destheight", u"4"},
+        {"srcx", u"2"},  {"srcy", u"1"},  {"srcwidth", u"4"},  {"srcheight", u"3"},
+        {"color", u"#ff0000"}
     });
 }
 
@@ -1292,42 +1292,42 @@ void SvmTest::checkGradient(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/gradient[1]"_ostr, {
-        {"style", "Linear"},
-        {"startcolor", "#ffffff"},
-        {"endcolor", "#000000"},
-        {"angle", "0"},
-        {"border", "0"},
-        {"offsetx", "50"},
-        {"offsety", "50"},
-        {"startintensity", "100"},
-        {"endintensity", "100"},
-        {"steps", "0"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]", {
+        {"style", u"Linear"},
+        {"startcolor", u"#ffffff"},
+        {"endcolor", u"#000000"},
+        {"angle", u"0"},
+        {"border", u"0"},
+        {"offsetx", u"50"},
+        {"offsety", u"50"},
+        {"startintensity", u"100"},
+        {"endintensity", u"100"},
+        {"steps", u"0"},
     });
-    assertXPathAttrs(pDoc, "/metafile/gradient[1]/rectangle"_ostr, {
-        {"left", "1"},
-        {"top", "2"},
-        {"right", "4"},
-        {"bottom", "6"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[1]/rectangle", {
+        {"left", u"1"},
+        {"top", u"2"},
+        {"right", u"4"},
+        {"bottom", u"6"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/gradient[2]"_ostr, {
-        {"style", "Radial"},
-        {"startcolor", "#ff0000"},
-        {"endcolor", "#00ff00"},
-        {"angle", "55"},
-        {"border", "10"},
-        {"offsetx", "22"},
-        {"offsety", "24"},
-        {"startintensity", "4"},
-        {"endintensity", "14"},
-        {"steps", "64"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[2]", {
+        {"style", u"Radial"},
+        {"startcolor", u"#ff0000"},
+        {"endcolor", u"#00ff00"},
+        {"angle", u"55"},
+        {"border", u"10"},
+        {"offsetx", u"22"},
+        {"offsety", u"24"},
+        {"startintensity", u"4"},
+        {"endintensity", u"14"},
+        {"steps", u"64"},
     });
-    assertXPathAttrs(pDoc, "/metafile/gradient[2]/rectangle"_ostr, {
-        {"left", "3"},
-        {"top", "4"},
-        {"right", "3"},
-        {"bottom", "5"},
+    assertXPathAttrs(pDoc, "/metafile/gradient[2]/rectangle", {
+        {"left", u"3"},
+        {"top", u"4"},
+        {"right", u"3"},
+        {"bottom", u"5"},
     });
 }
 
@@ -1365,57 +1365,57 @@ void SvmTest::checkGradientEx(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/gradientex[1]"_ostr, {
-        {"style", "Linear"},
-        {"startcolor", "#ffffff"},
-        {"endcolor", "#000000"},
-        {"angle", "0"},
-        {"border", "0"},
-        {"offsetx", "50"},
-        {"offsety", "50"},
-        {"startintensity", "100"},
-        {"endintensity", "100"},
-        {"steps", "0"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]", {
+        {"style", u"Linear"},
+        {"startcolor", u"#ffffff"},
+        {"endcolor", u"#000000"},
+        {"angle", u"0"},
+        {"border", u"0"},
+        {"offsetx", u"50"},
+        {"offsety", u"50"},
+        {"startintensity", u"100"},
+        {"endintensity", u"100"},
+        {"steps", u"0"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[1]", {
+        {"x", u"1"},
+        {"y", u"8"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[2]", {
+        {"x", u"2"},
+        {"y", u"7"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[3]"_ostr, {
-        {"x", "3"},
-        {"y", "6"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[1]/polygon/point[3]", {
+        {"x", u"3"},
+        {"y", u"6"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[2]"_ostr, {
-        {"style", "Axial"},
-        {"startcolor", "#ff00ff"},
-        {"endcolor", "#008080"},
-        {"angle", "55"},
-        {"border", "10"},
-        {"offsetx", "22"},
-        {"offsety", "24"},
-        {"startintensity", "4"},
-        {"endintensity", "14"},
-        {"steps", "64"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]", {
+        {"style", u"Axial"},
+        {"startcolor", u"#ff00ff"},
+        {"endcolor", u"#008080"},
+        {"angle", u"55"},
+        {"border", u"10"},
+        {"offsetx", u"22"},
+        {"offsety", u"24"},
+        {"startintensity", u"4"},
+        {"endintensity", u"14"},
+        {"steps", u"64"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "2"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[1]", {
+        {"x", u"1"},
+        {"y", u"2"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[2]"_ostr, {
-        {"x", "3"},
-        {"y", "4"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[1]/point[2]", {
+        {"x", u"3"},
+        {"y", u"4"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[1]"_ostr, {
-        {"x", "8"},
-        {"y", "9"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[1]", {
+        {"x", u"8"},
+        {"y", u"9"}
     });
-    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[2]"_ostr, {
-        {"x", "6"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/gradientex[2]/polygon[2]/point[2]", {
+        {"x", u"6"},
+        {"y", u"7"}
     });
 }
 
@@ -1469,21 +1469,21 @@ void SvmTest::checkHatch(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[1]"_ostr, {
-        {"x", "1"}, {"y", "8"},
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[1]", {
+        {"x", u"1"}, {"y", u"8"},
     });
-    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[2]"_ostr, {
-        {"x", "2"}, {"y", "7"},
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[2]", {
+        {"x", u"2"}, {"y", u"7"},
     });
-    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[3]"_ostr, {
-        {"x", "3"}, {"y", "6"},
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/polygon/point[3]", {
+        {"x", u"3"}, {"y", u"6"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/hatch[1]/hatch"_ostr, {
-        {"style", "Single"},
-        {"color", "#ffff00"},
-        {"distance", "15"},
-        {"angle", "900"},
+    assertXPathAttrs(pDoc, "/metafile/hatch[1]/hatch", {
+        {"style", u"Single"},
+        {"color", u"#ffff00"},
+        {"distance", u"15"},
+        {"angle", u"900"},
     });
 }
 
@@ -1514,20 +1514,20 @@ void SvmTest::checkWallpaper(const GDIMetaFile& rMetaFile)
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
     // Funny enough - we don't serialize the rectangle of the wallpaper so it's always EMPTY
-    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]"_ostr,
+    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]",
     {
-        {"left", "0"},
-        {"top", "0"},
-        {"right", "empty"},
-        {"bottom", "empty"},
+        {"left", u"0"},
+        {"top", u"0"},
+        {"right", u"empty"},
+        {"bottom", u"empty"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]/wallpaper"_ostr,
+    assertXPathAttrs(pDoc, "/metafile/wallpaper[1]/wallpaper",
     {
-        {"color", "#00ff00"},
-        {"style", "Tile"},
-        {"fixed", "true"},
-        {"scrollable", "true"},
+        {"color", u"#00ff00"},
+        {"style", u"Tile"},
+        {"fixed", u"true"},
+        {"scrollable", u"true"},
     });
 }
 
@@ -1548,71 +1548,71 @@ void SvmTest::checkClipRegion(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[1]"_ostr, {
-        {"left", "2"},
-        {"top", "2"},
-        {"right", "5"},
-        {"bottom", "5"},
+    assertXPathAttrs(pDoc, "/metafile/clipregion[1]", {
+        {"left", u"2"},
+        {"top", u"2"},
+        {"right", u"5"},
+        {"bottom", u"5"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[1]", {
+        {"x", u"1"},
+        {"y", u"8"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[2]", {
+        {"x", u"2"},
+        {"y", u"7"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[3]"_ostr, {
-        {"x", "3"},
-        {"y", "6"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[2]/polygon[1]/point[3]", {
+        {"x", u"3"},
+        {"y", u"6"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[1]", {
+        {"x", u"1"},
+        {"y", u"8"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[2]", {
+        {"x", u"2"},
+        {"y", u"7"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[3]"_ostr, {
-        {"x", "3"},
-        {"y", "6"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[1]/point[3]", {
+        {"x", u"3"},
+        {"y", u"6"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[1]"_ostr, {
-        {"x", "4"},
-        {"y", "9"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[1]", {
+        {"x", u"4"},
+        {"y", u"9"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[2]"_ostr, {
-        {"x", "5"},
-        {"y", "10"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[2]", {
+        {"x", u"5"},
+        {"y", u"10"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[3]"_ostr, {
-        {"x", "6"},
-        {"y", "11"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[3]/polygon[2]/point[3]", {
+        {"x", u"6"},
+        {"y", u"11"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[1]"_ostr, {
-        {"x", "0"},
-        {"y", "1"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[1]", {
+        {"x", u"0"},
+        {"y", u"1"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "3"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[2]", {
+        {"x", u"2"},
+        {"y", u"3"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[3]"_ostr, {
-        {"x", "4"},
-        {"y", "4"}
+    assertXPathAttrs(pDoc, "/metafile/clipregion[4]/polygon[1]/point[3]", {
+        {"x", u"4"},
+        {"y", u"4"}
     });
 }
 
@@ -1664,11 +1664,11 @@ void SvmTest::checkIntersectRectClipRegion(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]"_ostr, {
-        {"left", "1"},
-        {"top", "2"},
-        {"right", "4"},
-        {"bottom", "9"}
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]", {
+        {"left", u"1"},
+        {"top", u"2"},
+        {"right", u"4"},
+        {"bottom", u"9"}
     });
 }
 
@@ -1691,25 +1691,25 @@ void SvmTest::checkIntersectRegionClipRegion(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]"_ostr, {
-        {"left", "1"},
-        {"top", "2"},
-        {"right", "5"},
-        {"bottom", "6"}
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[1]", {
+        {"left", u"1"},
+        {"top", u"2"},
+        {"right", u"5"},
+        {"bottom", u"6"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[2]"_ostr, {
-        {"left", "1"},
-        {"top", "2"},
-        {"right", "7"},
-        {"bottom", "8"}
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[2]", {
+        {"left", u"1"},
+        {"top", u"2"},
+        {"right", u"7"},
+        {"bottom", u"8"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[3]"_ostr, {
-        {"left", "0"},
-        {"top", "3"},
-        {"right", "2"},
-        {"bottom", "6"}
+    assertXPathAttrs(pDoc, "/metafile/sectregionclipregion[3]", {
+        {"left", u"0"},
+        {"top", u"3"},
+        {"right", u"2"},
+        {"bottom", u"6"}
     });
 }
 
@@ -1756,14 +1756,14 @@ void SvmTest::checkMoveClipRegion(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/moveclipregion[1]"_ostr, {
-        {"horzmove", "1"},
-        {"vertmove", "2"}
+    assertXPathAttrs(pDoc, "/metafile/moveclipregion[1]", {
+        {"horzmove", u"1"},
+        {"vertmove", u"2"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/moveclipregion[2]"_ostr, {
-        {"horzmove", "-3"},
-        {"vertmove", "-4"}
+    assertXPathAttrs(pDoc, "/metafile/moveclipregion[2]", {
+        {"horzmove", u"-3"},
+        {"vertmove", u"-4"}
     });
 }
 
@@ -1790,8 +1790,8 @@ void SvmTest::checkLineColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/push/linecolor[1]"_ostr, {
-        {"color", "#654321"},
+    assertXPathAttrs(pDoc, "/metafile/push/linecolor[1]", {
+        {"color", u"#654321"},
     });
 }
 
@@ -1813,8 +1813,8 @@ void SvmTest::checkFillColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/push/fillcolor[1]"_ostr, {
-        {"color", "#456789"},
+    assertXPathAttrs(pDoc, "/metafile/push/fillcolor[1]", {
+        {"color", u"#456789"},
     });
 }
 
@@ -1836,8 +1836,8 @@ void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textcolor[1]"_ostr, {
-        {"color", "#123456"},
+    assertXPathAttrs(pDoc, "/metafile/textcolor[1]", {
+        {"color", u"#123456"},
     });
 }
 
@@ -1857,8 +1857,8 @@ void SvmTest::checkTextFillColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textfillcolor[1]"_ostr, {
-        {"color", "#234567"},
+    assertXPathAttrs(pDoc, "/metafile/textfillcolor[1]", {
+        {"color", u"#234567"},
     });
 }
 
@@ -1878,8 +1878,8 @@ void SvmTest::checkTextLineColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textlinecolor[1]"_ostr, {
-        {"color", "#345678"},
+    assertXPathAttrs(pDoc, "/metafile/textlinecolor[1]", {
+        {"color", u"#345678"},
     });
 }
 
@@ -1899,8 +1899,8 @@ void SvmTest::checkOverLineColor(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/push/overlinecolor[1]"_ostr, {
-        {"color", "#345678"},
+    assertXPathAttrs(pDoc, "/metafile/push/overlinecolor[1]", {
+        {"color", u"#345678"},
     });
 }
 
@@ -1922,8 +1922,8 @@ void SvmTest::checkTextAlign(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textalign[1]"_ostr, {
-        {"align", "bottom"},
+    assertXPathAttrs(pDoc, "/metafile/textalign[1]", {
+        {"align", u"bottom"},
     });
 }
 
@@ -1943,28 +1943,28 @@ void SvmTest::checkMapMode(const GDIMetaFile& rMetafile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
 
-    assertXPathAttrs(pDoc, "/metafile/mapmode[1]"_ostr, {
-        {"mapunit", "MapPixel"},
-        {"x", "0"},
-        {"y", "0"},
-        {"scalex", "(1/1)"},
-        {"scaley", "(1/1)"}
+    assertXPathAttrs(pDoc, "/metafile/mapmode[1]", {
+        {"mapunit", u"MapPixel"},
+        {"x", u"0"},
+        {"y", u"0"},
+        {"scalex", u"(1/1)"},
+        {"scaley", u"(1/1)"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/mapmode[2]"_ostr, {
-        {"mapunit", "Map100thInch"},
-        {"x", "0"},
-        {"y", "1"},
-        {"scalex", "(1/2)"},
-        {"scaley", "(2/3)"}
+    assertXPathAttrs(pDoc, "/metafile/mapmode[2]", {
+        {"mapunit", u"Map100thInch"},
+        {"x", u"0"},
+        {"y", u"1"},
+        {"scalex", u"(1/2)"},
+        {"scaley", u"(2/3)"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/mapmode[3]"_ostr, {
-        {"mapunit", "MapRelative"},
-        {"x", "0"},
-        {"y", "-1"},
-        {"scalex", "(25/12)"},
-        {"scaley", "(25/16)"}
+    assertXPathAttrs(pDoc, "/metafile/mapmode[3]", {
+        {"mapunit", u"MapRelative"},
+        {"x", u"0"},
+        {"y", u"-1"},
+        {"scalex", u"(25/12)"},
+        {"scaley", u"(25/16)"}
     });
 }
 
@@ -1998,16 +1998,16 @@ void SvmTest::testMapMode()
 void SvmTest::checkFont(const GDIMetaFile& rMetafile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
-    assertXPathAttrs(pDoc, "/metafile/font[1]"_ostr, {
-        {"color", "#ffffff"},
-        {"fillcolor", "#ffffff"},
-        {"name", "Liberation Sans"},
-        {"stylename", "Regular"},
-        {"width", "12"},
-        {"height", "12"},
-        {"orientation", "50"},
-        {"weight", "thin"},
-        {"vertical", "true"},
+    assertXPathAttrs(pDoc, "/metafile/font[1]", {
+        {"color", u"#ffffff"},
+        {"fillcolor", u"#ffffff"},
+        {"name", u"Liberation Sans"},
+        {"stylename", u"Regular"},
+        {"width", u"12"},
+        {"height", u"12"},
+        {"orientation", u"50"},
+        {"weight", u"thin"},
+        {"vertical", u"true"},
     });
 }
 #endif
@@ -2039,16 +2039,16 @@ void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/push[1]"_ostr, {{"flags", "PushAll"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/linecolor[1]"_ostr, {{"color", "#800000"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/line[1]"_ostr, {
-        {"startx", "4"}, {"starty", "4"},
-        {"endx", "6"},   {"endy", "6"},
+    assertXPathAttrs(pDoc, "/metafile/push[1]", {{"flags", u"PushAll"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/linecolor[1]", {{"color", u"#800000"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/line[1]", {
+        {"startx", u"4"}, {"starty", u"4"},
+        {"endx", u"6"},   {"endy", u"6"},
     });
-    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]"_ostr, {{"flags", "PushLineColor, PushFillColor"}});
-    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]/line[1]"_ostr, {
-        {"startx", "5"}, {"starty", "5"},
-        {"endx", "7"},   {"endy", "7"},
+    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]", {{"flags", u"PushLineColor, PushFillColor"}});
+    assertXPathAttrs(pDoc, "/metafile/push[1]/push[1]/line[1]", {
+        {"startx", u"5"}, {"starty", u"5"},
+        {"endx", u"7"},   {"endy", u"7"},
     });
 }
 
@@ -2077,8 +2077,8 @@ void SvmTest::checkRasterOp(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/rasterop[1]"_ostr, {
-        {"operation", "xor"},
+    assertXPathAttrs(pDoc, "/metafile/rasterop[1]", {
+        {"operation", u"xor"},
     });
 }
 
@@ -2098,18 +2098,18 @@ void SvmTest::checkTransparent(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/transparent[1]"_ostr, {
-        {"transparence", "50"},
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]", {
+        {"transparence", u"50"},
     });
 
-    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[1]"_ostr, {
-        {"x", "1"}, {"y", "8"},
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[1]", {
+        {"x", u"1"}, {"y", u"8"},
     });
-    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[2]"_ostr, {
-        {"x", "2"}, {"y", "7"},
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[2]", {
+        {"x", u"2"}, {"y", u"7"},
     });
-    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[3]"_ostr, {
-        {"x", "3"}, {"y", "6"},
+    assertXPathAttrs(pDoc, "/metafile/transparent[1]/polygon/point[3]", {
+        {"x", u"3"}, {"y", u"6"},
     });
 }
 
@@ -2138,35 +2138,35 @@ void SvmTest::checkFloatTransparent(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]"_ostr, {
-        {"x", "1"},
-        {"y", "2"},
-        {"width", "3"},
-        {"height", "4"},
-        {"transparent", "true"}
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]", {
+        {"x", u"1"},
+        {"y", u"2"},
+        {"width", u"3"},
+        {"height", u"4"},
+        {"transparent", u"true"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/gradient[1]"_ostr, {
-        {"style", "Linear"},
-        {"startcolor", "#ffffff"},
-        {"endcolor", "#000000"},
-        {"angle", "0"},
-        {"border", "0"},
-        {"offsetx", "50"},
-        {"offsety", "50"},
-        {"startintensity", "100"},
-        {"endintensity", "100"},
-        {"steps", "0"}
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/gradient[1]", {
+        {"style", u"Linear"},
+        {"startcolor", u"#ffffff"},
+        {"endcolor", u"#000000"},
+        {"angle", u"0"},
+        {"border", u"0"},
+        {"offsetx", u"50"},
+        {"offsety", u"50"},
+        {"startintensity", u"100"},
+        {"endintensity", u"100"},
+        {"steps", u"0"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"}
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[1]", {
+        {"x", u"1"},
+        {"y", u"8"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/floattransparent[1]/metafile[1]/point[2]", {
+        {"x", u"2"},
+        {"y", u"7"}
     });
 }
 
@@ -2195,41 +2195,41 @@ void SvmTest::checkEPS(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/eps[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"},
-        {"width", "2"},
-        {"height", "7"}
+    assertXPathAttrs(pDoc, "/metafile/eps[1]", {
+        {"x", u"1"},
+        {"y", u"8"},
+        {"width", u"2"},
+        {"height", u"7"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]"_ostr, {
-        {"width", "3"},
-        {"height", "6"},
-        {"type", "EpsBuffer"},
-        {"userid", "12345"},
-        {"datasize", "3"},
-        {"data", "616263"},
-        {"native", "false"},
-        {"emf", "false"},
-        {"validmapmode", "true"}
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]", {
+        {"width", u"3"},
+        {"height", u"6"},
+        {"type", u"EpsBuffer"},
+        {"userid", u"12345"},
+        {"datasize", u"3"},
+        {"data", u"616263"},
+        {"native", u"false"},
+        {"emf", u"false"},
+        {"validmapmode", u"true"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]/prefmapmode[1]"_ostr, {
-        {"mapunit", "Map100thInch"},
-        {"x", "0"},
-        {"y", "1"},
-        {"scalex", "(1/2)"},
-        {"scaley", "(2/3)"}
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/gfxlink[1]/prefmapmode[1]", {
+        {"mapunit", u"Map100thInch"},
+        {"x", u"0"},
+        {"y", u"1"},
+        {"scalex", u"(1/2)"},
+        {"scaley", u"(2/3)"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[1]"_ostr, {
-        {"x", "1"},
-        {"y", "8"}
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[1]", {
+        {"x", u"1"},
+        {"y", u"8"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[2]"_ostr, {
-        {"x", "2"},
-        {"y", "7"}
+    assertXPathAttrs(pDoc, "/metafile/eps[1]/metafile[1]/point[2]", {
+        {"x", u"2"},
+        {"y", u"7"}
     });
 }
 
@@ -2269,16 +2269,16 @@ void SvmTest::checkRefPoint(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/refpoint[1]"_ostr, {
-        {"x", "0"},
-        {"y", "0"},
-        {"set", "false"}
+    assertXPathAttrs(pDoc, "/metafile/refpoint[1]", {
+        {"x", u"0"},
+        {"y", u"0"},
+        {"set", u"false"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/refpoint[2]"_ostr, {
-        {"x", "1"},
-        {"y", "2"},
-        {"set", "true"}
+    assertXPathAttrs(pDoc, "/metafile/refpoint[2]", {
+        {"x", u"1"},
+        {"y", u"2"},
+        {"set", u"true"}
     });
 }
 
@@ -2300,25 +2300,25 @@ void SvmTest::checkComment(const GDIMetaFile& rMetafile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetafile);
 
-    assertXPathAttrs(pDoc, "/metafile/comment[1]"_ostr, {
-        {"value", "0"}
+    assertXPathAttrs(pDoc, "/metafile/comment[1]", {
+        {"value", u"0"}
     });
 
-    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]"_ostr, u"Test comment"_ustr);
+    assertXPathContent(pDoc, "/metafile/comment[1]/comment[1]", u"Test comment");
 
-    assertXPathAttrs(pDoc, "/metafile/comment[2]"_ostr, {
-        {"datasize", "48"}
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"datasize", u"48"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/comment[2]"_ostr, {
-        {"data", "540068006500730065002000610072006500200073006f006d0065002000740065007300740020006400610074006100"}
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"data", u"540068006500730065002000610072006500200073006f006d0065002000740065007300740020006400610074006100"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/comment[2]"_ostr, {
-        {"value", "4"}
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"value", u"4"}
     });
 
-    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]"_ostr, u"This is a test comment"_ustr);
+    assertXPathContent(pDoc, "/metafile/comment[2]/comment[1]", u"This is a test comment");
 }
 
 void SvmTest::testComment()
@@ -2345,12 +2345,12 @@ void SvmTest::checkLayoutMode(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/layoutmode[1]"_ostr, {
-        {"textlayout", "TextOriginLeft"}
+    assertXPathAttrs(pDoc, "/metafile/layoutmode[1]", {
+        {"textlayout", u"TextOriginLeft"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/layoutmode[2]"_ostr, {
-        {"textlayout", "BiDiRtl"}
+    assertXPathAttrs(pDoc, "/metafile/layoutmode[2]", {
+        {"textlayout", u"BiDiRtl"}
     });
 }
 
@@ -2371,12 +2371,12 @@ void SvmTest::checkTextLanguage(const GDIMetaFile& rMetaFile)
 {
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
-    assertXPathAttrs(pDoc, "/metafile/textlanguage[1]"_ostr, {
-        {"language", "#0408"}
+    assertXPathAttrs(pDoc, "/metafile/textlanguage[1]", {
+        {"language", u"#0408"}
     });
 
-    assertXPathAttrs(pDoc, "/metafile/textlanguage[2]"_ostr, {
-        {"language", "#00ff"}
+    assertXPathAttrs(pDoc, "/metafile/textlanguage[2]", {
+        {"language", u"#00ff"}
     });
 }
 

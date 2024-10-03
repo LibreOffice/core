@@ -97,8 +97,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
 
     // Then make sure <style:font-face> elements are sorted (by style:name="..."):
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    xmlXPathObjectPtr pXPath = getXPathNode(
-        pXmlDoc, "/office:document-content/office:font-face-decls/style:font-face"_ostr);
+    xmlXPathObjectPtr pXPath
+        = getXPathNode(pXmlDoc, "/office:document-content/office:font-face-decls/style:font-face");
     xmlNodeSetPtr pXmlNodes = pXPath->nodesetval;
     int nNodeCount = xmlXPathNodeSetGetLength(pXmlNodes);
     std::vector<XmlFont> aXMLFonts;
@@ -186,11 +186,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
         assertXPath(pXmlDoc,
                     "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
-                    "style:graphic-properties[@loext:writing-mode]"_ostr);
+                    "style:graphic-properties[@loext:writing-mode]");
         assertXPath(pXmlDoc,
                     "/office:document-styles/office:styles/style:style[@style:name='FrameBTLR']/"
-                    "style:graphic-properties"_ostr,
-                    "writing-mode"_ostr, u"bt-lr"_ustr);
+                    "style:graphic-properties",
+                    "writing-mode", u"bt-lr");
     }
 
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
@@ -204,8 +204,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
         xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-styles/office:styles/"
-                               "style:style[@style:name='FrameBTLR']/style:graphic-properties"_ostr,
-                               "writing-mode"_ostr);
+                               "style:style[@style:name='FrameBTLR']/style:graphic-properties",
+                               "writing-mode");
     }
 }
 
@@ -229,12 +229,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties[@loext:vertical-rel]"_ostr);
+            "style:graphic-properties[@loext:vertical-rel]");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties"_ostr,
-            "vertical-rel"_ostr, u"page-content-bottom"_ustr);
+            "style:graphic-properties",
+            "vertical-rel", u"page-content-bottom");
     }
 
     loadFromFile(u"tdf150407_PosRelBottomMargin.docx");
@@ -248,8 +248,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelBottomMargin)
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
-                               "style:style[@style:name='gr1']/style:graphic-properties"_ostr,
-                               "vertical-rel"_ostr);
+                               "style:style[@style:name='gr1']/style:graphic-properties",
+                               "vertical-rel");
     }
 }
 
@@ -273,12 +273,12 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties[@loext:vertical-rel]"_ostr);
+            "style:graphic-properties[@loext:vertical-rel]");
         assertXPath(
             pXmlDoc,
             "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/"
-            "style:graphic-properties"_ostr,
-            "vertical-rel"_ostr, u"page-content-top"_ustr);
+            "style:graphic-properties",
+            "vertical-rel", u"page-content-top");
     }
 
     loadFromFile(u"tdf150407_PosRelTopMargin.docx");
@@ -292,8 +292,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         assertXPathNoAttribute(pXmlDoc,
                                "/office:document-content/office:automatic-styles/"
-                               "style:style[@style:name='gr1']/style:graphic-properties"_ostr,
-                               "vertical-rel"_ostr);
+                               "style:style[@style:name='gr1']/style:graphic-properties",
+                               "vertical-rel");
     }
 }
 
@@ -311,17 +311,17 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath
         = "/office:document-styles/office:styles/draw:gradient[@draw:name='red2yellow']"_ostr;
-    assertXPath(pXmlDoc, sPath, "start-color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath, "end-color"_ostr, u"#ffff00"_ustr);
+    assertXPath(pXmlDoc, sPath, "start-color", u"#ff0000");
+    assertXPath(pXmlDoc, sPath, "end-color", u"#ffff00");
 
     // And it must have the new 'gradient-stop' elements.
     // The prefix 'loext' needs to be adapted, when the element is available in ODF strict.
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-type"_ostr, u"rgb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-type"_ostr, u"rgb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value"_ostr, u"#ffff00"_ustr);
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset", u"0");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-type", u"rgb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value", u"#ff0000");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset", u"1");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-type", u"rgb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value", u"#ffff00");
 
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -364,23 +364,23 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
     // For compatibility the file should still have the old attributes.
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath = "/office:document-styles/office:styles/draw:opacity"_ostr;
-    assertXPath(pXmlDoc, sPath, "start"_ostr, u"10%"_ustr); // UI 90% transparency
-    assertXPath(pXmlDoc, sPath, "end"_ostr, u"100%"_ustr); // UI 0% transparency
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"20%"_ustr);
-    assertXPath(pXmlDoc, sPath, "cx"_ostr, u"50%"_ustr);
-    assertXPath(pXmlDoc, sPath, "cy"_ostr, u"50%"_ustr);
-    assertXPath(pXmlDoc, sPath, "style"_ostr, u"radial"_ustr);
+    assertXPath(pXmlDoc, sPath, "start", u"10%"); // UI 90% transparency
+    assertXPath(pXmlDoc, sPath, "end", u"100%"); // UI 0% transparency
+    assertXPath(pXmlDoc, sPath, "border", u"20%");
+    assertXPath(pXmlDoc, sPath, "cx", u"50%");
+    assertXPath(pXmlDoc, sPath, "cy", u"50%");
+    assertXPath(pXmlDoc, sPath, "style", u"radial");
 
     // And it must have the new 'opacity-stop' elements.
     // The prefix 'loext' needs to be adapted, when the element is available in ODF strict.
     OString sFirstStop = sPath + "/loext:opacity-stop[1]";
-    assertXPath(pXmlDoc, sFirstStop, "offset"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sFirstStop, "offset", u"0");
     // Because of converting through color, the grade of opacity is not exact "0.1"
     double fOpacity = getXPathContent(pXmlDoc, sFirstStop + "/@svg:stop-opacity").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, fOpacity, 0.002);
 
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "offset"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "offset", u"1");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity", u"1");
 
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -425,25 +425,25 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath
         = "/office:document-styles/office:styles/draw:gradient[@draw:name='threeStops']"_ostr;
-    assertXPath(pXmlDoc, sPath, "start-color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath, "end-color"_ostr, u"#ffff00"_ustr);
-    assertXPath(pXmlDoc, sPath, "style"_ostr, u"square"_ustr);
-    assertXPath(pXmlDoc, sPath, "cx"_ostr, u"0%"_ustr);
-    assertXPath(pXmlDoc, sPath, "cy"_ostr, u"50%"_ustr);
-    assertXPath(pXmlDoc, sPath, "angle"_ostr, u"45deg"_ustr);
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"10%"_ustr);
+    assertXPath(pXmlDoc, sPath, "start-color", u"#ff0000");
+    assertXPath(pXmlDoc, sPath, "end-color", u"#ffff00");
+    assertXPath(pXmlDoc, sPath, "style", u"square");
+    assertXPath(pXmlDoc, sPath, "cx", u"0%");
+    assertXPath(pXmlDoc, sPath, "cy", u"50%");
+    assertXPath(pXmlDoc, sPath, "angle", u"45deg");
+    assertXPath(pXmlDoc, sPath, "border", u"10%");
 
     // And it must have the new 'gradient-stop' elements.
     // The prefix 'loext' needs to be adapted, when the element is available in ODF strict.
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-type"_ostr, u"rgb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset"_ostr, u"0.3"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-type"_ostr, u"rgb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value"_ostr, u"#0099bb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "offset"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "color-type"_ostr, u"rgb"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "color-value"_ostr, u"#ffff00"_ustr);
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset", u"0");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-type", u"rgb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value", u"#ff0000");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset", u"0.3");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-type", u"rgb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value", u"#0099bb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "offset", u"1");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "color-type", u"rgb");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[3]", "color-value", u"#ffff00");
 
     // Examine reloaded file
     uno::Reference<drawing::XShape> xShape(getShape(0));
@@ -502,20 +502,20 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath
         = "/office:document-styles/office:styles/draw:gradient[@draw:name='Gradient_20_1']"_ostr;
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value"_ostr, u"#ffff00"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"50%"_ustr);
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "color-value", u"#ff0000");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[2]", "offset", u"1");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "color-value", u"#ffff00");
+    assertXPath(pXmlDoc, sPath + "/loext:gradient-stop[1]", "offset", u"0");
+    assertXPath(pXmlDoc, sPath, "border", u"50%");
 
     // Save to ODF 1.3 strict and make sure border, start-color and end-color are suitable set.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
     save(u"impress8"_ustr);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:gradient-stop", 0);
-    assertXPath(pXmlDoc, sPath, "start-color"_ostr, u"#ffff00"_ustr);
-    assertXPath(pXmlDoc, sPath, "end-color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"50%"_ustr);
+    assertXPath(pXmlDoc, sPath, "start-color", u"#ffff00");
+    assertXPath(pXmlDoc, sPath, "end-color", u"#ff0000");
+    assertXPath(pXmlDoc, sPath, "border", u"50%");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
@@ -534,20 +534,20 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     OString sPath = "/office:document-styles/office:styles/draw:opacity[1]"_ostr;
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity"_ostr, u"0.9"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "offset"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "stop-opacity"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "offset"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"40%"_ustr);
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "stop-opacity", u"0.9");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[2]", "offset", u"1");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "stop-opacity", u"0");
+    assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "offset", u"0");
+    assertXPath(pXmlDoc, sPath, "border", u"40%");
 
     // Save to ODF 1.3 strict and make sure border, start and end opacity are suitable set.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
     save(u"impress8"_ustr);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop", 0);
-    assertXPath(pXmlDoc, sPath, "start"_ostr, u"0%"_ustr);
-    assertXPath(pXmlDoc, sPath, "end"_ostr, u"90%"_ustr);
-    assertXPath(pXmlDoc, sPath, "border"_ostr, u"40%"_ustr);
+    assertXPath(pXmlDoc, sPath, "start", u"0%");
+    assertXPath(pXmlDoc, sPath, "end", u"90%");
+    assertXPath(pXmlDoc, sPath, "border", u"40%");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAxialGradientCompatible)

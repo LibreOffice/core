@@ -229,7 +229,7 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
     // - Expected: 1
     // - Actual  : 0
     // i.e. a custom list level in a para style was lost on import+export.
-    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='mystyle']/w:pPr/w:numPr/w:ilvl"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='mystyle']/w:pPr/w:numPr/w:ilvl", "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
@@ -242,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '/w:document/w:body/w:p/w:r/w:br' number of nodes is incorrect
     // i.e. first the clearing break was turned into a plain break, then it was completely lost.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br"_ostr, "clear"_ostr, u"all"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", "clear", u"all");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
@@ -272,8 +272,8 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     // - Actual  : 0
     // XPath '//w:sdt/w:sdtPr/w:showingPlcHdr' number of nodes is incorrect
     // i.e. the SDT elements were missing on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:showingPlcHdr"_ostr, 1);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:showingPlcHdr", 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
@@ -306,9 +306,9 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     // - Actual  : 0
     // - XPath '//w:sdt/w:sdtPr/w14:checkbox/w14:checked' number of nodes is incorrect
     // i.e. <w14:checkbox> and its child elements were lost.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checked"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checkedState"_ostr, "val"_ostr, u"2612"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:uncheckedState"_ostr, "val"_ostr, u"2610"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checked", "val", u"1");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checkedState", "val", u"2612");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:uncheckedState", "val", u"2610");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
@@ -355,12 +355,12 @@ CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
     // - Actual  : 0
     // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]' number of nodes is incorrect
     // i.e. the list items were lost on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]"_ostr, "displayText"_ostr, u"red"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]"_ostr, "value"_ostr, u"R"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]"_ostr, "displayText"_ostr, u"green"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]"_ostr, "value"_ostr, u"G"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]"_ostr, "displayText"_ostr, u"blue"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]"_ostr, "value"_ostr, u"B"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "displayText", u"red");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", u"R");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "displayText", u"green");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", u"G");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "displayText", u"blue");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "value", u"B");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
@@ -394,7 +394,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureContentControlExport)
     // - Expected: 1
     // - Actual  : 0
     // i.e. <w:picture> was lost on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:picture"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:picture", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
@@ -439,20 +439,20 @@ CPPUNIT_TEST_FIXTURE(Test, testDateContentControlExport)
     // - Actual  : 0
     // - XPath '//w:sdt/w:sdtPr/w:date/w:dateFormat' number of nodes is incorrect
     // i.e. the <w:date> was lost on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:dateFormat"_ostr, "val"_ostr, u"M/d/yyyy"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:lid"_ostr, "val"_ostr, u"en-US"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date"_ostr, "fullDate"_ostr, u"2022-05-26T00:00:00Z"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:placeholder/w:docPart"_ostr, "val"_ostr, u"DefaultPlaceholder_-1854013437"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding"_ostr, "prefixMappings"_ostr, u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' "_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding"_ostr, "xpath"_ostr, u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding"_ostr, "storeItemID"_ostr, u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color"_ostr, "val"_ostr, u"008000"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:appearance"_ostr, "val"_ostr, u"hidden"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias"_ostr, "val"_ostr, u"myalias"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag"_ostr, "val"_ostr, u"mytag"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:id"_ostr, "val"_ostr, u"123"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tabIndex"_ostr, "val"_ostr, u"-1"_ustr);
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock"_ostr, "val"_ostr, u"sdtLocked"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:dateFormat", "val", u"M/d/yyyy");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date/w:lid", "val", u"en-US");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", "fullDate", u"2022-05-26T00:00:00Z");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:placeholder/w:docPart", "val", u"DefaultPlaceholder_-1854013437");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "prefixMappings", u"xmlns:ns0='http://schemas.microsoft.com/vsto/samples' ");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "xpath", u"/ns0:employees[1]/ns0:employee[1]/ns0:hireDate[1]");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dataBinding", "storeItemID", u"{241A8A02-7FFD-488D-8827-63FBE74E8BC9}");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:color", "val", u"008000");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w15:appearance", "val", u"hidden");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:alias", "val", u"myalias");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", "val", u"mytag");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:id", "val", u"123");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tabIndex", "val", u"-1");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:lock", "val", u"sdtLocked");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
@@ -478,13 +478,13 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 
     // Then make sure that the page edge -> border space is correct:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:pgMar"_ostr, "top"_ostr, u"284"_ustr);
-    assertXPath(pXmlDoc, "//w:pgBorders/w:top"_ostr, "sz"_ostr, u"36"_ustr);
+    assertXPath(pXmlDoc, "//w:pgMar", "top", u"284");
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "sz", u"36");
     // Without the fix in place, this test would have failed with:
     // - Expected: 28
     // - Actual  : 0
     // i.e. editeng::BorderDistancesToWord() mis-handled negative border distances.
-    assertXPath(pXmlDoc, "//w:pgBorders/w:top"_ostr, "space"_ostr, u"28"_ustr);
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", u"28");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
@@ -496,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
     // Without the fix in place, this test would have failed with
     // - Expected:  MACROBUTTON AllCaps Hello World
     // - Actual  :  MACROBUTTONAllCaps Hello World
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText"_ostr, u" MACROBUTTON AllCaps Hello World "_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", u" MACROBUTTON AllCaps Hello World ");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
@@ -506,11 +506,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
-    OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart"_ostr, "val"_ostr);
+    OUString sDocPart = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:placeholder/w:docPart", "val");
     CPPUNIT_ASSERT_EQUAL(u"DefaultPlaceholder_-1854013440"_ustr, sDocPart);
 
     // Ensure that we have <w15:color v:val="xxxx"/>
-    OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w15:color"_ostr, "val"_ostr);
+    OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w15:color", "val");
     CPPUNIT_ASSERT_EQUAL(u"FF0000"_ustr, sColor);
 }
 
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
     // - Expected: 0
     // - Actual  : 1
     // i.e. builtin styles were added to the export result, even if we opted out.
-    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Caption']"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Caption']", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
@@ -602,28 +602,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
     loadAndReload("tdf148720.odt");
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
-    const OString sShapeXPaths[] =
+    const char* sShapeXPaths[] =
     {
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]"_ostr,
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[1]"_ostr,
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[2]"_ostr,
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]"_ostr
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]",
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[1]",
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[2]",
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]"
     };
 
-    const OString sTextXPaths[] =
+    const char* sTextXPaths[] =
     {
-        "/root/page/body/txt/anchored/fly[1]/infos/bounds"_ostr,
-        "/root/page/body/txt/anchored/fly[2]/infos/bounds"_ostr,
-        "/root/page/body/txt/anchored/fly[3]/infos/bounds"_ostr,
-        "/root/page/body/txt/anchored/fly[4]/infos/bounds"_ostr
+        "/root/page/body/txt/anchored/fly[1]/infos/bounds",
+        "/root/page/body/txt/anchored/fly[2]/infos/bounds",
+        "/root/page/body/txt/anchored/fly[3]/infos/bounds",
+        "/root/page/body/txt/anchored/fly[4]/infos/bounds"
     };
 
-    const OString sAttribs[] =
+    const char* sAttribs[] =
     {
-        "left"_ostr,
-        "top"_ostr,
-        "width"_ostr,
-        "height"_ostr
+        "left",
+        "top",
+        "width",
+        "height"
     };
 
     for (sal_Int32 i = 0; i < 4; ++i)
@@ -631,7 +631,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148720)
         OUString aShapeVals[4];
         int aTextVals[4] = {0, 0, 0, 0};
 
-        const auto aOutRect = getXPath(pLayout, sShapeXPaths[i], "aOutRect"_ostr);
+        const auto aOutRect = getXPath(pLayout, sShapeXPaths[i], "aOutRect");
 
         sal_uInt16 nCommaPos[4] = {0, 0, 0, 0};
         nCommaPos[1] = aOutRect.indexOf(",");
@@ -678,7 +678,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
        return; // initial import, no further checks
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    CPPUNIT_ASSERT_EQUAL(u"Bookmark1"_ustr, getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]"_ostr, "name"_ostr));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name", u"Bookmark1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
@@ -744,11 +744,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153082_comma, "custom-styles-TOC-comma.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf160402, "StyleRef-DE.docx")
 {
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"Heading 1"_ustr);
-    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."_ustr);
-    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"Cras faucibus condimentum odio. Sed ac ligula. Aliquam at eros."_ustr);
-    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."_ustr);
-    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"Aenean nec lorem. In porttitor. Donec laoreet nonummy augue."_ustr);
+    assertXPath(pLayout, "/root/page[1]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Heading 1");
+    assertXPath(pLayout, "/root/page[2]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
+    assertXPath(pLayout, "/root/page[3]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Cras faucibus condimentum odio. Sed ac ligula. Aliquam at eros.");
+    assertXPath(pLayout, "/root/page[4]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus.");
+    assertXPath(pLayout, "/root/page[5]/header/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"Aenean nec lorem. In porttitor. Donec laoreet nonummy augue.");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
@@ -885,7 +885,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
         return;
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // ShowingPlaceholder should be off for 0, false and "on". (This was 21 before the fix)
-    assertXPath(pXmlDoc,"//w:p/w:sdt/w:sdtPr/w:showingPlcHdr"_ostr, 12);
+    assertXPath(pXmlDoc,"//w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 12);
 }
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
@@ -923,14 +923,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:text w:multiLine="1"/>
-    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtPr/w:text"_ostr, "multiLine"_ostr));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:sdt/w:sdtPr/w:text", "multiLine", u"1");
 
     // Ensure that we have <w:text w:multiLine="0"/>
-    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:sdt/w:sdtPr/w:text"_ostr, "multiLine"_ostr));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:sdt/w:sdtPr/w:text", "multiLine", u"0");
 
     // Ensure that we have <w:text/>
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139948, "tdf139948.docx")
@@ -1020,7 +1020,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Find list id for restarted list
-    sal_Int32 nListId = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:numPr/w:numId"_ostr, "val"_ostr).toInt32();
+    sal_Int32 nListId = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:numPr/w:numId", "val").toInt32();
 
     xmlDocUniquePtr pNumberingDoc = parseExport(u"word/numbering.xml"_ustr);
 
@@ -1028,7 +1028,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
     assertXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='0']");
     assertXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='1']");
     // And normal override for level 2
-    getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='2']/w:startOverride", "val"_ostr);
+    getXPath(pNumberingDoc, "/w:numbering/w:num[@w:numId='" + OString::number(nListId) +"']/w:lvlOverride[@w:ilvl='2']/w:startOverride", "val");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
@@ -1086,11 +1086,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149200)
 
     // Ensure there is no unexpected invalid structure <w14:textFill>
     // There is just one run property
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "count(/w:document/w:body/w:p[1]/w:r[1]/w:rPr/*)"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "count(/w:document/w:body/w:p[1]/w:r[1]/w:rPr/*)");
     CPPUNIT_ASSERT(pXmlObj);
     CPPUNIT_ASSERT_EQUAL(double(1), pXmlObj->floatval);
     // And it is a color definition with themeColor
-    CPPUNIT_ASSERT_EQUAL(u"dark1"_ustr, getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:color"_ostr, "themeColor"_ostr));
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:color", "themeColor", u"dark1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
@@ -1100,10 +1100,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf149313, "tdf149313.docx")
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // And ensure that pages are with correct sections (have correct dimensions)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "height"_ostr).toInt32());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds"_ostr, "width"_ostr).toInt32());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[2]/infos/bounds"_ostr, "height"_ostr).toInt32());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds"_ostr, "width"_ostr).toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[1]/infos/bounds", "width").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4989), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "height").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8000), getXPath(pXmlDoc, "/root/page[2]/infos/bounds", "width").toInt32());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148360, "tdf148360.docx")
@@ -1111,9 +1111,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148360, "tdf148360.docx")
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
     // Ensure first element is a tab
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]"_ostr, "type"_ostr, u"PortionType::TabLeft"_ustr);
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[1]", "type", u"PortionType::TabLeft");
     // and only then goes content
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]"_ostr, "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/child::*[2]", "type", u"PortionType::Text");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135923, "tdf135923-min.docx")
@@ -1159,7 +1159,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf139128)
     // - Expected: 2
     // - Actual  : 0
     // i.e. the line break was lost on export.
-    assertXPath(pXmlDoc, "//w:br"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:br", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

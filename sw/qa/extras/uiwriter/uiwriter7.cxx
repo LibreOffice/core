@@ -1359,9 +1359,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
     CPPUNIT_ASSERT(pXmlDoc);
     //asserting XPath in loaded XML DOM
     assertXPath(pXmlDoc, "//office:styles/style:default-style[@style:family='graphic']/"
-                         "style:graphic-properties[@svg:stroke-color='#3465a4']"_ostr);
+                         "style:graphic-properties[@svg:stroke-color='#3465a4']");
     assertXPath(pXmlDoc, "//office:styles/style:default-style[@style:family='graphic']/"
-                         "style:graphic-properties[@draw:fill-color='#729fcf']"_ostr);
+                         "style:graphic-properties[@draw:fill-color='#729fcf']");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf80663)
@@ -2433,12 +2433,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf34957)
     // regardless of whether it was already kept with the previous paragraph,
     // or whether the following paragraph actually fit on the same page (MAB 3.6 - 5.0)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(
-        u"Row 1"_ustr,
-        getXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"Row 1"_ustr,
-        getXPathContent(pXmlDoc, "/root/page[4]/body/tab[1]/row[2]/cell[1]/txt"_ostr));
+    assertXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[2]/cell[1]/txt", u"Row 1");
+    assertXPathContent(pXmlDoc, "/root/page[4]/body/tab[1]/row[2]/cell[1]/txt", u"Row 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89954)
@@ -2864,17 +2860,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf149089)
 {
     createSwDoc("tdf149089.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nPorLen1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]"_ostr, "length"_ostr).toInt32();
-    sal_Int32 nPorLen2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]"_ostr, "length"_ostr).toInt32();
-    sal_Int32 nPorLen3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]"_ostr, "length"_ostr).toInt32();
+    sal_Int32 nPorLen1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "length").toInt32();
+    sal_Int32 nPorLen2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32();
+    sal_Int32 nPorLen3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "length").toInt32();
     // Two SwTextPortion and one SwKernPortion
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nPorLen1); // SwTextPortion "&#x4E00;&#x4E00; "
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), nPorLen2); // SwTextPortion "BUG 11111111"
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nPorLen3); // SwKernPortion
 
-    sal_Int32 nPorWidth1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]"_ostr, "width"_ostr).toInt32();
-    sal_Int32 nPorWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]"_ostr, "width"_ostr).toInt32();
-    sal_Int32 nPorWidth3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]"_ostr, "width"_ostr).toInt32();
+    sal_Int32 nPorWidth1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
+    sal_Int32 nPorWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+    sal_Int32 nPorWidth3 = getXPath(pXmlDoc, "(//SwLinePortion)[3]", "width").toInt32();
     sal_Int32 nGridWidth1 = nPorWidth1 / 3;
     sal_Int32 nGridWidth2 = (nPorWidth2 + nPorWidth3) / 7;
     CPPUNIT_ASSERT_EQUAL(nGridWidth1, nGridWidth2);

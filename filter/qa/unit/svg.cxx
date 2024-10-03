@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testPreserveJpg)
 
     // Make sure that the original JPG data is reused and we don't perform a PNG re-compress.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
-    OUString aAttributeValue = getXPath(pXmlDoc, "//svg:image"_ostr, "href"_ostr);
+    OUString aAttributeValue = getXPath(pXmlDoc, "//svg:image", "href");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: aAttributeValue.startsWith("data:image/jpeg")
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentLine)
     // Get the style of the group around the actual <path> element.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     OUString aStyle = getXPath(
-        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g"_ostr, "style"_ostr);
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.LineShape']/svg:g/svg:g", "style");
     // Without the accompanying fix in place, this test would have failed, as the style was
     // "mask:url(#mask1)", not "opacity: <value>".
     CPPUNIT_ASSERT(aStyle.startsWith("opacity: ", &aStyle));
@@ -102,9 +102,8 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
 
     // Get the style of the group around the actual <path> element.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
-    OUString aStyle
-        = getXPath(pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:g"_ostr,
-                   "style"_ostr);
+    OUString aStyle = getXPath(
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:g", "style");
     CPPUNIT_ASSERT(aStyle.startsWith("opacity: ", &aStyle));
     int nPercent = std::round(aStyle.toDouble() * 100);
     // Make sure that the line is still 50% opaque
@@ -112,8 +111,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentFillWithTransparentLine)
 
     // Get the stroke of the fill of the EllipseShape (it must be "none")
     OUString aStroke = getXPath(
-        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:path"_ostr,
-        "stroke"_ostr);
+        pXmlDoc, "//svg:g[@class='com.sun.star.drawing.EllipseShape']/svg:g/svg:path", "stroke");
     // Without the accompanying fix in place, this test would have failed, as the stroke was
     // "rgb(255,255,255)", not "none".
     CPPUNIT_ASSERT_EQUAL(u"none"_ustr, aStroke);
@@ -139,13 +137,13 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
     // - Actual  : 1
     // i.e. the 2nd shape lots its text.
 
-    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:text"_ostr, 2);
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:text", 2);
 
     // First shape has semi-transparent text.
-    assertXPath(pXmlDoc, "//svg:text[1]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity='0.8']"_ostr);
+    assertXPath(pXmlDoc, "//svg:text[1]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity='0.8']");
 
     // Second shape has normal text.
-    assertXPath(pXmlDoc, "//svg:text[2]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity]"_ostr, 0);
+    assertXPath(pXmlDoc, "//svg:text[2]/svg:tspan/svg:tspan/svg:tspan[@fill-opacity]", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
@@ -176,20 +174,20 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
 
     // Then make sure that the two semi-transparent paragraphs have the same X position:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
-    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]"_ostr,
-                "x"_ostr, u"250"_ustr);
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]", "x",
+                u"250");
     assertXPath(pXmlDoc,
-                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]/svg:tspan"_ostr,
-                "fill-opacity"_ostr, u"0.8"_ustr);
+                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[1]/svg:tspan",
+                "fill-opacity", u"0.8");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 250
     // - Actual  : 8819
     // i.e. the X position of the second paragraph was wrong.
-    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]"_ostr,
-                "x"_ostr, u"250"_ustr);
+    assertXPath(pXmlDoc, "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]", "x",
+                u"250");
     assertXPath(pXmlDoc,
-                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]/svg:tspan"_ostr,
-                "fill-opacity"_ostr, u"0.8"_ustr);
+                "(//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition'])[2]/svg:tspan",
+                "fill-opacity", u"0.8");
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testShapeNographic)
@@ -228,8 +226,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testCustomBullet)
     // i.e. the custom bullet used '<use transform="scale(285,285)"
     // xlink:href="#bullet-char-template-45"/>', but nobody produced a bullet-char-template-45,
     // instead we need the path of the glyph inline.
-    CPPUNIT_ASSERT(
-        !getXPath(pXmlDoc, "//svg:g[@class='BulletChars']//svg:path"_ostr, "d"_ostr).isEmpty());
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, "//svg:g[@class='BulletChars']//svg:path", "d").isEmpty());
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
@@ -258,12 +255,12 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
 
     //assert that each tspan element with TextParagraph class has id and the tspan element of
     //each empty paragraph does not contain tspan element with class TextPosition
-    assertXPath(pXmlDoc, xPath + "[1]", "id"_ostr, u"id4"_ustr);
-    assertXPath(pXmlDoc, xPath + "[2]", "id"_ostr, u"id5"_ustr);
+    assertXPath(pXmlDoc, xPath + "[1]", "id", u"id4");
+    assertXPath(pXmlDoc, xPath + "[2]", "id", u"id5");
     assertXPath(pXmlDoc, xPath + "[2]//svg:tspan[@class='TextPosition']", 0);
-    assertXPath(pXmlDoc, xPath + "[3]", "id"_ostr, u"id6"_ustr);
+    assertXPath(pXmlDoc, xPath + "[3]", "id", u"id6");
     assertXPath(pXmlDoc, xPath + "[3]//svg:tspan[@class='TextPosition']", 0);
-    assertXPath(pXmlDoc, xPath + "[4]", "id"_ostr, u"id7"_ustr);
+    assertXPath(pXmlDoc, xPath + "[4]", "id", u"id7");
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
@@ -291,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
     // - Expected: 2
     // - Actual  : 1
     // i.e. the 2nd text portion was not positioned, which looked as if the tab is lost.
-    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition']"_ostr, 2);
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:tspan[@class='TextPosition']", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, textInImage)
@@ -305,8 +302,8 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, textInImage)
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
     // We expect the Graphic to have an image and a text
-    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:image"_ostr, 1);
-    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:text"_ostr, 1);
+    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:image", 1);
+    assertXPath(pXmlDoc, "//svg:g[@class='Graphic']//svg:text", 1);
     // Without the accompanying fix, this test would have failed with:
     // - Expected: 1
     // - Actual  : 0
@@ -323,22 +320,22 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentTextBullet)
     // Then make sure the result is correct:
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     // We have 3 paragraphs.
-    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:text/svg:tspan"_ostr, 3);
+    assertXPath(pXmlDoc, "//svg:g[@class='TextShape']//svg:text/svg:tspan", 3);
     // Paragraph 1 has no spans with text opacity set.
-    assertXPath(
-        pXmlDoc,
-        "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[1]/svg:tspan/svg:tspan[@fill-opacity='0.8']"_ostr,
-        0);
+    assertXPath(pXmlDoc,
+                "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[1]/svg:tspan/"
+                "svg:tspan[@fill-opacity='0.8']",
+                0);
     // Paragraph 2 has a span with text opacity set to 80%.
-    assertXPath(
-        pXmlDoc,
-        "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[2]/svg:tspan/svg:tspan[@fill-opacity='0.8']"_ostr,
-        1);
+    assertXPath(pXmlDoc,
+                "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[2]/svg:tspan/"
+                "svg:tspan[@fill-opacity='0.8']",
+                1);
     // Paragraph 3 has no spans with text opacity set.
-    assertXPath(
-        pXmlDoc,
-        "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[3]/svg:tspan/svg:tspan[@fill-opacity='0.8']"_ostr,
-        0);
+    assertXPath(pXmlDoc,
+                "(//svg:g[@class='TextShape']//svg:text/svg:tspan)[3]/svg:tspan/"
+                "svg:tspan[@fill-opacity='0.8']",
+                0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testMapModeText)
@@ -351,12 +348,12 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testMapModeText)
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
 
     OUString sTransform
-        = getXPath(pXmlDoc, "(//svg:text[@class='SVGTextShape'])[last()]"_ostr, "transform"_ostr);
+        = getXPath(pXmlDoc, "(//svg:text[@class='SVGTextShape'])[last()]", "transform");
 
     OUString aTextPositionX
-        = getXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[last()]"_ostr, "x"_ostr);
+        = getXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[last()]", "x");
     OUString aTextPositionY
-        = getXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[last()]"_ostr, "y"_ostr);
+        = getXPath(pXmlDoc, "(//svg:tspan[@class='TextPosition'])[last()]", "y");
 
     OUString sExpectedTransform("rotate(-90 " + aTextPositionX + " " + aTextPositionY + ")");
 

@@ -59,14 +59,14 @@ CPPUNIT_TEST_FIXTURE(Test, testEmbeddedFontProps)
     // Test file is a normal ODT, except EmbedFonts is set to true in settings.xml.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // These failed, the attributes were missing.
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-style"_ostr, u"normal"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]"_ostr, "font-weight"_ostr, u"normal"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-style"_ostr, u"normal"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]"_ostr, "font-weight"_ostr, u"bold"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-style"_ostr, u"italic"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]"_ostr, "font-weight"_ostr, u"normal"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-style"_ostr, u"italic"_ustr);
-    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]"_ostr, "font-weight"_ostr, u"bold"_ustr);
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-style", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[1]", "font-weight", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-style", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[2]", "font-weight", u"bold");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-style", u"italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[3]", "font-weight", u"normal");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-style", u"italic");
+    assertXPath(pXmlDoc, "//style:font-face[@style:name='Liberation Serif']/svg:font-face-src/svg:font-face-uri[4]", "font-weight", u"bold");
 #endif
 }
 
@@ -118,22 +118,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106733)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    OUString autostyle = getXPath(pXmlDoc, "//office:body/office:text/text:p[2]/text:span"_ostr,
-                                  "style-name"_ostr);
+    OUString autostyle = getXPath(pXmlDoc, "//office:body/office:text/text:p[2]/text:span",
+                                  "style-name");
     OString autostyle_span_xpath = "//style:style[@style:name='" + autostyle.toUtf8() + "']";
 
     // keep fo:hyphenate="false" in direct formatting
     assertXPath(
         pXmlDoc,
         autostyle_span_xpath + "/style:text-properties",
-        "hyphenate"_ostr, u"false"_ustr);
+        "hyphenate", u"false");
 
     // keep fo:hyphenate="false" in character style
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"styles.xml"_ustr);
     assertXPath(
         pXmlDoc2,
-        "//style:style[@style:name='Strong_20_Emphasis']/style:text-properties"_ostr,
-        "hyphenate"_ostr, u"false"_ustr);
+        "//style:style[@style:name='Strong_20_Emphasis']/style:text-properties",
+        "hyphenate", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page)
@@ -236,7 +236,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_always)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='always']"_ostr, 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='always']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
@@ -252,7 +252,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_table)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='page']"_ostr, 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:paragraph-properties[@loext:hyphenation-keep-type='page']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132599_page_in_default_paragraph_style)
@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158885_compound_remain)
     loadAndReload("tdf158885_compound-remain.fodt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:text-properties[@loext:hyphenation-compound-remain-char-count='3']"_ostr, 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph']/style:text-properties[@loext:hyphenation-compound-remain-char-count='3']", 1);
 }
 
 DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
@@ -347,8 +347,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRubyPosition)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']"_ostr, 1);
-    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']"_ostr, 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@loext:ruby-position='inter-character']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='ruby']/style:ruby-properties[@style:ruby-position='below']", 1);
 }
 
 DECLARE_ODFEXPORT_TEST(testAllowOverlap, "allow-overlap.odt")
@@ -542,12 +542,12 @@ CPPUNIT_TEST_FIXTURE(Test, tdf99631)
     loadAndReload("tdf99631.docx");
     // check import of VisualArea settings of the embedded XLSX OLE objects
     xmlDocUniquePtr pXmlDoc = parseExport(u"Object 1/settings.xml"_ustr);
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, u"4516"_ustr);
-    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, u"903"_ustr);
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaWidth']", u"4516");
+    assertXPathContent(pXmlDoc, "//config:config-item[@config:name='VisibleAreaHeight']", u"903");
 
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"Object 2/settings.xml"_ustr);
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']"_ostr, u"4516"_ustr);
-    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, u"1355"_ustr);
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaWidth']", u"4516");
+    assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']", u"1355");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf145871)
@@ -716,10 +716,10 @@ CPPUNIT_TEST_FIXTURE(Test, tdf124470)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/office:document-content/office:font-face-decls/style:style"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table-column']"_ostr, 2);
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-content/office:font-face-decls/style:style", 0);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table']", 1);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='table-column']", 2);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:family='paragraph']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf135942)
@@ -731,7 +731,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf135942)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 2);
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf150927)
@@ -745,7 +745,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf150927)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 2);
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
@@ -758,23 +758,23 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 
     loadAndReload("personalmetadata.odt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
     pXmlDoc = parseExport(u"settings.xml"_ustr);
     assertXPath(
         pXmlDoc,
-        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']",
         0);
     assertXPath(
         pXmlDoc,
-        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']"_ostr,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']",
         0);
 
     // 2. Remove user info too
@@ -783,23 +783,23 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
 
     loadAndReload("personalmetadata.odt");
     pXmlDoc = parseExport(u"meta.xml"_ustr);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles"_ostr, 0);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template"_ostr, 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:initial-creator", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:creation-date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/dc:creator", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:printed-by", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:print-date", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-duration", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:editing-cycles", 0);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/meta:template", 0);
     pXmlDoc = parseExport(u"settings.xml"_ustr);
     assertXPath(
         pXmlDoc,
-        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']"_ostr,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterName']",
         0);
     assertXPath(
         pXmlDoc,
-        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']"_ostr,
+        "/office:document-settings/office:settings/config:config-item-set[2]/config:config-item[@config:name='PrinterSetup']",
         0);
 }
 
@@ -814,7 +814,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf151100)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']"_ostr, 1);
+    assertXPath(pXmlDoc, "/office:document-styles/office:automatic-styles/style:style[@style:family='table']", 1);
 }
 
 DECLARE_ODFEXPORT_TEST(testGutterLeft, "gutter-left.odt")
@@ -835,11 +835,11 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nTabStop = getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[3]"_ostr, "width"_ostr).toInt32();
+    sal_Int32 nTabStop = getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[3]", "width").toInt32();
     // Without the fix, the text was unseen, with a tabstop width of 64057. It should be 3057
     CPPUNIT_ASSERT(nTabStop < 4000);
     CPPUNIT_ASSERT(3000 < nTabStop);
-    CPPUNIT_ASSERT_EQUAL(u"Pečiatka zamestnávateľa"_ustr, getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]"_ostr, "portion"_ostr));
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]", "portion", u"Pečiatka zamestnávateľa");
 
     // tdf#149547: __XXX___invalid CharacterStyles should not be imported/exported
     CPPUNIT_ASSERT(!getStyles(u"CharacterStyles"_ustr)->hasByName(u"__XXX___invalid"_ustr));
@@ -851,7 +851,7 @@ DECLARE_ODFEXPORT_TEST(testTdf104254_noHeaderWrapping, "tdf104254_noHeaderWrappi
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//header/txt[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//header/txt[1]/infos/bounds", "height").toInt32();
     // The wrapping on header images is supposed to be ignored (since OOo for MS compat reasons),
     // thus making the text run underneath the image. Before, height was 1104. Now it is 552.
     CPPUNIT_ASSERT_MESSAGE("Paragraph should fit on a single line", nParaHeight < 600);
@@ -893,7 +893,7 @@ DECLARE_ODFEXPORT_TEST(testTdf143793_noBodyWrapping, "tdf143793_noBodyWrapping.o
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//page[1]/header/txt[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nParaHeight = getXPath(pXmlDoc, "//page[1]/header/txt[1]/infos/bounds", "height").toInt32();
     // The header text should wrap around the header image in OOo 1.1 and prior,
     // thus taking up two lines instead of one. One line is 276. It should be 552.
     CPPUNIT_ASSERT_MESSAGE("Header text should fill two lines", nParaHeight > 400);
@@ -961,25 +961,25 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
     // Check also that in numbering styles we have num-list-format defined
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, u">%1%<"_ustr);
+        "text:list-level-style-number[@text:level='1']", "num-list-format", u">%1%<");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, u">>%1%/%2%<<"_ustr);
+        "text:list-level-style-number[@text:level='2']", "num-list-format", u">>%1%/%2%<<");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, u">>%1%/%2%/%3%<<"_ustr);
+        "text:list-level-style-number[@text:level='3']", "num-list-format", u">>%1%/%2%/%3%<<");
 
     // But for compatibility there are still prefix/suffix
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, u">"_ustr);
+        "text:list-level-style-number[@text:level='1']", "num-prefix", u">");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, u"<"_ustr);
+        "text:list-level-style-number[@text:level='1']", "num-suffix", u"<");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, u">>"_ustr);
+        "text:list-level-style-number[@text:level='2']", "num-prefix", u">>");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
+        "text:list-level-style-number[@text:level='2']", "num-suffix", u"<<");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, u">>"_ustr);
+        "text:list-level-style-number[@text:level='3']", "num-prefix", u">>");
     assertXPath(pXmlDoc, "/office:document-styles/office:styles/text:list-style[@style:name='WWNum1']/"
-        "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
+        "text:list-level-style-number[@text:level='3']", "num-suffix", u"<<");
 }
 
 DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
@@ -990,8 +990,8 @@ DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         // Check how conversion from prefix/suffix to list format did work
-        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a"_ostr,
-                    "href"_ostr, u"http://shape.com/"_ustr);
+        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
+                    "href", u"http://shape.com/");
     }
 }
 
@@ -1029,25 +1029,25 @@ DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
         xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
         // Check how conversion from prefix/suffix to list format did work
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-list-format"_ostr, u">%1%<"_ustr);
+            "text:list-level-style-number[@text:level='1']", "num-list-format", u">%1%<");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-list-format"_ostr, u">>%1%.%2%<<"_ustr);
+            "text:list-level-style-number[@text:level='2']", "num-list-format", u">>%1%.%2%<<");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-list-format"_ostr, u">>%1%.%2%.%3%<<"_ustr);
+            "text:list-level-style-number[@text:level='3']", "num-list-format", u">>%1%.%2%.%3%<<");
 
         // But for compatibility there are still prefix/suffix as they were before
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-prefix"_ostr, u">"_ustr);
+            "text:list-level-style-number[@text:level='1']", "num-prefix", u">");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']"_ostr, "num-suffix"_ostr, u"<"_ustr);
+            "text:list-level-style-number[@text:level='1']", "num-suffix", u"<");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-prefix"_ostr, u">>"_ustr);
+            "text:list-level-style-number[@text:level='2']", "num-prefix", u">>");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
+            "text:list-level-style-number[@text:level='2']", "num-suffix", u"<<");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-prefix"_ostr, u">>"_ustr);
+            "text:list-level-style-number[@text:level='3']", "num-prefix", u">>");
         assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']"_ostr, "num-suffix"_ostr, u"<<"_ustr);
+            "text:list-level-style-number[@text:level='3']", "num-suffix", u"<<");
     }
 }
 
@@ -1080,12 +1080,12 @@ CPPUNIT_TEST_FIXTURE(Test, tdf120972)
     OUString cDecimal(SvtSysLocale().GetLocaleData().getNumDecimalSep()[0]);
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/style:tab-stop"_ostr,
-        "char"_ostr, cDecimal);
+        "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/style:tab-stop",
+        "char", cDecimal);
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:name='P2']/style:paragraph-properties/style:tab-stops/style:tab-stop"_ostr,
-        "char"_ostr, cDecimal);
+        "//style:style[@style:name='P2']/style:paragraph-properties/style:tab-stops/style:tab-stop",
+        "char", cDecimal);
 }
 
 DECLARE_ODFEXPORT_TEST(testTdf114287, "tdf114287.odt")
@@ -1123,14 +1123,14 @@ DECLARE_ODFEXPORT_TEST(testTdf114287, "tdf114287.odt")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(16), u"ParaRightMargin"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, u"2268"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "left", u"2268");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "right", u"11339");
     // the list style name of the list is the same as the list style name of the
     // paragraph, but in any case the margins of the paragraph take precedence
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, u"2268"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "left"_ostr, u"357"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds"_ostr, "right"_ostr, u"11339"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "left", u"2268");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "right", u"11339");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds", "left", u"357");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[16]/infos/prtBounds", "right", u"11339");
 }
 
 DECLARE_ODFEXPORT_TEST(testSectionColumnSeparator, "section-columns-separator.fodt")
@@ -1235,31 +1235,31 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
     // painting)
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "left"_ostr, u"1134"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "left"_ostr, u"1134"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "left"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "left", u"1134");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds", "left", u"1134");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds", "left", u"0");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/infos/prtBounds", "right", u"9359");
 
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "left"_ostr, u"1701"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "left"_ostr, u"-567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "left"_ostr, u"567"_ustr);
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds"_ostr, "right"_ostr, u"9359"_ustr);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds", "left", u"1701");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds", "left", u"-567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[12]/infos/prtBounds", "right", u"9359");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds", "left", u"567");
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[13]/infos/prtBounds", "right", u"9359");
     }
 
     // now check the positions where text is actually painted -
@@ -1276,54 +1276,54 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
         // 1: inherited from paragraph style and overridden by list
         // bullet char is extra
 
-        assertXPath(pXmlDoc, "//textarray[1]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[1]", "x", u"2306");
         // text is after a tab from list - haven't checked if that is correct?
-        assertXPath(pXmlDoc, "//textarray[2]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[2]", "x", u"2873");
         // second line
-        assertXPath(pXmlDoc, "//textarray[3]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[3]", "x", u"2873");
         // 2: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr, u"3440"_ustr);
-        assertXPath(pXmlDoc, "//textarray[5]"_ostr, "x"_ostr, u"3593"_ustr);
-        assertXPath(pXmlDoc, "//textarray[6]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[4]", "x", u"3440");
+        assertXPath(pXmlDoc, "//textarray[5]", "x", u"3593");
+        assertXPath(pXmlDoc, "//textarray[6]", "x", u"2873");
         // 3: as 1 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[7]"_ostr, "x"_ostr, u"2873"_ustr);
-        assertXPath(pXmlDoc, "//textarray[8]"_ostr, "x"_ostr, u"3440"_ustr);
-        assertXPath(pXmlDoc, "//textarray[9]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[7]", "x", u"2873");
+        assertXPath(pXmlDoc, "//textarray[8]", "x", u"3440");
+        assertXPath(pXmlDoc, "//textarray[9]", "x", u"3440");
         // 4: as 1 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr, u"2306"_ustr);
-        assertXPath(pXmlDoc, "//textarray[11]"_ostr, "x"_ostr, u"3440"_ustr);
-        assertXPath(pXmlDoc, "//textarray[12]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[10]", "x", u"2306");
+        assertXPath(pXmlDoc, "//textarray[11]", "x", u"3440");
+        assertXPath(pXmlDoc, "//textarray[12]", "x", u"3440");
         // 5: as 1 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[13]"_ostr, "x"_ostr, u"1739"_ustr);
-        assertXPath(pXmlDoc, "//textarray[14]"_ostr, "x"_ostr, u"2873"_ustr);
-        assertXPath(pXmlDoc, "//textarray[15]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[13]", "x", u"1739");
+        assertXPath(pXmlDoc, "//textarray[14]", "x", u"2873");
+        assertXPath(pXmlDoc, "//textarray[15]", "x", u"2873");
         // 6: as 1
-        assertXPath(pXmlDoc, "//textarray[16]"_ostr, "x"_ostr, u"2306"_ustr);
-        assertXPath(pXmlDoc, "//textarray[17]"_ostr, "x"_ostr, u"2873"_ustr);
+        assertXPath(pXmlDoc, "//textarray[16]", "x", u"2306");
+        assertXPath(pXmlDoc, "//textarray[17]", "x", u"2873");
 
         // 8: inherited from paragraph style and overridden by list
-        assertXPath(pXmlDoc, "//textarray[18]"_ostr, "x"_ostr, u"2873"_ustr);
-        assertXPath(pXmlDoc, "//textarray[19]"_ostr, "x"_ostr, u"3746"_ustr);
-        assertXPath(pXmlDoc, "//textarray[20]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[18]", "x", u"2873");
+        assertXPath(pXmlDoc, "//textarray[19]", "x", u"3746");
+        assertXPath(pXmlDoc, "//textarray[20]", "x", u"2306");
         // 9: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[21]"_ostr, "x"_ostr, u"3440"_ustr);
-        assertXPath(pXmlDoc, "//textarray[22]"_ostr, "x"_ostr, u"3746"_ustr);
-        assertXPath(pXmlDoc, "//textarray[23]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[21]", "x", u"3440");
+        assertXPath(pXmlDoc, "//textarray[22]", "x", u"3746");
+        assertXPath(pXmlDoc, "//textarray[23]", "x", u"2306");
         // 10: as 8 + paragraph sets textleft
-        assertXPath(pXmlDoc, "//textarray[24]"_ostr, "x"_ostr, u"4007"_ustr);
-        assertXPath(pXmlDoc, "//textarray[25]"_ostr, "x"_ostr, u"4880"_ustr);
-        assertXPath(pXmlDoc, "//textarray[26]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[24]", "x", u"4007");
+        assertXPath(pXmlDoc, "//textarray[25]", "x", u"4880");
+        assertXPath(pXmlDoc, "//textarray[26]", "x", u"3440");
         // 11: as 8 + paragraph sets firstline, textleft
-        assertXPath(pXmlDoc, "//textarray[27]"_ostr, "x"_ostr, u"2306"_ustr);
-        assertXPath(pXmlDoc, "//textarray[28]"_ostr, "x"_ostr, u"3440"_ustr);
-        assertXPath(pXmlDoc, "//textarray[29]"_ostr, "x"_ostr, u"3440"_ustr);
+        assertXPath(pXmlDoc, "//textarray[27]", "x", u"2306");
+        assertXPath(pXmlDoc, "//textarray[28]", "x", u"3440");
+        assertXPath(pXmlDoc, "//textarray[29]", "x", u"3440");
         // 12: as 8 + paragraph sets firstline
-        assertXPath(pXmlDoc, "//textarray[30]"_ostr, "x"_ostr, u"1172"_ustr);
-        assertXPath(pXmlDoc, "//textarray[31]"_ostr, "x"_ostr, u"1739"_ustr);
-        assertXPath(pXmlDoc, "//textarray[32]"_ostr, "x"_ostr, u"2306"_ustr);
+        assertXPath(pXmlDoc, "//textarray[30]", "x", u"1172");
+        assertXPath(pXmlDoc, "//textarray[31]", "x", u"1739");
+        assertXPath(pXmlDoc, "//textarray[32]", "x", u"2306");
         // 13: as 8
-        assertXPath(pXmlDoc, "//textarray[33]"_ostr, "x"_ostr, u"2873"_ustr);
-        assertXPath(pXmlDoc, "//textarray[34]"_ostr, "x"_ostr, u"3746"_ustr);
+        assertXPath(pXmlDoc, "//textarray[33]", "x", u"2873");
+        assertXPath(pXmlDoc, "//textarray[34]", "x", u"3746");
     }
 #endif
 }
@@ -1334,12 +1334,12 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphMarkerMarkupRoundtrip)
     // Test that the markup stays at save-and-reload
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     OUString autostyle
-        = getXPath(pXmlDoc, "//office:body/office:text/text:p"_ostr, "marker-style-name"_ostr);
+        = getXPath(pXmlDoc, "//office:body/office:text/text:p", "marker-style-name");
     OString style_text_properties
         = "/office:document-content/office:automatic-styles/style:style[@style:name='"
           + autostyle.toUtf8() + "']/style:text-properties";
-    assertXPath(pXmlDoc, style_text_properties, "font-size"_ostr, u"9pt"_ustr);
-    assertXPath(pXmlDoc, style_text_properties, "color"_ostr, u"#ff0000"_ustr);
+    assertXPath(pXmlDoc, style_text_properties, "font-size", u"9pt");
+    assertXPath(pXmlDoc, style_text_properties, "color", u"#ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentStyles)
@@ -1389,8 +1389,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_IsLegal)
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(
         pXmlDoc,
-        "/office:document-styles/office:styles/text:outline-style/text:outline-level-style[2]"_ostr,
-        "is-legal"_ostr, u"true"_ustr);
+        "/office:document-styles/office:styles/text:outline-style/text:outline-level-style[2]",
+        "is-legal", u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
@@ -1410,8 +1410,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
             = getXPath(pXmlDoc,
-                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                       "width"_ostr)
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+                       "width")
                   .toInt32();
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width); // It was 720, i.e. 0.5 inch
@@ -1424,7 +1424,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         xmlDocUniquePtr pXmlDoc = parseExport(u"settings.xml"_ustr);
         assertXPathContent(
             pXmlDoc,
-            "//config:config-item[@config:name='NoGapAfterNoteNumber']"_ostr, u"true"_ustr);
+            "//config:config-item[@config:name='NoGapAfterNoteNumber']", u"true");
 
         uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xSettings(
@@ -1434,8 +1434,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
 
         pXmlDoc = parseLayoutDump();
         sal_Int32 width = getXPath(
-            pXmlDoc, "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-            "width"_ostr).toInt32();
+            pXmlDoc, "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+            "width").toInt32();
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
     }
@@ -1453,8 +1453,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
             = getXPath(pXmlDoc,
-                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                       "width"_ostr)
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+                       "width")
                   .toInt32();
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
@@ -1473,8 +1473,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159382)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 width
             = getXPath(pXmlDoc,
-                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                       "width"_ostr)
+                       "/root/page/ftncont/ftn/txt/SwParaPortion/SwLineLayout/SwFieldPortion",
+                       "width")
                   .toInt32();
         CPPUNIT_ASSERT(width);
         CPPUNIT_ASSERT_LESS(sal_Int32(100), width);
@@ -1560,31 +1560,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159438)
     // Test that the markup stays at save-and-reload
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]"_ostr,
-                        "bookmark-start"_ostr);
-    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[1]"_ostr, "name"_ostr,
-                u"bookmark1"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[1]",
+                        "bookmark-start");
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[1]", "name",
+                u"bookmark1");
 
     // Without the fix in place, this would fail with
     // - Expected: bookmark-end
     // - Actual  : bookmark-start
     // - In XPath '//office:body/office:text/text:p/*[2]' name of node is incorrect
-    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[2]"_ostr, "bookmark-end"_ostr);
-    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[2]"_ostr, "name"_ostr,
-                u"bookmark1"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[2]", "bookmark-end");
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[2]", "name",
+                u"bookmark1");
 
-    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[3]"_ostr, "bookmark"_ostr);
-    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[3]"_ostr, "name"_ostr,
-                u"bookmark2"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[3]", "bookmark");
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[3]", "name",
+                u"bookmark2");
 
-    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[4]"_ostr,
-                        "bookmark-start"_ostr);
-    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[4]"_ostr, "name"_ostr,
-                u"bookmark3"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[4]",
+                        "bookmark-start");
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[4]", "name",
+                u"bookmark3");
 
-    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "bookmark-end"_ostr);
-    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[5]"_ostr, "name"_ostr,
-                u"bookmark3"_ustr);
+    assertXPathNodeName(pXmlDoc, "//office:body/office:text/text:p/*[5]", "bookmark-end");
+    assertXPath(pXmlDoc, "//office:body/office:text/text:p/*[5]", "name",
+                u"bookmark3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
@@ -1612,8 +1612,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160700)
     // Check that we export the bookmark in the empty paragraph as a single text:bookmark
     // element. Another valid markup is text:bookmark-start followed by text:bookmark-end
     // (in that order). The problem was, that text:bookmark-end was before text:bookmark-start.
-    assertXPathChildren(pXmlDoc, "//office:text/text:list/text:list-item/text:p"_ostr, 1);
-    assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark"_ostr);
+    assertXPathChildren(pXmlDoc, "//office:text/text:list/text:list-item/text:p", 1);
+    assertXPath(pXmlDoc, "//office:text/text:list/text:list-item/text:p/text:bookmark");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf160253_ordinary_numbering)
@@ -1632,9 +1632,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_ordinary_numbering)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // This failed before the fix, because 'xml:id' attribute wasn't emitted
     OUString firstListId
-        = getXPath(pXmlDoc, "//office:body/office:text/text:list[1]"_ostr, "id"_ostr);
+        = getXPath(pXmlDoc, "//office:body/office:text/text:list[1]", "id");
     CPPUNIT_ASSERT(!firstListId.isEmpty());
-    assertXPath(pXmlDoc, "//office:body/office:text/text:list[2]"_ostr, "continue-list"_ostr,
+    assertXPath(pXmlDoc, "//office:body/office:text/text:list[2]", "continue-list",
                 firstListId);
 }
 
@@ -1653,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160253_outline_numbering)
     // The difference with the ordinary numbering is that for outline numbering, the list element
     // isn't really necessary. It is a TODO to fix the output, and not export the list.
     // xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-    // assertXPath(pXmlDoc, "//office:body/office:text/text:list"_ostr, 0);
+    // assertXPath(pXmlDoc, "//office:body/office:text/text:list", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
@@ -1663,7 +1663,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
     loadAndReload("table_in_frame_to_page.fodt");
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    auto AutoStyleUsedIn = [this, &pXmlDoc](const OString& path, const OString& attr) -> OString
+    auto AutoStyleUsedIn = [this, &pXmlDoc](const OString& path, const char* attr) -> OString
     {
         const OUString styleName = getXPath(pXmlDoc, path, attr);
         return "//office:automatic-styles/style:style[@style:name='" + styleName.toUtf8() + "']";
@@ -1673,12 +1673,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
     // Check also, that autostyles defined inside that frame are stored correctly. If not, then
     // these paragraphs would refer to styles in <office::styles>, not in <office:automatic-styles>,
     // without the 'italic' and 'bold' attributes.
-    OString P = AutoStyleUsedIn(xPathTextBox + "/text:p", "style-name"_ostr);
-    assertXPath(pXmlDoc, P + "/style:text-properties", "font-weight"_ostr, u"bold"_ustr);
+    OString P = AutoStyleUsedIn(xPathTextBox + "/text:p", "style-name");
+    assertXPath(pXmlDoc, P + "/style:text-properties", "font-weight", u"bold");
 
     P = AutoStyleUsedIn(xPathTextBox + "/table:table/table:table-row[1]/table:table-cell[1]/text:p",
-                        "style-name"_ostr);
-    assertXPath(pXmlDoc, P + "/style:text-properties", "font-style"_ostr, u"italic"_ustr);
+                        "style-name");
+    assertXPath(pXmlDoc, P + "/style:text-properties", "font-style", u"italic");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDeletedTableAutostylesExport)
@@ -1713,8 +1713,8 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathContent(pXmlDoc,
                        "//office:body/office:text/text:tracked-changes/text:changed-region/"
-                       "text:deletion/office:change-info/dc:date"_ostr,
-                       u"2001-01-01T00:00:00"_ustr);
+                       "text:deletion/office:change-info/dc:date",
+                       u"2001-01-01T00:00:00");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122452)

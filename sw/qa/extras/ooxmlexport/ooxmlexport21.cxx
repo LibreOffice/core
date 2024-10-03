@@ -379,26 +379,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumberi
     // ESTABLISH A BASELINE: these baseline paragraphs have no special character attributes.
     // Paragraph 1/list 1(uppercase): no formatting applied to list numbering. Width is 253 for me
     const sal_Int32 nUpperCaseWidth
-        = getXPath(pDump, "//body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                   "width"_ostr)
+        = getXPath(pDump, "//body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
               .toInt32();
     // Paragraph 4/list 2(lowercase): no formatting applied to list numbering. Width is 186 for me.
     const sal_Int32 nLowerCaseWidth
-        = getXPath(pDump, "//body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                   "width"_ostr)
+        = getXPath(pDump, "//body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
               .toInt32();
 
     // UPPERCASE LIST
     // Paragraph 2: ODF should honour "lowercase". MSO doesn't know about lowercase
     sal_Int32 nWidth
-        = getXPath(pDump, "//body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                   "width"_ostr)
+        = getXPath(pDump, "//body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
               .toInt32();
     CPPUNIT_ASSERT_EQUAL(isExported() ? nUpperCaseWidth : nLowerCaseWidth, nWidth);
 
     // Paragraph 3: ODF should honour "superscript" (for consistency). MSO ignores superscript
-    nWidth = getXPath(pDump, "//body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                      "width"_ostr)
+    nWidth = getXPath(pDump, "//body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
                  .toInt32();
     if (!isExported())
         CPPUNIT_ASSERT_LESS(nLowerCaseWidth, nWidth);
@@ -407,14 +403,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumberi
 
     // LOWERCASE LIST
     //Paragraph 6: ODF should honour "titlecase". MSO doesn't know about titlecase
-    nWidth = getXPath(pDump, "//body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                      "width"_ostr)
+    nWidth = getXPath(pDump, "//body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
                  .toInt32();
     CPPUNIT_ASSERT_EQUAL(isExported() ? nLowerCaseWidth : nUpperCaseWidth, nWidth);
 
     // Paragraph 7: ODF should honour "smallcaps". MSO apparently has an exception for small caps
-    nWidth = getXPath(pDump, "//body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                      "width"_ostr)
+    nWidth = getXPath(pDump, "//body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
                  .toInt32();
     if (!isExported())
     {
@@ -425,8 +419,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumberi
         CPPUNIT_ASSERT_EQUAL(nLowerCaseWidth, nWidth);
 
     // Paragraph 8: ODF should honour "uppercase". MSO also honours uppercase
-    nWidth = getXPath(pDump, "//body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                      "width"_ostr)
+    nWidth = getXPath(pDump, "//body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
                  .toInt32();
     CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
 }
@@ -444,8 +437,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.o
     {
         xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
         // The 3rd level is NONE. If we include the separator, MS Word will display it.
-        assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText"_ostr, "val"_ostr,
-                    u"(%)%1.%2.%3%4[%]"_ustr);
+        assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText", "val",
+                    u"(%)%1.%2.%3%4[%]");
     }
 }
 
@@ -520,11 +513,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCell, "tdf160077_layoutInCell.doc
     // so that effectively drops A1's print area down as well!
 
     xmlDocUniquePtr pDump = parseLayoutDump();
-    const sal_Int32 nCellTop
-        = getXPath(pDump, "//row[1]/cell[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    const sal_Int32 nCellTop = getXPath(pDump, "//row[1]/cell[1]/infos/bounds", "top").toInt32();
     const sal_Int32 nImageTop
-        = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//row[1]/cell[1]/txt/anchored/SwAnchoredDrawObject/bounds", "top")
               .toInt32();
     // The image should be 1 cm above the 2cm cell margin (thus 1cm below the top of the cell)
     // 1cm is 567 twips. The numbers are not exactly what I would have expected, but close.
@@ -549,8 +540,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellB, "tdf160077_layoutInCellB.d
     xmlDocUniquePtr pDump = parseLayoutDump();
     const sal_Int32 nShapeTop
         = getXPath(pDump,
-                   "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "top"_ostr)
+                   "//body/tab[1]/row[1]/cell[1]/txt[1]/anchored/SwAnchoredDrawObject/bounds",
+                   "top")
               .toInt32();
     // The shape is approximately 1 cm below the top of the page, and ~0.5cm above the cell
     // correct ShapeTop: 888 TWIPS, while incorrect value was -480. Cell top is 1148, PageTop is 284
@@ -571,12 +562,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellC, "tdf160077_layoutInCellC.d
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     const sal_Int32 nPara1Top
-        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     const sal_Int32 nPara1Bottom
-        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+        = getXPath(pDump, "//row[1]/cell[2]/txt[1]/infos/bounds", "bottom").toInt32();
     const sal_Int32 nImageTop
-        = getXPath(pDump, "//row[1]/cell[2]/txt[5]/anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//row[1]/cell[2]/txt[5]/anchored/SwAnchoredDrawObject/bounds", "top")
               .toInt32();
     // The image's top should be positioned at the start of the cell's text area (i.e. para1 top)
     // Before the fix, the image was positioned at the top of the cell.
@@ -602,21 +592,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Cell A1
     sal_Int32 nShapeTop
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds", "top")
               .toInt32();
     sal_Int32 nShapeBottom
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "bottom"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "bottom")
               .toInt32();
     // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
     sal_Int32 nPara1Top
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
     CPPUNIT_ASSERT_EQUAL(OUString("Below logo"),
-                         getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"_ostr));
+                         getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"));
     sal_Int32 nPara5Top
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
@@ -630,21 +619,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf160077_layoutInCellD, "tdf160077_layoutInCellD.d
 
     // Cell B1
     nShapeTop
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds", "top")
               .toInt32();
     nShapeBottom
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "bottom"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "bottom")
               .toInt32();
     // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
-    nPara1Top
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    nPara1Top = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
     CPPUNIT_ASSERT_EQUAL(OUString("Below image"),
-                         getXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]"_ostr));
-    nPara5Top
-        = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+                         getXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]"));
+    nPara5Top = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
@@ -664,8 +650,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nRectBottom
-        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "bottom"_ostr).toInt32();
-    sal_Int32 nTableTop = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds", "bottom").toInt32();
+    sal_Int32 nTableTop = getXPath(pDump, "//tab/row/infos/bounds", "top").toInt32();
     // The entire table must be below the rectangle
     CPPUNIT_ASSERT(nTableTop > nRectBottom);
 
@@ -673,8 +659,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153909_followTextFlow, "tdf153909_followTextFlow
     // Since layoutInCell is true (as a non-defined default), the cell is the fly reference, thus
     // the rectangle should start at the paper's edge, 1.3cm to the left of the start of the table.
     sal_Int32 nRectLeft
-        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nTableLeft = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds", "left").toInt32();
+    sal_Int32 nTableLeft = getXPath(pDump, "//tab/row/infos/bounds", "left").toInt32();
     CPPUNIT_ASSERT(nTableLeft > nRectLeft);
 }
 
@@ -683,22 +669,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162541, "tdf162541_notLayoutInCell_paraLeft.docx
     // given cell B2 with a para-left para-fromTop image that is NOT layoutInCell
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeLeft
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "left"_ostr)
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds",
+                   "left")
               .toInt32();
     sal_Int32 nParaLeft
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nTableLeft = getXPath(pDump, "//tab/infos/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds", "left").toInt32();
+    sal_Int32 nTableLeft = getXPath(pDump, "//tab/infos/bounds", "left").toInt32();
     // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
     CPPUNIT_ASSERT(nShapeLeft < nParaLeft); // shape is located in column A, not column B
     CPPUNIT_ASSERT_EQUAL(nTableLeft, nShapeLeft);
 
     // sal_Int32 nShapeBottom
-    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-    //                "bottom"_ostr)
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/anchored/fly/SwAnchoredObject/bounds",
+    //                "bottom")
     //           .toInt32();
     // sal_Int32 nPara8Top
-    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    //     = getXPath(pDump, "//tab/row[2]/cell[2]/txt[8]/infos/bounds", "top").toInt32();
     // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
     // CPPUNIT_ASSERT(nShapeBottom < nPara8Top); // shape is located at the top of the table para // tdf#133522
 
@@ -711,11 +697,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_from
     // (but Microsoft sees the CHAR orientation and triggers a layoutInCell anyway)
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeTop
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds", "top")
               .toInt32();
-    sal_Int32 nPara1Top
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nPara1Top = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds", "top").toInt32();
     // The image is limited by the cell margin
     CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // tdf#162539
 
@@ -749,10 +733,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160814_commentOrder)
     // make sure the order of the comments is imported and exported correctly
     xmlDocUniquePtr pXmlComments = parseExport(u"word/comments.xml"_ustr);
     // This really should be "1. First comment", the 1. being list numbering...
-    assertXPathContent(pXmlComments, "//w:comment[1]//w:t"_ostr, u"First comment"_ustr);
-    assertXPathContent(pXmlComments, "//w:comment[2]//w:t"_ostr, u"1.1 first reply."_ustr);
-    assertXPathContent(pXmlComments, "//w:comment[4]//w:t"_ostr, u"1.3"_ustr);
-    assertXPathContent(pXmlComments, "//w:comment[6]//w:t"_ostr, u"1.5"_ustr);
+    assertXPathContent(pXmlComments, "//w:comment[1]//w:t", u"First comment");
+    assertXPathContent(pXmlComments, "//w:comment[2]//w:t", u"1.1 first reply.");
+    assertXPathContent(pXmlComments, "//w:comment[4]//w:t", u"1.3");
+    assertXPathContent(pXmlComments, "//w:comment[6]//w:t", u"1.5");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
@@ -764,15 +748,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     loadAndSave("personalmetadata.docx");
 
     xmlDocUniquePtr pAppDoc = parseExport(u"docProps/app.xml"_ustr);
-    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
-    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template", 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
     xmlDocUniquePtr pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 0);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 0);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 0);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy"_ostr, 0);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted"_ostr, 0);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created", 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified", 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator", 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
 
     // 2. Remove personal information, keep user information
     officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(true, pBatch);
@@ -780,15 +764,15 @@ CPPUNIT_TEST_FIXTURE(Test, testPersonalMetaData)
     loadAndSave("personalmetadata.docx");
 
     pAppDoc = parseExport(u"docProps/app.xml"_ustr);
-    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template"_ostr, 0);
-    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:Template", 0);
+    assertXPath(pAppDoc, "/extended-properties:Properties/extended-properties:TotalTime", 0);
     pCoreDoc = parseExport(u"docProps/core.xml"_ustr);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created"_ostr, 1);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified"_ostr, 1);
-    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator"_ostr, 1);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy"_ostr, 1);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted"_ostr, 1);
-    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision"_ostr, 0);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:created", 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dcterms:modified", 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/dc:creator", 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastModifiedBy", 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:lastPrinted", 1);
+    assertXPath(pCoreDoc, "/cp:coreProperties/cp:revision", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf126533_noPageBitmap, "tdf126533_noPageBitmap.docx")
@@ -825,8 +809,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
         return;
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
-    assertXPath(pXmlDocRels,
-                "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']"_ostr, 1);
+    assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']",
+                1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf131098_imageFill, "tdf131098_imageFill.docx")
@@ -846,16 +830,16 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154369, "tdf154369.docx")
     // Without the fix in place, this test would have failed with:
     // - Expected result: A & B bullets display same green color #527d55 as the paragraph
     // - Actual result: A & B bullets display black color, while the paragraph is green color #527d55
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                "expand"_ostr, u"A."_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"A.");
     assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-                "color"_ostr, u"00527d55"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-                "expand"_ostr, u"B."_ustr);
+                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+                "color", u"00527d55");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"B.");
     assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-                "color"_ostr, u"00527d55"_ustr);
+                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+                "color", u"00527d55");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testScreenTip)
@@ -865,8 +849,8 @@ CPPUNIT_TEST_FIXTURE(Test, testScreenTip)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // Hyperlink with ScreenTip
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:hyperlink"_ostr, "tooltip"_ostr,
-                u"This is a hyperlink"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:hyperlink", "tooltip",
+                u"This is a hyperlink");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testEmptyObjectRange)
@@ -884,188 +868,144 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161509)
     CPPUNIT_ASSERT(pXmlStyles);
 
     // Check the mapping of standard style names to their IDs
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:name"_ostr, "val"_ostr,
-                u"Normal"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:name"_ostr, "val"_ostr,
-                u"heading 1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading2']/w:name"_ostr, "val"_ostr,
-                u"heading 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading3']/w:name"_ostr, "val"_ostr,
-                u"heading 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading4']/w:name"_ostr, "val"_ostr,
-                u"heading 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading5']/w:name"_ostr, "val"_ostr,
-                u"heading 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading6']/w:name"_ostr, "val"_ostr,
-                u"heading 6"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading7']/w:name"_ostr, "val"_ostr,
-                u"heading 7"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading8']/w:name"_ostr, "val"_ostr,
-                u"heading 8"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading9']/w:name"_ostr, "val"_ostr,
-                u"heading 9"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index1']/w:name"_ostr, "val"_ostr,
-                u"index 1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index2']/w:name"_ostr, "val"_ostr,
-                u"index 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index3']/w:name"_ostr, "val"_ostr,
-                u"index 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index4']/w:name"_ostr, "val"_ostr,
-                u"index 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index5']/w:name"_ostr, "val"_ostr,
-                u"index 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index6']/w:name"_ostr, "val"_ostr,
-                u"index 6"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index7']/w:name"_ostr, "val"_ostr,
-                u"index 7"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index8']/w:name"_ostr, "val"_ostr,
-                u"index 8"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index9']/w:name"_ostr, "val"_ostr,
-                u"index 9"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC1']/w:name"_ostr, "val"_ostr,
-                u"toc 1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC2']/w:name"_ostr, "val"_ostr,
-                u"toc 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC3']/w:name"_ostr, "val"_ostr,
-                u"toc 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC4']/w:name"_ostr, "val"_ostr,
-                u"toc 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC5']/w:name"_ostr, "val"_ostr,
-                u"toc 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC6']/w:name"_ostr, "val"_ostr,
-                u"toc 6"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC7']/w:name"_ostr, "val"_ostr,
-                u"toc 7"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC8']/w:name"_ostr, "val"_ostr,
-                u"toc 8"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC9']/w:name"_ostr, "val"_ostr,
-                u"toc 9"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NormalIndent']/w:name"_ostr, "val"_ostr,
-                u"Normal Indent"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteText']/w:name"_ostr, "val"_ostr,
-                u"footnote text"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentText']/w:name"_ostr, "val"_ostr,
-                u"annotation text"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Header']/w:name"_ostr, "val"_ostr,
-                u"header"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Footer']/w:name"_ostr, "val"_ostr,
-                u"footer"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='IndexHeading']/w:name"_ostr, "val"_ostr,
-                u"index heading"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Caption']/w:name"_ostr, "val"_ostr,
-                u"caption"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name"_ostr,
-                "val"_ostr, u"table of figures"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeAddress']/w:name"_ostr,
-                "val"_ostr, u"envelope address"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeReturn']/w:name"_ostr,
-                "val"_ostr, u"envelope return"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteReference']/w:name"_ostr,
-                "val"_ostr, u"footnote reference"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentReference']/w:name"_ostr,
-                "val"_ostr, u"annotation reference"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='LineNumber']/w:name"_ostr, "val"_ostr,
-                u"line number"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PageNumber']/w:name"_ostr, "val"_ostr,
-                u"page number"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteReference']/w:name"_ostr,
-                "val"_ostr, u"endnote reference"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteText']/w:name"_ostr, "val"_ostr,
-                u"endnote text"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofAuthorities']/w:name"_ostr,
-                "val"_ostr, u"table of authorities"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MacroText']/w:name"_ostr, "val"_ostr,
-                u"macro"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name"_ostr, "val"_ostr,
-                u"TOC Heading"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List']/w:name"_ostr, "val"_ostr,
-                u"List"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet']/w:name"_ostr, "val"_ostr,
-                u"List Bullet"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber']/w:name"_ostr, "val"_ostr,
-                u"List Number"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List2']/w:name"_ostr, "val"_ostr,
-                u"List 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List3']/w:name"_ostr, "val"_ostr,
-                u"List 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List4']/w:name"_ostr, "val"_ostr,
-                u"List 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List5']/w:name"_ostr, "val"_ostr,
-                u"List 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet2']/w:name"_ostr, "val"_ostr,
-                u"List Bullet 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet3']/w:name"_ostr, "val"_ostr,
-                u"List Bullet 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet4']/w:name"_ostr, "val"_ostr,
-                u"List Bullet 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet5']/w:name"_ostr, "val"_ostr,
-                u"List Bullet 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber2']/w:name"_ostr, "val"_ostr,
-                u"List Number 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber3']/w:name"_ostr, "val"_ostr,
-                u"List Number 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber4']/w:name"_ostr, "val"_ostr,
-                u"List Number 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber5']/w:name"_ostr, "val"_ostr,
-                u"List Number 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Title']/w:name"_ostr, "val"_ostr,
-                u"Title"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Closing']/w:name"_ostr, "val"_ostr,
-                u"Closing"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Signature']/w:name"_ostr, "val"_ostr,
-                u"Signature"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']/w:name"_ostr,
-                "val"_ostr, u"Default Paragraph Font"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText']/w:name"_ostr, "val"_ostr,
-                u"Body Text"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent']/w:name"_ostr,
-                "val"_ostr, u"Body Text Indent"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue']/w:name"_ostr, "val"_ostr,
-                u"List Continue"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue2']/w:name"_ostr, "val"_ostr,
-                u"List Continue 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue3']/w:name"_ostr, "val"_ostr,
-                u"List Continue 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue4']/w:name"_ostr, "val"_ostr,
-                u"List Continue 4"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue5']/w:name"_ostr, "val"_ostr,
-                u"List Continue 5"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MessageHeader']/w:name"_ostr, "val"_ostr,
-                u"Message Header"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Subtitle']/w:name"_ostr, "val"_ostr,
-                u"Subtitle"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Salutation']/w:name"_ostr, "val"_ostr,
-                u"Salutation"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Date']/w:name"_ostr, "val"_ostr,
-                u"Date"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent']/w:name"_ostr,
-                "val"_ostr, u"Body Text First Indent"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent2']/w:name"_ostr,
-                "val"_ostr, u"Body Text First Indent 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoteHeading']/w:name"_ostr, "val"_ostr,
-                u"Note Heading"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText2']/w:name"_ostr, "val"_ostr,
-                u"Body Text 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText3']/w:name"_ostr, "val"_ostr,
-                u"Body Text 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent2']/w:name"_ostr,
-                "val"_ostr, u"Body Text Indent 2"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent3']/w:name"_ostr,
-                "val"_ostr, u"Body Text Indent 3"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BlockText']/w:name"_ostr, "val"_ostr,
-                u"Block Text"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name"_ostr, "val"_ostr,
-                u"Hyperlink"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name"_ostr,
-                "val"_ostr, u"FollowedHyperlink"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']/w:name"_ostr, "val"_ostr,
-                u"Strong"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Emphasis']/w:name"_ostr, "val"_ostr,
-                u"Emphasis"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DocumentMap']/w:name"_ostr, "val"_ostr,
-                u"Document Map"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PlainText']/w:name"_ostr, "val"_ostr,
-                u"Plain Text"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:name", "val", u"Normal");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:name", "val", u"heading 1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading2']/w:name", "val", u"heading 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading3']/w:name", "val", u"heading 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading4']/w:name", "val", u"heading 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading5']/w:name", "val", u"heading 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading6']/w:name", "val", u"heading 6");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading7']/w:name", "val", u"heading 7");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading8']/w:name", "val", u"heading 8");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading9']/w:name", "val", u"heading 9");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index1']/w:name", "val", u"index 1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index2']/w:name", "val", u"index 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index3']/w:name", "val", u"index 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index4']/w:name", "val", u"index 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index5']/w:name", "val", u"index 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index6']/w:name", "val", u"index 6");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index7']/w:name", "val", u"index 7");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index8']/w:name", "val", u"index 8");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Index9']/w:name", "val", u"index 9");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC1']/w:name", "val", u"toc 1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC2']/w:name", "val", u"toc 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC3']/w:name", "val", u"toc 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC4']/w:name", "val", u"toc 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC5']/w:name", "val", u"toc 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC6']/w:name", "val", u"toc 6");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC7']/w:name", "val", u"toc 7");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC8']/w:name", "val", u"toc 8");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOC9']/w:name", "val", u"toc 9");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NormalIndent']/w:name", "val",
+                u"Normal Indent");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteText']/w:name", "val",
+                u"footnote text");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentText']/w:name", "val",
+                u"annotation text");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Header']/w:name", "val", u"header");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Footer']/w:name", "val", u"footer");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='IndexHeading']/w:name", "val",
+                u"index heading");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Caption']/w:name", "val", u"caption");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofFigures']/w:name", "val",
+                u"table of figures");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeAddress']/w:name", "val",
+                u"envelope address");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EnvelopeReturn']/w:name", "val",
+                u"envelope return");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FootnoteReference']/w:name", "val",
+                u"footnote reference");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='CommentReference']/w:name", "val",
+                u"annotation reference");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='LineNumber']/w:name", "val",
+                u"line number");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PageNumber']/w:name", "val",
+                u"page number");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteReference']/w:name", "val",
+                u"endnote reference");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='EndnoteText']/w:name", "val",
+                u"endnote text");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableofAuthorities']/w:name", "val",
+                u"table of authorities");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MacroText']/w:name", "val", u"macro");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TOCHeading']/w:name", "val",
+                u"TOC Heading");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List']/w:name", "val", u"List");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet']/w:name", "val",
+                u"List Bullet");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber']/w:name", "val",
+                u"List Number");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List2']/w:name", "val", u"List 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List3']/w:name", "val", u"List 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List4']/w:name", "val", u"List 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='List5']/w:name", "val", u"List 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet2']/w:name", "val",
+                u"List Bullet 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet3']/w:name", "val",
+                u"List Bullet 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet4']/w:name", "val",
+                u"List Bullet 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListBullet5']/w:name", "val",
+                u"List Bullet 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber2']/w:name", "val",
+                u"List Number 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber3']/w:name", "val",
+                u"List Number 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber4']/w:name", "val",
+                u"List Number 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListNumber5']/w:name", "val",
+                u"List Number 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Title']/w:name", "val", u"Title");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Closing']/w:name", "val", u"Closing");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Signature']/w:name", "val",
+                u"Signature");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']/w:name", "val",
+                u"Default Paragraph Font");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText']/w:name", "val", u"Body Text");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent']/w:name", "val",
+                u"Body Text Indent");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue']/w:name", "val",
+                u"List Continue");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue2']/w:name", "val",
+                u"List Continue 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue3']/w:name", "val",
+                u"List Continue 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue4']/w:name", "val",
+                u"List Continue 4");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListContinue5']/w:name", "val",
+                u"List Continue 5");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MessageHeader']/w:name", "val",
+                u"Message Header");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Subtitle']/w:name", "val", u"Subtitle");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Salutation']/w:name", "val",
+                u"Salutation");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Date']/w:name", "val", u"Date");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent']/w:name", "val",
+                u"Body Text First Indent");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextFirstIndent2']/w:name", "val",
+                u"Body Text First Indent 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoteHeading']/w:name", "val",
+                u"Note Heading");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText2']/w:name", "val",
+                u"Body Text 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyText3']/w:name", "val",
+                u"Body Text 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent2']/w:name", "val",
+                u"Body Text Indent 2");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BodyTextIndent3']/w:name", "val",
+                u"Body Text Indent 3");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='BlockText']/w:name", "val",
+                u"Block Text");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name", "val",
+                u"Hyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='FollowedHyperlink']/w:name", "val",
+                u"FollowedHyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']/w:name", "val", u"Strong");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Emphasis']/w:name", "val", u"Emphasis");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DocumentMap']/w:name", "val",
+                u"Document Map");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='PlainText']/w:name", "val",
+                u"Plain Text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf162370)
@@ -1164,10 +1104,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf162746)
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Without the fix, this would be 0 - i.e., the page body table didn't shift down
     // below the header's floating table
-    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "top"_ostr, u"35"_ustr);
+    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds", "top", u"35");
     // Without the fix, this would be 100, because the page body table only used tiny space
     // to the left of the header's floating table
-    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds"_ostr, "width"_ostr, u"9360"_ustr);
+    assertXPath(pDump, "//page[1]/body/tab/infos/prtBounds", "width", u"9360");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf61000)
@@ -1175,16 +1115,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf61000)
     // Without the fix in place this crashes on opening
     loadAndSave("tdf61000.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/numbering.xml"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:numFmt"_ostr,
-        "val"_ostr, u"bullet"_ustr);
+    assertXPath(pXmlDoc,
+                "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:numFmt",
+                "val", u"bullet");
     // Without the fix in place, this would be -540, and the abstractNumId is 4
     // The negative value of the tab stop is the culprit for the crash
     assertXPath(
         pXmlDoc,
-        "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab"_ostr,
-        "pos"_ostr, u"0"_ustr);
+        "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:pPr/w:tabs/w:tab",
+        "pos", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
@@ -1194,24 +1133,17 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentWithChildrenTdf163092)
     xmlDocUniquePtr pXmlCommExt = parseExport("word/commentsExtended.xml");
     CPPUNIT_ASSERT(pXmlCommExt);
     // And it should contain the same parent-child relations
-    OUString sExChild1
-        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]"_ostr, "paraId"_ostr);
-    OUString sExParent1
-        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]"_ostr, "paraIdParent"_ostr);
-    OUString sExChild2
-        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]"_ostr, "paraId"_ostr);
-    OUString sExParent2
-        = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]"_ostr, "paraIdParent"_ostr);
+    OUString sExChild1 = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]", "paraId");
+    OUString sExParent1 = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[1]", "paraIdParent");
+    OUString sExChild2 = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]", "paraId");
+    OUString sExParent2 = getXPath(pXmlCommExt, "/w15:commentsEx/w15:commentEx[2]", "paraIdParent");
     std::map<OUString, OUString> parents;
     parents[sExChild1] = sExParent1;
     parents[sExChild2] = sExParent2;
     xmlDocUniquePtr pXmlComments = parseExport("word/comments.xml");
-    OUString sComment1Id
-        = getXPath(pXmlComments, "/w:comments/w:comment[1]/w:p[1]"_ostr, "paraId"_ostr);
-    OUString sComment2Id
-        = getXPath(pXmlComments, "/w:comments/w:comment[2]/w:p[1]"_ostr, "paraId"_ostr);
-    OUString sComment3Id
-        = getXPath(pXmlComments, "/w:comments/w:comment[3]/w:p[1]"_ostr, "paraId"_ostr);
+    OUString sComment1Id = getXPath(pXmlComments, "/w:comments/w:comment[1]/w:p[1]", "paraId");
+    OUString sComment2Id = getXPath(pXmlComments, "/w:comments/w:comment[2]/w:p[1]", "paraId");
+    OUString sComment3Id = getXPath(pXmlComments, "/w:comments/w:comment[3]/w:p[1]", "paraId");
     CPPUNIT_ASSERT_EQUAL(parents[sComment2Id], sComment1Id);
     CPPUNIT_ASSERT_EQUAL(parents[sComment3Id], sComment2Id);
 }

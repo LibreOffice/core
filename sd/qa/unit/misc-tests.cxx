@@ -775,8 +775,7 @@ void SdMiscTest::testTdf98839_ShearVFlipH()
     static constexpr OString sPathStart(
         "/office:document-content/office:body/office:drawing/draw:page"_ostr);
     assertXPath(pXmlDoc, sPathStart);
-    const OUString sTransform
-        = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape", "transform"_ostr);
+    const OUString sTransform = getXPath(pXmlDoc, sPathStart + "/draw:custom-shape", "transform");
 
     // Error was, that the shear angle had a wrong sign.
     CPPUNIT_ASSERT_MESSAGE("expected: draw:transform='skewX (-0.64350...)",

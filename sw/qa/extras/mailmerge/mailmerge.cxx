@@ -65,8 +65,8 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     CPPUNIT_ASSERT_EQUAL( COL_BLACK, lineColor );
     // And check that the resulting file has the proper default.
     xmlDocUniquePtr pXmlDoc = parseMailMergeExport( u"styles.xml"_ustr );
-    CPPUNIT_ASSERT_EQUAL( u"graphic"_ustr, getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]"_ostr, "family"_ostr));
-    CPPUNIT_ASSERT_EQUAL( u"#000000"_ustr, getXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties"_ostr, "stroke-color"_ostr));
+    assertXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]", "family", u"graphic");
+    assertXPath(pXmlDoc, "/office:document-styles/office:styles/style:default-style[1]/style:graphic-properties", "stroke-color", u"#000000");
 }
 
 DECLARE_FILE_MAILMERGE_TEST(testSimpleMailMerge, "simple-mail-merge.odt", "10-testing-addresses.ods", "testing-addresses")
@@ -134,11 +134,11 @@ DECLARE_FILE_MAILMERGE_TEST(test2Pages, "simple-mail-merge-2pages.odt", "10-test
         // Also verify the layout.
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
-        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, lastname);
-        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[1]"_ostr, u"Fixed text."_ustr);
-        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[4]"_ostr, OUString());
-        assertXPathContent(pXmlDoc, "/root/page[2]/body/txt[1]"_ostr, u"Second page."_ustr);
-        assertXPath(pXmlDoc,  "/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, firstname);
+        assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", lastname);
+        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[1]", u"Fixed text.");
+        assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[4]", u"");
+        assertXPathContent(pXmlDoc, "/root/page[2]/body/txt[1]", u"Second page.");
+        assertXPath(pXmlDoc,  "/root/page[2]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", firstname);
     }
 }
 
@@ -246,21 +246,21 @@ DECLARE_SHELL_MAILMERGE_TEST(testBookmarkCondition, "bookmarkcondition.fodt", "b
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
     // check that conditions on sections and bookmarks are evaluated the same
-    assertXPath(pXmlDoc, "/root/page"_ostr, 7);
-    assertXPath(pXmlDoc, "/root/page[1]/body/section"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend . "_ustr);
-    assertXPath(pXmlDoc, "/root/page[3]/body/section"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
-    assertXPath(pXmlDoc, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war schön . "_ustr);
-    assertXPath(pXmlDoc, "/root/page[5]/body/section"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
-    assertXPath(pXmlDoc, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war erlebnisreich . "_ustr);
-    assertXPath(pXmlDoc, "/root/page[7]/body/section"_ostr, 3);
-    assertXPath(pXmlDoc, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In den Bergen war es anstrengend."_ustr);
-    assertXPath(pXmlDoc, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Barcelona war es schön."_ustr);
-    assertXPath(pXmlDoc, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"In Paris war es erlebnisreich."_ustr);
-    assertXPath(pXmlDoc, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr, u"Mein Urlaub war anstrengend schön erlebnisreich . "_ustr);
+    assertXPath(pXmlDoc, "/root/page", 7);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend.");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend . ");
+    assertXPath(pXmlDoc, "/root/page[3]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön.");
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war schön . ");
+    assertXPath(pXmlDoc, "/root/page[5]/body/section", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Paris war es erlebnisreich.");
+    assertXPath(pXmlDoc, "/root/page[5]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war erlebnisreich . ");
+    assertXPath(pXmlDoc, "/root/page[7]/body/section", 3);
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In den Bergen war es anstrengend.");
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Barcelona war es schön.");
+    assertXPath(pXmlDoc, "/root/page[7]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout", "portion", u"In Paris war es erlebnisreich.");
+    assertXPath(pXmlDoc, "/root/page[7]/body/txt[5]/SwParaPortion/SwLineLayout", "portion", u"Mein Urlaub war anstrengend schön erlebnisreich . ");
 }
 
 DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-testing-addresses.ods", "testing-addresses", 5)

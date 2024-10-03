@@ -357,10 +357,10 @@ CPPUNIT_TEST_FIXTURE(Test, testLayoutInCellWrapnoneColumn)
 
     // The entire blue, wrapthrough shape should be above the table that it is layoutInCell'd to.
     const sal_Int32 nShapeBottom
-        = getXPath(pXmlDoc, "//tab/row/cell[2]/txt[1]/anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "bottom"_ostr)
+        = getXPath(pXmlDoc, "//tab/row/cell[2]/txt[1]/anchored/SwAnchoredDrawObject/bounds",
+                   "bottom")
               .toInt32();
-    sal_Int32 nTableTop = getXPath(pXmlDoc, "//tab/row/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nTableTop = getXPath(pXmlDoc, "//tab/row/infos/bounds", "top").toInt32();
     // The entire table must be below the rectangle
     CPPUNIT_ASSERT(nTableTop > nShapeBottom);
 }

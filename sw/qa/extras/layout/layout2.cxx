@@ -50,142 +50,93 @@ protected:
 void SwLayoutWriter2::CheckRedlineCharAttributesHidden()
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"9"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Para"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "portion"_ostr, u"foobaz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"10"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Para"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "portion"_ostr, u"foobaz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"11"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"12"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"13"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"14"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"15"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"16"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"17"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Para"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "portion"_ostr, u"foobaz"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"18"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"fo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"ob"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"az"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/merged"_ostr, "paraPropsNodeIndex"_ostr,
-                u"19"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Para"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr,
-                "portion"_ostr, u"foobaz"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/merged", "paraPropsNodeIndex", u"9");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "type", u"PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "portion", u"foobaz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/merged", "paraPropsNodeIndex", u"10");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "type", u"PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "portion", u"foobaz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/merged", "paraPropsNodeIndex", u"11");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/merged", "paraPropsNodeIndex", u"12");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/merged", "paraPropsNodeIndex", u"13");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/merged", "paraPropsNodeIndex", u"14");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/merged", "paraPropsNodeIndex", u"15");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/merged", "paraPropsNodeIndex", u"16");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/merged", "paraPropsNodeIndex", u"17");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "type", u"PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "portion", u"foobaz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/merged", "paraPropsNodeIndex", u"18");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"fo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"ob");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"az");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/merged", "paraPropsNodeIndex", u"19");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "type", u"PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwParaPortion[1]",
+                "portion", u"foobaz");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
@@ -194,20 +145,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly", 1);
     // fly portion exists, no overlapping text
-    assertXPath(pXmlDoc,
-                "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion"_ostr,
-                "height"_ostr, u"5797"_ustr);
-    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", u"5797");
+    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 5);
 
     auto xModel = mxComponent.queryThrow<frame::XModel>();
     uno::Reference<drawing::XShape> xShape(getShapeByName(u"Image3"));
@@ -218,56 +168,53 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly", 1);
     // fly portion exists, no overlapping text
-    assertXPath(pXmlDoc,
-                "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion"_ostr,
-                "height"_ostr, u"5797"_ustr);
-    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", u"5797");
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 4);
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[3]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/anchored/fly", 1);
     // fly portion exists, no overlapping text
-    assertXPath(pXmlDoc,
-                "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion"_ostr,
-                "height"_ostr, u"5797"_ustr);
-    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", u"5797");
+    assertXPath(pXmlDoc, "/root/page[5]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 5);
 
     dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[2]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/sorted_objs/fly", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[2]/anchored/fly", 1);
     // fly portion exists, no overlapping text
-    assertXPath(pXmlDoc,
-                "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion"_ostr,
-                "height"_ostr, u"5797"_ustr);
-    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly"_ostr, 0);
-    assertXPath(pXmlDoc, "/root/page"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwFixPortion",
+                "height", u"5797");
+    assertXPath(pXmlDoc, "/root/page[4]/sorted_objs/fly", 0);
+    assertXPath(pXmlDoc, "/root/page[4]/body/txt/anchored/fly", 0);
+    assertXPath(pXmlDoc, "/root/page", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
@@ -289,235 +236,159 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // show: nothing is merged
-    assertXPath(pXmlDoc, "//merged"_ostr, 0);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"ba"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"r"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"fo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"o"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "portion"_ostr, u"b"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[5]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[5]"_ostr,
-                "portion"_ostr, u"az"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"b"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr,
-                "portion"_ostr, u"a"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "portion"_ostr, u"r"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[5]"_ostr,
-                "type"_ostr, u"PortionType::Text"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[5]"_ostr,
-                "portion"_ostr, u"baz"_ustr);
+    assertXPath(pXmlDoc, "//merged", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"ba");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"r");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[9]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"baz");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"fo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"o");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"bar");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "portion", u"b");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[5]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwLinePortion[5]",
+                "portion", u"az");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[1]",
+                "portion", u"foo");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[2]",
+                "portion", u"b");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[3]",
+                "portion", u"a");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[4]",
+                "portion", u"r");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[5]",
+                "type", u"PortionType::Text");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[11]/SwParaPortion/SwLineLayout/SwLinePortion[5]",
+                "portion", u"baz");
 
     // verify after hide
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
@@ -539,23 +410,22 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // check footnotes
-    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn"_ostr, 6);
-    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
     // check that first page ends with the y line and second page starts with z
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]"_ostr,
-                "portion"_ostr,
-                u"yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy "_ustr);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr,
-                u"zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]",
+                "portion",
+                u"yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
 
     // hide redlines - all still visible footnotes move to page 1
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn"_ostr, 0);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 0);
 
     // show again - should now get the same result as on loading
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
@@ -563,15 +433,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
     pXmlDoc = parseLayoutDump();
 
     // check footnotes
-    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn"_ostr, 6);
-    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 6);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 3);
     // check that first page ends with the y line and second page starts with z
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]"_ostr,
-                "portion"_ostr,
-                u"yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy "_ustr);
-    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr,
-                u"zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[last()]/SwParaPortion/SwLineLayout[last()]",
+                "portion",
+                u"yyyyyyyyy yyy yyyyyyyyyyyyyyyy yyyyyyy yyy yyyyy yyyyyyyyy yyy yyyyyyyyy ");
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"zzz. zzz zzzz zzzz* zzz zzz zzzzzzz zzz zzzz zzzzzzzzzzzzzz zzzzzzzzzzzz ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testtdf138951)
@@ -610,21 +479,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150717)
     createSwDoc("tdf150717.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // check bookmark colors defined in metadata
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[2]"_ostr,
-                "colors"_ostr, u"#Bookmark1 Bookmark Start"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[4]"_ostr,
-                "colors"_ostr, u"#Bookmark2 Bookmark Start"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[6]"_ostr,
-                "colors"_ostr, u"#Bookmark2 Bookmark End#Bookmark1 Bookmark End"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[2]", "colors",
+                u"#Bookmark1 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[4]", "colors",
+                u"#Bookmark2 Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[6]", "colors",
+                u"#Bookmark2 Bookmark End#Bookmark1 Bookmark End");
     // full text, if bookmarks are visible
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[1]"_ostr,
-                "portion"_ostr, u"Lorem "_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[3]"_ostr,
-                "portion"_ostr, u"ipsum dolor et "_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[5]"_ostr,
-                "portion"_ostr, u"ames"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[7]"_ostr,
-                "portion"_ostr, u"."_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[1]", "portion",
+                u"Lorem ");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[3]", "portion",
+                u"ipsum dolor et ");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[5]", "portion",
+                u"ames");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/child::*[7]", "portion",
+                u".");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
@@ -632,20 +501,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
     createSwDoc("tdf150790.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // point bookmark is shown as I-beam (only its text dump is |, as before on the screen)
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwBookmarkPortion"_ostr,
-                "colors"_ostr, u"#Bookmark 1 Bookmark"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwBookmarkPortion",
+                "colors", u"#Bookmark 1 Bookmark");
     // single start bookmark
-    assertXPath(pXmlDoc,
-                "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]"_ostr,
-                "colors"_ostr, u"#Bookmark 2 Bookmark Start"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]",
+                "colors", u"#Bookmark 2 Bookmark Start");
     // single end bookmark
-    assertXPath(pXmlDoc,
-                "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[3]"_ostr,
-                "colors"_ostr, u"#Bookmark 3 Bookmark End"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[3]",
+                "colors", u"#Bookmark 3 Bookmark End");
     // This was |, as before the point bookmark (neighboring end and start bookmarks)
-    assertXPath(pXmlDoc,
-                "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]"_ostr,
-                "colors"_ostr, u"#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]",
+                "colors", u"#Bookmark 2 Bookmark End#Bookmark 3 Bookmark Start");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
@@ -662,8 +528,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // visible soft hyphen
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push/push/textarray[2]/text"_ostr,
-                       u"-"_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/push/push/textarray[2]/text", u"-");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
@@ -684,12 +549,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
     // (and not COL_GREEN color of the tracked text movement, see testRedlineMoving) elements
     assertXPath(
         pXmlDoc,
-        "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]"_ostr,
-        5);
+        "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]", 5);
 
     // tdf#145068 numbering shows changes in the associated list item, not the next one
     // This was 1 (black numbering of the first list item previously)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']"_ostr, 0);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
@@ -707,11 +571,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
 
     // Show the correct and the original line numbering instead of counting
     // the deleted list items in Show Changes mode, as part of the list
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
     // This was "2." (deleted text node, now its text content is part of the first list item)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"[2.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"[2.] ");
     // This was "3." (now it's the second list item)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text"_ostr, u"2.[3.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", u"2.[3.] ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
@@ -728,12 +592,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Show the correct and the original line numbering in Show Changes mode
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"2.");
     // FIXME: show as 3.[2.]
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text"_ostr, u"3."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", u"3.");
     // This was "4." (not shown the original number)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text"_ostr, u"4.[3.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text", u"4.[3.] ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
@@ -764,19 +628,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
     // Show the correct and the original line numbering instead of counting
     // the deleted list items in Show Changes mode, as part of the list
     // This was "1."
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"[1.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"[1.] ");
     // This was "2." (deleted text node, now its text content is part of the first list item)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"1.[2.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"1.[2.] ");
     // This was "3." (now it's the second list item)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text"_ostr, u"2.[3.] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", u"2.[3.] ");
 
     // remove the tracked deletion, and check the layout again
     pWrtShell->Undo();
     xMetaFile = pShell->GetPreviewMetaFile();
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"2."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text"_ostr, u"3."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"2.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", u"3.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
@@ -806,35 +670,35 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
 
     // Show the correct and the original line numbering instead of counting
     // the deleted list items in Show Changes mode, as part of the list
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"a)"_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"a)");
     // This was "b)[2.]"
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text"_ostr, u"b)[a)] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", u"b)[a)] ");
     // This was "c)[3.]"
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text"_ostr, u"c)[b)] "_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", u"c)[b)] ");
     // This was "4.[2.]" (after disabling Show Changes, and enabling again)
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", u"2.");
 
     // remove the tracked deletion, and check the layout again
     pWrtShell->Undo();
     xMetaFile = pShell->GetPreviewMetaFile();
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"a)"_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text"_ostr, u"b)"_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"a)");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[5]/text", u"b)");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[7]/text", u"2.");
 
     // check Redo
     pWrtShell->Redo();
     xMetaFile = pShell->GetPreviewMetaFile();
     pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text"_ostr, u"1."_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text"_ostr, u"a)"_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[1]/text", u"1.");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[3]/text", u"a)");
     // TODO: show as b)[a)]
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text"_ostr, u"b)"_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[4]/text", u"b)");
     // FIXME: This must be "c)[b]"
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text"_ostr, u"c)[a)] "_ustr);
-    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[6]/text", u"c)[a)] ");
+    assertXPathContent(pXmlDoc, "/metafile/push/push/push/textarray[8]/text", u"2.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMark)
@@ -842,7 +706,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
     createSwDoc("tdf149711.docx");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 6);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 6);
 
     // reject tracked insertion (moveTo)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -852,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149711_importDOCXMoveToParagraphMar
 
     pXmlDoc = parseLayoutDump();
     // This was 6 (not tracked paragraph mark of the moveTo list item)
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 5);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
@@ -860,41 +724,36 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152872)
     createSwDoc("hidden-para-separator.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                u"C DE"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", u"C DE");
     // 5 is empty and hidden
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", u"0");
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 5);
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                u"C "_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                u"D"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 5);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", u"C ");
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout", "portion", u"D");
     // 3 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
     // frame; ideally it should only be hidden when control codes are hidden
     // and be a full-height frame now, but that needs more work...
-    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                u"E"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[3]/infos/bounds", "height", u"0");
+    assertXPath(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout", "portion", u"E");
     // 5 is an empty paragraph with RES_CHRATR_HIDDEN which results in 0-height
     // frame; ideally it should only be hidden when control codes are hidden
     // and be a full-height frame now, but that needs more work...
-    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[5]/infos/bounds", "height", u"0");
 
     dispatchCommand(mxComponent, u".uno:ControlCodes"_ustr, {});
 
     pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, "portion"_ostr,
-                u"C DE"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", "portion", u"C DE");
     // 5 is empty and hidden
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds"_ostr, "height"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
@@ -902,7 +761,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
     createSwDoc("tdf151954.docx");
     SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
 
     // accept tracked insertion (moveTo)
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -912,7 +771,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf151954)
 
     pXmlDoc = parseLayoutDump();
     // This was 1 (moveFrom was extended to the paragraph mark)
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952)
@@ -920,11 +779,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952)
     createSwDoc("Hyphenated-link.rtf");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // URL should not be hyphenated
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u" NNNNNNNNNN NNNNNNNNNNNNNNN "_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                "portion"_ostr,
-                u"https://example.com/xxxxxxx/testtesttesttest/hyphenate/testtesttest "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u" NNNNNNNNNN NNNNNNNNNNNNNNN ");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"https://example.com/xxxxxxx/testtesttesttest/hyphenate/testtesttest ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
@@ -936,11 +794,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152952_compat)
     createSwDoc("Hyphenated-link.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // URL hyphenated for backward compatibility
-    assertXPath(
-        pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr, "portion"_ostr,
-        u" NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/testtesttesttest/hyphen"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                "portion"_ostr, u"ate/testtesttest "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u" NNNNNNNNNN NNNNNNNNNNNNNNN https://example.com/xxxxxxx/testtesttesttest/hyphen");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"ate/testtesttest ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_compound_remain)
@@ -959,12 +816,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_compound_remain)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // hyphenate compound word with 3- or more character distance from the stem boundary
     // This was "emberel=lenes" (now "ember=ellenes", i.e. hyphenating at the stem boundary)
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr,
-                u"emberellenes emberellenes emberellenes emberellenes emberellenes ember"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                "portion"_ostr,
-                u"ellenes emberellenes emberellenes emberellenes emberellenes emberellenes "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"emberellenes emberellenes emberellenes emberellenes emberellenes ember");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"ellenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
@@ -984,12 +839,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
     // hyphenate compound word with 2-character distance from the stem boundary,
     // resulting less readable hyphenation "emberel=lenes" ("emberel" and "lenes" have
     // different meanings, than the original word parts)
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr,
-                u"emberellenes emberellenes emberellenes emberellenes emberellenes emberel"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                "portion"_ostr,
-                u"lenes emberellenes emberellenes emberellenes emberellenes emberellenes "_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                u"emberellenes emberellenes emberellenes emberellenes emberellenes emberel");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]", "portion",
+                u"lenes emberellenes emberellenes emberellenes emberellenes emberellenes ");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
@@ -1008,7 +861,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
     // changed color of numbers of footnote 1 (deleted footnote) and footnote 2 (inserted footnote)
     // decreased the black <font> elements by 2:
     // This was 7
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#000000']"_ostr, 5);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#000000']", 5);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
@@ -1036,8 +889,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 
     // text and numbering colors show moving of the list item
     // tdf#157663: the moved text item "It" is detected as text moving again!
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']"_ostr, 5);
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']"_ostr, 11);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
@@ -1071,8 +924,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
 
     // text and numbering colors show moving of the list item
     // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']"_ostr, 5);
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']"_ostr, 11);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
@@ -1094,7 +947,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 
     // text colors show moved text
     // These were 0 (other color, not COL_GREEN, color of the tracked text movement)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']"_ostr, 6);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 6);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
@@ -1119,35 +972,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds"_ostr, "top"_ostr,
-                u"6969"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds"_ostr,
-                "top"_ostr, u"6969"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds"_ostr,
-                "top"_ostr, u"6969"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds"_ostr, "top"_ostr,
-                u"7200"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", u"6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "height", u"231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds", "top",
+                u"6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds", "height",
+                u"231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds",
+                "top", u"6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds",
+                "height", u"231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "top", u"7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "height", u"231");
     // this was 6969, causing the overlap
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds"_ostr,
-                "top"_ostr, u"7200"_ustr);
-    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds"_ostr,
-                "top"_ostr, u"7200"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds"_ostr,
-                "height"_ostr, u"231"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds", "top",
+                u"7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds", "height",
+                u"231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds",
+                "top", u"7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds",
+                "height", u"231");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
@@ -1164,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
 
     // text colors show moved text
     // This was 0 (other color, not COL_GREEN, color of the tracked text movement)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']"_ostr, 4);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
@@ -1180,11 +1025,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This was 0 (other color, not COL_AUTHOR_TABLE_DEL, color of the tracked row deletion)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#fce6f4']"_ostr, 1);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#fce6f4']", 1);
     // This was 0 (other color, not COL_AUTHOR_TABLE_INS, color of the tracked row insertion)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#e1f2fa']"_ostr, 1);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#e1f2fa']", 1);
     // This was 3 (color of the cells of the last column, 2 of them disabled by change tracking )
-    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#3faf46']"_ostr, 1);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#3faf46']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf155187_TableInTextChange)
@@ -1200,9 +1045,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf155187_TableInTextChange)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This was 0 (other color, not COL_AUTHOR_TABLE_DEL, color of the tracked row deletion)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#fce6f4']"_ostr, 2);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#fce6f4']", 2);
     // This was 0 (other color, not COL_AUTHOR_TABLE_INS, color of the tracked row insertion)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#e1f2fa']"_ostr, 2);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/push/push/fillcolor[@color='#e1f2fa']", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertion)
@@ -1272,8 +1117,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
     // This was "Lorem Lorem ipsum" (reappearing deletion in Hide Changes mode)
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-                "portion"_ostr, u"Lorem ipsum"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"Lorem ipsum");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
@@ -1291,12 +1136,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 
     // Keep line spacing before bottom cell border (it was 1892)
     sal_Int32 y1
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[1]"_ostr,
-                   "y"_ostr)
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[1]", "y")
               .toInt32();
     sal_Int32 y2
-        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[2]"_ostr,
-                   "y"_ostr)
+        = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[7]/polyline/point[2]", "y")
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2092, y1, 7);
     CPPUNIT_ASSERT_EQUAL(y1, y2);
@@ -1320,16 +1163,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116830)
     // Cell background: 1.1.1.3
     assertXPath(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[2]/push[1]/push[1]/fillcolor[@color='#729fcf']"_ostr,
-        1);
-    assertXPath(pXmlDoc,
-                "/metafile/push[1]/push[1]/push[1]/push[2]/push[1]/push[1]/polypolygon"_ostr, 1);
+        "/metafile/push[1]/push[1]/push[1]/push[2]/push[1]/push[1]/fillcolor[@color='#729fcf']", 1);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[2]/push[1]/push[1]/polypolygon",
+                1);
 
     // This failed: cell background was painted before the background shape.
-    assertXPath(
-        pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/fillcolor[@color='#ffff00']"_ostr, 1);
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/rect"_ostr, 1);
+    assertXPath(pXmlDoc,
+                "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/fillcolor[@color='#ffff00']", 1);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/rect", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114163)
@@ -1344,7 +1185,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114163)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "(//textarray)[12]/text"_ostr, u"Data3"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[12]/text", u"Data3");
     // This failed, if the legend first label is not "Data3". The legend position is right.
 }
 
@@ -1353,11 +1194,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf131707)
     createSwDoc("tdf131707_flyWrap.doc");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds"_ostr, "top"_ostr,
-                u"2185"_ustr);
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/infos/bounds", "top", u"2185");
     // the image should be inside of the cell boundary - so the same top or higher
-    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr,
-                u"2185"_ustr);
+    assertXPath(pXmlDoc, "//body/tab/row[3]/cell[2]/txt/anchored/fly/infos/bounds", "top", u"2185");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
@@ -1374,14 +1213,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 
     // Bug 122225 - FILEOPEN DOCX Textbox of Column chart legend reduces and text of legend disappears
     const sal_Int32 nLegendLabelLines
-        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Advanced Diploma\")])"_ostr)
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Advanced Diploma\")])")
               .toInt32();
     // This failed, if the legend label is not "Advanced Diploma".
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nLegendLabelLines);
 
     // Bug 140623 - Fileopen DOCX: Text Orientation of X-Axis 0 instead of 45 degrees
     const sal_Int32 nThirdLabelLines
-        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Hispanic\")])"_ostr).toInt32();
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Hispanic\")])").toInt32();
     // This failed, if the third X axis label broke to multiple lines.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nThirdLabelLines);
 }
@@ -1398,7 +1237,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "(//textarray)[12]/text"_ostr, u"Data3"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[12]/text", u"Data3");
     // This failed, if the legend first label is not "Data3". The legend position is bottom.
 }
 
@@ -1414,7 +1253,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "(//textarray)[14]/text"_ostr, u"1. adatsor"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[14]/text", u"1. adatsor");
     // This failed, if the legend first label is not "1. adatsor".
 }
 
@@ -1430,9 +1269,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "(//textarray)[17]/text"_ostr, u"Series1"_ustr);
-    assertXPathContent(pXmlDoc, "(//textarray)[18]/text"_ostr, u"Series2"_ustr);
-    assertXPathContent(pXmlDoc, "(//textarray)[19]/text"_ostr, u"Series3"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[17]/text", u"Series1");
+    assertXPathContent(pXmlDoc, "(//textarray)[18]/text", u"Series2");
+    assertXPathContent(pXmlDoc, "(//textarray)[19]/text", u"Series3");
     // These failed, if the legend names are empty strings.
 }
 
@@ -1449,7 +1288,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check number of legend entries
-    assertXPath(pXmlDoc, "//text[contains(text(),\"Column\")]"_ostr, 2);
+    assertXPath(pXmlDoc, "//text[contains(text(),\"Column\")]", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
@@ -1467,7 +1306,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
     // - Expected: 14
     // - Actual  : 12
     // i.e. the text of the chart legend lost.
-    assertXPath(pXmlDoc, "//textarray"_ostr, 14);
+    assertXPath(pXmlDoc, "//textarray", 14);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
@@ -1482,8 +1321,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
     // i.e. the formula squashed
     CPPUNIT_ASSERT_GREATEREQUAL(
         double(300),
-        getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/notxt/infos/bounds"_ostr,
-                 "height"_ostr)
+        getXPath(pXmlDoc, "/root/page/body/txt[2]/anchored/fly/notxt/infos/bounds", "height")
             .toDouble());
 }
 
@@ -1502,8 +1340,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
     // - Expected: 53
     // - Actual  : 0
     // i.e. the chart lost.
-    assertXPath(pXmlDoc,
-                "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push"_ostr, 53);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/push[1]/push",
+                53);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
@@ -1520,13 +1358,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
 
     sal_Int32 nXChartWall = getXPath(pXmlDoc,
                                      "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
-                                     "push[1]/push[1]/polyline[1]/point[2]"_ostr,
-                                     "x"_ostr)
+                                     "push[1]/push[1]/polyline[1]/point[2]",
+                                     "x")
                                 .toInt32();
     sal_Int32 nXColumn = getXPath(pXmlDoc,
                                   "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/push[1]/"
-                                  "push[1]/push[41]/polypolygon/polygon/point[1]"_ostr,
-                                  "x"_ostr)
+                                  "push[1]/push[41]/polypolygon/polygon/point[1]",
+                                  "x")
                              .toInt32();
 
     // This failed, if the value axis doesn't appear inside category.
@@ -1547,16 +1385,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
 
     // Test wide of inner chart area.
     sal_Int32 nXRight
-        = getXPath(
-              pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[1]"_ostr,
-              "x"_ostr)
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[1]",
+                   "x")
               .toInt32();
     sal_Int32 nXLeft
-        = getXPath(
-              pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[2]"_ostr,
-              "x"_ostr)
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/polyline[1]/point[2]",
+                   "x")
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(2895, nXRight - nXLeft, 50);
 }
@@ -1573,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "//textarray[@length='22']"_ostr, 8);
+    assertXPath(pXmlDoc, "//textarray[@length='22']", 8);
     // This failed, if the textarray length of the first axis label not 22.
 }
 
@@ -1589,7 +1425,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    int nCount = countXPathNodes(pXmlDoc, "//textarray[@length='17']"_ostr);
+    int nCount = countXPathNodes(pXmlDoc, "//textarray[@length='17']");
     CPPUNIT_ASSERT_EQUAL(4, nCount);
     // This failed, if the textarray length of the category axis label not 17.
 }
@@ -1606,7 +1442,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "//textarray[@length='22']"_ostr, 9);
+    assertXPath(pXmlDoc, "//textarray[@length='22']", 9);
     // This failed, if the textarray length of the first axis label not 22.
 }
 
@@ -1623,10 +1459,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // test the X axis label visibility
-    assertXPathContent(pXmlDoc, "(//textarray)[1]/text"_ostr, u"Long axis label truncated 1"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", u"Long axis label truncated 1");
 
     // test the Y axis label visibility
-    assertXPathContent(pXmlDoc, "(//textarray)[3]/text"_ostr, u"-5.00"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[3]/text", u"-5.00");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
@@ -1641,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "(//textarray)[1]/text"_ostr, u"A very long category name 1"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", u"A very long category name 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
@@ -1656,13 +1492,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the first level of vertical category axis labels orientation. The first level orientation should be horizontal.
-    assertXPath(pXmlDoc, "(//font)[1]"_ostr, "orientation"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "(//font)[1]", "orientation", u"0");
     // Test the second level of vertical category axis labels orientation. The second level orientation should be vertical.
-    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[5]"_ostr, "orientation"_ostr).toInt32();
+    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[5]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
     // Test the third level of vertical category axis labels orientation. The third level orientation should be vertical.
-    nRotation = getXPath(pXmlDoc, "(//font)[7]"_ostr, "orientation"_ostr).toInt32();
+    nRotation = getXPath(pXmlDoc, "(//font)[7]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
 }
@@ -1679,13 +1515,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the first level of horizontal category axis labels orientation. The first level orientation should be vertical.
-    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[1]"_ostr, "orientation"_ostr).toInt32();
+    sal_Int32 nRotation = getXPath(pXmlDoc, "(//font)[1]", "orientation").toInt32();
     CPPUNIT_ASSERT(nRotation >= 899);
     CPPUNIT_ASSERT(nRotation <= 900);
     // Test the second level of horizontal category axis labels orientation. The second level orientation should be horizontal.
-    assertXPath(pXmlDoc, "(//font)[5]"_ostr, "orientation"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "(//font)[5]", "orientation", u"0");
     // Test the third level of horizontal category axis labels orientation. The third level orientation should be horizontal.
-    assertXPath(pXmlDoc, "(//font)[7]"_ostr, "orientation"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "(//font)[7]", "orientation", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
@@ -1700,7 +1536,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // Test the Y position of horizontal category axis label.
-    sal_Int32 nYposition = getXPath(pXmlDoc, "(//textarray)[7]"_ostr, "y"_ostr).toInt32();
+    sal_Int32 nYposition = getXPath(pXmlDoc, "(//textarray)[7]", "y").toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(11248, nYposition, 20);
 }
 
@@ -1710,16 +1546,16 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 
-    OString sShapeXPath[2] = {
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]"_ostr,
-        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]"_ostr
+    const char* sShapeXPath[2] = {
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]",
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]"
     };
-    OString sFrameXPath[2] = { "/root/page/body/txt/anchored/fly[1]/infos/bounds"_ostr,
-                               "/root/page/body/txt/anchored/fly[2]/infos/bounds"_ostr };
+    const char* sFrameXPath[2] = { "/root/page/body/txt/anchored/fly[1]/infos/bounds",
+                                   "/root/page/body/txt/anchored/fly[2]/infos/bounds" };
 
     for (int i = 0; i < 2; ++i)
     {
-        const auto sDrawRect = getXPath(pXmlDoc, sShapeXPath[i], "aOutRect"_ostr);
+        const auto sDrawRect = getXPath(pXmlDoc, sShapeXPath[i], "aOutRect");
         const auto nComaPos1 = sDrawRect.indexOf(',', 0);
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
         const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
@@ -1731,10 +1567,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
             sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1));
         const auto aChildShape = SwRect(nDraw1, nDraw2, nDraw3, nDraw4);
 
-        const auto nFlyLeft = getXPath(pXmlDoc, sFrameXPath[i], "left"_ostr).toInt64();
-        const auto nFlyTop = getXPath(pXmlDoc, sFrameXPath[i], "top"_ostr).toInt64();
-        const auto nFlyWidth = getXPath(pXmlDoc, sFrameXPath[i], "width"_ostr).toInt64();
-        const auto nFlyHeight = getXPath(pXmlDoc, sFrameXPath[i], "height"_ostr).toInt64();
+        const auto nFlyLeft = getXPath(pXmlDoc, sFrameXPath[i], "left").toInt64();
+        const auto nFlyTop = getXPath(pXmlDoc, sFrameXPath[i], "top").toInt64();
+        const auto nFlyWidth = getXPath(pXmlDoc, sFrameXPath[i], "width").toInt64();
+        const auto nFlyHeight = getXPath(pXmlDoc, sFrameXPath[i], "height").toInt64();
 
         const auto aFrame = SwRect(nFlyLeft, nFlyTop, nFlyWidth, nFlyHeight);
 
@@ -1759,25 +1595,21 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
     auto pLayout = parseLayoutDump();
     // Get the position of the shape
     const auto nCellLeft
-        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds"_ostr,
-                   "left"_ostr)
+        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds", "left")
               .toInt64();
     const auto nCellTop
-        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pLayout, "//page/body/txt/anchored/fly/tab/row[1]/cell/infos/bounds", "top")
               .toInt64();
     // Get the position of the textframe too.
     const auto nTextBoxFrameLeft
-        = getXPath(
-              pLayout,
-              "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds"_ostr,
-              "left"_ostr)
+        = getXPath(pLayout,
+                   "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds",
+                   "left")
               .toInt64();
     const auto nTextBoxFrameTop
-        = getXPath(
-              pLayout,
-              "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds"_ostr,
-              "top"_ostr)
+        = getXPath(pLayout,
+                   "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds",
+                   "top")
               .toInt64();
 
     // Without the fix in place these were less than they supposed to.
@@ -1800,7 +1632,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
     // - Expected: 8
     // - Actual  : 7
     // i.e. the X axis label flowed out of chart area.
-    assertXPath(pXmlDoc, "//textarray"_ostr, 8);
+    assertXPath(pXmlDoc, "//textarray", 8);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146272)
@@ -1837,7 +1669,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
     CPPUNIT_ASSERT(pXmlDoc);
 
     const sal_Int32 nFirstLabelLines
-        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"2000-01\")])"_ostr).toInt32();
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"2000-01\")])").toInt32();
 
     // This failed, if the first X axis label broke to multiple lines.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstLabelLines);
@@ -1856,10 +1688,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the minimum value of Y axis is not -10.
-    assertXPathContent(pXmlDoc, "(//textarray)[5]/text"_ostr, u"-10"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[5]/text", u"-10");
 
     // This failed, if the maximum value of Y axis is not 15.
-    assertXPathContent(pXmlDoc, "(//textarray)[10]/text"_ostr, u"15"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[10]/text", u"15");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
@@ -1877,9 +1709,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
     // Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : Series1
-    assertXPathContent(pXmlDoc, "(//textarray)[1]/text"_ostr, u"1"_ustr);
-    assertXPathContent(pXmlDoc, "(//textarray)[2]/text"_ostr, u"2"_ustr);
-    assertXPathContent(pXmlDoc, "(//textarray)[3]/text"_ostr, u"3"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[1]/text", u"1");
+    assertXPathContent(pXmlDoc, "(//textarray)[2]/text", u"2");
+    assertXPathContent(pXmlDoc, "(//textarray)[3]/text", u"3");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
@@ -1895,7 +1727,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the minimum value of Y axis is not 0.35781
-    assertXPathContent(pXmlDoc, "(//textarray)[5]/text"_ostr, u"0.35781"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[5]/text", u"0.35781");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
@@ -1912,9 +1744,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
     // Without the fix in place, this test would have failed with
     // - Expected: f(x) = 1.26510397865547E-06 x − 5.95245604996327E-12
     // - Actual  : f(x) = 0 x − 0
-    assertXPathContent(pXmlDoc, "(//textarray)[19]/text"_ostr,
-                       "f(x) = 1.26510397865547E-06 x " + OUStringChar(u'\x2212')
-                           + " 5.95245604996327E-12");
+    assertXPathContent(pXmlDoc, "(//textarray)[19]/text",
+                       Concat2View("f(x) = 1.26510397865547E-06 x " + OUStringChar(u'\x2212')
+                                   + " 5.95245604996327E-12"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
@@ -1931,16 +1763,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 
     // Test the size of diameter of Pie chart.
     sal_Int32 nYTop
-        = getXPath(
-              pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[1]"_ostr,
-              "y"_ostr)
+        = getXPath(pXmlDoc,
+                   "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[1]",
+                   "y")
               .toInt32();
     sal_Int32 nYBottom
         = getXPath(
               pXmlDoc,
-              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[31]"_ostr,
-              "y"_ostr)
+              "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[4]/polyline[1]/point[31]",
+              "y")
               .toInt32();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(4615, nYTop - nYBottom, 5);
 }
@@ -1958,7 +1789,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check the first data label of area chart.
-    assertXPathContent(pXmlDoc, "(//textarray)[22]/text"_ostr, u"56"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[22]/text", u"56");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
@@ -1974,7 +1805,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check the data label of pie chart.
-    assertXPathContent(pXmlDoc, "(//textarray)[2]/text"_ostr, u"100%"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[2]/text", u"100%");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
@@ -1988,10 +1819,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nX2
-        = getXPath(pXmlDoc, "(//textarray)[2]"_ostr, "x"_ostr).toInt32(); // second data label
-    sal_Int32 nX4
-        = getXPath(pXmlDoc, "(//textarray)[4]"_ostr, "x"_ostr).toInt32(); // fourth data label
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]", "x").toInt32(); // second data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "(//textarray)[4]", "x").toInt32(); // fourth data label
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1229
     // - Actual  : -225
@@ -2011,10 +1840,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nX1
-        = getXPath(pXmlDoc, "(//textarray)[1]"_ostr, "x"_ostr).toInt32(); // first data label
-    sal_Int32 nX4
-        = getXPath(pXmlDoc, "(//textarray)[4]"_ostr, "x"_ostr).toInt32(); // fourth data label
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[1]", "x").toInt32(); // first data label
+    sal_Int32 nX4 = getXPath(pXmlDoc, "(//textarray)[4]", "x").toInt32(); // fourth data label
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 10865
     // - Actual  : 10252
@@ -2036,7 +1863,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
     CPPUNIT_ASSERT(pXmlDoc);
 
     const sal_Int32 nFirstLabelLines
-        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"really\")])"_ostr).toInt32();
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"really\")])").toInt32();
 
     // This failed, if the first data label didn't break to multiple lines.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), nFirstLabelLines);
@@ -2053,7 +1880,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]"_ostr, "y"_ostr).toInt32();
+    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4653
     // - Actual  : 2182
@@ -2073,7 +1900,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]"_ostr, "y"_ostr).toInt32();
+    sal_Int32 nY = getXPath(pXmlDoc, "(//textarray)[11]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 5758
     // - Actual  : 3352
@@ -2081,7 +1908,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
     // i.e. the data label appeared above the data point.
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5758, nY, 50);
 
-    nY = getXPath(pXmlDoc, "(//textarray)[13]"_ostr, "y"_ostr).toInt32();
+    nY = getXPath(pXmlDoc, "(//textarray)[13]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2335
     // - Actual  : 2343
@@ -2103,7 +1930,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Check the custom leader line on pie chart.
-    assertXPath(pXmlDoc, "//polyline"_ostr, 1);
+    assertXPath(pXmlDoc, "//polyline", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
@@ -2121,7 +1948,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
     // - Expected: 2
     // - Actual  : 3
     // i.e. the leader line was visible.
-    assertXPath(pXmlDoc, "//polyline"_ostr, 2);
+    assertXPath(pXmlDoc, "//polyline", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
@@ -2137,8 +1964,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
     CPPUNIT_ASSERT(pXmlDoc);
     sal_Int32 nY = getXPath(pXmlDoc,
                             "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[1]/polypolygon/"
-                            "polygon/point[1]"_ostr,
-                            "y"_ostr)
+                            "polygon/point[1]",
+                            "y")
                        .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 6727
@@ -2161,7 +1988,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // check the inner chart area (relative size) visibility with testing the X axis label
-    assertXPathContent(pXmlDoc, "//textarray/text"_ostr, u"Category 1"_ustr);
+    assertXPathContent(pXmlDoc, "//textarray/text", u"Category 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
@@ -2177,7 +2004,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // check the inner chart area (default size) visibility with testing the X axis label
-    assertXPathContent(pXmlDoc, "//textarray/text"_ostr, u"Category 1"_ustr);
+    assertXPathContent(pXmlDoc, "//textarray/text", u"Category 1");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
@@ -2196,9 +2023,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
     // Make the layout xml dump after the change
     auto pXml = parseLayoutDump();
     auto sTextRightSidePosition
-        = getXPath(pXml, "/root/page/body/txt[6]/anchored/fly/infos/bounds"_ostr, "right"_ostr);
-    auto sShapeRightSidePosition = getXPath(
-        pXml, "/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/bounds"_ostr, "right"_ostr);
+        = getXPath(pXml, "/root/page/body/txt[6]/anchored/fly/infos/bounds", "right");
+    auto sShapeRightSidePosition
+        = getXPath(pXml, "/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/bounds", "right");
     // Before the textframe did not follow the shape, now it supposed to
     // so the right side of the shape must be greater than the right side of
     // textframe:
@@ -2225,30 +2052,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkLineHeight)
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[2]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[3]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[2]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[3]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[4]"_ostr,
-                    "height"_ostr, "184");
-        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[5]"_ostr,
-                    "height"_ostr, "253");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[2]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[3]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[1]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[2]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[3]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[4]", "height",
+                    u"184");
+        assertXPath(pXmlDoc, "/root/page/header/txt[2]/SwParaPortion/SwLineLayout[5]", "height",
+                    u"253");
     }
 
     xViewSettings->setPropertyValue(u"ShowNonprintingCharacters"_ustr, uno::Any(false));
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                    "height"_ostr, "253");
+        assertXPath(pXmlDoc, "/root/page/header/txt[1]/SwParaPortion/SwLineLayout[1]", "height",
+                    u"253");
     }
 }
 
@@ -2265,8 +2092,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the chart title is aligned to left.
-    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[13]"_ostr, "x"_ostr).toInt32();
-    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[14]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[13]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[14]", "x").toInt32();
     CPPUNIT_ASSERT_GREATER(nX1 + 100, nX2);
 }
 
@@ -2283,8 +2110,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This failed, if the axis label is aligned to left.
-    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[1]"_ostr, "x"_ostr).toInt32();
-    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nX1 = getXPath(pXmlDoc, "(//textarray)[1]", "x").toInt32();
+    sal_Int32 nX2 = getXPath(pXmlDoc, "(//textarray)[2]", "x").toInt32();
     CPPUNIT_ASSERT_GREATER(nX1 + 250, nX2);
 }
 
@@ -2303,7 +2130,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134235)
     // - Expected: 14
     // - Actual  : 13
     // i.e. the chart title flowed out of chart area.
-    assertXPath(pXmlDoc, "//textarray"_ostr, 14);
+    assertXPath(pXmlDoc, "//textarray", 14);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
@@ -2321,7 +2148,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
     // - Expected: 14
     // - Actual  : 13
     // i.e. the X axis title didn't break to multiple lines.
-    assertXPath(pXmlDoc, "//textarray"_ostr, 14);
+    assertXPath(pXmlDoc, "//textarray", 14);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
@@ -2337,7 +2164,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
     CPPUNIT_ASSERT(pXmlDoc);
 
     const sal_Int32 nTitleLines
-        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Horizontal\")])"_ostr).toInt32();
+        = getXPathContent(pXmlDoc, "count(//text[contains(text(),\"Horizontal\")])").toInt32();
 
     // Without the accompanying fix in place, this test would have failed.
     // i.e. the Y axis title didn't break to multiple lines.
@@ -2356,7 +2183,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // This failed, if the custom text of data label is missing.
-    assertXPathContent(pXmlDoc, "(//textarray)[16]/text"_ostr, u"Customlabel"_ustr);
+    assertXPathContent(pXmlDoc, "(//textarray)[16]/text", u"Customlabel");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
@@ -2371,14 +2198,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(
-        pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textarray/text"_ostr,
-        u"hello"_ustr);
+    assertXPathContent(pXmlDoc,
+                       "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textarray/text",
+                       u"hello");
     // This failed, text color was #000000.
     assertXPath(
         pXmlDoc,
-        "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textcolor[@color='#ffffff']"_ostr,
-        1);
+        "/metafile/push[1]/push[1]/push[1]/push[6]/push[1]/push[3]/textcolor[@color='#ffffff']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
@@ -2395,10 +2221,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 
     // The only polypolygon in the rendering result was the white background we
     // want to avoid.
-    assertXPath(pXmlDoc, "//polypolygon"_ostr, 0);
+    assertXPath(pXmlDoc, "//polypolygon", 0);
 
     // Make sure the text is still rendered.
-    assertXPathContent(pXmlDoc, "//textarray/text"_ostr, u"Hello"_ustr);
+    assertXPathContent(pXmlDoc, "//textarray/text", u"Hello");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
@@ -2412,7 +2238,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nBottom = getXPath(pXmlDoc, "//sectrectclipregion"_ostr, "bottom"_ostr).toInt32();
+    sal_Int32 nBottom = getXPath(pXmlDoc, "//sectrectclipregion", "bottom").toInt32();
 
     // No end point of line segments shall go below the bottom of the clipping area.
     const OString sXPath = "//polyline/point[@y>" + OString::number(nBottom) + "]";
@@ -2431,7 +2257,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion1)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    sal_Int32 nRight = getXPath(pXmlDoc, "//sectrectclipregion"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nRight = getXPath(pXmlDoc, "//sectrectclipregion", "right").toInt32();
     sal_Int32 nLeft = static_cast<sal_Int32>(nRight * 0.95);
 
     // Expect table borders in right page margin.
@@ -2453,7 +2279,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion2)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     // End point position of the outer table.
-    sal_Int32 nX = getXPath(pXmlDoc, "(//polyline[1]/point)[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nX = getXPath(pXmlDoc, "(//polyline[1]/point)[2]", "x").toInt32();
 
     // Do not allow inner table extrude outer table.
     const OString sXPath = "//polyline/point[@x>" + OString::number(nX) + "]";
@@ -2474,10 +2300,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117245)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2, TabOverMargin did not use a single line when there was
     // enough space for the text.
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", 1);
 
     // This was 2, same problem elsewhere due to code duplication.
-    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
@@ -2492,10 +2318,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf118672)
 
     // This ended as "fol*1 2 3 4 5 6 7 8 9", i.e. "10con-" was moved to the next line.
     // Bizarrely, Word lets the text run into the right margin (loaded from .rtf)
-    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr,
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
                 u"He heard quiet steps behind him. That didn't bode well. Who could be fol*1 2 "
-                "3 4 5 6 7 8 9 10consetetur"_ustr);
+                "3 4 5 6 7 8 9 10consetetur");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
@@ -2503,23 +2328,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200)
     createSwDoc("tdf150200.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2529,23 +2354,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150200_DOCX)
     createSwDoc("tdf150200.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // dash
-    OUString sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"-(dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(93), sFirstLine.getLength());
     // en-dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"–(en-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(88), sFirstLine.getLength());
     // em-dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"—(em-dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(77), sFirstLine.getLength());
     // figure dash
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‒(figure dash)"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(87), sFirstLine.getLength());
 }
@@ -2555,23 +2380,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438)
     createSwDoc("tdf150438.odt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }
@@ -2581,23 +2406,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150438_DOCX)
     createSwDoc("tdf150438.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // left double quotation mark
-    OUString sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    OUString sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"“Lorem ipsum"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(92), sFirstLine.getLength());
     // right double quotation mark
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[2]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"”Nunc viverra imperdiet enim."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(97), sFirstLine.getLength());
     // left single quotation mark
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[3]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"‘Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
     // right single quotation mark or apostrophe
-    sFirstLine = getXPathContent(
-        pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion"_ostr);
+    sFirstLine
+        = getXPathContent(pXmlDoc, "/root/page/body/txt[4]/SwParaPortion/SwLineLayout[1]/@portion");
     CPPUNIT_ASSERT_EQUAL(true, sFirstLine.startsWith(u"’Aenean nec lorem."));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(85), sFirstLine.getLength());
 }
@@ -2616,21 +2441,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117923)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Check that we actually test the line we need
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]"_ostr,
-                       u"GHI GHI GHI GHI"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-        "type"_ostr, u"PortionType::Number"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-        "expand"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", u"GHI GHI GHI GHI");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "type", u"PortionType::Number");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"2.");
     // The numbering height was 960.
     assertXPath(
         pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-        "height"_ostr, u"220"_ustr);
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", u"220");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
@@ -2647,21 +2469,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Check that we actually test the line we need
-    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]"_ostr,
-                       u"GHI GHI GHI GHI"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-        "type"_ostr, u"PortionType::Number"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr,
-        "expand"_ostr, u"2."_ustr);
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row/cell/txt[3]", u"GHI GHI GHI GHI");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "type", u"PortionType::Number");
+    assertXPath(pXmlDoc,
+                "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion",
+                "expand", u"2.");
     // The numbering height was 960 in DOC format.
     assertXPath(
         pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-        "height"_ostr, u"220"_ustr);
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", u"220");
 
     // tdf#127606: now it's possible to change formatting of numbering
     // increase font size (220 -> 260)
@@ -2671,8 +2490,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
     pXmlDoc = parseLayoutDump();
     assertXPath(
         pXmlDoc,
-        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-        "height"_ostr, u"260"_ustr);
+        "/root/page/body/tab/row/cell/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont",
+        "height", u"260");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127118)
@@ -2680,8 +2499,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127118)
     createSwDoc("tdf127118.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was Horizontal: merged cell split between pages didn't keep vertical writing direction
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]/txt[1]"_ostr, "WritingMode"_ostr,
-                u"VertBTLR"_ustr);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[1]/cell[1]/txt[1]", "WritingMode",
+                u"VertBTLR");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf141220)
@@ -2690,9 +2509,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf141220)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nTextBoxTop
-        = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
+    sal_Int32 nTextBoxTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
     // Make sure the textbox stays inside the shape.
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
 }
@@ -2800,8 +2618,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134685)
     createSwDoc("tdf134685.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth
-        = getXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/infos/bounds"_ostr, "width"_ostr)
-              .toInt32();
+        = getXPath(pXmlDoc, "/root/page/body/tab/row[6]/cell[1]/infos/bounds", "width").toInt32();
     // This was 2223: the content was only partially visible according to the lost cell width
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(14000), nWidth);
 }
@@ -2811,9 +2628,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf109077)
     createSwDoc("tdf109077.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nTextBoxTop
-        = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "top").toInt32();
+    sal_Int32 nTextBoxTop = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "top").toInt32();
     // This was 281: the top of the shape and its textbox should match, though
     // tolerate differences <= 1px (about 15 twips).
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
@@ -2840,8 +2656,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     // 123,456.00 transform chain.
     assertXPath(
         pXmlDoc,
-        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']"_ostr,
-        "expand"_ostr, u"1,234.56"_ustr);
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", u"1,234.56");
 
     // Now change the system locale to English (before this was failing, 1234,56 -> 0.00)
     aOptions.SetLocaleConfigString(u"en-GB"_ustr);
@@ -2855,8 +2671,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     // We expect, that the field value is not changed. Otherwise there is a problem:
     assertXPath(
         pXmlDoc,
-        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']"_ostr,
-        "expand"_ostr, u"1,234.56"_ustr);
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", u"1,234.56");
     // Now change the system locale to German
     aOptions.SetLocaleConfigString(u"de-DE"_ustr);
     aOptions.Commit();
@@ -2869,8 +2685,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     // We expect, that the field value is not changed. Otherwise there is a problem:
     assertXPath(
         pXmlDoc,
-        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']"_ostr,
-        "expand"_ostr, u"1,234.56"_ustr);
+        "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[@type='PortionType::Field']",
+        "expand", u"1,234.56");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
@@ -2913,7 +2729,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf135991)
     createSwDoc("tdf135991.odt");
     auto pDump = parseLayoutDump();
     // There used to be negative values that made the column frames invisible.
-    assertXPath(pDump, "//bounds[@top<0]"_ostr, 0);
+    assertXPath(pDump, "//bounds[@top<0]", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150642)
@@ -2921,8 +2737,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150642)
     createSwDoc("tdf150642.odt");
     auto pDump = parseLayoutDump();
     // There used to be negative values that made the cell frame invisible.
-    assertXPath(pDump, "//bounds[@left<0]"_ostr, 0);
-    assertXPath(pDump, "//bounds[@right<0]"_ostr, 0);
+    assertXPath(pDump, "//bounds[@left<0]", 0);
+    assertXPath(pDump, "//bounds[@right<0]", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152085)
@@ -2930,9 +2746,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152085)
     createSwDoc("tdf152085-section-tblr.odt");
     auto pDump = parseLayoutDump();
     sal_Int32 nSectionHeight
-        = getXPath(pDump, "//section/infos/bounds"_ostr, "bottom"_ostr).toInt32(); // was 8391
+        = getXPath(pDump, "//section/infos/bounds", "bottom").toInt32(); // was 8391
     sal_Int32 nColumnHeight
-        = getXPath(pDump, "(//column/infos/bounds)[2]"_ostr, "bottom"_ostr).toInt32(); // was 16216
+        = getXPath(pDump, "(//column/infos/bounds)[2]", "bottom").toInt32(); // was 16216
     CPPUNIT_ASSERT_MESSAGE("The column in a TBRL page should be shorter than the section.",
                            nColumnHeight <= nSectionHeight);
 }
@@ -2954,8 +2770,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf152031)
 
     auto pDump = parseLayoutDump();
     // There was a stair effect after change the table size.
-    sal_Int32 nLeft_Row1 = getXPath(pDump, "(//row/infos/bounds)[1]"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nLeft_Row2 = getXPath(pDump, "(//row/infos/bounds)[2]"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nLeft_Row1 = getXPath(pDump, "(//row/infos/bounds)[1]", "left").toInt32();
+    sal_Int32 nLeft_Row2 = getXPath(pDump, "(//row/infos/bounds)[2]", "left").toInt32();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("left values of SwRowFrames should be consistent.", nLeft_Row1,
                                  nLeft_Row2);
 }
@@ -2971,66 +2787,65 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf153136)
     // Page 1: standalone paragraphs
 
     // U+0009 CHARACTER TABULATION: height is ignored
-    sal_Int32 height
-        = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[1]"_ostr, "height"_ostr).toInt32();
+    sal_Int32 height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[1]", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+0020 SPACE: height is ignored
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[2]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[2]", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+00A0 NO-BREAK SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[3]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[3]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+1680 OGHAM SPACE MARK: height is considered; not tested, because Liberation Serif lacks it
 
     // U+2000 EN QUAD: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[4]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[4]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2001 EM QUAD: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[5]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[5]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2002 EN SPACE: height is ignored
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[6]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[6]", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2003 EM SPACE: height is ignored
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[7]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[7]", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2004 THREE-PER-EM SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[8]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[8]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2005 FOUR-PER-EM SPACE: height is ignored
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[9]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[9]", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2006 SIX-PER-EM SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[10]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[10]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2007 FIGURE SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[11]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[11]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2008 PUNCTUATION SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[12]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[12]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2009 THIN SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[13]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[13]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+200A HAIR SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[14]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[14]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+202F NARROW NO-BREAK SPACE: height is considered
-    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[15]"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[1]//SwLineLayout)[15]", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+205F MEDIUM MATHEMATICAL SPACE: height is considered; not tested, because Liberation Serif lacks it
@@ -3039,75 +2854,61 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf153136)
     // Page 2: table rows (no paragraph-level size DF)
 
     // U+0020 SPACE: height is ignored
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[1]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+00A0 NO-BREAK SPACE: height is considered (1104 or so)
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[2]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+1680 OGHAM SPACE MARK: height is considered; not tested, because Liberation Serif lacks it
 
     // U+2000 EN QUAD: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[3]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[3]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2001 EM QUAD: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[4]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[4]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2002 EN SPACE: height is ignored
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[5]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[5]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2003 EM SPACE: height is ignored
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[6]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[6]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2004 THREE-PER-EM SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[7]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[7]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2005 FOUR-PER-EM SPACE: height is ignored
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[8]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[8]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_LESS(small, height);
 
     // U+2006 SIX-PER-EM SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[9]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[9]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2007 FIGURE SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[10]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[10]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2008 PUNCTUATION SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[11]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[11]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+2009 THIN SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[12]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[12]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+200A HAIR SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[13]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[13]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+202F NARROW NO-BREAK SPACE: height is considered
-    height
-        = getXPath(pXmlDoc, "(/root/page[2]//row)[14]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    height = getXPath(pXmlDoc, "(/root/page[2]//row)[14]/infos/bounds", "height").toInt32();
     CPPUNIT_ASSERT_GREATER(large, height);
 
     // U+205F MEDIUM MATHEMATICAL SPACE: height is considered; not tested, because Liberation Serif lacks it

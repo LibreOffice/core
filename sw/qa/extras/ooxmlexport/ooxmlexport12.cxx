@@ -673,54 +673,53 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // page 1 header: 1 paragraph, 2 flys, 1 draw object
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/fly"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/fly", 2);
     if (isExported()) // somehow there's an additional shape on re-import?
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject"_ostr, 2);
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 2);
     else
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject"_ostr, 1);
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 1);
 
     // page 2 header: 3 paragraphs, 1 table, 1 fly on last paragraph
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt"_ostr, 3);
-    assertXPath(pXmlDoc, "/root/page[2]/header/tab"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt/anchored/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[2]/header/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt/anchored/fly", 1);
 
     // page 3 header: 1 table, 1 paragraph, no text
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[3]/header/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[3]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[3]/header/tab", 1);
     assertXPath(pXmlDoc,
-                "/root/page[3]/header/tab/row/cell/txt/SwParaPortion/SwLineLayout/child::*"_ostr,
-                0);
-    assertXPath(pXmlDoc, "/root/page[3]/header//anchored"_ostr, 0);
+                "/root/page[3]/header/tab/row/cell/txt/SwParaPortion/SwLineLayout/child::*", 0);
+    assertXPath(pXmlDoc, "/root/page[3]/header//anchored", 0);
     // tdf#149313: ensure 3rd page does not have extra empty paragraph at top
-    assertXPathContent(pXmlDoc, "/root/page[3]/body//txt"_ostr, u"AUFGABENSTELLUNG"_ustr);
+    assertXPathContent(pXmlDoc, "/root/page[3]/body//txt", u"AUFGABENSTELLUNG");
 
     // page 4 header: 1 table, 1 paragraph, with text
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[4]/header/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[4]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/header/tab", 1);
     assertXPath(
         pXmlDoc,
-        "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-        "portion"_ostr, u"Titel der studentischen Arbeit"_ustr);
-    assertXPath(pXmlDoc, "/root/page[4]/header//anchored"_ostr, 0);
+        "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", u"Titel der studentischen Arbeit");
+    assertXPath(pXmlDoc, "/root/page[4]/header//anchored", 0);
 
     // page 5: same as page 4
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[5]/header/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[5]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/header/tab", 1);
     assertXPath(
         pXmlDoc,
-        "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-        "portion"_ostr, u"Titel der studentischen Arbeit"_ustr);
-    assertXPath(pXmlDoc, "/root/page[5]/header//anchored"_ostr, 0);
+        "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", u"Titel der studentischen Arbeit");
+    assertXPath(pXmlDoc, "/root/page[5]/header//anchored", 0);
 
     // page 6: same as page 4
-    assertXPath(pXmlDoc, "/root/page[6]/header/txt"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[6]/header/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[6]/header/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[6]/header/tab", 1);
     assertXPath(
         pXmlDoc,
-        "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-        "portion"_ostr, u"Titel der studentischen Arbeit"_ustr);
-    assertXPath(pXmlDoc, "/root/page[6]/header//anchored"_ostr, 0);
+        "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+        "portion", u"Titel der studentischen Arbeit");
+    assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
@@ -782,11 +781,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
     CPPUNIT_ASSERT_EQUAL(u"date"_ustr, sTmp);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "name"_ostr,
-                u"compatibilityMode"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "uri"_ostr,
-                u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "val"_ostr, u"11"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "name", u"compatibilityMode");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "uri",
+                u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "val", u"11");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120224_textControlCrossRef, "tdf120224_textControlCrossRef.docx")
@@ -881,22 +879,22 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLShapetypeId)
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent/"
                 "mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:txbx/"
-                "w:txbxContent/w:p/w:r/w:object/v:shapetype"_ostr,
-                "id"_ostr, u"_x0000_t75"_ustr);
+                "w:txbxContent/w:p/w:r/w:object/v:shapetype",
+                "id", u"_x0000_t75");
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[1]/w:r/mc:AlternateContent/"
                 "mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wps:wsp/wps:txbx/"
-                "w:txbxContent/w:p/w:r/w:object/v:shape"_ostr,
-                "type"_ostr, u"#_x0000_t75"_ustr);
+                "w:txbxContent/w:p/w:r/w:object/v:shape",
+                "type", u"#_x0000_t75");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf73547)
 {
     loadAndSave("tdf73547-dash.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]"_ostr, "d"_ostr).toDouble();
+    double nD = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "d").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(105000.0, nD, 5000.0); // was 100000
-    double nSp = getXPath(pXmlDoc, "//a:custDash/a:ds[1]"_ostr, "sp"_ostr).toDouble();
+    double nSp = getXPath(pXmlDoc, "//a:custDash/a:ds[1]", "sp").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(35000.0, nSp, 5000.0); // was 100000
 }
 
@@ -924,7 +922,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105444)
     loadAndSave("tdf105444.docx");
     xmlDocUniquePtr pXmlComm = parseExport(u"word/comments.xml"_ustr);
     // there is no extra paragraph on Win32, only a single one.
-    assertXPath(pXmlComm, "/w:comments/w:comment/w:p"_ostr, 1);
+    assertXPath(pXmlComm, "/w:comments/w:comment/w:p", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
@@ -969,9 +967,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134618)
     //Without the fix it in place, it would have failed with
     //- Expected: 1
     //- Actual  : 9
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r", 1);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent"_ostr, 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
@@ -979,18 +977,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99631)
     loadAndSave("tdf99631.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "//w:object"_ostr, 2);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:object", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 2);
     // first XSLX OLE object (1:1 scale)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]"_ostr, "dxaOrig"_ostr,
-                u"2561"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]"_ostr, "dyaOrig"_ostr,
-                u"513"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dxaOrig", u"2561");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object[1]", "dyaOrig", u"513");
     // second XLSX OLE object (same content + 1 row, but zoomed)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]"_ostr, "dxaOrig"_ostr,
-                u"2561"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]"_ostr, "dyaOrig"_ostr,
-                u"769"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dxaOrig", u"2561");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:object[1]", "dyaOrig", u"769");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
@@ -998,10 +992,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138899)
     loadAndSave("tdf138899.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     // This was 6, not removed empty temporary paragraph at the end of the section
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p"_ostr, 5);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p", 5);
 
     //tdf#134385: Paragraph property to "add space between paragraphs of the same style" was lost
-    assertXPath(pXmlDocument, "//w:p[1]/w:pPr/w:contextualSpacing"_ostr, "val"_ostr, u"false"_ustr);
+    assertXPath(pXmlDocument, "//w:p[1]/w:pPr/w:contextualSpacing", "val", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
@@ -1009,10 +1003,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122563)
     loadAndSave("tdf122563.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object", 1);
     // Size of the embedded OLE spreadsheet was the bad "width:28.35pt;height:28.35pt"
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object/v:shape"_ostr, "style"_ostr,
-                u"width:255.75pt;height:63.75pt;mso-wrap-distance-right:0pt"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:object/v:shape", "style",
+                u"width:255.75pt;height:63.75pt;mso-wrap-distance-right:0pt");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
@@ -1101,8 +1095,8 @@ CPPUNIT_TEST_FIXTURE(Test, testLanguageInGroupShape)
     assertXPath(pXml,
                 "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/"
                 "a:graphic/a:graphicData/wpg:wgp/"
-                "wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:lang"_ostr,
-                "val"_ostr, u"de-DE"_ustr);
+                "wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/w:lang",
+                "val", u"de-DE");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116883, "tdf116883.docx")
@@ -1155,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131420)
 {
     loadAndSave("tdf131420.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr/w:top"_ostr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr/w:top");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf80526_word_wrap, "tdf80526_word_wrap.docx")
@@ -1230,28 +1224,28 @@ DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // These were 0 (missing move*FromRange* elements)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd"_ostr, 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
 
         // paired names
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart"_ostr,
-                    "name"_ostr, u"move471382752"_ustr);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart"_ostr,
-                    "name"_ostr, u"move471382752"_ustr);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name",
+                    u"move471382752");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name",
+                    u"move471382752");
 
         // mandatory authors and dates
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart"_ostr,
-                    "author"_ostr, u"Tekijä"_ustr);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart"_ostr,
-                    "author"_ostr, u"Tekijä"_ustr);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
+                    u"Tekijä");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
+                    u"Tekijä");
         // no date (anonymized change)
         // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
-        assertXPathNoAttribute(
-            pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart"_ostr, "date"_ostr);
-        assertXPathNoAttribute(
-            pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart"_ostr, "date"_ostr);
+        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",
+                               "date");
+        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart",
+                               "date");
     }
 }
 
@@ -1261,18 +1255,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf150166, "tdf150166.docx")
     if (isExported())
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        assertXPath(pXmlDoc, "//w:moveFromRangeStart"_ostr, 0);
+        assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
         // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
-        assertXPath(pXmlDoc, "//w:moveFromRangeEnd"_ostr, 0);
+        assertXPath(pXmlDoc, "//w:moveFromRangeEnd", 0);
 
         // These were 0 (moveFrom, moveTo and t)
-        assertXPath(pXmlDoc, "//w:del"_ostr, 11);
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 12);
-        assertXPath(pXmlDoc, "//w:delText"_ostr, 7);
+        assertXPath(pXmlDoc, "//w:del", 11);
+        assertXPath(pXmlDoc, "//w:ins", 12);
+        assertXPath(pXmlDoc, "//w:delText", 7);
 
         // no more moveFrom/moveTo to avoid of problems with ToC
-        assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 0);
-        assertXPath(pXmlDoc, "//w:moveTo"_ostr, 0);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
     }
 }
 
@@ -1283,8 +1277,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143510, "TC-table-DnD-move.docx")
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del"_ostr, 2);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins"_ostr, 2);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
     }
 }
 
@@ -1295,10 +1289,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143510_table_from_row, "TC-table-Separate-Move.d
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins"_ostr, 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 1);
     }
 }
 
@@ -1309,8 +1303,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table, "TC-table-rowDND.docx")
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins"_ostr, 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 1);
     }
 }
 
@@ -1321,8 +1315,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table2, "TC-table-rowDND-front.doc
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del"_ostr, 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 1);
     }
 }
 
@@ -1333,9 +1327,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf150824, "tdf150824.fodt")
     {
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
         // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins"_ostr, 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:trPr/w:ins"_ostr, 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins", 1);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:trPr/w:ins", 1);
     }
 }
 
@@ -1347,14 +1341,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf157011, "tdf157011_ins_del_empty_cols.docx")
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
         // This was 1 (missing tracked table cell insertions)
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 3);
+        assertXPath(pXmlDoc, "//w:ins", 3);
 
         // This was 4 (missing tracked table cell deletions)
-        assertXPath(pXmlDoc, "//w:del"_ostr, 6);
+        assertXPath(pXmlDoc, "//w:del", 6);
 
         // tdf#157187 This was false (dummy w:tc/w:p/w:sdt/w:sdtContent content box)
-        assertXPath(pXmlDoc, "//w:tc/w:p/w:del"_ostr, 6);
-        assertXPath(pXmlDoc, "//w:tc/w:p/w:ins"_ostr, 3);
+        assertXPath(pXmlDoc, "//w:tc/w:p/w:del", 6);
+        assertXPath(pXmlDoc, "//w:tc/w:p/w:ins", 3);
     }
 }
 
@@ -1413,14 +1407,14 @@ CPPUNIT_TEST_FIXTURE(Test, testChart_BorderLine_Style)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:spPr/a:ln/a:prstDash"_ostr,
-                "val"_ostr, u"sysDot"_ustr);
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:spPr/a:ln/a:prstDash",
+                "val", u"sysDot");
     assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:spPr/a:ln/a:prstDash"_ostr,
-                "val"_ostr, u"sysDash"_ustr);
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:spPr/a:ln/a:prstDash",
+                "val", u"sysDash");
     assertXPath(pXmlDoc,
-                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash"_ostr,
-                "val"_ostr, u"dash"_ustr);
+                "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:spPr/a:ln/a:prstDash",
+                "val", u"dash");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
@@ -1430,16 +1424,16 @@ CPPUNIT_TEST_FIXTURE(Test, testChart_Plot_BorderLine_Style)
      * should get preserved inside an XML tag <a:prstDash> with value "dash", "sysDot, "lgDot", etc.
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash"_ostr, "val"_ostr,
-                u"lgDashDot"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"sysDash"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:prstDash", "val",
+                u"lgDashDot");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:spPr/a:ln/a:prstDash", "val", u"sysDash");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesDeletedEmptyParagraph)
 {
     loadAndSave("testTrackChangesDeletedEmptyParagraph.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:rPr/w:del");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTrackChangesEmptyParagraphsInADeletion)
@@ -1457,18 +1451,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149708)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // keep tracked insertion of a list item
     // This was 0 (missing tracked insertion of the paragraph mark)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:ins"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:ins");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149707)
 {
     loadAndSave("tdf149711.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveFrom"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:moveTo"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveFrom");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:moveTo");
     // These were missing
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:moveFrom"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:moveTo"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:moveFrom");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:moveTo");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
@@ -1476,13 +1470,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70234)
     loadAndSave("tdf70234.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import field with tracked deletion
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r[1]/w:fldChar");
 
     // export multiple runs of a field with tracked deletion
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r"_ostr, 6);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r", 6);
 
     // export w:delInstrText
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:delInstrText"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:del/w:r/w:delInstrText");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
@@ -1490,7 +1484,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115212)
     loadAndSave("tdf115212.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export field with tracked deletion
-    assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar"_ostr);
+    assertXPath(pXmlDoc, "//w:p[2]/w:del[1]/w:r[1]/w:fldChar");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
@@ -1498,8 +1492,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126243)
     loadAndSave("tdf120338.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked paragraph style change
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle"_ostr,
-                "val"_ostr, u"Heading3"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:pPrChange/w:pPr/w:pStyle", "val",
+                u"Heading3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
@@ -1507,8 +1501,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126245)
     loadAndSave("tdf126245.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export change tracking rejection data for tracked numbering change
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId"_ostr,
-                "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange/w:pPr/w:numPr/w:numId", "val",
+                u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
@@ -1516,10 +1510,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124491)
     loadAndSave("tdf124491.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import format change of empty lines, FIXME: change w:r with w:pPr in export
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/*/w:rPr/w:rPrChange");
     // empty line without format change
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/w:rPrChange"_ostr, 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/w:rPrChange", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/*/*/w:rPrChange", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
@@ -1527,9 +1521,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143911)
     loadAndSave("tdf126206.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // export format change of text portions
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange");
     // This was without tracked bold formatting
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange/w:rPr/w:b"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w:rPrChange/w:rPr/w:b");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
@@ -1537,7 +1531,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105485)
     loadAndSave("tdf105485.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking of deleted comments
-    assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference"_ostr);
+    assertXPath(pXmlDoc, "//w:del/w:r/w:commentReference");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125894)
@@ -1545,8 +1539,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125894)
     loadAndSave("tdf125894.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in frames
-    assertXPath(pXmlDoc, "//w:del"_ostr, 2);
-    assertXPath(pXmlDoc, "//w:ins"_ostr);
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149388)
@@ -1557,10 +1551,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149388)
     // import change tracking in floating tables
     // (don't recognize tracked text moving during the import,
     // because the text is too short and it's only a single word)
-    assertXPath(pXmlDoc, "//w:del"_ostr, 2);
-    assertXPath(pXmlDoc, "//w:ins"_ostr, 2);
-    assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 0);
-    assertXPath(pXmlDoc, "//w:moveTo"_ostr, 0);
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins", 2);
+    assertXPath(pXmlDoc, "//w:moveFrom", 0);
+    assertXPath(pXmlDoc, "//w:moveTo", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
@@ -1571,18 +1565,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
     // import change tracking in floating tables
     if (!isExported())
     {
-        assertXPath(pXmlDoc, "//w:del"_ostr, 2);
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 2);
-        assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 0);
-        assertXPath(pXmlDoc, "//w:moveTo"_ostr, 0);
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 2);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
     }
     else
     {
-        assertXPath(pXmlDoc, "//w:del"_ostr, 1);
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 1);
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 1);
         // tracked text moving recognized during the import
-        assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 1);
-        assertXPath(pXmlDoc, "//w:moveTo"_ostr, 1);
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
     }
 }
 
@@ -1592,10 +1586,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149388_fly)
     loadAndSave("tdf136667.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del"_ostr, 2);
-    assertXPath(pXmlDoc, "//w:ins"_ostr, 4);
-    assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 0);
-    assertXPath(pXmlDoc, "//w:moveTo"_ostr, 0);
+    assertXPath(pXmlDoc, "//w:del", 2);
+    assertXPath(pXmlDoc, "//w:ins", 4);
+    assertXPath(pXmlDoc, "//w:moveFrom", 0);
+    assertXPath(pXmlDoc, "//w:moveTo", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
@@ -1606,18 +1600,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
     // import change tracking in floating tables
     if (!isExported())
     {
-        assertXPath(pXmlDoc, "//w:del"_ostr, 2);
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 4);
-        assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 0);
-        assertXPath(pXmlDoc, "//w:moveTo"_ostr, 0);
+        assertXPath(pXmlDoc, "//w:del", 2);
+        assertXPath(pXmlDoc, "//w:ins", 4);
+        assertXPath(pXmlDoc, "//w:moveFrom", 0);
+        assertXPath(pXmlDoc, "//w:moveTo", 0);
     }
     else
     {
-        assertXPath(pXmlDoc, "//w:del"_ostr, 1);
-        assertXPath(pXmlDoc, "//w:ins"_ostr, 3);
+        assertXPath(pXmlDoc, "//w:del", 1);
+        assertXPath(pXmlDoc, "//w:ins", 3);
         // tracked text moving recognized during the import
-        assertXPath(pXmlDoc, "//w:moveFrom"_ostr, 1);
-        assertXPath(pXmlDoc, "//w:moveTo"_ostr, 1);
+        assertXPath(pXmlDoc, "//w:moveFrom", 1);
+        assertXPath(pXmlDoc, "//w:moveTo", 1);
     }
 }
 
@@ -1626,7 +1620,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
     loadAndSave("tdf136850.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    assertXPath(pXmlDoc, "//w:del"_ostr);
+    assertXPath(pXmlDoc, "//w:del");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
@@ -1636,7 +1630,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128156)
     // keep tracked insertion of a paragraph
     // This was 0 before 350972a8bffc1a74b531e0336954bf54b1356025,
     // and 1 later (missing tracked insertion of the paragraph mark)
-    assertXPath(pXmlDoc, "//w:ins"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:ins", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
@@ -1644,7 +1638,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125546)
     loadAndSave("tdf125546.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // compress redlines (it was 15)
-    assertXPath(pXmlDoc, "//w:rPrChange"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:rPrChange", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
@@ -1656,110 +1650,97 @@ CPPUNIT_TEST_FIXTURE(Test, testLabelWidthAndPosition_Left_FirstLineIndent)
     // a) all LTR cases with no number text look good in Word
     // 1) negative first line indent on paragraph:
     // no list width/indent: this one was 0 previously; this looks good
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "end", u"0");
     // list width:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"966"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "hanging", u"966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:ind", "end", u"0");
     // list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:ind", "end", u"0");
     // list width + list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind"_ostr, "start"_ostr, u"1134"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"966"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "start", u"1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "hanging", u"966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:ind", "end", u"0");
     // 2) positive first line indent on paragraph:
     // no list width/indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:ind", "end", u"0");
     // list width:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"147"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "hanging", u"147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:ind", "end", u"0");
     // list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "end", u"0");
     // list width + list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind"_ostr, "start"_ostr, u"1134"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"147"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "start", u"1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "hanging", u"147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:pPr/w:ind", "end", u"0");
     // b) all LTR cases with number text: the indent looks good but some tabs are wrong
     // 1) negative first line indent on paragraph:
     // no list width/indent: this one was 0 previously; this looks good
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:ind", "end", u"0");
     // list width:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"966"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "hanging", u"966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:ind", "end", u"0");
     // list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[11]/w:pPr/w:ind", "end", u"0");
     // list width + list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind"_ostr, "start"_ostr, u"1134"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"966"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "start", u"1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "hanging", u"966");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[12]/w:pPr/w:ind", "end", u"0");
     // 2) positive first line indent on paragraph:
     // no list width/indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[13]/w:pPr/w:ind", "end", u"0");
     // list width:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"147"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "hanging", u"147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[14]/w:pPr/w:ind", "end", u"0");
     // list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind"_ostr, "start"_ostr, u"567"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "start", u"567");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[15]/w:pPr/w:ind", "end", u"0");
     // list width + list indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind"_ostr, "start"_ostr, u"1134"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"147"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "start", u"1134");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "hanging", u"147");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[16]/w:pPr/w:ind", "end", u"0");
     // (w:p[17] is empty)
     // I) RTL
     // a) only RTL cases with no number text and no width/indent look good in Word
     // 1) negative first line indent on paragraph:
     // no list width/indent
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[18]/w:pPr/w:ind", "end", u"0");
     // 2) positive first line indent on paragraph:
     // no list width/indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[22]/w:pPr/w:ind", "end", u"0");
     // b) RTL cases with number text: the indent looks good but some tabs are wrong
     // 1) negative first line indent on paragraph:
     // no list width/indent
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind"_ostr, "hanging"_ostr,
-                u"399"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "hanging", u"399");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[26]/w:pPr/w:ind", "end", u"0");
     // 2) positive first line indent on paragraph:
     // no list width/indent:
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind"_ostr, "firstLine"_ostr,
-                u"420"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind"_ostr, "end"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "start", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "firstLine", u"420");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[30]/w:pPr/w:ind", "end", u"0");
     // TODO: other cases
 }
 
@@ -1768,7 +1749,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124604)
     loadAndSave("tdf124604.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // If the numbering comes from a base style, indentation of the base style has also priority.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind"_ostr, "start"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:ind", "start", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
@@ -1776,8 +1757,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95374)
     loadAndSave("tdf95374.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Numbering disabled by non-existent numId=0, disabling also inheritance of indentation of parent styles
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind"_ostr, "hanging"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind"_ostr, "start"_ostr, u"1136"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "hanging", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:ind", "start", u"1136");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf108493, "tdf108493.docx")
@@ -1811,14 +1792,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf64264, "tdf64264.docx")
 
     // table starts on page 1 and finished on page 2
     // and it has got only a single repeating header line
-    assertXPath(pDump, "/root/page[2]/body/tab"_ostr, 1);
-    assertXPath(pDump, "/root/page[2]/body/tab/row"_ostr, 47);
-    CPPUNIT_ASSERT_EQUAL(
-        u"Repeating Table Header"_ustr,
-        getXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"Text"_ustr,
-        getXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
+    assertXPath(pDump, "/root/page[2]/body/tab", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab/row", 47);
+    assertXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()",
+                       u"Repeating Table Header");
+    assertXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()", u"Text");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-table-header.docx")
@@ -1830,14 +1808,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
 
     // table starts on page 1 and finished on page 2
     // instead of showing only a part of it on page 2
-    assertXPath(pDump, "/root/page[1]/body/tab"_ostr, 1);
-    assertXPath(pDump, "/root/page[1]/body/tab/row"_ostr, 11);
-    CPPUNIT_ASSERT_EQUAL(
-        u"Test1"_ustr,
-        getXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"Test2"_ustr,
-        getXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()"_ostr));
+    assertXPath(pDump, "/root/page[1]/body/tab", 1);
+    assertXPath(pDump, "/root/page[1]/body/tab/row", 11);
+    assertXPathContent(pDump, "/root/page[2]/body/tab/row[1]/cell[1]/txt/text()", u"Test1");
+    assertXPathContent(pDump, "/root/page[2]/body/tab/row[2]/cell[1]/txt/text()", u"Test2");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
@@ -1846,18 +1820,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // keep "repeat table header" setting of table styles
-    assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader"_ostr, 4);
+    assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader", 4);
 
     xmlDocUniquePtr pDump = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 
     // table starts on page 1 and finished on page 2
     // and it has got only a single repeating header line
-    assertXPath(pDump, "/root/page[2]/body/tab[1]"_ostr, 1);
-    assertXPath(pDump, "/root/page[2]/body/tab[1]/row"_ostr, 2);
-    assertXPath(pDump, "/root/page[3]/body/tab"_ostr, 1);
+    assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
+    assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
+    assertXPath(pDump, "/root/page[3]/body/tab", 1);
     if (!isExported()) // TODO export tblHeader=false
-        assertXPath(pDump, "/root/page[3]/body/tab/row"_ostr, 1);
+        assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
@@ -1889,64 +1863,62 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130494)
 {
     loadAndSave("tdf130494.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight"_ostr,
-                "val"_ostr, u"yellow"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
+                u"yellow");
     // keep direct formatting of table cell paragraph with removed highlighting
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r/w:rPr/w:highlight", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf130690)
 {
     loadAndSave("tdf130690.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight"_ostr,
-                "val"_ostr, u"yellow"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[1]/w:rPr/w:highlight"_ostr,
-                1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:pPr/w:rPr/w:highlight", "val",
+                u"yellow");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[1]/w:rPr/w:highlight", 1);
     // keep direct formatting of table cell paragraph with removed highlighting
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[2]/w:rPr/w:highlight"_ostr,
-                0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:p/w:r[2]/w:rPr/w:highlight", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf105215)
 {
     loadAndSave("tdf105215.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Linux Libertine G"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:rPr/w:rFonts", "ascii",
+                u"Linux Libertine G");
 
     // These were "Linux Libertine G"
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/w:rPr"_ostr, 5);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Lohit Devanagari"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Lohit Devanagari"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Lohit Devanagari"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[4]/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Lohit Devanagari"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:rPr/w:rFonts"_ostr,
-                "ascii"_ostr, u"Lohit Devanagari"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r/w:rPr", 5);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:rPr/w:rFonts", "ascii",
+                u"Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:rPr/w:rFonts", "ascii",
+                u"Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:rPr/w:rFonts", "ascii",
+                u"Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[4]/w:rPr/w:rFonts", "ascii",
+                u"Lohit Devanagari");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:rPr/w:rFonts", "ascii",
+                u"Lohit Devanagari");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135187)
 {
     loadAndSave("tdf135187.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:rPr/w:b"_ostr, 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:pPr/w:rPr/w:b"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:pPr/w:rPr/w:b"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:pPr/w:rPr/w:b", 1);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr, 1);
-    assertXPathNoAttribute(
-        pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr, "val"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
+                           "val");
     // This was 0
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr, 1);
-    assertXPathNoAttribute(
-        pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr, "val"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b"_ostr,
-                "val"_ostr, u"false"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b",
+                           "val");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:p/w:r[1]/w:rPr/w:b", "val",
+                u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136617)
@@ -1957,8 +1929,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136617)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[2]/w:pPr/w:rPr/w:sz"_ostr,
-                "val"_ostr, u"16"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:p[2]/w:pPr/w:rPr/w:sz", "val",
+                u"16");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
@@ -1968,12 +1940,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121597TrackedDeletionOfMultipleParagraphs)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // check paragraphs with removed paragraph mark
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:del"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:del"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:rPr/w:del"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:rPr/w:del"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:pPr/w:rPr/w:del");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[10]/w:pPr/w:rPr/w:del");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
@@ -1982,13 +1954,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf141660)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:footnoteReference"_ostr, "id"_ostr,
-                u"2"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:footnoteReference", "id", u"2");
     // w:del is imported correctly with its footnote
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:del[2]/w:r/w:footnoteReference"_ostr,
-                "id"_ostr, u"3"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/w:footnoteReference"_ostr, "id"_ostr,
-                u"4"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:del[2]/w:r/w:footnoteReference", "id", u"3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/w:footnoteReference", "id", u"4");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133643)
@@ -1997,28 +1966,28 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133643)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar"_ostr,
-                "fldCharType"_ostr, u"begin"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar", "fldCharType",
+                u"begin");
     assertXPath(
         pXmlDoc,
-        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[1]"_ostr,
-        "val"_ostr, u"Bourgoin-Jallieu, "_ustr);
+        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[1]",
+        "val", u"Bourgoin-Jallieu, ");
     assertXPath(
         pXmlDoc,
-        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[2]"_ostr,
-        "val"_ostr, u"Fontaine, "_ustr);
+        "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[1]/w:fldChar/w:ffData/w:ddList/w:listEntry[2]",
+        "val", u"Fontaine, ");
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:instrText"_ostr,
-                       u" FORMDROPDOWN "_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[2]/w:instrText",
+                       u" FORMDROPDOWN ");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:fldChar"_ostr,
-                "fldCharType"_ostr, u"separate"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:fldChar"_ostr,
-                "fldCharType"_ostr, u"end"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[3]/w:fldChar", "fldCharType",
+                u"separate");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[5]/w:fldChar", "fldCharType",
+                u"end");
 
     // Without the fix in place, this w:r wouldn't exist
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[6]/w:t"_ostr,
-                       u"le 22 fevrier 2013"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:r[6]/w:t",
+                       u"le 22 fevrier 2013");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
@@ -2048,17 +2017,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116084_anonymized)
     loadAndSave("tdf116084.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText"_ostr,
-                       u"must"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"must");
 
     // no date (anonymized changes)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[@date]"_ostr, 0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[@date]", 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]", 0);
 
     // w:ins and w:del have w:author attributes, and the same
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]"_ostr, 1);
-    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[2]"_ostr, "author"_ostr);
-    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del"_ostr, "author"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]", 1);
+    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins[2]", "author");
+    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del", "author");
     CPPUNIT_ASSERT_EQUAL(sAuthor, sAuthor2);
 }
 
@@ -2075,17 +2043,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121176_anonymized)
     loadAndSave("tdf121176.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText"_ostr,
-                       u"must"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"must");
 
     // no date (anonymized changes)
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:ins"_ostr, "date"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]"_ostr, 0);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p/w:ins", "date");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:date]", 0);
 
     // w:ins and w:del have w:author attributes, and the same
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]"_ostr, 1);
-    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins"_ostr, "author"_ostr);
-    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del"_ostr, "author"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del[@w:author]", 1);
+    OUString sAuthor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins", "author");
+    OUString sAuthor2 = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del", "author");
     CPPUNIT_ASSERT_EQUAL(sAuthor, sAuthor2);
 }
 
@@ -2094,8 +2061,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128913)
     loadAndSave("tdf128913.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:ins and w:del are imported correctly, if they contain only inline images
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:inline/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:inline/a:graphic");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
@@ -2103,8 +2070,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142700)
     loadAndSave("tdf142700.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:ins and w:del are imported correctly, if they contain only images anchored to character
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:r/w:drawing/wp:anchor/a:graphic");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:del/w:r/w:drawing/wp:anchor/a:graphic");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
@@ -2112,8 +2079,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142387)
     loadAndSave("tdf142387.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly (only w:del was exported)
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText"_ostr,
-                       u"inserts "_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:ins/w:del/w:r/w:delText", u"inserts ");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf147892)
@@ -2122,8 +2088,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147892)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // w:del in w:ins is exported correctly
     // (both w:del and w:ins were exported for para marker)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:del", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:ins", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123054, "tdf123054.docx")
@@ -2177,13 +2143,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 
     assertXPath(pXmlDoc,
                 "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/"
-                "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path"_ostr,
-                "fill"_ostr, u"none"_ustr);
+                "a:graphic/a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+                "fill", u"none");
     assertXPathNoAttribute(
         pXmlDoc,
         "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/"
-        "a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path"_ostr,
-        "fill"_ostr);
+        "a:graphicData/wps:wsp/wps:spPr/a:custGeom/a:pathLst/a:path",
+        "fill");
 }
 // The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
 // except:
@@ -2196,9 +2162,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
-                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", u"HEADER"_ustr,
-                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"));
 }
 
 // The (tdf124678_no_leading_paragraph.odt, tdf124678_with_leading_paragraph.odt) documents are the same,
@@ -2212,9 +2178,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case2)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", u""_ustr,
-                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[1]/header/txt"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Second page header text", u"HEADER"_ustr,
-                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"_ostr));
+                                 getXPathContent(pXmlDoc, "/root/page[2]/header/txt"));
 }
 
 static bool lcl_nearEqual(const sal_Int32 nNumber1, const sal_Int32 nNumber2,
@@ -2234,47 +2200,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
     xmlDocUniquePtr pDump = parseLayoutDump();
 
     //Check layout positions / sizes
-    sal_Int32 nLeftHead
-        = getXPath(pDump, "//page[1]/header/infos/bounds"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nLeftBody
-        = getXPath(pDump, "//page[1]/body/infos/bounds"_ostr, "left"_ostr).toInt32();
-    sal_Int32 nLeftFoot
-        = getXPath(pDump, "//page[1]/footer/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nLeftHead = getXPath(pDump, "//page[1]/header/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftBody = getXPath(pDump, "//page[1]/body/infos/bounds", "left").toInt32();
+    sal_Int32 nLeftFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "left").toInt32();
     sal_Int32 nLeftHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "left").toInt32();
     sal_Int32 nLeftFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "left").toInt32();
 
-    sal_Int32 nTopHead
-        = getXPath(pDump, "//page[1]/header/infos/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nTopBody = getXPath(pDump, "//page[1]/body/infos/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nTopFoot
-        = getXPath(pDump, "//page[1]/footer/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nTopHead = getXPath(pDump, "//page[1]/header/infos/bounds", "top").toInt32();
+    sal_Int32 nTopBody = getXPath(pDump, "//page[1]/body/infos/bounds", "top").toInt32();
+    sal_Int32 nTopFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "top").toInt32();
     sal_Int32 nTopHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "top").toInt32();
     sal_Int32 nTopFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
 
-    sal_Int32 nHeightHead
-        = getXPath(pDump, "//page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nHeightBody
-        = getXPath(pDump, "//page[1]/body/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nHeightFoot
-        = getXPath(pDump, "//page[1]/footer/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nHeightHead = getXPath(pDump, "//page[1]/header/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightBody = getXPath(pDump, "//page[1]/body/infos/bounds", "height").toInt32();
+    sal_Int32 nHeightFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "height").toInt32();
     sal_Int32 nHeightHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "height").toInt32();
     sal_Int32 nHeightFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds"_ostr, "height"_ostr)
-              .toInt32();
+        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "height").toInt32();
     sal_Int32 nHeightHFlyBound
-        = getXPath(pDump, "//page[1]/header/infos/prtBounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pDump, "//page[1]/header/infos/prtBounds", "height").toInt32();
     sal_Int32 nHeightFFlyBound
-        = getXPath(pDump, "//page[1]/footer/infos/prtBounds"_ostr, "height"_ostr).toInt32();
+        = getXPath(pDump, "//page[1]/footer/infos/prtBounds", "height").toInt32();
 
     CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftBody));
     CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFoot));
@@ -2305,69 +2257,43 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargi
     }
 
     //Check text of header/ footer
-    CPPUNIT_ASSERT_EQUAL(
-        u"f1"_ustr,
-        getXPath(
-            pDump,
-            "//page[1]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"                f8"_ustr,
-        getXPath(
-            pDump,
-            "//page[1]/header/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"                f8"_ustr,
-        getXPath(
-            pDump,
-            "//page[1]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"f1"_ustr,
-        getXPath(
-            pDump,
-            "//page[1]/footer/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
+    assertXPath(pDump,
+                "//page[1]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"f1");
+    assertXPath(pDump,
+                "//page[1]/header/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"                f8");
+    assertXPath(pDump,
+                "//page[1]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"                f8");
+    assertXPath(pDump,
+                "//page[1]/footer/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"f1");
 
-    CPPUNIT_ASSERT_EQUAL(
-        u"p1"_ustr,
-        getXPath(
-            pDump,
-            "//page[2]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"p1"_ustr,
-        getXPath(
-            pDump,
-            "//page[2]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
+    assertXPath(pDump,
+                "//page[2]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"p1");
+    assertXPath(pDump,
+                "//page[2]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"p1");
 
-    CPPUNIT_ASSERT_EQUAL(
-        u"  aaaa"_ustr,
-        getXPath(
-            pDump,
-            "//page[3]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
-    CPPUNIT_ASSERT_EQUAL(
-        u"      eeee"_ustr,
-        getXPath(
-            pDump,
-            "//page[3]/header/txt/anchored/fly/txt[5]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-            "portion"_ostr));
+    assertXPath(pDump,
+                "//page[3]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"  aaaa");
+    assertXPath(pDump,
+                "//page[3]/header/txt/anchored/fly/txt[5]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"      eeee");
 
-    CPPUNIT_ASSERT_EQUAL(u"f1    f2      f3        f4          f5            f6            "
-                         "  f7                f8"_ustr,
-                         getXPathContent(pDump, "/root/page[1]/header/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"                f8              f7            f6          f5    "
-                         "    f4      f3    f2f1"_ustr,
-                         getXPathContent(pDump, "/root/page[1]/footer/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr,
-                         getXPathContent(pDump, "/root/page[2]/header/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"p1"_ustr,
-                         getXPathContent(pDump, "/root/page[2]/footer/txt/anchored/fly"_ostr));
-    CPPUNIT_ASSERT_EQUAL(u"  aaaa   bbbb    cccc     dddd      eeee"_ustr,
-                         getXPathContent(pDump, "/root/page[3]/header/txt/anchored/fly"_ostr));
+    assertXPathContent(pDump, "/root/page[1]/header/txt/anchored/fly",
+                       u"f1    f2      f3        f4          f5            f6            "
+                       "  f7                f8");
+    assertXPathContent(pDump, "/root/page[1]/footer/txt/anchored/fly",
+                       u"                f8              f7            f6          f5    "
+                       "    f4      f3    f2f1");
+    assertXPathContent(pDump, "/root/page[2]/header/txt/anchored/fly", u"p1");
+    assertXPathContent(pDump, "/root/page[2]/footer/txt/anchored/fly", u"p1");
+    assertXPathContent(pDump, "/root/page[3]/header/txt/anchored/fly",
+                       u"  aaaa   bbbb    cccc     dddd      eeee");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,

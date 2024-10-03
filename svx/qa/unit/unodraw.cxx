@@ -147,14 +147,14 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
     // Check the primitives.
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
-    assertXPath(pDocument, "//shadow"_ostr, /*nNumberOfNodes=*/1);
+    assertXPath(pDocument, "//shadow", /*nNumberOfNodes=*/1);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 1
     // i.e. there was shadow for the cell text, while here PowerPoint-compatible output is expected,
     // which has no shadow for cell text (only for cell borders and cell background).
-    assertXPath(pDocument, "//shadow//sdrblocktext"_ostr, /*nNumberOfNodes=*/0);
+    assertXPath(pDocument, "//shadow//sdrblocktext", /*nNumberOfNodes=*/0);
 }
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)

@@ -81,10 +81,10 @@ void PictFilterTest::testDontClipTooMuch()
 
     CPPUNIT_ASSERT (pDoc);
 
-    assertXPath(pDoc, "/metafile/clipregion[5]"_ostr, "top"_ostr, u"0"_ustr);
-    assertXPath(pDoc, "/metafile/clipregion[5]"_ostr, "left"_ostr, u"0"_ustr);
-    assertXPath(pDoc, "/metafile/clipregion[5]"_ostr, "bottom"_ostr, u"empty"_ustr);
-    assertXPath(pDoc, "/metafile/clipregion[5]"_ostr, "right"_ostr, u"empty"_ustr);
+    assertXPath(pDoc, "/metafile/clipregion[5]", "top", u"0");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "left", u"0");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "bottom", u"empty");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "right", u"empty");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PictFilterTest);

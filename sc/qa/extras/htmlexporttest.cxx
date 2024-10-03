@@ -26,16 +26,16 @@ public:
         htmlDocUniquePtr pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
 
-        assertXPath(pDoc, "/html/body"_ostr, 1);
-        assertXPath(pDoc, "/html/body/table/tr/td/img"_ostr, 1);
+        assertXPath(pDoc, "/html/body", 1);
+        assertXPath(pDoc, "/html/body/table/tr/td/img", 1);
 
         setFilterOptions(u"SkipImages"_ustr);
         save(u"HTML (StarCalc)"_ustr);
 
         pDoc = parseHtml(maTempFile);
         CPPUNIT_ASSERT (pDoc);
-        assertXPath(pDoc, "/html/body"_ostr, 1);
-        assertXPath(pDoc, "/html/body/table/tr/td/img"_ostr, 0);
+        assertXPath(pDoc, "/html/body", 1);
+        assertXPath(pDoc, "/html/body/table/tr/td/img", 0);
     }
 
     void testTdf155244()
@@ -46,10 +46,10 @@ public:
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
         CPPUNIT_ASSERT(pXmlDoc);
 
-        assertXPath(pXmlDoc, "/xhtml:html"_ostr, 1);
+        assertXPath(pXmlDoc, "/xhtml:html", 1);
         // the problem was that there were 2 CSS styles named "Default"
-        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:table/xhtml:tr/xhtml:td"_ostr, "class"_ostr, u"cell-Default"_ustr);
-        OUString const styles = getXPathContent(pXmlDoc, "/xhtml:html/xhtml:head/xhtml:style"_ostr);
+        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:table/xhtml:tr/xhtml:td", "class", u"cell-Default");
+        OUString const styles = getXPathContent(pXmlDoc, "/xhtml:html/xhtml:head/xhtml:style");
         CPPUNIT_ASSERT(styles.indexOf(".graphic-Default{ background-color:#729fcf;") != -1);
         CPPUNIT_ASSERT(styles.indexOf(".cell-Default{ font-size:10pt; font-family:'Liberation Sans'; }") != -1);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), styles.indexOf(".Default"));

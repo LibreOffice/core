@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_anchoredAfterPgBreak)
         CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
+        assertXPath(pLayout, "//page[1]//anchored", 1);
     };
     createSwDoc("tdf153613_anchoredAfterPgBreak.rtf");
     verify();
@@ -136,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_anchoredAfterPgBreak2)
         CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
+        assertXPath(pLayout, "//page[2]//anchored", 1);
     };
     createSwDoc("tdf153613_anchoredAfterPgBreak2.rtf");
     verify();
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_anchoredAfterPgBreak4)
         CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
+        assertXPath(pLayout, "//page[1]//anchored", 1);
     };
     createSwDoc("tdf153613_anchoredAfterPgBreak4.rtf");
     verify();
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_anchoredAfterPgBreak5)
         CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//page[1]//anchored"_ostr, 1);
+        assertXPath(pLayout, "//page[1]//anchored", 1);
     };
     createSwDoc("tdf153613_anchoredAfterPgBreak5.rtf");
     verify();
@@ -186,7 +186,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_inlineAfterPgBreak)
         CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
+        assertXPath(pLayout, "//page[2]//anchored", 1);
     };
     createSwDoc("tdf153613_inlineAfterPgBreak.rtf");
     verify();
@@ -203,8 +203,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153613_inlineAfterPgBreak2)
         CPPUNIT_ASSERT_EQUAL(4, getParagraphs());
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"x"_ustr, getXPathContent(pLayout, "//page[1]/body/txt[2]"_ostr));
-        assertXPath(pLayout, "//page[2]//anchored"_ostr, 1);
+        assertXPathContent(pLayout, "//page[1]/body/txt[2]", u"x");
+        assertXPath(pLayout, "//page[2]//anchored", 1);
     };
     createSwDoc("tdf153613_inlineAfterPgBreak2.rtf");
     verify();
@@ -671,32 +671,29 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107413)
 
         xmlDocUniquePtr pDump = parseLayoutDump();
         const double nLeftFooter
-            = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "left"_ostr).toDouble();
+            = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "left").toDouble();
         const double nRightFooter
-            = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "right"_ostr).toDouble();
+            = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "right").toDouble();
         const double nTopFooter
-            = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "top"_ostr).toDouble();
+            = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "top").toDouble();
         const double nBottomFooter
-            = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "bottom"_ostr).toDouble();
+            = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "bottom").toDouble();
 
         // Without the fix in place, this test would have failed with
         // - Expected: 1
         // - Actual  : 0
         // - In <>, XPath '/root/page[1]/footer/txt/anchored/fly/infos/bounds' number of nodes is incorrect
         const double nLeftFly
-            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr,
-                       "left"_ostr)
+            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "left")
                   .toDouble();
         const double nRightFly
-            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr,
-                       "right"_ostr)
+            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "right")
                   .toDouble();
         const double nTopFly
-            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr)
+            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "top")
                   .toDouble();
         const double nBottomFly
-            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr,
-                       "bottom"_ostr)
+            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "bottom")
                   .toDouble();
 
         CPPUNIT_ASSERT_EQUAL(nLeftFooter, nLeftFly);

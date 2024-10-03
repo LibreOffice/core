@@ -31,9 +31,9 @@ CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testImageEmbedding)
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/html/body"_ostr, 1);
-    assertXPath(pDoc, "/html/body/div[1]/div[1]/img"_ostr, 1);
-    OUString aValue = getXPath(pDoc, "/html/body/div[1]/div[1]/img"_ostr, "src"_ostr);
+    assertXPath(pDoc, "/html/body", 1);
+    assertXPath(pDoc, "/html/body/div[1]/div[1]/img", 1);
+    OUString aValue = getXPath(pDoc, "/html/body/div[1]/div[1]/img", "src");
     CPPUNIT_ASSERT(aValue.startsWith("data:image/svg+xml;base64"));
 }
 

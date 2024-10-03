@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963_ODF)
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:spreadsheet/"
-                "table:database-ranges/table:database-range/contains-footer"_ostr,
+                "table:database-ranges/table:database-range/contains-footer",
                 0);
 }
 

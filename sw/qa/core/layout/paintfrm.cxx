@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     // border:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     int nHorizontalBorders = 0;
     // Count the horizontal borders:
@@ -83,7 +83,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRTLBorderMerge)
     // Then make sure the 5 columns all have left and right vertical borders:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     int nVerticalBorders = 0;
     // Count the vertical borders:
@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableMergedBorder)
     // Then make sure that the master table has a bottom border with the correct widths:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     std::set<int> aHorizontalBorderStarts;
     std::set<int> aHorizontalBorderEnds;
@@ -172,7 +172,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSeparatorPosition)
     // Then make sure the separator upper spacing is 60% of all space, matching Word:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    auto nEndnoteSeparatorY = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "y"_ostr).toInt32();
+    auto nEndnoteSeparatorY = getXPath(pXmlDoc, "//polygon/point[1]", "y").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2164
     // - Actual  : 2060
@@ -180,8 +180,8 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteSeparatorPosition)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2164), nEndnoteSeparatorY);
 
     // Also make sure the separator length is correct:
-    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "x"_ostr).toInt32();
-    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]"_ostr, "x"_ostr).toInt32();
+    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]", "x").toInt32();
+    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]", "x").toInt32();
     sal_Int32 nEndnoteSeparatorLength = nEndnoteSeparatorEnd - nEndnoteSeparatorStart;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2880
@@ -206,8 +206,8 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnoteContSeparator)
     // Then make sure the separator length is correct:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, xMetaFile);
-    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]"_ostr, "x"_ostr).toInt32();
-    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]"_ostr, "x"_ostr).toInt32();
+    auto nEndnoteSeparatorStart = getXPath(pXmlDoc, "//polygon/point[1]", "x").toInt32();
+    auto nEndnoteSeparatorEnd = getXPath(pXmlDoc, "//polygon/point[2]", "x").toInt32();
     sal_Int32 nEndnoteSeparatorLength = nEndnoteSeparatorEnd - nEndnoteSeparatorStart;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 9360 (page print area width)

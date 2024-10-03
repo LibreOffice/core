@@ -134,16 +134,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893_2)
     auto verify = [this]() {
         // Ensure that header text exists on each page (especially on second page)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[2]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[3]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[4]/header/txt/text()"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"HEADER"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[5]/header/txt/text()"_ostr));
+        assertXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()", u"HEADER");
+        assertXPathContent(pXmlDoc, "/root/page[2]/header/txt/text()", u"HEADER");
+        assertXPathContent(pXmlDoc, "/root/page[3]/header/txt/text()", u"HEADER");
+        assertXPathContent(pXmlDoc, "/root/page[4]/header/txt/text()", u"HEADER");
+        assertXPathContent(pXmlDoc, "/root/page[5]/header/txt/text()", u"HEADER");
         CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
     };
     createSwDoc("fdo49893-2.rtf");
@@ -882,13 +877,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133437)
 
         xmlDocUniquePtr pDump = parseLayoutDump();
         // Count shapes on first page
-        assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject"_ostr, 79);
+        assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject", 79);
 
         // Second page
-        assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 120);
+        assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 120);
 
         // Third page
-        assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject"_ostr, 86);
+        assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 86);
     };
     createSwDoc("tdf133437.rtf");
     verify();
@@ -1041,10 +1036,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118047)
 
         // Same for header, it should not derive props from "Normal" style
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"Header"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()"_ostr));
+        assertXPathContent(pXmlDoc, "/root/page[1]/header/txt/text()", u"Header");
         sal_Int32 nHeight
-            = getXPath(pXmlDoc, "/root/page[1]/header/infos/bounds"_ostr, "height"_ostr).toInt32();
+            = getXPath(pXmlDoc, "/root/page[1]/header/infos/bounds", "height").toInt32();
         CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
     };
     createSwDoc("tdf118047.rtf");

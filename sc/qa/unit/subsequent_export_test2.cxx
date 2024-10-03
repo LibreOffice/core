@@ -47,7 +47,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testGroupShape)
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr"_ostr);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:grpSp/xdr:grpSpPr");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
@@ -59,14 +59,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testMatrixMultiplicationXLSX)
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    OUString CellFormulaRange
-        = getXPath(pDoc, "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f"_ostr, "ref"_ostr);
+    OUString CellFormulaRange = getXPath(pDoc, "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f", "ref");
 
     // make sure that the CellFormulaRange is G5:G6.
     CPPUNIT_ASSERT_EQUAL(u"G5:G6"_ustr, CellFormulaRange);
 
-    OUString CellFormulaType
-        = getXPath(pDoc, "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f"_ostr, "t"_ostr);
+    OUString CellFormulaType = getXPath(pDoc, "/x:worksheet/x:sheetData/x:row[4]/x:c/x:f", "t");
 
     // make sure that the CellFormulaType is array.
     CPPUNIT_ASSERT_EQUAL(u"array"_ustr, CellFormulaType);
@@ -203,10 +201,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTextDirectionXLSX)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, "readingOrder"_ostr,
-                u"1"_ustr); //LTR
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment"_ostr, "readingOrder"_ostr,
-                u"2"_ustr); //RTL
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "readingOrder",
+                u"1"); //LTR
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "readingOrder",
+                u"2"); //RTL
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121260)
@@ -224,12 +222,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf121260)
     // Without the fix in place, this test would have failed with
     // - Expected: Sheet1!$A$1:$A$2
     // - Actual  : sheet1 $A$1:$A$2
-    assertXPathContent(
-        pChart1, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:val/c:numRef/c:f"_ostr,
-        u"Sheet1!$A$1:$A$2"_ustr);
-    assertXPathContent(
-        pChart1, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:val/c:numRef/c:f"_ostr,
-        u"Sheet1!$B$1:$B$2"_ustr);
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:val/c:numRef/c:f",
+                       u"Sheet1!$A$1:$A$2");
+    assertXPathContent(pChart1,
+                       "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:val/c:numRef/c:f",
+                       u"Sheet1!$B$1:$B$2");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120168)
@@ -243,10 +241,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf120168)
     // Without the fix in place, this test would have failed with
     // - Expected: left
     // - Actual  : general
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, "horizontal"_ostr,
-                u"left"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment"_ostr, "horizontal"_ostr,
-                u"right"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "horizontal", u"left");
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "horizontal", u"right");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf117266)
@@ -256,17 +252,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf117266)
     save(u"Calc MS Excel 2007 VBA XML"_ustr);
     xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
 
-    OUString sName = getXPath(pVmlDrawing, "/xml/v:shape"_ostr, "id"_ostr);
-    CPPUNIT_ASSERT_EQUAL(u"Button 1001"_ustr, sName);
+    assertXPath(pVmlDrawing, "/xml/v:shape", "id", u"Button 1001");
 
-    OUString sSpid = getXPath(pVmlDrawing, "/xml/v:shape"_ostr, "spid"_ostr);
+    OUString sSpid = getXPath(pVmlDrawing, "/xml/v:shape", "spid");
     CPPUNIT_ASSERT(sSpid.startsWith("_x0000_s"));
 
-    assertXPathContent(pVmlDrawing, "/xml/v:shape/v:textbox/div/font"_ostr,
-                       u"Button 1 \"y\" z"_ustr);
+    assertXPathContent(pVmlDrawing, "/xml/v:shape/v:textbox/div/font", u"Button 1 \"y\" z");
     // Why the xx:, I have no idea..., but it certainly doesn't work with just x:.
-    assertXPathContent(pVmlDrawing, "/xml/v:shape//xx:FmlaMacro"_ostr,
-                       u"Module1.Button1_Click"_ustr);
+    assertXPathContent(pVmlDrawing, "/xml/v:shape//xx:FmlaMacro", u"Module1.Button1_Click");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf66668)
@@ -287,13 +280,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf130108)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:b"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:i"_ostr, "val"_ostr, u"0"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:color"_ostr, "rgb"_ostr,
-                u"FFFFFFFF"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz"_ostr, "val"_ostr, u"10"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor"_ostr, "rgb"_ostr,
-                u"FFCC0000"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:b", "val", u"1");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:i", "val", u"0");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:color", "rgb", u"FFFFFFFF");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:font/x:sz", "val", u"10");
+    assertXPath(pDoc, "/x:styleSheet/x:dxfs/x:dxf/x:fill/x:patternFill/x:bgColor", "rgb",
+                u"FFCC0000");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf76949)
@@ -304,8 +296,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf76949)
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f"_ostr,
-                       u"_xlfn.CHISQ.DIST(1,1,1)"_ustr);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f",
+                       u"_xlfn.CHISQ.DIST(1,1,1)");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf107586)
@@ -318,7 +310,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf107586)
 
     // Without the fix in place, this test would have failed with
     // XPath '/x:worksheet/x:sheetPr/x:tabColor' number of nodes is incorrect
-    assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor"_ostr, "rgb"_ostr, u"FF9BBB59"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:tabColor", "rgb", u"FF9BBB59");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf55417)
@@ -328,8 +320,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf55417)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment"_ostr, 1);
-    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment"_ostr, 1);
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment", 1);
+    assertXPath(pDoc, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf129985)
@@ -340,8 +332,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf129985)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]"_ostr, "formatCode"_ostr,
-                u"m/d/yyyy"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode", u"m/d/yyyy");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf73063)
@@ -352,8 +343,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf73063)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]"_ostr, "formatCode"_ostr,
-                u"[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode",
+                u"[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx)
@@ -364,13 +355,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter"_ostr, "ref"_ostr, u"A1:B4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", u"A1:B4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr, "ref"_ostr,
-                u"A2:A4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"A2:A4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr,
-                "customList"_ostr, u"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                u"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx_with_standard_list)
@@ -380,14 +370,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_ods_to_xlsx_with_standard_list)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter"_ostr, "ref"_ostr, u"A1:B4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", u"A1:B4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr, "ref"_ostr,
-                u"A2:A4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"A2:A4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr,
-                "customList"_ostr,
-                u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                u"Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_xlsx_to_xlsx)
@@ -401,13 +389,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf95640_xlsx_to_xlsx)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter"_ostr, "ref"_ostr, u"A1:B4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter", "ref", u"A1:B4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr, "ref"_ostr,
-                u"A2:A4"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "ref", u"A2:A4");
 
-    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition"_ostr,
-                "customList"_ostr, u"Low,Medium,High"_ustr);
+    assertXPath(pDoc, "//x:worksheet/x:autoFilter/x:sortState/x:sortCondition", "customList",
+                u"Low,Medium,High");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterXLSX)
@@ -419,24 +406,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterXLSX)
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:autoFilter"_ostr, "ref"_ostr, u"A1:B4"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr, "day"_ostr,
-                u"02"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
-                "month"_ostr, u"03"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
-                "year"_ostr, u"2017"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]"_ostr,
-                "dateTimeGrouping"_ostr, u"day"_ustr);
+    assertXPath(pDoc, "//x:autoFilter", "ref", u"A1:B4");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "day", u"02");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "month", u"03");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year",
+                u"2017");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
+                "dateTimeGrouping", u"day");
 
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]"_ostr, "day"_ostr,
-                u"01"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]"_ostr,
-                "month"_ostr, u"10"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]"_ostr,
-                "year"_ostr, u"2014"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]"_ostr,
-                "dateTimeGrouping"_ostr, u"day"_ustr);
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "day", u"01");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "month", u"10");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]", "year",
+                u"2014");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[2]",
+                "dateTimeGrouping", u"day");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterODS)
@@ -447,10 +430,10 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testDateAutofilterODS)
     xmlDocUniquePtr pDoc = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]"_ostr,
-                "value"_ostr, u"Calc"_ustr);
-    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]"_ostr,
-                "value"_ostr, u"2021-05-04"_ustr);
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[1]", "value",
+                u"Calc");
+    assertXPath(pDoc, "//table:filter/table:filter-and/table:filter-condition[2]", "value",
+                u"2021-05-04");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsODF)
@@ -463,34 +446,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsODF)
 
     assertXPath(pDoc,
                 "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
-                "table:filter-condition[1]"_ostr,
-                "value"_ostr, u"#e8f2a1"_ustr);
+                "table:filter-condition[1]",
+                "value", u"#e8f2a1");
     assertXPath(pDoc,
                 "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
-                "table:filter-condition[1][@loext:data-type='background-color']"_ostr);
+                "table:filter-condition[1][@loext:data-type='background-color']");
     assertXPath(pDoc,
                 "//table:database-ranges/table:database-range[1]/table:filter/table:filter-and/"
-                "table:filter-condition[2]"_ostr,
-                "value"_ostr, u"#3465a4"_ustr);
-    assertXPath(pDoc,
-                "//table:database-ranges/table:database-range[1]/table:filter/"
-                "table:filter-and/table:filter-condition[2][@loext:data-type='text-color']"_ostr);
+                "table:filter-condition[2]",
+                "value", u"#3465a4");
+    assertXPath(pDoc, "//table:database-ranges/table:database-range[1]/table:filter/"
+                      "table:filter-and/table:filter-condition[2][@loext:data-type='text-color']");
 
     // tdf#142965 Check "none" value when automatic text color / no fill was selected
     assertXPath(pDoc, "//table:database-ranges/table:database-range[2]/table:filter/"
                       "table:filter-and/"
-                      "table:filter-condition[1][@loext:data-type='background-color']"_ostr);
+                      "table:filter-condition[1][@loext:data-type='background-color']");
     assertXPath(pDoc,
                 "//table:database-ranges/table:database-range[2]/table:filter/table:filter-and/"
-                "table:filter-condition[1]"_ostr,
-                "value"_ostr, u"transparent"_ustr);
-    assertXPath(pDoc,
-                "//table:database-ranges/table:database-range[3]/table:filter/"
-                "table:filter-and/table:filter-condition[1][@loext:data-type='text-color']"_ostr);
+                "table:filter-condition[1]",
+                "value", u"transparent");
+    assertXPath(pDoc, "//table:database-ranges/table:database-range[3]/table:filter/"
+                      "table:filter-and/table:filter-condition[1][@loext:data-type='text-color']");
     assertXPath(pDoc,
                 "//table:database-ranges/table:database-range[3]/table:filter/table:filter-and/"
-                "table:filter-condition[1]"_ostr,
-                "value"_ostr, u"window-font-color"_ustr);
+                "table:filter-condition[1]",
+                "value", u"window-font-color");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
@@ -501,8 +482,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
         xmlDocUniquePtr pTable1 = parseExport(u"xl/tables/table1.xml"_ustr);
         CPPUNIT_ASSERT(pTable1);
         sal_Int32 nDxfId
-            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter"_ostr,
-                       "dxfId"_ostr)
+            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
                   .toInt32()
               + 1;
 
@@ -510,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
         CPPUNIT_ASSERT(pStyles);
         OString sDxfXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfId)
                           + "]/x:fill/x:patternFill/x:fgColor");
-        assertXPath(pStyles, sDxfXPath, "rgb"_ostr, u"FFFFD7D7"_ustr);
+        assertXPath(pStyles, sDxfXPath, "rgb", u"FFFFD7D7");
     }
 
     {
@@ -519,8 +499,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
         xmlDocUniquePtr pTable1 = parseExport(u"xl/tables/table1.xml"_ustr);
         CPPUNIT_ASSERT(pTable1);
         sal_Int32 nDxfId
-            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter"_ostr,
-                       "dxfId"_ostr)
+            = getXPath(pTable1, "/x:table/x:autoFilter/x:filterColumn/x:colorFilter", "dxfId")
                   .toInt32()
               + 1;
 
@@ -528,7 +507,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterColorsOOXML)
         CPPUNIT_ASSERT(pStyles);
         OString sDxfXPath("/x:styleSheet/x:dxfs/x:dxf[" + OString::number(nDxfId)
                           + "]/x:fill/x:patternFill/x:fgColor");
-        assertXPath(pStyles, sDxfXPath, "rgb"_ostr, u"FF3465A4"_ustr);
+        assertXPath(pStyles, sDxfXPath, "rgb", u"FF3465A4");
     }
 }
 
@@ -539,8 +518,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testAutofilterTop10XLSX)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn"_ostr, "colId"_ostr, u"0"_ustr);
-    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10"_ostr, "val"_ostr, u"4"_ustr);
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn", "colId", u"0");
+    assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:top10", "val", u"4");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf88657ODS)
@@ -551,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf88657ODS)
     xmlDocUniquePtr pDoc = parseExport(u"styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//number:fraction"_ostr, "min-denominator-digits"_ostr, u"3"_ustr);
+    assertXPath(pDoc, "//number:fraction", "min-denominator-digits", u"3");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf41722)
@@ -562,12 +541,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf41722)
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[1]"_ostr, "operator"_ostr,
-                u"containsText"_ustr);
-    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[2]"_ostr, "operator"_ostr,
-                u"containsText"_ustr);
-    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[3]"_ostr, "operator"_ostr,
-                u"containsText"_ustr);
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[1]", "operator", u"containsText");
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[2]", "operator", u"containsText");
+    assertXPath(pDoc, "//x:conditionalFormatting/x:cfRule[3]", "operator", u"containsText");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf113621)
@@ -578,7 +554,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf113621)
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:conditionalFormatting"_ostr, "sqref"_ostr, u"A1:A1048576"_ustr);
+    assertXPath(pDoc, "//x:conditionalFormatting", "sqref", u"A1:A1048576");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testEscapeCharInNumberFormatXLSX)
@@ -589,21 +565,19 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testEscapeCharInNumberFormatXLSX)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]"_ostr, "formatCode"_ostr,
-                u"00\\ 00\\ 00\\ 00\\ 00"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]"_ostr, "formatCode"_ostr,
-                u"00\\.00\\.00\\.000\\.0"_ustr); // tdf#81939
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode",
+                u"00\\ 00\\ 00\\ 00\\ 00");
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode",
+                u"00\\.00\\.00\\.000\\.0"); // tdf#81939
     // "_-* #,##0\ _€_-;\-* #,##0\ _€_-;_-* "- "_€_-;_-@_-" // tdf#81222
     OUString rFormatStrExpected(u"_-* #,##0\\ _€_-;\\-* #,##0\\ _€_-;_-* \"- \"_€_-;_-@_-"_ustr);
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]"_ostr, "formatCode"_ostr,
-                rFormatStrExpected);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode", rFormatStrExpected);
     // "_-* #,##0" €"_-;\-* #,##0" €"_-;_-* "- €"_-;_-@_-");
     rFormatStrExpected = u"_-* #,##0\" €\"_-;\\-* #,##0\" €\"_-;_-* \"- €\"_-;_-@_-"_ustr;
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]"_ostr, "formatCode"_ostr,
-                rFormatStrExpected);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode", rFormatStrExpected);
     // remove escape char in fraction
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]"_ostr, "formatCode"_ostr,
-                u"# ?/?;[RED]\\-# #/#####"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode",
+                u"# ?/?;[RED]\\-# #/#####");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testNatNumInNumberFormatXLSX)
@@ -614,8 +588,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testNatNumInNumberFormatXLSX)
     xmlDocUniquePtr pDoc = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]"_ostr, "formatCode"_ostr,
-                u"[DBNum2][$-804]General;[RED][DBNum2][$-804]General"_ustr);
+    assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode",
+                u"[DBNum2][$-804]General;[RED][DBNum2][$-804]General");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testExponentWithoutSignFormatXLSX)
@@ -642,20 +616,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testExtendedLCIDXLSX)
     xmlDocUniquePtr pDocXml = parseExport(u"xl/styles.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
     // Check export
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[2]"_ostr, "formatCode"_ostr,
-                u"[$-107041E]dd\\-mm\\-yyyy"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[3]"_ostr, "formatCode"_ostr,
-                u"[$-D07041E]dd\\-mm\\-yyyy"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[4]"_ostr, "formatCode"_ostr,
-                u"[$-1030411]dd\\-mm\\-ee"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[5]"_ostr, "formatCode"_ostr,
-                u"[$-1B030411]dd\\-mm\\-ee"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[6]"_ostr, "formatCode"_ostr,
-                u"[$-108040D]dd\\-mm\\-yyyy"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[7]"_ostr, "formatCode"_ostr,
-                u"[$-108040D]dd\\-mm\\-yyyy"_ustr);
-    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[8]"_ostr, "formatCode"_ostr,
-                u"[$-1060401]dd\\-mm\\-yyyy"_ustr);
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode",
+                u"[$-107041E]dd\\-mm\\-yyyy");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[3]", "formatCode",
+                u"[$-D07041E]dd\\-mm\\-yyyy");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[4]", "formatCode",
+                u"[$-1030411]dd\\-mm\\-ee");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[5]", "formatCode",
+                u"[$-1B030411]dd\\-mm\\-ee");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[6]", "formatCode",
+                u"[$-108040D]dd\\-mm\\-yyyy");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[7]", "formatCode",
+                u"[$-108040D]dd\\-mm\\-yyyy");
+    assertXPath(pDocXml, "/x:styleSheet/x:numFmts/x:numFmt[8]", "formatCode",
+                u"[$-1060401]dd\\-mm\\-yyyy");
 
     // Check import
     ScDocument* pDoc = getScDoc();
@@ -727,8 +701,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHyperlinkTargetFrameODS)
     OUString aTargetFrameExport
         = getXPath(pDocXml,
                    "/office:document-content/office:body/office:spreadsheet/table:table/"
-                   "table:table-row[2]/table:table-cell[2]/text:p/text:a"_ostr,
-                   "target-frame-name"_ostr);
+                   "table:table-row[2]/table:table-cell[2]/text:p/text:a",
+                   "target-frame-name");
     CPPUNIT_ASSERT_EQUAL(u"_blank"_ustr, aTargetFrameExport);
 }
 
@@ -757,7 +731,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testKeepSettingsOfBlankRows)
     CPPUNIT_ASSERT(pSheet);
 
     // saved blank row with not default setting in A2
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row"_ostr, 2);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf133595)
@@ -769,7 +743,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf133595)
     CPPUNIT_ASSERT(pSheet);
 
     // without the fix in place, mc:AlternateContent would have been added to sheet1
-    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent"_ostr, 0);
+    assertXPath(pSheet, "/x:worksheet/mc:AlternateContent", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134769)
@@ -783,12 +757,12 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf134769)
     // without the fix in place, the legacyDrawing would have been exported after the checkbox
     // and Excel would have claimed the document is corrupted
     // Use their ids to check the order
-    assertXPath(pSheet, "/x:worksheet/x:drawing"_ostr, "id"_ostr, u"rId2"_ustr);
-    assertXPath(pSheet, "/x:worksheet/x:legacyDrawing"_ostr, "id"_ostr, u"rId3"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:drawing", "id", u"rId2");
+    assertXPath(pSheet, "/x:worksheet/x:legacyDrawing", "id", u"rId3");
     assertXPath(pSheet,
                 "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control"_ostr,
-                "id"_ostr, u"rId4"_ustr);
+                "mc:Choice/x:control",
+                "id", u"rId4");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf106181)
@@ -801,32 +775,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf106181)
 
     assertXPath(pSheet,
                 "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control"_ostr,
-                "name"_ostr, u"Check Box"_ustr);
+                "mc:Choice/x:control",
+                "name", u"Check Box");
     assertXPath(pSheet,
                 "/x:worksheet/mc:AlternateContent/mc:Choice/x:controls/mc:AlternateContent/"
-                "mc:Choice/x:control/x:controlPr"_ostr,
-                "altText"_ostr, u"Check Box 1"_ustr);
+                "mc:Choice/x:control/x:controlPr",
+                "altText", u"Check Box 1");
 
     xmlDocUniquePtr pDrawing = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDrawing);
 
     assertXPath(
         pDrawing,
-        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr"_ostr,
-        "name"_ostr, u"Check Box 1"_ustr);
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
+        "name", u"Check Box 1");
     assertXPath(
         pDrawing,
-        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr"_ostr,
-        "descr"_ostr, u"Check Box"_ustr);
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
+        "descr", u"Check Box");
     assertXPath(
         pDrawing,
-        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr"_ostr,
-        "hidden"_ostr, u"0"_ustr);
+        "/xdr:wsDr/mc:AlternateContent/mc:Choice/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr",
+        "hidden", u"0");
 
     xmlDocUniquePtr pVmlDrawing = parseExport(u"xl/drawings/vmlDrawing1.vml"_ustr);
     CPPUNIT_ASSERT(pVmlDrawing);
-    assertXPathContent(pVmlDrawing, "//xx:ClientData/xx:FmlaLink"_ostr, u"$D$9"_ustr);
+    assertXPathContent(pVmlDrawing, "//xx:ClientData/xx:FmlaLink", u"$D$9");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145057)
@@ -837,7 +811,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf145057)
     xmlDocUniquePtr pDoc = parseExport(u"xl/tables/table1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:colorFilter"_ostr, "dxfId"_ostr, u"1"_ustr);
+    assertXPath(pDoc, "//x:colorFilter", "dxfId", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf105272)
@@ -900,8 +874,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112936)
     xmlDocUniquePtr pDoc = parseExport(u"xl/pivotCache/pivotCacheDefinition1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPath(pDoc, "//x:pivotCacheDefinition"_ostr, "recordCount"_ostr, u"4"_ustr);
-    assertXPath(pDoc, "//x:pivotCacheDefinition"_ostr, "createdVersion"_ostr, u"3"_ustr);
+    assertXPath(pDoc, "//x:pivotCacheDefinition", "recordCount", u"4");
+    assertXPath(pDoc, "//x:pivotCacheDefinition", "createdVersion", u"3");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testXltxExport)
@@ -913,10 +887,9 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testXltxExport)
     save(u"Calc MS Excel 2007 XML Template"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"[Content_Types].xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(
-        pDoc, "/ContentType:Types/ContentType:Override[@PartName='/xl/workbook.xml']"_ostr,
-        "ContentType"_ostr,
-        u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml"_ustr);
+    assertXPath(pDoc, "/ContentType:Types/ContentType:Override[@PartName='/xl/workbook.xml']",
+                "ContentType",
+                u"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testPivotCacheAfterExportXLSX)
@@ -952,10 +925,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf114969XLSX)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]"_ostr, "location"_ostr,
-                u"'1.1.1.1'!C1"_ustr);
-    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]"_ostr, "location"_ostr,
-                u"'1.1.1.1'!C2"_ustr);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[1]", "location", u"'1.1.1.1'!C1");
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink[2]", "location", u"'1.1.1.1'!C2");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115192XLSX)
@@ -965,12 +936,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115192XLSX)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/_rels/drawing1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "TargetMode"_ostr,
-                u"External"_ustr);
-    assertXPathNoAttribute(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId2']"_ostr,
-                           "TargetMode"_ostr);
-    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId3']"_ostr, "TargetMode"_ostr,
-                u"External"_ustr);
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                u"External");
+    assertXPathNoAttribute(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId2']", "TargetMode");
+    assertXPath(pDoc, "/rels:Relationships/rels:Relationship[@Id='rId3']", "TargetMode",
+                u"External");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142764)
@@ -981,8 +951,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142764)
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPath(pSheet, "/x:worksheet/x:headerFooter"_ostr, "differentOddEven"_ostr, u"true"_ustr);
-    assertXPath(pSheet, "/x:worksheet/x:headerFooter"_ostr, "differentFirst"_ostr, u"true"_ustr);
+    assertXPath(pSheet, "/x:worksheet/x:headerFooter", "differentOddEven", u"true");
+    assertXPath(pSheet, "/x:worksheet/x:headerFooter", "differentFirst", u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91634XLSX)
@@ -992,15 +962,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91634XLSX)
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:nvPicPr/xdr:cNvPr/a:hlinkClick"_ostr,
-                1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:pic/xdr:nvPicPr/xdr:cNvPr/a:hlinkClick", 1);
 
     xmlDocUniquePtr pXmlRels = parseExport(u"xl/drawings/_rels/drawing1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "Target"_ostr,
-                u"https://www.google.com/"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr,
-                "TargetMode"_ostr, u"External"_ustr);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"https://www.google.com/");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                u"External");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testValidationCopyPaste)
@@ -1030,8 +999,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testValidationCopyPaste)
     // check validation
     xmlDocUniquePtr pDocXml = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDocXml);
-    assertXPathContent(pDocXml, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1"_ostr,
-                       u"#REF!"_ustr);
+    assertXPathContent(pDocXml, "/x:worksheet/x:dataValidations/x:dataValidation/x:formula1",
+                       u"#REF!");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115159)
@@ -1043,7 +1012,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf115159)
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
-    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName"_ostr, 1);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567)
@@ -1065,7 +1034,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567)
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
-    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName"_ostr, 1);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf75702)
@@ -1083,7 +1052,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf75702)
 
     save(u"calc8"_ustr);
     xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
-    assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p"_ostr, 2);
+    assertXPath(pContent, "//table:table-row[1]/table:table-cell/text:p", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf103829)
@@ -1139,33 +1108,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf142881)
     CPPUNIT_ASSERT(pDrawing1);
 
     // Verify that the shapes are rotated and positioned in the expected way
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:col"_ostr,
-                       u"11"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:row"_ostr,
-                       u"0"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:col"_ostr, u"12"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:row"_ostr, u"19"_ustr);
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:col", u"11");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:from/xdr:row", u"0");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:col", u"12");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:to/xdr:row", u"19");
 
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:col"_ostr,
-                       u"2"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:row"_ostr,
-                       u"8"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:col"_ostr, u"7"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:row"_ostr, u"10"_ustr);
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:col", u"2");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:from/xdr:row", u"8");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:col", u"7");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:to/xdr:row", u"10");
 
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:col"_ostr,
-                       u"10"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:row"_ostr,
-                       u"9"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:col"_ostr, u"11"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:row"_ostr, u"26"_ustr);
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:col", u"10");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:from/xdr:row", u"9");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:col", u"11");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:to/xdr:row", u"26");
 
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:col"_ostr,
-                       u"2"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:row"_ostr,
-                       u"17"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:col"_ostr, u"8"_ustr);
-    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row"_ostr, u"19"_ustr);
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:col", u"2");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:from/xdr:row", u"17");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:col", u"8");
+    assertXPathContent(pDrawing1, "/xdr:wsDr/xdr:twoCellAnchor[4]/xdr:to/xdr:row", u"19");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
@@ -1187,11 +1148,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567b)
     CPPUNIT_ASSERT(pDoc);
 
     //assert the existing OOXML built-in name is not duplicated
-    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName"_ostr, 1);
+    assertXPath(pDoc, "/x:workbook/x:definedNames/x:definedName", 1);
 
     //and it contains "," instead of ";"
-    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[1]"_ostr,
-                       u"Sheet1!$A:$A,Sheet1!$1:$1"_ustr);
+    assertXPathContent(pDoc, "/x:workbook/x:definedNames/x:definedName[1]",
+                       u"Sheet1!$A:$A,Sheet1!$1:$1");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123645XLSX)
@@ -1203,31 +1164,31 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf123645XLSX)
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor[1]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/"
-                "a:hlinkClick"_ostr,
+                "a:hlinkClick",
                 1);
     assertXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/"
-                "a:hlinkClick"_ostr,
+                "a:hlinkClick",
                 1);
     assertXPath(pDoc,
                 "/xdr:wsDr/xdr:twoCellAnchor[3]/xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr/"
-                "a:hlinkClick"_ostr,
+                "a:hlinkClick",
                 1);
 
     xmlDocUniquePtr pXmlRels = parseExport(u"xl/drawings/_rels/drawing1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr,
-                "TargetMode"_ostr, u"External"_ustr);
-    assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']"_ostr,
-                           "TargetMode"_ostr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']"_ostr,
-                "TargetMode"_ostr, u"External"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "Target"_ostr,
-                u"file:///C:/TEMP/test.xlsx"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']"_ostr, "Target"_ostr,
-                u"#Sheet2!A1"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']"_ostr, "Target"_ostr,
-                u"https://bugs.documentfoundation.org/show_bug.cgi?id=123645"_ustr);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                u"External");
+    assertXPathNoAttribute(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']",
+                           "TargetMode");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']", "TargetMode",
+                u"External");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"file:///C:/TEMP/test.xlsx");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId3']", "Target",
+                u"#Sheet2!A1");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId5']", "Target",
+                u"https://bugs.documentfoundation.org/show_bug.cgi?id=123645");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf125173XLSX)
@@ -1237,15 +1198,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf125173XLSX)
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr/a:hlinkClick"_ostr,
-                1);
+    assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor/xdr:sp/xdr:nvSpPr/xdr:cNvPr/a:hlinkClick", 1);
 
     xmlDocUniquePtr pXmlRels = parseExport(u"xl/drawings/_rels/drawing1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "Target"_ostr,
-                u"http://www.google.com/"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr,
-                "TargetMode"_ostr, u"External"_ustr);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target",
+                u"http://www.google.com/");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='rId1']", "TargetMode",
+                u"External");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf79972XLSX)
@@ -1255,14 +1215,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf79972XLSX)
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink"_ostr, "ref"_ostr, u"A1"_ustr);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "ref", u"A1");
 
     xmlDocUniquePtr pXmlRels = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship"_ostr, "Target"_ostr,
-                u"https://bugs.documentfoundation.org/show_bug.cgi?id=79972"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship"_ostr, "TargetMode"_ostr,
-                u"External"_ustr);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "Target",
+                u"https://bugs.documentfoundation.org/show_bug.cgi?id=79972");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", u"External");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
@@ -1272,14 +1231,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf126024XLSX)
 
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
-    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink"_ostr, "ref"_ostr, u"A2"_ustr);
+    assertXPath(pDoc, "/x:worksheet/x:hyperlinks/x:hyperlink", "ref", u"A2");
 
     xmlDocUniquePtr pXmlRels = parseExport(u"xl/worksheets/_rels/sheet1.xml.rels"_ustr);
     CPPUNIT_ASSERT(pXmlRels);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship"_ostr, "Target"_ostr,
-                u"https://bugs.documentfoundation.org/"_ustr);
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship"_ostr, "TargetMode"_ostr,
-                u"External"_ustr);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "Target",
+                u"https://bugs.documentfoundation.org/");
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship", "TargetMode", u"External");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testEnhancedProtectionRangeShorthand)
@@ -1289,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testEnhancedProtectionRangeShorthand)
     xmlDocUniquePtr pDoc = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pDoc);
     // the shorthand version was not recognized as a valid range on import
-    assertXPath(pDoc, "//x:protectedRanges/x:protectedRange[1]"_ostr, "sqref"_ostr, u"C:C"_ustr);
+    assertXPath(pDoc, "//x:protectedRanges/x:protectedRange[1]", "sqref", u"C:C");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf91332)
@@ -1320,14 +1278,13 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf137543XLSX)
     xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
     CPPUNIT_ASSERT(pSheet);
 
-    assertXPathContent(
-        pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f"_ostr,
-        u"_xlfn.LET(_xlpm.first,15,_xlpm.second,10,SUM(_xlpm.first,_xlpm.second))"_ustr);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row/x:c/x:f",
+                       u"_xlfn.LET(_xlpm.first,15,_xlpm.second,10,SUM(_xlpm.first,_xlpm.second))");
 
     // test with an unknown (for Calc) function inside the LET function
     assertXPathContent(
-        pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[5]/x:f"_ostr,
-        u"_xlfn.LET(_xlpm.first,B5:E15,_xlfn.chooserows(_xlpm.first, 1, 3, 5, 7, 9, 11))"_ustr);
+        pSheet, "/x:worksheet/x:sheetData/x:row[3]/x:c[5]/x:f",
+        u"_xlfn.LET(_xlpm.first,B5:E15,_xlfn.chooserows(_xlpm.first, 1, 3, 5, 7, 9, 11))");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

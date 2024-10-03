@@ -116,7 +116,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
 
     // Without fix draw:extrusion-skew="50 -135" was not written to file although "50 -135" is not
     // default in ODF, but only default inside LO.
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-skew"_ostr, u"50 -135"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-skew", u"50 -135");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     // - Actual  : 0
     // - XPath '//style:master-page/loext:theme/loext:color-table/loext:color' number of nodes is incorrect
     // i.e. the theme was lost on exporting to ODF.
-    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:theme-colors/loext:color"_ostr, 12);
+    assertXPath(pXmlDoc, "//style:master-page/loext:theme/loext:theme-colors/loext:color", 12);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
@@ -196,11 +196,11 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testVideoSnapshot)
     // - Actual  : 0
     // - XPath '//draw:frame[@draw:style-name='gr1']/draw:image' number of nodes is incorrect
     // i.e. the preview wasn't exported to ODP.
-    assertXPath(pXmlDoc, "//draw:frame[@draw:style-name='gr1']/draw:image"_ostr, "href"_ostr,
-                u"Pictures/MediaPreview1.png"_ustr);
+    assertXPath(pXmlDoc, "//draw:frame[@draw:style-name='gr1']/draw:image", "href",
+                u"Pictures/MediaPreview1.png");
     // Check that the crop was exported:
-    assertXPath(pXmlDoc, "//style:style[@style:name='gr1']/style:graphic-properties"_ostr,
-                "clip"_ostr, u"rect(0cm, 1.356cm, 0cm, 1.356cm)"_ustr);
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr1']/style:graphic-properties", "clip",
+                u"rect(0cm, 1.356cm, 0cm, 1.356cm)");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
@@ -296,54 +296,54 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
     // Text color
     OString aStyle1(
         "//style:style[@style:name='T2']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aStyle1, "theme-type"_ostr, u"accent3"_ustr);
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "value"_ostr, u"2000"_ustr);
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
-    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "value"_ostr, u"8000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aStyle1, "theme-type", u"accent3");
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[1]", "value", u"2000");
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "type", u"lumoff");
+    assertXPath(pXmlDoc, aStyle1 + "/loext:transformation[2]", "value", u"8000");
 
     OString aStyle2(
         "//style:style[@style:name='T3']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aStyle2, "theme-type"_ostr, u"accent3"_ustr);
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "value"_ostr, u"6000"_ustr);
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
-    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "value"_ostr, u"4000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aStyle2, "theme-type", u"accent3");
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[1]", "value", u"6000");
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "type", u"lumoff");
+    assertXPath(pXmlDoc, aStyle2 + "/loext:transformation[2]", "value", u"4000");
 
     OString aStyle3(
         "//style:style[@style:name='T4']/style:text-properties/loext:char-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aStyle3, "theme-type"_ostr, u"accent3"_ustr);
-    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "value"_ostr, u"5000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aStyle3, "theme-type", u"accent3");
+    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aStyle3 + "/loext:transformation[1]", "value", u"5000");
 
     // Shapes fill color
     OString aShape1("//style:style[@style:name='gr1']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aShape1, "theme-type"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "value"_ostr, u"2000"_ustr);
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
-    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "value"_ostr, u"8000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aShape1, "theme-type", u"accent2");
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[1]", "value", u"2000");
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "type", u"lumoff");
+    assertXPath(pXmlDoc, aShape1 + "/loext:transformation[2]", "value", u"8000");
 
     OString aShape2("//style:style[@style:name='gr2']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aShape2, "theme-type"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "value"_ostr, u"6000"_ustr);
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "type"_ostr, u"lumoff"_ustr);
-    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "value"_ostr, u"4000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aShape2, "theme-type", u"accent2");
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[1]", "value", u"6000");
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "type", u"lumoff");
+    assertXPath(pXmlDoc, aShape2 + "/loext:transformation[2]", "value", u"4000");
 
     OString aShape3("//style:style[@style:name='gr3']/style:graphic-properties/"
                     "loext:fill-complex-color"_ostr);
-    assertXPath(pXmlDoc, aStyle1, "color-type"_ostr, u"theme"_ustr);
-    assertXPath(pXmlDoc, aShape3, "theme-type"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type"_ostr, u"lummod"_ustr);
-    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value"_ostr, u"5000"_ustr);
+    assertXPath(pXmlDoc, aStyle1, "color-type", u"theme");
+    assertXPath(pXmlDoc, aShape3, "theme-type", u"accent2");
+    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "type", u"lummod");
+    assertXPath(pXmlDoc, aShape3 + "/loext:transformation[1]", "value", u"5000");
 
     // check fill color theme
     {
@@ -536,10 +536,9 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, u"true"_ustr);
-    assertXPath(
-        pXmlDoc,
-        "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']"_ostr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
+    assertXPath(pXmlDoc,
+                "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
 
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
@@ -555,8 +554,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry"_ostr, "extrusion-metal"_ostr, u"true"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-metal-type]"_ostr, 1);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-metal-type]", 1);
 }
 
 namespace
@@ -593,9 +592,9 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100']"_ostr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100']");
     assertXPath(pXmlDoc,
-                "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']"_ostr);
+                "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']");
 
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
@@ -613,8 +612,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc,
-                "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125']"_ostr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125']");
 
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
@@ -779,12 +777,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
 
     const OString sThemeColorPath = sThemeColorsPath + "/loext:color";
     assertXPath(pXmlDoc, sThemeColorPath, 12);
-    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name"_ostr, u"dark2"_ustr);
-    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color"_ostr, u"#002200"_ustr);
-    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name"_ostr, u"accent5"_ustr);
-    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color"_ostr, u"#880088"_ustr);
-    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name"_ostr, u"followed-hyperlink"_ustr);
-    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color"_ostr, u"#b0b0b0"_ustr);
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name", u"dark2");
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color", u"#002200");
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name", u"accent5");
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color", u"#880088");
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name", u"followed-hyperlink");
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color", u"#b0b0b0");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)

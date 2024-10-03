@@ -361,10 +361,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44176)
         // ensure that the body text space is equal on the first and follow page
         // (since in this case the default margins are large enough to fully include the header)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        const OUString sBodyHeight
-            = getXPath(pXmlDoc, "//page[1]/body/infos/bounds"_ostr, "height"_ostr);
+        const OUString sBodyHeight = getXPath(pXmlDoc, "//page[1]/body/infos/bounds", "height");
         CPPUNIT_ASSERT_EQUAL(sBodyHeight,
-                             getXPath(pXmlDoc, "//page[2]/body/infos/bounds"_ostr, "height"_ostr));
+                             getXPath(pXmlDoc, "//page[2]/body/infos/bounds", "height"));
     };
     createSwDoc("fdo44176.rtf");
     verify();

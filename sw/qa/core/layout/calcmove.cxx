@@ -35,7 +35,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMargin)
     // Then make sure that the paragraph on the 2nd page has no top margin:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nParaTopMargin
-        = getXPath(pXmlDoc, "/root/page[2]/body/txt/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "/root/page[2]/body/txt/infos/prtBounds", "top").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 2400
@@ -52,8 +52,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginTable)
     // Then make sure that the paragraph on the 2nd page in B1 has a top margin:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nParaTopMargin
-        = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt/infos/prtBounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt/infos/prtBounds", "top")
               .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2000
@@ -72,12 +71,11 @@ CPPUNIT_TEST_FIXTURE(Test, testIgnoreTopMarginFly)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Then make sure that the top margin is not ignored inside shape text:
-    sal_Int32 nParaTopMargin
-        = getXPath(
-              pXmlDoc,
-              "/root/page[2]/body/section/column[2]/body/txt/anchored/fly/column/body/txt/infos/prtBounds"_ostr,
-              "top"_ostr)
-              .toInt32();
+    sal_Int32 nParaTopMargin = getXPath(pXmlDoc,
+                                        "/root/page[2]/body/section/column[2]/body/txt/anchored/"
+                                        "fly/column/body/txt/infos/prtBounds",
+                                        "top")
+                                   .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 4000
     // - Actual  : 0

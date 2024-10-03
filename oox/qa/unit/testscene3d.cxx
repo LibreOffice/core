@@ -540,20 +540,20 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_material_wireframe)
 
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "extrusion-origin"_ostr, u"-0.5 -0.5"_ustr);
+                "draw:custom-shape/draw:enhanced-geometry",
+                "extrusion-origin", u"-0.5 -0.5");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "extrusion-skew"_ostr, u"30 -45"_ustr);
+                "draw:custom-shape/draw:enhanced-geometry",
+                "extrusion-skew", u"30 -45");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "projection"_ostr, u"parallel"_ustr);
+                "draw:custom-shape/draw:enhanced-geometry",
+                "projection", u"parallel");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:body/office:presentation/draw:page/"
-                "draw:custom-shape/draw:enhanced-geometry"_ostr,
-                "shade-mode"_ostr, u"draft"_ustr);
+                "draw:custom-shape/draw:enhanced-geometry",
+                "shade-mode", u"draft");
 }
 
 CPPUNIT_TEST_FIXTURE(TestScene3d, test_cropped_image)
@@ -633,7 +633,7 @@ CPPUNIT_TEST_FIXTURE(TestScene3d, test_shape_rotation)
     // Make sure that the immediate export to pptx has the same shape rotation
     save(u"Impress Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDoc, "//p:spPr/a:xfrm"_ostr, "rot"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc, "//p:spPr/a:xfrm", "rot", u"300000");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -412,8 +412,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112211_2)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     int nWidth = getXPath(pXmlDoc,
                           "/root/page/body/txt[2]/SwParaPortion/SwLineLayout/"
-                          "child::*[@type='PortionType::TabLeft']"_ostr,
-                          "width"_ostr)
+                          "child::*[@type='PortionType::TabLeft']",
+                          "width")
                      .toInt32();
     CPPUNIT_ASSERT_LESS(300, nWidth);
 }
@@ -460,9 +460,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo52052)
     createSwDoc("fdo52052.rtf");
     // Make sure the textframe containing the text "third" appears on the 3rd page.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(
-        u"third"_ustr,
-        getXPathContent(pXmlDoc, "/root/page[3]/body/txt/anchored/fly/txt/text()"_ostr));
+    assertXPathContent(pXmlDoc, "/root/page[3]/body/txt/anchored/fly/txt/text()", u"third");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInk)
@@ -767,7 +765,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf116265)
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
+    assertXPath(pLayout, "//SwFixPortion", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo66565)
@@ -1523,7 +1521,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf78506)
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is a tabstop in the pseudo-numbering (numbering::NONE followed by tabstop)
-    assertXPath(pLayout, "//SwFixPortion"_ostr, 1);
+    assertXPath(pLayout, "//SwFixPortion", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf117403)
@@ -1662,12 +1660,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf153196)
     CPPUNIT_ASSERT_EQUAL(4, getPages());
 
     // TODO: Writer creates an empty page 1 here, which Word does not
-    assertXPath(pLayout, "/root/page[1]/footer"_ostr, 0);
-    assertXPath(pLayout, "/root/page[2]/footer"_ostr, 1);
+    assertXPath(pLayout, "/root/page[1]/footer", 0);
+    assertXPath(pLayout, "/root/page[2]/footer", 1);
     // the first page (2) has a page style applied, which has a follow page
     // style; the problem was that the follow page style had a footer.
-    assertXPath(pLayout, "/root/page[3]/footer"_ostr, 0);
-    assertXPath(pLayout, "/root/page[4]/footer"_ostr, 1);
+    assertXPath(pLayout, "/root/page[3]/footer", 0);
+    assertXPath(pLayout, "/root/page[4]/footer", 1);
 
     // TODO exporting this, wrongly produces "even" footer from stashed one
     // TODO importing that, wrongly creates a footer even without evenAndOddHeaders

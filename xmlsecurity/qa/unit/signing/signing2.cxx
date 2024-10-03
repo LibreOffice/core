@@ -99,8 +99,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPreserveMacroSignatureODB)
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
 
     // Make sure the signature is still there
-    assertXPath(pXmlDoc, "//dsig:Signature"_ostr, "Id"_ostr,
-                u"ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8"_ustr);
+    assertXPath(pXmlDoc, "//dsig:Signature", "Id",
+                u"ID_00a7002f009000bc00ce00f7004400460080002f002e00e400e0003700df00e8");
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
@@ -129,37 +129,39 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
         saveAndReload(u"writer8"_ustr, "password");
 
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
+        assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.3");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']", 8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/"
+                    "manifest:encryption-data[@manifest:checksum-type and @manifest:checksum]",
                     8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data[@manifest:checksum-type and @manifest:checksum]"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2001/04/xmlenc#aes256-cbc']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[string-length(@manifest:initialisation-vector) = 24]"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:start-key-generation[@manifest:start-key-generation-name='http://www.w3.org/2000/09/xmldsig#sha256' and @manifest:key-size='32']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:key-derivation-name='PBKDF2' and @manifest:key-size='32']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:iteration-count='100000']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[string-length(@manifest:salt) = 24]"_ostr,
-            8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2001/04/"
+                    "xmlenc#aes256-cbc']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[string-length(@manifest:initialisation-vector) = 24]",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:start-key-generation[@manifest:start-key-generation-name='http://"
+                    "www.w3.org/2000/09/xmldsig#sha256' and @manifest:key-size='32']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:key-derivation-name='PBKDF2' and "
+                    "@manifest:key-size='32']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:iteration-count='100000']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[string-length(@manifest:salt) = 24]",
+                    8);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
@@ -176,44 +178,48 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODF13)
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.4"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
-                    u"encrypted-package"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
+        assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.4");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry", 1);
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry", "full-path",
+                    u"encrypted-package");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']", 1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/"
+                    "manifest:encryption-data[@manifest:checksum-type or @manifest:checksum]",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2009/"
+                    "xmlenc11#aes256-gcm']",
                     1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data[@manifest:checksum-type or @manifest:checksum]"_ostr,
-            0);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2009/xmlenc11#aes256-gcm']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[string-length(@manifest:initialisation-vector) = 16]"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:start-key-generation[@manifest:start-key-generation-name='http://www.w3.org/2001/04/xmlenc#sha256' and @manifest:key-size='32']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:key-derivation-name='urn:org:documentfoundation:names:experimental:office:manifest:argon2id' and @manifest:key-size='32']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:iteration-count]"_ostr,
-            0);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[string-length(@manifest:salt) = 24]"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@loext:argon2-iterations='3' and @loext:argon2-memory='65536' and @loext:argon2-lanes='4']"_ostr,
-            1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[string-length(@manifest:initialisation-vector) = 16]",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:start-key-generation[@manifest:start-key-generation-name='http://"
+                    "www.w3.org/2001/04/xmlenc#sha256' and @manifest:key-size='32']",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:key-derivation-name='urn:org:"
+                    "documentfoundation:names:experimental:office:manifest:argon2id' and "
+                    "@manifest:key-size='32']",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:iteration-count]",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[string-length(@manifest:salt) = 24]",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@loext:argon2-iterations='3' and "
+                    "@loext:argon2-memory='65536' and @loext:argon2-lanes='4']",
+                    1);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
@@ -244,44 +250,48 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
 
         // test wholesome ODF extended encryption
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.4"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, 1);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry"_ostr, "full-path"_ostr,
-                    u"encrypted-package"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
+        assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.4");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry", 1);
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry", "full-path",
+                    u"encrypted-package");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']", 1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/"
+                    "manifest:encryption-data[@manifest:checksum-type or @manifest:checksum]",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2009/"
+                    "xmlenc11#aes256-gcm']",
                     1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data[@manifest:checksum-type or @manifest:checksum]"_ostr,
-            0);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2009/xmlenc11#aes256-gcm']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[string-length(@manifest:initialisation-vector) = 16]"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:start-key-generation[@manifest:start-key-generation-name='http://www.w3.org/2001/04/xmlenc#sha256' and @manifest:key-size='32']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:key-derivation-name='urn:org:documentfoundation:names:experimental:office:manifest:argon2id' and @manifest:key-size='32']"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:iteration-count]"_ostr,
-            0);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[string-length(@manifest:salt) = 24]"_ostr,
-            1);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@loext:argon2-iterations='3' and @loext:argon2-memory='65536' and @loext:argon2-lanes='4']"_ostr,
-            1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[string-length(@manifest:initialisation-vector) = 16]",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:start-key-generation[@manifest:start-key-generation-name='http://"
+                    "www.w3.org/2001/04/xmlenc#sha256' and @manifest:key-size='32']",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:key-derivation-name='urn:org:"
+                    "documentfoundation:names:experimental:office:manifest:argon2id' and "
+                    "@manifest:key-size='32']",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:iteration-count]",
+                    0);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[string-length(@manifest:salt) = 24]",
+                    1);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@loext:argon2-iterations='3' and "
+                    "@loext:argon2-memory='65536' and @loext:argon2-lanes='4']",
+                    1);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());
@@ -304,37 +314,39 @@ CPPUNIT_TEST_FIXTURE(SigningTest2, testPasswordPreserveMacroSignatureODFWholesom
         saveAndReload(u"writer8"_ustr, "password");
 
         xmlDocUniquePtr pXmlDoc = parseExport(u"META-INF/manifest.xml"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest"_ostr, "version"_ostr, u"1.3"_ustr);
-        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']"_ostr,
+        assertXPath(pXmlDoc, "/manifest:manifest", "version", u"1.3");
+        assertXPath(pXmlDoc, "/manifest:manifest/manifest:file-entry[@manifest:size != '0']", 8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/"
+                    "manifest:encryption-data[@manifest:checksum-type and @manifest:checksum]",
                     8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data[@manifest:checksum-type and @manifest:checksum]"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2001/04/xmlenc#aes256-cbc']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:algorithm[string-length(@manifest:initialisation-vector) = 24]"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:start-key-generation[@manifest:start-key-generation-name='http://www.w3.org/2000/09/xmldsig#sha256' and @manifest:key-size='32']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:key-derivation-name='PBKDF2' and @manifest:key-size='32']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[@manifest:iteration-count='100000']"_ostr,
-            8);
-        assertXPath(
-            pXmlDoc,
-            "/manifest:manifest/manifest:file-entry/manifest:encryption-data/manifest:key-derivation[string-length(@manifest:salt) = 24]"_ostr,
-            8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[@manifest:algorithm-name='http://www.w3.org/2001/04/"
+                    "xmlenc#aes256-cbc']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:algorithm[string-length(@manifest:initialisation-vector) = 24]",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:start-key-generation[@manifest:start-key-generation-name='http://"
+                    "www.w3.org/2000/09/xmldsig#sha256' and @manifest:key-size='32']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:key-derivation-name='PBKDF2' and "
+                    "@manifest:key-size='32']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[@manifest:iteration-count='100000']",
+                    8);
+        assertXPath(pXmlDoc,
+                    "/manifest:manifest/manifest:file-entry/manifest:encryption-data/"
+                    "manifest:key-derivation[string-length(@manifest:salt) = 24]",
+                    8);
         // test reimport
         uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(u"secret"_ustr, xTextDoc->getText()->getString());

@@ -39,8 +39,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTablePrintAreaLeft)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // When laying out that document & parsing the left margin of the table:
-    SwTwips nTablePrintLeft
-        = getXPath(pXmlDoc, "//tab/infos/prtBounds"_ostr, "left"_ostr).toInt32();
+    SwTwips nTablePrintLeft = getXPath(pXmlDoc, "//tab/infos/prtBounds", "left").toInt32();
 
     // Then make sure it has ~no left margin:
     // Without the accompanying fix in place, this test would have failed with:

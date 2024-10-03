@@ -732,8 +732,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
     // Remember the original cell widths.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
     OString aPrefix = "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl/TableLayouter/columns/"_ostr;
-    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
-    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
+    sal_Int32 nExpectedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
+    sal_Int32 nExpectedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     pXmlDoc = nullptr;
 
     // Resize the left column, decrease its width by 1 cm.
@@ -743,9 +743,9 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Remember the resized column widths.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
+    sal_Int32 nResizedColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn1 < nExpectedColumn1);
-    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
+    sal_Int32 nResizedColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT(nResizedColumn2 > nExpectedColumn2);
     pXmlDoc = nullptr;
 
@@ -754,10 +754,10 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testResizeTableColumn)
 
     // Check the undo result.
     pXmlDoc = parseXmlDump();
-    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size"_ostr).toInt32();
+    sal_Int32 nActualColumn1 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[1]", "size").toInt32();
     // Expected was 7049, actual was 6048, i.e. the first column width after undo was 1cm smaller than expected.
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn1, nActualColumn1);
-    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size"_ostr).toInt32();
+    sal_Int32 nActualColumn2 = getXPath(pXmlDoc, aPrefix + "TableLayouter_Layout[2]", "size").toInt32();
     CPPUNIT_ASSERT_EQUAL(nExpectedColumn2, nActualColumn2);
     pXmlDoc = nullptr;
 }
@@ -1591,8 +1591,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf104405)
         getXPath(
             pXmlDoc,
             "/SdDrawDocument/SdrModel/maPages/SdPage/SdrPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
-                "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem"_ostr,
-            "value"_ostr));
+                "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem",
+            "value"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
@@ -1660,8 +1660,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     // Assert that the selected A1 has now a larger font than the unselected
     // A2.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]", "height").toInt32();
+    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
     // This failed when FuText::ChangeFontSize() never did "continue" in the
     // text loop, instead of doing so depending on what IsInSelection() returns.
     CPPUNIT_ASSERT(nA1Height > nA2Height);

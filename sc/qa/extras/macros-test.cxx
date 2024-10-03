@@ -163,13 +163,13 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testMacroButtonFormControlXlsxExport)
     // Without the fix in place, this test would have failed with:
     // - XPath '//x:controlPr' no attribute 'macro' exist
     // i.e. the macro was lost on export.
-    assertXPath(pSheetDoc, "//x:controlPr"_ostr, "macro"_ostr, u"Module1.Button1_Click"_ustr);
+    assertXPath(pSheetDoc, "//x:controlPr", "macro", u"Module1.Button1_Click");
 
     // Then also make sure that there is no defined name for the macro, which is only needed for
     // XLS:
     xmlDocUniquePtr pWorkbookDoc = parseExport(u"xl/workbook.xml"_ustr);
     CPPUNIT_ASSERT(pWorkbookDoc);
-    assertXPath(pWorkbookDoc, "//x:workbook/definedNames"_ostr, 0);
+    assertXPath(pWorkbookDoc, "//x:workbook/definedNames", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf104902)
@@ -251,15 +251,15 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
 
     assertXPathContent(pContentXml,
                        "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                       "table:table-row[1]/table:table-cell[1]/text:p[1]"_ostr,
-                       u"aa bb"_ustr);
+                       "table:table-row[1]/table:table-cell[1]/text:p[1]",
+                       u"aa bb");
 
     // Without the fix in place, this test would have failed here with
     // - Expression: xmlXPathNodeSetGetLength(pXmlNodes) > 0
     assertXPathContent(pContentXml,
                        "/office:document-content/office:body/office:spreadsheet/table:table[1]/"
-                       "table:table-row[1]/table:table-cell[1]/text:p[2]"_ostr,
-                       u"cc dd"_ustr);
+                       "table:table-row[1]/table:table-cell[1]/text:p[2]",
+                       u"cc dd");
 }
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)

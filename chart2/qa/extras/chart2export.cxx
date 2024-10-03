@@ -233,14 +233,14 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testErrorBarPropXLSX)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // test y error bars property
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:errDir"_ostr, "val"_ostr, u"y"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln"_ostr, "w"_ostr, u"12600"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"ff0000"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:errDir", "val", u"y");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln", "w", u"12600");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[1]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", u"ff0000");
 
     // test x error bars property
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:errDir"_ostr, "val"_ostr, u"x"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln"_ostr, "w"_ostr, u"9360"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"595959"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:errDir", "val", u"x");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln", "w", u"9360");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser/c:errBars[2]/c:spPr/a:ln/a:solidFill/a:srgbClr", "val", u"595959");
 }
 
 // This method tests the preservation of properties for trendlines / regression curves
@@ -315,12 +315,12 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testStockChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:idx", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:order", "val", u"1");
     assertXPathContent(
         pXmlDoc,
-        "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v"_ostr,
-        u"Open"_ustr);
+        "/c:chartSpace/c:chart/c:plotArea/c:stockChart/c:ser[1]/c:tx/c:strRef/c:strCache/c:pt/c:v",
+        u"Open");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChart)
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir"_ostr, "val"_ostr, u"col"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:barDir", "val", u"col");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
         save(u"Office Open XML Text"_ustr);
         xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
 
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses"_ostr, "val"_ostr, u"autoZero"_ustr);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crosses", "val", u"autoZero");
     }
     // tdf#142351: test crossesAt val="-50" with XLSX
     {
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testCrosses)
         xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
         CPPUNIT_ASSERT(pXmlDoc);
 
-        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crossesAt"_ostr, "val"_ostr, u"-50"_ustr);
+        assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:catAx/c:crossesAt", "val", u"-50");
     }
 }
 
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterChartTextXValues)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]"_ostr, u"1"_ustr);
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal[1]/c:numRef[1]/c:numCache[1]/c:pt[1]/c:v[1]", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisValues)
@@ -411,11 +411,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisValues)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:ptCount"_ostr, "val"_ostr, u"5"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[1]/c:v"_ostr, u"15"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[2]/c:v"_ostr, u"11"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[3]/c:v"_ostr, u"20"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[4]/c:v"_ostr, u"16"_ustr);
+    assertXPath(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:ptCount", "val", u"5");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[1]/c:v", u"15");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[2]/c:v", u"11");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[3]/c:v", u"20");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser/c:xVal/c:numRef/c:numCache/c:pt[4]/c:v", u"16");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisCategories)
@@ -425,9 +425,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterXAxisCategories)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:ptCount"_ostr, "val"_ostr, u"4"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:pt[1]/c:v"_ostr, u"Row 1"_ustr);
-    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:pt[2]/c:v"_ostr, u"Row 2"_ustr);
+    assertXPath(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:ptCount", "val", u"4");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:pt[1]/c:v", u"Row 1");
+    assertXPathContent(pXmlDoc, "//c:scatterChart/c:ser[1]/c:xVal/c:strRef/c:strCache/c:pt[2]/c:v", u"Row 2");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartDataTable)
@@ -437,9 +437,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartDataTable)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showHorzBorder", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showVertBorder", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:dTable/c:showOutline", "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartExternalData)
@@ -449,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testChartExternalData)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:externalData"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:externalData");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsGrabBag)
@@ -501,8 +501,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAreaChartLoad)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:showVal"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:showVal", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testUpDownBars)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:upDownBars", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
@@ -521,7 +521,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDoughnutChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieOfPieChart)
@@ -531,8 +531,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieOfPieChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart"_ostr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]"_ostr, "val"_ostr, u"pie"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]", "val", u"pie");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarOfPieChart)
@@ -542,8 +542,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarOfPieChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart"_ostr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]"_ostr, "val"_ostr, u"bar"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:ofPieChart/c:ofPieType[1]", "val", u"bar");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
@@ -553,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDisplayUnits)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit"_ostr, "val"_ostr, u"billions"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:valAx/c:dispUnits/c:builtInUnit", "val", u"billions");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallGradientFill)
@@ -563,7 +563,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallGradientFill)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:gradFill");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
@@ -572,7 +572,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo74115WallBitmapFill)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:blipFill");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
@@ -585,7 +585,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartWallLineStyle)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:noFill"_ostr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:spPr/a:ln/a:noFill");
 }
 
 //The below test case tests the built in marker 'x' for Office 2010 in Line charts
@@ -596,8 +596,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290LineChartMarkerX)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]"_ostr,"val"_ostr,u"x"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]"_ostr,"val"_ostr,u"7"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val",u"x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val",u"7");
 }
 
 // We can also use the built in marker 'x' in scatter chart, hence writing the test case for the same.
@@ -608,8 +608,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290ScatterChartMarkerX)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]"_ostr,"val"_ostr,u"x"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:size[1]"_ostr,"val"_ostr,u"7"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val",u"x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:scatterChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val",u"7");
 }
 
 // Also in a combination of charts like a column chart and line chart, we can use the built in marker 'x'
@@ -621,8 +621,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testFdo78290CombinationChartMarkerX)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]"_ostr,"val"_ostr,u"x"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]"_ostr,"val"_ostr,u"7"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val",u"x");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val",u"7");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf126115IndividualMarker)
@@ -633,13 +633,13 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testTdf126115IndividualMarker)
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // 1. series
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:symbol"_ostr, "val"_ostr, u"square"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:size"_ostr, "val"_ostr, u"8"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"ff0000"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:symbol", "val", u"square");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:size", "val", u"8");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[1]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", u"ff0000");
     // 2. series
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:symbol"_ostr, "val"_ostr, u"x"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:size"_ostr, "val"_ostr, u"15"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"7030a0"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:symbol", "val", u"x");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:size", "val", u"15");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[2]/c:dPt/c:marker/c:spPr/a:solidFill/a:srgbClr", "val", u"7030a0");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testAxisNumberFormatODS)
@@ -839,8 +839,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabel3DChartDOCX)
 
     // We must not export label position attributes for 3D bar charts. The
     // same rule also applies to several other 3D charts, apparently.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLblPos"_ostr, 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLbl/c:dLblPos"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:bar3DChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBarChartDOCX)
@@ -854,9 +854,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelBarChartDOCX)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLblPos"_ostr, "val"_ostr, u"ctr"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLblPos"_ostr, "val"_ostr, u"inEnd"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos"_ostr, "val"_ostr, u"inBase"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLblPos", "val", u"ctr");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLblPos", "val", u"inEnd");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos", "val", u"inBase");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
@@ -874,7 +874,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelClusteredBarChartDOCX)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // This was "t", should be one of the allowed values.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl[2]/c:dLblPos"_ostr, "val"_ostr, u"outEnd"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl[2]/c:dLblPos", "val", u"outEnd");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelRadarChartDOCX)
@@ -889,8 +889,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelRadarChartDOCX)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // We must not export label position attributes for radar charts.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLblPos"_ostr, 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLbl/c:dLblPos"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:radarChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
@@ -908,8 +908,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDoughnutChartDOCX)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // We must not export label position attributes for doughnut charts.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLblPos"_ostr, 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:doughnutChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelAreaChartDOCX)
@@ -927,8 +927,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelAreaChartDOCX)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // We must not export label position attributes for area charts.
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLblPos"_ostr, 0);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl/c:dLblPos"_ostr, 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLblPos", 0);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:areaChart/c:ser/c:dLbls/c:dLbl/c:dLblPos", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testDataLabelDefaultLineChartDOCX)
@@ -964,10 +964,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testIndividualDataLabelProps)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr"_ostr, "b"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr"_ostr, "sz"_ostr, u"1600"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"ff0000"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr/a:latin"_ostr, "typeface"_ostr, u"Times New Roman"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr", "b", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr", "sz", u"1600");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr/a:solidFill/a:srgbClr", "val", u"ff0000");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:scatterChart/c:ser[3]/c:dLbls/c:dLbl/c:txPr/a:p/a:pPr/a:defRPr/a:latin", "typeface", u"Times New Roman");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChartRotation)
@@ -977,8 +977,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testBarChartRotation)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX"_ostr, "val"_ostr, u"30"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY"_ostr, "val"_ostr, u"50"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", u"30");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", u"50");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
@@ -997,8 +997,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testShapeFollowedByChart)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
 
-    OUString aValueOfFirstDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:drawing[1]/wp:inline[1]/wp:docPr[1]"_ostr, "id"_ostr);
-    OUString aValueOfSecondDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:docPr[1]"_ostr, "id"_ostr);
+    OUString aValueOfFirstDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:drawing[1]/wp:inline[1]/wp:docPr[1]", "id");
+    OUString aValueOfSecondDocPR = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:docPr[1]", "id");
 
     CPPUNIT_ASSERT( aValueOfFirstDocPR != aValueOfSecondDocPR );
 }
@@ -1013,7 +1013,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartDataLabels)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos"_ostr, "val"_ostr, u"outEnd"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:pie3DChart/c:ser[1]/c:dLbls/c:dLbl[1]/c:dLblPos", "val", u"outEnd");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSeriesIdxOrder)
@@ -1022,8 +1022,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSeriesIdxOrder)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:idx[1]"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:idx[1]", "val", u"1");
+    assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testScatterPlotLabels)
@@ -1147,8 +1147,8 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testPieChartRotation)
     save(u"Office Open XML Text"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX"_ostr, "val"_ostr, u"40"_ustr);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY"_ostr, "val"_ostr, u"30"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotX", "val", u"40");
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:view3D/c:rotY", "val", u"30");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testEmbeddingsOleObjectGrabBag)
@@ -1266,7 +1266,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testSmoothedLines)
     save(u"Calc Office Open XML"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"xl/charts/chart1.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:smooth"_ostr, "val"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:ser[1]/c:smooth", "val", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ExportTest, testLabelStringODS)

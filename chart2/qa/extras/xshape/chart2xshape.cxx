@@ -247,7 +247,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
     // Check if the regression curve exists (which means a XShape with a certain
     // name should exist in the dump)
-    assertXPath(pXmlDoc, "//XShape[@name='CID/D=0:CS=0:CT=0:Series=0:Curve=0']"_ostr, 1);
+    assertXPath(pXmlDoc, "//XShape[@name='CID/D=0:CS=0:CT=0:Series=0:Curve=0']", 1);
 }
 
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
@@ -261,10 +261,10 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     {
         OString aPath("//XShape[@text='Oct-12']/Transformation"_ostr);
         assertXPath(pXmlDoc, aPath, 1);
-        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1"_ostr).toDouble();
-        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2"_ostr).toDouble();
-        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1"_ostr).toDouble();
-        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2"_ostr).toDouble();
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
@@ -272,10 +272,10 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     {
         OString aPath("//XShape[@text='Nov-12']/Transformation"_ostr);
         assertXPath(pXmlDoc, aPath, 1);
-        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1"_ostr).toDouble();
-        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2"_ostr).toDouble();
-        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1"_ostr).toDouble();
-        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2"_ostr).toDouble();
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
@@ -283,10 +283,10 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     {
         OString aPath("//XShape[@text='Dec-12']/Transformation"_ostr);
         assertXPath(pXmlDoc, aPath, 1);
-        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1"_ostr).toDouble();
-        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2"_ostr).toDouble();
-        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1"_ostr).toDouble();
-        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2"_ostr).toDouble();
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
@@ -294,10 +294,10 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     {
         OString aPath("//XShape[@text='May-13']/Transformation"_ostr);
         assertXPath(pXmlDoc, aPath, 1);
-        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1"_ostr).toDouble();
-        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2"_ostr).toDouble();
-        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1"_ostr).toDouble();
-        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2"_ostr).toDouble();
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);
@@ -305,10 +305,10 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     {
         OString aPath("//XShape[@text='Jan-14']/Transformation"_ostr);
         assertXPath(pXmlDoc, aPath, 1);
-        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1"_ostr).toDouble();
-        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2"_ostr).toDouble();
-        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1"_ostr).toDouble();
-        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2"_ostr).toDouble();
+        double fT11 = getXPath(pXmlDoc, aPath + "/Line1", "column1").toDouble();
+        double fT12 = getXPath(pXmlDoc, aPath + "/Line1", "column2").toDouble();
+        double fT21 = getXPath(pXmlDoc, aPath + "/Line2", "column1").toDouble();
+        double fT22 = getXPath(pXmlDoc, aPath + "/Line2", "column2").toDouble();
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT11, -fT21, 1e-8);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fT12, fT22, 1e-8);

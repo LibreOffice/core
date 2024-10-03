@@ -106,11 +106,11 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testODFCustomMetadata)
 
     // check that custom metadata is preserved
     xmlDocUniquePtr pXmlDoc = parseExport(u"meta.xml"_ustr);
-    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork"_ostr, u"bork"_ustr);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo"_ostr, 1);
-    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo[@baz:bar='foo']"_ostr);
-    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/foo:bar/foo:baz"_ostr, u"bar"_ustr);
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/bork", u"bork");
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo", 1);
+    assertXPath(pXmlDoc, "/office:document-meta/office:meta/foo:bar/baz:foo[@baz:bar='foo']");
+    assertXPathContent(pXmlDoc, "/office:document-meta/office:meta/foo:bar/foo:baz", u"bar");
 }
 
 /**

@@ -3884,14 +3884,14 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlinePortions)
     // Then make sure that the portion list is updated, so "bar" can be marked as deleted without
     // marking " after" as well:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr, "portion"_ostr, u"foo"_ustr);
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr, "portion"_ostr, u"ins"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"foo");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion", u"ins");
     // Without the accompanying fix in place, this test would have failed width:
     // - Expected: bar
     // - Actual  : bar after
     // i.e. the portion list was outdated, even " after" was marked as deleted.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[3]"_ostr, "portion"_ostr, u"bar"_ustr);
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr, "portion"_ostr, u" after"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[3]", "portion", u"bar");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[4]", "portion", u" after");
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
@@ -4177,7 +4177,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]"_ostr, "expand"_ostr, sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
@@ -4193,7 +4193,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSavedAuthorField)
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]"_ostr, "expand"_ostr, sAuthor);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwFieldPortion[1]", "expand", sAuthor);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineTooltip)

@@ -879,14 +879,14 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
     // attribute", i.e. the signature without such an attribute was not preserved correctly.
     assertXPathNoAttribute(pXmlDoc,
                            "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
-                           "dsig:Reference[starts-with(@URI, '#idSignedProperties')]"_ostr,
-                           "Type"_ostr);
+                           "dsig:Reference[starts-with(@URI, '#idSignedProperties')]",
+                           "Type");
 
     // New signature always has the Type attribute.
     assertXPath(pXmlDoc,
                 "/odfds:document-signatures/dsig:Signature[2]/dsig:SignedInfo/"
-                "dsig:Reference[starts-with(@URI, '#idSignedProperties')]"_ostr,
-                "Type"_ostr, u"http://uri.etsi.org/01903#SignedProperties"_ustr);
+                "dsig:Reference[starts-with(@URI, '#idSignedProperties')]",
+                "Type", u"http://uri.etsi.org/01903#SignedProperties");
 }
 
 /// Creates a XAdES signature from scratch.
@@ -933,15 +933,15 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
     // Assert that the digest algorithm is SHA-256 in the bAdESCompliant case, not SHA-1.
     assertXPath(pXmlDoc,
                 "/odfds:document-signatures/dsig:Signature/dsig:SignedInfo/"
-                "dsig:Reference[@URI='content.xml']/dsig:DigestMethod"_ostr,
-                "Algorithm"_ostr, ALGO_XMLDSIGSHA256);
+                "dsig:Reference[@URI='content.xml']/dsig:DigestMethod",
+                "Algorithm", ALGO_XMLDSIGSHA256);
 
     // Assert that the digest of the signing certificate is included.
-    assertXPath(pXmlDoc, "//xd:CertDigest"_ostr, 1);
+    assertXPath(pXmlDoc, "//xd:CertDigest", 1);
 
     // Assert that the Type attribute is set on all URI's that start with #idSignedProperties
-    assertXPath(pXmlDoc, "//dsig:Reference[starts-with(@URI, '#idSignedProperties')]"_ostr,
-                "Type"_ostr, u"http://uri.etsi.org/01903#SignedProperties"_ustr);
+    assertXPath(pXmlDoc, "//dsig:Reference[starts-with(@URI, '#idSignedProperties')]", "Type",
+                u"http://uri.etsi.org/01903#SignedProperties");
 }
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
@@ -1199,9 +1199,9 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testImplicitScriptSign)
     // Then make sure both signatures are created correctly:
     std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xScriptingStream, true));
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
-    OUString aScriptDigest = getXPathContent(
-        pXmlDoc, "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
-                 "dsig:Reference[@URI='Basic/script-lc.xml']/dsig:DigestValue"_ostr);
+    OUString aScriptDigest
+        = getXPathContent(pXmlDoc, "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
+                                   "dsig:Reference[@URI='Basic/script-lc.xml']/dsig:DigestValue");
     // Without the accompanying fix in place, this test would have failed, the digest value was just a
     // " " placeholder.
     CPPUNIT_ASSERT_GREATER(static_cast<sal_Int32>(1), aScriptDigest.getLength());
@@ -1211,7 +1211,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testImplicitScriptSign)
     // not part of the signed data of the document signature.
     assertXPath(pXmlDoc,
                 "/odfds:document-signatures/dsig:Signature[1]/dsig:SignedInfo/"
-                "dsig:Reference[@URI='META-INF/macrosignatures.xml']"_ostr,
+                "dsig:Reference[@URI='META-INF/macrosignatures.xml']",
                 1);
 }
 

@@ -146,66 +146,42 @@ void XmlScriptTest::testBasicElements()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Ensure we have all elements
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[1]"_ostr, "id"_ostr,
-                u"button1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[2]"_ostr, "id"_ostr,
-                u"button3"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[1]"_ostr, "id"_ostr,
-                u"check1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[2]"_ostr, "id"_ostr,
-                u"check2"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[3]"_ostr, "id"_ostr,
-                u"check3"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[1]"_ostr, "id"_ostr,
-                u"list1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[2]"_ostr, "id"_ostr,
-                u"list2"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox[1]"_ostr, "id"_ostr,
-                u"combo1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[1]"_ostr,
-                "id"_ostr, u"radio1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[2]"_ostr,
-                "id"_ostr, u"radio2"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[3]"_ostr,
-                "id"_ostr, u"radio3"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:titledbox[1]"_ostr, "id"_ostr,
-                u"groupbox1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[1]"_ostr,
-                "id"_ostr, u"radio5"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[2]"_ostr,
-                "id"_ostr, u"radio7"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[3]"_ostr,
-                "id"_ostr, u"radio8"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:text[1]"_ostr, "id"_ostr,
-                u"fixed1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[1]"_ostr, "id"_ostr,
-                u"field1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[2]"_ostr, "id"_ostr,
-                u"field2"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:img[1]"_ostr, "id"_ostr,
-                u"image1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:filecontrol[1]"_ostr, "id"_ostr,
-                u"file1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:datefield[1]"_ostr, "id"_ostr,
-                u"datefield1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:timefield[1]"_ostr, "id"_ostr,
-                u"time1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:patternfield[1]"_ostr, "id"_ostr,
-                u"pattern1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:currencyfield[1]"_ostr, "id"_ostr,
-                u"currency1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:numericfield[1]"_ostr, "id"_ostr,
-                u"numeric1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:fixedline[1]"_ostr, "id"_ostr,
-                u"fixedline1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:progressmeter[1]"_ostr, "id"_ostr,
-                u"progress1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:scrollbar[1]"_ostr, "id"_ostr,
-                u"scrollbar1"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[1]"_ostr, "id"_ostr,
-                u"ffield0"_ustr);
-    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[2]"_ostr, "id"_ostr,
-                u"ffield1"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[1]", "id", u"button1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:button[2]", "id", u"button3");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[1]", "id", u"check1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[2]", "id", u"check2");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:checkbox[3]", "id", u"check3");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[1]", "id", u"list1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:menulist[2]", "id", u"list2");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox[1]", "id", u"combo1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[1]", "id",
+                u"radio1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[2]", "id",
+                u"radio2");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[1]/dlg:radio[3]", "id",
+                u"radio3");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:titledbox[1]", "id", u"groupbox1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[1]", "id",
+                u"radio5");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[2]", "id",
+                u"radio7");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:radiogroup[2]/dlg:radio[3]", "id",
+                u"radio8");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:text[1]", "id", u"fixed1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[1]", "id", u"field1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:textfield[2]", "id", u"field2");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:img[1]", "id", u"image1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:filecontrol[1]", "id", u"file1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:datefield[1]", "id", u"datefield1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:timefield[1]", "id", u"time1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:patternfield[1]", "id", u"pattern1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:currencyfield[1]", "id", u"currency1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:numericfield[1]", "id", u"numeric1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:fixedline[1]", "id", u"fixedline1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:progressmeter[1]", "id", u"progress1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:scrollbar[1]", "id", u"scrollbar1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[1]", "id", u"ffield0");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:formattedfield[2]", "id", u"ffield1");
 
     Reference<lang::XComponent> xDialogModelComp(xModel, UNO_QUERY);
     if (xDialogModelComp)
@@ -228,15 +204,12 @@ void XmlScriptTest::testEmptyPopupItems()
     CPPUNIT_ASSERT(pXmlDoc);
 
     // Ensure we have 3 items in combobox after import/export and second one is empty
-    assertXPath(pXmlDoc,
-                "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[1]"_ostr,
-                "value"_ostr, u"Eintrag1"_ustr);
-    assertXPath(pXmlDoc,
-                "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[2]"_ostr,
-                "value"_ostr, u""_ustr);
-    assertXPath(pXmlDoc,
-                "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[3]"_ostr,
-                "value"_ostr, u"Eintrag2"_ustr);
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[1]",
+                "value", u"Eintrag1");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[2]",
+                "value", u"");
+    assertXPath(pXmlDoc, "/dlg:window/dlg:bulletinboard/dlg:combobox/dlg:menupopup/dlg:menuitem[3]",
+                "value", u"Eintrag2");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(XmlScriptTest);

@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     // - XPath '//unifiedtransparence' number of nodes is incorrect
     // i.e. the text was just plain red, not semi-transparent.
     sal_Int16 fTransparence
-        = getXPath(pDocument, "//unifiedtransparence"_ostr, "transparence"_ostr).toInt32();
+        = getXPath(pDocument, "//unifiedtransparence", "transparence").toInt32();
     CPPUNIT_ASSERT_EQUAL(nTransparence, fTransparence);
 }
 
@@ -287,42 +287,42 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
 
-    assertXPath(pXmlDoc, "/primitive2D"_ostr, 1);
+    assertXPath(pXmlDoc, "/primitive2D", 1);
 
     OString aBasePath("/primitive2D/sdrrectangle/group/polypolygoncolor"_ostr);
-    assertXPath(pXmlDoc, aBasePath, "color"_ostr, u"#729fcf"_ustr);
+    assertXPath(pXmlDoc, aBasePath, "color", u"#729fcf");
 
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "height"_ostr,
-                u"99"_ustr); // weird Rectangle is created with size 100
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "width"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "minx"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "miny"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy"_ostr, u"99"_ustr);
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "height",
+                u"99"); // weird Rectangle is created with size 100
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "width", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "minx", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "miny", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxx", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/polypolygon", "maxy", u"99");
 
     aBasePath = "/primitive2D/sdrrectangle/group/polypolygoncolor/polypolygon/polygon"_ostr;
 
     assertXPath(pXmlDoc, aBasePath + "/point", 5);
-    assertXPath(pXmlDoc, aBasePath + "/point[1]", "x"_ostr, u"49.5"_ustr); // hmm, weird, why?
-    assertXPath(pXmlDoc, aBasePath + "/point[1]", "y"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[2]", "x"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[2]", "y"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[3]", "x"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[3]", "y"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[4]", "x"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[4]", "y"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[5]", "x"_ostr, u"99"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/point[5]", "y"_ostr, u"99"_ustr);
+    assertXPath(pXmlDoc, aBasePath + "/point[1]", "x", u"49.5"); // hmm, weird, why?
+    assertXPath(pXmlDoc, aBasePath + "/point[1]", "y", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/point[2]", "x", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/point[2]", "y", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/point[3]", "x", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/point[3]", "y", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/point[4]", "x", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/point[4]", "y", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/point[5]", "x", u"99");
+    assertXPath(pXmlDoc, aBasePath + "/point[5]", "y", u"99");
 
     aBasePath = "/primitive2D/sdrrectangle/group/polygonstroke"_ostr;
     assertXPath(pXmlDoc, aBasePath, 1);
 
-    assertXPath(pXmlDoc, aBasePath + "/line", "color"_ostr, u"#3465a4"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/line", "width"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/line", "linejoin"_ostr, u"Round"_ustr);
-    assertXPath(pXmlDoc, aBasePath + "/line", "linecap"_ostr, u"BUTT"_ustr);
+    assertXPath(pXmlDoc, aBasePath + "/line", "color", u"#3465a4");
+    assertXPath(pXmlDoc, aBasePath + "/line", "width", u"0");
+    assertXPath(pXmlDoc, aBasePath + "/line", "linejoin", u"Round");
+    assertXPath(pXmlDoc, aBasePath + "/line", "linecap", u"BUTT");
 
-    assertXPathContent(pXmlDoc, aBasePath + "/polygon", u"49.5,99 0,99 0,0 99,0 99,99"_ustr);
+    assertXPathContent(pXmlDoc, aBasePath + "/polygon", u"49.5,99 0,99 0,0 99,0 99,99");
 
     // If solid line, then there is no line stroke information
     assertXPath(pXmlDoc, aBasePath + "/stroke", 0);
@@ -372,15 +372,14 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     SdrPage* pSdrPage = pDrawPage->GetSdrPage();
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-    assertXPath(pXmlDoc, "/primitive2D"_ostr, 1);
+    assertXPath(pXmlDoc, "/primitive2D", 1);
 
-    assertXPath(pXmlDoc, "//scene"_ostr, "projectionMode"_ostr, u"Perspective"_ustr);
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material"_ostr, "color"_ostr,
-                u"#ff0000"_ustr);
+    assertXPath(pXmlDoc, "//scene", "projectionMode", u"Perspective");
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill", "color", u"#ff0000");
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", u"#ff0000");
     // ODF default 50% is represented by Specular Intensity = 2^5. The relationship is not linear.
-    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material"_ostr,
-                "specularIntensity"_ostr, u"32"_ustr);
+    assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
+                u"32");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
@@ -403,9 +402,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
 
         // The text is: "O" + eop + "O" + eol + "O"
         // It should be displayed as 3 line of text. (1 "O" letter in every line)
-        sal_Int32 nY1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "y"_ostr).toInt32();
-        sal_Int32 nY2 = getXPath(pXmlDoc, aBasePath + "polygon[3]/point[1]", "y"_ostr).toInt32();
-        sal_Int32 nY3 = getXPath(pXmlDoc, aBasePath + "polygon[5]/point[1]", "y"_ostr).toInt32();
+        sal_Int32 nY1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "y").toInt32();
+        sal_Int32 nY2 = getXPath(pXmlDoc, aBasePath + "polygon[3]/point[1]", "y").toInt32();
+        sal_Int32 nY3 = getXPath(pXmlDoc, aBasePath + "polygon[5]/point[1]", "y").toInt32();
 
         sal_Int32 nDiff21 = nY2 - nY1;
         sal_Int32 nDiff32 = nY3 - nY2;
@@ -445,10 +444,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_CurvedTextWidth)
 
         // The text is: 7 line od "OOOOOOO"
         // Take the x coord of the 4 "O" on the corners
-        sal_Int32 nX1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "x"_ostr).toInt32();
-        sal_Int32 nX2 = getXPath(pXmlDoc, aBasePath + "polygon[13]/point[1]", "x"_ostr).toInt32();
-        sal_Int32 nX3 = getXPath(pXmlDoc, aBasePath + "polygon[85]/point[1]", "x"_ostr).toInt32();
-        sal_Int32 nX4 = getXPath(pXmlDoc, aBasePath + "polygon[97]/point[1]", "x"_ostr).toInt32();
+        sal_Int32 nX1 = getXPath(pXmlDoc, aBasePath + "polygon[1]/point[1]", "x").toInt32();
+        sal_Int32 nX2 = getXPath(pXmlDoc, aBasePath + "polygon[13]/point[1]", "x").toInt32();
+        sal_Int32 nX3 = getXPath(pXmlDoc, aBasePath + "polygon[85]/point[1]", "x").toInt32();
+        sal_Int32 nX4 = getXPath(pXmlDoc, aBasePath + "polygon[97]/point[1]", "x").toInt32();
 
         if (i < 2)
         {
@@ -476,9 +475,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMetal)
     // ODF specifies for metal = true specular color as rgb(200,200,200) and adding 15 to specularity
     // Together with extrusion-first-light-level 67% and extrusion-specularity 80% factor is
     // 0.67*0.8 * 200/255 = 0.42 and color #6b6b6b
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specular"_ostr, u"#6b6b6b"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#6b6b6b");
     // 3D specularIntensity = 2^(50/10) + 15 = 47, with default extrusion-shininess 50%
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specularIntensity"_ostr, u"47"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"47");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
@@ -490,8 +489,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testExtrusionPhong)
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
     // The rendering method and normals kind were always 'Flat' without the patch.
-    assertXPath(pXmlDoc, "//scene"_ostr, "shadeMode"_ostr, u"Phong"_ustr);
-    assertXPath(pXmlDoc, "//object3Dattributes"_ostr, "normalsKind"_ostr, u"Specific"_ustr);
+    assertXPath(pXmlDoc, "//scene", "shadeMode", u"Phong");
+    assertXPath(pXmlDoc, "//object3Dattributes", "normalsKind", u"Specific");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
@@ -508,14 +507,14 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSurfaceMattePPT)
     // to forth light, as only first light is specular. Because first and third lights are off, the
     // forth light is the second one in the dump. The gray color corresponding to
     // FirstLightLevel = 38000/2^16 is #949494.
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specular"_ostr, u"#000000"_ustr);
-    assertXPath(pXmlDoc, "(//light)[2]"_ostr, "color"_ostr, u"#949494"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#000000");
+    assertXPath(pXmlDoc, "(//light)[2]", "color", u"#949494");
     // To make the second light soft, part of its intensity is moved to lights 5,6,7 and 8.
-    assertXPath(pXmlDoc, "(//light)[1]"_ostr, "color"_ostr, u"#1e1e1e"_ustr);
-    assertXPath(pXmlDoc, "(//light)[3]"_ostr, "color"_ostr, u"#3b3b3b"_ustr);
+    assertXPath(pXmlDoc, "(//light)[1]", "color", u"#1e1e1e");
+    assertXPath(pXmlDoc, "(//light)[3]", "color", u"#3b3b3b");
     // The 3D property specularIntensity is not related to 'extrusion-specularity' but to
     // 'extrusion-shininess'. specularIntensity = 2^(shininess/10), here default 32.
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specularIntensity"_ostr, u"32"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"32");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
@@ -531,13 +530,13 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
     // -level'. 3D specularIntensity is derived from property 'draw:extrusion-shininess'. Both are
     // object properties, not scene properties. Those were wrong in various forms before the patch.
     // Specularity = 77% * first-light-level 67% = 0.5159, which corresponds to gray color #848484.
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specular"_ostr, u"#848484"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specular", u"#848484");
     // extrusion-shininess 50% corresponds to 3D specularIntensity 32, use 2^(50/10).
-    assertXPath(pXmlDoc, "(//material)[1]"_ostr, "specularIntensity"_ostr, u"32"_ustr);
+    assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", u"32");
     // extrusion-first-light-level 67% corresponds to gray color #ababab, use 255 * 0.67.
-    assertXPath(pXmlDoc, "(//light)[1]"_ostr, "color"_ostr, u"#ababab"_ustr);
+    assertXPath(pXmlDoc, "(//light)[1]", "color", u"#ababab");
     // The first light is harsh, the second light soft. So the 3D scene should have 6 lights (1+1+4).
-    assertXPath(pXmlDoc, "//light"_ostr, 6);
+    assertXPath(pXmlDoc, "//light", 6);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testVideoSnapshot)
@@ -727,35 +726,27 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testClipVerticalTextOverflow)
     // - In <>, XPath contents of child does not match
     // i.e. the vertically overflowing text wasn't clipped & overflowing text
     // was drawn anyways.
-    assertXPathContent(pDocument, "count((//sdrblocktext)[4]//textsimpleportion)"_ostr, u"6"_ustr);
+    assertXPathContent(pDocument, "count((//sdrblocktext)[4]//textsimpleportion)", u"6");
 
     // make sure text is aligned correctly after the overflowing text is clipped
-    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]"_ostr, "y"_ostr,
-                u"3749"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]"_ostr, "y"_ostr,
-                u"7559"_ustr);
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[1]", "y", u"3749");
+    assertXPath(pDocument, "((//sdrblocktext)[4]//textsimpleportion)[6]", "y", u"7559");
 
     // make sure the text that isn't overflowing is still aligned properly
-    assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)"_ostr, u"3"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]"_ostr, "y"_ostr,
-                u"5074"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]"_ostr, "y"_ostr,
-                u"6598"_ustr);
+    assertXPathContent(pDocument, "count((//sdrblocktext)[5]//textsimpleportion)", u"3");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[1]", "y", u"5074");
+    assertXPath(pDocument, "((//sdrblocktext)[5]//textsimpleportion)[3]", "y", u"6598");
 
     // Test vertically overflowing text, with vertical text direction
-    assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)"_ostr, u"12"_ustr);
+    assertXPathContent(pDocument, "count((//sdrblocktext)[6]//textsimpleportion)", u"12");
     // make sure text is aligned correctly after the overflowing text is clipped
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]"_ostr, "x"_ostr,
-                u"13093"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]"_ostr, "x"_ostr,
-                u"4711"_ustr);
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[1]", "x", u"13093");
+    assertXPath(pDocument, "((//sdrblocktext)[6]//textsimpleportion)[12]", "x", u"4711");
 
     // make sure the text that isn't overflowing is still aligned properly
-    assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)"_ostr, u"3"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]"_ostr, "x"_ostr,
-                u"25417"_ustr);
-    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]"_ostr, "x"_ostr,
-                u"23893"_ustr);
+    assertXPathContent(pDocument, "count((//sdrblocktext)[7]//textsimpleportion)", u"3");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[1]", "x", u"25417");
+    assertXPath(pDocument, "((//sdrblocktext)[7]//textsimpleportion)[3]", "x", u"23893");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
@@ -768,10 +759,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourText)
     // Text should be inside the shape and start at the bottom-right of the shape because of 180°
     // rotation. Without fix the text was rotated but positioned left-top of the shape. The first
     // line of text has started at (10000|7353), last line at (10000|5007).
-    assertXPath(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "x"_ostr, u"15998"_ustr);
-    assertXPath(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "y"_ostr, u"11424"_ustr);
-    assertXPath(pXmlDoc, "(//textsimpleportion)[4]"_ostr, "x"_ostr, u"15998"_ustr);
-    assertXPath(pXmlDoc, "(//textsimpleportion)[4]"_ostr, "y"_ostr, u"9291"_ustr);
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "x", u"15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[1]", "y", u"11424");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "x", u"15998");
+    assertXPath(pXmlDoc, "(//textsimpleportion)[4]", "y", u"9291");
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
@@ -786,9 +777,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testContourTextCJK)
     // The expected values are for font "Microsoft Yahei". Substitute fonts can have a different
     // metric despite having the same font size. Thus test with tolerance.
     // First line
-    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[1]"_ostr, "x"_ostr, 13327.0, 150.0);
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[1]", "x", 13327.0, 150.0);
     // Second line
-    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]"_ostr, "x"_ostr, 12489.0, 300.0);
+    assertXPathDoubleValue(pXmlDoc, "(//textsimpleportion)[3]", "x", 12489.0, 300.0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
@@ -798,10 +789,10 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf161724)
     SdrPage* pSdrPage = getFirstDrawPageWithAssert();
     xmlDocUniquePtr pXmlDoc = lcl_dumpAndParseFirstObjectWithAssert(pSdrPage);
 
-    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap"_ostr, "xy13"_ostr).toInt32();
-    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap"_ostr, "xy23"_ostr).toInt32();
-    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap"_ostr, "xy11"_ostr).toInt32();
-    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap"_ostr, "xy22"_ostr).toInt32();
+    sal_Int16 nBmpPosX = getXPath(pXmlDoc, "//bitmap", "xy13").toInt32();
+    sal_Int16 nBmpPosY = getXPath(pXmlDoc, "//bitmap", "xy23").toInt32();
+    sal_Int16 nBmpWidth = getXPath(pXmlDoc, "//bitmap", "xy11").toInt32();
+    sal_Int16 nBmpHeight = getXPath(pXmlDoc, "//bitmap", "xy22").toInt32();
 
     // Without the fix in place, all these values would have been completely different
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nBmpPosX);

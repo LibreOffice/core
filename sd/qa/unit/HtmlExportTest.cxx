@@ -26,20 +26,18 @@ public:
         save(u"impress_html_Export"_ustr);
         htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
 
-        assertXPath(htmlDoc, "/html"_ostr, 1);
-        assertXPath(htmlDoc, "/html/body"_ostr, 1);
-        assertXPath(htmlDoc, "/html/body/h1"_ostr, 4);
-        assertXPath(htmlDoc, "/html/body/table"_ostr, 1);
-        assertXPath(htmlDoc, "/html/body/table/tr"_ostr, 5);
-        assertXPath(htmlDoc, "/html/body/ul"_ostr, 1);
-        assertXPath(htmlDoc, "/html/body/ul/li"_ostr, 2);
+        assertXPath(htmlDoc, "/html", 1);
+        assertXPath(htmlDoc, "/html/body", 1);
+        assertXPath(htmlDoc, "/html/body/h1", 4);
+        assertXPath(htmlDoc, "/html/body/table", 1);
+        assertXPath(htmlDoc, "/html/body/table/tr", 5);
+        assertXPath(htmlDoc, "/html/body/ul", 1);
+        assertXPath(htmlDoc, "/html/body/ul/li", 2);
 
-        assertXPath(htmlDoc, "/html/head/meta[1]"_ostr, "content"_ostr,
-                    u"text/html; charset=utf-8"_ustr);
-        assertXPath(htmlDoc, "/html/head/meta[2]"_ostr, "name"_ostr, u"generator"_ustr);
-        assertXPath(htmlDoc, "/html/head/meta[3]"_ostr, "name"_ostr, u"created"_ustr);
-        assertXPath(htmlDoc, "/html/head/meta[3]"_ostr, "content"_ostr,
-                    u"2014-04-09T17:05:41.987922038"_ustr);
+        assertXPath(htmlDoc, "/html/head/meta[1]", "content", u"text/html; charset=utf-8");
+        assertXPath(htmlDoc, "/html/head/meta[2]", "name", u"generator");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "name", u"created");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "content", u"2014-04-09T17:05:41.987922038");
     }
 
     void testTdf154989()
@@ -48,23 +46,23 @@ public:
         save(u"XHTML Draw File"_ustr);
         xmlDocUniquePtr pXmlDoc = parseXml(maTempFile);
 
-        assertXPath(pXmlDoc, "/xhtml:html"_ostr, 1);
+        assertXPath(pXmlDoc, "/xhtml:html", 1);
         // 1 page
-        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div"_ostr, 1);
+        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div", 1);
         // 4 shapes
-        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div"_ostr, 4);
+        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div", 4);
         // 3 of them are text boxes
-        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div/xhtml:div"_ostr, 3);
+        assertXPath(pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div/xhtml:div", 3);
         // not sure if the order of these is stable?
-        assertXPathContent(
-            pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[2]/xhtml:div/xhtml:p"_ostr,
-            u"before"_ustr);
-        assertXPathContent(
-            pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[3]/xhtml:div/xhtml:p"_ostr,
-            u"above"_ustr);
-        assertXPathContent(
-            pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[4]/xhtml:div/xhtml:p"_ostr,
-            u"below"_ustr);
+        assertXPathContent(pXmlDoc,
+                           "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[2]/xhtml:div/xhtml:p",
+                           u"before");
+        assertXPathContent(pXmlDoc,
+                           "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[3]/xhtml:div/xhtml:p",
+                           u"above");
+        assertXPathContent(pXmlDoc,
+                           "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[4]/xhtml:div/xhtml:p",
+                           u"below");
     }
 
     CPPUNIT_TEST_SUITE(SdHTMLFilterTest);

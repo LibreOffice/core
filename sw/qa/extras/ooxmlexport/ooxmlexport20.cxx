@@ -38,20 +38,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsb)
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/"
-                "vnd.ms-excel.sheet.binary.macroEnabled.12']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.xlsb"_ustr);
+                "vnd.ms-excel.sheet.binary.macroEnabled.12']",
+                "PartName", u"/word/embeddings/oleObject1.xlsb");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsb']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsb']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"Excel.SheetBinaryMacroEnabled.12"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"Excel.SheetBinaryMacroEnabled.12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80097)
@@ -64,45 +62,45 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80097)
     //Table Cell Borders
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:top[@w:val = 'single']"_ostr,
+                "w:top[@w:val = 'single']",
                 1);
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:top[@w:sz = 4]"_ostr,
+                "w:top[@w:sz = 4]",
                 1);
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:top[@w:space = 0]"_ostr,
+                "w:top[@w:space = 0]",
                 1);
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:top[@w:color = '000000']"_ostr,
-                1);
-
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:bottom[@w:val = 'single']"_ostr,
-                1);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:bottom[@w:sz = 4]"_ostr,
-                1);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:bottom[@w:space = 0]"_ostr,
-                1);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:bottom[@w:color = '000000']"_ostr,
+                "w:top[@w:color = '000000']",
                 1);
 
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:insideH"_ostr,
+                "w:bottom[@w:val = 'single']",
+                1);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
+                "w:bottom[@w:sz = 4]",
+                1);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
+                "w:bottom[@w:space = 0]",
+                1);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
+                "w:bottom[@w:color = '000000']",
+                1);
+
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
+                "w:insideH",
                 0);
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/"
-                "w:insideV"_ostr,
+                "w:insideV",
                 0);
 }
 
@@ -116,28 +114,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf95033)
     //Not disabled table cell borders
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']",
+                0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']",
+                0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']"_ostr,
-        0);
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']"_ostr,
-        0);
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[9]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133455)
@@ -146,38 +138,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133455)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     //Not disabled table cell borders
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:val = 'nil']",
+                0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']",
+                0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']",
+                0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']", 0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']", 0);
     assertXPath(
         pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']"_ostr,
-        0);
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:start[@w:val = 'nil']"_ostr,
-        0);
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:end[@w:val = 'nil']"_ostr,
-        0);
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']"_ostr,
-        0);
+        "/w:document/w:body/w:tbl/w:tr[11]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'nil']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138612)
@@ -186,18 +170,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138612)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // Row 5 Col 1 - vertically merged cell
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:vMerge"_ostr,
-                "val"_ostr, u"restart"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[1]/w:tcPr/w:vMerge", "val",
+                u"restart");
     // Row 5 Col 2 - split cell
     // This was w:vMerge="restart"
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:vMerge"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[5]/w:tc[2]/w:tcPr/w:vMerge", 0);
 
     // Row 6 Col 1 - merged with cell in Row 5 Col 1
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[1]/w:tcPr/w:vMerge"_ostr,
-                "val"_ostr, u"continue"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[1]/w:tcPr/w:vMerge", "val",
+                u"continue");
     // Row 6 Col 2 - split cell
     // This was w:vMerge="continue" (merged with cell in Row 5 Col 2)
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[2]/w:tcPr/w:vMerge"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[2]/w:tcPr/w:vMerge", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf140597)
@@ -206,18 +190,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf140597)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // There were missing tblPrEx table exception borders
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
     assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:top"_ostr);
+                "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
     assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:tcBorders/w:start"_ostr);
+                "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:top");
     assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:top"_ostr);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[3]/w:tc[1]/w:tcPr/w:tcBorders/w:start"_ostr);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:top"_ostr);
-    assertXPath(pXmlDocument,
-                "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:start"_ostr);
+                "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:start");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
@@ -226,15 +207,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
     // The problem was that not hidden shapes anchored to empty hidden paragraphs were imported as hidden.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:pPr/w:rPr/w:vanish"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:pPr/w:rPr/w:vanish", 1);
     if (!isExported())
         // originally no <w:vanish> (the same as <w:vanish val="false">)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish"_ostr,
-                    0);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", 0);
     else
         // This was hidden (<w:vanish/>)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish"_ostr,
-                    "val"_ostr, u"false"_ustr);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", "val",
+                    u"false");
 
     // pre-emptive unit test - tdf#162211
     // given a compat12 file with wrap-through DML shape anchored in cell as layoutInCell
@@ -247,19 +227,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
     // the shape is "from page top", which for layoutInCell is to be applied from cell top
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nRectTop
-        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds"_ostr, "top"_ostr)
-              .toInt32();
-    sal_Int32 nTableTop = getXPath(pDump, "//tab/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds", "top").toInt32();
+    sal_Int32 nTableTop = getXPath(pDump, "//tab/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT(nRectTop > nTableTop); // higher numbers are farther down the document
     // The shape's top should be ~ 1/4 of the way down the cell, which is above the anchor para top
-    sal_Int32 nPara5Top = getXPath(pDump, "//cell/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nPara5Top = getXPath(pDump, "//cell/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT(nPara5Top > nRectTop);
 
     // The image must not go past the end of the table (and proves we have the right shape)
-    sal_Int32 nTableRight = getXPath(pDump, "//tab/row/infos/bounds"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nTableRight = getXPath(pDump, "//tab/row/infos/bounds", "right").toInt32();
     sal_Int32 nRectRight
-        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds"_ostr,
-                   "right"_ostr)
+        = getXPath(pDump, "//cell/txt[5]/anchored[1]/fly/SwAnchoredObject/bounds", "right")
               .toInt32();
     CPPUNIT_ASSERT_EQUAL(nTableRight, nRectRight);
 }
@@ -271,14 +249,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119800)
     // (tdf#128646 solved the same only for table paragraphs)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:vanish"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:vanish", 1);
     if (!isExported())
         // originally no <w:vanish> (the same as <w:vanish val="false">)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish"_ostr, 0);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", 0);
     else
         // This was hidden (<w:vanish/>)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish"_ostr, "val"_ostr,
-                    u"false"_ustr);
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", "val", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
@@ -291,12 +268,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // This was 22 (the 5 inline headings were not inline, i.e. normal paragraphs)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p"_ostr, 17);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p", 17);
 
     // Still existing headings (duplicated by alternate content)
-    assertXPath(pXmlDoc, "//w:p"_ostr, 27);
-    assertXPath(pXmlDoc, "//w:txbxContent/w:p"_ostr, 10);
-    assertXPath(pXmlDoc, "//w:pStyle[@w:val='Heading2']"_ostr, 10);
+    assertXPath(pXmlDoc, "//w:p", 27);
+    assertXPath(pXmlDoc, "//w:txbxContent/w:p", 10);
+    assertXPath(pXmlDoc, "//w:pStyle[@w:val='Heading2']", 10);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
@@ -306,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Data was lost from this paragraph.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t"_ostr, u"Abstract"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:t", u"Abstract");
 }
 
 // Test the same testdoc used for testFdo77129.
@@ -344,20 +321,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79969_xlsm)
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/"
-                "vnd.ms-excel.sheet.macroEnabled.12']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.xlsm"_ustr);
+                "vnd.ms-excel.sheet.macroEnabled.12']",
+                "PartName", u"/word/embeddings/oleObject1.xlsm");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsm']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.xlsm']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"Excel.SheetMacroEnabled.12"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"Excel.SheetMacroEnabled.12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
@@ -367,20 +342,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80522)
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/"
-                "vnd.ms-word.document.macroEnabled.12']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.docm"_ustr);
+                "vnd.ms-word.document.macroEnabled.12']",
+                "PartName", u"/word/embeddings/oleObject1.docm");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.docm']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.docm']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"Word.DocumentMacroEnabled.12"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"Word.DocumentMacroEnabled.12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
@@ -390,20 +363,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80523_pptm)
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/"
-                "vnd.ms-powerpoint.presentation.macroEnabled.12']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.pptm"_ustr);
+                "vnd.ms-powerpoint.presentation.macroEnabled.12']",
+                "PartName", u"/word/embeddings/oleObject1.pptm");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.pptm']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.pptm']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"PowerPoint.ShowMacroEnabled.12"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"PowerPoint.ShowMacroEnabled.12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
@@ -413,20 +384,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80523_sldm)
 
     assertXPath(pXmlDoc,
                 "/ContentType:Types/ContentType:Override[@ContentType='application/"
-                "vnd.ms-powerpoint.slide.macroEnabled.12']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.sldm"_ustr);
+                "vnd.ms-powerpoint.slide.macroEnabled.12']",
+                "PartName", u"/word/embeddings/oleObject1.sldm");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.sldm']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.sldm']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"PowerPoint.SlideMacroEnabled.12"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"PowerPoint.SlideMacroEnabled.12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo80898)
@@ -436,28 +405,26 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80898)
     xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
 
     assertXPath(pXmlDoc,
-                "/ContentType:Types/ContentType:Override[@ContentType='application/msword']"_ostr,
-                "PartName"_ostr, u"/word/embeddings/oleObject1.doc"_ustr);
+                "/ContentType:Types/ContentType:Override[@ContentType='application/msword']",
+                "PartName", u"/word/embeddings/oleObject1.doc");
 
     // check the rels too
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(
-        pXmlDocRels,
-        "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.doc']"_ostr,
-        "Type"_ostr,
-        u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject"_ustr);
+        pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='embeddings/oleObject1.doc']",
+        "Type", u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject");
     // check the content too
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject"_ostr,
-                "ProgID"_ostr, u"Word.Document.8"_ustr);
+    assertXPath(pXmlDocContent, "/w:document/w:body/w:p[1]/w:r/w:object/o:OLEObject", "ProgID",
+                u"Word.Document.8");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOleIconDrawAspect)
 {
     loadAndSave("tdf131537.odt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject"_ostr,
-                "DrawAspect"_ostr, u"Icon"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:object/o:OLEObject", "DrawAspect",
+                u"Icon");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCellWithDirectFormatting)
@@ -470,8 +437,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellWithDirectFormatting)
     // Ensure that for Third Table cell Direct Formatting is preserved.
     // In file, Direct Formatting used for Third Table cell is Line Spacing="1.5 lines"
     // For Line Spacing "1.5 lines" w:line equals 360
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[3]/w:p/w:pPr/w:spacing"_ostr,
-                "line"_ostr, u"360"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[3]/w:p/w:pPr/w:spacing", "line",
+                u"360");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo80800b_tableStyle, "fdo80800b_tableStyle.docx")
@@ -560,17 +527,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148035)
     loadAndSave("tdf148035.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t"_ostr,
-                       u"headline"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:sz"_ostr,
-                "val"_ostr, u"72"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:szCs"_ostr,
-                "val"_ostr, u"72"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:u"_ostr,
-                "val"_ostr, u"single"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:b"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:i"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:iCs"_ostr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t",
+                       u"headline");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:sz", "val",
+                u"72");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:szCs", "val",
+                u"72");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:u", "val",
+                u"single");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:b");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:i");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:rPr/w:iCs");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo83048)
@@ -581,9 +548,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo83048)
 
     // Make sure Date is inside SDT tag.
     // This will happen only if right SDT properties are exported.
-    assertXPathContent(pXmlDoc,
-                       "/w:ftr/w:sdt/w:sdtContent/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:t"_ostr,
-                       u"1/2/2013"_ustr);
+    assertXPathContent(pXmlDoc, "/w:ftr/w:sdt/w:sdtContent/w:p[1]/w:sdt/w:sdtContent/w:r[2]/w:t",
+                       u"1/2/2013");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
@@ -592,10 +558,10 @@ CPPUNIT_TEST_FIXTURE(Test, testSdt2Run)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t"_ostr,
-                       u"firstsecond"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t",
+                       u"firstsecond");
     // Make sure the third portion is still outside <w:sdt>.
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t"_ostr, u"third"_ustr);
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", u"third");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFD083057)
@@ -609,8 +575,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFD083057)
     // one for a separate run as expected, and one incorrectly exported in the alternateContent (FLYFRAME)
 
     // Assert that the file has only one sdt, in a separate run
-    assertXPath(pXmlDoc, "//w:sdt"_ostr, 1);
-    assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt"_ostr, 0);
+    assertXPath(pXmlDoc, "//w:sdt", 1);
+    assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHeaderBorder)
@@ -618,11 +584,11 @@ CPPUNIT_TEST_FIXTURE(Test, testHeaderBorder)
     loadAndSave("header-border.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 0, as header margin was lost during import.
-    assertXPath(pXmlDoc, "//w:pgMar"_ostr, "header"_ostr, u"720"_ustr);
+    assertXPath(pXmlDoc, "//w:pgMar", "header", u"720");
     // This was 33: 33 points -> 660 twips. We counted 900 - 240 (distance
     // of page and body frame) instead of 720 - 240 (distance of page and
     // header frame).
-    assertXPath(pXmlDoc, "//w:pgBorders/w:top"_ostr, "space"_ostr, u"24"_ustr);
+    assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", u"24");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTablepprShape, "tblppr-shape.docx")
@@ -647,22 +613,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89774)
     loadAndSave("tdf89774.fodt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"docProps/app.xml"_ustr);
     // This was 65, as unit was seconds instead of minutes.
-    assertXPathContent(
-        pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime"_ostr, u"1"_ustr);
+    assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime",
+                       u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSectionProtection)
 {
     loadAndReload("sectionprot.odt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr/w:formProt"_ostr, "val"_ostr,
-                u"true"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:formProt"_ostr, "val"_ostr, u"false"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr/w:formProt", "val", u"true");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:formProt", "val", u"false");
 
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "enforcement"_ostr,
-                u"true"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "edit"_ostr, u"forms"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"true");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"forms");
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
@@ -680,9 +644,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionProtection2)
     loadAndSave("sectionprot2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "enforcement"_ostr,
-                u"true"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "edit"_ostr, u"forms"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"true");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"forms");
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
@@ -698,26 +661,22 @@ DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
     if (isExported())
     {
         xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "edit"_ostr,
-                    u"readOnly"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "enforcement"_ostr,
-                    u"1"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "cryptProviderType"_ostr,
-                    u"rsaAES"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr,
-                    "cryptAlgorithmClass"_ostr, u"hash"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr,
-                    "cryptAlgorithmType"_ostr, u"typeAny"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "cryptAlgorithmSid"_ostr,
-                    u"14"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "cryptSpinCount"_ostr,
-                    u"100000"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "hash"_ostr,
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"readOnly");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"1");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptProviderType",
+                    u"rsaAES");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmClass",
+                    u"hash");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmType",
+                    u"typeAny");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmSid", u"14");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptSpinCount", u"100000");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "hash",
                     u"A0/"
                     "Xy6KcXljJlZjP0TwJMPJuW2rc46UwXqn2ctxckc2nCECE5i89M85z2Noh3ZEA5NBQ9RJ5ycxiUH6nz"
-                    "mJaKw=="_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "salt"_ostr,
-                    u"B8k6wb1pkjUs4Nv/8QBk/w=="_ustr);
+                    "mJaKw==");
+        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "salt",
+                    u"B8k6wb1pkjUs4Nv/8QBk/w==");
     }
 
     // get bookmark interface
@@ -737,19 +696,17 @@ CPPUNIT_TEST_FIXTURE(Test, tdf106843)
     loadAndSave("tdf106843.fodt");
     // check Track Changes permission set in Writer/OpenDocument (password: "test", encoded by default encoding of Writer)
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "edit"_ostr,
-                u"trackedChanges"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:documentProtection"_ostr, "enforcement"_ostr,
-                u"1"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"trackedChanges");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"1");
 
     // LO intends to export a .docx format that is natively compatible with 2013
     // but this document has an implicitly added setting AddExternalLeading = false
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "name"_ostr,
-                u"compatibilityMode"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "uri"_ostr,
-                u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "val"_ostr,
-                u"14"_ustr); // compatible with 2010
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name",
+                u"compatibilityMode");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri",
+                u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val",
+                u"14"); // compatible with 2010
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf89991_revisionView)
@@ -757,17 +714,16 @@ CPPUNIT_TEST_FIXTURE(Test, tdf89991_revisionView)
     loadAndSave("tdf89991.docx");
     // check revisionView (Show Changes) import and export
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:revisionView"_ostr, "insDel"_ostr, u"0"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:revisionView"_ostr, "formatting"_ostr, u"0"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:revisionView", "insDel", u"0");
+    assertXPath(pXmlSettings, "/w:settings/w:revisionView", "formatting", u"0");
 
     // There was no compatibilityMode defined.
     // 12: Use word processing features specified in ECMA-376. This is the default.
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "name"_ostr,
-                u"compatibilityMode"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "uri"_ostr,
-                u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "val"_ostr,
-                u"12"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "name",
+                u"compatibilityMode");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "uri",
+                u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", u"12");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
@@ -800,7 +756,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // this test must not be zero
-    assertXPath(pXmlDoc, "//w:headerReference"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:headerReference", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
@@ -808,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
     loadAndReload("tdf146491.odt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was 12 - a page style was unnecessarily created for every section.
-    assertXPath(pXmlDoc, "//w:footerReference"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:footerReference", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOO47778_1)
@@ -817,7 +773,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOO47778_1)
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPathContent(pXmlDoc, "(//w:t)[3]"_ostr, u"c"_ustr);
+    assertXPathContent(pXmlDoc, "(//w:t)[3]", u"c");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOO47778_2)
@@ -826,7 +782,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOO47778_2)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPathContent(pXmlDoc, "(//w:t)[4]"_ostr, u"c"_ustr);
+    assertXPathContent(pXmlDoc, "(//w:t)[4]", u"c");
 
     // tdf116436: The problem was that the table background was undefined, not white.
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -842,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOO67471)
     loadAndReload("ooo67471-2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPathContent(pXmlDoc, "(//w:t)[2]"_ostr, u"B"_ustr);
+    assertXPathContent(pXmlDoc, "(//w:t)[2]", u"B");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
@@ -851,7 +807,7 @@ CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//v:shape"_ostr, "ID"_ostr, u"KoPathShape"_ustr);
+    assertXPath(pXmlDoc, "//v:shape", "ID", u"KoPathShape");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testKDE216114)
@@ -860,7 +816,7 @@ CPPUNIT_TEST_FIXTURE(Test, testKDE216114)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:pict"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:pict", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOO72950)
@@ -868,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOO72950)
     loadAndReload("ooo72950-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:tbl"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:tbl", 1);
 }
 
 //There are two tables to export in this doc the second of which is inside a
@@ -878,7 +834,7 @@ CPPUNIT_TEST_FIXTURE(Test, fdo60957)
 {
     loadAndSave("fdo60957-2.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:tbl"_ostr, 2);
+    assertXPath(pXmlDoc, "//w:tbl", 2);
 
     //tdf#154956
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
@@ -896,7 +852,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOO106020)
 {
     loadAndSave("ooo106020-1.odt");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:tbl"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:tbl", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")
@@ -916,8 +872,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSpacingGroupShapeText)
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
                 "/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:txbx/w:txbxContent/w:p/w:r/w:rPr/"
-                "w:spacing"_ostr,
-                "val"_ostr, u"200"_ustr);
+                "w:spacing",
+                "val", u"200");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf100581)
@@ -927,28 +883,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100581)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:pPr/w:pStyle"_ostr,
-        "val"_ostr, u"FrameContents"_ustr);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+                "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:pPr/w:pStyle",
+                "val", u"FrameContents");
 
     // w:sectPr is not exported
-    assertXPath(
-        pXmlDocument,
-        "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:pPr/w:sectPr"_ostr,
-        0);
+    assertXPath(pXmlDocument,
+                "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
+                "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:pPr/w:sectPr",
+                0);
 
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect"
-                "/v:textbox/w:txbxContent/w:p[1]/w:pPr/w:pStyle"_ostr,
-                "val"_ostr, u"FrameContents"_ustr);
+                "/v:textbox/w:txbxContent/w:p[1]/w:pPr/w:pStyle",
+                "val", u"FrameContents");
 
     // w:sectPr is not exported
     assertXPath(pXmlDocument,
                 "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect"
-                "/v:textbox/w:txbxContent/w:p[1]/w:pPr/w:sectPr"_ostr,
+                "/v:textbox/w:txbxContent/w:p[1]/w:pPr/w:sectPr",
                 0);
 }
 
@@ -959,14 +913,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287)
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr,
-                u"margin"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "hAnchor"_ostr,
-                u"text"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "xAlign"_ostr,
-                u"center"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "yAlign"_ostr,
-                u"bottom"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vAnchor", u"margin");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hAnchor", u"text");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "xAlign", u"center");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign", u"bottom");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157572_defaultVAnchor)
@@ -975,11 +925,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157572_defaultVAnchor)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // vAnchor wasn't defined on import. It should default to 'margin' when w:y=non-zero
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr,
-                u"margin"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vAnchor", u"margin");
     // yAlign=something is not compatible with w:y=non-zero" - don't write anything out
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr,
-                           "yAlign"_ostr);
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157572_insidiousCombination)
@@ -993,14 +941,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157572_insidiousCombination)
     // position and the vAlign ONLY affects the UI.
 
     // vAnchor was defined as text.
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr,
-                u"text"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vAnchor", u"text");
     // yAlign=something is not compatible with "text" - don't write anything out
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr,
-                           "yAlign"_ostr);
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
     // y is zero - no need to write out the default value
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr,
-                           "y"_ostr);
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "y");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf157572_noVAlignAsText)
@@ -1008,11 +953,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157572_noVAlignAsText)
     loadAndSave("tdf157572_noVAlignAsText.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr,
-                u"text"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vAnchor", u"text");
     // yAlign=something is not compatible with vAnchor="text" - don't write anything out
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr,
-                           "yAlign"_ostr);
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
@@ -1020,10 +963,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
     loadAndSave("tdf112287B.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr,
-                u"text"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "hAnchor"_ostr,
-                u"text"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vAnchor", u"text");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hAnchor", u"text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testZOrderInHeader)
@@ -1034,12 +975,11 @@ CPPUNIT_TEST_FIXTURE(Test, testZOrderInHeader)
 
     // Get the Z-Order of the background image and of the shape in front of it.
     sal_Int32 nBackground
-        = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/w:drawing/wp:anchor"_ostr, "relativeHeight"_ostr)
-              .toInt32();
+        = getXPath(pXml, "/w:hdr/w:p[1]/w:r[1]/w:drawing/wp:anchor", "relativeHeight").toInt32();
     sal_Int32 nFrontShape = getXPath(pXml,
                                      "/w:hdr/w:p[1]/w:r[1]/mc:AlternateContent[2]"
-                                     "/mc:Choice/w:drawing/wp:anchor"_ostr,
-                                     "relativeHeight"_ostr)
+                                     "/mc:Choice/w:drawing/wp:anchor",
+                                     "relativeHeight")
                                 .toInt32();
 
     // Assert that background is in the back.
@@ -1053,25 +993,22 @@ CPPUNIT_TEST_FIXTURE(Test, testSvgExtensionsSupport)
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
     // Check we have 2 relationships - one for PNG and one for SVG files
-    assertXPath(pXmlDocRels,
-                "/rels:Relationships/rels:Relationship[@Target='media/image1.png']"_ostr, "Id"_ostr,
-                u"rId2"_ustr);
+    assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='media/image1.png']",
+                "Id", u"rId2");
 
-    assertXPath(pXmlDocRels,
-                "/rels:Relationships/rels:Relationship[@Target='media/image2.svg']"_ostr, "Id"_ostr,
-                u"rId3"_ustr);
+    assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='media/image2.svg']",
+                "Id", u"rId3");
 
     // Check there is the extension present
     xmlDocUniquePtr pXmlDocContent = parseExport(u"word/document.xml"_ustr);
 
     OString aPath(
         "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip"_ostr);
-    assertXPath(pXmlDocContent, aPath, "embed"_ostr, u"rId2"_ustr);
+    assertXPath(pXmlDocContent, aPath, "embed", u"rId2");
 
-    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext"_ostr, "uri"_ostr,
-                u"{96DAC541-7B7A-43D3-8B79-37D633B846F1}"_ustr);
-    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext/asvg:svgBlip"_ostr, "embed"_ostr,
-                u"rId3"_ustr);
+    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext", "uri",
+                u"{96DAC541-7B7A-43D3-8B79-37D633B846F1}");
+    assertXPath(pXmlDocContent, aPath + "/a:extLst/a:ext/asvg:svgBlip", "embed", u"rId3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
@@ -1080,32 +1017,31 @@ CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
     // write hard attributes to prevent multiple toggle attributes from vanishing
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
-                u"BoldItalicCapsEmbossedStrike"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:b[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:bCs[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:i[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:iCs[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:strike[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:emboss[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:rStyle[1]", "val",
+                u"BoldItalicCapsEmbossedStrike");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:b[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:bCs[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:i[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:iCs[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:strike[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:rPr[1]/w:emboss[1]");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
-                u"SmallcapsImprint"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:imprint[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:smallCaps[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:rStyle[1]", "val",
+                u"SmallcapsImprint");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:imprint[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr[1]/w:smallCaps[1]");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
-                u"AllCaps"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:caps[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:rStyle[1]", "val",
+                u"AllCaps");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[2]/w:rPr[1]/w:caps[1]");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
-                u"Hidden"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:vanish[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:rStyle[1]", "val", u"Hidden");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r[2]/w:rPr[1]/w:vanish[1]");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:rStyle[1]"_ostr, "val"_ostr,
-                u"OutlineShadow"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:outline[1]"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:shadow[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:rStyle[1]", "val",
+                u"OutlineShadow");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:outline[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r[4]/w:rPr[1]/w:shadow[1]");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
@@ -1210,9 +1146,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
                          getProperty<OUString>(getRun(getParagraph(1), 1), u"HyperLinkURL"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    OString sId
-        = OUStringToOString(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink"_ostr, "id"_ostr),
-                            RTL_TEXTENCODING_UTF8);
+    OString sId = OUStringToOString(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink", "id"),
+                                    RTL_TEXTENCODING_UTF8);
 
     xmlDocUniquePtr pXmlRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
@@ -1221,8 +1156,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
     // - Actual  : http://www.example.org/path  with  spaces
     // - In <>, attribute 'Target' of '/rels:Relationships/rels:Relationship[@Id='rId2']' incorrect value.
     // I.e., the spaces were stored without percent-encoding, and collapsed on import
-    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='"_ostr + sId + "']",
-                "Target"_ostr, sExpectedURL);
+    assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@Id='" + sId + "']", "Target",
+                sExpectedURL);
 }
 
 } // end of anonymous namespace

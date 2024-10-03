@@ -26,7 +26,7 @@ CPPUNIT_TEST_FIXTURE(DocbookExportTest, testsimple)
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
-    assertXPathContent(pDoc, "/article/para"_ostr, u"aaaa"_ustr);
+    assertXPathContent(pDoc, "/article/para", u"aaaa");
 }
 
 /* the test actually should crash with this file */

@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
     // - Expected: 0.1665in
     // - Actual  : 1.9685in
     // i.e. we wrote a hardcoded 5cm width, not the real one.
-    assertXPath(pXmlDoc, "//style:graphic-properties", "visible-area-width", "0.1665in");
+    assertXPath(pXmlDoc, "//style:graphic-properties", "visible-area-width", u"0.1665in");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

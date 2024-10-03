@@ -98,9 +98,9 @@ CPPUNIT_TEST_FIXTURE(Test, testVertPosFromBottom)
 
     // Verify that the distance between the body and anchored object bottom is indeed around 1cm.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32();
     sal_Int32 nAnchoredBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "bottom"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "bottom").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 565
     // - Actual  : 9035
@@ -158,22 +158,18 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMargin)
     xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nBodyBottom
-        = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //14989
-    sal_Int32 nPageBottom
-        = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //16123
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //14989
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //16123
     sal_Int32 nFirstShapeBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "bottom")
               .toInt32(); //16124
     sal_Int32 nSecondShapeBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "bottom")
               .toInt32(); //15699
     sal_Int32 nSecondShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //15414
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15414
     sal_Int32 nThirdShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //14989
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32(); //14989
 
     // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=bottom)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstShapeBottom - nPageBottom);
@@ -236,22 +232,18 @@ CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMarginWithFooter)
     xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nBodyBottom
-        = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //14853
-    sal_Int32 nPageBottom
-        = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //17121
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //14853
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //17121
     sal_Int32 nFirstShapeBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "bottom")
               .toInt32(); //17122
     sal_Int32 nSecondShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //15703
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15703
     sal_Int32 nSecondShapeBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "bottom")
               .toInt32(); //16272
     sal_Int32 nThirdShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //14853
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32(); //14853
 
     // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=bottom)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFirstShapeBottom - nPageBottom);
@@ -270,16 +262,13 @@ CPPUNIT_TEST_FIXTURE(Test, testInsideOutsideVertAlignBottomMargin)
     createSwDoc("inside-outside-vert-align.docx");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nBodyBottom
-        = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //15704
-    sal_Int32 nPageBottom
-        = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //17121
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //15704
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //17121
     sal_Int32 nFirstShapeOutside
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "bottom")
               .toInt32(); //17098
     sal_Int32 nSecondShapeInside
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //15694
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top").toInt32(); //15694
 
     // Verify that the distance between the bottom of page and bottom of first shape is around 0cm. (align=outside)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), nPageBottom - nFirstShapeOutside);
@@ -296,28 +285,23 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLVertAlignBottomMargin)
     createSwDoc("vml-vertical-alignment.docx");
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nBodyBottom
-        = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //11803
-    sal_Int32 nPageBottom
-        = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "bottom"_ostr).toInt32(); //16123
+    sal_Int32 nBodyBottom = getXPath(pXmlDoc, "//body/infos/bounds", "bottom").toInt32(); //11803
+    sal_Int32 nPageBottom = getXPath(pXmlDoc, "//page/infos/bounds", "bottom").toInt32(); //16123
 
     sal_Int32 nFirstVMLShapeInside
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //11802
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "top").toInt32(); //11802
     sal_Int32 nSecondVMLShapeBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "bottom")
               .toInt32(); //16124
     sal_Int32 nThirdVMLShapeCenterBottom
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "bottom")
               .toInt32(); //14185
     sal_Int32 nThirdVMLShapeCenterTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //13741
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top").toInt32(); //13741
     sal_Int32 nFourthVMLShapeTop
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[4]/bounds"_ostr, "top"_ostr)
-              .toInt32(); //11802
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[4]/bounds", "top").toInt32(); //11802
     sal_Int32 nFifthVMLShapeOutside
-        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[5]/bounds"_ostr, "bottom"_ostr)
+        = getXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[5]/bounds", "bottom")
               .toInt32(); //16124
 
     // Verify that the distance between the bottom of body and top of first VMLshape is around 0cm. (align=inside)

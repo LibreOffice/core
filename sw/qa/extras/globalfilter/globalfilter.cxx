@@ -979,18 +979,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
-        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@style:contextual-spacing='true']");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
         xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr, 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
 
         // check model
         verifyText13("1.3 reload");
@@ -1009,18 +1009,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
-        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr, 0);
+        assertXPath(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties[@loext:contextual-spacing='true']");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
         xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr, 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first");
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
 
         // reload
         mxComponent->dispose();
@@ -1038,18 +1038,18 @@ void Test::testODF13()
 
         // check XML
         xmlDocUniquePtr pContentXml = parseExport(u"content.xml"_ustr);
-        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties"_ostr, "contextual-spacing"_ostr);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end"_ostr, 0);
-        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end"_ostr, 0);
+        assertXPathNoAttribute(pContentXml, "/office:document-content/office:automatic-styles/style:style/style:paragraph-properties", "contextual-spacing");
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/meta:creator-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:p/office:annotation/loext:sender-initials", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-start", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/text:index-entry-link-end", 0);
+        assertXPath(pContentXml, "/office:document-content/office:body/office:text/text:illustration-index/text:illustration-index-source/text:illustration-index-entry-template/loext:index-entry-link-end", 0);
         xmlDocUniquePtr pStylesXml = parseExport(u"styles.xml"_ustr);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first"_ostr, 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first"_ostr, 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first"_ostr, 0);
-        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first"_ostr, 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:header-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
+        assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/loext:footer-first", 0);
     }
 }
 

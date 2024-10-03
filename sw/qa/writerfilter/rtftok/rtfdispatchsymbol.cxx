@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenSectBreak)
     // - Expected: 1
     // - Actual  : 0
     // i.e. the floating table was on the 2nd page, not on the 1st page.
-    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/sorted_objs/fly", 1);
 }
 }
 

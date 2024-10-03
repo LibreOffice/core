@@ -13,6 +13,7 @@
 
 #include <vcl/mtfxmldump.hxx>
 #include <sal/log.hxx>
+#include <test/cppunitasserthelper.hxx>
 
 namespace {
 
@@ -67,11 +68,11 @@ xmlDocUniquePtr XmlTestTools::dumpAndParse(MetafileXmlDump& rDumper, const GDIMe
     return XmlTestTools::parseXmlStream(&aStream);
 }
 
-xmlXPathObjectPtr XmlTestTools::getXPathNode(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
+xmlXPathObjectPtr XmlTestTools::getXPathNode(const xmlDocUniquePtr& pXmlDoc, const char* pXPath)
 {
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc.get());
     registerNamespaces(pXmlXpathCtx);
-    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(pXPath), pXmlXpathCtx);
     xmlXPathFreeContext(pXmlXpathCtx);
     return pXmlXpathObj;
 }
@@ -86,20 +87,21 @@ void XmlTestTools::registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("reqif-xhtml"), BAD_CAST("http://www.w3.org/1999/xhtml"));
 }
 
-OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
+OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute)
 {
     CPPUNIT_ASSERT(pXmlDoc);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
-    OString docAndXPath = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath;
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
+    OString docAndXPath = OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath;
     CPPUNIT_ASSERT_MESSAGE(docAndXPath.getStr(), pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_MESSAGE(OString(docAndXPath + "' not found").getStr(), pXmlNodes);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(docAndXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
-    CPPUNIT_ASSERT(!rAttribute.isEmpty());
+    CPPUNIT_ASSERT(pAttribute);
+    CPPUNIT_ASSERT(pAttribute[0]);
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
-    OString sAttAbsent = docAndXPath + "' no attribute '" + rAttribute + "' exist";
+    xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(pAttribute));
+    OString sAttAbsent = docAndXPath + "' no attribute '" + pAttribute + "' exist";
     CPPUNIT_ASSERT_MESSAGE(sAttAbsent.getStr(), prop);
     OUString s(convert(prop));
     xmlFree(prop);
@@ -107,9 +109,9 @@ OUString XmlTestTools::getXPath(const xmlDocUniquePtr& pXmlDoc, const OString& r
     return s;
 }
 
-OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
+OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const char* pXPath)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     switch (pXmlObj->type)
     {
         case XPATH_UNDEFINED:
@@ -119,7 +121,7 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OSt
             xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
 
             CPPUNIT_ASSERT_MESSAGE(
-                OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' not found")
+                OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' not found")
                     .getStr(),
                 xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
@@ -160,57 +162,57 @@ OUString XmlTestTools::getXPathContent(const xmlDocUniquePtr& pXmlDoc, const OSt
     CPPUNIT_FAIL("Invalid XPath type");
 }
 
-void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute, std::u16string_view rExpectedValue)
 {
-    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, attribute '" + rAttribute + "' of '" + rXPath + "' incorrect value.").getStr(),
-                                 rExpectedValue, aValue);
+    OUString aValue = getXPath(pXmlDoc, pXPath, pAttribute);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, attribute '" + pAttribute + "' of '" + pXPath + "' incorrect value.").getStr(),
+                                 rExpectedValue, std::u16string_view(aValue));
 }
 
-void XmlTestTools::assertXPathDoubleValue(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute, double expectedValue, double delta)
+void XmlTestTools::assertXPathDoubleValue(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute, double expectedValue, double delta)
 {
-    OUString aValue = getXPath(pXmlDoc, rXPath, rAttribute);
+    OUString aValue = getXPath(pXmlDoc, pXPath, pAttribute);
     double pathValue = aValue.toDouble();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string("In <") + std::string(pXmlDoc->name ? pXmlDoc->name : "") + ">, attribute '" + std::string(rAttribute) + "' of '" + std::string(rXPath) + "' incorrect value.",
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(std::string("In <") + std::string(pXmlDoc->name ? pXmlDoc->name : "") + ">, attribute '" + std::string(pAttribute) + "' of '" + std::string(pXPath) + "' incorrect value.",
                                          expectedValue, pathValue, delta);
 }
 
-void XmlTestTools::assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                    const std::vector<std::pair<OString, OUString>>& aPairVector)
+void XmlTestTools::assertXPathAttrs(const xmlDocUniquePtr& pXmlDoc, const char*  pXPath,
+                                    const std::vector<std::pair<const char*, std::u16string_view>>& aPairVector)
 {
     for (auto& rPair : aPairVector)
     {
-        assertXPath(pXmlDoc, rXPath, rPair.first, rPair.second);
+        assertXPath(pXmlDoc, pXPath, rPair.first, rPair.second);
     }
 }
 
-int XmlTestTools::countXPathNodes(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath)
+int XmlTestTools::countXPathNodes(const xmlDocUniquePtr& pXmlDoc, const char*  pXPath)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     const int n = xmlXPathNodeSetGetLength(pXmlNodes);
     xmlXPathFreeObject(pXmlObj);
     return n;
 }
 
-void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfNodes)
+void XmlTestTools::assertXPath(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, int nNumberOfNodes)
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
-                                 nNumberOfNodes, countXPathNodes(pXmlDoc, rXPath));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
+                                 nNumberOfNodes, countXPathNodes(pXmlDoc, pXPath));
 }
 
-void XmlTestTools::assertXPathContent(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OUString& rContent)
+void XmlTestTools::assertXPathContent(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, std::u16string_view rContent)
 {
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath contents of child does not match").getStr(), rContent, getXPathContent(pXmlDoc, rXPath));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath contents of child does not match").getStr(), rContent, std::u16string_view(getXPathContent(pXmlDoc, pXPath)));
 }
 
-void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                    std::u16string_view rNSPrefix, std::u16string_view rNSHref)
+void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
+                                    std::string_view rNSPrefix, std::string_view rNSHref)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_MESSAGE(
-        OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' not found").getStr(),
+        OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' not found").getStr(),
         xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
@@ -221,7 +223,7 @@ void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OStrin
             continue;
 
         CPPUNIT_ASSERT(pNamespace->href);
-        if (rNSPrefix == convert(pNamespace->prefix) && rNSHref == convert(pNamespace->href))
+        if (rNSPrefix == oconvert(pNamespace->prefix) && rNSHref == oconvert(pNamespace->href))
         {
             bFound = true;
             break;
@@ -231,16 +233,16 @@ void XmlTestTools::assertXPathNSDef(const xmlDocUniquePtr& pXmlDoc, const OStrin
     CPPUNIT_ASSERT(bFound);
 }
 
-void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
+void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, int nNumberOfChildNodes)
 {
 #if LIBXML_VERSION >= 20703 /* xmlChildElementCount is only available in libxml2 >= 2.7.3 */
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of child-nodes is incorrect").getStr(),
                                  nNumberOfChildNodes, static_cast<int>(xmlChildElementCount(pXmlNode)));
     xmlXPathFreeObject(pXmlObj);
 #else
@@ -250,32 +252,32 @@ void XmlTestTools::assertXPathChildren(const xmlDocUniquePtr& pXmlDoc, const OSt
 #endif
 }
 
-void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, const OString& rAttribute)
+void XmlTestTools::assertXPathNoAttribute(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pAttribute)
 {
-    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' unexpected '" + rAttribute + "' attribute").getStr(),
-                                 !hasXPathAttribute(pXmlDoc, rXPath, rAttribute));
+    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' unexpected '" + pAttribute + "' attribute").getStr(),
+                                 !hasXPathAttribute(pXmlDoc, pXPath, pAttribute));
 }
 
-bool XmlTestTools::hasXPathAttribute(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                     const OString& rAttribute)
+bool XmlTestTools::hasXPathAttribute(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
+                                     const char* pAttribute)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    bool bFound(xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    bool bFound(xmlGetProp(pXmlNode, BAD_CAST(pAttribute)));
     xmlXPathFreeObject(pXmlObj);
     return bFound;
 }
 
-int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath, std::string_view rChildName)
+int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const char* pXPath, const char* pChildName)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
                                  1,
                                  xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
@@ -283,7 +285,7 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString
     bool bFound = false;
     for (xmlNodePtr pChild = pXmlNode->children; pChild; pChild = pChild->next)
     {
-        if (oconvert(pChild->name) == rChildName)
+        if (oconvert(pChild->name) == pChildName)
         {
             bFound = true;
             break;
@@ -291,26 +293,26 @@ int XmlTestTools::getXPathPosition(const xmlDocUniquePtr& pXmlDoc, const OString
         ++nRet;
     }
     xmlXPathFreeObject(pXmlObj);
-    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath
-                                   + "' child '" + rChildName + "' not found")
+    CPPUNIT_ASSERT_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath
+                                   + "' child '" + pChildName + "' not found")
                                .getStr(),
         bFound);
     return nRet;
 }
 
-void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                          const OString& rExpectedName)
+void XmlTestTools::assertXPathNodeName(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
+                                       std::string_view rExpectedName)
 {
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, pXPath);
     CPPUNIT_ASSERT(pXmlObj);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In <") + pXmlDoc->name + ">, XPath '" + pXPath + "' number of nodes is incorrect").getStr(),
                                  1,
                                  xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In XPath '" + rXPath + "' name of node is incorrect")).getStr(),
-                                 rExpectedName, oconvert(pXmlNode->name));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OString(OString::Concat("In XPath '") + pXPath + "' name of node is incorrect").getStr(),
+                                 rExpectedName, std::string_view(oconvert(pXmlNode->name)));
     xmlXPathFreeObject(pXmlObj);
 }
 

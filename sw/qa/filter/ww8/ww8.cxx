@@ -107,7 +107,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPlainTextContentControlExport)
     // - Actual  : 0
     // - XPath '//w:sdt/w:sdtPr/w:text' number of nodes is incorrect
     // i.e. the plain text content control was turned into a rich text one on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:text", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
@@ -128,7 +128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxComboBoxContentControlExport)
     // - Actual  : 0
     // - XPath '//w:sdt/w:sdtPr/w:comboBox' number of nodes is incorrect
     // i.e. the combo box content control was turned into a drop-down one on export.
-    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:comboBox"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:comboBox", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxHyperlinkShape)
@@ -179,8 +179,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem' unexpected 'displayText' attribute
     // i.e. we wrote an empty attribute instead of omitting it.
-    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem"_ostr,
-                           "displayText"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem", "displayText");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
@@ -206,9 +205,9 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
     // Then make sure the expected markup is used:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "//w:p/w:r/w:sym"_ostr, 1);
-    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "font"_ostr, u"Wingdings"_ustr);
-    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]"_ostr, "char"_ostr, u"f0e0"_ustr);
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym", 1);
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "font", u"Wingdings");
+    assertXPath(pXmlDoc, "//w:p/w:r/w:sym[1]", "char", u"f0e0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
@@ -243,7 +242,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxFloatingTableExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//w:tbl/w:tblPr/w:tblpPr' number of nodes is incorrect
     // i.e. no floating table was exported.
-    assertXPath(pXmlDoc, "//w:tbl/w:tblPr/w:tblpPr"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:tbl/w:tblPr/w:tblpPr", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDocFloatingTableImport)
@@ -292,7 +291,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapThroughLayoutInCell)
     // - Actual  : 0
     // - attribute 'layoutInCell' of '//wp:anchor' incorrect value.
     // i.e. layoutInCell was disabled, leading to bad layout in Word.
-    assertXPath(pXmlDoc, "//wp:anchor"_ostr, "layoutInCell"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "//wp:anchor", "layoutInCell", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test3Endnotes)
@@ -342,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // - Actual  : 0
     // - XPath '/w:settings/w:compat/w:doNotBreakWrappedTables' number of nodes is incorrect
     // i.e. <w:doNotBreakWrappedTables> was not written.
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotBreakWrappedTables"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotBreakWrappedTables", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
@@ -363,10 +362,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     // - Actual  : 0
     // - XPath '/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']' number of nodes is incorrect
     // i.e. the compat flag was lost on export.
-    assertXPath(
-        pXmlDoc,
-        "/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']"_ostr,
-        "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc,
+                "/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']",
+                "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDOCfDontBreakWrappedTables)
@@ -397,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCFloatingTableHiddenAnchor)
     // - Expected: 2
     // - Actual  : 1
     // i.e. the floating table was lost.
-    assertXPath(pLayout, "//tab"_ostr, 2);
+    assertXPath(pLayout, "//tab", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDOCVerticalFlyOffset)
@@ -492,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
     // - Actual  : 0
     // - XPath '//w:tblPr/w:tblOverlap' number of nodes is incorrect
     // i.e. <w:tblOverlap> was not written.
-    assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap"_ostr, "val"_ostr, u"never"_ustr);
+    assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap", "val", u"never");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCImport)
@@ -594,7 +592,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEndnotesAtSectEnd)
 
     // Then make sure the endnote position is section end:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
-    OUString aPos = getXPath(pXmlDoc, "/w:settings/w:endnotePr/w:pos"_ostr, "val"_ostr);
+    OUString aPos = getXPath(pXmlDoc, "/w:settings/w:endnotePr/w:pos", "val");
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '/w:settings/w:endnotePr/w:pos' number of nodes is incorrect
     // i.e. the default position was used: document end.
@@ -640,7 +638,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlPDFDropDownEmptyItem)
     // - Expected: 1
     // - Actual  : 2
     // i.e. we emitted an empty list item, so the result can't be opened in Word.
-    assertXPath(pXmlDoc, "//w:dropDownList/w:listItem"_ostr, 1);
+    assertXPath(pXmlDoc, "//w:dropDownList/w:listItem", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf71749_with_footnote)

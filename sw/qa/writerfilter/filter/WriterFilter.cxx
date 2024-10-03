@@ -41,9 +41,8 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotMirrorRtlDrawObjs)
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
-    sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "right"_ostr).toInt32();
-    sal_Int32 nShapeLeft
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds", "right").toInt32();
+    sal_Int32 nShapeLeft = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "left").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater than: 11083
     // - Actual  : 722
@@ -68,11 +67,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnoteDOCX)
     // - xpath should match exactly 1 node
     // i.e. the endnote was also in the footnote container, not at the end of the body text.
     sal_Int32 nEndnoteTop
-        = getXPath(pXmlDoc, "/root/page/body/section/column/ftncont/ftn/infos/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pXmlDoc, "/root/page/body/section/column/ftncont/ftn/infos/bounds", "top")
               .toInt32();
     sal_Int32 nFootnoteTop
-        = getXPath(pXmlDoc, "/root/page/ftncont/ftn/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "/root/page/ftncont/ftn/infos/bounds", "top").toInt32();
     // Endnote at the end of body text, footnote at page bottom.
     CPPUNIT_ASSERT_LESS(nFootnoteTop, nEndnoteTop);
 }

@@ -93,8 +93,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0)
 
         // There should be no empty paragraph at the start
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, u"First page"_ustr);
+        assertXPath(pLayout, "//anchored", 1);
+        assertXPathContent(pLayout, "/root/page[1]/body//txt", u"First page");
     };
     createSwDoc("tdf158586_pageBreak0.rtf");
     verify();
@@ -111,8 +111,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0B)
 
         // There should be no empty paragraph at the start
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "/root/page[1]/body//txt"_ostr, u"First page"_ustr);
+        assertXPath(pLayout, "//anchored", 1);
+        assertXPathContent(pLayout, "/root/page[1]/body//txt", u"First page");
     };
     createSwDoc("tdf158586_pageBreak0B.rtf");
     verify();
@@ -131,7 +131,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1)
         xmlDocUniquePtr pLayout = parseLayoutDump();
         // on import there is a section on page 2; on reimport there is no section
         // (probably not an important difference?)
-        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, u"Second page"_ustr);
+        assertXPathContent(pLayout, "/root/page[2]/body//txt", u"Second page");
     };
     createSwDoc("tdf158586_pageBreak1.rtf");
     verify();
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_1header)
         xmlDocUniquePtr pLayout = parseLayoutDump();
         // on import there is a section on page 2; on reimport there is no section
         // (probably not an important difference?)
-        assertXPathContent(pLayout, "/root/page[2]/body//txt"_ostr, u"Second page"_ustr);
+        assertXPathContent(pLayout, "/root/page[2]/body//txt", u"Second page");
     };
     createSwDoc("tdf158586_pageBreak1_header.rtf");
     verify();
@@ -163,10 +163,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158586_lostFrame)
     auto verify = [this]() {
         // The anchor and align properties are sufficient to define a frame
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "//anchored"_ostr, 1);
-        assertXPathContent(pLayout, "//page[1]/body//txt"_ostr,
-                           u"First page textbox 1st page"_ustr);
-        assertXPathContent(pLayout, "//page[2]/body//txt"_ostr, u"2nd page"_ustr);
+        assertXPath(pLayout, "//anchored", 1);
+        assertXPathContent(pLayout, "//page[1]/body//txt", u"First page textbox 1st page");
+        assertXPathContent(pLayout, "//page[2]/body//txt", u"2nd page");
 
         CPPUNIT_ASSERT_EQUAL(2, getPages());
     };
@@ -213,19 +212,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158983)
         // all anchored to the same node
 
         xmlDocUniquePtr pLayout = parseLayoutDump();
-        assertXPath(pLayout, "/root/page[1]/body/section/txt"_ostr, 1);
-        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly"_ostr, 1);
+        assertXPath(pLayout, "/root/page[1]/body/section/txt", 1);
+        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/fly", 1);
         // Word shows these shapes anchored in the fly, not body, but at least they are not lost
-        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/SwAnchoredDrawObject"_ostr,
-                    2);
+        assertXPath(pLayout, "/root/page[1]/body/section/txt/anchored/SwAnchoredDrawObject", 2);
         // page break, paragraph break, section break.
-        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt"_ostr, 1);
-        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt/anchored"_ostr, 0);
-        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt"_ostr, 1);
-        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/fly"_ostr, 1);
+        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt", 1);
+        assertXPath(pLayout, "/root/page[2]/body/section[1]/txt/anchored", 0);
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt", 1);
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/fly", 1);
         // Word shows these shapes anchored in the fly, not body, but at least they are not lost
-        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/SwAnchoredDrawObject"_ostr,
-                    2);
+        assertXPath(pLayout, "/root/page[2]/body/section[2]/txt/anchored/SwAnchoredDrawObject", 2);
 
         CPPUNIT_ASSERT_EQUAL(2, getPages());
     };
@@ -425,13 +422,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter)
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"First Left"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
+        assertXPathContent(pXmlDoc, "/root/page[1]/footer/txt", u"First page first footer");
+        assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt", u"First Left");
         if (!bIsExported)
-            CPPUNIT_ASSERT_EQUAL(u"First Right"_ustr,
-                                 getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
+            assertXPathContent(pXmlDoc, "/root/page[3]/footer/txt", u"First Right");
     };
     createSwDoc("tdf160976_headerFooter.odt");
     verify();
@@ -448,12 +442,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter2)
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"First page first footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
+        assertXPathContent(pXmlDoc, "/root/page[1]/footer/txt", u"First page first footer");
+        assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt", u"First page footer");
+        assertXPathContent(pXmlDoc, "/root/page[3]/footer/txt", u"Default footer");
     };
     createSwDoc("tdf160976_headerFooter2.odt");
     verify();
@@ -469,12 +460,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf160976_headerFooter3)
         CPPUNIT_ASSERT_EQUAL(3, getPages());
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-        CPPUNIT_ASSERT_EQUAL(u"First page footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[1]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[2]/footer/txt"_ostr));
-        CPPUNIT_ASSERT_EQUAL(u"Default footer"_ustr,
-                             getXPathContent(pXmlDoc, "/root/page[3]/footer/txt"_ostr));
+        assertXPathContent(pXmlDoc, "/root/page[1]/footer/txt", u"First page footer");
+        assertXPathContent(pXmlDoc, "/root/page[2]/footer/txt", u"Default footer");
+        assertXPathContent(pXmlDoc, "/root/page[3]/footer/txt", u"Default footer");
     };
     createSwDoc("tdf160976_headerFooter3.odt");
     verify();

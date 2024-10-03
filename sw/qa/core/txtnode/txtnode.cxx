@@ -64,12 +64,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
-    assertXPath(pXmlDoc, "//font[1]"_ostr, "orientation"_ostr, u"900"_ustr);
+    assertXPath(pXmlDoc, "//font[1]", "orientation", u"900");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: false
     // - Actual  : true
     // i.e. the glyph was rotated further, so it was upside down.
-    assertXPath(pXmlDoc, "//font[1]"_ostr, "vertical"_ostr, u"false"_ustr);
+    assertXPath(pXmlDoc, "//font[1]", "vertical", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)
@@ -529,9 +529,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitFlyAnchorSplit)
     // Also test that the new follow anchor text frame still has a fly portion, otherwise the anchor
     // text and the floating table would overlap:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString aPortionType
-        = getXPath(pXmlDoc, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*[1]"_ostr,
-                   "type"_ostr);
+    OUString aPortionType = getXPath(
+        pXmlDoc, "//page[2]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*[1]", "type");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: PortionType::Fly
     // - Actual  : PortionType::Para

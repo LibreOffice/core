@@ -38,8 +38,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133701)
     loadAndSave("tdf133701.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "hSpace"_ostr, u"567"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "vSpace"_ostr, u"284"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "hSpace", u"567");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "vSpace", u"284");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDmlShapeTitle, "dml-shape-title.docx")
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlZorder)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was "0": causing that in Word, the second shape was on top, while in the original odt the first shape is on top.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor"_ostr, "relativeHeight"_ostr, u"2"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor", "relativeHeight", u"2");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlShapeRelsize)
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlShapeRelsize)
     loadAndSave("dml-shape-relsize.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Relative size wasn't exported all, then relativeFrom was "page", not "margin".
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH"_ostr, "relativeFrom"_ostr, u"margin"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", u"margin");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDmlPictureInTextframe)
@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapeRelsize)
     loadAndSave("dml-groupshape-relsize.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Relative size wasn't imported.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH"_ostr, "relativeFrom"_ostr, u"margin"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", u"margin");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
@@ -97,7 +97,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
         return;
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     // This was wrap="none".
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr"_ostr, "wrap"_ostr, u"square"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", u"square");
 
     xShape.set(xGroup->getByIndex(3), uno::UNO_QUERY);
     OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, u"CustomShapeGeometry"_ustr))[u"Type"_ustr].get<OUString>();
@@ -383,16 +383,16 @@ CPPUNIT_TEST_FIXTURE(Test, testDMLGradientFillTheme)
 
     // check no explicit gradFill has been exported
     assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill"_ostr,
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill",
             0);
 
     // check shape style has been exported
     assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef"_ostr,
-            "idx"_ostr, u"2"_ustr);
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", u"2");
     assertXPath(pXmlDoc,
-            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", u"accent1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspacing.docx")
@@ -470,7 +470,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx"
         return;
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127814)
@@ -478,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127814)
     loadAndSave("tdf127814.docx");
     // Paragraph top margin was 0 in a table started on a new page
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "before"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "before", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128752)
@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128752)
     loadAndSave("tdf128752.docx");
     // Paragraph bottom margin was 200, docDefault instead of table style setting
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119054)
@@ -495,10 +495,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119054)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Don't overwrite before and after spacing of Heading2 by table style.
     // Heading2 overrides table style's values from DocDefaults.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "before"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "after"_ostr, u"360"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "before", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "after", u"360");
     // Use table style based single line spacing instead of the docDefaults' 254
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing"_ostr, "line"_ostr, u"240"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr/w:spacing", "line", u"240");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131258)
@@ -506,7 +506,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131258)
     loadAndSave("tdf131258.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Use table style based bottom margin instead of the docDefaults in empty tables, too
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "after"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf132514)
@@ -514,8 +514,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132514)
     loadAndSave("tdf132514.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Keep table style setting, when the footer also contain a table
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing"_ostr, "after"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing", "before", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:p[2]/w:pPr/w:spacing", "after", u"0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153891, "tdf153891.docx")
@@ -533,9 +533,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69636)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // VML
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox"_ostr, "style"_ostr).match("mso-layout-flow-alt:bottom-to-top"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox", "style").match("mso-layout-flow-alt:bottom-to-top"));
     // drawingML
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr"_ostr, "vert"_ostr, u"vert270"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "vert", u"vert270");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testVMLData)
@@ -544,7 +544,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVMLData)
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header3.xml"_ustr);
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape"_ostr, "stroked"_ostr).match("f"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "stroked").match("f"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testImageData)
@@ -553,7 +553,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageData)
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header3.xml"_ustr);
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata"_ostr, "detectmouseclick"_ostr).match("t"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape/v:imagedata", "detectmouseclick").match("t"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
@@ -567,15 +567,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
     // Check DML document
 
     sal_Int32 aXPos[4], aYPos[4];
-    aXPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset"_ostr).toInt32();
-    aXPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset"_ostr).toInt32();
-    aXPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset"_ostr).toInt32();
-    aXPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset"_ostr).toInt32();
+    aXPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
+    aXPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionH/wp:posOffset").toInt32();
 
-    aYPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset"_ostr).toInt32();
-    aYPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset"_ostr).toInt32();
-    aYPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset"_ostr).toInt32();
-    aYPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset"_ostr).toInt32();
+    aYPos[0] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[1] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[2] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
+    aYPos[3] = getXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:positionV/wp:posOffset").toInt32();
 
     // certain degree of error is tolerated due to rounding in unit conversions
     CPPUNIT_ASSERT(abs(1239520 - aXPos[0]) < 1000);
@@ -589,15 +589,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
     CPPUNIT_ASSERT(abs(2094865 - aYPos[3]) < 1000);
 
     sal_Int32 aHSize[4], aVSize[4];
-    aHSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cx"_ostr).toInt32();
-    aHSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cx"_ostr).toInt32();
-    aHSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cx"_ostr).toInt32();
-    aHSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cx"_ostr).toInt32();
+    aHSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
+    aHSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cx").toInt32();
 
-    aVSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cy"_ostr).toInt32();
-    aVSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cy"_ostr).toInt32();
-    aVSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cy"_ostr).toInt32();
-    aVSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent"_ostr, "cy"_ostr).toInt32();
+    aVSize[0] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[1] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[2] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
+    aVSize[3] = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/wp:extent", "cy").toInt32();
 
     // certain degree of error is tolerated due to rounding in unit conversions
     CPPUNIT_ASSERT(abs(3599280 - aHSize[0]) < 1000);
@@ -614,13 +614,13 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo70838)
 
     // get styles of the four shapes
     OUString aStyles[4];
-    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect"_ostr, "style"_ostr);
+    aStyles[0] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.6pt;margin-top:165pt;width:283.4pt;height:141.7pt;rotation:285"
-    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect"_ostr, "style"_ostr);
+    aStyles[1] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.6pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:255"
-    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Fallback/w:pict/v:rect"_ostr, "style"_ostr);
+    aStyles[2] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.5pt;margin-top:164.9pt;width:283.4pt;height:141.7pt;rotation:105"
-    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Fallback/w:pict/v:rect"_ostr, "style"_ostr);
+    aStyles[3] = getXPath( pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Fallback/w:pict/v:rect", "style");
     // original is: "position:absolute;margin-left:97.55pt;margin-top:164.95pt;width:283.4pt;height:141.7pt;rotation:75"
 
     //check the size and position of each of the shapes
@@ -686,11 +686,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73215)
     loadAndSave("fdo73215.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // 'rect' was 'pictureFrame', which isn't valid.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:prstGeom"_ostr,
-                "prst"_ostr, u"rect"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:prstGeom",
+                "prst", u"rect");
     // 'adj1' was 'adj', which is not valid for bentConnector3.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[9]/wps:spPr/a:prstGeom/a:avLst/a:gd"_ostr,
-                "name"_ostr, u"adj1"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[9]/wps:spPr/a:prstGeom/a:avLst/a:gd",
+                "name", u"adj1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBehinddoc)
@@ -698,7 +698,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBehinddoc)
     loadAndSave("behinddoc.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // This was "0", shape was in the foreground.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"_ostr, "behindDoc"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSmartArtAnchoredInline)
@@ -712,14 +712,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSmartArtAnchoredInline)
     */
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr"_ostr,"id"_ostr,u"2"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr"_ostr,"name"_ostr,u"Diagram2"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr","id",u"2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[2]/wp:anchor/wp:docPr","name",u"Diagram2");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr"_ostr,"id"_ostr,u"3"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr"_ostr,"name"_ostr,u"10-Point Star 3"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr","id",u"3");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr","name",u"10-Point Star 3");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr"_ostr,"id"_ostr,u"1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr"_ostr,"name"_ostr,u"Picture 1"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","id",u"1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing[1]/wp:anchor/wp:docPr","name",u"Picture 1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo65833)
@@ -727,7 +727,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo65833)
     loadAndSave("fdo65833.docx");
     // The "editas" attribute for vml group shape was not preserved.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group"_ostr, "editas"_ostr, u"canvas"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group", "editas", u"canvas");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
@@ -735,16 +735,16 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
     loadAndSave("fdo73247.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm"_ostr,
-                "rot"_ostr, u"1969200"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+                "rot", u"1969200");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
 {
     loadAndSave("fdo70942.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom"_ostr,
-                "prst"_ostr, u"ellipse"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                "prst", u"ellipse");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDrawinglayerPicPos)
@@ -753,11 +753,11 @@ CPPUNIT_TEST_FIXTURE(Test, testDrawinglayerPicPos)
     // The problem was that the position of the picture was incorrect, it was shifted towards the bottom right corner.
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    OString aXPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:xfrm/a:off"_ostr);
+    const char* const aXPath("/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:xfrm/a:off");
     // This was 720.
-    assertXPath(pXmlDocument, aXPath, "x"_ostr, u"0"_ustr);
+    assertXPath(pXmlDocument, aXPath, "x", u"0");
     // This was 1828800.
-    assertXPath(pXmlDocument, aXPath, "y"_ostr, u"0"_ustr);
+    assertXPath(pXmlDocument, aXPath, "y", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
@@ -767,87 +767,87 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeThemePreservation)
 
     // check shape style has been preserved
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef"_ostr,
-            "idx"_ostr, u"1"_ustr);
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", u"1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef"_ostr,
-            "idx"_ostr, u"1"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", u"1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef"_ostr,
-            "idx"_ostr, u"1"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef",
+            "idx", u"1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:fillRef/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef"_ostr,
-            "idx"_ostr, u"2"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef",
+            "idx", u"2");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr/a:shade"_ostr,
-            "val"_ostr, u"50000"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:lnRef/a:schemeClr/a:shade",
+            "val", u"50000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:effectRef"_ostr,
-            "idx"_ostr, u"0"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:effectRef",
+            "idx", u"0");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:effectRef/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:style/a:effectRef/a:schemeClr",
+            "val", u"accent1");
 
     // check shape style hasn't been overwritten
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill"_ostr,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill",
             1);
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill"_ostr,
+            "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill",
             1);
 
     // check direct theme assignments have been preserved
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr"_ostr,
-            "val"_ostr, u"accent6"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr",
+            "val", u"accent6");
     // check whether theme color has been converted into native color
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr"_ostr,
-            "val"_ostr, u"9bbb59"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
+            "val", u"9bbb59");
 
     // check color transformations applied to theme colors have been preserved
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumMod"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumMod",
+            "val", u"40000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumOff"_ostr,
-            "val"_ostr, u"60000"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:schemeClr/a:lumOff",
+            "val", u"60000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr/a:lumMod"_ostr,
-            "val"_ostr, u"50000"_ustr);
+            "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr/a:lumMod",
+            "val", u"50000");
 
     // check direct color assignments have been preserved
     OUString sFillColor = getXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr"_ostr,
-            "val"_ostr);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:solidFill/a:srgbClr",
+            "val");
     CPPUNIT_ASSERT_EQUAL(Color(0x00b050), Color(ColorTransparency, sFillColor.toInt32(16)));
     sal_Int32 nLineColor = getXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr"_ostr,
-            "val"_ostr).toInt32(16);
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:solidFill/a:srgbClr",
+            "val").toInt32(16);
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(ColorTransparency, nLineColor));
 
     // check direct line type assignments have been preserved
     sal_Int32 nLineWidth = getXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln"_ostr,
-            "w"_ostr).toInt32();
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln",
+            "w").toInt32();
     CPPUNIT_ASSERT(abs(63500 - nLineWidth) < 1000); //some rounding errors in the conversion ooxml -> libo -> ooxml are tolerated
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:miter"_ostr,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:miter",
             1);
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr,
+            "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash",
             1);
 
     uno::Reference<drawing::XShape> xShape1 = getShape(1);
@@ -875,7 +875,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO73546)
 {
     loadAndSave("FDO73546.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"_ostr, "distL"_ostr,u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL",u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69616)
@@ -895,7 +895,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAlignForShape)
     //The wp:align tag is missing after roundtrip
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/"
-                         "wp:anchor/wp:positionH/wp:align"_ostr);
+                         "wp:anchor/wp:positionH/wp:align");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType)
@@ -906,13 +906,13 @@ CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"lgDashDotDot"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"lgDashDot"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"lgDash"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"dashDot"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"dash"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"sysDash"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash"_ostr, "val"_ostr, u"sysDot"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[7]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"lgDashDotDot");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[6]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"lgDashDot");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[5]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"lgDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[4]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"dashDot");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[3]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"dash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"sysDash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:prstDash", "val", u"sysDot");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
@@ -922,35 +922,35 @@ CPPUNIT_TEST_FIXTURE(Test, testGradientFillPreservation)
 
     // check rgb colors for every step in the gradient of the first shape
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr"_ostr,
-            "val"_ostr, u"ffff00"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[1]/a:srgbClr",
+            "val", u"ffff00");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr"_ostr,
-            "val"_ostr, u"ffff33"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[2]/a:srgbClr",
+            "val", u"ffff33");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[3]/a:srgbClr"_ostr,
-            "val"_ostr, u"ff0000"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[3]/a:srgbClr",
+            "val", u"ff0000");
 
     // check theme colors for every step in the gradient of the second shape
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='0']/a:schemeClr"_ostr,
-            "val"_ostr, u"accent5"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='0']/a:schemeClr",
+            "val", u"accent5");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='100000']/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='100000']/a:schemeClr",
+            "val", u"accent1");
 
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"20000"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[1]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:srgbClr/a:alpha",
+            "val", u"20000");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:tint"_ostr,
-            "val"_ostr, u"44500"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:tint",
+            "val", u"44500");
     assertXPath(pXmlDocument,
-            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod"_ostr,
-            "val"_ostr, u"160000"_ustr);
+            "/w:document/w:body/w:p/w:r/mc:AlternateContent[2]/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:gradFill/a:gsLst/a:gs[@pos='50000']/a:schemeClr/a:satMod",
+            "val", u"160000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLineStyle_DashType_VML)
      * preserved inside an XML tag <v:stroke> with attribute dashstyle having value "dash".
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke"_ostr, "dashstyle"_ostr, u"dash"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", u"dash");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo74110)
@@ -973,23 +973,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo74110)
     Hence the following test case.
     */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]"_ostr,
-                "prst"_ostr, u"rect"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]"_ostr,0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]",
+                "prst", u"rect");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]",0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testOuterShdw)
 {
     loadAndReload("testOuterShdw.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]"_ostr, "dist"_ostr, u"1041400"_ustr);
+    assertXPath(pXmlDoc, "//mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:effectLst[1]/a:outerShdw[1]", "dist", u"1041400");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExtentValue)
 {
     loadAndSave("fdo74605.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    sal_Int32 nX = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent"_ostr, "cx"_ostr).toInt32();
+    sal_Int32 nX = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent", "cx").toInt32();
     // This was negative.
     CPPUNIT_ASSERT(nX >= 0);
 
@@ -1009,7 +1009,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSyncedRelativePercent)
 
     // check no explicit pctHeight has been exported, all we care
     // about at this point is that it's not 255000
-    assertXPath(pXmlDoc, "//wp14:pctHeight"_ostr, 0);
+    assertXPath(pXmlDoc, "//wp14:pctHeight", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf107119, "tdf107119.docx")
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133457)
     loadAndSave("tdf133457.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr"_ostr, "vAnchor"_ostr, u"text"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[3]/w:pPr/w:framePr", "vAnchor", u"text");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133924)
@@ -1031,8 +1031,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133924)
     loadAndSave("tdf133924.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr"_ostr, "wrap"_ostr, u"around"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr"_ostr, "wrap"_ostr, u"notBeside"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "wrap", u"around");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", u"notBeside");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
@@ -1045,9 +1045,9 @@ DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
         return;
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds"_ostr, "top"_ostr, u"1502"_ustr); // center
-    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds"_ostr, "top"_ostr, u"2683"_ustr); // bottom
-    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds"_ostr, "top"_ostr, u"313"_ustr);  // top
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "top", u"1502"); // center
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top", u"2683"); // bottom
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[3]/bounds", "top", u"313");  // top
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

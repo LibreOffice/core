@@ -367,74 +367,72 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testFillBitmapUnused)
     // shapes
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']"_ostr,
-        1);
+        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']", 1);
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']"_ostr,
-        "fill-image-name"_ostr, u"nav_5f_up"_ustr);
+        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']",
+        "fill-image-name", u"nav_5f_up");
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']"_ostr,
-        1);
+        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']", 1);
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='graphic']/"
-                "style:graphic-properties[@draw:fill='solid' and @draw:fill-image-name]"_ostr,
+                "style:graphic-properties[@draw:fill='solid' and @draw:fill-image-name]",
                 0);
     assertXPath(
         pXmlDoc,
-        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']"_ostr,
-        "fill-color"_ostr, u"#808080"_ustr);
+        "//style:style[@style:family='graphic']/style:graphic-properties[@draw:fill='solid']",
+        "fill-color", u"#808080");
 
     xmlDocUniquePtr pStyles = parseExport(u"styles.xml"_ustr);
     // master slide presentation style
     assertXPath(pStyles,
                 "/office:document-styles/office:styles/style:style[@style:family='presentation' "
-                "and @style:name='Default-background']/style:graphic-properties"_ostr,
-                "fill"_ostr, u"bitmap"_ustr);
+                "and @style:name='Default-background']/style:graphic-properties",
+                "fill", u"bitmap");
     assertXPath(pStyles,
                 "/office:document-styles/office:styles/style:style[@style:family='presentation' "
-                "and @style:name='Default-background']/style:graphic-properties"_ostr,
-                "fill-image-name"_ostr, u"nav_5f_up"_ustr);
+                "and @style:name='Default-background']/style:graphic-properties",
+                "fill-image-name", u"nav_5f_up");
     assertXPath(pStyles,
                 "/office:document-styles/office:styles/style:style[@style:family='presentation' "
-                "and @style:name='Default_20_1-background']/style:graphic-properties"_ostr,
-                "fill"_ostr, u"solid"_ustr);
+                "and @style:name='Default_20_1-background']/style:graphic-properties",
+                "fill", u"solid");
     assertXPath(pStyles,
                 "/office:document-styles/office:styles/style:style[@style:family='presentation' "
-                "and @style:name='Default_20_1-background']/style:graphic-properties"_ostr,
-                "fill-color"_ostr, u"#808080"_ustr);
+                "and @style:name='Default_20_1-background']/style:graphic-properties",
+                "fill-color", u"#808080");
     assertXPath(
         pStyles,
         "/office:document-styles/office:styles/style:style[@style:family='presentation' and "
-        "@style:name='Default_20_1-background']/style:graphic-properties[@draw:fill-image-name]"_ostr,
+        "@style:name='Default_20_1-background']/style:graphic-properties[@draw:fill-image-name]",
         0);
     // master slide drawing-page style
     assertXPath(pStyles,
                 "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/"
-                "style:drawing-page-properties"_ostr,
-                "fill"_ostr, u"bitmap"_ustr);
+                "style:drawing-page-properties",
+                "fill", u"bitmap");
     assertXPath(pStyles,
                 "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp1']/"
-                "style:drawing-page-properties"_ostr,
-                "fill-image-name"_ostr, u"nav_5f_up"_ustr);
+                "style:drawing-page-properties",
+                "fill-image-name", u"nav_5f_up");
     assertXPath(pStyles,
                 "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/"
-                "style:drawing-page-properties"_ostr,
-                "fill"_ostr, u"solid"_ustr);
+                "style:drawing-page-properties",
+                "fill", u"solid");
     assertXPath(pStyles,
                 "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/"
-                "style:drawing-page-properties"_ostr,
-                "fill-color"_ostr, u"#808080"_ustr);
+                "style:drawing-page-properties",
+                "fill-color", u"#808080");
     assertXPath(pStyles,
                 "/office:document-styles/office:automatic-styles/style:style[@style:name='Mdp2']/"
-                "style:drawing-page-properties[@draw:fill-image-name]"_ostr,
+                "style:drawing-page-properties[@draw:fill-image-name]",
                 0);
 
     // the named items
-    assertXPath(pStyles, "/office:document-styles/office:styles/draw:fill-image"_ostr, 1);
-    assertXPath(pStyles, "/office:document-styles/office:styles/draw:fill-image"_ostr, "name"_ostr,
-                u"nav_5f_up"_ustr);
+    assertXPath(pStyles, "/office:document-styles/office:styles/draw:fill-image", 1);
+    assertXPath(pStyles, "/office:document-styles/office:styles/draw:fill-image", "name",
+                u"nav_5f_up");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testFdo84043)
@@ -512,28 +510,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf97630)
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='presentation']/"
                 "style:graphic-properties[@draw:fit-to-size='false' and "
-                "@style:shrink-to-fit='false']"_ostr,
+                "@style:shrink-to-fit='false']",
                 1);
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='presentation']/"
                 "style:graphic-properties[@draw:fit-to-size='true' and "
-                "@style:shrink-to-fit='false']"_ostr,
+                "@style:shrink-to-fit='false']",
                 2);
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='presentation']/"
                 "style:graphic-properties[@draw:fit-to-size='false' and "
-                "@style:shrink-to-fit='true']"_ostr,
+                "@style:shrink-to-fit='true']",
                 1);
     // fontworks
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='graphic']/"
                 "style:graphic-properties[@draw:fit-to-size='false' and "
-                "@style:shrink-to-fit='false']"_ostr,
+                "@style:shrink-to-fit='false']",
                 1);
     assertXPath(pXmlDoc,
                 "//style:style[@style:family='graphic']/"
                 "style:graphic-properties[@draw:fit-to-size='true' and "
-                "@style:shrink-to-fit='false']"_ostr,
+                "@style:shrink-to-fit='false']",
                 1);
 }
 
@@ -632,9 +630,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testOOoXMLAnimations)
     // the problem was that legacy OOoXML animations were lost if store
     // immediately follows load because they were "converted" async by a timer
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']"_ostr, 26);
+    assertXPath(pXmlDoc, "//anim:par[@presentation:node-type='timing-root']", 26);
     // currently getting 52 of these without the fix (depends on timing)
-    assertXPath(pXmlDoc, "//anim:par"_ostr, 223);
+    assertXPath(pXmlDoc, "//anim:par", 223);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testBnc480256)
@@ -702,11 +700,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testUnknownAttributes)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/"
                          "style:style[@style:name='gr1']/"
-                         "style:graphic-properties[@foo:non-existent-att='bar']"_ostr);
+                         "style:graphic-properties[@foo:non-existent-att='bar']");
     // TODO: if the namespace is *known*, the attribute is not preserved, but that seems to be a pre-existing problem, or maybe it's even intentional?
     //    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[@style:name='gr1']/style:graphic-properties[@svg:non-existent-att='blah']");
     // this was on style:graphic-properties on the import, but the export moves it to root node which is OK
-    assertXPathNSDef(pXmlDoc, "/office:document-content"_ostr, u"foo", u"http://example.com/");
+    assertXPathNSDef(pXmlDoc, "/office:document-content", "foo", "http://example.com/");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf80020)
@@ -840,32 +838,31 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf79082)
 
     // P1 should have 6 tab stops defined
     assertXPathChildren(
-        pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops"_ostr,
-        6);
+        pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops", 6);
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[1]"_ostr,
-                "position"_ostr, u"0cm"_ustr);
+                "style:tab-stop[1]",
+                "position", u"0cm");
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[2]"_ostr,
-                "position"_ostr, u"5.08cm"_ustr);
+                "style:tab-stop[2]",
+                "position", u"5.08cm");
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[3]"_ostr,
-                "position"_ostr, u"10.16cm"_ustr);
+                "style:tab-stop[3]",
+                "position", u"10.16cm");
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[4]"_ostr,
-                "position"_ostr, u"15.24cm"_ustr);
+                "style:tab-stop[4]",
+                "position", u"15.24cm");
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[5]"_ostr,
-                "position"_ostr, u"20.32cm"_ustr);
+                "style:tab-stop[5]",
+                "position", u"20.32cm");
     assertXPath(pXmlDoc,
                 "//style:style[@style:name='P1']/style:paragraph-properties/style:tab-stops/"
-                "style:tab-stop[6]"_ostr,
-                "position"_ostr, u"25.4cm"_ustr);
+                "style:tab-stop[6]",
+                "position", u"25.4cm");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testImageWithSpecialID)
@@ -1053,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf98477)
     save(u"impress8"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//anim:animateTransform"_ostr, "by"_ostr, u"0.5,0.5"_ustr);
+    assertXPath(pXmlDoc, "//anim:animateTransform", "by", u"0.5,0.5");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testAuthorField)
@@ -1078,9 +1075,9 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf50499)
     save(u"impress8"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//anim:animate[1]"_ostr, "from"_ostr, u"(-width/2)"_ustr);
-    assertXPath(pXmlDoc, "//anim:animate[1]"_ostr, "to"_ostr, u"(x)"_ustr);
-    assertXPath(pXmlDoc, "//anim:animate[3]"_ostr, "by"_ostr, u"(height/3+width*0.1)"_ustr);
+    assertXPath(pXmlDoc, "//anim:animate[1]", "from", u"(-width/2)");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "to", u"(x)");
+    assertXPath(pXmlDoc, "//anim:animate[3]", "by", u"(height/3+width*0.1)");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf100926)
@@ -1373,12 +1370,11 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113822)
 
     // IterateContainer was created as ParallelTimeContainer before, so
     // the iterate type is not set too.
-    assertXPath(pXmlDoc, "//anim:iterate"_ostr, "iterate-type"_ostr, u"by-letter"_ustr);
+    assertXPath(pXmlDoc, "//anim:iterate", "iterate-type", u"by-letter");
     // The target of the child animation nodes need to be in the iterate container.
-    assertXPath(pXmlDoc, "//anim:iterate"_ostr, "targetElement"_ostr, u"id1"_ustr);
-    assertXPath(pXmlDoc, "//anim:iterate/anim:set"_ostr, "attributeName"_ostr,
-                u"text-underline"_ustr);
-    assertXPath(pXmlDoc, "//anim:iterate/anim:set"_ostr, "to"_ostr, u"solid"_ustr);
+    assertXPath(pXmlDoc, "//anim:iterate", "targetElement", u"id1");
+    assertXPath(pXmlDoc, "//anim:iterate/anim:set", "attributeName", u"text-underline");
+    assertXPath(pXmlDoc, "//anim:iterate/anim:set", "to", u"solid");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113818)
@@ -1389,8 +1385,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf113818)
     save(u"impress8"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//anim:animate[1]"_ostr, "formula"_ostr, u"width*sin(2.5*pi*$)"_ustr);
-    assertXPath(pXmlDoc, "//anim:animate[1]"_ostr, "values"_ostr, u"0;1"_ustr);
+    assertXPath(pXmlDoc, "//anim:animate[1]", "formula", u"width*sin(2.5*pi*$)");
+    assertXPath(pXmlDoc, "//anim:animate[1]", "values", u"0;1");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf119629)
@@ -1410,7 +1406,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf119629)
                 "/anim:par[@presentation:node-type='on-click']"
                 "/anim:par[@presentation:node-type='with-previous']"
                 "/anim:par[@presentation:node-type='on-click']"
-                "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']"_ostr,
+                "/anim:animate[@anim:formula='width*sin(2.5*pi*$)']",
                 1);
 }
 
@@ -1448,18 +1444,18 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf123557)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // Contains 2 interactive sequences and 3 triggered effects.
-    assertXPath(pXmlDoc, "//draw:page"_ostr, 1);
-    assertXPath(pXmlDoc, "//draw:page/anim:par"_ostr, 1);
+    assertXPath(pXmlDoc, "//draw:page", 1);
+    assertXPath(pXmlDoc, "//draw:page/anim:par", 1);
     assertXPath(pXmlDoc,
                 "//draw:page"
                 "/anim:par[@presentation:node-type='timing-root']"
-                "/anim:seq[@presentation:node-type='interactive-sequence']"_ostr,
+                "/anim:seq[@presentation:node-type='interactive-sequence']",
                 2);
     assertXPath(pXmlDoc,
                 "//draw:page"
                 "/anim:par[@presentation:node-type='timing-root']"
                 "/anim:seq[@presentation:node-type='interactive-sequence']"
-                "/anim:par[@smil:begin]"_ostr,
+                "/anim:par[@smil:begin]",
                 3);
 }
 
@@ -1504,21 +1500,21 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlow)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // check that we actually test graphic style
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]"_ostr,
-                "family"_ostr, u"graphic"_ustr);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
+                "family", u"graphic");
     // check loext graphic attributes
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties"_ostr,
-        "glow-radius"_ostr, u"0.529cm"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-radius", u"0.529cm");
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties"_ostr,
-        "glow-color"_ostr, u"#ff4000"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-color", u"#ff4000");
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties"_ostr,
-        "glow-transparency"_ostr, u"60%"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "glow-transparency", u"60%");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
@@ -1545,21 +1541,21 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testGlowTextInShape)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // check that we actually test graphic style
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]"_ostr,
-                "family"_ostr, u"graphic"_ustr);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]",
+                "family", u"graphic");
     // check loext text attributes for text in shapes
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
-        "glow-text-radius"_ostr, u"0.706cm"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties",
+        "glow-text-radius", u"0.706cm");
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
-        "glow-text-color"_ostr, u"#4ea72e"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties",
+        "glow-text-color", u"#4ea72e");
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties"_ostr,
-        "glow-text-transparency"_ostr, u"5%"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[3]/style:text-properties",
+        "glow-text-transparency", u"5%");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
@@ -1577,13 +1573,13 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testSoftEdges)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
     // check that we actually test graphic style
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]"_ostr,
-                "family"_ostr, u"graphic"_ustr);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[2]",
+                "family", u"graphic");
     // check loext graphic attribute
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties"_ostr,
-        "softedge-radius"_ostr, u"0.635cm"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[2]/style:graphic-properties",
+        "softedge-radius", u"0.635cm");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testShadowBlur)
@@ -1598,12 +1594,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testShadowBlur)
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]"_ostr,
-                "family"_ostr, u"graphic"_ustr);
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/style:style[3]",
+                "family", u"graphic");
     assertXPath(
         pXmlDoc,
-        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties"_ostr,
-        "shadow-blur"_ostr, u"0.388cm"_ustr);
+        "/office:document-content/office:automatic-styles/style:style[3]/style:graphic-properties",
+        "shadow-blur", u"0.388cm");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testRhbz1870501)
@@ -1645,8 +1641,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf128550)
     createSdImpressDoc("pptx/tdf128550.pptx");
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='background']"_ostr, 1);
-    assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='text']"_ostr, 4);
+    assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='background']", 1);
+    assertXPath(pXmlDoc, "//anim:iterate[@anim:sub-item='text']", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf140714)
@@ -1876,29 +1872,29 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testMasterPageBackgroundFullSize)
                 "style:style[@style:family='drawing-page' and @style:name = "
                 "/office:document-styles/office:master-styles/"
                 "style:master-page[@style:name='Default']/attribute::draw:style-name"
-                "]/style:drawing-page-properties"_ostr,
-                "background-size"_ostr, u"border"_ustr);
+                "]/style:drawing-page-properties",
+                "background-size", u"border");
     assertXPath(pXmlDoc,
                 "/office:document-styles/office:automatic-styles/"
                 "style:style[@style:family='drawing-page' and @style:name = "
                 "/office:document-styles/office:master-styles/"
                 "style:master-page[@style:name='Default_20_3']/attribute::draw:style-name"
-                "]/style:drawing-page-properties"_ostr,
-                "background-size"_ostr, u"full"_ustr);
+                "]/style:drawing-page-properties",
+                "background-size", u"full");
     assertXPath(pXmlDoc,
                 "/office:document-styles/office:automatic-styles/"
                 "style:style[@style:family='drawing-page' and @style:name = "
                 "/office:document-styles/office:master-styles/"
                 "style:master-page[@style:name='Default_20_2']/attribute::draw:style-name"
-                "]/style:drawing-page-properties"_ostr,
-                "background-size"_ostr, u"border"_ustr);
+                "]/style:drawing-page-properties",
+                "background-size", u"border");
     assertXPath(pXmlDoc,
                 "/office:document-styles/office:automatic-styles/"
                 "style:style[@style:family='drawing-page' and @style:name = "
                 "/office:document-styles/office:master-styles/"
                 "style:master-page[@style:name='Default_20_1']/attribute::draw:style-name"
-                "]/style:drawing-page-properties"_ostr,
-                "background-size"_ostr, u"full"_ustr);
+                "]/style:drawing-page-properties",
+                "background-size", u"full");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testColumnsODG)
@@ -1954,12 +1950,12 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testColumnsODG)
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc,
                 "/office:document-content/office:automatic-styles/style:style/"
-                "style:graphic-properties/style:columns"_ostr,
-                "column-count"_ostr, u"2"_ustr);
+                "style:graphic-properties/style:columns",
+                "column-count", u"2");
     assertXPath(pXmlDoc,
                 "/office:document-content/office:automatic-styles/style:style/"
-                "style:graphic-properties/style:columns"_ostr,
-                "column-gap"_ostr, u"0.7cm"_ustr);
+                "style:graphic-properties/style:columns",
+                "column-gap", u"0.7cm");
 }
 
 CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf112126)

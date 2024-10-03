@@ -78,11 +78,10 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndFootnote)
     // - xpath should match exactly 1 node
     // i.e. the endnote was also in the footnote container, not at the end of the body text.
     sal_Int32 nEndnoteTop
-        = getXPath(pXmlDoc, "/root/page/body/section/column/ftncont/ftn/infos/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pXmlDoc, "/root/page/body/section/column/ftncont/ftn/infos/bounds", "top")
               .toInt32();
     sal_Int32 nFootnoteTop
-        = getXPath(pXmlDoc, "/root/page/ftncont/ftn/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "/root/page/ftncont/ftn/infos/bounds", "top").toInt32();
     // Endnote at the end of body text, footnote at page bottom.
     CPPUNIT_ASSERT_LESS(nFootnoteTop, nEndnoteTop);
 }
@@ -97,7 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnoteAndSection)
 
     // Then make sure the endnote section is after the section at the end of the document, not
     // inside it:
-    int nToplevelSections = countXPathNodes(pXmlDoc, "/root/page/body/section"_ostr);
+    int nToplevelSections = countXPathNodes(pXmlDoc, "/root/page/body/section");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 2
     // - Actual  : 1
@@ -116,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInlineEndnotePosition)
     // Then make sure the endnote separator (line + spacing around it) is large enough, so the
     // endnote text below the separator has the correct position:
     sal_Int32 nEndnoteContTopMargin
-        = getXPath(pXmlDoc, "//column/ftncont/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//column/ftncont/infos/prtBounds", "top").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 269
     // - Actual  : 124

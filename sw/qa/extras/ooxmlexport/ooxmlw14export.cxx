@@ -21,67 +21,67 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_GlowShadowReflection)
     loadAndReload("TextEffects_Glow_Shadow_Reflection.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow"_ostr, "rad"_ostr).match("63500"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow/w14:srgbClr"_ostr, "val"_ostr).match("00B0F0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow/w14:srgbClr/w14:alpha"_ostr, "val"_ostr).match("60000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow", "rad").match("63500"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow/w14:srgbClr", "val").match("00B0F0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/w:rPr/w14:glow/w14:srgbClr/w14:alpha", "val").match("60000"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow"_ostr, "rad"_ostr).match("228600"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr"_ostr, "val"_ostr).match("accent6"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr/w14:alpha"_ostr, "val"_ostr).match("60000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr/w14:satMod"_ostr, "val"_ostr).match("175000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow", "rad").match("228600"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr", "val").match("accent6"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr/w14:alpha", "val").match("60000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:rPr/w14:glow/w14:schemeClr/w14:satMod", "val").match("175000"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "blurRad"_ostr).match("63500"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "dist"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "dir"_ostr).match("1800000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "sx"_ostr).match("100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "sy"_ostr).match("-30000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "kx"_ostr).match("-800400"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "ky"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow"_ostr, "algn"_ostr).match("bl"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "blurRad").match("63500"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "dist").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "dir").match("1800000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "sx").match("100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "sy").match("-30000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "kx").match("-800400"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "ky").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow", "algn").match("bl"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr"_ostr, "val"_ostr).match("accent3"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr/w14:alpha"_ostr, "val"_ostr).match("38000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr).match("75000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr", "val").match("accent3"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr/w14:alpha", "val").match("38000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[4]/w:rPr/w14:shadow/w14:schemeClr/w14:lumMod", "val").match("75000"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "blurRad"_ostr).match("190500"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "dist"_ostr).match("190500"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "dir"_ostr).match("3000000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "sx"_ostr).match("100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "sy"_ostr).match("100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "kx"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "ky"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow"_ostr, "algn"_ostr).match("ctr"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "blurRad").match("190500"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "dist").match("190500"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "dir").match("3000000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "sx").match("100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "sy").match("100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "kx").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "ky").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow", "algn").match("ctr"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow/w14:srgbClr"_ostr, "val"_ostr).match("FF0000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow/w14:srgbClr/w14:alpha"_ostr, "val"_ostr).match("10000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow/w14:srgbClr", "val").match("FF0000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[5]/w:rPr/w14:shadow/w14:srgbClr/w14:alpha", "val").match("10000"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "blurRad"_ostr).match("6350"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "stA"_ostr).match("60000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "stPos"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "endA"_ostr).match("900"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "endPos"_ostr).match("60000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "dist"_ostr).match("60007"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "dir"_ostr).match("5400000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "fadeDir"_ostr).match("5400000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "sx"_ostr).match("100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "sy"_ostr).match("-100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "kx"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "ky"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection"_ostr, "algn"_ostr).match("bl"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "blurRad").match("6350"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "stA").match("60000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "stPos").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "endA").match("900"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "endPos").match("60000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "dist").match("60007"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "dir").match("5400000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "fadeDir").match("5400000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "sx").match("100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "sy").match("-100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "kx").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "ky").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[6]/w:rPr/w14:reflection", "algn").match("bl"));
 
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "blurRad"_ostr).match("6350"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "stA"_ostr).match("55000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "stPos"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "endA"_ostr).match("300"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "endPos"_ostr).match("45500"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "dist"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "dir"_ostr).match("5400000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "fadeDir"_ostr).match("5400000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "sx"_ostr).match("100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "sy"_ostr).match("-100000"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "kx"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "ky"_ostr).match("0"));
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection"_ostr, "algn"_ostr).match("bl"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "blurRad").match("6350"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "stA").match("55000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "stPos").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "endA").match("300"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "endPos").match("45500"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "dist").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "dir").match("5400000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "fadeDir").match("5400000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "sx").match("100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "sy").match("-100000"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "kx").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "ky").match("0"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[7]/w:rPr/w14:reflection", "algn").match("bl"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
@@ -90,54 +90,54 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextOutline)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline"_ostr, "w"_ostr, u"50800"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cap"_ostr, u"rnd"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cmpd"_ostr, u"dbl"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline"_ostr, "algn"_ostr, u"ctr"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline", "w", u"50800");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline", "cap", u"rnd");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline", "cmpd", u"dbl");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline", "algn", u"ctr");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]"_ostr, "pos"_ostr, u"70000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr"_ostr, "val"_ostr, u"92D050"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:alpha"_ostr, "val"_ostr, u"30000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:lumMod"_ostr, "val"_ostr, u"75000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:lumOff"_ostr, "val"_ostr, u"25000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", u"70000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr", "val", u"92D050");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:alpha", "val", u"30000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:lumMod", "val", u"75000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[1]/w14:srgbClr/w14:lumOff", "val", u"25000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]"_ostr, "pos"_ostr, u"30000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr"_ostr, "val"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:alpha"_ostr, "val"_ostr, u"55000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff"_ostr, "val"_ostr, u"60000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", u"30000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:alpha", "val", u"55000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", u"40000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", u"60000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[3]"_ostr, "pos"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[3]/w14:srgbClr"_ostr, "val"_ostr, u"0070C0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[3]/w14:srgbClr", "val", u"0070C0");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[4]"_ostr, "pos"_ostr, u"100000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[4]/w14:schemeClr"_ostr, "val"_ostr, u"accent4"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[4]", "pos", u"100000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:gsLst/w14:gs[4]/w14:schemeClr", "val", u"accent4");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:lin"_ostr, "ang"_ostr, u"3600000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:lin"_ostr, "scaled"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:lin", "ang", u"3600000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:gradFill/w14:lin", "scaled", u"0");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash"_ostr, "val"_ostr, u"dash"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:miter"_ostr, "lim"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash", "val", u"dash");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:textOutline/w14:miter", "lim", u"0");
 
     // Paragraph 2
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline"_ostr, "w"_ostr, u"9525"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cap"_ostr, u"rnd"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cmpd"_ostr, u"sng"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline"_ostr, "algn"_ostr, u"ctr"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline", "w", u"9525");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline", "cap", u"rnd");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline", "cmpd", u"sng");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline", "algn", u"ctr");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:solidFill/w14:srgbClr"_ostr, "val"_ostr, u"FF0000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash"_ostr, "val"_ostr, u"solid"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:bevel"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:solidFill/w14:srgbClr", "val", u"FF0000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash", "val", u"solid");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textOutline/w14:bevel", 1);
 
     // Paragraph 3
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline"_ostr, "w"_ostr, u"9525"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cap"_ostr, u"rnd"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline"_ostr, "cmpd"_ostr, u"sng"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline"_ostr, "algn"_ostr, u"ctr"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline", "w", u"9525");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline", "cap", u"rnd");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline", "cmpd", u"sng");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline", "algn", u"ctr");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:noFill"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash"_ostr, "val"_ostr, u"solid"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:bevel"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:noFill", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:prstDash", "val", u"solid");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textOutline/w14:bevel", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextFill)
@@ -147,35 +147,35 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_TextFill)
     // Paragraph 1 has no textFill
 
     // Paragraph 2
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textFill/w14:noFill"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:textFill/w14:noFill", 1);
 
     // Paragraph 3
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr"_ostr, "val"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:alpha"_ostr, "val"_ostr, u"5000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:lumOff"_ostr, "val"_ostr, u"60000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr", "val", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:alpha", "val", u"5000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:lumMod", "val", u"40000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:rPr/w14:textFill/w14:solidFill/w14:schemeClr/w14:lumOff", "val", u"60000");
 
     // Paragraph 4
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]"_ostr, "pos"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr"_ostr, "val"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha"_ostr, "val"_ostr, u"5000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr, u"67000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val", u"5000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val", u"67000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]"_ostr, "pos"_ostr, u"50000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr"_ostr, "val"_ostr, u"00B0F0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr/w14:alpha"_ostr, "val"_ostr, u"10000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr/w14:lumMod"_ostr, "val"_ostr, u"80000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", u"50000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr", "val", u"00B0F0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr/w14:alpha", "val", u"10000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[2]/w14:srgbClr/w14:lumMod", "val", u"80000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]"_ostr, "pos"_ostr, u"100000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr"_ostr, "val"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:alpha"_ostr, "val"_ostr, u"15000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr, u"60000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff"_ostr, "val"_ostr, u"40000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", u"100000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", u"accent1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:alpha", "val", u"15000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", u"60000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff", "val", u"40000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:lin"_ostr, "ang"_ostr, u"16200000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:lin"_ostr, "scaled"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:lin", "ang", u"16200000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w14:textFill/w14:gradFill/w14:lin", "scaled", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing)
@@ -184,44 +184,44 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Props3d_Ligatures_NumForm_NumSpacing
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1 - w14:props3d
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d"_ostr, "extrusionH"_ostr, u"63500"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d"_ostr, "contourW"_ostr, u"25400"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d"_ostr, "prstMaterial"_ostr, u"softEdge"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d", "extrusionH", u"63500");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d", "contourW", u"25400");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d", "prstMaterial", u"softEdge");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT"_ostr, "w"_ostr, u"38100"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT"_ostr, "h"_ostr, u"38100"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT"_ostr, "prst"_ostr, u"relaxedInset"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT", "w", u"38100");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT", "h", u"38100");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelT", "prst", u"relaxedInset");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB"_ostr, "w"_ostr, u"69850"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB"_ostr, "h"_ostr, u"38100"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB"_ostr, "prst"_ostr, u"cross"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB", "w", u"69850");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB", "h", u"38100");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:bevelB", "prst", u"cross");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr"_ostr, "val"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr/w14:lumMod"_ostr, "val"_ostr, u"20000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr/w14:lumOff"_ostr, "val"_ostr, u"80000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr", "val", u"accent2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", u"20000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", u"80000");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:contourClr"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:contourClr/w14:srgbClr"_ostr, "val"_ostr, u"92D050"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:contourClr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:props3d/w14:contourClr/w14:srgbClr", "val", u"92D050");
 
     // Paragraph 2 - w14:ligatures
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:ligatures"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:ligatures"_ostr, "val"_ostr, u"standard"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:ligatures", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:ligatures", "val", u"standard");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures"_ostr, "val"_ostr, u"standardContextual"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[3]/w:rPr/w14:ligatures", "val", u"standardContextual");
 
     // Paragraph 3 - w14:numForm and w14:numSpacing
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm"_ostr, "val"_ostr, u"lining"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numSpacing"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numSpacing"_ostr, "val"_ostr, u"tabular"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numForm", "val", u"lining");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numSpacing", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[2]/w:rPr/w14:numSpacing", "val", u"tabular");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numForm"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numForm"_ostr, "val"_ostr, u"oldStyle"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing"_ostr, "val"_ostr, u"proportional"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numForm", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numForm", "val", u"oldStyle");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[4]/w:rPr/w14:numSpacing", "val", u"proportional");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
@@ -230,14 +230,14 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_StylisticSets_CntxtAlts)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Paragraph 1 - w14:stylisticSets
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet"_ostr, "id"_ostr, u"4"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w14:stylisticSets/w14:styleSet", "id", u"4");
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet"_ostr, "id"_ostr, u"2"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/w:rPr/w14:stylisticSets/w14:styleSet", "id", u"2");
 
     // Paragraph 1 - w14:cntxtAlts
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:cntxtAlts"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/w:rPr/w14:cntxtAlts", 1);
 
 }
 
@@ -246,11 +246,11 @@ CPPUNIT_TEST_FIXTURE(Test, Test_McIgnorable)
     loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document"_ostr, "Ignorable"_ostr, u"w14 wp14 w15"_ustr);
+    assertXPath(pXmlDocument, "/w:document", "Ignorable", u"w14 wp14 w15");
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
-    assertXPath(pXmlStyles, "/w:styles"_ostr, "Ignorable"_ostr, u"w14"_ustr);
+    assertXPath(pXmlStyles, "/w:styles", "Ignorable", u"w14");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_CompatSettingsForW14)
@@ -258,27 +258,27 @@ CPPUNIT_TEST_FIXTURE(Test, Test_CompatSettingsForW14)
     loadAndReload("TextEffects_StylisticSets_CntxtAlts.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/settings.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting"_ostr, 5);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting", 5);
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "name"_ostr, u"compatibilityMode"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "uri"_ostr, u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]"_ostr, "val"_ostr, u"15"_ustr); // document was made with Word2013 -> 15
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "name", u"compatibilityMode");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "uri", u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[1]", "val", u"15"); // document was made with Word2013 -> 15
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]"_ostr, "name"_ostr, u"overrideTableStyleFontSizeAndJustification"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]"_ostr, "uri"_ostr, u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "name", u"overrideTableStyleFontSizeAndJustification");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "uri", u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[2]", "val", u"1");
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]"_ostr, "name"_ostr, u"enableOpenTypeFeatures"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]"_ostr, "uri"_ostr, u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "name", u"enableOpenTypeFeatures");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "uri", u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[3]", "val", u"1");
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]"_ostr, "name"_ostr, u"doNotFlipMirrorIndents"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]"_ostr, "uri"_ostr, u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "name", u"doNotFlipMirrorIndents");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "uri", u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[4]", "val", u"1");
 
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]"_ostr, "name"_ostr, u"differentiateMultirowTableHeaders"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]"_ostr, "uri"_ostr, u"http://schemas.microsoft.com/office/word"_ustr);
-    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]"_ostr, "val"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "name", u"differentiateMultirowTableHeaders");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "uri", u"http://schemas.microsoft.com/office/word");
+    assertXPath(pXmlDoc, "/w:settings/w:compat/w:compatSetting[5]", "val", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
@@ -295,104 +295,104 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_Groupshapes)
     // Glow
     OString sPathGlow = sPathToShapeRunProperties + "/w14:glow";
     assertXPath(pXmlDoc, sPathGlow, 1);
-    assertXPath(pXmlDoc, sPathGlow, "rad"_ostr, u"127000"_ustr);
-    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr", "val"_ostr, u"00B050"_ustr);
-    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr/w14:alpha", "val"_ostr, u"60000"_ustr);
+    assertXPath(pXmlDoc, sPathGlow, "rad", u"127000");
+    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr", "val", u"00B050");
+    assertXPath(pXmlDoc, sPathGlow+"/w14:srgbClr/w14:alpha", "val", u"60000");
 
     // Shadow
     OString sPathShadow = sPathToShapeRunProperties + "/w14:shadow";
     assertXPath(pXmlDoc, sPathShadow, 1);
-    assertXPath(pXmlDoc, sPathShadow, "blurRad"_ostr, u"127000"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "dist"_ostr, u"787400"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "dir"_ostr, u"12720000"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "sx"_ostr, u"70000"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "sy"_ostr, u"70000"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "kx"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "ky"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathShadow, "algn"_ostr, u"l"_ustr);
-    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val"_ostr, u"92D050"_ustr);
-    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val"_ostr, u"40000"_ustr);
+    assertXPath(pXmlDoc, sPathShadow, "blurRad", u"127000");
+    assertXPath(pXmlDoc, sPathShadow, "dist", u"787400");
+    assertXPath(pXmlDoc, sPathShadow, "dir", u"12720000");
+    assertXPath(pXmlDoc, sPathShadow, "sx", u"70000");
+    assertXPath(pXmlDoc, sPathShadow, "sy", u"70000");
+    assertXPath(pXmlDoc, sPathShadow, "kx", u"0");
+    assertXPath(pXmlDoc, sPathShadow, "ky", u"0");
+    assertXPath(pXmlDoc, sPathShadow, "algn", u"l");
+    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", u"92D050");
+    assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", u"40000");
 
     // Reflection
     OString sPathReflection = sPathToShapeRunProperties + "/w14:reflection";
     assertXPath(pXmlDoc, sPathReflection, 1);
-    assertXPath(pXmlDoc, sPathReflection, "blurRad"_ostr, u"139700"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "stA"_ostr, u"47000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "stPos"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "endA"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "endPos"_ostr, u"85000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "dist"_ostr, u"63500"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "dir"_ostr, u"5400000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "fadeDir"_ostr, u"5400000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "sx"_ostr, u"100000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "sy"_ostr, u"-100000"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "kx"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "ky"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathReflection, "algn"_ostr, u"bl"_ustr);
+    assertXPath(pXmlDoc, sPathReflection, "blurRad", u"139700");
+    assertXPath(pXmlDoc, sPathReflection, "stA", u"47000");
+    assertXPath(pXmlDoc, sPathReflection, "stPos", u"0");
+    assertXPath(pXmlDoc, sPathReflection, "endA", u"0");
+    assertXPath(pXmlDoc, sPathReflection, "endPos", u"85000");
+    assertXPath(pXmlDoc, sPathReflection, "dist", u"63500");
+    assertXPath(pXmlDoc, sPathReflection, "dir", u"5400000");
+    assertXPath(pXmlDoc, sPathReflection, "fadeDir", u"5400000");
+    assertXPath(pXmlDoc, sPathReflection, "sx", u"100000");
+    assertXPath(pXmlDoc, sPathReflection, "sy", u"-100000");
+    assertXPath(pXmlDoc, sPathReflection, "kx", u"0");
+    assertXPath(pXmlDoc, sPathReflection, "ky", u"0");
+    assertXPath(pXmlDoc, sPathReflection, "algn", u"bl");
 
     // TextOutline
     OString sPathTextOutline = sPathToShapeRunProperties + "/w14:textOutline";
     assertXPath(pXmlDoc, sPathTextOutline, 1);
-    assertXPath(pXmlDoc, sPathTextOutline, "w"_ostr, u"25400"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline, "cap"_ostr, u"rnd"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline, "cmpd"_ostr, u"sng"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline, "algn"_ostr, u"ctr"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
-    assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val"_ostr, u"solid"_ustr);
+    assertXPath(pXmlDoc, sPathTextOutline, "w", u"25400");
+    assertXPath(pXmlDoc, sPathTextOutline, "cap", u"rnd");
+    assertXPath(pXmlDoc, sPathTextOutline, "cmpd", u"sng");
+    assertXPath(pXmlDoc, sPathTextOutline, "algn", u"ctr");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", u"accent2");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", u"40000");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", u"75000");
+    assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", u"solid");
     assertXPath(pXmlDoc, sPathTextOutline+"/w14:round", 1);
 
     // TextFill
     OString sPathTextFill = sPathToShapeRunProperties + "/w14:textFill";
     assertXPath(pXmlDoc, sPathTextFill, 1);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val"_ostr, u"accent4"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos"_ostr, u"41000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val"_ostr, u"accent6"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val"_ostr, u"60000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos"_ostr, u"87000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val"_ostr, u"accent5"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val"_ostr, u"60000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff", "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "ang"_ostr, u"5400000"_ustr);
-    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "scaled"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", u"0");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", u"accent4");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", u"41000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", u"accent6");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", u"60000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", u"40000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", u"87000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", u"accent5");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", u"60000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumOff", "val", u"40000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "ang", u"5400000");
+    assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:lin", "scaled", u"0");
 
     // Props3D
     OString sPathProps3D = sPathToShapeRunProperties + "/w14:props3d";
     assertXPath(pXmlDoc, sPathProps3D, 1);
-    assertXPath(pXmlDoc, sPathProps3D, "extrusionH"_ostr, u"63500"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D, "contourW"_ostr, u"12700"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D, "prstMaterial"_ostr, u"warmMatte"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w"_ostr, u"38100"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h"_ostr, u"38100"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst"_ostr, u"circle"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val"_ostr, u"accent2"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"60000"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val"_ostr, u"40000"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val"_ostr, u"accent4"_ustr);
-    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
+    assertXPath(pXmlDoc, sPathProps3D, "extrusionH", u"63500");
+    assertXPath(pXmlDoc, sPathProps3D, "contourW", u"12700");
+    assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", u"warmMatte");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", u"38100");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", u"38100");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", u"circle");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", u"accent2");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", u"60000");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", u"40000");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", u"accent4");
+    assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", u"75000");
 
     // Ligatures
     OString sPathLigatures = sPathToShapeRunProperties + "/w14:ligatures";
     assertXPath(pXmlDoc, sPathLigatures, 1);
-    assertXPath(pXmlDoc, sPathLigatures, "val"_ostr, u"standard"_ustr);
+    assertXPath(pXmlDoc, sPathLigatures, "val", u"standard");
 
     // NumForm
     OString sPathNumForm = sPathToShapeRunProperties + "/w14:numForm";
     assertXPath(pXmlDoc, sPathNumForm, 1);
-    assertXPath(pXmlDoc, sPathNumForm, "val"_ostr, u"oldStyle"_ustr);
+    assertXPath(pXmlDoc, sPathNumForm, "val", u"oldStyle");
 
     // NumSpacing
     OString sPathNumSpacing = sPathToShapeRunProperties + "/w14:numSpacing";
     assertXPath(pXmlDoc, sPathNumSpacing, 1);
-    assertXPath(pXmlDoc, sPathNumSpacing, "val"_ostr, u"tabular"_ustr);
+    assertXPath(pXmlDoc, sPathNumSpacing, "val", u"tabular");
 
     // StylisticSets
     OString sPathStylisticSets = sPathToShapeRunProperties + "/w14:stylisticSets";
     assertXPath(pXmlDoc, sPathStylisticSets, 1);
-    assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_InStyleXml)
@@ -402,224 +402,224 @@ CPPUNIT_TEST_FIXTURE(Test, Test_TextEffects_InStyleXml)
 
     OString sPathToCharacterStyle = "/w:styles/w:style[3]"_ostr;
 
-    assertXPath(pXmlDoc, sPathToCharacterStyle, "type"_ostr, u"character"_ustr);
-    assertXPath(pXmlDoc, sPathToCharacterStyle, "styleId"_ostr, u"TextEffectsStyleChar"_ustr);
-    assertXPath(pXmlDoc, sPathToCharacterStyle, "customStyle"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "type", u"character");
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "styleId", u"TextEffectsStyleChar");
+    assertXPath(pXmlDoc, sPathToCharacterStyle, "customStyle", u"1");
 
     {
         OString sPathToRun = sPathToCharacterStyle + "/w:rPr";
 
         // Glow
         OString sPathGlow = sPathToRun + "/w14:glow";
-        assertXPath(pXmlDoc, sPathGlow, "rad"_ostr, u"63500"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val"_ostr, u"accent2"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val"_ostr, u"175000"_ustr);
+        assertXPath(pXmlDoc, sPathGlow, "rad", u"63500");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val", u"accent2");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val", u"60000");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val", u"175000");
 
         // Shadow
         OString sPathShadow = sPathToRun + "/w14:shadow";
-        assertXPath(pXmlDoc, sPathShadow, "blurRad"_ostr, u"50800"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "dist"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "dir"_ostr, u"16200000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "sx"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "sy"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "kx"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "ky"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "algn"_ostr, u"b"_ustr);
-        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val"_ostr, u"000000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val"_ostr, u"60000"_ustr);
+        assertXPath(pXmlDoc, sPathShadow, "blurRad", u"50800");
+        assertXPath(pXmlDoc, sPathShadow, "dist", u"38100");
+        assertXPath(pXmlDoc, sPathShadow, "dir", u"16200000");
+        assertXPath(pXmlDoc, sPathShadow, "sx", u"100000");
+        assertXPath(pXmlDoc, sPathShadow, "sy", u"100000");
+        assertXPath(pXmlDoc, sPathShadow, "kx", u"0");
+        assertXPath(pXmlDoc, sPathShadow, "ky", u"0");
+        assertXPath(pXmlDoc, sPathShadow, "algn", u"b");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", u"000000");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", u"60000");
 
         // Reflection
         OString sPathReflection = sPathToRun + "/w14:reflection";
-        assertXPath(pXmlDoc, sPathReflection, "blurRad"_ostr, u"6350"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "stA"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "stPos"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "endA"_ostr, u"300"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "endPos"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "dist"_ostr, u"29997"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "dir"_ostr, u"5400000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "fadeDir"_ostr, u"5400000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "sx"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "sy"_ostr, u"-100000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "kx"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "ky"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "algn"_ostr, u"bl"_ustr);
+        assertXPath(pXmlDoc, sPathReflection, "blurRad", u"6350");
+        assertXPath(pXmlDoc, sPathReflection, "stA", u"50000");
+        assertXPath(pXmlDoc, sPathReflection, "stPos", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "endA", u"300");
+        assertXPath(pXmlDoc, sPathReflection, "endPos", u"50000");
+        assertXPath(pXmlDoc, sPathReflection, "dist", u"29997");
+        assertXPath(pXmlDoc, sPathReflection, "dir", u"5400000");
+        assertXPath(pXmlDoc, sPathReflection, "fadeDir", u"5400000");
+        assertXPath(pXmlDoc, sPathReflection, "sx", u"100000");
+        assertXPath(pXmlDoc, sPathReflection, "sy", u"-100000");
+        assertXPath(pXmlDoc, sPathReflection, "kx", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "ky", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "algn", u"bl");
 
         // TextOutline
         OString sPathTextOutline = sPathToRun + "/w14:textOutline";
-        assertXPath(pXmlDoc, sPathTextOutline, "w"_ostr, u"25400"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "cap"_ostr, u"rnd"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "cmpd"_ostr, u"sng"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "algn"_ostr, u"ctr"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val"_ostr, u"40000"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val"_ostr, u"solid"_ustr);
+        assertXPath(pXmlDoc, sPathTextOutline, "w", u"25400");
+        assertXPath(pXmlDoc, sPathTextOutline, "cap", u"rnd");
+        assertXPath(pXmlDoc, sPathTextOutline, "cmpd", u"sng");
+        assertXPath(pXmlDoc, sPathTextOutline, "algn", u"ctr");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", u"40000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", u"75000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", u"solid");
         assertXPath(pXmlDoc, sPathTextOutline+"/w14:bevel", 1);
 
         // TextFill
         OString sPathTextFill = sPathToRun + "/w14:textFill";
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val"_ostr, u"10000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val"_ostr, u"40000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos"_ostr, u"46000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val"_ostr, u"95000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val"_ostr, u"5000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path"_ostr, u"circle"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b"_ostr, u"-30000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t"_ostr, u"130000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l"_ostr, u"50000"_ustr);
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", u"0");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val", u"10000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val", u"40000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val", u"60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", u"46000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", u"95000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", u"5000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", u"100000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", u"60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path", u"circle");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b", u"-30000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r", u"50000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t", u"130000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l", u"50000");
 
         // Props3D
         OString sPathProps3D = sPathToRun + "/w14:props3d";
-        assertXPath(pXmlDoc, sPathProps3D, "extrusionH"_ostr, u"57150"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D, "contourW"_ostr, u"12700"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial"_ostr, u"metal"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst"_ostr, u"angle"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w"_ostr, u"69850"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h"_ostr, u"69850"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst"_ostr, u"divot"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"20000"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val"_ostr, u"80000"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
+        assertXPath(pXmlDoc, sPathProps3D, "extrusionH", u"57150");
+        assertXPath(pXmlDoc, sPathProps3D, "contourW", u"12700");
+        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", u"metal");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", u"38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", u"38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", u"angle");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w", u"69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h", u"69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst", u"divot");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", u"20000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", u"80000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", u"75000");
 
         // Ligatures
         OString sPathLigatures = sPathToRun + "/w14:ligatures";
-        assertXPath(pXmlDoc, sPathLigatures, "val"_ostr, u"standard"_ustr);
+        assertXPath(pXmlDoc, sPathLigatures, "val", u"standard");
 
         // NumForm
         OString sPathNumForm = sPathToRun + "/w14:numForm";
-        assertXPath(pXmlDoc, sPathNumForm, "val"_ostr, u"lining"_ustr);
+        assertXPath(pXmlDoc, sPathNumForm, "val", u"lining");
 
         // NumSpacing
         OString sPathNumSpacing = sPathToRun + "/w14:numSpacing";
-        assertXPath(pXmlDoc, sPathNumSpacing, "val"_ostr, u"proportional"_ustr);
+        assertXPath(pXmlDoc, sPathNumSpacing, "val", u"proportional");
 
         // StylisticSets
         OString sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
-        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id"_ostr, u"1"_ustr);
+        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", u"1");
     }
 
     OString sPathToParagraphStyle = "/w:styles/w:style[9]"_ostr;
 
-    assertXPath(pXmlDoc, sPathToParagraphStyle, "type"_ostr, u"paragraph"_ustr);
-    assertXPath(pXmlDoc, sPathToParagraphStyle, "styleId"_ostr, u"TextEffectsStyle"_ustr);
-    assertXPath(pXmlDoc, sPathToParagraphStyle, "customStyle"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "type", u"paragraph");
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "styleId", u"TextEffectsStyle");
+    assertXPath(pXmlDoc, sPathToParagraphStyle, "customStyle", u"1");
 
     {
         OString sPathToRun = sPathToParagraphStyle + "/w:rPr";
 
         // Glow
         OString sPathGlow = sPathToRun + "/w14:glow";
-        assertXPath(pXmlDoc, sPathGlow, "rad"_ostr, u"63500"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val"_ostr, u"accent2"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val"_ostr, u"175000"_ustr);
+        assertXPath(pXmlDoc, sPathGlow, "rad", u"63500");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr", "val", u"accent2");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:alpha", "val", u"60000");
+        assertXPath(pXmlDoc, sPathGlow+"/w14:schemeClr/w14:satMod", "val", u"175000");
 
         // Shadow
         OString sPathShadow = sPathToRun + "/w14:shadow";
-        assertXPath(pXmlDoc, sPathShadow, "blurRad"_ostr, u"50800"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "dist"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "dir"_ostr, u"16200000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "sx"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "sy"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "kx"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "ky"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathShadow, "algn"_ostr, u"b"_ustr);
-        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val"_ostr, u"000000"_ustr);
-        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val"_ostr, u"60000"_ustr);
+        assertXPath(pXmlDoc, sPathShadow, "blurRad", u"50800");
+        assertXPath(pXmlDoc, sPathShadow, "dist", u"38100");
+        assertXPath(pXmlDoc, sPathShadow, "dir", u"16200000");
+        assertXPath(pXmlDoc, sPathShadow, "sx", u"100000");
+        assertXPath(pXmlDoc, sPathShadow, "sy", u"100000");
+        assertXPath(pXmlDoc, sPathShadow, "kx", u"0");
+        assertXPath(pXmlDoc, sPathShadow, "ky", u"0");
+        assertXPath(pXmlDoc, sPathShadow, "algn", u"b");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr", "val", u"000000");
+        assertXPath(pXmlDoc, sPathShadow+"/w14:srgbClr/w14:alpha", "val", u"60000");
 
         // Reflection
         OString sPathReflection = sPathToRun + "/w14:reflection";
-        assertXPath(pXmlDoc, sPathReflection, "blurRad"_ostr, u"6350"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "stA"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "stPos"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "endA"_ostr, u"300"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "endPos"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "dist"_ostr, u"29997"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "dir"_ostr, u"5400000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "fadeDir"_ostr, u"5400000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "sx"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "sy"_ostr, u"-100000"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "kx"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "ky"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathReflection, "algn"_ostr, u"bl"_ustr);
+        assertXPath(pXmlDoc, sPathReflection, "blurRad", u"6350");
+        assertXPath(pXmlDoc, sPathReflection, "stA", u"50000");
+        assertXPath(pXmlDoc, sPathReflection, "stPos", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "endA", u"300");
+        assertXPath(pXmlDoc, sPathReflection, "endPos", u"50000");
+        assertXPath(pXmlDoc, sPathReflection, "dist", u"29997");
+        assertXPath(pXmlDoc, sPathReflection, "dir", u"5400000");
+        assertXPath(pXmlDoc, sPathReflection, "fadeDir", u"5400000");
+        assertXPath(pXmlDoc, sPathReflection, "sx", u"100000");
+        assertXPath(pXmlDoc, sPathReflection, "sy", u"-100000");
+        assertXPath(pXmlDoc, sPathReflection, "kx", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "ky", u"0");
+        assertXPath(pXmlDoc, sPathReflection, "algn", u"bl");
 
         // TextOutline
         OString sPathTextOutline = sPathToRun + "/w14:textOutline";
-        assertXPath(pXmlDoc, sPathTextOutline, "w"_ostr, u"25400"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "cap"_ostr, u"rnd"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "cmpd"_ostr, u"sng"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline, "algn"_ostr, u"ctr"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val"_ostr, u"40000"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
-        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val"_ostr, u"solid"_ustr);
+        assertXPath(pXmlDoc, sPathTextOutline, "w", u"25400");
+        assertXPath(pXmlDoc, sPathTextOutline, "cap", u"rnd");
+        assertXPath(pXmlDoc, sPathTextOutline, "cmpd", u"sng");
+        assertXPath(pXmlDoc, sPathTextOutline, "algn", u"ctr");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:alpha", "val", u"40000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:solidFill/w14:schemeClr/w14:lumMod", "val", u"75000");
+        assertXPath(pXmlDoc, sPathTextOutline+"/w14:prstDash", "val", u"solid");
         assertXPath(pXmlDoc, sPathTextOutline+"/w14:bevel", 1);
 
         // TextFill
         OString sPathTextFill = sPathToRun + "/w14:textFill";
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos"_ostr, u"0"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val"_ostr, u"10000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val"_ostr, u"40000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos"_ostr, u"46000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val"_ostr, u"95000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val"_ostr, u"5000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos"_ostr, u"100000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val"_ostr, u"60000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path"_ostr, u"circle"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b"_ostr, u"-30000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r"_ostr, u"50000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t"_ostr, u"130000"_ustr);
-        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l"_ostr, u"50000"_ustr);
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]", "pos", u"0");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:alpha", "val", u"10000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumMod", "val", u"40000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[1]/w14:schemeClr/w14:lumOff", "val", u"60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]", "pos", u"46000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumMod", "val", u"95000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[2]/w14:schemeClr/w14:lumOff", "val", u"5000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]", "pos", u"100000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:gsLst/w14:gs[3]/w14:schemeClr/w14:lumMod", "val", u"60000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path", "path", u"circle");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "b", u"-30000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "r", u"50000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "t", u"130000");
+        assertXPath(pXmlDoc, sPathTextFill+"/w14:gradFill/w14:path/w14:fillToRect", "l", u"50000");
 
         // Props3D
         OString sPathProps3D = sPathToRun + "/w14:props3d";
-        assertXPath(pXmlDoc, sPathProps3D, "extrusionH"_ostr, u"57150"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D, "contourW"_ostr, u"12700"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial"_ostr, u"metal"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h"_ostr, u"38100"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst"_ostr, u"angle"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w"_ostr, u"69850"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h"_ostr, u"69850"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst"_ostr, u"divot"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"20000"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val"_ostr, u"80000"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val"_ostr, u"accent1"_ustr);
-        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val"_ostr, u"75000"_ustr);
+        assertXPath(pXmlDoc, sPathProps3D, "extrusionH", u"57150");
+        assertXPath(pXmlDoc, sPathProps3D, "contourW", u"12700");
+        assertXPath(pXmlDoc, sPathProps3D, "prstMaterial", u"metal");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "w", u"38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "h", u"38100");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelT", "prst", u"angle");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "w", u"69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "h", u"69850");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:bevelB", "prst", u"divot");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumMod", "val", u"20000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:extrusionClr/w14:schemeClr/w14:lumOff", "val", u"80000");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr", "val", u"accent1");
+        assertXPath(pXmlDoc, sPathProps3D+"/w14:contourClr/w14:schemeClr/w14:lumMod", "val", u"75000");
 
         // Ligatures
         OString sPathLigatures = sPathToRun + "/w14:ligatures";
-        assertXPath(pXmlDoc, sPathLigatures, "val"_ostr, u"standard"_ustr);
+        assertXPath(pXmlDoc, sPathLigatures, "val", u"standard");
 
         // NumForm
         OString sPathNumForm = sPathToRun + "/w14:numForm";
-        assertXPath(pXmlDoc, sPathNumForm, "val"_ostr, u"lining"_ustr);
+        assertXPath(pXmlDoc, sPathNumForm, "val", u"lining");
 
         // NumSpacing
         OString sPathNumSpacing = sPathToRun + "/w14:numSpacing";
-        assertXPath(pXmlDoc, sPathNumSpacing, "val"_ostr, u"proportional"_ustr);
+        assertXPath(pXmlDoc, sPathNumSpacing, "val", u"proportional");
 
         // StylisticSets
         OString sPathStylisticSets = sPathToRun + "/w14:stylisticSets";
-        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id"_ostr, u"1"_ustr);
+        assertXPath(pXmlDoc, sPathStylisticSets+"/w14:styleSet", "id", u"1");
     }
 }
 
@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(Test, Test_no_tag_if_no_fill)
     loadAndReload("tdf112103_tablebgnofill.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:shd"_ostr, 0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:shd", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

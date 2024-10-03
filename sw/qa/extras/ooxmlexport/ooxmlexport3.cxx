@@ -137,7 +137,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     // Make sure we write qFormat for custom style names.
-    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat"_ostr, 1);
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
@@ -147,15 +147,15 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     // Check that now styleId's are more like what MSO produces
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     // the 1st style always must be Normal
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]"_ostr, "styleId"_ostr, u"Normal"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]", "styleId", u"Normal");
     // some random style later
-    assertXPath(pXmlStyles, "/w:styles/w:style[4]"_ostr, "styleId"_ostr, u"Heading3"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[4]", "styleId", u"Heading3");
 
     // Check that we do _not_ export w:next for styles that point to themselves.
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:next"_ostr, 0);
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:next", 0);
 
     // Check that we roundtrip <w:next> correctly - on XML level
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next"_ostr, "val"_ostr, u"Normal"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:next", "val", u"Normal");
     // And to be REALLY sure, check it on the API level too ;-)
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
     uno::Reference< beans::XPropertySet > properties(paragraphStyles->getByName(u"Heading 1"_ustr), uno::UNO_QUERY);
@@ -168,18 +168,18 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
 
     // Make sure style #2 is Heading 1.
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]"_ostr, "styleId"_ostr, u"Heading1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]", "styleId", u"Heading1");
     // w:ind was copied from the parent (Normal) style without a good reason.
-    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind"_ostr, 0);
+    assertXPath(pXmlStyles, "/w:styles/w:style[2]/w:pPr/w:ind", 0);
 
     // We output exactly 2 properties in rPrDefault, nothing else was
     // introduced as an additional default
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/*"_ostr, 2);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/*", 2);
     // Check that we output real content of rPrDefault
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts"_ostr, "ascii"_ostr, u"Times New Roman"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang"_ostr, "bidi"_ostr, u"ar-SA"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "ascii", u"Times New Roman");
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:lang", "bidi", u"ar-SA");
     // pPrDefault contains only one hyphenation property
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:pPrDefault/w:pPr/*", 1);
 
     // Check latent styles
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
@@ -211,33 +211,33 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleInheritance)
     CPPUNIT_ASSERT_EQUAL(u"Normal"_ustr, aName); // This checks the "name" attribute of the first exception.
 
     // This numbering style wasn't roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']/w:name"_ostr, "val"_ostr, u"No List"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']/w:name", "val", u"No List");
 
     // Table style wasn't roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:tblPr/w:tblCellMar/w:left"_ostr, "w"_ostr, u"108"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:semiHidden"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:unhideWhenUsed"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:tblPr/w:tblCellMar/w:left", "w", u"108");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:semiHidden", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='TableNormal']/w:unhideWhenUsed", 1);
 
     // Additional para style properties should be also roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListParagraph']/w:uiPriority"_ostr, "val"_ostr, u"34"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:qFormat"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rsid"_ostr, "val"_ostr, u"00780346"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']"_ostr, "default"_ostr, u"1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='ListParagraph']/w:uiPriority", "val", u"34");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:qFormat", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rsid", "val", u"00780346");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']", "default", u"1");
 
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:link"_ostr, "val"_ostr, u"Heading1Char"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:locked"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:link", "val", u"Heading1Char");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading1']/w:locked", 1);
 
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading11']"_ostr, "customStyle"_ostr, u"1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading11']/w:autoRedefine"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading11']", "customStyle", u"1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Heading11']/w:autoRedefine", 1);
 
     // Additional char style properties should be also roundtripped.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']"_ostr, "default"_ostr, u"1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='DefaultParagraphFont']", "default", u"1");
 
     // Finally check the same for numbering styles.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']"_ostr, "default"_ostr, u"1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NoList']", "default", u"1");
 
     // This was 1, the default style had <w:suppressAutoHyphens w:val="true"/> even for a default style having no RES_PARATR_HYPHENZONE set.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens"_ostr, 0);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:pPr/w:suppressAutoHyphens", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCalendar1)
@@ -245,32 +245,32 @@ CPPUNIT_TEST_FIXTURE(Test, testCalendar1)
     loadAndSave("calendar1.docx");
     // Document has a non-trivial table style, test the roundtrip of it.
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:basedOn"_ostr, "val"_ostr, u"TableNormal"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rsid"_ostr, "val"_ostr, u"00903003"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblPr/w:tblStyleColBandSize"_ostr, "val"_ostr, u"1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tcPr/w:shd"_ostr, "val"_ostr, u"clear"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:basedOn", "val", u"TableNormal");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rsid", "val", u"00903003");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblPr/w:tblStyleColBandSize", "val", u"1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tcPr/w:shd", "val", u"clear");
 
     // Table style lost its paragraph / run properties.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:pPr/w:spacing"_ostr, "lineRule"_ostr, u"auto"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rPr/w:lang"_ostr, "eastAsia"_ostr, u"ja-JP"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:pPr/w:spacing", "lineRule", u"auto");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:rPr/w:lang", "eastAsia", u"ja-JP");
 
     // Table style lost its conditional table formatting properties.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:pPr/w:wordWrap"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:rFonts"_ostr, "hAnsiTheme"_ostr, u"minorHAnsi"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:tblPr"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:vAlign"_ostr, "val"_ostr, u"bottom"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='lastRow']/w:tcPr/w:tcBorders/w:tr2bl"_ostr, "val"_ostr, u"nil"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='band2Horz']/w:tcPr/w:tcBorders/w:top"_ostr, "themeColor"_ostr, u"text1"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:pPr/w:wordWrap", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:rFonts", "hAnsiTheme", u"minorHAnsi");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:tblPr", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:vAlign", "val", u"bottom");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='lastRow']/w:tcPr/w:tcBorders/w:tr2bl", "val", u"nil");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar1']/w:tblStylePr[@w:type='band2Horz']/w:tcPr/w:tcBorders/w:top", "themeColor", u"text1");
 
     // w:tblLook element and its attributes were missing.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "firstRow"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "lastRow"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "lastColumn"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "firstColumn"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "noHBand"_ostr, u"0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "noVBand"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook"_ostr, "val"_ostr, u"04a0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "firstRow", u"1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "lastRow", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "lastColumn", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "firstColumn", u"1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "noHBand", u"0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "noVBand", u"1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "val", u"04a0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
@@ -290,18 +290,18 @@ DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
     if (!isExported())
         return;
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:pPr/w:jc"_ostr, "val"_ostr, u"center"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:pPr/w:jc", "val", u"center");
 
     // These run properties were missing
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:rPr/w:lang"_ostr, "val"_ostr, u"en-US"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:rPr/w:lang"_ostr, "bidi"_ostr, u"ar-SA"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:caps"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:smallCaps"_ostr, "val"_ostr, u"0"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color"_ostr, "themeColor"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:spacing"_ostr, "val"_ostr, u"20"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:rPr/w:lang", "val", u"en-US");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:rPr/w:lang", "bidi", u"ar-SA");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:caps", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:smallCaps", "val", u"0");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color", "themeColor", u"accent1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:spacing", "val", u"20");
 
     // Table borders were also missing
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV"_ostr, "themeTint"_ostr, u"99"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:tblPr/w:tblBorders/w:insideV", "themeTint", u"99");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCalendar3, "calendar3.docx")
@@ -356,10 +356,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTcBorders)
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:val = 'single']"_ostr,1);
-    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:sz = 4]"_ostr, 1);
-    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:space = 0]"_ostr, 1);
-    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:color = 808080]"_ostr, 1);
+    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document[1]/w:body[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tcPr[1]/w:tcBorders[1]/w:bottom[1][@w:color = 808080]", 1);
 
     uno::Reference<beans::XPropertySet> xStyle(
         getStyles(u"CharacterStyles"_ustr)->getByName(u"Code Featured Element"_ustr),
@@ -373,27 +373,27 @@ CPPUNIT_TEST_FIXTURE(Test, testQuicktables)
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
     // These were missing in the Calendar3 table style.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:rFonts"_ostr, "cstheme"_ostr, u"majorBidi"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:color"_ostr, "themeTint"_ostr, u"80"_ustr);
-    CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color"_ostr, "themeShade"_ostr).equalsIgnoreAsciiCase("BF"));
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:rFonts", "cstheme", u"majorBidi");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:rPr/w:color", "themeTint", u"80");
+    CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar3']/w:tblStylePr[@w:type='firstRow']/w:rPr/w:color", "themeShade").equalsIgnoreAsciiCase("BF"));
 
     // Calendar4.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:pPr/w:snapToGrid"_ostr, "val"_ostr, u"0"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:rPr/w:bCs"_ostr, 1);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tcPr/w:shd"_ostr, "themeFill"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tcPr/w:shd"_ostr, "themeFillShade"_ostr, u"80"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='firstCol']/w:pPr/w:ind"_ostr, "rightChars"_ostr, u"0"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='firstCol']/w:pPr/w:ind"_ostr, "right"_ostr, u"144"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='band2Horz']/w:tcPr/w:tcMar/w:bottom"_ostr, "w"_ostr, u"86"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:pPr/w:snapToGrid", "val", u"0");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:rPr/w:bCs", 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tcPr/w:shd", "themeFill", u"accent1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tcPr/w:shd", "themeFillShade", u"80");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='firstCol']/w:pPr/w:ind", "rightChars", u"0");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='firstCol']/w:pPr/w:ind", "right", u"144");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar4']/w:tblStylePr[@w:type='band2Horz']/w:tcPr/w:tcMar/w:bottom", "w", u"86");
 
     // LightList.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='LightList']/w:tblStylePr[@w:type='firstRow']/w:pPr/w:spacing"_ostr, "before"_ostr, u"0"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='LightList']/w:tblStylePr[@w:type='firstRow']/w:pPr/w:spacing", "before", u"0");
 
     // MediumList2-Accent1.
-    CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumList2-Accent1']/w:tblStylePr[@w:type='band1Vert']/w:tcPr/w:shd"_ostr, "themeFillTint"_ostr).equalsIgnoreAsciiCase("3F"));
+    CPPUNIT_ASSERT(getXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumList2-Accent1']/w:tblStylePr[@w:type='band1Vert']/w:tcPr/w:shd", "themeFillTint").equalsIgnoreAsciiCase("3F"));
 
     // MediumShading2-Accent5.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top"_ostr, "color"_ostr, u"auto"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='MediumShading2-Accent5']/w:tblStylePr[@w:type='firstRow']/w:tcPr/w:tcBorders/w:top", "color", u"auto");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo71302)
@@ -402,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo71302)
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
     // This got renamed to "Strong Emphasis" without a good reason.
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Strong']", 1);
 }
 
 
@@ -497,7 +497,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFontNameIsEmpty)
     // This test does not fail, if the document contains a font with empty name.
 
     xmlDocUniquePtr pXmlFontTable = parseExport(u"word/fontTable.xml"_ustr);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlFontTable, "/w:fonts/w:font"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
     for(sal_Int32 index = 0; index < length; index++){
@@ -515,7 +515,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMultiColumnLineSeparator)
     loadAndSave("multi-column-line-separator-SAVED.docx");
     // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols"_ostr,"sep"_ostr,u"false"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:pPr/w:sectPr/w:cols","sep",u"false");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCustomXmlGrabBag, "customxml.docx")
@@ -553,8 +553,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomXmlRelationships)
     xmlDocUniquePtr pXmlDoc = parseExport(u"customXml/_rels/item1.xml.rels"_ustr);
 
     // Check there is a relation to itemProps1.xml.
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship"_ostr, 1);
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']"_ostr, "Target"_ostr, u"itemProps1.xml"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship", 1);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId1']", "Target", u"itemProps1.xml");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69644)
@@ -564,7 +564,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69644)
     // with only 3 columns, instead of 5 columns.
     // Check that the table grid is exported with 5 columns
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol"_ostr, 5);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblGrid/w:gridCol", 5);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo70812, "fdo70812.docx")
@@ -577,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPgMargin)
 {
     loadAndSave("testPgMargin.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar"_ostr, "left"_ostr, u"1440"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:pgMar", "left", u"1440");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
@@ -693,8 +693,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCellGridSpan)
     // used to get set wrongly to 5 and 65532 respectively which was the reason for crash during save operation
     // Verifying gridSpan element is not present in RoundTripped Document (As it's Default value is 1).
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan"_ostr,0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan"_ostr,0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:gridSpan",0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:gridSpan",0);
 }
 DECLARE_OOXMLEXPORT_TEST(testFdo71646, "fdo71646.docx")
 {
@@ -713,15 +713,15 @@ CPPUNIT_TEST_FIXTURE(Test, testParaAutoSpacing)
 {
     loadAndSave("para-auto-spacing.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing"_ostr, "beforeAutospacing"_ostr,u"1"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing"_ostr, "afterAutospacing"_ostr,u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "beforeAutospacing",u"1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:spacing", "afterAutospacing",u"1");
 
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr,
-                           "beforeAutospacing"_ostr);
-    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr,
-                           "afterAutospacing"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr, "before"_ostr,u"400"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing"_ostr, "after"_ostr,u"400"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing",
+                           "beforeAutospacing");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing",
+                           "afterAutospacing");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "before",u"400");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:spacing", "after",u"400");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
@@ -799,22 +799,22 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteParagraphTag)
      * Check for, paragraph tag is correctly written into footnotes.xml.
      */
     xmlDocUniquePtr pXmlFootnotes = parseExport(u"word/footnotes.xml"_ustr);
-    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]"_ostr,"id"_ostr,u"2"_ustr);
-    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:footnoteRef"_ostr, 1);
+    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]","id",u"2");
+    assertXPath(pXmlFootnotes, "/w:footnotes/w:footnote[3]/w:p/w:r/w:footnoteRef", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSpacingLineRule)
 {
     loadAndReload("table_lineRule.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing"_ostr, "lineRule"_ostr, u"auto"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "lineRule", u"auto");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableLineSpacing)
 {
     loadAndSave("table_atleast.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing"_ostr, "line"_ostr, u"320"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p/w:pPr/w:spacing", "line", u"320");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testOoxmlTriangle, "ooxml-triangle.docx")
@@ -835,31 +835,31 @@ CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
     loadAndSave("theme-preservation.docx");
     // check default font theme values have been preserved
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts"_ostr, "asciiTheme"_ostr, u"minorHAnsi"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts"_ostr, "cstheme"_ostr, u"minorBidi"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "asciiTheme", u"minorHAnsi");
+    assertXPath(pXmlStyles, "/w:styles/w:docDefaults/w:rPrDefault/w:rPr/w:rFonts", "cstheme", u"minorBidi");
 
     // check the font theme values in style definitions
-    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts"_ostr, "eastAsiaTheme"_ostr, u"minorEastAsia"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[1]/w:rPr/w:rFonts", "eastAsiaTheme", u"minorEastAsia");
 
     // check the color theme values in style definitions
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color"_ostr, "themeColor"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color"_ostr, "themeTint"_ostr, u"99"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color", "themeColor", u"accent1");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Custom1']/w:rPr/w:color", "themeTint", u"99");
 
     // check direct format font theme values have been preserved
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts"_ostr, "hAnsiTheme"_ostr, u"majorHAnsi"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts"_ostr, "asciiTheme"_ostr, u"majorHAnsi"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "hAnsiTheme", u"majorHAnsi");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[5]/w:r[1]/w:rPr/w:rFonts", "asciiTheme", u"majorHAnsi");
 
     // check theme font color value has been preserved
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color"_ostr, "themeColor"_ostr, u"accent3"_ustr);
-    OUString sThemeShade = getXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color"_ostr, "themeShade"_ostr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeColor", u"accent3");
+    OUString sThemeShade = getXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeShade");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xbf), sThemeShade.toInt32(16));
 
     // check the themeFontLang values in settings file
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang"_ostr, "val"_ostr, u"en-US"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang"_ostr, "eastAsia"_ostr, u"zh-CN"_ustr);
-    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang"_ostr, "bidi"_ostr, u"he-IL"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "val", u"en-US");
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "eastAsia", u"zh-CN");
+    assertXPath(pXmlSettings, "/w:settings/w:themeFontLang", "bidi", u"he-IL");
 
     // check fonts have been applied properly
     sal_Unicode fontName[2]; //represents the string "宋体"
@@ -876,11 +876,11 @@ CPPUNIT_TEST_FIXTURE(Test, testThemePreservation)
                          getProperty<OUString>(getParagraph(5, u"Major theme font"_ustr), u"CharFontName"_ustr));
 
     // check the paragraph background pattern has been preserved including theme colors
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd"_ostr, "val"_ostr, u"thinHorzStripe"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd"_ostr, "themeFill"_ostr, u"text2"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd"_ostr, "themeFillTint"_ostr, u"33"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd"_ostr, "themeColor"_ostr, u"accent1"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd"_ostr, "themeShade"_ostr, u"80"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "val", u"thinHorzStripe");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFill", u"text2");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFillTint", u"33");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeColor", u"accent1");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeShade", u"80");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTableThemePreservation)
@@ -889,50 +889,50 @@ CPPUNIT_TEST_FIXTURE(Test, testTableThemePreservation)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // check cell theme colors have been preserved
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd"_ostr, "themeFill"_ostr, u"accent6"_ustr);
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd"_ostr,
-                           "themeFillShade"_ostr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd"_ostr, "themeFillTint"_ostr, u"33"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd"_ostr, "themeFill"_ostr, u"accent6"_ustr);
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd"_ostr,
-                           "themeFillShade"_ostr);
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd"_ostr,
-                           "themeFillTint"_ostr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "themeFill"_ostr, u"accent6"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "themeFillShade"_ostr, u"80"_ustr);
-    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr,
-                           "themeFillTint"_ostr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "val"_ostr, u"horzStripe"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "themeColor"_ostr, u"accent3"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "themeTint"_ostr, u"33"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd"_ostr, "color"_ostr, u"E7EEEE"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd", "themeFill", u"accent6");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd",
+                           "themeFillShade");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[1]/w:tcPr/w:shd", "themeFillTint", u"33");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd", "themeFill", u"accent6");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd",
+                           "themeFillShade");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[2]/w:tcPr/w:shd",
+                           "themeFillTint");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeFill", u"accent6");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeFillShade", u"80");
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd",
+                           "themeFillTint");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "val", u"horzStripe");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeColor", u"accent3");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "themeTint", u"33");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[3]/w:tcPr/w:shd", "color", u"E7EEEE");
 
     // check table style has been preserved
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tblPr/w:tblStyle"_ostr, "val"_ostr, u"Sombreadoclaro-nfasis1"_ustr);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tblPr/w:tblStyle", "val", u"Sombreadoclaro-nfasis1");
     // check table style is not overwritten by other properties
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:tcBorders/*"_ostr, 0);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[3]/w:tcPr/w:tcBorders/*"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[2]/w:tcPr/w:tcBorders/*", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[3]/w:tcPr/w:tcBorders/*", 0);
     // check that one cell attribute present in the original document has been preserved
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/*"_ostr, 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/*", 1);
 
     // Check that w:cnfStyle row, cell and paragraph property is preserved.
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle"_ostr, "val"_ostr, u"100000000000"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle"_ostr, "firstRow"_ostr, u"1"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle"_ostr, "lastRow"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle"_ostr, "firstColumn"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle"_ostr, "lastColumn"_ostr, u"0"_ustr);
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "val", u"100000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "firstRow", u"1");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "lastRow", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "firstColumn", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:trPr/w:cnfStyle", "lastColumn", u"0");
 
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle"_ostr, "val"_ostr, u"001000000000"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle"_ostr, "oddVBand"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle"_ostr, "evenVBand"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle"_ostr, "oddHBand"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle"_ostr, "evenHBand"_ostr, u"0"_ustr);
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "val", u"001000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "oddVBand", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "evenVBand", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "oddHBand", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc/w:tcPr/w:cnfStyle", "evenHBand", u"0");
 
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle"_ostr, "val"_ostr, u"100000000000"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle"_ostr, "firstRowFirstColumn"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle"_ostr, "firstRowLastColumn"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle"_ostr, "lastRowFirstColumn"_ostr, u"0"_ustr);
-    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle"_ostr, "lastRowLastColumn"_ostr, u"0"_ustr);
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "val", u"100000000000");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "firstRowFirstColumn", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "firstRowLastColumn", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "lastRowFirstColumn", u"0");
+    assertXPath(pXmlDocument, "//w:tbl/w:tr[1]/w:tc[2]/w:p/w:pPr/w:cnfStyle", "lastRowLastColumn", u"0");
 
 }
 
@@ -943,8 +943,8 @@ CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
     // in table row property,As default row prop is allow row to break across page.
     // writing <w:cantSplit w:val="false"/> during export was causing problem that all the cell data used to come on same page
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit"_ostr,0);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit"_ostr,"val"_ostr,u"true"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:cantSplit",0);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val",u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
@@ -953,7 +953,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     //single row tables need to prevent split by setting row to no split
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL( u"Row 1"_ustr, getXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]"_ostr) );
+    assertXPathContent(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]", u"Row 1");
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
@@ -982,14 +982,14 @@ CPPUNIT_TEST_FIXTURE(Test, testcolumnbreak)
     loadAndSave("columnbreak.docx");
     CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(5, u"This is first line after col brk."_ustr), u"BreakType"_ustr));
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br"_ostr, "type"_ostr, u"column"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:br", "type", u"column");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGlossary)
 {
     loadAndSave("testGlossary.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/glossary/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:glossaryDocument"_ostr, "Ignorable"_ostr, u"w14 wp14"_ustr);
+    assertXPath(pXmlDoc, "/w:glossaryDocument", "Ignorable", u"w14 wp14");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
@@ -1000,12 +1000,12 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
     assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@Id='rId4' "
         "and @Type='http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink' "
         "and @Target='mailto:emailgoeshere@example.com' "
-        "and @TargetMode='External']"_ostr);
+        "and @TargetMode='External']");
 
     // preserve the ShowingPlaceholder setting on both block SDTs.
     pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:showingPlcHdr"_ostr, 1);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:sdt/w:sdtPr/w:showingPlcHdr"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:sdt/w:sdtPr/w:showingPlcHdr", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")
@@ -1017,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCrashWhileSave)
 {
     loadAndSave("testCrashWhileSave.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/footer1.xml"_ustr);
-    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle"_ostr, "val"_ostr).match("Normal"));
+    CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:ftr/w:tbl/w:tr/w:tc[1]/w:p[1]/w:pPr/w:pStyle", "val").match("Normal"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFileOpenInputOutputError)
@@ -1025,10 +1025,10 @@ CPPUNIT_TEST_FIXTURE(Test, testFileOpenInputOutputError)
     loadAndReload("floatingtbl_with_formula.docx");
     // Docx containing Floating table with formula was giving "General input/output error" while opening in LibreOffice
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle"_ostr, "val"_ostr, u"Normal"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", u"Normal");
 
     // let's also assert that the formula was exported properly
-    assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMathPara/m:oMath/m:sSubSup/m:e/m:r/m:t"_ostr, u"\u03C3"_ustr);
+    assertXPathContent(pXmlDoc, "//w:tbl/w:tr/w:tc[2]/w:p/m:oMathPara/m:oMath/m:sSubSup/m:e/m:r/m:t", u"\u03C3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSingleCellTableBorders)
@@ -1037,8 +1037,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSingleCellTableBorders)
     // tdf#124399: Extra borders on single cell tables fixed.
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:top    [@w:val = 'nil']"_ostr, 1);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']"_ostr, 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:top    [@w:val = 'nil']", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsideBorders)
@@ -1049,7 +1049,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsideBorders)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // If this is not 0, then inside borders are removed.
-    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders"_ostr, 0);
+    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:tcPr/w:tcBorders", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRightBorder)
@@ -1060,7 +1060,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRightBorder)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // If the right border is missing like in the bug, then there is a <w:right w:val="nil" /> tag in tcBorders.
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:tcPr/w:tcBorders/w:end [@w:val = 'nil']"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc/w:tcPr/w:tcBorders/w:end [@w:val = 'nil']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBottomBorder)
@@ -1071,7 +1071,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBottomBorder)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     // If there is no bottom border, it is shown in tcBorders.
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBottomBorders)
@@ -1082,11 +1082,11 @@ CPPUNIT_TEST_FIXTURE(Test, testBottomBorders)
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']"_ostr, 0);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[4]/w:tc[2]/w:tcPr/w:tcBorders/w:bottom [@w:val = 'nil']", 0);
 
     // But also don't treat separately merged cells as one - the topmost merged cell shouldn't gain a border.
-    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcBorders/w:bottom"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[4]/w:tcPr/w:tcBorders/w:bottom", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFontTypes)
@@ -1096,11 +1096,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFontTypes)
 
     // Check the font type of the text, should be Consolas.
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:rFonts [@w:ascii='Consolas']"_ostr, 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r/w:rPr/w:rFonts [@w:ascii='Consolas']", 1);
 
     // Now the font type of the numbering symbols, should be Arial Black.
     xmlDocUniquePtr qXmlDocument = parseExport(u"word/numbering.xml"_ustr);
-    assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']"_ostr, 1);
+    assertXPath(qXmlDocument, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:rPr/w:rFonts [@w:ascii='Arial Black']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
@@ -1112,14 +1112,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingLevels)
     // [this assertXPath is not a very good test, since the numbering definition is not set on the paragraph itself,
     //  but in a style. This just tests the current copy-to-paragraph implementation. But leaving it for now,
     //  since this example is very much a corner case, so anyone trespassing here should double-check everything...]
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']"_ostr, 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:numPr/w:ilvl [@w:val = '1']", 1);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Note: _Toc and _Ref hidden bookmarks are imported from OOXML as normal bookmarks.
     // Without hiding them from visible bookmarks (SwBookmarkPortion), this line would be
     // shown as "A.2.1 [[[[[.DESCRIPTION]]]] with XML layout dump "A.2.1 #_Ref... Bookmark Start..."
-    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[1]"_ostr, "expand"_ostr, u"A.2.1 "_ustr);
-    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[2]"_ostr, "portion"_ostr, u".DESCRIPTION"_ustr);
+    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[1]", "expand", u"A.2.1 ");
+    assertXPath(pXmlDoc, "//body/txt[5]/SwParaPortion/SwLineLayout/child::*[2]", "portion", u".DESCRIPTION");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testVerticalBorders)
@@ -1129,7 +1129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticalBorders)
 
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     // Left and right borders.
-    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders"_ostr, 2);
+    assertXPathChildren(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[3]/w:tc[3]/w:tcPr/w:tcBorders", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testArrowFlipXY)
@@ -1141,8 +1141,8 @@ CPPUNIT_TEST_FIXTURE(Test, testArrowFlipXY)
 
     OUString arrowStyle = getXPath(pXmlDocument,
                                    "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/"
-                                   "w:pict/v:group/v:shape[@type='_x0000_t32']"_ostr,
-                                   "style"_ostr);
+                                   "w:pict/v:group/v:shape[@type='_x0000_t32']",
+                                   "style");
     CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
 }
 
@@ -1154,7 +1154,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArrowPosition)
 
     // This is the correct Y coordinate, the incorrect was 817880.
     assertXPathContent(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/wp:positionV/wp:posOffset"_ostr, u"516890"_ustr);
+        "/wp:positionV/wp:posOffset", u"516890");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testArrowMarker)
@@ -1165,7 +1165,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArrowMarker)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd"_ostr, "type"_ostr, u"arrow"_ustr);
+        "/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:tailEnd", "type", u"arrow");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeLineWidth)
@@ -1178,7 +1178,7 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeLineWidth)
 
     // "w" attribute was not exported.
     assertXPath(pXml, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing"
-        "/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln"_ostr, "w"_ostr, u"0"_ustr);
+        "/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln", "w", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromLeftMargin)
@@ -1187,7 +1187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromLeftMargin)
     // tdf#132976 The size of the width of this shape should come from the size of the left margin.
     // It was set to the size of the width of the entire page before.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds"_ostr, "width"_ostr, u"1133"_ustr);
+    assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject/bounds", "width", u"1133");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromInsideOutsideMargin)
@@ -1197,13 +1197,13 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeAnchorWidthFromInsideOutsideMargin)
     // The open book: outside --text-- inside | inside --text-- outside
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Inside
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds"_ostr, "width"_ostr, u"1440"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[1]/bounds", "width", u"1440");
     // Outside
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds"_ostr, "width"_ostr, u"2552"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[2]/bounds", "width", u"2552");
     // Outside
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds"_ostr, "width"_ostr, u"2552"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[3]/bounds", "width", u"2552");
     // Inside
-    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[4]/bounds"_ostr, "width"_ostr, u"1440"_ustr);
+    assertXPath(pXmlDoc, "(//anchored/SwAnchoredDrawObject)[4]/bounds", "width", u"1440");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
@@ -1214,7 +1214,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wps:wsp/wps:bodyPr"_ostr, "upright"_ostr, u"1"_ustr);
+        "/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "upright", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLostArrow)
@@ -1227,7 +1227,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLostArrow)
     xmlDocUniquePtr pDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-        "/a:graphic/a:graphicData/wps:wsp"_ostr);
+        "/a:graphic/a:graphicData/wps:wsp");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

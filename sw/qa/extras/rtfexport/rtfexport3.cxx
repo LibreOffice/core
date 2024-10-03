@@ -272,17 +272,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115180)
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         sal_Int32 rowWidth
-            = getXPath(pXmlDoc, "/root/page/body/tab/row/infos/bounds"_ostr, "width"_ostr)
-                  .toInt32();
+            = getXPath(pXmlDoc, "/root/page/body/tab/row/infos/bounds", "width").toInt32();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Row width", sal_Int32(9360), rowWidth);
         sal_Int32 cell1Width
-            = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds"_ostr, "width"_ostr)
-                  .toInt32();
+            = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[1]/infos/bounds", "width").toInt32();
         CPPUNIT_ASSERT_MESSAGE("First cell width", cell1Width >= 9140);
         CPPUNIT_ASSERT_MESSAGE("First cell width", cell1Width <= 9142);
         sal_Int32 cell2Width
-            = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/infos/bounds"_ostr, "width"_ostr)
-                  .toInt32();
+            = getXPath(pXmlDoc, "/root/page/body/tab/row/cell[2]/infos/bounds", "width").toInt32();
         CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width >= 218);
         CPPUNIT_ASSERT_MESSAGE("Second cell width", cell2Width <= 220);
     };

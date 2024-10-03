@@ -76,11 +76,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
-    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds"_ostr, "bottom"_ostr).toInt32();
-    sal_Int32 nTableFrameTop
-        = getXPath(pXmlDoc, "//body/tab/infos/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nTableTopMargin
-        = getXPath(pXmlDoc, "//body/tab/infos/prtBounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
+    sal_Int32 nTableFrameTop = getXPath(pXmlDoc, "//body/tab/infos/bounds", "top").toInt32();
+    sal_Int32 nTableTopMargin = getXPath(pXmlDoc, "//body/tab/infos/prtBounds", "top").toInt32();
     sal_Int32 nTableTop = nTableFrameTop + nTableTopMargin;
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected greater than: 2747

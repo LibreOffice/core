@@ -33,13 +33,13 @@ public:
 protected:
     // We import OOXML's EMUs into integral mm100 internal representation, then export back into
     // EMUs. This results in inaccuracies.
-    void assertXPathHasApproxEMU(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
-                                 const OString& rAttribute, sal_Int64 nAttributeVal)
+    void assertXPathHasApproxEMU(const xmlDocUniquePtr& pXmlDoc, const char* pXPath,
+                                 const char* pAttribute, sal_Int64 nAttributeVal)
     {
-        OUString val = getXPath(pXmlDoc, rXPath, rAttribute);
+        OUString val = getXPath(pXmlDoc, pXPath, pAttribute);
         // Use precision of 1/2 of 100th of mm, which is 180 EMU
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE(
-            OString("XPath: " + rXPath + "\nAttribute: " + rAttribute).getStr(), nAttributeVal,
+            OString(OString::Concat("XPath: ") + pXPath + "\nAttribute: " + pAttribute).getStr(), nAttributeVal,
             val.toInt64(), 180);
     }
 };
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(Test,  testChildNodesOfCubicBezierTo)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath( pXmlDoc,
-        "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]"_ostr);
+        "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent[1]/mc:Choice/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[3]/wps:spPr[1]/a:custGeom[1]/a:pathLst[1]/a:path[1]/a:cubicBezTo[2]/a:pt[3]");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testMSwordHang)
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMSwordHang)
     loadAndSave("test_msword_hang.docx");
     // fdo#74771:
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline"_ostr, "distT"_ostr, u"0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r[2]/w:drawing/wp:inline", "distT", u"0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGroupshapeThemeFont, "groupshape-theme-font.docx")
@@ -81,8 +81,8 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchorIdForWP14AndW14)
     loadAndSave("AnchorId.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline"_ostr, "anchorId"_ostr, u"78735EFD"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect"_ostr, "anchorId"_ostr, u"78735EFD"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:inline", "anchorId", u"78735EFD");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[3]/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "anchorId", u"78735EFD");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDkVert, "dkvert.docx")
@@ -102,10 +102,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTextWatermark)
     //It has to have the 'PowerPlusWaterMarkObject' string in it
     xmlDocUniquePtr pXmlHeader2 = parseExport(u"word/header2.xml"_ustr);
 
-    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]"_ostr,"id"_ostr,u"PowerPlusWaterMarkObject93701316"_ustr);
+    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","id",u"PowerPlusWaterMarkObject93701316");
 
     //The second problem was that Word uses also "o:spid"
-    const OUString& sSpid = getXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]"_ostr,"spid"_ostr);
+    const OUString& sSpid = getXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/w:pict[1]/v:shape[1]","spid");
     CPPUNIT_ASSERT(!sSpid.isEmpty());
 }
 
@@ -119,7 +119,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureWatermark)
     xmlDocUniquePtr pXmlHeader2 = parseExport(u"word/header2.xml"_ustr);
 
     // Check the watermark ID
-    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]"_ostr,"id"_ostr,u"WordPictureWatermark11962361"_ustr);
+    assertXPath(pXmlHeader2, "/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:shape[1]","id",u"WordPictureWatermark11962361");
 }
 
 
@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76249)
      * are not allowed inside the textboxes.
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]/v:textbox[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]"_ostr,1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Fallback[1]/w:pict[1]/v:rect[1]/v:textbox[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]",1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo76979)
@@ -142,7 +142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76979)
     // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
     // This was "auto", not "FFFFFF".
-    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr"_ostr, "val"_ostr, u"FFFFFF"_ustr);
+    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", u"FFFFFF");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
@@ -152,8 +152,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104539)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dir"_ostr, u"13500000"_ustr);
+            "wp:inline/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dir", u"13500000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
@@ -163,131 +163,131 @@ CPPUNIT_TEST_FIXTURE(Test, testShapeEffectPreservation)
 
     // first shape with outer shadow, rgb color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "algn"_ostr, u"tl"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "algn", u"tl");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "blurRad"_ostr, u"50760"_ustr); // because convertEMUtoHmm rounds fractions into nearest integer 50800 will be 50760
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "blurRad", u"50760"); // because convertEMUtoHmm rounds fractions into nearest integer 50800 will be 50760
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dir"_ostr, u"2700000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dir", u"2700000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dist"_ostr, u"37674"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dist", u"37674");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "rotWithShape"_ostr, u"0"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "rotWithShape", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr"_ostr,
-            "val"_ostr, u"000000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr",
+            "val", u"000000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha",
+            "val", u"40000");
 
     // second shape with outer shadow, scheme color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "algn"_ostr, u"tl"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "algn", u"tl");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "blurRad"_ostr, u"114480"_ustr); // because convertEMUtoHmm rounds fractions into nearest integer 114300 will be 114480
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "blurRad", u"114480"); // because convertEMUtoHmm rounds fractions into nearest integer 114300 will be 114480
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dir"_ostr, u"2700000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dir", u"2700000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dist"_ostr, u"203137"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "dist", u"203137");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw"_ostr,
-            "rotWithShape"_ostr, u"0"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw",
+            "rotWithShape", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr"_ostr,
-            "val"_ostr, u"accent1"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr",
+            "val", u"accent1");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:lumMod"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:lumMod",
+            "val", u"40000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:lumOff"_ostr,
-            "val"_ostr, u"60000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:lumOff",
+            "val", u"60000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:alpha"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:outerShdw/a:schemeClr/a:alpha",
+            "val", u"40000");
 
     // third shape with inner shadow, rgb color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw"_ostr,
-            "blurRad"_ostr, u"63500"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
+            "blurRad", u"63500");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw"_ostr,
-            "dir"_ostr, u"16200000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
+            "dir", u"16200000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw"_ostr,
-            "dist"_ostr, u"50800"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
+            "dist", u"50800");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr"_ostr,
-            "val"_ostr, u"ffff00"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr",
+            "val", u"ffff00");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"50000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr/a:alpha",
+            "val", u"50000");
 
     // 4th shape with soft edge
     assertXPathHasApproxEMU(
         pXmlDoc,
         "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge"_ostr,
-        "rad"_ostr, 127000); // actually, it returns 127080
+        "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge",
+        "rad", 127000); // actually, it returns 127080
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge/*"_ostr,
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:softEdge/*",
             0 ); // should not be present
 
     // 5th shape with glow effect, scheme color
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr"_ostr,
-            "val"_ostr, u"eb2722"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr",
+            "val", u"eb2722");
 
     // 6th shape with reflection
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "blurRad"_ostr, u"6350"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "blurRad", u"6350");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "stA"_ostr, u"50000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "stA", u"50000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "endA"_ostr, u"300"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "endA", u"300");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "endPos"_ostr, u"55500"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "endPos", u"55500");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[7]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection/*"_ostr,
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection/*",
             0 ); // should not be present
 
     // 7th shape with several effects: glow, inner shadow and reflection
     assertXPathHasApproxEMU(pXmlDoc,
                             "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-                            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow"_ostr,
-                            "rad"_ostr, 63500); // actually, it returns 63360
+                            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow",
+                            "rad", 63500); // actually, it returns 63360
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr"_ostr,
-            "val"_ostr, u"eb2722"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:glow/a:srgbClr",
+            "val", u"eb2722");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw"_ostr,
-            "blurRad"_ostr, u"63500"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
+            "blurRad", u"63500");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw"_ostr,
-            "dir"_ostr, u"2700000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw",
+            "dir", u"2700000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr"_ostr,
-            "val"_ostr, u"000000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr",
+            "val", u"000000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"50000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:innerShdw/a:srgbClr/a:alpha",
+            "val", u"50000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "blurRad"_ostr, u"6350"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "blurRad", u"6350");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[8]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection"_ostr,
-            "stA"_ostr, u"52000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:effectLst/a:reflection",
+            "stA", u"52000");
 
 }
 
@@ -298,107 +298,107 @@ CPPUNIT_TEST_FIXTURE(Test, testShape3DEffectPreservation)
 
     // first shape: extrusion and shift on z, rotated camera with zoom, rotated light rig
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera"_ostr,
-            "prst"_ostr, u"perspectiveRelaxedModerately"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "prst", u"perspectiveRelaxedModerately");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera"_ostr,
-            "zoom"_ostr, u"150000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "zoom", u"150000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot"_ostr,
-            "lat"_ostr, u"19490639"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot",
+            "lat", u"19490639");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot"_ostr,
-            "lon"_ostr, u"0"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot",
+            "lon", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot"_ostr,
-            "rev"_ostr, u"12900001"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot",
+            "rev", u"12900001");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig"_ostr,
-            "rig"_ostr, u"threePt"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig",
+            "rig", u"threePt");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig"_ostr,
-            "dir"_ostr, u"t"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig",
+            "dir", u"t");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot"_ostr,
-            "lat"_ostr, u"0"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot",
+            "lat", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot"_ostr,
-            "lon"_ostr, u"0"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot",
+            "lon", u"0");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot"_ostr,
-            "rev"_ostr, u"4800000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot",
+            "rev", u"4800000");
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "extrusionH"_ostr, u"63500"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "extrusionH", u"63500");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "z"_ostr, u"488950"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "z", u"488950");
 
     // second shape: extrusion with theme color, no camera or light rotation, metal material
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera"_ostr,
-            "prst"_ostr, u"isometricLeftDown"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera",
+            "prst", u"isometricLeftDown");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot"_ostr,
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:camera/a:rot",
             0);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig"_ostr,
-            "rig"_ostr, u"threePt"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig",
+            "rig", u"threePt");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig"_ostr,
-            "dir"_ostr, u"t"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig",
+            "dir", u"t");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot"_ostr,
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:scene3d/a:lightRig/a:rot",
             0);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "extrusionH"_ostr, u"25400"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "extrusionH", u"25400");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "prstMaterial"_ostr, u"metal"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", u"metal");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr"_ostr,
-            "val"_ostr, u"accent5"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr",
+            "val", u"accent5");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr/a:lumMod"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr/a:lumMod",
+            "val", u"40000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr/a:lumOff"_ostr,
-            "val"_ostr, u"60000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:extrusionClr/a:schemeClr/a:lumOff",
+            "val", u"60000");
 
     // third shape: colored contour and top and bottom bevel, plastic material
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "contourW"_ostr, u"50800"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "contourW", u"50800");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "prstMaterial"_ostr, u"plastic"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", u"plastic");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT"_ostr,
-            "w"_ostr, u"139700"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT",
+            "w", u"139700");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT"_ostr,
-            "h"_ostr, u"88900"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT",
+            "h", u"88900");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT"_ostr,
-            "prst"_ostr, u"cross"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelT",
+            "prst", u"cross");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelB"_ostr,
-            "h"_ostr, u"88900"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelB",
+            "h", u"88900");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelB"_ostr,
-            "prst"_ostr, u"relaxedInset"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:bevelB",
+            "prst", u"relaxedInset");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:contourClr/a:srgbClr"_ostr,
-            "val"_ostr, u"3333ff"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d/a:contourClr/a:srgbClr",
+            "val", u"3333ff");
 
     // fourth shape: wireframe
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d"_ostr,
-            "prstMaterial"_ostr, u"legacyWireframe"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:sp3d",
+            "prstMaterial", u"legacyWireframe");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureEffectPreservation)
@@ -408,52 +408,52 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureEffectPreservation)
 
     // first picture: glow effect with theme color and transformations, 3d rotation and extrusion
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow"_ostr,
-            "rad"_ostr, u"228600"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow",
+            "rad", u"228600");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr"_ostr,
-            "val"_ostr, u"267de6"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr",
+            "val", u"267de6");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:glow/a:srgbClr/a:alpha",
+            "val", u"40000");
 
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:camera"_ostr,
-            "prst"_ostr, u"isometricRightUp"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:camera",
+            "prst", u"isometricRightUp");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:lightRig"_ostr,
-            "rig"_ostr, u"threePt"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:scene3d/a:lightRig",
+            "rig", u"threePt");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:sp3d"_ostr,
-            "extrusionH"_ostr, u"76200"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:sp3d",
+            "extrusionH", u"76200");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:sp3d/a:extrusionClr/a:srgbClr"_ostr,
-            "val"_ostr, u"92d050"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:sp3d/a:extrusionClr/a:srgbClr",
+            "val", u"92d050");
 
     // second picture: shadow and reflection effects
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw"_ostr,
-            "dir"_ostr, u"8100000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw",
+            "dir", u"8100000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/a:srgbClr"_ostr,
-            "val"_ostr, u"000000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/a:srgbClr",
+            "val", u"000000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha"_ostr,
-            "val"_ostr, u"40000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha",
+            "val", u"40000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:reflection"_ostr,
-            "dir"_ostr, u"5400000"_ustr);
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:reflection",
+            "dir", u"5400000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:reflection/*"_ostr,
+            "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:reflection/*",
             0 ); // should not be present
 
     // third picture: soft edge effect
     assertXPathHasApproxEMU(
         pXmlDoc,
         "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-        "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge"_ostr,
-        "rad"_ostr, 63500); // actually, it returns 63360
+        "wp:anchor/a:graphic/a:graphicData/pic:pic/pic:spPr/a:effectLst/a:softEdge",
+        "rad", 63500); // actually, it returns 63360
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
@@ -468,86 +468,86 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureArtisticEffectPreservation)
     // 1st picture: marker effect
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticMarker"_ostr,
-            "trans"_ostr, u"14000"_ustr);
+            "a14:artisticMarker",
+            "trans", u"14000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticMarker"_ostr,
-            "size"_ostr, u"80"_ustr);
+            "a14:artisticMarker",
+            "size", u"80");
 
     OUString sEmbedId1 = getXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     OUString sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId1 + "']";
-    OUString sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target"_ostr);
+    OUString sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
 
     // 2nd picture: pencil grayscale
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticPencilGrayscale"_ostr,
-            "trans"_ostr, u"15000"_ustr);
+            "a14:artisticPencilGrayscale",
+            "trans", u"15000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticPencilGrayscale"_ostr,
-            "pencilSize"_ostr, u"66"_ustr);
+            "a14:artisticPencilGrayscale",
+            "pencilSize", u"66");
 
     OUString sEmbedId2 = getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId2);
 
     // 3rd picture: pencil sketch
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticPencilSketch"_ostr,
-            "trans"_ostr, u"7000"_ustr);
+            "a14:artisticPencilSketch",
+            "trans", u"7000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticPencilSketch"_ostr,
-            "pressure"_ostr, u"17"_ustr);
+            "a14:artisticPencilSketch",
+            "pressure", u"17");
 
     OUString sEmbedId3 = getXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId3);
 
     // 4th picture: light screen
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticLightScreen"_ostr,
-            "trans"_ostr, u"13000"_ustr);
+            "a14:artisticLightScreen",
+            "trans", u"13000");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticLightScreen"_ostr,
-            "gridSize"_ostr, u"1"_ustr);
+            "a14:artisticLightScreen",
+            "gridSize", u"1");
 
     OUString sEmbedId4 = getXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     sXmlPath = "/rels:Relationships/rels:Relationship[@Id='" + sEmbedId4 + "']";
-    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target"_ostr);
+    sFile = getXPath(pRelsDoc, OUStringToOString( sXmlPath, RTL_TEXTENCODING_UTF8 ), "Target");
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("word/" + sFile)));
 
     // 5th picture: watercolor sponge
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticWatercolorSponge"_ostr,
-            "brushSize"_ostr, u"4"_ustr);
+            "a14:artisticWatercolorSponge",
+            "brushSize", u"4");
 
     OUString sEmbedId5 = getXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId5);
 
     // 6th picture: photocopy (no attributes)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/"
             "a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer/a14:imgEffect/"
-            "a14:artisticPhotocopy"_ostr, 1);
+            "a14:artisticPhotocopy", 1);
 
     OUString sEmbedId6 = getXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:r/mc:AlternateContent/mc:Choice/w:drawing/"
-            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer"_ostr,
-            "embed"_ostr);
+            "wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:extLst/a:ext/a14:imgProps/a14:imgLayer",
+            "embed");
     CPPUNIT_ASSERT_EQUAL(sEmbedId1, sEmbedId6);
 
     // no redundant wdp files saved
@@ -558,7 +558,7 @@ CPPUNIT_TEST_FIXTURE(Test, fdo77719)
 {
     loadAndSave("fdo77719.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:custGeom[1]"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:custGeom[1]", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNestedAlternateContent)
@@ -566,7 +566,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedAlternateContent)
     loadAndSave("nestedAlternateContent.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // We check alternateContent  could not contains alternateContent (i.e. nested alternateContent)
-    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]"_ostr,0);
+    assertXPath(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wpg:wgp[1]/wps:wsp[2]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]",0);
 }
 
 #if 0
@@ -586,14 +586,14 @@ CPPUNIT_TEST_FIXTURE(Test, fdo76591)
 {
     loadAndSave("fdo76591.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]"_ostr, "relativeHeight"_ostr, u"3"_ustr);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "relativeHeight", u"3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test76317_2K10)
 {
     loadAndSave("test76317_2K10.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]"_ostr, "name"_ostr, u"adj"_ustr);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:prstGeom[1]/a:avLst[1]/a:gd[1]", "name", u"adj");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO77122)
@@ -601,22 +601,22 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77122)
     loadAndSave("LinkedTextBoxes.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     //ensure that the text box links are preserved.
-    assertXPath(pXmlDoc, "//wps:txbx[1]"_ostr, "id"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc, "//wps:linkedTxbx[1]"_ostr, "id"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "//wps:txbx[1]", "id", u"1");
+    assertXPath(pXmlDoc, "//wps:linkedTxbx[1]", "id", u"1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test76734_2K7)
 {
     loadAndSave("test76734_2K7.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]"_ostr, "Requires"_ostr, u"wps"_ustr);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[3]/mc:AlternateContent[1]/mc:Choice[1]", "Requires", u"wps");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test77219)
 {
     loadAndSave("test77219.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]"_ostr, "behindDoc"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[6]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]", "behindDoc", u"1");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf77219_backgroundShape, "tdf77219_backgroundShape.docx")
@@ -700,7 +700,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo76101)
 {
     loadAndSave("fdo76101.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:styles/w:style"_ostr);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:styles/w:style");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(4091 >= xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
@@ -710,8 +710,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtAndShapeOverlapping)
 {
     loadAndSave("ShapeOverlappingWithSdt.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent"_ostr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]"_ostr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt[1]/w:sdtContent[1]/w:r[1]");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
@@ -719,7 +719,7 @@ CPPUNIT_TEST_FIXTURE(Test, testLockedCanvas)
     loadAndSave("fdo78658.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // Checking for lockedCanvas tag
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/lc:lockedCanvas"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/lc:lockedCanvas", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, fdo78474)
@@ -727,10 +727,10 @@ CPPUNIT_TEST_FIXTURE(Test, fdo78474)
     loadAndSave("fdo78474.docx");
     xmlDocUniquePtr pXmlDoc1 = parseExport(u"word/document.xml"_ustr);
     //docx file after RT is getting corrupted.
-    assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]"_ostr, "embed"_ostr, u"rId2"_ustr);
+    assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", u"rId2");
 
     xmlDocUniquePtr pXmlDoc2 = parseExport(u"word/_rels/document.xml.rels"_ustr);
-    assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]"_ostr,"Id"_ostr,u"rId2"_ustr);
+    assertXPath(pXmlDoc2,"/rels:Relationships/rels:Relationship[2]","Id",u"rId2");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
@@ -739,14 +739,14 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     xmlXPathObjectPtr pXmlObjs[6];
-    pXmlObjs[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]"_ostr);
-    pXmlObjs[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]"_ostr);
+    pXmlObjs[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlObjs[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
-    pXmlObjs[2] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]"_ostr);
-    pXmlObjs[3] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]"_ostr);
+    pXmlObjs[2] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlObjs[3] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
-    pXmlObjs[4] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]"_ostr);
-    pXmlObjs[5] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]"_ostr);
+    pXmlObjs[4] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    pXmlObjs[5] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
     for(sal_Int32 index = 0; index<6; ++index)
     {
@@ -769,7 +769,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78300)
     loadAndSave("fdo78300.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc,
-                "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]"_ostr,
+                "/w:document/w:body/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing[1]/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r[1]/w:drawing[1]",
                 0);
 }
 
@@ -786,10 +786,10 @@ CPPUNIT_TEST_FIXTURE(Test, testWordArtWithinDraingtool)
      * */
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent"_ostr,1);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape"_ostr,1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent",1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape",1);
     // Make sure that the shape inside a shape is exported as VML-only, no embedded mc:AlternateContent before w:pict.
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict"_ostr,1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict",1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testfdo78663)
@@ -807,10 +807,10 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo78663)
      * */
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path"_ostr,1);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path"_ostr,1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path",1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:textbox/w:txbxContent/w:p/w:r/w:pict/v:shape/v:path",1);
     // Make sure that the shape inside a shape is exported as VML-only, no embedded mc:AlternateContent before w:pict.
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict"_ostr,1);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p/w:r/w:pict",1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo78957)
@@ -820,8 +820,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo78957)
 
     const sal_Int64 IntMax = SAL_MAX_INT32;
     sal_Int64 cx = 0, cy = 0;
-    cx = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]"_ostr,"cx"_ostr).toInt64();
-    cy = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]"_ostr,"cy"_ostr).toInt64();
+    cx = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cx").toInt64();
+    cy = getXPath(pXmlHeader,"/w:hdr[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:extent[1]","cy").toInt64();
     //  Here we check the values of extent width & height
     CPPUNIT_ASSERT(cx <= IntMax );
     CPPUNIT_ASSERT(cy >= 0 );
@@ -835,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79256)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln/a:prstDash"_ostr, "val"_ostr, u"lgDash"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln/a:prstDash", "val", u"lgDash");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDash1000thOfPercent)
@@ -847,14 +847,14 @@ CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDash1000thOfPercent)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]"_ostr, "d"_ostr , u"800000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "d" , u"800000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "sp", u"300000");
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]"_ostr, "d"_ostr , u"100000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]", "d" , u"100000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]", "sp", u"300000");
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]"_ostr, "d"_ostr , u"100000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]", "d" , u"100000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]", "sp", u"300000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDashPercentage)
@@ -867,14 +867,14 @@ CPPUNIT_TEST_FIXTURE(Test, testDashedLine_CustDashPercentage)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]"_ostr, "d"_ostr , u"800000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "d" , u"800000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]", "sp", u"300000");
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]"_ostr, "d"_ostr , u"100000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]", "d" , u"100000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[2]", "sp", u"300000");
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]"_ostr, "d"_ostr , u"100000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]"_ostr, "sp"_ostr, u"300000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]", "d" , u"100000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[3]", "sp", u"300000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
@@ -883,7 +883,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCommentInitials)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/comments.xml"_ustr);
 
-    assertXPath(pXmlDoc,"/w:comments/w:comment[1]"_ostr, "initials"_ostr, u"initials"_ustr);
+    assertXPath(pXmlDoc,"/w:comments/w:comment[1]", "initials", u"initials");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.docx")
@@ -911,8 +911,8 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79591)
      */
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr"_ostr, "name"_ostr, u"_x0000_t0"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape"_ostr, "ID"_ostr, u"_x0000_t0"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", u"_x0000_t0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", u"_x0000_t0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testBnc884615, "bnc884615.docx")
@@ -927,8 +927,8 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo80894)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Rotation value was not roundtripped for textframe.
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm"_ostr,
-    "rot"_ostr,u"16200000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+    "rot",u"16200000");
 
     // w:enforcement defaults to off if not explicitly specified, so DocProtect forms should not be enabled.
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
@@ -945,12 +945,12 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo80895)
     // Checking there is a shape in header without <a:noFill/> element.
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/header2.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:noFill"_ostr,0);
-    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:noFill"_ostr,0);
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:noFill",0);
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:ln/a:noFill",0);
 
     // Check for fallback (required for MSO-2007)
-    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect"_ostr, "fillcolor"_ostr, u"#4f81bd"_ustr);
-    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:fill"_ostr, "type"_ostr, u"solid"_ustr);
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "fillcolor", u"#4f81bd");
+    assertXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:fill", "type", u"solid");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
@@ -961,20 +961,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118242)
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:pStyle"_ostr, "val"_ostr, u"HeaderRight"_ustr);
+    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:pStyle", "val", u"HeaderRight");
 
     // w:sectPr is not exported
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor"
-    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:sectPr"_ostr, 0);
+    "/a:graphic/a:graphicData/wps:wsp/wps:txbx/w:txbxContent/w:p[2]/w:pPr/w:sectPr", 0);
 
     // and drawing is no longer in the document
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[3]"_ostr, 0);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:r[3]", 0);
 
     //but it's in the header
     pXmlDocument = parseExport(u"word/header1.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData"
-            "/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r/w:drawing"_ostr, 1);
+            "/wps:wsp/wps:txbx/w:txbxContent/w:p[1]/w:r/w:drawing", 1);
 
 }
 
@@ -984,9 +984,9 @@ CPPUNIT_TEST_FIXTURE(Test, testWrapTightThrough)
     // These were wrapSquare without a wrap polygon before.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // The first shape should be wrapThrough with a wrap polygon (was wrapSquare).
-    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start"_ostr, "x"_ostr, u"-1104"_ustr);
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapThrough/wp:wrapPolygon/wp:start", "x", u"-1104");
     // The second shape should be wrapTight with a wrap polygon (was wrapSquare).
-    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start"_ostr, "y"_ostr, u"792"_ustr);
+    assertXPath(pXmlDoc, "//w:drawing/wp:anchor[1]/wp:wrapTight/wp:wrapPolygon/wp:start", "y", u"792");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.docx")
@@ -1006,7 +1006,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeGrayscale)
     // The problem was that the grayscale was not exported
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:grayscl"_ostr, 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:inline/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:grayscl", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeBlackWhite)
@@ -1016,7 +1016,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeBlackWhite)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:biLevel"_ostr, "thresh"_ostr, u"50000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:biLevel", "thresh", u"50000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeWatermark)
@@ -1025,8 +1025,8 @@ CPPUNIT_TEST_FIXTURE(Test, testPictureColormodeWatermark)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport (u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum"_ostr, "bright"_ostr, u"70000"_ustr);
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum"_ostr, "contrast"_ostr, u"-70000"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "bright", u"70000");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:drawing/wp:anchor/a:graphic/a:graphicData/pic:pic/pic:blipFill/a:blip/a:lum", "contrast", u"-70000");
 }
 
 
@@ -1038,10 +1038,10 @@ CPPUNIT_TEST_FIXTURE(Test, testExportShadow)
     // The problem was that shadows of shapes from non-OOXML origin were not exported to DrawingML
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw"_ostr, "dist"_ostr , u"109865"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw"_ostr, "dir"_ostr , u"634411"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr"_ostr, "val"_ostr , u"000000"_ustr);
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha"_ostr, "val"_ostr , u"38000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw", "dist" , u"109865");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw", "dir" , u"634411");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr", "val" , u"000000");
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wpg:wgp/wps:wsp[1]/wps:spPr/a:effectLst/a:outerShdw/a:srgbClr/a:alpha", "val" , u"38000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testExportAdjustmentValue)
@@ -1049,7 +1049,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportAdjustmentValue)
     loadAndSave("tdf91429.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd"_ostr, "fmla"_ostr, u"val 50000"_ustr);
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", u"val 50000");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.docx")
@@ -1083,57 +1083,57 @@ DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
     int followCount=0;
     int precedeCount=0;
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[1]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[2]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[3]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[4]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[5]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[6]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[7]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[8]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[9]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[10]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[11]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[12]/txt","precede") )
         precedeCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt"_ostr,"follow"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt","follow") )
         followCount++;
-    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt"_ostr,"precede"_ostr) )
+    if( hasXPathAttribute(pXmlDoc, "/root/page/body/txt/anchored/fly[13]/txt","precede") )
         precedeCount++;
     //there should be 4 chains/13 linked textboxes (set of 5, set of 3, set of 3, set of 2)
     //that means 9 NEXT links and 9 PREV links.
@@ -1149,7 +1149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTDF93675)
     loadAndSave("no-numlevel-but-indented.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-    assertXPath(pXmlDoc, "//w:ind"_ostr, "start"_ostr, u"1418"_ustr);
+    assertXPath(pXmlDoc, "//w:ind", "start", u"1418");
 }
 
 
@@ -1161,29 +1161,29 @@ CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // there should be no flipH
-    assertXPathNoAttribute(pXmlDoc, "//a:xfrm"_ostr, "flipH"_ostr);
+    assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipH");
     // flipV should be there
-    assertXPath(pXmlDoc, "//a:xfrm"_ostr, "flipV"_ostr, u"1"_ustr);
+    assertXPath(pXmlDoc, "//a:xfrm", "flipV", u"1");
     // check rotation angle
-    assertXPath(pXmlDoc, "//a:xfrm"_ostr, "rot"_ostr, u"8100000"_ustr);
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", u"8100000");
     // point values depend on path size, values as of March 2022
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path"_ostr, "w"_ostr, u"21600"_ustr);
-    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path"_ostr, "h"_ostr, u"21600"_ustr);
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", u"21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", u"21600");
     // check the first few coordinates of the polygon
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        0, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt"_ostr, "x"_ostr).toInt32(), 1);
+        0, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        15831, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt"_ostr, "y"_ostr).toInt32(), 1);
+        15831, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "y").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt"_ostr, "x"_ostr).toInt32(), 1);
+        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        10062, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt"_ostr, "y"_ostr).toInt32(), 1);
+        10062, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        13284, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt"_ostr, "x"_ostr).toInt32(), 1);
+        13284, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt"_ostr, "y"_ostr).toInt32(), 1);
+        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "y").toInt32(), 1);
     // check path is closed
-    assertXPath(pXmlDoc, "//a:close"_ostr, 1);
+    assertXPath(pXmlDoc, "//a:close", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92335)
@@ -1192,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf92335)
     // Don't export redundant ListLabel character styles
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
 
-    assertXPath(pXmlStyles, "//w:style[@w:styleId='ListLabel1']"_ostr, 0);
+    assertXPath(pXmlStyles, "//w:style[@w:styleId='ListLabel1']", 0);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

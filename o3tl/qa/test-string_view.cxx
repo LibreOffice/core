@@ -19,13 +19,7 @@
 #include <o3tl/string_view.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-
-template <>
-inline std::string
-CppUnit::assertion_traits<std::u16string_view>::toString(std::u16string_view const& x)
-{
-    return std::string(OUStringToOString(x, RTL_TEXTENCODING_UTF8));
-}
+#include <test/cppunitasserthelper.hxx>
 
 namespace
 {

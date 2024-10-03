@@ -182,7 +182,7 @@ xray ThisComponent.DrawPage(1).getByIndex(0).String
 
     // test the textbox is on the first page (it was put onto another page without the fix)
     const xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPathContent(pXmlDoc, "//page[1]//OutlinerParaObject[1]//text"_ostr, "TEXT1");
+    assertXPathContent(pXmlDoc, "//page[1]//OutlinerParaObject[1]//text", u"TEXT1");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129237)
@@ -370,14 +370,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130804)
 {
     createSwDoc("tdf130804.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString flyHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds"_ostr, "height"_ostr);
-    OUString txtHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/anchored/fly/infos/bounds"_ostr, "height"_ostr);
+    OUString flyHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds", "height");
+    OUString txtHeight = getXPath(pXmlDoc, "/root/page/body/txt[1]/anchored/fly/infos/bounds", "height");
 
     //Without the fix in place, txtHeight would have been flyHeight + 55
     CPPUNIT_ASSERT_EQUAL(flyHeight, txtHeight);
 
     // Also check the bookmark portion is ignored in the next paragraph
-    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/prtBounds"_ostr, "top"_ostr);
+    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt[2]/infos/prtBounds", "top");
     CPPUNIT_ASSERT_EQUAL(u"240"_ustr, aTop);
 }
 
@@ -389,11 +389,11 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
      * to the numbering. This is easier to test using a layout dump.
      */
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]/SwFont"_ostr, "height"_ostr, u"220"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwFieldPortion[1]/SwFont", "height", u"220");
 
     // hidden _Toc and _Ref bookmarks are not visible in Visible bookmarks mode
     // This was PortionType::Bookmark
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr, "type"_ostr, u"PortionType::Text"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion[1]", "type", u"PortionType::Text");
 
     // insert a not hidden bookmark
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -414,14 +414,14 @@ CPPUNIT_TEST_FIXTURE(Test, testN758883)
     pXmlDoc = parseLayoutDump();
 
     // check the bookmark portions are of the expected height
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]"_ostr, "type"_ostr, u"PortionType::Bookmark"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]"_ostr, "height"_ostr, u"253"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]"_ostr, "type"_ostr, u"PortionType::Bookmark"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]"_ostr, "height"_ostr, u"253"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "type", u"PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "height", u"253");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "type", u"PortionType::Bookmark");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "height", u"253");
 
     // tdf#150947 check a11y of the newly inserted bookmark portions
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]"_ostr, "colors"_ostr, u"#BookmarkTest Bookmark Start"_ustr);
-    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]"_ostr, "colors"_ostr, u"#BookmarkTest Bookmark End"_ustr);
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[1]", "colors", u"#BookmarkTest Bookmark Start");
+    assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwBookmarkPortion[2]", "colors", u"#BookmarkTest Bookmark End");
 
     /*
      * Next problem was that the page margin contained the width of the page border as well.
@@ -800,7 +800,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf105143)
 {
     createSwDoc("tdf105143.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
+    OUString aTop = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // This was 6272, i.e. the shape was moved up (incorrect position) to be
     // inside the page rectangle.
     CPPUNIT_ASSERT_EQUAL(u"6731"_ustr, aTop);
@@ -1035,7 +1035,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf75573)
 
     // the frame should be on page 1
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL( u"lorem ipsum"_ustr, getXPathContent(pXmlDoc, "/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()"_ostr) );
+    assertXPathContent(pXmlDoc, "/root/page[1]/body/section/txt/anchored/fly/txt[1]/text()", u"lorem ipsum");
 
     // the "Proprietary" style should set the vertical and horizontal anchors to the page
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
@@ -1239,7 +1239,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableSectionColumns)
 {
     createSwDoc("floating-table-section-columns.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString tableWidth = getXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds"_ostr, "width"_ostr);
+    OUString tableWidth = getXPath(pXmlDoc, "/root/page[1]/body/section/column[2]/body/txt/anchored/fly/tab/infos/bounds", "width");
     // table width was restricted by a column
     CPPUNIT_ASSERT( tableWidth.toInt32() > 10000 );
 }
@@ -1463,8 +1463,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf60351)
     // tdf143899: image affected by compat15's aversion to vertical page margin.
     // although the image is set to -0.3cm above the first paragraph, it can't move up at all.
     xmlDocUniquePtr pDump = parseLayoutDump();
-    sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds"_ostr, "top"_ostr).toInt32();
-    sal_Int32 nImageTop = getXPath(pDump, "//fly/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nBodyTop = getXPath(pDump, "//page/body/infos/bounds", "top").toInt32();
+    sal_Int32 nImageTop = getXPath(pDump, "//fly/infos/bounds", "top").toInt32();
     // The image (like most floating objects) is vertically limited to the page margins
     CPPUNIT_ASSERT_EQUAL(nBodyTop, nImageTop);
 }
@@ -1526,8 +1526,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf98882)
 {
     createSwDoc("tdf98882.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nFlyHeight = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
-    sal_Int32 nContentHeight = getXPath(pXmlDoc, "//notxt/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nFlyHeight = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "height").toInt32();
+    sal_Int32 nContentHeight = getXPath(pXmlDoc, "//notxt/infos/bounds", "height").toInt32();
     // The content height was 600, not 360, so the frame and the content height did not match.
     CPPUNIT_ASSERT_EQUAL(nFlyHeight, nContentHeight);
 }
@@ -1673,10 +1673,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100072)
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, rMetaFile);
 
     // Get first polyline rightside x coordinate
-    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nFirstEnd = getXPath(pXmlDoc, "(//polyline)[1]/point[2]", "x").toInt32();
 
     // Get last stroke x coordinate
-    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[last()]/point[2]"_ostr, "x"_ostr).toInt32();
+    sal_Int32 nSecondEnd = getXPath(pXmlDoc, "(//polyline)[last()]/point[2]", "x").toInt32();
 
     // Assert that the difference is less than half point.
     CPPUNIT_ASSERT_MESSAGE("Shape line width does not match", abs(nFirstEnd - nSecondEnd) < 10);
@@ -1837,7 +1837,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136952_pgBreak3)
     //Do not lose the page::breakAfter. This SHOULD be on page 4, but sadly it is not.
     //The key part of this test is that the page starts with "Lorem ipsum"
     //Prior to this, there was no page break, and so it was in the middle of a page.
-    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]"_ostr, "portion"_ostr).startsWith("Lorem ipsum"));
+    CPPUNIT_ASSERT(getXPath(pDump, "//page[6]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion[1]", "portion").startsWith("Lorem ipsum"));
 }
 
 

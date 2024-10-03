@@ -85,13 +85,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131684)
 
     // check that the text frame has the correct upper
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString const sectionId = getXPath(pXmlDoc, "/root/page[1]/body/section[7]"_ostr, "id"_ostr);
-    OUString const sectionLower
-        = getXPath(pXmlDoc, "/root/page[1]/body/section[7]"_ostr, "lower"_ostr);
-    OUString const textId
-        = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]"_ostr, "id"_ostr);
-    OUString const textUpper
-        = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]"_ostr, "upper"_ostr);
+    OUString const sectionId = getXPath(pXmlDoc, "/root/page[1]/body/section[7]", "id");
+    OUString const sectionLower = getXPath(pXmlDoc, "/root/page[1]/body/section[7]", "lower");
+    OUString const textId = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]", "id");
+    OUString const textUpper = getXPath(pXmlDoc, "/root/page[1]/body/section[7]/txt[1]", "upper");
     CPPUNIT_ASSERT_EQUAL(textId, sectionLower);
     CPPUNIT_ASSERT_EQUAL(sectionId, textUpper);
 }
@@ -215,7 +212,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 
     // check it in Show Changes mode
 
@@ -224,7 +221,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
 
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 
     // check it in Hide Changes mode again
 
@@ -233,14 +230,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
 
     pXmlDoc = parseLayoutDump();
     // only a single row is visible again
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 
     // tdf#148227 check Undo of tracked table row deletion
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     pXmlDoc = parseLayoutDump();
     // This was 1
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
@@ -281,7 +278,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
 
     // hidden table
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//tab"_ostr, 0);
+    assertXPath(pXmlDoc, "//tab", 0);
 
     // delete frame
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -322,7 +319,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 1
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 0);
 
     // check it in Show Changes mode
 
@@ -331,7 +328,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
 
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 
     // check it in Hide Changes mode again
 
@@ -340,14 +337,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
 
     pXmlDoc = parseLayoutDump();
     // no visible row again
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 0);
 
     // tdf#148228 check Undo of tracked table deletion
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     pXmlDoc = parseLayoutDump();
     // This was 0
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153819)
@@ -396,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 2
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 
     // check it in Show Changes mode
 
@@ -405,7 +402,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
 
     pXmlDoc = parseLayoutDump();
     // 2 rows are visible now
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 
     // check it in Hide Changes mode again
 
@@ -414,14 +411,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
 
     pXmlDoc = parseLayoutDump();
     // only a single row is visible again
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 
     // tdf#148227 check Reject All of tracked table row deletion
 
     dispatchCommand(mxComponent, u".uno:RejectAllTrackedChanges"_ustr, {});
     pXmlDoc = parseLayoutDump();
     // This was 1
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
@@ -447,18 +444,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // 3-row, overwriting cells of the second row and inserting a new row
     // with the 2-row clipboard table content
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 3);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
 
     // Undo
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/SwParaPortion"_ostr, 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/SwParaPortion", 0);
 
     // insert the 2-row table into the second paragraph of cell "A2" as a nested table
     // For this it's enough to positionate the text cursor not in the first paragraph
@@ -468,30 +464,28 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     pWrtShell->SplitNode();
     Scheduler::ProcessEventsToIdle();
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt"_ostr, 2);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"Some text..."_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout",
+                "portion", u"Some text...");
     // the empty paragraph in A2
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[2]/SwParaPortion"_ostr, 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[2]/SwParaPortion", 0);
 
     // insert the table, as a nested one in cell "A2"
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab"_ostr, 1);
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab/row"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab/row", 2);
 
     // Undo
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     pXmlDoc = parseLayoutDump();
     // 2 rows again, no copied text content
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 2);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"Some text..."_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/SwParaPortion/SwLineLayout",
+                "portion", u"Some text...");
 
     // copy the 2-row table into the first paragraph of cell "A2",
     // but not at paragraph start (changed behaviour)
@@ -506,11 +500,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     // with the 2-row clipboard table content
 
     // This was 2 (nested table)
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
     // This was "Some text..." with a nested table
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
@@ -535,13 +528,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Paste as Rows Above results 4-row table with default table alignment
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 4);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 4);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
 
     // set table alignment to center, select and copy the table again
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -575,19 +566,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     pXmlDoc = parseLayoutDump();
     // This was 5 (inserting only a single row for the 4-row clipboard content, and
     // overwriting 3 existing rows)
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 8);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[5]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
-    assertXPath(pXmlDoc,
-                "/root/page[1]/body/tab/row[7]/cell[1]/txt/SwParaPortion/SwLineLayout"_ostr,
-                "portion"_ostr, u"hello"_ustr);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 8);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[5]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[7]/cell[1]/txt/SwParaPortion/SwLineLayout",
+                "portion", u"hello");
 
     // tdf#64902 add a test case for nested tables
 
@@ -604,9 +591,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
 
     pXmlDoc = parseLayoutDump();
     // rows of the nested table doesn't effect row number of the main table
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 16);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 16);
     // there are two nested tables after the paste
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab"_ostr, 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab", 2);
 
     // tdf#64902 add a test case for repeated table headings
 
@@ -627,9 +614,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
 
     pXmlDoc = parseLayoutDump();
     // repeating table header (and its thead/tbody indentation) doesn't effect row number
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row"_ostr, 32);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 32);
     // there are two nested tables after the paste
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab"_ostr, 4);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135014)
@@ -653,7 +640,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135014)
     saveAndReload(u"Office Open XML Text"_ustr);
 
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
-    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NewNumberingStyle']/w:qFormat"_ostr, 1);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='NewNumberingStyle']/w:qFormat", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130629)
@@ -1115,7 +1102,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
     dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/header/tab/row"_ostr, 2);
+    assertXPath(pLayout, "/root/page[1]/header/tab/row", 2);
 
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -1123,12 +1110,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
 
     pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/header"_ostr, 0);
+    assertXPath(pLayout, "/root/page[1]/header", 0);
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
     pLayout = parseLayoutDump();
-    assertXPath(pLayout, "/root/page[1]/header/tab/row"_ostr, 2);
+    assertXPath(pLayout, "/root/page[1]/header/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141613)
@@ -1422,7 +1409,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121031)
 
     // Without the fix in place, the table would be hidden
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab"_ostr, 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, TestTextBoxCrashAfterLineDel)
@@ -2828,21 +2815,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 
-    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Text before section"_ustr);
+    assertXPath(pLayout, "/root/page[1]/body/section[1]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Text before section");
     // the inner section and its content was hidden
-    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Text inside section before ToC"_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Table of Contents"_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"First header*1"_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Second header*1"_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/section[5]/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Text inside section after ToC"_ustr);
-    assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                "portion"_ostr, u"Text after section"_ustr);
+    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Text inside section before ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[3]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Table of Contents");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"First header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[4]/txt[2]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Second header*1");
+    assertXPath(pLayout, "/root/page[1]/body/section[5]/txt[2]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Text inside section after ToC");
+    assertXPath(pLayout, "/root/page[1]/body/section[6]/txt[1]/SwParaPortion/SwLineLayout[1]",
+                "portion", u"Text after section");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
@@ -2900,7 +2887,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf40142)
     // Without the fix in place, this test would have failed with
     // - Expected: 2
     // - Actual  : 4
-    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt"_ostr, 2);
+    assertXPath(pLayout, "/root/page[1]/body/section[2]/txt", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
@@ -2912,30 +2899,30 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
     // Without the fix in place, there would be just the first index entry
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[2]/anchored/fly/section/txt[1]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"sub one"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"sub one");
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[2]/anchored/fly/section/txt[2]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"sub two"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"sub two");
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[2]/anchored/fly/section/txt[3]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"sub three"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"sub three");
 
     // Without the fix in place, there would be just the first index entry
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[6]/anchored/fly/section/txt[1]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"another sub one"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"another sub one");
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[6]/anchored/fly/section/txt[2]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"another sub two"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"another sub two");
     assertXPath(pLayout,
                 "/root/page[1]/body/txt[6]/anchored/fly/section/txt[3]/SwParaPortion/"
-                "SwLineLayout[1]/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"another sub three"_ustr);
+                "SwLineLayout[1]/SwLinePortion[1]",
+                "portion", u"another sub three");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
@@ -3037,18 +3024,18 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
 
     xmlDocUniquePtr pXml = parseExport(u"content.xml"_ustr);
     CPPUNIT_ASSERT(pXml);
-    OUString para_style_name = getXPath(
-        pXml, "/office:document-content/office:body/office:text/text:p"_ostr, "style-name"_ostr);
+    OUString para_style_name
+        = getXPath(pXml, "/office:document-content/office:body/office:text/text:p", "style-name");
     // Without the fix in place, this would fail
     CPPUNIT_ASSERT(!para_style_name.equalsIgnoreAsciiCase("Standard"));
 
     OString para_style_path
         = "/office:document-content/office:automatic-styles/style:style[@style:name='"
           + para_style_name.toUtf8() + "']";
-    assertXPath(pXml, para_style_path, "family"_ostr, u"paragraph"_ustr);
+    assertXPath(pXml, para_style_path, "family", u"paragraph");
     // Without the fix in place, the autostyle had no parent
-    assertXPath(pXml, para_style_path, "parent-style-name"_ostr, u"Standard"_ustr);
-    assertXPath(pXml, para_style_path, "master-page-name"_ostr, u"Right_20_Page"_ustr);
+    assertXPath(pXml, para_style_path, "parent-style-name", u"Standard");
+    assertXPath(pXml, para_style_path, "master-page-name", u"Right_20_Page");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf62032ApplyStyle)

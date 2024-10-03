@@ -74,6 +74,13 @@ inline std::string CPPUNIT_NS::assertion_traits<css::table::CellRangeAddress>::t
     return ost.str();
 }
 
+template <>
+inline std::string
+CPPUNIT_NS::assertion_traits<std::u16string_view>::toString(std::u16string_view const& x)
+{
+    return std::string(OUStringToOString(x, RTL_TEXTENCODING_UTF8));
+}
+
 #endif // INCLUDED_TEST_CPPUNITASSERTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

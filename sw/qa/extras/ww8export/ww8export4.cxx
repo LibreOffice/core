@@ -101,9 +101,9 @@ DECLARE_WW8EXPORT_TEST(testTdf150197_anlv2ListFormat, "tdf150197_anlv2ListFormat
 DECLARE_WW8EXPORT_TEST(testTdf117994_CRnumformatting, "tdf117994_CRnumformatting.doc")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr));
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", u"1.");
     //Without this fix in place, it would become 200 (and non-bold).
-    CPPUNIT_ASSERT_EQUAL(u"160"_ustr, getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "height"_ostr));
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont", "height", u"160");
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros.doc")
@@ -138,21 +138,20 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
     xmlDocUniquePtr pDump = parseLayoutDump();
     // Cell A1
     sal_Int32 nShapeTop
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "top")
               .toInt32();
     sal_Int32 nShapeBottom
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "bottom"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "bottom")
               .toInt32();
     // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
     sal_Int32 nPara1Top
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
-    CPPUNIT_ASSERT_EQUAL(OUString("Below logo"),
-                         getXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]"_ostr));
+    assertXPathContent(pDump, "//tab/row[1]/cell[1]/txt[5]", u"Below logo");
     sal_Int32 nPara5Top
-        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[1]/cell[1]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
@@ -166,21 +165,20 @@ DECLARE_WW8EXPORT_TEST(testTdf91632_layoutInCellD, "tdf91632_layoutInCellD.doc")
 
     // Cell B1
     nShapeTop
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "top")
               .toInt32();
     nShapeBottom
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "bottom"_ostr)
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/anchored/fly/SwAnchoredObject/bounds",
+                   "bottom")
               .toInt32();
     // use paragraph 1 to indicate where the cell spacing/padding ends, and the text starts.
     nPara1Top
-        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[1]/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     // use paragraph 5 to prove the image is not at the bottom.
-    CPPUNIT_ASSERT_EQUAL(OUString("Below image"),
-                         getXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]"_ostr));
+    assertXPathContent(pDump, "//tab/row[1]/cell[2]/txt[5]", u"Below image");
     nPara5Top
-        = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab[1]/row/cell[2]/txt[5]/infos/bounds", "top").toInt32();
     CPPUNIT_ASSERT_EQUAL(nShapeTop, nPara1Top);
     CPPUNIT_ASSERT(nPara5Top > nShapeBottom); // ShapeBottom is higher than Para5Top
 
@@ -198,13 +196,13 @@ DECLARE_WW8EXPORT_TEST(testTdf162541, "tdf162541_notLayoutInCell_paraLeft.doc")
     // given cell B2 with a para-left para-fromTop image that is NOT layoutInCell
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeLeft
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "left"_ostr)
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/anchored/fly/SwAnchoredObject/bounds",
+                   "left")
               .toInt32();
     sal_Int32 nParaLeft
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt/infos/bounds", "left").toInt32();
     sal_Int32 nTableLeft
-        = getXPath(pDump, "//tab/infos/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pDump, "//tab/infos/bounds", "left").toInt32();
     // The image uses the table-paragraph to orient to the left (bizarre MSO layout anomaly)
     CPPUNIT_ASSERT(nShapeLeft < nParaLeft); // shape is located in column A, not column B
     CPPUNIT_ASSERT_EQUAL(nTableLeft, nShapeLeft);
@@ -216,20 +214,20 @@ DECLARE_WW8EXPORT_TEST(testTdf162542, "tdf162542_notLayoutInCell_charLeft_wrapTh
     // given cell B2 with a char-oriented-left wrapThrough image that is NOT layoutInCell
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeLeft
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "left"_ostr)
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds",
+                   "left")
               .toInt32();
     sal_Int32 nPara6Left
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/infos/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/infos/bounds", "left").toInt32();
     CPPUNIT_ASSERT(nShapeLeft > nPara6Left); // nShapeLeft starts after the word "anchor"
 
     // tdf#162551: The top is oriented to the top of the page - but MSO treats it as layoutInCell
     sal_Int32 nShapeTop
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds"_ostr,
-                   "top"_ostr)
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[6]/anchored/fly/SwAnchoredObject/bounds",
+                   "top")
               .toInt32();
     sal_Int32 nPara1Top
-        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+        = getXPath(pDump, "//tab/row[2]/cell[2]/txt[1]/infos/bounds", "top").toInt32();
     // layoutInCell uses the cell margin as the top-most point, not the cell edge
     CPPUNIT_ASSERT_EQUAL(nPara1Top, nShapeTop); // nShapeTop starts at the cell margin"
 
@@ -445,13 +443,13 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCExportDoNotMirrorRtlDrawObjs)
 
     // Then make sure the shape is on the right margin:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_Int32 nPageRight = getXPath(pXmlDoc, "//page/infos/bounds"_ostr, "right"_ostr).toInt32();
-    sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds"_ostr, "right"_ostr).toInt32();
+    sal_Int32 nPageRight = getXPath(pXmlDoc, "//page/infos/bounds", "right").toInt32();
+    sal_Int32 nBodyRight = getXPath(pXmlDoc, "//body/infos/bounds", "right").toInt32();
     sal_Int32 nShapeLeft
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds"_ostr, "left"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "left").toInt32();
     CPPUNIT_ASSERT_GREATER(nBodyRight, nShapeLeft);
     sal_Int32 nShapeRight
-        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds"_ostr, "right"_ostr).toInt32();
+        = getXPath(pXmlDoc, "//SwAnchoredDrawObject/bounds", "right").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected less than: 12523
     // - Actual  : 12536
@@ -534,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nFlyLeft = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds", "left").toInt32();
 
     // Set the anchor of the image to AT PARAGRAPH, without the fix in place this
     // results in the picture moving to the first column
@@ -544,7 +542,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135710)
                                        uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
     pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nFlyLeftAfter = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds"_ostr, "left"_ostr).toInt32();
+    sal_Int32 nFlyLeftAfter = getXPath(pXmlDoc, "(//anchored)[1]/fly/infos/bounds", "left").toInt32();
 
     // Without the fix in place this fails with
     // Expected: 4771
@@ -623,8 +621,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf54862)
 
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-        sal_Int32 nCellA2Height = getXPath(pXmlDoc, "//tab/row[1]/cell[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
-        sal_Int32 nCellB4Height = getXPath(pXmlDoc, "//tab/row[4]/cell[2]/infos/bounds"_ostr, "height"_ostr).toInt32();
+        sal_Int32 nCellA2Height = getXPath(pXmlDoc, "//tab/row[1]/cell[2]/infos/bounds", "height").toInt32();
+        sal_Int32 nCellB4Height = getXPath(pXmlDoc, "//tab/row[4]/cell[2]/infos/bounds", "height").toInt32();
 
         // Without the fix in place this is this fails with:
         // Expected: 1269, 9021

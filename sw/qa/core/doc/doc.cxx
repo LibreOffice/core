@@ -230,7 +230,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
     // Without the accompanying fix in place, this test would have failed, because the first text
     // frame in the body frame had an SwAnchoredDrawObject anchored to it, but not a fly frame, so
     // a blank square was painted, not the image.
-    assertXPath(pLayout, "/root/page/body/txt/anchored/fly"_ostr, 1);
+    assertXPath(pLayout, "/root/page/body/txt/anchored/fly", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
@@ -649,8 +649,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxWordWrap)
 
     // When checking the layout size of the shape:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    auto nFlyHeight
-        = getXPath(pXmlDoc, "//anchored/fly/infos/bounds"_ostr, "height"_ostr).toInt32();
+    auto nFlyHeight = getXPath(pXmlDoc, "//anchored/fly/infos/bounds", "height").toInt32();
 
     // Then make sure it has a small height, hosting just one line:
     // Without the accompanying fix in place, this test would have failed with:

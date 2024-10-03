@@ -63,8 +63,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartExport)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//style:graphic-properties' no attribute 'wrap-text-at-frame-start' exist
     // i.e. no floating table was exported.
-    assertXPath(pXmlDoc, "//style:graphic-properties"_ostr, "wrap-text-at-frame-start"_ostr,
-                u"true"_ustr);
+    assertXPath(pXmlDoc, "//style:graphic-properties", "wrap-text-at-frame-start", u"true");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableWrapTextAtFlyStartImport)

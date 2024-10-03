@@ -69,8 +69,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowScaleOrigin)
     // Examine the created primitives.
     svx::ExtendedPrimitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
-    sal_Int32 fShadowX = getXPath(pDocument, "//shadow/transform"_ostr, "xy13"_ostr).toInt32();
-    sal_Int32 fShadowY = getXPath(pDocument, "//shadow/transform"_ostr, "xy23"_ostr).toInt32();
+    sal_Int32 fShadowX = getXPath(pDocument, "//shadow/transform", "xy13").toInt32();
+    sal_Int32 fShadowY = getXPath(pDocument, "//shadow/transform", "xy23").toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: -705
     // - Actual  : -158
@@ -101,32 +101,32 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Actual  : 162
         // - In <>, attribute 'xy13' of '(//shadow/transform)[1]' incorrect value.
         // i.e. shadow alignment was ignored while scaling the shadow.
-        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy13"_ostr, u"-568"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[1]"_ostr, "xy23"_ostr, u"162"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[1]", "xy13", u"-568");
+        assertXPath(pDocument, "(//shadow/transform)[1]", "xy23", u"162");
 
-        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy13"_ostr, u"-1795"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[2]"_ostr, "xy23"_ostr, u"162"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[2]", "xy13", u"-1795");
+        assertXPath(pDocument, "(//shadow/transform)[2]", "xy23", u"162");
 
-        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy13"_ostr, u"-3021"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[3]"_ostr, "xy23"_ostr, u"161"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[3]", "xy13", u"-3021");
+        assertXPath(pDocument, "(//shadow/transform)[3]", "xy23", u"161");
 
-        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy13"_ostr, u"-568"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[4]"_ostr, "xy23"_ostr, u"-749"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[4]", "xy13", u"-568");
+        assertXPath(pDocument, "(//shadow/transform)[4]", "xy23", u"-749");
 
-        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy13"_ostr, u"-3021"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[5]"_ostr, "xy23"_ostr, u"-750"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[5]", "xy13", u"-3021");
+        assertXPath(pDocument, "(//shadow/transform)[5]", "xy23", u"-750");
 
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy13"_ostr, u"-567"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[6]"_ostr, "xy23"_ostr, u"-1692"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[6]", "xy13", u"-567");
+        assertXPath(pDocument, "(//shadow/transform)[6]", "xy23", u"-1692");
 
-        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy13"_ostr, u"-1795"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[7]"_ostr, "xy23"_ostr, u"-1693"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[7]", "xy13", u"-1795");
+        assertXPath(pDocument, "(//shadow/transform)[7]", "xy23", u"-1693");
 
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy13"_ostr, u"-3023"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[8]"_ostr, "xy23"_ostr, u"-1692"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[8]", "xy13", u"-3023");
+        assertXPath(pDocument, "(//shadow/transform)[8]", "xy23", u"-1692");
 
-        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy13"_ostr, u"-1795"_ustr);
-        assertXPath(pDocument, "(//shadow/transform)[9]"_ostr, "xy23"_ostr, u"-750"_ustr);
+        assertXPath(pDocument, "(//shadow/transform)[9]", "xy13", u"-1795");
+        assertXPath(pDocument, "(//shadow/transform)[9]", "xy23", u"-750");
     }
     {
         // Page 2 contains a table with shadow alignment center
@@ -143,8 +143,8 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testShadowAlignment)
         // - Expected: -5196
         // - Actual  : 0
         // - In<>, attribute 'xy13' of '//shadow/transform' incorrect value.
-        assertXPath(pDocument, "//shadow/transform"_ostr, "xy13"_ostr, u"-5196"_ustr);
-        assertXPath(pDocument, "//shadow/transform"_ostr, "xy23"_ostr, u"-2290"_ustr);
+        assertXPath(pDocument, "//shadow/transform", "xy13", u"-5196");
+        assertXPath(pDocument, "//shadow/transform", "xy23", u"-2290");
     }
 }
 
@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testZeroWidthTextWrap)
     // - Expected: 1
     // - Actual  : 12
     // i.e. the text on the only shape on the slide had 12 lines, not a single one.
-    assertXPath(pDocument, "//textsimpleportion"_ostr, 1);
+    assertXPath(pDocument, "//textsimpleportion", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
@@ -187,7 +187,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testSlideBackground)
     // - Expected: 1
     // - Actual  : 0
     // i.e. the rendering did not find the bitmap.
-    assertXPath(pDocument, "//bitmap"_ostr, 1);
+    assertXPath(pDocument, "//bitmap", 1);
 }
 }
 

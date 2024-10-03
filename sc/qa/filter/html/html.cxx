@@ -224,8 +224,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyText)
     // i.e. metadata was missing to avoid converting 01 to 1 (number).
     aStream.Seek(0);
     htmlDocUniquePtr pHtmlDoc = parseHtmlStream(&aStream);
-    assertXPath(pHtmlDoc, "//td"_ostr, "data-sheets-value"_ostr,
-                u"{ \"1\": 2, \"2\": \"01\"}"_ustr);
+    assertXPath(pHtmlDoc, "//td", "data-sheets-value", u"{ \"1\": 2, \"2\": \"01\"}");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
@@ -249,10 +248,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyBoolean)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//td' no attribute 'data-sheets-value' exist
     // i.e. metadata was missing to avoid converting TRUE to text.
-    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr,
-                u"{ \"1\": 4, \"4\": 1}"_ustr);
-    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr,
-                u"{ \"1\": 4, \"4\": 0}"_ustr);
+    assertXPath(pHtmlDoc, "(//td)[1]", "data-sheets-value", u"{ \"1\": 4, \"4\": 1}");
+    assertXPath(pHtmlDoc, "(//td)[2]", "data-sheets-value", u"{ \"1\": 4, \"4\": 0}");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
@@ -284,14 +281,12 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormattedNumber)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '(//td)[1]' no attribute 'data-sheets-value' exist
     // i.e. only a formatted number string was written, without a float value.
-    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-value"_ostr,
-                u"{ \"1\": 3, \"3\": 1000}"_ustr);
-    assertXPath(pHtmlDoc, "(//td)[1]"_ostr, "data-sheets-numberformat"_ostr,
-                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}"_ustr);
-    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-value"_ostr,
-                u"{ \"1\": 3, \"3\": 2000}"_ustr);
-    assertXPath(pHtmlDoc, "(//td)[2]"_ostr, "data-sheets-numberformat"_ostr,
-                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}"_ustr);
+    assertXPath(pHtmlDoc, "(//td)[1]", "data-sheets-value", u"{ \"1\": 3, \"3\": 1000}");
+    assertXPath(pHtmlDoc, "(//td)[1]", "data-sheets-numberformat",
+                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
+    assertXPath(pHtmlDoc, "(//td)[2]", "data-sheets-value", u"{ \"1\": 3, \"3\": 2000}");
+    assertXPath(pHtmlDoc, "(//td)[2]", "data-sheets-numberformat",
+                u"{ \"1\": 2, \"2\": \"#,##0.00\", \"3\": 1}");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
@@ -317,8 +312,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCopyFormula)
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '(//td)[3]' no attribute 'data-sheets-formula' exist
     // i.e. only the formula result was exported, not the formula.
-    assertXPath(pHtmlDoc, "(//td)[3]"_ostr, "data-sheets-formula"_ostr,
-                u"=SUM(R[-2]C:R[-1]C)"_ustr);
+    assertXPath(pHtmlDoc, "(//td)[3]", "data-sheets-formula", u"=SUM(R[-2]C:R[-1]C)");
 }
 }
 

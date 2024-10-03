@@ -81,25 +81,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     //- Actual  : 2
     //- In <>, XPath contents of child does not match
     // i.e. the shadow's transparency was miscalculated.
-    assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)"_ostr, u"0"_ustr);
+    assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)", u"0");
 
-    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[1]"_ostr, "blur"_ostr, u"141"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[2]"_ostr, "blur"_ostr, u"141"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[3]"_ostr, "blur"_ostr, u"141"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[4]"_ostr, "blur"_ostr, u"141"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "color"_ostr, u"#ff0000"_ustr);
-    assertXPath(pDocument, "//objectinfo/shadow[5]"_ostr, "blur"_ostr, u"141"_ustr);
+    assertXPath(pDocument, "//objectinfo/shadow[1]", "color", u"#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[1]", "blur", u"141");
+    assertXPath(pDocument, "//objectinfo/shadow[2]", "color", u"#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[2]", "blur", u"141");
+    assertXPath(pDocument, "//objectinfo/shadow[3]", "color", u"#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[3]", "blur", u"141");
+    assertXPath(pDocument, "//objectinfo/shadow[4]", "color", u"#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[4]", "blur", u"141");
+    assertXPath(pDocument, "//objectinfo/shadow[5]", "color", u"#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[5]", "blur", u"141");
 
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[1]/unifiedtransparence"_ostr, 0);
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[2]/unifiedtransparence"_ostr, 0);
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/group/polypolygonrgba"_ostr,
-                "transparence"_ostr, u"80"_ustr);
-    assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/group/polypolygonrgba"_ostr,
-                "transparence"_ostr, u"80"_ustr);
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[1]/unifiedtransparence", 0);
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[2]/unifiedtransparence", 0);
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/group/polypolygonrgba", "transparence",
+                u"80");
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/group/polypolygonrgba", "transparence",
+                u"80");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)

@@ -53,14 +53,14 @@ DECLARE_SHELL_MAILMERGE_TEST(testTd78611_shell, "tdf78611.odt", "10-testing-addr
     xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
 
     // check first page
-    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
-    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1");
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.1");
+    assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.2");
 
     // check some other pages
-    assertXPath(pXmlDoc,  "/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
-    assertXPath(pXmlDoc,  "/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
-    assertXPath(pXmlDoc,  "/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
+    assertXPath(pXmlDoc,  "/root/page[3]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1");
+    assertXPath(pXmlDoc,  "/root/page[5]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.1");
+    assertXPath(pXmlDoc,  "/root/page[7]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.2");
 }
 
 
@@ -71,9 +71,9 @@ DECLARE_FILE_MAILMERGE_TEST(testTd78611_file, "tdf78611.odt", "10-testing-addres
     {
         loadMailMergeDocument( doc );
         xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
-        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1"_ustr);
-        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.1"_ustr);
-        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr, u"1.2"_ustr);
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1");
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.1");
+        assertXPath(pXmlDoc,  "/root/page[1]/body/txt[10]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.2");
     }
 }
 
@@ -276,11 +276,11 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf81750_shell, "tdf81750.odt", "10-testing-add
     // check several pages page
     OUString aExpected(u"Text: Foo "_ustr);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
-    assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[2]"_ostr, aExpected);
-    assertXPathContent(pXmlDoc, "/root/page[3]/body/txt[2]"_ostr, aExpected);
-    assertXPathContent(pXmlDoc, "/root/page[5]/body/txt[2]"_ostr, aExpected);
-    assertXPathContent(pXmlDoc, "/root/page[7]/body/txt[2]"_ostr, aExpected);
-    assertXPathContent(pXmlDoc, "/root/page[9]/body/txt[2]"_ostr, aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[1]/body/txt[2]", aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[3]/body/txt[2]", aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[5]/body/txt[2]", aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[7]/body/txt[2]", aExpected);
+    assertXPathContent(pXmlDoc, "/root/page[9]/body/txt[2]", aExpected);
 }
 
 

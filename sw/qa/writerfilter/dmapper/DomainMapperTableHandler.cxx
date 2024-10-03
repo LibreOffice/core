@@ -212,18 +212,16 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeaderBodyOverlap)
     OString aDump = xDumper->dump(u"layout"_ustr).toUtf8();
     auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
-    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds"_ostr, "bottom"_ostr).toInt32();
+    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
     // Body text top is body top + height of the first line, that's just a fly portion (kind of a
     // top margin).
-    sal_Int32 nBodyTop
-        = getXPath(pXmlDoc, "//page[1]/body/txt[1]/infos/bounds"_ostr, "top"_ostr).toInt32();
+    sal_Int32 nBodyTop = getXPath(pXmlDoc, "//page[1]/body/txt[1]/infos/bounds", "top").toInt32();
     // Without the accompanying fix in place, this test would have failed, the first line was not a
     // fly portion but it was actual text, above the floating table.
-    assertXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*"_ostr,
-                "type"_ostr, u"PortionType::Fly"_ustr);
+    assertXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]/child::*", "type",
+                u"PortionType::Fly");
     sal_Int32 nBodyFlyPortionHeight
-        = getXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr,
-                   "height"_ostr)
+        = getXPath(pXmlDoc, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "height")
               .toInt32();
     sal_Int32 nBodyTextTop = nBodyTop + nBodyFlyPortionHeight;
     // Fly bottom was 3063, body text top was 7148.

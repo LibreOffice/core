@@ -35,9 +35,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
     // is accompanied by a png fallback graphic.
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                         "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
+                         "draw:image[@draw:mime-type='image/x-vclgraphic']");
     assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                         "draw:image[@draw:mime-type='image/png']"_ostr);
+                         "draw:image[@draw:mime-type='image/png']");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
@@ -52,9 +52,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
     // (they use different code paths).
     xmlDocUniquePtr pXmlDoc = parseExportedFile();
     assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                         "draw:image[@draw:mime-type='image/x-vclgraphic']"_ostr);
+                         "draw:image[@draw:mime-type='image/x-vclgraphic']");
     assertXPath(pXmlDoc, "/office:document/office:body/office:text/text:p/draw:frame/"
-                         "draw:image[@draw:mime-type='image/png']"_ostr);
+                         "draw:image[@draw:mime-type='image/png']");
 }
 
 DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")

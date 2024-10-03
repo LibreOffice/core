@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
-    assertXPath(pXmlDoc, "//floattransparent"_ostr);
+    assertXPath(pXmlDoc, "//floattransparent");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLastBibliographyPdfExport)
@@ -541,9 +541,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTabOverMarginSection)
     createSwDoc("tabovermargin-section.fodt");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     sal_Int32 nWidth
-        = getXPath(pXmlDoc,
-                   "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']"_ostr,
-                   "width"_ostr)
+        = getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::TabRight']",
+                   "width")
               .toInt32();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected less than: 5000
@@ -566,7 +565,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineHeight)
     // - Expected: 284
     // - Actual  : -65252
     // due to various unsigned integer truncations.
-    assertXPath(pXmlDoc, "//fly/infos/bounds"_ostr, "top"_ostr, OUString::number(DOCUMENTBORDER));
+    assertXPath(pXmlDoc, "//fly/infos/bounds", "top", OUString::number(DOCUMENTBORDER));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
@@ -600,12 +599,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
 
     // Get the line width of the first line for the 1st paragraph.
     sal_Int32 nFirstLineWidth
-        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout[1]"_ostr, "width"_ostr)
-              .toInt32();
+        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
     // Get the line width of the first line for the 2nd paragraph.
     sal_Int32 nSecondLineWidth
-        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout[1]"_ostr, "width"_ostr)
-              .toInt32();
+        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
 
     // Tdf#129448: the changing of line-height should not affect the auto first line indent.
     // As a result, the first line width of the two paragraphs should be the same.
@@ -695,7 +692,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
     // - Actual  : 276
     // i.e. the line height wasn't the twips value of the 1.806 cm from the file, but was based on
     // the font size of the text, which is only correct for non-clearing breaks.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"1024"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", u"1024");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
@@ -725,7 +722,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
     // - Actual  : 276
     // i.e. the line height was too small, but only in case the full line was a fly and a break
     // portion, without any real content.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"1024"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", u"1024");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
@@ -777,7 +774,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
     // - Expected: 2837
     // - Actual  : 4254
     // i.e. any non-none type was handled as type=all, and this was jumping below both shapes.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"2837"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", u"2837");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
@@ -818,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeftRTL)
     // - Expected: 276
     // - Actual  : 2837
     // i.e. left/right was not ignored in the RTL case.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"276"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", u"276");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
@@ -861,8 +858,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakVertical)
     // - Actual  : 7135
     // i.e. the expected break height is the twips value of the 5cm rectangle size, it was much
     // more.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]/SwBreakPortion"_ostr, "height"_ostr,
-                u"2837"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]/SwBreakPortion", "height", u"2837");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
@@ -878,7 +874,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
     // - Expected: 276
     // - Actual  : 15398
     // i.e. the shape was in the background, but we failed to ignore it for the break portion.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]"_ostr, "height"_ostr, u"276"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", u"276");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
@@ -1382,8 +1378,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
     // i.e. the numbering portion font size was 12pt, not 24pt (but only when the doc had a
     // bookmark).
     assertXPath(pXmlDoc,
-                "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr,
-                "height"_ostr, u"480"_ustr);
+                "//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont",
+                "height", u"480");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
@@ -1399,9 +1395,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionNoformat)
     // - Expected: ffffffff (COL_AUTO)
     // - Actual  : 00ff0000 (COL_LIGHTRED)
     // i.e. the run color affected the color of the number portion in Writer, but not in Word.
-    CPPUNIT_ASSERT_EQUAL(
-        u"ffffffff"_ustr,
-        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr, "color"_ostr));
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color",
+                u"ffffffff");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
@@ -1422,10 +1417,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
-        nSectionAfterNBSPX_legacy_leftAligned
-            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
-        nSectionAfterNBSPX_legacy_justified
-            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
+        nSectionAfterNBSPX_legacy_leftAligned = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
+        nSectionAfterNBSPX_legacy_justified = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
     }
 
     // Measure the X of sections after NBSPs in a file with the option enabled
@@ -1438,9 +1431,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
         nSectionAfterNBSPX_optionDisabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
         nSectionAfterNBSPX_optionDisabled_justified
-            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
     }
 
     // Measure the X of the sections after NBSPs in a file with the option enabled
@@ -1453,9 +1446,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
 
         nSectionAfterNBSPX_optionEnabled_leftAligned
-            = getXPath(pXmlDoc, "//textarray[4]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[4]", "x").toInt32();
         nSectionAfterNBSPX_optionEnabled_justified
-            = getXPath(pXmlDoc, "//textarray[10]"_ostr, "x"_ostr).toInt32();
+            = getXPath(pXmlDoc, "//textarray[10]", "x").toInt32();
     }
 
     // Assert left aligned NBSP for the legacy file is larger than zero
@@ -1538,47 +1531,39 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf89288)
 
     // Then make sure there is no kern portions between the Western and Complex
     // portions:
-    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, 3);
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']"_ostr,
-                3);
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
-                0);
+                "//body/txt[1]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
 
-    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, 3);
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/SwLinePortion", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']"_ostr,
-                3);
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
-                0);
+                "//body/txt[2]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 0);
 
     // But also make sure there is a kern portion between each Western and Asian
     // portion:
-    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, 5);
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
     assertXPath(pXmlDoc,
-                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']"_ostr,
-                3);
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
-                2);
-    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Kern"_ustr);
-    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, u"PortionType::Kern"_ustr);
+                "//body/txt[3]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
+                u"PortionType::Kern");
+    assertXPath(pXmlDoc, "//body/txt[3]/SwParaPortion/SwLineLayout/SwLinePortion[4]", "type",
+                u"PortionType::Kern");
 
-    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion"_ostr, 5);
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion", 5);
     assertXPath(pXmlDoc,
-                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']"_ostr,
-                3);
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Text']", 3);
     assertXPath(pXmlDoc,
-                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']"_ostr,
-                2);
-    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "type"_ostr, u"PortionType::Kern"_ustr);
-    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[4]"_ostr,
-                "type"_ostr, u"PortionType::Kern"_ustr);
+                "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Kern']", 2);
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
+                u"PortionType::Kern");
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/SwLinePortion[4]", "type",
+                u"PortionType::Kern");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf139863)
@@ -1593,8 +1578,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf139863)
     // Without the fix we don’t even reach here, as the old code resulted in a
     // lone surrogate which can’t be converted to UTF-8 for the layout dump and
     // we get an assert in OString::toUtf8().
-    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*"_ostr, 1);
-    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*"_ostr, 1);
+    assertXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout/child::*", 1);
+    assertXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout/child::*", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
@@ -1610,16 +1595,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
     // upper margin, not based on the 1st para lower margin:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     int nFlyCount
-        = getXPathContent(
-              pXmlDoc,
-              "count(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Fly'])"_ostr)
+        = getXPathContent(pXmlDoc,
+                          "count(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Fly'])")
               .toInt32();
     int nHeight = 0;
     for (int i = 1; i <= nFlyCount; ++i)
     {
         OString xPath = "(//SwParaPortion/SwLineLayout/child::*[@type='PortionType::Fly'])["
                         + OString::number(i) + "]";
-        nHeight += getXPath(pXmlDoc, xPath, "height"_ostr).toInt32();
+        nHeight += getXPath(pXmlDoc, xPath, "height").toInt32();
     }
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 521 (~500)
@@ -1678,20 +1662,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testScriptinfosurrogatePairs)
     // Without the fix it fails with:
     // - Expected: 11
     // - Actual  : 11◌
-    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"11"_ustr);
-    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"\u25CC\U00010A01"_ustr);
+    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
+                u"\u25CC\U00010A01");
 
     // Without the fix this would crash because we got a lone surrogate that
     // can’t be converted to UTF-8, but if it were not for that it might fail
     // with something like:
     // - Expected: 11
     // - Actual  : 11𝐀
-    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr,
-                "portion"_ostr, u"11"_ustr);
-    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr,
-                "portion"_ostr, u"\U0001D400\u064E"_ustr);
+    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
+                u"\U0001D400\u064E");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
@@ -1705,10 +1687,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
     // - Expected: 11
     // - Actual  : 11\u202F
     // (U+020F is a space, so might not be visible)
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]"_ostr, "portion"_ostr,
-                u"11"_ustr);
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]"_ostr, "portion"_ostr,
-                u"\u202F\u1824"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
+                u"\u202F\u1824");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf161990)

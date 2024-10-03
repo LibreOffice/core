@@ -124,8 +124,8 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToRelativeExport)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, u"relative.docx"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                u"relative.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
@@ -136,8 +136,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeToAbsoluteExport)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    OUString sTarget
-        = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
+    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("relative.docx"));
 }
@@ -150,8 +149,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToRelativeExport)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr,
-                u"test.docx"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target", u"test.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
@@ -162,8 +160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsoluteToAbsoluteExport)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    OUString sTarget
-        = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]"_ostr, "Target"_ostr);
+    OUString sTarget = getXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[2]", "Target");
     CPPUNIT_ASSERT(sTarget.startsWith("file:///"));
     CPPUNIT_ASSERT(sTarget.endsWith("test.docx"));
 }
@@ -176,8 +173,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123627_export)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, u"test.docx"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                u"test.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
@@ -188,8 +185,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126590_export)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
     // in the original file: Target="file:///C:\TEMP\test.docx" => invalid file URI
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, u"file:///C:/TEMP/test.docx"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                u"file:///C:/TEMP/test.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
@@ -200,8 +197,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126768_export)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
     // in the original file: "file:///C:\\TEMP\\test.docx" => invalid file URI
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr, u"file:///C:/TEMP/test.docx"_ustr);
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
+                u"file:///C:/TEMP/test.docx");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
@@ -212,8 +209,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNon_ascii_link_export)
     saveAndReload(mpFilter);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/_rels/document.xml.rels"_ustr);
 
-    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']"_ostr,
-                "Target"_ostr,
+    assertXPath(pXmlDoc, "/rels:Relationships/rels:Relationship[@TargetMode='External']", "Target",
                 INetURLObject::decode(u"file:///C:/TEMP/%C3%A9kezet.docx",
                                       INetURLObject::DecodeMechanism::ToIUri,
                                       RTL_TEXTENCODING_UTF8));

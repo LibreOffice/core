@@ -2039,7 +2039,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
     OString aPath("//XShape[@text='Green;  $7,654,321 ']"_ostr);
     assertXPath(pXmlDoc, aPath, 1);
     // Expected - 1 line tall(371), not 4 lines(1481).
-    CPPUNIT_ASSERT_EQUAL(u"371"_ustr, getXPath(pXmlDoc, aPath, "sizeY"_ostr));
+    assertXPath(pXmlDoc, aPath, "sizeY", u"371");
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146756)
@@ -2057,9 +2057,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146756)
     OString aPath("//XShape[@text='New service request and approval; 18%']"_ostr);
     assertXPath(pXmlDoc, aPath, 1);
     // Expected something like 4 lines tall(1697), not 11 lines(3817).
-    CPPUNIT_ASSERT_EQUAL(u"1697"_ustr, getXPath(pXmlDoc, aPath, "sizeY"_ostr));
+    assertXPath(pXmlDoc, aPath, "sizeY", u"1697");
     // Expected some reasonable maximum text length for the label like 2350, not 881.
-    sal_Int32 nTextLength = getXPath(pXmlDoc, aPath, "textMaximumFrameWidth"_ostr).toInt32();
+    sal_Int32 nTextLength = getXPath(pXmlDoc, aPath, "textMaximumFrameWidth").toInt32();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2350), nTextLength);
     // MSO doesn't allow much more than 1/5 of the total chart width, so never go higher than that
     CPPUNIT_ASSERT_LESS(sal_Int32(2370.6), nTextLength);

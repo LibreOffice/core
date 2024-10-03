@@ -304,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
     // - Expected: 1428
     // - Actual  : 387
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString aTop = getXPath(pXmlDoc, "//anchored/fly[1]/infos/bounds"_ostr, "top"_ostr);
+    OUString aTop = getXPath(pXmlDoc, "//anchored/fly[1]/infos/bounds", "top");
     CPPUNIT_ASSERT_EQUAL(u"1428"_ustr, aTop);
 }
 
@@ -455,9 +455,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf124600)
     // text.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString aShapeTextLeft
-        = getXPath(pXmlDoc, "/root/page/header/txt/anchored/fly/infos/bounds"_ostr, "left"_ostr);
-    OUString aBodyTextLeft
-        = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds"_ostr, "left"_ostr);
+        = getXPath(pXmlDoc, "/root/page/header/txt/anchored/fly/infos/bounds", "left");
+    OUString aBodyTextLeft = getXPath(pXmlDoc, "/root/page/body/txt/infos/bounds", "left");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1701
     // - Actual  : 1815
@@ -472,10 +471,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120548)
     // Without the accompanying fix in place, this test would have failed with 'Expected: 00ff0000;
     // Actual: ffffffff', i.e. the numbering portion was black, not red.
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(u"00ff0000"_ustr,
-                         getXPath(pXmlDoc,
-                                  "//SwFieldPortion[@type='PortionType::Number']/SwFont"_ostr,
-                                  "color"_ostr));
+    assertXPath(pXmlDoc, "//SwFieldPortion[@type='PortionType::Number']/SwFont", "color",
+                u"00ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test120551)
@@ -694,8 +691,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113946)
 {
     createSwDoc("tdf113946.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    OUString aTop = getXPath(
-        pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds"_ostr, "top"_ostr);
+    OUString aTop
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject/bounds", "top");
     // tdf#106792 Checked loading of tdf113946.docx. Before the change, the expected
     // value of this test was "1696". Opening the file shows a single short line anchored
     // at the doc start. Only diff is that in 'old' version it is slightly rotated, in 'new'

@@ -170,7 +170,7 @@ DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderT
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row[1]/infos/bounds"_ostr, "height"_ostr).toInt32();
+    sal_Int32 nRowHeight = getXPath(pXmlDoc, "//header/tab/row[1]/infos/bounds", "height").toInt32();
     // The fly is supposed to be no-wrap, so the text should come underneath it, not wrap-through,
     // thus making the row much higher. Before, height was 706. Now it is 1067.
     CPPUNIT_ASSERT_MESSAGE("Text must wrap under green box", nRowHeight > 1000);
@@ -687,9 +687,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94009_zeroPgMargin)
 DECLARE_WW8EXPORT_TEST(testTdf108518_CRnumformatting, "tdf108518_CRnumformatting.doc")
 {
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(u"6.2.3."_ustr, getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']"_ostr, "expand"_ostr));
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']", "expand", u"6.2.3.");
     //Without this fix in place, it would become 200 (and non-bold).
-    CPPUNIT_ASSERT_EQUAL(u"220"_ustr, getXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont"_ostr, "height"_ostr));
+    assertXPath(pXmlDoc, "//body/txt[4]/SwParaPortion/SwLineLayout/child::*[@type='PortionType::Number']/SwFont", "height", u"220");
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf120711_joinedParagraphWithChangeTracking, "tdf120711.doc")
@@ -864,7 +864,7 @@ DECLARE_WW8EXPORT_TEST(testPresetDash, "tdf127166_prstDash_Word97.doc")
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure that there is no tabstop in the first paragraph (despite chapter numbering's setting)
     // This is a pre-emptive test to ensure something visibly correct is not broken.
-    assertXPath(pLayout, "//body/txt[1]//SwFixPortion"_ostr, 0);
+    assertXPath(pLayout, "//body/txt[1]//SwFixPortion", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRtlGutter)
@@ -1087,12 +1087,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79186_noLayoutInCell)
     CPPUNIT_ASSERT_EQUAL(isExported(), getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeLeft
-        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds"_ostr,
-                   "left"_ostr)
+        = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds",
+                   "left")
               .toInt32();
     sal_Int32 nColumnBLeft
-        = getXPath(pDump, "//page[1]/body/tab/row[1]/cell[2]/infos/bounds"_ostr,
-                   "left"_ostr).toInt32();
+        = getXPath(pDump, "//page[1]/body/tab/row[1]/cell[2]/infos/bounds",
+                   "left").toInt32();
     // The textbox's horizontal placement is of primary concern. It must remain in cell B2
     CPPUNIT_ASSERT(nShapeLeft > nColumnBLeft);
 

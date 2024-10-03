@@ -453,17 +453,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
 
     // Also test the generated layout:
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion"_ostr, "expand"_ostr,
-                u""_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: PortionType::ContentControl
     // - Actual  : PortionType::Text
     // i.e. SwContentControl generated a plain text portion, not a dedicated content control
     // portion.
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "type"_ostr,
-                u"PortionType::ContentControl"_ustr);
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion"_ostr, "portion"_ostr,
-                u"test*"_ustr);
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion", "type",
+                u"PortionType::ContentControl");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion", "portion", u"test*");
 
     // Also test the doc model, make sure that there is a dummy character at the start and end, so
     // the user can explicitly decide if they want to expand the content control or not:
@@ -872,9 +870,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerODFExport)
     // - Expected: 00ff0000 (COL_LIGHTRED)
     // - Actual  : ffffffff (COL_AUTO)
     // i.e. the custom "red" color was lost as RES_PARATR_LIST_AUTOFMT was not serialized to ODT.
-    CPPUNIT_ASSERT_EQUAL(
-        u"00ff0000"_ustr,
-        getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr, "color"_ostr));
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color",
+                u"00ff0000");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
@@ -891,9 +888,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testParagraphMarkerFormattedRun)
     // - Expected: normal
     // - Actual  : bold
     // i.e. the numbering portion was bold, while its weight should be normal.
-    CPPUNIT_ASSERT_EQUAL(
-        u"normal"_ustr, getXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont"_ostr,
-                                 "weight"_ostr));
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "weight", u"normal");
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testFlySplit)
@@ -1012,7 +1007,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeWithLayout)
     // element.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     // Also make sure that we don't have multiple <draw:frame> elements in the first place.
-    assertXPath(pXmlDoc, "//draw:frame"_ostr, 1);
+    assertXPath(pXmlDoc, "//draw:frame", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)

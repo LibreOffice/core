@@ -358,14 +358,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     pXmlDoc = parseLayoutDump();
     // Verifies that the leading space before "World" was also cut
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-                "portion"_ostr, "New!\"");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"New!\"");
 
     // Reset to initial string
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-                "portion"_ostr, "New World!\"");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"New World!\"");
 
     pWrtShell->EndPara(false);
     pWrtShell->Left(SwCursorSkipMode::Chars, false, 1, false);
@@ -374,8 +374,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     pWrtShell->Delete();
     pWrtShell->Insert(u"."_ustr);
     pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-                "portion"_ostr, "New World.\"");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"New World.\"");
 
     pWrtShell->Left(SwCursorSkipMode::Chars, false, 1, false);
     // Select and cut "World" from string
@@ -386,8 +386,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     // Without the test in place, the leading space before "World" is not also cut.
     // Expected: New."
     // Actual: New ."
-    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion"_ostr,
-                "portion"_ostr, "New.\"");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+                "portion", u"New.\"");
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)

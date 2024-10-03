@@ -25,20 +25,20 @@ CPPUNIT_TEST_FIXTURE(TestXPath, test_getXPath)
     xmlDocUniquePtr pTable(xmlParseDoc(s_xml));
     CPPUNIT_ASSERT(pTable);
     // Must get existing element content without errors
-    CPPUNIT_ASSERT_ASSERTION_PASS(assertXPath(pTable, "/xml/item"_ostr));
+    CPPUNIT_ASSERT_ASSERTION_PASS(assertXPath(pTable, "/xml/item"));
     // Must error out when getting non-existing element
-    CPPUNIT_ASSERT_ASSERTION_FAIL(assertXPath(pTable, "/xml/no_item"_ostr));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(assertXPath(pTable, "/xml/no_item"));
     // Must get existing attribute value correctly
-    CPPUNIT_ASSERT_ASSERTION_PASS(getXPath(pTable, "/xml/item"_ostr, "attrib"_ostr));
+    CPPUNIT_ASSERT_ASSERTION_PASS(getXPath(pTable, "/xml/item", "attrib"));
     // Must fail when requested non-empty attribute doesn't exist
-    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPath(pTable, "/xml/item"_ostr, "no_attrib"_ostr));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPath(pTable, "/xml/item", "no_attrib"));
     // Must properly return attribute content
-    CPPUNIT_ASSERT_EQUAL(u"val"_ustr, getXPath(pTable, "/xml/item"_ostr, "attrib"_ostr));
+    CPPUNIT_ASSERT_EQUAL(u"val"_ustr, getXPath(pTable, "/xml/item", "attrib"));
     // Trying to get position of missing child of a node must fail assertion
-    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pTable, "/xml/item"_ostr, "absent"));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pTable, "/xml/item", "absent"));
     // Asserting that an attribute is absent
-    CPPUNIT_ASSERT_ASSERTION_FAIL(assertXPathNoAttribute(pTable, "/xml/item"_ostr, "attrib"_ostr));
-    CPPUNIT_ASSERT_ASSERTION_PASS(assertXPathNoAttribute(pTable, "/xml/item"_ostr, "foo"_ostr));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(assertXPathNoAttribute(pTable, "/xml/item", "attrib"));
+    CPPUNIT_ASSERT_ASSERTION_PASS(assertXPathNoAttribute(pTable, "/xml/item", "foo"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
