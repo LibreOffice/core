@@ -82,81 +82,55 @@ void impl_cairo_set_hairline(cairo_t* pRT,
 
 void addB2DPolygonToPathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon)
 {
-    // short circuit if there is nothing to do
     const sal_uInt32 nPointCount(rPolygon.count());
 
-    const bool bHasCurves(rPolygon.areControlPointsUsed());
-    const bool bClosePath(rPolygon.isClosed());
-    const basegfx::B2DPoint* pLast(nullptr);
+    if (0 == nPointCount)
+        // no points, done
+        return;
 
-    for (sal_uInt32 nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++)
+    // get basic infos
+    const bool bClosed(rPolygon.isClosed());
+    const sal_uInt32 nEdgeCount(bClosed ? nPointCount : nPointCount - 1);
+
+    // get 1st point and move to it
+    basegfx::B2DPoint aCurrent(rPolygon.getB2DPoint(0));
+    cairo_move_to(pRT, aCurrent.getX(), aCurrent.getY());
+
+    for (sal_uInt32 nIndex(0); nIndex < nEdgeCount; nIndex++)
     {
-        int nClosedIdx = nPointIdx;
-        if (nPointIdx >= nPointCount)
+        // get index for and next point
+        const sal_uInt32 nNextIndex((nIndex + 1) % nPointCount);
+        const basegfx::B2DPoint aNext(rPolygon.getB2DPoint(nNextIndex));
+
+        // get and check curve stuff
+        basegfx::B2DPoint aCP1(rPolygon.getNextControlPoint(nIndex));
+        basegfx::B2DPoint aCP2(rPolygon.getPrevControlPoint(nNextIndex));
+        const bool bCP1Equal(aCP1.equal(aCurrent));
+        const bool bCP2Equal(aCP2.equal(aNext));
+
+        if (!bCP1Equal || !bCP2Equal)
         {
-            // prepare to close last curve segment if needed
-            if (bClosePath && (nPointIdx == nPointCount))
-            {
-                nClosedIdx = 0;
-            }
-            else
-            {
-                break;
-            }
+            // tdf#99165, see other similar changes for more info
+            if (bCP1Equal)
+                aCP1 = aCurrent + ((aCP2 - aCurrent) * 0.0005);
+
+            if (bCP2Equal)
+                aCP2 = aNext + ((aCP1 - aNext) * 0.0005);
+
+            cairo_curve_to(pRT, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(), aNext.getX(),
+                           aNext.getY());
+        }
+        else
+        {
+            cairo_line_to(pRT, aNext.getX(), aNext.getY());
         }
 
-        const basegfx::B2DPoint& rPoint(rPolygon.getB2DPoint(nClosedIdx));
-
-        if (!nPointIdx)
-        {
-            // first point => just move there
-            cairo_move_to(pRT, rPoint.getX(), rPoint.getY());
-            pLast = &rPoint;
-            continue;
-        }
-
-        bool bPendingCurve(false);
-
-        if (bHasCurves)
-        {
-            bPendingCurve = rPolygon.isNextControlPointUsed(nPrevIdx);
-            bPendingCurve |= rPolygon.isPrevControlPointUsed(nClosedIdx);
-        }
-
-        if (!bPendingCurve) // line segment
-        {
-            cairo_line_to(pRT, rPoint.getX(), rPoint.getY());
-        }
-        else // cubic bezier segment
-        {
-            basegfx::B2DPoint aCP1 = rPolygon.getNextControlPoint(nPrevIdx);
-            basegfx::B2DPoint aCP2 = rPolygon.getPrevControlPoint(nClosedIdx);
-
-            // tdf#99165 if the control points are 'empty', create the mathematical
-            // correct replacement ones to avoid problems with the graphical sub-system
-            // tdf#101026 The 1st attempt to create a mathematically correct replacement control
-            // vector was wrong. Best alternative is one as close as possible which means short.
-            if (aCP1.equal(*pLast))
-            {
-                aCP1 = *pLast + ((aCP2 - *pLast) * 0.0005);
-            }
-
-            if (aCP2.equal(rPoint))
-            {
-                aCP2 = rPoint + ((aCP1 - rPoint) * 0.0005);
-            }
-
-            cairo_curve_to(pRT, aCP1.getX(), aCP1.getY(), aCP2.getX(), aCP2.getY(), rPoint.getX(),
-                           rPoint.getY());
-        }
-
-        pLast = &rPoint;
+        // prepare next step
+        aCurrent = aNext;
     }
 
-    if (bClosePath)
-    {
+    if (bClosed)
         cairo_close_path(pRT);
-    }
 }
 
 // needed as helper, see below. It guarantees clean
@@ -221,7 +195,6 @@ public:
         cairo_new_path(globalStaticCairoContext.getContext());
         addB2DPolygonToPathGeometry(globalStaticCairoContext.getContext(), rPolygon);
         mpCairoPath = cairo_copy_path(globalStaticCairoContext.getContext());
-        cairo_new_path(globalStaticCairoContext.getContext());
     }
 
     CairoPathHelper(const basegfx::B2DPolyPolygon& rPolyPolygon)
@@ -231,7 +204,6 @@ public:
         for (const auto& rPolygon : rPolyPolygon)
             addB2DPolygonToPathGeometry(globalStaticCairoContext.getContext(), rPolygon);
         mpCairoPath = cairo_copy_path(globalStaticCairoContext.getContext());
-        cairo_new_path(globalStaticCairoContext.getContext());
     }
 
     ~CairoPathHelper()
@@ -288,10 +260,8 @@ void checkAndDoPixelSnap(cairo_t* pRT,
                           && rViewInformation.getUseAntiAliasing());
 
     if (!bPixelSnap)
-    {
         // no pixel snap, done
         return;
-    }
 
     // with the comments above at CairoPathHelper we cannot do PixelSnap
     // at path construction time, so it needs to be done *after* the path
@@ -311,36 +281,40 @@ void checkAndDoPixelSnap(cairo_t* pRT,
         return;
     }
 
+    auto doPixelSnap([&pRT](double& rX, double& rY) {
+        // transform to discrete pixels
+        cairo_user_to_device(pRT, &rX, &rY);
+
+        // round them, also add 0.5 which will be as transform in
+        // the paint method to move to 'inside' pixels when AA used.
+        // remember: this is only done when AA is active (see bPixelSnap
+        // above) and moves the hairline to full-pixel position
+        rX = trunc(rX) + 0.5;
+        rY = trunc(rY) + 0.5;
+
+        // transform back to former transformed state
+        cairo_device_to_user(pRT, &rX, &rY);
+    });
+
     for (int a(0); a < path->num_data; a += path->data[a].header.length)
     {
         cairo_path_data_t* data(&path->data[a]);
 
         switch (data->header.type)
         {
-            case CAIRO_PATH_MOVE_TO:
-            case CAIRO_PATH_LINE_TO:
             case CAIRO_PATH_CURVE_TO:
             {
-                // NOTE: for CAIRO_PATH_CURVE_TO we would also have the control
-                // points, but these do not really need correction. If that may
-                // change a correction using the deltas in x and y could be added
-
-                // get pointers to double data
-                double* pX(&data[1].point.x);
-                double* pY(&data[1].point.y);
-
-                // transform to discrete pixels
-                cairo_user_to_device(pRT, pX, pY);
-
-                // round them, also add 0.5 which will be as transform in
-                // the paint method to move to 'inside' pixels when AA used.
-                // remember: this is only done when AA is active (see bPixelSnap
-                // above) and moves the hairline to full-pixel position
-                *pX = trunc(*pX) + 0.5;
-                *pY = trunc(*pY) + 0.5;
-
-                // transform back to former transformed state
-                cairo_device_to_user(pRT, pX, pY);
+                // curve: snap all three point positions,
+                // thus use fallthrough below
+                doPixelSnap(data[2].point.x, data[2].point.y);
+                doPixelSnap(data[3].point.x, data[3].point.y);
+                [[fallthrough]]; // break;
+            }
+            case CAIRO_PATH_MOVE_TO:
+            case CAIRO_PATH_LINE_TO:
+            {
+                // path/move: snap first point position
+                doPixelSnap(data[1].point.x, data[1].point.y);
                 break;
             }
             case CAIRO_PATH_CLOSE_PATH:
@@ -359,7 +333,8 @@ void checkAndDoPixelSnap(cairo_t* pRT,
 }
 
 void getOrCreatePathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon,
-                             const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+                             const drawinglayer::geometry::ViewInformation2D& rViewInformation,
+                             bool bPixelSnap)
 {
     // try to access buffered data
     std::shared_ptr<SystemDependentData_CairoPathGeometry> pSystemDependentData_CairoPathGeometry(
@@ -371,14 +346,16 @@ void getOrCreatePathGeometry(cairo_t* pRT, const basegfx::B2DPolygon& rPolygon,
         // re-use data and do evtl. needed pixel snap after adding on cairo path data
         cairo_append_path(
             pRT, pSystemDependentData_CairoPathGeometry->getCairoPathHelper()->getCairoPath());
-        checkAndDoPixelSnap(pRT, rViewInformation);
+        if (bPixelSnap)
+            checkAndDoPixelSnap(pRT, rViewInformation);
         return;
     }
 
     // create new data and add path data to pRT and do evtl. needed pixel snap after adding on cairo path data
     std::shared_ptr<CairoPathHelper> pCairoPathHelper(std::make_shared<CairoPathHelper>(rPolygon));
     cairo_append_path(pRT, pCairoPathHelper->getCairoPath());
-    checkAndDoPixelSnap(pRT, rViewInformation);
+    if (bPixelSnap)
+        checkAndDoPixelSnap(pRT, rViewInformation);
 
     // add to buffering mechanism if not trivial
     if (rPolygon.count() > nMinimalPointsPath)
@@ -1360,7 +1337,8 @@ void CairoPixelProcessor2D::processPolygonHairlinePrimitive2D(
 
     // get PathGeometry & paint it
     cairo_new_path(mpRT);
-    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D());
+    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
+                            getViewInformation2D().getUseAntiAliasing());
     cairo_stroke(mpRT);
 
     cairo_restore(mpRT);
@@ -2051,7 +2029,8 @@ void CairoPixelProcessor2D::processPolygonStrokePrimitive2D(
 
     // create path geometry and put mask as path
     cairo_new_path(mpRT);
-    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D());
+    getOrCreatePathGeometry(mpRT, rPolygon, getViewInformation2D(),
+                            bHairline && getViewInformation2D().getUseAntiAliasing());
 
     // render
     cairo_stroke(mpRT);
