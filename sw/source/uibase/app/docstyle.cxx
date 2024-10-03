@@ -1799,6 +1799,10 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
                     m_rDoc.CopyPageDesc(*m_pDesc, *pNewDsc); // #i7983#
 
                     pFormat = &pNewDsc->GetMaster();
+
+                    // tdf#134166: Changing page style can affect toolbar button state.
+                    if (SwEditShell* pSh = m_rDoc.GetEditShell())
+                        pSh->CallChgLnk();
                 }
             }
             break;
