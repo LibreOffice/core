@@ -135,31 +135,27 @@ void SAL_CALL OFSStreamContainer::release()
 //  XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL OFSStreamContainer::getTypes()
 {
+    std::scoped_lock aGuard( m_aMutex );
     if ( !m_aTypes.hasElements() )
     {
-        std::scoped_lock aGuard( m_aMutex );
-
-        if ( !m_aTypes.hasElements() )
+        std::vector<uno::Type> tmp
         {
-            std::vector<uno::Type> tmp
-            {
-                cppu::UnoType<lang::XTypeProvider>::get(),
-                cppu::UnoType<embed::XExtendedStorageStream>::get()
-            };
+            cppu::UnoType<lang::XTypeProvider>::get(),
+            cppu::UnoType<embed::XExtendedStorageStream>::get()
+        };
 
-            if ( m_xSeekable.is() )
-                tmp.push_back(cppu::UnoType<io::XSeekable>::get());
-            if ( m_xInputStream.is() )
-                tmp.push_back(cppu::UnoType<io::XInputStream>::get());
-            if ( m_xOutputStream.is() )
-                tmp.push_back(cppu::UnoType<io::XOutputStream>::get());
-            if ( m_xTruncate.is() )
-                tmp.push_back(cppu::UnoType<io::XTruncate>::get());
-            if ( m_xAsyncOutputMonitor.is() )
-                tmp.push_back(cppu::UnoType<io::XAsyncOutputMonitor>::get());
+        if ( m_xSeekable.is() )
+            tmp.push_back(cppu::UnoType<io::XSeekable>::get());
+        if ( m_xInputStream.is() )
+            tmp.push_back(cppu::UnoType<io::XInputStream>::get());
+        if ( m_xOutputStream.is() )
+            tmp.push_back(cppu::UnoType<io::XOutputStream>::get());
+        if ( m_xTruncate.is() )
+            tmp.push_back(cppu::UnoType<io::XTruncate>::get());
+        if ( m_xAsyncOutputMonitor.is() )
+            tmp.push_back(cppu::UnoType<io::XAsyncOutputMonitor>::get());
 
-            m_aTypes = comphelper::containerToSequence(tmp);
-        }
+        m_aTypes = comphelper::containerToSequence(tmp);
     }
     return m_aTypes;
 }
