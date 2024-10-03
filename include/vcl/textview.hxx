@@ -21,11 +21,14 @@
 #define INCLUDED_VCL_TEXTVIEW_HXX
 
 #include <config_options.h>
+#include <o3tl/deleter.hxx>
 #include <tools/gen.hxx>
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/dndhelp.hxx>
+#include <vcl/seleng.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/outdev.hxx>
 #include <memory>
@@ -44,9 +47,9 @@ namespace i18nutil {
     struct SearchOptions2;
 }
 
-
-struct ImpTextView;
 class ExtTextEngine;
+class TextSelFunctionSet;
+struct TextDDInfo;
 
 class UNLESS_MERGELIBS(VCL_DLLPUBLIC) TETextDataObject final : public css::datatransfer::XTransferable,
                         public ::cppu::OWeakObject
@@ -80,9 +83,33 @@ class VCL_DLLPUBLIC TextView final : public vcl::unohelper::DragAndDropClient
     friend class        TextUndoManager;
     friend class        TextSelFunctionSet;
 
-    std::unique_ptr<ImpTextView>  mpImpl;
+    ExtTextEngine* mpTextEngine;
 
-                        TextView( const TextView& ) = delete;
+    VclPtr<vcl::Window> mpWindow;
+    TextSelection maSelection;
+    Point maStartDocPos;
+
+    std::unique_ptr<vcl::Cursor, o3tl::default_delete<vcl::Cursor>> mpCursor;
+
+    std::unique_ptr<TextDDInfo, o3tl::default_delete<TextDDInfo>> mpDDInfo;
+
+    std::unique_ptr<SelectionEngine> mpSelEngine;
+    std::unique_ptr<TextSelFunctionSet> mpSelFuncSet;
+
+    rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
+
+    sal_uInt16 mnTravelXPos;
+
+    bool mbAutoScroll : 1;
+    bool mbInsertMode : 1;
+    bool mbReadOnly : 1;
+    bool mbPaintSelection : 1;
+    bool mbAutoIndent : 1;
+    bool mbCursorEnabled : 1;
+    bool mbClickedInSelection : 1;
+    bool mbCursorAtEndOfLine;
+
+    TextView(const TextView&) = delete;
     TextView&           operator=( const TextView& ) = delete;
 
     SAL_DLLPRIVATE bool ImpIndentBlock( bool bRight );
