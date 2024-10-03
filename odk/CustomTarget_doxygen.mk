@@ -27,7 +27,7 @@ odk_cygwin_path = $(if $(MSYSTEM),$(1),$(call gb_Helper_cyg_path,$(1)))
 odk_cpp_PREFIX := $(call odk_cygwin_path,$(INSTDIR)/$(SDKDIRNAME)/include/)
 odk_cpp_DOXY_INPUT := $(call odk_cygwin_path,$(SRCDIR)/odk/docs/cpp/main.dox \
 	$(SRCDIR)/include/sal/log-areas.dox \
-	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST))
+	$(addprefix $(odk_cpp_PREFIX),$(odk_cpp_INCDIRLIST) $(odk_cpp_INCFILELIST)))
 odk_cpp_DOXY_WORKDIR := $(call odk_cygwin_path,$(gb_CustomTarget_workdir)/odk/docs/cpp/ref)
 
 $(eval $(call gb_CustomTarget_register_targets,odk/docs,\
@@ -71,7 +71,7 @@ odk_idl_PREFIX := $(call odk_cygwin_path,$(SRCDIR)/udkapi/ $(SRCDIR)/offapi/)
 odk_idl_DOXY_INPUT := $(call odk_cygwin_path,$(SRCDIR)/odk/docs/idl/main.dox \
 	$(addsuffix com,$(odk_idl_PREFIX)) \
 	$(addsuffix org,$(odk_idl_PREFIX)) \
-	$(SRCDIR)/odk/docs/idl/generated_idl_chapter_refs.idl
+	$(SRCDIR)/odk/docs/idl/generated_idl_chapter_refs.idl)
 odk_idl_DOXY_WORKDIR := $(call odk_cygwin_path,$(gb_CustomTarget_workdir)/odk/docs/idl/ref)
 
 # don't depend on the IDL files directly but instead on the udkapi/offapi
