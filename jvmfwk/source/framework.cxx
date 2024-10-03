@@ -159,7 +159,8 @@ std::vector<OUString> jfw_convertUserPathList(std::u16string_view sUserPath)
                 if (nBootstrapVarEnd == std::u16string_view::npos)
                 {
                     // Current colon is part of bootstrap variable - skip it!
-                    nextColon = sUserPath.find(SAL_PATHSEPARATOR, nextColon + 1);
+                    const auto nAfterColon = (nextColon != std::string_view::npos) ? (nextColon + 1) : 0;
+                    nextColon = sUserPath.find(SAL_PATHSEPARATOR, nAfterColon);
                     if (nextColon != 0 && nextColon != std::u16string_view::npos)
                         sToken = sUserPath.substr(nIdx, nextColon - nIdx);
                     else
