@@ -25,6 +25,7 @@
 
 #include <o3tl/deleter.hxx>
 #include <tools/fldunit.hxx>
+#include <svl/ctloptions.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
@@ -108,6 +109,8 @@ class SAL_DLLPUBLIC_RTTI SwModule final : public SfxModule, public SfxListener, 
     css::uno::Reference< css::scanner::XScannerManager2 >    m_xScannerManager;
     css::uno::Reference< css::linguistic2::XLanguageGuessing >  m_xLanguageGuesser;
 
+    SvtCTLOptions::TextNumerals m_eCTLTextNumerals;
+
     bool                m_bAuthorInitialised : 1;
     bool                m_bEmbeddedLoadSave : 1;
 
@@ -182,6 +185,8 @@ public:
 
     bool IsEmbeddedLoadSave() const         { return m_bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( bool bFlag )  { m_bEmbeddedLoadSave = bFlag; }
+
+    SvtCTLOptions::TextNumerals GetCTLTextNumerals() const { return m_eCTLTextNumerals; }
 
     static void ShowDBObj( SwView const & rView, const SwDBData& rData);
 

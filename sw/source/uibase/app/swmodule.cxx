@@ -130,6 +130,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
                     SfxObjectFactory* pGlobalFact )
     : SfxModule("sw"_ostr, {pWebFact, pFact, pGlobalFact}),
     m_pView(nullptr),
+    m_eCTLTextNumerals(SvtCTLOptions::GetCTLTextNumerals()),
     m_bAuthorInitialised(false),
     m_bEmbeddedLoadSave( false ),
     m_pDragDrop( nullptr ),

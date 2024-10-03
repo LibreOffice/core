@@ -52,6 +52,7 @@
 #include <fntcache.hxx>
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
+#include <swmodule.hxx>
 
 #ifdef DBG_UTIL
 // global Variable
@@ -998,7 +999,8 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
-    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+    SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
+                                           SW_MOD()->GetCTLTextNumerals());
 
     Size aTextSize;
     TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
@@ -1127,7 +1129,8 @@ void SwSubFont::DrawText_( SwDrawTextInfo &rInf, const bool bGrey )
     if( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
-    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+    SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
+                                           SW_MOD()->GetCTLTextNumerals());
 
     const Point aOldPos(rInf.GetPos());
     Point aPos( rInf.GetPos() );
@@ -1252,7 +1255,8 @@ void SwSubFont::DrawStretchText_( SwDrawTextInfo &rInf )
     if ( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
-    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+    SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
+                                           SW_MOD()->GetCTLTextNumerals());
 
     rInf.ApplyAutoColor();
 
@@ -1317,7 +1321,8 @@ TextFrameIndex SwSubFont::GetModelPositionForViewPoint_( SwDrawTextInfo& rInf )
     if ( !pLastFont || pLastFont->GetOwner() != m_nFontCacheId )
         ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
-    SwDigitModeModifier aDigitModeModifier( rInf.GetOut(), rInf.GetFont()->GetLanguage() );
+    SwDigitModeModifier aDigitModeModifier(rInf.GetOut(), rInf.GetFont()->GetLanguage(),
+                                           SW_MOD()->GetCTLTextNumerals());
 
     TextFrameIndex const nLn = rInf.GetLen() == TextFrameIndex(COMPLETE_STRING)
             ? TextFrameIndex(rInf.GetText().getLength())
