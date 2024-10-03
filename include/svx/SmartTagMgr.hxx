@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SMARTTAGMGR_HXX
-#define INCLUDED_SVX_SMARTTAGMGR_HXX
+#pragma once
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -226,7 +225,5 @@ public:
     // css::util::XChangesListener
       virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_SVXPRESETLISTBOX_HXX
-#define INCLUDED_SVX_SVXPRESETLISTBOX_HXX
+#pragma once
 
 #include <svtools/valueset.hxx>
 #include <svx/xtable.hxx>
@@ -60,7 +59,5 @@ public:
     void FillPresetListBox(XPatternList& pList, sal_uInt32 nStartIndex = 1);
     void DrawLayout();
 };
-
-#endif // INCLUDED_SVX_SVXPRESETLISTBOX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
