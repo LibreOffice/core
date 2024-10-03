@@ -315,10 +315,10 @@ namespace XSLT
                 std::scoped_lock<std::mutex> g(m_mutex);
                 m_tcontext = tcontext;
             }
-            oh->registercontext(m_tcontext);
-            xsltQuoteUserParams(m_tcontext, params.data());
+            oh->registercontext(tcontext);
+            xsltQuoteUserParams(tcontext, params.data());
             result = xsltApplyStylesheetUser(styleSheet, doc, nullptr, nullptr, nullptr,
-                                             m_tcontext);
+                                             tcontext);
         }
 
         if (result)
