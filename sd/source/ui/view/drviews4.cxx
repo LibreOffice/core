@@ -795,8 +795,13 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             }
 
             // nothing selected
-            else
+            else if (!SlideShow::IsRunning(GetViewShellBase()))
             {
+                // tdf#163124 this is the non-native SlideShow (see !bNativeShow),
+                // thus the above checks/actions have to be done to make the
+                // EditView work normally, but use the "page" standard context menu
+                // fallback only when SlideShow is not running to get the
+                // SlideShow popup menu - as expected when SlideShow is running
                 aPopupId = "page";
             }
         }
