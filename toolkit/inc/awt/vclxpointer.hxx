@@ -34,14 +34,18 @@
 class VCLXPointer final : public cppu::WeakImplHelper<
     css::awt::XPointer, css::lang::XServiceInfo>
 {
-    std::mutex    maMutex;
+    mutable std::mutex maMutex;
     PointerStyle    maPointer;
 
 public:
     VCLXPointer();
     virtual ~VCLXPointer() override;
 
-    PointerStyle GetPointer() const { return maPointer; }
+    PointerStyle GetPointer() const
+    {
+        std::scoped_lock aGuard( maMutex );
+        return maPointer;
+    }
 
     // css::awt::XPointer
     void SAL_CALL setType( sal_Int32 nType ) override;
