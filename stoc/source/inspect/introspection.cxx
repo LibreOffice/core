@@ -785,15 +785,8 @@ ImplIntrospectionAccess::ImplIntrospectionAccess
 Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
 {
     std::unique_lock aGuard( m_aMutex );
-
     if( !mxObjElementAccess.is() )
-    {
-        aGuard.unlock();
-        Reference<XElementAccess> xElementAccess( mxIface, UNO_QUERY );
-        aGuard.lock();
-        if( !mxObjElementAccess.is() )
-            mxObjElementAccess = std::move(xElementAccess);
-    }
+        mxObjElementAccess.set( mxIface, UNO_QUERY );
     return mxObjElementAccess;
 }
 
@@ -922,30 +915,16 @@ Reference<XIndexAccess> ImplIntrospectionAccess::getXIndexAccess()
 Reference<XEnumerationAccess> ImplIntrospectionAccess::getXEnumerationAccess()
 {
     std::unique_lock aGuard( m_aMutex );
-
     if( !mxObjEnumerationAccess.is() )
-    {
-        aGuard.unlock();
-        Reference<XEnumerationAccess> xEnumerationAccess( mxIface, UNO_QUERY );
-        aGuard.lock();
-        if( !mxObjEnumerationAccess.is() )
-            mxObjEnumerationAccess = std::move(xEnumerationAccess);
-    }
+        mxObjEnumerationAccess.set( mxIface, UNO_QUERY );
     return mxObjEnumerationAccess;
 }
 
 Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
 {
     std::unique_lock aGuard( m_aMutex );
-
     if( !mxObjIdlArray.is() )
-    {
-        aGuard.unlock();
-        Reference<XIdlArray> xIdlArray( mxIface, UNO_QUERY );
-        aGuard.lock();
-        if( !mxObjIdlArray.is() )
-            mxObjIdlArray = std::move(xIdlArray);
-    }
+        mxObjIdlArray.set( mxIface, UNO_QUERY );
     return mxObjIdlArray;
 }
 
