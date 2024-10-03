@@ -261,7 +261,7 @@ class SwTokenWindow
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
     DECL_LINK(AdjustPositionsHdl, const Size&, void);
 
-    void    SetActiveControl(SwTOXWidget* pSet);
+    void    SetActiveControl(SwTOXWidget* pSet, bool bGrabFocus = true);
 
     SwTOXWidget* InsertItem(const OUString& rText, const SwFormToken& aToken);
     void        AdjustPositions();
@@ -275,7 +275,7 @@ public:
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
-    void        SetForm(SwForm& rForm, sal_uInt16 nLevel);
+    void        SetForm(SwForm& rForm, sal_uInt16 nLevel, bool bGrabFocus = true);
     sal_uInt16  GetLastLevel()const {return m_nLevel;};
 
     bool        IsValid() const {return m_bValid;}
@@ -388,6 +388,7 @@ class SwTOXEntryTabPage final : public SfxTabPage
     DECL_LINK(ModifyClickHdl, weld::Toggleable&, void);
 
     void ShowHideControls(int eType);
+    void LevelHdlImpl(weld::TreeView& rBox, bool bGrabFocus);
 
 public:
     SwTOXEntryTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rAttrSet);
