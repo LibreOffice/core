@@ -1775,6 +1775,24 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(weld::Container* pPage, weld::DialogC
     mxPbSignCertSelect->set_sensitive(true);
     mxPbSignCertSelect->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect));
     mxPbSignCertClear->connect_clicked(LINK(this, ImpPDFTabSigningPage, ClickmaPbSignCertClear));
+
+    // Populate the TSA ComboBox
+    try
+    {
+        std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+        if (aTSAURLs)
+        {
+            const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
+            for (auto const& elem : rTSAURLs)
+            {
+                mxLBSignTSA->append_text(elem);
+            }
+        }
+    }
+    catch (const uno::Exception &)
+    {
+        TOOLS_INFO_EXCEPTION("filter.pdf", "TSAURLsDialog::TSAURLsDialog()");
+    }
 }
 
 ImpPDFTabSigningPage::~ImpPDFTabSigningPage()
@@ -1803,23 +1821,6 @@ IMPL_LINK_NOARG(ImpPDFTabSigningPage, ClickmaPbSignCertSelect, weld::Button&, vo
     mxEdSignContactInfo->set_sensitive(true);
     mxEdSignReason->set_sensitive(true);
     mxEdSignReason->set_text(aDescription);
-
-    try
-    {
-        std::optional<css::uno::Sequence<OUString>> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
-        if (aTSAURLs)
-        {
-            const css::uno::Sequence<OUString>& rTSAURLs = *aTSAURLs;
-            for (auto const& elem : rTSAURLs)
-            {
-                mxLBSignTSA->append_text(elem);
-            }
-        }
-    }
-    catch (const uno::Exception &)
-    {
-        TOOLS_INFO_EXCEPTION("filter.pdf", "TSAURLsDialog::TSAURLsDialog()");
-    }
 
     // If more than only the "None" entry is there, enable the ListBox
     if (mxLBSignTSA->get_count() > 1)
