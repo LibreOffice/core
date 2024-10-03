@@ -36,6 +36,7 @@
 #include "shapelist.hxx"
 #include "misc/scopelock.hxx"
 #include "sddllapi.h"
+#include <tools/json_writer.hxx>
 
 namespace com::sun::star::animations {
     class XAnimationNode;
@@ -171,6 +172,8 @@ public:
     OUString        GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
+    void            GetPageInfo(::tools::JsonWriter& jsonWriter);
+    void            NotifyPagePropertyChanges();
     bool            RestoreDefaultText( SdrObject* pObj );
 
     /** @return true if the given SdrObject is inside the presentation object list */
