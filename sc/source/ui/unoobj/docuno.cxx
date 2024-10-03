@@ -649,16 +649,25 @@ OUString ScModelObj::getPartInfo( int nPart )
     const bool bIsSelected = false; //pViewData->GetDocument()->IsSelected(nPart);
     const bool bIsRTLLayout = pViewData->GetDocument().IsLayoutRTL(nPart);
 
-    OUString aPartInfo = "{ \"visible\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsVisible)) +
-        "\", \"selected\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsSelected)) +
-        "\", \"rtllayout\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsRTLLayout)) +
-        "\", \"protected\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsProtected)) +
-        "\" }";
-    return aPartInfo;
+    ::tools::JsonWriter jsonWriter;
+    jsonWriter.put("visible", static_cast<unsigned int>(bIsVisible));
+    jsonWriter.put("rtllayout", static_cast<unsigned int>(bIsRTLLayout));
+    jsonWriter.put("protected", static_cast<unsigned int>(bIsProtected));
+    jsonWriter.put("selected", static_cast<unsigned int>(bIsSelected));
+
+    OUString tabName;
+    pViewData->GetDocument().GetName(nPart, tabName);
+    jsonWriter.put("name", tabName);
+
+    sal_Int64 hashCode;
+    pViewData->GetDocument().GetHashCode(nPart, hashCode);
+    jsonWriter.put("hash", hashCode);
+
+    Size lastColRow = getDataArea(nPart);
+    jsonWriter.put("lastcolumn", lastColRow.getWidth());
+    jsonWriter.put("lastrow", lastColRow.getHeight());
+
+    return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
 
 OUString ScModelObj::getPartName( int nPart )
