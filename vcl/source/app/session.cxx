@@ -294,16 +294,21 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
 
     SAL_INFO("vcl.se.debug", "  m_bInteractionGranted = " << (m_bInteractionGranted ? "true" : "false") <<
                              ", m_bInteractionRequested = "<< (m_bInteractionRequested ? "true" : "false"));
+
+    std::unique_lock aGuard( m_aMutex );
+
     if( m_bInteractionGranted )
     {
-        if( m_bInteractionDone )
+        bool bInteractionDone = m_bInteractionDone;
+        aGuard.unlock();
+
+        if( bInteractionDone )
             xListener->approveInteraction( false );
         else
             xListener->approveInteraction( true );
         return;
     }
 
-    std::unique_lock aGuard( m_aMutex );
     if( ! m_bInteractionRequested )
     {
         if (m_xSession)
