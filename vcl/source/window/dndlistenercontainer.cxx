@@ -384,11 +384,12 @@ sal_uInt32 DNDListenerContainer::fireDragGestureEvent( sal_Int8 dragAction, sal_
 
 void SAL_CALL DNDListenerContainer::acceptDrag( sal_Int8 dragOperation )
 {
-    if( m_xDropTargetDragContext.is() )
-    {
-        m_xDropTargetDragContext->acceptDrag( dragOperation );
-        m_xDropTargetDragContext.clear();
-    }
+    std::unique_lock g(m_aMutex);
+    if( !m_xDropTargetDragContext )
+        return;
+    auto xTmpDragContext = std::move(m_xDropTargetDragContext);
+    g.unlock();
+    xTmpDragContext->acceptDrag( dragOperation );
 }
 
 void SAL_CALL DNDListenerContainer::rejectDrag(  )
