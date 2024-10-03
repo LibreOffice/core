@@ -62,6 +62,7 @@
 #include <swundo.hxx>
 #include <swcli.hxx>
 #include <poolfmt.hxx>
+#include <postithelper.hxx>
 #include <edtwin.hxx>
 #include <fmtcol.hxx>
 #include <swtable.hxx>
@@ -2258,11 +2259,14 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if ( pTextItem )
             sText = pTextItem->GetValue();
 
+        const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML);
+
         // If we have a text already registered for answer, use that
         if (GetView().GetPostItMgr()->IsAnswer() && !GetView().GetPostItMgr()->GetAnswerText().isEmpty())
         {
             sText = GetView().GetPostItMgr()->GetAnswerText();
             GetView().GetPostItMgr()->RegisterAnswerText(OUString());
+            pHtmlItem = nullptr;
         }
 
         if ( HasSelection() && !IsTableMode() )
@@ -2323,6 +2327,15 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         Push();
         SwCursorShell::Left(1, SwCursorSkipMode::Chars);
         pPostIt = static_cast<SwPostItField*>(rFieldMgr.GetCurField());
+
+        if (pPostIt && pHtmlItem)
+        {
+            SwDocShell* pDocSh = GetView().GetDocShell();
+            Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
+            SwPostItHelper::ImportHTML(aOutliner, pHtmlItem->GetValue());
+            pPostIt->SetTextObject(aOutliner.CreateParaObject());
+        }
+
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position
     }
 

@@ -26,6 +26,7 @@
 #include "SidebarWindowsTypes.hxx"
 #include "nodeoffset.hxx"
 
+class Outliner;
 class SfxBroadcaster;
 class SwRootFrame;
 class SwPostItMgr;
@@ -89,6 +90,8 @@ namespace SwPostItHelper
     tools::Long getLayoutHeight( const SwRootFrame* pRoot );
     void setSidebarChanged( SwRootFrame* pRoot, bool bBrowseMode );
     tools::ULong getPageInfo( SwRect& rPageFrame, const SwRootFrame* , const Point& );
+
+    void ImportHTML(Outliner& rOutliner, const OUString& rHtml);
 }
 
 class SAL_DLLPUBLIC_RTTI SwSidebarItem

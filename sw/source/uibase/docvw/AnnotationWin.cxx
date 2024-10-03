@@ -86,6 +86,22 @@ void collectUIInformation( const OUString& aevent , const OUString& aID )
 
 }
 
+namespace SwPostItHelper {
+
+void ImportHTML(Outliner& rOutliner, const OUString& rHtml)
+{
+    OString sHtmlContent(rHtml.toUtf8());
+    SvMemoryStream aHTMLStream(const_cast<char*>(sHtmlContent.getStr()),
+                               sHtmlContent.getLength(), StreamMode::READ);
+    SvKeyValueIteratorRef xValues(new SvKeyValueIterator);
+    // Insert newlines for divs, not normally done, so to keep things simple
+    // only enable that for this case.
+    xValues->Append(SvKeyValue("newline-on-div", "true"));
+    rOutliner.Read(aHTMLStream, "", EETextFormat::Html, xValues.get());
+}
+
+}
+
 namespace sw::annotation {
 
 // see AnnotationContents in sd for something similar
@@ -488,14 +504,7 @@ void SwAnnotationWin::UpdateText(const OUString& aText)
 void SwAnnotationWin::UpdateHTML(const OUString& rHtml)
 {
     mpOutliner->Clear();
-    OString sHtmlContent(rHtml.toUtf8());
-    SvMemoryStream aHTMLStream(const_cast<char*>(sHtmlContent.getStr()),
-                               sHtmlContent.getLength(), StreamMode::READ);
-    SvKeyValueIteratorRef xValues(new SvKeyValueIterator);
-    // Insert newlines for divs, not normally done, so to keep things simple
-    // only enable tthat for this case.
-    xValues->Append(SvKeyValue("newline-on-div", "true"));
-    GetOutlinerView()->Read(aHTMLStream, EETextFormat::Html, xValues.get());
+    SwPostItHelper::ImportHTML(*mpOutliner, rHtml);
     UpdateData();
 }
 
