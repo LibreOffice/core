@@ -142,8 +142,15 @@
                     action: @selector(menuItemTriggered:)
                     keyEquivalent: [NSString string]];
     [ret setTarget: self];
+    mbReallyEnabled = [ret isEnabled];
     return ret;
 }
+
+-(BOOL)isReallyEnabled
+{
+    return mbReallyEnabled;
+}
+
 -(void)menuItemTriggered: (id)aSender
 {
     (void)aSender;
@@ -187,8 +194,8 @@
             [pCharacters isEqualToString: @"a"] ||
             [pCharacters isEqualToString: @"z"] ) )
         {
-            NSEvent* pEvent = [NSApp currentEvent];
             NSEvent* pKeyEvent = nil;
+            NSEvent* pEvent = [NSApp currentEvent];
             if( pEvent )
             {
                 switch( [pEvent type] )
@@ -196,23 +203,29 @@
                     case NSEventTypeKeyDown:
                     case NSEventTypeKeyUp:
                     case NSEventTypeFlagsChanged:
-                        pKeyEvent = pEvent;
+                        // tdf#162843 replace the event's string parameters
+                        // When using the Dvorak - QWERTY keyboard, the
+                        // event's charactersIgnoringModifiers string causes
+                        // pasting to fail so replace both the event's
+                        // characters and charactersIgnoringModifiers strings
+                        // with this menu item's key equivalent.
+                        pKeyEvent = [NSEvent keyEventWithType: [pEvent type] location: [pEvent locationInWindow] modifierFlags: nModMask timestamp: [pEvent timestamp] windowNumber: [pEvent windowNumber] context: nil characters: pCharacters charactersIgnoringModifiers: pCharacters isARepeat: [pEvent isARepeat] keyCode: [pEvent keyCode]];
                         break;
                     default:
                         break;
                 }
-
-                if( !pKeyEvent )
-                {
-                    // Native key events appear to set the location to the
-                    // top left corner of the key window
-                    NSPoint aPoint = NSMakePoint(0, [pKeyWin frame].size.height);
-                    pKeyEvent = [NSEvent keyEventWithType: NSEventTypeKeyDown location: aPoint modifierFlags: nModMask timestamp: [[NSProcessInfo processInfo] systemUptime] windowNumber: [pKeyWin windowNumber] context: nil characters: pCharacters charactersIgnoringModifiers: pCharacters isARepeat: NO keyCode: 0];
-                }
-
-                [[pKeyWin contentView] keyDown: pKeyEvent];
-                return;
             }
+
+            if( !pKeyEvent )
+            {
+                // Native key events appear to set the location to the
+                // top left corner of the key window
+                NSPoint aPoint = NSMakePoint(0, [pKeyWin frame].size.height);
+                pKeyEvent = [NSEvent keyEventWithType: NSEventTypeKeyDown location: aPoint modifierFlags: nModMask timestamp: [[NSProcessInfo processInfo] systemUptime] windowNumber: [pKeyWin windowNumber] context: nil characters: pCharacters charactersIgnoringModifiers: pCharacters isARepeat: NO keyCode: 0];
+            }
+
+            [[pKeyWin contentView] keyDown: pKeyEvent];
+            return;
         }
     }
 
@@ -255,6 +268,12 @@
     }
 }
 
+-(void)setReallyEnabled: (BOOL)bEnabled
+{
+    mbReallyEnabled = bEnabled;
+    [self setEnabled: mbReallyEnabled];
+}
+
 -(BOOL)validateMenuItem: (NSMenuItem *)pMenuItem
 {
     // Related: tdf#126638 disable all menu items when displaying modal windows
@@ -265,7 +284,18 @@
     if (!pMenuItem || [NSApp modalWindow])
         return NO;
 
-    return [pMenuItem isEnabled];
+    // Related: tdf#126638 return the last enabled state set by the LibreOffice code
+    // Apparently whatever is returned will be passed to
+    // -[NSMenuItem setEnabled:] which can cause the enabled state
+    // to be different than the enabled state that the LibreOffice
+    // code expoects. This results in menu items failing to be
+    // reenabled after being temporarily disabled such as when a
+    // native modal dialog is closed. So, return the last enabled
+    // state set by the LibreOffice code.
+    if ([pMenuItem isKindOfClass: [SalNSMenuItem class]])
+        return [static_cast<SalNSMenuItem*>(pMenuItem) isReallyEnabled];
+    else
+        return [pMenuItem isEnabled];
 }
 @end
 
@@ -359,8 +389,36 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 @implementation SalNSMainMenu
 
+- (id)initWithTitle:(NSString*)pTitle
+{
+    mpLastPerformKeyEquivalentEvent = nil;
+    return [super initWithTitle:pTitle];
+}
+
+- (void)dealloc
+{
+    if (mpLastPerformKeyEquivalentEvent)
+        [mpLastPerformKeyEquivalentEvent release];
+
+    [super dealloc];
+}
+
 - (BOOL)performKeyEquivalent:(NSEvent*)pEvent
 {
+    // Related: tdf#162843 prevent dispatch of the same event more than once
+    // When pressing Command-V with a Dvorak - QWERTY keyboard,
+    // that single event passes through this selector twice which
+    // causes content to be pasted twice in any text fields in the
+    // Find and Replace dialog.
+    if (pEvent == mpLastPerformKeyEquivalentEvent)
+        return false;
+
+    if (mpLastPerformKeyEquivalentEvent)
+        [mpLastPerformKeyEquivalentEvent release];
+    mpLastPerformKeyEquivalentEvent = pEvent;
+    if (mpLastPerformKeyEquivalentEvent)
+        [mpLastPerformKeyEquivalentEvent retain];
+
     bool bRet = [super performKeyEquivalent: pEvent];
 
     // tdf#126638 dispatch key shortcut events to modal windows

@@ -44,15 +44,21 @@ class AquaSalMenuItem;
 @interface SalNSMenuItem : NSMenuItem <NSMenuItemValidation>
 {
     AquaSalMenuItem* mpMenuItem;
+    BOOL mbReallyEnabled;
 }
 - (id)initWithMenuItem:(AquaSalMenuItem*)pMenuItem;
+- (BOOL)isReallyEnabled;
 - (void)menuItemTriggered:(id)aSender;
 - (BOOL)validateMenuItem:(NSMenuItem*)pMenuItem;
+- (void)setReallyEnabled:(BOOL)bEnabled;
 @end
 
 @interface SalNSMainMenu : NSMenu
 {
+    NSEvent* mpLastPerformKeyEquivalentEvent;
 }
+- (id)initWithTitle:(NSString*)pTitle;
+- (void)dealloc;
 - (BOOL)performKeyEquivalent:(NSEvent*)pEvent;
 @end
 
