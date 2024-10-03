@@ -3815,22 +3815,27 @@ OUString SdXImpressDocument::getPartInfo(int nPart)
     if (!pViewSh)
         return OUString();
 
-    const SdPage* pSdPage = mpDoc->GetSdPage(nPart, pViewSh->GetPageKind());
-    const bool bIsVisible = pSdPage && !pSdPage->IsExcluded();
-    const bool bIsSelected = pViewSh->IsSelected(nPart);
+    SdPage* pSdPage = mpDoc->GetSdPage(nPart, pViewSh->GetPageKind());
     const sal_Int16 nMasterPageCount= pViewSh->GetDoc()->GetMasterSdPageCount(pViewSh->GetPageKind());
 
-    OUString aPartInfo = "{ \"visible\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsVisible)) +
-        "\", \"selected\": \"" +
-        OUString::number(static_cast<unsigned int>(bIsSelected)) +
-        "\", \"masterPageCount\": \"" +
-        OUString::number(nMasterPageCount) +
-        "\", \"mode\": \"" +
-        OUString::number(getEditMode()) +
-        "\" }";
+    ::tools::JsonWriter jsonWriter;
 
-    return aPartInfo;
+    jsonWriter.put("masterPageCount", nMasterPageCount);
+    jsonWriter.put("mode", getEditMode());
+    jsonWriter.put("gridSnapEnabled", pViewSh->GetDrawView()->IsGridSnap());
+    jsonWriter.put("gridVisible", pViewSh->GetDrawView()->IsGridVisible());
+
+    // Below information is useful when grid snapping is enabled. It let's to calculate the points we can snap to.
+    const Size gridCoarse = pViewSh->GetDrawView()->GetGridCoarse();
+    const Size innerDots = pViewSh->GetDrawView()->GetGridFine();
+    jsonWriter.put("gridCoarseWidth", gridCoarse.getWidth());
+    jsonWriter.put("gridCoarseHeight", gridCoarse.getHeight());
+    jsonWriter.put("innerSpacesX", innerDots.getWidth() ? gridCoarse.getWidth() / innerDots.getWidth() : 0);
+    jsonWriter.put("innerSpacesY", innerDots.getHeight() ? gridCoarse.getHeight() / innerDots.getHeight() : 0);
+
+    pSdPage->GetPageInfo(jsonWriter);
+
+    return OStringToOUString(jsonWriter.finishAndGetAsOString(), RTL_TEXTENCODING_UTF8);
 }
 
 void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )

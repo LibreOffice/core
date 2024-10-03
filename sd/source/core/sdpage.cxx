@@ -22,6 +22,8 @@
 
 #include <comphelper/classids.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
+#include <comphelper/lok.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <sfx2/viewsh.hxx>
 #include <vcl/svapp.hxx>
@@ -1771,6 +1773,32 @@ void SdPage::onRemoveObject( SdrObject* pObject )
     }
 }
 
+void SdPage::GetPageInfo(::tools::JsonWriter& jsonWriter)
+{
+    jsonWriter.put("visible", static_cast<unsigned int>(!this->IsExcluded()));
+    jsonWriter.put("selected", static_cast<unsigned int>(this->IsSelected()));
+    jsonWriter.put("width", GetWidth());
+    jsonWriter.put("height", GetHeight());
+    jsonWriter.put("leftBorder", GetLeftBorder());
+    jsonWriter.put("rightBorder", GetRightBorder());
+    jsonWriter.put("upperBorder", GetUpperBorder());
+    jsonWriter.put("lowerBorder", GetLowerBorder());
+    jsonWriter.put("name", GetName());
+    jsonWriter.put("hash", GetUniqueID());
+}
+
+void SdPage::NotifyPagePropertyChanges()
+{
+    // Send the new size info to views, snapping to grid feature uses this info (maybe some others in the future).
+    ::tools::JsonWriter jsonWriter;
+    jsonWriter.put("commandName", ".uno:PageSetup");
+    GetPageInfo(jsonWriter);
+
+    OString out = jsonWriter.finishAndGetAsOString();
+    SfxViewShell::Current()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, out);
+    SfxViewShell::Current()->NotifyOtherViews(LOK_CALLBACK_STATE_CHANGED, ".uno:PageSetup"_ostr, out);
+}
+
 void SdPage::SetSize(const Size& aSize)
 {
     Size aOldSize = GetSize();
@@ -1778,6 +1806,9 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
+
+        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+            NotifyPagePropertyChanges();
     }
 }
 
@@ -1787,6 +1818,9 @@ void SdPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32
         nRgt != GetRightBorder() || nLwr != GetLowerBorder() )
     {
         FmFormPage::SetBorder(nLft, nUpp, nRgt, nLwr);
+
+        if (comphelper::LibreOfficeKit::isActive() && SfxViewShell::Current())
+            NotifyPagePropertyChanges();
     }
 }
 
