@@ -334,21 +334,18 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
 ProviderCache*
 MasterScriptProvider::providerCache()
 {
+    std::scoped_lock aGuard( m_mutex );
     if ( !m_pPCache )
     {
-        std::scoped_lock aGuard( m_mutex );
-        if ( !m_pPCache )
-        {
-            Sequence<OUString> denylist { u"com.sun.star.script.provider.ScriptProviderForBasic"_ustr };
+        Sequence<OUString> denylist { u"com.sun.star.script.provider.ScriptProviderForBasic"_ustr };
 
-            if ( !m_bIsPkgMSP )
-            {
-                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs ) );
-            }
-            else
-            {
-                m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs, denylist ) );
-            }
+        if ( !m_bIsPkgMSP )
+        {
+            m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs ) );
+        }
+        else
+        {
+            m_pPCache.reset( new ProviderCache( m_xContext, m_sAargs, denylist ) );
         }
     }
     return m_pPCache.get();
