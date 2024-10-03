@@ -412,7 +412,10 @@ void AquaSalMenu::enableMainMenu( bool bEnable )
         for( int n = 1; n < nItems; n++ )
         {
             NSMenuItem* pItem = [pMainMenu itemAtIndex: n];
-            [pItem setEnabled: bEnable ? YES : NO];
+            if( [pItem isKindOfClass: [SalNSMenuItem class]])
+                [static_cast<SalNSMenuItem*>(pItem) setReallyEnabled: bEnable];
+            else
+                [pItem setEnabled: bEnable];
         }
     }
 }
@@ -581,7 +584,10 @@ void AquaSalMenu::EnableItem( unsigned nPos, bool bEnable )
     if( nPos < maItems.size() )
     {
         NSMenuItem* pItem = maItems[nPos]->mpMenuItem;
-        [pItem setEnabled: bEnable ? YES : NO];
+        if( [pItem isKindOfClass: [SalNSMenuItem class]])
+            [static_cast<SalNSMenuItem*>(pItem) setReallyEnabled: bEnable];
+        else
+            [pItem setEnabled: bEnable];
     }
 }
 
@@ -874,7 +880,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     else
     {
         mpMenuItem = [[SalNSMenuItem alloc] initWithMenuItem: this];
-        [mpMenuItem setEnabled: YES];
+        [static_cast<SalNSMenuItem*>(mpMenuItem) setReallyEnabled: YES];
 
         // peel mnemonics because on mac there are no such things for menu items
         // Delete CJK-style mnemonics for the dropdown menu of the 'New button' and lower menu of 'File > New'

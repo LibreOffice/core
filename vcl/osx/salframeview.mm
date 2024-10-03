@@ -1748,9 +1748,37 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 -(void)noop: (id)aSender
 {
     (void)aSender;
-    if( ! mbKeyHandled )
+    if( ! mbKeyHandled && mpLastEvent )
     {
-        if( ! [self sendSingleCharacter:mpLastEvent] )
+        // Related tdf#162843: replace the event's string parameter
+        // When using the Dvorak - QWERTY keyboard and the Command key
+        // is pressed, any key events that match a disabled menu item
+        // are handled here. However, the Dvorak - QWERTY event's
+        // charactersIgnoringModifiers string can cause cutting and
+        // copying to fail in the Find toolbar and the Find and Replace
+        // dialog so replace the event's charactersIgnoringModifiers
+        // string with the event's character string.
+        NSEvent* pEvent = mpLastEvent;
+        NSEventModifierFlags nModMask = [mpLastEvent modifierFlags];
+        if( nModMask & NSEventModifierFlagCommand )
+        {
+            switch( [mpLastEvent type] )
+            {
+                case NSEventTypeKeyDown:
+                case NSEventTypeKeyUp:
+                case NSEventTypeFlagsChanged:
+                {
+                    NSString* pCharacters = [mpLastEvent characters];
+                    NSString* pCharactersIgnoringModifiers = ( nModMask & NSEventModifierFlagShift ) ? [pCharacters uppercaseString] : pCharacters;
+                    pEvent = [NSEvent keyEventWithType: [pEvent type] location: [pEvent locationInWindow] modifierFlags: nModMask timestamp: [pEvent timestamp] windowNumber: [pEvent windowNumber] context: nil characters: pCharacters charactersIgnoringModifiers: pCharactersIgnoringModifiers isARepeat: [pEvent isARepeat] keyCode: [pEvent keyCode]];
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
+        if( ! [self sendSingleCharacter:pEvent] )
         {
             /* prevent recursion */
             if( mpLastEvent != mpLastSuperEvent && [NSApp respondsToSelector: @selector(sendSuperEvent:)] )
