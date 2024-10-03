@@ -205,7 +205,7 @@ bool XclExpString::IsEqual( const XclExpString& rCmp ) const
         (mnLen          == rCmp.mnLen)          &&
         (mbIsBiff8      == rCmp.mbIsBiff8)      &&
         (mbIsUnicode    == rCmp.mbIsUnicode)    &&
-        (mbWrapped      == rCmp.mbWrapped)      &&
+        (mbHasNewline   == rCmp.mbHasNewline)   &&
         (
             ( mbIsBiff8 && (maUniBuffer  == rCmp.maUniBuffer)) ||
             (!mbIsBiff8 && (maCharBuffer == rCmp.maCharBuffer))
@@ -471,8 +471,8 @@ void XclExpString::CharsToBuffer( const sal_Unicode* pcSource, sal_Int32 nBegin,
         if( *aIt & 0xFF00 )
             mbIsUnicode = true;
     }
-    if( !mbWrapped )
-        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF ) != aEnd;
+    if (!mbHasNewline)
+        mbHasNewline = std::find(aBeg, aEnd, EXC_LF) != aEnd;
 }
 
 void XclExpString::CharsToBuffer( const char* pcSource, sal_Int32 nBegin, sal_Int32 nLen )
@@ -485,8 +485,8 @@ void XclExpString::CharsToBuffer( const char* pcSource, sal_Int32 nBegin, sal_In
     for( ScfUInt8Vec::iterator aIt = aBeg; aIt != aEnd; ++aIt, ++pcSrcChar )
         *aIt = static_cast< sal_uInt8 >( *pcSrcChar );
     mbIsUnicode = false;
-    if( !mbWrapped )
-        mbWrapped = ::std::find( aBeg, aEnd, EXC_LF_C ) != aEnd;
+    if (!mbHasNewline)
+        mbHasNewline = std::find(aBeg, aEnd, EXC_LF_C) != aEnd;
 }
 
 void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMaxLen, bool bBiff8 )
@@ -496,7 +496,8 @@ void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMax
     mb8BitLen = bool( nFlags & XclStrFlags::EightBitLength );
     mbSmartFlags = bBiff8 && ( nFlags & XclStrFlags::SmartFlags );
     mbSkipFormats = bool( nFlags & XclStrFlags::SeparateFormats );
-    mbWrapped = false;
+    mbHasNewline = false;
+    mbSingleLineForMultipleParagraphs = false;
     mbSkipHeader = bool( nFlags & XclStrFlags::NoHeader );
     mnMaxLen = nMaxLen;
     SetStrLen( nCurrLen );

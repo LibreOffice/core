@@ -531,6 +531,11 @@ XclExpStringRef lclCreateFormattedString(
             XclExpStringHelper::AppendChar( *xString, rRoot, '\n' );
     }
 
+    if (xString->HasNewline() && nParaCount == 1)
+    {
+        // Found buggy Excel behaviour: although the content has newlines, it has not been wrapped.
+        xString->SetSingleLineForMultipleParagraphs(true);
+    }
     return xString;
 }
 

@@ -119,7 +119,12 @@ public:
     /** Returns true, if the string is empty. */
     bool         IsEmpty() const { return mnLen == 0; }
     /** Returns true, if the string contains line breaks. */
-    bool         IsWrapped() const { return mbWrapped; }
+    bool         HasNewline() const { return mbHasNewline; }
+
+    /** Returns true, if multiple paragraphs are displayed without any wrapping **/
+    bool IsSingleLineForMultipleParagraphs() const { return mbSingleLineForMultipleParagraphs; }
+    void SetSingleLineForMultipleParagraphs(bool bSet) { mbSingleLineForMultipleParagraphs = bSet; }
+
     /** Returns true, if this string is equal to the passed string. */
     bool                IsEqual( const XclExpString& rCmp ) const;
     /** Returns true, if this string is less than the passed string. */
@@ -236,7 +241,8 @@ private:
     bool                mb8BitLen;      /// true = write 8-bit string length; false = 16-bit.
     bool                mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
     bool                mbSkipFormats;  /// true = skip formats on export; false = write complete formatted string.
-    bool                mbWrapped;      /// true = text contains several paragraphs.
+    bool                mbHasNewline;   /// true = text contains several paragraphs.
+    bool                mbSingleLineForMultipleParagraphs; /// true = several paragraphs displayed all on one line
     bool                mbSkipHeader;   /// true = skip length and flags when writing string bytes.
 };
 
