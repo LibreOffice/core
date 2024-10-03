@@ -2983,6 +2983,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
     for (size_t n = 0; n < nCount; ++n)
     {
         sal_uInt16 nId = m_xTbSymbol->GetItemId( n );
+        assert(nId > 0 && "otherwise totally broken");
 
         if ( m_xTbSymbol->GetItemText( nId ) == aURL )
         {

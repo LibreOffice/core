@@ -1466,6 +1466,7 @@ OUString cppuhelper::ServiceManager::readLegacyRdbString(
     }
     OUString val;
     std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
+    assert(s > 0 && "throw above otherwise");
     if (subkey.getValue(OUString(), v.data()) != RegError::NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(
