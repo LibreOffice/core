@@ -54,7 +54,11 @@ public:
                               const css::uno::Any& rOldValue,
                               const css::uno::Any& rNewValue );
 
-    bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+    bool HasAccessibleListeners() const
+    {
+        std::unique_lock aGuard (m_aMutex);
+        return( mxEventListeners.size() > 0 );
+    }
 
 public:
     /** Called by the corresponding ValueSet when it gets the focus.
