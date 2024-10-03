@@ -334,7 +334,7 @@ bool FuConstructRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             ::tools::Rectangle aNewObjectRectangle(aClickPos, Size(nDefaultObjectSize, nDefaultObjectSize));
             rtl::Reference<SdrObject> pObjDefault = CreateDefaultObject(nSlotId, aNewObjectRectangle);
 
-            bReturn = mpView->InsertObjectAtView(pObjDefault.get(), *pPV);
+            bReturn = mpView->InsertObjectAtView(pObjDefault.get(), *pPV, SdrInsertFlags::SETDEFLAYER | SdrInsertFlags::SETDEFATTR);
         }
     }
 
