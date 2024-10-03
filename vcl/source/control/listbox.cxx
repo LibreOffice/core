@@ -721,7 +721,7 @@ void ListBox::StateChanged( StateChangedType nType )
             if ( IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
                     && ! IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown) )
             {
-                GetWindow( GetWindowType::Border )->Invalidate( InvalidateFlags::NoErase );
+                GetWindow(GetWindowType::Border)->Invalidate();
             }
             else
                 mpImplWin->Invalidate();
@@ -894,7 +894,7 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
             if (IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire)
                 && !IsNativeControlSupported(ControlType::Listbox, ControlPart::ButtonDown))
             {
-                GetWindow(GetWindowType::Border)->Invalidate(InvalidateFlags::NoErase);
+                GetWindow(GetWindowType::Border)->Invalidate();
             }
         }
     }
