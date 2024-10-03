@@ -32,6 +32,7 @@
 #include <unotools/useroptions.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/datetime.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -1439,6 +1440,14 @@ CPPUNIT_TEST_FIXTURE(ScExportTest3, testPreserveTextWhitespace2XLSX)
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si[1]/x:t"_ostr, "space"_ostr, "preserve");
     assertXPath(pDoc, "/x:sst/x:si[2]/x:t"_ostr, "space"_ostr, "preserve");
+
+    // tdf#158460: ensure B1 is NOT set to wrap text, so Excel keeps displaying as single line
+    SCTAB nTab = 0;
+    SCROW nRow = 0;
+    CPPUNIT_ASSERT(!getScDoc()->GetAttr(1, nRow, nTab, ATTR_LINEBREAK)->GetValue());
+    // Without the fix, this wrapped to two lines high (841). It should be 1 line high (529).
+    int nHeight = convertTwipToMm100(getScDoc()->GetRowHeight(nRow, nTab, false));
+    CPPUNIT_ASSERT_LESS(600, nHeight);
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest3, testHiddenShapeXLS)

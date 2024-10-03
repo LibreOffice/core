@@ -722,7 +722,7 @@ XclExpLabelCell::XclExpLabelCell(
 
 bool XclExpLabelCell::IsMultiLineText() const
 {
-    return mbLineBreak || mxText->IsWrapped();
+    return mbLineBreak || mxText->HasNewline();
 }
 
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
@@ -744,9 +744,13 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
     // create cell format
     if( GetXFId() == EXC_XFID_NOTFOUND )
     {
-       OSL_ENSURE( nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found" );
-       bool bForceLineBreak = mxText->IsWrapped();
-       SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
+        OSL_ENSURE(nXclFont != EXC_FONT_NOTFOUND, "XclExpLabelCell::Init - leading font not found");
+
+        // Buggy Excel behaviour - newlines are ignored unless wrap-text is enabled,
+        // so always force text-wrapping (unless it was imported that way and not modified).
+        bool bForceLineBreak = mxText->HasNewline() && !mxText->IsSingleLineForMultipleParagraphs();
+        SetXFId(rRoot.GetXFBuffer().InsertWithFont(
+            pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak));
     }
 
     // get auto-wrap attribute from cell format
