@@ -1548,7 +1548,12 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
-        SwWrtShell* pWrtShell = pTextNode->GetDoc().GetDocShell()->GetWrtShell();
+
+        SwDocShell* pDocShell = pTextNode->GetDoc().GetDocShell();
+        if (!pDocShell)
+            return;
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
         if (pWrtShell && !pTextNode->getLayoutFrame(pWrtShell->GetLayout()))
             return;
 
