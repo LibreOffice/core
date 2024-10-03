@@ -721,7 +721,8 @@ void SwLayoutModeModifier::SetAuto()
     const_cast<OutputDevice&>(m_rOut).SetLayoutMode( nNewLayoutMode );
 }
 
-SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang ) :
+SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang,
+                                          SvtCTLOptions::TextNumerals eCTLTextNumerals ) :
         rOut( rOutp ), nOldLanguageType( rOutp.GetDigitLanguage() )
 {
     LanguageType eLang = eCurLang;
@@ -729,13 +730,11 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
         eLang = LANGUAGE_ENGLISH_US;
     else
     {
-        const SvtCTLOptions::TextNumerals nTextNumerals = SvtCTLOptions::GetCTLTextNumerals();
-
-        if ( SvtCTLOptions::NUMERALS_HINDI == nTextNumerals )
+        if ( SvtCTLOptions::NUMERALS_HINDI == eCTLTextNumerals )
             eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-        else if ( SvtCTLOptions::NUMERALS_ARABIC == nTextNumerals )
+        else if ( SvtCTLOptions::NUMERALS_ARABIC == eCTLTextNumerals )
             eLang = LANGUAGE_ENGLISH;
-        else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
+        else if ( SvtCTLOptions::NUMERALS_SYSTEM == eCTLTextNumerals )
             eLang = ::GetAppLanguage();
     }
 

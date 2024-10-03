@@ -1047,6 +1047,7 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
 #endif
     else if( pBrdCst == m_pCTLOptions.get() )
     {
+        m_eCTLTextNumerals = SvtCTLOptions::GetCTLTextNumerals();
         const SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
         while( pObjSh )
         {
@@ -1060,7 +1061,6 @@ void SwModule::ConfigurationChanged(utl::ConfigurationBroadcaster* pBrdCst, Conf
             pObjSh = SfxObjectShell::GetNext(*pObjSh);
         }
     }
-
 }
 
 SwDBConfig* SwModule::GetDBConfig()
