@@ -2273,7 +2273,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
     //invalidate PatternWindow
     m_xTokenWIN->SetInvalid();
-    LevelHdl(*m_xLevelLB);
+    LevelHdlImpl(*m_xLevelLB, false);
 }
 
 void SwTOXEntryTabPage::UpdateDescriptor()
@@ -2447,20 +2447,21 @@ void SwTOXEntryTabPage::WriteBackLevel()
     }
 }
 
-IMPL_LINK(SwTOXEntryTabPage, LevelHdl, weld::TreeView&, rBox, void)
+void SwTOXEntryTabPage::LevelHdlImpl(weld::TreeView& rBox, bool bGrabFocus)
 {
-    if(m_bInLevelHdl)
+    if (m_bInLevelHdl)
         return;
     m_bInLevelHdl = true;
     WriteBackLevel();
 
     const sal_uInt16 nLevel = rBox.get_selected_index();
-    m_xTokenWIN->SetForm(*m_pCurrentForm, nLevel);
+    m_xTokenWIN->SetForm(*m_pCurrentForm, nLevel, bGrabFocus);
+
     if(TOX_AUTHORITIES == m_pCurrentForm->GetTOXType())
     {
         //fill the types in
         m_xAuthFieldsLB->clear();
-        for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
+        for(sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
             m_xAuthFieldsLB->append(OUString::number(i), SwResId(STR_AUTH_FIELD_ARY[i]));
         }
@@ -2481,8 +2482,18 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, weld::TreeView&, rBox, void)
         m_xAuthFieldsLB->set_active(0);
     }
     m_bInLevelHdl = false;
-    rBox.grab_focus();
+
+    if (bGrabFocus)
+    {
+        rBox.grab_focus();
+    }
 }
+
+IMPL_LINK(SwTOXEntryTabPage, LevelHdl, weld::TreeView&, rBox, void)
+{
+    LevelHdlImpl(rBox, true);
+}
+
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, SortKeyHdl, weld::Toggleable&, void)
 {
@@ -2802,9 +2813,9 @@ SwTokenWindow::~SwTokenWindow()
 {
 }
 
-void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
+void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL, bool bGrabFocus)
 {
-    SetActiveControl(nullptr);
+    SetActiveControl(nullptr, bGrabFocus);
     m_bValid = true;
 
     if (m_pForm)
@@ -2831,7 +2842,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 SwTOXWidget* pCtrl = InsertItem(aToken.sText, aToken);
                 bLastWasText = true;
                 if (!GetActiveControl())
-                    SetActiveControl(pCtrl);
+                    SetActiveControl(pCtrl, bGrabFocus);
             }
             else
             {
@@ -2869,12 +2880,12 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
             if(!pSetActiveControl)
                 pSetActiveControl = pCtrl;
         }
-        SetActiveControl(pSetActiveControl);
+        SetActiveControl(pSetActiveControl, bGrabFocus);
     }
     AdjustScrolling();
 }
 
-void SwTokenWindow::SetActiveControl(SwTOXWidget* pSet)
+void SwTokenWindow::SetActiveControl(SwTOXWidget* pSet, bool bGrabFocus)
 {
     if (pSet == m_pActiveCtrl)
         return;
@@ -2882,8 +2893,8 @@ void SwTokenWindow::SetActiveControl(SwTOXWidget* pSet)
     m_pActiveCtrl = pSet;
     if( !m_pActiveCtrl )
         return;
-
-    m_pActiveCtrl->GrabFocus();
+    if (bGrabFocus)
+        m_pActiveCtrl->GrabFocus();
     //it must be a SwTOXEdit
     const SwFormToken* pFToken;
     if( WindowType::EDIT == m_pActiveCtrl->GetType() )
