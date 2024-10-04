@@ -92,7 +92,6 @@ cui/uiconfig/ui/newlibdialog.ui://GtkLabel[@id='altmacrotitle'] orphan-label
 cui/uiconfig/ui/newlibdialog.ui://GtkLabel[@id='altrenametitle'] orphan-label
 cui/uiconfig/ui/numberingformatpage.ui://GtkLabel[@id='commentft'] orphan-label
 cui/uiconfig/ui/numberingoptionspage.ui://GtkLabel[@id='separator'] orphan-label
-cui/uiconfig/ui/objecttitledescdialog.ui://GtkLabel[@id='desc_label'] orphan-label
 cui/uiconfig/ui/optadvancedpage.ui://GtkLabel[@id='selectruntime'] orphan-label
 cui/uiconfig/ui/optadvancedpage.ui://GtkLabel[@id='javapath'] orphan-label
 cui/uiconfig/ui/optappearancepage.ui://GtkLabel[@id='uielements'] orphan-label
