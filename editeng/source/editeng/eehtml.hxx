@@ -46,6 +46,7 @@ private:
     bool                    bInPara:1;
     bool                    bWasInPara:1; // Remember bInPara before HeadingStart, because afterwards it will be gone.
     bool                    mbBreakForDivs:1; // Create newlines on encountering divs
+    bool                    mbNewBlockNeeded:1;
     bool                    bFieldsInserted:1;
     bool                    bInTitle:1;
 
