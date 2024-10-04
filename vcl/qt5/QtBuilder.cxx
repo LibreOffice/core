@@ -217,20 +217,15 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
                 pLayout->removeWidget(pButtonBox);
                 pLayout->addWidget(pButtonBox);
 
-                // let button click close dialog if response code is set
+                // connect button click handler
                 const QList<QAbstractButton*> aButtons = pButtonBox->buttons();
                 for (const QAbstractButton* pButton : aButtons)
                 {
-                    QVariant aResponseProperty
-                        = pButton->property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
-                    if (aResponseProperty.isValid())
-                    {
-                        assert(aResponseProperty.canConvert<int>());
-                        const int nResponseCode = aResponseProperty.toInt();
-                        QObject::connect(
-                            pButton, &QAbstractButton::clicked, pDialog,
-                            [pDialog, nResponseCode] { pDialog->done(nResponseCode); });
-                    }
+                    assert(pButton);
+                    QObject::connect(pButton, &QAbstractButton::clicked, pDialog,
+                                     [pDialog, pButton] {
+                                         QtInstanceDialog::handleButtonClick(*pDialog, *pButton);
+                                     });
                 }
             }
         }

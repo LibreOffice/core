@@ -11,6 +11,8 @@
 
 #include "QtInstanceWindow.hxx"
 
+#include <QtWidgets/QAbstractButton>
+
 class QtInstanceDialog : public QObject, public QtInstanceWindow, public virtual weld::Dialog
 {
     Q_OBJECT
@@ -54,6 +56,8 @@ public:
     virtual void set_default_response(int) override;
 
     virtual weld::Container* weld_content_area() override;
+
+    static void handleButtonClick(QDialog& rDialog, const QAbstractButton& rButton);
 
     /**
     * Name of the property to set on a QPushButton that holds the

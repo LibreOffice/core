@@ -157,4 +157,15 @@ void QtInstanceDialog::dialogFinished(int nResult)
     xRunAsyncDialog.reset();
 }
 
+void QtInstanceDialog::handleButtonClick(QDialog& rDialog, const QAbstractButton& rButton)
+{
+    QVariant aResponseProperty = rButton.property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
+    if (aResponseProperty.isValid())
+    {
+        assert(aResponseProperty.canConvert<int>());
+        const int nResponseCode = aResponseProperty.toInt();
+        rDialog.done(nResponseCode);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
