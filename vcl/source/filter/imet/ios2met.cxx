@@ -2522,8 +2522,8 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             for (sal_uInt8 i = 0; i < 4; ++i) {
                 sal_uInt8 nbyte(0),nbyte2(0);
                 pOS2MET->ReadUChar(nbyte).ReadUChar(nbyte2);
-                nbyte -= 0x30;
-                nbyte2 -= 0x30;
+                nbyte = sal_uInt8(nbyte - 0x30);
+                nbyte2 = sal_uInt8(nbyte2 - 0x30);
                 nbyte = (nbyte << 4) | nbyte2;
                 pB->nID=(pB->nID>>8)|(static_cast<sal_uInt32>(nbyte)<<24);
             }
