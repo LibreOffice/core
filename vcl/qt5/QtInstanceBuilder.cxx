@@ -16,6 +16,7 @@
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
+#include <QtInstanceTextView.hxx>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile)
@@ -254,10 +255,12 @@ std::unique_ptr<weld::Label> QtInstanceBuilder::weld_label(const OUString& rId)
     return xRet;
 }
 
-std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString&)
+std::unique_ptr<weld::TextView> QtInstanceBuilder::weld_text_view(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QPlainTextEdit* pTextEdit = m_xBuilder->get<QPlainTextEdit>(rId);
+    std::unique_ptr<weld::TextView> xRet(pTextEdit ? std::make_unique<QtInstanceTextView>(pTextEdit)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString&)

@@ -21,6 +21,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QLayout>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollArea>
 
@@ -161,6 +162,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkScrolledWindow")
     {
         pObject = new QScrollArea(pParentWidget);
+    }
+    else if (sName == u"GtkTextView")
+    {
+        pObject = new QPlainTextEdit(pParentWidget);
     }
     else
     {
