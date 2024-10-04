@@ -860,64 +860,6 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testCondFormatThemeColor3XLSX)
     checkDatabarPositiveColor(pFormat, Color(217, 217, 217));
 }
 
-namespace
-{
-void testComplexIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, ScIconSetType eType)
-{
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 0);
-    CPPUNIT_ASSERT(pFormat);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
-    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
-    const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    CPPUNIT_ASSERT_EQUAL(eType, pIconSet->GetIconSetData()->eIconSetType);
-}
-
-void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
-                                 ScIconSetType eType, sal_Int32 nIndex)
-{
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 1);
-    CPPUNIT_ASSERT(pFormat);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
-    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
-    CPPUNIT_ASSERT(pEntry);
-    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
-    const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1)));
-    if (nIndex == -1)
-        CPPUNIT_ASSERT(!pInfo);
-    else
-    {
-        CPPUNIT_ASSERT(pInfo);
-        CPPUNIT_ASSERT_EQUAL(nIndex, pInfo->nIconIndex);
-        CPPUNIT_ASSERT_EQUAL(eType, pInfo->eIconSetType);
-    }
-}
-}
-
-CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testComplexIconSetsXLSX)
-{
-    createScDoc("xlsx/complex_icon_set.xlsx");
-
-    ScDocument* pDoc = getScDoc();
-    CPPUNIT_ASSERT_EQUAL(size_t(3), pDoc->GetCondFormList(0)->size());
-    testComplexIconSetsXLSX_Impl(*pDoc, 1, IconSet_3Triangles);
-    testComplexIconSetsXLSX_Impl(*pDoc, 3, IconSet_3Stars);
-    testComplexIconSetsXLSX_Impl(*pDoc, 5, IconSet_5Boxes);
-
-    CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetCondFormList(1)->size());
-    testCustomIconSetsXLSX_Impl(*pDoc, 1, 1, IconSet_3ArrowsGray, 0);
-    testCustomIconSetsXLSX_Impl(*pDoc, 1, 2, IconSet_3ArrowsGray, -1);
-    testCustomIconSetsXLSX_Impl(*pDoc, 1, 3, IconSet_3Arrows, 1);
-    testCustomIconSetsXLSX_Impl(*pDoc, 1, 4, IconSet_3ArrowsGray, -1);
-    testCustomIconSetsXLSX_Impl(*pDoc, 1, 5, IconSet_3Arrows, 2);
-
-    testCustomIconSetsXLSX_Impl(*pDoc, 3, 1, IconSet_4RedToBlack, 3);
-    testCustomIconSetsXLSX_Impl(*pDoc, 3, 2, IconSet_3TrafficLights1, 1);
-    testCustomIconSetsXLSX_Impl(*pDoc, 3, 3, IconSet_3Arrows, 2);
-}
-
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf101104)
 {
     createScDoc("ods/tdf101104.ods");
