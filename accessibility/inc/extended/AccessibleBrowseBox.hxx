@@ -194,7 +194,7 @@ private:
 class AccessibleBrowseBoxAccess final : public ::vcl::IAccessibleBrowseBox
 {
 private:
-    std::mutex                          m_aMutex;
+    mutable std::mutex                  m_aMutex;
     css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
     ::vcl::IAccessibleTableProvider&    m_rBrowseBox;
@@ -218,39 +218,39 @@ private:
     void dispose() override;
     virtual bool isAlive() const override
     {
+        std::unique_lock aGuard(m_aMutex);
         return m_xContext.is() && m_xContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( AccessibleBrowseBoxObjType _eObjType ) override
     {
-        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
-        if (m_xContext)
-            xAccessible = m_xContext->getHeaderBar( _eObjType );
-        return xAccessible;
+        std::unique_lock aGuard(m_aMutex);
+        return m_xContext ? m_xContext->getHeaderBar(_eObjType) : nullptr;
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getTable() override
     {
-        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
-        if (m_xContext)
-            xAccessible = m_xContext->getTable();
-        return xAccessible;
+        std::unique_lock aGuard(m_aMutex);
+        return m_xContext ? m_xContext->getTable() : nullptr;
     }
     virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
         const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) override
     {
+        std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
             m_xContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
+        std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
             m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
+        std::unique_lock aGuard(m_aMutex);
         if (m_xContext)
             m_xContext->commitEvent( nEventId, rNewValue, rOldValue );
     }
