@@ -346,6 +346,10 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl ;
     ]
+    SID_ADDITIONS_DIALOG
+    [
+        ExecMethod = OfaExec_Impl ;
+    ]
 }
 
 shell SfxModule
