@@ -301,7 +301,7 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
             if (rKey == u"active")
                 pCheckBox->setChecked(toBool(rValue));
             else if (rKey == u"label")
-                pCheckBox->setText(toQString(rValue));
+                pCheckBox->setText(convertAccelerator(rValue));
         }
     }
     else if (QDialog* pDialog = qobject_cast<QDialog*>(pObject))
