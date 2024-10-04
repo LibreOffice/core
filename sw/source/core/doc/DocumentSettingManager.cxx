@@ -110,7 +110,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbUseVariableWidthNBSP(false),
     mbPaintHellOverHeaderFooter(false),
     mbMinRowHeightInclBorder(false),
-    mbMsWordCompGridMetrics(false) // tdf#129808
+    mbMsWordCompGridMetrics(false), // tdf#129808
+    mbNoClippingWithWrapPolygon(false)
 
     // COMPATIBILITY FLAGS END
 {
