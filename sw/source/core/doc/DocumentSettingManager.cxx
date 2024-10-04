@@ -109,7 +109,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbDropCapPunctuation(true),
     mbUseVariableWidthNBSP(false),
     mbPaintHellOverHeaderFooter(false),
-    mbMinRowHeightInclBorder(false)
+    mbMinRowHeightInclBorder(false),
+    mbNoClippingWithWrapPolygon(false)
 
     // COMPATIBILITY FLAGS END
 {
