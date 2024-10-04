@@ -207,9 +207,6 @@ public:
         ::vcl::IAccessibleTableProvider& _rBrowseBox
     );
 
-    /// returns the AccessibleContext belonging to this Accessible
-    AccessibleBrowseBox*            getContext() { return m_xContext.get(); }
-
 private:
     virtual ~AccessibleBrowseBoxAccess() override;
 
@@ -227,40 +224,35 @@ private:
         getHeaderBar( AccessibleBrowseBoxObjType _eObjType ) override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
-        AccessibleBrowseBox* pContext( getContext() );
-        if ( pContext )
-            xAccessible = pContext->getHeaderBar( _eObjType );
+        if (m_xContext)
+            xAccessible = m_xContext->getHeaderBar( _eObjType );
         return xAccessible;
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getTable() override
     {
         css::uno::Reference< css::accessibility::XAccessible > xAccessible;
-        AccessibleBrowseBox* pContext( getContext() );
-        if ( pContext )
-            xAccessible = pContext->getTable();
+        if (m_xContext)
+            xAccessible = m_xContext->getTable();
         return xAccessible;
     }
     virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
         const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) override
     {
-        AccessibleBrowseBox* pContext( getContext() );
-        if ( pContext )
-            pContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
+        if (m_xContext)
+            m_xContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
-        AccessibleBrowseBox* pContext( getContext() );
-        if ( pContext )
-            pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
+        if (m_xContext)
+            m_xContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
         const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
     {
-        AccessibleBrowseBox* pContext( getContext() );
-        if ( pContext )
-            pContext->commitEvent( nEventId, rNewValue, rOldValue );
+        if (m_xContext)
+            m_xContext->commitEvent( nEventId, rNewValue, rOldValue );
     }
 
 private:
