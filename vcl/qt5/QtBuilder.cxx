@@ -354,7 +354,7 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
         for (auto const & [ rKey, rValue ] : rProps)
         {
             if (rKey == u"label")
-                pLabel->setText(toQString(rValue));
+                pLabel->setText(convertAccelerator(rValue));
             else if (rKey == u"wrap")
                 pLabel->setWordWrap(toBool(rValue));
         }
