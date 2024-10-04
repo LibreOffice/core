@@ -22,6 +22,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollArea>
 
 namespace
 {
@@ -156,6 +157,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkLabel")
     {
         pObject = new QLabel(pParentWidget);
+    }
+    else if (sName == u"GtkScrolledWindow")
+    {
+        pObject = new QScrollArea(pParentWidget);
     }
     else
     {
