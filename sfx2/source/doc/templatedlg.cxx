@@ -206,11 +206,7 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxLocalViewWeld->set_size_request(TEMPLATE_ITEM_MAX_WIDTH * 5, TEMPLATE_ITEM_MAX_HEIGHT_SUB * 3);
 
     mxOKButton->connect_clicked(LINK(this, SfxTemplateManagerDlg, OkClickHdl));
-    // FIXME: rather than disabling make dispatchCommand(".uno:AdditionsDialog") work in start center
-    if ( !SfxModule::GetActiveModule() )
-        mxActionBar->set_item_sensitive(MNI_ACTION_EXTENSIONS, false);
-    else
-        mxActionBar->set_item_sensitive(MNI_ACTION_EXTENSIONS, true);
+    mxActionBar->set_item_sensitive(MNI_ACTION_EXTENSIONS, true);
     mxListViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ListViewHdl));
     mxThumbnailViewButton->connect_toggled(LINK(this, SfxTemplateManagerDlg, ThumbnailViewHdl));
 
