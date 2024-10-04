@@ -552,6 +552,12 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
     }
 }
 
+void SlideShowView::ignoreNextMouseReleased()
+{
+    std::unique_lock aGuard( m_aMutex );
+    mbMousePressedEaten = true;
+}
+
 void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
 {
     std::unique_lock aGuard( m_aMutex );

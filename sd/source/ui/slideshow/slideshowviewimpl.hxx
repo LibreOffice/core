@@ -107,7 +107,7 @@ public:
                    SlideshowImpl*  pSlideShow,
                    bool            bFullScreen );
 
-    void ignoreNextMouseReleased() { mbMousePressedEaten = true; }
+    void ignoreNextMouseReleased();
 
     /// Dispose all internal references
     virtual void disposing(std::unique_lock<std::mutex>&) override;
