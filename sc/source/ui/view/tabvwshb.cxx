@@ -466,26 +466,6 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                 break;
             }
 
-            case SID_ADDITIONS_DIALOG:
-            {
-                OUString sAdditionsTag = u""_ustr;
-
-                const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
-                if (pStringArg)
-                    sAdditionsTag = pStringArg->GetValue();
-
-                VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                VclPtr<AbstractAdditionsDialog> pDialog(
-                    pFact->CreateAdditionsDialog(pWin->GetFrameWeld(), sAdditionsTag));
-                pDialog->StartExecuteAsync(
-                    [pDialog] (sal_Int32 /*nResult*/)->void
-                    {
-                        pDialog->disposeOnce();
-                    }
-                );
-                break;
-            }
-
             case SID_OBJECTRESIZE:
             {
                 //         the server would like to change the client size

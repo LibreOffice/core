@@ -3624,28 +3624,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_ADDITIONS_DIALOG:
-        {
-            OUString sAdditionsTag = u""_ustr;
-
-            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
-            if (pStringArg)
-                sAdditionsTag = pStringArg->GetValue();
-
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            VclPtr<AbstractAdditionsDialog> pDlg(
-                pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
-            pDlg->StartExecuteAsync(
-                [pDlg] (sal_Int32 /*nResult*/)->void
-                {
-                    pDlg->disposeOnce();
-                }
-            );
-            Cancel();
-            rReq.Ignore ();
-        }
-        break;
-
         case SID_ATTR_GLOW_COLOR:
         case SID_ATTR_GLOW_RADIUS:
         case SID_ATTR_GLOW_TRANSPARENCY:

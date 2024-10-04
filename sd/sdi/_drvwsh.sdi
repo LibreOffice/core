@@ -2923,11 +2923,6 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_ADDITIONS_DIALOG
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_ATTR_GLOW_COLOR
     [
         ExecMethod = FuTemporary ;

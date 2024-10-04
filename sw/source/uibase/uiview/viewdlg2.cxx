@@ -92,25 +92,7 @@ void SwView::ExecDlgExt(SfxRequest& rReq)
             });
             break;
         }
-        case SID_ADDITIONS_DIALOG:
-        {
-            OUString sAdditionsTag = u""_ustr;
 
-            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
-            if (pStringArg)
-                sAdditionsTag = pStringArg->GetValue();
-
-            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-            VclPtr<AbstractAdditionsDialog> pDialog(
-                pFact->CreateAdditionsDialog(GetFrameWeld(), sAdditionsTag));
-            pDialog->StartExecuteAsync(
-                [pDialog] (sal_Int32 /*nResult*/)->void
-                {
-                    pDialog->disposeOnce();
-                }
-            );
-            break;
-        }
         case SID_SIGN_SIGNATURELINE:
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
