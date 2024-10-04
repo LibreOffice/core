@@ -2220,49 +2220,6 @@ public class DOMTest
     }
     */
 
-    @Test public void testXNodeList_ChildList() throws Exception
-    {
-        XDocumentBuilder xBuilder =
-            UnoRuntime.queryInterface(XDocumentBuilder.class,
-            m_xMSF.createInstance("com.sun.star.xml.dom.DocumentBuilder"));
-        XDocument xDoc = xBuilder.newDocument();
-
-        XElement xRoot = xDoc.createElement("root");
-        XElement xFoo = xDoc.createElement("foo");
-        XElement xBar = xDoc.createElement("bar");
-        XElement xBaz = xDoc.createElement("baz");
-
-        xDoc.appendChild(xRoot);
-
-        XNodeList xChildList = xRoot.getChildNodes();
-        assertNotNull(xChildList);
-        assertSame("ChildList.getLength()", 0, xChildList.getLength());
-
-        try {
-            xChildList.item(4);
-        } catch (Exception e) { /* expected */ }
-
-        xRoot.appendChild(xFoo);
-        assertSame("ChildList.getLength()", 1, xChildList.getLength());
-        assertEquals("ChildList.item", xFoo, xChildList.item(0));
-
-        xRoot.appendChild(xBar);
-        assertSame("ChildList.getLength()", 2, xChildList.getLength());
-        assertEquals("ChildList.item", xFoo, xChildList.item(0));
-        assertEquals("ChildList.item", xBar, xChildList.item(1));
-
-        xRoot.appendChild(xBaz);
-        assertSame("ChildList.getLength()", 3, xChildList.getLength());
-        assertEquals("ChildList.item", xFoo, xChildList.item(0));
-        assertEquals("ChildList.item", xBar, xChildList.item(1));
-        assertEquals("ChildList.item", xBaz, xChildList.item(2));
-
-        xRoot.removeChild(xBar);
-        assertSame("ChildList.getLength()", 2, xChildList.getLength());
-        assertEquals("ChildList.item", xFoo, xChildList.item(0));
-        assertEquals("ChildList.item", xBaz, xChildList.item(1));
-    }
-
     @Test public void testXNodeList_ElementList() throws Exception
     {
         XDocumentBuilder xBuilder =

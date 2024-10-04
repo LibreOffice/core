@@ -560,6 +560,53 @@ public:
         }
     }
 
+    void testXNodeList_ChildList()
+    {
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        Reference< xml::dom::XElement > xRoot = xDocument->createElement(u"root"_ustr);
+        Reference< xml::dom::XElement > xFoo = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XElement > xBar = xDocument->createElement(u"bar"_ustr);
+        Reference< xml::dom::XElement > xBaz = xDocument->createElement(u"baz"_ustr);
+
+        xDocument->appendChild(xRoot);
+
+        uno::Reference<xml::dom::XNodeList> xChildList = xRoot->getChildNodes();
+        CPPUNIT_ASSERT(xChildList);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xChildList->getLength());
+
+        CPPUNIT_ASSERT(!xChildList->item(4));
+
+        xRoot->appendChild(xFoo);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xChildList->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(0), uno::UNO_QUERY));
+
+        xRoot->appendChild(xBar);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xChildList->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xBar, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(1), uno::UNO_QUERY));
+
+        xRoot->appendChild(xBaz);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xChildList->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xBar, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(1), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xBaz, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(2), uno::UNO_QUERY));
+
+        xRoot->removeChild(xBar);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xChildList->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xFoo, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xBaz, uno::UNO_QUERY),
+                Reference< XInterface >(xChildList->item(1), uno::UNO_QUERY));
+    }
+
     void testXNodeList_NodeList()
     {
         uno::Reference<xml::xpath::XXPathAPI> xXPathAPI( getMultiServiceFactory()->createInstance(u"com.sun.star.xml.xpath.XPathAPI"_ustr), uno::UNO_QUERY_THROW );
@@ -641,6 +688,7 @@ public:
     CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST(testXXPathAPI);
     CPPUNIT_TEST(testXXPathObject);
+    CPPUNIT_TEST(testXNodeList_ChildList);
     CPPUNIT_TEST(testXNodeList_NodeList);
     CPPUNIT_TEST(serializerTest);
     CPPUNIT_TEST_SUITE_END();
