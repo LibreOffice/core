@@ -221,7 +221,7 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
 
                 // connect button click handler
                 const QList<QAbstractButton*> aButtons = pButtonBox->buttons();
-                for (const QAbstractButton* pButton : aButtons)
+                for (QAbstractButton* pButton : aButtons)
                 {
                     assert(pButton);
                     QObject::connect(pButton, &QAbstractButton::clicked, pDialog,

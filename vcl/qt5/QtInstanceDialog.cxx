@@ -10,6 +10,8 @@
 #include <QtInstanceDialog.hxx>
 #include <QtInstanceDialog.moc>
 
+#include <vcl/help.hxx>
+
 const char* const QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code";
 
 QtInstanceDialog::QtInstanceDialog(QDialog* pDialog)
@@ -157,15 +159,37 @@ void QtInstanceDialog::dialogFinished(int nResult)
     xRunAsyncDialog.reset();
 }
 
-void QtInstanceDialog::handleButtonClick(QDialog& rDialog, const QAbstractButton& rButton)
+void QtInstanceDialog::handleButtonClick(QDialog& rDialog, QAbstractButton& rButton)
 {
-    QVariant aResponseProperty = rButton.property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
-    if (aResponseProperty.isValid())
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
     {
-        assert(aResponseProperty.canConvert<int>());
-        const int nResponseCode = aResponseProperty.toInt();
-        rDialog.done(nResponseCode);
+        rQtInstance.RunInMainThread([&] { handleButtonClick(rDialog, rButton); });
+        return;
     }
+
+    QVariant aResponseProperty = rButton.property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
+    if (!aResponseProperty.isValid())
+        return;
+
+    assert(aResponseProperty.canConvert<int>());
+    const int nResponseCode = aResponseProperty.toInt();
+
+    // close dialog with button's response code unless it's the "Help" button
+    if (nResponseCode != RET_HELP)
+    {
+        rDialog.done(nResponseCode);
+        return;
+    }
+
+    // handle "Help" button
+    Help* pHelp = Application::GetHelp();
+    if (!pHelp)
+        return;
+
+    QtInstanceWidget aButtonWidget(&rButton);
+    pHelp->Start(aButtonWidget.get_help_id(), &aButtonWidget);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

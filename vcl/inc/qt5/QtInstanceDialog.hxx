@@ -57,7 +57,7 @@ public:
 
     virtual weld::Container* weld_content_area() override;
 
-    static void handleButtonClick(QDialog& rDialog, const QAbstractButton& rButton);
+    static void handleButtonClick(QDialog& rDialog, QAbstractButton& rButton);
 
     /**
     * Name of the property to set on a QPushButton that holds the
