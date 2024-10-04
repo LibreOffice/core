@@ -86,7 +86,7 @@ void KashidaTest::testNoZwnjExpansion()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(u"نویس\u200Cه"_ustr).value().nIndex);
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), GetWordKashidaPosition(u"متن"_ustr).value().nIndex);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), GetWordKashidaPosition(u"مت\u200Cن"_ustr).value().nIndex);
+    CPPUNIT_ASSERT(!GetWordKashidaPosition(u"مت\u200Cن"_ustr).has_value());
 }
 
 // tdf#163105: Do not insert kashida if the position is invalid

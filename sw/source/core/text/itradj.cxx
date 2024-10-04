@@ -167,10 +167,11 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
         const OUString& rWord = aScanner.GetWord();
 
         // Fetch the set of valid positions from VCL, where possible
-        aValidPositions.clear();
         if (SwScriptInfo::IsKashidaScriptText(rInf.GetText(), TextFrameIndex{ aScanner.GetBegin() },
                                               TextFrameIndex{ aScanner.GetLen() }))
         {
+            aValidPositions.clear();
+
             rItr.SeekAndChgAttrIter(TextFrameIndex{ aScanner.GetBegin() }, rInf.GetRefDev());
 
             vcl::text::ComplexTextLayoutFlags nOldLayout = rInf.GetRefDev()->GetLayoutMode();
@@ -179,13 +180,13 @@ static bool lcl_CheckKashidaPositions(SwScriptInfo& rSI, SwTextSizeInfo& rInf, S
             rInf.GetRefDev()->GetWordKashidaPositions(rWord, &aValidPositions);
 
             rInf.GetRefDev()->SetLayoutMode(nOldLayout);
-        }
 
-        auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord, aValidPositions);
-        if (stKashidaPos.has_value())
-        {
-            TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
-            aNewKashidaPositions.push_back(nNewKashidaPos);
+            auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord, aValidPositions);
+            if (stKashidaPos.has_value())
+            {
+                TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
+                aNewKashidaPositions.push_back(nNewKashidaPos);
+            }
         }
     }
 

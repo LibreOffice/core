@@ -134,6 +134,13 @@ bool CanConnectToPrev(sal_Unicode cCh, sal_Unicode cPrevCh)
     return bRet;
 }
 
+bool isSyriacChar(sal_Unicode cCh)
+{
+    return (cCh >= 0x700 && cCh <= 0x74F) || (cCh >= 0x860 && cCh <= 0x86A);
+}
+
+bool isArabicChar(sal_Unicode cCh) { return cCh >= 0x60C && cCh <= 0x6FE; }
+
 std::optional<i18nutil::KashidaPosition>
 GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pValidPositions)
 {
@@ -283,7 +290,7 @@ GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pVa
         {
             // Reh, Zain (right joining) final form may appear in the middle of word
             // All others except Yeh - only at end of word
-            if (isRehChar(cCh) || (0x60C <= cCh && 0x6FE >= cCh && nIdx == nWordLen - 1))
+            if (isRehChar(cCh) || (isArabicChar(cCh) && nIdx == nWordLen - 1))
             {
                 SAL_WARN_IF(0 == cPrevCh, "i18n", "No previous character");
                 // check if character is connectable to previous character,
@@ -295,7 +302,8 @@ GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pVa
         }
 
         // 8. Try any valid position
-        if (nPriorityLevel >= 7 && nIdx > 0)
+        if (nPriorityLevel >= 7 && nIdx > 0 && isArabicChar(cPrevCh) && isArabicChar(cCh)
+            && !pValidPositions.empty())
         {
             fnTryInsertBefore(7);
         }
@@ -339,7 +347,7 @@ GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pVa
 
     sal_Int32 nWordMidpoint = nWordLen / 2;
 
-    auto fnPositionValid = [&pValidPositions](sal_Int32 nIdx) {
+    auto fnPositionValid = [&pValidPositions, &rWord](sal_Int32 nIdx) {
         // Exclusions:
 
         // tdf#163105: Do not insert kashida if the position is invalid
@@ -348,7 +356,8 @@ GetWordKashidaPositionSyriac(const OUString& rWord, const std::vector<bool>& pVa
             return false;
         }
 
-        return true;
+        sal_Unicode cCh = rWord[nIdx];
+        return isSyriacChar(cCh);
     };
 
     // End to midpoint
@@ -385,7 +394,7 @@ i18nutil::GetWordKashidaPosition(const OUString& rWord, const std::vector<bool>&
     {
         auto cCh = rWord[nIdx];
 
-        if ((cCh >= 0x700 && cCh <= 0x74F) || (cCh >= 0x860 && cCh <= 0x86A))
+        if (isSyriacChar(cCh))
         {
             // This word contains Syriac characters.
             return GetWordKashidaPositionSyriac(rWord, pValidPositions);

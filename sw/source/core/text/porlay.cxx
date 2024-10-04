@@ -1525,16 +1525,21 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
             // the search has to be performed on a per word base
             while ( aScanner.NextWord() )
             {
-                const OUString& rWord = aScanner.GetWord();
-                auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord);
-
-                if (stKashidaPos.has_value())
+                if (SwScriptInfo::IsKashidaScriptText(rText, TextFrameIndex{ aScanner.GetBegin() },
+                                                      TextFrameIndex{ aScanner.GetLen() }))
                 {
-                    // Only populate kashida positions for the invalidated tail
-                    TextFrameIndex nNewKashidaPos{aScanner.GetBegin() + stKashidaPos->nIndex};
-                    if(nNewKashidaPos >= nLastKashida) {
-                        m_Kashida.insert(m_Kashida.begin() + nCntKash, nNewKashidaPos);
-                        nCntKash++;
+                    const OUString& rWord = aScanner.GetWord();
+                    auto stKashidaPos = i18nutil::GetWordKashidaPosition(rWord);
+
+                    if (stKashidaPos.has_value())
+                    {
+                        // Only populate kashida positions for the invalidated tail
+                        TextFrameIndex nNewKashidaPos{ aScanner.GetBegin() + stKashidaPos->nIndex };
+                        if (nNewKashidaPos >= nLastKashida)
+                        {
+                            m_Kashida.insert(m_Kashida.begin() + nCntKash, nNewKashidaPos);
+                            nCntKash++;
+                        }
                     }
                 }
             } // end of kashida search
