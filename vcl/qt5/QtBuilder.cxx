@@ -17,6 +17,7 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
@@ -143,6 +144,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         pObject = new QDialog(pParentWidget);
     }
+    else if (sName == u"GtkFrame")
+    {
+        pObject = new QGroupBox(pParentWidget);
+    }
     else if (sName == u"GtkLabel")
     {
         pObject = new QLabel(pParentWidget);
@@ -177,9 +182,26 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     return pObject;
 }
 
-void QtBuilder::tweakInsertedChild(QObject*, QObject* pCurrentChild, std::string_view,
+void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std::string_view sType,
                                    std::string_view)
 {
+    if (sType == "label")
+    {
+        if (QLabel* pLabel = qobject_cast<QLabel*>(pCurrentChild))
+        {
+            if (QGroupBox* pGroupBox = qobject_cast<QGroupBox*>(pParent))
+            {
+                // GtkFrame has a `child-type="label"` child for the GtkFrame label
+                // in the GtkBuilder .ui file, s. https://docs.gtk.org/gtk3/class.Frame.html
+                // For QGroupBox, the title can be set directly. Therefore, take over the
+                // title from the label and delete the separate label widget again
+                pGroupBox->setTitle(pLabel->text());
+                pLabel->setParent(nullptr);
+                pLabel->deleteLater();
+            }
+        }
+    }
+
     if (QDialog* pDialog = qobject_cast<QDialog*>(pCurrentChild))
     {
         // no action needed for QMessageBox, where the default button box is used
