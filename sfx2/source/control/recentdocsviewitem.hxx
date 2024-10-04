@@ -68,7 +68,7 @@ private:
     bool m_bPinned;
     bool m_bPinnedIconHighlighted;
     BitmapEx m_aPinnedDocumentBitmap;
-    BitmapEx m_aPinnedDocumentBitmapHiglighted;
+    BitmapEx m_aPinnedDocumentBitmapHighlighted;
 };
 
 #endif // INCLUDED_SFX2_RECENTDOCSVIEWITEM_HXX

@@ -134,7 +134,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
       m_bPinned(isPinned),
       m_bPinnedIconHighlighted(false),
       m_aPinnedDocumentBitmap(BMP_PIN_DOC),
-      m_aPinnedDocumentBitmapHiglighted(BMP_PIN_DOC_HIGHLIGHTED)
+      m_aPinnedDocumentBitmapHighlighted(BMP_PIN_DOC_HIGHLIGHTED)
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
@@ -311,7 +311,8 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         // tdf#38742 - draw pinned icon
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         aSeq.push_back(new DiscreteBitmapPrimitive2D(
-            m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
+            m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHighlighted : m_aPinnedDocumentBitmap,
+            B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
 
         pProcessor->process(aSeq);
     }
@@ -321,8 +322,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
         drawinglayer::primitive2d::Primitive2DContainer aSeq {
             new DiscreteBitmapPrimitive2D(
-                m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHiglighted : m_aPinnedDocumentBitmap,
-                B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
+                m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())) };
 
         pProcessor->process(aSeq);
     }
