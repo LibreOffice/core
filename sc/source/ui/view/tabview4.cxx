@@ -315,23 +315,17 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            double nPPTX = aViewData.GetPPTX();
-            double nPPTY = aViewData.GetPPTY();
+            // we need to use nAddX and nAddX here because we need the next row&column address
+            OUString sCol = OUString::number(nEndX + nAddX);
+            OUString sRow = OUString::number(nEndY + nAddY);
 
-            OString sRectangleString = "EMPTY"_ostr;
-            if (!aTipRectangle.IsEmpty())
-            {
-                // selection start handle
-                tools::Rectangle aLogicRectangle(
-                    aTipRectangle.Left() / nPPTX, aTipRectangle.Top() / nPPTY,
-                    aTipRectangle.Right() / nPPTX, aTipRectangle.Bottom() / nPPTY);
-                sRectangleString = aLogicRectangle.toString();
-            }
+            // since start and end cells are the same, duplicate them
+            OUString sCellAddress = OUString::Concat(sCol + " " + sRow + " " + sCol + " " + sRow);
 
             tools::JsonWriter writer;
             writer.put("type", "autofillpreviewtooltip");
             writer.put("text", sTipString);
-            writer.put("location", sRectangleString);
+            writer.put("celladdress", sCellAddress);
             OString sPayloadString = writer.finishAndGetAsOString();
             ScTabViewShell* pViewShell = aViewData.GetViewShell();
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
