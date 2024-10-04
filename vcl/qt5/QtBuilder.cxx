@@ -244,9 +244,20 @@ void QtBuilder::setContext(QObject*, std::vector<vcl::EnumContext::Context>&&)
     SAL_WARN("vcl.qt", "Ignoring context");
 }
 
-void QtBuilder::applyAtkProperties(QObject*, const stringmap&, bool)
+void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rProperties, bool)
 {
-    SAL_WARN("vcl.qt", "QtBuilder::applyAtkProperties not implemented yet");
+    if (!pObject || !pObject->isWidgetType())
+        return;
+
+    QWidget* pWidget = static_cast<QWidget*>(pObject);
+
+    for (auto const & [ rKey, rValue ] : rProperties)
+    {
+        if (rKey == "AtkObject::accessible-description")
+            pWidget->setAccessibleDescription(toQString(rValue));
+        else if (rKey == "AtkObject::accessible-name")
+            pWidget->setAccessibleName(toQString(rValue));
+    }
 }
 
 void QtBuilder::applyPackingProperties(QObject*, QObject*, const stringmap&)
