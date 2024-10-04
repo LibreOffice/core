@@ -20,6 +20,9 @@ tar cvJf skia-mXX-$id.tar.xz skia
 And review differences for BUILD.gn and relevant files in gn/ :
 git diff chrome/mYY..chrome/mXX ./BUILD.gn ./gn
 
+The libreoffice Library_skia.mk file has been ordered and commented to make it easier to match
+up the changes in the external *.gn build files with the changes needed here.
+
 
 Debugging Skia:
 ===============
