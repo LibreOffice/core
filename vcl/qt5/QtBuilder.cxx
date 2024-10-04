@@ -165,6 +165,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         if (pParentLayout)
             pParentLayout->addWidget(pWidget);
 
+        QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + sID);
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
         // Set GtkBuilder ID as accessible ID
         pWidget->setAccessibleIdentifier(toQString(sID));

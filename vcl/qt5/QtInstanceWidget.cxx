@@ -11,6 +11,9 @@
 
 #include <vcl/transfer.hxx>
 
+/** Name of QObject property used for the help ID. */
+const char* const PROPERTY_HELP_ID = "help-id";
+
 QtInstanceWidget::QtInstanceWidget(QWidget* pWidget)
     : m_pWidget(pWidget)
 {
@@ -197,9 +200,33 @@ OUString QtInstanceWidget::get_buildable_name() const { return OUString(); }
 
 void QtInstanceWidget::set_buildable_name(const OUString&) {}
 
-void QtInstanceWidget::set_help_id(const OUString&) {}
+void QtInstanceWidget::setHelpId(QWidget& rWidget, const OUString& rHelpId)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread(
+        [&] { rWidget.setProperty(PROPERTY_HELP_ID, toQString(rHelpId)); });
+}
 
-OUString QtInstanceWidget::get_help_id() const { return OUString(); }
+void QtInstanceWidget::set_help_id(const OUString& rHelpId) { setHelpId(*m_pWidget, rHelpId); }
+
+OUString QtInstanceWidget::get_help_id() const
+{
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    if (!rQtInstance.IsMainThread())
+    {
+        OUString sHelpId;
+        rQtInstance.RunInMainThread([&] { sHelpId = get_help_id(); });
+        return sHelpId;
+    }
+
+    const QVariant aHelpIdVariant = m_pWidget->property(PROPERTY_HELP_ID);
+    if (!aHelpIdVariant.isValid())
+        return OUString();
+
+    assert(aHelpIdVariant.canConvert<QString>());
+    return toOUString(aHelpIdVariant.toString());
+}
 
 void QtInstanceWidget::set_grid_left_attach(int) {}
 

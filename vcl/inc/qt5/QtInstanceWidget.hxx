@@ -68,7 +68,7 @@ public:
 
     virtual void set_buildable_name(const OUString&) override;
 
-    virtual void set_help_id(const OUString&) override;
+    virtual void set_help_id(const OUString& rHelpId) override;
 
     virtual OUString get_help_id() const override;
 
@@ -176,6 +176,8 @@ public:
     virtual void set_background(const Color&) override;
 
     virtual void draw(OutputDevice&, const Point&, const Size&) override;
+
+    static void setHelpId(QWidget& rWidget, const OUString& rHelpId);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
