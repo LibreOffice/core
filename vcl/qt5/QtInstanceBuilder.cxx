@@ -34,6 +34,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
     // what is relevant for that particular one, without having to implement the full
     // weld API at once.
     static std::unordered_set<OUString> aSupportedUIFiles = {
+        u"modules/schart/ui/insertaxisdlg.ui"_ustr,
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
         u"sfx/ui/licensedialog.ui"_ustr,
         u"sfx/ui/querysavedialog.ui"_ustr,
