@@ -332,6 +332,7 @@ void QtInstance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
 SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
 {
+    SolarMutexGuard aGuard;
     SalFrame* pRet(nullptr);
     RunInMainThread([&, this]() { pRet = new QtFrame(nullptr, nStyle, useCairo()); });
     assert(pRet);
@@ -340,6 +341,8 @@ SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameSt
 
 SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
 {
+    SolarMutexGuard aGuard;
+
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalFrame* pRet(nullptr);
@@ -360,6 +363,8 @@ void QtInstance::DestroyFrame(SalFrame* pFrame)
 
 SalObject* QtInstance::CreateObject(SalFrame* pParent, SystemWindowData*, bool bShow)
 {
+    SolarMutexGuard aGuard;
+
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalObject* pRet(nullptr);
