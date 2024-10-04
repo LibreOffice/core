@@ -13,6 +13,7 @@
 
 #include <QtBuilder.hxx>
 #include <QtInstanceCheckButton.hxx>
+#include <QtInstanceEntry.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
 
@@ -193,10 +194,12 @@ std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString&
     return nullptr;
 }
 
-std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString&)
+std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QLineEdit* pLineEdit = m_xBuilder->get<QLineEdit>(rId);
+    std::unique_ptr<weld::Entry> xRet(pLineEdit ? std::make_unique<QtInstanceEntry>(pLineEdit)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString&)

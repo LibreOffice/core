@@ -19,6 +19,7 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
 
@@ -143,6 +144,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkDialog")
     {
         pObject = new QDialog(pParentWidget);
+    }
+    else if (sName == u"GtkEntry")
+    {
+        pObject = new QLineEdit(pParentWidget);
     }
     else if (sName == u"GtkFrame")
     {
