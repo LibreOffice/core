@@ -61,6 +61,19 @@ protected:
         SizeGroup() {}
     };
 
+    struct StringPair
+    {
+        OUString m_sID;
+        OUString m_sValue;
+        StringPair(OUString sId, OUString sValue)
+            : m_sID(std::move(sId))
+            , m_sValue(std::move(sValue))
+        {
+        }
+    };
+
+    typedef StringPair MnemonicWidgetMap;
+
     static void collectPangoAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRelationAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
     static void collectAtkRoleAttribute(xmlreader::XmlReader& reader, stringmap& rMap);
@@ -83,6 +96,9 @@ protected:
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
     const std::vector<SizeGroup>& getSizeGroups() const;
+
+    void extractMnemonicWidget(const OUString& id, stringmap& rMap);
+    const std::vector<MnemonicWidgetMap>& getMnemonicWidgetMaps() const;
 
     OUString finalizeValue(const OString& rContext, const OString& rValue,
                            const bool bTranslate) const;
@@ -119,6 +135,8 @@ private:
 
         std::map<OUString, Adjustment> m_aAdjustments;
         std::map<OUString, TextBuffer> m_aTextBuffers;
+
+        std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
     };
 
     std::unique_ptr<ParserState> m_pParserState;

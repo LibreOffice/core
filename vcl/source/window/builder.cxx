@@ -474,6 +474,11 @@ const std::vector<BuilderBase::SizeGroup>& BuilderBase::getSizeGroups() const
     return m_pParserState->m_aSizeGroups;
 }
 
+const std::vector<BuilderBase::MnemonicWidgetMap>& BuilderBase::getMnemonicWidgetMaps() const {
+    assert(m_pParserState && "parser state no more valid");
+    return m_pParserState->m_aMnemonicWidgetMaps;
+}
+
 OUString BuilderBase::finalizeValue(const OString& rContext, const OString& rValue,
                                     const bool bTranslate) const
 {
@@ -515,7 +520,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
     processUIFile(pParent);
 
     //Set Mnemonic widgets when everything has been imported
-    for (auto const& mnemonicWidget : m_pVclParserState->m_aMnemonicWidgetMaps)
+    for (auto const& mnemonicWidget : getMnemonicWidgetMaps())
     {
         FixedText *pOne = get<FixedText>(mnemonicWidget.m_sID);
         vcl::Window *pOther = get(mnemonicWidget.m_sValue);
@@ -1405,7 +1410,7 @@ void VclBuilder::extractButtonImage(const OUString &id, stringmap &rMap, bool bR
     }
 }
 
-void VclBuilder::extractMnemonicWidget(const OUString &rLabelID, stringmap &rMap)
+void BuilderBase::extractMnemonicWidget(const OUString &rLabelID, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(u"mnemonic-widget"_ustr);
     if (aFind != rMap.end())
@@ -1414,7 +1419,7 @@ void VclBuilder::extractMnemonicWidget(const OUString &rLabelID, stringmap &rMap
         sal_Int32 nDelim = sID.indexOf(':');
         if (nDelim != -1)
             sID = sID.copy(0, nDelim);
-        m_pVclParserState->m_aMnemonicWidgetMaps.emplace_back(rLabelID, sID);
+        m_pParserState->m_aMnemonicWidgetMaps.emplace_back(rLabelID, sID);
         rMap.erase(aFind);
     }
 }

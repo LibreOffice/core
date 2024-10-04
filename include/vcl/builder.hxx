@@ -139,17 +139,6 @@ private:
     };
     std::vector<MenuAndId> m_aMenus;
 
-    struct StringPair
-    {
-        OUString m_sID;
-        OUString m_sValue;
-        StringPair(OUString sId, OUString sValue)
-            : m_sID(std::move(sId))
-            , m_sValue(std::move(sValue))
-        {
-        }
-    };
-
     typedef StringPair RadioButtonGroupMap;
 
     struct ButtonImageWidgetMap
@@ -168,7 +157,6 @@ private:
     typedef StringPair TextBufferMap;
     typedef StringPair WidgetAdjustmentMap;
     typedef StringPair ButtonMenuMap;
-    typedef StringPair MnemonicWidgetMap;
 
     struct ComboBoxModelMap
     {
@@ -222,8 +210,6 @@ private:
         std::map<VclPtr<vcl::Window>, VclPtr<vcl::Window>> m_aRedundantParentWidgets;
 
         std::map<VclPtr<vcl::Window>, stringmap> m_aAtkInfo;
-
-        std::vector<MnemonicWidgetMap> m_aMnemonicWidgetMaps;
 
         std::vector< VclPtr<VclExpander> > m_aExpanderWidgets;
 
@@ -285,7 +271,6 @@ private:
     void        extractBuffer(const OUString &id, stringmap &rVec);
     static bool extractAdjustmentToMap(const OUString &id, stringmap &rVec, std::vector<WidgetAdjustmentMap>& rAdjustmentMap);
     void        extractButtonImage(const OUString &id, stringmap &rMap, bool bRadio);
-    void        extractMnemonicWidget(const OUString &id, stringmap &rMap);
 
     void applyPackingProperties(vcl::Window* pCurrent, vcl::Window* pParent,
                                 const stringmap& rPackingProperties) override;
