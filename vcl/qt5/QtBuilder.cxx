@@ -157,6 +157,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkLabel")
     {
+        extractMnemonicWidget(sID, rMap);
         pObject = new QLabel(pParentWidget);
     }
     else if (sName == u"GtkScrolledWindow")
@@ -249,9 +250,15 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
     }
 }
 
-void QtBuilder::setMnemonicWidget(const OUString&, const OUString&)
+void QtBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId)
 {
-    SAL_WARN("vcl.qt", "QtBuilder::setMnemonicWidget not implemented yet");
+    QLabel* pLabel = get<QLabel>(rLabelId);
+    QObject* pBuddy = get_by_name(rMnemonicWidgetId);
+
+    if (!pLabel || !pBuddy || !pBuddy->isWidgetType())
+        return;
+
+    pLabel->setBuddy(static_cast<QWidget*>(pBuddy));
 }
 
 void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priority"); }
