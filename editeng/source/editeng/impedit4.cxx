@@ -1106,7 +1106,7 @@ OString ImpEditEngine::GetSimpleHtml() const
 
             OUString aRTFStr = EditDoc::GetParaAsString(pNode, nIndex, nIndex + rTextPortion.GetLen());
             if (pURLField)
-                aOutput.append("<a href=\"" + pURLField->GetURL().toUtf8() + "\">");
+                aOutput.append("<a href=\"" + HTMLOutFuncs::ConvertStringToHTML(pURLField->GetURL()) + "\">");
 
             aOutput.append(HTMLOutFuncs::ConvertStringToHTML(aRTFStr));
 
