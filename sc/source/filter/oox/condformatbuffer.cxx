@@ -115,6 +115,13 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
 {
     OUString aType = rAttribs.getString( XML_type, OUString() );
     OUString aVal = rAttribs.getString(XML_val, OUString());
+    OUString aGreaterThanOrEqual = rAttribs.getString(XML_gte, OUString());
+
+    if (!aGreaterThanOrEqual.isEmpty())
+    {
+        if (!aGreaterThanOrEqual.toBoolean())
+            pEntry->mbGreaterThanOrEqual = false;
+    }
 
     if (aVal != "\"\"")
     {
@@ -323,6 +330,8 @@ ScColorScaleEntry* ConvertToModel( const ColorScaleRuleModelEntry& rEntry, ScDoc
             pEntry->SetType(COLORSCALE_FORMULA);
             pEntry->SetFormula(rEntry.maFormula, *pDoc, rAddr, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
         }
+
+        pEntry->SetGreaterThanOrEqual(rEntry.mbGreaterThanOrEqual);
 
         return pEntry;
 }

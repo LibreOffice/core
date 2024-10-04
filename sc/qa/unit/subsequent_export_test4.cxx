@@ -111,17 +111,17 @@ void testComplexIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, ScIconSetT
     CPPUNIT_ASSERT_EQUAL(eType, pIconSet->GetIconSetData()->eIconSetType);
 }
 
-void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow,
+void testCustomIconSetsXLSX_Impl(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                  ScIconSetType eType, sal_Int32 nIndex)
 {
-    ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, 1, 1);
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(nCol, nRow, nTab);
     CPPUNIT_ASSERT(pFormat);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
     const ScFormatEntry* pEntry = pFormat->GetEntry(0);
     CPPUNIT_ASSERT(pEntry);
     CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Iconset, pEntry->GetType());
     const ScIconSetFormat* pIconSet = static_cast<const ScIconSetFormat*>(pEntry);
-    std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, 1)));
+    std::unique_ptr<ScIconSetInfo> pInfo(pIconSet->GetIconSetInfo(ScAddress(nCol, nRow, nTab)));
     if (nIndex == -1)
         CPPUNIT_ASSERT(!pInfo);
     else
@@ -143,18 +143,40 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testComplexIconSetsXLSX)
         testComplexIconSetsXLSX_Impl(*pDoc, 5, IconSet_5Boxes);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetCondFormList(1)->size());
-        testCustomIconSetsXLSX_Impl(*pDoc, 1, 1, IconSet_3ArrowsGray, 0);
-        testCustomIconSetsXLSX_Impl(*pDoc, 1, 2, IconSet_3ArrowsGray, -1);
-        testCustomIconSetsXLSX_Impl(*pDoc, 1, 3, IconSet_3Arrows, 1);
-        testCustomIconSetsXLSX_Impl(*pDoc, 1, 4, IconSet_3ArrowsGray, -1);
-        testCustomIconSetsXLSX_Impl(*pDoc, 1, 5, IconSet_3Arrows, 2);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 1, 1, IconSet_3ArrowsGray, 0);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 2, 1, IconSet_3ArrowsGray, -1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 3, 1, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 4, 1, IconSet_3ArrowsGray, -1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 5, 1, IconSet_3Arrows, 2);
 
-        testCustomIconSetsXLSX_Impl(*pDoc, 3, 1, IconSet_4RedToBlack, 3);
-        testCustomIconSetsXLSX_Impl(*pDoc, 3, 2, IconSet_3TrafficLights1, 1);
-        testCustomIconSetsXLSX_Impl(*pDoc, 3, 3, IconSet_3Arrows, 2);
+        testCustomIconSetsXLSX_Impl(*pDoc, 3, 1, 1, IconSet_4RedToBlack, 3);
+        testCustomIconSetsXLSX_Impl(*pDoc, 3, 2, 1, IconSet_3TrafficLights1, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 3, 3, 1, IconSet_3Arrows, 2);
     };
 
     createScDoc("xlsx/complex_icon_set.xlsx");
+    verify();
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    verify();
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162948)
+{
+    auto verify = [this]() {
+        ScDocument* pDoc = getScDoc();
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetCondFormList(0)->size());
+        testCustomIconSetsXLSX_Impl(*pDoc, 0, 0, 0, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 0, 1, 0, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 0, 2, 0, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 0, 3, 0, IconSet_3Arrows, 1);
+
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 0, 0, IconSet_3Arrows, 2);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 1, 0, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 2, 0, IconSet_3Arrows, 1);
+        testCustomIconSetsXLSX_Impl(*pDoc, 1, 3, 0, IconSet_3Arrows, 1);
+    };
+
+    createScDoc("xlsx/tdf162948.xlsx");
     verify();
     saveAndReload(u"Calc Office Open XML"_ustr);
     verify();

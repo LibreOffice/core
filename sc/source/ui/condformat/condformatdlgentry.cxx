@@ -1281,6 +1281,10 @@ ScIconSetFrmtDataEntry::ScIconSetFrmtDataEntry(weld::Container* pParent, ScIconS
     , mxLbEntryType(mxBuilder->weld_combo_box(u"listbox"_ustr))
     , mpContainer(pParent)
 {
+    // tdf#162948: Use ">" instead of ">=". Add some spaces to keep the alignment
+    if (!pEntry->GetGreaterThanOrEqual())
+        mxFtEntry->set_label(" >   ");
+
     mxImgIcon->set_from_icon_name(ScIconSetFormat::getIconName(eType, i));
     if(pEntry)
     {

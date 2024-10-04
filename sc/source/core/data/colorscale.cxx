@@ -154,7 +154,8 @@ bool ScFormulaListener::NeedsRepaint() const
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
     mpFormat(nullptr),
-    meType(COLORSCALE_VALUE)
+    meType(COLORSCALE_VALUE),
+    mbGreaterThanOrEqual(true)
 {
 }
 
@@ -162,7 +163,8 @@ ScColorScaleEntry::ScColorScaleEntry(double nVal, const Color& rCol, ScColorScal
     mnVal(nVal),
     mpFormat(nullptr),
     maColor(rCol),
-    meType(eType)
+    meType(eType),
+    mbGreaterThanOrEqual(true)
 {
 }
 
@@ -170,7 +172,8 @@ ScColorScaleEntry::ScColorScaleEntry(const ScColorScaleEntry& rEntry):
     mnVal(rEntry.mnVal),
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
-    meType(rEntry.meType)
+    meType(rEntry.meType),
+    mbGreaterThanOrEqual(true)
 {
     setListener();
     if(rEntry.mpCell)
@@ -185,7 +188,8 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     mnVal(rEntry.mnVal),
     mpFormat(rEntry.mpFormat),
     maColor(rEntry.maColor),
-    meType(rEntry.meType)
+    meType(rEntry.meType),
+    mbGreaterThanOrEqual(true)
 {
     setListener();
     if(rEntry.mpCell)
@@ -245,6 +249,16 @@ double ScColorScaleEntry::GetValue() const
     }
 
     return mnVal;
+}
+
+bool ScColorScaleEntry::GetGreaterThanOrEqual() const
+{
+    return mbGreaterThanOrEqual;
+}
+
+void ScColorScaleEntry::SetGreaterThanOrEqual(bool bGreaterThanOrEqual)
+{
+    mbGreaterThanOrEqual = bGreaterThanOrEqual;
 }
 
 void ScColorScaleEntry::SetValue(double nValue)
@@ -1143,15 +1157,25 @@ std::unique_ptr<ScIconSetInfo> ScIconSetFormat::GetIconSetInfo(const ScAddress& 
     double nValMax = CalcValue(nMin, nMax, itr);
 
     ++itr;
+    bool bGreaterThanOrEqual = true;
     while(itr != end() && nVal >= nValMax)
     {
+        bGreaterThanOrEqual = (*itr)->GetGreaterThanOrEqual();
         ++nIndex;
         nValMax = CalcValue(nMin, nMax, itr);
         ++itr;
     }
 
-    if(nVal >= nValMax)
-        ++nIndex;
+    if (bGreaterThanOrEqual)
+    {
+        if(nVal >= nValMax)
+            ++nIndex;
+    }
+    else
+    {
+        if(nVal > nValMax)
+            ++nIndex;
+    }
 
     std::unique_ptr<ScIconSetInfo> pInfo(new ScIconSetInfo);
 

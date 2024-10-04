@@ -80,6 +80,7 @@ struct ColorScaleRuleModelEntry
     bool mbPercentile;
     bool mbNum;
     OUString maFormula;
+    bool mbGreaterThanOrEqual;
 
     ColorScaleRuleModelEntry():
         maColor(),
@@ -88,7 +89,8 @@ struct ColorScaleRuleModelEntry
         mbMax(false),
         mbPercent(false),
         mbPercentile(false),
-        mbNum(false) {}
+        mbNum(false),
+        mbGreaterThanOrEqual(true) {}
 };
 
 class ColorScaleRule final : public WorksheetHelper

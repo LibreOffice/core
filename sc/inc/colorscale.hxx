@@ -48,6 +48,7 @@ private:
     ScConditionalFormat* mpFormat;
     Color maColor;
     ScColorScaleEntryType meType;
+    bool mbGreaterThanOrEqual;
 
     void setListener();
 
@@ -62,6 +63,8 @@ public:
     void SetColor(const Color&);
     SC_DLLPUBLIC double GetValue() const;
     SC_DLLPUBLIC void SetValue(double nValue);
+    SC_DLLPUBLIC bool GetGreaterThanOrEqual() const;
+    SC_DLLPUBLIC void SetGreaterThanOrEqual(bool bGreaterThanOrEqual);
     SC_DLLPUBLIC void SetFormula(const OUString& rFormula, ScDocument& rDoc, const ScAddress& rAddr,
             formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT);
 
