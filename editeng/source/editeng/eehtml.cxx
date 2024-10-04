@@ -42,6 +42,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, OUString _aBaseURL, SvKeyValueIte
     bInPara(false),
     bWasInPara(false),
     mbBreakForDivs(false),
+    mbNewBlockNeeded(false),
     bFieldsInserted(false),
     bInTitle(false),
     nInTable(0),
@@ -313,8 +314,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
     case HtmlTokenId::DIVISION_ON:
     case HtmlTokenId::DIVISION_OFF:
     {
-        if (mbBreakForDivs)
-            Newline();
+        mbNewBlockNeeded = true;
         break;
     }
 
@@ -531,6 +531,7 @@ void EditHTMLParser::ImpInsertParaBreak()
         mpEditEngine->CallHtmlImportHandler(aImportInfo);
     }
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
+    mbNewBlockNeeded = false;
 }
 
 void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems )
@@ -676,6 +677,13 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 
 void EditHTMLParser::ImpInsertText( const OUString& rText )
 {
+    if (mbNewBlockNeeded)
+    {
+        if (mbBreakForDivs)
+            Newline();
+        mbNewBlockNeeded = false;
+    }
+
     if (mpEditEngine->IsHtmlImportHandlerSet())
     {
         HtmlImportInfo aImportInfo(HtmlImportState::InsertText, this, mpEditEngine->CreateESelection(aCurSel));

@@ -1059,7 +1059,7 @@ OString ImpEditEngine::GetSimpleHtml() const
         sal_Int32 nIndex = 0;
         sal_Int32 nEndPortion = pParaPortion->GetTextPortions().Count() - 1;
 
-        aOutput.append("<div>");
+        OStringBuffer aPara;
         for (sal_Int32 n = 0; n <= nEndPortion; n++)
         {
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
@@ -1078,17 +1078,23 @@ OString ImpEditEngine::GetSimpleHtml() const
 
             OUString aRTFStr = EditDoc::GetParaAsString(pNode, nIndex, nIndex + rTextPortion.GetLen());
             if (pURLField)
-                aOutput.append("<a href=\"" + HTMLOutFuncs::ConvertStringToHTML(pURLField->GetURL()) + "\">");
+                aPara.append("<a href=\"" + HTMLOutFuncs::ConvertStringToHTML(pURLField->GetURL()) + "\">");
 
-            aOutput.append(HTMLOutFuncs::ConvertStringToHTML(aRTFStr));
+            aPara.append(HTMLOutFuncs::ConvertStringToHTML(aRTFStr));
 
             if (pURLField)
-                aOutput.append("</a>");
+                aPara.append("</a>");
 
             nIndex = nIndex + rTextPortion.GetLen();
         }
 
-        aOutput.append("</div>");
+        if (aPara.isEmpty())
+        {
+            if (nEndNode == 0) // only one empty blank line
+                break;
+            aPara.append("<br/>");
+        }
+        aOutput.append("<div>" + aPara + "</div>");
     }
 
     return aOutput.makeStringAndClear();
