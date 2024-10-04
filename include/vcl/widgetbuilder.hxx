@@ -55,6 +55,12 @@ protected:
             assert(false && "missing ui file or missing gb_CppunitTest_use_uiconfigs dependency");
             throw;
         }
+
+        // Set Mnemonic widgets when everything has been imported
+        for (const MnemonicWidgetMap& rMnemonic : getMnemonicWidgetMaps())
+        {
+            setMnemonicWidget(rMnemonic.m_sID, rMnemonic.m_sValue);
+        }
     }
 
     // either pParent or pAtkProps must be set, pParent for a child of a widget, pAtkProps for
@@ -282,6 +288,7 @@ protected:
                                     std::string_view sInternalChild)
         = 0;
 
+    virtual void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) = 0;
     virtual void setPriority(Widget* pWidget, int nPriority) = 0;
     virtual void setContext(Widget* pWidget, std::vector<vcl::EnumContext::Context>&& aContext) = 0;
 

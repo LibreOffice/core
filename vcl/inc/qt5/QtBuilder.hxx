@@ -61,6 +61,8 @@ public:
     void tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std::string_view sType,
                             std::string_view sInternalChild) override;
 
+    virtual void setMnemonicWidget(const OUString& rLabelId,
+                                   const OUString& rMnemonicWidgetId) override;
     virtual void setPriority(QObject* pObject, int nPriority) override;
     virtual void setContext(QObject* pObject,
                             std::vector<vcl::EnumContext::Context>&& aContext) override;

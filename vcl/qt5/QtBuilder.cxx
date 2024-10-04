@@ -249,6 +249,11 @@ void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std
     }
 }
 
+void QtBuilder::setMnemonicWidget(const OUString&, const OUString&)
+{
+    SAL_WARN("vcl.qt", "QtBuilder::setMnemonicWidget not implemented yet");
+}
+
 void QtBuilder::setPriority(QObject*, int) { SAL_WARN("vcl.qt", "Ignoring priority"); }
 
 void QtBuilder::setContext(QObject*, std::vector<vcl::EnumContext::Context>&&)

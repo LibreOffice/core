@@ -519,17 +519,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
 
     processUIFile(pParent);
 
-    //Set Mnemonic widgets when everything has been imported
-    for (auto const& mnemonicWidget : getMnemonicWidgetMaps())
-    {
-        FixedText *pOne = get<FixedText>(mnemonicWidget.m_sID);
-        vcl::Window *pOther = get(mnemonicWidget.m_sValue);
-        SAL_WARN_IF(!pOne || !pOther, "vcl", "missing either source " << mnemonicWidget.m_sID
-            << " or target " << mnemonicWidget.m_sValue << " member of Mnemonic Widget Mapping");
-        if (pOne && pOther)
-            pOne->set_mnemonic_widget(pOther);
-    }
-
     //Set a11y relations and role when everything has been imported
     for (auto const& elemAtk : m_pVclParserState->m_aAtkInfo)
     {
@@ -3082,6 +3071,17 @@ void VclBuilder::applyAtkProperties(vcl::Window *pWindow, const stringmap& rProp
         else
             SAL_WARN("vcl.builder", "unhandled atk prop: " << rKey);
     }
+}
+
+void VclBuilder::setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId)
+{
+    FixedText* pOne = get<FixedText>(rLabelId);
+    vcl::Window* pOther = get(rMnemonicWidgetId);
+    SAL_WARN_IF(!pOne || !pOther, "vcl",
+                "missing either source " << rLabelId << " or target " << rMnemonicWidgetId
+                                         << " member of Mnemonic Widget Mapping");
+    if (pOne && pOther)
+        pOne->set_mnemonic_widget(pOther);
 }
 
 void VclBuilder::setPriority(vcl::Window* pWindow, int nPriority)

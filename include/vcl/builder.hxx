@@ -295,6 +295,7 @@ private:
     void applyAtkProperties(vcl::Window* pWindow, const stringmap& rProperties,
                             bool bToolbarItem) override;
 
+    void setMnemonicWidget(const OUString& rLabelId, const OUString& rMnemonicWidgetId) override;
     void setPriority(vcl::Window* pWindow, int nPriority) override;
     void setContext(vcl::Window* pWindow,
                     std::vector<vcl::EnumContext::Context>&& aContext) override;
