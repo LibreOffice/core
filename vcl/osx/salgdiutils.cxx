@@ -37,7 +37,7 @@
 #include <osx/saldata.hxx>
 
 #if HAVE_FEATURE_SKIA
-#include <tools/sk_app/mac/WindowContextFactory_mac.h>
+#include <tools/window/mac/WindowContextFactory_mac.h>
 #include <skia/osx/gdiimpl.hxx>
 #endif
 
@@ -125,7 +125,7 @@ void resetWindowScaling()
     // then reconnected.
 #if HAVE_FEATURE_SKIA
     if ( SkiaHelper::isVCLSkiaEnabled() )
-        sk_app::ResetBackingScaleFactor();
+        skwindow::ResetBackingScaleFactor();
 #endif
     bWindowScaling = false;
     getWindowScaling();

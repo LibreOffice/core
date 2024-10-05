@@ -23,7 +23,7 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
-#include <tools/sk_app/mac/WindowContextFactory_mac.h>
+#include <tools/window/mac/WindowContextFactory_mac.h>
 
 #include <quartz/CoreTextFont.hxx>
 #include <quartz/SystemFontList.hxx>
@@ -72,9 +72,9 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     assert(!mWindowContext);
     assert(!mSurface);
     SkiaZone zone;
-    sk_app::DisplayParams displayParams;
+    skwindow::DisplayParams displayParams;
     displayParams.fColorType = kN32_SkColorType;
-    sk_app::window_context_factory::MacWindowInfo macWindow;
+    skwindow::MacWindowInfo macWindow;
     macWindow.fMainView = mrShared.mpFrame->mpNSView;
     mScaling = getWindowScaling();
     RenderMethod renderMethod = forceRaster ? RenderRaster : renderMethodToUse();
@@ -86,8 +86,7 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
             mSurface = createSkSurface(GetWidth() * mScaling, GetHeight() * mScaling);
             break;
         case RenderMetal:
-            mWindowContext
-                = sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
+            mWindowContext = skwindow::MakeMetalForMac(macWindow, displayParams);
             // Like with other GPU contexts, create a proxy offscreen surface (see
             // flushSurfaceToWindowContext()). Here it's additionally needed because
             // it appears that Metal surfaces cannot be read from, which would break things
@@ -327,7 +326,8 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
         assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
         getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
         // Related: tdf#156881 flush the canvas after drawing the pixel buffer
-        getDrawCanvas()->flush();
+        if (auto dContext = GrAsDirectContext(getDrawCanvas()->recordingContext()))
+            dContext->flushAndSubmit();
         ++pendingOperationsToFlush; // tdf#136369
         postDraw();
     }
@@ -398,12 +398,12 @@ void AquaSkiaSalGraphicsImpl::drawTextLayout(const GenericSalLayout& rLayout)
 
 namespace
 {
-std::unique_ptr<sk_app::WindowContext> createMetalWindowContext(bool /*temporary*/)
+std::unique_ptr<skwindow::WindowContext> createMetalWindowContext(bool /*temporary*/)
 {
-    sk_app::DisplayParams displayParams;
-    sk_app::window_context_factory::MacWindowInfo macWindow;
+    skwindow::DisplayParams displayParams;
+    skwindow::MacWindowInfo macWindow;
     macWindow.fMainView = nullptr;
-    return sk_app::window_context_factory::MakeMetalForMac(macWindow, displayParams);
+    return skwindow::MakeMetalForMac(macWindow, displayParams);
 }
 }
 

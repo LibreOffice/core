@@ -426,7 +426,9 @@ void SkiaSalGraphicsImpl::flushSurfaceToWindowContext()
         // so no transformation needed.
         screenSurface->getCanvas()->drawImage(makeCheckedImageSnapshot(mSurface), 0, 0,
                                               SkSamplingOptions(), &paint);
-        screenSurface->flushAndSubmit(); // Otherwise the window is not drawn sometimes.
+        // Otherwise the window is not drawn sometimes.
+        if (auto dContext = GrAsDirectContext(screenSurface->getCanvas()->recordingContext()))
+            dContext->flushAndSubmit();
         mWindowContext->swapBuffers(nullptr); // Must swap the entire surface.
     }
     else
@@ -465,7 +467,8 @@ void SkiaSalGraphicsImpl::postDraw()
     static int maxOperationsToFlush = 1000;
     if (pendingOperationsToFlush > maxOperationsToFlush)
     {
-        mSurface->flushAndSubmit();
+        if (auto dContext = GrAsDirectContext(mSurface->getCanvas()->recordingContext()))
+            dContext->flushAndSubmit();
         pendingOperationsToFlush = 0;
     }
     SkiaZone::leave(); // matched in preDraw()

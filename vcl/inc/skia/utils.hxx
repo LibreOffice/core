@@ -39,7 +39,7 @@
 #pragma GCC diagnostic ignored "-Wattributes"
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
-#include <tools/sk_app/WindowContext.h>
+#include <tools/window/WindowContext.h>
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
@@ -123,7 +123,7 @@ void setBlenderXor(SkPaint* paint);
 // Must be called in any VCL backend before any Skia functionality is used.
 // If not set, Skia will be disabled.
 VCL_DLLPUBLIC void
-    prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContext)(bool));
+    prepareSkia(std::unique_ptr<skwindow::WindowContext> (*createGpuWindowContext)(bool));
 
 // Shared cache of images.
 void addCachedImage(const OString& key, sk_sp<SkImage> image);

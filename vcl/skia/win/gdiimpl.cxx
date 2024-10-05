@@ -27,8 +27,8 @@
 #include <SkTypeface_win.h>
 #include <SkFont.h>
 #include <SkFontMgr.h>
-#include <tools/sk_app/win/WindowContextFactory_win.h>
-#include <tools/sk_app/WindowContext.h>
+#include <tools/window/win/WindowContextFactory_win.h>
+#include <tools/window/WindowContext.h>
 
 #include <windows.h>
 
@@ -257,20 +257,18 @@ void WinSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
     assert(!mWindowContext);
     assert(!mSurface);
     SkiaZone zone;
-    sk_app::DisplayParams displayParams;
+    skwindow::DisplayParams displayParams;
     assert(GetWidth() > 0 && GetHeight() > 0);
     displayParams.fSurfaceProps = *surfaceProps();
     switch (forceRaster ? RenderRaster : renderMethodToUse())
     {
         case RenderRaster:
-            mWindowContext = sk_app::window_context_factory::MakeRasterForWin(mWinParent.gethWnd(),
-                                                                              displayParams);
+            mWindowContext = skwindow::MakeRasterForWin(mWinParent.gethWnd(), displayParams);
             if (mWindowContext)
                 mSurface = mWindowContext->getBackbufferSurface();
             break;
         case RenderVulkan:
-            mWindowContext = sk_app::window_context_factory::MakeVulkanForWin(mWinParent.gethWnd(),
-                                                                              displayParams);
+            mWindowContext = skwindow::MakeVulkanForWin(mWinParent.gethWnd(), displayParams);
             // See flushSurfaceToWindowContext().
             if (mWindowContext)
                 mSurface = createSkSurface(GetWidth(), GetHeight());
@@ -568,11 +566,11 @@ SkiaControlCacheType& SkiaControlsCache::get()
 
 namespace
 {
-std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool /*temporary*/)
+std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool /*temporary*/)
 {
     SkiaZone zone;
-    sk_app::DisplayParams displayParams;
-    return sk_app::window_context_factory::MakeVulkanForWin(nullptr, displayParams);
+    skwindow::DisplayParams displayParams;
+    return skwindow::MakeVulkanForWin(nullptr, displayParams);
 }
 }
 

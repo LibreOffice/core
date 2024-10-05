@@ -1,5 +1,5 @@
---- tools/sk_app/mac/WindowContextFactory_mac.h	2022-02-16 06:03:39.000000000 -0500
-+++ tools/sk_app/mac/WindowContextFactory_mac.h	2023-01-25 08:09:00.000000000 -0500
+--- tools/window/mac/WindowContextFactory_mac.h	2022-02-16 06:03:39.000000000 -0500
++++ tools/window/mac/WindowContextFactory_mac.h	2023-01-25 08:09:00.000000000 -0500
 @@ -19,15 +19,8 @@
  
  struct DisplayParams;
@@ -16,19 +16,19 @@
 +SK_API CGFloat GetBackingScaleFactor(NSView* view);
 +SK_API void ResetBackingScaleFactor();
  
- namespace window_context_factory {
- 
+ struct MacWindowInfo {
+     NSView*   fMainView;
 --- /dev/null	2023-01-25 09:20:55.000000000 -0500
-+++ tools/sk_app/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
++++ tools/window/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
 @@ -0,0 +1,57 @@
 +/*
 + * Use of this source code is governed by a BSD-style license that can be
 + * found in the LICENSE file.
 + */
 +
-+#include "tools/sk_app/mac/WindowContextFactory_mac.h"
++#include "tools/window/mac/WindowContextFactory_mac.h"
 +
-+namespace sk_app {
++namespace skwindow {
 +
 +static bool  bWindowScaling = false;
 +static float fWindowScale = 1.0f;
@@ -78,17 +78,17 @@
 +}
 +
 +}  // namespace sk_app
---- tools/sk_app/mac/MetalWindowContext_mac.mm	2024-08-31 15:49:57
-+++ tools/sk_app/mac/MetalWindowContext_mac.mm	2024-09-25 20:09:32
+--- tools/window/mac/MetalWindowContext_mac.mm	2024-08-31 15:49:57
++++ tools/window/mac/MetalWindowContext_mac.mm	2024-09-25 20:09:32
 @@ -11,6 +11,8 @@
  #import <Cocoa/Cocoa.h>
  #import <QuartzCore/CAConstraintLayoutManager.h>
  
 +#include <sal/log.hxx>
 +
- using sk_app::DisplayParams;
- using sk_app::window_context_factory::MacWindowInfo;
- using sk_app::MetalWindowContext;
+ using skwindow::DisplayParams;
+ using skwindow::MacWindowInfo;
+ using skwindow::internal::MetalWindowContext;
 @@ -66,8 +68,7 @@
      fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
      fMetalLayer.contentsGravity = kCAGravityTopLeft;

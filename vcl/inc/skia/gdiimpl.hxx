@@ -348,7 +348,7 @@ protected:
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     // Note that mSurface may be a proxy surface and not the one from the window context.
-    std::unique_ptr<sk_app::WindowContext> mWindowContext;
+    std::unique_ptr<skwindow::WindowContext> mWindowContext;
     bool mIsGPU; // whether the surface is GPU-backed
     // Note that we generally use VCL coordinates, which is not mSurface coordinates if mScaling!=1.
     SkIRect mDirtyRect; // The area that has been changed since the last performFlush().
