@@ -1206,6 +1206,7 @@ WW8TableNodeInfo * WW8TableCellGrid::connectCells(RowEndInners_t &rLastRowEnds)
 
                 if (pNode->IsEndNode())
                 {
+                    assert(nDepthInCell > 0 && "otherwise overflow");
                     nDepthInCell--;
 
                     if (nDepthInCell == 0 && !pEndOfCellInfo)
