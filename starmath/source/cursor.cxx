@@ -711,7 +711,7 @@ bool SmCursor::InsertRow() {
     //Find parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    assert(nParentIndex >= 0);
+    assert(nParentIndex >= 0 && nParentIndex < INT_MAX);
 
     //Discover the context of this command
     SmTableNode  *pTable  = nullptr;
@@ -726,7 +726,7 @@ bool SmCursor::InsertRow() {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
         pTable = static_cast<SmTableNode*>(pLineParent->GetParent());
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
-        assert(nTableIndex >= 0);
+        assert(nTableIndex >= 0 && nTableIndex < INT_MAX);
     }
     if(pLineParent->GetType() == SmNodeType::Matrix)
         pMatrix = static_cast<SmMatrixNode*>(pLineParent);

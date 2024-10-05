@@ -229,7 +229,7 @@ bool SwCursor::GotoNextFootnoteAnchor()
             {
                 // search backwards
                 pTextFootnote = nullptr;
-                while( nPos )
+                while (nPos > 0)
                 {
                     pTextFootnote = rFootnoteArr[ --nPos ];
                     if( CmpLE( *pTextFootnote, nNdPos, nCntPos ) )

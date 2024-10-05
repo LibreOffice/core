@@ -4736,7 +4736,10 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             static_cast<SCSIZE>( aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1 ) :
             static_cast<SCSIZE>( aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1 );
         if ( nCount >= nTotLines )
+        {
+            assert(nTotLines > 0 && "coverity 2023.12.2");
             nCount = nTotLines - 1;
+        }
 
         switch (eDir)
         {
