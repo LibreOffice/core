@@ -19,6 +19,7 @@
 
 #include <config_wasm_strip.h>
 
+#include <bodyfrm.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -1129,7 +1130,13 @@ bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
     {
         // A row larger than the entire page ought to be allowed to split regardless of setting,
         // otherwise it has hidden content and that makes no sense
-        if ( pRow->getFrameArea().Height() > FindPageFrame()->getFramePrintArea().Height() )
+        tools::Long nMaxHeight = FindPageFrame()->getFramePrintArea().Height();
+        for (auto pBody = FindBodyFrame(); pBody; pBody = pBody->GetUpper()->FindBodyFrame())
+        {
+            if (pBody->IsPageBodyFrame())
+                nMaxHeight = pBody->getFramePrintArea().Height();
+        }
+        if (pRow->getFrameArea().Height() > nMaxHeight)
             pRow->SetForceRowSplitAllowed( true );
         else
             bSplitRowAllowed = false;
