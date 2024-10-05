@@ -76,6 +76,8 @@ fix16_t fix16_mul(fix16_t inArg0, fix16_t inArg1)
     return result;
 }
 
+static uint32_t mask(int bits) { return (1 << bits) - 1; }
+
 /* 32-bit implementation of fix16_div. Fastest version for e.g. ARM Cortex M3.
  * Performs 32-bit divisions repeatedly to reduce the remainder. For this to
  * be efficient, the processor has to have 32-bit hardware division.
@@ -111,13 +113,13 @@ fix16_t fix16_div(fix16_t a, fix16_t b)
         bit_pos -= 4;
     }
 
-    while (remainder && bit_pos >= 0)
+    while (remainder > 0 && bit_pos >= 0)
     {
         // Shift remainder as much as we can without overflowing
         int shift = std::countl_zero(remainder);
         if (shift > bit_pos)
             shift = bit_pos;
-        remainder <<= shift;
+        remainder = (remainder & mask(32 - shift)) << shift;
         bit_pos -= shift;
 
         uint32_t div = remainder / divider;
