@@ -187,8 +187,8 @@ void SfxBindings::DeleteControllers_Impl()
 {
     // in the first round delete Controllers
     std::size_t nCount = pImpl->pCaches.size();
-    std::size_t nCache;
-    for ( nCache = 0; nCache < nCount; ++nCache )
+    std::size_t nCache = 0;
+    while (nCache < nCount)
     {
         // Remember were you are
         SfxStateCache *pCache = pImpl->pCaches[nCache].get();
@@ -199,11 +199,15 @@ void SfxBindings::DeleteControllers_Impl()
         if ( nNewCount < nCount )
         {
             nCache = GetSlotPos(nSlotId);
+            nCount = nNewCount;
             if ( nCache >= nNewCount ||
                  nSlotId != pImpl->pCaches[nCache]->GetId() )
-                --nCache;
-            nCount = nNewCount;
+            {
+                continue;
+            }
         }
+
+        ++nCache;
     }
 
     // Delete all Caches
