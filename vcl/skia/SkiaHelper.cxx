@@ -57,8 +57,8 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #if defined(MACOSX)
 #include <premac.h>
 #endif
-#include <tools/sk_app/VulkanWindowContext.h>
-#include <tools/sk_app/MetalWindowContext.h>
+#include <tools/window/VulkanWindowContext.h>
+#include <tools/window/MetalWindowContext.h>
 #if defined(MACOSX)
 #include <postmac.h>
 #endif
@@ -215,7 +215,7 @@ static void writeSkiaRasterInfo()
 }
 
 #if defined(SK_VULKAN) || defined(SK_METAL)
-static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext();
+static std::unique_ptr<skwindow::WindowContext> getTemporaryWindowContext();
 #endif
 
 static void checkDeviceDenylisted(bool blockDisable = false)
@@ -233,9 +233,9 @@ static void checkDeviceDenylisted(bool blockDisable = false)
         {
 #ifdef SK_VULKAN
             // First try if a GrDirectContext already exists.
-            std::unique_ptr<sk_app::WindowContext> temporaryWindowContext;
+            std::unique_ptr<skwindow::WindowContext> temporaryWindowContext;
             GrDirectContext* grDirectContext
-                = sk_app::VulkanWindowContext::getSharedGrDirectContext();
+                = skwindow::internal::VulkanWindowContext::getSharedGrDirectContext();
             if (!grDirectContext)
             {
                 // This function is called from isVclSkiaEnabled(), which
@@ -247,13 +247,14 @@ static void checkDeviceDenylisted(bool blockDisable = false)
                 // for just finding out information about Vulkan) and destroying
                 // the temporary context will clean up again.
                 temporaryWindowContext = getTemporaryWindowContext();
-                grDirectContext = sk_app::VulkanWindowContext::getSharedGrDirectContext();
+                grDirectContext
+                    = skwindow::internal::VulkanWindowContext::getSharedGrDirectContext();
             }
             bool denylisted = true; // assume the worst
             if (grDirectContext) // Vulkan was initialized properly
             {
-                denylisted
-                    = isVulkanDenylisted(sk_app::VulkanWindowContext::getPhysDeviceProperties());
+                denylisted = isVulkanDenylisted(
+                    skwindow::internal::VulkanWindowContext::getPhysDeviceProperties());
                 SAL_INFO("vcl.skia", "Vulkan denylisted: " << denylisted);
             }
             else
@@ -274,14 +275,14 @@ static void checkDeviceDenylisted(bool blockDisable = false)
         {
 #ifdef SK_METAL
             // First try if a GrDirectContext already exists.
-            std::unique_ptr<sk_app::WindowContext> temporaryWindowContext;
-            GrDirectContext* grDirectContext = sk_app::getMetalSharedGrDirectContext();
+            std::unique_ptr<skwindow::WindowContext> temporaryWindowContext;
+            GrDirectContext* grDirectContext = skwindow::internal::getMetalSharedGrDirectContext();
             if (!grDirectContext)
             {
                 // Create a temporary window context just to get the GrDirectContext,
                 // as an initial test of Metal functionality.
                 temporaryWindowContext = getTemporaryWindowContext();
-                grDirectContext = sk_app::getMetalSharedGrDirectContext();
+                grDirectContext = skwindow::internal::getMetalSharedGrDirectContext();
             }
             if (grDirectContext) // Metal was initialized properly
             {
@@ -479,10 +480,10 @@ void disableRenderMethod(RenderMethod method)
 
 // If needed, we'll allocate one extra window context so that we have a valid GrDirectContext
 // from Vulkan/MetalWindowContext.
-static std::unique_ptr<sk_app::WindowContext> sharedWindowContext;
+static std::unique_ptr<skwindow::WindowContext> sharedWindowContext;
 
-static std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContextFunction)(bool) = nullptr;
-static void setCreateGpuWindowContext(std::unique_ptr<sk_app::WindowContext> (*function)(bool))
+static std::unique_ptr<skwindow::WindowContext> (*createGpuWindowContextFunction)(bool) = nullptr;
+static void setCreateGpuWindowContext(std::unique_ptr<skwindow::WindowContext> (*function)(bool))
 {
     createGpuWindowContextFunction = function;
 }
@@ -500,13 +501,14 @@ GrDirectContext* getSharedGrDirectContext()
     {
         case RenderVulkan:
 #ifdef SK_VULKAN
-            if (GrDirectContext* context = sk_app::VulkanWindowContext::getSharedGrDirectContext())
+            if (GrDirectContext* context
+                = skwindow::internal::VulkanWindowContext::getSharedGrDirectContext())
                 return context;
 #endif
             break;
         case RenderMetal:
 #ifdef SK_METAL
-            if (GrDirectContext* context = sk_app::getMetalSharedGrDirectContext())
+            if (GrDirectContext* context = skwindow::internal::getMetalSharedGrDirectContext())
                 return context;
 #endif
             break;
@@ -533,7 +535,7 @@ GrDirectContext* getSharedGrDirectContext()
 }
 
 #if defined(SK_VULKAN) || defined(SK_METAL)
-static std::unique_ptr<sk_app::WindowContext> getTemporaryWindowContext()
+static std::unique_ptr<skwindow::WindowContext> getTemporaryWindowContext()
 {
     if (createGpuWindowContextFunction == nullptr)
         return nullptr;
@@ -853,7 +855,7 @@ void setPixelGeometry(SkPixelGeometry pixelGeometry)
 // Skia should not be used from VCL backends that do not actually support it, as there will be setup missing.
 // The code here (that is in the vcl lib) needs a function for creating Vulkan/Metal context that is
 // usually available only in the backend libs.
-void prepareSkia(std::unique_ptr<sk_app::WindowContext> (*createGpuWindowContext)(bool))
+void prepareSkia(std::unique_ptr<skwindow::WindowContext> (*createGpuWindowContext)(bool))
 {
     setCreateGpuWindowContext(createGpuWindowContext);
     skiaSupportedByBackend = true;
@@ -866,7 +868,8 @@ void dump(const SkBitmap& bitmap, const char* file)
 
 void dump(const sk_sp<SkSurface>& surface, const char* file)
 {
-    surface->getCanvas()->flush();
+    if (auto dContext = GrAsDirectContext(surface->getCanvas()->recordingContext()))
+        dContext->flushAndSubmit();
     dump(makeCheckedImageSnapshot(surface), file);
 }
 

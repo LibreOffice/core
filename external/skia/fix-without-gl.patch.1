@@ -1,50 +1,47 @@
-diff --git a/include/gpu/gl/GrGLInterface.h b/include/gpu/gl/GrGLInterface.h
-index e10242b3b7..a1c0058caa 100644
---- a/include/gpu/gl/GrGLInterface.h
-+++ b/include/gpu/gl/GrGLInterface.h
-@@ -83,7 +83,9 @@ public:
- 
+diff -ur skia.org/include/gpu/gl/GrGLInterface.h skia/include/gpu/gl/GrGLInterface.h
+--- skia.org/include/gpu/gl/GrGLInterface.h	2024-10-04 15:33:38.063875425 +0200
++++ skia/include/gpu/gl/GrGLInterface.h	2024-10-04 15:34:00.073017585 +0200
+@@ -83,7 +83,9 @@
+
      GrGLExtensions fExtensions;
- 
+
 +#ifdef SK_GL
      bool hasExtension(const char ext[]) const { return fExtensions.has(ext); }
 +#endif
- 
+
      /**
       * The function pointers are in a struct so that we can have a compiler generated assignment
-diff --git a/src/gpu/ganesh/gl/GrGLContext.h b/src/gpu/ganesh/gl/GrGLContext.h
-index d5424ca6cf..5b730fe176 100644
---- a/src/gpu/ganesh/gl/GrGLContext.h
-+++ b/src/gpu/ganesh/gl/GrGLContext.h
-@@ -64,9 +64,11 @@ public:
+diff -ur skia.org/src/gpu/ganesh/gl/GrGLContext.h skia/src/gpu/ganesh/gl/GrGLContext.h
+--- skia.org/src/gpu/ganesh/gl/GrGLContext.h	2024-10-04 15:33:38.116875769 +0200
++++ skia/src/gpu/ganesh/gl/GrGLContext.h	2024-10-04 15:34:36.192247894 +0200
+@@ -69,9 +69,11 @@
      const GrGLCaps* caps() const { return fGLCaps.get(); }
      GrGLCaps* caps() { return fGLCaps.get(); }
- 
+
 +#ifdef SK_GL
      bool hasExtension(const char* ext) const {
          return fInterface->hasExtension(ext);
      }
 +#endif
- 
+
      const GrGLExtensions& extensions() const { return fInterface->fExtensions; }
- 
-diff --git a/src/gpu/ganesh/gl/GrGLGpu.h b/src/gpu/ganesh/gl/GrGLGpu.h
-index a3ac1ad25d..ffc18093e6 100644
---- a/src/gpu/ganesh/gl/GrGLGpu.h
-+++ b/src/gpu/ganesh/gl/GrGLGpu.h
-@@ -279,6 +279,7 @@ private:
+
+diff -ur skia.org/src/gpu/ganesh/gl/GrGLGpu.h skia/src/gpu/ganesh/gl/GrGLGpu.h
+--- skia.org/src/gpu/ganesh/gl/GrGLGpu.h	2024-10-04 15:33:38.116875769 +0200
++++ skia/src/gpu/ganesh/gl/GrGLGpu.h	2024-10-04 15:35:07.627445512 +0200
+@@ -291,6 +291,7 @@
      // compatible stencil format, or negative if there is no compatible stencil format.
      int getCompatibleStencilIndex(GrGLFormat format);
- 
+
 +#ifdef SK_GL
      GrBackendFormat getPreferredStencilFormat(const GrBackendFormat& format) override {
-         int idx = this->getCompatibleStencilIndex(format.asGLFormat());
+         int idx = this->getCompatibleStencilIndex(GrBackendFormats::AsGLFormat(format));
          if (idx < 0) {
-@@ -287,6 +288,7 @@ private:
-         return GrBackendFormat::MakeGL(GrGLFormatToEnum(this->glCaps().stencilFormats()[idx]),
-                                        GR_GL_TEXTURE_NONE);
+@@ -299,6 +300,7 @@
+         return GrBackendFormats::MakeGL(GrGLFormatToEnum(this->glCaps().stencilFormats()[idx]),
+                                         GR_GL_TEXTURE_NONE);
      }
 +#endif
- 
+
      void onFBOChanged();
- 
+

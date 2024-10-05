@@ -1204,7 +1204,8 @@ void SkiaSalBitmap::EnsureBitmapData()
             SkPaint paint;
             paint.setBlendMode(SkBlendMode::kSrc); // set as is, including alpha
             canvas.drawImage(mAlphaImage, 0, 0, SkSamplingOptions(), &paint);
-            canvas.flush();
+            if (auto dContext = GrAsDirectContext(canvas.recordingContext()))
+                dContext->flushAndSubmit();
         }
         bitmap.setImmutable();
         ResetPendingScaling();
@@ -1281,7 +1282,8 @@ void SkiaSalBitmap::EnsureBitmapData()
         }
         else
             canvas.drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
-        canvas.flush();
+        if (auto dContext = GrAsDirectContext(canvas.recordingContext()))
+            dContext->flushAndSubmit();
     }
     bitmap.setImmutable();
     ResetPendingScaling();

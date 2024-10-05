@@ -56,7 +56,8 @@ CGImageRef SkiaSalBitmap::CreateColorMask(int nX, int nY, int nWidth, int nHeigh
     SkCanvas canvas(targetBitmap);
     canvas.concat(matrix);
     canvas.drawImageRect(GetSkImage(), SkRect::MakeXYWH(nX, nY, nWidth, nHeight), SkRect::MakeXYWH(0, 0, nWidth, nHeight), SkSamplingOptions(), &paint, SkCanvas::SrcRectConstraint::kFast_SrcRectConstraint);
-    canvas.flush();
+    if (auto dContext = GrAsDirectContext(canvas.recordingContext()))
+        dContext->flushAndSubmit();
 
     const SkColor maskColor = SkiaHelper::toSkColor(nMaskColor);
     for (int y = 0; y < targetBitmap.height(); y++)
@@ -94,7 +95,8 @@ CGImageRef SkiaSalBitmap::CreateCroppedImage(int nX, int nY, int nWidth, int nHe
     SkCanvas canvas(targetBitmap);
     canvas.concat(matrix);
     canvas.drawImageRect(GetSkImage(), SkRect::MakeXYWH(nX, nY, nWidth, nHeight), SkRect::MakeXYWH(0, 0, nWidth, nHeight), SkSamplingOptions(), &paint, SkCanvas::SrcRectConstraint::kFast_SrcRectConstraint);
-    canvas.flush();
+    if (auto dContext = GrAsDirectContext(canvas.recordingContext()))
+        dContext->flushAndSubmit();
     targetBitmap.setImmutable();
 
     CGContextRef xContext = CGBitmapContextCreate(targetBitmap.getAddr32(0, 0), targetBitmap.width(), targetBitmap.height(), 8, targetBitmap.rowBytes(), GetSalData()->mxRGBSpace, SkiaToCGBitmapType(targetBitmap.colorType(), targetBitmap.alphaType()));

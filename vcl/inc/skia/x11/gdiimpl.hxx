@@ -33,10 +33,10 @@ public:
 private:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     virtual bool avoidRecreateByResize() const override;
-    static std::unique_ptr<sk_app::WindowContext>
+    static std::unique_ptr<skwindow::WindowContext>
     createWindowContext(Display* display, Drawable drawable, const XVisualInfo* visual, int width,
                         int height, SkiaHelper::RenderMethod renderMethod, bool temporary);
-    friend std::unique_ptr<sk_app::WindowContext> createVulkanWindowContext(bool);
+    friend std::unique_ptr<skwindow::WindowContext> createVulkanWindowContext(bool);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,99 +1,106 @@
-diff --git a/tools/sk_app/WindowContext.h b/tools/sk_app/WindowContext.h
-index 79f6d72f35..428d198159 100644
---- a/tools/sk_app/WindowContext.h
-+++ b/tools/sk_app/WindowContext.h
-@@ -22,7 +22,7 @@ class Context;
- 
- namespace sk_app {
- 
--class WindowContext {
-+class SK_API WindowContext {
- public:
-     WindowContext(const DisplayParams&);
- 
-diff --git a/tools/sk_app/mac/WindowContextFactory_mac.h b/tools/sk_app/mac/WindowContextFactory_mac.h
-index 3e136a8f57..affb89e43e 100644
---- a/tools/sk_app/mac/WindowContextFactory_mac.h
-+++ b/tools/sk_app/mac/WindowContextFactory_mac.h
-@@ -52,7 +52,7 @@ std::unique_ptr<WindowContext> MakeDawnMTLForMac(const MacWindowInfo&, const Dis
+diff -ur skia.org/tools/window/mac/WindowContextFactory_mac.h skia/tools/window/mac/WindowContextFactory_mac.h
+--- skia.org/tools/window/mac/WindowContextFactory_mac.h	2024-10-04 14:26:29.787526193 +0200
++++ skia/tools/window/mac/WindowContextFactory_mac.h	2024-10-04 14:28:08.353196733 +0200
+@@ -53,7 +53,7 @@
  #endif
- 
+
  #ifdef SK_METAL
 -std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeMetalForMac(const MacWindowInfo&, const DisplayParams&);
  #if defined(SK_GRAPHITE)
  std::unique_ptr<WindowContext> MakeGraphiteMetalForMac(const MacWindowInfo&, const DisplayParams&);
  #endif
-diff --git a/tools/sk_app/unix/WindowContextFactory_unix.h b/tools/sk_app/unix/WindowContextFactory_unix.h
-index 11bd2d2ac2..09c92dc417 100644
---- a/tools/sk_app/unix/WindowContextFactory_unix.h
-+++ b/tools/sk_app/unix/WindowContextFactory_unix.h
-@@ -36,20 +36,20 @@ struct XlibWindowInfo {
-     int          fHeight;
+diff -ur skia.org/tools/window/unix/WindowContextFactory_unix.h skia/tools/window/unix/WindowContextFactory_unix.h
+--- skia.org/tools/window/unix/WindowContextFactory_unix.h	2024-10-04 14:26:29.787526193 +0200
++++ skia/tools/window/unix/WindowContextFactory_unix.h	2024-10-04 14:29:16.184625681 +0200
+@@ -35,7 +35,7 @@
  };
- 
+
+ #ifdef SK_VULKAN
 -std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
- 
+ #if defined(SK_GRAPHITE)
+ std::unique_ptr<WindowContext> MakeGraphiteVulkanForXlib(const XlibWindowInfo&,
+                                                          const DisplayParams&);
+@@ -43,11 +43,11 @@
+ #endif
+
+ #ifdef SK_GL
 -std::unique_ptr<WindowContext> MakeGLForXlib(const XlibWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeGLForXlib(const XlibWindowInfo&, const DisplayParams&);
- 
+ #endif
+
  #ifdef SK_DAWN
 -std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
  #endif
- 
+
  #if defined(SK_DAWN) && defined(SK_GRAPHITE)
- std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
+@@ -55,7 +55,7 @@
                                                               const DisplayParams&);
  #endif
- 
+
 -std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeRasterForXlib(const XlibWindowInfo&, const DisplayParams&);
- 
- }  // namespace window_context_factory
- 
-diff --git a/tools/sk_app/win/WindowContextFactory_win.h b/tools/sk_app/win/WindowContextFactory_win.h
-index c05a4f0acf..fc27cd2afb 100644
---- a/tools/sk_app/win/WindowContextFactory_win.h
-+++ b/tools/sk_app/win/WindowContextFactory_win.h
-@@ -13,31 +13,33 @@ struct DisplayParams;
- 
+
+ }  // namespace skwindow
+
+diff -ur skia.org/tools/window/win/WindowContextFactory_win.h skia/tools/window/win/WindowContextFactory_win.h
+--- skia.org/tools/window/win/WindowContextFactory_win.h	2024-10-04 14:26:29.787526193 +0200
++++ skia/tools/window/win/WindowContextFactory_win.h	2024-10-04 14:30:25.346039651 +0200
+@@ -13,28 +13,30 @@
+
  #include <memory>
- 
+
 +#include "include/core/SkTypes.h"
 +
- namespace sk_app {
- 
+ namespace skwindow {
+
  class WindowContext;
  struct DisplayParams;
- 
- namespace window_context_factory {
- 
+
+ #ifdef SK_VULKAN
 -std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeVulkanForWin(HWND, const DisplayParams&);
- 
+ #if defined(SK_GRAPHITE)
+ std::unique_ptr<WindowContext> MakeGraphiteVulkanForWin(HWND, const DisplayParams&);
+ #endif
+ #endif
+
+ #ifdef SK_GL
 -std::unique_ptr<WindowContext> MakeGLForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeGLForWin(HWND, const DisplayParams&);
- 
+ #endif
+
+ #ifdef SK_ANGLE
 -std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeANGLEForWin(HWND, const DisplayParams&);
- 
+ #endif
+
  #ifdef SK_DIRECT3D
 -std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeD3D12ForWin(HWND, const DisplayParams&);
  #endif
- 
+
  #ifdef SK_DAWN
--std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
-+SK_API std::unique_ptr<WindowContext> MakeDawnD3D12ForWin(HWND, const DisplayParams&);
- #if defined(SK_GRAPHITE)
- std::unique_ptr<WindowContext> MakeGraphiteDawnD3D12ForWin(HWND, const DisplayParams&);
+@@ -44,7 +46,7 @@
  #endif
  #endif
- 
+
 -std::unique_ptr<WindowContext> MakeRasterForWin(HWND, const DisplayParams&);
 +SK_API std::unique_ptr<WindowContext> MakeRasterForWin(HWND, const DisplayParams&);
- 
- }  // namespace window_context_factory
- 
+
+ }  // namespace skwindow
+
+diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
+--- skia.org/tools/window/WindowContext.h	2024-10-04 14:26:29.787526193 +0200
++++ skia/tools/window/WindowContext.h	2024-10-04 14:27:39.148004258 +0200
+@@ -23,7 +23,7 @@
+
+ namespace skwindow {
+
+-class WindowContext {
++class SK_API WindowContext {
+ public:
+     WindowContext(const DisplayParams&);
+
