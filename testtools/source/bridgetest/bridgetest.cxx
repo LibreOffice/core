@@ -1235,6 +1235,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
             ++i;
         }
 
+        // coverity[loop_top] - deliberate 'infinite' loop when 'stress' is set
         for (;;) {
             Reference< XInterface > o;
             if (remote) {
