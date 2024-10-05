@@ -343,11 +343,21 @@ tools::Long ImplBorderWindowView::ImplCalcTitleWidth( const ImplBorderFrameData*
 
     ImplBorderWindow* pBorderWindow = pData->mpBorderWindow;
     tools::Long nTitleWidth = pBorderWindow->GetTextWidth( pBorderWindow->GetText() )+6;
-    nTitleWidth += pData->maCloseRect.GetWidth();
-    nTitleWidth += pData->maDockRect.GetWidth();
-    nTitleWidth += pData->maMenuRect.GetWidth();
-    nTitleWidth += pData->maHideRect.GetWidth();
-    nTitleWidth += pData->maHelpRect.GetWidth();
+    auto nCloseRectWidth = pData->maCloseRect.GetWidth();
+    assert(nCloseRectWidth >= 0 && "coverity 2023.12.2");
+    nTitleWidth += nCloseRectWidth;
+    auto nDockRectWidth = pData->maDockRect.GetWidth();
+    assert(nDockRectWidth >= 0 && "coverity 2023.12.2");
+    nTitleWidth += nDockRectWidth;
+    auto nMenuRectWidth = pData->maMenuRect.GetWidth();
+    assert(nMenuRectWidth >= 0 && "coverity 2023.12.2");
+    nTitleWidth += nMenuRectWidth;
+    auto nHideRectWidth = pData->maHideRect.GetWidth();
+    assert(nHideRectWidth >= 0 && "coverity 2023.12.2");
+    nTitleWidth += nHideRectWidth;
+    auto nHelpRectWidth = pData->maHelpRect.GetWidth();
+    assert(nHelpRectWidth >= 0 && "coverity 2023.12.2");
+    nTitleWidth += nHelpRectWidth;
     nTitleWidth += pData->mnLeftBorder+pData->mnRightBorder;
     return nTitleWidth;
 }
