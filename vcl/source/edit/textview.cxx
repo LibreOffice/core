@@ -130,6 +130,7 @@ TextView::TextView(ExtTextEngine* pEng, vcl::Window* pWindow)
     mbAutoIndent = false;
     mbCursorEnabled = true;
     mbClickedInSelection = false;
+    mbCursorAtEndOfLine = false;
 //  mbInSelection = false;
 
     mnTravelXPos = TRAVEL_X_DONTKNOW;
