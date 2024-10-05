@@ -493,7 +493,7 @@ void SwAnnotationWin::UpdateHTML(const OUString& rHtml)
                                sHtmlContent.getLength(), StreamMode::READ);
     SvKeyValueIteratorRef xValues(new SvKeyValueIterator);
     // Insert newlines for divs, not normally done, so to keep things simple
-    // only enable tthat for this case.
+    // only enable that for this case.
     xValues->Append(SvKeyValue("newline-on-div", "true"));
     GetOutlinerView()->Read(aHTMLStream, EETextFormat::Html, xValues.get());
     UpdateData();
