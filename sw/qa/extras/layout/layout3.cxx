@@ -3600,6 +3600,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf163230)
     assertXPath(pExportDump, "//page"_ostr, 3);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf163285)
+{
+    createSwDoc("tdf163285.fodt");
+    auto pDump = parseLayoutDump();
+    // The first row must split across three pages, despite its "do not break" attribute, because it
+    // doesn't fit on the whole page.
+    // A1 text is created such that its "pg_1", "pg_2" and "pg_3" must start the respective pages.
+    assertXPath(pDump, "//page"_ostr, 3);
+    OUString topText1 = getXPathContent(pDump, "//page[1]/body/tab/row[1]/cell[1]/txt[1]"_ostr);
+    CPPUNIT_ASSERT(topText1.startsWith("pg_1"));
+    OUString topText2 = getXPathContent(pDump, "//page[2]/body/tab/row[1]/cell[1]/txt[1]"_ostr);
+    CPPUNIT_ASSERT(topText2.startsWith("pg_2"));
+    OUString topText3 = getXPathContent(pDump, "//page[3]/body/tab/row[1]/cell[1]/txt[1]"_ostr);
+    // Without the fix, this failed:
+    CPPUNIT_ASSERT(topText3.startsWith("pg_3"));
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
