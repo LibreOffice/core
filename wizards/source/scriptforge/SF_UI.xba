@@ -1078,21 +1078,19 @@ Check:
 
 Try:
 	Set oStatusbar = _SF_.Statusbar
-	With oStatusbar
-		If IsNull(oStatusbar) Then		&apos;	Initial call
-			Set oComp = StarDesktop.CurrentComponent
-			If Not IsNull(oComp) Then
-				Set oControl = Nothing
-				If SF_Session.HasUnoProperty(oComp, &quot;CurrentController&quot;) Then Set oControl = oComp.CurrentController
-				If Not IsNull(oControl) Then
-					If SF_Session.HasUnoMethod(oControl, &quot;getStatusIndicator&quot;) Then oStatusbar = oControl.getStatusIndicator()
-				End If
-			End If
-			If Not IsNull(oStatusbar) Then
-				.start(&quot;&quot;, 100)
+	If IsNull(oStatusbar) Then		&apos;	Initial call
+		Set oComp = StarDesktop.CurrentComponent
+		If Not IsNull(oComp) Then
+			Set oControl = Nothing
+			If SF_Session.HasUnoProperty(oComp, &quot;CurrentController&quot;) Then Set oControl = oComp.CurrentController
+			If Not IsNull(oControl) Then
+				If SF_Session.HasUnoMethod(oControl, &quot;getStatusIndicator&quot;) Then oStatusbar = oControl.getStatusIndicator()
 			End If
 		End If
-		If Not IsNull(oStatusbar) Then
+		If Not IsNull(oStatusbar) Then oStatusBar.start(&quot;&quot;, 100)
+	End If
+	If Not IsNull(oStatusbar) Then
+		With oStatusbar
 			If Len(Text) = 0 And Percentage = -1 Then
 				.end()
 				Set oStatusbar = Nothing
@@ -1100,8 +1098,8 @@ Try:
 				If Len(Text) &gt; 0 Then .setText(Text)
 				If Percentage &gt;= 0 And Percentage &lt;= 100 Then .setValue(Percentage)
 			End If
-		End If
-	End With
+		End With
+	End If
 
 Finally:
 	Set _SF_.Statusbar = oStatusbar
@@ -1160,11 +1158,11 @@ Try:
 		Set oFixedText = .ProgressBarText
 		Set oProgressBar = .ProgressBarBar
 	End With
-	With oDialog
-		bFirstCall = ( IsNull(oDialog) )
-		If Not bFirstCall Then bFirstCall = Not ._IsStillAlive(False)	&apos;	False to not raise an error
-		If bFirstCall Then Set oDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgProgress&quot;, _Context)
 
+	bFirstCall = ( IsNull(oDialog) )
+	If Not bFirstCall Then bFirstCall = Not oDialog._IsStillAlive(False)	&apos;	False to not raise an error
+	If bFirstCall Then Set oDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgProgress&quot;, _Context)
+	With oDialog
 		If Not IsNull(oDialog) Then
 			If Len(Title) = 0 And Len(Text) = 0 And Percentage = -1 Then
 				Set oDialog = .Dispose()
