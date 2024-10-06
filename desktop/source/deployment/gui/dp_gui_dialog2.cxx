@@ -839,9 +839,9 @@ void ExtMgrDialog::showProgress( bool _bStart )
 
 void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 {
+    std::unique_lock aGuard( m_aMutex );
     if ( m_nProgress != nProgress )
     {
-        std::unique_lock aGuard( m_aMutex );
         m_nProgress = nProgress;
         m_aIdle.Start();
     }
@@ -945,6 +945,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
 {
+    std::unique_lock aGuard( m_aMutex );
     if ( m_bStopProgress )
     {
         m_bHasProgress = false;
