@@ -296,7 +296,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/program/classes.*"
         mv_file_between_flists java_common_list.txt common_list.txt $INSTALLDIR/program/libofficebean.so
         mv_file_between_flists java_common_list.txt common_list.txt "$INSTALLDIR/share/Scripts/java.*"
-        mv_file_between_flists java_common_list.txt writer_list.txt $INSTALLDIR/program/classes/writer2latex.jar
 
         # Move arch-dependent/dup files from common to core
         for f in \
