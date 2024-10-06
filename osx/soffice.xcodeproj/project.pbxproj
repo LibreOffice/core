@@ -67,7 +67,6 @@
 		29F88FB22A554D6F00C77A3F /* udkapi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = udkapi; path = ../udkapi; sourceTree = "<group>"; };
 		29F88FB32A554D7000C77A3F /* shell */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shell; path = ../shell; sourceTree = "<group>"; };
 		29F88FB42A554D7000C77A3F /* sdext */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sdext; path = ../sdext; sourceTree = "<group>"; };
-		29F88FB52A554D7000C77A3F /* xmerge */ = {isa = PBXFileReference; lastKnownFileType = folder; name = xmerge; path = ../xmerge; sourceTree = "<group>"; };
 		29F88FB62A554D7000C77A3F /* qadevOOo */ = {isa = PBXFileReference; lastKnownFileType = folder; name = qadevOOo; path = ../qadevOOo; sourceTree = "<group>"; };
 		29F88FB72A554D7000C77A3F /* setup_native */ = {isa = PBXFileReference; lastKnownFileType = folder; name = setup_native; path = ../setup_native; sourceTree = "<group>"; };
 		29F88FB82A554D7000C77A3F /* sysui */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sysui; path = ../sysui; sourceTree = "<group>"; };
@@ -285,7 +284,6 @@
 				29F88FA92A554D6F00C77A3F /* wizards */,
 				29F88F8D2A554D6C00C77A3F /* writerfilter */,
 				29F88FE22A554D7600C77A3F /* writerperfect */,
-				29F88FB52A554D7000C77A3F /* xmerge */,
 				29F88F972A554D6D00C77A3F /* xmlhelp */,
 				29F88FEB2A554D7800C77A3F /* xmloff */,
 				29F88FF02A554D7800C77A3F /* xmlreader */,

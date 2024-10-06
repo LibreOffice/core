@@ -1,2 +1,0 @@
-RegistrationClassName: XMergeBridge
-UNO-Type-Path: 

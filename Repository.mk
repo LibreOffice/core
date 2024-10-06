@@ -809,7 +809,6 @@ $(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
 $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	ScriptFramework \
 	ScriptProviderForJava \
-	XMergeBridge \
 	commonwizards \
 	form \
 	$(if $(filter-out MACOSX,$(OS)),officebean) \
@@ -819,7 +818,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 	smoketest \
 	table \
 	unoil \
-	xmerge \
 ))
 
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder, \

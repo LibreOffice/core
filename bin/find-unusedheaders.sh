@@ -54,7 +54,6 @@ for subdir in $(ls -d */ | grep -v \
                                 -e unotest/ \
                                 -e ure/ \
                                 -e wizards/ \
-                                -e xmerge/ \
                                 -e xmlreader/ \
                                 -e instdir/ `# Skip typical build-related temporaries` \
                                 -e workdir/ \
