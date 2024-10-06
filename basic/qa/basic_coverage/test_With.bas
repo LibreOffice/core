@@ -69,6 +69,17 @@ Sub test_with
     fields = "n = " & foo_var.n & " s = " & foo_var.s
     TestUtil.AssertEqual(fields, "n = 6 s = baz", "Field values of foo_var")
 
+    ' tdf#163219: make sure that assigning the variable in the block works
+    Set foo_var = Nothing
+    TestUtil.Assert(foo_var Is Nothing, "foo_var Is Nothing")
+    With foo_var
+        foo_var = New foo
+        .n = 7
+        .s = "something"
+    End With
+    TestUtil.AssertEqual(foo_var.n, 7, "foo_var.n")
+    TestUtil.AssertEqual(foo_var.s, "something", "foo_var.s")
+
     ' tdf#162935: Test an UNO struct - it used to copy into the With variable, not used by ref
     Dim uno_struct As New com.sun.star.table.CellRangeAddress
     With uno_struct
