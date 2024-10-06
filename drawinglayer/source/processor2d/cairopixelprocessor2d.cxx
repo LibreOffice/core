@@ -419,6 +419,12 @@ class CairoSurfaceHelper
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
+        if (cairo_surface_status(mpCairoSurface) != CAIRO_STATUS_SUCCESS)
+        {
+            SAL_WARN("drawinglayer",
+                     "cairo_image_surface_create failed for: " << nWidth << " x " << nHeight);
+            return;
+        }
         const sal_uInt32 nStride(cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, nWidth));
         unsigned char* surfaceData(cairo_image_surface_get_data(mpCairoSurface));
 
@@ -450,6 +456,12 @@ class CairoSurfaceHelper
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_RGB24, nWidth, nHeight);
+        if (cairo_surface_status(mpCairoSurface) != CAIRO_STATUS_SUCCESS)
+        {
+            SAL_WARN("drawinglayer",
+                     "cairo_image_surface_create failed for: " << nWidth << " x " << nHeight);
+            return;
+        }
         sal_uInt32 nStride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, nWidth));
         unsigned char* surfaceData(cairo_image_surface_get_data(mpCairoSurface));
 
@@ -481,6 +493,12 @@ class CairoSurfaceHelper
         const tools::Long nHeight(pReadAccess->Height());
         const tools::Long nWidth(pReadAccess->Width());
         mpCairoSurface = cairo_image_surface_create(CAIRO_FORMAT_RGB16_565, nWidth, nHeight);
+        if (cairo_surface_status(mpCairoSurface) != CAIRO_STATUS_SUCCESS)
+        {
+            SAL_WARN("drawinglayer",
+                     "cairo_image_surface_create failed for: " << nWidth << " x " << nHeight);
+            return;
+        }
         sal_uInt32 nStride(cairo_format_stride_for_width(CAIRO_FORMAT_RGB16_565, nWidth));
         unsigned char* surfaceData(cairo_image_surface_get_data(mpCairoSurface));
 
