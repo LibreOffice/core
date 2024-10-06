@@ -276,6 +276,63 @@ void SbiParser::For()
 
 // WITH .. END WITH
 
+namespace
+{
+// Generate a '{_with_library.module_offset} = rVar'
+// Use the {_with_library.module_offset} in OpenBlock
+// The name of the variable can't be used by user: a name like [{_with_library.module_offset}]
+// is valid, but not without the square brackets
+struct WithLocalVar
+{
+    WithLocalVar(SbiParser& rParser, SbiExpression& rVar)
+        : m_rParser(rParser)
+        , m_aWithParent(createLocalVar(rParser))
+    {
+        // Assignment
+        m_aWithParent.Gen();
+        rVar.Gen();
+        m_rParser.aGen.Gen(SbiOpcode::PUTC_);
+    }
+
+    ~WithLocalVar()
+    {
+        // {_with_library.module_offset} = Nothing
+        m_aWithParent.Gen();
+        m_rParser.aGen.Gen(SbiOpcode::RTL_, m_rParser.aGblStrings.Add(u"Nothing"_ustr), SbxOBJECT);
+        m_rParser.aGen.Gen(SbiOpcode::PUTC_);
+    }
+
+    static SbiExpression createLocalVar(SbiParser& rParser)
+    {
+        // Create the unique name
+        OUStringBuffer moduleName(rParser.aGen.GetModule().GetName());
+        for (auto parent = rParser.aGen.GetModule().GetParent(); parent;
+             parent = parent->GetParent())
+            moduleName.insert(0, parent->GetName() + ".");
+
+        OUString uniqueName
+            = "{_with_" + moduleName + "_" + OUString::number(rParser.aGen.GetOffset()) + "}";
+        while (rParser.pPool->Find(uniqueName) != nullptr)
+        {
+            static sal_Int64 unique_suffix;
+            uniqueName = "{_with_" + moduleName + "_" + OUString::number(rParser.aGen.GetOffset())
+                         + "_" + OUString::number(unique_suffix++) + "}";
+        }
+        SbiSymDef* pWithParentDef = new SbiSymDef(uniqueName);
+        pWithParentDef->SetType(SbxOBJECT);
+        rParser.pPool->Add(pWithParentDef);
+
+        // DIM local variable: work with Option Explicit
+        rParser.aGen.Gen(SbiOpcode::LOCAL_, pWithParentDef->GetId(), pWithParentDef->GetType());
+
+        return SbiExpression(&rParser, *pWithParentDef);
+    }
+
+    SbiParser& m_rParser;
+    SbiExpression m_aWithParent;
+};
+}
+
 void SbiParser::With()
 {
     SbiExpression aVar( this, SbOPERAND );
@@ -290,47 +347,15 @@ void SbiParser::With()
     else if( pDef->GetType() != SbxOBJECT )
         Error( ERRCODE_BASIC_NEEDS_OBJECT );
 
-
     pNode->SetType( SbxOBJECT );
 
-    // Generate a '{_with_library.module_offset} = aVar.GetExprNode()'
-    // Use the {_with_library.module_offset} in OpenBlock
-    // The name of the variable can't be used by user: a name like [{_with_library.module_offset}]
-    // is valid, but not without the square brackets
+    std::optional<WithLocalVar> oLocalVar;
+    if (pDef->GetProcDef())
+        oLocalVar.emplace(*this, aVar);
 
-    // Create the unique name
-    OUStringBuffer moduleName(aGen.GetModule().GetName());
-    for (auto parent = aGen.GetModule().GetParent(); parent; parent = parent->GetParent())
-        moduleName.insert(0, parent->GetName() + ".");
-
-    OUString uniqueName = "{_with_" + moduleName + "_" + OUString::number(aGen.GetOffset()) + "}";
-    while (pPool->Find(uniqueName) != nullptr)
-    {
-        static sal_Int64 unique_suffix;
-        uniqueName = "{_with_" + moduleName + "_" + OUString::number(aGen.GetOffset()) + "_"
-                     + OUString::number(unique_suffix++) + "}";
-    }
-    SbiSymDef* pWithParentDef = new SbiSymDef(uniqueName);
-    pWithParentDef->SetType(SbxOBJECT);
-    pPool->Add(pWithParentDef);
-
-    // DIM local variable: work with Option Explicit
-    aGen.Gen(SbiOpcode::LOCAL_, pWithParentDef->GetId(), pWithParentDef->GetType());
-
-    // Assignment
-    SbiExpression aWithParent(this, *pWithParentDef);
-    aWithParent.Gen();
-    aVar.Gen();
-    aGen.Gen(SbiOpcode::PUTC_);
-
-    OpenBlock(NIL, aWithParent.GetExprNode());
+    OpenBlock(NIL, oLocalVar ? oLocalVar->m_aWithParent.GetExprNode() : aVar.GetExprNode());
     StmntBlock( ENDWITH );
     CloseBlock();
-
-    // {_with_library.module_offset} = Nothing
-    aWithParent.Gen();
-    aGen.Gen(SbiOpcode::RTL_, aGblStrings.Add(u"Nothing"_ustr), SbxOBJECT);
-    aGen.Gen(SbiOpcode::PUTC_);
 }
 
 // LOOP/NEXT/WEND without construct
