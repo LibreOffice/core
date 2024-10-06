@@ -1550,10 +1550,10 @@ Try:
 		vStyles = oFamily.getElementNames()
 		&apos;	Scan the list and retain those passing the filter
 		For i = 0 To UBound(vStyles)
-			With oStyle
-				sStyle = vStyles(i)
-				Set oStyle = _GetStyle(oFamily, sStyle)
-				If Not IsNull(oStyle) Then
+			sStyle = vStyles(i)
+			Set oStyle = _GetStyle(oFamily, sStyle)
+			If Not IsNull(oStyle) Then
+				With oStyle
 					&apos;	Pattern ?
 					bValid = ( Len(NamePattern) = 0 )
 					If Not bValid Then bValid = ScriptForge.SF_String.IsLike(.DisplayName, NamePattern, CaseSensitive := True)
@@ -1570,10 +1570,10 @@ Try:
 					&apos;	Category ?
 					If bValid And Len(Category) &gt; 0 Then bValid = ( UCase(Category) = .Category )
 					If bValid Then vStyles(i) = .DisplayName Else vStyles(i) = &quot;&quot;
-				Else
-					vStyles(i) = &quot;&quot;
-				End If
-			End With
+				End With
+			Else
+				vStyles(i) = &quot;&quot;
+			End If
 		Next i
 		&apos;	Reject when not valid
 		vStyles = ScriptForge.SF_Array.TrimArray(vStyles)

@@ -938,10 +938,10 @@ Check:
 	If _ReadOnly Then GoTo Catch_ReadOnly
 
 Try:
-	With _Connection
-		bCommit = ( TransactionMode &gt; com.sun.star.sdbc.TransactionIsolation.NONE )
-		&apos;	Replace the existing connection
-		If Not IsNull(_Connection) Then
+	bCommit = ( TransactionMode &gt; com.sun.star.sdbc.TransactionIsolation.NONE )
+	&apos;	Replace the existing connection
+	If Not IsNull(_Connection) Then
+		With _Connection
 			If .AutoCommit And bCommit Then
 				_CloseConnection()
 				Set _Connection = _DataSource.getIsolatedConnection(_User, _Password)
@@ -949,9 +949,11 @@ Try:
 				_CloseConnection()
 				Set _Connection = _DataSource.getConnection(_User, _Password)
 			End If
-		End If
+		End With
+	End If
 
 		&apos;	Set the transaction mode
+	With _Connection
 		If bCommit Then
 			.SetTransactionIsolation(CLng(TransactionMode))
 			.setAutoCommit(Not bCommit)

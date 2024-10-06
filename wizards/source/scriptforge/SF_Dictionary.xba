@@ -583,8 +583,8 @@ Check:
 
 Try:
 	If Not IsArray(PropertyValues) Then PropertyValues = Array(PropertyValues)
-	With oPropertyValue
-		For Each oPropertyValue In PropertyValues
+	For Each oPropertyValue In PropertyValues
+		With oPropertyValue
 			If Overwrite Then bExists = Exists(.Name) Else bExists = False
 			If SF_Session.UnoObjectType(oPropertyValue) = &quot;com.sun.star.beans.PropertyValue&quot; Then
 				If IsUnoStruct(.Value) Then
@@ -604,8 +604,8 @@ Try:
 					Add(.Name, vItem)	&apos;	Key controls are done in Add
 				End If
 			End If
-		Next oPropertyValue
-	End With
+		End With
+	Next oPropertyValue
 	bImport = True
 
 Finally:
