@@ -215,7 +215,7 @@ static void getShift( unsigned long nMask, int& rShift, int& rSigBits, int& rShi
             nMask <<= 1;
         }
 
-    int nRotate = sizeof(unsigned long)*8 - rShift;
+    int nRotate = int(sizeof(unsigned long)*8) - rShift;
     rSigBits = 0;
     nMask = doRightShift( nUseMask, rShift) ;
     while( nRotate-- )
