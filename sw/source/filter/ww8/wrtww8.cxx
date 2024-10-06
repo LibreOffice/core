@@ -1079,8 +1079,8 @@ void WW8_WrPlcPn::WritePlc()
                                 m_Fkps[ i ]->GetStartFc() );
     }
 
-    SwWW8Writer::WriteLong( *m_rWrt.m_pTableStrm,
-                                m_Fkps[ i - 1 ]->GetEndFc() );
+    WW8_FC nEndFc = i > 0 ? m_Fkps[i - 1]->GetEndFc() : 0;
+    SwWW8Writer::WriteLong(*m_rWrt.m_pTableStrm, nEndFc);
 
     // for every FKP output the page
     for (i = 0; i < m_Fkps.size(); ++i)
