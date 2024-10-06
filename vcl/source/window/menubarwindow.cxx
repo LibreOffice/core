@@ -778,10 +778,16 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
             sal_uInt16 nLoop = n;
 
-            if( nCode == KEY_HOME )
-                { n = sal_uInt16(-1); nLoop = n+1; }
-            if( nCode == KEY_END )
-                { n = m_pMenu->GetItemCount(); nLoop = n-1; }
+            if (nCode == KEY_HOME)
+            {
+                n = ITEMPOS_INVALID;
+                nLoop = 0;
+            }
+            else if (nCode == KEY_END)
+            {
+                n = m_pMenu->GetItemCount();
+                nLoop = n-1;
+            }
 
             do
             {
