@@ -3004,11 +3004,12 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 {
-    if (m_aPositionArr.empty())
+    size_t nCount = m_aPositionArr.size();
+    if (nCount == 0)
         return nullptr;
 
     std::vector<sal_uInt16>::size_type n;
-    for( n = 0; n < m_aPositionArr.size(); ++n )
+    for (n = 0; n < nCount; ++n)
     {
         if( m_aPositionArr[ n ] == m_nWidth )
             break;
@@ -3020,7 +3021,7 @@ const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
         }
     }
 
-    if( n >= m_aPositionArr.size() )
+    if (n >= nCount)
         --n;
 
     m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
