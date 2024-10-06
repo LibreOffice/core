@@ -972,8 +972,8 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
         }
         else
         {
-            n = sal_uInt16(-1);
-            nLoop = n+1;
+            n = ITEMPOS_INVALID;
+            nLoop = 0;
         }
     }
 
@@ -991,7 +991,7 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
         }
         else
         {
-            n++;
+            n = (n == ITEMPOS_INVALID) ? 0 : n + 1;
             if ( n >= pMenu->GetItemCount() )
             {
                 if ( !IsScrollMenu() || ( nHighlightedItem == ITEMPOS_INVALID ) )
