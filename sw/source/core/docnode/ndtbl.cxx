@@ -3004,28 +3004,27 @@ void SwCollectTableLineBoxes::AddBox( const SwTableBox& rBox )
 
 const SwTableBox* SwCollectTableLineBoxes::GetBoxOfPos( const SwTableBox& rBox )
 {
-    const SwTableBox* pRet = nullptr;
+    if (m_aPositionArr.empty())
+        return nullptr;
 
-    if( !m_aPositionArr.empty() )
+    std::vector<sal_uInt16>::size_type n;
+    for( n = 0; n < m_aPositionArr.size(); ++n )
     {
-        std::vector<sal_uInt16>::size_type n;
-        for( n = 0; n < m_aPositionArr.size(); ++n )
-            if( m_aPositionArr[ n ] == m_nWidth )
-                break;
-            else if( m_aPositionArr[ n ] > m_nWidth )
-            {
-                if( n )
-                    --n;
-                break;
-            }
-
-        if( n >= m_aPositionArr.size() )
-            --n;
-
-        m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
-        pRet = m_Boxes[ n ];
+        if( m_aPositionArr[ n ] == m_nWidth )
+            break;
+        else if( m_aPositionArr[ n ] > m_nWidth )
+        {
+            if( n )
+                --n;
+            break;
+        }
     }
-    return pRet;
+
+    if( n >= m_aPositionArr.size() )
+        --n;
+
+    m_nWidth = m_nWidth + o3tl::narrowing<sal_uInt16>(rBox.GetFrameFormat()->GetFrameSize().GetWidth());
+    return m_Boxes[ n ];
 }
 
 bool SwCollectTableLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth )
