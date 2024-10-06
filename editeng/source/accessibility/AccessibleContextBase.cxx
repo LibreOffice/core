@@ -270,7 +270,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     // Create a copy of the relation set and return it.
     if (mxRelationSet)
     {
-        return new ::utl::AccessibleRelationSetHelper(*mxRelationSet);
+        return mxRelationSet->Clone();
     }
     else
         return uno::Reference<XAccessibleRelationSet>(nullptr);

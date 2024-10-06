@@ -52,6 +52,12 @@ AccessibleRelationSetHelper::AccessibleRelationSetHelper (const AccessibleRelati
 {
 }
 
+css::uno::Reference<css::accessibility::XAccessibleRelationSet> AccessibleRelationSetHelper::Clone() const
+{
+    std::scoped_lock aGuard (maMutex);
+    return new AccessibleRelationSetHelper(*this);
+}
+
 AccessibleRelationSetHelper::~AccessibleRelationSetHelper()
 {
 }

@@ -42,9 +42,11 @@ class UNOTOOLS_DLLPUBLIC AccessibleRelationSetHelper final
 public:
     //=====  internal  ========================================================
     AccessibleRelationSetHelper();
-    AccessibleRelationSetHelper(const AccessibleRelationSetHelper& rHelper);
+
+    css::uno::Reference<css::accessibility::XAccessibleRelationSet> Clone() const;
 
 private:
+    AccessibleRelationSetHelper(const AccessibleRelationSetHelper& rHelper);
     virtual ~AccessibleRelationSetHelper() override;
 
 public:
@@ -115,7 +117,7 @@ public:
 
 private:
     /// Mutex guarding this object.
-    std::mutex maMutex;
+    mutable std::mutex maMutex;
     /// The implementation of this helper interface.
     std::vector<css::accessibility::AccessibleRelation> maRelations;
 };
