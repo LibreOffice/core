@@ -1963,10 +1963,10 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                     if ( pStyleSheet )
                     {
-                        ScStyleSaveData aOldData;
+                        auto xOldData = std::make_shared<ScStyleSaveData>();
                         const bool bUndo(m_pDocument->IsUndoEnabled());
                         if (bUndo)
-                            aOldData.InitFromStyle( pStyleSheet );
+                            xOldData->InitFromStyle(pStyleSheet);
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
                         rStyleSet.MergeRange( XATTR_FILL_FIRST, XATTR_FILL_LAST );
@@ -1977,8 +1977,9 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
 
                         auto xRequest = std::make_shared<SfxRequest>(rReq);
                         rReq.Ignore(); // the 'old' request is not relevant any more
-                        pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet, aOldData,
-                                                 aOldName, &rStyleSet, nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
+                        pDlg->StartExecuteAsync([this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
+                                                 xOldData=std::move(xOldData), aOldName, &rStyleSet,
+                                                 nCurTab, &rCaller, bUndo](sal_Int32 nResult) {
                             if ( nResult == RET_OK )
                             {
                                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
@@ -2010,7 +2011,7 @@ void ScDocShell::ExecutePageStyle( const SfxViewShell& rCaller,
                                 {
                                     GetUndoManager()->AddUndoAction(
                                             std::make_unique<ScUndoModifyStyle>( this, SfxStyleFamily::Page,
-                                                        aOldData, aNewData ) );
+                                                        *xOldData, aNewData ) );
                                 }
 
                                 PageStyleModified( aNewName, false );
