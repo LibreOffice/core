@@ -158,6 +158,7 @@ namespace emfplushelper
                 {
                     if (((i - last_normal )% 3) == 1)
                     {
+                        assert(p != 0);
                         polygon.setNextControlPoint (p - 1, mapped);
                         SAL_INFO ("drawinglayer.emf", "EMF+\t\tPolygon append next: " << p - 1 << " mapped: " << mapped.getX () << "," << mapped.getY ());
                         continue;
