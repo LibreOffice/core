@@ -11,6 +11,7 @@
 
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -236,6 +237,19 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testHybridPDFFile)
     }
 }
 #endif // _WIN32
+
+CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testTdf163295)
+{
+    // Given a file with a content of "<?xmlpwi" - yes, it's not an XML, and not a pwi file
+    auto xDetection(comphelper::getProcessServiceFactory()
+                        ->createInstance(u"com.sun.star.document.TypeDetection"_ustr)
+                        .queryThrow<document::XTypeDetection>());
+    OUString url = createFileURL(u"test_pseudo_pwi.xml");
+    css::uno::Sequence mediaDescriptor{ comphelper::makePropertyValue(u"URL"_ustr, url) };
+    OUString detection = xDetection->queryTypeByDescriptor(mediaDescriptor, true);
+    // Without the fix, this was "writer_PocketWord_File"
+    CPPUNIT_ASSERT_EQUAL(u"generic_Text"_ustr, detection);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
