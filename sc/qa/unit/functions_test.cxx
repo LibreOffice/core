@@ -49,11 +49,18 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
                 {
                     if (rDoc.HasValueData(1, row, tab))
                     {
+                        // snprintf provides requested precision, unlike OUString::number, which
+                        // rounds to 15 decimals
+                        char buf[25];
+                        int len = snprintf(buf, 25, "%.17G", rDoc.GetValue(0, row, tab));
+                        OUString result(OUString::createFromAscii(std::string_view(buf, len)));
+                        len = snprintf(buf, 25, "%.17G", rDoc.GetValue(1, row, tab));
+                        OUString expected(OUString::createFromAscii(std::string_view(buf, len)));
                         CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
                                     + rDoc.GetAllTableNames()[tab] + ".A" + OUString::number(row+1)
                                     + " \'" + rDoc.GetString(3, row, tab) + "\'"
-                                    " result: " + OUString::number(rDoc.GetValue(0, row, tab))
-                                    + ", expected: " + OUString::number(rDoc.GetValue(1, row, tab)))
+                                    " result: " + result
+                                    + ", expected: " + expected)
                                 .toUtf8().getStr());
                     }
                     else
