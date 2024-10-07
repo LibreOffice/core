@@ -5919,7 +5919,10 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
                                    { GID_ROTATE, GC_ROTATE, 0 },
                                    { GID_PAN, dwPanWant, dwPanBlock } };
             UINT uiGcs = 3;
-            SetGestureConfig(hWnd, 0, uiGcs, gc, sizeof(GESTURECONFIG));
+            if (!SetGestureConfig(hWnd, 0, uiGcs, gc, sizeof(GESTURECONFIG)))
+            {
+                SAL_WARN("vcl", "SetGestureConfig failed: " << WindowsErrorString(GetLastError()));
+            }
         }
         return 0;
     }
@@ -5939,9 +5942,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
     switch( nMsg )
     {
         case WM_GESTURE:
-            ImplSalYieldMutexAcquireWithWait();
             rDef = !ImplHandleGestureMsg(hWnd, lParam);
-            ImplSalYieldMutexRelease();
             break;
 
         case WM_MOUSEMOVE:
@@ -6001,7 +6002,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
             {
                 bInWheelMsg = true;
                 rDef = !ImplHandleWheelMsg( hWnd, nMsg, wParam, lParam );
-                // If we did not process the message, re-check if here is a
+                // If we did not process the message, re-check if there is a
                 // connected (?) window that we have to notify.
                 if ( rDef )
                     rDef = ImplSalWheelMousePos( hWnd, nMsg, wParam, lParam, nRet );
