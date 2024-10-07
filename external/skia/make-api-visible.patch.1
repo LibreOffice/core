@@ -30,12 +30,12 @@ diff -ur skia.org/tools/window/unix/WindowContextFactory_unix.h skia/tools/windo
 +SK_API std::unique_ptr<WindowContext> MakeGLForXlib(const XlibWindowInfo&, const DisplayParams&);
  #endif
 
- #ifdef SK_DAWN
--std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
-+SK_API std::unique_ptr<WindowContext> MakeDawnVulkanForXlib(const XlibWindowInfo&, const DisplayParams&);
+ #if defined(SK_DAWN) && defined(SK_GRAPHITE)
+-std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
++SK_API std::unique_ptr<WindowContext> MakeGraphiteDawnVulkanForXlib(const XlibWindowInfo&,
+                                                              const DisplayParams&);
  #endif
 
- #if defined(SK_DAWN) && defined(SK_GRAPHITE)
 @@ -55,7 +55,7 @@
                                                               const DisplayParams&);
  #endif
