@@ -38,6 +38,7 @@
 
 #include <SkFont.h>
 #include <SkFontMgr_fontconfig.h>
+#include <SkFontTypes.h>
 
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop

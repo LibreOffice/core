@@ -44,7 +44,7 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 
 #include <SkBitmap.h>
 #include <SkCanvas.h>
-#include <SkEncodedImageFormat.h>
+#include <include/codec/SkEncodedImageFormat.h>
 #include <SkPaint.h>
 #include <SkSurface.h>
 #include <SkGraphics.h>
