@@ -40,8 +40,8 @@ skia_patches := \
     incomplete.patch.0 \
     ubsan-missing-typeinfo.patch.1 \
     incomplete-type-SkImageGenerator.patch.1 \
-    0001-AvoidCombiningExtrememelyLargeMeshes.patch.1 \
     help-msvc-analyzer.patch \
+    always_inline_and_multiversioning_conflict.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 

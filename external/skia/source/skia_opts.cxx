@@ -13,6 +13,7 @@
 #endif
 #include "src/core/SkCpu.h"
 #include "src/core/SkOpts.h"
+#include "src/core/SkSwizzlePriv.h"
 #if defined __GNUC__
 #pragma GCC diagnostic pop
 #endif
