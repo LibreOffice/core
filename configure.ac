@@ -13838,7 +13838,7 @@ then
 #include <kcoreaddons_version.h>
 
 int main(int argc, char **argv) {
-       static_assert(KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 0);
+       static_assert(KCOREADDONS_VERSION_MAJOR == 5);
        return 0;
 }
        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
@@ -13909,12 +13909,12 @@ then
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $KF6_CFLAGS"
     dnl KF6 development version as of 2023-06 uses version number 5.240
-    AC_MSG_CHECKING([whether KDE is >= 5.240])
+    AC_MSG_CHECKING([whether KDE Frameworks version is >= 6.0])
        AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <kcoreaddons_version.h>
 
 int main(int argc, char **argv) {
-       static_assert(KCOREADDONS_VERSION_MAJOR == 6 || (KCOREADDONS_VERSION_MAJOR == 5 && KCOREADDONS_VERSION_MINOR >= 240));
+       static_assert(KCOREADDONS_VERSION_MAJOR == 6);
        return 0;
 }
        ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
