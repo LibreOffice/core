@@ -365,6 +365,8 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     ContentNode* pEN = aEndPaM.GetNode();
     sal_Int32 nStartNode = mpEditEngine->GetEditDoc().GetPos( pSN );
     sal_Int32 nEndNode = mpEditEngine->GetEditDoc().GetPos( pEN );
+    assert(nStartNode != EE_PARA_NOT_FOUND);
+    assert(nEndNode != EE_PARA_NOT_FOUND);
     sal_Int16 nOutlLevel = 0xff;
 
     if (rSet.StyleNo() && mpEditEngine->GetStyleSheetPool() && mpEditEngine->IsImportRTFStyleSheetsSet())
