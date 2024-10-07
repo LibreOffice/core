@@ -73,30 +73,24 @@ bool IsMediaTypeXML( const OUString& mediaType )
 
 OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
-    OUString sTypeName;
     OUString sUrl;
-    Sequence<PropertyValue > lProps ;
-
     css::uno::Reference< css::io::XInputStream > xInStream;
-    const PropertyValue * pValue = aArguments.getConstArray();
-    sal_Int32 nLength;
-    OUString resultString;
 
-    nLength = aArguments.getLength();
+    sal_Int32 nLength = aArguments.getLength();
     sal_Int32 location=nLength;
     for (sal_Int32 i = 0 ; i < nLength; i++)
     {
-        if ( pValue[i].Name == "TypeName" )
+        if (aArguments[i].Name == "TypeName")
         {
             location=i;
         }
-        else if ( pValue[i].Name == "URL" )
+        else if (aArguments[i].Name == "URL")
         {
-            pValue[i].Value >>= sUrl;
+            aArguments[i].Value >>= sUrl;
         }
-        else if ( pValue[i].Name == "InputStream" )
+        else if (aArguments[i].Name == "InputStream")
         {
-            pValue[i].Value >>= xInStream ;
+            aArguments[i].Value >>= xInStream;
         }
     }
     try
@@ -109,7 +103,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
             xInStream = aContent.openStream();
             if (!xInStream.is())
             {
-                return sTypeName;
+                return {};
             }
         }
 
@@ -134,6 +128,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
             pInStream->Seek( STREAM_SEEK_TO_BEGIN );
         }
 
+        OUString resultString;
         if ( nUniPos == 3 || ( nUniPos == 0 && !bTryUtf16 ) ) // UTF-8 or non-Unicode
         {
             OString const str(read_uInt8s_ToOString(*pInStream, nSize));
@@ -175,25 +170,32 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
         Sequence < OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
 
-        sal_Int32 new_nlength=0;
-        sal_Int32 i = 0 ;
-        while ((i < nLength) && (sTypeName.isEmpty()))
+        for (const OUString& myType : myTypes)
         {
-            Any elem = xTypeCont->getByName(myTypes[i]);
-            elem >>=lProps;
-            new_nlength = lProps.getLength();
-            sal_Int32 j =0;
-            while (j < new_nlength && (sTypeName.isEmpty()))
+            Sequence<PropertyValue> lProps;
+            xTypeCont->getByName(myType) >>= lProps;
+            OUString detectService, clipboardFormat;
+            for (const PropertyValue& prop : lProps)
             {
-                OUString tmpStr;
-                lProps[j].Value >>=tmpStr;
-                if ( lProps[j].Name == "ClipboardFormat" && !tmpStr.isEmpty() )
-                {
-                    sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
-                }
-                j++;
+                if (prop.Name == "DetectService")
+                    prop.Value >>= detectService;
+                else if (prop.Name == "ClipboardFormat")
+                    prop.Value >>= clipboardFormat;
             }
-            i++;
+            if (!clipboardFormat.isEmpty() && detectService == getImplementationName())
+            {
+                OUString sTypeName = supportedByType(clipboardFormat, resultString, myType);
+                if (!sTypeName.isEmpty())
+                {
+                    if (location == aArguments.getLength())
+                    {
+                        aArguments.realloc(aArguments.getLength() + 1);
+                        aArguments.getArray()[location].Name = "TypeName";
+                    }
+                    aArguments.getArray()[location].Value <<= sTypeName;
+                    return sTypeName;
+                }
+            }
         }
     }
     catch (const Exception &)
@@ -201,17 +203,7 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
         TOOLS_WARN_EXCEPTION("filter.xmlfd", "An Exception occurred while opening File stream");
     }
 
-    if (!sTypeName.isEmpty())
-    {
-        if (location == aArguments.getLength())
-        {
-            aArguments.realloc(nLength+1);
-            aArguments.getArray()[location].Name = "TypeName";
-        }
-        aArguments.getArray()[location].Value <<=sTypeName;
-    }
-
-    return sTypeName;
+    return {};
 }
 
 // XInitialization
