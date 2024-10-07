@@ -359,17 +359,20 @@ void ParaPortion::MarkSelectionInvalid(sal_Int32 nStart)
 
 sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
 {
-    SAL_WARN_IF(!maLineList.Count(), "editeng", "Empty ParaPortion in GetLine!");
+    const sal_Int32 nCount = maLineList.Count();
+    assert(nCount > 0 && "Empty ParaPortion in GetLine!");
+    if (nCount == 0)
+        return 0;
     DBG_ASSERT(mbVisible, "Why GetLine() on an invisible paragraph?");
 
-    for ( sal_Int32 nLine = 0; nLine < maLineList.Count(); nLine++ )
+    for ( sal_Int32 nLine = 0; nLine < nCount; nLine++ )
     {
         if (maLineList[nLine].IsIn(nIndex))
             return nLine;
     }
 
     // Then it should be at the end of the last line!
-    DBG_ASSERT(nIndex == maLineList[maLineList.Count() - 1].GetEnd(), "Index dead wrong!");
+    DBG_ASSERT(nIndex == maLineList[nCount - 1].GetEnd(), "Index dead wrong!");
     return (maLineList.Count() - 1);
 }
 
