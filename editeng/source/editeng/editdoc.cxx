@@ -1035,6 +1035,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     assert(aPaM.GetNode());
     ContentNode* pCurNode = aPaM.GetNode();
     sal_Int32 nPos = GetPos( pCurNode );
+    assert(nPos != EE_PARA_NOT_FOUND);
     OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
