@@ -1187,7 +1187,7 @@ void AnimationsExporter::convertValue(XMLTokenEnum eAttributeName, OStringBuffer
                 }
                 break;
             default:
-                OSL_FAIL("unomdel: AnimationsExporter::convertValue(), invalid AttributeName!");
+                OSL_FAIL("unomodel: AnimationsExporter::convertValue(), invalid AttributeName!");
         }
     }
 }
