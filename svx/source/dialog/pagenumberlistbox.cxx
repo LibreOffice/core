@@ -58,9 +58,9 @@ SvxPageNumberListBox::SvxPageNumberListBox(std::unique_ptr<weld::ComboBox> pCont
 }
 
 SvxNumberingPreview::SvxNumberingPreview()
-    : pActNum(nullptr)
-    , bPosition(false)
-    , nActLevel(SAL_MAX_UINT16)
+    : m_pActNum(nullptr)
+    , m_bPosition(false)
+    , m_nActLevel(SAL_MAX_UINT16)
 {
 }
 
@@ -143,51 +143,51 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
     pVDev->SetBackground(Wallpaper(aBackColor));
     pVDev->DrawWallpaper(pVDev->GetOutputRectPixel(), pVDev->GetBackground());
 
-    if (pActNum)
+    if (m_pActNum)
     {
         tools::Long nWidthRelation = 30; // chapter dialog
 
         // height per level
         tools::Long nXStep
-            = aSize.Width() / (pActNum->GetLevelCount() > 1 ? 3 * pActNum->GetLevelCount() : 3);
-        if (pActNum->GetLevelCount() < 10)
+            = aSize.Width() / (m_pActNum->GetLevelCount() > 1 ? 3 * m_pActNum->GetLevelCount() : 3);
+        if (m_pActNum->GetLevelCount() < 10)
             nXStep /= 2;
         tools::Long nYStart = 4;
         // the whole height mustn't be used for a single level
-        tools::Long nYStep
-            = (aSize.Height() - 6) / (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
+        tools::Long nYStep = (aSize.Height() - 6)
+                             / (m_pActNum->GetLevelCount() > 1 ? m_pActNum->GetLevelCount() : 5);
 
-        aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS,
-                                                MsLangId::getConfiguredSystemLanguage(),
-                                                GetDefaultFontFlags::OnlyOne);
-        aStdFont.SetColor(aTextColor);
-        aStdFont.SetFillColor(aBackColor);
+        m_aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS,
+                                                  MsLangId::getConfiguredSystemLanguage(),
+                                                  GetDefaultFontFlags::OnlyOne);
+        m_aStdFont.SetColor(aTextColor);
+        m_aStdFont.SetFillColor(aBackColor);
 
         tools::Long nFontHeight = nYStep * 6 / 10;
-        if (bPosition)
+        if (m_bPosition)
             nFontHeight = nYStep * 15 / 10;
-        aStdFont.SetFontSize(Size(0, nFontHeight));
+        m_aStdFont.SetFontSize(Size(0, nFontHeight));
 
         SvxNodeNum aNum;
-        sal_uInt16 nPreNum = pActNum->GetLevel(0).GetStart();
+        sal_uInt16 nPreNum = m_pActNum->GetLevel(0).GetStart();
 
-        if (bPosition)
+        if (m_bPosition)
         {
             // When bPosition == true, draw the preview used in the Writer's "Position" tab
             // This is not used in Impress/Draw
 
             tools::Long nLineHeight = nFontHeight * 8 / 7;
             sal_uInt8 nStart = 0;
-            while (!(nActLevel & (1 << nStart)))
+            while (!(m_nActLevel & (1 << nStart)))
             {
                 nStart++;
             }
             if (nStart)
                 nStart--;
-            sal_uInt8 nEnd = std::min(sal_uInt8(nStart + 3), sal_uInt8(pActNum->GetLevelCount()));
+            sal_uInt8 nEnd = std::min(sal_uInt8(nStart + 3), sal_uInt8(m_pActNum->GetLevelCount()));
             for (sal_uInt8 nLevel = nStart; nLevel < nEnd; ++nLevel)
             {
-                const SvxNumberFormat& rFmt = pActNum->GetLevel(nLevel);
+                const SvxNumberFormat& rFmt = m_pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[nLevel] = rFmt.GetStart();
 
                 tools::Long nXStart(0);
@@ -234,16 +234,16 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
                 {
                     nBulletWidth = rFmt.IsShowSymbol()
                                        ? lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos, nYStart,
-                                                        aStdFont.GetFontSize())
+                                                        m_aStdFont.GetFontSize())
                                        : 0;
                 }
                 else
                 {
-                    pVDev->SetFont(aStdFont);
+                    pVDev->SetFont(m_aStdFont);
                     aNum.SetLevel(nLevel);
-                    if (pActNum->IsContinuousNumbering())
+                    if (m_pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
-                    OUString aText(pActNum->MakeNumString(aNum));
+                    OUString aText(m_pActNum->MakeNumString(aNum));
                     vcl::Font aSaveFont = pVDev->GetFont();
                     vcl::Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
@@ -263,7 +263,7 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
                 if (rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT
                     && rFmt.GetLabelFollowedBy() == SvxNumberFormat::SPACE)
                 {
-                    pVDev->SetFont(aStdFont);
+                    pVDev->SetFont(m_aStdFont);
                     OUString aText(' ');
                     pVDev->DrawText(Point(nNumberXPos, nYStart), aText);
                     nBulletWidth = nBulletWidth + pVDev->GetTextWidth(aText);
@@ -326,10 +326,10 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
             tools::Long nTopOffset = nTextHeight - nRectHeight;
             Color aSelRectColor = pVDev->GetBackgroundColor().IsDark() ? COL_WHITE : COL_BLACK;
 
-            for (sal_uInt16 nLevel = 0; nLevel < pActNum->GetLevelCount();
+            for (sal_uInt16 nLevel = 0; nLevel < m_pActNum->GetLevelCount();
                  ++nLevel, nYStart = nYStart + nYStep)
             {
-                const SvxNumberFormat& rFmt = pActNum->GetLevel(nLevel);
+                const SvxNumberFormat& rFmt = m_pActNum->GetLevel(nLevel);
                 aNum.GetLevelVal()[nLevel] = rFmt.GetStart();
                 tools::Long nXStart(0);
                 pVDev->SetFillColor(aBackColor);
@@ -369,15 +369,15 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
                     if (rFmt.IsShowSymbol())
                     {
                         nTextOffset = lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart,
-                                                     aStdFont.GetFontSize());
+                                                     m_aStdFont.GetFontSize());
                         nTextOffset = nTextOffset + nXStep;
                     }
                 }
                 else
                 {
-                    vcl::Font aFont(aStdFont);
-                    Size aTmpSize(aStdFont.GetFontSize());
-                    if (pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE))
+                    vcl::Font aFont(m_aStdFont);
+                    Size aTmpSize(m_aStdFont.GetFontSize());
+                    if (m_pActNum->IsFeatureSupported(SvxNumRuleFlags::BULLET_REL_SIZE))
                     {
                         aTmpSize.setWidth(aTmpSize.Width() * (rFmt.GetBulletRelSize()));
                         aTmpSize.setWidth(aTmpSize.Width() / 100);
@@ -397,9 +397,9 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
                     aFont.SetColor(aTmpBulletColor);
                     pVDev->SetFont(aFont);
                     aNum.SetLevel(nLevel);
-                    if (pActNum->IsContinuousNumbering())
+                    if (m_pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
-                    OUString aText(pActNum->MakeNumString(aNum));
+                    OUString aText(m_pActNum->MakeNumString(aNum));
                     tools::Long nY = nYStart;
                     nY -= (pVDev->GetTextHeight() - nTextHeight
                            - pVDev->GetFontMetric().GetDescent());
@@ -407,10 +407,10 @@ void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext,
                     nTextOffset = pVDev->GetTextWidth(aText);
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
-                    pVDev->SetFont(aStdFont);
+                    pVDev->SetFont(m_aStdFont);
                 }
                 //#i5153# the selected rectangle(s) should be black
-                if (0 != (nActLevel & (1 << nLevel)))
+                if (0 != (m_nActLevel & (1 << nLevel)))
                 {
                     pVDev->SetFillColor(aSelRectColor);
                     pVDev->SetLineColor(aSelRectColor);
