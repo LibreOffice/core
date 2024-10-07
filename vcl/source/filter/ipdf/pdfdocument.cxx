@@ -1382,6 +1382,12 @@ bool PDFDocument::Read(SvStream& rStream)
     rStream.Seek(0);
     m_aEditBuffer.WriteStream(rStream);
 
+    // clear out key items that may have been filled with info from any previous read attempt
+    m_aOffsetTrailers.clear();
+    m_aTrailerOffsets.clear();
+    m_pTrailer = nullptr;
+    m_pXRefStream = nullptr;
+
     // Look up the offset of the xref table.
     size_t nStartXRef = FindStartXRef(rStream);
     SAL_INFO("vcl.filter", "PDFDocument::Read: nStartXRef is " << nStartXRef);
