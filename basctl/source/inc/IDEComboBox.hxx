@@ -24,7 +24,7 @@
 #include <vcl/InterimItemWindow.hxx>
 
 #include "doceventnotifier.hxx"
-#include "scriptdocument.hxx"
+#include <basctl/scriptdocument.hxx>
 
 namespace basctl
 {

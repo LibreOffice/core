@@ -764,21 +764,26 @@ bool QueryReplaceMacro( std::u16string_view rName, weld::Widget* pParent )
 
 bool QueryDelDialog( std::u16string_view rName, weld::Widget* pParent )
 {
+    EnsureIde();
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
 bool QueryDelLib( std::u16string_view rName, bool bRef, weld::Widget* pParent )
 {
+    EnsureIde();
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
 bool QueryDelModule( std::u16string_view rName, weld::Widget* pParent )
 {
+    EnsureIde();
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
 bool QueryPassword(weld::Widget* pDialogParent, const Reference< script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat, bool bNewTitle)
 {
+    EnsureIde();
+
     bool bOK = false;
     sal_uInt16 nRet = 0;
 

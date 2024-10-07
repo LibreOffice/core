@@ -62,8 +62,11 @@ inline constexpr OUString RID_SVXBMP_THEME_DEFAULT_BIG = u"svx/res/galdefl.png"_
 
 inline constexpr OUString RID_CUIBMP_HARDDISK = u"res/harddisk_16.png"_ustr;
 inline constexpr OUString RID_CUIBMP_LIB = u"res/im30820.png"_ustr;
+inline constexpr OUString RID_CUIBMP_DIALOG = u"res/im30823.png"_ustr;
 inline constexpr OUString RID_CUIBMP_MACRO = u"res/im30821.png"_ustr;
 inline constexpr OUString RID_CUIBMP_DOC = u"res/im30826.png"_ustr;
+inline constexpr OUString RID_CUIBMP_LOCKED = u"res/lock.png"_ustr;
+inline constexpr OUString RID_CUIBMP_LINKED = u"sw/res/nc20007.png"_ustr;
 
 inline constexpr OUString RID_SVXBMP_SCRIPT = u"res/script.png"_ustr;
 

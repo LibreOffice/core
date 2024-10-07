@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "basctldllapi.h"
+
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -61,7 +63,7 @@ namespace basctl
 
     /** encapsulates a document which contains Basic scripts and dialogs
     */
-    class ScriptDocument
+    class BASCTL_DLLPUBLIC ScriptDocument
     {
     private:
         class Impl;

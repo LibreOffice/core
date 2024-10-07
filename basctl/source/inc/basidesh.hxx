@@ -19,7 +19,7 @@
 #pragma once
 
 #include "doceventnotifier.hxx"
-#include "sbxitem.hxx"
+#include <basctl/sbxitem.hxx>
 #include "ObjectCatalog.hxx"
 
 #include <com/sun/star/container/XContainerListener.hpp>

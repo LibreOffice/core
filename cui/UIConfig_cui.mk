@@ -116,6 +116,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/listdialog \
 	cui/uiconfig/ui/macroassigndialog \
 	cui/uiconfig/ui/macroassignpage \
+        cui/uiconfig/ui/macromanagerdialog \
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/menuassignpage \
 	cui/uiconfig/ui/mosaicdialog \

@@ -112,6 +112,16 @@ public:
     virtual void                SetRunLabel() = 0;
 };
 
+class AbstractMacroManagerDialog : virtual public VclAbstractDialog
+{
+protected:
+    virtual ~AbstractMacroManagerDialog() override = default;
+
+public:
+    virtual OUString GetScriptURL() const = 0;
+    virtual void LoadLastUsedMacro() const = 0;
+};
+
 namespace com::sun::star::frame { class XFrame; }
 
 class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
@@ -139,6 +149,11 @@ public:
 
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame) = 0;
+
+    virtual VclPtr<AbstractMacroManagerDialog>
+    CreateMacroManagerDialog(weld::Window* pParent,
+                             const css::uno::Reference<css::frame::XFrame>& rxFrame)
+        = 0;
 
     virtual void ShowAsyncScriptErrorDialog( weld::Window* pParent, const css::uno::Any& rException ) = 0;
 

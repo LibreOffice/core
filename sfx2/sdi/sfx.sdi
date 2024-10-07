@@ -2427,6 +2427,23 @@ SfxVoidItem RunMacro SID_RUNMACRO
     GroupId = SfxGroupId::Macro;
 ]
 
+SfxVoidItem MacroManager SID_MACROMANAGER
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Macro;
+]
+
 SfxVoidItem GotoLine SID_GOTOLINE
 
 [

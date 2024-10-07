@@ -1894,6 +1894,56 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             rReq.Done();
         }
         break;
+
+        case SID_MACROMANAGER:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+
+            Reference<XFrame> xFrame(GetRequestFrame(rReq));
+            if (!xFrame.is())
+            {
+                if (const SfxViewFrame* pViewFrame = SfxViewFrame::Current())
+                    xFrame = pViewFrame->GetFrame().GetFrameInterface();
+            }
+
+            VclPtr<AbstractMacroManagerDialog> pDlg(
+                pFact->CreateMacroManagerDialog(lcl_getDialogParent(xFrame), xFrame));
+            OSL_ENSURE(pDlg, "SfxApplication::OfaExec_Impl(SID_MACROMANAGER): no dialog!");
+            if (pDlg)
+            {
+                pDlg->StartExecuteAsync(
+                    [pDlg, xFrame](sal_Int32 nDialogResult)
+                    {
+                        if (!nDialogResult)
+                        {
+                            pDlg->disposeOnce();
+                            return;
+                        }
+
+                        Sequence<Any> args;
+                        Sequence<sal_Int16> outIndex;
+                        Sequence<Any> outArgs;
+                        Any ret;
+
+                        Reference<XInterface> xScriptContext;
+
+                        Reference<XController> xController;
+                        if (xFrame.is())
+                            xController = xFrame->getController();
+                        if (xController.is())
+                            xScriptContext = xController->getModel();
+                        if (!xScriptContext.is())
+                            xScriptContext = xController;
+
+                        SfxObjectShell::CallXScript(xScriptContext, pDlg->GetScriptURL(), args, ret,
+                                                    outIndex, outArgs);
+                        pDlg->disposeOnce();
+                    });
+                pDlg->LoadLastUsedMacro();
+            }
+            rReq.Done();
+        }
+        break;
 #endif // HAVE_FEATURE_SCRIPTING
 
         case SID_OFFICE_CHECK_PLZ:
@@ -2015,6 +2065,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
         rSet.DisableItem(SID_MACROORGANIZER);
         rSet.DisableItem(SID_SCRIPTORGANIZER);
         rSet.DisableItem(SID_BASICIDE_APPEAR);
+        rSet.DisableItem(SID_MACROMANAGER);
     }
 }
 

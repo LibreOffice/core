@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <scriptdocument.hxx>
+#include <basctl/scriptdocument.hxx>
 #include <basobj.hxx>
 #include <strings.hrc>
 #include <iderid.hxx>

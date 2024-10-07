@@ -576,7 +576,7 @@
 #include <iderid.hxx>
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
-#include <scriptdocument.hxx>
+#include <basctl/scriptdocument.hxx>
 #endif // PCH_LEVEL >= 4
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

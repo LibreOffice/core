@@ -23,7 +23,7 @@
 
 #include <string_view>
 
-#include "scriptdocument.hxx"
+#include <basctl/scriptdocument.hxx>
 
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 

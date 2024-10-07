@@ -540,6 +540,9 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
 
             for ( Reference< browse::XBrowseNode > const & theChild : children )
             {
+                if (!theChild.is())
+                    continue;
+
                 bool bDisplay = true;
                 OUString uiName = theChild->getName();
                 if ( bIsRootNode )
@@ -576,6 +579,9 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
 
                         for ( const auto& rxNode : grandchildren )
                         {
+                            if (!rxNode.is())
+                                continue;
+
                             if ( rxNode->getType() == browse::BrowseNodeTypes::CONTAINER )
                             {
                                 bChildOnDemand = true;
@@ -875,59 +881,59 @@ void CuiConfigGroupListBox::GroupSelected()
 
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
         {
-            if (!m_xTreeView->iter_has_child(*xIter))
-            {
-                Reference< browse::XBrowseNode > rootNode(
-                    static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
+            Reference< browse::XBrowseNode > rootNode(
+                static_cast< browse::XBrowseNode* >( pInfo->pObject ) ) ;
 
-                try {
-                    if ( rootNode->hasChildNodes() )
+            try {
+                if ( rootNode->hasChildNodes() )
+                {
+                    const Sequence< Reference< browse::XBrowseNode > > children =
+                        rootNode->getChildNodes();
+
+                    for ( const Reference< browse::XBrowseNode >& childNode : children )
                     {
-                        const Sequence< Reference< browse::XBrowseNode > > children =
-                            rootNode->getChildNodes();
+                        if (!childNode.is())
+                            continue;
 
-                        for ( const Reference< browse::XBrowseNode >& childNode : children )
+                        if (childNode->getType() == browse::BrowseNodeTypes::SCRIPT)
                         {
-                            if (childNode->getType() == browse::BrowseNodeTypes::SCRIPT)
+                            OUString uri, description;
+
+                            Reference < beans::XPropertySet >xPropSet( childNode, UNO_QUERY );
+                            if (!xPropSet.is())
                             {
-                                OUString uri, description;
-
-                                Reference < beans::XPropertySet >xPropSet( childNode, UNO_QUERY );
-                                if (!xPropSet.is())
-                                {
-                                    continue;
-                                }
-
-                                Any value =
-                                    xPropSet->getPropertyValue(u"URI"_ustr);
-                                value >>= uri;
-
-                                try
-                                {
-                                    value = xPropSet->getPropertyValue(u"Description"_ustr);
-                                    value >>= description;
-                                }
-                                catch (Exception &) {
-                                    // do nothing, the description will be empty
-                                }
-
-                                OUString* pScriptURI = new OUString( uri );
-
-                                OUString aImage = GetImage(childNode, Reference< XComponentContext >(), false);
-                                m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
-                                m_pFunctionListBox->aArr.back()->sCommand = uri;
-                                m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
-                                m_pFunctionListBox->aArr.back()->sHelpText = description;
-
-                                OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
-                                m_pFunctionListBox->append(sId, childNode->getName(), aImage);
+                                continue;
                             }
+
+                            Any value =
+                                xPropSet->getPropertyValue(u"URI"_ustr);
+                            value >>= uri;
+
+                            try
+                            {
+                                value = xPropSet->getPropertyValue(u"Description"_ustr);
+                                value >>= description;
+                            }
+                            catch (Exception &) {
+                                // do nothing, the description will be empty
+                            }
+
+                            OUString* pScriptURI = new OUString( uri );
+
+                            OUString aImage = GetImage(childNode, Reference< XComponentContext >(), false);
+                            m_pFunctionListBox->aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::FUNCTION_SCRIPT, 0, pScriptURI ));
+                            m_pFunctionListBox->aArr.back()->sCommand = uri;
+                            m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
+                            m_pFunctionListBox->aArr.back()->sHelpText = description;
+
+                            OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
+                            m_pFunctionListBox->append(sId, childNode->getName(), aImage);
                         }
                     }
                 }
-                catch (RuntimeException&) {
-                    // do nothing, the entry will not be displayed in the UI
-                }
+            }
+            catch (RuntimeException&) {
+                // do nothing, the entry will not be displayed in the UI
             }
             break;
         }
@@ -1032,23 +1038,10 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
 #if HAVE_FEATURE_SCRIPTING
 void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 {
-    auto const rMacro = pItem->GetQualifiedName();
-    sal_Int32 nIdx {rMacro.lastIndexOf('.')};
-    const std::u16string_view aMethod( rMacro.subView(nIdx + 1) );
-    std::u16string_view aLib;
-    std::u16string_view aModule;
-    if ( nIdx>0 )
-    {
-        // string contains at least 2 tokens
-        nIdx = rMacro.lastIndexOf('.', nIdx);
-        if (nIdx != -1)
-        {
-            // string contains at least 3 tokens
-            aLib = o3tl::getToken(rMacro, 0, '.' );
-            sal_Int32 nIdx2 = nIdx + 1;
-            aModule = o3tl::getToken(rMacro, 0, '.', nIdx2 );
-        }
-    }
+    const std::u16string_view aLocation = pItem->GetLocation();
+    const std::u16string_view aLib = pItem->GetLib();
+    const std::u16string_view aModule = pItem->GetModule();
+    const std::u16string_view aMethod = pItem->GetMethod();
 
     std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator();
     if (!m_xTreeView->get_iter_first(*xIter))
@@ -1065,6 +1058,8 @@ void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
             {
                 do
                 {
+                    if (aLocation !=  m_xTreeView->get_text(*xLocationIter))
+                        continue;
                     m_xTreeView->expand_row(*xLocationIter);
                     std::unique_ptr<weld::TreeIter> xLibIter = m_xTreeView->make_iterator(xLocationIter.get());
                     if (m_xTreeView->iter_children(*xLibIter))
@@ -1074,6 +1069,34 @@ void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
                             OUString aEntryLib = m_xTreeView->get_text(*xLibIter);
                             if (aEntryLib == aLib)
                             {
+                                if (aModule.empty())
+                                {
+                                    m_xTreeView->scroll_to_row(*xLibIter);
+                                    m_xTreeView->select(*xLibIter);
+                                    GroupSelected();
+                                    weld::TreeView& rFunctionListBoxTreeView
+                                        = m_pFunctionListBox->get_widget();
+                                    std::unique_ptr<weld::TreeIter> xFunctionListBoxIter
+                                        = rFunctionListBoxTreeView.make_iterator();
+                                    if (!rFunctionListBoxTreeView.get_iter_first(
+                                            *xFunctionListBoxIter))
+                                        return;
+                                    do
+                                    {
+                                        OUString aEntryMethod = rFunctionListBoxTreeView.get_text(
+                                            *xFunctionListBoxIter);
+                                        if (aEntryMethod == aMethod)
+                                        {
+                                            rFunctionListBoxTreeView.scroll_to_row(
+                                                *xFunctionListBoxIter);
+                                            rFunctionListBoxTreeView.select(*xFunctionListBoxIter);
+                                            return;
+                                        }
+                                    } while (
+                                        rFunctionListBoxTreeView.iter_next(*xFunctionListBoxIter));
+                                    return;
+                                }
+
                                 m_xTreeView->expand_row(*xLibIter);
                                 std::unique_ptr<weld::TreeIter> xModIter = m_xTreeView->make_iterator(xLibIter.get());
                                 if (m_xTreeView->iter_children(*xModIter))

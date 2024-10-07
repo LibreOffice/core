@@ -18,9 +18,9 @@
  */
 #pragma once
 
-#include "scriptdocument.hxx"
-
-#include "sbxitem.hxx"
+#include <basctl/basctldllpublic.hxx>
+#include <basctl/scriptdocument.hxx>
+#include <basctl/sbxitem.hxx>
 #include <svtools/scrolladaptor.hxx>
 #include <svtools/tabbar.hxx>
 #include <basic/sbdef.hxx>
@@ -297,10 +297,6 @@ sal_uInt32           CalcLineCount( SvStream& rStream );
 
 bool QueryReplaceMacro( std::u16string_view rName, weld::Widget* pParent );
 bool QueryDelMacro( std::u16string_view rName, weld::Widget* pParent );
-bool QueryDelDialog( std::u16string_view rName, weld::Widget* pParent );
-bool QueryDelModule( std::u16string_view rName, weld::Widget* pParent );
-bool QueryDelLib( std::u16string_view rName, bool bRef, weld::Widget* pParent );
-bool QueryPassword(weld::Widget* pDialogParent, const css::uno::Reference< css::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false);
 
 class ModuleInfoHelper
 {

@@ -18,7 +18,8 @@
  */
 #pragma once
 
-#include "scriptdocument.hxx"
+#include <basctl/basctldllpublic.hxx>
+#include <basctl/scriptdocument.hxx>
 #include <tools/long.hxx>
 
 class SbMethod;
@@ -44,13 +45,9 @@ namespace basctl
     void            BasicStopped( bool* pbAppWindowDisabled = nullptr, bool* pbDispatcherLocked = nullptr, sal_uInt16* pnWaitCount = nullptr,
                             SfxUInt16Item** ppSWActionCount = nullptr, SfxUInt16Item** ppSWLockViewCount = nullptr );
 
-    bool            IsValidSbxName( std::u16string_view rName );
-
     SAL_RET_MAYBENULL BasicManager*   FindBasicManager( StarBASIC const * pLib );
 
     SAL_RET_MAYBENULL SfxBindings*    GetBindingsPtr();
-
-    SAL_RET_MAYBENULL SfxDispatcher*  GetDispatcher ();
 
     void            InvalidateDebuggerSlots();
 
@@ -97,8 +94,6 @@ namespace basctl
     bool            RenameDialog(weld::Widget* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName);
 
     bool            RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
-
-    void            MarkDocumentModified( const ScriptDocument& rDocument );
 
 } // namespace basctl
 

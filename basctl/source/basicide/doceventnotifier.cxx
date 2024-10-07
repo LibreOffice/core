@@ -18,7 +18,7 @@
  */
 
 #include <doceventnotifier.hxx>
-#include <scriptdocument.hxx>
+#include <basctl/scriptdocument.hxx>
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 

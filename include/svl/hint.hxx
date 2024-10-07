@@ -84,6 +84,8 @@ enum class SfxHintId {
 // basctl
     BasCtlDlgEd,
 
+    ScriptDocumentChanged,
+
 // reportdesign
     ReportDesignDlgEd,
 
@@ -266,6 +268,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::BasicInfoWanted: return stream << "BasicInfoWanted";
     case SfxHintId::BasicStart: return stream << "BasicStart";
     case SfxHintId::BasicStop: return stream << "BasicStop";
+    case SfxHintId::ScriptDocumentChanged: return stream << "ScriptDocumentChanged";
     case SfxHintId::FmDesignModeChanged: return stream << "FmDesignModeChanged";
     case SfxHintId::EditSourceParasMoved: return stream << "EditSourceParasMoved";
     case SfxHintId::EditSourceSelectionChanged: return stream << "EditSourceSelectionChanged";

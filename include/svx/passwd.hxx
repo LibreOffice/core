@@ -23,7 +23,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <svx/svxdllapi.h>
 
-class UNLESS_MERGELIBS(SVX_DLLPUBLIC) SvxPasswordDialog final : public SfxDialogController
+class UNLESS_MERGELIBS_MORE(SVX_DLLPUBLIC) SvxPasswordDialog final : public SfxDialogController
 {
 private:
     OUString m_aOldPasswdErrStr;

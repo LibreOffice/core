@@ -289,6 +289,11 @@ shell SfxApplication
     [
         ExecMethod = OfaExec_Impl;
     ]
+    SID_MACROMANAGER
+    [
+        ExecMethod = OfaExec_Impl;
+        StateMethod = OfaState_Impl;
+    ]
     SID_INET_DLG  // status(final)
     [
         ExecMethod = OfaExec_Impl;

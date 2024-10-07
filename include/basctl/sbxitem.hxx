@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include "basctldllapi.h"
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
@@ -34,7 +35,7 @@ enum SbxItemType
     SBX_TYPE_METHOD
 };
 
-class SbxItem : public SfxPoolItem
+class BASCTL_DLLPUBLIC SbxItem : public SfxPoolItem
 {
     const ScriptDocument    m_aDocument;
     const OUString          m_aLibName;

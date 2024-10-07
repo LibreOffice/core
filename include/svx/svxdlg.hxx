@@ -430,6 +430,9 @@ public:
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
 
+    virtual VclPtr<AbstractMacroManagerDialog> CreateMacroManagerDialog(weld::Window* pParent,
+            const css::uno::Reference< css::frame::XFrame >& rxFrame) override = 0;
+
     virtual void ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException) override = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateSvxMacroAssignDlg(

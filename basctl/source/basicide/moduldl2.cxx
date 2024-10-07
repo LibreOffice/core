@@ -464,7 +464,13 @@ IMPL_LINK( LibPage, ButtonHdl, weld::Button&, rButton, void )
     else if (&rButton == m_xInsertLibButton.get())
         InsertLib();
     else if (&rButton == m_xExportButton.get())
-        Export();
+    {
+        std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
+        if (!m_xLibBox->get_cursor(xCurEntry.get()))
+            return;
+        OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
+        Export(m_aCurDocument, aLibName, m_pDialog->getDialog());
+    }
     else if (&rButton == m_xDelButton.get())
         DeleteCurrent();
     else if (&rButton == m_xPasswordButton.get())
@@ -565,9 +571,32 @@ void LibPage::NewLib()
 
 void LibPage::InsertLib()
 {
+    auto remove_entry = [this](OUString& rLibName) { // remove listbox entry
+        int nEntry = FindEntry(*m_xLibBox, rLibName);
+        if (nEntry != -1)
+            m_xLibBox->remove(nEntry);
+    };
+
+    auto insert_entry = [this](OUString& rLibName) { // insert listbox entry
+        m_xLibBox->make_unsorted();
+        ImpInsertLibEntry(rLibName, m_xLibBox->n_children());
+        m_xLibBox->make_sorted();
+        m_xLibBox->set_cursor(m_xLibBox->find_text(rLibName));
+    };
+
+    ImportLib(m_aCurDocument, m_pDialog->getDialog(), remove_entry, insert_entry, {});
+}
+
+void ImportLib(const ScriptDocument& rDocument, weld::Dialog* pDialog,
+               const std::function<void(OUString& rLibName)>& func_remove_entry,
+               const std::function<void(OUString& rLibName)>& func_insert_entry,
+               const std::function<void()>& func_insert_entries)
+{
+    basctl::EnsureIde();
+
     const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, pDialog);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
@@ -643,7 +672,7 @@ void LibPage::InsertLib()
     if (aLibNames.hasElements())
     {
         // library import dialog
-        xLibDlg = std::make_shared<LibDialog>(m_pDialog->getDialog());
+        xLibDlg = std::make_shared<LibDialog>(pDialog);
         xLibDlg->SetStorageName(aURLObj.getName());
         weld::TreeView& rView = xLibDlg->GetLibBox();
         rView.make_unsorted();
@@ -671,7 +700,7 @@ void LibPage::InsertLib()
 
     if (!xLibDlg)
     {
-        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
+        std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(pDialog,
                                                        VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_NOLIBINSTORAGE)));
         xErrorBox->run();
         return;
@@ -685,9 +714,12 @@ void LibPage::InsertLib()
     if ( aExtension != aLibExtension && aExtension != aContExtension )
         xLibDlg->EnableReference(false);
 
-    weld::DialogController::runAsync(xLibDlg, [aContExtension, xDlgURLObj=std::move(xDlgURLObj), aExtension,
-                                               aLibExtension, xModURLObj=std::move(xModURLObj), xLibDlg,
-                                               xDlgLibContImport, xModLibContImport, this](sal_Int32 nResult)
+    weld::DialogController::runAsync(
+        xLibDlg,
+        [aContExtension, xDlgURLObj = std::move(xDlgURLObj), aExtension, aLibExtension,
+         xModURLObj = std::move(xModURLObj), xLibDlg, xDlgLibContImport, xModLibContImport,
+         rDocument, pDialog, func_remove_entry, func_insert_entry,
+         func_insert_entries](sal_Int32 nResult)
         {
             if (!nResult )
                 return;
@@ -702,8 +734,10 @@ void LibPage::InsertLib()
                 if (rView.get_toggle(nLib) == TRISTATE_TRUE)
                 {
                     OUString aLibName(rView.get_text(nLib));
-                    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-                    Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+                    Reference<script::XLibraryContainer2> xModLibContainer(
+                        rDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
+                    Reference<script::XLibraryContainer2> xDlgLibContainer(
+                        rDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
 
                     // check, if the library is already existing
                     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) ) ||
@@ -714,8 +748,10 @@ void LibPage::InsertLib()
                             // check, if the library is the Standard library
                             if ( aLibName == "Standard" )
                             {
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
-                                                                               VclMessageType::Warning, VclButtonsType::Ok, IDEResId(RID_STR_REPLACESTDLIB)));
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(
+                                    Application::CreateMessageDialog(
+                                        pDialog, VclMessageType::Warning, VclButtonsType::Ok,
+                                        IDEResId(RID_STR_REPLACESTDLIB)));
                                 xErrorBox->run();
                                 continue;
                             }
@@ -726,8 +762,10 @@ void LibPage::InsertLib()
                             {
                                 OUString aErrStr( IDEResId(RID_STR_REPLACELIB) );
                                 aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" + IDEResId(RID_STR_LIBISREADONLY);
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
-                                                                               VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(
+                                    Application::CreateMessageDialog(pDialog,
+                                                                     VclMessageType::Warning,
+                                                                     VclButtonsType::Ok, aErrStr));
                                 xErrorBox->run();
                                 continue;
                             }
@@ -743,8 +781,9 @@ void LibPage::InsertLib()
                             else
                                 aErrStr = IDEResId(RID_STR_IMPORTNOTPOSSIBLE);
                             aErrStr = aErrStr.replaceAll("XX", aLibName) + "\n" +IDEResId(RID_STR_SBXNAMEALLREADYUSED);
-                            std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
-                                                                           VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                            std::unique_ptr<weld::MessageDialog> xErrorBox(
+                                Application::CreateMessageDialog(pDialog, VclMessageType::Warning,
+                                                                 VclButtonsType::Ok, aErrStr));
                             xErrorBox->run();
                             continue;
                         }
@@ -758,14 +797,17 @@ void LibPage::InsertLib()
                         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
                         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) && !bReference )
                         {
-                            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContImport, aLibName, aPassword, true, true);
+                            bOK = QueryPassword(pDialog, xModLibContImport, aLibName, aPassword,
+                                                true, true);
 
                             if ( !bOK )
                             {
                                 OUString aErrStr( IDEResId(RID_STR_NOIMPORT) );
                                 aErrStr = aErrStr.replaceAll("XX", aLibName);
-                                std::unique_ptr<weld::MessageDialog> xErrorBox(Application::CreateMessageDialog(m_pDialog->getDialog(),
-                                                                               VclMessageType::Warning, VclButtonsType::Ok, aErrStr));
+                                std::unique_ptr<weld::MessageDialog> xErrorBox(
+                                    Application::CreateMessageDialog(pDialog,
+                                                                     VclMessageType::Warning,
+                                                                     VclButtonsType::Ok, aErrStr));
                                 xErrorBox->run();
                                 continue;
                             }
@@ -775,10 +817,7 @@ void LibPage::InsertLib()
                     // remove existing libraries
                     if ( bRemove )
                     {
-                        // remove listbox entry
-                        int nEntry_ = FindEntry(*m_xLibBox, aLibName);
-                        if (nEntry_ != -1)
-                            m_xLibBox->remove(nEntry_);
+                        func_remove_entry(aLibName); // LibPage::InsertLib
 
                         // remove module library
                         if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
@@ -901,29 +940,24 @@ void LibPage::InsertLib()
                         }
                     }
 
-                    // insert listbox entry
-                    m_xLibBox->make_unsorted();
-                    ImpInsertLibEntry( aLibName, m_xLibBox->n_children() );
-                    m_xLibBox->make_sorted();
-                    m_xLibBox->set_cursor( m_xLibBox->find_text(aLibName) );
+                    func_insert_entry(aLibName); // LibPage::InsertLib
                     bChanges = true;
                 }
             }
 
-            if ( bChanges )
-                MarkDocumentModified( m_aCurDocument );
+            if (bChanges)
+            {
+                func_insert_entries(); // MacroManager
+                MarkDocumentModified(rDocument);
+            }
         });
 }
 
-void LibPage::Export()
+void Export(const ScriptDocument& rDocument, const OUString& aLibName, weld::Dialog* pDialog)
 {
-    std::unique_ptr<weld::TreeIter> xCurEntry(m_xLibBox->make_iterator());
-    if (!m_xLibBox->get_cursor(xCurEntry.get()))
-        return;
-    OUString aLibName(m_xLibBox->get_text(*xCurEntry, 0));
-
     // Password verification
-    Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+    Reference<script::XLibraryContainer2> xModLibContainer(rDocument.getLibraryContainer(E_SCRIPTS),
+                                                           UNO_QUERY);
 
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
@@ -934,13 +968,13 @@ void LibPage::Export()
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
             OUString aPassword;
-            bOK = QueryPassword(m_pDialog->getDialog(), xModLibContainer, aLibName, aPassword);
+            bOK = QueryPassword(pDialog, xModLibContainer, aLibName, aPassword);
         }
         if ( !bOK )
             return;
     }
 
-    std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(m_pDialog->getDialog()));
+    std::unique_ptr<ExportDialog> xNewDlg(new ExportDialog(pDialog));
     if (xNewDlg->run() != RET_OK)
         return;
 
@@ -951,24 +985,24 @@ void LibPage::Export()
         //parent of file dialog from ExportAs...
         xNewDlg.reset();
         if (bExportAsPackage)
-            ExportAsPackage( aLibName );
+            ExportAsPackage(rDocument, aLibName, pDialog);
         else
-            ExportAsBasic( aLibName );
+            ExportAsBasic(rDocument, aLibName, pDialog);
     }
     catch(const util::VetoException& ) // user canceled operation
     {
     }
 }
 
-void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetURL,
-    const Reference< task::XInteractionHandler >& Handler )
+void implExportLib(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                   const OUString& aTargetURL, const Reference<task::XInteractionHandler>& Handler)
 {
-    Reference< script::XLibraryContainerExport > xModLibContainerExport
-        ( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-    Reference< script::XLibraryContainerExport > xDlgLibContainerExport
-        ( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+    Reference<script::XLibraryContainerExport> xModLibContainerExport(
+        rScriptDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
+    Reference<script::XLibraryContainerExport> xDlgLibContainerExport(
+        rScriptDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
     if ( xModLibContainerExport.is() )
-        xModLibContainerExport->exportLibrary( aLibName, aTargetURL, Handler );
+        xModLibContainerExport->exportLibrary(aLibName, aTargetURL, Handler);
 
     if (!xDlgLibContainerExport.is())
         return;
@@ -1011,10 +1045,13 @@ Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
     return xRet;
 }
 
-void LibPage::ExportAsPackage( const OUString& aLibName )
+void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                     weld::Dialog* pDialog)
 {
+    EnsureIde();
     // file open dialog
-    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
+    sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_SIMPLE,
+                                FileDialogFlags::NONE, pDialog);
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
@@ -1049,7 +1086,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     if( xSFA->exists( aSourcePath ) )
         xSFA->kill( aSourcePath );
     Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
-    implExportLib( aLibName, aTmpPath, xDummyHandler );
+    implExportLib(rScriptDocument, aLibName, aTmpPath, xDummyHandler);
 
     Reference< XCommandEnvironment > xCmdEnv = new OLibCommandEnvironment(xHandler);
 
@@ -1113,11 +1150,13 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
         xSFA->kill( aMetaInfFolder );
 }
 
-void LibPage::ExportAsBasic( const OUString& aLibName )
+void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                   weld::Dialog* pDialog)
 {
+    EnsureIde();
     // Folder picker
     const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDialog->getDialog());
+    Reference<XFolderPicker2> xFolderPicker = sfx2::createFolderPicker(xContext, pDialog);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 
     xFolderPicker->setTitle(IDEResId(RID_STR_EXPORTBASIC));
@@ -1136,7 +1175,7 @@ void LibPage::ExportAsBasic( const OUString& aLibName )
         GetExtraData()->SetAddLibPath(aTargetURL);
 
         Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
-        implExportLib( aLibName, aTargetURL, xDummyHandler );
+        implExportLib(rScriptDocument, aLibName, aTargetURL, xDummyHandler);
     }
 }
 

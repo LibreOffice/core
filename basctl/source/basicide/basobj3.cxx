@@ -244,6 +244,8 @@ BasicManager* FindBasicManager( StarBASIC const * pLib )
 
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
+    SfxGetpApp()->Broadcast(SfxHint(SfxHintId::ScriptDocumentChanged));
+
     Shell* pShell = GetShell();
 
     // does not have to come from a document...

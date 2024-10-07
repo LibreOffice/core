@@ -36,6 +36,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem final : public SfxPoolItem
     OUString                aModuleName;
     OUString                aMethodName;
     OUString                aCommentText;
+    OUString aLocationName;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -44,7 +45,8 @@ public:
                     OUString aLibName,
                     OUString aModuleName,
                     OUString aMethodName,
-                    OUString aComment);
+                    OUString aComment,
+                    OUString aLocation = OUString());
 
     virtual SfxMacroInfoItem* Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
@@ -63,6 +65,7 @@ public:
     const BasicManager*     GetBasicManager() const
                             { return pBasicManager; }
     OUString                GetQualifiedName() const;
+    const OUString& GetLocation() const { return aLocationName; }
 };
 
 #endif

@@ -436,4 +436,33 @@
 #define STR_STYLE_NO_LANGUAGE                       NC_("STR_STYLE_NO_LANGUAGE", "Check if styles have a language set.")
 #define STR_DOCUMENT_TITLE                          NC_("STR_DOCUMENT_TITLE", "Check if the document title is set.")
 
+// Unified script organizer selector
+#define STR_LIBRARY                                 NC_("STR_LIBRARY", "Library")
+#define STR_MODULE                                  NC_("STR_MODULE", "Module")
+#define STR_DIALOG                                  NC_("STR_DIALOG", "Dialog")
+#define STR_MACRO                                   NC_("STR_MACRO", "Macro")
+
+#define STR_INPUTDIALOG_NEWLIBRARYTITLE             NC_("STR_INPUTDIALOG_NEWLIBRARYTITLE", "New Library")
+#define STR_INPUTDIALOG_NEWLIBRARYLABEL             NC_("STR_INPUTDIALOG_NEWLIBRARYLABEL", "Please enter a name for the new library:")
+#define STR_INPUTDIALOG_NEWMODULETITLE              NC_("STR_INPUTDIALOG_NEWMODULETITLE", "New Module")
+#define STR_INPUTDIALOG_NEWMODULELABEL              NC_("STR_INPUTDIALOG_NEWMODULELABEL", "Please enter a name for the new module:")
+#define STR_INPUTDIALOG_NEWDIALOGTITLE              NC_("STR_INPUTDIALOG_NEWDIALOGTITLE", "New Dialog")
+#define STR_INPUTDIALOG_NEWDIALOGLABEL              NC_("STR_INPUTDIALOG_NEWDIALOGLABEL", "Please enter a name for the new dialog:")
+#define STR_INPUTDIALOG_NEWMACROTITLE               NC_("STR_INPUTDIALOG_NEWMACROTITLE", "New Macro")
+#define STR_INPUTDIALOG_NEWMACROLABEL               NC_("STR_INPUTDIALOG_NEWMACROLABEL", "Please enter a name for the new macro:")
+
+#define STR_INPUTDIALOG_RENAMELIBRARYTITLE          NC_("STR_INPUTDIALOG_RENAMELIBRARYTITLE", "Rename Library")
+#define STR_INPUTDIALOG_RENAMELIBRARYLABEL          NC_("STR_INPUTDIALOG_RENAMELIBRARYLABEL", "Please enter a name to rename the library:")
+#define STR_INPUTDIALOG_RENAMEMODULETITLE           NC_("STR_INPUTDIALOG_RENAMEMODULETITLE", "Rename Module")
+#define STR_INPUTDIALOG_RENAMEMODULELABEL           NC_("STR_INPUTDIALOG_RENAMEMODULELABEL", "Please enter a name to rename the module:")
+#define STR_INPUTDIALOG_RENAMEDIALOGTITLE           NC_("STR_INPUTDIALOG_RENAMEDIALOGTITLE", "Rename Dialog")
+#define STR_INPUTDIALOG_RENAMEDIALOGLABEL           NC_("STR_INPUTDIALOG_RENAMEDIALOGLABEL", "Please enter a name to rename the dialog:")
+#define STR_INPUTDIALOG_RENAMEMACROTITLE            NC_("STR_INPUTDIALOG_RENAMEMACROTITLE", "Rename Macro")
+#define STR_INPUTDIALOG_RENAMEMACROLABEL            NC_("STR_INPUTDIALOG_RENAMEMACROLABEL", "Please enter a name to rename the macro:")
+
+#define STR_LIBISREADONLY                           NC_("STR_LIBISREADONLY", "This library is read-only.")
+#define STR_SBXNAMEALLREADYUSED                     NC_("STR_SBXNAMEALLREADYUSED", "Name already exists")
+
+#define STR_SELECTEDENTRYNOTFOUND                   NC_("STR_SELECTEDENTRYNOTFOUND", "The selected entry doesn't exist. It will be removed from the list.")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

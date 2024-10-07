@@ -26,7 +26,7 @@
 #include "doceventnotifier.hxx"
 
 #include <vcl/weld.hxx>
-#include "sbxitem.hxx"
+#include <basctl/sbxitem.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class SbModule;

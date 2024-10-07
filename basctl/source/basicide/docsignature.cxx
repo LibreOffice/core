@@ -18,7 +18,7 @@
  */
 
 #include <docsignature.hxx>
-#include <scriptdocument.hxx>
+#include <basctl/scriptdocument.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>

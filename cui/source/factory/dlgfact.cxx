@@ -94,6 +94,8 @@
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
 
+#include <MacroManagerDialog.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
@@ -134,6 +136,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasswordToOpenModifyDialog,weld::DialogControll
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractQrCodeGenDialog,QrCodeGenDialog)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasteDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SfxDialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractMacroManagerDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSpellDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxAreaTabDialog,SfxTabDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSvxCaptionDialog,SfxTabDialogController)
@@ -995,6 +998,18 @@ void AbstractScriptSelectorDialog_Impl::SetRunLabel()
 {
     m_xDlg->SetRunLabel();
 }
+
+VclPtr<AbstractMacroManagerDialog>
+AbstractDialogFactory_Impl::CreateMacroManagerDialog(weld::Window* pParent,
+                                                     const Reference<frame::XFrame>& rxFrame)
+{
+    return VclPtr<AbstractMacroManagerDialog_Impl>::Create(
+        std::make_shared<MacroManagerDialog>(pParent, rxFrame));
+}
+
+OUString AbstractMacroManagerDialog_Impl::GetScriptURL() const { return m_xDlg->GetScriptURL(); }
+
+void AbstractMacroManagerDialog_Impl::LoadLastUsedMacro() const { m_xDlg->LoadLastUsedMacro(); }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog(weld::Window* pParent,
                                             const OUString& rLanguage)

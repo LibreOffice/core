@@ -60,6 +60,8 @@
 #include <zoom.hxx>
 #include <AdditionsDialog.hxx>
 
+#include <MacroManagerDialog.hxx>
+
 #define DECL_ABSTDLG_CLASS_(Class,Base,Dialog,StdPtr) \
 class Class##_Impl final : public Base \
 { \
@@ -204,6 +206,13 @@ DECL_ABSTDLG_CLASS(AbstractTitleDialog,TitleDialog)
 DECL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SvxScriptSelectorDialog)
     virtual OUString GetScriptURL() const override;
     virtual void SetRunLabel() override;
+};
+
+
+// AbstractMacroManagerDialog_Impl
+DECL_ABSTDLG_CLASS_ASYNC(AbstractMacroManagerDialog,MacroManagerDialog)
+    virtual OUString GetScriptURL() const override;
+    virtual void LoadLastUsedMacro() const override;
 };
 
 // AbstractGalleryIdDialog_Impl
@@ -574,6 +583,10 @@ public:
 
     virtual VclPtr<AbstractScriptSelectorDialog> CreateScriptSelectorDialog(weld::Window* pParent,
             const css::uno::Reference< css::frame::XFrame >& rxFrame) override;
+
+    virtual VclPtr<AbstractMacroManagerDialog> CreateMacroManagerDialog(weld::Window* pParent,
+            const css::uno::Reference< css::frame::XFrame >& rxFrame) override;
+
 
     virtual void ShowAsyncScriptErrorDialog(weld::Window* pParent, const css::uno::Any& rException) override;
 

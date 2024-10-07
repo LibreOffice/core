@@ -237,8 +237,6 @@ basctl/source/inc/docsignature.hxx
 basctl/source/inc/localizationmgr.hxx
 basctl/source/inc/managelang.hxx
 basctl/source/inc/propbrw.hxx
-basctl/source/inc/sbxitem.hxx
-basctl/source/inc/scriptdocument.hxx
 basegfx/source/color/bcolormodifier.cxx
 basegfx/source/color/bcolortools.cxx
 basegfx/source/curve/b2dbeziertools.cxx
@@ -4740,6 +4738,8 @@ include/avmedia/mediaitem.hxx
 include/avmedia/mediaplayer.hxx
 include/avmedia/mediatoolbox.hxx
 include/avmedia/mediawindow.hxx
+include/basctl/sbxitem.hxx
+include/basctl/scriptdocument.hxx
 include/basegfx/color/bcolor.hxx
 include/basegfx/color/bcolormodifier.hxx
 include/basegfx/curve/b2dbeziertools.hxx

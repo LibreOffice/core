@@ -27,6 +27,8 @@
 #include <vcl/weld.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
+#include <basctl/basctldllpublic.hxx>
+
 class SvxPasswordDialog;
 
 namespace basctl
@@ -185,11 +187,6 @@ class LibPage final : public OrganizePage
     void                DeleteCurrent();
     void                NewLib();
     void                InsertLib();
-    void                implExportLib( const OUString& aLibName, const OUString& aTargetURL,
-                                       const css::uno::Reference< css::task::XInteractionHandler >& Handler );
-    void                Export();
-    void                ExportAsPackage( const OUString& aLibName );
-    void                ExportAsBasic( const OUString& aLibName );
     void                EndTabDialog();
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
@@ -201,6 +198,14 @@ public:
     virtual             ~LibPage() override;
     virtual void        ActivatePage() override;
 };
+
+void implExportLib(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                   const OUString& aTargetURL,
+                   const css::uno::Reference<css::task::XInteractionHandler>& Handler);
+void ExportAsPackage(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                     weld::Dialog* pDialog);
+void ExportAsBasic(const ScriptDocument& rScriptDocument, const OUString& aLibName,
+                   weld::Dialog* pDialog);
 
 class OrganizeDialog : public weld::GenericDialogController
 {
