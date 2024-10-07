@@ -130,7 +130,7 @@
 #include <tools/time.hxx>
 #include <memory>
 
-// PPT ColorScheme Slots
+/* PPT ColorScheme Slots
 #define PPT_COLSCHEME                       (0x08000000)
 #define PPT_COLSCHEME_HINTERGRUND           (0x08000000)
 #define PPT_COLSCHEME_TEXT_UND_ZEILEN       (0x08000001)
@@ -140,7 +140,7 @@
 #define ANSI_CHARSET            0
 #define SYMBOL_CHARSET          2
 
-/* Font Families */
+Font Families 
 #define FF_ROMAN                0x10
 #define FF_SWISS                0x20
 #define FF_MODERN               0x30
@@ -149,7 +149,7 @@
 
 #define DEFAULT_PITCH           0x00
 #define FIXED_PITCH             0x01
-#define VARIABLE_PITCH          0x02
+#define VARIABLE_PITCH          0x02*/
 
 using namespace ::com::sun::star    ;
 using namespace uno                 ;
@@ -157,6 +157,38 @@ using namespace beans               ;
 using namespace drawing             ;
 using namespace container           ;
 using namespace table               ;
+
+namespace ppt {
+    enum class PptColorScheme
+    {
+        SCHEME                       = 0x08000000,
+        HINTERGRUND                 = SCHEME,
+        TEXT_UND_ZEILEN            = 0x08000001,
+        TITELTEXT                   = 0x08000003,
+        A_UND_HYPERLINK             = 0x08000006
+    };
+    enum class Charset
+    {
+        ANSI                         = 0,
+        SYMBOL                       = 2
+    };
+    enum class FontFamily
+    {
+        ROMAN                        = 0x10,
+        SWISS                        = 0x20,
+        MODERN                       = 0x30,
+        SCRIPT                       = 0x40,
+        DECORATIVE                   = 0x50
+    };
+    enum class Pitch
+    {
+        DEFAULT                      = 0x00,
+        FIXED                        = 0x01,
+        VARIABLE                     = 0x02
+    };
+
+} 
+
 
 PowerPointImportParam::PowerPointImportParam( SvStream& rDocStrm ) :
     rDocStream      ( rDocStrm ),
@@ -388,7 +420,7 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
        .ReadUChar( rAtom.lfQuality )
        .ReadUChar( lfPitchAndFamily );
 
-    switch( lfCharset )
+    /*switch( lfCharset )
     {
         case SYMBOL_CHARSET :
             rAtom.eCharSet = RTL_TEXTENCODING_SYMBOL;
@@ -399,8 +431,22 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
 
         default :
             rAtom.eCharSet = osl_getThreadTextEncoding();
+    }*/
+
+        switch (lfCharset)
+    {
+        case static_cast<sal_uInt32>(ppt::Charset::SYMBOL):
+            rAtom.eCharSet = RTL_TEXTENCODING_SYMBOL;
+            break;
+        case static_cast<sal_uInt32>(ppt::Charset::ANSI):
+            rAtom.eCharSet = RTL_TEXTENCODING_MS_1252;
+            break;
+        default:
+            rAtom.eCharSet = osl_getThreadTextEncoding();
     }
-    switch ( lfPitchAndFamily & 0xf0 )
+
+    
+    /*switch ( lfPitchAndFamily & 0xf0 )
     {
         case FF_ROMAN:
             rAtom.eFamily = FAMILY_ROMAN;
@@ -425,9 +471,36 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
         default:
             rAtom.eFamily = FAMILY_DONTKNOW;
         break;
-    }
+    }*/
 
-    switch ( lfPitchAndFamily & 0x0f )
+    switch (lfPitchAndFamily & 0xf0)
+{
+    case static_cast<sal_uInt32>(ppt::FontFamily::ROMAN):
+        rAtom.eFamily = FAMILY_ROMAN;
+        break;
+
+    case static_cast<sal_uInt32>(ppt::FontFamily::SWISS):
+        rAtom.eFamily = FAMILY_SWISS;
+        break;
+
+    case static_cast<sal_uInt32>(ppt::FontFamily::MODERN):
+        rAtom.eFamily = FAMILY_MODERN;
+        break;
+
+    case static_cast<sal_uInt32>(ppt::FontFamily::SCRIPT):
+        rAtom.eFamily = FAMILY_SCRIPT;
+        break;
+
+    case static_cast<sal_uInt32>(ppt::FontFamily::DECORATIVE):
+        rAtom.eFamily = FAMILY_DECORATIVE;
+        break;
+
+    default:
+        rAtom.eFamily = FAMILY_DONTKNOW;
+        break;
+}
+
+    /*switch ( lfPitchAndFamily & 0x0f )
     {
         case FIXED_PITCH:
             rAtom.ePitch = PITCH_FIXED;
@@ -438,7 +511,20 @@ SvStream& ReadPptFontEntityAtom( SvStream& rIn, PptFontEntityAtom& rAtom )
         default:
             rAtom.ePitch = PITCH_VARIABLE;
         break;
+    }*/
+    switch (lfPitchAndFamily & 0x0f)
+    {
+        case static_cast<sal_uInt32>(ppt::Pitch::FIXED):
+            rAtom.ePitch = PITCH_FIXED;
+            break;
+    
+        case static_cast<sal_uInt32>(ppt::Pitch::DEFAULT):
+        case static_cast<sal_uInt32>(ppt::Pitch::VARIABLE):
+        default:
+            rAtom.ePitch = PITCH_VARIABLE;
+            break;
     }
+
     sal_uInt16 i;
     for ( i = 0; i < 32; i++ )
     {
@@ -3765,7 +3851,7 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport const & rM
     rNumberFormat.SetFirstLineOffset( -static_cast<sal_Int32>(nFirstLineOffset) );
 }
 
-PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
+/*PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
 {
     sal_uInt32 nColor = PPT_COLSCHEME_TEXT_UND_ZEILEN;
     sal_uInt16 nFontHeight(0);
@@ -3803,7 +3889,51 @@ PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
         nDepth.mnFontColorInStyleSheet = Color( static_cast<sal_uInt8>(nColor), static_cast<sal_uInt8>( nColor >> 8 ), static_cast<sal_uInt8>( nColor >> 16 ) );
         nDepth.mnEscapement = 0;
     }
+}*/
+
+PPTCharSheet::PPTCharSheet( TSS_Type nInstance )
+{
+    ppt::PptColorScheme nColor = ppt::PptColorScheme::TEXT_UND_ZEILEN;
+    sal_uInt16 nFontHeight(0);
+    switch ( nInstance )
+    {
+        case TSS_Type::PageTitle :
+        case TSS_Type::Title :
+        {
+            nColor = ppt::PptColorScheme::TITELTEXT;
+            nFontHeight = 44;
+        }
+        break;
+        case TSS_Type::Body :
+        case TSS_Type::Subtitle :
+        case TSS_Type::HalfBody :
+        case TSS_Type::QuarterBody :
+            nFontHeight = 32;
+        break;
+        case TSS_Type::Notes :
+            nFontHeight = 12;
+        break;
+        case TSS_Type::Unused :
+        case TSS_Type::TextInShape :
+            nFontHeight = 24;
+        break;
+        default: break;
+    }
+    for (PPTCharLevel & nDepth : maCharLevel)
+    {
+        nDepth.mnFlags = 0;
+        nDepth.mnFont = 0;
+        nDepth.mnAsianOrComplexFont = 0xffff;
+        nDepth.mnFontHeight = nFontHeight;
+        nDepth.mnFontColor = static_cast<sal_uInt32>(nColor); 
+        nDepth.mnFontColorInStyleSheet = Color(static_cast<sal_uInt8>(static_cast<sal_uInt32>(nColor)),
+                                               static_cast<sal_uInt8>(static_cast<sal_uInt32>(nColor) >> 8),
+                                               static_cast<sal_uInt8>(static_cast<sal_uInt32>(nColor) >> 16));
+        nDepth.mnEscapement = 0;
+    }
 }
+
+
 
 void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
 {
@@ -3833,7 +3963,8 @@ void PPTCharSheet::Read( SvStream& rIn, sal_uInt32 nLevel)
     {
         rIn.ReadUInt32( maCharLevel[ nLevel ].mnFontColor );
         if( ! (maCharLevel[ nLevel ].mnFontColor & 0xff000000 ) )
-            maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
+            //maCharLevel[ nLevel ].mnFontColor = PPT_COLSCHEME_HINTERGRUND;
+            maCharLevel[nLevel].mnFontColor = static_cast<sal_uInt32>(ppt::PptColorScheme::HINTERGRUND);
     }
     if ( nCMask & ( 1 << PPT_CharAttr_Escapement ) )            // 0x00080000
         rIn.ReadUInt16( maCharLevel[ nLevel ].mnEscapement );
@@ -3862,7 +3993,8 @@ PPTParaSheet::PPTParaSheet( TSS_Type nInstance )
     {
         case TSS_Type::PageTitle :
         case TSS_Type::Title :
-            nBulletColor = PPT_COLSCHEME_TITELTEXT;
+            //nBulletColor = PPT_COLSCHEME_TITELTEXT;
+            nBulletColor = static_cast<sal_uInt32>(ppt::PptColorScheme::TITELTEXT);
         break;
         case TSS_Type::Body :
         case TSS_Type::Subtitle :
@@ -4911,7 +5043,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, const DffRecordHeader
                     sal_uInt32 nHiByte;
                     nHiByte = nVal32 >> 24;
                     if ( nHiByte <= 8 )
-                        nVal32 = nHiByte | PPT_COLSCHEME;
+                        //nVal32 = nHiByte | PPT_COLSCHEME;
+                        nVal32 = nHiByte | static_cast<sal_uInt32>(ppt::PptColorScheme::SCHEME);
                     aSet.mnBulletColor = nVal32;
                 }
             }
@@ -5152,7 +5285,9 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
         sal_uInt32 nVal(0);
         rIn.ReadUInt32( nVal );
         if ( !( nVal & 0xff000000 ) )
-            nVal = PPT_COLSCHEME_HINTERGRUND;
+            //nVal = PPT_COLSCHEME_HINTERGRUND;
+            nVal = static_cast<sal_uInt32>(ppt::PptColorScheme::HINTERGRUND);
+
         aSet.mnColor = nVal;
         aSet.mnAttrSet |= 1 << PPT_CharAttr_FontColor;
     }
@@ -5895,7 +6030,9 @@ bool PPTParagraphObj::GetAttrib( sal_uInt32 nAttr, sal_uInt32& rRetValue, TSS_Ty
                 rRetValue = mxParaSet->mnBulletColor;
             else
             {
-                rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
+                //rRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
+                rRetValue = static_cast<sal_uInt32>(ppt::PptColorScheme::TEXT_UND_ZEILEN);
+                
                 if ((nDestinationInstance != TSS_Type::Unknown) && !m_PortionList.empty())
                 {
                     PPTPortionObj const& rPortion = *m_PortionList.front();
@@ -6965,7 +7102,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                     if ( pCurrent->mpFieldItem )
                                     {
-                                        pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                        //pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                        pCurrent->SetColor(static_cast<sal_uInt32>(ppt::PptColorScheme::A_UND_HYPERLINK));
+
+                                        
                                         if ( dynamic_cast< const SvxURLField* >(pCurrent->mpFieldItem->GetField()) != nullptr)
                                             break;
                                         nHyperLenLeft--;
@@ -6999,7 +7139,9 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             nHyperLenLeft = 0;
                                         }
                                         pCurrent->maString.clear();
-                                        pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                        //pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
+                                        pCurrent->SetColor(static_cast<sal_uInt32>(ppt::PptColorScheme::A_UND_HYPERLINK));
+
                                     }
                                     nIdx++;
                                 }
