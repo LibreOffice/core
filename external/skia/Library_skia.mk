@@ -297,6 +297,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
+    UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMasks \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
@@ -486,7 +487,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkScan_Path \
     UnpackedTarball/skia/src/core/SkScan_SAAPath \
     UnpackedTarball/skia/src/core/SkSpecialImage \
-    UnpackedTarball/skia/src/core/SkSpecialSurface \
     UnpackedTarball/skia/src/core/SkSpriteBlitter_ARGB32 \
     UnpackedTarball/skia/src/core/SkStream \
     UnpackedTarball/skia/src/core/SkStrike \
@@ -502,7 +502,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkTaskGroup \
     UnpackedTarball/skia/src/core/SkTextBlob \
     UnpackedTarball/skia/src/core/SkTextBlobTrace \
-    UnpackedTarball/skia/src/core/SkTime \
     UnpackedTarball/skia/src/core/SkTypeface \
     UnpackedTarball/skia/src/core/SkTypefaceCache \
     UnpackedTarball/skia/src/core/SkTypeface_remote \
@@ -545,7 +544,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/shaders/SkShaderBase \
     UnpackedTarball/skia/src/shaders/SkTransformShader \
     UnpackedTarball/skia/src/shaders/SkTriColorShader \
+    UnpackedTarball/skia/src/shaders/SkWorkingColorSpaceShader \
     UnpackedTarball/skia/src/text/GlyphRun \
+    UnpackedTarball/skia/src/text/SlugFromBuffer \
     UnpackedTarball/skia/src/text/StrikeForGPU \
 ))
 
@@ -629,7 +630,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/SkEmbossMaskFilter \
     UnpackedTarball/skia/src/effects/SkHighContrastFilter \
     UnpackedTarball/skia/src/effects/SkLayerDrawLooper \
-    UnpackedTarball/skia/src/effects/SkOpPathEffect \
     UnpackedTarball/skia/src/effects/SkShaderMaskFilterImpl \
     UnpackedTarball/skia/src/effects/SkTableMaskFilter \
     UnpackedTarball/skia/src/effects/SkTrimPathEffect \
