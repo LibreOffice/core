@@ -359,6 +359,14 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 pLabel->setWordWrap(toBool(rValue));
         }
     }
+    else if (QPlainTextEdit* pTextEdit = qobject_cast<QPlainTextEdit*>(pObject))
+    {
+        for (auto const & [ rKey, rValue ] : rProps)
+        {
+            if (rKey == u"accepts-tab")
+                pTextEdit->setTabChangesFocus(!toBool(rValue));
+        }
+    }
     else if (QPushButton* pButton = qobject_cast<QPushButton*>(pObject))
     {
         for (auto const & [ rKey, rValue ] : rProps)
