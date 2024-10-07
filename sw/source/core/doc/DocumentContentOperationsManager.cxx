@@ -4946,7 +4946,6 @@ static void lcl_PopNumruleState(
     // #i86492# - restore also <ListId> item
     if ( lcl_MarksWholeNode(rPam) )
         return;
-
     if (aNumRuleItemHolderIfSet)
     {
         pDestTextNd->SetAttr(*aNumRuleItemHolderIfSet);
@@ -5138,9 +5137,11 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
     // - source contains at least one paragraph which is not in a list
     // or
     // - source is a table
+    // - tdf#163340 overwrite list if source has a list
+
     if ( pNumRuleToPropagate &&
          ((pDestTextNd && !pDestTextNd->GetText().getLength() &&
-         !pDestTextNd->IsInList() &&
+         (!pDestTextNd->IsInList() || rPam.GetPointNode().GetTextNode()->IsInList() ) &&
          !lcl_ContainsOnlyParagraphsInList(rPam)) ||
          rPam.GetBound().nNode.GetNode().GetNodeType() == SwNodeType::Table) )
     {

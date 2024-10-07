@@ -677,6 +677,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     CPPUNIT_ASSERT_EQUAL(u"Word"_ustr, pWrtShell->GetSelText());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
+{
+    createSwDoc("tdf163340.odt");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<view::XSelectionSupplier> xSelSupplier(xModel->getCurrentController(),
+                                                          uno::UNO_QUERY_THROW);
+    uno::Reference<text::XParagraphCursor> xParaCursor(xTextDocument->getText()->createTextCursor(),
+                                                       uno::UNO_QUERY);
+
+    for (int i = 0; i < 14; i++)
+        xParaCursor->gotoNextParagraph(false);
+    xParaCursor->gotoEndOfParagraph(true);
+    xSelSupplier->select(uno::Any(xParaCursor));
+
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    xParaCursor = uno::Reference<text::XParagraphCursor>(xText->createTextCursor(), uno::UNO_QUERY);
+    for (int i = 0; i < 3; i++)
+        xParaCursor->gotoNextParagraph(false);
+    xParaCursor->gotoEndOfParagraph(true);
+    CPPUNIT_ASSERT_EQUAL(u"1."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+    xSelSupplier->select(uno::Any(xParaCursor));
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
