@@ -560,6 +560,65 @@ public:
         }
     }
 
+    void testXNamedNodeMap_AttributesMap()
+    {
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+
+        Reference< xml::dom::XElement > xElem = xDocument->createElement(u"foo"_ustr);
+        Reference< xml::dom::XNamedNodeMap > xAttributes = xElem->getAttributes();
+        CPPUNIT_ASSERT(xAttributes);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xAttributes->getLength());
+
+        // Should it throw an exception ?
+        CPPUNIT_ASSERT(!xAttributes->item(4));
+
+        xElem->setAttribute(u"bar"_ustr, u"42"_ustr);
+        Reference< xml::dom::XAttr > xAttBar = xElem->getAttributeNode(u"bar"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xAttributes->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItem(u"bar"_ustr), uno::UNO_QUERY));
+
+        OUString aNS(u"http://example.com/"_ustr);
+
+        xElem->setAttributeNS(aNS, u"n:bar"_ustr, u"43"_ustr);
+        Reference< xml::dom::XAttr > xAttBarNS = xElem->getAttributeNodeNS(aNS, u"bar"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xAttributes->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBarNS, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->item(1), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItem(u"bar"_ustr), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBarNS, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItemNS(aNS, u"bar"_ustr), uno::UNO_QUERY));
+
+        uno::Reference<xml::dom::XNode> xAttrBarNsRem = xAttributes->removeNamedItemNS(aNS, u"bar"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xAttributes->getLength());
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->item(0), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttBar, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItem(u"bar"_ustr), uno::UNO_QUERY));
+        CPPUNIT_ASSERT(!xAttrBarNsRem->getParentNode());
+
+        uno::Reference<xml::dom::XNode> xAttrBarRem = xAttributes->removeNamedItem(u"bar"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xAttributes->getLength());
+        CPPUNIT_ASSERT(!xAttrBarRem->getParentNode());
+
+        uno::Reference<xml::dom::XNode> xAttrBarSet = xAttributes->setNamedItem(xAttrBarRem);
+        CPPUNIT_ASSERT(xAttrBarSet);
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttrBarSet, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItem(u"bar"_ustr), uno::UNO_QUERY));
+
+        uno::Reference<xml::dom::XNode> xAttrBarNsSet = xAttributes->setNamedItemNS(xAttrBarNsRem);
+        CPPUNIT_ASSERT(xAttrBarNsSet);
+        CPPUNIT_ASSERT_EQUAL(Reference< XInterface >(xAttrBarNsSet, uno::UNO_QUERY),
+                Reference< XInterface >(xAttributes->getNamedItemNS(aNS, u"bar"_ustr), uno::UNO_QUERY));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xAttributes->getLength());
+    }
+
     void testXNodeList_ChildList()
     {
         Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
@@ -576,6 +635,7 @@ public:
         CPPUNIT_ASSERT(xChildList);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xChildList->getLength());
 
+        // Should it throw an exception ?
         CPPUNIT_ASSERT(!xChildList->item(4));
 
         xRoot->appendChild(xFoo);
@@ -688,6 +748,7 @@ public:
     CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST(testXXPathAPI);
     CPPUNIT_TEST(testXXPathObject);
+    CPPUNIT_TEST(testXNamedNodeMap_AttributesMap);
     CPPUNIT_TEST(testXNodeList_ChildList);
     CPPUNIT_TEST(testXNodeList_NodeList);
     CPPUNIT_TEST(serializerTest);
