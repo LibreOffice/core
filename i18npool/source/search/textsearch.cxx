@@ -374,7 +374,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             ? FindPosInSeq_Impl( offset, endPos )
             : in_str.getLength();
 
-        sres = (this->*fnForward)( in_str, newStartPos, newEndPos );
+        sres = (this->*fnForward)( g, in_str, newStartPos, newEndPos );
 
         // Map offsets back to untransliterated string.
         const sal_Int32 nOffsets = offset.getLength();
@@ -412,7 +412,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
         if ( bReplaceApostrophe )
             in_str = in_str.replace(u'\u2019', '\'');
 
-        sres = (this->*fnForward)( in_str, startPos, endPos );
+        sres = (this->*fnForward)( g, in_str, startPos, endPos );
     }
 
     if ( xTranslit2.is() && aSrchPara.AlgorithmType2 != SearchAlgorithms2::REGEXP)
@@ -433,7 +433,7 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
             endPos = in_str.getLength();
 
         bUsePrimarySrchStr = false;
-        sres2 = (this->*fnForward)( in_str, startPos, endPos );
+        sres2 = (this->*fnForward)( g, in_str, startPos, endPos );
         auto sres2_startOffsetRange = asNonConstRange(sres2.startOffset);
         auto sres2_endOffsetRange = asNonConstRange(sres2.endOffset);
 
@@ -496,7 +496,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         // if (pRegexMatcher && startPos < searchStr.getLength())
         // but that appears to be impossible with ICU regex
 
-        sres = (this->*fnBackward)( in_str, newStartPos, newEndPos );
+        sres = (this->*fnBackward)( g, in_str, newStartPos, newEndPos );
 
         // Map offsets back to untransliterated string.
         const sal_Int32 nOffsets = offset.getLength();
@@ -534,7 +534,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
         if ( bReplaceApostrophe )
             in_str = replacePunctuation(in_str);
 
-        sres = (this->*fnBackward)( in_str, startPos, endPos );
+        sres = (this->*fnBackward)( g, in_str, startPos, endPos );
     }
 
     if ( xTranslit2.is() && aSrchPara.AlgorithmType2 != SearchAlgorithms2::REGEXP )
@@ -555,7 +555,7 @@ SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 st
             endPos = FindPosInSeq_Impl( offset, endPos );
 
         bUsePrimarySrchStr = false;
-        sres2 = (this->*fnBackward)( in_str, startPos, endPos );
+        sres2 = (this->*fnBackward)( g, in_str, startPos, endPos );
         auto sres2_startOffsetRange = asNonConstRange(sres2.startOffset);
         auto sres2_endOffsetRange = asNonConstRange(sres2.endOffset);
 
@@ -720,7 +720,7 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 }
 
 
-SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
+SearchResult TextSearch::NSrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -783,7 +783,7 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
     return aRet;
 }
 
-SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
+SearchResult TextSearch::NSrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/,const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -943,7 +943,7 @@ static bool lcl_findRegex(std::unique_ptr<icu::RegexMatcher> const& pRegexMatche
     return true;
 }
 
-SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
+SearchResult TextSearch::RESrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
@@ -997,7 +997,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
     return aRet;
 }
 
-SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
+SearchResult TextSearch::RESrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
 {
     // NOTE: for backwards search callers provide startPos/endPos inverted!
@@ -1072,7 +1072,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 
 
 // search for words phonetically
-SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
+SearchResult TextSearch::ApproxSrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
@@ -1114,7 +1114,7 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
     return aRet;
 }
 
-SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
+SearchResult TextSearch::ApproxSrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
 {
     SearchResult aRet;
@@ -1163,7 +1163,7 @@ void setWildcardMatch( css::util::SearchResult& rRes, sal_Int32 nStartOffset, sa
 }
 }
 
-SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
+SearchResult TextSearch::WildcardSrchFrwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
 {
     SearchResult aRes;
     aRes.subRegExpressions = 0;     // no match
@@ -1334,7 +1334,7 @@ SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32
     return aRes;
 }
 
-SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
+SearchResult TextSearch::WildcardSrchBkwrd( std::unique_lock<std::mutex>& /*rGuard*/, const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
 {
     SearchResult aRes;
     aRes.subRegExpressions = 0;     // no match

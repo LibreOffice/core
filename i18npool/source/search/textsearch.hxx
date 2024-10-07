@@ -60,7 +60,7 @@ class TextSearch: public cppu::WeakImplHelper
 
     // define a function pointer for the different search methods
     typedef css::util::SearchResult
-        (TextSearch::*FnSrch)( const OUString& searchStr,
+        (TextSearch::*FnSrch)( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     FnSrch fnForward;
@@ -81,22 +81,22 @@ class TextSearch: public cppu::WeakImplHelper
     sal_Int32 GetDiff( const sal_Unicode ) const;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        NSrchFrwrd( const OUString& searchStr,
+        NSrchFrwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        NSrchBkwrd( const OUString& searchStr,
+        NSrchBkwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     // Members and methods for the regular expression search
     std::unique_ptr<icu::RegexMatcher> pRegexMatcher;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        RESrchFrwrd( const OUString& searchStr,
+        RESrchFrwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        RESrchBkwrd( const OUString& searchStr,
+        RESrchBkwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
     void RESrchPrepare( const css::util::SearchOptions2&);
 
@@ -106,11 +106,11 @@ class TextSearch: public cppu::WeakImplHelper
     css::uno::Reference < css::i18n::XBreakIterator > xBreak;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        ApproxSrchFrwrd( const OUString& searchStr,
+        ApproxSrchFrwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        ApproxSrchBkwrd( const OUString& searchStr,
+        ApproxSrchBkwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     // Members and methods for the wildcard search
@@ -120,11 +120,11 @@ class TextSearch: public cppu::WeakImplHelper
     bool        mbWildcardAllowSubstring;
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        WildcardSrchFrwrd( const OUString& searchStr,
+        WildcardSrchFrwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
     /// @throws css::uno::RuntimeException
     css::util::SearchResult
-        WildcardSrchBkwrd( const OUString& searchStr,
+        WildcardSrchBkwrd( std::unique_lock<std::mutex>& rGuard, const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos );
 
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
