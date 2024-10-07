@@ -4274,6 +4274,27 @@ OString SdXImpressDocument::getPresentationInfo() const
                 bool bIsDrawPageEmpty = pSlide->getCount() == 0;
                 aJsonWriter.put("empty", bIsDrawPageEmpty);
 
+                // Notes
+                SdPage* pNotesPage = mpDoc->GetSdPage((pPage->GetPageNum() - 1) >> 1, PageKind::Notes);
+                if (pNotesPage)
+                {
+                    SdrObject* pNotes = pNotesPage->GetPresObj(PresObjKind::Notes);
+                    if (pNotes)
+                    {
+                        OUStringBuffer strNotes;
+                        OutlinerParaObject* pPara = pNotes->GetOutlinerParaObject();
+                        if (pPara)
+                        {
+                            const EditTextObject& rText = pPara->GetTextObject();
+                            for (sal_Int32 nNote = 0; nNote < rText.GetParagraphCount(); nNote++)
+                            {
+                                strNotes.append(rText.GetText(nNote));
+                            }
+                            aJsonWriter.put("notes", strNotes.makeStringAndClear());
+                        }
+                    }
+                }
+
                 SdMasterPage* pMasterPage = nullptr;
                 SdDrawPage* pMasterPageTarget(dynamic_cast<SdDrawPage*>(pSlide));
                 if (pMasterPageTarget)
