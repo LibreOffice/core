@@ -27,6 +27,7 @@
 #include <txtfld.hxx>
 #include <svl/itempool.hxx>
 #include <svl/numformat.hxx>
+#include <editeng/editobj.hxx>
 #include <tools/lineend.hxx>
 #include <svl/whiter.hxx>
 #include <svl/eitem.hxx>
@@ -513,6 +514,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     auto pWin = pMgr->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                     if(pWin)
                     {
+                        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+                        {
+                            SwDocShell* pDocSh = GetView().GetDocShell();
+                            Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
+                            SwPostItHelper::ImportHTML(aOutliner, pHtmlItem->GetValue());
+                            if (std::optional<OutlinerParaObject> oPara = aOutliner.CreateParaObject())
+                                pMgr->RegisterAnswer(oPara.value());
+                        }
+
                         OUString sText;
                         if(const auto pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT))
                             sText = pTextItem->GetValue();
