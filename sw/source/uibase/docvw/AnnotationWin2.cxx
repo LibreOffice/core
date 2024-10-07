@@ -1055,7 +1055,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             if (!mpOutliner->GetEditEngine().GetText().isEmpty())
             {
                 OutlinerParaObject aPara(GetOutlinerView()->GetEditView().CreateTextObject());
-                mrMgr.RegisterAnswer(&aPara);
+                mrMgr.RegisterAnswer(aPara);
             }
             if (mrMgr.HasActiveSidebarWin())
                 mrMgr.SetActiveSidebarWin(nullptr);

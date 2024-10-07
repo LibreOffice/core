@@ -260,9 +260,9 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener
         static Color           GetColorLight(std::size_t aAuthorIndex);
         static Color           GetColorAnchor(std::size_t aAuthorIndex);
 
-        void                RegisterAnswer(const OutlinerParaObject* pAnswer) { if (pAnswer) mpAnswer =* pAnswer; else mpAnswer.reset(); }
+        void                RegisterAnswer(const OutlinerParaObject& rAnswer) { mpAnswer = rAnswer; }
         OutlinerParaObject* IsAnswer() { return mpAnswer ? &*mpAnswer : nullptr; }
-        void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
+        void                RegisterAnswerText(const OUString& rAnswerText) { maAnswerText = rAnswerText; }
         const OUString&     GetAnswerText() const { return maAnswerText; }
         void CheckMetaText();
 
