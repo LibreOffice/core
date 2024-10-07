@@ -36,6 +36,7 @@
 #include <tools/bigint.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/ipclient.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/ulspitem.hxx>
@@ -2259,14 +2260,25 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         if ( pTextItem )
             sText = pTextItem->GetValue();
 
-        const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML);
+        std::optional<OutlinerParaObject> oTextPara;
+        if (const SvxPostItTextItem* pHtmlItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_HTML))
+        {
+            SwDocShell* pDocSh = GetView().GetDocShell();
+            Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
+            SwPostItHelper::ImportHTML(aOutliner, pHtmlItem->GetValue());
+            oTextPara = aOutliner.CreateParaObject();
+        }
 
         // If we have a text already registered for answer, use that
-        if (GetView().GetPostItMgr()->IsAnswer() && !GetView().GetPostItMgr()->GetAnswerText().isEmpty())
+        SwPostItMgr* pPostItMgr = GetView().GetPostItMgr();
+        if (OutlinerParaObject* pAnswer = pPostItMgr->IsAnswer())
         {
-            sText = GetView().GetPostItMgr()->GetAnswerText();
-            GetView().GetPostItMgr()->RegisterAnswerText(OUString());
-            pHtmlItem = nullptr;
+            if (!pPostItMgr->GetAnswerText().isEmpty())
+            {
+                sText = GetView().GetPostItMgr()->GetAnswerText();
+                pPostItMgr->RegisterAnswerText(OUString());
+            }
+            oTextPara = *pAnswer;
         }
 
         if ( HasSelection() && !IsTableMode() )
@@ -2328,12 +2340,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
         SwCursorShell::Left(1, SwCursorSkipMode::Chars);
         pPostIt = static_cast<SwPostItField*>(rFieldMgr.GetCurField());
 
-        if (pPostIt && pHtmlItem)
+        if (pPostIt && oTextPara)
         {
-            SwDocShell* pDocSh = GetView().GetDocShell();
-            Outliner aOutliner(&pDocSh->GetPool(), OutlinerMode::TextObject);
-            SwPostItHelper::ImportHTML(aOutliner, pHtmlItem->GetValue());
-            pPostIt->SetTextObject(aOutliner.CreateParaObject());
+            pPostIt->SetTextObject(*oTextPara);
         }
 
         Pop(SwCursorShell::PopMode::DeleteCurrent); // Restore cursor position

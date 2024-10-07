@@ -1052,7 +1052,7 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
             const bool bReply = nSlot == FN_REPLY;
             // if this note is empty, it will be deleted once losing the focus, so no reply, but only a new note
             // will be created
-            if (!mpOutliner->GetEditEngine().GetText().isEmpty())
+            if (!mrMgr.IsAnswer() && !mpOutliner->GetEditEngine().GetText().isEmpty())
             {
                 OutlinerParaObject aPara(GetOutlinerView()->GetEditView().CreateTextObject());
                 mrMgr.RegisterAnswer(aPara);
