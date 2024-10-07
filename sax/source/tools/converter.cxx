@@ -35,6 +35,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>
+#include <tools/time.hxx>
 
 #include <algorithm>
 #include <string_view>
@@ -976,16 +977,13 @@ static bool convertDurationHelper(double& rfTime, V pStr)
 
     if ( bSuccess )
     {
-        if ( nDays )
-            nHours += nDays * 24;               // add the days to the hours part
-        double fHour = nHours;
-        double fMin = nMins;
-        double fSec = nSecs;
-        double fFraction = o3tl::toDouble(sDoubleStr);
-        double fTempTime = fHour / 24;
-        fTempTime += fMin / (24 * 60);
-        fTempTime += fSec / (24 * 60 * 60);
-        fTempTime += fFraction / (24 * 60 * 60);
+        // Calculate similar to ImpSvNumberInputScan::GetTimeRef: first, sum whole seconds, add
+        // second fraction, and finally, divide. Produces less rounding errors than calculating
+        // fractions of a day from seconds, minutes, hours separately, and then adding together.
+        double seconds = nDays * tools::Time::secondPerDay + nHours * tools::Time::secondPerHour
+                         + nMins * tools::Time::secondPerMinute + nSecs
+                         + o3tl::toDouble(sDoubleStr);
+        double fTempTime = seconds / tools::Time::secondPerDay;
 
         // negative duration?
         if ( bIsNegativeDuration )
