@@ -48,6 +48,12 @@ endif
 gb_LinkTarget_LDFLAGS += $(gb_EMSCRIPTEN_LDFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS) \
     $(gb_EMSCRIPTEN_EXCEPT) -sEXPORT_EXCEPTION_HANDLING_HELPERS
 
+ifeq ($(ENABLE_OPTIMIZED),TRUE)
+ifneq ($(ENABLE_SYMBOLS_FOR),)
+gb_LinkTarget__emscripten_warnings_ldflags := -Wno-limited-postlink-optimizations
+endif
+endif
+
 # Linker and compiler optimize + debug flags are handled in LinkTarget.mk
 gb_LINKEROPTFLAGS :=
 gb_LINKERSTRIPDEBUGFLAGS :=

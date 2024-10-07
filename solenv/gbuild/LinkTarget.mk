@@ -51,7 +51,8 @@ gb_LinkTarget__get_debugflags= \
 
 # T_LDFLAGS is just expanded once. Override the flags here, so that the linker and compiler use the same.
 ifeq (EMSCRIPTEN,$(OS))
-gb_LinkTarget__get_debugldflags=$(call gb_LinkTarget__get_debugflags,$1)
+gb_LinkTarget__get_debugldflags=$(call gb_LinkTarget__get_debugflags,$1) \
+    $(gb_LinkTarget__emscripten_warnings_ldflags)
 else
 # similar for LDFLAGS, use linker optimization flags in non-debug case,
 # but moreover strip debug from libraries for which debuginfo is not wanted
