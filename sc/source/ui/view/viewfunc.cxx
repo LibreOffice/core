@@ -143,7 +143,7 @@ struct FormulaProcessingContext
     std::shared_ptr<ScTokenArray> pArr;
     std::shared_ptr<ScTokenArray> pArrFirst;
 
-    const EditTextObject* pData;
+    std::shared_ptr<EditTextObject> xTextObject;
     ScMarkData aMark;
     ScViewFunc& rViewFunc;
 
@@ -558,10 +558,10 @@ namespace
             if (nType == SvNumFormatType::TEXT ||
                     ((context->aString[0] == '+' || context->aString[0] == '-') && nError != FormulaError::NONE && context->aString == context->aFormula))
             {
-                if ( context->pData )
+                if ( context->xTextObject )
                 {
-                    // A clone of context->pData will be stored in the cell.
-                    context->GetDocFunc().SetEditCell(*(context->aPos), *context->pData, true);
+                    // A clone of context->xTextObject will be stored in the cell.
+                    context->GetDocFunc().SetEditCell(*(context->aPos), *context->xTextObject, true);
                 }
                 else
                     context->GetDocFunc().SetStringCell(*(context->aPos), context->aFormula, true);
@@ -725,6 +725,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         i = aMark.GetFirstSelected();
         auto xPosPtr = std::make_shared<ScAddress>(nCol, nRow, i);
         auto xCompPtr = std::make_shared<ScCompiler>(rDoc, *xPosPtr, rDoc.GetGrammar(), true, false);
+        std::unique_ptr<EditTextObject> xTextObject(pData ? pData->Clone() : nullptr);
 
         //2do: enable/disable autoCorrection via calcoptions
         xCompPtr->SetAutoCorrection( true );
@@ -736,10 +737,10 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         OUString aFormula( rString );
 
         FormulaProcessingContext context_instance{
-            std::move(xPosPtr), std::move(xCompPtr), std::move(xModificator), nullptr,
-            nullptr,            pData,               std::move(aMark),        *this,
-            OUString(),         aFormula,            rString,                 nCol,
-            nRow,               nTab,                bMatrixExpand,           bNumFmtChanged,
+            std::move(xPosPtr), std::move(xCompPtr),    std::move(xModificator), nullptr,
+            nullptr,            std::move(xTextObject), std::move(aMark),        *this,
+            OUString(),         aFormula,               rString,                 nCol,
+            nRow,               nTab,                   bMatrixExpand,           bNumFmtChanged,
             bRecord
         };
 
