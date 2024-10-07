@@ -1428,6 +1428,7 @@ bool PDFDocument::Read(SvStream& rStream)
             nStartXRef = pPrev->GetValue();
 
         // Reset state, except the edit buffer.
+        m_aOffsetTrailers.clear(); // contents are lifecycle managed by m_aElements
         m_aElements.clear();
         m_aOffsetObjects.clear();
         m_aIDObjects.clear();
