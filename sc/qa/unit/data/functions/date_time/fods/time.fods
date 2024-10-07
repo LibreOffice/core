@@ -748,9 +748,11 @@
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="7"/>
+     <table:table-cell table:style-name="ce13" table:formula="of:=TIME(14;30;0)" office:value-type="time"/>
+     <table:table-cell table:style-name="ce16" office:value-type="time" office:time-value="PT14H30M00S"/>
+     <table:table-cell table:style-name="ce17" table:formula="of:=ORG.LIBREOFFICE.RAWSUBTRACT([.A11];[.B11])=0" office:value-type="boolean"/>
+     <table:table-cell table:style-name="ce21" table:formula="of:=FORMULA([.A11])" office:value-type="string"/>
+     <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell office:value-type="float" office:value="19" calcext:value-type="float">
       <text:p>19</text:p>
      </table:table-cell>
@@ -771,167 +773,6 @@
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce19"/>
      <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="10"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce15" table:number-columns-repeated="5"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="6"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="5"/>
-     <table:table-cell table:number-columns-repeated="10"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="10"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce20"/>
-     <table:table-cell table:style-name="ce14" table:number-columns-repeated="2"/>
-     <table:table-cell table:number-columns-repeated="4"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce24"/>
-     <table:table-cell table:number-columns-repeated="5"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="6">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="4">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="6"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="2"/>
-     <table:table-cell table:style-name="ce19"/>
-     <table:table-cell table:number-columns-repeated="12"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce22" table:number-columns-repeated="5"/>
-     <table:table-cell/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce25" table:number-columns-repeated="5"/>
-     <table:table-cell table:style-name="ce26" office:value-type="string" calcext:value-type="string">
-      <text:p>Age</text:p>
-     </table:table-cell>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="2">
-     <table:table-cell table:number-columns-repeated="9"/>
-     <table:table-cell table:style-name="ce26" table:number-columns-repeated="6"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2" table:number-rows-repeated="1048515">
-     <table:table-cell table:number-columns-repeated="15"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro2">
-     <table:table-cell table:number-columns-repeated="15"/>
     </table:table-row>
     <calcext:conditional-formats>
      <calcext:conditional-format calcext:target-range-address="Sheet2.C18:Sheet2.C41 Sheet2.C2:Sheet2.C15">
