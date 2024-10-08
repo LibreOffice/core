@@ -433,9 +433,11 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
             aElem.SetDefaultZoomValue(100);
         }
         else
+        {
             aElem.SetDefaultZoomType(SvxZoomType::PERCENT);
+            aElem.SetDefaultZoomValue(m_xZoomValue->get_value(FieldUnit::PERCENT));
+        }
     }
-    aElem.SetDefaultZoomValue(m_xZoomValue->get_value(FieldUnit::PERCENT));
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)

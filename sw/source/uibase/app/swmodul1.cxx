@@ -100,7 +100,7 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell
         pView->CreateTab();
     else
         pView->KillTab();
-
+    pView->SetZoom(rPref.GetZoomType(), rPref.GetZoom(), true);
     pView->GetPostItMgr()->PrepareView(true);
 }
 
