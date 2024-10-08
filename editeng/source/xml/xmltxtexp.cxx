@@ -280,10 +280,8 @@ SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     };
     static SvxItemPropertySet aSvxXMLTextExportComponentPropertySet( SvxXMLTextExportComponentPropertyMap, EditEngine::GetGlobalItemPool() );
 
-    rtl::Reference<SvxUnoText> pUnoText = new SvxUnoText( &aEditSource, &aSvxXMLTextExportComponentPropertySet, mxText );
-    pUnoText->SetSelection( rSel );
-    mxText = pUnoText;
-
+    mxText = new SvxUnoText( &aEditSource, &aSvxXMLTextExportComponentPropertySet, mxText );
+    mxText->SetSelection(rSel);
 }
 
 void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& rSel )

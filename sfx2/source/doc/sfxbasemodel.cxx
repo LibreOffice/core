@@ -4573,8 +4573,7 @@ SfxBaseModel::loadMetadataFromStorage(
         m_pData->m_xDocumentMetadata = xDMA;
         throw;
     }
-    m_pData->m_xDocumentMetadata = xDMA;
-
+    m_pData->m_xDocumentMetadata = std::move(xDMA);
 }
 
 void SAL_CALL
@@ -4612,7 +4611,7 @@ SfxBaseModel::loadMetadataFromMedium(
         m_pData->m_xDocumentMetadata = xDMA;
         throw;
     }
-    m_pData->m_xDocumentMetadata = xDMA;
+    m_pData->m_xDocumentMetadata = std::move(xDMA);
 }
 
 void SAL_CALL

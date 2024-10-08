@@ -64,17 +64,17 @@ bool SvUnoWeakContainer::findRef(
     for ( auto it = maVector.begin(); it != maVector.end(); )
     {
         unotools::WeakReference< SdLayer > & itRef = *it;
-        rtl::Reference< SdLayer > pSdLayer( itRef );
-        if ( !pSdLayer.is() )
+        rtl::Reference< SdLayer > xSdLayer( itRef );
+        if ( !xSdLayer.is() )
         {
             it = maVector.erase( it );
         }
         else
         {
-            SdrLayer* pSdrLayer = pSdLayer->GetSdrLayer ();
+            SdrLayer* pSdrLayer = xSdLayer->GetSdrLayer ();
             if (pSdrLayer == pSearchData)
             {
-                rRef = pSdLayer;
+                rRef = std::move(xSdLayer);
                 return true;
             }
             ++it;

@@ -131,7 +131,7 @@ public:
 
     virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) override;
     virtual css::uno::Reference<css::frame::XModel> getModel() override;
-    virtual void setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage) override;
+    virtual void setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage) override;
     virtual rtl::Reference<SwFmDrawPage> getDrawPage() override;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) override;
     virtual void setXNoteId(const sal_Int32 nId) override;

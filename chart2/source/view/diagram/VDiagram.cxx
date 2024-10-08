@@ -438,10 +438,12 @@ void VDiagram::createShapes_3d()
     rtl::Reference<SvxShapeGroupAnyD> xOuterGroup_Shapes = m_xOuterGroupShape;
 
     //create additional group to manipulate the aspect ratio of the whole diagram:
-    rtl::Reference<Svx3DSceneObject> xAdditionalGroup = ShapeFactory::createGroup3D( xOuterGroup_Shapes );
-    xOuterGroup_Shapes = xAdditionalGroup;
+    {
+        rtl::Reference<Svx3DSceneObject> xAdditionalGroup = ShapeFactory::createGroup3D( xOuterGroup_Shapes );
+        xOuterGroup_Shapes = xAdditionalGroup;
 
-    m_xAspectRatio3D = xAdditionalGroup;
+        m_xAspectRatio3D = std::move(xAdditionalGroup);
+    }
 
     bool bAddFloorAndWall = m_xDiagram->isSupportingFloorAndWall();
 

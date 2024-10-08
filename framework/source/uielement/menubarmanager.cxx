@@ -1088,10 +1088,9 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
-                rtl::Reference<VCLXPopupMenu> pVCLXPopupMenu = new VCLXPopupMenu;
-                PopupMenu* pPopupMenu = static_cast<PopupMenu *>(pVCLXPopupMenu->GetMenu());
+                pItemHandler->xPopupMenu = new VCLXPopupMenu;
+                PopupMenu* pPopupMenu = static_cast<PopupMenu*>(pItemHandler->xPopupMenu->GetMenu());
                 pMenu->SetPopupMenu( pItemHandler->nItemId, pPopupMenu );
-                pItemHandler->xPopupMenu = pVCLXPopupMenu;
 
                 if ( bAccessibilityEnabled && CreatePopupMenuController( pItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier ) )
                 {

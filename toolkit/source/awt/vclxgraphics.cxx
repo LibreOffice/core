@@ -126,9 +126,9 @@ uno::Reference< awt::XDevice > VCLXGraphics::getDevice()
 
     if( !mxDevice.is() && mpOutputDevice )
     {
-        rtl::Reference<VCLXDevice> pDev = new VCLXDevice;
-        pDev->SetOutputDevice( mpOutputDevice );
-        mxDevice = pDev;
+        rtl::Reference<VCLXDevice> xDev = new VCLXDevice;
+        xDev->SetOutputDevice( mpOutputDevice );
+        mxDevice = std::move(xDev);
     }
     return mxDevice;
 }

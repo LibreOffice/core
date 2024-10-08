@@ -66,9 +66,8 @@ rtl::Reference< VCLXDevice > const &  VCLXPrinterPropertySet::GetDevice()
 {
     if ( !mxPrnDevice.is() )
     {
-        rtl::Reference<VCLXDevice> pDev = new VCLXDevice;
-        pDev->SetOutputDevice( GetPrinter() );
-        mxPrnDevice = pDev;
+        mxPrnDevice = new VCLXDevice;
+        mxPrnDevice->SetOutputDevice(GetPrinter());
     }
     return mxPrnDevice;
 }

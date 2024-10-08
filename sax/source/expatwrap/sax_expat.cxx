@@ -354,8 +354,7 @@ SaxExpatParser::SaxExpatParser(  )
 {
     m_pImpl.reset( new SaxExpatParser_Impl );
 
-    rtl::Reference<LocatorImpl> pLoc = new LocatorImpl( m_pImpl.get() );
-    m_pImpl->rDocumentLocator = pLoc;
+    m_pImpl->rDocumentLocator = new LocatorImpl( m_pImpl.get() );
 
     // Performance-improvement; handing out the same object with every call of
     // the startElement callback is allowed (see sax-specification):

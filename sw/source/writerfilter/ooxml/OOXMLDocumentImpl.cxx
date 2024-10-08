@@ -825,7 +825,7 @@ uno::Reference<frame::XModel> OOXMLDocumentImpl::getModel()
     return mxModel;
 }
 
-void OOXMLDocumentImpl::setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage)
+void OOXMLDocumentImpl::setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage)
 {
     mxDrawPage = xDrawPage;
 }

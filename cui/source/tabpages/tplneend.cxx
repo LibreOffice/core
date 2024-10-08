@@ -514,14 +514,14 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
             aPathURL.removeSegment();
             aPathURL.removeFinalSlash();
 
-            XLineEndListRef pLeList = XPropertyList::AsLineEndList(
+            XLineEndListRef xLeList = XPropertyList::AsLineEndList(
                 XPropertyList::CreatePropertyList(
                     XPropertyListType::LineEnd,
                     aPathURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), u""_ustr));
-            pLeList->SetName( aURL.getName() );
-            if( pLeList->Load() )
+            xLeList->SetName( aURL.getName() );
+            if( xLeList->Load() )
             {
-                pLineEndList = pLeList;
+                pLineEndList = std::move(xLeList);
                 static_cast<SvxLineTabDialog*>(GetDialogController())->SetNewLineEndList( pLineEndList );
                 m_xLbLineEnds->clear();
                 m_xLbLineEnds->Fill( pLineEndList );

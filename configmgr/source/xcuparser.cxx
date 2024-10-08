@@ -188,7 +188,7 @@ void XcuParser::endElement(xmlreader::XmlReader const &) {
     state_.pop();
     if (insert.is()) {
         assert(!state_.empty() && state_.top().node.is());
-        state_.top().node->getMembers()[name] = insert;
+        state_.top().node->getMembers()[name] = std::move(insert);
     }
     if (pop && !path_.empty()) {
         path_.pop_back();

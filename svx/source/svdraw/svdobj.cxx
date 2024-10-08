@@ -2530,7 +2530,7 @@ rtl::Reference<SdrObject> SdrObject::ImpConvertToContourObj(bool bForceLineDash)
             // do we need a group?
             if(bBuildGroup || bAddOriginalGeometry)
             {
-                rtl::Reference<SdrObject> pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
+                rtl::Reference<SdrObject> xGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
                 if(bAddOriginalGeometry)
                 {
@@ -2543,20 +2543,20 @@ rtl::Reference<SdrObject> SdrObject::ImpConvertToContourObj(bool bForceLineDash)
                     rtl::Reference<SdrObject> pClone(CloneSdrObject(getSdrModelFromSdrObject()));
                     pClone->SetMergedItemSet(aSet);
 
-                    pGroup->GetSubList()->NbcInsertObject(pClone.get());
+                    xGroup->GetSubList()->NbcInsertObject(pClone.get());
                 }
 
                 if(aLinePolygonPart)
                 {
-                    pGroup->GetSubList()->NbcInsertObject(aLinePolygonPart.get());
+                    xGroup->GetSubList()->NbcInsertObject(aLinePolygonPart.get());
                 }
 
                 if(aLineHairlinePart)
                 {
-                    pGroup->GetSubList()->NbcInsertObject(aLineHairlinePart.get());
+                    xGroup->GetSubList()->NbcInsertObject(aLineHairlinePart.get());
                 }
 
-                pRetval = pGroup;
+                pRetval = std::move(xGroup);
             }
             else
             {

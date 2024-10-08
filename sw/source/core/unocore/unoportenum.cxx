@@ -975,7 +975,7 @@ lcl_ExportHints(
                         {
                             pUnoCursor->Normalize(false);
                             pUnoCursor->DeleteMark();
-                            pPortion = xTmp;
+                            pPortion = std::move(xTmp);
                         }
                         else // just insert it
                         {

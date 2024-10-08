@@ -436,9 +436,8 @@ void SwXTextDocument::GetNumberFormatter()
     {
         if ( m_pDocShell->GetDoc() )
         {
-            rtl::Reference<SvNumberFormatsSupplierObj> pNumFormat = new SvNumberFormatsSupplierObj(
+            m_xNumFormatAgg = new SvNumberFormatsSupplierObj(
                                 m_pDocShell->GetDoc()->GetNumberFormatter());
-            m_xNumFormatAgg = pNumFormat;
         }
         if(m_xNumFormatAgg.is())
             m_xNumFormatAgg->setDelegator(getXWeak());

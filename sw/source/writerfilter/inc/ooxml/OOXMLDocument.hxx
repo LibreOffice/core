@@ -209,7 +209,7 @@ public:
 
     virtual void setModel(css::uno::Reference<css::frame::XModel> xModel) = 0;
     virtual css::uno::Reference<css::frame::XModel> getModel() = 0;
-    virtual void setDrawPage(rtl::Reference<SwFmDrawPage> xDrawPage) = 0;
+    virtual void setDrawPage(const rtl::Reference<SwFmDrawPage>& xDrawPage) = 0;
     virtual rtl::Reference<SwFmDrawPage> getDrawPage() = 0;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;

@@ -476,128 +476,110 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  )
 
 void ODatabaseMetaDataResultSet::setProceduresMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setProceduresMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setProceduresMap();
 }
 
 void ODatabaseMetaDataResultSet::setCatalogsMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setCatalogsMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setCatalogsMap();
 }
 
 void ODatabaseMetaDataResultSet::setSchemasMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setSchemasMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setSchemasMap();
 }
 
 void ODatabaseMetaDataResultSet::setColumnPrivilegesMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setColumnPrivilegesMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setColumnPrivilegesMap();
 }
 
 void ODatabaseMetaDataResultSet::setColumnsMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setColumnsMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setColumnsMap();
 }
 
 void ODatabaseMetaDataResultSet::setTablesMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setTablesMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setTablesMap();
 }
 
 void ODatabaseMetaDataResultSet::setProcedureColumnsMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setProcedureColumnsMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setProcedureColumnsMap();
 }
 
 void ODatabaseMetaDataResultSet::setPrimaryKeysMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setPrimaryKeysMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setPrimaryKeysMap();
 }
 
 void ODatabaseMetaDataResultSet::setIndexInfoMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setIndexInfoMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setIndexInfoMap();
 }
 
 void ODatabaseMetaDataResultSet::setTablePrivilegesMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setTablePrivilegesMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setTablePrivilegesMap();
 }
 
 void ODatabaseMetaDataResultSet::setCrossReferenceMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setCrossReferenceMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setCrossReferenceMap();
 }
 
 void ODatabaseMetaDataResultSet::setVersionColumnsMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setVersionColumnsMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setVersionColumnsMap();
 }
 
 void ODatabaseMetaDataResultSet::setBestRowIdentifierMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setBestRowIdentifierMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setBestRowIdentifierMap();
 }
 
 void ODatabaseMetaDataResultSet::setTypeInfoMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setTypeInfoMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setTypeInfoMap();
 }
 
 void ODatabaseMetaDataResultSet::setUDTsMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setUDTsMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setUDTsMap();
 }
 
 void ODatabaseMetaDataResultSet::setTableTypes()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setTableTypes();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setTableTypes();
 }
 
 void ODatabaseMetaDataResultSet::setExportedKeysMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setExportedKeysMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setExportedKeysMap();
 }
 
 void ODatabaseMetaDataResultSet::setImportedKeysMap()
 {
-    rtl::Reference<ODatabaseMetaDataResultSetMetaData> pMetaData = new ODatabaseMetaDataResultSetMetaData();
-    pMetaData->setImportedKeysMap();
-    m_xMetaData = pMetaData;
+    m_xMetaData = new ODatabaseMetaDataResultSetMetaData();
+    m_xMetaData->setImportedKeysMap();
 }
 
 Reference< css::beans::XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySetInfo(  )

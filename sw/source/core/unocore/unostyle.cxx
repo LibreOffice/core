@@ -4433,7 +4433,7 @@ void SwXTextTableStyle::UpdateCellStylesMapping()
             xCellStyle.set(new SwXTextCellStyle(m_pDocShell, pBoxFormat, m_pTableAutoFormat->GetName()));
             pBoxFormat->SetXObject(xCellStyle);
         }
-        m_aCellStyles[i] = xCellStyle;
+        m_aCellStyles[i] = std::move(xCellStyle);
     }
 }
 
