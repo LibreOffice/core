@@ -4754,11 +4754,10 @@ HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext
     try {
         Reference< XDocumentHandler > xHandler( rxContext->getServiceManager()->createInstanceWithContext( WRITER_IMPORTER_NAME, rxContext ), UNO_QUERY );
 
-        rtl::Reference<HwpReader> p = new HwpReader;
-        p->setDocumentHandler( xHandler );
+        rFilter = new HwpReader;
+        rFilter->setDocumentHandler( xHandler );
 
         rImporter.set(xHandler, UNO_QUERY);
-        rFilter = p;
     }
     catch( Exception & )
     {
