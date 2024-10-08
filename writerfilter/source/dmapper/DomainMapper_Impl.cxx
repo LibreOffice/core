@@ -300,6 +300,7 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
             switch (*pInner->GetFieldId())
             {
                 case FIELD_DOCVARIABLE:
+                case FIELD_DOCPROPERTY:
                 case FIELD_FORMTEXT:
                 case FIELD_FORMULA:
                 case FIELD_IF:
@@ -312,6 +313,7 @@ static bool IsFieldNestingAllowed(const FieldContextPtr& pOuter, const FieldCont
                     return false;
                 }
                 default:
+                    // TODO: tdf#125038 suggests everything probably needs to return false
                     break;
             }
             break;
@@ -7737,8 +7739,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 break;
                 case FIELD_DOCPROPERTY :
-                    handleDocProperty(pContext, sFirstParam,
-                            xFieldInterface);
+                {
+                    FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
+                    if (!pOuter || IsFieldNestingAllowed(pOuter, m_aFieldStack.back()))
+                        handleDocProperty(pContext, sFirstParam, xFieldInterface);
+                }
                 break;
                 case FIELD_DOCVARIABLE  :
                 {

@@ -852,6 +852,12 @@ CPPUNIT_TEST_FIXTURE(Test, testConditionalText3)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getParagraph(1)->getString().indexOf('2'));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testConditionalText4)
+{
+    loadAndReload("tdf125038_conditionalText_DOCPROPERTY.docx");
+    getParagraph(1, u"customized field"_ustr);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf142464_ampm, "tdf142464_ampm.docx")
 {
     css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
