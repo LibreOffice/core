@@ -317,12 +317,12 @@ private:
     bool                isIsoODF() const;
     bool                isValidBcp47() const;
 
-    void                convertLocaleToBcp47();
+    void                convertLocaleToBcp47() const;
     bool                convertLocaleToLang( bool bAllowOnTheFlyID );
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
-    void                convertLangToLocale();
-    void                convertLangToBcp47();
+    void                convertLangToLocale() const;
+    void                convertLangToBcp47() const;
 
     /** @return whether BCP 47 language tag string was changed. */
     bool                canonicalize();
@@ -1029,6 +1029,7 @@ LanguageTagImpl const * LanguageTag::getImpl() const
     return mpImpl.get();
 }
 
+
 LanguageTagImpl * LanguageTag::getImpl()
 {
     if (!mpImpl)
@@ -1038,6 +1039,7 @@ LanguageTagImpl * LanguageTag::getImpl()
     }
     return mpImpl.get();
 }
+
 
 void LanguageTag::resetVars()
 {
@@ -1303,9 +1305,9 @@ bool LanguageTagImpl::synCanonicalize()
 }
 
 
-void LanguageTag::syncFromImpl()
+void LanguageTag::syncFromImpl() const
 {
-    LanguageTagImpl* pImpl = getImpl();
+    const LanguageTagImpl* pImpl = getImpl();
     bool bRegister = ((mbInitializedBcp47 && maBcp47 != pImpl->maBcp47) ||
             (mbInitializedLangID && mnLangID != pImpl->mnLangID));
     SAL_INFO_IF( bRegister, "i18nlangtag",
@@ -1352,7 +1354,7 @@ bool LanguageTag::synCanonicalize()
 }
 
 
-void LanguageTagImpl::convertLocaleToBcp47()
+void LanguageTagImpl::convertLocaleToBcp47() const
 {
     if (mbSystemLocale && !mbInitializedLocale)
         convertLangToLocale();
@@ -1499,7 +1501,7 @@ void LanguageTag::convertBcp47ToLang()
 }
 
 
-void LanguageTagImpl::convertLangToLocale()
+void LanguageTagImpl::convertLangToLocale() const
 {
     if (mbSystemLocale && !mbInitializedLangID)
     {
@@ -1512,14 +1514,14 @@ void LanguageTagImpl::convertLangToLocale()
 }
 
 
-void LanguageTag::convertLangToLocale()
+void LanguageTag::convertLangToLocale() const
 {
     getImpl()->convertLangToLocale();
     syncFromImpl();
 }
 
 
-void LanguageTagImpl::convertLangToBcp47()
+void LanguageTagImpl::convertLangToBcp47() const
 {
     if (!mbInitializedLocale)
         convertLangToLocale();
@@ -1573,9 +1575,9 @@ const OUString & LanguageTagImpl::getBcp47() const
     if (!mbInitializedBcp47)
     {
         if (mbInitializedLocale)
-            const_cast<LanguageTagImpl*>(this)->convertLocaleToBcp47();
+            convertLocaleToBcp47();
         else
-            const_cast<LanguageTagImpl*>(this)->convertLangToBcp47();
+            convertLangToBcp47();
     }
     return maBcp47;
 }
@@ -1592,7 +1594,7 @@ const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
     if (!mbInitializedBcp47)
     {
         getImpl()->getBcp47();
-        const_cast<LanguageTag*>(this)->syncFromImpl();
+        syncFromImpl();
     }
     return maBcp47;
 }
@@ -1733,7 +1735,7 @@ const css::lang::Locale & LanguageTag::getLocale( bool bResolveSystem ) const
         if (mbInitializedBcp47)
             const_cast<LanguageTag*>(this)->convertBcp47ToLocale();
         else
-            const_cast<LanguageTag*>(this)->convertLangToLocale();
+            convertLangToLocale();
     }
     return maLocale;
 }
@@ -1864,7 +1866,7 @@ OUString LanguageTag::getLanguage() const
     if (pImpl->mbCachedLanguage)
         return pImpl->maCachedLanguage;
     OUString aRet( pImpl->getLanguage());
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return aRet;
 }
 
@@ -1886,7 +1888,7 @@ OUString LanguageTag::getScript() const
     if (pImpl->mbCachedScript)
         return pImpl->maCachedScript;
     OUString aRet( pImpl->getScript());
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return aRet;
 }
 
@@ -1922,7 +1924,7 @@ OUString LanguageTag::getCountry() const
     if (pImpl->mbCachedCountry)
         return pImpl->maCachedCountry;
     OUString aRet( pImpl->getCountry());
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return aRet;
 }
 
@@ -1950,7 +1952,7 @@ OUString LanguageTag::getVariants() const
     if (pImpl->mbCachedVariants)
         return pImpl->maCachedVariants;
     OUString aRet( pImpl->getVariants());
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return aRet;
 }
 
@@ -2011,7 +2013,7 @@ bool LanguageTagImpl::hasScript() const
 bool LanguageTag::hasScript() const
 {
     bool bRet = getImpl()->hasScript();
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return bRet;
 }
 
@@ -2076,7 +2078,7 @@ bool LanguageTagImpl::isIsoLocale() const
 bool LanguageTag::isIsoLocale() const
 {
     bool bRet = getImpl()->isIsoLocale();
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return bRet;
 }
 
@@ -2111,7 +2113,7 @@ bool LanguageTagImpl::isIsoODF() const
 bool LanguageTag::isIsoODF() const
 {
     bool bRet = getImpl()->isIsoODF();
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return bRet;
 }
 
@@ -2131,7 +2133,7 @@ bool LanguageTagImpl::isValidBcp47() const
 bool LanguageTag::isValidBcp47() const
 {
     bool bRet = getImpl()->isValidBcp47();
-    const_cast<LanguageTag*>(this)->syncFromImpl();
+    syncFromImpl();
     return bRet;
 }
 

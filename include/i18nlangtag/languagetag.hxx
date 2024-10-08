@@ -569,16 +569,16 @@ private:
             bool                            mbIsFallback        : 1;
 
     LanguageTagImpl*    getImpl();
-    LanguageTagImpl const* getImpl() const;
+    LanguageTagImpl const * getImpl() const;
     ImplPtr             registerImpl() const;
-    void                syncFromImpl();
+    void                syncFromImpl() const;
     void                syncVarsFromRawImpl() const;
     void                syncVarsFromImpl() const;
 
     void                convertLocaleToLang();
     void                convertBcp47ToLocale();
     void                convertBcp47ToLang();
-    void                convertLangToLocale();
+    void                convertLangToLocale() const;
 
     void                convertFromRtlLocale();
 
