@@ -247,7 +247,7 @@ public:
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
-    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> m_oOverrideODFVersion;
+    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> m_oODFVersion;
 
     /// name of stream in package, e.g., "content.xml"
     OUString mStreamName;
@@ -420,12 +420,12 @@ void SvXMLExport::DetermineModelType_()
             {
                 case SvtSaveOptions::ODFSVER_013_EXTENDED:
                     SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
-                    mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012_EXTENDED;
+                    mpImpl->m_oODFVersion = SvtSaveOptions::ODFSVER_012_EXTENDED;
                     maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012_EXTENDED);
                     break;
                 case SvtSaveOptions::ODFSVER_013:
                     SAL_INFO("xmloff.core", "tdf#138209 force form export to ODF 1.2");
-                    mpImpl->m_oOverrideODFVersion = SvtSaveOptions::ODFSVER_012;
+                    mpImpl->m_oODFVersion = SvtSaveOptions::ODFSVER_012;
                     maUnitConv.overrideSaneDefaultVersion(SvtSaveOptions::ODFSVER_012);
                     break;
                 default:
@@ -2326,11 +2326,10 @@ uno::Reference< embed::XStorage > const & SvXMLExport::GetTargetStorage() const
 
 SvtSaveOptions::ODFSaneDefaultVersion SvXMLExport::getSaneDefaultVersion() const
 {
-    if (mpImpl->m_oOverrideODFVersion)
-    {
-        return *mpImpl->m_oOverrideODFVersion;
-    }
-    return GetODFSaneDefaultVersion();
+    // cache this because it is surprising expensive when used extensively from ScXMLExport::WriteCell
+    if (!mpImpl->m_oODFVersion)
+        mpImpl->m_oODFVersion = GetODFSaneDefaultVersion();
+    return *mpImpl->m_oODFVersion;
 }
 
 void
