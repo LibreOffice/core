@@ -235,6 +235,7 @@ sal_Int32 Drawing::getLocalShapeIndex( std::u16string_view rShapeId ) const
     sal_Int32 nBlockId = (nShapeId - 1) / 1024;
     BlockIdVector::iterator aIt = ::std::lower_bound( maBlockIds.begin(), maBlockIds.end(), nBlockId );
     sal_Int32 nIndex = static_cast< sal_Int32 >( aIt - maBlockIds.begin() );
+    assert(nIndex < std::numeric_limits<sal_Int32>::max() / 1024 -1 && "possible overflow");
 
     // block id not found in set -> register it now (value of nIndex remains valid)
     if( (aIt == maBlockIds.end()) || (*aIt != nBlockId) )
