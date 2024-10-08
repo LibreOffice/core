@@ -27,7 +27,7 @@ index 70c7f0ea80..ab8319a447 100644
 --- a/src/gpu/ganesh/vk/GrVkSemaphore.cpp
 +++ b/src/gpu/ganesh/vk/GrVkSemaphore.cpp
 @@ -10,6 +10,7 @@
- #include "include/gpu/GrBackendSemaphore.h"
+ #include "include/gpu/ganesh/vk/GrVkBackendSemaphore.h"
  #include "src/gpu/ganesh/vk/GrVkGpu.h"
  #include "src/gpu/ganesh/vk/GrVkUtil.h"
 +#include "tools/gpu/vk/GrVulkanDefines.h"
@@ -67,18 +67,3 @@ index af4909aaaf..825ec35c83 100644
  #include <dwrite.h>
  #include <d2d1.h>
  
-diff --git a/modules/skcms/skcms.cc b/modules/skcms/skcms.cc
-index 1b643f45cf..c1981110da 100644
---- a/modules/skcms/skcms.cc
-+++ b/modules/skcms/skcms.cc
-@@ -2371,7 +2372,9 @@ typedef enum {
-     SKCMS_WORK_OPS(M)
-     SKCMS_STORE_OPS(M)
- #undef M
--} Op;
-+} Op_skcms;
-+
-+#define Op Op_skcms
- 
- #if defined(__clang__)
-     template <int N, typename T> using Vec = T __attribute__((ext_vector_type(N)));
