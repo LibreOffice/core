@@ -727,6 +727,7 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
         mrWriter.put("id", sId);
         sal_Int16 nNodeType = xNode->getType();
         auto iterator = constAnimationNodeTypeToString.find(nNodeType);
+        assert(iterator != constAnimationNodeTypeToString.end() && "must be previously checked with isValidNode");
         mrWriter.put("nodeName", iterator->second);
 
         // common properties
