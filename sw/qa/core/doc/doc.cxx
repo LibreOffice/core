@@ -22,6 +22,7 @@
 #include <editeng/langitem.hxx>
 #include <vcl/scheduler.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -658,6 +659,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxWordWrap)
     // - Actual  : 5183
     // i.e. the shape had new lines for each character instead of 1 line.
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(1000), nFlyHeight);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAtCharImageCopy)
+{
+    // Given a document with 2 pages, one draw object on both pages:
+    createSwDoc("at-char-image-copy.odt");
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
+    pWrtShell1->SelAll();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell1);
+    xTransfer->Copy();
+    // Don't use createSwDoc(), UnoApiTest::loadWithParams() would dispose the first document.
+    uno::Reference<lang::XComponent> xComponent2 = loadFromDesktop(u"private:factory/swriter"_ustr);
+    comphelper::ScopeGuard g([xComponent2] { xComponent2->dispose(); });
+
+    // When copying the body text from that document to a new one:
+    auto pXTextDocument2 = dynamic_cast<SwXTextDocument*>(xComponent2.get());
+    SwDocShell* pDocShell2 = pXTextDocument2->GetDocShell();
+    SwWrtShell* pWrtShell2 = pDocShell2->GetWrtShell();
+    TransferableDataHelper aHelper(xTransfer);
+    SwTransferable::Paste(*pWrtShell2, aHelper);
+
+    // Then make sure the new document also has the 2 images on the 2 pages:
+    SwDoc* pDoc2 = pDocShell2->GetDoc();
+    SwRootFrame* pLayout2 = pDoc2->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout2->GetLower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. both images went to page 1.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
