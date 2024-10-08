@@ -1079,11 +1079,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/BlendFormula \
     UnpackedTarball/skia/src/gpu/BlurUtils \
     UnpackedTarball/skia/src/gpu/DitherUtils \
+    UnpackedTarball/skia/src/gpu/MutableTextureState \
     UnpackedTarball/skia/src/gpu/PipelineUtils \
     UnpackedTarball/skia/src/gpu/RectanizerPow2 \
     UnpackedTarball/skia/src/gpu/RectanizerSkyline \
     UnpackedTarball/skia/src/gpu/ResourceKey \
     UnpackedTarball/skia/src/gpu/ShaderErrorHandler \
+    UnpackedTarball/skia/src/gpu/SkBackingFit \
     UnpackedTarball/skia/src/gpu/Swizzle \
     UnpackedTarball/skia/src/gpu/TiledTextureUtils \
     UnpackedTarball/skia/src/gpu/tessellate/FixedCountBufferUtils \
@@ -1109,11 +1111,13 @@ endif
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/vk/AHardwareBufferVk \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBackendSemaphore \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBackendSurface \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCaps \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCommandBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkCommandPool \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkContextThreadSafeProxy \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorPool \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSet \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSetManager \
@@ -1193,6 +1197,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/vk/VulkanExtensions \
     UnpackedTarball/skia/src/gpu/vk/VulkanInterface \
     UnpackedTarball/skia/src/gpu/vk/VulkanMemory \
+    UnpackedTarball/skia/src/gpu/vk/VulkanMutableTextureState \
+    UnpackedTarball/skia/src/gpu/vk/VulkanUtilsPriv \
 ))
 endif
 
@@ -1233,7 +1239,8 @@ endif
 # Not used, uses OpenGL - UnpackedTarball/skia/tools/sk_app/mac/RasterWindowContext_mac
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
-    external/skia/source/skia_opts_ssse3, $(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
+    external/skia/source/skia_opts_ssse3, \
+	$(CXXFLAGS_INTRINSICS_SSSE3) $(LO_CLANG_CXXFLAGS_INTRINSICS_SSSE3) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMemset_opts_avx, \
@@ -1241,13 +1248,19 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     $(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformSkx, \
+	$(CXXFLAGS_INTRINSICS_AVX512) $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512) \
+    $(LO_SKIA_AVOID_INLINE_COPIES) \
+))
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw \
     UnpackedTarball/skia/src/core/SkSwizzler_opts_hsw \
     UnpackedTarball/skia/src/core/SkBlitRow_opts_hsw \
-    UnpackedTarball/skia/src/core/SkBitmapProcState_opts_hsw, \
-        $(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
-        $(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
-        $(LO_SKIA_AVOID_INLINE_COPIES) \
+    UnpackedTarball/skia/src/core/SkBitmapProcState_opts_hsw \
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformHsw, \
+	$(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
+	$(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \
+	$(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzler_opts_ssse3 \
@@ -1257,11 +1270,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 	$(LO_SKIA_AVOID_INLINE_COPIES) \
 ))
 
+
 # Skcms code is used by png writer, which is used by SkiaHelper::dump(). Building
 # this without optimizations would mean having each pixel of saved images be
 # processed by unoptimized code.
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/modules/skcms/skcms, $(gb_COMPILEROPTFLAGS) \
+	UnpackedTarball/skia/modules/skcms/src/skcms_TransformBaseline \
+    UnpackedTarball/skia/modules/skcms/skcms, \
+	$(gb_COMPILEROPTFLAGS) \
 ))
 
 

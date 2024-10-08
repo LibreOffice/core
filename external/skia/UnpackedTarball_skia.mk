@@ -53,7 +53,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,skia,\
 ))
 
 $(eval $(call gb_UnpackedTarball_set_post_action,skia,\
-    mv modules/skcms/skcms.cc modules/skcms/skcms.cpp \
+    mv modules/skcms/skcms.cc modules/skcms/skcms.cpp && \
+	mv modules/skcms/src/skcms_TransformBaseline.cc modules/skcms/src/skcms_TransformBaseline.cpp && \
+	mv modules/skcms/src/skcms_TransformHsw.cc modules/skcms/src/skcms_TransformHsw.cpp && \
+	mv modules/skcms/src/skcms_TransformSkx.cc modules/skcms/src/skcms_TransformSkx.cpp \
 ))
 
 # vim: set noet sw=4 ts=4:
