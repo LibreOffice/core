@@ -4751,19 +4751,12 @@ private:
 
 HwpImportFilter::HwpImportFilter(const Reference< XComponentContext >& rxContext)
 {
-    try {
-        Reference< XDocumentHandler > xHandler( rxContext->getServiceManager()->createInstanceWithContext( WRITER_IMPORTER_NAME, rxContext ), UNO_QUERY );
+    Reference<XDocumentHandler> xHandler(rxContext->getServiceManager()->createInstanceWithContext(WRITER_IMPORTER_NAME, rxContext), UNO_QUERY);
 
-        rFilter = new HwpReader;
-        rFilter->setDocumentHandler( xHandler );
+    rFilter = new HwpReader;
+    rFilter->setDocumentHandler( xHandler );
 
-        rImporter.set(xHandler, UNO_QUERY);
-    }
-    catch( Exception & )
-    {
-        printf(" fail to instantiate %s\n", WRITER_IMPORTER_NAME.toUtf8().getStr() );
-        exit( 1 );
-    }
+    rImporter.set(xHandler, UNO_QUERY);
 }
 
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
