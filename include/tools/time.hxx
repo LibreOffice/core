@@ -19,6 +19,10 @@
 #ifndef INCLUDED_TOOLS_TIME_HXX
 #define INCLUDED_TOOLS_TIME_HXX
 
+#include <sal/config.h>
+
+#include <cmath>
+
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/util/Time.hpp>
 
@@ -36,8 +40,8 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Time
 {
 private:
     sal_Int64       nTime;
-    void            init( sal_uInt32 nHour, sal_uInt32 nMin,
-                          sal_uInt32 nSec, sal_uInt64 nNanoSec);
+    static sal_Int64 assemble(sal_uInt32 h, sal_uInt32 m, sal_uInt32 s, sal_uInt64 ns);
+    short GetSign() const { return (nTime >= 0) ? +1 : -1; }
 
 public:
     enum TimeInitSystem
@@ -75,7 +79,7 @@ public:
                         { nTime = 0; }
                     explicit Time( TimeInitSystem );
                     explicit Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
-                    Time( const tools::Time& rTime );
+                    Time( const tools::Time& rTime ) = default;
                     explicit Time( const css::util::Time& rTime );
                     explicit Time( const css::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
@@ -89,18 +93,10 @@ public:
     void            SetMin( sal_uInt16 nNewMin );
     void            SetSec( sal_uInt16 nNewSec );
     void            SetNanoSec( sal_uInt32 nNewNanoSec );
-    sal_uInt16      GetHour() const
-                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>(nTempTime / SAL_CONST_UINT64(10000000000000)); }
-    sal_uInt16      GetMin() const
-                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>((nTempTime / SAL_CONST_UINT64(100000000000)) % 100); }
-    sal_uInt16      GetSec() const
-                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt16>((nTempTime / SAL_CONST_UINT64(1000000000)) % 100); }
-    sal_uInt32      GetNanoSec() const
-                    { sal_uInt64 nTempTime = (nTime >= 0) ? nTime : -nTime;
-                      return static_cast<sal_uInt32>( nTempTime % SAL_CONST_UINT64(1000000000)); }
+    sal_uInt16      GetHour() const { return std::abs(nTime) / SAL_CONST_UINT64(10000000000000); }
+    sal_uInt16      GetMin() const { return (std::abs(nTime) / SAL_CONST_UINT64(100000000000)) % 100; }
+    sal_uInt16      GetSec() const { return (std::abs(nTime) / SAL_CONST_UINT64(1000000000)) % 100; }
+    sal_uInt32      GetNanoSec() const { return std::abs(nTime) % SAL_CONST_UINT64(1000000000); }
 
     // TODO: consider removing GetMSFromTime and MakeTimeFromMS?
     sal_Int32       GetMSFromTime() const;
@@ -168,7 +164,7 @@ public:
      */
     static sal_uInt64 GetMonotonicTicks();
 
-    tools::Time&           operator =( const tools::Time& rTime );
+    tools::Time&           operator =( const tools::Time& rTime ) = default;
     Time            operator -() const
                         { return Time( -nTime ); }
     tools::Time&           operator +=( const tools::Time& rTime );
