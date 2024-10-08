@@ -1,12 +1,12 @@
-diff --git a/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator.h b/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator.h
+diff --git a/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h b/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h
 index 1c6212bd47..756175b4e7 100644
---- a/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator.h
-+++ b/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator.h
-@@ -32,7 +32,7 @@
+--- a/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h
++++ b/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper.h
+@@ -31,7 +31,7 @@
  #define VULKAN_H_
  #define GR_NEEDED_TO_DEFINE_VULKAN_H
  #endif
--#include "vk_mem_alloc.h"
+-#include "vk_mem_alloc.h"  // NO_G3_REWRITE
 +#include "include/vk_mem_alloc.h"
  #ifdef GR_NEEDED_TO_DEFINE_VULKAN_H
  #undef VULKAN_H_
