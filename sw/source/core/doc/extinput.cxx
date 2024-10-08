@@ -107,20 +107,12 @@ SwExtTextInput::~SwExtTextInput()
     }
     else
     {
-        // 1. Insert text at start position with EMPTYEXPAND to use correct formatting
-        //    ABC<NEW><OLD>
-        // 2. Then remove old (not tracked) content
-        //    ABC<NEW>
-
-        sal_Int32 nLenghtOfOldString = nEndCnt - nSttCnt;
+        pTNd->EraseText( rPtPos, nEndCnt - nSttCnt );
 
         if( m_bInsText )
         {
-            rPtPos.SetContent(nSttCnt);
-            rDoc.getIDocumentContentOperations().InsertString( *this, sText, SwInsertFlags::EMPTYEXPAND );
+            rDoc.getIDocumentContentOperations().InsertString(*this, sText);
         }
-
-        pTNd->EraseText( rPtPos, nLenghtOfOldString );
     }
     if (!bWasIME)
     {
@@ -202,8 +194,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
             pTNd->EraseText( aIdx, nEndCnt - nSttCnt );
         }
 
-        // NOHINTEXPAND so we can use correct formatting in destructor when we finish composing
-        pTNd->InsertText( rNewStr, aIdx, SwInsertFlags::NOHINTEXPAND );
+        pTNd->InsertText(rNewStr, aIdx);
         if( !HasMark() )
             SetMark();
     }

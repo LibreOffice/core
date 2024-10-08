@@ -15,6 +15,8 @@
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
+#include <editeng/editids.hrc>
+#include <editeng/fontitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -376,6 +378,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
     // - Actual  : 3 (INVALID)
     // i.e. the doc was modified by the time the signature state was calculated.
     CPPUNIT_ASSERT_EQUAL(SignatureState::NOTVALIDATED, eState);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormatInsertStartList)
+{
+    // Given a document containing a list where the text has a changed font
+    SwXTextDocument* pXTextDocument = createDoc("format-insert-list.docx");
+    CPPUNIT_ASSERT(pXTextDocument);
+    VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    assert(pView);
+
+    // Insert a string at the begining of a list item
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // The inserted text should have the same font as the rest
+    std::unique_ptr<SvxFontItem> pFontItem;
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_FONT, pFontItem);
+    CPPUNIT_ASSERT(pFontItem);
+    CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, pFontItem->GetFamilyName());
+    // Without the accompanying fix in place, this test fails with:
+    // - Expected: Calibri
+    // - Actual  : MS Sans Serif
 }
 }
 

@@ -2712,6 +2712,21 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     // check the content
     CPPUNIT_ASSERT_EQUAL(u"bab"_ustr, pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
+
+    // check the actual weight format of the text
+    SvxWeightItem aBoldWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    SfxItemSet aSet(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 0, 1);
+    SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem != aBoldWeightItem); // b not bold
+    aSet.ClearItem();
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 1, 2);
+    pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem == aBoldWeightItem); // a bold
+    aSet.ClearItem();
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 2, 3);
+    pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem != aBoldWeightItem); // b not bold
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
