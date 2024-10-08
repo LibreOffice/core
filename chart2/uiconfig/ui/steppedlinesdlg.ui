@@ -154,7 +154,7 @@
                     <property name="group">step_start_rb</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="step_center_x_rb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_center_x_rb">Start to step up vertically and end with horizontal line.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_center_x_rb">Start with horizontal line, step up vertically in the middle of the X values and end with horizontal line.</property>
                       </object>
                     </child>
                   </object>
@@ -174,7 +174,7 @@
                     <property name="group">step_start_rb</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="step_end_rb-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_end_rb">Start with horizontal line, step up vertically in the middle of the X values and end with horizontal line.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="steppedlinesdlg|extended_tip|step_end_rb">Start to step up vertically and end with horizontal line.</property>
                       </object>
                     </child>
                   </object>
