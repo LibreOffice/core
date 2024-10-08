@@ -37,7 +37,6 @@ skia_patches := \
     redefinition-of-op.patch.0 \
     0001-Added-missing-include-cstdio.patch \
     fix-SkDebugf-link-error.patch.1 \
-    incomplete.patch.0 \
     ubsan-missing-typeinfo.patch.1 \
     help-msvc-analyzer.patch \
     always_inline_and_multiversioning_conflict.patch.1 \

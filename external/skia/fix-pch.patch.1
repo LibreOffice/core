@@ -72,9 +72,9 @@ index 1b643f45cf..c1981110da 100644
 --- a/modules/skcms/skcms.cc
 +++ b/modules/skcms/skcms.cc
 @@ -2371,7 +2372,9 @@ typedef enum {
-     Op_store_hhhh,
-     Op_store_fff,
-     Op_store_ffff,
+     SKCMS_WORK_OPS(M)
+     SKCMS_STORE_OPS(M)
+ #undef M
 -} Op;
 +} Op_skcms;
 +

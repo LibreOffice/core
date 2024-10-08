@@ -127,6 +127,7 @@ $(eval $(call gb_Library_set_include,skia,\
     -I$(gb_UnpackedTarball_workdir)/skia \
     -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/include/third_party/vulkan/ \
     -I$(SRCDIR)/external/skia/inc/ \
 ))
@@ -297,12 +298,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
     UnpackedTarball/skia/src/codec/SkCodecImageGenerator \
     UnpackedTarball/skia/src/codec/SkColorPalette \
+    UnpackedTarball/skia/src/codec/SkExif \
     UnpackedTarball/skia/src/codec/SkImageGenerator_FromEncoded \
     UnpackedTarball/skia/src/codec/SkMasks \
     UnpackedTarball/skia/src/codec/SkMaskSwizzler \
     UnpackedTarball/skia/src/codec/SkPixmapUtils \
     UnpackedTarball/skia/src/codec/SkSampler \
     UnpackedTarball/skia/src/codec/SkSwizzler \
+    UnpackedTarball/skia/src/codec/SkTiffUtility \
 ))
 
 # from file skia/gn/codec.gni, target "skia_codec_decode_bmp"
@@ -320,6 +323,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/base/SkArenaAlloc \
+    UnpackedTarball/skia/src/base/SkBase64 \
     UnpackedTarball/skia/src/base/SkBezierCurves \
 	UnpackedTarball/skia/src/base/SkBlockAllocator \
     UnpackedTarball/skia/src/base/SkBuffer \
@@ -385,7 +389,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkCubicMap \
     UnpackedTarball/skia/src/core/SkData \
     UnpackedTarball/skia/src/core/SkDataTable \
-    UnpackedTarball/skia/src/core/SkDebug \
     UnpackedTarball/skia/src/core/SkDescriptor \
     UnpackedTarball/skia/src/core/SkDevice \
     UnpackedTarball/skia/src/core/SkDistanceFieldGen \
@@ -440,6 +443,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkMipmap \
     UnpackedTarball/skia/src/core/SkMipmapAccessor \
     UnpackedTarball/skia/src/core/SkMipmapBuilder \
+    UnpackedTarball/skia/src/core/SkMipmapDrawDownSampler \
+    UnpackedTarball/skia/src/core/SkMipmapHQDownSampler \
     UnpackedTarball/skia/src/core/SkOpts \
     UnpackedTarball/skia/src/core/SkOverdrawCanvas \
     UnpackedTarball/skia/src/core/SkPaint \
@@ -802,7 +807,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 # from file skia/gn/utils.gni:55, target "skia_utils_private"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/utils/SkBase64 \
     UnpackedTarball/skia/src/utils/SkCamera \
     UnpackedTarball/skia/src/utils/SkCanvasStack \
     UnpackedTarball/skia/src/utils/SkCanvasStateUtils \
@@ -942,7 +946,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/GrStyle \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurface \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceCharacterization \
-    UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceInfo \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceProxy \
     UnpackedTarball/skia/src/gpu/ganesh/GrSurfaceProxyView \
     UnpackedTarball/skia/src/gpu/ganesh/GrTestUtils \
@@ -1114,6 +1117,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorPool \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSet \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDescriptorSetManager \
+    UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkDirectContext \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkFramebuffer \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkGpu \
     UnpackedTarball/skia/src/gpu/ganesh/vk/GrVkImage \
@@ -1204,11 +1208,11 @@ endif
 endif
 
 
-# from file skia/third_party/vulkanmemoryallocator/BUILD.gn:15, target "source_set("vulkanmemoryallocator")"
+# from file skia/src/gpu/vk/vulkanmemoryallocator/BUILD.gn:15, target "source_set("vulkanmemoryallocator")"
 #
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/third_party/vulkanmemoryallocator/GrVulkanMemoryAllocator \
+    UnpackedTarball/skia/src/gpu/vk/vulkanmemoryallocator/VulkanMemoryAllocatorWrapper \
 ))
 endif
 
