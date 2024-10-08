@@ -1950,11 +1950,13 @@ public:
             if (pCell->IsSharedTop())
             {
                 ScFormulaCell** pp = &(*it);
-                processSharedTop(pp, nRow, pCell->GetSharedLength());
+                SCROW nCellLen = pCell->GetSharedLength();
+                assert(nCellLen > 0);
+                processSharedTop(pp, nRow, nCellLen);
 
                 // Move to the last cell in the group, to get incremented to
                 // the next cell in the next iteration.
-                size_t nOffsetToLast = pCell->GetSharedLength() - 1;
+                size_t nOffsetToLast = nCellLen - 1;
                 std::advance(it, nOffsetToLast);
             }
         }
