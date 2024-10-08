@@ -4144,8 +4144,9 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                     ++aAnchorNdIdx;
                 }
             }
-            // apply found anchor text node as new anchor position
-            newPos.Assign( aAnchorNdIdx );
+            // apply found anchor text node as new anchor position, but keep the content index
+            // unchanged
+            newPos.Assign( aAnchorNdIdx, newPos.GetContentIndex() );
         }
         else
         {
