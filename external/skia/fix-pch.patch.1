@@ -2,13 +2,13 @@ diff --git a/include/private/SkColorData.h b/include/private/SkColorData.h
 index a59e7b0446..960b4c0313 100644
 --- a/include/private/SkColorData.h
 +++ b/include/private/SkColorData.h
-@@ -438,4 +438,6 @@ constexpr SkPMColor4f SK_PMColor4fILLEGAL = { SK_FloatNegativeInfinity,
+@@ -382,4 +382,6 @@ constexpr SkPMColor4f SK_PMColor4fILLEGAL = { SK_FloatNegativeInfinity,
+                                               SK_FloatNegativeInfinity,
                                                SK_FloatNegativeInfinity,
                                                SK_FloatNegativeInfinity };
- 
 +template <> uint32_t SkPMColor4f::toBytes_RGBA() const;
 +
- #endif
+ #endif  // SkColorData_DEFINED
 diff --git a/src/core/SkM44.cpp b/src/core/SkM44.cpp
 index 02b1741763..4cece999d2 100644
 --- a/src/core/SkM44.cpp
@@ -34,26 +34,6 @@ index 70c7f0ea80..ab8319a447 100644
  
  #ifdef VK_USE_PLATFORM_WIN32_KHR
  // windows wants to define this as CreateSemaphoreA or CreateSemaphoreW
-diff --git a/src/sksl/ir/SkSLPoison.h b/src/sksl/ir/SkSLPoison.h
-index 035f94e1f6..3cf12db902 100644
---- a/src/sksl/ir/SkSLPoison.h
-+++ b/src/sksl/ir/SkSLPoison.h
-@@ -5,6 +5,9 @@
-  * found in the LICENSE file.
-  */
- 
-+#ifndef SKSL_POISON
-+#define SKSL_POISON
-+
- #include "src/sksl/SkSLBuiltinTypes.h"
- #include "src/sksl/SkSLCompiler.h"
- #include "src/sksl/SkSLContext.h"
-@@ -38,3 +41,5 @@ private:
- };
- 
- } // namespace SkSL
-+
-+#endif
 diff --git a/src/utils/win/SkDWriteGeometrySink.h b/src/utils/win/SkDWriteGeometrySink.h
 index af4909aaaf..825ec35c83 100644
 --- a/src/utils/win/SkDWriteGeometrySink.h

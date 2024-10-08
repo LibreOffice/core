@@ -2,7 +2,7 @@ diff -ur skia.org/include/gpu/gl/GrGLInterface.h skia/include/gpu/gl/GrGLInterfa
 --- skia.org/include/gpu/gl/GrGLInterface.h	2024-10-04 15:33:38.063875425 +0200
 +++ skia/include/gpu/gl/GrGLInterface.h	2024-10-04 15:34:00.073017585 +0200
 @@ -83,7 +83,9 @@
-
+     GrGLStandard fStandard;
      GrGLExtensions fExtensions;
 
 +#ifdef SK_GL
