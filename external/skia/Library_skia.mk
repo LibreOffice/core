@@ -466,7 +466,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkScan_Antihair \
     UnpackedTarball/skia/src/core/SkScan_Hairline \
     UnpackedTarball/skia/src/core/SkScan_Path \
-    UnpackedTarball/skia/src/core/SkScan_SAAPath \
     UnpackedTarball/skia/src/core/SkSpecialImage \
     UnpackedTarball/skia/src/core/SkSpriteBlitter_ARGB32 \
     UnpackedTarball/skia/src/core/SkStream \
@@ -757,6 +756,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateEmptyStatements \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateUnreachableCode \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinFunctions \
+    UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinStructs \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLHoistSwitchVarDeclarationsAtTopLevel \
     UnpackedTarball/skia/src/sksl/transform/SkSLRenamePrivateSymbols \
@@ -1232,7 +1232,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/opts/SkOpts_hsw \
     UnpackedTarball/skia/src/core/SkSwizzler_opts_hsw \
     UnpackedTarball/skia/src/core/SkBlitRow_opts_hsw \
-    UnpackedTarball/skia/src/core/SkBitmapProcState_opts_hsw \
 	UnpackedTarball/skia/modules/skcms/src/skcms_TransformHsw, \
 	$(CXXFLAGS_INTRINSICS_AVX2) $(CXXFLAGS_INTRINSICS_F16C) $(CXXFLAGS_INTRINSICS_FMA) \
 	$(LO_CLANG_CXXFLAGS_INTRINSICS_AVX2) $(LO_CLANG_CXXFLAGS_INTRINSICS_F16C) $(LO_CLANG_CXXFLAGS_INTRINSICS_FMA) \

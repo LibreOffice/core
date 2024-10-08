@@ -12,9 +12,9 @@ diff -ur skia.org/include/private/base/SkFloatingPoint.h skia/include/private/ba
      return static_cast<float>(x);
  }
 @@ -161,12 +163,16 @@
-
- // IEEE defines how float divide behaves for non-finite values and zero-denoms, but C does not,
- // so we have a helper that suppresses the possible undefined-behavior warnings.
+ #pragma warning( disable : 4723)
+ #endif
+ // Your function
 +#if defined(__clang__)
  SK_NO_SANITIZE("float-divide-by-zero")
 +#endif
