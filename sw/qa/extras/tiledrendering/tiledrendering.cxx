@@ -35,6 +35,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/wghtitem.hxx>
 #include <svl/srchitem.hxx>
@@ -2738,6 +2739,21 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     // check the content
     CPPUNIT_ASSERT_EQUAL(OUString("bab"), pShellCursor->GetPoint()->GetNode().GetTextNode()->GetText());
+
+    // check the actual weight format of the text
+    SvxWeightItem aBoldWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    SfxItemSet aSet(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 0, 1);
+    SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem != aBoldWeightItem); // b not bold
+    aSet.ClearItem();
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 1, 2);
+    pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem == aBoldWeightItem); // a bold
+    aSet.ClearItem();
+    pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 2, 3);
+    pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
+    CPPUNIT_ASSERT(*pPoolItem != aBoldWeightItem); // b not bold
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
@@ -4601,7 +4617,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
 {
-    // Given a document with 3 pages, the first page is visible:
+    // Given a document with 3 pages, the first page is visible:f
     SwXTextDocument* pXTextDocument = createDoc();
     CPPUNIT_ASSERT(pXTextDocument);
     ViewCallback aView;
@@ -4658,6 +4674,30 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
     // - Actual  : 3 (INVALID)
     // i.e. the doc was modified by the time the signature state was calculated.
     CPPUNIT_ASSERT_EQUAL(SignatureState::NOTVALIDATED, eState);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormatInsertStartList)
+{
+    // Given a document containing a list where the text has a changed font
+    SwXTextDocument* pXTextDocument = createDoc("format-insert-list.docx");
+    CPPUNIT_ASSERT(pXTextDocument);
+    VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
+    SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
+    assert(pView);
+
+    // Insert a string at the begining of a list item
+    pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
+    pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
+    Scheduler::ProcessEventsToIdle();
+
+    // The inserted text should have the same font as the rest
+    std::unique_ptr<SvxFontItem> pFontItem;
+    pView->GetViewFrame().GetBindings().QueryState(SID_ATTR_CHAR_FONT, pFontItem);
+    CPPUNIT_ASSERT(pFontItem);
+    CPPUNIT_ASSERT_EQUAL(u"Calibri"_ustr, pFontItem->GetFamilyName());
+    // Without the accompanying fix in place, this test fails with:
+    // - Expected: Calibri
+    // - Actual  : MS Sans Serif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
