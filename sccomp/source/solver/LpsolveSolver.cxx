@@ -351,7 +351,7 @@ void SAL_CALL LpsolveSolver::solve()
             bool bHasConstrReport = false;
             bHasConstrReport = get_ptr_sensitivity_rhs(lp, &pConstrDual, &pConstrFrom, &pConstrTill);
 
-            // When successfull, store sensitivity data in the solver component
+            // When successful, store sensitivity data in the solver component
             if (bHasObjReport && bHasConstrReport)
             {
                 m_aSensitivityReport.HasReport = true;
