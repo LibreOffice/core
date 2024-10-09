@@ -30,7 +30,7 @@ ifeq ($(ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS),TRUE)
 gb_EMSCRIPTEN_LDFLAGS += -sPROXY_POSIX_SOCKETS -lwebsocket.js
 endif
 
-gb_Executable_EXT := .html
+gb_Executable_EXT := .js
 gb_EMSCRIPTEN_EXCEPT = -fwasm-exceptions -s SUPPORT_LONGJMP=wasm
 
 gb_CXXFLAGS += $(gb_EMSCRIPTEN_CPPFLAGS)
@@ -77,7 +77,6 @@ define gb_Executable_Executable_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
-        $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
         $(patsubst %.lib,%.wasm.dwp,$(3)) \
 )
@@ -88,7 +87,6 @@ define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
-        $(patsubst %.lib,%.js,$(3)) \
         $(patsubst %.lib,%.worker.js,$(3)) \
         $(patsubst %.lib,%.wasm.dwp,$(3)) \
 )
