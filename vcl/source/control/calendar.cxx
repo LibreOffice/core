@@ -103,11 +103,11 @@ void Calendar::ImplInit( WinBits nWinStyle )
     SetFirstDate( maCurDate );
     ImplCalendarSelectDate( mpSelectTable.get(), maCurDate, true );
 
-    // Sonstige Strings erzeugen
+    // generate other strings
     maDayText = VclResId(STR_SVT_CALENDAR_DAY);
     maWeekText = VclResId(STR_SVT_CALENDAR_WEEK);
 
-    // Tagestexte anlegen
+    // create text for each day
     for (sal_Int32 i = 0; i < 31; ++i)
         maDayTexts[i] = OUString::number(i+1);
 
