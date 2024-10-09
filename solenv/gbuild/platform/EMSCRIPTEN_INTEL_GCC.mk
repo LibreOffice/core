@@ -17,6 +17,10 @@ gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 # Initial memory size
 gb_EMSCRIPTEN_LDFLAGS += -s TOTAL_MEMORY=1GB
 
+ifeq ($(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD),)
+gb_EMSCRIPTEN_LDFLAGS += -sPTHREAD_POOL_SIZE=6
+endif
+
 # Double the main thread stack size, but keep the default value for other threads:
 gb_EMSCRIPTEN_LDFLAGS += -sSTACK_SIZE=131072 -sDEFAULT_PTHREAD_STACK_SIZE=65536
 
