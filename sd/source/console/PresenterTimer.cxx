@@ -96,7 +96,11 @@ public:
 
     static void NotifyTermination();
 #if !defined NDEBUG
-    static bool HasInstance() { return mpInstance != nullptr; }
+    static bool HasInstance()
+    {
+        std::scoped_lock aGuard (maInstanceMutex);
+        return mpInstance != nullptr;
+    }
 #endif
 
 private:
