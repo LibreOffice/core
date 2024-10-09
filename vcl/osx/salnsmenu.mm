@@ -288,7 +288,7 @@
     // Apparently whatever is returned will be passed to
     // -[NSMenuItem setEnabled:] which can cause the enabled state
     // to be different than the enabled state that the LibreOffice
-    // code expoects. This results in menu items failing to be
+    // code expects. This results in menu items failing to be
     // reenabled after being temporarily disabled such as when a
     // native modal dialog is closed. So, return the last enabled
     // state set by the LibreOffice code.
