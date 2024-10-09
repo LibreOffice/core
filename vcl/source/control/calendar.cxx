@@ -132,15 +132,15 @@ void Calendar::ImplInitSettings()
     SetBackground(Wallpaper(rStyleSettings.GetFieldColor()));
 }
 
-Calendar::Calendar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK) ),
-    maCalendarWrapper( Application::GetAppLocaleDataWrapper().getComponentContext() ),
-    maOldFormatFirstDate( 0, 0, 1900 ),
-    maOldFormatLastDate( 0, 0, 1900 ),
-    maFirstDate( 0, 0, 1900 ),
-    maOldFirstDate( 0, 0, 1900 ),
-    maCurDate( Date::SYSTEM ),
-    maOldCurDate( 0, 0, 1900 )
+Calendar::Calendar(vcl::Window* pParent, WinBits nWinStyle)
+    : Control(pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK))
+    , maCalendarWrapper(Application::GetAppLocaleDataWrapper().getComponentContext())
+    , maOldFormatFirstDate(0, 0, 1900)
+    , maOldFormatLastDate(0, 0, 1900)
+    , maFirstDate(0, 0, 1900)
+    , maOldFirstDate(0, 0, 1900)
+    , maCurDate(Date::SYSTEM)
+    , maOldCurDate(0, 0, 1900)
 {
     ImplInit( nWinStyle );
 }
