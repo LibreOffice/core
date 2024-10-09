@@ -44,5 +44,5 @@
 +}
 +
  #include "include/ports/SkFontMgr_indirect.h"
- SK_API sk_sp<SkFontMgr> SkFontMgr_New_DirectWriteRenderer(sk_sp<SkRemotableFontMgr> proxy) {
+ sk_sp<SkFontMgr> SkFontMgr_New_DirectWriteRenderer(sk_sp<SkRemotableFontMgr> proxy) {
      sk_sp<SkFontMgr> impl(SkFontMgr_New_DirectWrite());

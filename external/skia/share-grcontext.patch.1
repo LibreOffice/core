@@ -1,6 +1,6 @@
 diff -ur skia.org/tools/window/mac/MetalWindowContext_mac.mm skia/tools/window/mac/MetalWindowContext_mac.mm
---- skia.org/tools/window/mac/MetalWindowContext_mac.mm	2024-10-08 14:58:53.731121800 +0200
-+++ skia/tools/window/mac/MetalWindowContext_mac.mm	2024-10-08 14:59:05.913213666 +0200
+--- skia.org/tools/window/mac/MetalWindowContext_mac.mm	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/mac/MetalWindowContext_mac.mm	2024-10-09 09:52:21.883858977 +0200
 @@ -47,10 +47,14 @@
  }
 
@@ -18,8 +18,8 @@ diff -ur skia.org/tools/window/mac/MetalWindowContext_mac.mm skia/tools/window/m
 
      // resize ignores the passed values and uses the fMainView directly.
 diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindowContext.h
---- skia.org/tools/window/MetalWindowContext.h	2024-10-08 14:58:53.730121792 +0200
-+++ skia/tools/window/MetalWindowContext.h	2024-10-08 14:59:05.913213666 +0200
+--- skia.org/tools/window/MetalWindowContext.h	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/MetalWindowContext.h	2024-10-09 09:52:21.883858977 +0200
 @@ -14,13 +14,18 @@
 
  #include "tools/window/WindowContext.h"
@@ -79,9 +79,9 @@ diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindo
  }   // namespace skwindow::internal
 
 diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWindowContext.mm
---- skia.org/tools/window/MetalWindowContext.mm	2024-10-08 14:58:53.730121792 +0200
-+++ skia/tools/window/MetalWindowContext.mm	2024-10-08 14:59:05.914213673 +0200
-@@ -39,24 +39,30 @@
+--- skia.org/tools/window/MetalWindowContext.mm	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/MetalWindowContext.mm	2024-10-09 09:55:38.054848393 +0200
+@@ -41,24 +41,30 @@
  }
 
  void MetalWindowContext::initializeContext() {
@@ -119,7 +119,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 
  #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
      if (fDisplayParams.fEnableBinaryArchive) {
-@@ -64,11 +70,11 @@
+@@ -66,11 +72,11 @@
              sk_cfp<MTLBinaryArchiveDescriptor*> desc([MTLBinaryArchiveDescriptor new]);
              (*desc).url = CacheURL(); // try to load
              NSError* error;
@@ -135,7 +135,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
                      SkDebugf("Error creating MTLBinaryArchive:\n%s\n",
                               error.debugDescription.UTF8String);
                  }
-@@ -76,46 +82,75 @@
+@@ -78,46 +84,75 @@
          }
      } else {
          if (@available(macOS 11.0, iOS 14.0, tvOS 14.0, *)) {
@@ -156,9 +156,9 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +        backendContext.fBinaryArchive.retain((__bridge GrMTLHandle)d->fPipelineArchive);
      }
  #endif
--    fContext = GrDirectContext::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
+-    fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
 -    if (!fContext && fDisplayParams.fMSAASampleCount > 1) {
-+    d->fContext = GrDirectContext::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
++    d->fContext = GrDirectContexts::MakeMetal(backendContext, fDisplayParams.fGrContextOptions);
 +    if (!d->fContext && fDisplayParams.fMSAASampleCount > 1) {
          fDisplayParams.fMSAASampleCount /= 2;
 +        fGlobalShared.reset();
@@ -226,7 +226,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
  }
 
  sk_sp<SkSurface> MetalWindowContext::getBackbufferSurface() {
-@@ -158,7 +193,7 @@
+@@ -160,7 +195,7 @@
  void MetalWindowContext::onSwapBuffers() {
      id<CAMetalDrawable> currentDrawable = (id<CAMetalDrawable>)fDrawableHandle;
 
@@ -235,7 +235,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
      commandBuffer.label = @"Present";
 
      [commandBuffer presentDrawable:currentDrawable];
-@@ -179,9 +214,9 @@
+@@ -181,9 +216,9 @@
      if (!isActive) {
  #if SKGPU_GRAPHITE_METAL_SDK_VERSION >= 230
          if (@available(macOS 11.0, iOS 14.0, tvOS 14.0, *)) {
@@ -247,7 +247,7 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
                  if (error) {
                      SkDebugf("Error storing MTLBinaryArchive:\n%s\n",
                               error.debugDescription.UTF8String);
-@@ -192,4 +227,11 @@
+@@ -194,4 +229,11 @@
      }
  }
 
@@ -259,9 +259,11 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +}
 +
  }   //namespace skwindow::internal
+Only in skia/tools/window: MetalWindowContext.mm.orig
+Only in skia/tools/window: MetalWindowContext.mm.rej
 diff -ur skia.org/tools/window/unix/VulkanWindowContext_unix.cpp skia/tools/window/unix/VulkanWindowContext_unix.cpp
---- skia.org/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-08 14:58:53.731121800 +0200
-+++ skia/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-08 14:59:05.914213673 +0200
+--- skia.org/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-09 09:52:21.883858977 +0200
 @@ -24,7 +24,7 @@
          return nullptr;
      }
@@ -291,8 +293,8 @@ diff -ur skia.org/tools/window/unix/VulkanWindowContext_unix.cpp skia/tools/wind
      }
      return ctx;
 diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanWindowContext.cpp
---- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-08 14:58:53.730121792 +0200
-+++ skia/tools/window/VulkanWindowContext.cpp	2024-10-08 14:59:28.352382864 +0200
+--- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/VulkanWindowContext.cpp	2024-10-09 09:52:21.883858977 +0200
 @@ -29,9 +29,13 @@
  #endif
 
@@ -711,11 +713,9 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 +SK_API sk_sp<VulkanWindowContext::Shared> VulkanWindowContext::fGlobalShared;
 +
  }  // namespace skwindow::internal
-Only in skia/tools/window: VulkanWindowContext.cpp.orig
-Only in skia/tools/window: VulkanWindowContext.cpp.rej
 diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWindowContext.h
---- skia.org/tools/window/VulkanWindowContext.h	2024-10-08 14:58:53.730121792 +0200
-+++ skia/tools/window/VulkanWindowContext.h	2024-10-08 14:59:05.914213673 +0200
+--- skia.org/tools/window/VulkanWindowContext.h	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/VulkanWindowContext.h	2024-10-09 09:52:21.883858977 +0200
 @@ -15,19 +15,23 @@
  #include "tools/gpu/vk/VkTestUtils.h"
  #include "tools/window/WindowContext.h"
@@ -823,8 +823,8 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 
      uint32_t               fImageCount;
 diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window/win/VulkanWindowContext_win.cpp
---- skia.org/tools/window/win/VulkanWindowContext_win.cpp	2024-10-08 14:58:53.731121800 +0200
-+++ skia/tools/window/win/VulkanWindowContext_win.cpp	2024-10-08 14:59:05.914213673 +0200
+--- skia.org/tools/window/win/VulkanWindowContext_win.cpp	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/win/VulkanWindowContext_win.cpp	2024-10-09 09:52:21.883858977 +0200
 @@ -25,7 +25,7 @@
          return nullptr;
      }
@@ -854,8 +854,8 @@ diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window
      }
      return ctx;
 diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
---- skia.org/tools/window/WindowContext.h	2024-10-08 14:58:53.730121792 +0200
-+++ skia/tools/window/WindowContext.h	2024-10-08 14:59:05.914213673 +0200
+--- skia.org/tools/window/WindowContext.h	2024-10-09 09:52:11.322780365 +0200
++++ skia/tools/window/WindowContext.h	2024-10-09 09:52:21.883858977 +0200
 @@ -10,9 +10,9 @@
  #include "include/core/SkRefCnt.h"
  #include "include/core/SkSurfaceProps.h"
