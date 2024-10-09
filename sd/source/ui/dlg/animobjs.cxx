@@ -116,8 +116,6 @@ void SdDisplay::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     SetOutputSizePixel(aSize);
 }
 
-const size_t AnimationWindow::EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
-
 /**
  *  AnimationWindow - FloatingWindow
  */

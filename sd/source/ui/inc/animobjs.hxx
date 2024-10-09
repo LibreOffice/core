@@ -112,7 +112,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtnHelp;
 
     ::std::vector< ::std::pair<BitmapEx, ::tools::Time> > m_FrameList;
-    static const size_t EMPTY_FRAMELIST;
+    static constexpr size_t EMPTY_FRAMELIST = std::numeric_limits<size_t>::max();
     size_t          m_nCurrentFrame;
     std::unique_ptr<SdDrawDocument> pMyDoc;
 
