@@ -87,9 +87,6 @@ public:
     // SfxStyleSheetBase
     virtual bool SetName(const OUString& rNewName, bool bReindexNow = true) override;
 
-    // XInterface
-    virtual void SAL_CALL release(  ) noexcept override;
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;

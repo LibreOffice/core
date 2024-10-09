@@ -149,6 +149,10 @@ SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& 
 
 SdStyleSheet::~SdStyleSheet()
 {
+    // restore reference count, prevent double-delete from calling dispose
+    osl_atomic_increment( &m_refCount );
+    dispose();
+
     delete pSet;
     pSet = nullptr;    // that following destructors also get a change
 }
@@ -725,28 +729,6 @@ rtl::Reference<SdStyleSheet> SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBa
     while( rPool.Find( aName, eFamily ) != nullptr );
 
     return new SdStyleSheet(aName, rPool, eFamily, SfxStyleSearchBits::UserDefined);
-}
-
-// XInterface
-
-void SAL_CALL SdStyleSheet::release(  ) noexcept
-{
-    if (osl_atomic_decrement( &m_refCount ) != 0)
-        return;
-
-    // restore reference count:
-    osl_atomic_increment( &m_refCount );
-    if (! m_bDisposed) try
-    {
-        dispose();
-    }
-    catch (RuntimeException const&)
-    {
-        // don't break throw ()
-        TOOLS_WARN_EXCEPTION( "sd", "" );
-    }
-    OSL_ASSERT( m_bDisposed );
-    SdStyleSheetBase::release();
 }
 
 // XComponent
