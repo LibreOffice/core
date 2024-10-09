@@ -127,13 +127,13 @@ $(eval $(call gb_Library_set_include,skia,\
     -I$(gb_UnpackedTarball_workdir)/skia \
     -I$(gb_UnpackedTarball_workdir)/skia/modules/skcms/ \
     -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/ \
+    -I$(gb_UnpackedTarball_workdir)/skia/third_party/vulkanmemoryallocator/include/ \
     -I$(gb_UnpackedTarball_workdir)/skia/src/gpu/vk/vulkanmemoryallocator/ \
     -I$(gb_UnpackedTarball_workdir)/skia/include/third_party/vulkan/ \
     -I$(SRCDIR)/external/skia/inc/ \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,skia,\
-    external/skia/source/SkMemory_malloc \
     external/skia/source/skia_compiler \
     external/skia/source/skia_opts \
 ))
@@ -213,6 +213,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkParseEncodedOrigin \
     UnpackedTarball/skia/src/codec/SkSampledCodec \
     UnpackedTarball/skia/src/ports/SkGlobalInitialization_default \
+    UnpackedTarball/skia/src/ports/SkMemory_malloc \
     UnpackedTarball/skia/src/ports/SkOSFile_stdio \
     UnpackedTarball/skia/src/sfnt/SkOTTable_name \
     UnpackedTarball/skia/src/sfnt/SkOTUtils \
@@ -244,6 +245,7 @@ endif
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/tools/gpu/vk/VkTestUtils \
+    UnpackedTarball/skia/tools/gpu/vk/VkTestMemoryAllocator \
 ))
 endif
 
@@ -399,6 +401,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkImageFilterTypes \
     UnpackedTarball/skia/src/core/SkImageGenerator \
     UnpackedTarball/skia/src/core/SkImageInfo \
+    UnpackedTarball/skia/src/core/SkKnownRuntimeEffects \
     UnpackedTarball/skia/src/core/SkLatticeIter \
     UnpackedTarball/skia/src/core/SkLineClipper \
     UnpackedTarball/skia/src/core/SkLocalMatrixImageFilter \
@@ -481,7 +484,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkSwizzler_opts \
     UnpackedTarball/skia/src/core/SkTaskGroup \
     UnpackedTarball/skia/src/core/SkTextBlob \
-    UnpackedTarball/skia/src/core/SkTextBlobTrace \
     UnpackedTarball/skia/src/core/SkTypeface \
     UnpackedTarball/skia/src/core/SkTypefaceCache \
     UnpackedTarball/skia/src/core/SkTypeface_remote \
@@ -815,6 +817,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/mac/SkCTFont \
+    UnpackedTarball/skia/src/utils/mac/SkCTFontCreateExactCopy \
     UnpackedTarball/skia/src/utils/mac/SkCreateCGImageRef \
 ))
 endif
@@ -1138,10 +1141,12 @@ ifeq ($(OS),MACOSX)
 ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlAttachment \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBackendSemaphore \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCaps \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCommandBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlDepthStencil \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlDirectContext \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlFramebuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlGpu \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlOpsRenderPass \

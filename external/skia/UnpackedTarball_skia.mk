@@ -19,7 +19,7 @@ skia_patches := \
     fix-alpha-difference-copy.patch.1 \
     share-grcontext.patch.1 \
     clang-attributes-warning.patch.1 \
-    fontconfig-get-typeface.patch.0 \
+    fontconfig-get-typeface.patch.1 \
     windows-do-not-modify-logfont.patch.0 \
     windows-text-gamma.patch.0 \
     windows-force-unicode-api.patch.0 \
