@@ -721,6 +721,13 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="WrapNextPrevSheetTab" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>When switching to next / previous sheet, wrap from last to first tab (and vice versa)</desc>
+          <label>When switching to next / previous sheet, wrap from last to first tab (and vice versa)</label>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="LastFunctions" oor:type="oor:int-list" oor:nillable="false">
         <info>
           <desc>Specifies the functions last used.</desc>

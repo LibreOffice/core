@@ -1834,25 +1834,35 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
     ScDocument& rDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
     SCTAB nNextTab = nTab;
+    SCTAB nCount = rDoc.GetTableCount();
     if (nDir < 0)
     {
         do
         {
             --nNextTab;
             if (nNextTab < 0)
-                nNextTab = rDoc.GetTableCount();
+            {
+                if (officecfg::Office::Calc::Input::WrapNextPrevSheetTab::get())
+                    nNextTab = nCount;
+                else
+                    return;
+            }
             if (rDoc.IsVisible(nNextTab))
                 break;
         } while (nNextTab != nTab);
     }
-    if (nDir > 0)
+    else // nDir > 0
     {
-        SCTAB nCount = rDoc.GetTableCount();
         do
         {
             ++nNextTab;
             if (nNextTab >= nCount)
-                nNextTab = 0;
+            {
+                if (officecfg::Office::Calc::Input::WrapNextPrevSheetTab::get())
+                    nNextTab = 0;
+                else
+                    return;
+            }
             if (rDoc.IsVisible(nNextTab))
                 break;
         } while (nNextTab != nTab);
