@@ -356,6 +356,14 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
                 aValue.Value <<= aSeqByte;
             }
         }
+        else if (rType == "any")
+        {
+            aNodeValue = rPair.second.get_child("value", aNodeNull);
+            if (aNodeValue != aNodeNull && !aNodeValue.empty())
+            {
+                aValue.Value = jsonToUnoAny(aNodeValue);
+            }
+        }
         else if (rType == "[]any")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
