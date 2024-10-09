@@ -50,9 +50,9 @@ struct SdrMediaObj::Impl
     // It may be shared between multiple documents in case of copy/paste,
     // hence the shared_ptr.
     std::shared_ptr< ::avmedia::MediaTempFile >  m_pTempFile;
+    rtl::Reference<avmedia::PlayerListener> m_xPlayerListener;
 #endif
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
-    rtl::Reference<avmedia::PlayerListener> m_xPlayerListener;
     OUString m_LastFailedPkgURL;
 };
 
