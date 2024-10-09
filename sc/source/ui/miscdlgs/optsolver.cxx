@@ -1219,7 +1219,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             SCTAB nNewTab;
             mrDoc.GetName(mnCurTab, sNewTabName);
             sNewTabName += "_" + ScResId(STR_SENSITIVITY);
-            // Chech if the new Tab name exists
+            // Check if the new Tab name exists
             if (mrDoc.GetTable(sNewTabName, nNewTab))
             {
                 // Add numbers to the end of the Tab name to make it unique
