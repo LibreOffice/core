@@ -63,8 +63,10 @@ $(call gb_Executable_get_linktarget_target,soffice_bin): \
 
 $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
 	-s EXPORTED_FUNCTIONS=@$(gb_CustomTarget_workdir)/desktop/soffice_bin-emscripten-exports/exports -Wl$(COMMA)--whole-archive $(call gb_StaticLibrary_get_target,unoembind) -Wl$(COMMA)--no-whole-archive \
-	-sPROXY_TO_PTHREAD=1 \
-	$(if $(DISABLE_GUI),,-sOFFSCREENCANVAS_SUPPORT=1 -sOFFSCREENCANVASES_TO_PTHREAD=\#qtcanvas) \
+	$(if $(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD), \
+	    -sPROXY_TO_PTHREAD=1 \
+	    $(if $(DISABLE_GUI),, \
+	        -sOFFSCREENCANVAS_SUPPORT=1 -sOFFSCREENCANVASES_TO_PTHREAD=\#qtcanvas)) \
 ))
 ifeq ($(ENABLE_QT6),TRUE)
 $(eval $(call gb_Executable_add_ldflags,soffice_bin, \

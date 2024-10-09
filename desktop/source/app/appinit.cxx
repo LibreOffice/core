@@ -55,6 +55,7 @@
 #include <emscripten/threading.h>
 #include <emscripten/val.h>
 #include <bindings_uno.hxx>
+#include <config_emscripten.h>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -97,12 +98,20 @@ EM_JS(void, setupMainChannel, (), {
 });
 
 extern "C" void resolveUnoMain(pthread_t id) {
+#if HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD
     EM_ASM({
         const sofficeMain = PThread.pthreads[$0];
         const channel = new MessageChannel();
         sofficeMain.postMessage({cmd:"LOWA-channel"}, [channel.port2]);
         Module.uno_main$resolve(channel.port1);
     }, id);
+#else
+    EM_ASM({
+        const channel = new MessageChannel();
+        postMessage({cmd:"LOWA-channel"}, [channel.port2]);
+        Module.uno_main$resolve(channel.port1);
+    }, id);
+#endif
 }
 
 void initUno() {

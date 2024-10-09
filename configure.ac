@@ -2145,6 +2145,15 @@ AC_ARG_WITH(main-module,
 ,)
 
 if test "$_os" = Emscripten; then
+    AC_ARG_ENABLE(emscripten-proxy-to-pthread,
+        AS_HELP_STRING([--disable-emscripten-proxy-to-pthread],
+            [Experimentally disable use of the Emscripten -sPROXY_TO_PTHREAD feature.]),,
+        enable_emscripten_proxy_to_pthread=yes)
+else
+    enable_emscripten_proxy_to_pthread=
+fi
+
+if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-proxy-posix-sockets,
         AS_HELP_STRING([--enable-emscripten-proxy-posix-sockets],
             [Enable experimental Emscripten support for full POSIX sockets over WebSocket proxy
@@ -4113,6 +4122,14 @@ AC_SUBST(CROSS_COMPILING)
 AC_SUBST(ENABLE_WASM_STRIP)
 AC_SUBST(ENABLE_WASM_STRIP_WRITER)
 AC_SUBST(ENABLE_WASM_STRIP_CALC)
+
+if test "$enable_emscripten_proxy_to_pthread" = yes; then
+    ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD=TRUE
+    AC_DEFINE(HAVE_EMSCRIPTEN_PROXY_TO_PTHREAD)
+else
+    ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD=
+fi
+AC_SUBST(ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD)
 
 if test "$enable_emscripten_proxy_posix_sockets" = yes; then
     ENABLE_EMSCRIPTEN_PROXY_POSIX_SOCKETS=TRUE
