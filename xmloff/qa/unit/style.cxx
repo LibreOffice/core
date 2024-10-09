@@ -297,6 +297,31 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPosRelTopMargin)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTdf156707)
+{
+    // The file contains a shape with linear gradient fill from red #ff0000 to yellow #ffff00,
+    // named 'red2yellow'
+    loadFromFile(u"tdf156707_text_form_control_borders.odt");
+    saveAndReload(u"writer8"_ustr);
+
+    uno::Reference<drawing::XShape> xShape = getShape(0);
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY_THROW);
+
+    sal_uInt16 nBorderStyle = 0; // 0 = none, 1 = 3d [default], 2 = flat
+    xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), nBorderStyle);
+
+    xShape = getShape(1);
+    xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
+    xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), nBorderStyle);
+
+    xShape = getShape(2);
+    xShapeProperties.set(xShape, uno::UNO_QUERY_THROW);
+    xShapeProperties->getPropertyValue(u"ControlBorder"_ustr) >>= nBorderStyle;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), nBorderStyle);
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
 {
     // The file contains a shape with linear gradient fill from red #ff0000 to yellow #ffff00,
