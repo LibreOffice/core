@@ -372,7 +372,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkDocument \
     UnpackedTarball/skia/src/core/SkDraw \
     UnpackedTarball/skia/src/core/SkDrawBase \
-    UnpackedTarball/skia/src/core/SkDrawLooper \
     UnpackedTarball/skia/src/core/SkDrawShadowInfo \
     UnpackedTarball/skia/src/core/SkDraw_atlas \
     UnpackedTarball/skia/src/core/SkDraw_text \
@@ -611,7 +610,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/effects/SkEmbossMask \
     UnpackedTarball/skia/src/effects/SkEmbossMaskFilter \
     UnpackedTarball/skia/src/effects/SkHighContrastFilter \
-    UnpackedTarball/skia/src/effects/SkLayerDrawLooper \
     UnpackedTarball/skia/src/effects/SkShaderMaskFilterImpl \
     UnpackedTarball/skia/src/effects/SkTableMaskFilter \
     UnpackedTarball/skia/src/effects/SkTrimPathEffect \
@@ -756,6 +754,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadGlobalVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateDeadLocalVariables \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateEmptyStatements \
+    UnpackedTarball/skia/src/sksl/transform/SkSLEliminateUnnecessaryBraces \
     UnpackedTarball/skia/src/sksl/transform/SkSLEliminateUnreachableCode \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinFunctions \
     UnpackedTarball/skia/src/sksl/transform/SkSLFindAndDeclareBuiltinStructs \
@@ -1057,6 +1056,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/Blend \
     UnpackedTarball/skia/src/gpu/BlendFormula \
     UnpackedTarball/skia/src/gpu/BlurUtils \
+    UnpackedTarball/skia/src/gpu/DataUtils \
     UnpackedTarball/skia/src/gpu/DitherUtils \
     UnpackedTarball/skia/src/gpu/MutableTextureState \
     UnpackedTarball/skia/src/gpu/PipelineUtils \
@@ -1142,6 +1142,7 @@ ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlAttachment \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBackendSemaphore \
+    UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBackendSurface \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlBuffer \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCaps \
     UnpackedTarball/skia/src/gpu/ganesh/mtl/GrMtlCommandBuffer \
