@@ -30,10 +30,19 @@ namespace framework
 
 struct ImageItemDescriptor
 {
+    // index of the bitmap inside the bitmaplist; not required currently, but was mandatory
+    // previously, so needs to be written for backward compatibility
+    long nIndex = -1;
     OUString  aCommandURL;                // URL command to dispatch
 };
 
-typedef std::vector<ImageItemDescriptor> ImageItemDescriptorList;
+struct ImageItemDescriptorList
+{
+    // a URL to a bitmap with several images inside; not required currently, but was mandatory
+    // previously, so needs to be written for backward compatibility
+    OUString aURL;
+    std::vector<ImageItemDescriptor> aImageItemDescriptors;
+};
 
 class ImagesConfiguration
 {
