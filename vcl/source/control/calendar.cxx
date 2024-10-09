@@ -17,23 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/builder.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
-#include <vcl/kernarray.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/calendar.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/dockwin.hxx>
-#include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
+
 #include <com/sun/star/i18n/Weekdays.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <sal/log.hxx>
-#include <tools/json_writer.hxx>
 
 #include <calendar.hxx>
 #include <svdata.hxx>
@@ -49,12 +43,10 @@
 #define TITLE_BORDERY                   2
 #define SPIN_OFFX                       4
 #define SPIN_OFFY                       TITLE_BORDERY
-
 #define CALENDAR_HITTEST_DAY            (sal_uInt16(0x0001))
 #define CALENDAR_HITTEST_MONTHTITLE     (sal_uInt16(0x0004))
 #define CALENDAR_HITTEST_PREV           (sal_uInt16(0x0008))
 #define CALENDAR_HITTEST_NEXT           (sal_uInt16(0x0010))
-
 #define MENU_YEAR_COUNT                 3
 
 using namespace ::com::sun::star;
