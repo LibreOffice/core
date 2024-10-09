@@ -1,0 +1,80 @@
+diff -ur skia.org/include/ports/SkTypeface_win.h skia/include/ports/SkTypeface_win.h
+--- skia.org/include/ports/SkTypeface_win.h	2024-10-09 15:15:35.479395601 +0200
++++ skia/include/ports/SkTypeface_win.h	2024-10-09 15:15:55.130556562 +0200
+@@ -59,5 +59,13 @@
+                                                   IDWriteFontCollection* collection,
+                                                   IDWriteFontFallback* fallback);
+
++struct IDWriteFontFace;
++struct IDWriteFont;
++struct IDWriteFontFamily;
++SK_API SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                               IDWriteFontFace* fontFace,
++                                               IDWriteFont* font,
++                                               IDWriteFontFamily* fontFamily);
++
+ #endif  // SK_BUILD_FOR_WIN
+ #endif  // SkTypeface_win_DEFINED
+diff -ur skia.org/include/ports/SkTypeface_win.h.orig skia/include/ports/SkTypeface_win.h.orig
+--- skia.org/include/ports/SkTypeface_win.h.orig	2024-10-09 15:15:35.479395601 +0200
++++ skia/include/ports/SkTypeface_win.h.orig	2024-10-09 15:15:35.472395544 +0200
+@@ -27,7 +27,7 @@
+  *  corresponding typeface for the specified logfont. The caller is responsible
+  *  for calling unref() when it is finished.
+  */
+-SK_API sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONT&);
++SK_API sk_sp<SkTypeface> SkCreateTypefaceFromLOGFONT(const LOGFONTW&);
+
+ /**
+  *  Copy the LOGFONT associated with this typeface into the lf parameter. Note
+@@ -35,7 +35,7 @@
+  *  not track this (the paint does).
+  *  typeface may be NULL, in which case we return the logfont for the default font.
+  */
+-SK_API void SkLOGFONTFromTypeface(const SkTypeface* typeface, LOGFONT* lf);
++SK_API void SkLOGFONTFromTypeface(const SkTypeface* typeface, LOGFONTW* lf);
+
+ /**
+   *  Set an optional callback to ensure that the data behind a LOGFONT is loaded.
+@@ -43,7 +43,7 @@
+   *  Normally this is null, and is only required if the font data needs to be
+   *  remotely (re)loaded.
+   */
+-SK_API void SkTypeface_SetEnsureLOGFONTAccessibleProc(void (*)(const LOGFONT&));
++SK_API void SkTypeface_SetEnsureLOGFONTAccessibleProc(void (*)(const LOGFONTW&));
+
+ // Experimental!
+ //
+diff -ur skia.org/src/ports/SkFontMgr_win_dw.cpp skia/src/ports/SkFontMgr_win_dw.cpp
+--- skia.org/src/ports/SkFontMgr_win_dw.cpp	2024-10-09 15:15:35.519395929 +0200
++++ skia/src/ports/SkFontMgr_win_dw.cpp	2024-10-09 15:16:17.314738255 +0200
+@@ -149,6 +149,10 @@
+
+     friend class SkFontStyleSet_DirectWrite;
+     friend class FontFallbackRenderer;
++    friend SK_API SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                               IDWriteFontFace* fontFace,
++                                               IDWriteFont* font,
++                                               IDWriteFontFamily* fontFamily);
+ };
+
+ class SkFontStyleSet_DirectWrite : public SkFontStyleSet {
+@@ -947,4 +951,16 @@
+                                              defaultFamilyName, defaultFamilyNameLen);
+ }
+
++SkTypeface* SkCreateTypefaceDirectWrite(sk_sp<SkFontMgr> fontMgr,
++                                        IDWriteFontFace* fontFace,
++                                        IDWriteFont* font,
++                                        IDWriteFontFamily* fontFamily)
++{
++    SkFontMgr_DirectWrite* mgr = dynamic_cast<SkFontMgr_DirectWrite*>(fontMgr.get());
++    if(!mgr)
++        return nullptr;
++    sk_sp<SkTypeface> typeface = mgr->makeTypefaceFromDWriteFont(fontFace, font, fontFamily);
++    return typeface.release();
++}
++
+ #endif//defined(SK_BUILD_FOR_WIN)
+Only in skia/src/ports: SkFontMgr_win_dw.cpp.orig
+Only in skia/src/ports: SkFontMgr_win_dw.cpp.rej

@@ -125,7 +125,7 @@ diff -ur skia.org/tools/window/WindowContext.cpp skia/tools/window/WindowContext
 +    this->onSwapBuffers(rect);
  }
 
- }  // namespace skwindow
+ #if defined(SK_GRAPHITE)
 diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
 --- skia.org/tools/window/WindowContext.h	2024-10-05 18:16:04.521814026 +0200
 +++ skia/tools/window/WindowContext.h	2024-10-05 18:22:12.945998819 +0200

@@ -12,9 +12,9 @@ diff -ur skia.org/include/private/base/SkFloatingPoint.h skia/include/private/ba
      return static_cast<float>(x);
  }
 @@ -161,12 +163,16 @@
- #pragma warning( disable : 4723)
+ #pragma warning(push)
+ #pragma warning(disable : 4723)
  #endif
- // Your function
 +#if defined(__clang__)
  SK_NO_SANITIZE("float-divide-by-zero")
 +#endif

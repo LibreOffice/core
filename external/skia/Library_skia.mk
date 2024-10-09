@@ -173,7 +173,6 @@ endif
 #
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/fonts/SkFontMgr_indirect \
     UnpackedTarball/skia/src/ports/SkFontMgr_win_dw \
     UnpackedTarball/skia/src/ports/SkScalerContext_win_dw \
     UnpackedTarball/skia/src/ports/SkTypeface_win_dw \
@@ -1207,7 +1206,6 @@ endif
 
 # I need these, but they dont appear anywhere in the *.gn* build files?
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/fonts/SkRemotableFontMgr \
     UnpackedTarball/skia/src/ports/SkImageGenerator_none \
 ))
 ifeq ($(OS),MACOSX)
