@@ -739,6 +739,7 @@ void Chart2Positioner::createPositionMap()
         SCCOL nCol1 = s.Col(), nCol2 = e.Col();
         SCROW nRow1 = s.Row(), nRow2 = e.Row();
         SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
+        assert(nTab2 < MAXTABCOUNT);
 
         for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
