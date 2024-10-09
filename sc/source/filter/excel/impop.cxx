@@ -246,7 +246,7 @@ void ImportExcel::ReadDimensions()
         nXclRow2 = maStrm.ReaduInt32();
         aXclUsedArea.maFirst.mnCol = maStrm.ReaduInt16();
         aXclUsedArea.maLast.mnCol = maStrm.ReaduInt16();
-        if( (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
+        if( nXclRow2 != 0 && (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
             (nXclRow1 <= o3tl::make_unsigned( GetScMaxPos().Row() )) )
         {
             // Excel stores first unused row/column index
