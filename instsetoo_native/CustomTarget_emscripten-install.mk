@@ -20,8 +20,7 @@ emscripten_install_files := \
     soffice.wasm \
     soffice.worker.js \
     $(if $(ENABLE_SYMBOLS_FOR),soffice.wasm.dwp) \
-    $(if $(DISABLE_GUI), \
-        soffice.html, \
+    $(if $(DISABLE_GUI),, \
         qt_soffice.html \
         qtloader.js \
         qtlogo.svg) \
