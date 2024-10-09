@@ -11,8 +11,10 @@ $(eval $(call gb_Module_Module,xmlsecurity))
 
 $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
-	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),Library_xsec_xmlsec) \
-	UIConfig_xmlsec \
+	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),\
+	    Library_xsec_xmlsec \
+	    UIConfig_xmlsec \
+	) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,xmlsecurity,\
@@ -35,7 +37,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,xmlsecurity,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,xmlsecurity,\
-	AllLangMoTarget_xsc \
+	$(if $(ENABLE_NSS)$(ENABLE_OPENSSL),AllLangMoTarget_xsc) \
 ))
 
 # failing
