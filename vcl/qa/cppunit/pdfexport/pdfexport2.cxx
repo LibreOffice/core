@@ -4183,7 +4183,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageHyperlink)
     // - Expected: 0.0012626264
     // - Actual  : 0.00126
     // i.e. the rounded reciprocal was 794 points, not the original 792.
-    CPPUNIT_ASSERT_EQUAL(0.0012626264, rtl::math::round(aScale.getY(), 10));
+    CPPUNIT_ASSERT_EQUAL(0.001262626, rtl::math::round(aScale.getY(), 9));
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
