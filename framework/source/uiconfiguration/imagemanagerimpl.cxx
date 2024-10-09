@@ -308,14 +308,14 @@ void ImageManagerImpl::implts_loadUserImages(
             ImagesConfiguration::LoadImages( m_xContext,
                                              xInputStream,
                                              aUserImageListInfo );
-            if ( !aUserImageListInfo.empty() )
+            if (!aUserImageListInfo.aImageItemDescriptors.empty())
             {
-                sal_Int32 nCount = aUserImageListInfo.size();
+                sal_Int32 nCount = aUserImageListInfo.aImageItemDescriptors.size();
                 std::vector< OUString > aUserImagesVector;
                 aUserImagesVector.reserve(nCount);
                 for ( sal_Int32 i=0; i < nCount; i++ )
                 {
-                    const ImageItemDescriptor& rItem = aUserImageListInfo[i];
+                    const ImageItemDescriptor& rItem = aUserImageListInfo.aImageItemDescriptors[i];
                     aUserImagesVector.push_back( rItem.aCommandURL );
                 }
 
@@ -379,9 +379,11 @@ bool ImageManagerImpl::implts_storeUserImages(
         for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
         {
             ImageItemDescriptor aItem;
-            aItem.aCommandURL = pImageList->GetImageName( i );
-            aUserImageListInfo.push_back( aItem );
+            aItem.nIndex = i;
+            aItem.aCommandURL = pImageList->GetImageName(i);
+            aUserImageListInfo.aImageItemDescriptors.push_back( aItem );
         }
+        aUserImageListInfo.aURL = "Bitmaps/" + BITMAP_FILE_NAMES[nImageType];
 
         uno::Reference< XTransactedObject > xTransaction;
         uno::Reference< XOutputStream >     xOutputStream;
