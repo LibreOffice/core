@@ -44,11 +44,10 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <!-- n-columns=3 n-rows=2 -->
+  <!-- n-columns=3 n-rows=4 -->
   <object class="GtkGrid" id="FieldVarPage">
-    <property name="width-request">700</property>
-    <property name="height-request">400</property>
     <property name="visible">True</property>
+    <property name="width-request">700</property>
     <property name="can-focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
@@ -57,7 +56,7 @@
     <property name="column-spacing">12</property>
     <property name="column-homogeneous">True</property>
     <child>
-      <!-- n-columns=4 n-rows=2 -->
+      <!-- n-columns=4 n-rows=3 -->
       <object class="GtkGrid" id="gdNameValue">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -139,6 +138,7 @@
             <property name="left-attach">1</property>
             <property name="top-attach">1</property>
             <property name="width">2</property>
+            <property name="height">2</property>
           </packing>
         </child>
         <child>
@@ -191,8 +191,14 @@
           </object>
           <packing>
             <property name="left-attach">3</property>
-            <property name="top-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -202,6 +208,7 @@
         <property name="left-attach">0</property>
         <property name="top-attach">1</property>
         <property name="width">3</property>
+        <property name="height">3</property>
       </packing>
     </child>
     <child>
