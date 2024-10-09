@@ -480,6 +480,12 @@ void ImportExcel::Columndefault()
     OSL_ENSURE( aIn.GetRecLeft() == static_cast<std::size_t>(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
 
+    if (nColMac == 0)
+    {
+        SAL_WARN("sc", "dodgy column defaults");
+        return;
+    }
+
     nColMac--;
 
     if( nColMac > rD.MaxCol() )
