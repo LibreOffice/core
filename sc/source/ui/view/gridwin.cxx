@@ -1015,7 +1015,6 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     if (!pDBData)
         return;
 
-    pDBData->ExtendBackColorArea(rDoc);
     pData->mpData = pDBData;
     mpAutoFilterPopup->setExtendedData(std::move(pData));
 
