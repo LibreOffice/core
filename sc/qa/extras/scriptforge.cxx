@@ -45,6 +45,30 @@ CPPUNIT_TEST_FIXTURE(ScScriptForgeTest, testSetValue)
     CPPUNIT_ASSERT_EQUAL(u"10"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScScriptForgeTest, testShowProgressBar)
+{
+    createScDoc();
+
+    // insert initial library
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
+    xLibrary->insertByName(u"TestModule"_ustr,
+                           uno::Any(u"Function Test as String\n"
+                                    " GlobalScope.BasicLibraries.LoadLibrary(\"ScriptForge\")\n"
+                                    " ui = CreateScriptService(\"UI\")\n"
+                                    " ui.ShowProgressBar\n"
+                                    " Test = \"OK\"\n"
+                                    "End Function\n"_ustr));
+
+    // Without the fix in place, this test would have crashed
+    Any aRet = executeMacro(
+        u"vnd.sun.Star.script:TestLibrary.TestModule.Test?language=Basic&location=document"_ustr);
+    OUString sResult;
+    aRet >>= sResult;
+    CPPUNIT_ASSERT_EQUAL(u"OK"_ustr, sResult);
+}
+
 ScScriptForgeTest::ScScriptForgeTest()
     : ScModelTestBase(u"/sc/qa/extras/testdocuments"_ustr)
 {
