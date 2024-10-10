@@ -1035,9 +1035,15 @@ namespace
                 }
             }
 
-            while( nPos-- && ( pFootnoteNd = &( pSrch = rFootnoteArr[ nPos ] )->
-                    GetTextNode())->GetIndex() >= rSttNd.GetIndex() )
+            for (;;)
             {
+                if (!nPos)
+                    break;
+                nPos--;
+                pSrch = rFootnoteArr[ nPos ];
+                pFootnoteNd = &pSrch->GetTextNode();
+                if (pFootnoteNd->GetIndex() < rSttNd.GetIndex())
+                    break;
                 const sal_Int32 nFootnoteSttIdx = pSrch->GetStart();
                 if( !oEndCnt || !oSttCnt ||
                     !  (( &rSttNd == pFootnoteNd &&
