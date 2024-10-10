@@ -1,6 +1,6 @@
 diff -ur skia.org/tools/window/mac/MetalWindowContext_mac.mm skia/tools/window/mac/MetalWindowContext_mac.mm
---- skia.org/tools/window/mac/MetalWindowContext_mac.mm	2024-10-09 14:43:19.822177912 +0200
-+++ skia/tools/window/mac/MetalWindowContext_mac.mm	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/mac/MetalWindowContext_mac.mm	2024-10-10 07:57:58.131535102 +0200
++++ skia/tools/window/mac/MetalWindowContext_mac.mm	2024-10-10 07:58:23.102672034 +0200
 @@ -47,10 +47,14 @@
  }
 
@@ -18,8 +18,8 @@ diff -ur skia.org/tools/window/mac/MetalWindowContext_mac.mm skia/tools/window/m
 
      // resize ignores the passed values and uses the fMainView directly.
 diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindowContext.h
---- skia.org/tools/window/MetalWindowContext.h	2024-10-09 14:43:19.821177903 +0200
-+++ skia/tools/window/MetalWindowContext.h	2024-10-09 14:46:00.510600783 +0200
+--- skia.org/tools/window/MetalWindowContext.h	2024-10-10 07:57:58.131535102 +0200
++++ skia/tools/window/MetalWindowContext.h	2024-10-10 07:58:23.103672039 +0200
 @@ -14,13 +14,18 @@
 
  #include "tools/window/WindowContext.h"
@@ -72,8 +72,8 @@ diff -ur skia.org/tools/window/MetalWindowContext.h skia/tools/window/MetalWindo
  }   // namespace skwindow::internal
 
 diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWindowContext.mm
---- skia.org/tools/window/MetalWindowContext.mm	2024-10-09 14:43:19.821177903 +0200
-+++ skia/tools/window/MetalWindowContext.mm	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/MetalWindowContext.mm	2024-10-10 07:57:58.130535096 +0200
++++ skia/tools/window/MetalWindowContext.mm	2024-10-10 07:58:23.103672039 +0200
 @@ -35,50 +35,84 @@
  }
 
@@ -200,8 +200,8 @@ diff -ur skia.org/tools/window/MetalWindowContext.mm skia/tools/window/MetalWind
 +
  }   //namespace skwindow::internal
 diff -ur skia.org/tools/window/unix/VulkanWindowContext_unix.cpp skia/tools/window/unix/VulkanWindowContext_unix.cpp
---- skia.org/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-09 14:43:19.822177912 +0200
-+++ skia/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-10 07:57:58.132535107 +0200
++++ skia/tools/window/unix/VulkanWindowContext_unix.cpp	2024-10-10 07:58:23.103672039 +0200
 @@ -24,7 +24,7 @@
          return nullptr;
      }
@@ -231,8 +231,8 @@ diff -ur skia.org/tools/window/unix/VulkanWindowContext_unix.cpp skia/tools/wind
      }
      return ctx;
 diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanWindowContext.cpp
---- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-09 14:43:19.822177912 +0200
-+++ skia/tools/window/VulkanWindowContext.cpp	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/VulkanWindowContext.cpp	2024-10-10 07:57:58.131535102 +0200
++++ skia/tools/window/VulkanWindowContext.cpp	2024-10-10 08:05:46.850125372 +0200
 @@ -29,9 +29,13 @@
  #endif
 
@@ -249,7 +249,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
  namespace skwindow::internal {
 
-@@ -53,32 +57,39 @@
+@@ -53,32 +57,43 @@
  }
 
  void VulkanWindowContext::initializeContext() {
@@ -265,19 +265,18 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      // any config code here (particularly for msaa)?
 
      PFN_vkGetInstanceProcAddr getInstanceProc = fGetInstanceProcAddr;
--    GrVkBackendContext backendContext;
-+    GrVkBackendContext& backendContext = fGlobalShared->backendContext;
+-    skgpu::VulkanBackendContext backendContext;
++    skgpu::VulkanBackendContext& backendContext = fGlobalShared->backendContext;
      skgpu::VulkanExtensions extensions;
--    VkPhysicalDeviceFeatures2 features;
--    if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions,
+     VkPhysicalDeviceFeatures2 features;
+     if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions,
 -                                             &features, &fDebugCallback, &fPresentQueueIndex,
--                                             fCanPresentFn,
--                                             fDisplayParams.fCreateProtectedNativeBackend)) {
--        sk_gpu_test::FreeVulkanFeaturesStructs(&features);
-+    if (!sk_gpu_test::CreateVkBackendContext(getInstanceProc, &backendContext, &extensions, &d->features,
-+                                             &d->fDebugCallback, &d->fPresentQueueIndex, fCanPresentFn)) {
++                                             &d->features, &d->fDebugCallback, &d->fPresentQueueIndex,
+                                              fCanPresentFn,
+                                              fDisplayParams.fCreateProtectedNativeBackend)) {
 +        sk_gpu_test::FreeVulkanFeaturesStructs(&d->features);
 +        fGlobalShared.reset();
+         sk_gpu_test::FreeVulkanFeaturesStructs(&features);
          return;
      }
 
@@ -302,7 +301,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
      PFN_vkGetPhysicalDeviceProperties localGetPhysicalDeviceProperties =
              reinterpret_cast<PFN_vkGetPhysicalDeviceProperties>(
-@@ -86,21 +97,30 @@
+@@ -86,24 +101,33 @@
                                              backendContext.fInstance,
                                              VK_NULL_HANDLE));
      if (!localGetPhysicalDeviceProperties) {
@@ -314,12 +313,18 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 -    VkPhysicalDeviceProperties physDeviceProperties;
 -    localGetPhysicalDeviceProperties(backendContext.fPhysicalDevice, &physDeviceProperties);
 -    uint32_t physDevVersion = physDeviceProperties.apiVersion;
+-
+-    fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc,
+-                                                fInstance,
+-                                                fDevice,
 +    localGetPhysicalDeviceProperties(backendContext.fPhysicalDevice, &d->physDeviceProperties);
 +    uint32_t physDevVersion = d->physDeviceProperties.apiVersion;
-
--    fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc, fInstance, fDevice,
-+    d->fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc, d->fInstance, d->fDevice,
-                                                 backendContext.fInstanceVersion, physDevVersion,
++
++    d->fInterface.reset(new skgpu::VulkanInterface(backendContext.fGetProc,
++                                                d->fInstance,
++                                                d->fDevice,
+                                                 backendContext.fMaxAPIVersion,
+                                                 physDevVersion,
                                                  &extensions));
 
 -    GET_PROC(DestroyInstance);
@@ -341,7 +346,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_PROC(DestroySurfaceKHR);
      GET_PROC(GetPhysicalDeviceSurfaceSupportKHR);
      GET_PROC(GetPhysicalDeviceSurfaceCapabilitiesKHR);
-@@ -108,7 +128,6 @@
+@@ -111,7 +135,6 @@
      GET_PROC(GetPhysicalDeviceSurfacePresentModesKHR);
      GET_DEV_PROC(DeviceWaitIdle);
      GET_DEV_PROC(QueueWaitIdle);
@@ -349,7 +354,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      GET_DEV_PROC(CreateSwapchainKHR);
      GET_DEV_PROC(DestroySwapchainKHR);
      GET_DEV_PROC(GetSwapchainImagesKHR);
-@@ -116,46 +135,44 @@
+@@ -119,46 +142,44 @@
      GET_DEV_PROC(QueuePresentKHR);
      GET_DEV_PROC(GetDeviceQueue);
 
@@ -406,7 +411,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -163,14 +180,14 @@
+@@ -166,14 +187,14 @@
 
      SkAutoMalloc surfaceFormatAlloc(surfaceFormatCount * sizeof(VkSurfaceFormatKHR));
      VkSurfaceFormatKHR* surfaceFormats = (VkSurfaceFormatKHR*)surfaceFormatAlloc.get();
@@ -423,7 +428,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                     nullptr);
      if (VK_SUCCESS != res) {
          return false;
-@@ -178,7 +195,7 @@
+@@ -181,7 +202,7 @@
 
      SkAutoMalloc presentModeAlloc(presentModeCount * sizeof(VkPresentModeKHR));
      VkPresentModeKHR* presentModes = (VkPresentModeKHR*)presentModeAlloc.get();
@@ -432,7 +437,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                                     presentModes);
      if (VK_SUCCESS != res) {
          return false;
-@@ -294,8 +311,8 @@
+@@ -297,8 +318,8 @@
      swapchainCreateInfo.imageArrayLayers = 1;
      swapchainCreateInfo.imageUsage = usageFlags;
 
@@ -443,7 +448,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
          swapchainCreateInfo.queueFamilyIndexCount = 2;
          swapchainCreateInfo.pQueueFamilyIndices = queueFamilies;
-@@ -311,27 +328,27 @@
+@@ -314,27 +335,27 @@
      swapchainCreateInfo.clipped = true;
      swapchainCreateInfo.oldSwapchain = fSwapchain;
 
@@ -476,7 +481,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      }
 
      return true;
-@@ -341,10 +358,9 @@
+@@ -344,10 +365,9 @@
                                          VkImageUsageFlags usageFlags,
                                          SkColorType colorType,
                                          VkSharingMode sharingMode) {
@@ -488,7 +493,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
      // set up initial image layouts and create surfaces
      fImageLayouts = new VkImageLayout[fImageCount];
-@@ -360,7 +376,7 @@
+@@ -363,7 +383,7 @@
          info.fFormat = format;
          info.fImageUsageFlags = usageFlags;
          info.fLevelCount = 1;
@@ -497,7 +502,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          info.fProtected = skgpu::Protected(fDisplayParams.fCreateProtectedNativeBackend);
          info.fSharingMode = sharingMode;
 
-@@ -403,8 +419,8 @@
+@@ -406,8 +426,8 @@
      fBackbuffers = new BackbufferInfo[fImageCount + 1];
      for (uint32_t i = 0; i < fImageCount + 1; ++i) {
          fBackbuffers[i].fImageIndex = -1;
@@ -508,7 +513,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                  &fBackbuffers[i].fRenderSemaphore));
          SkASSERT(result == VK_SUCCESS);
      }
-@@ -417,8 +433,8 @@
+@@ -420,8 +440,8 @@
      if (fBackbuffers) {
          for (uint32_t i = 0; i < fImageCount + 1; ++i) {
              fBackbuffers[i].fImageIndex = -1;
@@ -519,7 +524,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -443,42 +459,59 @@
+@@ -446,42 +466,59 @@
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -545,13 +550,13 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      fContext.reset();
 -    fInterface.reset();
 +    fShared.reset();
++
++    checkDestroyShared();
++}
 
 -    if (VK_NULL_HANDLE != fDevice) {
 -        fDestroyDevice(fDevice, nullptr);
 -        fDevice = VK_NULL_HANDLE;
-+    checkDestroyShared();
-+}
-+
 +void VulkanWindowContext::checkDestroyShared()
 +{
 +    if(!fGlobalShared || !fGlobalShared->unique()) // TODO mutex?
@@ -593,7 +598,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
  }
 
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -504,35 +537,35 @@
+@@ -507,35 +544,35 @@
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -635,7 +640,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
              return nullptr;
          }
      }
-@@ -557,7 +590,7 @@
+@@ -560,7 +597,7 @@
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &beSemaphore;
      skgpu::MutableTextureState presentState = skgpu::MutableTextureStates::MakeVulkan(
@@ -644,16 +649,18 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      auto dContext = surface->recordingContext()->asDirectContext();
      dContext->flush(surface, info, &presentState);
      dContext->submit();
-@@ -578,4 +611,6 @@
+@@ -581,4 +618,6 @@
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
 
 +SK_API sk_sp<VulkanWindowContext::Shared> VulkanWindowContext::fGlobalShared;
 +
  }  // namespace skwindow::internal
+Only in skia/tools/window: VulkanWindowContext.cpp.orig
+Only in skia/tools/window: VulkanWindowContext.cpp.rej
 diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWindowContext.h
---- skia.org/tools/window/VulkanWindowContext.h	2024-10-09 14:43:19.821177903 +0200
-+++ skia/tools/window/VulkanWindowContext.h	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/VulkanWindowContext.h	2024-10-10 07:57:58.130535096 +0200
++++ skia/tools/window/VulkanWindowContext.h	2024-10-10 07:58:23.111672083 +0200
 @@ -15,19 +15,23 @@
  #include "tools/gpu/vk/VkTestUtils.h"
  #include "tools/window/WindowContext.h"
@@ -742,7 +749,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 +    // Store this to make it accessible.
 +    VkPhysicalDeviceProperties physDeviceProperties;
 +
-+    GrVkBackendContext backendContext;
++    skgpu::VulkanBackendContext backendContext;
 +
      uint32_t          fGraphicsQueueIndex;
      VkQueue           fGraphicsQueue;
@@ -761,8 +768,8 @@ diff -ur skia.org/tools/window/VulkanWindowContext.h skia/tools/window/VulkanWin
 
      uint32_t               fImageCount;
 diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window/win/VulkanWindowContext_win.cpp
---- skia.org/tools/window/win/VulkanWindowContext_win.cpp	2024-10-09 14:43:19.822177912 +0200
-+++ skia/tools/window/win/VulkanWindowContext_win.cpp	2024-10-09 14:43:26.400236867 +0200
+--- skia.org/tools/window/win/VulkanWindowContext_win.cpp	2024-10-10 07:57:58.131535102 +0200
++++ skia/tools/window/win/VulkanWindowContext_win.cpp	2024-10-10 07:58:23.111672083 +0200
 @@ -25,7 +25,7 @@
          return nullptr;
      }
@@ -792,8 +799,8 @@ diff -ur skia.org/tools/window/win/VulkanWindowContext_win.cpp skia/tools/window
      }
      return ctx;
 diff -ur skia.org/tools/window/WindowContext.h skia/tools/window/WindowContext.h
---- skia.org/tools/window/WindowContext.h	2024-10-09 14:43:19.822177912 +0200
-+++ skia/tools/window/WindowContext.h	2024-10-09 14:43:26.401236876 +0200
+--- skia.org/tools/window/WindowContext.h	2024-10-10 07:57:58.131535102 +0200
++++ skia/tools/window/WindowContext.h	2024-10-10 07:58:23.111672083 +0200
 @@ -10,9 +10,9 @@
  #include "include/core/SkRefCnt.h"
  #include "include/core/SkSurfaceProps.h"
