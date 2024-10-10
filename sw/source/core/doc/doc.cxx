@@ -1412,27 +1412,6 @@ void SwDoc::ForEachFormatURL( const std::function<bool(const SwFormatURL&)>& rFu
     }
 }
 
-/// Iterate over all SwFormatURL, if the function returns false, iteration is stopped
-void SwDoc::ForEachCharacterBoxItem( const std::function<bool(const SvxBoxItem&)>& rFunc ) const
-{
-    for(SwCharFormat* pFormat : *GetCharFormats())
-    {
-        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
-        if (const SvxBoxItem* pBoxItem = rAttrSet.GetItemIfSet(RES_CHRATR_BOX))
-            if (!rFunc(*pBoxItem))
-                return;
-    }
-    std::vector<std::shared_ptr<SfxItemSet>> aStyles;
-    for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
-    {
-        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
-        for (const auto & rxItemSet : aStyles)
-            if (const SvxBoxItem* pBoxItem = rxItemSet->GetItemIfSet(RES_CHRATR_BOX))
-                if (!rFunc(*pBoxItem))
-                    return;
-    }
-}
-
 namespace
 {
 /// Iterate over all pool item of type T, if the function returns false, iteration is stopped
@@ -1456,6 +1435,12 @@ void ForEachCharacterItem(const SwDoc* pDoc, TypedWhichId<T> nWhich, const std::
                     return;
     }
 }
+}
+
+/// Iterate over all SwFormatURL, if the function returns false, iteration is stopped
+void SwDoc::ForEachCharacterBoxItem( const std::function<bool(const SvxBoxItem&)>& rFunc ) const
+{
+    ForEachCharacterItem(this, RES_CHRATR_BOX, rFunc);
 }
 
 /// Iterate over all SvxColorItem, if the function returns false, iteration is stopped
