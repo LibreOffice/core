@@ -2472,8 +2472,25 @@ void GtkSalFrame::SetScreen( unsigned int nNewScreen, SetType eType, tools::Rect
 
         // #i110881# for the benefit of compiz set a max size here
         // else setting to fullscreen fails for unknown reasons
-        m_aMaxSize.setWidth( aNewMonitor.width );
-        m_aMaxSize.setHeight( aNewMonitor.height );
+        //
+        // tdf#161479 With fractional scaling on wayland the monitor
+        // sizes here are reported effectively with the fractional
+        // scaling factor rounded up to the next integer, so,
+        // 1920 x 1080 at 125% scaling which appears like,
+        // 1536 x 864 is reported the same as 200% scaling, i.e.
+        // 960 x 540 which causes a problem on trying to set
+        // fullscreen on fractional scaling under wayland. Drop
+        // this old workaround when under wayland.
+#if defined(GDK_WINDOWING_WAYLAND)
+        const bool bWayland = DLSYM_GDK_IS_WAYLAND_DISPLAY(GtkSalFrame::getGdkDisplay());
+#else
+        const bool bWayland = false;
+#endif
+        if (!bWayland)
+        {
+            m_aMaxSize.setWidth( aNewMonitor.width );
+            m_aMaxSize.setHeight( aNewMonitor.height );
+        }
     }
 
     if( pSize && eType == SetType::UnFullscreen )
