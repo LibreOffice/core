@@ -37,7 +37,7 @@
 #include <osx/saldata.hxx>
 
 #if HAVE_FEATURE_SKIA
-#include <tools/window/mac/WindowContextFactory_mac.h>
+#include <tools/window/mac/MacWindowInfo.h>
 #include <skia/osx/gdiimpl.hxx>
 #endif
 

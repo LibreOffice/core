@@ -7,6 +7,6 @@ diff -ur skia.org/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator.h sk
                                               const VulkanExtensions* extensions,
 -                                             const VulkanInterface* interface,
 +                                             const VulkanInterface* vinterface,
-                                              ThreadSafe);
- 
-     ~VulkanAMDMemoryAllocator() override;
+                                              ThreadSafe,
+                                              std::optional<VkDeviceSize> blockSize);
+

@@ -23,11 +23,13 @@
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
 
-#include <tools/window/mac/WindowContextFactory_mac.h>
+//#include <tools/window/mac/WindowContextFactory_mac.h>
 
 #include <quartz/CoreTextFont.hxx>
 #include <quartz/SystemFontList.hxx>
 #include <skia/quartz/cgutils.h>
+#include <tools/window/mac/MacWindowInfo.h>
+#include <tools/window/mac/GaneshMetalWindowContext_mac.h>
 
 #include <SkBitmap.h>
 #include <SkCanvas.h>
@@ -86,7 +88,7 @@ void AquaSkiaSalGraphicsImpl::createWindowSurfaceInternal(bool forceRaster)
             mSurface = createSkSurface(GetWidth() * mScaling, GetHeight() * mScaling);
             break;
         case RenderMetal:
-            mWindowContext = skwindow::MakeMetalForMac(macWindow, displayParams);
+            mWindowContext = skwindow::MakeGaneshMetalForMac(macWindow, displayParams);
             // Like with other GPU contexts, create a proxy offscreen surface (see
             // flushSurfaceToWindowContext()). Here it's additionally needed because
             // it appears that Metal surfaces cannot be read from, which would break things
@@ -403,7 +405,7 @@ std::unique_ptr<skwindow::WindowContext> createMetalWindowContext(bool /*tempora
     skwindow::DisplayParams displayParams;
     skwindow::MacWindowInfo macWindow;
     macWindow.fMainView = nullptr;
-    return skwindow::MakeMetalForMac(macWindow, displayParams);
+    return skwindow::MakeGaneshMetalForMac(macWindow, displayParams);
 }
 }
 

@@ -1,32 +1,12 @@
---- tools/window/mac/WindowContextFactory_mac.h	2022-02-16 06:03:39.000000000 -0500
-+++ tools/window/mac/WindowContextFactory_mac.h	2023-01-25 08:09:00.000000000 -0500
-@@ -19,15 +19,8 @@
- 
- struct DisplayParams;
- 
--static inline CGFloat GetBackingScaleFactor(NSView* view) {
--    #ifdef SK_BUILD_FOR_IOS
--    UIScreen* screen = view.window.screen ?: [UIScreen mainScreen];
--    return screen.nativeScale;
--    #else
--    NSScreen* screen = view.window.screen ?: [NSScreen mainScreen];
--    return screen.backingScaleFactor;
--    #endif
--}
-+SK_API CGFloat GetBackingScaleFactor(NSView* view);
-+SK_API void ResetBackingScaleFactor();
- 
- struct MacWindowInfo {
-     NSView*   fMainView;
 --- /dev/null	2023-01-25 09:20:55.000000000 -0500
-+++ tools/window/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
++++ skia.org/tools/window/mac/WindowContextFactory_mac.mm	2023-01-25 09:21:22.000000000 -0500
 @@ -0,0 +1,57 @@
 +/*
 + * Use of this source code is governed by a BSD-style license that can be
 + * found in the LICENSE file.
 + */
 +
-+#include "tools/window/mac/WindowContextFactory_mac.h"
++#include "tools/window/mac/MacWindowInfo.h"
 +
 +namespace skwindow {
 +
@@ -78,18 +58,19 @@
 +}
 +
 +}  // namespace sk_app
---- tools/window/mac/MetalWindowContext_mac.mm	2024-08-31 15:49:57
-+++ tools/window/mac/MetalWindowContext_mac.mm	2024-09-25 20:09:32
+diff -ur skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm skia/tools/window/mac/GaneshMetalWindowContext_mac.mm
+--- skia.org/tools/window/mac/GaneshMetalWindowContext_mac.mm	2024-10-10 13:50:06.102852791 +0200
++++ skia/tools/window/mac/GaneshMetalWindowContext_mac.mm	2024-10-10 13:53:34.821323595 +0200
 @@ -11,6 +11,8 @@
- #import <Cocoa/Cocoa.h>
- #import <QuartzCore/CAConstraintLayoutManager.h>
+ #include "tools/window/MetalWindowContext.h"
+ #include "tools/window/mac/MacWindowInfo.h"
  
 +#include <sal/log.hxx>
 +
- using skwindow::DisplayParams;
- using skwindow::MacWindowInfo;
- using skwindow::internal::MetalWindowContext;
-@@ -66,8 +68,7 @@
+ #import <Cocoa/Cocoa.h>
+ #import <QuartzCore/CAConstraintLayoutManager.h>
+ 
+@@ -65,8 +67,7 @@
      fMetalLayer.autoresizingMask = kCALayerHeightSizable | kCALayerWidthSizable;
      fMetalLayer.contentsGravity = kCAGravityTopLeft;
      fMetalLayer.magnificationFilter = kCAFilterNearest;
@@ -99,7 +80,7 @@
  
      fMainView.layer = fMetalLayer;
      fMainView.wantsLayer = YES;
-@@ -86,6 +87,18 @@
+@@ -85,6 +86,18 @@
      fMetalLayer.drawableSize = backingSize;
      fMetalLayer.contentsScale = backingScaleFactor;
  
@@ -118,3 +99,19 @@
      fWidth = backingSize.width;
      fHeight = backingSize.height;
  }
+diff -ur skia.org/tools/window/mac/MacWindowInfo.h skia/tools/window/mac/MacWindowInfo.h
+--- skia.org/tools/window/mac/MacWindowInfo.h	2024-10-10 13:50:06.102852791 +0200
++++ skia/tools/window/mac/MacWindowInfo.h	2024-10-10 13:51:30.227006251 +0200
+@@ -22,10 +22,8 @@
+     NSView* fMainView;
+ };
+ 
+-static inline CGFloat GetBackingScaleFactor(NSView* view) {
+-    NSScreen* screen = view.window.screen ?: [NSScreen mainScreen];
+-    return screen.backingScaleFactor;
+-}
++SK_API CGFloat GetBackingScaleFactor(NSView* view);
++SK_API void ResetBackingScaleFactor();
+ 
+ }  // namespace skwindow
+
