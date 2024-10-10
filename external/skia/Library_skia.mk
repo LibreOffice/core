@@ -187,6 +187,22 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 endif
 
+# from file skia/gn/BUILD.gn:553, target "skia_executable("sksl-minify")"
+#
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/utils/SkGetExecutablePath_win \
+))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/utils/SkGetExecutablePath_mac \
+))
+else
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/utils/SkGetExecutablePath_linux \
+))
+endif
+
 # from file skia/gn/BUILD.gn:1278, target "optional("png_decode")"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -674,6 +690,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/SkSLIntrinsicList \
     UnpackedTarball/skia/src/sksl/SkSLLexer \
     UnpackedTarball/skia/src/sksl/SkSLMangler \
+    UnpackedTarball/skia/src/sksl/SkSLModule \
     UnpackedTarball/skia/src/sksl/SkSLModuleLoader \
     UnpackedTarball/skia/src/sksl/SkSLOperator \
     UnpackedTarball/skia/src/sksl/SkSLOutputStream \
@@ -697,6 +714,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/analysis/SkSLIsTrivialExpression \
     UnpackedTarball/skia/src/sksl/analysis/SkSLProgramUsage \
     UnpackedTarball/skia/src/sksl/analysis/SkSLReturnsInputAlpha \
+    UnpackedTarball/skia/src/sksl/analysis/SkSLSpecialization \
     UnpackedTarball/skia/src/sksl/analysis/SkSLSwitchCaseContainsExit \
     UnpackedTarball/skia/src/sksl/analysis/SkSLSymbolTableStackBuilder \
     UnpackedTarball/skia/src/sksl/codegen/SkSLRasterPipelineBuilder \
@@ -778,7 +796,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/codegen/SkSLMetalCodeGenerator \
     UnpackedTarball/skia/src/sksl/codegen/SkSLPipelineStageCodeGenerator \
     UnpackedTarball/skia/src/sksl/codegen/SkSLSPIRVCodeGenerator \
-    UnpackedTarball/skia/src/sksl/codegen/SkSLSPIRVtoHLSL \
     UnpackedTarball/skia/src/sksl/codegen/SkSLWGSLCodeGenerator \
 ))
 
@@ -794,6 +811,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/utils/SkDashPath \
     UnpackedTarball/skia/src/utils/SkEventTracer \
     UnpackedTarball/skia/src/utils/SkFloatToDecimal \
+    UnpackedTarball/skia/src/sksl/SkSLModuleDataDefault \
     UnpackedTarball/skia/src/utils/SkJSON \
     UnpackedTarball/skia/src/utils/SkJSONWriter \
     UnpackedTarball/skia/src/utils/SkMatrix22 \
@@ -1175,7 +1193,6 @@ endif
 #
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
-    UnpackedTarball/skia/src/gpu/vk/VulkanAMDMemoryAllocator \
     UnpackedTarball/skia/src/gpu/vk/VulkanExtensions \
     UnpackedTarball/skia/src/gpu/vk/VulkanInterface \
     UnpackedTarball/skia/src/gpu/vk/VulkanMemory \
@@ -1184,7 +1201,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 ))
 endif
 
-# from file skia/gn/gpu.gni:1136, target "skia_shared_mtl_sources"
+# from file skia/gn/gpu.gni:1140, target "skia_vma_sources"
+#
+ifeq ($(SKIA_GPU),VULKAN)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/gpu/vk/vulkanmemoryallocator/VulkanAMDMemoryAllocator \
+))
+endif
+
+# from file skia/gn/gpu.gni:1149, target "skia_shared_mtl_sources"
 #
 ifeq ($(OS),MACOSX)
 ifeq ($(SKIA_GPU),METAL)
