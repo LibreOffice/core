@@ -225,7 +225,6 @@ endif
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkIcoCodec \
-    UnpackedTarball/skia/src/codec/SkPngCodec \
 ))
 
 # from file skia/gn/BUILD.gn:1314, target "typeface_freetype"
@@ -311,7 +310,7 @@ $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
 endif
 endif
 
-# from file skia/gn/codec.gni, target "skia_codec_core"
+# from file skia/gn/codec.gni:30, target "skia_codec_shared"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkCodec \
@@ -326,7 +325,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkTiffUtility \
 ))
 
-# from file skia/gn/codec.gni, target "skia_codec_decode_bmp"
+# from file skia/gn/codec.gni:64, target "skia_codec_decode_bmp"
 #
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkBmpBaseCodec \
@@ -336,6 +335,14 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/codec/SkBmpStandardCodec \
     UnpackedTarball/skia/src/codec/SkWbmpCodec \
 ))
+
+# from file skia/gn/codec.gni:96, target "skia_codec_png"
+#
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/src/codec/SkPngCodec \
+    UnpackedTarball/skia/src/codec/SkPngCodecBase \
+))
+
 
 # from file skia/gn/core.gni:152, target "skia_core_sources"
 #
