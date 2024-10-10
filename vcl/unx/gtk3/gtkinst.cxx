@@ -15320,7 +15320,8 @@ public:
 
     virtual void bulk_insert_for_each(int nSourceCount, const std::function<void(weld::TreeIter&, int nSourceIndex)>& func,
                                       const weld::TreeIter* pParent,
-                                      const std::vector<int>* pFixedWidths) override
+                                      const std::vector<int>* pFixedWidths,
+                                      bool /*bGoingToSetText*/) override
     {
         GtkInstanceTreeIter* pGtkIter = const_cast<GtkInstanceTreeIter*>(static_cast<const GtkInstanceTreeIter*>(pParent));
 

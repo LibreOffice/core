@@ -1235,10 +1235,12 @@ public:
     // width will not be measured, and the fixed width used instead. Use
     // sparingly because wider text than the fixed width is clipped and cannot
     // be scrolled into view horizontally.
+    // @param bGoingToSetText needs to be true, if you plan to call set_text inside the insert func.
     virtual void bulk_insert_for_each(int nSourceCount,
                                       const std::function<void(TreeIter&, int nSourceIndex)>& func,
                                       const weld::TreeIter* pParent = nullptr,
-                                      const std::vector<int>* pFixedWidths = nullptr)
+                                      const std::vector<int>* pFixedWidths = nullptr,
+                                      bool bGoingToSetText = false)
         = 0;
 
     /* expanding on-demand node details

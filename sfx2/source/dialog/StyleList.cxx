@@ -707,8 +707,8 @@ static bool IsExpanded_Impl(const std::vector<OUString>& rEntries, std::u16strin
     return false;
 }
 
-static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyleFamily eFam,
-                       const weld::TreeIter* pParent, weld::TreeIter* pRet, SfxViewShell* pViewSh)
+static void lcl_Update(weld::TreeView& rTreeView, weld::TreeIter& rIter, const OUString& rName,
+                       SfxStyleFamily eFam, SfxViewShell* pViewSh)
 {
     Color aColor = ColorHash(rName);
 
@@ -729,7 +729,8 @@ static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyl
         // don't show a color or number for default character style 'No Character Style' entry
         if (rName == sDefaultCharStyleUIName.value() /*"No Character Style"*/)
         {
-            rTreeView.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, pRet);
+            rTreeView.set_id(rIter, rName);
+            rTreeView.set_text(rIter, rName);
             return;
         }
     }
@@ -746,32 +747,57 @@ static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyl
     xDevice->DrawText(aRect, OUString::number(nColor),
                       DrawTextFlags::Center | DrawTextFlags::VCenter);
 
-    rTreeView.insert(pParent, -1, &rName, &rName, nullptr, xDevice.get(), false, pRet);
+    rTreeView.set_id(rIter, rName);
+    rTreeView.set_text(rIter, rName);
+    rTreeView.set_image(rIter, *xDevice);
 }
 
-static void FillBox_Impl(weld::TreeView& rBox, StyleTree_Impl* pEntry,
-                         const std::vector<OUString>& rEntries, SfxStyleFamily eStyleFamily,
-                         const weld::TreeIter* pParent, bool blcl_insert, SfxViewShell* pViewShell,
+static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
+                         SfxStyleFamily eStyleFamily, const weld::TreeIter* pParent,
+                         bool blcl_insert, SfxViewShell* pViewShell,
                          SfxStyleSheetBasePool* pStyleSheetPool)
 {
-    std::unique_ptr<weld::TreeIter> xResult = rBox.make_iterator();
-    const OUString& rName = pEntry->getName();
-    if (blcl_insert)
-    {
-        const SfxStyleSheetBase* pStyle = nullptr;
-        if (pStyleSheetPool)
-            pStyle = pStyleSheetPool->Find(rName, eStyleFamily);
-        if (pStyle && pStyle->IsUsed())
-            lcl_Insert(rBox, rName, eStyleFamily, pParent, xResult.get(), pViewShell);
-        else
-            rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
-    }
-    else
-        rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
+    if (rTreeArray.empty())
+        return;
+    rBox.bulk_insert_for_each(rTreeArray.size(),
+                              [&rTreeArray, blcl_insert, pStyleSheetPool, eStyleFamily, &rBox,
+                               pViewShell](weld::TreeIter& rIter, int i) {
+                                  StyleTree_Impl* pChildEntry = rTreeArray[i].get();
+                                  const OUString& rChildName = pChildEntry->getName();
+                                  if (blcl_insert)
+                                  {
+                                      const SfxStyleSheetBase* pStyle = nullptr;
+                                      if (pStyleSheetPool)
+                                          pStyle = pStyleSheetPool->Find(rChildName, eStyleFamily);
+                                      if (pStyle && pStyle->IsUsed())
+                                          lcl_Update(rBox, rIter, rChildName, eStyleFamily,
+                                                     pViewShell);
+                                      else
+                                      {
+                                          rBox.set_id(rIter, rChildName);
+                                          rBox.set_text(rIter, rChildName);
+                                      }
+                                  }
+                                  else
+                                  {
+                                      rBox.set_id(rIter, rChildName);
+                                      rBox.set_text(rIter, rChildName);
+                                  }
+                              },
+                              pParent, nullptr, /*bGoingToSetText*/ true);
 
-    for (size_t i = 0; i < pEntry->getChildren().size(); ++i)
-        FillBox_Impl(rBox, pEntry->getChildren()[i].get(), rEntries, eStyleFamily, xResult.get(),
+    std::unique_ptr<weld::TreeIter> xChildParentIter = rBox.make_iterator(pParent);
+    if (!pParent)
+        rBox.get_iter_first(*xChildParentIter);
+    else
+        rBox.iter_children(*xChildParentIter);
+    for (size_t i = 0; i < rTreeArray.size(); ++i)
+    {
+        if (i != 0)
+            rBox.iter_next_sibling(*xChildParentIter);
+        FillBox_Impl(rBox, rTreeArray[i]->getChildren(), eStyleFamily, xChildParentIter.get(),
                      blcl_insert, pViewShell, pStyleSheetPool);
+    }
 }
 
 namespace SfxTemplate
@@ -1076,12 +1102,9 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
                        && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
                            || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles));
 
+    FillBox_Impl(*m_xTreeBox, aArr, eFam, nullptr, blcl_insert, pViewShell, m_pStyleSheetPool);
     for (sal_uInt16 i = 0; i < nCount; ++i)
-    {
-        FillBox_Impl(*m_xTreeBox, aArr[i].get(), aEntries, eFam, nullptr, blcl_insert, pViewShell,
-                     m_pStyleSheetPool);
         aArr[i].reset();
-    }
 
     m_xTreeBox->columns_autosize();
 
@@ -1267,25 +1290,33 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     }
 
     size_t nCount = aStrings.size();
-    size_t nPos = 0;
 
     if (pViewShell && m_bModuleHasStylesHighlighterFeature
         && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
             || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles)))
     {
-        for (nPos = 0; nPos < nCount; ++nPos)
-        {
-            pStyle = m_pStyleSheetPool->Find(aStrings[nPos], eFam);
-            if (pStyle && pStyle->IsUsed())
-                lcl_Insert(*m_xFmtLb, aStrings[nPos], eFam, nullptr, nullptr, pViewShell);
-            else
-                m_xFmtLb->append(aStrings[nPos], aStrings[nPos]);
-        }
+        m_xFmtLb->bulk_insert_for_each(
+            nCount,
+            [this, &aStrings, eFam, pViewShell](weld::TreeIter& rIter, int nIdx) {
+                auto pChildStyle = m_pStyleSheetPool->Find(aStrings[nIdx], eFam);
+                if (pChildStyle && pChildStyle->IsUsed())
+                    lcl_Update(*m_xFmtLb, rIter, aStrings[nIdx], eFam, pViewShell);
+                else
+                {
+                    m_xFmtLb->set_id(rIter, aStrings[nIdx]);
+                    m_xFmtLb->set_text(rIter, aStrings[nIdx]);
+                }
+            },
+            nullptr, nullptr, /*bGoingToSetText*/ true);
     }
     else
     {
-        for (nPos = 0; nPos < nCount; ++nPos)
-            m_xFmtLb->append(aStrings[nPos], aStrings[nPos]);
+        m_xFmtLb->bulk_insert_for_each(nCount,
+                                       [this, &aStrings](weld::TreeIter& rIter, int nIdx) {
+                                           m_xFmtLb->set_id(rIter, aStrings[nIdx]);
+                                           m_xFmtLb->set_text(rIter, aStrings[nIdx]);
+                                       },
+                                       nullptr, nullptr, /*bGoingToSetText*/ true);
     }
 
     m_xFmtLb->columns_autosize();
