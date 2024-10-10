@@ -1566,6 +1566,7 @@ void ScDocument::GetFilterEntries(
     if (!pDBData)
         return;
 
+    pDBData->ExtendBackColorArea(*this);
     pDBData->ExtendDataArea(*this);
     SCTAB nAreaTab;
     SCCOL nStartCol;
