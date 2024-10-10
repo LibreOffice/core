@@ -18,7 +18,9 @@
 
 #include <skia/x11/gdiimpl.hxx>
 
-#include <tools/window/unix/WindowContextFactory_unix.h>
+#include <tools/window/unix/RasterWindowContext_unix.h>
+#include <tools/window/unix/GaneshVulkanWindowContext_unix.h>
+#include <tools/window/unix/XlibWindowInfo.h>
 
 #include <skia/utils.hxx>
 #include <skia/zone.hxx>
@@ -112,7 +114,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
                                                         : kRGBA_8888_SkColorType);
             return skwindow::MakeRasterForXlib(winInfo, displayParams);
         case RenderVulkan:
-            return skwindow::MakeVulkanForXlib(winInfo, displayParams);
+            return skwindow::MakeGaneshVulkanForXlib(winInfo, displayParams);
         case RenderMetal:
             abort();
             break;

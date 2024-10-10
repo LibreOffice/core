@@ -57,8 +57,12 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #if defined(MACOSX)
 #include <premac.h>
 #endif
+#ifdef SK_VULKAN
 #include <tools/window/VulkanWindowContext.h>
+#endif
+#ifdef SK_METAL
 #include <tools/window/MetalWindowContext.h>
+#endif
 #if defined(MACOSX)
 #include <postmac.h>
 #endif

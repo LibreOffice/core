@@ -140,6 +140,24 @@ $(eval $(call gb_Library_add_exception_objects,skia,\
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,skia,cpp))
 
+# from file skia/gn/BUILD.gn:17, target "skia_component("window")"
+#
+ifeq ($(SKIA_GPU),VULKAN)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+	UnpackedTarball/skia/tools/window/VulkanWindowContext \
+))
+ifneq ($(filter-out WNT MACOSX,$(OS)),)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/window/unix/GaneshVulkanWindowContext_unix \
+))
+endif
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/window/win/VulkanWindowContext_win \
+))
+endif
+endif
+
 # from file skia/gn/BUILD.gn:416, target "optional("fontmgr_fontconfig")"
 #
 ifneq ($(filter-out WNT MACOSX,$(OS)),)
@@ -237,25 +255,36 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_win \
     UnpackedTarball/skia/src/ports/SkOSFile_win \
-    UnpackedTarball/skia/src/ports/SkOSLibrary_win \
 ))
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
     UnpackedTarball/skia/src/ports/SkImageGeneratorCG \
     UnpackedTarball/skia/src/ports/SkOSFile_posix \
-    UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
 ))
 else
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/ports/SkDebug_stdio \
     UnpackedTarball/skia/src/ports/SkOSFile_posix \
-    UnpackedTarball/skia/src/ports/SkOSLibrary_posix \
 ))
 endif
 
 
-# from file skia/gn/BUILD.gn:1903, target "test_lib("gpu_tool_utils")"
+# from file skia/gn/BUILD.gn:1904, target "test_lib("load_dynamic_library")"
+#
+ifeq ($(SKIA_GPU),VULKAN)
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/library/LoadDynamicLibrary_win \
+))
+else
+$(eval $(call gb_Library_add_generated_exception_objects,skia,\
+    UnpackedTarball/skia/tools/library/LoadDynamicLibrary_posix \
+))
+endif
+endif
+
+# from file skia/gn/BUILD.gn:1915, target "test_lib("gpu_tool_utils")"
 #
 ifeq ($(SKIA_GPU),VULKAN)
 $(eval $(call gb_Library_add_generated_exception_objects,skia,\
@@ -271,18 +300,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
 	$(if $(filter LINUX,$(OS)),UnpackedTarball/skia/tools/window/unix/RasterWindowContext_unix) \
     $(if $(filter WNT,$(OS)),UnpackedTarball/skia/tools/window/win/RasterWindowContext_win) \
 ))
-ifeq ($(SKIA_GPU),VULKAN)
-$(eval $(call gb_Library_add_generated_exception_objects,skia,\
-	UnpackedTarball/skia/tools/window/VulkanWindowContext \
-	$(if $(filter LINUX,$(OS)),UnpackedTarball/skia/tools/window/unix/VulkanWindowContext_unix) \
-    $(if $(filter WNT,$(OS)),UnpackedTarball/skia/tools/window/win/VulkanWindowContext_win) \
-))
-endif
 ifeq ($(SKIA_GPU),METAL)
 $(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
     UnpackedTarball/skia/tools/window/MetalWindowContext \
-    $(if $(filter MACOSX,$(OS)),UnpackedTarball/skia/tools/window/mac/MetalWindowContext_mac) \
 ))
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_add_generated_objcxxobjects,skia,\
+    UnpackedTarball/skia/tools/window/mac/GaneshMetalWindowContext_mac \
+))
+endif
 endif
 
 # from file skia/gn/codec.gni, target "skia_codec_core"
@@ -780,6 +806,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/sksl/transform/SkSLHoistSwitchVarDeclarationsAtTopLevel \
     UnpackedTarball/skia/src/sksl/transform/SkSLRenamePrivateSymbols \
     UnpackedTarball/skia/src/sksl/transform/SkSLReplaceConstVarsWithLiterals \
+    UnpackedTarball/skia/src/sksl/transform/SkSLReplaceSplatCastsWithSwizzles \
     UnpackedTarball/skia/src/sksl/transform/SkSLRewriteIndexedSwizzle \
 ))
 
@@ -1077,12 +1104,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/gpu/DataUtils \
     UnpackedTarball/skia/src/gpu/DitherUtils \
     UnpackedTarball/skia/src/gpu/MutableTextureState \
-    UnpackedTarball/skia/src/gpu/PipelineUtils \
     UnpackedTarball/skia/src/gpu/RectanizerPow2 \
     UnpackedTarball/skia/src/gpu/RectanizerSkyline \
     UnpackedTarball/skia/src/gpu/ResourceKey \
     UnpackedTarball/skia/src/gpu/ShaderErrorHandler \
     UnpackedTarball/skia/src/gpu/SkBackingFit \
+    UnpackedTarball/skia/src/gpu/SkSLToBackend \
     UnpackedTarball/skia/src/gpu/Swizzle \
     UnpackedTarball/skia/src/gpu/TiledTextureUtils \
     UnpackedTarball/skia/src/gpu/tessellate/FixedCountBufferUtils \
@@ -1090,13 +1117,13 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/text/gpu/DistanceFieldAdjustTable \
     UnpackedTarball/skia/src/text/gpu/GlyphVector \
     UnpackedTarball/skia/src/text/gpu/SDFMaskFilter \
-    UnpackedTarball/skia/src/text/gpu/SDFTControl \
     UnpackedTarball/skia/src/text/gpu/SkChromeRemoteGlyphCache \
     UnpackedTarball/skia/src/text/gpu/Slug \
     UnpackedTarball/skia/src/text/gpu/SlugImpl \
     UnpackedTarball/skia/src/text/gpu/StrikeCache \
     UnpackedTarball/skia/src/text/gpu/SubRunAllocator \
     UnpackedTarball/skia/src/text/gpu/SubRunContainer \
+    UnpackedTarball/skia/src/text/gpu/SubRunControl \
     UnpackedTarball/skia/src/text/gpu/TextBlob \
     UnpackedTarball/skia/src/text/gpu/TextBlobRedrawCoordinator \
     UnpackedTarball/skia/src/text/gpu/VertexFiller \
