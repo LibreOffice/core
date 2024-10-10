@@ -2812,36 +2812,34 @@ void SdrObjEditView::OnEndPasteOrDrop(PasteOrDropInfos*)
 
 sal_uInt16 SdrObjEditView::GetSelectionLevel() const
 {
-    sal_uInt16 nLevel = 0xFFFF;
-    if (IsTextEdit())
+    if (!IsTextEdit())
+        return 0xFFFF;
+    DBG_ASSERT(mpTextEditOutlinerView != nullptr,
+               "SdrObjEditView::GetAttributes(): mpTextEditOutlinerView=NULL");
+    DBG_ASSERT(mpTextEditOutliner != nullptr,
+               "SdrObjEditView::GetAttributes(): mpTextEditOutliner=NULL");
+    if (!mpTextEditOutlinerView)
+        return 0xFFFF;
+    //start and end position
+    ESelection aSelect = mpTextEditOutlinerView->GetSelection();
+    sal_uInt16 nStartPara = ::std::min(aSelect.nStartPara, aSelect.nEndPara);
+    sal_uInt16 nEndPara = ::std::max(aSelect.nStartPara, aSelect.nEndPara);
+    //get level from each paragraph
+    sal_uInt16 nLevel = 0;
+    for (sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++)
     {
-        DBG_ASSERT(mpTextEditOutlinerView != nullptr,
-                   "SdrObjEditView::GetAttributes(): mpTextEditOutlinerView=NULL");
-        DBG_ASSERT(mpTextEditOutliner != nullptr,
-                   "SdrObjEditView::GetAttributes(): mpTextEditOutliner=NULL");
-        if (mpTextEditOutlinerView)
-        {
-            //start and end position
-            ESelection aSelect = mpTextEditOutlinerView->GetSelection();
-            sal_uInt16 nStartPara = ::std::min(aSelect.nStartPara, aSelect.nEndPara);
-            sal_uInt16 nEndPara = ::std::max(aSelect.nStartPara, aSelect.nEndPara);
-            //get level from each paragraph
-            nLevel = 0;
-            for (sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++)
-            {
-                sal_uInt16 nParaDepth
-                    = 1 << static_cast<sal_uInt16>(mpTextEditOutliner->GetDepth(nPara));
-                if (!(nLevel & nParaDepth))
-                    nLevel += nParaDepth;
-            }
-            //reduce one level for Outliner Object
-            //if( nLevel > 0 && GetTextEditObject()->GetObjIdentifier() == OBJ_OUTLINETEXT )
-            //  nLevel = nLevel >> 1;
-            //no bullet paragraph selected
-            if (nLevel == 0)
-                nLevel = 0xFFFF;
-        }
+        sal_Int16 nDepth = mpTextEditOutliner->GetDepth(nPara);
+        assert(nDepth >= 0 && nDepth <= 15);
+        sal_uInt16 nParaDepth = 1 << static_cast<sal_uInt16>(nDepth);
+        if (!(nLevel & nParaDepth))
+            nLevel += nParaDepth;
     }
+    //reduce one level for Outliner Object
+    //if( nLevel > 0 && GetTextEditObject()->GetObjIdentifier() == OBJ_OUTLINETEXT )
+    //  nLevel = nLevel >> 1;
+    //no bullet paragraph selected
+    if (nLevel == 0)
+        nLevel = 0xFFFF;
     return nLevel;
 }
 
