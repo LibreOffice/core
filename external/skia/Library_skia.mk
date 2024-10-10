@@ -342,6 +342,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,skia,\
     UnpackedTarball/skia/src/core/SkBlitter_A8 \
     UnpackedTarball/skia/src/core/SkBlitter_ARGB32 \
     UnpackedTarball/skia/src/core/SkBlitter_Sprite \
+    UnpackedTarball/skia/src/core/SkBlurEngine \
     UnpackedTarball/skia/src/core/SkBlurMask \
     UnpackedTarball/skia/src/core/SkBlurMaskFilterImpl \
     UnpackedTarball/skia/src/core/SkCachedData \
