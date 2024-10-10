@@ -40,6 +40,7 @@ skia_patches := \
     ubsan-missing-typeinfo.patch.1 \
     help-msvc-analyzer.patch \
     always_inline_and_multiversioning_conflict.patch.1 \
+    windows-define-conflict.patch.1 \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
