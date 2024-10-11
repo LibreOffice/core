@@ -112,8 +112,14 @@ void VCLXAccessibleCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindo
     {
         case VclEventId::CheckboxToggle:
         {
+            const sal_Int32 nOldValue = m_bIndeterminate ? 2 : (m_bChecked ? 1 : 0);
+
             SetChecked( IsChecked() );
             SetIndeterminate( IsIndeterminate() );
+
+            const sal_Int32 nNewValue = m_bIndeterminate ? 2 : (m_bChecked ? 1 : 0);
+            if (nOldValue != nNewValue)
+                NotifyAccessibleEvent(AccessibleEventId::VALUE_CHANGED, Any(nOldValue), Any(nNewValue));
         }
         break;
         default:
