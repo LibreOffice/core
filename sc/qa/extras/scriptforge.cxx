@@ -37,7 +37,6 @@ CPPUNIT_TEST_FIXTURE(ScScriptForgeTest, testSetValue)
                  " oDoc.setValue(\"A1\", 10)\n"
                  "End Function\n"_ustr));
 
-    // Without the fix in place, this test would have crashed
     executeMacro(
         u"vnd.sun.Star.script:TestLibrary.TestModule.Main?language=Basic&location=document"_ustr);
 
@@ -61,7 +60,6 @@ CPPUNIT_TEST_FIXTURE(ScScriptForgeTest, testShowProgressBar)
                                     " Test = \"OK\"\n"
                                     "End Function\n"_ustr));
 
-    // Without the fix in place, this test would have crashed
     Any aRet = executeMacro(
         u"vnd.sun.Star.script:TestLibrary.TestModule.Test?language=Basic&location=document"_ustr);
     OUString sResult;
