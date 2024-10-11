@@ -358,7 +358,6 @@
 #include <core/fxcrt/string_data_template.h>
 #include <core/fxcrt/string_pool_template.h>
 #include <core/fxcrt/string_template.h>
-#include <core/fxcrt/string_view_template.h>
 #include <core/fxcrt/unowned_ptr.h>
 #include <core/fxcrt/unowned_ptr_exclusion.h>
 #include <core/fxcrt/utf16.h>
@@ -373,10 +372,10 @@
 #include <core/fxcrt/xml/cfx_xmltext.h>
 #include <core/fxcrt/zip.h>
 #include <core/fxge/agg/cfx_agg_bitmapcomposer.h>
+#include <core/fxge/agg/cfx_agg_cliprgn.h>
 #include <core/fxge/agg/cfx_agg_devicedriver.h>
 #include <core/fxge/agg/cfx_agg_imagerenderer.h>
 #include <core/fxge/calculate_pitch.h>
-#include <core/fxge/cfx_cliprgn.h>
 #include <core/fxge/cfx_color.h>
 #include <core/fxge/cfx_defaultrenderdevice.h>
 #include <core/fxge/cfx_drawutils.h>
@@ -490,6 +489,7 @@
 #include <third_party/agg23/agg_rasterizer_scanline_aa.h>
 #include <third_party/agg23/agg_renderer_scanline.h>
 #include <third_party/agg23/agg_scanline_u.h>
+#include <third_party/fast_float/src/include/fast_float/fast_float.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
 #endif // PCH_LEVEL >= 4
