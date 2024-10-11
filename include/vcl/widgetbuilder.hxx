@@ -103,7 +103,8 @@ protected:
             {
                 if (name == "object" || name == "placeholder")
                 {
-                    pCurrentChild = handleObject(pParent, pAtkProps, reader, bToolbarItem);
+                    pCurrentChild
+                        = handleObject(pParent, pAtkProps, reader, sInternalChild, bToolbarItem);
 
                     bool bObjectInserted = pCurrentChild && pParent != pCurrentChild;
                     if (bObjectInserted)
@@ -139,7 +140,7 @@ protected:
     }
 
     WidgetPtr handleObject(Widget* pParent, stringmap* pAtkProps, xmlreader::XmlReader& reader,
-                           bool bToolbarItem)
+                           std::string_view sInternalChild, bool bToolbarItem)
     {
         OUString sClass;
         OUString sID;
@@ -186,6 +187,11 @@ protected:
 
         if (!sCustomProperty.isEmpty())
             aProperties[u"customproperty"_ustr] = sCustomProperty;
+
+        // Internal-children default in glade to not having their visible bits set
+        // even though they are visible (generally anyway)
+        if (!sInternalChild.empty())
+            aProperties[u"visible"_ustr] = "True";
 
         WidgetPtr pCurrentChild = nullptr;
         while (true)

@@ -2752,11 +2752,6 @@ void VclBuilder::tweakInsertedChild(vcl::Window *pParent, vcl::Window* pCurrentC
 {
     assert(pCurrentChild);
 
-    //Internal-children default in glade to not having their visible bits set
-    //even though they are visible (generally anyway)
-    if (!sInternalChild.empty())
-        pCurrentChild->Show();
-
     //Select the first page if it's a notebook
     if (pCurrentChild->GetType() == WindowType::TABCONTROL)
     {
