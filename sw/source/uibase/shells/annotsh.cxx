@@ -28,11 +28,13 @@
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
 #include <i18nutil/transliteration.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
@@ -248,7 +250,39 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 break;
             }
         case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
-        case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
+
+        case SID_ATTR_CHAR_COLOR2:
+        {
+            if (!rReq.GetArgs())
+            {
+                const std::optional<NamedColor>& oColor
+                    = m_rView.GetDocShell()->GetRecentColor(SID_ATTR_CHAR_COLOR);
+                if (oColor.has_value())
+                {
+                    nEEWhich = GetPool().GetWhichIDFromSlotID(SID_ATTR_CHAR_COLOR);
+                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                    rReq.SetArgs(aNewAttr);
+                    rReq.SetSlot(SID_ATTR_CHAR_COLOR);
+                }
+            }
+            break;
+        }
+        case SID_ATTR_CHAR_BACK_COLOR:
+        {
+            nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
+            if (!rReq.GetArgs())
+            {
+                const std::optional<NamedColor>& oColor
+                    = m_rView.GetDocShell()->GetRecentColor(nSlot);
+                if (oColor.has_value())
+                {
+                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                }
+            }
+            break;
+        }
         case SID_ATTR_CHAR_UNDERLINE:
         {
             if( rReq.GetArgs() )
@@ -724,6 +758,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         rSet.InvalidateItem( nWhich );
                 }
                 break;
+            case SID_ATTR_CHAR_COLOR2:
             case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
             case SID_ATTR_CHAR_BACK_COLOR: nEEWhich = EE_CHAR_BKGCOLOR; break;
             case SID_ATTR_CHAR_UNDERLINE: nEEWhich = EE_CHAR_UNDERLINE;break;

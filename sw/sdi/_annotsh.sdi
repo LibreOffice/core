@@ -313,6 +313,13 @@ interface _Annotation
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_CHAR_COLOR2
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_CHAR_BACK_COLOR // api:
     [
         ExecMethod = Exec;

@@ -742,6 +742,13 @@ interface TextDrawFont
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    SID_ATTR_CHAR_COLOR2
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetDrawTextCtrlState ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     SID_ATTR_CHAR_BACK_COLOR // api:
     [
         ExecMethod = Execute ;
