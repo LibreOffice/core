@@ -115,10 +115,12 @@ std::unique_ptr<weld::Notebook> QtInstanceBuilder::weld_notebook(const OUString&
     return nullptr;
 }
 
-std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString&)
+std::unique_ptr<weld::Button> QtInstanceBuilder::weld_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QPushButton* pButton = m_xBuilder->get<QPushButton>(rId);
+    std::unique_ptr<weld::Button> xRet(pButton ? std::make_unique<QtInstanceButton>(pButton)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MenuButton> QtInstanceBuilder::weld_menu_button(const OUString&)
