@@ -1458,22 +1458,7 @@ void SwDoc::ForEachCharacterUnderlineItem( const std::function<bool(const SvxUnd
 /// Iterate over all SvxBrushItem, if the function returns false, iteration is stopped
 void SwDoc::ForEachCharacterBrushItem( const std::function<bool(const SvxBrushItem&)>& rFunc ) const
 {
-    for(SwCharFormat* pFormat : *GetCharFormats())
-    {
-        const SwAttrSet& rAttrSet = pFormat->GetAttrSet();
-        if (const SvxBrushItem* pItem = rAttrSet.GetItemIfSet(RES_CHRATR_BACKGROUND))
-            if (!rFunc(*pItem))
-                return;
-    }
-    std::vector<std::shared_ptr<SfxItemSet>> aStyles;
-    for (auto eFamily : { IStyleAccess::AUTO_STYLE_CHAR, IStyleAccess::AUTO_STYLE_RUBY, IStyleAccess::AUTO_STYLE_PARA, IStyleAccess::AUTO_STYLE_NOTXT })
-    {
-        const_cast<SwDoc*>(this)->GetIStyleAccess().getAllStyles(aStyles, eFamily);
-        for (const auto & rxItemSet : aStyles)
-            if (const SvxBrushItem* pItem = rxItemSet->GetItemIfSet(RES_CHRATR_BACKGROUND))
-                if (!rFunc(*pItem))
-                    return;
-    }
+    ForEachCharacterItem(this, RES_CHRATR_BACKGROUND, rFunc);
 }
 
 /// Iterate over all RES_TXTATR_UNKNOWN_CONTAINER SvXMLAttrContainerItem, if the function returns false, iteration is stopped
