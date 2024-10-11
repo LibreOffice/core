@@ -628,20 +628,32 @@ public:
         case LOK_CALLBACK_STATE_CHANGED:
         {
             std::stringstream aStream(pPayload);
-            if (!aStream.str().starts_with("{"))
-            {
-                break;
-            }
-
             boost::property_tree::ptree aTree;
-            boost::property_tree::read_json(aStream, aTree);
-            auto it = aTree.find("commandName");
-            if (it == aTree.not_found())
+            std::string aCommandName;
+
+            if (aStream.str().starts_with("{"))
             {
-                break;
+                boost::property_tree::read_json(aStream, aTree);
+                auto it = aTree.find("commandName");
+                if (it == aTree.not_found())
+                {
+                    break;
+                }
+
+                aCommandName = it->second.get_value<std::string>();
+            }
+            else
+            {
+                std::string aState = aStream.str();
+                auto it = aState.find("=");
+                if (it == std::string::npos)
+                {
+                    break;
+                }
+                aCommandName = aState.substr(0, it);
+                aTree.put("state", aState.substr(it + 1));
             }
 
-            std::string aCommandName = it->second.get_value<std::string>();
             m_aStateChanges[aCommandName] = aTree;
         }
         break;
@@ -4033,6 +4045,46 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLeftOverflowEdit)
     // - Expected: 20
     // - Actual  : 1300
     CPPUNIT_ASSERT_EQUAL(tools::Long(20), aView.m_aTextSelectionResult.m_aRefPoint.getX());
+}
+
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testFreezeRowOrColumn)
+{
+    createDoc("empty.ods");
+    ViewCallback aView;
+    SfxViewShell* pView = SfxViewShell::Current();
+
+    // Freeze panes on a column and receive the proper state back
+    aView.m_aStateChanges.clear();
+    uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue("Index",  uno::Any(static_cast<sal_Int32>(8))),
+    };
+    comphelper::dispatchCommand(".uno:FreezePanesColumn", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    pView->GetViewFrame().GetBindings().GetTimer().Invoke();
+    pView->GetViewFrame().GetBindings().GetTimer().Invoke();
+    auto it = aView.m_aStateChanges.find(".uno:FreezePanesColumn");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    std::string values = it->second.get<std::string>("state");
+    std::string index = values.substr(0, values.find(' '));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(std::string("8"), index);
+
+    // Freeze panes on a row and receive the proper state back
+    aView.m_aStateChanges.clear();
+    comphelper::dispatchCommand(".uno:FreezePanesRow", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+    pView->GetViewFrame().GetBindings().GetTimer().Invoke();
+    pView->GetViewFrame().GetBindings().GetTimer().Invoke();
+    it = aView.m_aStateChanges.find(".uno:FreezePanesRow");
+    CPPUNIT_ASSERT(it != aView.m_aStateChanges.end());
+    values = it->second.get<std::string>("state");
+    index = values.substr(0, values.find(' '));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 8
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(std::string("8"), index);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
