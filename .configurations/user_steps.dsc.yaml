@@ -30,7 +30,7 @@ properties:
     - resource: xPSDesiredStateConfiguration/xScript
       id: wsl-check
       directives:
-        description: check that wsl utility is avilable/working - i.e. whehter wsl is installed
+        description: check that wsl utility is available/working - i.e. whether wsl is installed
       settings:
         TestScript: wsl.exe --status ; return ![bool]$LASTEXITCODE
         GetScript: return $false
