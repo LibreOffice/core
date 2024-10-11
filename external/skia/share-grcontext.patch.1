@@ -481,11 +481,12 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      }
 
      return true;
-@@ -344,10 +365,9 @@
+@@ -344,10 +365,10 @@
                                          VkImageUsageFlags usageFlags,
                                          SkColorType colorType,
                                          VkSharingMode sharingMode) {
 -    fGetSwapchainImagesKHR(fDevice, fSwapchain, &fImageCount, nullptr);
++    fGetSwapchainImagesKHR(fShared->fDevice, fSwapchain, &fImageCount, nullptr);
      SkASSERT(fImageCount);
      fImages = new VkImage[fImageCount];
 -    fGetSwapchainImagesKHR(fDevice, fSwapchain, &fImageCount, fImages);
@@ -493,7 +494,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
 
      // set up initial image layouts and create surfaces
      fImageLayouts = new VkImageLayout[fImageCount];
-@@ -363,7 +383,7 @@
+@@ -363,7 +384,7 @@
          info.fFormat = format;
          info.fImageUsageFlags = usageFlags;
          info.fLevelCount = 1;
@@ -502,7 +503,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
          info.fProtected = skgpu::Protected(fDisplayParams.fCreateProtectedNativeBackend);
          info.fSharingMode = sharingMode;
 
-@@ -406,8 +426,8 @@
+@@ -406,8 +427,8 @@
      fBackbuffers = new BackbufferInfo[fImageCount + 1];
      for (uint32_t i = 0; i < fImageCount + 1; ++i) {
          fBackbuffers[i].fImageIndex = -1;
@@ -513,7 +514,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                  &fBackbuffers[i].fRenderSemaphore));
          SkASSERT(result == VK_SUCCESS);
      }
-@@ -420,8 +440,8 @@
+@@ -420,8 +441,8 @@
      if (fBackbuffers) {
          for (uint32_t i = 0; i < fImageCount + 1; ++i) {
              fBackbuffers[i].fImageIndex = -1;
@@ -524,7 +525,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
                                          fBackbuffers[i].fRenderSemaphore,
                                          nullptr));
          }
-@@ -446,42 +466,59 @@
+@@ -446,42 +467,59 @@
  void VulkanWindowContext::destroyContext() {
      if (this->isValid()) {
          fQueueWaitIdle(fPresentQueue);
@@ -598,7 +599,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
  }
 
  VulkanWindowContext::BackbufferInfo* VulkanWindowContext::getAvailableBackbuffer() {
-@@ -507,35 +544,35 @@
+@@ -507,35 +545,35 @@
      semaphoreInfo.pNext = nullptr;
      semaphoreInfo.flags = 0;
      VkSemaphore semaphore;
@@ -640,7 +641,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
              return nullptr;
          }
      }
-@@ -560,7 +597,7 @@
+@@ -560,7 +598,7 @@
      info.fNumSemaphores = 1;
      info.fSignalSemaphores = &beSemaphore;
      skgpu::MutableTextureState presentState = skgpu::MutableTextureStates::MakeVulkan(
@@ -649,7 +650,7 @@ diff -ur skia.org/tools/window/VulkanWindowContext.cpp skia/tools/window/VulkanW
      auto dContext = surface->recordingContext()->asDirectContext();
      dContext->flush(surface, info, &presentState);
      dContext->submit();
-@@ -581,4 +618,6 @@
+@@ -581,4 +619,6 @@
      fQueuePresentKHR(fPresentQueue, &presentInfo);
  }
 
