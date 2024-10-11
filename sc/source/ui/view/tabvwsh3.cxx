@@ -1222,7 +1222,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 bool bIsCol = (nSlot == SID_WINDOW_FIX_COL);
                 sal_Int32 nFreezeIndex = 1;
-                if (const SfxInt32Item* pItem = rReq.GetArg<SfxInt32Item>(nSlot))
+                if (const SfxInt32Item* pItem = rReq.GetArg<SfxInt32Item>(FN_PARAM_1))
                 {
                     nFreezeIndex = pItem->GetValue();
                     if (nFreezeIndex < 0)
