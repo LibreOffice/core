@@ -176,6 +176,11 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162948)
     verify();
     saveAndReload(u"Calc Office Open XML"_ustr);
     verify();
+
+    // FIXME: Error: tag name "calcext:icon-set" is not allowed. Possible tag names are: <color-scale>,<condition>,<data-bar>
+    skipValidation();
+    saveAndReload(u"calc8"_ustr); // tdf#163337
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testCommentTextHAlignment)

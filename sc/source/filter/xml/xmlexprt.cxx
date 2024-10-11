@@ -4943,6 +4943,9 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                     else
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, OUString::number(it->GetValue()));
 
+                    if (!it->GetGreaterThanOrEqual())
+                        AddAttribute(XML_NAMESPACE_CALC_EXT, XML_GREATER_EQUAL, OUString::boolean(false));
+
                     AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
                     SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                 }

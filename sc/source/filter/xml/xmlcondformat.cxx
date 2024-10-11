@@ -908,6 +908,7 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
 {
     OUString sVal;
     OUString sType;
+    bool bGreaterThanOrEqual = true;
 
     if ( rAttrList.is() )
     {
@@ -921,6 +922,9 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
                 case XML_ELEMENT( CALC_EXT, XML_VALUE ):
                     sVal = aIter.toString();
                 break;
+                case XML_ELEMENT( CALC_EXT, XML_GREATER_EQUAL ):
+                    bGreaterThanOrEqual = aIter.toBoolean();
+                break;
                 default:
                     break;
             }
@@ -933,6 +937,7 @@ ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport,
 
     pColorScaleEntry = new ScColorScaleEntry(nVal, Color());
     setColorEntryType(sType, pColorScaleEntry, sVal, GetScImport());
+    pColorScaleEntry->SetGreaterThanOrEqual(bGreaterThanOrEqual);
 }
 
 namespace {
