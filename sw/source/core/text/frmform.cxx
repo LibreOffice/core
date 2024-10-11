@@ -604,14 +604,12 @@ css::uno::Sequence< css::style::TabStop > SwTextFrame::GetTabStopInfo( SwTwips C
 // If it's 0, the FollowFrame is deleted.
 void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
                  const TextFrameIndex nOffset, const TextFrameIndex nEnd,
-                             const sal_uInt8 nMode )
+                             const bool bDontJoin)
 {
     SwFrameSwapper aSwapper( this, false );
 
     // We got the rest of the text mass: Delete all Follows
     // DummyPortions() are a special case.
-    // Special cases are controlled by parameter <nMode>.
-    bool bDontJoin = nMode & 1;
     if( HasFollow() && !bDontJoin && nOffset == nEnd )
     {
         while( GetFollow() )
@@ -684,7 +682,7 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
             return;
         }
 
-        if ( nMode )
+        if (bDontJoin)
             GetFollow()->ManipOfst(TextFrameIndex(0));
 
         if ( CalcFollow( nNewOfst ) )   // CalcFollow only at the end, we do a SetOffset there
@@ -1203,22 +1201,21 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     // Call base class method <SwTextFrameBreak::IsBreakNow(..)>
     // instead of method <WidowsAndOrphans::IsBreakNow(..)> to get a break,
     // even if due to widow rule no enough lines exists.
-    sal_uInt8 nNew = ( !GetFollow() &&
+    bool createNew = ( !GetFollow() &&
                        nEnd < nStrLen &&
                        ( rLine.IsStop() ||
                          ( bHasToFit
                            ? ( rLine.GetLineNr() > 1 &&
                                !rFrameBreak.IsInside( rLine ) )
-                           : rFrameBreak.IsBreakNow( rLine ) ) ) )
-                     ? 1 : 0;
+                           : rFrameBreak.IsBreakNow( rLine ) ) ) );
 
     SwTextFormatInfo& rInf = rLine.GetInfo();
     bool bEmptyWithSplitFly = false;
-    if (nNew == 0 && !nStrLen && !rInf.GetTextFly().IsOn() && IsEmptyWithSplitFly())
+    if (!createNew && !nStrLen && !rInf.GetTextFly().IsOn() && IsEmptyWithSplitFly())
     {
         // Empty paragraph, so IsBreakNow() is not called, but we should split the fly portion and
         // the paragraph marker.
-        nNew = 1;
+        createNew = true;
         bEmptyWithSplitFly = true;
     }
 
@@ -1241,9 +1238,9 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         else if (!isFirstVisibleFrameInPageBody(this))
             bLoneAsCharAnchoredObj = false;
         else
-            nNew = 0;
+            createNew = false;
     }
-    else if (nNew)
+    else if (createNew)
     {
         if (IsFollow())
         {
@@ -1253,7 +1250,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             auto precedeText = precede->DynCastTextFrame();
             assert(precedeText);
             if (isReallyEmptyMaster(precedeText))
-                nNew = 0;
+                createNew = false;
         }
         else if (!bEmptyWithSplitFly)
         {
@@ -1262,22 +1259,23 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             // frame if we have columns.
             if (pBodyFrame && !FindColFrame() && isFirstVisibleFrameInPageBody(this)
                 && !hasFly(this) && !hasAtPageFly(pBodyFrame))
-                nNew = 0;
+                createNew = false;
         }
     }
 
-    if (nNew && nEnd == TextFrameIndex(0) && !bEmptyWithSplitFly && HasFullPageFly(this))
+    if (createNew && nEnd == TextFrameIndex(0) && !bEmptyWithSplitFly && HasFullPageFly(this))
     {
         // We intended to split at start, due to an anchored object which would use all space on the
         // current page. It makes no sense to split & move all text of the frame forward: the
         // current page would be empty and we would move back later anyway.
-        nNew = 0;
+        createNew = false;
     }
 
-    if ( nNew )
+    if (createNew)
     {
         SplitFrame( nEnd );
     }
+    bool dontJoin = createNew;
 
     const tools::Long nBodyHeight = pBodyFrame ? ( IsVertical() ?
                                           pBodyFrame->getFrameArea().Width() :
@@ -1292,7 +1290,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     if( rLine.IsStop() )
     {
         rLine.TruncLines( true );
-        nNew = 1;
+        dontJoin = true;
     }
 
     // FindBreak truncates the last line
@@ -1309,7 +1307,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         }
         if( GetFollow() )
         {
-            if( nNew && nOld < nEnd )
+            if (dontJoin && nOld < nEnd)
                 RemoveFootnote( nOld, nEnd - nOld );
             ChangeOffset( GetFollow(), nEnd );
             if( !bDelta )
@@ -1336,7 +1334,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                  GetFollow()->IsFieldFollow() ||
                  (nStrLen == TextFrameIndex(0) && GetTextNodeForParaProps()->GetNumRule()))
             {
-                nNew |= 3;
+                dontJoin = true;
             }
             else if (FindTabFrame() && nEnd > TextFrameIndex(0) &&
                 rLine.GetInfo().GetChar(nEnd - TextFrameIndex(1)) == CH_BREAK)
@@ -1345,12 +1343,12 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 // ends with a hard line break. Don't join the follow just
                 // because the follow would have no content, we may still need it
                 // for the paragraph mark.
-                nNew |= 1;
+                dontJoin = true;
             }
             // move footnotes if the follow is kept - if RemoveFootnote() is
             // called in next format iteration, it will be with the *new*
             // offset so no effect!
-            if (nNew && nOld < nEnd)
+            if (dontJoin && nOld < nEnd)
             {
                 RemoveFootnote(nOld, nEnd - nOld);
             }
@@ -1387,7 +1385,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                )
             {
                 SplitFrame( nEnd );
-                nNew |= 3;
+                dontJoin = true;
             }
         }
         // If the remaining height changed e.g by RemoveFootnote() we need to
@@ -1428,7 +1426,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     AdjustFrame( nChg, bHasToFit );
 
     if( HasFollow() || IsInFootnote() )
-        AdjustFollow_( rLine, nEnd, nStrLen, nNew );
+        AdjustFollow_(rLine, nEnd, nStrLen, dontJoin);
 
     pPara->SetPrepMustFit( false );
 }

@@ -209,7 +209,7 @@ class SW_DLLPUBLIC SwTextFrame final : public SwContentFrame
 
     // Separates the Master and creates a Follow or adjusts the data in the Follow
     void AdjustFollow_( SwTextFormatter &rLine, TextFrameIndex nOffset,
-                               TextFrameIndex nStrEnd, const sal_uInt8 nMode );
+                               TextFrameIndex nStrEnd, bool bDontJoin );
 
     // Iterates all Lines and sets the line spacing using the attribute
     void CalcLineSpace();
