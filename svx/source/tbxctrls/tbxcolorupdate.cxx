@@ -122,6 +122,7 @@ namespace svx
                                 o3tl::toUInt32(o3tl::getToken(aUserData, 0, ';', nIdx)));
                 }
             }
+            SetRecentColor(aNamedColor, /*Broadcast=*/false);
             Update(aNamedColor);
         }
         else
@@ -149,10 +150,10 @@ namespace svx
         }
     }
 
-    void ToolboxButtonColorUpdaterBase::SetRecentColor(const NamedColor &rNamedColor)
+    void ToolboxButtonColorUpdaterBase::SetRecentColor(const NamedColor &rNamedColor, bool bBroadcast)
     {
         if (rtl::Reference xModel = dynamic_cast<SfxBaseModel*>(mxFrame->getController()->getModel().get()))
-            xModel->GetObjectShell()->SetRecentColor(mnSlotId, rNamedColor);
+            xModel->GetObjectShell()->SetRecentColor(mnSlotId, rNamedColor, bBroadcast);
         else if (!mbWideButton)
             Update(rNamedColor);
     }

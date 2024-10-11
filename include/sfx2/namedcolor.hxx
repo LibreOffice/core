@@ -31,7 +31,7 @@ struct SFX2_DLLPUBLIC NamedColor
     {
     }
 
-    model::ComplexColor getComplexColor()
+    model::ComplexColor getComplexColor() const
     {
         model::ComplexColor aComplexColor;
 

@@ -59,7 +59,7 @@ namespace svx
         virtual ~ToolboxButtonColorUpdaterBase();
 
         void        Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
-        void        SetRecentColor(const NamedColor& rNamedColor);
+        void        SetRecentColor(const NamedColor& rNamedColor, bool bBroadcast = true);
         void        Update( const NamedColor& rNamedColor );
         void        Update( const Color& rColor, bool bForceUpdate = false );
         Color const & GetCurrentColor() const { return maCurColor; }

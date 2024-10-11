@@ -582,7 +582,7 @@ public:
     StarBASIC*                  GetBasic() const;
 
     std::optional<NamedColor> GetRecentColor(sal_uInt16 nSlotId);
-    void SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor);
+    void SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor, bool bBroadcast = true);
 
     virtual std::shared_ptr<sfx::IDocumentModelAccessor> GetDocumentModelAccessor() const;
     virtual std::set<Color> GetDocColors();

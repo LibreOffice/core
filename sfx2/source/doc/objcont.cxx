@@ -326,10 +326,11 @@ std::optional<NamedColor> SfxObjectShell::GetRecentColor(sal_uInt16 nSlotId)
     return std::nullopt;
 }
 
-void SfxObjectShell::SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor)
+void SfxObjectShell::SetRecentColor(sal_uInt16 nSlotId, const NamedColor& rColor, bool bBroadcast)
 {
     pImpl->m_aRecentColors[nSlotId] = rColor;
-    Broadcast(SfxHint(SfxHintId::ColorsChanged));
+    if (bBroadcast)
+        Broadcast(SfxHint(SfxHintId::ColorsChanged));
 }
 
 std::set<Color> SfxObjectShell::GetDocColors()

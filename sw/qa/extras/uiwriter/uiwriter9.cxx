@@ -332,6 +332,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf34804)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Simulate a keyboard shortcut to SID_ATTR_CHAR_COLOR2 (which must use the shared button color)
+    dispatchCommand(mxComponent, u".uno:FontColor"_ustr, {});
+    pWrtShell->Insert(u"New World!"_ustr);
+
+    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1, "New World!"), 1);
+    // (This test assumes that nothing in the unit tests has modified the app's recent font color)
+    // COL_DEFAULT_FONT is the default red color for the fontColor button on the toolbar.
+    CPPUNIT_ASSERT_EQUAL(COL_DEFAULT_FONT, getProperty<Color>(xRun, u"CharColor"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
 {
     // Unit test for tdf#139631

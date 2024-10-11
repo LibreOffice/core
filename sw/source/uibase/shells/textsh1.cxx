@@ -38,6 +38,7 @@
 #include <sfx2/htmlmode.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/weld.hxx>
@@ -1761,6 +1762,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_ATTR_CHAR_COLOR2:
         {
+            std::unique_ptr<const SvxColorItem> pRecentColor; // manage lifecycle scope
+            if (!pItem)
+            {
+                // no color provided: use the pre-selected color shown in the toolbar/sidebar
+                const std::optional<NamedColor>& oColor
+                    = GetView().GetDocShell()->GetRecentColor(SID_ATTR_CHAR_COLOR);
+                if (oColor.has_value())
+                {
+                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    pRecentColor = std::make_unique<const SvxColorItem>(
+                        rCol.getFinalColor(), rCol, RES_CHRATR_COLOR);
+                    pItem = pRecentColor.get();
+                }
+            }
+
             if (pItem)
             {
                 auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
@@ -1783,7 +1799,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_COLOR_BACKGROUND: // deprecated
         case SID_ATTR_CHAR_COLOR_EXT:
         {
-            Color aColor;
+            Color aColor = COL_TRANSPARENT;
             model::ComplexColor aComplexColor;
 
             if (pItem)
@@ -1792,8 +1808,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 aColor = pColorItem->GetValue();
                 aComplexColor = pColorItem->getComplexColor();
             }
-            else
-                aColor = COL_TRANSPARENT;
+            else if (nSlot == SID_ATTR_CHAR_BACK_COLOR)
+            {
+                // no color provided: use the pre-selected color shown in the toolbar/sidebar
+                const std::optional<NamedColor>& oColor
+                    = GetView().GetDocShell()->GetRecentColor(nSlot);
+                if (oColor.has_value())
+                {
+                    aComplexColor = (*oColor).getComplexColor();
+                    aColor = aComplexColor.getFinalColor();
+                }
+            }
 
             SwEditWin& rEdtWin = GetView().GetEditWin();
             if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
