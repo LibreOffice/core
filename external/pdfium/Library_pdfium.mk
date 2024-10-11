@@ -473,7 +473,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_bitmapcomposer \
     UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_devicedriver \
     UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_imagerenderer \
-    UnpackedTarball/pdfium/core/fxge/cfx_cliprgn \
+    UnpackedTarball/pdfium/core/fxge/agg/cfx_agg_cliprgn \
     UnpackedTarball/pdfium/core/fxge/cfx_color \
     UnpackedTarball/pdfium/core/fxge/cfx_glyphcache \
     UnpackedTarball/pdfium/core/fxge/cfx_folderfontinfo \

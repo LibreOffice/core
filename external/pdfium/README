@@ -14,4 +14,5 @@ git archive --prefix=pdfium/ --format=tar origin/chromium/${version} > pdfium-${
 (cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/freetype/src/include/ pdfium/third_party/freetype/src/src/)
 (cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/abseil-cpp/absl/)
 (cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/build/build_config.h pdfium/build/buildflag.h)
+(cd ..; tar --append --file pdfium/pdfium-${version}.tar pdfium/third_party/fast_float/src/)
 bzip2 pdfium-${version}.tar
