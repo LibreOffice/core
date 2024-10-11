@@ -31,6 +31,7 @@
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -690,6 +691,18 @@ SET_ADJUST:
                             Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
                     break;
                     case SID_ATTR_CHAR_COLOR:
+                    case SID_ATTR_CHAR_BACK_COLOR:
+                    {
+                        const sal_uInt16 nEEWhich
+                            = aEditAttr.GetPool()->GetWhichIDFromSlotID(nSlot);
+                        const std::optional<NamedColor>& oColor
+                            = mpViewShell->GetDocSh()->GetRecentColor(nSlot);
+                        if (oColor.has_value())
+                        {
+                            const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                            aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                        }
+                    }
                     break;
 // #i35937# removed need for FN_NUM_BULLET_ON handling
                 }
