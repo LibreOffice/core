@@ -1979,7 +1979,7 @@ SfxVoidItem FreezePanes SID_WINDOW_FIX
 ]
 
 SfxPointItem FreezePanesColumn SID_WINDOW_FIX_COL
-
+(SfxInt32Item Index FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -1996,7 +1996,7 @@ SfxPointItem FreezePanesColumn SID_WINDOW_FIX_COL
 ]
 
 SfxPointItem FreezePanesRow SID_WINDOW_FIX_ROW
-
+(SfxInt32Item Index FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
