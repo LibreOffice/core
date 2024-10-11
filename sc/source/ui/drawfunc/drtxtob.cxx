@@ -23,6 +23,7 @@
 #include <i18nutil/transliteration.hxx>
 #include <editeng/adjustitem.hxx>
 #include <svx/clipfmtitem.hxx>
+#include <editeng/colritem.hxx>
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -48,6 +49,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/writingmodeitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -918,6 +920,19 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                     );
                 }
                 break;
+            case SID_ATTR_CHAR_COLOR:
+            case SID_ATTR_CHAR_BACK_COLOR:
+            {
+                const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
+                const std::optional<NamedColor>& oColor
+                    = mrViewData.GetDocShell()->GetRecentColor(nSlot);
+                if (oColor.has_value())
+                {
+                    const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                    aNewAttr.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                }
+                break;
+            }
         }
     }
 

@@ -48,6 +48,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/namedcolor.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -1028,11 +1029,23 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
 
         case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_BACK_COLOR:
             {
                 if (pArgs)
                 {
                     aSet.Put( pArgs->Get( pArgs->GetPool()->GetWhichIDFromSlotID( nSlot ) ) );
                     rBindings.Invalidate( nSlot );
+                }
+                else
+                {
+                    const sal_uInt16 nEEWhich = GetPool().GetWhichIDFromSlotID(nSlot);
+                    const std::optional<NamedColor>& oColor
+                        = rViewData.GetDocShell()->GetRecentColor(nSlot);
+                    if (oColor.has_value())
+                    {
+                        const model::ComplexColor& rCol = (*oColor).getComplexColor();
+                        aSet.Put(SvxColorItem(rCol.getFinalColor(), rCol, nEEWhich));
+                    }
                 }
             }
             break;
