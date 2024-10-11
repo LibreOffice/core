@@ -1827,6 +1827,7 @@ void TestFormula2::testExtRefConcat(ScDocument* pDoc, ScDocument& rExtDoc)
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefFunctions)
 {
+#ifndef DISABLE_NAN_TESTS
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName(u"file:///extdata.fake"_ustr);
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
@@ -1925,6 +1926,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefFunctions)
                            !findLoadedDocShellByName(aExtDocName));
 
     m_pDoc->DeleteTab(0);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRefUnresolved)
@@ -3173,6 +3175,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncSUMX2MY2)
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGCD)
 {
+#ifndef DISABLE_NAN_TESTS
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
     m_pDoc->InsertTab(0, u"GCDTest"_ustr);
@@ -3267,10 +3270,12 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGCD)
                                  u"#VALUE!"_ustr, aVal);
 
     m_pDoc->DeleteTab(0);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLCM)
 {
+#ifndef DISABLE_NAN_TESTS
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
 
     m_pDoc->InsertTab(0, u"LCMTest"_ustr);
@@ -3365,6 +3370,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncLCM)
                                  u"#VALUE!"_ustr, aVal);
 
     m_pDoc->DeleteTab(0);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncSUMSQ)

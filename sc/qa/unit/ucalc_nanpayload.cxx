@@ -16,10 +16,12 @@ class TestNanPayload : public ScUcalcTestBase
 
 CPPUNIT_TEST_FIXTURE(TestNanPayload, testNanPayload)
 {
+#ifndef DISABLE_NAN_TESTS
     // Some tests, such as testExternalRefFunctions, testFuncGCD, and testFuncGCD, evaluates
     // spreadsheet functions' error code, which need NaN payload feature of the hardware
     NanPayloadTest nanTest;
     CPPUNIT_ASSERT_MESSAGE(nanTest.getMessage(), nanTest.getIfSupported());
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

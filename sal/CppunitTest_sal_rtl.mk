@@ -71,4 +71,12 @@ ifeq ($(ENABLE_CIPHER_OPENSSL_BACKEND),TRUE)
 $(eval $(call gb_CppunitTest_add_defs,sal_rtl,-DLIBO_CIPHER_OPENSSL_BACKEND))
 endif
 
+# test_payloadNaN may fail on some arch(e.g. riscv64) that does not
+# support part of IEEE 754 voluntary standards
+ifeq ($(DISABLE_NAN_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,sal_rtl,\
+    -DDISABLE_NAN_TESTS \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

@@ -686,7 +686,9 @@ public:
     CPPUNIT_TEST(test_acosh);
     CPPUNIT_TEST(test_asinh);
     CPPUNIT_TEST(test_atanh);
+#ifndef DISABLE_NAN_TESTS
     CPPUNIT_TEST(test_payloadNaN);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 

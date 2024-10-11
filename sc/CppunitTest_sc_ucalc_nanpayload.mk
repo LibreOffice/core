@@ -11,4 +11,12 @@
 
 $(eval $(call sc_ucalc_test,_nanpayload))
 
+# some testes related to NaN payload may fail on some arch(e.g. riscv64)
+# that does not support part of IEEE 754 voluntary standards
+ifeq ($(DISABLE_NAN_TESTS),TRUE)
+$(eval $(call gb_CppunitTest_add_defs,sc_ucalc_nanpayload,\
+    -DDISABLE_NAN_TESTS \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

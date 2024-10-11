@@ -1895,6 +1895,11 @@ libo_FUZZ_ARG_ENABLE(cve-tests,
         [Prevent CVE tests to be executed]),
 ,)
 
+libo_FUZZ_ARG_ENABLE(nan-tests,
+    AS_HELP_STRING([--disable-nan-tests],
+        [Prevent NaN payload tests to be executed]),
+,)
+
 AC_ARG_ENABLE(build-opensymbol,
     AS_HELP_STRING([--enable-build-opensymbol],
         [Do not use the prebuilt opens___.ttf. Build it instead. This needs
@@ -11534,6 +11539,18 @@ if test "$enable_cve_tests" = "no"; then
     AC_MSG_RESULT([no])
     DISABLE_CVE_TESTS=TRUE
     AC_SUBST(DISABLE_CVE_TESTS)
+else
+    AC_MSG_RESULT([yes])
+fi
+
+dnl ===================================================================
+dnl Check for disabling nan_tests
+dnl ===================================================================
+AC_MSG_CHECKING([whether to execute NaN payload tests])
+if test "$enable_nan_tests" = "no"; then
+    AC_MSG_RESULT([no])
+    DISABLE_NAN_TESTS=TRUE
+    AC_SUBST(DISABLE_NAN_TESTS)
 else
     AC_MSG_RESULT([yes])
 fi
