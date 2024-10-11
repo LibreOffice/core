@@ -34,6 +34,7 @@ public:
 
     DECL_LINK(ButtonPressed, weld::Button&, void);
     DECL_LINK(StyleSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(OnEdChanged, weld::Entry&, void);
 
 private:
     void SetDescription(std::u16string_view rCondition);
@@ -52,6 +53,7 @@ private:
     std::unique_ptr<weld::Entry> mxNumberEntry;
     std::unique_ptr<weld::Entry> mxNumberEntry2;
     std::unique_ptr<weld::Container> mxAllInputs;
+    std::unique_ptr<weld::Label> mxWarningLabel;
     std::unique_ptr<formula::RefEdit> mxRangeEntry;
     std::unique_ptr<formula::RefButton> mxButtonRangeEdit;
     std::unique_ptr<weld::ComboBox> mxStyles;
