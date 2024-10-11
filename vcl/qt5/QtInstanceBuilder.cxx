@@ -73,10 +73,12 @@ std::unique_ptr<weld::Window> QtInstanceBuilder::create_screenshot_window()
     return nullptr;
 }
 
-std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString&)
+std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QWidget* pWidget = m_xBuilder->get<QWidget>(rId);
+    std::unique_ptr<weld::Widget> xRet(pWidget ? std::make_unique<QtInstanceWidget>(pWidget)
+                                               : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString&)
