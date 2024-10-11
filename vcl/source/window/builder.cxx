@@ -1085,18 +1085,6 @@ namespace
         return sActionName;
     }
 
-    bool extractVisible(VclBuilder::stringmap &rMap)
-    {
-        bool bRet = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"visible"_ustr);
-        if (aFind != rMap.end())
-        {
-            bRet = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bRet;
-    }
-
     Size extractSizeRequest(VclBuilder::stringmap &rMap)
     {
         OUString sWidthRequest(u"0"_ustr);
@@ -3781,6 +3769,20 @@ bool BuilderBase::hasOrientationVertical(VclBuilder::stringmap &rMap)
         rMap.erase(aFind);
     }
     return bVertical;
+}
+
+
+
+bool BuilderBase::extractVisible(VclBuilder::stringmap& rMap)
+{
+    bool bRet = false;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"visible"_ustr);
+    if (aFind != rMap.end())
+    {
+        bRet = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bRet;
 }
 
 void BuilderBase::collectProperty(xmlreader::XmlReader& reader, stringmap& rMap) const
