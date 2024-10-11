@@ -58,8 +58,9 @@ index a2a44df..8b5f4fc 100644
 +FXFTMMVarDeleter::FXFTMMVarDeleter(FXFT_FaceRec* face) : m_pFace(face) {}
  
  ScopedFXFTMMVar::ScopedFXFTMMVar(FXFT_FaceRec* face)
--    : variation_desc_(GetVariationDescriptor(face)) {}
-+    : variation_desc_(GetVariationDescriptor(face), FXFTMMVarDeleter(face)) {}
+-    : variation_desc_(GetVariationDescriptor(face)),
++    : variation_desc_(GetVariationDescriptor(face), FXFTMMVarDeleter(face)),
+       axis_(GetVariationAxis(variation_desc_.get())) {}
  
  ScopedFXFTMMVar::~ScopedFXFTMMVar() = default;
  
