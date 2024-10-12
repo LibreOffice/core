@@ -741,6 +741,7 @@ void SwLineRects::ConnectEdges( OutputDevice const *pOut, SwPaintProperties cons
                                                       SubColFlags::Tab);
                             if ( isFull() )
                             {
+                                assert(i > 0);
                                 --i;
                                 k = aCheck.size();
                                 break;
