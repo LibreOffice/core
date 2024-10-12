@@ -32,10 +32,12 @@ public:
     void testCRMDatabase();
     void testRegistrationName();
     uno::Reference<XConnection> setUpDBConnection();
+    void testQueryColumns();
 
     CPPUNIT_TEST_SUITE(CRMDBTest);
     CPPUNIT_TEST(testCRMDatabase);
     CPPUNIT_TEST(testRegistrationName);
+    CPPUNIT_TEST(testQueryColumns);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -132,6 +134,50 @@ void CRMDBTest::testRegistrationName()
         "Bibliography already exists",
         xDatabaseContext->registerObject(u"Bibliography"_ustr, xDataSource),
         container::ElementExistException);
+}
+
+void CRMDBTest::testQueryColumns()
+{
+    // Ported from dbaccess/Query.java
+    // Test prepared queries return the expected column names
+
+    createDBDocument(u"sdbc:embedded:hsqldb"_ustr);
+    uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
+    uno::Reference<XDataSource> xDataSource = xDocument->getDataSource();
+    CPPUNIT_ASSERT(xDataSource.is());
+
+    // Create queries before establishing connection to database
+    createQueries(xDataSource);
+
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    createTables(xConnection);
+
+    uno::Reference<XQueriesSupplier> xQuerySupplier(xConnection, UNO_QUERY_THROW);
+    uno::Reference<container::XNameAccess> xQueryAccess = xQuerySupplier->getQueries();
+    CPPUNIT_ASSERT(xQueryAccess->hasElements());
+
+    Sequence<OUString> queryNames{ u"parseable"_ustr, u"parseable native"_ustr };
+
+    Sequence<Sequence<OUString>> expectedColumnNames{
+        { u"ID"_ustr, u"NAME"_ustr, u"ADDRESS"_ustr, u"CITY"_ustr, u"POSTAL"_ustr,
+          u"COMMENT"_ustr },
+        { u"TABLE_CATALOG"_ustr, u"TABLE_SCHEMA"_ustr, u"TABLE_NAME"_ustr, u"VIEW_DEFINITION"_ustr,
+          u"CHECK_OPTION"_ustr, u"IS_UPDATABLE"_ustr, u"VALID"_ustr }
+    };
+
+    for (sal_uInt32 i = 0; i < queryNames.size(); ++i)
+    {
+        uno::Reference<sdbcx::XColumnsSupplier> xColumns(xQueryAccess->getByName(queryNames[i]),
+                                                         UNO_QUERY);
+        uno::Reference<container::XNameAccess> xColumnAccess(xColumns->getColumns());
+        CPPUNIT_ASSERT(xColumnAccess->hasElements());
+        Sequence<OUString> ColumnNames = xColumnAccess->getElementNames();
+
+        for (sal_uInt32 j = 0; j < expectedColumnNames[i].size(); ++j)
+        {
+            CPPUNIT_ASSERT_EQUAL(expectedColumnNames[i][j], ColumnNames[j]);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CRMDBTest);

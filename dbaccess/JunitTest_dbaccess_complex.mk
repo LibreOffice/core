@@ -38,7 +38,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,dbaccess_complex,\
     dbaccess/qa/complex/dbaccess/FileHelper \
     dbaccess/qa/complex/dbaccess/Parser \
     dbaccess/qa/complex/dbaccess/PropertyBag \
-    dbaccess/qa/complex/dbaccess/Query \
     dbaccess/qa/complex/dbaccess/QueryInQuery \
     dbaccess/qa/complex/dbaccess/RowSet \
     dbaccess/qa/complex/dbaccess/RowSetEventListener \
