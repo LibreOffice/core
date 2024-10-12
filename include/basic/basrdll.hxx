@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_BASIC_BASRDLL_HXX
-#define INCLUDED_BASIC_BASRDLL_HXX
+#pragma once
 
 #include <basic/basicdllapi.h>
 #include <tools/ref.hxx>
@@ -37,7 +35,5 @@ public:
     static void EnableBreak(bool bEnable);
     static void SetDebugMode(bool bDebugMode);
 };
-
-#endif // INCLUDED_BASIC_BASRDLL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

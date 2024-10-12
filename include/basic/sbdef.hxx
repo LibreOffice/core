@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_BASIC_SBDEF_HXX
-#define INCLUDED_BASIC_SBDEF_HXX
+#pragma once
 
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
@@ -73,7 +71,5 @@ enum class PropertyMode
 BASIC_DLLPUBLIC extern std::pair<TranslateId, ErrCode> const RID_BASIC_START[];
 BASIC_DLLPUBLIC std::locale BasResLocale();
 OUString BasResId(TranslateId pId);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,8 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_BASIC_BASICDLLAPI_H
-#define INCLUDED_BASIC_BASICDLLAPI_H
+#pragma once
 
 #include <sal/types.h>
 
@@ -17,7 +16,5 @@
 #define BASIC_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 #define BASIC_DLLPRIVATE SAL_DLLPRIVATE
-
-#endif // INCLUDED_BASIC_BASICDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
