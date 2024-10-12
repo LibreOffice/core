@@ -6691,12 +6691,15 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                             break;
                         FormulaToken* pLHS = *(ppTok - 1);
                         FormulaToken* pRHS = *(ppTok - 2);
-                        StackVar lhsType = pLHS->GetType();
-                        StackVar rhsType = pRHS->GetType();
-                        if (lhsType == svDoubleRef && rhsType == svDoubleRef)
+                        if (pLHS && pRHS)
                         {
-                            pLHS->GetDoubleRef()->SetTrimToData(true);
-                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                            StackVar lhsType = pLHS->GetType();
+                            StackVar rhsType = pRHS->GetType();
+                            if (lhsType == svDoubleRef && rhsType == svDoubleRef)
+                            {
+                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                            }
                         }
                     }
                     break;
@@ -6714,8 +6717,6 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                 case ocOr:
                 case ocXor:
                 case ocIntersect:
-                case ocUnion:
-                case ocRange:
                     {
                         // tdf#160616: Double refs with these operators only
                         // trimmable in case of one parameter
@@ -6723,15 +6724,18 @@ void ScCompiler::AnnotateTrimOnDoubleRefs()
                             break;
                         FormulaToken* pLHS = *(ppTok - 1);
                         FormulaToken* pRHS = *(ppTok - 2);
-                        StackVar lhsType = pLHS->GetType();
-                        StackVar rhsType = pRHS->GetType();
-                        if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDoubleRef))
+                        if (pLHS && pRHS)
                         {
-                            pLHS->GetDoubleRef()->SetTrimToData(true);
-                        }
-                        if (rhsType == svDoubleRef && (lhsType == svSingleRef || lhsType == svDoubleRef))
-                        {
-                            pRHS->GetDoubleRef()->SetTrimToData(true);
+                            StackVar lhsType = pLHS->GetType();
+                            StackVar rhsType = pRHS->GetType();
+                            if (lhsType == svDoubleRef && (rhsType == svSingleRef || rhsType == svDoubleRef))
+                            {
+                                pLHS->GetDoubleRef()->SetTrimToData(true);
+                            }
+                            if (rhsType == svDoubleRef && (lhsType == svSingleRef || lhsType == svDoubleRef))
+                            {
+                                pRHS->GetDoubleRef()->SetTrimToData(true);
+                            }
                         }
                     }
                     break;
