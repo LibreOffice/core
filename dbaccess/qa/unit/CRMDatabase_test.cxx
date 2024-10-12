@@ -31,6 +31,7 @@ class CRMDBTest : public DBTestBase
 public:
     void testCRMDatabase();
     void testRegistrationName();
+    uno::Reference<XConnection> setUpDBConnection();
 
     CPPUNIT_TEST_SUITE(CRMDBTest);
     CPPUNIT_TEST(testCRMDatabase);
@@ -38,7 +39,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void CRMDBTest::testCRMDatabase()
+uno::Reference<XConnection> CRMDBTest::setUpDBConnection()
 {
     createDBDocument(u"sdbc:embedded:hsqldb"_ustr);
     uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
@@ -49,6 +50,12 @@ void CRMDBTest::testCRMDatabase()
     createQueries(xDataSource);
 
     uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    return xConnection;
+}
+
+void CRMDBTest::testCRMDatabase()
+{
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
     createTables(xConnection);
 
     // test selection
