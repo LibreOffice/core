@@ -21,6 +21,7 @@ $(eval $(call gb_Module_Module,filter))
 $(eval $(call gb_Module_add_targets,filter,\
 	Configuration_filter \
 	CustomTarget_svg \
+	CustomTarget_docbook \
 	Library_filterconfig \
     Library_icg \
 	Library_msfilter \

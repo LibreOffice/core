@@ -16,10 +16,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Package_Package,filter_docbook,$(SRCDIR)/filter/source/docbook))
+$(eval $(call gb_Package_Package,filter_docbook,$(gb_CustomTarget_workdir)/filter/source/docbook))
 
 $(eval $(call gb_Package_add_files,filter_docbook,$(LIBO_SHARE_FOLDER)/xslt/docbook,\
-	DocBookTemplate.stw \
+	DocBookTemplate.ott \
 	docbooktosoffheadings.xsl \
 	sofftodocbookheadings.xsl \
 ))

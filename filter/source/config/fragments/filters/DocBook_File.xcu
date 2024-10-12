@@ -22,7 +22,7 @@
         <prop oor:name="UIComponent"/>
         <prop oor:name="UserData"><value oor:separator=",">com.sun.star.documentconversion.XSLTFilter,,com.sun.star.comp.Writer.XMLImporter,com.sun.star.comp.Writer.XMLExporter,../$(share_subdir_name)/xslt/docbook/docbooktosoffheadings.xsl,../$(share_subdir_name)/xslt/docbook/sofftodocbookheadings.xsl</value></prop>
         <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
-        <prop oor:name="TemplateName"><value>../$(share_subdir_name)/xslt/docbook/DocBookTemplate.stw</value></prop>
+        <prop oor:name="TemplateName"><value>../$(share_subdir_name)/xslt/docbook/DocBookTemplate.ott</value></prop>
         <prop oor:name="UIName">
             <value xml:lang="en-US">DocBook</value>
         </prop>
