@@ -2875,6 +2875,8 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
             ePresObjKind == PresObjKind::Notes   ||
             ePresObjKind == PresObjKind::Text)
         {
+            sd::ModifyGuard aGuard(static_cast<SdDrawDocument*>(&getSdrModelFromSdrPage()));
+
             OUString aString( GetPresObjText(ePresObjKind) );
 
             if (!aString.isEmpty())

@@ -783,11 +783,20 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
     SdrTextObj* xObj = GetTextEditObject();
 
     bool bDefaultTextRestored = RestoreDefaultText( xObj );
+    const bool bSaveSetModifiedEnabled = mpDocSh && mpDocSh->IsEnableSetModified();
+    if (bDefaultTextRestored)
+    {
+        if (bSaveSetModifiedEnabled)
+            mpDocSh->EnableSetModified(false);
+    }
 
     SdrEndTextEditKind eKind = FmFormView::SdrEndTextEdit(bDontDeleteReally);
 
     if( bDefaultTextRestored )
     {
+        if (bSaveSetModifiedEnabled)
+            mpDocSh->EnableSetModified();
+
         if( xObj && !xObj->IsEmptyPresObj() )
         {
             xObj->SetEmptyPresObj( true );
