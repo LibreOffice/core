@@ -1078,7 +1078,9 @@ void SwFEShell::SelectionToBottom( bool bBottom )
                     = pFormat->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel())
                     if (auto pPage = pDrwModel->GetPage(0))
                     {
-                        const auto pNextObj = pPage->SetObjectOrdNum(pObj->GetOrdNum() - 1, pObj->GetOrdNum() - 1);
+                        sal_uInt32 nOrdNum = pObj->GetOrdNum();
+                        assert(nOrdNum > 0);
+                        const auto pNextObj = pPage->SetObjectOrdNum(nOrdNum - 1, nOrdNum - 1);
                         // If there is a lower object (not null)...
                         if (pNextObj)
                         {
