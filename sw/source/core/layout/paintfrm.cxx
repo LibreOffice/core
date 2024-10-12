@@ -1028,7 +1028,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *pOut );
 
     // Remove all help line that are almost covered (tables)
-    for (size_type i = 0; i != m_aLineRects.size(); ++i)
+    for (sal_Int32 i = 0; i != static_cast<sal_Int32>(m_aLineRects.size()); ++i)
     {
         SwLineRect& rLi = m_aLineRects[i];
         const bool bVerticalSubs = rLi.Height() > rLi.Width();
