@@ -446,6 +446,8 @@ static bool lcl_MergeGCLine(SwTableLine* pLn, GCLinePara* pGCPara)
         {
             if( !lcl_MergeGCBox( pLn->GetTabBoxes()[nLen], pGCPara ))
             {
+                if (nLen == 0)
+                    break;
                 --nLen;
                 continue;
             }
