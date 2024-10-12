@@ -2800,7 +2800,7 @@ void SwTextNode::EraseText(const SwContentIndex &rIdx, const sal_Int32 nCount,
     // GCAttr(); don't remove all empty ones, just the ones that are in the
     // range but not at the end of the range.
 
-    for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( sal_Int32 i = 0; m_pSwpHints && i < static_cast<sal_Int32>(m_pSwpHints->Count()); ++i )
     {
         SwTextAttr *pHt = m_pSwpHints->Get(i);
 
