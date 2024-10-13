@@ -512,6 +512,8 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
 
             if( !pArgs )
             {
+                SvxAdjust eAdjst;
+                SdrTextHorzAdjust eAnchor;
                 switch ( nSlot )
                 {
                     case SID_ATTR_CHAR_WEIGHT:
@@ -601,26 +603,25 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                     }
                     break;
 
-                    case SID_ATTR_PARA_ADJUST_LEFT:
+                    case SID_ATTR_PARA_ADJUST_LEFT:  eAdjst = SvxAdjust::Left;  eAnchor = SDRTEXTHORZADJUST_LEFT;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_CENTER:  eAdjst = SvxAdjust::Center;  eAnchor = SDRTEXTHORZADJUST_CENTER;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_RIGHT:  eAdjst = SvxAdjust::Right;  eAnchor = SDRTEXTHORZADJUST_RIGHT;  goto SET_ADJUST;
+                    case SID_ATTR_PARA_ADJUST_BLOCK:  eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_BLOCK;  goto SET_ADJUST;
+SET_ADJUST:
                     {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
+                        aNewAttr.Put(SvxAdjustItem(eAdjst, EE_PARA_JUST));
+                        // set anchor
+                        ESelection aSel = pOLV->GetSelection();
+                        aSel.Adjust();
+                        sal_Int32 nStartPara = aSel.nStartPara;
+                        if (!aSel.HasRange())
+                            nStartPara = 0;
+
+                        if (nStartPara == 0)
+                            aNewAttr.Put(SdrTextHorzAdjustItem(eAnchor));
                     }
                     break;
-                    case SID_ATTR_PARA_ADJUST_CENTER:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
-                    }
-                    break;
-                    case SID_ATTR_PARA_ADJUST_RIGHT:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-                    }
-                    break;
-                    case SID_ATTR_PARA_ADJUST_BLOCK:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
-                    }
-                    break;
+
                     case SID_ATTR_PARA_LINESPACE_10:
                     {
                         SvxLineSpacingItem aItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL );
@@ -746,29 +747,32 @@ void TextObjectBar::ExecuteImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxR
                 nSlot == SID_ATTR_PARA_ADJUST_RIGHT ||
                 nSlot == SID_ATTR_PARA_ADJUST_BLOCK)
             {
-                switch( nSlot )
-                {
-                case SID_ATTR_PARA_ADJUST_LEFT:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Left, EE_PARA_JUST ) );
-                    }
-                    break;
-                case SID_ATTR_PARA_ADJUST_CENTER:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Center, EE_PARA_JUST ) );
-                    }
-                    break;
-                case SID_ATTR_PARA_ADJUST_RIGHT:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Right, EE_PARA_JUST ) );
-                    }
-                    break;
-                case SID_ATTR_PARA_ADJUST_BLOCK:
-                    {
-                        aNewAttr.Put( SvxAdjustItem( SvxAdjust::Block, EE_PARA_JUST ) );
-                    }
-                    break;
+                SvxAdjust eAdjst;
+                SdrTextHorzAdjust eAnchor;
+                if (nSlot == SID_ATTR_PARA_ADJUST_LEFT) {
+                    eAdjst = SvxAdjust::Left;  eAnchor = SDRTEXTHORZADJUST_LEFT;
                 }
+                else if (nSlot == SID_ATTR_PARA_ADJUST_CENTER) {
+                    eAdjst = SvxAdjust::Center;  eAnchor = SDRTEXTHORZADJUST_CENTER;
+                }
+                else if (nSlot == SID_ATTR_PARA_ADJUST_RIGHT) {
+                    eAdjst = SvxAdjust::Right;  eAnchor = SDRTEXTHORZADJUST_RIGHT;
+                }
+                else {
+                    eAdjst = SvxAdjust::Block;  eAnchor = SDRTEXTHORZADJUST_BLOCK;
+                }
+
+                aNewAttr.Put(SvxAdjustItem(eAdjst, EE_PARA_JUST));
+                // set anchor
+                ESelection aSel = pOLV->GetSelection();
+                aSel.Adjust();
+                sal_Int32 nStartPara = aSel.nStartPara;
+                if (!aSel.HasRange())
+                    nStartPara = 0;
+
+                if (nStartPara == 0)
+                    aNewAttr.Put(SdrTextHorzAdjustItem(eAnchor));
+
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
             }

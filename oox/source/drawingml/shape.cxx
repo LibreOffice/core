@@ -75,6 +75,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -614,6 +615,16 @@ static SdrTextHorzAdjust lcl_convertAdjust( ParagraphAdjust eAdjust )
     else if (eAdjust == ParagraphAdjust_CENTER)
         return SDRTEXTHORZADJUST_CENTER;
     return SDRTEXTHORZADJUST_LEFT;
+}
+
+static TextHorizontalAdjust lcl_convertTextAdjust(ParagraphAdjust eAdjust)
+{
+    if (eAdjust == ParagraphAdjust_LEFT)
+        return drawing::TextHorizontalAdjust_LEFT;
+    else if (eAdjust == ParagraphAdjust_RIGHT)
+        return drawing::TextHorizontalAdjust_RIGHT;
+    else
+        return drawing::TextHorizontalAdjust_BLOCK;
 }
 
 // LO does not interpret properties in styles belonging to the text content of a FontWork shape,
@@ -1505,6 +1516,35 @@ Reference< XShape > const & Shape::createAndInsert(
                     }
                     mpTextBody->getTextProperties().maPropertyMap.setProperty(
                         PROP_TextVerticalAdjust, mpTextBody->getTextProperties().meVA);
+                }
+            }
+
+            // tdf#162571: In case of shapes with TextAutoGrowHeight, PP calculates/grow the
+            // shapes size in edit mode (typing) based on the text horizontal alignment.
+            // In LO, we simulate it by setting TextHorizontalAdjust based on the ParagraphAdjust
+            // of the 1. paragraph
+            // It is not perfect, because we have 1 TextHorizontalAdjust / 1 shape,
+            // while we can have many ParagraphAdjust / 1 shape
+            if (!mpTextBody->getTextProperties().maPropertyMap.hasProperty(PROP_WritingMode)
+                && mpTextBody->getParagraphs().size() > 0)
+            {
+                std::optional<css::style::ParagraphAdjust>& oParaAdjust
+                    = mpTextBody->getParagraphs()[0]->getProperties().getParaAdjust();
+
+                bool bAutoHeight = false;
+                Reference< XPropertySetInfo > xSetInfo(xSet->getPropertySetInfo());
+                const OUString& rPropName = PropertyMap::getPropertyName(PROP_TextAutoGrowHeight);
+                if (xSetInfo.is() && xSetInfo->hasPropertyByName(rPropName))
+                {
+                    uno::Any aTextAutoGrowHeight = xSet->getPropertyValue(u"TextAutoGrowHeight"_ustr);
+                    aTextAutoGrowHeight >>= bAutoHeight;
+                }
+
+                if (bAutoHeight && nShapeRotateInclCamera == 0)
+                {
+                    mpTextBody->getTextProperties().maPropertyMap.setProperty(
+                        PROP_TextHorizontalAdjust, lcl_convertTextAdjust(
+                            oParaAdjust ? *oParaAdjust : ParagraphAdjust_LEFT));
                 }
             }
 
