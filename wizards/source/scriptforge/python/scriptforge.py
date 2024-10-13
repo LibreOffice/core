@@ -108,6 +108,7 @@ class ScriptForge(object, metaclass = _Singleton):
     hostname = ''
     port = 0
     pipe = ''
+    outsideprocess = False
 
     componentcontext = None  # com.sun.star.uno.XComponentContext
     scriptprovider = None   # com.sun.star.script.provider.XScriptProvider
@@ -162,6 +163,7 @@ class ScriptForge(object, metaclass = _Singleton):
         # Determine main pyuno entry points
         ScriptForge.componentcontext = self.ConnectToLOProcess(hostname, port, pipe)
                                 # com.sun.star.uno.XComponentContext
+        ScriptForge.outsideprocess = (port > 0 and len(hostname) > 0) or len(pipe) > 0
         ScriptForge.scriptprovider = self.ScriptProvider(ScriptForge.componentcontext)  # ...script.provider.XScriptProvider
         #
         # Establish a list of the available services as a dictionary (servicename, serviceclass)
@@ -1114,8 +1116,8 @@ class SFScriptForge:
             apso = 'apso.python.script.organizer'
             if len(ext.getPackageLocation(apso)) > 0:
                 # APSO is available. However, PythonShell() is ignored in bridge mode
-                # because APSO library not in pythonpath
-                if ScriptForge.port > 0:
+                # because APSO library is not in pythonpath
+                if ScriptForge.outsideprocess:
                     return None
                 # Directly derived from apso.oxt|python|scripts|tools.py$console
                 # we need to load apso before import statement
@@ -2195,8 +2197,7 @@ class SFDialogs:
                 Transform positional and keyword arguments into positional only
                 Add the XComponentContext as last argument
                 """
-            outsideprocess = len(ScriptForge.hostname) > 0 and ScriptForge.port > 0
-            if outsideprocess:
+            if ScriptForge.outsideprocess:
                 return dialogname, place, ScriptForge.componentcontext
             else:
                 return dialogname, place
@@ -2367,8 +2368,8 @@ class SFDocuments:
             # Exclude Base and Math
             doctype = self.DocumentType
             if doctype in ('Calc', 'Writer', 'FormDocument', 'Draw', 'Impress'):
-                # XStyles() DOES NOT WORK through the socket bridge ?!? Works normally in direct mode.
-                if ScriptForge.port > 0:
+                # XStyles() DOES NOT WORK in bridged mode ?!? Works normally in direct mode.
+                if ScriptForge.outsideprocess:
                     return None
                 return self.ExecMethod(self.vbMethod + self.flgUno, 'XStyle', family, stylename)
             raise RuntimeError('The \'XStyle\' method is not applicable to {0} documents'.format(doctype))
