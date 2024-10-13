@@ -1333,6 +1333,10 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.attribute("orientation", aFont.GetOrientation().get());
                 rWriter.attribute("weight", convertFontWeightToString(aFont.GetWeight()));
                 rWriter.attribute("vertical", aFont.IsVertical() ? "true" : "false");
+                rWriter.attribute("emphasis", aFont.GetEmphasisMark() != FontEmphasisMark::NONE ? "true" : "false");
+                rWriter.attribute("shadow", aFont.IsShadow() ? "true" : "false");
+                rWriter.attribute("wordunderline", aFont.IsWordLineMode() ? "true" : "false");
+                rWriter.attribute("outline", aFont.IsOutline() ? "true" : "false");
 
                 rWriter.endElement();
             }
