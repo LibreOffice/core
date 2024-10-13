@@ -833,27 +833,35 @@ def mapStorageType2PackageContext( storageType ):
         ret = "user"
     return ret
 
-def getPackageName2PathMap( sfa, storageType ):
+def getPackageName2PathMap(sfa, storageType):
     ret = {}
-    packageManagerFactory = uno.getComponentContext().getValueByName(
-        "/singletons/com.sun.star.deployment.thePackageManagerFactory" )
-    packageManager = packageManagerFactory.getPackageManager(
-        mapStorageType2PackageContext(storageType))
-#    packageManager.addModifyListener( ModifyListener() )
-    log.debug( "pythonscript: getPackageName2PathMap start getDeployedPackages" )
-    packages = packageManager.getDeployedPackages(
-        packageManager.createAbortChannel(), CommandEnvironment( ) )
-    log.debug( "pythonscript: getPackageName2PathMap end getDeployedPackages (" + str(len(packages))+")" )
 
-    for i in packages:
-        log.debug( "inspecting package " + i.Name + "("+i.Identifier.Value+")" )
-        transientPathElement = penultimateElement( i.URL )
-        j = expandUri( i.URL )
-        paths = getPathsFromPackage( j, sfa )
-        if len( paths ) > 0:
+    ext_mgr = uno.getComponentContext().getValueByName(
+        "/singletons/com.sun.star.deployment.ExtensionManager"
+    )
+
+    log.debug("pythonscript: getPackageName2PathMap start getDeployedPackages")
+    packages = ext_mgr.getDeployedExtensions(
+        mapStorageType2PackageContext(storageType),
+        ext_mgr.createAbortChannel(),
+        CommandEnvironment(),
+    )
+
+    log.debug(
+        "pythonscript: getPackageName2PathMap end getDeployedPackages ("
+        + str(len(packages))
+        + ")"
+    )
+
+    for pkg in packages:
+        log.debug("inspecting package " + pkg.Name + "(" + pkg.Identifier.Value + ")")  # type: ignore
+        transientPathElement = penultimateElement(pkg.URL)  # type: ignore
+        exp_uri = expandUri(pkg.URL)  # type: ignore
+        paths = getPathsFromPackage(exp_uri, sfa)
+        if len(paths) > 0:
             # map package name to url, we need this later
-            log.debug( "adding Package " + transientPathElement + " " + str( paths ) )
-            ret[ lastElement( j ) ] = Package( paths, transientPathElement )
+            log.debug("adding Package " + transientPathElement + " " + str(paths))
+            ret[lastElement(exp_uri)] = Package(paths, transientPathElement)
     return ret
 
 def penultimateElement( aStr ):
