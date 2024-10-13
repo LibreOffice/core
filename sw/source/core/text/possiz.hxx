@@ -37,7 +37,7 @@ public:
         , m_nHeight(SwTwips(rSize.Height()))
     {
     }
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
     virtual ~SwPosSize() COVERITY_NOEXCEPT_FALSE {}
 #else
     virtual ~SwPosSize() {}

@@ -985,7 +985,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         const EditPosition& rPos )
     : aAttrSet( rPool, pWhichRange )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
-#if !defined(__COVERITY__)
+#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
     // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
 #endif
@@ -1001,7 +1001,7 @@ SvxRTFItemStackType::SvxRTFItemStackType(
         bool const bCopyAttr )
     : aAttrSet( *rCpy.aAttrSet.GetPool(), rCpy.aAttrSet.GetRanges() )
     , mxStartNodeIdx(rPos.MakeNodeIdx())
-#if !defined(__COVERITY__)
+#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
     // coverity 2020 has difficulty wrt std::optional leading to bogus 'Uninitialized scalar variable'
     , mxEndNodeIdx(mxStartNodeIdx)
 #endif

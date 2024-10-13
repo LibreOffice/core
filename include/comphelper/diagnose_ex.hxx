@@ -37,7 +37,7 @@ COMPHELPER_DLLPUBLIC void DbgUnhandledException(const css::uno::Any& caughtExcep
 //floods coverity with warnings
 inline css::uno::Any DbgGetCaughtException()
 {
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
     try
     {
         return ::cppu::getCaughtException();

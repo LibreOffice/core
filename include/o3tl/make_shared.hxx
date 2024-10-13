@@ -32,7 +32,7 @@ template <typename T> std::shared_ptr<T> make_shared_array(size_t const size)
 */
 template <class T, class... Args> std::shared_ptr<T> make_shared(Args&&... args)
 {
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
     return std::shared_ptr<T>(new T(std::forward<Args>(args)...), o3tl::default_delete<T>());
 #else
     return std::make_shared<T>(std::forward<Args>(args)...);

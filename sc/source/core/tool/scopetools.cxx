@@ -86,7 +86,7 @@ DelayStartListeningFormulaCells::DelayStartListeningFormulaCells(ScColumn& colum
 
 DelayStartListeningFormulaCells::~DelayStartListeningFormulaCells()
 {
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
     try
     {
         mColumn.GetDoc().EnableDelayStartListeningFormulaCells(&mColumn, mbOldValue);

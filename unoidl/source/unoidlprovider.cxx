@@ -534,7 +534,7 @@ sal_uInt32 findInMap(
     return off;
 }
 
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
 extern "C" void __coverity_tainted_data_sanitize__(void *);
 #endif
 
@@ -545,7 +545,7 @@ std::vector< OUString > readAnnotations(
     std::vector< OUString > ans;
     if (annotated) {
         sal_uInt32 n = file->read32(offset);
-#if defined(__COVERITY__)
+#if defined(__COVERITY__) && __COVERITY_MAJOR__ <= 2023
         __coverity_tainted_data_sanitize__(&n);
 #endif
         offset += 4;
