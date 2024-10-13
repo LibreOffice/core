@@ -18,7 +18,7 @@ using namespace dbahsql;
 
 namespace
 {
-constexpr std::size_t operator"" _z(unsigned long long n) { return n; }
+constexpr std::size_t operator""_z(unsigned long long n) { return n; }
 
 const ColumnDefinition* lcl_findByType(const std::vector<ColumnDefinition>& columns,
                                        sal_Int32 nType)
