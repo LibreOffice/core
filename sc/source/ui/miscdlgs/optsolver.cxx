@@ -1238,7 +1238,11 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             ScDocFunc &rFunc = mpDocShell->GetDocFunc();
             rFunc.InsertTable(mnCurTab + 1, sNewTabName, false, false);
             SCTAB nReportTab;
-            mrDoc.GetTable(sNewTabName, nReportTab);
+            if (!mrDoc.GetTable(sNewTabName, nReportTab))
+            {
+                SAL_WARN("sc", "Could not get the just inserted table!");
+                return false;
+            }
 
             // Used to input data in the new sheet
             ScAddress aOutputAddress(0, 0, nReportTab);
