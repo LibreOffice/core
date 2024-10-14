@@ -4104,6 +4104,7 @@ void SwContentTree::ExecCommand(std::u16string_view rCmd, bool bOutlineWithChild
                     return false;
                 });
             }
+            UpdateContentFunctionsToolbar();
         }
         else
         {

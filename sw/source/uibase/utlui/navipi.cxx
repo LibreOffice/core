@@ -679,6 +679,7 @@ void SwNavigationPI::UpdateContentFunctionsToolbar()
         eContentTypeId = pContentType->GetType();
         if (eContentTypeId == ContentTypeId::OUTLINE)
         {
+            // todo: make buttons sensitive to movability (think position and protection)
             m_xHeadingsContentFunctionsToolbar->show();
         }
         else if (m_xContentTree->IsSelectedEntryCurrentDocCursorPosition(*xEntry))
