@@ -108,7 +108,7 @@ class ScriptForge(object, metaclass = _Singleton):
     hostname = ''
     port = 0
     pipe = ''
-    outsideprocess = False
+    remoteprocess = False
 
     componentcontext = None  # com.sun.star.uno.XComponentContext
     scriptprovider = None   # com.sun.star.script.provider.XScriptProvider
@@ -163,7 +163,7 @@ class ScriptForge(object, metaclass = _Singleton):
         # Determine main pyuno entry points
         ScriptForge.componentcontext = self.ConnectToLOProcess(hostname, port, pipe)
                                 # com.sun.star.uno.XComponentContext
-        ScriptForge.outsideprocess = (port > 0 and len(hostname) > 0) or len(pipe) > 0
+        ScriptForge.remoteprocess = (port > 0 and len(hostname) > 0) or len(pipe) > 0
         ScriptForge.scriptprovider = self.ScriptProvider(ScriptForge.componentcontext)  # ...script.provider.XScriptProvider
         #
         # Establish a list of the available services as a dictionary (servicename, serviceclass)
@@ -1101,12 +1101,14 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'DebugPrint', param)
 
         @classmethod
-        def PythonShell(cls, variables = None):
+        def PythonShell(cls, variables = None, background = 0xFDF6E3, foreground = 0x657B83):
             """
                 Open an APSO python shell window - Thanks to its authors Hanya/Tsutomu Uchino/Hubert Lambert
                 :param variables: Typical use
                                         PythonShell.({**globals(), **locals()})
                                   to push the global and local dictionaries to the shell window
+                :param background: background color as an int
+                :param foreground: foreground color as an int
                 """
             if variables is None:
                 variables = locals()
@@ -1117,7 +1119,7 @@ class SFScriptForge:
             if len(ext.getPackageLocation(apso)) > 0:
                 # APSO is available. However, PythonShell() is ignored in bridge mode
                 # because APSO library is not in pythonpath
-                if ScriptForge.outsideprocess:
+                if ScriptForge.remoteprocess:
                     return None
                 # Directly derived from apso.oxt|python|scripts|tools.py$console
                 # we need to load apso before import statement
@@ -1126,7 +1128,7 @@ class SFScriptForge:
                 from apso_utils import console
                 kwargs = {'loc': variables}
                 kwargs['loc'].setdefault('XSCRIPTCONTEXT', uno)
-                console(**kwargs)
+                console(BACKGROUND = background, FOREGROUND = foreground, **kwargs)
                 # An interprocess call is necessary to allow a redirection of STDOUT and STDERR by APSO
                 #   Choice is a minimalist call to a Basic routine: no arguments, a few lines of code
                 SFScriptForge.SF_Basic.GetGuiType()
@@ -2197,7 +2199,7 @@ class SFDialogs:
                 Transform positional and keyword arguments into positional only
                 Add the XComponentContext as last argument
                 """
-            if ScriptForge.outsideprocess:
+            if ScriptForge.remoteprocess:
                 return dialogname, place, ScriptForge.componentcontext
             else:
                 return dialogname, place
@@ -2369,7 +2371,7 @@ class SFDocuments:
             doctype = self.DocumentType
             if doctype in ('Calc', 'Writer', 'FormDocument', 'Draw', 'Impress'):
                 # XStyles() DOES NOT WORK in bridged mode ?!? Works normally in direct mode.
-                if ScriptForge.outsideprocess:
+                if ScriptForge.remoteprocess:
                     return None
                 return self.ExecMethod(self.vbMethod + self.flgUno, 'XStyle', family, stylename)
             raise RuntimeError('The \'XStyle\' method is not applicable to {0} documents'.format(doctype))

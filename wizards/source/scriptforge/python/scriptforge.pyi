@@ -837,7 +837,10 @@ class SFScriptForge:
             ...
 
         @classmethod
-        def PythonShell(cls, variables: dict = ...) -> None:
+        def PythonShell(cls, variables: dict = ...,
+                        background: int = ...,
+                        foreground: int = ...
+                        ) -> None:
             """
                 Opens an APSO Python shell as a non-modal window.
                 The Python script keeps running after the shell is opened.
@@ -847,7 +850,13 @@ class SFScriptForge:
                         passed on to the APSO Python shell. By default, all local variables are passed using
                         Python's builtin ``locals()`` function.
 
-                        Typical use: ``{**globals(), **locals()}``
+                        ``background``: the background color of the window as an integer value. Usually given
+                        as a hexadecimal value, like 0xFFFFFF, or as the output of the ``basic.RGB()`` method.
+
+                        ``foreground``: the foreground color of the window as an integer value.
+                    Note
+                        Typical use
+                            ``exc.PythonShell({**globals(), **locals()}, background = 0x0, foregound = 0xFFFFFF)``
                 """
             ...
 
@@ -5788,7 +5797,7 @@ class SFDocuments:
 
         def RemoveDuplicates(self,
                              range: RANGE,
-                             columns: Union[int | Sequence[int]],
+                             columns: Union[int, Sequence[int]],
                              header: bool = ...,
                              casesensitive: bool = ...,
                              mode: Literal["CLEAR", "COMPACT"] = ...,
