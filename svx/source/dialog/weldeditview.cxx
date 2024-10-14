@@ -1571,7 +1571,7 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     EnableRTL(false);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    Color aBgColor = rStyleSettings.GetWindowColor();
+    Color aBgColor = rStyleSettings.GetFieldColor();
 
     OutputDevice& rDevice = pDrawingArea->get_ref_device();
 
