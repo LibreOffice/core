@@ -353,7 +353,8 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
 
 
 void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream,
-                                                const uno::Reference< io::XStream >& xCachedVisualRepresentation )
+                                                const uno::Reference< io::XStream >& xCachedVisualRepresentation,
+                                                osl::ResettableMutexGuard& rGuard )
 {
     OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!" );
 
@@ -433,7 +434,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     xTempOutStream->writeBytes( aData );
 
     // get the size
-    awt::Size aSize = getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+    awt::Size aSize = getVisualAreaSize_impl(embed::Aspects::MSOLE_CONTENT, rGuard);
     sal_Int32 nIndex = 0;
 
     // write width
@@ -1223,7 +1224,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                 }
             }
 
-            InsertVisualCache_Impl( xTargetStream, xCachedVisualRepresentation );
+            InsertVisualCache_Impl(xTargetStream, xCachedVisualRepresentation, rGuard);
         }
         else
         {
@@ -1600,7 +1601,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         {
             // the call will cache the size in case of success
             // probably it might need to be done earlier, while the object is in active state
-            getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+            getVisualAreaSize_impl(embed::Aspects::MSOLE_CONTENT, aGuard);
         }
         catch( const uno::Exception& )
         {}
@@ -1750,7 +1751,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         {
             // the m_xCachedVisualRepresentation must be set or it should be already stored
             if ( m_xCachedVisualRepresentation.is() )
-                InsertVisualCache_Impl( m_xObjectStream, m_xCachedVisualRepresentation );
+                InsertVisualCache_Impl(m_xObjectStream, m_xCachedVisualRepresentation, aGuard);
             else
             {
                 m_xCachedVisualRepresentation = TryToRetrieveCachedVisualRepresentation_Impl( m_xObjectStream, aGuard );
@@ -1775,7 +1776,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
         {
             // the call will cache the size in case of success
             // probably it might need to be done earlier, while the object is in active state
-            getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+            getVisualAreaSize_impl(embed::Aspects::MSOLE_CONTENT, aGuard);
         }
         catch( const uno::Exception& )
         {}

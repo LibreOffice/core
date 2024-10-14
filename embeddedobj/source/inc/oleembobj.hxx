@@ -258,7 +258,8 @@ protected:
     /// @throws css::uno::Exception
     void InsertVisualCache_Impl(
             const css::uno::Reference< css::io::XStream >& xTargetStream,
-            const css::uno::Reference< css::io::XStream >& xCachedVisualRepresentation );
+            const css::uno::Reference< css::io::XStream >& xCachedVisualRepresentation,
+            osl::ResettableMutexGuard& rGuard);
 
     /// @throws css::uno::Exception
     void RemoveVisualCache_Impl( const css::uno::Reference< css::io::XStream >& xTargetStream );
@@ -453,6 +454,9 @@ public:
     OUString SAL_CALL getImplementationName() override;
     sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+private:
+    css::awt::Size getVisualAreaSize_impl(sal_Int64 nAspect, osl::ResettableMutexGuard& guard);
 };
 
 class ClearedMutexArea
