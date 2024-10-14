@@ -1000,12 +1000,12 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
 
         aGrabber.seek(nEndPos + 4);
         sal_uInt16 const nEndDisk = aGrabber.ReadUInt16();
-        if (nEndDisk != 0)
+        if (nEndDisk != 0 && nEndDisk != 0xFFFF)
         {   // only single disk is supported!
             throw ZipException("invalid end (disk)" );
         }
         sal_uInt16 const nEndDirDisk = aGrabber.ReadUInt16();
-        if (nEndDirDisk != 0)
+        if (nEndDirDisk != 0 && nEndDisk != 0xFFFF)
         {
             throw ZipException("invalid end (directory disk)" );
         }
@@ -1087,12 +1087,12 @@ std::tuple<sal_Int64, sal_Int64, sal_Int64> ZipFile::findCentralDirectory()
                 {
                     throw ZipException("inconsistent Zip/Zip64 end (entries)");
                 }
-                if (o3tl::make_unsigned(nEndDirSize) != sal_uInt32(-1)
+                if (nEndDirSize != -1
                     && nEnd64DirSize != nEndDirSize)
                 {
                     throw ZipException("inconsistent Zip/Zip64 end (size)");
                 }
-                if (o3tl::make_unsigned(nEndDirOffset) != sal_uInt32(-1)
+                if (nEndDirOffset != -1
                     && nEnd64DirOffset != nEndDirOffset)
                 {
                     throw ZipException("inconsistent Zip/Zip64 end (offset)");
@@ -1379,7 +1379,7 @@ bool ZipFile::readExtraFields(MemoryByteGrabber& aMemGrabber, sal_Int16 nExtraLe
                     isZip64 = true;
                 }
                 nReadSize = 16;
-                if (dataSize >= 24 /*&& roOffset*/)
+                if (dataSize >= 24)
                 {
                     isZip64 = true;
 #if 0
