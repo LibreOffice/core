@@ -134,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,sw_writerfilter,\
     sw/source/writerfilter/ooxml/OOXMLParserState \
     sw/source/writerfilter/ooxml/OOXMLPropertySet \
     sw/source/writerfilter/ooxml/OOXMLStreamImpl \
+    sw/source/writerfilter/ooxml/ShadowContext \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,sw_writerfilter,\

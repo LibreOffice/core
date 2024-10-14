@@ -24,6 +24,7 @@
 #include <oox/core/contexthandler2.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+//#include <oox/dllapi.h>
 
 #include <optional>
 
@@ -79,7 +80,7 @@ private:
 };
 
 
-class ShapeContextBase : public ::oox::core::ContextHandler2
+class SAL_DLLPUBLIC_RTTI ShapeContextBase : public ::oox::core::ContextHandler2
 {
 public:
     static ::oox::core::ContextHandlerRef
@@ -94,7 +95,7 @@ protected:
 };
 
 
-class ShapeTypeContext : public ShapeContextBase
+class SAL_DLLPUBLIC_RTTI ShapeTypeContext : public ShapeContextBase
 {
 public:
     explicit            ShapeTypeContext(
@@ -118,7 +119,7 @@ private:
 };
 
 
-class ShapeContext : public ShapeTypeContext
+class SAL_DLLPUBLIC_RTTI ShapeContext : public ShapeTypeContext
 {
 public:
     explicit ShapeContext(::oox::core::ContextHandler2Helper const& rParent,
@@ -126,6 +127,8 @@ public:
 
     virtual ::oox::core::ContextHandlerRef
                         onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) override;
+
+    void OOX_DLLPUBLIC setWriterShape();
 
 private:
     /** Processes the 'points' attribute. */

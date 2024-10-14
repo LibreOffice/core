@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySet.hxx"
+#include "ShadowContext.hxx"
 
 namespace writerfilter::ooxml
 {
@@ -494,9 +495,14 @@ public:
     OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent,
                                    css::uno::Reference<css::xml::sax::XFastContextHandler> const & xContext,
             rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler);
+    OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent,
+                                   rtl::Reference<ShadowContext> const & xContext,
+                                   css::uno::Reference<css::xml::sax::XFastContextHandler> const & xParentContext,
+            rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler);
     virtual ~OOXMLFastContextHandlerWrapper() override;
 
     // css::xml::sax::XFastContextHandler:
+    virtual void SAL_CALL endFastElement( ::sal_Int32 Element ) override;
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace, const OUString & Name, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void SAL_CALL endUnknownElement(const OUString & Namespace, const OUString & Name) override;
@@ -532,12 +538,18 @@ protected:
     virtual void setToken(Token_t nToken) override;
     virtual Token_t getToken() const override;
 
+    bool isWriterFrameDetected() const { return mbIsWriterFrameDetected;}
+
 private:
     css::uno::Reference<css::xml::sax::XFastContextHandler> mxWrappedContext;
     rtl::Reference<OOXMLFastContextHandlerShape> mxShapeHandler;
     std::set<Id> mMyNamespaces;
     std::set<Token_t> mMyTokens;
     OOXMLPropertySet::Pointer_t mpPropertySet;
+    rtl::Reference<ShadowContext> const mxShadowContext;
+    css::uno::Reference<css::xml::sax::XFastContextHandler> mxReplayParentContext;
+    bool mbIsWriterFrameDetected;
+    bool mbIsReplayTextBox;
 
     OOXMLFastContextHandler * getFastContextHandler() const;
 };
