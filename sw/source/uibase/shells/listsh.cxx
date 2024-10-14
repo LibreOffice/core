@@ -79,6 +79,7 @@ static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bU
             {
                 // The current subpoint which should be moved
                 // starts at nActPos and ends at nActEndPos - 1
+                assert(nActEndPos > 0);
                 --nActEndPos;
                 SwOutlineNodes::size_type nDest = nActEndPos + 2;
                 while ( nDest < pIDoc->getOutlineNodesCount() &&
