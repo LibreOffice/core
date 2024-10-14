@@ -412,6 +412,26 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163341)
+{
+    auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163341.ods"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    // this Zip64 should load successfully
+    // on branches with Zip64 support, but not this old branch
+    try
+    {
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args,
+                                                                               m_xContext);
+    }
+    catch (css::packages::zip::ZipIOException const&)
+    {
+    }
+}
+
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
 //CPPUNIT_PLUGIN_IMPLEMENT();
 
