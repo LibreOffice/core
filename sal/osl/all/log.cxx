@@ -55,16 +55,14 @@ bool const sal_use_syslog = false;
 
 namespace {
 
-struct TimeContainer
+TimeValue GetTime()
 {
     TimeValue aTime;
-    TimeContainer()
-    {
-        osl_getSystemTime(&aTime);
-    }
-};
+    osl_getSystemTime(&aTime);
+    return aTime;
+}
 
-TimeContainer aStartTime;
+const TimeValue aStartTime = GetTime();
 
 bool equalStrings(
     char const * string1, std::size_t length1, char const * string2,
@@ -276,26 +274,21 @@ void maybeOutputTimestamp(std::ostringstream &s) {
         s << ts << '.' << milliSecs << ':';
     }
 
-// disable this fairly obscure feature when building with coverity
-// to avoid a bazillion 'Initialization or destruction ordering is unspecified'
-// warnings about the use of aStartTime
-#if !defined(__COVERITY__) || __COVERITY_MAJOR__ > 2023
     if (outputRelativeTimer)
     {
-        int seconds = now.Seconds - aStartTime.aTime.Seconds;
+        int seconds = now.Seconds - aStartTime.Seconds;
         int milliSeconds;
-        if (now.Nanosec < aStartTime.aTime.Nanosec)
+        if (now.Nanosec < aStartTime.Nanosec)
         {
             seconds--;
-            milliSeconds = 1000 - (aStartTime.aTime.Nanosec - now.Nanosec) / 1000000;
+            milliSeconds = 1000 - (aStartTime.Nanosec - now.Nanosec) / 1000000;
         }
         else
-            milliSeconds = (now.Nanosec - aStartTime.aTime.Nanosec) / 1000000;
+            milliSeconds = (now.Nanosec - aStartTime.Nanosec) / 1000000;
         char relativeTimestamp[100];
         snprintf(relativeTimestamp, sizeof(relativeTimestamp), "%d.%03d", seconds, milliSeconds);
         s << relativeTimestamp << ':';
     }
-#endif
 }
 
 #endif
