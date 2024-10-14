@@ -1572,7 +1572,11 @@ sal_Int16 VCLXListBox::getSelectedItemPos()
 {
     SolarMutexGuard aGuard;
     VclPtr< ListBox > pBox = GetAs< ListBox >();
-    return pBox ? pBox->GetSelectedEntryPos() : 0;
+    if (!pBox)
+        return 0;
+    sal_Int32 nPos = pBox->GetSelectedEntryPos();
+    assert(nPos <= SAL_MAX_INT16);
+    return nPos;
 }
 
 css::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos()
