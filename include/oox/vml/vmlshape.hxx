@@ -145,6 +145,8 @@ public:
     OUString     getGraphicPath() const;
 
     const Drawing& getDrawing() const { return mrDrawing; }
+    void setTextBox(bool bSet) {mbTextBox = bSet;}
+    bool isTextBox() const {return mbTextBox;}
 
 protected:
     /** Returns the coordinate system of this shape. */
@@ -159,6 +161,7 @@ protected:
 protected:
     Drawing&            mrDrawing;          ///< The VML drawing page that contains this shape.
     ShapeTypeModel      maTypeModel;        ///< The model structure containing shape type data.
+    bool                mbTextBox;          //will be set if the shape contains a text box
 };
 
 

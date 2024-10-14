@@ -25,6 +25,7 @@
 #include <oox/mathml/imexport.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
+#include <oox/vml/vmlshapecontext.hxx>
 #include <sal/log.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -41,6 +42,8 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include "OOXMLPropertySet.hxx"
 #include <dmapper/GraphicHelpers.hxx>
+#include <unodraw.hxx>
+#include "ShadowContext.hxx"
 
 const sal_Unicode uCR = 0xd;
 const sal_Unicode uFtnEdnRef = 0x2;
@@ -1988,7 +1991,26 @@ OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper
  rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler)
     : OOXMLFastContextHandler(pParent),
       mxWrappedContext(xContext),
-      mxShapeHandler(xShapeHandler)
+      mxShapeHandler(xShapeHandler),
+      mbIsWriterFrameDetected(false),
+      mbIsReplayTextBox(false)
+{
+    setId(pParent->getId());
+    setToken(pParent->getToken());
+    setPropertySet(pParent->getPropertySet());
+}
+
+OOXMLFastContextHandlerWrapper::OOXMLFastContextHandlerWrapper(OOXMLFastContextHandler * pParent,
+                                   rtl::Reference<ShadowContext> const & xShadowContext,
+                                   uno::Reference<XFastContextHandler> const& xParentContext,
+            rtl::Reference<OOXMLFastContextHandlerShape> const & xShapeHandler)
+    : OOXMLFastContextHandler(pParent),
+      mxWrappedContext(xShadowContext),
+      mxShapeHandler(xShapeHandler),
+      mxShadowContext(xShadowContext),
+      mxReplayParentContext(xParentContext),
+      mbIsWriterFrameDetected(false),
+      mbIsReplayTextBox(false)
 {
     setId(pParent->getId());
     setToken(pParent->getToken());
@@ -2014,6 +2036,114 @@ void SAL_CALL OOXMLFastContextHandlerWrapper::endUnknownElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->endUnknownElement(Namespace, Name);
+}
+
+void SAL_CALL OOXMLFastContextHandlerWrapper::endFastElement(::sal_Int32 Element)
+{
+    OOXMLFastContextHandler::endFastElement(Element);
+    if (mxShadowContext.is())
+    {
+        mxWrappedContext = mxReplayParentContext;
+        mbIsReplayTextBox = true;
+        mbIsWriterFrameDetected = mxShadowContext->isWriterFrame();
+        sal_uInt16 nLevel = mxShadowContext->getElementLevel();
+        if (!nLevel)
+        {
+            std::deque<CallData>& callDataDeque = mxShadowContext->getCallData();
+            std::deque<uno::Reference<xml::sax::XFastContextHandler>> aLocalHandlers;
+            for (auto callDataIt = callDataDeque.begin(); callDataIt != callDataDeque.end(); ++callDataIt)
+            {
+                switch (callDataIt->getType())
+                {
+                    case Init:
+                    {
+                        sal_Int32 nElement = callDataIt->getElement();
+                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttribs
+                            = callDataIt->getAttributes();
+                        if (mbIsWriterFrameDetected)
+                        {
+                            oox::vml::ShapeContext* pShapeContext = dynamic_cast<oox::vml::ShapeContext*>(mxWrappedContext.get());
+                            if (pShapeContext)
+                                pShapeContext->setWriterShape();
+                        }
+                        uno::Reference< xml::sax::XFastContextHandler > newWrapper = lcl_createFastChildContext(nElement, rAttribs);
+                        static_cast<OOXMLFastContextHandlerWrapper*>(newWrapper.get())->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
+                        aLocalHandlers.push_back(newWrapper);
+                    }
+                    break;
+                    case ElementAttr:
+                    {
+                        sal_Int32 nElement = callDataIt->getElement();
+                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                            = callDataIt->getAttributes();
+                        auto xHandler = aLocalHandlers.back();
+                        if (xHandler)
+                            xHandler->startFastElement(nElement, rAttrs);
+                    }
+                    break;
+                    case Char:
+                    {
+                        const ::rtl::OUString& chars = callDataIt->getChars();
+                        auto xHandler = aLocalHandlers.back();
+                        if (xHandler)
+                            xHandler->characters(chars);
+                    }
+                    break;
+                    case EndElementAttr:
+                    {
+                        sal_Int32 nElement = callDataIt->getElement();
+                        auto xHandler = aLocalHandlers.back();
+                        if (xHandler)
+                            xHandler->endFastElement(nElement);
+                        aLocalHandlers.pop_back();
+                    }
+                    break;
+                    case Unknown:
+                    {
+                        const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
+                        const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
+                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                            = callDataIt->getAttributes();
+                        auto xHandler = aLocalHandlers.back();
+                        if (xHandler)
+                            xHandler->startUnknownElement(rNameSpace, rElement, rAttrs);
+                    }
+                    break;
+                    case EndUnknown:
+                    {
+                        const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
+                        const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
+                        auto xHandler = aLocalHandlers.back();
+                        if (xHandler)
+                            xHandler->endUnknownElement(rNameSpace, rElement);
+                        aLocalHandlers.pop_back();
+                    }
+                    break;
+                    case ElementContext:
+                    {
+                        sal_Int32 nElement = callDataIt->getElement();
+                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                            = callDataIt->getAttributes();
+                        uno::Reference< xml::sax::XFastContextHandler > newContext = aLocalHandlers.back()->createFastChildContext(nElement, rAttrs);
+                        if (nElement == Token_t(NMSP_vml | XML_textbox))
+                            static_cast<OOXMLFastContextHandlerWrapper*>(newContext.get())->mbIsWriterFrameDetected = mbIsWriterFrameDetected;
+                        aLocalHandlers.push_back(newContext);
+                    }
+                    break;
+                    case UnknownContext:
+                    {
+                        const ::rtl::OUString& rNameSpace = callDataIt->getUnknownNameSpace();
+                        const ::rtl::OUString& rElement = callDataIt->getUnknownElement();
+                        css::uno::Reference<css::xml::sax::XFastAttributeList> rAttrs
+                            = callDataIt->getAttributes();
+                        uno::Reference< xml::sax::XFastContextHandler > newContext = aLocalHandlers.back()->createUnknownChildContext(rNameSpace, rElement, rAttrs);
+                        aLocalHandlers.push_back(newContext);
+                    }
+                    break;
+                }
+            }
+        }
+    }
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -2066,12 +2196,17 @@ void OOXMLFastContextHandlerWrapper::lcl_startFastElement
 {
     if (mxWrappedContext.is())
         mxWrappedContext->startFastElement(Element, Attribs);
-
-    if (mxShapeHandler->isDMLGroupShape()
-        && (Element == Token_t(NMSP_wps | XML_txbx)
-            || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+    if (!mxShadowContext.is())
     {
-        mpStream->startTextBoxContent();
+        bool bInTokens = mMyTokens.find(Element) != mMyTokens.end();
+        if ((mxShapeHandler->isDMLGroupShape()
+            && (Element == Token_t(NMSP_wps | XML_txbx)
+                || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+    //TODO: why check for bInTokens
+            || (!bInTokens && mbIsWriterFrameDetected && Element == Token_t(NMSP_vml | XML_textbox)))
+        {
+            mpStream->startTextBoxContent();
+        }
     }
 }
 
@@ -2081,11 +2216,16 @@ void OOXMLFastContextHandlerWrapper::lcl_endFastElement
     if (mxWrappedContext.is())
         mxWrappedContext->endFastElement(Element);
 
-    if (mxShapeHandler->isDMLGroupShape()
-        && (Element == Token_t(NMSP_wps | XML_txbx)
-            || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+    if (!mxShadowContext.is())
     {
-        mpStream->endTextBoxContent();
+        bool bInTokens = mMyTokens.find(Element) != mMyTokens.end();
+        if ((mxShapeHandler->isDMLGroupShape()
+            && (Element == Token_t(NMSP_wps | XML_txbx)
+                || Element == Token_t(NMSP_wps | XML_linkedTxbx)))
+            || (!bInTokens && mbIsWriterFrameDetected && Element == Token_t(NMSP_vml | XML_textbox)))
+        {
+            mpStream->endTextBoxContent();
+        }
     }
 }
 
@@ -2095,6 +2235,10 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
+    if (mxShadowContext.is() && !mbIsReplayTextBox)
+    {
+        return mxShadowContext->createFastChildContext(Element, Attribs);
+    }
 
     bool bInNamespaces = mMyNamespaces.find(oox::getNamespace(Element)) != mMyNamespaces.end();
     bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );
@@ -2115,11 +2259,34 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     }
     else if (mxWrappedContext.is()  && !bSkipImages)
     {
-        rtl::Reference<OOXMLFastContextHandlerWrapper> pWrapper =
-            new OOXMLFastContextHandlerWrapper
-            (this, mxWrappedContext->createFastChildContext(Element, Attribs),
-             mxShapeHandler);
-        pWrapper->mMyNamespaces = mMyNamespaces;
+        rtl::Reference<OOXMLFastContextHandlerWrapper> pWrapper;
+        if (Element == (NMSP_vml | XML_textbox) && !mbIsReplayTextBox)
+        {
+            //TODO: change handling of drawingml, currently Writer frame only
+            rtl::Reference<ShadowContext> xShadowContext
+                = new ShadowContext(Element, Attribs);
+            pWrapper = new OOXMLFastContextHandlerWrapper(this, xShadowContext, mxWrappedContext, mxShapeHandler);
+            pWrapper->mMyNamespaces = mMyNamespaces;
+            //don't send shape here
+            bInTokens = false;
+        }
+        else
+        {
+            pWrapper =
+                new OOXMLFastContextHandlerWrapper
+                (this, mxWrappedContext->createFastChildContext(Element, Attribs),
+                 mxShapeHandler);
+            if (mbIsWriterFrameDetected)
+            {
+                pWrapper->addNamespace(NMSP_doc);
+                pWrapper->addNamespace(NMSP_vmlWord);
+                pWrapper->addNamespace(NMSP_vmlOffice);
+            }
+            else
+            {
+                pWrapper->mMyNamespaces = mMyNamespaces;
+            }
+        }
         pWrapper->mMyTokens = mMyTokens;
         pWrapper->setPropertySet(getPropertySet());
         xResult.set(pWrapper);
@@ -2257,7 +2424,6 @@ Token_t OOXMLFastContextHandlerWrapper::getToken() const
 
     return nResult;
 }
-
 
 /*
   class OOXMLFastContextHandlerLinear

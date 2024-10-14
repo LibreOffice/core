@@ -591,6 +591,10 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     // handle remaining stuff in base class
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
 }
+void ShapeContext::setWriterShape()
+{
+    mrShape.setTextBox(true);
+}
 
 void ShapeContext::setPoints(std::u16string_view rPoints)
 {

@@ -150,6 +150,7 @@ void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
 
 ShapeType::ShapeType( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
+    , mbTextBox(false)
 {
 }
 
@@ -853,6 +854,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
                 PropertySet(xShape).setAnyProperty(PROP_TextLowerDistance, Any(sal_Int32(getTextBox()->borderDistanceBottom)));
                 xShape->setSize(aSize);
             }
+
+            if (mbTextBox)
+            {
+                // similar to drawingml::Shape::createAndInsert(...)
+                PropertySet(xShape).setAnyProperty(PROP_TextBox, Any(true));
+            }
+
         }
     }
 
