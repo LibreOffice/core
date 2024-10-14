@@ -67,11 +67,10 @@ class PPDKey
     friend class CPDManager;
 
     typedef std::unordered_map< OUString, PPDValue > hash_type;
-    typedef std::vector< PPDValue* > value_type;
 
     OUString            m_aKey;
     hash_type           m_aValues;
-    value_type          m_aOrderedValues;
+    std::vector<PPDValue*> m_aOrderedValues;
     const PPDValue*     m_pDefaultValue;
     bool                m_bQueryValue;
     OUString            m_aGroup;
@@ -120,7 +119,6 @@ class PPDParser
     friend class PPDCache;
 
     typedef std::unordered_map< OUString, std::unique_ptr<PPDKey> > hash_type;
-    typedef std::vector< PPDKey* > value_type;
 
     void insertKey( std::unique_ptr<PPDKey> pKey );
 public:
@@ -135,7 +133,7 @@ public:
     };
 private:
     hash_type                                   m_aKeys;
-    value_type                                  m_aOrderedKeys;
+    std::vector<PPDKey*>                        m_aOrderedKeys;
     ::std::vector< PPDConstraint >              m_aConstraints;
 
     // the full path of the PPD file
