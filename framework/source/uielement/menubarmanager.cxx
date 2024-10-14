@@ -1032,8 +1032,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
                 MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, nullptr, xDispatch );
-                rtl::Reference<VCLXPopupMenu> pVCLXPopupMenu = new VCLXPopupMenu(pPopup);
-                pItemHandler->xPopupMenu = pVCLXPopupMenu;
+                pItemHandler->xPopupMenu = new VCLXPopupMenu(pPopup);
                 pItemHandler->aMenuItemURL = aItemCommand;
                 m_aMenuItemHandlerVector.push_back( std::unique_ptr<MenuItemHandler>(pItemHandler) );
 
