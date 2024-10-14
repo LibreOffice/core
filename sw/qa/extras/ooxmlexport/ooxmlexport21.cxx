@@ -17,6 +17,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -1187,6 +1188,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146269)
         auto xModifiable = mxComponent.queryThrow<util::XModifiable>();
         CPPUNIT_ASSERT(!xModifiable->isModified());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf164065)
+{
+    loadAndSave("tdf164065.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    uno::Reference<table::XCellRange> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XText> xCell(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xCell->getString());
 }
 
 } // end of anonymous namespace
