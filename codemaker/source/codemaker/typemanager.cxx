@@ -241,7 +241,7 @@ codemaker::UnoType::Sort TypeManager::decompose(
                 }
             }
             if (entity != nullptr) {
-                *entity = ent;
+                *entity = std::move(ent);
             }
             return
                 codemaker::UnoType::Sort::InstantiatedPolymorphicStruct;

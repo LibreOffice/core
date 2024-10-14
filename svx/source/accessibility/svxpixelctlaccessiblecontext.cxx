@@ -255,7 +255,7 @@ void SvxPixelCtlAccessible::NotifyChild(tools::Long nIndex,bool bSelect ,bool bC
     {
         xNewChild->CheckChild();
     }
-    m_xCurChild = xNewChild;
+    m_xCurChild = std::move(xNewChild);
 }
 
 rtl::Reference<SvxPixelCtlAccessibleChild> SvxPixelCtlAccessible::CreateChild (tools::Long nIndex,Point mPoint)

@@ -1124,7 +1124,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                         }
                     }
                 }
-                xFormerChartType = xCurrentChartType;
+                xFormerChartType = std::move(xCurrentChartType);
             }
         }
     }
@@ -1762,7 +1762,7 @@ Diagram::tTemplateWithServiceName
 
             if (xTempl.is() && xTempl->matchesTemplate2(this, true))
             {
-                aResult.xChartTypeTemplate = xTempl;
+                aResult.xChartTypeTemplate = std::move(xTempl);
                 aResult.sServiceName = aServiceNames[ i ];
                 bTemplateFound = true;
             }

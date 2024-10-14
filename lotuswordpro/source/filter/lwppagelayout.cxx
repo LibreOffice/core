@@ -514,7 +514,7 @@ LwpHeaderLayout* LwpPageLayout::GetHeaderLayout()
             SAL_WARN("lwp", "loop in layout");
             break;
         }
-        xLay = xNext;
+        xLay = std::move(xNext);
     }
     return nullptr;
 }
@@ -534,7 +534,7 @@ LwpFooterLayout* LwpPageLayout::GetFooterLayout()
             SAL_WARN("lwp", "loop in layout");
             break;
         }
-        xLay = xNext;
+        xLay = std::move(xNext);
     }
     return nullptr;
 }

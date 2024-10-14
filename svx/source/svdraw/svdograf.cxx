@@ -977,7 +977,7 @@ rtl::Reference<SdrObject> SdrGrafObj::DoConvertToPolyObj(bool bBezier, bool bAdd
                 }
                 else
                 {
-                    pRetval = pLineFill;
+                    pRetval = std::move(pLineFill);
                 }
             }
 

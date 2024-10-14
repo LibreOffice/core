@@ -700,7 +700,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
 
             if( pDshLst->Load() )
             {
-                pDashList = pDshLst;
+                pDashList = std::move(pDshLst);
                 static_cast<SvxLineTabDialog*>(GetDialogController())->SetNewDashList( pDashList );
 
                 m_xLbLineStyles->clear();

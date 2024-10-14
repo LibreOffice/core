@@ -156,7 +156,7 @@ rtl::Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (sa
         xAccessibleCell->Init();
         maChildMap[xCell] = xAccessibleCell;
 
-        xChild = xAccessibleCell;
+        xChild = std::move(xAccessibleCell);
     }
     return xChild;
 }
@@ -268,7 +268,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
                     }
 
                     // move still existing cell from temporary child map to our child map
-                    maChildMap[xCell] = xAccessibleCell;
+                    maChildMap[xCell] = std::move(xAccessibleCell);
                     aTempChildMap.erase( iter );
                 }
                 else
@@ -276,7 +276,7 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
                     rtl::Reference< AccessibleCell > xAccessibleCell( new AccessibleCell( mxAccessible, xCell, nChildIndex, mrShapeTreeInfo ) );
 
                     xAccessibleCell->Init();
-                    maChildMap[xCell] = xAccessibleCell;
+                    maChildMap[xCell] = std::move(xAccessibleCell);
                 }
 
                 ++nChildIndex;

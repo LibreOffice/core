@@ -730,7 +730,7 @@ RequestHandler::Status RequestHandler::Enable(bool ipc)
     assert(thread.is() == (stat == IPC_STATUS_OK));
     if (stat == IPC_STATUS_OK) {
         pGlobal = new RequestHandler;
-        pGlobal->mIpcThread = thread;
+        pGlobal->mIpcThread = std::move(thread);
         pGlobal->mIpcThread->start(pGlobal.get());
     }
     return stat;

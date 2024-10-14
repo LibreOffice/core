@@ -87,7 +87,7 @@ storeError OStoreLockBytes::create (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    m_xManager   = xManager;
+    m_xManager   = std::move(xManager);
     m_xNode      = xNode;
     m_bWriteable = (eMode != storeAccessMode::ReadOnly);
 

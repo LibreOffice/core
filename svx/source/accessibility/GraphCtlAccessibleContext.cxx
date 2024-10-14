@@ -133,9 +133,9 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
             xAccessibleShape = pAcc.get();
             if (pAcc.is())
             {
-                pAcc->Init ();
+                pAcc->Init();
             }
-            mxShapes[pObj] = pAcc;
+            mxShapes[pObj] = std::move(pAcc);
 
             // Create event and inform listeners of the object creation.
             CommitChange( AccessibleEventId::CHILD, Any( xAccessibleShape ), Any( Reference<XAccessible>() ) );

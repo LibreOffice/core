@@ -3034,13 +3034,13 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
     if (it != maDocShells.end())
     {
         it->second.maShell->DoClose();
-        it->second.maShell = xDocShell;
+        it->second.maShell = std::move(xDocShell);
         it->second.maLastAccess = tools::Time(tools::Time::SYSTEM);
     }
     else
     {
         SrcShell aSrcDoc;
-        aSrcDoc.maShell = xDocShell;
+        aSrcDoc.maShell = std::move(xDocShell);
         aSrcDoc.maLastAccess = tools::Time(tools::Time::SYSTEM);
         cacheNewDocShell(nFileId, aSrcDoc);
     }

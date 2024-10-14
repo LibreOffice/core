@@ -282,7 +282,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLIndexTOCContext::cr
         xContext = xNewBodyContext;
         if ( !xBodyContextRef.is() || !xBodyContextRef->HasContent() )
         {
-            xBodyContextRef = xNewBodyContext;
+            xBodyContextRef = std::move(xNewBodyContext);
         }
     }
     else if (nElement == XML_ELEMENT(TEXT, aIndexSourceElementMap[eIndexType]))

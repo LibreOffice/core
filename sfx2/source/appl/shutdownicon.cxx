@@ -454,7 +454,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
     try {
         rtl::Reference<ShutdownIcon> pIcon(new ShutdownIcon( comphelper::getProcessComponentContext() ));
         pIcon->init ();
-        pShutdownIcon = pIcon;
+        pShutdownIcon = std::move(pIcon);
     } catch (...) {
     }
 

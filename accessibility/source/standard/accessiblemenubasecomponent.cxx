@@ -325,7 +325,7 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
             // set states
             pChild->SetStates();
 
-            xChild = pChild;
+            xChild = std::move(pChild);
 
             // insert into menu item list
             m_aAccessibleChildren[i] = xChild;

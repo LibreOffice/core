@@ -541,7 +541,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( std::u16string
         {                               // the group is already cached
             if ( !sCompleteGroupName.isEmpty() )
             {   // the group still exists -> return it
-                xGroup = pSwGroup;
+                xGroup = std::move(pSwGroup);
                 break;
             }
             else
@@ -602,7 +602,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
             &&  pEntry->GetEntryName() == rEntryName
             )
         {
-            xReturn = pEntry;
+            xReturn = std::move(pEntry);
             break;
         }
 

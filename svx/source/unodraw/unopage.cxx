@@ -177,7 +177,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         pClonedSdrShape->setUnoShape(pShape);
         // pShape->InvalidateSdrObject();
         // pShape->Create(pClonedSdrShape, this);
-        pObj = pClonedSdrShape;
+        pObj = std::move(pClonedSdrShape);
         bNeededToClone = true;
     }
 

@@ -2816,7 +2816,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // set CID to symbol for selection
                 if( xShape.is() )
                 {
-                    aEntry.xSymbol = xSymbolGroup;
+                    aEntry.xSymbol = std::move(xSymbolGroup);
 
                     OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_DATA_POINT, nIdx ) );
                     aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
@@ -2932,7 +2932,7 @@ std::vector<ViewLegendSymbol> VSeriesPlotter::createSymbolsForSeries(
         // set CID to symbol for selection
         if (xShape.is())
         {
-            aEntry.xSymbol = xSymbolGroup;
+            aEntry.xSymbol = std::move(xSymbolGroup);
             aResult.push_back(aEntry);
         }
     }

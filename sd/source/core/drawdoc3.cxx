@@ -1527,8 +1527,8 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 return;
             }
 
-            pNotesMaster = pNewNotesMaster;
-            pMaster = pNewMaster;
+            pNotesMaster = std::move(pNewNotesMaster);
+            pMaster = std::move(pNewMaster);
 
             // layout name needs to be unique
             aTargetNewLayoutName = pMaster->GetLayoutName();

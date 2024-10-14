@@ -580,7 +580,7 @@ Found findEntity(
                     }
                     e->kind
                         = unoidl::detail::SourceProviderEntity::KIND_EXTERNAL;
-                    e->entity = ent;
+                    e->entity = std::move(ent);
                 }
                 break;
             case unoidl::detail::SourceProviderEntity::KIND_MODULE:

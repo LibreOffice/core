@@ -1195,7 +1195,7 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
                         rtl::Reference<SdrObject> pGroup = new SdrObjGroup(*pSdrModel);
                         pGroup->GetSubList()->NbcInsertObject( pRet.get() );
                         pGroup->GetSubList()->NbcInsertObject( pTObj.get() );
-                        pRet = pGroup;
+                        pRet = std::move(pGroup);
                     }
                     else
                         pRet = pTObj.get();

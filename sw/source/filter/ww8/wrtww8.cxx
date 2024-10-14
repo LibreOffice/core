@@ -3805,7 +3805,7 @@ void WW8Export::PrepareStorage()
 
 ErrCodeMsg SwWW8Writer::WriteStorage()
 {
-    rtl::Reference<SotStorage> pOrigStg;
+    rtl::Reference<SotStorage> xOrigStg;
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
     std::shared_ptr<SvStream> pSotStorageStream;
     uno::Sequence< beans::NamedValue > aEncryptionData;
@@ -3831,7 +3831,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
                 {
                     // We have an encryptor
                     // Create new temporary storage for content
-                    pOrigStg = m_pStg;
+                    xOrigStg = m_pStg;
                     pSotStorageStream = std::make_shared<SvMemoryStream>();
                     m_pStg = new SotStorage(*pSotStorageStream);
                 }
@@ -3854,7 +3854,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
         uno::Reference<io::XInputStream > xInputStream(new utl::OSeekableInputStreamWrapper(pSotStorageStream.get(), false));
         uno::Sequence<beans::NamedValue> aStreams = xPackageEncryption->encrypt(xInputStream);
 
-        m_pStg = pOrigStg;
+        m_pStg = std::move(xOrigStg);
         for (const beans::NamedValue& aStreamData : aStreams)
         {
             // To avoid long paths split and open substorages recursively

@@ -910,7 +910,7 @@ void AnnotationManagerImpl::onSelectionChanged()
     rtl::Reference<SdPage> xPage = mrBase.GetMainViewShell()->getCurrentPage();
     if (xPage != mxCurrentPage)
     {
-        mxCurrentPage = xPage;
+        mxCurrentPage = std::move(xPage);
         UpdateTags(true);
     }
 }

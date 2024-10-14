@@ -4678,7 +4678,7 @@ void SAL_CALL SwXTextTableStyle::replaceByName(const OUString& rName, const uno:
     xStyleToReplaceWith->SetBoxFormat(&m_pTableAutoFormat->GetBoxFormat(nBoxFormat));
     m_pTableAutoFormat->GetBoxFormat(nBoxFormat).SetXObject(xStyleToReplaceWith);
     // make this SwXTextTableStyle use new SwXTextCellStyle
-    m_aCellStyles[nCellStyle] = xStyleToReplaceWith;
+    m_aCellStyles[nCellStyle] = std::move(xStyleToReplaceWith);
 }
 
 void SAL_CALL SwXTextTableStyle::removeByName(const OUString& /*Name*/)

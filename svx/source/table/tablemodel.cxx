@@ -598,7 +598,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableColumnRef xNewCol( new TableColumn( this, nIndex+nOffset ) );
             maColumns[nIndex+nOffset] = xNewCol;
-            aNewColumns[nOffset] = xNewCol;
+            aNewColumns[nOffset] = std::move(xNewCol);
         }
 
         const bool bUndo(mpTableObj->IsInserted() && rModel.IsUndoEnabled());
@@ -788,7 +788,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableRowRef xNewRow( new TableRow( this, nIndex+nOffset, nColCount ) );
             maRows[nIndex+nOffset] = xNewRow;
-            aNewRows[nOffset] = xNewRow;
+            aNewRows[nOffset] = std::move(xNewRow);
         }
 
         if( bUndo )

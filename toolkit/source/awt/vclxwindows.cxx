@@ -7008,7 +7008,7 @@ void SVTXFormattedField::setFormatsSupplier(const css::uno::Reference< css::util
     if (!pNew)
         return;     // TODO : how to process ?
 
-    m_xCurrentSupplier = pNew;
+    m_xCurrentSupplier = std::move(pNew);
     if (!pField)
         return;
 

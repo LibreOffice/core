@@ -422,7 +422,7 @@ bool ZipPackageStream::ParsePackageRawStream()
         return false;
     }
 
-    m_xBaseEncryptionData = xTempEncrData;
+    m_xBaseEncryptionData = std::move(xTempEncrData);
     SetIsEncrypted ( true );
     // it's already compressed and encrypted
     m_bToBeEncrypted = m_bToBeCompressed = false;

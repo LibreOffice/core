@@ -766,7 +766,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
                 rtl::Reference< MotionPathTag > xTag( *aMIter );
                 if( !xTag->isDisposed() )
                 {
-                    xMotionPathTag = xTag;
+                    xMotionPathTag = std::move(xTag);
                     rOldTags.erase( aMIter );
                 }
             }

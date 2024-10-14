@@ -797,7 +797,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow, ORowSetRow const & _rK
             rtl::Reference aCopy(
                 new ORowSetValueVector(*m_aParameterValueForCache));
             (*aCopy)[i] = (*_rInsertRow)[parameterName.second.nPosition];
-            m_aUpdatedParameter[i_nBookmark] = aCopy;
+            m_aUpdatedParameter[i_nBookmark] = std::move(aCopy);
             bChanged = true;
         }
         ++aParaValuesIter;

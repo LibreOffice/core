@@ -345,7 +345,7 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         xInteractionHandler = pQuietInteraction.get();
         if ( o_ppQuietInteraction != nullptr )
         {
-            *o_ppQuietInteraction = pQuietInteraction;
+            *o_ppQuietInteraction = std::move(pQuietInteraction);
         }
     }
 

@@ -106,7 +106,7 @@ storeError OStoreDirectory_Impl::create (
     m_nPath = rtl_crc32 (m_nPath, "/", 1);
 
     // Save page manager, and descriptor.
-    m_xManager = xManager;
+    m_xManager = std::move(xManager);
     m_aDescr   = xNode->m_aDescr;
 
     return store_E_None;

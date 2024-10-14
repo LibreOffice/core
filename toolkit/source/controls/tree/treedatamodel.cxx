@@ -193,7 +193,7 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
         throw IllegalArgumentException();
 
     xImpl->mbIsInserted = true;
-    mxRootNode = xImpl;
+    mxRootNode = std::move(xImpl);
 
     Reference< XTreeNode > xParentNode;
     broadcastImpl( aGuard, structure_changed, xParentNode, mxRootNode );

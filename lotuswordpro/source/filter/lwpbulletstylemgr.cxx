@@ -300,7 +300,7 @@ rtl::Reference<XFContentContainer> LwpBulletStyleMgr::AddBulletList(
         {
             theItem->Add(prevList.get());
         }
-        prevList = theList;
+        prevList = std::move(theList);
     }
     return InnerItem;
 }

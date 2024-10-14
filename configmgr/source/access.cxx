@@ -159,7 +159,7 @@ void Access::markChildAsModified(rtl::Reference< ChildAccess > const & child) {
         parent->modifiedChildren_.emplace(
                 p->getNameInternal(),
                 ModifiedChild(static_cast< ChildAccess * >(p.get()), false));
-        p = parent;
+        p = std::move(parent);
     }
 }
 
@@ -2287,7 +2287,7 @@ rtl::Reference< Access > Access::getNotificationRoot() {
         if (!parent.is()) {
             return p;
         }
-        p = parent;
+        p = std::move(parent);
     }
 }
 

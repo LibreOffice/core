@@ -241,7 +241,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
                     xSeries = new DataSeries;
                 assert( xSeries.is() );
                 xSeries->setData( aSequences[nGroupIndex][nSeriesIdx] );
-                pResultSerie[nSeriesIdx] = xSeries;
+                pResultSerie[nSeriesIdx] = std::move(xSeries);
             }
             catch( const uno::Exception & )
             {

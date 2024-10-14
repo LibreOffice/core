@@ -342,7 +342,7 @@ void ScSelectionTransferObj::CreateDrawData()
             pTransferObj->SetDrawPersist(aDragShellRef); // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
 
-            mxDrawData = pTransferObj;
+            mxDrawData = std::move(pTransferObj);
         }
     }
     OSL_ENSURE( mxDrawData.is(), "can't create DrawData" );

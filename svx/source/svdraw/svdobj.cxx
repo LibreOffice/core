@@ -2612,7 +2612,7 @@ rtl::Reference<SdrObject> SdrObject::ConvertToContourObj(SdrObject* pRet1, bool 
         for (const rtl::Reference<SdrObject>& pIterObj : *pObjList2)
             pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj.get(), bForceLineDash).get());
 
-        pRet = pGroup;
+        pRet = std::move(pGroup);
     }
     else
     {

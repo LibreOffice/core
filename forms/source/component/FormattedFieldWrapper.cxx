@@ -276,14 +276,14 @@ void SAL_CALL OFormattedFieldWrapper::read(const Reference<XObjectInputStream>& 
         if (!pBasicReader->lastReadWasFormattedFake())
         {
             // yes -> all fine
-            m_xAggregate = pBasicReader;
+            m_xAggregate = std::move(pBasicReader);
         }
         else
         {   // no -> substitute it with a formatted model
             // let the formatted model do the reading
             m_xFormattedPart.set(new OFormattedModel(m_xContext));
             m_xFormattedPart->read(_rxInStream);
-            m_pEditPart = pBasicReader;
+            m_pEditPart = std::move(pBasicReader);
             m_xAggregate.set( m_xFormattedPart, UNO_QUERY );
         }
     }

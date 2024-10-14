@@ -544,7 +544,7 @@ SQLHANDLE OConnection::createStatementHandle()
         {
             rtl::Reference xConnection(new OConnection(m_pDriverHandleCopy,m_xDriver.get()));
             xConnection->Construct(m_sURL,getConnectionInfo());
-            xConnectionTemp = xConnection;
+            xConnectionTemp = std::move(xConnection);
             bNew = true;
         }
     }
