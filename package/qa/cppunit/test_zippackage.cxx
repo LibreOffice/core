@@ -384,6 +384,34 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testZip64End)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163364)
+{
+    auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163364.ods"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    // don't load corrupted zip file
+    CPPUNIT_ASSERT_THROW(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                             ZipPackage, args, m_xContext),
+                         css::packages::zip::ZipIOException);
+
+    try
+    {
+        uno::Sequence<uno::Any> const args2{
+            uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage"_ustr, uno::Any(true))),
+            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        };
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
+                                                                               m_xContext);
+    }
+    catch (css::packages::zip::ZipIOException const&)
+    {
+        // check that this doesn't crash, it doesn't matter if it succeeds or not
+    }
+}
+
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
 //CPPUNIT_PLUGIN_IMPLEMENT();
 
