@@ -133,7 +133,8 @@ ro       0  1048   # Romanian
 ru       0  1049
 rw       0  1159   # Kinyarwanda
 sa-IN    0  1103   # Sanskrit
-sat      0  1606   # Santali
+sat      0  1606   # Santali Devanagari
+sat-Olck 0  1715   # Santali Ol Chiki
 sb       0  1070   # Sorbian
 sc       0  3047
 sd       0  1113   # Sindhi
