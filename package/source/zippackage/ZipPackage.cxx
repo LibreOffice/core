@@ -175,6 +175,14 @@ void ZipPackage::checkZipEntriesWithDD()
             {
                 uno::Reference<XPropertySet> xStream;
                 getByHierarchicalName(rEntry.sPath) >>= xStream;
+                uno::Reference<XServiceInfo> const xStreamSI{xStream, uno::UNO_QUERY_THROW};
+                if (!xStreamSI->supportsService("com.sun.star.packages.PackageStream"))
+                {
+                    SAL_INFO("package", "entry STORED with data descriptor is folder: \"" << rEntry.sPath << "\"");
+                    throw ZipIOException(
+                        THROW_WHERE
+                        "entry STORED with data descriptor is folder");
+                }
                 if (!xStream->getPropertyValue("WasEncrypted").get<bool>())
                 {
                     SAL_INFO("package", "entry STORED with data descriptor but not encrypted: \"" << rEntry.sPath << "\"");
