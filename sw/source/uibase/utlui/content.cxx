@@ -1251,24 +1251,22 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
         // Only move drag entry and continuous selected siblings:
         m_aDndOutlinesSelected.clear();
 
-        std::unique_ptr<weld::TreeIter> xScratch(m_xTreeView->make_iterator());
+        std::unique_ptr<weld::TreeIter> xScratch(m_xTreeView->make_iterator(xEntry.get()));
 
         // Find first selected of continuous siblings
-        while (true)
+        while (m_xTreeView->iter_previous_sibling(*xScratch) && m_xTreeView->is_selected(*xScratch))
         {
-            m_xTreeView->copy_iterator(*xEntry, *xScratch);
-            if (!m_xTreeView->iter_previous_sibling(*xScratch))
-                break;
-            if (!m_xTreeView->is_selected(*xScratch))
-                break;
             m_xTreeView->copy_iterator(*xScratch, *xEntry);
         }
         // Record continuous selected siblings
         do
         {
-            m_aDndOutlinesSelected.push_back(m_xTreeView->make_iterator(xEntry.get()));
-        }
-        while (m_xTreeView->iter_next_sibling(*xEntry) && m_xTreeView->is_selected(*xEntry));
+            SwOutlineContent* pOutlineContent
+                = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry));
+            if (!pOutlineContent) // shouldn't happen
+                continue;
+            m_aDndOutlinesSelected.push_back(pOutlineContent->GetOutlinePos());
+        } while (m_xTreeView->iter_next_sibling(*xEntry) && m_xTreeView->is_selected(*xEntry));
     }
 
     rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
@@ -5022,9 +5020,9 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 
     bool bFirstMove = true;
 
-    for (const auto& source : m_aDndOutlinesSelected)
+    for (const SwOutlineNodes::size_type& nPos : m_aDndOutlinesSelected)
     {
-        SwOutlineNodes::size_type nSourcePos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*source))->GetOutlinePos();
+        SwOutlineNodes::size_type nSourcePos = nPos;
 
         // Done on the first selection move
         if (bFirstMove) // only do once
