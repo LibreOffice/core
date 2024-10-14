@@ -362,7 +362,8 @@ constexpr struct {
     { "pdc_US", DataLocaleLibrary::OTHERS },
     { "dv_MV",  DataLocaleLibrary::OTHERS },
     { "mfe_MU", DataLocaleLibrary::OTHERS },
-    { "sat_IN", DataLocaleLibrary::OTHERS }
+    { "sat_IN", DataLocaleLibrary::OTHERS },
+    { "sat_Olck_IN", DataLocaleLibrary::OTHERS }
 };
 
 #else
