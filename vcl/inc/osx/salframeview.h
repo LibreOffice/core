@@ -30,9 +30,11 @@ enum class SalEvent;
     id mDraggingDestinationHandler;
     BOOL                mbInWindowDidResize;
     NSTimer*            mpLiveResizeTimer;
+    NSTimer*            mpResetParentWindowTimer;
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(void)clearLiveResizeTimer;
+-(void)clearResetParentWindowTimer;
 -(void)dealloc;
 -(BOOL)canBecomeKeyWindow;
 -(void)displayIfNeeded;
@@ -79,6 +81,8 @@ enum class SalEvent;
 -(id)accessibilityFocusedUIElement;
 -(BOOL)accessibilityIsIgnored;
 -(BOOL)isAccessibilityElement;
+
+-(void)resetParentWindow;
 
 @end
 

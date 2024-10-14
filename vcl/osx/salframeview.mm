@@ -222,6 +222,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     mDraggingDestinationHandler = nil;
     mbInWindowDidResize = NO;
     mpLiveResizeTimer = nil;
+    mpResetParentWindowTimer = nil;
     mpFrame = pFrame;
     NSRect aRect = { { static_cast<CGFloat>(pFrame->maGeometry.x()), static_cast<CGFloat>(pFrame->maGeometry.y()) },
                      { static_cast<CGFloat>(pFrame->maGeometry.width()), static_cast<CGFloat>(pFrame->maGeometry.height()) } };
@@ -272,9 +273,20 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     }
 }
 
+-(void)clearResetParentWindowTimer
+{
+    if ( mpResetParentWindowTimer )
+    {
+        [mpResetParentWindowTimer invalidate];
+        [mpResetParentWindowTimer release];
+        mpResetParentWindowTimer = nil;
+    }
+}
+
 -(void)dealloc
 {
     [self clearLiveResizeTimer];
+    [self clearResetParentWindowTimer];
     [super dealloc];
 }
 
@@ -373,6 +385,18 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
         mpFrame->screenParametersChanged();
+
+    // Start timer to handle hiding of native child windows that have been
+    // dragged to a different screen.
+    if( !mpResetParentWindowTimer )
+    {
+        mpResetParentWindowTimer = [NSTimer scheduledTimerWithTimeInterval: 0.1f target: self selector: @selector(resetParentWindow) userInfo: nil repeats: YES];
+        if( mpResetParentWindowTimer )
+        {
+            [mpResetParentWindowTimer retain];
+            [[NSRunLoop currentRunLoop] addTimer: mpResetParentWindowTimer forMode: NSEventTrackingRunLoopMode];
+        }
+    }
 }
 
 -(void)windowDidMove: (NSNotification*)pNotification
@@ -690,6 +714,35 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 {
     if ( pTimer )
         [self windowDidResize:[pTimer userInfo]];
+}
+
+-(void)resetParentWindow
+{
+    // Wait until the left mouse button has been released. Otherwise
+    // the code below will cause native child windows to flicker while
+    // dragging the window in a different screen than its parent window.
+    if( [NSEvent pressedMouseButtons] & 0x1 )
+        return;
+
+    // Stop hiding of child windows when dragged to a different screen
+    // LibreOffice sets all dialog windows as a native child window of
+    // its related document window in order to force the dialog windows
+    // to always remain in front of their releated document window.
+    // However, for some unknown reason, if a native child window is
+    // dragged to a different screen than its native parent window,
+    // macOS will hide the native child window when the drag has ended.
+    // So, once the current drag has finished, unattach and reattach
+    // the native child window to its native parent window. This should
+    // cause macOS to force the native child window to jump back to the
+    // same screen as its native parent window.
+    NSWindow *pParentWindow = [self parentWindow];
+    if( pParentWindow && [pParentWindow screen] != [self screen] )
+    {
+        [pParentWindow removeChildWindow: self];
+        [pParentWindow addChildWindow: self ordered: NSWindowAbove];
+    }
+
+    [self clearResetParentWindowTimer];
 }
 
 @end
