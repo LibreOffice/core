@@ -155,18 +155,19 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     m_nCachedAspect = nAspect;
 }
 
-awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+awt::Size OleEmbeddedObject::getVisualAreaSize_impl(sal_Int64 nAspect,
+                                                    osl::ResettableMutexGuard& guard)
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
+        osl::ResettableMutexGuardScopedReleaser area(guard);
         // the object was converted to OOo embedded object, the current implementation is now only a wrapper
         return xWrappedObject->getVisualAreaSize( nAspect );
     }
     // end wrapping related part ====================
 
-    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -197,7 +198,9 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
             {
                 // there is no internal cache
                 awt::Size aSize;
-                aGuard.clear();
+
+                { // => unguarded
+                osl::ResettableMutexGuardScopedReleaser area(guard);
 
                 bool bBackToLoaded = false;
 
@@ -277,7 +280,7 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                                     "No size available!",
                                     static_cast< ::cppu::OWeakObject* >(this) );
 
-                aGuard.reset();
+                } // <= unguarded
 
                 m_aCachedSize = aSize;
                 m_nCachedAspect = nAspect;
@@ -312,6 +315,12 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     }
 
     return aResult;
+}
+
+awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
+{
+    osl::ResettableMutexGuard aGuard(m_aMutex);
+    return getVisualAreaSize_impl(nAspect, aGuard);
 }
 
 embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
