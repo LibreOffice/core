@@ -621,7 +621,7 @@ namespace o3tl
 #define LANGUAGE_USER_BODO_INDIA            LanguageType(0x0643)
 #define LANGUAGE_USER_DOGRI_INDIA           LanguageType(0x0644)
 #define LANGUAGE_USER_MAITHILI_INDIA        LanguageType(0x0645)
-#define LANGUAGE_USER_SANTALI_INDIA         LanguageType(0x0646)
+#define LANGUAGE_USER_SANTALI_INDIA         LanguageType(0x0646)  /* Devanagari script */
 #define LANGUAGE_USER_TETUN_TIMOR_LESTE     LanguageType(0x0A40)  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_TETUN)) */
 #define LANGUAGE_USER_TOK_PISIN             LanguageType(0x0647)
 #define LANGUAGE_USER_SHUSWAP               LanguageType(0x0648)
@@ -791,6 +791,7 @@ namespace o3tl
 #define LANGUAGE_USER_SARAIKI               LanguageType(0x06B0)
 #define LANGUAGE_USER_ROHINGYA_HANIFI       LanguageType(0x06B1)
 #define LANGUAGE_USER_MORISYEN              LanguageType(0x06B2)
+#define LANGUAGE_USER_SANTALI_OLCHIKI_INDIA LanguageType(0x06B3)
 
 
 /* XXX Add new user defined LCIDs ^^^ there.
