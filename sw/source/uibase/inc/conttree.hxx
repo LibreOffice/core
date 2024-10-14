@@ -131,7 +131,7 @@ class SwContentTree final : public SfxListener
     bool                m_bViewHasChanged     :1;
 
     // outline root mode drag & drop
-    std::vector<std::unique_ptr<weld::TreeIter>> m_aDndOutlinesSelected;
+    std::vector<SwOutlineNodes::size_type> m_aDndOutlinesSelected;
 
     bool m_bDocHasChanged = true;
     bool m_bIgnoreDocChange = false; // used to prevent tracking update
