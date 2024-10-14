@@ -211,6 +211,7 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
 {
     short nWeek;
     short n1WDay = static_cast<short>(Date( 1, 1, GetYear() ).GetDayOfWeek());
+    assert(n1WDay >= 0);
     short nDayOfYear = static_cast<short>(GetDayOfYear());
 
     // weekdays start at 0, thus decrement one
