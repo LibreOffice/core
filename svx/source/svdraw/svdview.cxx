@@ -514,17 +514,16 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
 
         // Around the TextEditArea there's a border to select without going into text edit mode.
         tools::Rectangle aBoundRect;
-        if (pTextObj && !pTextObj->GetGeoStat().m_nRotationAngle
+        // Force to SnapRect when Fontwork
+        if (pTextObj && pTextObj->IsFontwork())
+            aBoundRect = pHitObj->GetSnapRect();
+        else if (pTextObj && !pTextObj->GetGeoStat().m_nRotationAngle
             && !pTextObj->GetGeoStat().m_nShearAngle)
         {
             pTextObj->TakeTextEditArea(nullptr, nullptr, &aBoundRect, nullptr);
         }
         else
             aBoundRect = pHitObj->GetCurrentBoundRect();
-
-        // Force to SnapRect when Fontwork
-        if( pTextObj && pTextObj->IsFontwork() )
-            aBoundRect = pHitObj->GetSnapRect();
 
         sal_Int32 nTolerance(mnHitTolLog);
         bool bBoundRectHit(false);
