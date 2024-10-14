@@ -20,7 +20,7 @@
 module com { module sun { module star { module cui {
 
 /**
-  The vcl module uses this to call ::cui::GetFactory() in the cui module.
+  The vcl module uses this to call 'new AbstractDialogFactory_Impl' in the cui module.
   Because we have a dependency in our modules that goes the "wrong" way.
 
   @since LibreOffice 24.8
