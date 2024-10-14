@@ -943,13 +943,18 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  )
         {
             // we hope that we have only sd style sheets
             SdStyleSheet* pSdStyleSheet = static_cast<SdStyleSheet*>(pStyle);
+
+            // check that the master msApiName matches, as msApiName exists once per
+            // master page
+            if (pSdStyleSheet->msApiName != rParentName)
+                continue;
+
             OUString const curName(pStyle->GetName());
             sal_Int32 const curSep(curName.indexOf(SD_LT_SEPARATOR));
             OUString const curMaster((curSep == -1)
                     ? OUString() : curName.copy(0, curSep));
-            // check that the master matches, as msApiName exists once per
-            // master page
-            if (pSdStyleSheet->msApiName == rParentName && master == curMaster)
+            // check that the master matches
+            if (master == curMaster)
             {
                 if( pStyle != this )
                 {
