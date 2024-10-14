@@ -148,10 +148,12 @@ public:
     void ReindexOnNameChange(const SfxStyleSheetBase& style, const OUString& rOldName,
                              const OUString& rNewName);
 
-    /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found. */
-    SfxStyleSheetBase* GetNthStyleSheetThatMatchesPredicate(sal_Int32 n,
-                                                            StyleSheetPredicate& predicate,
-                                                            sal_Int32 startAt = 0);
+    /** Warning: counting for n starts at 0, i.e., the 0th style sheet is the first that is found.
+        Returns a pointer if a stylesheet is found, and the position of the found stylesheet
+     */
+    std::pair<SfxStyleSheetBase*, sal_Int32>
+    GetNthStyleSheetThatMatchesPredicate(sal_Int32 n, StyleSheetPredicate& predicate,
+                                         sal_Int32 startAt = 0);
 
     /** Get the positions of the style sheets which belong to a certain family.
      */

@@ -441,12 +441,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::operator[](sal_Int32 nIdx)
     else
     {
         DoesStyleMatchStyleSheetPredicate predicate(this);
-        rtl::Reference< SfxStyleSheetBase > ref =
+        std::pair<SfxStyleSheetBase*, sal_Int32> aFound =
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(nIdx, predicate);
-        if (ref)
+        if (aFound.first)
         {
-            mnCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
-            retval = ref.get();
+            mnCurrentPosition = aFound.second;
+            retval = aFound.first;
         }
     }
 
@@ -497,12 +497,12 @@ SfxStyleSheetBase* SfxStyleSheetIterator::Next()
     else
     {
         DoesStyleMatchStyleSheetPredicate predicate(this);
-        rtl::Reference< SfxStyleSheetBase > ref =
+        std::pair< SfxStyleSheetBase*, sal_Int32> aFound =
                 pBasePool->pImpl->mxIndexedStyleSheets->GetNthStyleSheetThatMatchesPredicate(
                         0, predicate, mnCurrentPosition+1);
-        retval = ref.get();
+        retval = aFound.first;
         if (retval != nullptr) {
-            mnCurrentPosition = pBasePool->pImpl->mxIndexedStyleSheets->FindStyleSheetPosition(*ref);
+            mnCurrentPosition = aFound.second;
         }
     }
     pCurrentStyle = retval;

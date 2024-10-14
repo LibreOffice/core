@@ -150,7 +150,7 @@ IndexedStyleSheets::GetNumberOfStyleSheetsWithPredicate(StyleSheetPredicate& pre
         });
 }
 
-SfxStyleSheetBase*
+std::pair<SfxStyleSheetBase*, sal_Int32>
 IndexedStyleSheets::GetNthStyleSheetThatMatchesPredicate(
         sal_Int32 n,
         StyleSheetPredicate& predicate,
@@ -158,7 +158,8 @@ IndexedStyleSheets::GetNthStyleSheetThatMatchesPredicate(
 {
     SfxStyleSheetBase* retval = nullptr;
     sal_Int32 matching = 0;
-    for (VectorType::const_iterator it = mStyleSheets.begin()+startAt; it != mStyleSheets.end(); ++it) {
+    VectorType::const_iterator it = mStyleSheets.begin()+startAt;
+    for (; it != mStyleSheets.end(); ++it) {
         SfxStyleSheetBase *ssheet = it->get();
         if (predicate.Check(*ssheet)) {
             if (matching == n) {
@@ -168,7 +169,7 @@ IndexedStyleSheets::GetNthStyleSheetThatMatchesPredicate(
             ++matching;
         }
     }
-    return retval;
+    return { retval, std::distance(mStyleSheets.cbegin(), it) };
 }
 
 sal_Int32 IndexedStyleSheets::FindStyleSheetPosition(const SfxStyleSheetBase& style) const
