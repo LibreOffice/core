@@ -425,7 +425,6 @@
     <block-list:block block-list:abbreviated-name=".*พุดตาล.*" block-list:name="พุดตาน"/>
     <block-list:block block-list:abbreviated-name=".*พุทธชาติ.*" block-list:name="พุทธชาด"/>
     <block-list:block block-list:abbreviated-name=".*พูมใจ.*" block-list:name="ภูมิใจ"/>
-    <block-list:block block-list:abbreviated-name=".*เพ็ชร.*" block-list:name="เพชร"/>
     <block-list:block block-list:abbreviated-name=".*เพชรฆาต.*" block-list:name="เพชฌฆาต"/>
     <block-list:block block-list:abbreviated-name=".*เพยีย.*" block-list:name="พเยีย"/>
     <block-list:block block-list:abbreviated-name=".*เพริดพราย.*" block-list:name="เพริศพราย"/>
