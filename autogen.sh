@@ -173,6 +173,12 @@ if ($src_path ne $build_path)
         $src_path_win=`cygpath -m $src_path`;
         chomp $src_path_win;
     }
+    # wsl-as-helper method: autogen.sh/configure runs within a wsl-container (WSL_DISTRO_NAME)
+    # and build is run from within git-bash (that adds .../Git/mingw64/bin to PATH)
+    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
+        $src_path_win=`wslpath -m $src_path`;
+        chomp $src_path_win;
+    }
     my @modules = <$src_path/*/Makefile>;
     foreach my $module (@modules)
     {
