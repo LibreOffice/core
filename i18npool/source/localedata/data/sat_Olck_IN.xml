@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ -->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+  <LC_INFO>
+    <Language>
+      <LangID>qlt</LangID>
+      <DefaultName>Santali, Ol Chiki</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>IN</CountryID>
+      <DefaultName>India</DefaultName>
+    </Country>
+    <Variant>sat-Olck-IN</Variant>
+  </LC_INFO>
+  <LC_CTYPE ref="hi_IN"/>
+  <LC_FORMAT ref="hi_IN" replaceFrom="[CURRENCY]" replaceTo="[$₹-6B3]"/>
+  <LC_COLLATION ref="hi_IN"/>
+  <LC_SEARCH ref="hi_IN"/>
+  <LC_INDEX>
+    <IndexKey unoid="alphanumeric" default="true" phonetic="false">ᱚ-ᱷ</IndexKey>
+    <UnicodeScript>14</UnicodeScript> <!-- Wrong Devanagari; but published enum UnicodeScript does not have Ol Chiki -->
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>ᱥᱤᱸ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱤᱸᱜᱮ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>ᱚᱛ</DefaultAbbrvName>
+          <DefaultFullName>ᱚᱛᱮ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>ᱵᱟ</DefaultAbbrvName>
+          <DefaultFullName>ᱵᱟᱞᱮ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>ᱥᱟᱹᱜ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱟᱹᱜᱩᱱ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>ᱥᱟᱹᱨ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱟᱹᱨᱫᱤ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>ᱡᱟᱹᱨ</DefaultAbbrvName>
+          <DefaultFullName>ᱡᱟᱹᱨᱩᱢ</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>ᱧᱩᱦ</DefaultAbbrvName>
+          <DefaultFullName>ᱧᱩᱦᱩᱢ</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>ᱢᱟᱜᱽ</DefaultAbbrvName>
+          <DefaultFullName>ᱢᱟᱜᱽ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>ᱯᱷᱟ.ᱜᱩᱱ</DefaultAbbrvName>
+          <DefaultFullName>ᱯᱷᱟ.ᱜᱩᱱ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>ᱪᱟ.ᱛ</DefaultAbbrvName>
+          <DefaultFullName>ᱪᱟ.ᱛ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>ᱵᱟ.ᱭᱥᱟ.ᱠ</DefaultAbbrvName>
+          <DefaultFullName>ᱵᱟ.ᱭᱥᱟ.ᱠ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>ᱡᱷᱮᱸᱴ</DefaultAbbrvName>
+          <DefaultFullName>ᱡᱷᱮᱸᱴ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>ᱟᱥᱟᱲ</DefaultAbbrvName>
+          <DefaultFullName>ᱟᱥᱟᱲ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>ᱥᱟᱱ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱟᱱ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>ᱵᱷᱟᱫᱚᱨ</DefaultAbbrvName>
+          <DefaultFullName>ᱵᱷᱟᱫᱚᱨ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>ᱫᱟᱥᱟᱸᱭ</DefaultAbbrvName>
+          <DefaultFullName>ᱫᱟᱥᱟᱸᱭ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>ᱥᱚᱦᱨᱟᱭ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱚᱦᱨᱟᱭ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>ᱟᱜᱷᱟᱬ</DefaultAbbrvName>
+          <DefaultFullName>ᱟᱜᱷᱟᱬ</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>ᱯᱩᱥ</DefaultAbbrvName>
+          <DefaultFullName>ᱯᱩᱥ</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>ᱡᱤ ᱢᱟ</DefaultAbbrvName>
+          <DefaultFullName>ᱡᱤᱥᱩ ᱢᱟᱲᱟᱝ</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>ᱥᱚᱱ</DefaultAbbrvName>
+          <DefaultFullName>ᱥᱚᱱ</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY ref="hi_IN"/>
+  <LC_TRANSLITERATION ref="hi_IN"/>
+  <LC_MISC>
+    <ReservedWords>
+      <trueWord>ᱥᱟᱹᱨᱤ</trueWord>
+      <falseWord>ᱵᱷᱩᱞ</falseWord>
+      <quarter1Word>ᱯᱩᱭᱞᱩ ᱯᱮ ᱪᱟᱸᱫᱚ</quarter1Word>
+      <quarter2Word>ᱫᱚᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ</quarter2Word>
+      <quarter3Word>ᱛᱮᱥᱟᱨ ᱯᱮ ᱪᱟᱸᱫᱚ</quarter3Word>
+      <quarter4Word>ᱯᱩᱱᱟᱹᱜ ᱯᱮ ᱪᱟᱸᱫᱚ</quarter4Word>
+      <aboveWord>ᱪᱮᱛᱟᱱ</aboveWord>
+      <belowWord>ᱞᱟᱛᱟᱨ</belowWord>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel ref="hi_IN"/>
+  <LC_OutLineNumberingLevel ref="hi_IN"/>
+</Locale>
