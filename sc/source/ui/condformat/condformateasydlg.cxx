@@ -81,7 +81,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry(u"entryRange"_ustr)))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button(u"rbassign"_ustr)))
     , mxStyles(m_xBuilder->weld_combo_box(u"themeCombo"_ustr))
-    , mxWdPreviewWin(m_xBuilder->weld_widget("previewwin"))
+    , mxWdPreviewWin(m_xBuilder->weld_widget(u"previewwin"_ustr))
     , mxWdPreview(new weld::CustomWeld(*m_xBuilder, "preview", maWdPreview))
     , mxDescription(m_xBuilder->weld_label(u"description"_ustr))
     , mxButtonOk(m_xBuilder->weld_button(u"ok"_ustr))
