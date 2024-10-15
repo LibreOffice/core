@@ -2291,7 +2291,9 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
                 sText = GetView().GetPostItMgr()->GetAnswerText();
                 pPostItMgr->RegisterAnswerText(OUString());
             }
-            oTextPara = *pAnswer;
+            const EditTextObject& rTextObject = pAnswer->GetTextObject();
+            if (rTextObject.GetParagraphCount() != 1 || !rTextObject.GetText(0).isEmpty())
+                oTextPara = *pAnswer;
         }
 
         if ( HasSelection() && !IsTableMode() )
