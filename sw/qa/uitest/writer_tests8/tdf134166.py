@@ -10,7 +10,6 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from uitest.uihelper.common import select_by_text
 from uitest.uihelper.common import select_pos
-import uno
 import unohelper
 from com.sun.star.util import URL
 from com.sun.star.frame import XStatusListener
