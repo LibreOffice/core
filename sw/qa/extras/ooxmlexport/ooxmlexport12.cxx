@@ -1563,21 +1563,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132271)
     loadAndSave("tdf149388.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    if (!isExported())
-    {
-        assertXPath(pXmlDoc, "//w:del", 2);
-        assertXPath(pXmlDoc, "//w:ins", 2);
-        assertXPath(pXmlDoc, "//w:moveFrom", 0);
-        assertXPath(pXmlDoc, "//w:moveTo", 0);
-    }
-    else
-    {
-        assertXPath(pXmlDoc, "//w:del", 1);
-        assertXPath(pXmlDoc, "//w:ins", 1);
-        // tracked text moving recognized during the import
-        assertXPath(pXmlDoc, "//w:moveFrom", 1);
-        assertXPath(pXmlDoc, "//w:moveTo", 1);
-    }
+    assertXPath(pXmlDoc, "//w:del", 1);
+    assertXPath(pXmlDoc, "//w:ins", 1);
+    // tracked text moving recognized during the import
+    assertXPath(pXmlDoc, "//w:moveFrom", 1);
+    assertXPath(pXmlDoc, "//w:moveTo", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf149388_fly)
@@ -1598,21 +1588,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136667)
     loadAndSave("tdf149388_fly.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // import change tracking in floating tables
-    if (!isExported())
-    {
-        assertXPath(pXmlDoc, "//w:del", 2);
-        assertXPath(pXmlDoc, "//w:ins", 4);
-        assertXPath(pXmlDoc, "//w:moveFrom", 0);
-        assertXPath(pXmlDoc, "//w:moveTo", 0);
-    }
-    else
-    {
-        assertXPath(pXmlDoc, "//w:del", 1);
-        assertXPath(pXmlDoc, "//w:ins", 3);
-        // tracked text moving recognized during the import
-        assertXPath(pXmlDoc, "//w:moveFrom", 1);
-        assertXPath(pXmlDoc, "//w:moveTo", 1);
-    }
+    assertXPath(pXmlDoc, "//w:del", 1);
+    assertXPath(pXmlDoc, "//w:ins", 3);
+    // tracked text moving recognized during the import
+    assertXPath(pXmlDoc, "//w:moveFrom", 1);
+    assertXPath(pXmlDoc, "//w:moveTo", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136850)
