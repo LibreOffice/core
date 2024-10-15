@@ -177,8 +177,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
     // In ODF 1.3 strict, there must not be an attribute at all.
     loadFromFile(u"tdf150407_WritingModeBTLR_style.odt");
 
-    // Save to ODF 1.3 extended. Adapt 3 (=ODFVER_LATEST) to a to be ODFVER_013_EXTENDED when
-    // attribute value "bt-lr" is included in ODF strict.
+    // Save to latest extended. Adapt test, when attribute value "bt-lr" is included in ODF strict.
     {
         save(u"writer8"_ustr);
 
@@ -197,6 +196,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testWritingModeBTLR)
     // Save to ODF 1.3 strict.
     {
         SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+        // As of Nov 2024, validating against a version other than LATEST is not implemented.
+        skipValidation();
         save(u"writer8"_ustr);
 
         // Without the fix an faulty 'writing-mode="bt-lr"' attribute was written in productive build.
@@ -521,7 +522,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 
     // Backup original ODF default version
 
-    // Save ODF 1.3 extended. Make sure gradient-stop elements have
+    // Save to LATEST; that is extended. Make sure gradient-stop elements have
     // offsets 0 and 1, and border is written as 50%.
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -535,6 +536,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)
 
     // Save to ODF 1.3 strict and make sure border, start-color and end-color are suitable set.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
     save(u"impress8"_ustr);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:gradient-stop", 0);
@@ -554,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     // When transparency gradient-stops are integrated in ODF strict, the test needs to be adapted.
     loadFromFile(u"MCGR_TransparencyBorder_restoration.pptx");
 
-    // Save to ODF 1.3 extended. Make sure transparency gradient-stop
+    // Save to LATEST, that is extended. Make sure transparency gradient-stop
     //elements are written with offset 0 and 1, and border is written as 40%.
     save(u"impress8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
@@ -564,9 +567,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testTransparencyBorderRestoration)
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "stop-opacity", u"0");
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop[1]", "offset", u"0");
     assertXPath(pXmlDoc, sPath, "border", u"40%");
-
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
     // Save to ODF 1.3 strict and make sure border, start and end opacity are suitable set.
     SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+
     save(u"impress8"_ustr);
     pXmlDoc = parseExport(u"styles.xml"_ustr);
     assertXPath(pXmlDoc, sPath + "/loext:opacity-stop", 0);

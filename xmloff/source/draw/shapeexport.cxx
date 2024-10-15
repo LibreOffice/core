@@ -85,6 +85,7 @@
 #include <comphelper/classids.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -4070,7 +4071,36 @@ static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::
                         ExportParameter( aStrBuffer, aPosition.First );
                         ExportParameter( aStrBuffer, aPosition.Second );
                         aStr = aStrBuffer.makeStringAndClear();
+
+                        // Keep it for backward compatibility
                         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POSITION, aStr );
+
+                        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+                        if (eVersion >= SvtSaveOptions::ODFSVER_014)
+                        {
+                            comphelper::SequenceAsHashMap aPropSeqMap(rPropSeq);
+                            if (aPropSeqMap.contains(u"Polar"_ustr))
+                            {
+                                ExportParameter( aStrBuffer, aPosition.First );
+                                aStr = aStrBuffer.makeStringAndClear();
+                                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_HANDLE_POLAR_RADIUS, aStr);
+
+                                ExportParameter( aStrBuffer, aPosition.Second );
+                                aStr = aStrBuffer.makeStringAndClear();
+                                rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_HANDLE_POLAR_ANGLE, aStr);
+                            }
+                            else
+                            {
+                                ExportParameter( aStrBuffer, aPosition.First );
+                                aStr = aStrBuffer.makeStringAndClear();
+                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POSITION_X, aStr );
+
+                                ExportParameter( aStrBuffer, aPosition.Second );
+                                aStr = aStrBuffer.makeStringAndClear();
+                                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POSITION_Y, aStr );
+                            }
+                        }
+
                         bPosition = true;
                     }
                 }
@@ -4107,7 +4137,20 @@ static void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::
                         ExportParameter( aStrBuffer, aPolar.First );
                         ExportParameter( aStrBuffer, aPolar.Second );
                         aStr = aStrBuffer.makeStringAndClear();
+                        // Keep it for backward compatibility
                         rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POLAR, aStr );
+
+                        SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
+                        if (eVersion >= SvtSaveOptions::ODFSVER_014)
+                        {
+                            ExportParameter( aStrBuffer, aPolar.First );
+                            aStr = aStrBuffer.makeStringAndClear();
+                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POLAR_POLE_X, aStr );
+
+                            ExportParameter( aStrBuffer, aPolar.Second );
+                            aStr = aStrBuffer.makeStringAndClear();
+                            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POLAR_POLE_Y, aStr );
+                        }
                     }
                 }
                 break;

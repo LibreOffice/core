@@ -579,6 +579,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 
     // save in ODF 1.3 strict and test that new attribute is not written.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
     save(u"writer8"_ustr);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
@@ -631,6 +633,64 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
     save(u"calc8"_ustr);
     pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPathNoAttribute(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal-type");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePosition)
+{
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    loadFromFile(u"tdf162691_handle_position.fodt");
+
+    save(u"writer8"_ustr);
+    static constexpr OString sXPath("/office:document-content/office:body/office:text/text:p/"
+                                    "draw:custom-shape/draw:enhanced-geometry/draw:handle"_ostr);
+    // assert XML.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    assertXPath(pXmlDoc, sXPath, "handle-position", u"$0 10800");
+    assertXPath(pXmlDoc, sXPath, "handle-position-x", u"$0");
+    assertXPath(pXmlDoc, sXPath, "handle-position-y", u"10800");
+
+    // assert that new attributes are not written in older ODF versions and old one is written.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
+    save(u"writer8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, sXPath, "handle-position", u"$0 10800");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-position-x");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-position-y");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testHandlePolar)
+{
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    loadFromFile(u"tdf162691_handle_polar.fodt");
+
+    save(u"writer8"_ustr);
+
+    // assert XML.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr OString sXPath("/office:document-content/office:body/office:text/text:p/"
+                                    "draw:custom-shape/draw:enhanced-geometry/draw:handle"_ostr);
+    assertXPath(pXmlDoc, sXPath, "handle-position", u"9000 $0");
+    assertXPath(pXmlDoc, sXPath, "handle-polar", u"10800 1000");
+    assertXPath(pXmlDoc, sXPath, "handle-polar-angle", u"$0");
+    assertXPath(pXmlDoc, sXPath, "handle-polar-radius", u"9000");
+    assertXPath(pXmlDoc, sXPath, "handle-polar-pole-x", u"10800");
+    assertXPath(pXmlDoc, sXPath, "handle-polar-pole-y", u"1000");
+
+    // assert that new attributes are not written in older ODF versions and old ones are written.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
+    save(u"writer8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, sXPath, "handle-position", u"9000 $0");
+    assertXPath(pXmlDoc, sXPath, "handle-polar", u"10800 1000");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-polar-pole-x");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-polar-pole-y");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-polar-angle");
+    assertXPathNoAttribute(pXmlDoc, sXPath, "handle-polar-radius");
 }
 
 namespace
