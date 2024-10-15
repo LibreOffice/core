@@ -33,12 +33,12 @@
 
 class SAL_WARN_UNUSED SVXCORE_DLLPUBLIC Camera3D final : public Viewport3D
 {
-    basegfx::B3DPoint aPosition;
-    basegfx::B3DPoint aLookAt;
-    double fFocalLength;
-    double fBankAngle;
+    basegfx::B3DPoint m_aPosition;
+    basegfx::B3DPoint m_aLookAt;
+    double m_fFocalLength;
+    double m_fBankAngle;
 
-    bool bAutoAdjustProjection;
+    bool m_bAutoAdjustProjection;
 
 public:
     Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
@@ -48,18 +48,18 @@ public:
     void SetViewWindow(double fX, double fY, double fW, double fH);
 
     void SetPosition(const basegfx::B3DPoint& rNewPos);
-    const basegfx::B3DPoint& GetPosition() const { return aPosition; }
+    const basegfx::B3DPoint& GetPosition() const { return m_aPosition; }
     void SetLookAt(const basegfx::B3DPoint& rNewLookAt);
     void SetPosAndLookAt(const basegfx::B3DPoint& rNewPos, const basegfx::B3DPoint& rNewLookAt);
 
     // Focal length in mm
     void SetFocalLength(double fLen);
-    double GetFocalLength() const { return fFocalLength; }
+    double GetFocalLength() const { return m_fFocalLength; }
 
     // Bank angle left/right
     void SetBankAngle(double fAngle);
 
-    void SetAutoAdjustProjection(bool bAdjust) { bAutoAdjustProjection = bAdjust; }
+    void SetAutoAdjustProjection(bool bAdjust) { m_bAutoAdjustProjection = bAdjust; }
 };
 
 #endif // INCLUDED_SVX_CAMERA3D_HXX

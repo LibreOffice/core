@@ -21,8 +21,8 @@
 
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen)
-    : fBankAngle(0)
-    , bAutoAdjustProjection(true)
+    : m_fBankAngle(0)
+    , m_bAutoAdjustProjection(true)
 {
     SetPosition(rPos);
     SetLookAt(rLookAt);
@@ -30,9 +30,9 @@ Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLook
 }
 
 Camera3D::Camera3D()
-    : fFocalLength(35.0)
-    , fBankAngle(0.0)
-    , bAutoAdjustProjection(false)
+    : m_fFocalLength(35.0)
+    , m_fBankAngle(0.0)
+    , m_bAutoAdjustProjection(false)
 {
 }
 
@@ -41,50 +41,50 @@ Camera3D::Camera3D()
 void Camera3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
     Viewport3D::SetViewWindow(fX, fY, fW, fH);
-    if (bAutoAdjustProjection)
-        SetFocalLength(fFocalLength);
+    if (m_bAutoAdjustProjection)
+        SetFocalLength(m_fFocalLength);
 }
 
 void Camera3D::SetPosition(const basegfx::B3DPoint& rNewPos)
 {
-    if (rNewPos != aPosition)
+    if (rNewPos != m_aPosition)
     {
-        aPosition = rNewPos;
-        SetVRP(aPosition);
-        SetVPN(aPosition - aLookAt);
-        SetBankAngle(fBankAngle);
+        m_aPosition = rNewPos;
+        SetVRP(m_aPosition);
+        SetVPN(m_aPosition - m_aLookAt);
+        SetBankAngle(m_fBankAngle);
     }
 }
 
 void Camera3D::SetLookAt(const basegfx::B3DPoint& rNewLookAt)
 {
-    if (rNewLookAt != aLookAt)
+    if (rNewLookAt != m_aLookAt)
     {
-        aLookAt = rNewLookAt;
-        SetVPN(aPosition - aLookAt);
-        SetBankAngle(fBankAngle);
+        m_aLookAt = rNewLookAt;
+        SetVPN(m_aPosition - m_aLookAt);
+        SetBankAngle(m_fBankAngle);
     }
 }
 
 void Camera3D::SetPosAndLookAt(const basegfx::B3DPoint& rNewPos,
                                const basegfx::B3DPoint& rNewLookAt)
 {
-    if (rNewPos != aPosition || rNewLookAt != aLookAt)
+    if (rNewPos != m_aPosition || rNewLookAt != m_aLookAt)
     {
-        aPosition = rNewPos;
-        aLookAt = rNewLookAt;
+        m_aPosition = rNewPos;
+        m_aLookAt = rNewLookAt;
 
-        SetVRP(aPosition);
-        SetVPN(aPosition - aLookAt);
-        SetBankAngle(fBankAngle);
+        SetVRP(m_aPosition);
+        SetVPN(m_aPosition - m_aLookAt);
+        SetBankAngle(m_fBankAngle);
     }
 }
 
 void Camera3D::SetBankAngle(double fAngle)
 {
-    basegfx::B3DVector aDiff(aPosition - aLookAt);
+    basegfx::B3DVector aDiff(m_aPosition - m_aLookAt);
     basegfx::B3DVector aPrj(aDiff);
-    fBankAngle = fAngle;
+    m_fBankAngle = fAngle;
 
     if (aDiff.getY() == 0)
     {
@@ -137,7 +137,7 @@ void Camera3D::SetBankAngle(double fAngle)
         aTf *= aTemp;
     }
 
-    aTf.rotate(0.0, 0.0, fBankAngle);
+    aTf.rotate(0.0, 0.0, m_fBankAngle);
 
     {
         basegfx::B3DHomMatrix aTemp;
@@ -174,7 +174,7 @@ void Camera3D::SetFocalLength(double fLen)
     if (fLen < 5)
         fLen = 5;
     SetPRP(basegfx::B3DPoint(0.0, 0.0, fLen / 35.0 * aViewWin.W));
-    fFocalLength = fLen;
+    m_fFocalLength = fLen;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
