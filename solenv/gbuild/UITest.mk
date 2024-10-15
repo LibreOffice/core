@@ -63,7 +63,7 @@ else
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf $(dir $(call gb_UITest_get_target,$*)) && \
 		mkdir -p $(dir $(call gb_UITest_get_target,$*))/user/user && \
-		cp -T $(if $(gb_UITest_use_config),$(gb_UITest_use_config),$(SRCDIR)/qadevOOo/qa/registrymodifications.xcu) $(dir $(call gb_UITest_get_target,$*))/user/user/registrymodifications.xcu && \
+		cp $(if $(filter-out MACOSX,$(OS)),-T) $(if $(gb_UITest_use_config),$(gb_UITest_use_config),$(SRCDIR)/qadevOOo/qa/registrymodifications.xcu) $(dir $(call gb_UITest_get_target,$*))/user/user/registrymodifications.xcu && \
 		$(if $(gb_UITest__interactive),, \
 		    rm -fr $@.core && mkdir -p $(dir $(call gb_UITest_get_target,$*))user/ && mkdir $@.core && cd $@.core && ) \
 		$(call gb_CppunitTest_coredumpctl_setup,$@) \
