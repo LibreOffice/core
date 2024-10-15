@@ -1221,14 +1221,13 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             }
             lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[nCurr],
                 rParm.nOldWish, nOldWidth, true );
-            bool bGoOn = !aRowSpanPos.empty();
             sal_uInt16 j = nCurr;
-            while( bGoOn )
+            while (!aRowSpanPos.empty() && j > 0)
             {
-                lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[--j],
+                j = o3tl::sanitizing_dec(j);
+                lcl_CalcNewWidths( aRowSpanPos, aCopy, rLines[j],
                     rParm.nOldWish, nOldWidth, true );
                 lcl_AdjustWidthsInLine( rLines[j], aCopy, rParm, 0 );
-                bGoOn = !aRowSpanPos.empty() && j > 0;
             }
             aRowSpanPos.clear();
         }
