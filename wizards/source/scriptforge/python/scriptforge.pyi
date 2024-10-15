@@ -856,7 +856,7 @@ class SFScriptForge:
                         ``foreground``: the foreground color of the window as an integer value.
                     Note
                         Typical use
-                            ``exc.PythonShell({**globals(), **locals()}, background = 0x0, foregound = 0xFFFFFF)``
+                            ``exc.PythonShell({**globals(), **locals()}, background = 0x0, foreground = 0xFFFFFF)``
                 """
             ...
 
