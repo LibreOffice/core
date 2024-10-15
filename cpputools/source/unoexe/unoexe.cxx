@@ -296,7 +296,6 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
             }
             else if (_bSingleInstance)
             {
-                if (! _xSingleInstance.is())
                 {
                     std::lock_guard aGuard( _aSingleInstanceMutex );
                     if (! _xSingleInstance.is())
