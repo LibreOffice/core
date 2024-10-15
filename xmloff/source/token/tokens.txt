@@ -2420,11 +2420,17 @@ handle-mirror-vertical
 handle-mirror-horizontal
 handle-switched
 handle-position
+handle-position-x
+handle-position-y
 handle-range-x-minimum
 handle-range-x-maximum
 handle-range-y-minimum
 handle-range-y-maximum
 handle-polar
+handle-polar-angle
+handle-polar-radius
+handle-polar-pole-x
+handle-polar-pole-y
 handle-radius-range-minimum
 handle-radius-range-maximum
 rectangle
