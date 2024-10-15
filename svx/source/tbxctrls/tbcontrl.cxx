@@ -3923,9 +3923,9 @@ namespace
 
             std::vector<sfx::CurrencyID> aCurrencyIDs;
 
-            SfxObjectShell* pDocShell = SfxObjectShell::Current();
-            if (auto pModelAccessor = pDocShell->GetDocumentModelAccessor())
-                aCurrencyIDs = pModelAccessor->getDocumentCurrencies();
+            if (SfxObjectShell* pDocShell = SfxObjectShell::Current())
+                if (auto pModelAccessor = pDocShell->GetDocumentModelAccessor())
+                    aCurrencyIDs = pModelAccessor->getDocumentCurrencies();
 
             SvxCurrencyToolBoxControl::GetCurrencySymbols(aList, true, aCurrencyList, aCurrencyIDs);
 
