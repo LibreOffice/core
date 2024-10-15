@@ -244,9 +244,9 @@ struct TableInfo
     css::beans::PropertyValues aTableProperties;
     std::vector< PropertyIds > aTablePropertyIds;
 
-    TableInfo()
-    : nLeftBorderDistance(DEF_BORDER_DIST)
-    , nRightBorderDistance(DEF_BORDER_DIST)
+    explicit TableInfo(bool bOOXMLImport)
+    : nLeftBorderDistance(bOOXMLImport ? DEF_BORDER_DIST : 0)
+    , nRightBorderDistance(bOOXMLImport ? DEF_BORDER_DIST : 0)
     , nTopBorderDistance(0)
     , nBottomBorderDistance(0)
     , nTblLook(0x4a0)
@@ -390,7 +390,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 PropertyMapPtr pMergedProperties = pStyleSheet->GetMergedInheritedProperties(pStyleSheetTable);
 
                 table::BorderLine2 aBorderLine;
-                TableInfo rStyleInfo;
+                TableInfo rStyleInfo(m_rDMapper_Impl.IsOOXMLImport());
                 if (lcl_extractTableBorderProperty(pMergedProperties, PROP_TOP_BORDER, rStyleInfo, aBorderLine))
                 {
                     aGrabBag[u"TableStyleTopBorder"_ustr] <<= aBorderLine;
@@ -1414,7 +1414,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     // If we want to make this table a floating one.
     std::vector<beans::PropertyValue> aFrameProperties = comphelper::sequenceToContainer<std::vector<beans::PropertyValue> >
             (m_rDMapper_Impl.getTableManager().getCurrentTablePosition());
-    TableInfo aTableInfo;
+    TableInfo aTableInfo(m_rDMapper_Impl.IsOOXMLImport());
     aTableInfo.nNestLevel = nestedTableLevel;
 
     // non-floating tables need floating in footnotes and endnotes, because

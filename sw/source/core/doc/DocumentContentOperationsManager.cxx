@@ -3706,7 +3706,7 @@ bool DocumentContentOperationsManager::InsertPoolItem(
         //            aPara.pFormatColl = pPara->pFormatColl;
         aPara.bReset = true;
         // #i62675#
-        aPara.bResetListAttrs = false;
+        aPara.bResetListAttrs = true;
         aPara.bResetAllCharAttrs = true;
         aPara.pDelSet = pDelSet.get();
         m_rDoc.GetNodes().ForEach(

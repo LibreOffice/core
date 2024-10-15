@@ -1043,8 +1043,8 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
 
         // #i62675# check, if paragraph style has changed
         if ( pPara->bResetListAttrs &&
-             pFormat != pCNd->GetFormatColl() &&
-             pFormat->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET )
+             pFormat != pCNd->GetFormatColl()
+            && pCNd->GetTextNode()->IsInList() )
         {
             // Check, if the list style of the paragraph will change.
             bool bChangeOfListStyleAtParagraph( true );
@@ -1054,7 +1054,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
                 if ( pNumRuleAtParagraph )
                 {
                     const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
-                        pFormat->GetNumRule();
+                        rTNd.GetTextColl()->GetNumRule();
                     if ( rNumRuleItemAtParagraphStyle.GetValue() ==
                             pNumRuleAtParagraph->GetName() )
                     {
