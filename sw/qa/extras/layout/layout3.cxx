@@ -497,6 +497,52 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
+{
+    createSwDoc("tdf163149.docx");
+    // Ensure that all text portions are calculated before testing.
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the text array action for the second non-empty (shrunk) line
+    bool bFirst = true;
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // skip empty paragraphs
+            if (pDXArray.size() <= 1)
+                continue;
+
+            // skip first non-empty line
+            if (bFirst)
+            {
+                bFirst = false;
+                continue;
+            }
+
+            // There should be 46 chars on the second line
+            CPPUNIT_ASSERT_EQUAL(size_t(46), pDXArray.size());
+
+            // Assert we are using the expected position for the last char
+            // This was 4673, now 4163, according to the fixed space shrinking
+            CPPUNIT_ASSERT_LESS(sal_Int32(4200), pDXArray[45]);
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
