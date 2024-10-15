@@ -373,7 +373,7 @@ sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
 
     // Then it should be at the end of the last line!
     DBG_ASSERT(nIndex == maLineList[nCount - 1].GetEnd(), "Index dead wrong!");
-    return (maLineList.Count() - 1);
+    return nCount - 1;
 }
 
 void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormattedLine )
