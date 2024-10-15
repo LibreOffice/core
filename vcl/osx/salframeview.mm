@@ -728,7 +728,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     // Stop hiding of child windows when dragged to a different screen
     // LibreOffice sets all dialog windows as a native child window of
     // its related document window in order to force the dialog windows
-    // to always remain in front of their releated document window.
+    // to always remain in front of their related document window.
     // However, for some unknown reason, if a native child window is
     // dragged to a different screen than its native parent window,
     // macOS will hide the native child window when the drag has ended.
