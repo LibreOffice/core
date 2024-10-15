@@ -302,30 +302,26 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
         if ( m_pMenu )
         {
             // create a new child
-            rtl::Reference<OAccessibleMenuItemComponent> pChild;
-
             if ( m_pMenu->GetItemType( static_cast<sal_uInt16>(i) ) == MenuItemType::SEPARATOR )
             {
-                pChild = new VCLXAccessibleMenuSeparator( m_pMenu, static_cast<sal_uInt16>(i) );
+                xChild = new VCLXAccessibleMenuSeparator(m_pMenu, static_cast<sal_uInt16>(i));
             }
             else
             {
                 PopupMenu* pPopupMenu = m_pMenu->GetPopupMenu( m_pMenu->GetItemId( static_cast<sal_uInt16>(i) ) );
                 if ( pPopupMenu )
                 {
-                    pChild = new VCLXAccessibleMenu( m_pMenu, static_cast<sal_uInt16>(i), pPopupMenu );
-                    pPopupMenu->SetAccessible( pChild );
+                    xChild = new VCLXAccessibleMenu(m_pMenu, static_cast<sal_uInt16>(i), pPopupMenu);
+                    pPopupMenu->SetAccessible(xChild);
                 }
                 else
                 {
-                    pChild = new VCLXAccessibleMenuItem( m_pMenu, static_cast<sal_uInt16>(i) );
+                    xChild = new VCLXAccessibleMenuItem(m_pMenu, static_cast<sal_uInt16>(i));
                 }
             }
 
             // set states
-            pChild->SetStates();
-
-            xChild = std::move(pChild);
+            xChild->SetStates();
 
             // insert into menu item list
             m_aAccessibleChildren[i] = xChild;
