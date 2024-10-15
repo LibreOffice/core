@@ -1217,139 +1217,123 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104797, "tdf104797.docx")
     CPPUNIT_ASSERT_EQUAL(u"?"_ustr, getRun(getParagraph(2), 14)->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf145720)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // These were 0 (missing move*FromRange* elements)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
+    loadAndSave("tdf104797.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // These were 0 (missing move*FromRange* elements)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFromRangeEnd", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveToRangeEnd", 1);
 
-        // paired names
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name",
-                    u"move471382752");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name",
-                    u"move471382752");
+    // paired names
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "name",
+                u"move471382752");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "name",
+                u"move471382752");
 
-        // mandatory authors and dates
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
-                    u"Tekijä");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
-                    u"Tekijä");
-        // no date (anonymized change)
-        // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
-        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",
-                               "date");
-        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart",
-                               "date");
-    }
+    // mandatory authors and dates
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
+                u"Tekijä");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
+                u"Tekijä");
+    // no date (anonymized change)
+    // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",
+                           "date");
+    assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart",
+                           "date");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf150166, "tdf150166.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf150166)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End (to keep tracked text moving)
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
-        // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
-        assertXPath(pXmlDoc, "//w:moveFromRangeEnd", 0);
+    loadAndSave("tdf150166.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:moveFromRangeStart", 0);
+    // This was 2 (missing RangeStart elements, but bad unpaired RangeEnds)
+    assertXPath(pXmlDoc, "//w:moveFromRangeEnd", 0);
 
-        // These were 0 (moveFrom, moveTo and t)
-        assertXPath(pXmlDoc, "//w:del", 11);
-        assertXPath(pXmlDoc, "//w:ins", 12);
-        assertXPath(pXmlDoc, "//w:delText", 7);
+    // These were 0 (moveFrom, moveTo and t)
+    assertXPath(pXmlDoc, "//w:del", 11);
+    assertXPath(pXmlDoc, "//w:ins", 12);
+    assertXPath(pXmlDoc, "//w:delText", 7);
 
-        // no more moveFrom/moveTo to avoid of problems with ToC
-        assertXPath(pXmlDoc, "//w:moveFrom", 0);
-        assertXPath(pXmlDoc, "//w:moveTo", 0);
-    }
+    // no more moveFrom/moveTo to avoid of problems with ToC
+    assertXPath(pXmlDoc, "//w:moveFrom", 0);
+    assertXPath(pXmlDoc, "//w:moveTo", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf143510, "TC-table-DnD-move.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143510)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
-    }
+    loadAndSave("TC-table-DnD-move.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // This was 0 (missing tracked table row deletion/insertion)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 2);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf143510_table_from_row, "TC-table-Separate-Move.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143510_table_from_row)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table move by drag & drop
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 1);
-    }
+    loadAndSave("TC-table-Separate-Move.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // This was 0 (missing tracked table row deletion/insertion)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr/w:trPr/w:del", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[3]/w:trPr/w:del", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:ins", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table, "TC-table-rowDND.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 1);
-    }
+    loadAndSave("TC-table-rowDND.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // This was 0 (missing tracked table row deletion/insertion)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:del", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:ins", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf143510_within_table2, "TC-table-rowDND-front.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf143510_within_table2)
 {
     // check moveFromRangeStart/End and moveToRangeStart/End for tracked table row move by DnD
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 1);
-    }
+    loadAndSave("TC-table-rowDND-front.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // This was 0 (missing tracked table row deletion/insertion)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:trPr/w:del", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf150824, "tdf150824.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf150824)
 {
     // check tracked table row insertion (stored in a single redline)
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        // This was 0 (missing tracked table row deletion/insertion)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins", 1);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:trPr/w:ins", 1);
-    }
+    loadAndSave("tdf150824.fodt");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    // This was 0 (missing tracked table row deletion/insertion)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:trPr/w:ins", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:trPr/w:ins", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[3]/w:trPr/w:ins", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf157011, "tdf157011_ins_del_empty_cols.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf157011)
 {
     // check tracked table column insertions and deletions with empty cells
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    loadAndSave("tdf157011_ins_del_empty_cols.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-        // This was 1 (missing tracked table cell insertions)
-        assertXPath(pXmlDoc, "//w:ins", 3);
+    // This was 1 (missing tracked table cell insertions)
+    assertXPath(pXmlDoc, "//w:ins", 3);
 
-        // This was 4 (missing tracked table cell deletions)
-        assertXPath(pXmlDoc, "//w:del", 6);
+    // This was 4 (missing tracked table cell deletions)
+    assertXPath(pXmlDoc, "//w:del", 6);
 
-        // tdf#157187 This was false (dummy w:tc/w:p/w:sdt/w:sdtContent content box)
-        assertXPath(pXmlDoc, "//w:tc/w:p/w:del", 6);
-        assertXPath(pXmlDoc, "//w:tc/w:p/w:ins", 3);
-    }
+    // tdf#157187 This was false (dummy w:tc/w:p/w:sdt/w:sdtContent content box)
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:del", 6);
+    assertXPath(pXmlDoc, "//w:tc/w:p/w:ins", 3);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf150824_regression, "ooo30436-1-minimized.sxw")
