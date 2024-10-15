@@ -292,29 +292,24 @@ void SwBaseShell::ExecDelete(SfxRequest &rReq)
     //#i42732# - notify the edit window that from now on we do not use the input language
     rTmpEditWin.SetUseInputLanguage( false );
 
-    std::function<void(SwPosition* sp, const IDocumentMarkAccess* pMarksAccess)>
-        NoEmptyTextField = [](SwPosition* sp, const IDocumentMarkAccess* pMarksAccess)
+    // Test Fieldmark when empty reset the Placeholders
+    const IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
+    for (SwPaM &rPaM : rSh.GetCursor()->GetRingContainer())
     {
+        const SwPosition* sp = rPaM.Start();
         // Legacy text/combo/checkbox: never return read-only when inside these form fields.
         sw::mark::Fieldmark* pA = pMarksAccess->getInnerFieldmarkFor(*sp);
         if (pA != nullptr)
         {
-            bool fm = IDocumentMarkAccess::GetType(*pA) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK;
-            if ((pA->GetContent().getLength() == 0) && fm)
+            if ((IDocumentMarkAccess::GetType(*pA) == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK) &&
+                (pA->GetContent().getLength() == 0)
+               )
             {
                 pA->ReplaceContent(vEnSpaces);
-            };
+                rSh.GotoFieldmark(pA);
+            }
         }
-    };
-
-    const IDocumentMarkAccess* pMarksAccess = rSh.GetDoc()->getIDocumentMarkAccess();
-    for (SwPaM& rPaM : rSh.GetCursor()->GetRingContainer())
-    {
-        auto [pStt, pEnd] = rPaM.StartEnd(); // SwPosition*
-        NoEmptyTextField(pStt, pMarksAccess);
-        NoEmptyTextField(pEnd, pMarksAccess);
     }
-
 }
 
 void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
