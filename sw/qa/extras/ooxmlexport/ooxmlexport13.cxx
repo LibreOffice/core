@@ -631,40 +631,37 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 
 CPPUNIT_TEST_FIXTURE(Test, testInputListExport)
 {
-    loadAndReload("tdf122186_input_list.odt");
-    if (!isExported()) // importing the ODT, an input field
-    {
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        CPPUNIT_ASSERT(xFields->hasMoreElements());
-        uno::Any aField = xFields->nextElement();
-        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
-    }
-    else // importing the DOCX, a content control
-    {
-        uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
-        OUString aPortionType;
-        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
-        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
-        uno::Reference<text::XTextContent> xContentControl;
-        xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
-        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValues> aListItems;
-        xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
-        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
-        comphelper::SequenceAsHashMap aMap0(aListItems[0]);
-        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aMap0[u"Value"_ustr].get<OUString>());
-        comphelper::SequenceAsHashMap aMap1(aListItems[1]);
-        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aMap1[u"Value"_ustr].get<OUString>());
-        comphelper::SequenceAsHashMap aMap2(aListItems[2]);
-        CPPUNIT_ASSERT_EQUAL(u"3"_ustr, aMap2[u"Value"_ustr].get<OUString>());
-        uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xContentControl, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
-        uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xContent->getString());
-    }
+    createSwDoc("tdf122186_input_list.odt");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    uno::Any aField = xFields->nextElement();
+    uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
+
+    saveAndReload(mpFilter);
+
+    uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValues> aListItems;
+    xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
+    comphelper::SequenceAsHashMap aMap0(aListItems[0]);
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aMap0[u"Value"_ustr].get<OUString>());
+    comphelper::SequenceAsHashMap aMap1(aListItems[1]);
+    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, aMap1[u"Value"_ustr].get<OUString>());
+    comphelper::SequenceAsHashMap aMap2(aListItems[2]);
+    CPPUNIT_ASSERT_EQUAL(u"3"_ustr, aMap2[u"Value"_ustr].get<OUString>());
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xContentControl, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xContent->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123435, "tdf123435.docx")
