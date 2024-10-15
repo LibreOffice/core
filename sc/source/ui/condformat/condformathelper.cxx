@@ -24,7 +24,6 @@
 #include <tabvwsh.hxx>
 #include <svx/fntctrl.hxx>
 #include <compiler.hxx>
-#include <globstr.hrc>
 
 namespace {
 
