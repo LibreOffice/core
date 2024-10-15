@@ -482,7 +482,10 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                     tools::Long nSpaceSub = ( nBreakWidth > pCurrent->Width() )
                         ? (nBreakWidth - pCurrent->Width()) * SPACING_PRECISION_FACTOR /
                                 sal_Int32(nGluePortion) + LONG_MAX/2
-                        : 0;
+                        : ( nSpaceAdd < 0 )
+                            // shrink, if portions exceed the line width available before an image
+                            ? -nSpaceAdd + LONG_MAX/2
+                            : 0;
 
                     // i60594
                     if( rSI.CountKashida() && !bSkipKashida )
