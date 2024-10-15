@@ -20,6 +20,7 @@
 #include <XMLRangeHelper.hxx>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 
@@ -115,7 +116,7 @@ void lcl_getSingleCellAddressFromXMLString(
     std::u16string_view aCellStr = rXMLString.substr( nStartPos, nEndPos - nStartPos + 1 );
     const sal_Unicode* pStrArray = aCellStr.data();
     sal_Int32 nLength = aCellStr.size();
-    sal_Int32 i = nLength - 1, nColumn = 0;
+    sal_Int32 i = nLength - 1;
 
     // parse number for row
     while( rtl::isAsciiDigit( pStrArray[ i ] ) && i >= 0 )
@@ -131,14 +132,21 @@ void lcl_getSingleCellAddressFromXMLString(
         rOutCell.bRelativeRow = true;
 
     // parse rest for column
-    assert(i <= 6);
-    sal_Int32 nPower = 1;
+    assert(i <= 13);
+    sal_Int64 nPower = 1;
+    sal_Int64 nColumn = 0;
     while( i >= 0 && rtl::isAsciiAlpha( pStrArray[ i ] ))
     {
         nColumn += (rtl::toAsciiUpperCase(pStrArray[ i ]) - aLetterA + 1) * nPower;
         i--;
         nPower *= 26;
     }
+    if (nColumn < SAL_MIN_INT32 || nColumn > SAL_MAX_INT32)
+    {
+        SAL_WARN("chart2", "out of range column");
+        nColumn = 0;
+    }
+
     rOutCell.nColumn = nColumn - 1;
 
     rOutCell.bRelativeColumn = true;
