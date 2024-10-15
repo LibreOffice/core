@@ -29,6 +29,7 @@
 
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
@@ -560,6 +561,123 @@ public:
         }
     }
 
+    void testXProcessingInstruction()
+    {
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+        Reference< xml::dom::XProcessingInstruction > xPI = xDocument->createProcessingInstruction(u"foo"_ustr, u"bar"_ustr);
+        CPPUNIT_ASSERT(xPI);
+
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, xPI->getTarget());
+        CPPUNIT_ASSERT_EQUAL(u"bar"_ustr, xPI->getData());
+
+        xPI->setData(u"baz"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, xPI->getData());
+
+        {
+            uno::Reference< xml::dom::XProcessingInstruction> xPIClone( xPI->cloneNode(false), uno::UNO_QUERY_THROW );
+            CPPUNIT_ASSERT(xPIClone);
+            CPPUNIT_ASSERT(!xPIClone->hasChildNodes());
+        }
+        {
+            uno::Reference< xml::dom::XProcessingInstruction> xPIClone( xPI->cloneNode(true), uno::UNO_QUERY_THROW );
+            CPPUNIT_ASSERT(xPIClone);
+            CPPUNIT_ASSERT(!xPIClone->hasChildNodes());
+        }
+
+        CPPUNIT_ASSERT(!xPI->getAttributes());
+
+        uno::Reference<xml::dom::XNodeList> xChildList = xPI->getChildNodes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xChildList->getLength());
+
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xPI->getLocalName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xPI->getNamespaceURI());
+        CPPUNIT_ASSERT(!xPI->getNextSibling());
+        CPPUNIT_ASSERT_EQUAL(u"foo"_ustr, xPI->getNodeName());
+        CPPUNIT_ASSERT_EQUAL(xml::dom::NodeType::NodeType_PROCESSING_INSTRUCTION_NODE, xPI->getNodeType());
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, xPI->getNodeValue());
+        CPPUNIT_ASSERT_EQUAL(xDocument, xPI->getOwnerDocument());
+        CPPUNIT_ASSERT(!xPI->getParentNode());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xPI->getPrefix());
+        CPPUNIT_ASSERT(!xPI->getPreviousSibling());
+        CPPUNIT_ASSERT(!xPI->hasAttributes());
+        CPPUNIT_ASSERT(!xPI->hasChildNodes());
+        CPPUNIT_ASSERT(!xPI->isSupported(u"frobnication"_ustr, u"v99.33.0.0.0.1"_ustr));
+
+        xPI->normalize();
+        xPI->setNodeValue(u"42"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, xPI->getNodeValue());
+
+        try
+        {
+            xPI->setPrefix(u"foo"_ustr);
+            CPPUNIT_FAIL("XProcessingInstruction.setPrefix()");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_NO_MODIFICATION_ALLOWED_ERR, e.Code);
+        }
+
+        uno::Reference<xml::dom::XText> xText2 = xDocument->createTextNode(u"foobar"_ustr);
+        uno::Reference<xml::dom::XText> xText3 = xDocument->createTextNode(u"foobar"_ustr);
+
+        try
+        {
+            xPI->appendChild(nullptr);
+            CPPUNIT_FAIL("XProcessingInstruction.appendChild(null)");
+        }
+        catch (css::uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xPI->appendChild(xText2);
+            CPPUNIT_FAIL("XProcessingInstruction.appendChild(xText2)");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_HIERARCHY_REQUEST_ERR, e.Code);
+        }
+
+        try
+        {
+            xPI->insertBefore(xText2, xText3);
+            CPPUNIT_FAIL("XProcessingInstruction.insertBefore");
+        }
+        catch (xml::dom::DOMException&)
+        {
+        }
+
+        try
+        {
+            xPI->replaceChild(xText2, xText3);
+            CPPUNIT_FAIL("XProcessingInstruction.replaceChild");
+        }
+        catch (xml::dom::DOMException&)
+        {
+        }
+
+        try
+        {
+            xPI->removeChild(nullptr);
+            CPPUNIT_FAIL("XProcessingInstruction.removeChild(null)");
+        }
+        catch (css::uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xPI->removeChild(xText2);
+            CPPUNIT_FAIL("XProcessingInstruction.removeChild");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_HIERARCHY_REQUEST_ERR, e.Code);
+        }
+    }
+
     void testXNamedNodeMap_AttributesMap()
     {
         Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
@@ -748,6 +866,7 @@ public:
     CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST(testXXPathAPI);
     CPPUNIT_TEST(testXXPathObject);
+    CPPUNIT_TEST(testXProcessingInstruction);
     CPPUNIT_TEST(testXNamedNodeMap_AttributesMap);
     CPPUNIT_TEST(testXNodeList_ChildList);
     CPPUNIT_TEST(testXNodeList_NodeList);
