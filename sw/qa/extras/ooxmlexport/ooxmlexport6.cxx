@@ -83,34 +83,41 @@ CPPUNIT_TEST_FIXTURE(Test, testDmlGroupshapeRelsize)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp14:sizeRelH", "relativeFrom", u"margin");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDmlTextshape, "dml-textshape.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDmlTextshape)
 {
-    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xGroup, u"VertOrient"_ustr));
-    uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
-    // This was drawing::FillStyle_NONE.
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape, u"FillStyle"_ustr));
-    // This was drawing::LineStyle_NONE.
-    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, u"LineStyle"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(text::VertOrientation::TOP, getProperty<sal_Int16>(xGroup, u"VertOrient"_ustr));
+        uno::Reference<drawing::XShape> xShape(xGroup->getByIndex(1), uno::UNO_QUERY);
+        // This was drawing::FillStyle_NONE.
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xShape, u"FillStyle"_ustr));
+        // This was drawing::LineStyle_NONE.
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, getProperty<drawing::LineStyle>(xShape, u"LineStyle"_ustr));
 
-    if (!isExported())
-        return;
-    xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
-    // This was wrap="none".
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", u"square");
+        if (!bIsExport)
+            return;
+        xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
+        // This was wrap="none".
+        assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:inline/a:graphic/a:graphicData/wpg:wgp/wps:wsp[2]/wps:bodyPr", "wrap", u"square");
 
-    xShape.set(xGroup->getByIndex(3), uno::UNO_QUERY);
-    OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, u"CustomShapeGeometry"_ustr))[u"Type"_ustr].get<OUString>();
-    CPPUNIT_ASSERT_EQUAL(u"ooxml-bentConnector3"_ustr, aType);
-    // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
-    // It is not a DML, but a VML shape. The whole group is shifted 3mm right and 6mm up.
-    // Values are as in LO7.2, original problem is still fixed.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4016), xShape->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4485), xShape->getPosition().Y);
+        xShape.set(xGroup->getByIndex(3), uno::UNO_QUERY);
+        OUString aType = comphelper::SequenceAsHashMap(getProperty<beans::PropertyValues>(xShape, u"CustomShapeGeometry"_ustr))[u"Type"_ustr].get<OUString>();
+        CPPUNIT_ASSERT_EQUAL(u"ooxml-bentConnector3"_ustr, aType);
+        // Connector was incorrectly shifted towards the top left corner, X was 552, Y was 0.
+        // It is not a DML, but a VML shape. The whole group is shifted 3mm right and 6mm up.
+        // Values are as in LO7.2, original problem is still fixed.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4016), xShape->getPosition().X);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-4485), xShape->getPosition().Y);
 
-    xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
-    // This was incorrectly shifted towards the top of the page, Y was 106.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-4729), xShape->getPosition().Y);
+        xShape.set(xGroup->getByIndex(5), uno::UNO_QUERY);
+        // This was incorrectly shifted towards the top of the page, Y was 106.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-4729), xShape->getPosition().Y);
+    };
+
+    createSwDoc("dml-textshape.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 // testDmlTextshapeB was only made export-only because as an import-export test it failed for an unknown reason
@@ -352,24 +359,31 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillPattern, "dml-shape-fillpattern.docx")
     CPPUNIT_ASSERT_EQUAL(drawing::HatchStyle_DOUBLE, aHatch.Style);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeChildPosition, "dml-groupshape-childposition.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDMLGroupShapeChildPosition)
 {
-    // Problem was parent transformation was ignored fully, but translate component
-    // which specify the position must be also applied for children of the group.
+    auto verify = [this](bool bIsExport = false) {
+        // Problem was parent transformation was ignored fully, but translate component
+        // which specify the position must be also applied for children of the group.
 
-    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
-    uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
+        uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+        uno::Reference<drawing::XShape> xChildGroup(xGroup->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
-    xGroup.set(xChildGroup, uno::UNO_QUERY);
-    xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1859), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
+        xGroup.set(xChildGroup, uno::UNO_QUERY);
+        xChildGroup.set(xGroup->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1859), xChildGroup->getPosition().X);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(11331), xChildGroup->getPosition().Y);
 
-    xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(isExported() ? 14023 : 14021), xChildGroup->getPosition().Y);
+        xChildGroup.set(xGroup->getByIndex(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-2123), xChildGroup->getPosition().X);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(bIsExport ? 14023 : 14021), xChildGroup->getPosition().Y);
+    };
+
+    createSwDoc("dml-groupshape-childposition.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDMLGradientFillTheme)
@@ -456,18 +470,23 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
     // CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "ParaBottomMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTableFloatingMargins)
 {
-    // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
-    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
-    sal_Int32 nHoriOrientPosition = getProperty<sal_Int32>(xFrame, u"HoriOrientPosition"_ustr);
-    CPPUNIT_ASSERT(nHoriOrientPosition < sal_Int32(-495));
-    // These were 0 as well, due to lack of import.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, u"TopMargin"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, u"BottomMargin"_ustr));
+    auto verify = [this]() {
+        // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
+        uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+        sal_Int32 nHoriOrientPosition = getProperty<sal_Int32>(xFrame, u"HoriOrientPosition"_ustr);
+        CPPUNIT_ASSERT(nHoriOrientPosition < sal_Int32(-495));
+        // These were 0 as well, due to lack of import.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, u"TopMargin"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, u"BottomMargin"_ustr));
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("table-floating-margins.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     // Paragraph bottom margin wasn't 0 in the A1 cell of the floating table.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p/w:pPr/w:spacing", "after", u"0");
@@ -1035,15 +1054,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133924)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[2]/w:pPr/w:framePr", "wrap", u"notBeside");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRelativeAlignmentFromTopMargin,
-                         "tdf133045_TestShapeAlignmentRelativeFromTopMargin.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelativeAlignmentFromTopMargin)
 {
     // tdf#133045 These shapes are relatively aligned from top margin, vertically to
     // top, center and bottom.
 
-    if (isExported())
-        return;
-
+    createSwDoc("tdf133045_TestShapeAlignmentRelativeFromTopMargin.docx");
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[1]/bounds", "top", u"1502"); // center
     assertXPath(pXmlDoc, "//anchored/SwAnchoredDrawObject[2]/bounds", "top", u"2683"); // bottom

@@ -668,58 +668,65 @@ CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(21), nIndex);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTd112202)
 {
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    auto verify = [this](bool bIsExport = false) {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
-    // page 1 header: 1 paragraph, 2 flys, 1 draw object
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/fly", 2);
-    if (isExported()) // somehow there's an additional shape on re-import?
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 2);
-    else
-        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 1);
+        // page 1 header: 1 paragraph, 2 flys, 1 draw object
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/fly", 2);
+        if (bIsExport) // somehow there's an additional shape on re-import?
+            assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 2);
+        else
+            assertXPath(pXmlDoc, "/root/page[1]/header/txt/anchored/SwAnchoredDrawObject", 1);
 
-    // page 2 header: 3 paragraphs, 1 table, 1 fly on last paragraph
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt", 3);
-    assertXPath(pXmlDoc, "/root/page[2]/header/tab", 1);
-    assertXPath(pXmlDoc, "/root/page[2]/header/txt/anchored/fly", 1);
+        // page 2 header: 3 paragraphs, 1 table, 1 fly on last paragraph
+        assertXPath(pXmlDoc, "/root/page[2]/header/txt", 3);
+        assertXPath(pXmlDoc, "/root/page[2]/header/tab", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/header/txt/anchored/fly", 1);
 
-    // page 3 header: 1 table, 1 paragraph, no text
-    assertXPath(pXmlDoc, "/root/page[3]/header/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[3]/header/tab", 1);
-    assertXPath(pXmlDoc,
-                "/root/page[3]/header/tab/row/cell/txt/SwParaPortion/SwLineLayout/child::*", 0);
-    assertXPath(pXmlDoc, "/root/page[3]/header//anchored", 0);
-    // tdf#149313: ensure 3rd page does not have extra empty paragraph at top
-    assertXPathContent(pXmlDoc, "/root/page[3]/body//txt", u"AUFGABENSTELLUNG");
+        // page 3 header: 1 table, 1 paragraph, no text
+        assertXPath(pXmlDoc, "/root/page[3]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/header/tab", 1);
+        assertXPath(pXmlDoc,
+                    "/root/page[3]/header/tab/row/cell/txt/SwParaPortion/SwLineLayout/child::*", 0);
+        assertXPath(pXmlDoc, "/root/page[3]/header//anchored", 0);
+        // tdf#149313: ensure 3rd page does not have extra empty paragraph at top
+        assertXPathContent(pXmlDoc, "/root/page[3]/body//txt", u"AUFGABENSTELLUNG");
 
-    // page 4 header: 1 table, 1 paragraph, with text
-    assertXPath(pXmlDoc, "/root/page[4]/header/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[4]/header/tab", 1);
-    assertXPath(
-        pXmlDoc,
-        "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-        "portion", u"Titel der studentischen Arbeit");
-    assertXPath(pXmlDoc, "/root/page[4]/header//anchored", 0);
+        // page 4 header: 1 table, 1 paragraph, with text
+        assertXPath(pXmlDoc, "/root/page[4]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[4]/header/tab", 1);
+        assertXPath(pXmlDoc,
+                    "/root/page[4]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwParaPortion",
+                    "portion", u"Titel der studentischen Arbeit");
+        assertXPath(pXmlDoc, "/root/page[4]/header//anchored", 0);
 
-    // page 5: same as page 4
-    assertXPath(pXmlDoc, "/root/page[5]/header/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[5]/header/tab", 1);
-    assertXPath(
-        pXmlDoc,
-        "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-        "portion", u"Titel der studentischen Arbeit");
-    assertXPath(pXmlDoc, "/root/page[5]/header//anchored", 0);
+        // page 5: same as page 4
+        assertXPath(pXmlDoc, "/root/page[5]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[5]/header/tab", 1);
+        assertXPath(pXmlDoc,
+                    "/root/page[5]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwParaPortion",
+                    "portion", u"Titel der studentischen Arbeit");
+        assertXPath(pXmlDoc, "/root/page[5]/header//anchored", 0);
 
-    // page 6: same as page 4
-    assertXPath(pXmlDoc, "/root/page[6]/header/txt", 1);
-    assertXPath(pXmlDoc, "/root/page[6]/header/tab", 1);
-    assertXPath(
-        pXmlDoc,
-        "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-        "portion", u"Titel der studentischen Arbeit");
-    assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
+        // page 6: same as page 4
+        assertXPath(pXmlDoc, "/root/page[6]/header/txt", 1);
+        assertXPath(pXmlDoc, "/root/page[6]/header/tab", 1);
+        assertXPath(pXmlDoc,
+                    "/root/page[6]/header/tab/row[1]/cell[1]/txt[1]/SwParaPortion/SwLineLayout/"
+                    "SwParaPortion",
+                    "portion", u"Titel der studentischen Arbeit");
+        assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
+    };
+
+    createSwDoc("090716_Studentische_Arbeit_VWS.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
@@ -1152,12 +1159,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131420)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:pPr/w:pBdr/w:top");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf80526_word_wrap, "tdf80526_word_wrap.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf80526_word_wrap)
 {
     // tdf#80526: check whether the "wrap" property has been set
+    createSwDoc("tdf80526_word_wrap.docx");
     // TODO: fix export too
-    if (isExported())
-        return;
     uno::Reference<drawing::XShape> xShape = getShape(1);
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, u"TextWordWrap"_ustr));
 }
@@ -1780,22 +1786,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf58944RepeatingTableHeader, "tdf58944-repeating-t
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf81100)
 {
-    loadAndSave("tdf81100.docx");
+    auto verify = [this](bool bIsExport = false) {
+        xmlDocUniquePtr pDump = parseLayoutDump();
+        CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+        // table starts on page 1 and finished on page 2
+        // and it has got only a single repeating header line
+        assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
+        assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
+        assertXPath(pDump, "/root/page[3]/body/tab", 1);
+        if (!bIsExport) // TODO export tblHeader=false
+            assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
+    };
+    createSwDoc("tdf81100.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     CPPUNIT_ASSERT(pXmlDoc);
     // keep "repeat table header" setting of table styles
     assertXPath(pXmlDoc, "/w:styles/w:style/w:tblStylePr/w:trPr/w:tblHeader", 4);
-
-    xmlDocUniquePtr pDump = parseLayoutDump();
-    CPPUNIT_ASSERT_EQUAL(3, getPages());
-
-    // table starts on page 1 and finished on page 2
-    // and it has got only a single repeating header line
-    assertXPath(pDump, "/root/page[2]/body/tab[1]", 1);
-    assertXPath(pDump, "/root/page[2]/body/tab[1]/row", 2);
-    assertXPath(pDump, "/root/page[3]/body/tab", 1);
-    if (!isExported()) // TODO export tblHeader=false
-        assertXPath(pDump, "/root/page[3]/body/tab/row", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf88496)
@@ -2153,111 +2164,128 @@ static bool lcl_nearEqual(const sal_Int32 nNumber1, const sal_Int32 nNumber2,
     return std::abs(nNumber1 - nNumber2) < nMaxDiff;
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf119952_negativeMargins, "tdf119952_negativeMargins.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf119952_negativeMargins)
 {
-    // With negative margins (in MS Word) one can set up header (or footer) that overlaps with the body.
-    // LibreOffice unable to display that, so when importing negative margins,
-    // the header (or footer) converted to a flyframe, anchored to the header..
-    // that can overlap with the body, and will appear like in Word.
-    // This conversion modifies the document [i.e. replacing header text with a textbox...]
-    // but its DOCX export looks the same, as the original document in Word, too.
-    xmlDocUniquePtr pDump = parseLayoutDump();
+    auto verify = [this](bool bIsExport = false) {
+        // With negative margins (in MS Word) one can set up header (or footer) that overlaps with the body.
+        // LibreOffice unable to display that, so when importing negative margins,
+        // the header (or footer) converted to a flyframe, anchored to the header..
+        // that can overlap with the body, and will appear like in Word.
+        // This conversion modifies the document [i.e. replacing header text with a textbox...]
+        // but its DOCX export looks the same, as the original document in Word, too.
+        xmlDocUniquePtr pDump = parseLayoutDump();
 
-    //Check layout positions / sizes
-    sal_Int32 nLeftHead = getXPath(pDump, "//page[1]/header/infos/bounds", "left").toInt32();
-    sal_Int32 nLeftBody = getXPath(pDump, "//page[1]/body/infos/bounds", "left").toInt32();
-    sal_Int32 nLeftFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "left").toInt32();
-    sal_Int32 nLeftHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "left").toInt32();
-    sal_Int32 nLeftFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "left").toInt32();
+        //Check layout positions / sizes
+        sal_Int32 nLeftHead = getXPath(pDump, "//page[1]/header/infos/bounds", "left").toInt32();
+        sal_Int32 nLeftBody = getXPath(pDump, "//page[1]/body/infos/bounds", "left").toInt32();
+        sal_Int32 nLeftFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "left").toInt32();
+        sal_Int32 nLeftHFly
+            = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "left").toInt32();
+        sal_Int32 nLeftFFly
+            = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "left").toInt32();
 
-    sal_Int32 nTopHead = getXPath(pDump, "//page[1]/header/infos/bounds", "top").toInt32();
-    sal_Int32 nTopBody = getXPath(pDump, "//page[1]/body/infos/bounds", "top").toInt32();
-    sal_Int32 nTopFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "top").toInt32();
-    sal_Int32 nTopHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "top").toInt32();
-    sal_Int32 nTopFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
+        sal_Int32 nTopHead = getXPath(pDump, "//page[1]/header/infos/bounds", "top").toInt32();
+        sal_Int32 nTopBody = getXPath(pDump, "//page[1]/body/infos/bounds", "top").toInt32();
+        sal_Int32 nTopFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "top").toInt32();
+        sal_Int32 nTopHFly
+            = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "top").toInt32();
+        sal_Int32 nTopFFly
+            = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "top").toInt32();
 
-    sal_Int32 nHeightHead = getXPath(pDump, "//page[1]/header/infos/bounds", "height").toInt32();
-    sal_Int32 nHeightBody = getXPath(pDump, "//page[1]/body/infos/bounds", "height").toInt32();
-    sal_Int32 nHeightFoot = getXPath(pDump, "//page[1]/footer/infos/bounds", "height").toInt32();
-    sal_Int32 nHeightHFly
-        = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "height").toInt32();
-    sal_Int32 nHeightFFly
-        = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "height").toInt32();
-    sal_Int32 nHeightHFlyBound
-        = getXPath(pDump, "//page[1]/header/infos/prtBounds", "height").toInt32();
-    sal_Int32 nHeightFFlyBound
-        = getXPath(pDump, "//page[1]/footer/infos/prtBounds", "height").toInt32();
+        sal_Int32 nHeightHead
+            = getXPath(pDump, "//page[1]/header/infos/bounds", "height").toInt32();
+        sal_Int32 nHeightBody = getXPath(pDump, "//page[1]/body/infos/bounds", "height").toInt32();
+        sal_Int32 nHeightFoot
+            = getXPath(pDump, "//page[1]/footer/infos/bounds", "height").toInt32();
+        sal_Int32 nHeightHFly
+            = getXPath(pDump, "//page[1]/header/txt/anchored/fly/infos/bounds", "height").toInt32();
+        sal_Int32 nHeightFFly
+            = getXPath(pDump, "//page[1]/footer/txt/anchored/fly/infos/bounds", "height").toInt32();
+        sal_Int32 nHeightHFlyBound
+            = getXPath(pDump, "//page[1]/header/infos/prtBounds", "height").toInt32();
+        sal_Int32 nHeightFFlyBound
+            = getXPath(pDump, "//page[1]/footer/infos/prtBounds", "height").toInt32();
 
-    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftBody));
-    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFoot));
-    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftHFly));
-    CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFFly));
+        CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftBody));
+        CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFoot));
+        CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftHFly));
+        CPPUNIT_ASSERT(lcl_nearEqual(nLeftHead, nLeftFFly));
 
-    CPPUNIT_ASSERT(lcl_nearEqual(nTopHead, 851));
-    CPPUNIT_ASSERT(lcl_nearEqual(nTopBody, 1418));
-    CPPUNIT_ASSERT(lcl_nearEqual(nTopFoot, 15875));
-    CPPUNIT_ASSERT(lcl_nearEqual(nTopHFly, 851));
+        CPPUNIT_ASSERT(lcl_nearEqual(nTopHead, 851));
+        CPPUNIT_ASSERT(lcl_nearEqual(nTopBody, 1418));
+        CPPUNIT_ASSERT(lcl_nearEqual(nTopFoot, 15875));
+        CPPUNIT_ASSERT(lcl_nearEqual(nTopHFly, 851));
 
-    // this seems to be an import bug
-    if (!isExported())
-        CPPUNIT_ASSERT(lcl_nearEqual(nTopFFly, 14403));
+        // this seems to be an import bug
+        if (!bIsExport)
+            CPPUNIT_ASSERT(lcl_nearEqual(nTopFFly, 14403));
 
-    CPPUNIT_ASSERT(lcl_nearEqual(nHeightHead, 567));
-    CPPUNIT_ASSERT(lcl_nearEqual(nHeightBody, 14457));
-    CPPUNIT_ASSERT(lcl_nearEqual(nHeightFoot, 680));
-    CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFly, 2152));
-    CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFly, 2152));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightHead, 567));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightBody, 14457));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightFoot, 680));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFly, 2152));
+        CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFly, 2152));
 
-    // after export these heights increase to like 567.
-    // not sure if it is another import, or export bug... or just the result of the modified document
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFlyBound, 57));
-        CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFlyBound, 57));
-    }
+        // after export these heights increase to like 567.
+        // not sure if it is another import, or export bug... or just the result of the modified document
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT(lcl_nearEqual(nHeightHFlyBound, 57));
+            CPPUNIT_ASSERT(lcl_nearEqual(nHeightFFlyBound, 57));
+        }
 
-    //Check text of header/ footer
-    assertXPath(pDump,
-                "//page[1]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"f1");
-    assertXPath(pDump,
-                "//page[1]/header/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"                f8");
-    assertXPath(pDump,
-                "//page[1]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"                f8");
-    assertXPath(pDump,
-                "//page[1]/footer/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"f1");
+        //Check text of header/ footer
+        assertXPath(
+            pDump,
+            "//page[1]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"f1");
+        assertXPath(
+            pDump,
+            "//page[1]/header/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"                f8");
+        assertXPath(
+            pDump,
+            "//page[1]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"                f8");
+        assertXPath(
+            pDump,
+            "//page[1]/footer/txt/anchored/fly/txt[8]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"f1");
 
-    assertXPath(pDump,
-                "//page[2]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"p1");
-    assertXPath(pDump,
-                "//page[2]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"p1");
+        assertXPath(
+            pDump,
+            "//page[2]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"p1");
+        assertXPath(
+            pDump,
+            "//page[2]/footer/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"p1");
 
-    assertXPath(pDump,
-                "//page[3]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"  aaaa");
-    assertXPath(pDump,
-                "//page[3]/header/txt/anchored/fly/txt[5]/SwParaPortion/SwLineLayout/SwParaPortion",
-                "portion", u"      eeee");
+        assertXPath(
+            pDump,
+            "//page[3]/header/txt/anchored/fly/txt[1]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"  aaaa");
+        assertXPath(
+            pDump,
+            "//page[3]/header/txt/anchored/fly/txt[5]/SwParaPortion/SwLineLayout/SwParaPortion",
+            "portion", u"      eeee");
 
-    assertXPathContent(pDump, "/root/page[1]/header/txt/anchored/fly",
-                       u"f1    f2      f3        f4          f5            f6            "
-                       "  f7                f8");
-    assertXPathContent(pDump, "/root/page[1]/footer/txt/anchored/fly",
-                       u"                f8              f7            f6          f5    "
-                       "    f4      f3    f2f1");
-    assertXPathContent(pDump, "/root/page[2]/header/txt/anchored/fly", u"p1");
-    assertXPathContent(pDump, "/root/page[2]/footer/txt/anchored/fly", u"p1");
-    assertXPathContent(pDump, "/root/page[3]/header/txt/anchored/fly",
-                       u"  aaaa   bbbb    cccc     dddd      eeee");
+        assertXPathContent(pDump, "/root/page[1]/header/txt/anchored/fly",
+                           u"f1    f2      f3        f4          f5            f6            "
+                           "  f7                f8");
+        assertXPathContent(pDump, "/root/page[1]/footer/txt/anchored/fly",
+                           u"                f8              f7            f6          f5    "
+                           "    f4      f3    f2f1");
+        assertXPathContent(pDump, "/root/page[2]/header/txt/anchored/fly", u"p1");
+        assertXPathContent(pDump, "/root/page[2]/footer/txt/anchored/fly", u"p1");
+        assertXPathContent(pDump, "/root/page[3]/header/txt/anchored/fly",
+                           u"  aaaa   bbbb    cccc     dddd      eeee");
+    };
+
+    createSwDoc("tdf119952_negativeMargins.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf143384_tableInFoot_negativeMargins,

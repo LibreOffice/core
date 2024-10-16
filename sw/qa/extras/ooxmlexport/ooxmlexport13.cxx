@@ -804,33 +804,40 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
     CPPUNIT_ASSERT_EQUAL(4, nElements);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123460)
 {
-    // check paragraph mark deletion at terminating moveFrom
-    CPPUNIT_ASSERT(getParagraph( 2 )->getString().startsWith("Nunc"));
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(getParagraph( 2 ), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( u""_ustr, xRun->getString());
-    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(hasProperty(xRun, u"RedlineType"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Delete"_ustr,getProperty<OUString>(xRun, u"RedlineType"_ustr));
-    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xRun->getString().endsWith("tellus."));
-    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(hasProperty(xRun, u"Bookmark"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        // check paragraph mark deletion at terminating moveFrom
+        CPPUNIT_ASSERT(getParagraph( 2 )->getString().startsWith("Nunc"));
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(getParagraph( 2 ), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL( u""_ustr, xRun->getString());
+        xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(hasProperty(xRun, u"RedlineType"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Delete"_ustr,getProperty<OUString>(xRun, u"RedlineType"_ustr));
+        xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xRun->getString().endsWith("tellus."));
+        xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(hasProperty(xRun, u"Bookmark"_ustr));
 
-    // The paragraph marker's formatting.
-    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,getProperty<OUString>(xRun, u"TextPortionType"_ustr));
-    CPPUNIT_ASSERT(xRun->getString().isEmpty());
+        // The paragraph marker's formatting.
+        xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"Text"_ustr,getProperty<OUString>(xRun, u"TextPortionType"_ustr));
+        CPPUNIT_ASSERT(xRun->getString().isEmpty());
 
-    // deleted paragraph mark at the end of the second paragraph
-    if (isExported())
-    {
-        // there is no run after the MoveBookmark
-        CPPUNIT_ASSERT(!xRunEnum->hasMoreElements());
-    }
+        // deleted paragraph mark at the end of the second paragraph
+        if (bIsExport)
+        {
+            // there is no run after the MoveBookmark
+            CPPUNIT_ASSERT(!xRunEnum->hasMoreElements());
+        }
+    };
+
+    createSwDoc("tdf123460.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf146140)
@@ -884,27 +891,26 @@ DECLARE_OOXMLEXPORT_TEST(testTdf121784, "tdf121784.docx")
     CPPUNIT_ASSERT_EQUAL( u"i"_ustr, getRun( getParagraph( 2 ), 3 )->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTbrlFrameVml, "tbrl-frame-vml.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTbrlFrameVml)
 {
+    createSwDoc("tbrl-frame-vml.docx");
     uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextFrame.is());
 
-    if (isExported())
-    {
-        // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
+    // VML import: creates a TextFrame.
 
-        auto eMode = getProperty<text::WritingMode>(xTextFrame, u"TextWritingMode"_ustr);
-        CPPUNIT_ASSERT_EQUAL(text::WritingMode::WritingMode_TB_RL, eMode);
-    }
-    else
-    {
-        // VML import: creates a TextFrame.
+    auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);
+    // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
+    // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
 
-        auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);
-        // Without the accompanying fix in place, this test would have failed with 'Expected: 2; Actual:
-        // 4', i.e. writing direction was inherited from page, instead of explicit tbrl.
-        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, nActual);
-    }
+    saveAndReload(mpFilter);
+    xTextFrame.set(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextFrame.is());
+
+    // DML import: creates a TextBox, eaVert read back as TB_RL in TextWritingMode
+    auto eMode = getProperty<text::WritingMode>(xTextFrame, u"TextWritingMode"_ustr);
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode::WritingMode_TB_RL, eMode);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf119037)

@@ -88,15 +88,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
     CPPUNIT_ASSERT_EQUAL(u"yesterday at noon"_ustr, xField->getPresentation(false));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148380_fldLocked)
 {
+    createSwDoc("tdf148380_fldLocked.docx");
     getParagraph(2, u"4/5/2022 4:29:00 PM"_ustr);
     getParagraph(4, u"1/23/4567 8:9:10 PM"_ustr);
 
     // Verify that these are fields, and not just plain text
     // (import only, since export thankfully just dumps these fixed fields as plain text
-    if (isExported())
-        return;
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -107,6 +106,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.docx")
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"1/23/4567 8:9:10 PM"_ustr, xField->getPresentation(false));
     CPPUNIT_ASSERT_EQUAL(u"DocInformation:Last printed (fixed)"_ustr, xField->getPresentation(true));
+    saveAndReload(mpFilter);
+
+    getParagraph(2, u"4/5/2022 4:29:00 PM"_ustr);
+    getParagraph(4, u"1/23/4567 8:9:10 PM"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148380_usernameField, "tdf148380_usernameField.docx")
@@ -499,10 +502,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", u" MACROBUTTON AllCaps Hello World ");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137466)
 {
-    if (!isExported())
-       return; // initial import, no further checks
+    loadAndSave("tdf137466.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:placeholder><w:docPart v:val="xxxx"/></w:placeholder>
@@ -662,22 +664,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126287, "tdf126287.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123642_BookmarkAtDocEnd)
 {
-    // get bookmark interface
-    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+    auto verify = [this]() {
+        // get bookmark interface
+        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
 
-    // check: we have 1 bookmark (previously there were 0)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Bookmark1"_ustr));
+        // check: we have 1 bookmark (previously there were 0)
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+        CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"Bookmark1"_ustr));
+    };
 
-    // and it is really in exported DOCX (let's ensure)
-    if (!isExported())
-       return; // initial import, no further checks
+    createSwDoc("tdf123642.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name", u"Bookmark1");
 }
 
@@ -854,35 +859,40 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148052, "tdf148052.docx")
     CPPUNIT_ASSERT_EQUAL(u"14. Aug 18"_ustr, xTextField->getPresentation(false));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148111)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
 
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    std::vector<OUString> aExpectedValues = {
-        // These field values are NOT in order in document: getTextFields did provide
-        // fields in a strange but fixed order (mostly reversed, thanks to SwModify::Add)
-        u"Title"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
-        u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
-        u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
-        u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
-        u"Placeholder"_ustr, u"Title"_ustr, u"Title"_ustr, u"Title"_ustr,
-        u"Title"_ustr, u"Title"_ustr, u"Title"_ustr, u"Title"_ustr
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        std::vector<OUString> aExpectedValues = {
+            // These field values are NOT in order in document: getTextFields did provide
+            // fields in a strange but fixed order (mostly reversed, thanks to SwModify::Add)
+            u"Title"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
+            u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
+            u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
+            u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr, u"Placeholder"_ustr,
+            u"Placeholder"_ustr, u"Title"_ustr, u"Title"_ustr, u"Title"_ustr,
+            u"Title"_ustr, u"Title"_ustr, u"Title"_ustr, u"Title"_ustr
+        };
+
+        sal_uInt16 nIndex = 0;
+        while (xFields->hasMoreElements())
+        {
+            uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
+        }
+
+        // No more fields
+        CPPUNIT_ASSERT(!xFields->hasMoreElements());
     };
 
-    sal_uInt16 nIndex = 0;
-    while (xFields->hasMoreElements())
-    {
-        uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
-    }
+    createSwDoc("tdf148111.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
-    // No more fields
-    CPPUNIT_ASSERT(!xFields->hasMoreElements());
-
-    if (!isExported())
-        return;
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // ShowingPlaceholder should be off for 0, false and "on". (This was 21 before the fix)
     assertXPath(pXmlDoc,"//w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 12);
@@ -916,10 +926,9 @@ DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
         xTextBox2Properties->getPropertyValue(u"ChainPrevName"_ustr).get<OUString>());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf81507)
 {
-    if (!isExported())
-       return; // initial import, no further checks
+    loadAndSave("tdf81507.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Ensure that we have <w:text w:multiLine="1"/>
@@ -1013,10 +1022,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
     CPPUNIT_ASSERT_EQUAL(u"1.1.1."_ustr, getProperty<OUString>(xPara2, u"ListLabelString"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148455_2, "tdf148455_2.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148455_2)
 {
-    if (!isExported())
-       return; // initial import, no further checks
+    loadAndSave("tdf148455_2.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // Find list id for restarted list

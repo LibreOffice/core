@@ -74,34 +74,40 @@ CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
     loadAndSave("cell-sdt-redline.docx");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148956_directEndFormatting, "tdf148956_directEndFormatting.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148956_directEndFormatting)
 {
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    auto verify = [this](bool bIsExport = false) {
+        SwDoc* pDoc = getSwDoc();
+        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // pWrtShell->EndPara(/*bSelect=*/true);
-    dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_MESSAGE(
-            "Has direct formatting",
-            pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
-    }
-    else
-    {
+        // pWrtShell->EndPara(/*bSelect=*/true);
+        dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_MESSAGE(
+                "Has direct formatting",
+                pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE(
+                "Direct formatting cleared",
+                !pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
+        }
+
+        pWrtShell->SttPara(/*bSelect=*/true);
+        dispatchCommand(mxComponent, u".uno:ResetAttributes"_ustr, {});
+
+        dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
+
         CPPUNIT_ASSERT_MESSAGE(
             "Direct formatting cleared",
             !pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
-    }
-
-    pWrtShell->SttPara(/*bSelect=*/true);
-    dispatchCommand(mxComponent, u".uno:ResetAttributes"_ustr, {});
-
-    dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});
-
-    CPPUNIT_ASSERT_MESSAGE(
-        "Direct formatting cleared",
-        !pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetpSwpHints());
+    };
+    createSwDoc("tdf148956_directEndFormatting.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf147646, "tdf147646_mergedCellNumbering.docx")
@@ -121,33 +127,30 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153526_commentInNumbering, "tdf153526_commentInN
     CPPUNIT_ASSERT_EQUAL(13, getParagraphs());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf153042_largeTab, "tdf153042_largeTab.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf153042_largeTab)
 {
+    createSwDoc("tdf153042_largeTab.docx");
     // This is not the greatest test because it is slightly weird, and has a different layout
     // in MS Word 2010/2003 than it does in Word 2019. This tests for the 2019 layout.
     // Additionally (in Word 2019), going to paragraph properties and hitting OK changes the layout.
     // It changes back by going to outline numbering properties and hitting OK.
 
     // export does not keep the tabstop when exporting non-numbering. (Probably a good thing...)
-    if (isExported())
-        return;
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a large tabstop is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion", "width", u"1701");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf153042_noTab, "tdf153042_noTab.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf153042_noTab)
 {
+    createSwDoc("tdf153042_noTab.docx");
     // This is not the greatest test because it is slightly weird.
     // It is the same as the "largeTab" file, except the paragraph properties were viewed
     // and OK'ed, and now it looks like how Word 2010 and 2003 were laying it out.
     // Amazingly, LO is handling both documents correctly at the moment, so let's unit test that...
 
     // export does not keep the tabstop when exporting non-numbering. (Probably a good thing...)
-    if (isExported())
-        return;
-
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // Ensure a miniscule tab is used in the pseudo-numbering (numbering::NONE followed by tabstop)
     assertXPath(pLayout, "//SwFixPortion", "width", u"10");
@@ -250,31 +253,36 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr, "tdf154703_framePr.docx")
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
+CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePr2)
 {
-    // framePr frames are always imported as fully transparent
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), u"FillTransparence"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        // framePr frames are always imported as fully transparent
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(getShape(1), u"FillTransparence"_ustr));
 
-    // as opposed to testLibreOfficeHang (RTF != INVERT_BORDER_SPACING) do not duplicate left/right
-    uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
-    uno::Reference<text::XText> xText = xTextRange->getText();
-    CPPUNIT_ASSERT_EQUAL(u"framePr"_ustr, getParagraphOfText(1, xText)->getString());
-    sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), u"LeftBorderDistance"_ustr);
-    sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), u"LeftBorderDistance"_ustr);
-    if (!isExported()) // RTF
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nFrame + nPara);
-    else // DOCX
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(529*2), nFrame + nPara);
+        // as opposed to testLibreOfficeHang (RTF != INVERT_BORDER_SPACING) do not duplicate left/right
+        uno::Reference<text::XTextRange> xTextRange(getShape(1), uno::UNO_QUERY);
+        uno::Reference<text::XText> xText = xTextRange->getText();
+        CPPUNIT_ASSERT_EQUAL(u"framePr"_ustr, getParagraphOfText(1, xText)->getString());
+        sal_Int32 nFrame = getProperty<sal_Int32>(getShape(1), u"LeftBorderDistance"_ustr);
+        sal_Int32 nPara = getProperty<sal_Int32>(getParagraphOfText(1, xText), u"LeftBorderDistance"_ustr);
+        if (!bIsExport) // RTF
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(529), nFrame + nPara);
+        else // DOCX
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(529*2), nFrame + nPara);
 
-    if (!isExported())
-    {
-        // Fill the frame with a red background. It should be transferred on export to the paragraph
-        uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
-        xFrame->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
-        xFrame->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+        if (!bIsExport)
+        {
+            // Fill the frame with a red background. It should be transferred on export to the paragraph
+            uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+            xFrame->setPropertyValue(u"FillColor"_ustr, uno::Any(COL_RED));
+            xFrame->setPropertyValue(u"FillTransparence"_ustr, uno::Any(static_cast<sal_Int32>(0)));
+        }
+    };
 
-        return;
-    }
+    createSwDoc("tdf154703_framePr2.rtf");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 
     // exported: framed paragraphs without a background should now have a red background
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
@@ -285,22 +293,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
     assertXPathNoAttribute(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr", "y");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWrapSpacing.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePrWrapSpacing)
 {
+    loadAndSave("tdf154703_framePrWrapSpacing.docx");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    if (!isExported())
-        return;
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     // before the fix, this was half of the correct value.
     assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:framePr", "hSpace", u"2552");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrTextDirection, "tdf154703_framePrTextDirection.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf154703_framePrTextDirection)
 {
+    createSwDoc("tdf154703_framePrTextDirection.docx");
     CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
-    if (!isExported())
-        return;
+    saveAndReload(mpFilter);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::WritingMode2::TB_RL), getProperty<sal_Int16>(getShape(1), u"WritingMode"_ustr));
 
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:body/w:p/w:pPr/w:textDirection", "val", u"tbRl");
@@ -564,13 +572,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf149551_mongolianVert)
     assertXPath(pXmlDoc, "//wps:bodyPr", "vert", u"mongolianVert");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf151912, "tdf151912.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf151912)
 {
+    loadAndSave("tdf151912.docx");
     // For now just ensure roundtrip is successful
 
     //tdf#151548 - ensure block SDT preserves id (instead of random re-assignment)
-    if (!isExported())
-        return;
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt//w:sdtPr/w:id", "val", u"1802566103");
 }
@@ -951,87 +958,123 @@ DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_max, "tdf159158_zOrder_max.docx")
     CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexMax, "tdf159158_zOrder_zIndexMax.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexMax)
 {
-    // given a yellow star with a heaven z-index of MAX_SAL_INT32
-    // followed by overlapped blue star with a heaven z-index of MAX_SAL_INT32 - 1
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // there is no artificial maximum for z-index. All values are unique. Yellow is on top
-    if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        // given a yellow star with a heaven z-index of MAX_SAL_INT32
+        // followed by overlapped blue star with a heaven z-index of MAX_SAL_INT32 - 1
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        // there is no artificial maximum for z-index. All values are unique. Yellow is on top
+        if (!bIsExport) //somehow the name is lost on this export
+        {
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+        }
+    };
+
+    createSwDoc("tdf159158_zOrder_zIndexMax.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexDuplicate_compat15, "tdf159158_zOrder_zIndexDuplicate_compat15.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexDuplicate_compat15)
 {
-    // given a yellow star with a heaven z-index of MAX_SAL_INT32 - 1
-    // followed by overlapping blue star with the same heaven z-index (last duplicate wins)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // should be the same as relativeHeight - last duplicate wins so blue is on top.
-    if (!isExported()) //somehow the name is lost on this export
+    auto verify = [this](bool bIsExport = false) {
+        // given a yellow star with a heaven z-index of MAX_SAL_INT32 - 1
+        // followed by overlapping blue star with the same heaven z-index (last duplicate wins)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        // should be the same as relativeHeight - last duplicate wins so blue is on top.
+        if (!bIsExport) //somehow the name is lost on this export
+        {
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+        }
+    };
+
+    createSwDoc("tdf159158_zOrder_zIndexDuplicate_compat15.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_zIndexWins)
+{
+    auto verify = [this](bool bIsExport = false) {
+        // given a yellow star with relativeHeight 0 (typically a maximum value, but not today)
+        // followed by an overlapping-everything textbox at z-index 0 (the lowest heaven-layer z-index)
+        // followed by a partially overlapping blue star with a
+        // seems-to-be-a-magic-number relativeHeight 251658240 (0F00 0000)
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr)); // higher
+        // I'm puzzled. Somehow 0 is larger than 0EFF FFFF, but not larger than 0F00 0000
+        // and yet the maximum value was established earlier as 1DFF FFFF. Something doesn't line up.
+        // Perhaps 0 and 1 don't mean maximum value at all, but something completely different?
+        CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? I really should be yellow, not blue",
+                                "5-Point Star Yellow" != getProperty<OUString>(zOrder0, u"Name"_ustr));
+        // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
+        // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
+        if (bIsExport) // not named on import
+            CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder2,u"Name"_ustr));
+    };
+    createSwDoc("tdf159158_zOrder_zIndexWins.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocA)
+{
+    auto verify = [this](bool bIsExport = false) {
+        // given a yellow star with lowest relativeHeight 2 but behindDoc
+        // followed by an overlapping blue star with negative z-index -1644167168.
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        // yellow is at the lowest hell-level possible for relativeHeight, so expected to be under blue
         CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    if (!isExported()) //somehow the name is lost on this export
-        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+        if (!bIsExport) // the name is lost on export
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    };
+
+    createSwDoc("tdf159158_zOrder_behindDocA.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_zIndexWins, "tdf159158_zOrder_zIndexWins.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf159158_zOrder_behindDocB)
 {
-    // given a yellow star with relativeHeight 0 (typically a maximum value, but not today)
-    // followed by an overlapping-everything textbox at z-index 0 (the lowest heaven-layer z-index)
-    // followed by a partially overlapping blue star with a
-    // seems-to-be-a-magic-number relativeHeight 251658240 (0F00 0000)
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder2(getShape(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(zOrder2, u"ZOrder"_ustr)); // higher
-    // I'm puzzled. Somehow 0 is larger than 0EFF FFFF, but not larger than 0F00 0000
-    // and yet the maximum value was established earlier as 1DFF FFFF. Something doesn't line up.
-    // Perhaps 0 and 1 don't mean maximum value at all, but something completely different?
-    CPPUNIT_ASSERT_MESSAGE("DID YOU FIX ME? I really should be yellow, not blue",
-                            "5-Point Star Yellow" != getProperty<OUString>(zOrder0, u"Name"_ustr));
-    // CPPUNIT_ASSERT_EQUAL(OUString("5-Point Star Blue"), getProperty<OUString>(zOrder1,"Name"));
-    // If zOrder is defined by z-index, it seems that it goes above everything set by relativeHeight
-    if (isExported()) // not named on import
-        CPPUNIT_ASSERT_EQUAL(u"Frame1"_ustr, getProperty<OUString>(zOrder2,u"Name"_ustr));
-}
+    auto verify = [this](bool bIsExport = false) {
+        // given a yellow star with a high relativeHeight 503314431 (1DFF F7FF) but behindDoc
+        // followed by an overlapping blue star with negative z-index -1644167168.
+        uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
+        // yellow is at the highest hell-level possible for relativeHeight,
+        // so you will be forgiven for thinking yellow should be on the top.
+        // Any z-index level ends up being above any relativeHeight, so blue should still be on top
+        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
+        if (!bIsExport) // the name is lost on export
+            CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    };
 
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocA, "tdf159158_zOrder_behindDocA.docx")
-{
-    // given a yellow star with lowest relativeHeight 2 but behindDoc
-    // followed by an overlapping blue star with negative z-index -1644167168.
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // yellow is at the lowest hell-level possible for relativeHeight, so expected to be under blue
-    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    if (!isExported()) // the name is lost on export
-        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_behindDocB, "tdf159158_zOrder_behindDocB.docx")
-{
-    // given a yellow star with a high relativeHeight 503314431 (1DFF F7FF) but behindDoc
-    // followed by an overlapping blue star with negative z-index -1644167168.
-    uno::Reference<beans::XPropertySet> zOrder0(getShape(1), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> zOrder1(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(zOrder0, u"ZOrder"_ustr)); // lower
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(zOrder1, u"ZOrder"_ustr)); // higher
-    // yellow is at the highest hell-level possible for relativeHeight,
-    // so you will be forgiven for thinking yellow should be on the top.
-    // Any z-index level ends up being above any relativeHeight, so blue should still be on top
-    CPPUNIT_ASSERT_EQUAL(u"5-Point Star Yellow"_ustr, getProperty<OUString>(zOrder0, u"Name"_ustr));
-    if (!isExported()) // the name is lost on export
-        CPPUNIT_ASSERT_EQUAL(u"5-Point Star Blue"_ustr, getProperty<OUString>(zOrder1,u"Name"_ustr));
+    createSwDoc("tdf159158_zOrder_behindDocB.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf159158_zOrder_headerBehind, "tdf159158_zOrder_headerBehind.odt")

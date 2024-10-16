@@ -148,18 +148,23 @@ DECLARE_OOXMLEXPORT_TEST(testKeywords, "tdf143175.docx")
     CPPUNIT_ASSERT_EQUAL(u"Three"_ustr, aKeywords[2]);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
+CPPUNIT_TEST_FIXTURE(Test, testZoom)
 {
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
-    sal_Int16 nValue = 0;
-    xPropertySet->getPropertyValue(u"ZoomValue"_ustr) >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+    auto verify = [this]() {
+        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+        uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
+        sal_Int16 nValue = 0;
+        xPropertySet->getPropertyValue(u"ZoomValue"_ustr) >>= nValue;
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(42), nValue);
+    };
+
+    createSwDoc("zoom.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     // Validation test: order of elements were wrong.
-    if (!isExported())
-        return;
     validate(maTempFile.GetFileName(), test::OOXML);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Order was: rsid, next.
@@ -188,62 +193,67 @@ CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
     CPPUNIT_ASSERT_EQUAL( style::TabAlign_DEFAULT, stops[ 0 ].Alignment );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo38244)
 {
-    /*
-     * Comments attached to a range was imported without the range, check for the annotation mark start/end positions.
-     *
-     * oParas = ThisComponent.Text.createEnumeration
-     * oPara = oParas.nextElement
-     * oRuns = oPara.createEnumeration
-     * oRun = oRuns.nextElement
-     * oRun = oRuns.nextElement 'Annotation
-     * oRun = oRuns.nextElement
-     * oRun = oRuns.nextElement 'AnnotationEnd
-     * xray oRun.TextPortionType
-     */
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    xRunEnum->nextElement();
-    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
-    xRunEnum->nextElement();
-    xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
+    auto verify = [this]() {
+        /*
+         * Comments attached to a range was imported without the range, check for the annotation mark start/end positions.
+         *
+         * oParas = ThisComponent.Text.createEnumeration
+         * oPara = oParas.nextElement
+         * oRuns = oPara.createEnumeration
+         * oRun = oRuns.nextElement
+         * oRun = oRuns.nextElement 'Annotation
+         * oRun = oRuns.nextElement
+         * oRun = oRuns.nextElement 'AnnotationEnd
+         * xray oRun.TextPortionType
+         */
+        uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        xRunEnum->nextElement();
+        uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"Annotation"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
+        xRunEnum->nextElement();
+        xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"AnnotationEnd"_ustr, getProperty<OUString>(xPropertySet, u"TextPortionType"_ustr));
 
-    /*
-     * Initials were not imported.
-     *
-     * oFields = ThisComponent.TextFields.createEnumeration
-     * oField = oFields.nextElement
-     * xray oField.Initials
-     */
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"M"_ustr, getProperty<OUString>(xPropertySet, u"Initials"_ustr));
+        /*
+         * Initials were not imported.
+         *
+         * oFields = ThisComponent.TextFields.createEnumeration
+         * oField = oFields.nextElement
+         * xray oField.Initials
+         */
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+        xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"M"_ustr, getProperty<OUString>(xPropertySet, u"Initials"_ustr));
 
-    /*
-     * There was a fake empty paragraph at the end of the comment text.
-     *
-     * oFields = ThisComponent.TextFields.createEnumeration
-     * oField = oFields.nextElement
-     * oParas = oField.TextRange.createEnumeration
-     * oPara = oParas.nextElement
-     * oPara = oParas.nextElement
-     */
+        /*
+         * There was a fake empty paragraph at the end of the comment text.
+         *
+         * oFields = ThisComponent.TextFields.createEnumeration
+         * oField = oFields.nextElement
+         * oParas = oField.TextRange.createEnumeration
+         * oPara = oParas.nextElement
+         * oPara = oParas.nextElement
+         */
 
-    xParaEnumAccess = getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, u"TextRange"_ustr);
-    xParaEnum = xParaEnumAccess->createEnumeration();
-    xParaEnum->nextElement();
-    CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
+        xParaEnumAccess = getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, u"TextRange"_ustr);
+        xParaEnum = xParaEnumAccess->createEnumeration();
+        xParaEnum->nextElement();
+        CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
+    };
 
-    if (isExported())
-        validate(maTempFile.GetFileName(), test::OOXML);
+    createSwDoc("fdo38244.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+    validate(maTempFile.GetFileName(), test::OOXML);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
@@ -672,16 +682,16 @@ DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
     CPPUNIT_ASSERT(xBitmap.is());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo64826, "fdo64826.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo64826)
 {
     // 'Track-Changes' (Track Revisions) wasn't exported.
+    createSwDoc("fdo64826.docx");
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, u"RecordChanges"_ustr));
+    saveAndReload(mpFilter);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, u"RecordChanges"_ustr));
     // 'Show-Changes' should not be exported - default is true.
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
-    }
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:revisionView", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
@@ -810,17 +820,17 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65400, "fdo65400.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xd8d8d8 ), getProperty< sal_Int32 >( shaded, u"CharBackColor"_ustr ));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
+CPPUNIT_TEST_FIXTURE(Test, testFdo66543)
 {
     // The problem was that when importing DOCX with 'line numbers' - the 'start value' was imported
     // but nothing was done with it.
+    createSwDoc("fdo66543.docx");
 
-    uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
-                         getProperty<sal_Int32>(paragraph1, u"ParaLineNumberStartValue"_ustr));
-
-    if (!isExported())
-        return;
+                         getProperty<sal_Int32>(getParagraph( 1 ), u"ParaLineNumberStartValue"_ustr));
+    saveAndReload(mpFilter);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
+                         getProperty<sal_Int32>(getParagraph( 1 ), u"ParaLineNumberStartValue"_ustr));
 
     // ensure unnecessary suppressLineNumbers entry is not created.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);

@@ -175,55 +175,63 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyAnnotationMark)
     assertXPath(pXmlDoc, "//w:commentRangeEnd", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDropdownInCell, "dropdown-in-cell.docx")
+CPPUNIT_TEST_FIXTURE(Test, testDropdownInCell)
 {
-    // First problem: table was missing from the document, this was 0.
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    auto verify = [this](bool bIsExport = false) {
+        // First problem: table was missing from the document, this was 0.
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
 
-    // Second problem: dropdown shape wasn't anchored inside the B1 cell.
-    if (getShapes() > 0)
-    {
-        uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
-        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
-        uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xCell, uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextRangeCompare->compareRegionStarts(xAnchor, xCell));
-    }
-    else if (!isExported())
-    {
-        // ComboBox was imported as DropDown text field
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        CPPUNIT_ASSERT(xFields->hasMoreElements());
-        uno::Any aField = xFields->nextElement();
-        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
-    }
-    else
-    {
-        // DropDown text field is exported as inline SDT, we import that back here.
-        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<table::XCell> xCell = xTable->getCellByName(u"B1"_ustr);
-        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
-        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
-                                                             uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
-        OUString aPortionType;
-        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
-        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
-        uno::Reference<text::XTextContent> xContentControl;
-        xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
-        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        uno::Sequence<beans::PropertyValues> aListItems;
-        xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
-        CPPUNIT_ASSERT(aListItems.hasElements());
-    }
+        // Second problem: dropdown shape wasn't anchored inside the B1 cell.
+        if (getShapes() > 0)
+        {
+            uno::Reference<text::XTextContent> xShape(getShape(1), uno::UNO_QUERY);
+            uno::Reference<text::XTextRange> xAnchor = xShape->getAnchor();
+            uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"B1"_ustr), uno::UNO_QUERY);
+            uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xCell, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xTextRangeCompare->compareRegionStarts(xAnchor, xCell));
+        }
+
+        if (!bIsExport)
+        {
+            // ComboBox was imported as DropDown text field
+            uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+            uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+            uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+            CPPUNIT_ASSERT(xFields->hasMoreElements());
+            uno::Any aField = xFields->nextElement();
+            uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
+            CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.textfield.DropDown"_ustr));
+        }
+        else
+        {
+            // DropDown text field is exported as inline SDT, we import that back here.
+            uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<table::XCell> xCell = xTable->getCellByName(u"B1"_ustr);
+            uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                 uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+            uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+            OUString aPortionType;
+            xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+            CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+            uno::Reference<text::XTextContent> xContentControl;
+            xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+            uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+            uno::Sequence<beans::PropertyValues> aListItems;
+            xContentControlProps->getPropertyValue(u"ListItems"_ustr) >>= aListItems;
+            CPPUNIT_ASSERT(aListItems.hasElements());
+        }
+    };
+
+    createSwDoc("dropdown-in-cell.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableAlignment, "table-alignment.docx")
@@ -254,17 +262,20 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunPicture)
     assertXPath(pXmlDoc, "//w:body/w:p/w:sdt", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testChartDupe, "chart-dupe.docx")
+CPPUNIT_TEST_FIXTURE(Test, testChartDupe)
 {
-    // Single chart was exported back as two charts.
-    uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
-    // This was 2, on second import we got a duplicated chart copy.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
+    auto verify = [this]() {
+        // Single chart was exported back as two charts.
+        uno::Reference<text::XTextEmbeddedObjectsSupplier> xTextEmbeddedObjectsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xEmbeddedObjects(xTextEmbeddedObjectsSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+        // This was 2, on second import we got a duplicated chart copy.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xEmbeddedObjects->getCount());
+    };
 
-
-    if (!isExported())
-       return; // initial import
+    createSwDoc("chart-dupe.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     xmlDocUniquePtr pXmlDocCT = parseExport(u"[Content_Types].xml"_ustr);
 
@@ -786,17 +797,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf97090, "tdf97090.docx")
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(paragraphProperties, u"FillColor"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf89791, "tdf89791.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf89791)
 {
-    if (isExported())
-    {
-        uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
-        CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"docProps/custom.xml"_ustr)));
-    }
 
+    createSwDoc("tdf89791.docx");
     //tdf#102619 - setting FollowStyle with a not-yet-created style was failing. (Titre is created before Corps de texte).
     uno::Reference< beans::XPropertySet > properties(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Titre"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
+
+    saveAndReload(mpFilter);
+
+    properties.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Titre"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Corps de texte"_ustr, getProperty<OUString>(properties, u"FollowStyle"_ustr));
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName(u"docProps/custom.xml"_ustr)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf91261, "tdf91261.docx")

@@ -37,28 +37,35 @@ protected:
     void verifyComboBoxExport(bool aComboBoxAsDropDown);
 };
 
-DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
+CPPUNIT_TEST_FIXTURE(Test, testRelorientation)
 {
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    // This was text::RelOrientation::FRAME, when handling relativeFrom=page, align=right
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        // This was text::RelOrientation::FRAME, when handling relativeFrom=page, align=right
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, u"HoriOrientRelation"_ustr));
 
-    uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
-    // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xShapeDescriptor->getShapeType());
+        uno::Reference<drawing::XShapes> xGroup(xShape, uno::UNO_QUERY);
+        // This resulted in lang::IndexOutOfBoundsException, as nested groupshapes weren't handled.
+        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xGroup->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.GroupShape"_ustr, xShapeDescriptor->getShapeType());
 
-    // 'actual child size' = 'group ext' * 'child ext' / 'chExt from group', see section 'chExt' in
-    // [MS-OI29500]. Here for width from file 3108960 * 4896 / 4911 = 3099464 EMU. That corresponds to
-    // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. Considering scaling of the
-    // parent group to the anchor extent (* 3118485 / 3108960) we get a display width of 3108960 EMU
-    // = 8636Hmm. FIXME: Expected value is as in LO 7.2. Reason for difference is yet unknown.
-    if (isExported())
-    {
-        uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
-        // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8662), xYear->getSize().Width);
-    }
+        // 'actual child size' = 'group ext' * 'child ext' / 'chExt from group', see section 'chExt' in
+        // [MS-OI29500]. Here for width from file 3108960 * 4896 / 4911 = 3099464 EMU. That corresponds to
+        // width 8.61cm and 325px in UI in Word and rounds down to 8609 Hmm. Considering scaling of the
+        // parent group to the anchor extent (* 3118485 / 3108960) we get a display width of 3108960 EMU
+        // = 8636Hmm. FIXME: Expected value is as in LO 7.2. Reason for difference is yet unknown.
+        if (bIsExport)
+        {
+            uno::Reference<drawing::XShape> xYear(xGroup->getByIndex(1), uno::UNO_QUERY);
+            // This was 2, due to incorrect handling of parent transformations inside DML groupshapes.
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(8662), xYear->getSize().Width);
+        }
+    };
+
+    createSwDoc("relorientation.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testBezier)
@@ -349,16 +356,14 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO74215)
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testColumnBreak_ColumnCountIsZero,"fdo74153.docx")
+CPPUNIT_TEST_FIXTURE(Test, testColumnBreak_ColumnCountIsZero)
 {
     /* fdo73545: Column Break with Column_count = 0 was not getting preserved.
      * The <w:br w:type="column" /> was missing after roundtrip
      */
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br", "type", u"column");
-    }
+    loadAndSave("fdo74153.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:r[1]/w:br", "type", u"column");
 
     //tdf76349 match Word's behavior of treating breaks in single columns as page breaks.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -473,16 +478,21 @@ CPPUNIT_TEST_FIXTURE(Test, testAbi11739)
     CPPUNIT_ASSERT(getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "unhideWhenUsed") < getXPathPosition(pXmlDoc, "/w:styles/w:style[11]", "qFormat"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testEmbeddedXlsx, "embedded-xlsx.docx")
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedXlsx)
 {
-    // check there are two objects and they are FrameShapes
-    CPPUNIT_ASSERT_EQUAL(2, getShapes());
-    CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, getShape(1)->getShapeType());
-    CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, getShape(2)->getShapeType());
+    auto verify = [this]() {
+        // check there are two objects and they are FrameShapes
+        CPPUNIT_ASSERT_EQUAL(2, getShapes());
+        CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, getShape(1)->getShapeType());
+        CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, getShape(2)->getShapeType());
+    };
+
+    createSwDoc("embedded-xlsx.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     // check the objects are present in the exported document.xml
-    if (!isExported())
-        return;
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/w:object", 2);
 

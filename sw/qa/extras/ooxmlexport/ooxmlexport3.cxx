@@ -273,22 +273,27 @@ CPPUNIT_TEST_FIXTURE(Test, testCalendar1)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblLook", "val", u"04a0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCalendar2, "calendar2.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCalendar2)
 {
-    // Problem was that CharCaseMap was style::CaseMap::NONE.
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharCaseMap"_ustr));
-    // Font size in the second row was 11.
-    xCell.set(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharHeight"_ustr));
-    // Font size in the third row was 11 as well.
-    xCell.set(xTable->getCellByName(u"B3"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharHeight"_ustr));
+    auto verify = [this]() {
+        // Problem was that CharCaseMap was style::CaseMap::NONE.
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, getProperty<sal_Int16>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharCaseMap"_ustr));
+        // Font size in the second row was 11.
+        xCell.set(xTable->getCellByName(u"A2"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(16.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharHeight"_ustr));
+        // Font size in the third row was 11 as well.
+        xCell.set(xTable->getCellByName(u"B3"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(14.f, getProperty<float>(getRun(getParagraphOfText(1, xCell->getText()), 1), u"CharHeight"_ustr));
+    };
+
+    createSwDoc("calendar2.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     // This paragraph property was missing in table style.
-    if (!isExported())
-        return;
     xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
     assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Calendar2']/w:pPr/w:jc", "val", u"center");
 
