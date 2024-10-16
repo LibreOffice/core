@@ -14,6 +14,7 @@
 #include <rtl/digest.h>
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace rtl {
@@ -38,6 +39,8 @@ const sal_uInt32 SHA384_HASH_LENGTH = 48;
 const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct HashImpl;
+
+COMPHELPER_DLLPUBLIC std::string hashToString(const std::vector<unsigned char>& rHash);
 
 class COMPHELPER_DLLPUBLIC Hash
 {
