@@ -982,17 +982,15 @@ CPPUNIT_TEST_FIXTURE(Test, testListFormatDocx)
         "text:list-level-style-number[@text:level='3']", "num-suffix", u"<<");
 }
 
-DECLARE_ODFEXPORT_TEST(testShapeWithHyperlink, "shape-with-hyperlink.odt")
+CPPUNIT_TEST_FIXTURE(Test, testShapeWithHyperlink)
 {
+    loadAndSave("shape-with-hyperlink.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        // Check how conversion from prefix/suffix to list format did work
-        assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
-                    "href", u"http://shape.com/");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Check how conversion from prefix/suffix to list format did work
+    assertXPath(pXmlDoc, "/office:document-content/office:body/office:text/text:p/draw:a",
+                "href", u"http://shape.com/");
 }
 
 DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
@@ -1015,40 +1013,44 @@ DECLARE_ODFEXPORT_TEST(testShapesHyperlink, "shapes-hyperlink.odt")
     CPPUNIT_ASSERT_EQUAL(u"http://libreoffice5.org/"_ustr, getProperty<OUString>(xPropSet5, u"Hyperlink"_ustr));
 }
 
-DECLARE_ODFEXPORT_TEST(testListFormatOdt, "listformat.odt")
+CPPUNIT_TEST_FIXTURE(Test, testListFormatOdt)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
-    CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u">>1.1<<"_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u">>1.1.1<<"_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u">>1.1.2<<"_ustr, getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        // Ensure in resulting ODT we also have not just prefix/suffix, but custom delimiters
+        CPPUNIT_ASSERT_EQUAL(u">1<"_ustr, getProperty<OUString>(getParagraph(1), u"ListLabelString"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u">>1.1<<"_ustr, getProperty<OUString>(getParagraph(2), u"ListLabelString"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u">>1.1.1<<"_ustr, getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u">>1.1.2<<"_ustr, getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
+    };
 
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        // Check how conversion from prefix/suffix to list format did work
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']", "num-list-format", u">%1%<");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']", "num-list-format", u">>%1%.%2%<<");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']", "num-list-format", u">>%1%.%2%.%3%<<");
+    createSwDoc("listformat.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
-        // But for compatibility there are still prefix/suffix as they were before
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']", "num-prefix", u">");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='1']", "num-suffix", u"<");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']", "num-prefix", u">>");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='2']", "num-suffix", u"<<");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']", "num-prefix", u">>");
-        assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
-            "text:list-level-style-number[@text:level='3']", "num-suffix", u"<<");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // Check how conversion from prefix/suffix to list format did work
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='1']", "num-list-format", u">%1%<");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='2']", "num-list-format", u">>%1%.%2%<<");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='3']", "num-list-format", u">>%1%.%2%.%3%<<");
+
+    // But for compatibility there are still prefix/suffix as they were before
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='1']", "num-prefix", u">");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='1']", "num-suffix", u"<");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='2']", "num-prefix", u">>");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='2']", "num-suffix", u"<<");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='3']", "num-prefix", u">>");
+    assertXPath(pXmlDoc, "/office:document-content/office:automatic-styles/text:list-style[@style:name='L1']/"
+        "text:list-level-style-number[@text:level='3']", "num-suffix", u"<<");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testStyleLink)

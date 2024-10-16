@@ -360,133 +360,137 @@ CPPUNIT_TEST_FIXTURE(Test, testUserFieldDeclFly)
     assertXPath(pXmlDoc, "//style:header/text:user-field-decls/text:user-field-decl", 2);
 }
 
-DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFramebackgrounds)
 {
-    CPPUNIT_ASSERT_EQUAL(16, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-   //Counting the Number of Frames and checking with the expected count
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(16), xIndexAccess->getCount());
-    uno::Reference<drawing::XShape> xTextFrame;
-    awt::Gradient aGradientxTextFrame;
-    //Frame 1
-    xTextFrame = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 2
-    xTextFrame = getShape(2);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x006600), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 3
-    xTextFrame = getShape(3);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x006600), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 4
-    xTextFrame = getShape(4);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x579D1C), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
-    aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
-    //Frame 5
-    xTextFrame = getShape(5);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
-    //Frame 6
-    xTextFrame = getShape(6);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 7
-    xTextFrame = getShape(7);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
-    aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
-    //Frame 8
-    xTextFrame = getShape(8);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 9
-    xTextFrame = getShape(9);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 10
-    xTextFrame = getShape(10);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 11
-    xTextFrame = getShape(11);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    //Frame 12
-    xTextFrame = getShape(12);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
-    //Frame 13
-    xTextFrame = getShape(13);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
-    aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
-    //Frame 14
-    xTextFrame = getShape(14);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
-    //Frame 15
-    xTextFrame = getShape(15);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
-    //Frame 16
-    xTextFrame = getShape(16);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
-    aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
-    CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(16, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+       //Counting the Number of Frames and checking with the expected count
+        uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16), xIndexAccess->getCount());
+        uno::Reference<drawing::XShape> xTextFrame;
+        awt::Gradient aGradientxTextFrame;
+        //Frame 1
+        xTextFrame = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 2
+        xTextFrame = getShape(2);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x006600), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 3
+        xTextFrame = getShape(3);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x006600), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 4
+        xTextFrame = getShape(4);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x579D1C), getProperty<Color>(xTextFrame, u"FillColor"_ustr));
+        aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+        //Frame 5
+        xTextFrame = getShape(5);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
+        //Frame 6
+        xTextFrame = getShape(6);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 7
+        xTextFrame = getShape(7);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Subtle Tango Green"_ustr, getProperty<OUString>(xTextFrame, u"FillGradientName"_ustr));
+        aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+        //Frame 8
+        xTextFrame = getShape(8);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 9
+        xTextFrame = getShape(9);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 10
+        xTextFrame = getShape(10);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 11
+        xTextFrame = getShape(11);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        //Frame 12
+        xTextFrame = getShape(12);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+        //Frame 13
+        xTextFrame = getShape(13);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Black 0 Degrees"_ustr, getProperty<OUString>(xTextFrame, u"FillHatchName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBackground"_ustr));
+        aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+        //Frame 14
+        xTextFrame = getShape(14);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
+        //Frame 15
+        xTextFrame = getShape(15);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(45), getProperty<sal_Int32>(xTextFrame, u"FillTransparence"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
+        //Frame 16
+        xTextFrame = getShape(16);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xTextFrame, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(u"Sky"_ustr, getProperty<OUString>(xTextFrame, u"FillBitmapName"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapPositionOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetX"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xTextFrame, u"FillBitmapOffsetY"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextFrame, u"FillBitmapTile"_ustr));
+        aGradientxTextFrame = getProperty<awt::Gradient>(xTextFrame, u"FillTransparenceGradient"_ustr);
+        CPPUNIT_ASSERT_EQUAL(css::awt::GradientStyle_LINEAR, aGradientxTextFrame.Style);
+    };
 
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        // check that there are 3 background-image elements
-        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']/style:background-image[@style:repeat='stretch']", 3);
-        // tdf#90640: check that one of them is 55% opaque
-        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity='55%']/style:background-image[@style:repeat='stretch' and @draw:opacity='55%']", 1);
-        // tdf#90640: check that one of them is 43% opaque
-        // (emulated - hopefully not with rounding errors)
-        assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity-name='Transparency_20_1']/style:background-image[@style:repeat='stretch' and @draw:opacity='43%']", 1);
-    }
+    createSwDoc("framebackgrounds.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // check that there are 3 background-image elements
+    assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap']/style:background-image[@style:repeat='stretch']", 3);
+    // tdf#90640: check that one of them is 55% opaque
+    assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity='55%']/style:background-image[@style:repeat='stretch' and @draw:opacity='55%']", 1);
+    // tdf#90640: check that one of them is 43% opaque
+    // (emulated - hopefully not with rounding errors)
+    assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity-name='Transparency_20_1']/style:background-image[@style:repeat='stretch' and @draw:opacity='43%']", 1);
 }
 
 DECLARE_SW_ROUNDTRIP_TEST(testSHA1Correct, "sha1_correct.odt", "1012345678901234567890123456789012345678901234567890", Test)
@@ -660,85 +664,84 @@ DECLARE_ODFEXPORT_TEST(testResolvedComment, "resolved-comment.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92379)
 {
-    loadAndReload("tdf92379.fodt");
-    // frame style fo:background-color was not imported
-    uno::Reference<container::XNameAccess> xStyles(getStyles(u"FrameStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"encarts"_ustr),
-            uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"BackColorRGB"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"BackColorTransparency"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"FillColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, u"FillTransparence"_ustr));
+    auto verify = [this]() {
+        // frame style fo:background-color was not imported
+        uno::Reference<container::XNameAccess> xStyles(getStyles(u"FrameStyles"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(u"encarts"_ustr),
+                uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"BackColorRGB"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xStyle, u"BackColorTransparency"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffcc99), getProperty<Color>(xStyle, u"FillColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle, u"FillTransparence"_ustr));
 
-    uno::Reference<beans::XPropertySet> xFrameStyle2(xStyles->getByName(u"Untitled1"_ustr),
-            uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xFrameStyle2, u"BackColorRGB"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xFrameStyle2, u"BackTransparent"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrameStyle2, u"BackColorTransparency"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrameStyle2, u"FillStyle"_ustr));
-// unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
-//    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "FillColor"));
-//    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xFrameStyle2, "FillTransparence"));
+        uno::Reference<beans::XPropertySet> xFrameStyle2(xStyles->getByName(u"Untitled1"_ustr),
+                uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xFrameStyle2, u"BackColorRGB"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xFrameStyle2, u"BackTransparent"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(100), getProperty<sal_Int32>(xFrameStyle2, u"BackColorTransparency"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrameStyle2, u"FillStyle"_ustr));
+    // unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xFrameStyle2, "FillColor"));
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xFrameStyle2, "FillTransparence"));
 
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
-        // check that fo:background-color attribute is exported properly
-        assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='encarts']/style:graphic-properties[@fo:background-color='#ffcc99']", 1);
-        assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='Untitled1']/style:graphic-properties[@fo:background-color='transparent']", 1);
-    }
+        // paragraph style fo:background-color was wrongly inherited despite being
+        // overridden in derived style
+        uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
+                u"Titre Avis expert"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, u"ParaBackColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle1, u"ParaBackTransparent"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle1, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, u"FillColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle1, u"FillTransparence"_ustr));
+        CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xStyle1, u"CharColor"_ustr));
 
-    // paragraph style fo:background-color was wrongly inherited despite being
-    // overridden in derived style
-    uno::Reference<container::XNameAccess> xParaStyles(getStyles(u"ParagraphStyles"_ustr));
-    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName(
-            u"Titre Avis expert"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle1, u"ParaBackTransparent"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle1, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle1, u"FillColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle1, u"FillTransparence"_ustr));
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xStyle1, u"CharColor"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle2(xParaStyles->getByName(
+                u"Avis expert questions"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle2, u"ParaBackColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle2, u"ParaBackTransparent"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle2, u"FillStyle"_ustr));
+    // unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle2, "FillColor"));
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle2, "FillTransparence"));
+        CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle2, u"CharColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xStyle2(xParaStyles->getByName(
-            u"Avis expert questions"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle2, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle2, u"ParaBackTransparent"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle2, u"FillStyle"_ustr));
-// unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
-//    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle2, "FillColor"));
-//    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle2, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle2, u"CharColor"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle31(xParaStyles->getByName(
+                u"avis expert questions non cadres"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, u"ParaBackColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle31, u"ParaBackTransparent"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle31, u"FillStyle"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, u"FillColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle31, u"FillTransparence"_ustr));
+        CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle31, u"CharColor"_ustr));
 
-    uno::Reference<beans::XPropertySet> xStyle31(xParaStyles->getByName(
-            u"avis expert questions non cadres"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xStyle31, u"ParaBackTransparent"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(xStyle31, u"FillStyle"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x801900), getProperty<Color>(xStyle31, u"FillColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xStyle31, u"FillTransparence"_ustr));
-    CPPUNIT_ASSERT_EQUAL(Color(0x661900), getProperty<Color>(xStyle31, u"CharColor"_ustr));
+        uno::Reference<beans::XPropertySet> xStyle32(xParaStyles->getByName(
+                u"Avis expert rXponses"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle32, u"ParaBackColor"_ustr));
+        CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle32, u"ParaBackTransparent"_ustr));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle32, u"FillStyle"_ustr));
+    // unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle32, "FillColor"));
+    //    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle32, "FillTransparence"));
+        CPPUNIT_ASSERT_EQUAL(Color(0x461900), getProperty<Color>(xStyle32, u"CharColor"_ustr));
+    };
 
-    uno::Reference<beans::XPropertySet> xStyle32(xParaStyles->getByName(
-            u"Avis expert rXponses"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xStyle32, u"ParaBackColor"_ustr));
-    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xStyle32, u"ParaBackTransparent"_ustr));
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xStyle32, u"FillStyle"_ustr));
-// unfortunately this is actually the pool default value, which would be hard to fix - but it isn't a problem because style is NONE
-//    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xffffff), getProperty<sal_Int32>(xStyle32, "FillColor"));
-//    CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xStyle32, "FillTransparence"));
-    CPPUNIT_ASSERT_EQUAL(Color(0x461900), getProperty<Color>(xStyle32, u"CharColor"_ustr));
+    createSwDoc("tdf92379.fodt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
-        // check that fo:background-color attribute is exported properly
-        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Titre Avis expert']/style:paragraph-properties[@fo:background-color='#661900']", 1);
-        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert questions']/style:paragraph-properties[@fo:background-color='transparent']", 1);
-        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='avis expert questions non cadres']/style:paragraph-properties[@fo:background-color='#801900']", 1);
-        assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert rXponses']/style:paragraph-properties[@fo:background-color='transparent']", 1);
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"styles.xml"_ustr);
+    // check that fo:background-color attribute is exported properly
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='encarts']/style:graphic-properties[@fo:background-color='#ffcc99']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='graphic' and @style:name='Untitled1']/style:graphic-properties[@fo:background-color='transparent']", 1);
+
+    // check that fo:background-color attribute is exported properly
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Titre Avis expert']/style:paragraph-properties[@fo:background-color='#661900']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert questions']/style:paragraph-properties[@fo:background-color='transparent']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='avis expert questions non cadres']/style:paragraph-properties[@fo:background-color='#801900']", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:family='paragraph' and @style:display-name='Avis expert rXponses']/style:paragraph-properties[@fo:background-color='transparent']", 1);
 }
 
 DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
@@ -1178,35 +1181,38 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
 {
-    loadAndReload("protection-key.fodt");
-    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
+    auto verify = [this]() {
+        OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
-    // check 1 invalid OOo legacy password and 3 valid ODF 1.2 passwords
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xSect0(xSections->getByIndex(0), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key0(getProperty<uno::Sequence<sal_Int8>>(xSect0, u"ProtectionKey"_ustr));
-    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key0, password));
-    uno::Reference<beans::XPropertySet> xSect1(xSections->getByIndex(1), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key1(getProperty<uno::Sequence<sal_Int8>>(xSect1, u"ProtectionKey"_ustr));
-    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key1, password));
-    uno::Reference<beans::XPropertySet> xSect2(xSections->getByIndex(2), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect2, u"ProtectionKey"_ustr));
-    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key2, password));
-    uno::Reference<beans::XPropertySet> xSect3(xSections->getByIndex(3), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect3, u"ProtectionKey"_ustr));
-    CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key3, password));
+        // check 1 invalid OOo legacy password and 3 valid ODF 1.2 passwords
+        uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xSect0(xSections->getByIndex(0), uno::UNO_QUERY);
+        uno::Sequence<sal_Int8> const key0(getProperty<uno::Sequence<sal_Int8>>(xSect0, u"ProtectionKey"_ustr));
+        CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key0, password));
+        uno::Reference<beans::XPropertySet> xSect1(xSections->getByIndex(1), uno::UNO_QUERY);
+        uno::Sequence<sal_Int8> const key1(getProperty<uno::Sequence<sal_Int8>>(xSect1, u"ProtectionKey"_ustr));
+        CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key1, password));
+        uno::Reference<beans::XPropertySet> xSect2(xSections->getByIndex(2), uno::UNO_QUERY);
+        uno::Sequence<sal_Int8> const key2(getProperty<uno::Sequence<sal_Int8>>(xSect2, u"ProtectionKey"_ustr));
+        CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key2, password));
+        uno::Reference<beans::XPropertySet> xSect3(xSections->getByIndex(3), uno::UNO_QUERY);
+        uno::Sequence<sal_Int8> const key3(getProperty<uno::Sequence<sal_Int8>>(xSect3, u"ProtectionKey"_ustr));
+        CPPUNIT_ASSERT(SvPasswordHelper::CompareHashPassword(key3, password));
+    };
+
+    createSwDoc("protection-key.fodt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     // we can't assume that the user entered the password; check that we
     // round-trip the password as-is
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        assertXPath(pXmlDoc, "//text:section[@text:name='Section0' and @text:protected='true' and @text:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=']");
-        assertXPath(pXmlDoc, "//text:section[@text:name='Section1' and @text:protected='true' and @text:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=']");
-        assertXPath(pXmlDoc, "//text:section[@text:name='Section2' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
-        assertXPath(pXmlDoc, "//text:section[@text:name='Section3' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//text:section[@text:name='Section0' and @text:protected='true' and @text:protection-key='vbnhxyBKtPHCA1wB21zG1Oha8ZA=']");
+    assertXPath(pXmlDoc, "//text:section[@text:name='Section1' and @text:protected='true' and @text:protection-key='nLHas0RIwepGDaH4c2hpyIUvIS8=']");
+    assertXPath(pXmlDoc, "//text:section[@text:name='Section2' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
+    assertXPath(pXmlDoc, "//text:section[@text:name='Section3' and @text:protected='true' and @text:protection-key-digest-algorithm='http://www.w3.org/2000/09/xmldsig#sha256' and @text:protection-key='1tnJohagR2T0yF/v69hLPuumSTsj32CumW97nkKGuSQ=']");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128188)
@@ -1400,29 +1406,33 @@ DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, u"RelativeHeightRelation"_ustr));
 }
 
-DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTextboxRoundedCorners)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        comphelper::SequenceAsHashMap aCustomShapeGeometry(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, u"CustomShapeGeometry"_ustr));
 
-    // Test that the shape is a rounded rectangle.
-    CPPUNIT_ASSERT_EQUAL(u"round-rectangle"_ustr, aCustomShapeGeometry[u"Type"_ustr].get<OUString>());
+        // Test that the shape is a rounded rectangle.
+        CPPUNIT_ASSERT_EQUAL(u"round-rectangle"_ustr, aCustomShapeGeometry[u"Type"_ustr].get<OUString>());
 
-    // The shape text should start with a table, with "a" in its A1 cell.
-    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
-    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1, xText), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xCell->getString());
+        // The shape text should start with a table, with "a" in its A1 cell.
+        uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+        uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1, xText), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"A1"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"a"_ustr, xCell->getString());
+    };
+
+    createSwDoc("textbox-rounded-corners.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     // Table inside a textbox should be in the extension namespace.
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-        // This failed, as draw:custom-shape had a table:table child.
-        assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", u"Table1");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    // This failed, as draw:custom-shape had a table:table child.
+    assertXPath(pXmlDoc, "//draw:custom-shape/loext:table", "name", u"Table1");
 }
 
 // test that import whitespace collapsing is compatible with old docs
@@ -1785,60 +1795,67 @@ DECLARE_ODFEXPORT_TEST(testBtlrCell, "btlr-cell.odt")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, u"WritingMode"_ustr));
 }
 
-DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
+CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    // Without the accompanying fix in place, this test would have failed, as
-    // the btlr text direction in the text frame was lost on ODF import and
-    // export.
-    uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xTextFrame.is());
+    auto verify = [this](bool bIsExport = false) {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        // Without the accompanying fix in place, this test would have failed, as
+        // the btlr text direction in the text frame was lost on ODF import and
+        // export.
+        uno::Reference<beans::XPropertySet> xTextFrame(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xTextFrame.is());
 
-    auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);
-    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
+        auto nActual = getProperty<sal_Int16>(xTextFrame, u"WritingMode"_ustr);
+        CPPUNIT_ASSERT_EQUAL(text::WritingMode2::BT_LR, nActual);
 
-    // Without the accompanying fix in place, this test would have failed, as the fly frame had
-    // mbVertical==true, but mbVertLRBT==false, even if the writing direction in the doc model was
-    // btlr.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+        // Without the accompanying fix in place, this test would have failed, as the fly frame had
+        // mbVertical==true, but mbVertLRBT==false, even if the writing direction in the doc model was
+        // btlr.
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
 
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    CPPUNIT_ASSERT(pDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        CPPUNIT_ASSERT(pDoc);
 
-    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    CPPUNIT_ASSERT(pLayout);
+        SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+        CPPUNIT_ASSERT(pLayout);
 
-    SwFrame* pPageFrame = pLayout->GetLower();
-    CPPUNIT_ASSERT(pPageFrame);
-    CPPUNIT_ASSERT(pPageFrame->IsPageFrame());
+        SwFrame* pPageFrame = pLayout->GetLower();
+        CPPUNIT_ASSERT(pPageFrame);
+        CPPUNIT_ASSERT(pPageFrame->IsPageFrame());
 
-    SwFrame* pBodyFrame = pPageFrame->GetLower();
-    CPPUNIT_ASSERT(pBodyFrame);
-    CPPUNIT_ASSERT(pBodyFrame->IsBodyFrame());
+        SwFrame* pBodyFrame = pPageFrame->GetLower();
+        CPPUNIT_ASSERT(pBodyFrame);
+        CPPUNIT_ASSERT(pBodyFrame->IsBodyFrame());
 
-    SwFrame* pBodyTextFrame = pBodyFrame->GetLower();
-    CPPUNIT_ASSERT(pBodyTextFrame);
-    CPPUNIT_ASSERT(pBodyTextFrame->IsTextFrame());
+        SwFrame* pBodyTextFrame = pBodyFrame->GetLower();
+        CPPUNIT_ASSERT(pBodyTextFrame);
+        CPPUNIT_ASSERT(pBodyTextFrame->IsTextFrame());
 
-    CPPUNIT_ASSERT(pBodyTextFrame->GetDrawObjs());
-    const SwSortedObjs& rAnchored = *pBodyTextFrame->GetDrawObjs();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rAnchored.size());
+        CPPUNIT_ASSERT(pBodyTextFrame->GetDrawObjs());
+        const SwSortedObjs& rAnchored = *pBodyTextFrame->GetDrawObjs();
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rAnchored.size());
 
-    auto* pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
-    CPPUNIT_ASSERT(pFlyFrame);
-    CPPUNIT_ASSERT(pFlyFrame->IsVertLRBT());
+        auto* pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
+        CPPUNIT_ASSERT(pFlyFrame);
+        CPPUNIT_ASSERT(pFlyFrame->IsVertLRBT());
 
-    if (!isExported())
-        // Not yet exported, don't modify the doc model for test purposes.
-        return;
+        if (!bIsExport)
+            // Not yet exported, don't modify the doc model for test purposes.
+            return;
 
-    // Make sure that btlr -> tbrl transition clears the "BT" flag.
-    xTextFrame->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::TB_LR));
-    pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
-    CPPUNIT_ASSERT(pFlyFrame);
-    CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
+        // Make sure that btlr -> tbrl transition clears the "BT" flag.
+        xTextFrame->setPropertyValue(u"WritingMode"_ustr, uno::Any(text::WritingMode2::TB_LR));
+        pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
+        CPPUNIT_ASSERT(pFlyFrame);
+        CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
+    };
+
+    createSwDoc("btlr-frame.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129520)
@@ -2272,7 +2289,7 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::Any(xCellC1), u"proName"_ustr, u"v3"_ustr);
 }
 
-DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
+CPPUNIT_TEST_FIXTURE(Test, testEmbeddedPdf)
 {
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
@@ -2280,35 +2297,39 @@ DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
         return;
     }
 
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    // This failed, pdf+png replacement graphics pair didn't survive an ODT roundtrip.
-    auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"ReplacementGraphic"_ustr);
-    CPPUNIT_ASSERT(xReplacementGraphic.is());
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        // This failed, pdf+png replacement graphics pair didn't survive an ODT roundtrip.
+        auto xReplacementGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"ReplacementGraphic"_ustr);
+        CPPUNIT_ASSERT(xReplacementGraphic.is());
 
-    auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"Graphic"_ustr);
-    CPPUNIT_ASSERT(xGraphic.is());
-    // This was image/x-vclgraphic, not exposing the info that the image is a PDF one.
-    CPPUNIT_ASSERT_EQUAL(u"application/pdf"_ustr, getProperty<OUString>(xGraphic, u"MimeType"_ustr));
+        auto xGraphic = getProperty<uno::Reference<graphic::XGraphic>>(xShape, u"Graphic"_ustr);
+        CPPUNIT_ASSERT(xGraphic.is());
+        // This was image/x-vclgraphic, not exposing the info that the image is a PDF one.
+        CPPUNIT_ASSERT_EQUAL(u"application/pdf"_ustr, getProperty<OUString>(xGraphic, u"MimeType"_ustr));
+    };
 
-    if (isExported())
+    createSwDoc("embedded-pdf.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
+    uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
+    uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs), uno::UNO_QUERY);
+    bool bHasBitmap = false;
+    const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
+    for (const auto& rElementName : aNames)
     {
-        uno::Sequence<uno::Any> aArgs{ uno::Any(maTempFile.GetURL()) };
-        uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments(u"com.sun.star.packages.zip.ZipFileAccess"_ustr, aArgs), uno::UNO_QUERY);
-        bool bHasBitmap = false;
-        const uno::Sequence<OUString> aNames = xNameAccess->getElementNames();
-        for (const auto& rElementName : aNames)
+        if (rElementName.startsWith("Pictures") && rElementName.endsWith("png"))
         {
-            if (rElementName.startsWith("Pictures") && rElementName.endsWith("png"))
-            {
-                bHasBitmap = true;
-                break;
-            }
+            bHasBitmap = true;
+            break;
         }
-        // This failed, replacement was an svm file.
-        CPPUNIT_ASSERT(bHasBitmap);
     }
+    // This failed, replacement was an svm file.
+    CPPUNIT_ASSERT(bHasBitmap);
 }
 
 DECLARE_ODFEXPORT_TEST(testTableStyles1, "table_styles_1.odt")
