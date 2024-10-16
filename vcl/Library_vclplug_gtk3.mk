@@ -94,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/a11y/atktablecell \
     vcl/unx/gtk3/a11y/atktextattributes \
     vcl/unx/gtk3/a11y/atktext \
-    vcl/unx/gtk3/a11y/atkutil \
     vcl/unx/gtk3/a11y/atkvalue \
     vcl/unx/gtk3/a11y/atkwrapper \
     vcl/unx/gtk3/fpicker/resourceprovider \

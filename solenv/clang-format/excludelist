@@ -14950,7 +14950,6 @@ vcl/unx/gtk3/a11y/atkselection.cxx
 vcl/unx/gtk3/a11y/atktable.cxx
 vcl/unx/gtk3/a11y/atktext.cxx
 vcl/unx/gtk3/a11y/atktextattributes.cxx
-vcl/unx/gtk3/a11y/atkutil.cxx
 vcl/unx/gtk3/a11y/atkvalue.cxx
 vcl/unx/gtk3/a11y/atkwrapper.cxx
 vcl/unx/gtk3/gtkcairo.cxx
