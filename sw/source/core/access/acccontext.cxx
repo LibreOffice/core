@@ -478,7 +478,7 @@ void SwAccessibleContext::FireStateChangedEvent( sal_Int64 nState,
 
 void SwAccessibleContext::GetStates( sal_Int64& rStateSet )
 {
-    SolarMutexGuard aGuard;
+    std::scoped_lock aGuard( m_Mutex );
 
     // SHOWING
     if (m_isShowingState)
