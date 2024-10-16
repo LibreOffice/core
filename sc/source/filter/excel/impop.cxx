@@ -471,11 +471,8 @@ void ImportExcel:: WinProtection()
 
 void ImportExcel::Columndefault()
 {// Default Cell Attributes
-    sal_uInt16  nColMic, nColMac;
-    sal_uInt8   nOpt0;
-
-    nColMic = aIn.ReaduInt16();
-    nColMac = aIn.ReaduInt16();
+    sal_uInt16 nColMic = aIn.ReaduInt16();
+    sal_uInt16 nColMac = aIn.ReaduInt16();
 
     OSL_ENSURE( aIn.GetRecLeft() == static_cast<std::size_t>(nColMac - nColMic) * 3 + 2,
                 "ImportExcel::Columndefault - wrong record size" );
@@ -486,6 +483,8 @@ void ImportExcel::Columndefault()
         return;
     }
 
+    assert(nColMac > 0 && "coverity 2023.12.2");
+
     nColMac--;
 
     if( nColMac > rD.MaxCol() )
@@ -493,7 +492,7 @@ void ImportExcel::Columndefault()
 
     for( sal_uInt16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
-        nOpt0 = aIn.ReaduInt8();
+        sal_uInt8 nOpt0 = aIn.ReaduInt8();
         aIn.Ignore( 2 );   // only 0. Attribute-Byte used
 
         if( nOpt0 & 0x80 )  // Col hidden?
