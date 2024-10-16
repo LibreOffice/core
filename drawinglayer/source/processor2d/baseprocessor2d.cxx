@@ -62,7 +62,8 @@ namespace drawinglayer::processor2d
         {
             for (const primitive2d::Primitive2DReference& rCandidate : rSource)
             {
-                if (rCandidate)
+                // Skip, if not visible
+                if (rCandidate && rCandidate->getVisible())
                     processBasePrimitive2D(*rCandidate);
             }
         }
