@@ -57,9 +57,9 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf155663)
 {
-    auto verify = [this]() {
+    auto verify = [this](bool bIsExport = false) {
         auto const xShape(getShape(1));
-        if (!isExported())
+        if (!bIsExport)
         {
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Height);
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2004), xShape->getSize().Width);
@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf155663)
     createSwDoc("piccrop.rtf");
     verify();
     saveAndReload(mpFilter);
-    verify();
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf158586_0)

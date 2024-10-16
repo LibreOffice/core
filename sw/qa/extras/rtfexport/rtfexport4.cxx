@@ -318,14 +318,14 @@ CPPUNIT_TEST_FIXTURE(Test, test150382)
 
 CPPUNIT_TEST_FIXTURE(Test, testAnchoredAtSamePosition)
 {
-    auto verify = [this]() {
+    auto verify = [this](bool bIsExport = false) {
         SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
         SwDoc* const pDoc = pTextDoc->GetDocShell()->GetDoc();
 
         CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, getParagraph(1)->getString());
 
         auto& rFlys = *pDoc->GetSpzFrameFormats();
-        if (isExported())
+        if (bIsExport)
         { // 2, not 3: the form control becomes a field on export...
             CPPUNIT_ASSERT_EQUAL(size_t(2), rFlys.size());
         }
@@ -334,7 +334,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredAtSamePosition)
             CPPUNIT_ASSERT_EQUAL(size_t(3), rFlys.size());
         }
 
-        sal_Int32 const nIndex(isExported() ? 4 : 3);
+        sal_Int32 const nIndex(bIsExport ? 4 : 3);
         CPPUNIT_ASSERT_EQUAL(RndStdIds::FLY_AT_CHAR, rFlys[0]->GetAnchor().GetAnchorId());
         CPPUNIT_ASSERT_EQUAL(SwNodeOffset(12), rFlys[0]->GetAnchor().GetAnchorNode()->GetIndex());
         CPPUNIT_ASSERT_EQUAL(nIndex, rFlys[0]->GetAnchor().GetAnchorContentOffset());
@@ -345,7 +345,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAnchoredAtSamePosition)
     createSwDoc("anchor.fodt");
     verify();
     saveAndReload(mpFilter);
-    verify();
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testRedlineInsdel)
@@ -619,7 +619,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129631_lostBorders)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
 {
-    auto verify = [this]() {
+    auto verify = [this](bool bIsExport = false) {
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         uno::Reference<container::XNameAccess> paragraphStyles = getStyles(u"ParagraphStyles"_ustr);
         uno::Reference<beans::XPropertySet> xStyleProps(paragraphStyles->getByName(u"Shadow"_ustr),
@@ -654,7 +654,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
             = getProperty<table::BorderLine2>(xRun, u"CharRightBorder"_ustr);
         // MS formats can't have a shadow without a border.
         // Char borders are all or none, so have to decide to add borders, or throw away shadow...
-        if (isExported())
+        if (bIsExport)
             CPPUNIT_ASSERT(sal_uInt32(0) != aBorderLine.LineWidth);
 
         xRun.set(getRun(getParagraph(4), 2, u"shadow"_ustr));
@@ -670,7 +670,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129522_removeShadowStyle)
     createSwDoc("tdf129522_removeShadowStyle.odt");
     verify();
     saveAndReload(mpFilter);
-    verify();
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf136587_noStyleName)

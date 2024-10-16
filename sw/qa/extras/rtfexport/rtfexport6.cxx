@@ -260,13 +260,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108505_fieldCharFormat)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf108505_fieldCharFormat2)
 {
-    auto verify = [this]() {
+    auto verify = [this](bool bIsExport = false) {
         uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xCell(xTable->getCellByName(u"C1"_ustr), uno::UNO_QUERY);
         uno::Reference<text::XTextRange> xPara = getParagraphOfText(1, xCell->getText());
 
-        const sal_Int32 nRun = isExported() ? 6 : 5;
-        const Color aColor = isExported() ? COL_BLACK : COL_AUTO;
+        const sal_Int32 nRun = bIsExport ? 6 : 5;
+        const Color aColor = bIsExport ? COL_BLACK : COL_AUTO;
 
         // Character formatting should only be defined by the \fldrslt, and not by prior formatting.
         // Prior formatting is italic, red, 20pt.
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108505_fieldCharFormat2)
     createSwDoc("tdf108505_fieldCharFormat2.rtf");
     verify();
     saveAndReload(mpFilter);
-    verify();
+    verify(/*bIsExport*/ true);
 }
 
 /** Make sure that the document variable "Unused", which is not referenced in the document,

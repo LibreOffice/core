@@ -179,25 +179,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf137683_charHighlightNone)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf116436_tableBackground)
 {
-    auto verify = [this]() {
+    auto verify = [this](bool bIsExport = false) {
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
                                                         uno::UNO_QUERY);
         uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
         uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
-        if (isExported())
+        if (bIsExport)
             CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), getProperty<Color>(xCell, u"BackColor"_ustr));
         xCell.set(xTable->getCellByName(u"A6"_ustr));
         CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), getProperty<Color>(xCell, u"BackColor"_ustr));
         xCell.set(xTable->getCellByName(u"B6"_ustr));
-        if (isExported())
+        if (bIsExport)
             CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), getProperty<Color>(xCell, u"BackColor"_ustr));
     };
     createSwDoc("tdf116436_tableBackground.odt");
     verify();
     saveAndReload(mpFilter);
-    verify();
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf122589_firstSection)
