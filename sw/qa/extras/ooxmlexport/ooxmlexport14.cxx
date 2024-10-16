@@ -539,13 +539,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf130610)
     }
 
     // check inline text properties
-    {
-        if (isExported())
-        {
-            xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-            assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:b");
-        }
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:b");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121045)
@@ -781,24 +776,31 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
     CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf149421, "tdf121661.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf149421)
 {
-    uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
-    // This was false
-    CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        uno::Reference<beans::XPropertySet> xStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        // This was false
+        CPPUNIT_ASSERT_GREATER( static_cast<sal_Int16>(0), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
 
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(851), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
-        // modify hyphenation zone (note: only hyphenation zone set in Standard paragraph style
-        // is exported, according to the document-level hyphenation settings of OOXML)
-        xStyle->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(static_cast<sal_Int16>(2000)));
-    }
-    else
-    {
-        // check the export of the modified hyphenation zone
-        CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(2000), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
-    }
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(851), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+            // modify hyphenation zone (note: only hyphenation zone set in Standard paragraph style
+            // is exported, according to the document-level hyphenation settings of OOXML)
+            xStyle->setPropertyValue(u"ParaHyphenationZone"_ustr, uno::Any(static_cast<sal_Int16>(2000)));
+        }
+        else
+        {
+            // check the export of the modified hyphenation zone
+            CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>(2000), getProperty<sal_Int16>(xStyle, u"ParaHyphenationZone"_ustr));
+        }
+    };
+
+    createSwDoc("tdf121661.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf149421_default, "tdf146171.docx")
@@ -1689,8 +1691,6 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
 {
     // tdf#97618 The text wrapping of a shape was not handled in a canvas.
     // TODO: fix export too
-    if (isExported())
-        return;
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     if (!pXmlDoc)
         return;
@@ -1699,11 +1699,10 @@ DECLARE_OOXMLEXPORT_TEST(testVmlShapeTextWordWrap, "tdf97618_testVmlShapeTextWor
 }
 */
 
-DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMirroredX.docx")
+CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredX)
 {
     // tdf#97517 The "flip:x" was not handled for VML line shapes.
-    if (!isExported())
-        return;
+    loadAndSave("tdf97517_testVmlLineShapeMirroredX.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(pXmlDoc,
         "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",
@@ -1711,11 +1710,10 @@ DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredX, "tdf97517_testVmlLineShapeMi
     CPPUNIT_ASSERT(sStyle.indexOf("flip:x") > 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testVmlLineShapeMirroredY, "tdf137678_testVmlLineShapeMirroredY.docx")
+CPPUNIT_TEST_FIXTURE(Test, testVmlLineShapeMirroredY)
 {
     // tdf#137678 The "flip:y" was not handled for VML line shapes.
-    if (!isExported())
-        return;
+    loadAndSave("tdf137678_testVmlLineShapeMirroredY.docx");
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     OUString sStyle = getXPath(pXmlDoc,
         "/w:document/w:body/w:p[3]/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:line",

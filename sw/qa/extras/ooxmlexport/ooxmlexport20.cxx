@@ -208,13 +208,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128646)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:pPr/w:rPr/w:vanish", 1);
-    if (!isExported())
-        // originally no <w:vanish> (the same as <w:vanish val="false">)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", 0);
-    else
-        // This was hidden (<w:vanish/>)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", "val",
-                    u"false");
+    // This was hidden (<w:vanish/>)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc/w:p[7]/w:r/w:rPr/w:vanish", "val",
+                u"false");
 
     // pre-emptive unit test - tdf#162211
     // given a compat12 file with wrap-through DML shape anchored in cell as layoutInCell
@@ -250,12 +246,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119800)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:pPr/w:rPr/w:vanish", 1);
-    if (!isExported())
-        // originally no <w:vanish> (the same as <w:vanish val="false">)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", 0);
-    else
-        // This was hidden (<w:vanish/>)
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", "val", u"false");
+    // This was hidden (<w:vanish/>)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r/w:rPr/w:vanish", "val", u"false");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
@@ -655,40 +647,43 @@ CPPUNIT_TEST_FIXTURE(Test, testSectionProtection2)
                                  getProperty<bool>(xSect, u"IsProtected"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf66398_permissions, "tdf66398_permissions.docx")
+CPPUNIT_TEST_FIXTURE(Test, tdf66398_permissions)
 {
+    auto verify = [this]() {
+        // get bookmark interface
+        uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
+                                                                uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xBookmarksByName
+            = xBookmarksSupplier->getBookmarks();
+
+        // check: we have 2 bookmarks
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
+        CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"_GoBack"_ustr));
+        CPPUNIT_ASSERT(
+            xBookmarksByName->hasByName(u"permission-for-group:267014232:everyone"_ustr));
+    };
+
+    createSwDoc("tdf66398_permissions.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     // check document permission settings for the whole document
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"readOnly");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"1");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptProviderType",
-                    u"rsaAES");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmClass",
-                    u"hash");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmType",
-                    u"typeAny");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmSid", u"14");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptSpinCount", u"100000");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "hash",
-                    u"A0/"
-                    "Xy6KcXljJlZjP0TwJMPJuW2rc46UwXqn2ctxckc2nCECE5i89M85z2Noh3ZEA5NBQ9RJ5ycxiUH6nz"
-                    "mJaKw==");
-        assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "salt",
-                    u"B8k6wb1pkjUs4Nv/8QBk/w==");
-    }
-
-    // get bookmark interface
-    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(),
-                                                            uno::UNO_QUERY);
-    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
-
-    // check: we have 2 bookmarks
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xBookmarksByIdx->getCount());
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"_GoBack"_ustr));
-    CPPUNIT_ASSERT(xBookmarksByName->hasByName(u"permission-for-group:267014232:everyone"_ustr));
+    xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "edit", u"readOnly");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"1");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptProviderType", u"rsaAES");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmClass", u"hash");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmType", u"typeAny");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptAlgorithmSid", u"14");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "cryptSpinCount", u"100000");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "hash",
+                u"A0/"
+                "Xy6KcXljJlZjP0TwJMPJuW2rc46UwXqn2ctxckc2nCECE5i89M85z2Noh3ZEA5NBQ9RJ5ycxiUH6nz"
+                "mJaKw==");
+    assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "salt",
+                u"B8k6wb1pkjUs4Nv/8QBk/w==");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf106843)

@@ -100,19 +100,17 @@ CPPUNIT_TEST_FIXTURE(Test, testDefaultContentTypes)
                 u"image/jpeg");
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testDocmSave, "hello.docm", nullptr, DocmTest)
+CPPUNIT_TEST_FIXTURE(DocmTest, testDocmSave)
 {
     // This was
     // application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml,
     // we used the wrong content type for .docm files.
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
-        assertXPath(pXmlDoc,
-                    "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
-                    "ContentType",
-                    u"application/vnd.ms-word.document.macroEnabled.main+xml");
-    }
+    loadAndSave("hello.docm");
+    xmlDocUniquePtr pXmlDoc = parseExport(u"[Content_Types].xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@PartName='/word/document.xml']",
+                "ContentType",
+                u"application/vnd.ms-word.document.macroEnabled.main+xml");
 }
 
 DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
@@ -439,14 +437,19 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106970, "tdf106970.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(494), getProperty<sal_Int32>(getParagraph(4), u"ParaBottomMargin"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf79272_strictDxa, "tdf79272_strictDxa.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf79272_strictDxa)
 {
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), u"Width"_ustr));
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(4318), getProperty<sal_Int32>(xTables->getByIndex(0), u"Width"_ustr));
+    };
 
-    if (!isExported())
-         return;
+    createSwDoc("tdf79272_strictDxa.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/styles.xml"_ustr);
     // Validation test: order of elements was wrong. Order was: insideH, end, insideV.
     int nEnd = getXPathPosition(pXmlDoc, "/w:styles/w:style[@w:styleId='TableGrid']/w:tblPr/w:tblBorders", "end");
@@ -511,35 +514,42 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth, "tdf97648_relativeWidth.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf97648_relativeWidth)
 {
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(7616), getShape(1)->getSize().Width, 10);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(8001), getShape(2)->getSize().Width, 10);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(4001), getShape(3)->getSize().Width, 10);
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr)) );
-    CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(1600), getShape(4)->getSize().Width, 10);
-    CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr)) );
+    auto verify = [this](bool bIsExport = false) {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(7616), getShape(1)->getSize().Width, 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(8001), getShape(2)->getSize().Width, 10);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(4001), getShape(3)->getSize().Width, 10);
+        CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_LEFT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(6), u"ParaAdjust"_ustr)) );
+        CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(1600), getShape(4)->getSize().Width, 10);
+        CPPUNIT_ASSERT_EQUAL( style::ParagraphAdjust_RIGHT, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(8), u"ParaAdjust"_ustr)) );
 
 
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), getProperty<sal_Int32>(getShape(1), u"LeftMargin"_ustr) );
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Text should wrap above/below the line", text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(2), u"HoriOrient"_ustr));
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(getShape(3), u"HoriOrient"_ustr));
-        CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT, getProperty<sal_Int16>(getShape(4), u"HoriOrient"_ustr));
-    }
+        CPPUNIT_ASSERT_EQUAL( sal_Int32(0), getProperty<sal_Int32>(getShape(1), u"LeftMargin"_ustr) );
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Text should wrap above/below the line", text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(getShape(1), u"Surround"_ustr));
+            CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(2), u"HoriOrient"_ustr));
+            CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(getShape(3), u"HoriOrient"_ustr));
+            CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT, getProperty<sal_Int16>(getShape(4), u"HoriOrient"_ustr));
+        }
 
-    uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
-                                                      uno::UNO_QUERY);
+        uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(),
+                                                          uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSections->getCount());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSections->getCount());
 
-    uno::Reference<beans::XPropertySet> xTextSection(xSections->getByIndex(2), uno::UNO_QUERY);
-    uno::Reference<text::XTextColumns> xTextColumns
-        = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, u"TextColumns"_ustr);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+        uno::Reference<beans::XPropertySet> xTextSection(xSections->getByIndex(2), uno::UNO_QUERY);
+        uno::Reference<text::XTextColumns> xTextColumns
+            = getProperty<uno::Reference<text::XTextColumns>>(xTextSection, u"TextColumns"_ustr);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xTextColumns->getColumnCount());
+    };
+
+    createSwDoc("tdf97648_relativeWidth.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf144362, "tdf144362.odt")
@@ -888,61 +898,66 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
-    loadAndReload("tdf55427_footnote2endnote.odt");
-    CPPUNIT_ASSERT_EQUAL(4, getPages());
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Footnote"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty<Color>(xPageStyle, u"CharColor"_ustr));
-    xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty<Color>(xPageStyle, u"CharColor"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        CPPUNIT_ASSERT_EQUAL(4, getPages());
+        uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Footnote"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty<Color>(xPageStyle, u"CharColor"_ustr));
+        xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty<Color>(xPageStyle, u"CharColor"_ustr));
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
-    // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().m_aFormat.GetNumberingType() );
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
+        // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().m_aFormat.GetNumberingType() );
 
-    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+        uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
 
-    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
-    uno::Reference<text::XFootnote> xEndnote;
-    xEndnotes->getByIndex(0) >>= xEndnote;
-    uno::Reference<text::XText> xEndnoteText;
-    xEndnotes->getByIndex(0) >>= xEndnoteText;
+        uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
+        uno::Reference<text::XFootnote> xEndnote;
+        xEndnotes->getByIndex(0) >>= xEndnote;
+        uno::Reference<text::XText> xEndnoteText;
+        xEndnotes->getByIndex(0) >>= xEndnoteText;
 
-    // ODT footnote-at-document-end's closest DOCX match is an endnote, so the two imports will not exactly match by design.
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );
+        // ODT footnote-at-document-end's closest DOCX match is an endnote, so the two imports will not exactly match by design.
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );
 
-        uno::Reference<text::XFootnote> xFootnote;
-        xFootnotes->getByIndex(0) >>= xFootnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", u"1"_ustr, xFootnote->getAnchor()->getString() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
+            uno::Reference<text::XFootnote> xFootnote;
+            xFootnotes->getByIndex(0) >>= xFootnote;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", u"1"_ustr, xFootnote->getAnchor()->getString() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
 
-        uno::Reference<text::XText> xFootnoteText;
-        xFootnotes->getByIndex(0) >>= xFootnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-    }
-    else
-    {
-        // These asserted items are major differences in the conversion from footnote to endnote, NOT necessary conditions for a proper functioning document.
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes were converted into endnotes", sal_Int32(0), xFootnotes->getCount() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes became endnotes", sal_Int32(6), xEndnotes->getCount() );
+            uno::Reference<text::XText> xFootnoteText;
+            xFootnotes->getByIndex(0) >>= xFootnoteText;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+        }
+        else
+        {
+            // These asserted items are major differences in the conversion from footnote to endnote, NOT necessary conditions for a proper functioning document.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes were converted into endnotes", sal_Int32(0), xFootnotes->getCount() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes became endnotes", sal_Int32(6), xEndnotes->getCount() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
-        xEndnotes->getByIndex(4) >>= xEndnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", u"v"_ustr, xEndnote->getAnchor()->getString() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
+            xEndnotes->getByIndex(4) >>= xEndnote;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", u"v"_ustr, xEndnote->getAnchor()->getString() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-        xEndnotes->getByIndex(4) >>= xEndnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-    }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+            xEndnotes->getByIndex(4) >>= xEndnoteText;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+        }
+    };
+    createSwDoc("tdf55427_footnote2endnote.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")

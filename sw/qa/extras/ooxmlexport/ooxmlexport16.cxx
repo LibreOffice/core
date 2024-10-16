@@ -461,13 +461,12 @@ CPPUNIT_TEST_FIXTURE(Test, testCustomShapePresetExport)
     CPPUNIT_ASSERT_EQUAL(17, nCount);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf148671, "tdf148671.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148671)
 {
+    loadAndSave("tdf148671.docx");
     // Don't assert with 'pFieldMark' failed when document is opened
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    if (!isExported())
-        return;
     // Preserve tag on SDT blocks. (Before the fix, these were all lost)
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:tag", 3);
@@ -934,47 +933,54 @@ DECLARE_OOXMLEXPORT_TEST(testTableWidth, "frame_size_export.docx")
 }
 
 
-DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
+CPPUNIT_TEST_FIXTURE(Test, testCommentDoneModel)
 {
-    css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
-        mxComponent, css::uno::UNO_QUERY_THROW);
-    auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
+    auto verify = [this](bool bIsExport = false) {
+        css::uno::Reference<css::text::XTextFieldsSupplier> xTextFieldsSupplier(
+            mxComponent, css::uno::UNO_QUERY_THROW);
+        auto xFields(xTextFieldsSupplier->getTextFields()->createEnumeration());
 
-    // First comment: initially resolved, toggled to unresolved on import, unresolved on roundtrip
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
-    css::uno::Any aComment = xFields->nextElement();
-    css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
+        // First comment: initially resolved, toggled to unresolved on import, unresolved on roundtrip
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        css::uno::Any aComment = xFields->nextElement();
+        css::uno::Reference<css::beans::XPropertySet> xComment(aComment, css::uno::UNO_QUERY_THROW);
 
-    if (!isExported())
-    {
-        // Check that it's resolved when initially read
-        CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
-        // Set to unresolved
-        xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(false));
-    }
-    else
-    {
-        // After the roundtrip, it keeps the "unresolved" state set above
-        CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
-    }
+        if (!bIsExport)
+        {
+            // Check that it's resolved when initially read
+            CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
+            // Set to unresolved
+            xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(false));
+        }
+        else
+        {
+            // After the roundtrip, it keeps the "unresolved" state set above
+            CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
+        }
 
-    // Second comment: initially unresolved, toggled to resolved on import, resolved on roundtrip
-    CPPUNIT_ASSERT(xFields->hasMoreElements());
-    aComment = xFields->nextElement();
-    xComment.set(aComment, css::uno::UNO_QUERY_THROW);
+        // Second comment: initially unresolved, toggled to resolved on import, resolved on roundtrip
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        aComment = xFields->nextElement();
+        xComment.set(aComment, css::uno::UNO_QUERY_THROW);
 
-    if (!isExported())
-    {
-        // Check that it's unresolved when initially read
-        CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
-        // Set to resolved
-        xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(true));
-    }
-    else
-    {
-        // After the roundtrip, it keeps the "resolved" state set above
-        CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
-    }
+        if (!bIsExport)
+        {
+            // Check that it's unresolved when initially read
+            CPPUNIT_ASSERT_EQUAL(false, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
+            // Set to resolved
+            xComment->setPropertyValue(u"Resolved"_ustr, css::uno::Any(true));
+        }
+        else
+        {
+            // After the roundtrip, it keeps the "resolved" state set above
+            CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue(u"Resolved"_ustr).get<bool>());
+        }
+    };
+
+    createSwDoc("CommentDone.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, Test_ShadowDirection)

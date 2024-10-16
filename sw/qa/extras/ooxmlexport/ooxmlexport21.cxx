@@ -365,81 +365,94 @@ DECLARE_OOXMLEXPORT_TEST(testTdf125469_singleSpacing, "tdf125469_singleSpacing.d
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf43767_caseMapNumbering, "tdf43767_caseMapNumbering.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf43767_caseMapNumbering)
 {
-    // given a document with 2 numbered Lists [each entry restarts numbering for visual comparison]
-    xmlDocUniquePtr pDump = parseLayoutDump();
+    auto verify = [this](bool bIsExport = false) {
+        // given a document with 2 numbered Lists [each entry restarts numbering for visual comparison]
+        xmlDocUniquePtr pDump = parseLayoutDump();
 
-    // using the relative width difference between "A)" and "a)" as the test comparison
-    // since ListLabelString etc. does not output the actual string that is displayed on the screen
+        // using the relative width difference between "A)" and "a)" as the test comparison
+        // since ListLabelString etc. does not output the actual string that is displayed on the screen
 
-    // When the entire paragraph has a certain character attribute, that property is also applied
-    // to the list numbering itself (with some differing exceptions) for both ODT and DOCX.
+        // When the entire paragraph has a certain character attribute, that property is also applied
+        // to the list numbering itself (with some differing exceptions) for both ODT and DOCX.
 
-    // ESTABLISH A BASELINE: these baseline paragraphs have no special character attributes.
-    // Paragraph 1/list 1(uppercase): no formatting applied to list numbering. Width is 253 for me
-    const sal_Int32 nUpperCaseWidth
-        = getXPath(pDump, "//body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-              .toInt32();
-    // Paragraph 4/list 2(lowercase): no formatting applied to list numbering. Width is 186 for me.
-    const sal_Int32 nLowerCaseWidth
-        = getXPath(pDump, "//body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-              .toInt32();
+        // ESTABLISH A BASELINE: these baseline paragraphs have no special character attributes.
+        // Paragraph 1/list 1(uppercase): no formatting applied to list numbering. Width is 253 for me
+        const sal_Int32 nUpperCaseWidth
+            = getXPath(pDump, "//body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                  .toInt32();
+        // Paragraph 4/list 2(lowercase): no formatting applied to list numbering. Width is 186 for me.
+        const sal_Int32 nLowerCaseWidth
+            = getXPath(pDump, "//body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                  .toInt32();
 
-    // UPPERCASE LIST
-    // Paragraph 2: ODF should honour "lowercase". MSO doesn't know about lowercase
-    sal_Int32 nWidth
-        = getXPath(pDump, "//body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-              .toInt32();
-    CPPUNIT_ASSERT_EQUAL(isExported() ? nUpperCaseWidth : nLowerCaseWidth, nWidth);
+        // UPPERCASE LIST
+        // Paragraph 2: ODF should honour "lowercase". MSO doesn't know about lowercase
+        sal_Int32 nWidth
+            = getXPath(pDump, "//body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                  .toInt32();
+        CPPUNIT_ASSERT_EQUAL(bIsExport ? nUpperCaseWidth : nLowerCaseWidth, nWidth);
 
-    // Paragraph 3: ODF should honour "superscript" (for consistency). MSO ignores superscript
-    nWidth = getXPath(pDump, "//body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-                 .toInt32();
-    if (!isExported())
-        CPPUNIT_ASSERT_LESS(nLowerCaseWidth, nWidth);
-    else
+        // Paragraph 3: ODF should honour "superscript" (for consistency). MSO ignores superscript
+        nWidth = getXPath(pDump, "//body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                     .toInt32();
+        if (!bIsExport)
+            CPPUNIT_ASSERT_LESS(nLowerCaseWidth, nWidth);
+        else
+            CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
+
+        // LOWERCASE LIST
+        //Paragraph 6: ODF should honour "titlecase". MSO doesn't know about titlecase
+        nWidth = getXPath(pDump, "//body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                     .toInt32();
+        CPPUNIT_ASSERT_EQUAL(bIsExport ? nLowerCaseWidth : nUpperCaseWidth, nWidth);
+
+        // Paragraph 7: ODF should honour "smallcaps". MSO apparently has an exception for small caps
+        nWidth = getXPath(pDump, "//body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                     .toInt32();
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_GREATER(nLowerCaseWidth, nWidth);
+            CPPUNIT_ASSERT_LESS(nUpperCaseWidth, nWidth);
+        }
+        else
+            CPPUNIT_ASSERT_EQUAL(nLowerCaseWidth, nWidth);
+
+        // Paragraph 8: ODF should honour "uppercase". MSO also honours uppercase
+        nWidth = getXPath(pDump, "//body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
+                     .toInt32();
         CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
+    };
 
-    // LOWERCASE LIST
-    //Paragraph 6: ODF should honour "titlecase". MSO doesn't know about titlecase
-    nWidth = getXPath(pDump, "//body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-                 .toInt32();
-    CPPUNIT_ASSERT_EQUAL(isExported() ? nLowerCaseWidth : nUpperCaseWidth, nWidth);
-
-    // Paragraph 7: ODF should honour "smallcaps". MSO apparently has an exception for small caps
-    nWidth = getXPath(pDump, "//body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-                 .toInt32();
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_GREATER(nLowerCaseWidth, nWidth);
-        CPPUNIT_ASSERT_LESS(nUpperCaseWidth, nWidth);
-    }
-    else
-        CPPUNIT_ASSERT_EQUAL(nLowerCaseWidth, nWidth);
-
-    // Paragraph 8: ODF should honour "uppercase". MSO also honours uppercase
-    nWidth = getXPath(pDump, "//body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion", "width")
-                 .toInt32();
-    CPPUNIT_ASSERT_EQUAL(nUpperCaseWidth, nWidth);
+    createSwDoc("tdf43767_caseMapNumbering.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf156105_percentSuffix, "tdf156105_percentSuffix.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf156105_percentSuffix)
 {
-    // given a numbered list with a non-escaping percent symbol in the prefix and suffix
-    CPPUNIT_ASSERT_EQUAL(u"(%)[%]"_ustr,
-                         getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
+    auto verify = [this]() {
+        // given a numbered list with a non-escaping percent symbol in the prefix and suffix
+        CPPUNIT_ASSERT_EQUAL(u"(%)[%]"_ustr,
+                             getProperty<OUString>(getParagraph(3), u"ListLabelString"_ustr));
 
-    // tdf#149258 - NONE number should not export separator since LO doesn't currently show it
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("showing levels 1, 2, and 4", u"(%)1.1.1[%]"_ustr,
-                                 getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
-        // The 3rd level is NONE. If we include the separator, MS Word will display it.
-        assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText", "val",
-                    u"(%)%1.%2.%3%4[%]");
-    }
+        // tdf#149258 - NONE number should not export separator since LO doesn't currently show it
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            "showing levels 1, 2, and 4", u"(%)1.1.1[%]"_ustr,
+            getProperty<OUString>(getParagraph(4), u"ListLabelString"_ustr));
+    };
+
+    createSwDoc("tdf156105_percentSuffix.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
+    xmlDocUniquePtr pXmlNum = parseExport(u"word/numbering.xml"_ustr);
+    // The 3rd level is NONE. If we include the separator, MS Word will display it.
+    assertXPath(pXmlNum, "/w:numbering/w:abstractNum[1]/w:lvl[4]/w:lvlText", "val",
+                u"(%)%1.%2.%3%4[%]");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf160049_anchorMarginVML, "tdf160049_anchorMarginVML.docx")
@@ -797,16 +810,20 @@ DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageGradient, "fill.docx")
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_RECT, aGradient.Style);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf126533_pageBitmap, "tdf126533_pageBitmap.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf126533_pageBitmap)
 {
-    // given a document with a page background image
-    uno::Reference<beans::XPropertySet> xPageStyle(
-        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
-                         getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
+    auto verify = [this]() {
+        // given a document with a page background image
+        uno::Reference<beans::XPropertySet> xPageStyle(
+            getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP,
+                             getProperty<drawing::FillStyle>(xPageStyle, u"FillStyle"_ustr));
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf126533_pageBitmap.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
     xmlDocUniquePtr pXmlDocRels = parseExport(u"word/_rels/document.xml.rels"_ustr);
     assertXPath(pXmlDocRels, "/rels:Relationships/rels:Relationship[@Target='media/image1.jpeg']",

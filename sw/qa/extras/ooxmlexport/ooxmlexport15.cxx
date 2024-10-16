@@ -48,38 +48,43 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131540)
                                  getProperty<sal_Int16>(getShape(2), u"HoriOrientRelation"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf131801, "tdf131801.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131801)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getPages());
 
-    xmlDocUniquePtr pDump = parseLayoutDump();
-    // "1." is red
-    assertXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.");
-    assertXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
-    // "2." is red
-    assertXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"2.");
-    assertXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
-    // "3." is black
-    assertXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"3.");
-    assertXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
-    // "4." is black
-    assertXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"4.");
-    assertXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
-    // "5." is red
-    assertXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"5.");
-    assertXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
-    // "6." is red
-    assertXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"6.");
-    assertXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
-    // "7." is black
-    assertXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"7.");
-    assertXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
-    // "8." is black
-    assertXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "expand", u"8.");
-    assertXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]/SwFont", "color", u"ffffffff");
+        xmlDocUniquePtr pDump = parseLayoutDump();
+        // "1." is red
+        assertXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"1.");
+        assertXPath(pDump, "//page[1]/body/txt[1]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
+        // "2." is red
+        assertXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"2.");
+        assertXPath(pDump, "//page[1]/body/txt[2]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
+        // "3." is black
+        assertXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"3.");
+        assertXPath(pDump, "//page[1]/body/txt[3]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
+        // "4." is black
+        assertXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"4.");
+        assertXPath(pDump, "//page[1]/body/txt[4]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
+        // "5." is red
+        assertXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"5.");
+        assertXPath(pDump, "//page[1]/body/txt[5]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
+        // "6." is red
+        assertXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"6.");
+        assertXPath(pDump, "//page[1]/body/txt[6]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"00ff0000");
+        // "7." is black
+        assertXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion", "expand", u"7.");
+        assertXPath(pDump, "//page[1]/body/txt[7]/SwParaPortion/SwLineLayout/SwFieldPortion/SwFont", "color", u"ffffffff");
+        // "8." is black
+        assertXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]", "expand", u"8.");
+        assertXPath(pDump, "//page[1]/body/txt[8]/SwParaPortion/SwLineLayout/SwFieldPortion[1]/SwFont", "color", u"ffffffff");
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf131801.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDocument = parseExport(u"word/document.xml"_ustr);
 
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:rPr/w:rStyle",
@@ -194,21 +199,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123401)
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[4]/w:tc/w:p/w:r[2]/w:instrText", u" =AVERAGE(A1:A3)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf116394, "tdf116394.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf116394)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
+        uno::Reference<text::XTextField> xEnumerationAccess(xFields->nextElement(), uno::UNO_QUERY);
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: ab=cd..
-    // - Actual  : abcd..
-    CPPUNIT_ASSERT_EQUAL(u"ab=cd.."_ustr, xEnumerationAccess->getPresentation(true).trim());
+        // Without the fix in place, this test would have failed with
+        // - Expected: ab=cd..
+        // - Actual  : abcd..
+        CPPUNIT_ASSERT_EQUAL(u"ab=cd.."_ustr, xEnumerationAccess->getPresentation(true).trim());
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf116394.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/w:instrText", u" MERGEFIELD ab=cd ");
 }
@@ -325,42 +334,47 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123354)
     CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xEnumerationAccess3->getPresentation(false).trim());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123355, "tdf123355.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123355)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // Tests conversion of range IDs ABOVE, BELOW, LEFT and RIGHT
-    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    // Note: range ends at B4 here, which is a cell with text content
-    CPPUNIT_ASSERT_EQUAL(u"average( <B2:B3> )"_ustr, xEnumerationAccess1->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"5,5"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+        // Tests conversion of range IDs ABOVE, BELOW, LEFT and RIGHT
+        uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+        // Note: range ends at B4 here, which is a cell with text content
+        CPPUNIT_ASSERT_EQUAL(u"average( <B2:B3> )"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"5,5"_ustr, xEnumerationAccess1->getPresentation(false).trim());
 
-    // range ends at the end of the empty cells
-    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"SUM(<C6:A6>)"_ustr, xEnumerationAccess6->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xEnumerationAccess6->getPresentation(false).trim());
+        // range ends at the end of the empty cells
+        uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"SUM(<C6:A6>)"_ustr, xEnumerationAccess6->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"0"_ustr, xEnumerationAccess6->getPresentation(false).trim());
 
-    // range starts at the first cell above D5
-    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<D4:D1>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"5,33"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+        // range starts at the first cell above D5
+        uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<D4:D1>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"5,33"_ustr, xEnumerationAccess2->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<C2:C1>)"_ustr, xEnumerationAccess3->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"3,5"_ustr, xEnumerationAccess3->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<C2:C1>)"_ustr, xEnumerationAccess3->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"3,5"_ustr, xEnumerationAccess3->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<D2:D2>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, xEnumerationAccess4->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<D2:D2>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"5"_ustr, xEnumerationAccess4->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<A2:A2>)"_ustr, xEnumerationAccess5->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xEnumerationAccess5->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"AVERAGE(<A2:A2>)"_ustr, xEnumerationAccess5->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xEnumerationAccess5->getPresentation(false).trim());
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf123355.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // keep original formula IDs
@@ -372,46 +386,51 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123355, "tdf123355.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[6]/w:tc[4]/w:p/w:r[2]/w:instrText", u" =SUM(LEFT)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf123382, "tdf123382.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf123382)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // Tests conversion of range IDs ABOVE, BELOW, LEFT and RIGHT
-    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    // Note: range ends at B4 here, which is a cell with text content
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<B1:D1>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+        // Tests conversion of range IDs ABOVE, BELOW, LEFT and RIGHT
+        uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+        // Note: range ends at B4 here, which is a cell with text content
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<B1:D1>)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"12"_ustr, xEnumerationAccess1->getPresentation(false).trim());
 
-    // range ends at the end of the empty cells
-    uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<C4:D4>)"_ustr, xEnumerationAccess6->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"9"_ustr, xEnumerationAccess6->getPresentation(false).trim());
+        // range ends at the end of the empty cells
+        uno::Reference<text::XTextField> xEnumerationAccess6(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<C4:D4>)"_ustr, xEnumerationAccess6->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"9"_ustr, xEnumerationAccess6->getPresentation(false).trim());
 
-    // range starts at the first cell above D5
-    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"SUM(<B3:D3>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"30"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+        // range starts at the first cell above D5
+        uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"SUM(<B3:D3>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"30"_ustr, xEnumerationAccess2->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<C2:A2>)"_ustr, xEnumerationAccess3->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, xEnumerationAccess3->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<C2:A2>)"_ustr, xEnumerationAccess3->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, xEnumerationAccess3->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<B2:D2>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, xEnumerationAccess4->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<B2:D2>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"7"_ustr, xEnumerationAccess4->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<D2:D4>)"_ustr, xEnumerationAccess5->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"12"_ustr, xEnumerationAccess5->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess5(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<D2:D4>)"_ustr, xEnumerationAccess5->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"12"_ustr, xEnumerationAccess5->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"MAX(<B2:B4>)"_ustr, xEnumerationAccess7->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"10"_ustr, xEnumerationAccess7->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess7(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"MAX(<B2:B4>)"_ustr, xEnumerationAccess7->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"10"_ustr, xEnumerationAccess7->getPresentation(false).trim());
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf123382.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     // keep original formula IDs
@@ -424,32 +443,37 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123382, "tdf123382.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[2]/w:tc[4]/w:p/w:r[2]/w:instrText", u" =MAX(LEFT)");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf122648, "tdf122648.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf122648)
 {
-    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    auto verify = [this]() {
+        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    // table formula conversion worked only in the first table
-    uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"<A1>"_ustr, xEnumerationAccess1->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xEnumerationAccess1->getPresentation(false).trim());
+        // table formula conversion worked only in the first table
+        uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"<A1>"_ustr, xEnumerationAccess1->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xEnumerationAccess1->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:B1>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xEnumerationAccess2->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:B1>)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xEnumerationAccess2->getPresentation(false).trim());
 
-    // These were <?> and SUM(<?:?>) with zero values
-    uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"<A1>"_ustr, xEnumerationAccess3->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xEnumerationAccess3->getPresentation(false).trim());
+        // These were <?> and SUM(<?:?>) with zero values
+        uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"<A1>"_ustr, xEnumerationAccess3->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, xEnumerationAccess3->getPresentation(false).trim());
 
-    uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:B1>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
-    CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xEnumerationAccess4->getPresentation(false).trim());
+        uno::Reference<text::XTextField> xEnumerationAccess4(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"SUM(<A1:B1>)"_ustr, xEnumerationAccess4->getPresentation(true).trim());
+        CPPUNIT_ASSERT_EQUAL(u"2"_ustr, xEnumerationAccess4->getPresentation(false).trim());
+    };
 
-    if (!isExported())
-        return;
+    createSwDoc("tdf122648.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[2]/w:p/w:r[2]/w:instrText", u" =A1");
@@ -802,18 +826,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf136441_commentInFootnote)
     // (MS Word's UI doesn't allow adding comments to a footnote.)
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf137683_charHighlightTests, "tdf137683_charHighlightTests.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf137683_charHighlightTests)
 {
-    // Don't export unnecessary w:highlight="none" (Unnecessary one intentionally hand-added to original .docx)
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
-        assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:highlight", 0);
-    }
+    auto verify = [this]() {
+        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(10), 2, u"no highlight"_ustr), uno::UNO_QUERY_THROW);
+        // This test was failing with a cyan charHighlight of 65535 (0x00FFFF), instead of COL_TRANSPARENT (0xFFFFFFFF)
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, u"CharHighlight"_ustr));
+    };
 
-    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(10), 2, u"no highlight"_ustr), uno::UNO_QUERY_THROW);
-    // This test was failing with a cyan charHighlight of 65535 (0x00FFFF), instead of COL_TRANSPARENT (0xFFFFFFFF)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO), getProperty<sal_Int32>(xRun, u"CharHighlight"_ustr));
+    // Don't export unnecessary w:highlight="none" (Unnecessary one intentionally hand-added to original .docx)
+    createSwDoc("tdf137683_charHighlightTests.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
+
+    xmlDocUniquePtr pXmlStyles = parseExport(u"word/styles.xml"_ustr);
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Normal']/w:rPr/w:highlight", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf138345_charStyleHighlight, "tdf138345_charStyleHighlight.docx")

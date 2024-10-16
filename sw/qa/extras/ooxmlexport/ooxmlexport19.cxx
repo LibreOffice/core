@@ -685,25 +685,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
     CPPUNIT_ASSERT_EQUAL(sal_Int16(100), getProperty<sal_Int16>(xTable, u"RelativeWidth"_ustr));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf119760_tableInTablePosition, "tdf119760_tableInTablePosition.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf119760_tableInTablePosition)
 {
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    auto verify = [this]() {
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        // For compatibilityMode 15: margin 0 means table border starts at 0,
+        // shifted to account for half of the thick border width, so 106, not 0.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(106), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
+    };
+    createSwDoc("tdf119760_tableInTablePosition.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 
-        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type",
-                    u"dxa");
-        assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]", "w",
-                    u"0");
-    }
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    // For compatibilityMode 15: margin 0 means table border starts at 0,
-    // shifted to account for half of the thick border width, so 106, not 0.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(106), getProperty<sal_Int32>(xTable, u"LeftMargin"_ustr));
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tblPr[1]/w:tblInd[1]", "type",
+                u"dxa");
+    assertXPath(pXmlDoc, "//w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]//w:tblPr[1]/w:tblInd[1]", "w", u"0");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableCellMargin, "table-cell-margin.docx")
@@ -868,14 +870,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf77236_MissingSolidFill)
         1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf105875_VmlShapeRotationWithFlip,
-                         "tdf105875_VmlShapeRotationWithFlip.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf105875_VmlShapeRotationWithFlip)
 {
     // tdf#105875: check whether the rotation of the VML bezier shape is ok (with flip too)
     // TODO: fix export too
-    if (isExported())
-        return;
 
+    createSwDoc("tdf105875_VmlShapeRotationWithFlip.docx");
     {
         uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
@@ -922,57 +922,67 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133363)
                 u"0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
 {
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        assertXPath(pXmlDoc, "//w:sdt", 3);
-        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                        uno::UNO_QUERY);
-        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<table::XCell> xCell = xTable->getCellByName(u"B1"_ustr);
-        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParagraphs
-            = xParagraphsAccess->createEnumeration();
-        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
-                                                                 uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    auto verify = [this](bool bIsExport = false) {
+        if (bIsExport)
+        {
+            uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                            uno::UNO_QUERY);
+            uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<table::XCell> xCell = xTable->getCellByName(u"B1"_ustr);
+            uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xParagraphs
+                = xParagraphsAccess->createEnumeration();
+            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                     uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+            uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(),
+                                                             uno::UNO_QUERY);
 
-        OUString aPortionType;
-        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
-        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+            OUString aPortionType;
+            xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+            CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
 
-        uno::Reference<text::XTextContent> xContentControl;
-        xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
-        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        bool bDate{};
-        xContentControlProps->getPropertyValue(u"Date"_ustr) >>= bDate;
-        CPPUNIT_ASSERT(bDate);
-        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
-                                                                                uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xContentControlEnum
-            = xContentControlEnumAccess->createEnumeration();
-        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
-                                                           uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(u"2017"_ustr, xTextPortionRange->getString());
-    }
-    else
-    {
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
+            uno::Reference<text::XTextContent> xContentControl;
+            xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+            uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl,
+                                                                     uno::UNO_QUERY);
+            bool bDate{};
+            xContentControlProps->getPropertyValue(u"Date"_ustr) >>= bDate;
+            CPPUNIT_ASSERT(bDate);
+            uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                                    uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xContentControlEnum
+                = xContentControlEnumAccess->createEnumeration();
+            uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
+                                                               uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(u"2017"_ustr, xTextPortionRange->getString());
+        }
+        else
+        {
+            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+            CPPUNIT_ASSERT(pTextDoc);
+            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
-        ::sw::mark::DateFieldmark* pFieldmark
-            = dynamic_cast<::sw::mark::DateFieldmark*>(*pMarkAccess->getAllMarksBegin());
-        CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
-        CPPUNIT_ASSERT_EQUAL(u"2017"_ustr, pFieldmark->GetContent());
-    }
+            ::sw::mark::DateFieldmark* pFieldmark
+                = dynamic_cast<::sw::mark::DateFieldmark*>(*pMarkAccess->getAllMarksBegin());
+            CPPUNIT_ASSERT(pFieldmark);
+            CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL(u"2017"_ustr, pFieldmark->GetContent());
+        }
+    };
+
+    createSwDoc("tdf138093.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 3);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
@@ -1012,61 +1022,71 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093B)
     CPPUNIT_ASSERT_EQUAL(u"2019"_ustr, xTextPortionRange->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf131722, "tdf131722.docx")
+CPPUNIT_TEST_FIXTURE(Test, testTdf131722)
 {
-    if (isExported())
-    {
-        xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
-        assertXPath(pXmlDoc, "//w:sdt", 4);
-        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                        uno::UNO_QUERY);
-        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-        uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
-        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParagraphs
-            = xParagraphsAccess->createEnumeration();
-        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
-                                                                 uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
-
-        OUString aPortionType;
-        xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
-        CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
-
-        uno::Reference<text::XTextContent> xContentControl;
-        xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
-        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-        bool bDate{};
-        xContentControlProps->getPropertyValue(u"Date"_ustr) >>= bDate;
-        CPPUNIT_ASSERT(bDate);
-        uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
-                                                                                uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xContentControlEnum
-            = xContentControlEnumAccess->createEnumeration();
-        uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
-                                                           uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(u"Enter a date here!"_ustr, xTextPortionRange->getString());
-    }
-    else
-    {
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-        IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getFieldmarksCount());
-
-        for (auto aIter = pMarkAccess->getFieldmarksBegin();
-             aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
+    auto verify = [this](bool bIsExport = false) {
+        if (bIsExport)
         {
-            ::sw::mark::DateFieldmark* pFieldmark
-                = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
-            CPPUNIT_ASSERT(pFieldmark);
-            CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
-            CPPUNIT_ASSERT_EQUAL(u"Enter a date here!"_ustr, pFieldmark->GetContent());
+            uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                            uno::UNO_QUERY);
+            uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+            uno::Reference<table::XCell> xCell = xTable->getCellByName(u"A1"_ustr);
+            uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xParagraphs
+                = xParagraphsAccess->createEnumeration();
+            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                                     uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+            uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(),
+                                                             uno::UNO_QUERY);
+
+            OUString aPortionType;
+            xTextPortion->getPropertyValue(u"TextPortionType"_ustr) >>= aPortionType;
+            CPPUNIT_ASSERT_EQUAL(u"ContentControl"_ustr, aPortionType);
+
+            uno::Reference<text::XTextContent> xContentControl;
+            xTextPortion->getPropertyValue(u"ContentControl"_ustr) >>= xContentControl;
+            uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl,
+                                                                     uno::UNO_QUERY);
+            bool bDate{};
+            xContentControlProps->getPropertyValue(u"Date"_ustr) >>= bDate;
+            CPPUNIT_ASSERT(bDate);
+            uno::Reference<container::XEnumerationAccess> xContentControlEnumAccess(xContentControl,
+                                                                                    uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xContentControlEnum
+                = xContentControlEnumAccess->createEnumeration();
+            uno::Reference<text::XTextRange> xTextPortionRange(xContentControlEnum->nextElement(),
+                                                               uno::UNO_QUERY);
+            CPPUNIT_ASSERT_EQUAL(u"Enter a date here!"_ustr, xTextPortionRange->getString());
         }
-    }
+        else
+        {
+            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+            CPPUNIT_ASSERT(pTextDoc);
+            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getFieldmarksCount());
+
+            for (auto aIter = pMarkAccess->getFieldmarksBegin();
+                 aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
+            {
+                ::sw::mark::DateFieldmark* pFieldmark
+                    = dynamic_cast<::sw::mark::DateFieldmark*>(*aIter);
+                CPPUNIT_ASSERT(pFieldmark);
+                CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
+                CPPUNIT_ASSERT_EQUAL(u"Enter a date here!"_ustr, pFieldmark->GetContent());
+            }
+        }
+    };
+
+    createSwDoc("tdf131722.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:sdt", 4);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf155945)
