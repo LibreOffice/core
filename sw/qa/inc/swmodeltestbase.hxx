@@ -28,18 +28,6 @@
 
 #include <doc.hxx>
 
-/**
- * Macro to declare a new test (with full round-trip. To test
- * import only use the CPPUNIT_TEST_FIXTURE macro directly).
- * In order to add a new test, one only needs to use this macro
- * and then specify the test content, like this:
- *
- * DECLARE_SW_ROUNDTRIP_TEST(MyTest, "myfilename.docx", Test)
- * {
- *      CPPUNIT_ASSERT_EQUAL(blabla);
- * }
- *
- */
 #define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         public:\
