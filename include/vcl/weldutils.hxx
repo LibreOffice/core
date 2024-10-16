@@ -455,9 +455,6 @@ VCL_DLLPUBLIC bool IsEntryVisible(const weld::TreeView& rTreeView, const weld::T
 VCL_DLLPUBLIC void RemoveParentKeepChildren(weld::TreeView& rTreeView,
                                             const weld::TreeIter& rParent);
 
-// return the min height of a weld::Entry
-VCL_DLLPUBLIC int GetMinimumEditHeight();
-
 // return the weld::Window of the SalFrame rOutWin is in, and convert rRect
 // from relative to rOutWin to relative to that weld::Window suitable for use
 // with popup_at_rect

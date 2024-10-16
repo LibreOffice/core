@@ -1342,12 +1342,6 @@ void SAL_CALL ResultSet::removeVetoableChangeListener(
 
 // Non-interface methods.
 
-void ResultSet::propertyChanged( const beans::PropertyChangeEvent& rEvt ) const
-{
-    std::unique_lock aGuard( m_pImpl->m_aMutex );
-    propertyChanged(aGuard, rEvt);
-}
-
 void ResultSet::propertyChanged( std::unique_lock<std::mutex>& rGuard, const beans::PropertyChangeEvent& rEvt ) const
 {
     if ( !m_pImpl->m_pPropertyChangeListeners )

@@ -118,7 +118,6 @@ public:
     SwFootnoteContFrame* ContainsFootnoteCont( const SwFootnoteContFrame* pCont = nullptr ) const;
     bool Growable() const;
     SwTwips Shrink_( SwTwips, bool bTst );
-    SwTwips Grow_  ( SwTwips, bool bTst );
     SwTwips Grow_(SwTwips, SwResizeLimitReason&, bool bTst);
 
     /**
@@ -189,10 +188,6 @@ inline SwSectionFrame *SwSectionFrame::GetFollow()
 inline const SwContentFrame *SwSectionFrame::FindLastContent() const
 {
     return const_cast<SwSectionFrame*>(this)->FindLastContent();
-}
-inline SwTwips SwSectionFrame::Grow_(SwTwips nDist, bool bTst)
-{
-    return Grow_(nDist, o3tl::temporary(SwResizeLimitReason()), bTst);
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

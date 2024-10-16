@@ -51,7 +51,6 @@ public:
 
 private:
     void Init();
-    void Okay();
     void SetDialogData(bool bToggle);
     std::unique_ptr<weld::CheckButton> m_xIncludesHeaders;
     std::unique_ptr<weld::RadioButton> m_xRadioRow;

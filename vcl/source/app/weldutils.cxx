@@ -489,15 +489,6 @@ PatternFormatter::~PatternFormatter()
     m_rEntry.connect_focus_out(Link<weld::Widget&, void>());
 }
 
-int GetMinimumEditHeight()
-{
-    // load this little .ui just to measure the height of an Entry
-    std::unique_ptr<weld::Builder> xBuilder(
-        Application::CreateBuilder(nullptr, u"cui/ui/namedialog.ui"_ustr));
-    std::unique_ptr<weld::Entry> xEntry(xBuilder->weld_entry(u"name_entry"_ustr));
-    return xEntry->get_preferred_size().Height();
-}
-
 WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString& aCommand)
     : mWidget(widget)
 {

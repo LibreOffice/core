@@ -510,7 +510,6 @@ public:
     bool IsInHyphenatedWord(SwPaM *, bool bSelection) const;
 
     /// Test grow
-    inline SwTwips GrowTst( const SwTwips nGrow );
     inline SwTwips GrowTst( const SwTwips nGrow, SwResizeLimitReason& );
 
     SwParaPortion *GetPara();
@@ -856,10 +855,6 @@ inline bool SwTextFrame::HasPara() const
     return mnCacheIndex!=USHRT_MAX && HasPara_();
 }
 
-inline SwTwips SwTextFrame::GrowTst( const SwTwips nGrow )
-{
-    return GrowTst(nGrow, o3tl::temporary(SwResizeLimitReason()));
-}
 inline SwTwips SwTextFrame::GrowTst(const SwTwips nGrow, SwResizeLimitReason& reason)
 {
     return Grow(nGrow, reason, true, false);

@@ -225,9 +225,6 @@ public:
     virtual void SAL_CALL gotoRange(
             const css::uno::Reference< css::text::XTextRange >& xRange,
             sal_Bool bExpand) override;
-    void gotoRange(
-            const rtl::Reference< SwXTextCursor >& xRange,
-            bool bExpand);
 
     // XWordCursor
     virtual sal_Bool SAL_CALL isStartOfWord() override;

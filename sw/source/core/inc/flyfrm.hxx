@@ -183,7 +183,6 @@ public:
 
     bool    IsResizeValid(const SwBorderAttrs *pAttrs, Size aTargetSize);
     SwTwips Shrink_( SwTwips, bool bTst );
-    SwTwips Grow_  ( SwTwips, bool bTst );
     SwTwips Grow_(SwTwips, SwResizeLimitReason&, bool bTst);
     void    Invalidate_( SwPageFrame const *pPage = nullptr );
 
@@ -312,11 +311,6 @@ private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
     void PaintDecorators() const;
 };
-
-inline SwTwips SwFlyFrame::Grow_(SwTwips nDist, bool bTst)
-{
-    return Grow_(nDist, o3tl::temporary(SwResizeLimitReason()), bTst);
-}
 
 #endif
 

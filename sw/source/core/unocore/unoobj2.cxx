@@ -1149,15 +1149,6 @@ static bool XTextRangeToSwPaMImpl( SwUnoInternalPaM & rToFill,
         const SwPaM* pUnoCursor);
 
 bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
-        const rtl::Reference< SwXTextCursor > & xTextRange)
-{
-    assert(xTextRange);
-    SwDoc* pDoc = xTextRange->GetDoc();
-    const SwPaM* pUnoCursor = xTextRange->GetPaM();
-    return XTextRangeToSwPaMImpl(rToFill, pDoc, pUnoCursor);
-}
-
-bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
         const uno::Reference<text::XTextRange> & xTextRange,
         ::sw::TextRangeMode const eMode)
 {

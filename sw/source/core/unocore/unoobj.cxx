@@ -1168,14 +1168,6 @@ SwXTextCursor::gotoRange(
 }
 
 void
-SwXTextCursor::gotoRange(
-    const rtl::Reference< SwXTextCursor > & xRange, bool bExpand)
-{
-    assert(xRange);
-    gotoRangeImpl(nullptr, xRange.get(), bExpand);
-}
-
-void
 SwXTextCursor::gotoRangeImpl(
     SwXTextRange* pRange,
     OTextCursorHelper* pCursor,

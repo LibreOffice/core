@@ -666,20 +666,6 @@ void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
         drawBitmap( rPosAry, rSalBitmap );
 }
 
-void SalGraphics::DrawBitmap( const SalTwoRect& rPosAry,
-                              const SalBitmap& rSalBitmap,
-                              const SalBitmap& rTransparentBitmap, const OutputDevice& rOutDev )
-{
-    if( (m_nLayout & SalLayoutFlags::BiDiRtl) || rOutDev.IsRTLEnabled() )
-    {
-        SalTwoRect aPosAry2 = rPosAry;
-        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, rOutDev );
-        drawBitmap( aPosAry2, rSalBitmap, rTransparentBitmap );
-    }
-    else
-        drawBitmap( rPosAry, rSalBitmap, rTransparentBitmap );
-}
-
 void SalGraphics::DrawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSalBitmap,
                             Color nMaskColor, const OutputDevice& rOutDev )

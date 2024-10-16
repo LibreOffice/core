@@ -75,8 +75,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         void UpdateText(const OUString& rText);
         void UpdateHTML(const OUString& rHtml);
 
-        static void ImportHtml(Outliner& rOutliner, const OUString& rHtml);
-
         OUString GetAuthor() const;
         Date     GetDate() const;
         tools::Time GetTime() const;

@@ -699,24 +699,6 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
     ImplDrawSelect(rRenderContext);
 }
 
-/**
- * An inelegant method; sets the item width & height such that
- * all of the included items and their labels fit; if we can
- * calculate that.
- */
-void ValueSet::RecalculateItemSizes()
-{
-    Size aLargestItem = GetLargestItemSize();
-
-    if ( mnUserItemWidth != aLargestItem.Width() ||
-         mnUserItemHeight != aLargestItem.Height() )
-    {
-        mnUserItemWidth = aLargestItem.Width();
-        mnUserItemHeight = aLargestItem.Height();
-        QueueReformat();
-    }
-}
-
 void ValueSet::SetFirstLine(sal_uInt16 nNewFirstLine)
 {
     if (nNewFirstLine != mnFirstLine)

@@ -244,8 +244,6 @@ public:
       *
       * @param rEvt is a property change event.
       */
-    void propertyChanged(
-                const css::beans::PropertyChangeEvent& rEvt ) const;
     void propertyChanged(std::unique_lock<std::mutex>& rGuard,
                 const css::beans::PropertyChangeEvent& rEvt ) const;
 

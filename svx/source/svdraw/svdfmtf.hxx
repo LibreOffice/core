@@ -143,7 +143,6 @@ class ImpSdrGDIMetaFileImport final
     void ImportText(const Point& rPos, const OUString& rStr, const MetaAction& rAct);
     void SetAttributes(SdrObject* pObj, bool bForceTextAttr = false);
     void InsertObj(SdrObject* pObj, bool bScale = true);
-    void MapScaling();
 
     // #i73407# reformulation to use new B2DPolygon classes
     bool CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly);

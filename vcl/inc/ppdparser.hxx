@@ -157,7 +157,6 @@ private:
     std::unique_ptr<PPDTranslator>              m_pTranslator;
 
     PPDParser( OUString aFile );
-    PPDParser(OUString aFile, const std::vector<PPDKey*>& keys);
 
     void parseOrderDependency(const OString& rLine);
     void parseOpenUI(const OString& rLine, std::string_view rPPDGroup);

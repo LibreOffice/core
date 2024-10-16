@@ -272,12 +272,6 @@ public:
                                     const SalBitmap& rSalBitmap,
                                     const OutputDevice& rOutDev );
 
-    SAL_DLLPRIVATE void                        DrawBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransparentBitmap,
-                                    const OutputDevice& rOutDev );
-
     SAL_DLLPRIVATE void                        DrawMask(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,

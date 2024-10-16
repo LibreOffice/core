@@ -2731,12 +2731,6 @@ tools::Long Ruler::GetMargin2() const
     return mpData->nMargin2;
 }
 
-
-bool Ruler::GetTextRTL() const
-{
-    return mpData->bTextRTL;
-}
-
 const RulerUnitData& Ruler::GetCurrentRulerUnit() const
 {
     return aImplRulerUnitTab[mnUnitIndex];
