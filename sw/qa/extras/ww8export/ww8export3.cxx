@@ -127,15 +127,14 @@ DECLARE_WW8EXPORT_TEST(testTdf148380_createField, "tdf148380_createField.doc")
     CPPUNIT_ASSERT_EQUAL(u"yesterday at noon"_ustr, xField->getPresentation(false));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf148380_fldLocked)
 {
+    createSwDoc("tdf148380_fldLocked.doc");
     getParagraph(2, u"4/5/2022 4:29:00 PM"_ustr);
     getParagraph(4, u"1/23/4567 8:9:10 PM"_ustr);
 
     // Verify that these are fields, and not just plain text
     // (import only, since export thankfully just dumps these fixed fields as plain text
-    if (isExported())
-        return;
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -216,24 +215,21 @@ DECLARE_WW8EXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.doc")
                          aMap[u"NumberingType"_ustr].get<sal_uInt16>());
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf128501, "tdf128501.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf128501)
 {
-    if (!isExported())
-    {
-        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
-        CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeDescriptor->getShapeType());
-    }
-    else
-    {
-        uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
-        // Without the fix in place, this test would have failed with
-        // - Expected: FrameShape
-        // - Actual  : com.sun.star.drawing.CustomShape
-        CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, xShapeDescriptor->getShapeType());
-    }
+    createSwDoc("tdf128501.doc");
+    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeDescriptor->getShapeType());
+
+    saveAndReload(mpFilter);
+    xShapeDescriptor = getShape(1);
+    // Without the fix in place, this test would have failed with
+    // - Expected: FrameShape
+    // - Actual  : com.sun.star.drawing.CustomShape
+    CPPUNIT_ASSERT_EQUAL(u"FrameShape"_ustr, xShapeDescriptor->getShapeType());
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
+CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
 {
     // Create a document, set footnote numbering type to ARABIC_ZERO.
     createSwDoc();
@@ -263,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testArabicZeroNumberingFootnote)
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
-CPPUNIT_TEST_FIXTURE(SwModelTestBase, testChicagoNumberingFootnote)
+CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
 {
     // Create a document, set footnote numbering type to SYMBOL_CHICAGO.
     createSwDoc();
@@ -815,10 +811,6 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
     loadAndReload("btlr-frame.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (!isExported())
-    {
-        return;
-    }
 
     // Without the accompanying fix in place, this test would have failed with a
     // beans.UnknownPropertyException, as the writing direction was lost, so the default direction
@@ -961,32 +953,39 @@ DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberingLevels, "tdf104239_chapterN
     CPPUNIT_ASSERT_EQUAL(u"1.1.1.1.1.1.1.1.1."_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
 }
 
-DECLARE_WW8EXPORT_TEST(testTdf104239_chapterNumberTortureTest, "tdf104239_chapterNumberTortureTest.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104239_chapterNumberTortureTest)
 {
-    // There is no point in identifying what the wrong values where in this test,
-    //because EVERYTHING was wrong, and MANY different fixes are required to solve the problems.
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, u"No numId in style or paragraph"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(2, u"Paragraph cancels numbering(0)"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(3, u"First numbered line"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"1st.i.a.1.I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(7, u"inheritOnly: inherit outlineLvl and listLvl."_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"2nd.ii"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr)); // Level 2
-    xPara.set(getParagraph(9, u"outline with Body listLvl(9)."_ustr), uno::UNO_QUERY);
-    if (!isExported())
+    auto verify = [this](bool bIsExport = false) {
+        // There is no point in identifying what the wrong values where in this test,
+        //because EVERYTHING was wrong, and MANY different fixes are required to solve the problems.
+        uno::Reference<beans::XPropertySet> xPara(getParagraph(1, u"No numId in style or paragraph"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(10, u"outline with Body listLvl(9) #2."_ustr), uno::UNO_QUERY);
-    if (!isExported())
+        xPara.set(getParagraph(2, u"Paragraph cancels numbering(0)"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(11, u"direct formatting - Body listLvl(9)."_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    xPara.set(getParagraph(12, u"direct numId, inherit listLvl."_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u"2nd.ii.a.1.I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr)); // Level 5
-    xPara.set(getParagraph(13, u"Style numId0 cancels inherited numbering."_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        xPara.set(getParagraph(3, u"First numbered line"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"1st.i.a.1.I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        xPara.set(getParagraph(7, u"inheritOnly: inherit outlineLvl and listLvl."_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"2nd.ii"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr)); // Level 2
+        xPara.set(getParagraph(9, u"outline with Body listLvl(9)."_ustr), uno::UNO_QUERY);
+        if (!bIsExport)
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        xPara.set(getParagraph(10, u"outline with Body listLvl(9) #2."_ustr), uno::UNO_QUERY);
+        if (!bIsExport)
+            CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        xPara.set(getParagraph(11, u"direct formatting - Body listLvl(9)."_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        xPara.set(getParagraph(12, u"direct numId, inherit listLvl."_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u"2nd.ii.a.1.I"_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4), getProperty<sal_Int16>(xPara, u"NumberingLevel"_ustr)); // Level 5
+        xPara.set(getParagraph(13, u"Style numId0 cancels inherited numbering."_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, getProperty<OUString>(xPara, u"ListLabelString"_ustr));
+    };
+
+    createSwDoc("tdf104239_chapterNumberTortureTest.doc");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf106541_inheritOutlineNumbering, "tdf106541_inheritOutlineNumbering.doc")
@@ -1084,7 +1083,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf79186_noLayoutInCell)
     // in MS Word the textbox was contained in column A instead of the original column B.)
     // Thus the "perfect look" simply proves that LO is doing the layout wrong.
     CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr)); // tdf#157637
-    CPPUNIT_ASSERT_EQUAL(isExported(), getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"IsFollowingTextFlow"_ustr));
     xmlDocUniquePtr pDump = parseLayoutDump();
     sal_Int32 nShapeLeft
         = getXPath(pDump, "//anchored/SwAnchoredDrawObject/bounds",

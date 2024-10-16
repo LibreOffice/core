@@ -144,60 +144,67 @@ DECLARE_WW8EXPORT_TEST(testTdf49102_mergedCellNumbering, "tdf49102_mergedCellNum
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
-    loadAndReload("tdf55427_footnote2endnote.odt");
-    uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Footnote"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
-    xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
+    auto verify = [this](bool bIsExport = false) {
+        uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Footnote"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
+        xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
-    // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
-    // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().m_aFormat.GetNumberingType() );
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
+        // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote numbering type", SVX_NUM_ROMAN_LOWER, pDoc->GetEndNoteInfo().m_aFormat.GetNumberingType() );
 
-    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
+        uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
 
-    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
-    uno::Reference<text::XFootnote> xEndnote;
-    xEndnotes->getByIndex(0) >>= xEndnote;
-    uno::Reference<text::XText> xEndnoteText;
-    xEndnotes->getByIndex(0) >>= xEndnoteText;
+        uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
+        uno::Reference<text::XFootnote> xEndnote;
+        xEndnotes->getByIndex(0) >>= xEndnote;
+        uno::Reference<text::XText> xEndnoteText;
+        xEndnotes->getByIndex(0) >>= xEndnoteText;
 
-    // ODT footnote-at-document-end's closest DOC match is an endnote, so the two imports will not exactly match by design.
-    if (!isExported())
-    {
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );
+        // ODT footnote-at-document-end's closest DOC match is an endnote, so the two imports will not exactly match by design.
+        if (!bIsExport)
+        {
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote count", sal_Int32(5), xFootnotes->getCount() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote count", sal_Int32(1), xEndnotes->getCount() );
 
-        uno::Reference<text::XFootnote> xFootnote;
-        xFootnotes->getByIndex(0) >>= xFootnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", u"1"_ustr, xFootnote->getAnchor()->getString() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
+            uno::Reference<text::XFootnote> xFootnote;
+            xFootnotes->getByIndex(0) >>= xFootnote;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote's number", u"1"_ustr, xFootnote->getAnchor()->getString() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
 
-        uno::Reference<text::XText> xFootnoteText;
-        xFootnotes->getByIndex(0) >>= xFootnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr) );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-    }
-    else
-    {
-        // These asserted items are major differences in the conversion from footnote to endnote, NOT necessary conditions for a proper functioning document.
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes were converted into endnotes", sal_Int32(0), xFootnotes->getCount() );
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes became endnotes", sal_Int32(6), xEndnotes->getCount() );
+            uno::Reference<text::XText> xFootnoteText;
+            xFootnotes->getByIndex(0) >>= xFootnoteText;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xFootnoteText), u"ParaStyleName"_ustr) );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+        }
+        else
+        {
+            // These asserted items are major differences in the conversion from footnote to endnote, NOT necessary conditions for a proper functioning document.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes were converted into endnotes", sal_Int32(0), xFootnotes->getCount() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "At-Document-End footnotes became endnotes", sal_Int32(6), xEndnotes->getCount() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
-        xEndnotes->getByIndex(4) >>= xEndnote;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", u"v"_ustr, xEndnote->getAnchor()->getString() );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "converted footnote's number", u"i"_ustr, xEndnote->getAnchor()->getString() );
+            xEndnotes->getByIndex(4) >>= xEndnote;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote's new number", u"v"_ustr, xEndnote->getAnchor()->getString() );
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-        xEndnotes->getByIndex(4) >>= xEndnoteText;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
-    }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "retained footnote style", u"Footnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+            xEndnotes->getByIndex(4) >>= xEndnoteText;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "original endnote style", u"Endnote"_ustr, getProperty<OUString>(getParagraphOfText(1, xEndnoteText), u"ParaStyleName"_ustr) );
+        }
+    };
+
+
+    createSwDoc("tdf55427_footnote2endnote.odt");
+    verify();
+    saveAndReload(mpFilter);
+    verify(/*bIsExport*/ true);
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf107931_KERN_DocEnabled_disabledDefStyle, "testTdf107931_KERN_DocEnabled_disabledDefStyle.doc")
@@ -569,10 +576,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box anchored as a floating object
     uno::Reference<drawing::XControlShape> xControlShape;
-    if(!isExported())
-        xControlShape.set(getShape(1), uno::UNO_QUERY);
-    else
-        xControlShape.set(getShape(2), uno::UNO_QUERY);
+    xControlShape.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xControlShape.is());
 
     // Check whether we have the right control
@@ -586,10 +590,7 @@ CPPUNIT_TEST_FIXTURE(Test, testActiveXCheckbox)
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,u"AnchorType"_ustr));
 
     // Second check box anchored inline / as character
-    if(!isExported())
-        xControlShape.set(getShape(2), uno::UNO_QUERY);
-    else
-        xControlShape.set(getShape(1), uno::UNO_QUERY);
+    xControlShape.set(getShape(1), uno::UNO_QUERY);
 
     // Check whether we have the right control
     xPropertySet.set(xControlShape->getControl(), uno::UNO_QUERY);
@@ -635,13 +636,12 @@ DECLARE_WW8EXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.doc")
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.text.fieldmaster.DataBase.Name"_ustr, sValue);
 }
 
-DECLARE_OOXMLEXPORT_TEST( testTableCrossReference, "table_cross_reference.odt" )
+CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
 {
+    loadAndReload("table_cross_reference.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
-    if (!isExported())
-        return;
 
     // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
@@ -800,8 +800,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#42346: Cross references to tables were not saved
     // Check also captions with custom formatting
-    if (!isExported())
-        return;
 
     // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
@@ -912,13 +910,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCrossReferenceCustomFormat)
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST( testObjectCrossReference, "object_cross_reference.odt" )
+CPPUNIT_TEST_FIXTURE(Test, testObjectCrossReference)
 {
+    loadAndReload("object_cross_reference.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     // tdf#42346: Cross references to objects were not saved
     // MSO uses simple bookmarks for referencing table caption, so we do the same by export
-    if (!isExported())
-        return;
 
     // Check whether we have all the necessary bookmarks exported and imported back
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
