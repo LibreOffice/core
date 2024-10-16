@@ -781,7 +781,11 @@ bool SwAnchoredObject::IsDraggingOffPageAllowed(const SwFrameFormat* pFrameForma
 {
     assert(pFrameFormat);
     const bool bDisablePositioning = pFrameFormat->getIDocumentSettingAccess().get(DocumentSettingId::DISABLE_OFF_PAGE_POSITIONING);
-    const bool bIsWrapThrough = pFrameFormat->GetSurround().GetSurround() == text::WrapTextMode::WrapTextMode_THROUGH;
+    // If this fly is paired with a draw format, then take the wrap text mode from the outer draw
+    // format, since the fly format is always wrap through.
+    SwFrameFormat* pDrawFormat = SwTextBoxHelper::getOtherTextBoxFormat(pFrameFormat, RES_FLYFRMFMT);
+    const SwFrameFormat* pFormat = pDrawFormat ? pDrawFormat : pFrameFormat;
+    const bool bIsWrapThrough = pFormat->GetSurround().GetSurround() == text::WrapTextMode::WrapTextMode_THROUGH;
 
     return bDisablePositioning && bIsWrapThrough;
 }
