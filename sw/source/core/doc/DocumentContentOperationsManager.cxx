@@ -1039,10 +1039,8 @@ namespace
                 }
             }
 
-            for (;;)
+            while (nPos > 0)
             {
-                if (!nPos)
-                    break;
                 nPos--;
                 pSrch = rFootnoteArr[ nPos ];
                 pFootnoteNd = &pSrch->GetTextNode();
