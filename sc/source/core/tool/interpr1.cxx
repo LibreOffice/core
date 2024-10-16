@@ -8752,6 +8752,11 @@ void ScInterpreter::ScSortBy()
                 return;
             }
             pMatSrc->GetDimensions(nsC, nsR);
+            if (nsC == 0 || nsR == 0)
+            {
+                PushIllegalArgument();
+                return;
+            }
             nSortCol2 = nsC - 1; // nSortCol1 = 0
             nSortRow2 = nsR - 1; // nSortRow1 = 0
         }
