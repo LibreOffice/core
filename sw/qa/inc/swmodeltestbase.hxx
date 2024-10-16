@@ -92,14 +92,6 @@ protected:
     void executeLoadVerifyReloadVerify(const char* filename, const char* pPassword = nullptr);
 
     /**
-     * Helper func used by each unit test to test the 'export' code.
-     * (Loads the requested file for document base (this represents
-     * the initial document condition), exports with the desired
-     * export filter and then calls 'verify' method)
-     */
-    void executeImportExport(const char* filename, const char* pPassword);
-
-    /**
      * Function overridden by unit test. See DECLARE_SW_*_TEST macros
      */
     virtual void verify()

@@ -73,16 +73,6 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     maTempFile.EnableKillingFile();
 }
 
-void SwModelTestBase::executeImportExport(const char* filename, const char* pPassword)
-{
-    maTempFile.EnableKillingFile(false);
-    header();
-    loadAndSave(filename, pPassword);
-    maTempFile.EnableKillingFile(false);
-    verify();
-    maTempFile.EnableKillingFile();
-}
-
 void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rComponent)
 {
     // create the xml writer
