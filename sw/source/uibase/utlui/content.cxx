@@ -1267,6 +1267,8 @@ IMPL_LINK(SwContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                 continue;
             m_aDndOutlinesSelected.push_back(pOutlineContent->GetOutlinePos());
         } while (m_xTreeView->iter_next_sibling(*xEntry) && m_xTreeView->is_selected(*xEntry));
+
+        bDisallow = false;
     }
 
     rtl::Reference<TransferDataContainer> xContainer = new TransferDataContainer;
