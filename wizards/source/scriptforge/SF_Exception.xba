@@ -709,7 +709,7 @@ Const cstSubArgs = &quot;[Source=Erl]&quot;
 	&apos;	Save Err, Erl, .. values before any On Error ... statement
 	SF_Exception._CaptureSystemError()
 	On Local Error Resume Next
-	
+
 Check:
 	If IsMissing(Source) Or IsEmpty(Source) Then Source = &quot;&quot;
 
@@ -720,7 +720,7 @@ Try:
 		Set L10N = _SF_._GetLocalizedInterface()
 		If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 			vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
-			If UBound(vLocation) &lt; 2 Then vLocation = SF_Array.Prepend(vLocation, &quot;ScriptForge&quot;)
+			If UBound(vLocation) &lt; 2 Then vLocation = Split(&quot;ScriptForge.&quot; &amp; _SF_.MainFunction, &quot;.&quot;)
 			sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), vLocation(1), vLocation(2)) &amp; &quot;\n\n\n&quot;
 		Else
 			sLocation = &quot;&quot;
@@ -779,7 +779,7 @@ Const cstStop = &quot;⏻&quot;		&apos; Chr(9211)
 	&apos;	Save Err, Erl, .. values before any On Error ... statement
 	SF_Exception._CaptureSystemError()
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
-	
+
 Check:
 	If IsMissing(ErrorCode) Or IsEmpty(ErrorCode) Then ErrorCode = &quot;&quot;
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
@@ -791,7 +791,7 @@ Try:
 	&apos;	Location header common to all error messages
 	If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 		vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
-		If UBound(vLocation) &lt; 2 Then vLocation = SF_Array.Prepend(vLocation, &quot;ScriptForge&quot;)
+			If UBound(vLocation) &lt; 2 Then vLocation = Split(&quot;ScriptForge.&quot; &amp; _SF_.MainFunction, &quot;.&quot;)
 		sService = vLocation(1)
 		sMethod = vLocation(2)
 		sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), sService, sMethod) _

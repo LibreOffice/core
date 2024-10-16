@@ -223,7 +223,7 @@ Try:
 	If UBound(pvArgs) = 0 Then
 		If IsEmpty(pvArgs(0)) Then pvArgs = Array()
 	End If
-	On Local Error GoTo CatchCall
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo CatchCall
 	vReturn = oCalc.callFunction(UCase(CalcFunction), pvArgs())
 
 Finally:
