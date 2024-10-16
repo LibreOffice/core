@@ -57,28 +57,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
                          "draw:image[@draw:mime-type='image/png']");
 }
 
-DECLARE_FODFEXPORT_TEST(testSvgImageRoundtrip, "SvgImageTest.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testSvgImageRoundtrip)
 {
     // Related to tdf#123396
+    auto verify = [this]() {
+        // We should have one image (shape)
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    // We should have one image (shape)
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+        // Get the shape and extract the Graphic
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        uno::Reference<beans::XPropertySet> XPropertySet(xShape, uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(XPropertySet.is());
+        uno::Reference<graphic::XGraphic> xGraphic;
+        XPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
+        CPPUNIT_ASSERT(xGraphic.is());
+        Graphic aGraphic(xGraphic);
 
-    // Get the shape and extract the Graphic
-    uno::Reference<drawing::XShape> xShape = getShape(1);
-    uno::Reference<beans::XPropertySet> XPropertySet(xShape, uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(XPropertySet.is());
-    uno::Reference<graphic::XGraphic> xGraphic;
-    XPropertySet->getPropertyValue(u"Graphic"_ustr) >>= xGraphic;
-    CPPUNIT_ASSERT(xGraphic.is());
-    Graphic aGraphic(xGraphic);
+        // The graphic should be SVG - so should contain a VectorGraphicData
+        auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT(pVectorGraphicData);
 
-    // The graphic should be SVG - so should contain a VectorGraphicData
-    auto const& pVectorGraphicData = aGraphic.getVectorGraphicData();
-    CPPUNIT_ASSERT(pVectorGraphicData);
+        // The VectorGraphicData type should be SVG
+        CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg, pVectorGraphicData->getType());
+    };
 
-    // The VectorGraphicData type should be SVG
-    CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Svg, pVectorGraphicData->getType());
+    createSwDoc("SvgImageTest.fodt");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 } // end of anonymous namespace
