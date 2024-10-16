@@ -493,14 +493,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFramebackgrounds)
     assertXPath(pXmlDoc, "//style:style[@style:parent-style-name='Frame' and @style:family='graphic']/style:graphic-properties[@draw:fill='bitmap' and @fo:background-color='transparent' and @draw:opacity-name='Transparency_20_1']/style:background-image[@style:repeat='stretch' and @draw:opacity='43%']", 1);
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testSHA1Correct, "sha1_correct.odt", "1012345678901234567890123456789012345678901234567890", Test)
+CPPUNIT_TEST_FIXTURE(Test, testSHA1Correct)
 {   // tdf#114939 this has both an affected password as well as content.xml
+    const char* const sPass = "1012345678901234567890123456789012345678901234567890";
+    createSwDoc("sha1_correct.odt", sPass);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    getParagraph(1, u"012"_ustr);
+
+    saveAndReload(mpFilter, sPass);
+
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testSHA1Wrong, "sha1_wrong.odt", "1012345678901234567890123456789012345678901234567890", Test)
+CPPUNIT_TEST_FIXTURE(Test, testSHA1Wrong)
 {   // tdf#114939 this has both an affected password as well as content.xml
+    const char* const sPass = "1012345678901234567890123456789012345678901234567890";
+    createSwDoc("sha1_wrong.odt", sPass);
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    getParagraph(1, u"012"_ustr);
+
+    saveAndReload(mpFilter, sPass);
+
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     getParagraph(1, u"012"_ustr);
 }

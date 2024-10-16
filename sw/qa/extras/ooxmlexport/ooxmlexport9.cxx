@@ -113,9 +113,16 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testDocmSave)
                 u"application/vnd.ms-word.document.macroEnabled.main+xml");
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testBadDocm, "bad.docm", nullptr, DocmTest)
+CPPUNIT_TEST_FIXTURE(DocmTest, testBadDocm)
 {
+    createSwDoc("bad.docm");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    // This was 'MS Word 2007 XML', broken docm files were not recognized.
+    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
+
+    saveAndReload(mpFilter);
+    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
     CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());

@@ -19,32 +19,47 @@ public:
     }
 };
 
-DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2007, "Encrypted_MSO2007_abc.docx", "abc", Test)
+CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2007)
 {
+    const char* const sPass = "abc";
+    createSwDoc("Encrypted_MSO2007_abc.docx", sPass);
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
+    saveAndReload(mpFilter, sPass);
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2010, "Encrypted_MSO2010_abc.docx", "abc", Test)
+CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2010)
 {
+    const char* const sPass = "abc";
+    createSwDoc("Encrypted_MSO2010_abc.docx", sPass);
     // Agile encryption format, AES 128, CBC, SHA1
-    uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
+    saveAndReload(mpFilter, sPass);
+    CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, getParagraph(1)->getString());
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testPasswordMSO2013, "Encrypted_MSO2013_abc.docx", "abc", Test)
+CPPUNIT_TEST_FIXTURE(Test, testPasswordMSO2013)
 {
+    const char* const sPass = "abc";
+    createSwDoc("Encrypted_MSO2013_abc.docx", sPass);
     // Agile encryption format, AES 256, CBC, SHA512
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
+    saveAndReload(mpFilter, sPass);
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testPasswordLOStandard, "Encrypted_LO_Standard_abc.docx", "abc", Test)
+CPPUNIT_TEST_FIXTURE(Test, testPasswordLOStandard)
 {
+    const char* const sPass = "abc";
+    createSwDoc("Encrypted_LO_Standard_abc.docx", sPass);
     // Standard encryption format, AES 128, SHA1
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
-    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, xParagraph->getString());
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
+    saveAndReload(mpFilter, sPass);
+    CPPUNIT_ASSERT_EQUAL(u"ABC"_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -21,8 +21,8 @@ public:
     }
 };
 
-DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_ODF,
-                          "Test_ThemePortionLevel_CharColor.fodt", nullptr, Test)
+DECLARE_OOXMLEXPORT_TEST(testThemePortionLevelCharColor_ODF,
+                         "Test_ThemePortionLevel_CharColor.fodt")
 {
     auto xParagraph = getParagraph(1);
     CPPUNIT_ASSERT(xParagraph.is());
@@ -36,8 +36,8 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_ODF,
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_DOCX,
-                          "Test_ThemePortionLevel_CharColor.docx", nullptr, Test)
+DECLARE_OOXMLEXPORT_TEST(testThemePortionLevelCharColor_DOCX,
+                         "Test_ThemePortionLevel_CharColor.docx")
 {
     auto xParagraph = getParagraph(1);
     CPPUNIT_ASSERT(xParagraph.is());
@@ -51,8 +51,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_DOCX,
     CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTransforms[0].mnValue);
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColor.docx", nullptr,
-                          Test)
+DECLARE_OOXMLEXPORT_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderColor.docx")
 {
     auto xParagraph = getParagraph(1);
     CPPUNIT_ASSERT(xParagraph.is());
@@ -81,8 +80,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderCol
     CPPUNIT_ASSERT(isPropertyVoid(xParagraph, u"RightBorderComplexColor"_ustr));
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeColor.docx", nullptr,
-                          Test)
+DECLARE_OOXMLEXPORT_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeColor.docx")
 {
     auto xParagraph = getParagraph(1);
     CPPUNIT_ASSERT(xParagraph.is());
@@ -97,8 +95,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeC
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2509), rTransforms[0].mnValue);
 }
 
-DECLARE_SW_ROUNDTRIP_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgroundColor.docx",
-                          nullptr, Test)
+DECLARE_OOXMLEXPORT_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackgroundColor.docx")
 {
     {
         auto xParagraph = getParagraph(1);
