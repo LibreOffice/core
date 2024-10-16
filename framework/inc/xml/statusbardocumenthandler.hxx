@@ -124,7 +124,6 @@ class OWriteStatusBarDocumentHandler final
 
         css::uno::Reference< css::container::XIndexAccess >       m_aStatusBarItems;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;
-        rtl::Reference< comphelper::AttributeList >               m_xEmptyList;
         OUString                                                  m_aXMLStatusBarNS;
         OUString                                                  m_aXMLXlinkNS;
         OUString                                                  m_aAttributeURL;

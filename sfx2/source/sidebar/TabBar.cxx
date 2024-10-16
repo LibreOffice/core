@@ -141,7 +141,6 @@ void TabBar::SetDecks(const ResourceManager::DeckContextDescriptorContainer& rDe
         xItem->mxButton->connect_clicked(LINK(xItem.get(), TabBar::Item, HandleClick));
         xItem->maDeckActivationFunctor = maDeckActivationFunctor;
         xItem->mbIsHidden = !xDescriptor->mbIsEnabled;
-        xItem->mbIsHiddenByDefault = xItem->mbIsHidden; // the default is the state while creating
 
         xItem->mxButton->set_visible(deck.mbIsEnabled);
     }
@@ -253,7 +252,6 @@ TabBar::Item::Item(TabBar& rTabBar)
     , mxBuilder(Application::CreateBuilder(rTabBar.GetContainer(), u"sfx/ui/tabbutton.ui"_ustr))
     , mxButton(mxBuilder->weld_toolbar(u"button"_ustr))
     , mbIsHidden(false)
-    , mbIsHiddenByDefault(false)
 {
 }
 

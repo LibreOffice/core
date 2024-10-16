@@ -68,8 +68,6 @@ private:
     sw::sidebar::CommentsPanel& mrCommentsPanel;
     OUString msText;
     OUString msAuthor;
-    OUString msInitials; //Initials of Author.
-    OUString msName; //Name of the comment
     Date maDate;
     tools::Time maTime;
 

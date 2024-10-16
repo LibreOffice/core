@@ -453,7 +453,6 @@ OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     m_aStatusBarItems( aStatusBarItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_xEmptyList = new ::comphelper::AttributeList;
     m_aXMLXlinkNS       = XMLNS_XLINK_PREFIX;
     m_aXMLStatusBarNS   = XMLNS_STATUSBAR_PREFIX;
 }

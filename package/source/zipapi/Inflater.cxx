@@ -136,10 +136,8 @@ sal_Int32 Inflater::doInflateBytes (Sequence < sal_Int8 >  &rBuffer, sal_Int32 n
 
 InflaterBytes::InflaterBytes(bool bNoWrap)
 : bFinished(false),
-  bNeedDict(false),
   nOffset(0),
   nLength(0),
-  nLastInflateError(0),
   sInBuffer(nullptr)
 {
     pStream.reset(new z_stream);
@@ -201,11 +199,8 @@ sal_Int32 InflaterBytes::doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOff
 {
     if ( !pStream )
     {
-        nLastInflateError = Z_STREAM_ERROR;
         return 0;
     }
-
-    nLastInflateError = 0;
 
     pStream->next_in   = reinterpret_cast<const unsigned char*>( sInBuffer + nOffset );
     pStream->avail_in  = nLength;
@@ -229,15 +224,13 @@ sal_Int32 InflaterBytes::doInflateBytes (sal_Int8* pOutBuffer, sal_Int32 nNewOff
             return nNewLength - pStream->avail_out;
 
         case Z_NEED_DICT:
-            bNeedDict = true;
             nOffset += nLength - pStream->avail_in;
             nLength = pStream->avail_in;
             return 0;
 
         default:
             // it is no error, if there is no input or no output
-            if ( nLength && nNewLength )
-                nLastInflateError = nResult;
+            break;
     }
 
     return 0;

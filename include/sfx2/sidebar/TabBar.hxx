@@ -103,7 +103,6 @@ private:
         typedef ::std::function<void (const OUString& rsDeckId)> DeckActivationFunctor;
         DeckActivationFunctor maDeckActivationFunctor;
         bool mbIsHidden;
-        bool mbIsHiddenByDefault;
     };
     typedef ::std::vector<std::unique_ptr<Item>> ItemContainer;
     ItemContainer maItems;

@@ -285,7 +285,6 @@ OWriteImagesDocumentHandler::OWriteImagesDocumentHandler(
     m_rImageItemList( rItems ),
     m_xWriteDocumentHandler( rWriteDocumentHandler )
 {
-    m_xEmptyList = new ::comphelper::AttributeList;
     m_aXMLImageNS           = XMLNS_IMAGE_PREFIX;
     m_aAttributeXlinkType   = ATTRIBUTE_XLINK_TYPE;
     m_aAttributeValueSimple = ATTRIBUTE_XLINK_TYPE_VALUE;

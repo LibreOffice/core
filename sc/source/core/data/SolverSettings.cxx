@@ -778,9 +778,6 @@ void SolverSettings::ResetToDefaults()
     // The default solver engine is the first implementation available
     m_sLOEngineName = aEngineNames[0];
 
-    // Default engine options
-    m_aEngineOptions = ScSolverUtil::GetDefaults(m_sLOEngineName);
-
     // Clear all constraints
     m_aConstraints.clear();
 }

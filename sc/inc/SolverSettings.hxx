@@ -168,8 +168,6 @@ private:
     // SCO only
     OUString m_sLibrarySize;
 
-    css::uno::Sequence<css::beans::PropertyValue> m_aEngineOptions;
-
     std::vector<ModelConstraint> m_aConstraints;
 
     void Initialize();

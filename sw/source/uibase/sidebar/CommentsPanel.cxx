@@ -132,8 +132,6 @@ void Comment::InitControls(const SwPostItField* pPostItField)
         return;
     msText = pPostItField->GetText();
     msAuthor = pPostItField->GetPar1();
-    msInitials = pPostItField->GetInitials();
-    msName = pPostItField->GetName();
     maDate = Date(pPostItField->GetDateTime().GetDate());
     maTime = tools::Time(pPostItField->GetDateTime().GetTime());
     mbResolved = pPostItField->GetResolved();
