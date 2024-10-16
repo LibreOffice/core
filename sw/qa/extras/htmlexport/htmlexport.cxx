@@ -749,17 +749,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
         // Check alternate text (it was empty, for export the 'alt' attribute was used).
         CPPUNIT_ASSERT_EQUAL(u"OLE Object"_ustr,
                              getProperty<OUString>(xObject, u"Title"_ustr).trim());
-
-        if (!isExported())
-            return;
-
-        // "type" attribute was missing for the inner <object> element.
-        SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
-        CPPUNIT_ASSERT(pStream);
-        sal_uInt64 nLength = pStream->TellEnd();
-        OString aStream(read_uInt8s_ToOString(*pStream, nLength));
-        CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
     };
+
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("reqif-ole-img.xhtml");
@@ -767,6 +758,13 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     saveAndReload(mpFilter);
     verify();
+
+    // "type" attribute was missing for the inner <object> element.
+    SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
+    CPPUNIT_ASSERT(pStream);
+    sal_uInt64 nLength = pStream->TellEnd();
+    OString aStream(read_uInt8s_ToOString(*pStream, nLength));
+    CPPUNIT_ASSERT(aStream.indexOf("type=\"image/png\"") != -1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
@@ -953,30 +951,8 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
         // Finally the export also failed as it tried to open the stream from the
         // document storage, but the embedded object already opened it, so an
         // exception of type com.sun.star.io.IOException was thrown.
-
-        if (isExported())
-        {
-            // Check that the replacement graphic is exported at RTF level.
-            xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
-            // Get the path of the RTF data.
-            OUString aOlePath = getXPath(
-                pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
-            OUString aOleSuffix(u".ole"_ustr);
-            CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
-            INetURLObject aUrl(maTempFile.GetURL());
-            aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
-            aUrl.setExtension(u"ole");
-            OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-
-            // Search for \result in the RTF data.
-            SvFileStream aOleStream(aOleUrl, StreamMode::READ);
-            CPPUNIT_ASSERT(aOleStream.IsOpen());
-            OString aOleString(read_uInt8s_ToOString(aOleStream, aOleStream.TellEnd()));
-            // Without the accompanying fix in place, this test would have failed,
-            // replacement graphic was missing at RTF level.
-            CPPUNIT_ASSERT(aOleString.indexOf(OOO_STRING_SVTOOLS_RTF_RESULT) != -1);
-        }
     };
+
     setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     setImportFilterName(u"HTML (StarWriter)"_ustr);
     createSwDoc("reqif-ole2.xhtml");
@@ -984,6 +960,26 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2)
     setFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
     saveAndReload(mpFilter);
     verify();
+
+    // Check that the replacement graphic is exported at RTF level.
+    xmlDocUniquePtr pDoc = WrapReqifFromTempFile();
+    // Get the path of the RTF data.
+    OUString aOlePath = getXPath(
+        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
+    OUString aOleSuffix(u".ole"_ustr);
+    CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
+    aUrl.setExtension(u"ole");
+    OUString aOleUrl = aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+
+    // Search for \result in the RTF data.
+    SvFileStream aOleStream(aOleUrl, StreamMode::READ);
+    CPPUNIT_ASSERT(aOleStream.IsOpen());
+    OString aOleString(read_uInt8s_ToOString(aOleStream, aOleStream.TellEnd()));
+    // Without the accompanying fix in place, this test would have failed,
+    // replacement graphic was missing at RTF level.
+    CPPUNIT_ASSERT(aOleString.indexOf(OOO_STRING_SVTOOLS_RTF_RESULT) != -1);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOle2Odg)

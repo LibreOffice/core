@@ -85,9 +85,6 @@ public:
 /// Base class for filter tests loading or roundtripping a document, then asserting the document model.
 class SWQAHELPER_DLLPUBLIC SwModelTestBase : public UnoApiXmlTest
 {
-private:
-    bool mbExported; ///< Does maTempFile already contain something useful?
-
 protected:
     xmlBufferPtr mpXmlBuffer;
     OUString mpFilter;
@@ -268,8 +265,6 @@ protected:
      * Wraps a reqif-xhtml fragment into an XHTML file, and XML-parses it.
      */
     xmlDocUniquePtr WrapReqifFromTempFile();
-
-    bool isExported(){ return mbExported; }
 
     void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr);
 

@@ -57,7 +57,6 @@ void SwModelTestBase::paste(std::u16string_view aFilename, OUString aInstance,
 
 SwModelTestBase::SwModelTestBase(const OUString& pTestDocumentPath, const OUString& pFilter)
     : UnoApiXmlTest(pTestDocumentPath)
-    , mbExported(false)
     , mpXmlBuffer(nullptr)
     , mpFilter(pFilter)
 {
@@ -391,10 +390,7 @@ void SwModelTestBase::header() {}
 void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 {
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
-    if (!isExported())
-    {
-        std::cout << rURL << ":\n";
-    }
+    std::cout << rURL << ":\n";
 
     UnoApiXmlTest::load(rURL, pPassword);
 
@@ -406,7 +402,6 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
 void SwModelTestBase::saveAndReload(const OUString& pFilter, const char* pPassword)
 {
     save(pFilter, pPassword);
-    mbExported = true;
 
     loadURL(maTempFile.GetURL(), pPassword);
 }
@@ -415,7 +410,6 @@ void SwModelTestBase::loadAndSave(const char* pName, const char* pPassword)
 {
     loadURL(createFileURL(OUString::createFromAscii(pName)), pPassword);
     save(mpFilter);
-    mbExported = true;
 }
 
 void SwModelTestBase::loadAndReload(const char* pName)

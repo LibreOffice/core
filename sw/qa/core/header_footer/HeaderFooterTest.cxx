@@ -461,24 +461,21 @@ CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testContSectBreakHeaderFooter)
         // - Expected: Header, section 2
         // - Actual  : First page header, section 2
         // i.e. both the header and the footer on page 3 was wrong.
-
-        // Additional problem: top margin on page 3 was wrong.
-        if (isExported())
-        {
-            xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
-            // Without the accompanying fix in place, this test would have failed with:
-            // - Expected: 2200
-            // - Actual  : 2574
-            // i.e. the top margin on page 3 was too large and now matches the value from the input
-            // document.
-            assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar", "top", u"2200");
-        }
     };
 
     createSwDoc("cont-sect-break-header-footer.docx");
     verify();
     saveAndReload(u"Office Open XML Text"_ustr);
     verify();
+
+    // Additional problem: top margin on page 3 was wrong.
+    xmlDocUniquePtr pXml = parseExport(u"word/document.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2200
+    // - Actual  : 2574
+    // i.e. the top margin on page 3 was too large and now matches the value from the input
+    // document.
+    assertXPath(pXml, "/w:document/w:body/w:sectPr/w:pgMar", "top", u"2200");
 }
 
 CPPUNIT_TEST_FIXTURE(HeaderFooterTest, testTdf145998_firstHeader)
