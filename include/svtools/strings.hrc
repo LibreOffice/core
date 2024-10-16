@@ -350,5 +350,8 @@
 #define STR_DESCRIPTION_MYTHES                  NC_("STR_DESCRIPTION_MYTHES", "MyThes Thesaurus")
 #define STR_DESCRIPTION_IGNOREALLLIST           NC_("STR_DESCRIPTION_IGNOREALLLIST", "List of Ignored Words")
 #define STR_DESCRIPTION_LANGUAGETOOL            NC_("STR_DESCRIPTION_LANGUAGETOOL", "LanguageTool Remote Grammar Checker")
+#define STR_DESCRIPTION_SPELLING_ERROR          NC_("STR_DESCRIPTION_SPELLING_ERROR", "Spelling error")
+#define STR_DESCRIPTION_GRAMMAR_ERROR           NC_("STR_DESCRIPTION_GRAMMAR_ERROR_LONG", "Grammar error")
+#define STR_DESCRIPTION_STYLE_ERROR             NC_("STR_DESCRIPTION_STYLE_ERROR", "Bad style")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

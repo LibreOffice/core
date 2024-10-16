@@ -235,28 +235,42 @@ uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string
     return {};
 }
 
+OUString DudenTypeToComment(const std::string& type, const Locale& rLocale)
+{
+    // TODO: consider also "errorcode", some values of which are explained
+    // at https://main.dks.epc.de/doc/Relnotes.html
+    TranslateId id = STR_DESCRIPTION_SPELLING_ERROR; // matches both "orth" and "term"
+    if (type == "gram")
+        id = STR_DESCRIPTION_GRAMMAR_ERROR;
+    else if (type == "style")
+        id = STR_DESCRIPTION_STYLE_ERROR;
+    std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
+    return Translate::get(id, loc);
+}
+
 void parseDudenResponse(ProofreadingResult& rResult, std::string&& aJSONBody)
 {
     rResult.aErrors = parseJson(
         std::move(aJSONBody), "check-positions",
-        [](const boost::property_tree::ptree& rPos, SingleProofreadingError& rError) {
+        [& locale = rResult.aLocale](const boost::property_tree::ptree& rPos,
+                                     SingleProofreadingError& rError) {
             rError.nErrorStart = rPos.get<int>("offset", 0);
             rError.nErrorLength = rPos.get<int>("length", 0);
             rError.nErrorType = text::TextMarkupType::PROOFREADING;
-            //rError.aShortComment = ??
-            //rError.aFullComment = ??
             const std::string sType = rPos.get<std::string>("type", {});
+            rError.aShortComment = DudenTypeToComment(sType, locale);
+            rError.aFullComment = rError.aShortComment;
             rError.aProperties = { lcl_GetLineColorPropertyFromErrorId(sType) };
 
-            const auto proposals = rPos.get_child_optional("proposals");
-            if (!proposals)
-                return;
-            rError.aSuggestions.realloc(std::min(proposals->size(), MAX_SUGGESTIONS_SIZE));
-            auto itProp = proposals->begin();
-            for (auto& rSuggestion : asNonConstRange(rError.aSuggestions))
+            if (const auto proposals = rPos.get_child_optional("proposals"))
             {
-                rSuggestion = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
-                itProp++;
+                rError.aSuggestions.realloc(std::min(proposals->size(), MAX_SUGGESTIONS_SIZE));
+                auto itProp = proposals->begin();
+                for (auto& rSuggestion : asNonConstRange(rError.aSuggestions))
+                {
+                    rSuggestion = OStringToOUString(itProp->second.data(), RTL_TEXTENCODING_UTF8);
+                    itProp++;
+                }
             }
         });
 }
