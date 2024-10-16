@@ -15,6 +15,8 @@
 #include <rtl/alloc.h>
 #include <osl/endian.h>
 #include <config_oox.h>
+#include <sstream>
+#include <iomanip>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -26,6 +28,17 @@
 #endif // USE_TLS_OPENSSL
 
 namespace comphelper {
+
+std::string hashToString(const std::vector<unsigned char>& rHash)
+{
+    std::stringstream aStringStream;
+    for (auto& i: rHash)
+    {
+        aStringStream << std::setw(2) << std::setfill('0') << std::hex << int(i);
+    }
+
+    return aStringStream.str();
+}
 
 struct HashImpl
 {

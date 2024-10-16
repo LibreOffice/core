@@ -139,7 +139,8 @@ void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rCo
 }
 
 drawinglayer::primitive2d::TextHierarchyBlockPrimitive2D*
-findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer)
+findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
+              drawinglayer::geometry::ViewInformation2D const& rViewInformation2D)
 {
     for (size_t i = 0; i < rContainer.size(); i++)
     {
@@ -158,7 +159,8 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer)
                 = dynamic_cast<drawinglayer::primitive2d::GroupPrimitive2D*>(pBasePrimitive);
             if (pGroupPrimitive)
             {
-                auto* pTextBlock = findTextBlock(pGroupPrimitive->getChildren());
+                auto* pTextBlock
+                    = findTextBlock(pGroupPrimitive->getChildren(), rViewInformation2D);
                 if (pTextBlock)
                     return pTextBlock;
             }
@@ -170,9 +172,8 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer)
             {
                 // try to decompose
                 drawinglayer::primitive2d::Primitive2DContainer aPrimitiveContainer;
-                pBasePrimitive->get2DDecomposition(aPrimitiveContainer,
-                                                   drawinglayer::geometry::ViewInformation2D());
-                auto* pTextBlock = findTextBlock(aPrimitiveContainer);
+                pBasePrimitive->get2DDecomposition(aPrimitiveContainer, rViewInformation2D);
+                auto* pTextBlock = findTextBlock(aPrimitiveContainer, rViewInformation2D);
                 if (pTextBlock)
                     return pTextBlock;
             }
@@ -182,9 +183,10 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer)
 }
 
 void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
+                      drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
                       std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject)
 {
-    auto* pTextBlock = findTextBlock(rContainer);
+    auto* pTextBlock = findTextBlock(rContainer, rViewInformation2D);
 
     if (pTextBlock)
     {
@@ -244,6 +246,10 @@ public:
             return;
 
         SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
+        drawinglayer::geometry::ViewInformation2D const& rViewInformation2D
+            = rOriginal.GetObjectContact().getViewInformation2D();
+
         // Check if we are rendering an object that is valid to render (exists, and not empty)
         if (pObject == nullptr || pObject->IsEmptyPresObj())
             return;
@@ -339,7 +345,8 @@ public:
 
             if (bRenderOtherParagraphs)
             {
-                modifyParagraphs(rContainer, nOtherParagraphs, true); // render the object
+                modifyParagraphs(rContainer, rViewInformation2D, nOtherParagraphs,
+                                 true); // render the object
                 mrRenderState.mnCurrentTargetParagraph = -1;
             }
             else
@@ -349,8 +356,8 @@ public:
 
                 std::deque<sal_Int32> aPreserveParagraphs{ nParagraph };
                 mrRenderState.mnCurrentTargetParagraph = nParagraph;
-                modifyParagraphs(rContainer, aPreserveParagraphs,
-                                 false); // render only the paragraphs
+                // render only the paragraphs
+                modifyParagraphs(rContainer, rViewInformation2D, aPreserveParagraphs, false);
             }
         }
 

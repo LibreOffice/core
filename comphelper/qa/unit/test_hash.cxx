@@ -13,7 +13,6 @@
 #include <comphelper/docpasswordhelper.hxx>
 
 #include <rtl/ustring.hxx>
-#include <iomanip>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -48,21 +47,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-namespace {
-
-std::string tostring(const std::vector<unsigned char>& a)
-{
-    std::stringstream aStrm;
-    for (auto& i:a)
-    {
-        aStrm << std::setw(2) << std::setfill('0') << std::hex << static_cast<int>(i);
-    }
-
-    return aStrm.str();
-}
-
-}
-
 void TestHash::testMD5()
 {
     comphelper::Hash aHash(comphelper::HashType::MD5);
@@ -70,7 +54,7 @@ void TestHash::testMD5()
     aHash.update(reinterpret_cast<const unsigned char*>(pInput), 0);
     std::vector<unsigned char> calculate_hash = aHash.finalize();
     CPPUNIT_ASSERT_EQUAL(size_t(16), calculate_hash.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("d41d8cd98f00b204e9800998ecf8427e"), tostring(calculate_hash));
+    CPPUNIT_ASSERT_EQUAL(std::string("d41d8cd98f00b204e9800998ecf8427e"), comphelper::hashToString(calculate_hash));
 }
 
 void TestHash::testSHA1()
@@ -80,7 +64,7 @@ void TestHash::testSHA1()
     aHash.update(reinterpret_cast<const unsigned char*>(pInput), 0);
     std::vector<unsigned char> calculate_hash = aHash.finalize();
     CPPUNIT_ASSERT_EQUAL(size_t(20), calculate_hash.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("da39a3ee5e6b4b0d3255bfef95601890afd80709"), tostring(calculate_hash));
+    CPPUNIT_ASSERT_EQUAL(std::string("da39a3ee5e6b4b0d3255bfef95601890afd80709"), comphelper::hashToString(calculate_hash));
 }
 
 void TestHash::testSHA256()
@@ -90,7 +74,7 @@ void TestHash::testSHA256()
     aHash.update(reinterpret_cast<const unsigned char*>(pInput), 0);
     std::vector<unsigned char> calculate_hash = aHash.finalize();
     CPPUNIT_ASSERT_EQUAL(size_t(32), calculate_hash.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"), tostring(calculate_hash));
+    CPPUNIT_ASSERT_EQUAL(std::string("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"), comphelper::hashToString(calculate_hash));
 }
 
 void TestHash::testSHA512()
@@ -101,7 +85,7 @@ void TestHash::testSHA512()
     std::vector<unsigned char> calculate_hash = aHash.finalize();
     CPPUNIT_ASSERT_EQUAL(size_t(64), calculate_hash.size());
     std::string aStr("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
-    CPPUNIT_ASSERT_EQUAL(aStr, tostring(calculate_hash));
+    CPPUNIT_ASSERT_EQUAL(aStr, comphelper::hashToString(calculate_hash));
 }
 
 // Must be identical to testSHA512()
@@ -113,7 +97,7 @@ void TestHash::testSHA512_NoSaltNoSpin()
                 nullptr, 0, 0, comphelper::Hash::IterCount::NONE, comphelper::HashType::SHA512);
     CPPUNIT_ASSERT_EQUAL(size_t(64), calculate_hash.size());
     std::string aStr("cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e");
-    CPPUNIT_ASSERT_EQUAL(aStr, tostring(calculate_hash));
+    CPPUNIT_ASSERT_EQUAL(aStr, comphelper::hashToString(calculate_hash));
 }
 
 // Password, salt, hash and spin count taken from OOXML sheetProtection of

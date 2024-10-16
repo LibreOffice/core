@@ -39,6 +39,8 @@ const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct HashImpl;
 
+COMPHELPER_DLLPUBLIC std::string hashToString(const std::vector<unsigned char>& rHash);
+
 class COMPHELPER_DLLPUBLIC Hash
 {
 private:
