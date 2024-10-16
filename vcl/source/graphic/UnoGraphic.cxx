@@ -165,7 +165,10 @@ uno::Sequence<sal_Int8> SAL_CALL Graphic::getMaskDIB()
     {
         SvMemoryStream aMemoryStream;
 
-        WriteDIB(maGraphic.GetBitmapEx().GetAlphaMask().GetBitmap(), aMemoryStream, false, true);
+        AlphaMask aMask = maGraphic.GetBitmapEx().GetAlphaMask();
+        // for backwards compatibility for extensions, we need to convert from alpha to transparency
+        aMask.Invert();
+        WriteDIB(aMask.GetBitmap(), aMemoryStream, false, true);
         return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMemoryStream.GetData()), aMemoryStream.Tell() );
     }
     else
