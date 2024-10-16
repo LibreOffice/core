@@ -3466,7 +3466,8 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 
 sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 {
-    SolarMutexGuard g;
+    std::scoped_lock aGuard( m_Mutex );
+
     //Get the real heading level, Heading1 ~ Heading10
     if (m_nHeadingLevel > 0)
         return AccessibleRole::HEADING;
