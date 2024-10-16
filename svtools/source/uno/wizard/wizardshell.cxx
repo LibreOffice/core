@@ -26,6 +26,7 @@
 #include <com/sun/star/ui/dialogs/WizardTravelType.hpp>
 
 using vcl::RoadmapWizardTypes::WizardPath;
+using vcl::RoadmapWizardTypes::PathId;
 
 namespace svt::uno
 {
@@ -66,7 +67,7 @@ namespace svt::uno
             WizardPath aPath( rPath.getLength() );
             std::transform(rPath.begin(), rPath.end(), aPath.begin(),
                 [this](const sal_Int16 nPageId) -> WizardPath::value_type { return impl_pageIdToState(nPageId); });
-            declarePath( i, aPath );
+            declarePath( static_cast<PathId>(i), aPath );
         }
 
         // create the first page, to know the page size

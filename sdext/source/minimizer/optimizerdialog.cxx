@@ -52,6 +52,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
+using vcl::RoadmapWizardTypes::PathId;
+
 OptimizedDialogPage::OptimizedDialogPage(weld::Container* pPage, OptimizerDialog& rOptimizerDialog,
                                          const OUString& rUIXMLDescription, const OUString& rID,
                                          int nPageNum)
@@ -246,7 +248,7 @@ void OptimizerDialog::InitDialog()
 void OptimizerDialog::InitRoadmap()
 {
     declarePath(
-        0,
+        PathId::COMMON_FIRST_STATE,
         {ITEM_ID_INTRODUCTION,
          ITEM_ID_SLIDES,
          ITEM_ID_GRAPHIC_OPTIMIZATION,

@@ -209,7 +209,7 @@ namespace vcl
 
         // determine the index of the current state in the current path
         sal_Int32 nCurrentStatePathIndex = -1;
-        if ( m_pImpl->nActivePath != -1 )
+        if ( m_pImpl->nActivePath != PathId::INVALID )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
 
         DBG_ASSERT( static_cast<sal_Int32>(aNewPathPos->second.size()) > nCurrentStatePathIndex,

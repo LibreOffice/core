@@ -91,7 +91,7 @@ namespace vcl
 
         RoadmapWizardImpl()
             :pRoadmap( nullptr )
-            ,nActivePath( -1 )
+            ,nActivePath( PathId::INVALID )
             ,bActivePathIsDefinite( false )
         {
         }

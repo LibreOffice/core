@@ -137,7 +137,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
 
     ::dbaccess::ODsnTypeCollection::TypeIterator aIter = m_pCollection->begin();
     ::dbaccess::ODsnTypeCollection::TypeIterator aEnd = m_pCollection->end();
-    for(PathId i = 1;aIter != aEnd;++aIter,++i)
+    for(auto i = 1;aIter != aEnd;++aIter,++i)
     {
         const OUString& sURLPrefix = aIter.getURLPrefix();
         WizardPath aPath;
@@ -146,7 +146,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(weld::Window* _pParent
         aPath.push_back(PAGE_DBSETUPWIZARD_AUTHENTIFICATION);
         aPath.push_back(PAGE_DBSETUPWIZARD_FINAL);
 
-        declareAuthDepPath(sURLPrefix,i,aPath);
+        declareAuthDepPath(sURLPrefix,static_cast<PathId>(i),aPath);
     }
 
     WizardPath aPath;

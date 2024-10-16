@@ -35,10 +35,10 @@
 using namespace css;
 
 using vcl::RoadmapWizardTypes::WizardPath;
+using vcl::RoadmapWizardTypes::PathId;
 
 namespace chart
 {
-#define PATH_FULL   1
 #define STATE_FIRST        0
 #define STATE_CHARTTYPE    STATE_FIRST
 #define STATE_SIMPLE_RANGE 1
@@ -72,7 +72,7 @@ CreationWizard::CreationWizard(weld::Window* pParent, const rtl::Reference<::cha
         STATE_OBJECTS
     };
 
-    declarePath(PATH_FULL, aPath);
+    declarePath(PathId::COMPLETE, aPath);
 
     // tdf#135935 ensure help ID is set when no element is clicked in the dialog
     m_xAssistant->set_help_id(HID_SCH_WIZARD_ROADMAP);

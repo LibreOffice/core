@@ -44,10 +44,7 @@ namespace abp
 #define STATE_MANUAL_FIELD_MAPPING  3
 #define STATE_FINAL_CONFIRM         4
 
-#define PATH_COMPLETE               1
-#define PATH_NO_SETTINGS            2
-#define PATH_NO_FIELDS              3
-#define PATH_NO_SETTINGS_NO_FIELDS  4
+
 
     using namespace ::com::sun::star::uno;
 
@@ -57,26 +54,26 @@ namespace abp
         ,m_aNewDataSource(_rxORB)
         ,m_eNewDataSourceType( AST_INVALID )
     {
-        declarePath( PATH_COMPLETE,
+        declarePath(PathId::COMPLETE,
             {STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
             STATE_TABLE_SELECTION,
             STATE_MANUAL_FIELD_MAPPING,
             STATE_FINAL_CONFIRM}
         );
-        declarePath( PATH_NO_SETTINGS,
+        declarePath(PathId::NO_SETTINGS,
             {STATE_SELECT_ABTYPE,
             STATE_TABLE_SELECTION,
             STATE_MANUAL_FIELD_MAPPING,
             STATE_FINAL_CONFIRM}
         );
-        declarePath( PATH_NO_FIELDS,
+        declarePath(PathId::NO_FIELDS,
             {STATE_SELECT_ABTYPE,
             STATE_INVOKE_ADMIN_DIALOG,
             STATE_TABLE_SELECTION,
             STATE_FINAL_CONFIRM}
         );
-        declarePath( PATH_NO_SETTINGS_NO_FIELDS,
+        declarePath(PathId::NO_SETTINGS_NO_FIELDS,
             {STATE_SELECT_ABTYPE,
             STATE_TABLE_SELECTION,
             STATE_FINAL_CONFIRM}
@@ -422,19 +419,19 @@ namespace abp
 
     void OAddressBookSourcePilot::typeSelectionChanged( AddressSourceType _eType )
     {
-        PathId nCurrentPathID( PATH_COMPLETE );
+        PathId nCurrentPathID( PathId::COMPLETE );
         bool bSettingsPage = needAdminInvokationPage( _eType );
         bool bFieldsPage = needManualFieldMapping( _eType );
         if ( !bSettingsPage )
             if ( !bFieldsPage )
-                nCurrentPathID = PATH_NO_SETTINGS_NO_FIELDS;
+                nCurrentPathID = PathId::NO_SETTINGS_NO_FIELDS;
             else
-                nCurrentPathID = PATH_NO_SETTINGS;
+                nCurrentPathID = PathId::NO_SETTINGS;
         else
             if ( !bFieldsPage )
-                nCurrentPathID = PATH_NO_FIELDS;
+                nCurrentPathID = PathId::NO_FIELDS;
             else
-                nCurrentPathID = PATH_COMPLETE;
+                nCurrentPathID = PathId::COMPLETE;
         activatePath( nCurrentPathID, true );
 
         m_aNewDataSource.disconnect();

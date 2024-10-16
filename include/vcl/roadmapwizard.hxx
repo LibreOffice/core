@@ -30,8 +30,18 @@ namespace vcl
 
     namespace RoadmapWizardTypes
     {
-        typedef sal_Int16                                   PathId;
         typedef ::std::vector< WizardTypes::WizardState >   WizardPath;
+
+        enum class PathId : sal_Int16
+        {
+            INVALID = -1,
+            COMMON_FIRST_STATE = 0,
+            COMPLETE = 1, //include settings and fields page
+            NO_SETTINGS = 2, // exclude settings page
+            NO_FIELDS = 3, // exclude fields page
+            NO_SETTINGS_NO_FIELDS = 4, // exclude settings and fields page
+        };
+
     };
 
     //= RoadmapWizard

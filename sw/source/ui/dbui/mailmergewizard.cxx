@@ -34,6 +34,7 @@
 #include <helpids.h>
 
 using namespace ::com::sun::star;
+using vcl::RoadmapWizardTypes::PathId;
 
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeConfigItem> xItem)
     : RoadmapWizardMachine(rView.GetFrameWeld())
@@ -60,7 +61,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
     //#i51949# no output type page visible if e-Mail is not supported
     if (m_xConfigItem->IsMailAvailable())
         declarePath(
-            0,
+            PathId::COMMON_FIRST_STATE,
             {MM_DOCUMENTSELECTPAGE,
             MM_OUTPUTTYPETPAGE,
             MM_ADDRESSBLOCKPAGE,
@@ -69,7 +70,7 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, std::shared_ptr<SwMailMergeC
         );
     else
         declarePath(
-            0,
+            PathId::COMMON_FIRST_STATE,
             {MM_DOCUMENTSELECTPAGE,
             MM_ADDRESSBLOCKPAGE,
             MM_GREETINGSPAGE,
