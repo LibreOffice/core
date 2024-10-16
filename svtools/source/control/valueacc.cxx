@@ -377,8 +377,14 @@ void ValueItemAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValu
     if( !nEventId )
         return;
 
-    ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >                  aTmpListeners( mxEventListeners );
-    accessibility::AccessibleEventObject                                                        aEvtObject;
+    std::vector<uno::Reference<accessibility::XAccessibleEventListener>> aTmpListeners;
+
+    {
+        std::scoped_lock aGuard(maMutex);
+        aTmpListeners = mxEventListeners;
+    }
+
+    accessibility::AccessibleEventObject aEvtObject;
 
     aEvtObject.EventId = nEventId;
     aEvtObject.Source = getXWeak();
