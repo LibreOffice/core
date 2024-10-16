@@ -2656,6 +2656,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
+                    assert(nNumber < 0xffff);
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
                 }
@@ -2719,6 +2720,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
+                    assert(nNumber < 0xfff);
                     nNumber = 16 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
                 }
@@ -2752,6 +2754,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (rtl::isAsciiHexDigit(*p) && nDigits < 4)
                 {
+                    assert(nNumber < 0xffff);
                     nNumber = 16 * nNumber + INetMIME::getHexWeight(*p);
                     ++nDigits;
                 }
@@ -2809,6 +2812,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                 }
                 else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
+                    assert(nNumber < 0xfff);
                     nNumber = 16 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
                 }
