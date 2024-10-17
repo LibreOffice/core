@@ -2737,6 +2737,72 @@ DECLARE_ODFEXPORT_TEST(testTdf132642_keepWithNextTable, "tdf132642_keepWithNextT
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Row splits over 2 pages", 2, getPages());
 }
 
+DECLARE_ODFEXPORT_TEST(testArabicZeroNumberingRTF, "arabic-zero-numbering.rtf")
+{
+    auto xNumberingRules = getProperty<uno::Reference<container::XIndexAccess>>(
+        getParagraph(1), u"NumberingRules"_ustr);
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO.
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
+}
+
+
+DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.docx")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 64
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO.
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
+}
+
+DECLARE_ODFEXPORT_TEST(testArabicZero3Numbering, "arabic-zero3-numbering.docx")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 65
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO3.
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO3),
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
+}
+
+DECLARE_ODFEXPORT_TEST(testArabicZero4Numbering, "arabic-zero4-numbering.docx")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 66
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO4.
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO4),
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
+}
+
+DECLARE_ODFEXPORT_TEST(testArabicZero5Numbering, "arabic-zero5-numbering.docx")
+{
+    auto xNumberingRules
+        = getProperty<uno::Reference<container::XIndexAccess>>(getParagraph(1), u"NumberingRules"_ustr);
+    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 67
+    // - Actual  : 4
+    // i.e. numbering type was ARABIC, not ARABIC_ZERO5.
+    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO5),
+                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testImageMimetype)
 {
     loadAndReload("image-mimetype.odt");

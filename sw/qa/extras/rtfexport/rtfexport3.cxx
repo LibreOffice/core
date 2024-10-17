@@ -289,19 +289,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115180)
     verify();
 }
 
-DECLARE_ODFEXPORT_TEST(testArabicZeroNumbering, "arabic-zero-numbering.rtf")
-{
-    auto xNumberingRules = getProperty<uno::Reference<container::XIndexAccess>>(
-        getParagraph(1), u"NumberingRules"_ustr);
-    comphelper::SequenceAsHashMap aMap(xNumberingRules->getByIndex(0));
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 64
-    // - Actual  : 4
-    // i.e. numbering type was ARABIC, not ARABIC_ZERO.
-    CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(style::NumberingType::ARABIC_ZERO),
-                         aMap[u"NumberingType"_ustr].get<sal_uInt16>());
-}
-
 CPPUNIT_TEST_FIXTURE(Test, testTdf116841)
 {
     auto verify = [this]() {
