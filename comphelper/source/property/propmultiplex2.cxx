@@ -101,12 +101,9 @@ void OPropertyChangeMultiplexer2::onListenerDestruction()
 void SAL_CALL OPropertyChangeMultiplexer2::disposing(const EventObject& /*_rSource*/)
 {
     std::unique_lock g(m_rMutex);
+    // disconnect the listener
     if (m_pListener)
-    {
-        // disconnect the listener
-        if (m_pListener) // may have been reset whilst calling into _disposing
-            m_pListener->setAdapter(g, nullptr);
-    }
+        m_pListener->setAdapter(g, nullptr);
 
     m_pListener = nullptr;
     m_bListening = false;
