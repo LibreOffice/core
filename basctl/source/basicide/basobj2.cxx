@@ -389,9 +389,9 @@ Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUSt
         for ( sal_uInt32 i = 0 ; i < nCount; ++i )
         {
             SbMethod* pMethod = static_cast<SbMethod*>(pMod->GetMethods()->Get(i));
+            assert(pMethod && "Method not found! (NULL)");
             if( pMethod->IsHidden() )
                 continue;
-            assert(pMethod && "Method not found! (NULL)");
             aSeqMethods.getArray()[ iTarget++ ] = pMethod->GetName();
         }
     }
