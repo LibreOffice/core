@@ -5739,7 +5739,7 @@ class SFDocuments:
                         The selected range as a string, or the empty string when the user cancelled the request.
                     Note
                         This method opens the same dialog that is used by ``LibreOffice`` when the ``Shrink``
-                        button is pressed. For example, the vTools - Goal Seek`` dialog has a ``Shrink`` button
+                        button is pressed. For example, the ``Tools + Goal Seek`` dialog has a ``Shrink`` button
                         to the right of the ``Formula`` cell field.
                 """
             ...
