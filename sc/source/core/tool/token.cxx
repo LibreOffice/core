@@ -5245,7 +5245,6 @@ void appendTokenByType( ScSheetLimits& rLimits, sc::TokenStringContext& rCxt, OU
             OpCode eOpErr;
             switch (nErr)
             {
-                break;
                 case FormulaError::DivisionByZero:
                     eOpErr = ocErrDivZero;
                 break;
