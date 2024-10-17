@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBMOD_HXX
-#define INCLUDED_BASIC_SBMOD_HXX
+#pragma once
 
 #include <config_options.h>
 #include <basic/sbdef.hxx>
@@ -164,7 +163,5 @@ public:
     void triggerInitializeEvent();
     void triggerTerminateEvent();
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

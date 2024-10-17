@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_BASIC_SBSTAR_HXX
-#define INCLUDED_BASIC_SBSTAR_HXX
+#pragma once
 
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
@@ -152,7 +151,5 @@ public:
 };
 
 typedef tools::SvRef<StarBASIC> StarBASICRef;
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
