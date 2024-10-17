@@ -125,32 +125,35 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
         }
     }
     ScDrawView* pDrawView = rViewSh.GetScDrawView();
-    const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
 
     // #i123922# check if an existing object is selected; if yes, evtl. replace
     // the graphic for a SdrGraphObj (including link state updates) or adapt the fill
     // style for other objects
-    if(pDrawView && 1 == rMarkList.GetMarkCount())
+    if(pDrawView)
     {
-        SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-        if(pPickObj)
+        const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
+        if (1 == rMarkList.GetMarkCount())
         {
-            //sal_Int8 nAction(DND_ACTION_MOVE);
-            //Point aPos;
-            const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
+            SdrObject* pPickObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-            SdrObject* pResult = pDrawView->ApplyGraphicToObject(
-                *pPickObj,
-                rGraphic1,
-                aBeginUndo,
-                bAsLink ? rFileName : OUString());
-
-            if(pResult)
+            if(pPickObj)
             {
-                // we are done; mark the modified/new object
-                pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
-                return;
+                //sal_Int8 nAction(DND_ACTION_MOVE);
+                //Point aPos;
+                const OUString aBeginUndo(ScResId(STR_UNDO_DRAGDROP));
+
+                SdrObject* pResult = pDrawView->ApplyGraphicToObject(
+                    *pPickObj,
+                    rGraphic1,
+                    aBeginUndo,
+                    bAsLink ? rFileName : OUString());
+
+                if(pResult)
+                {
+                    // we are done; mark the modified/new object
+                    pDrawView->MarkObj(pResult, pDrawView->GetSdrPageView());
+                    return;
+                }
             }
         }
     }
