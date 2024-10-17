@@ -47,16 +47,8 @@ std::unique_ptr<double[]> mgcLinearSystemD::NewVector (int N)
 bool mgcLinearSystemD::Solve (int n, std::unique_ptr<std::unique_ptr<double[]>[]> const & a, double* b)
 {
   std::unique_ptr<int[]> indxc( new int[n] );
-  if ( !indxc )
-    return false;
   std::unique_ptr<int[]> indxr( new int[n] );
-  if ( !indxr ) {
-    return false;
-  }
   std::unique_ptr<int[]> ipiv( new int[n] );
-  if ( !ipiv ) {
-    return false;
-  }
 
   int i, j, k;
   int irow = 0;
