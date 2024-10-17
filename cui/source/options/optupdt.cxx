@@ -201,7 +201,7 @@ static inline OUString WrapString(const OUString& aStr)
         sResult += sPos;
         if ((nPos > 50) && (sPos == ";"))
         {
-            sResult += "/n";
+            sResult += "\n";
             nPos = 0;
         }
         nPos++;
