@@ -2888,7 +2888,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 // set CID to symbol for selection
                 if( xShape.is())
                 {
-                    aEntry.xSymbol = xSymbolGroup;
+                    aEntry.xSymbol = std::move(xSymbolGroup);
 
                     bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
                     ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
