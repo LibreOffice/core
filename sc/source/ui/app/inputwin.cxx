@@ -2334,19 +2334,13 @@ OUString ScPosWnd::createLocalRangeName(std::u16string_view rName, std::u16strin
 
 void ScPosWnd::FillRangeNames()
 {
-    m_xWidget->clear();
-    m_xWidget->freeze();
-
+    std::set<OUString> aSet;
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
-    if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
+    if (auto pDocShell = dynamic_cast<ScDocShell*>(pObjSh))
     {
         ScDocument& rDoc = pDocShell->GetDocument();
 
-        m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
-        m_xWidget->append_separator(u"separator"_ustr);
-
         ScRange aDummy;
-        std::set<OUString> aSet;
         ScRangeName* pRangeNames = rDoc.GetRangeName();
         for (const auto& rEntry : *pRangeNames)
         {
@@ -2367,14 +2361,24 @@ void ScPosWnd::FillRangeNames()
                 }
             }
         }
+    }
 
-        for (const auto& rItem : aSet)
-        {
-            m_xWidget->append_text(rItem);
-        }
+    if (aSet == aRangeNames && !aSet.empty())
+        return;
+
+    aRangeNames = aSet;
+
+    m_xWidget->clear();
+    m_xWidget->freeze();
+    m_xWidget->append_text(ScResId(STR_MANAGE_NAMES));
+    m_xWidget->append_separator(u"separator"_ustr);
+    for (const auto& rItem : aSet)
+    {
+        m_xWidget->append_text(rItem);
     }
     m_xWidget->thaw();
-    m_xWidget->set_entry_text(aPosStr);
+    if (!aPosStr.isEmpty())
+        m_xWidget->set_entry_text(aPosStr);
 }
 
 void ScPosWnd::FillFunctions()
