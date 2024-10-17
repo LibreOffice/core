@@ -102,6 +102,10 @@ wrapper::ItemConverter* createItemConverter(
         //create itemconverter for a single object
         switch(eObjectType)
         {
+            case OBJECTTYPE_DATA_STOCK_LOSS:
+            case OBJECTTYPE_DATA_STOCK_GAIN:
+            case OBJECTTYPE_DIAGRAM_WALL:
+            case OBJECTTYPE_DIAGRAM_FLOOR:
             case OBJECTTYPE_PAGE:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
@@ -135,13 +139,6 @@ wrapper::ItemConverter* createItemConverter(
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;
             case OBJECTTYPE_DIAGRAM:
-                    break;
-            case OBJECTTYPE_DIAGRAM_WALL:
-            case OBJECTTYPE_DIAGRAM_FLOOR:
-                pItemConverter =  new wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel, xChartModel,
-                                        wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
             case OBJECTTYPE_AXIS:
             {
@@ -282,13 +279,6 @@ wrapper::ItemConverter* createItemConverter(
                 break;
             }
             case OBJECTTYPE_DATA_STOCK_RANGE:
-                    break;
-            case OBJECTTYPE_DATA_STOCK_LOSS:
-            case OBJECTTYPE_DATA_STOCK_GAIN:
-                pItemConverter =  new wrapper::GraphicPropertyItemConverter(
-                                        xObjectProperties, rDrawModel.GetItemPool(),
-                                        rDrawModel, xChartModel,
-                                        wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
             case OBJECTTYPE_DATA_TABLE:
             {
