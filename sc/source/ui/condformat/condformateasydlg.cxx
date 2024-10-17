@@ -342,14 +342,12 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
 
         std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mpDocument));
 
-        OUString sExpression1
-            = (mxNumberEntry->get_visible() == true && mxAllInputs->get_visible() == true
-                   ? mxNumberEntry->get_text()
-                   : u""_ustr);
-        OUString sExpression2
-            = (mxNumberEntry2->get_visible() == true && mxAllInputs->get_visible() == true
-                   ? mxNumberEntry2->get_text()
-                   : u""_ustr);
+        OUString sExpression1 = (mxNumberEntry->get_visible() && mxAllInputs->get_visible()
+                                     ? mxNumberEntry->get_text()
+                                     : u""_ustr);
+        OUString sExpression2 = (mxNumberEntry2->get_visible() && mxAllInputs->get_visible()
+                                     ? mxNumberEntry2->get_text()
+                                     : u""_ustr);
 
         switch (meMode)
         {
