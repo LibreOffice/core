@@ -91,21 +91,16 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                 }
             }
 
-            if( aMDHelper.ISSET_Storage )
-                xStorage.set( aMDHelper.Storage );
-            else
-            {
-                Sequence< uno::Any > aStorageArgs{
-                    aMDHelper.ISSET_OutputStream ? uno::Any(aMDHelper.OutputStream)
-                                                 : uno::Any(aMDHelper.URL),
-                    uno::Any(embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE),
-                    uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
-                };
+            Sequence< uno::Any > aStorageArgs{
+                aMDHelper.ISSET_OutputStream ? uno::Any(aMDHelper.OutputStream)
+                                             : uno::Any(aMDHelper.URL),
+                uno::Any(embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE),
+                uno::Any(comphelper::containerToSequence( aPropertiesForStorage ))
+            };
 
-                xStorage.set(
-                    xStorageFact->createInstanceWithArguments( aStorageArgs ),
-                    uno::UNO_QUERY_THROW );
-            }
+            xStorage.set(
+                xStorageFact->createInstanceWithArguments( aStorageArgs ),
+                uno::UNO_QUERY_THROW );
         }
 
         // set correct media type at storage
