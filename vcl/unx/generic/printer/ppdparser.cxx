@@ -600,6 +600,98 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
     return pNewParser;
 }
 
+PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
+    : m_aFile(std::move(aFile))
+    , m_aFileEncoding(RTL_TEXTENCODING_MS_1252)
+    , m_pImageableAreas(nullptr)
+    , m_pDefaultPaperDimension(nullptr)
+    , m_pPaperDimensions(nullptr)
+    , m_pDefaultInputSlot(nullptr)
+    , m_pDefaultResolution(nullptr)
+    , m_pTranslator(new PPDTranslator())
+{
+    for (auto & key: keys)
+    {
+        insertKey( std::unique_ptr<PPDKey>(key) );
+    }
+
+    // fill in shortcuts
+    const PPDKey* pKey;
+
+    pKey = getKey( u"PageSize"_ustr );
+
+    if ( pKey ) {
+        std::unique_ptr<PPDKey> pImageableAreas(new PPDKey(u"ImageableArea"_ustr));
+        std::unique_ptr<PPDKey> pPaperDimensions(new PPDKey(u"PaperDimension"_ustr));
+#if ENABLE_CUPS
+        for (int i = 0; i < pKey->countValues(); i++) {
+            const PPDValue* pValue = pKey -> getValue(i);
+            OUString aValueName = pValue -> m_aOption;
+            PPDValue* pImageableAreaValue = pImageableAreas -> insertValue( aValueName, eQuoted );
+            PPDValue* pPaperDimensionValue = pPaperDimensions -> insertValue( aValueName, eQuoted );
+            rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+            OString o = OUStringToOString( aValueName, aEncoding );
+            pwg_media_t *pPWGMedia = pwgMediaForPWG(o.pData->buffer);
+            if (pPWGMedia != nullptr) {
+                OUStringBuffer aBuf( 256 );
+                aBuf = "0 0 " +
+                    OUString::number(PWG_TO_POINTS(pPWGMedia -> width)) +
+                    " " +
+                    OUString::number(PWG_TO_POINTS(pPWGMedia -> length));
+                if ( pImageableAreaValue )
+                    pImageableAreaValue->m_aValue = aBuf.makeStringAndClear();
+                aBuf.append( OUString::number(PWG_TO_POINTS(pPWGMedia -> width))
+                    + " "
+                    + OUString::number(PWG_TO_POINTS(pPWGMedia -> length) ));
+                if ( pPaperDimensionValue )
+                    pPaperDimensionValue->m_aValue = aBuf.makeStringAndClear();
+                if (aValueName.equals(pKey -> getDefaultValue() -> m_aOption)) {
+                    pImageableAreas -> m_pDefaultValue = pImageableAreaValue;
+                    pPaperDimensions -> m_pDefaultValue = pPaperDimensionValue;
+                }
+            }
+        }
+#endif
+        insertKey(std::move(pImageableAreas));
+        insertKey(std::move(pPaperDimensions));
+    }
+
+    m_pImageableAreas = getKey( u"ImageableArea"_ustr );
+    const PPDValue* pDefaultImageableArea = nullptr;
+    if( m_pImageableAreas )
+        pDefaultImageableArea = m_pImageableAreas->getDefaultValue();
+    if (m_pImageableAreas == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no ImageableArea in " << m_aFile);
+    }
+    if (pDefaultImageableArea == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no DefaultImageableArea in " << m_aFile);
+    }
+
+    m_pPaperDimensions = getKey( u"PaperDimension"_ustr );
+    if( m_pPaperDimensions )
+        m_pDefaultPaperDimension = m_pPaperDimensions->getDefaultValue();
+    if (m_pPaperDimensions == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no PaperDimensions in " << m_aFile);
+    }
+    if (m_pDefaultPaperDimension == nullptr) {
+        SAL_WARN( "vcl.unx.print", "no DefaultPaperDimensions in " << m_aFile);
+    }
+
+    auto pResolutions = getKey( u"Resolution"_ustr );
+    if( pResolutions )
+        m_pDefaultResolution = pResolutions->getDefaultValue();
+    if (pResolutions == nullptr) {
+        SAL_INFO( "vcl.unx.print", "no Resolution in " << m_aFile);
+    }
+    SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
+
+    auto pInputSlots = getKey( u"InputSlot"_ustr );
+    if( pInputSlots )
+        m_pDefaultInputSlot = pInputSlots->getDefaultValue();
+    SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
+    SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
+}
+
 PPDParser::PPDParser( OUString aFile ) :
         m_aFile(std::move( aFile )),
         m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
