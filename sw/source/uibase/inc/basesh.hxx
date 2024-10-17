@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BASESH_HXX
-#define INCLUDED_SW_SOURCE_UIBASE_INC_BASESH_HXX
+#pragma once
 
 #include <shellid.hxx>
 
@@ -117,7 +116,5 @@ public:
     // vector can be used equivalently to rOrig to affect the same selections
     static std::shared_ptr<std::vector<std::unique_ptr<SwPaM>>> CopyPaMRing(SwPaM& rOrig);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
