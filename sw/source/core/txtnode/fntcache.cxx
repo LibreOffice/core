@@ -828,6 +828,34 @@ static void DrawTextArray(OutputDevice& rOutputDevice, const Point& rStartPt, co
     }
 }
 
+namespace
+{
+void lcl_SnapToGridEdge(const SwDrawTextInfo& rInf, KernArray* pKernArray, tools::Long nGridWidth,
+                        tools::Long nSpaceAdd)
+{
+    auto bUseMsoCompatibleGrid = false;
+    sal_uInt32 nBaseFontHeight = 0;
+    if (auto pSh = rInf.GetShell(); pSh)
+    {
+        const IDocumentSettingAccess& rIDSA = pSh->getIDocumentSettingAccess();
+        bUseMsoCompatibleGrid = rIDSA.get(DocumentSettingId::MS_WORD_COMP_GRID_METRICS);
+
+        SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
+        SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
+
+        SfxStyleSheetBase* pStyle
+            = pBasePool->Find(SwResId(STR_POOLCOLL_STANDARD), SfxStyleFamily::Para);
+        SfxItemSet& aTmpSet = pStyle->GetItemSet();
+        const SvxFontHeightItem& aDefaultFontItem = aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE);
+
+        nBaseFontHeight = aDefaultFontItem.GetHeight();
+    }
+
+    sw::Justify::SnapToGridEdge(*pKernArray, sal_Int32(rInf.GetLen()), nGridWidth, nSpaceAdd,
+                                rInf.GetKern(), nBaseFontHeight, bUseMsoCompatibleGrid);
+}
+}
+
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
@@ -1017,8 +1045,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
             else
             {
-                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
-                        nSpaceAdd, rInf.GetKern());
+                lcl_SnapToGridEdge(rInf, &aKernArray, nGridWidth, nSpaceAdd);
             }
 
             if (nDelta)
@@ -1672,8 +1699,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             else
             {
                 // use 0 to calculate raw width without rInf.GetSpace().
-                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth, 0,
-                        rInf.GetKern());
+                lcl_SnapToGridEdge(rInf, &aKernArray, nGridWidth, 0);
             }
 
             aTextSize.setWidth(aKernArray[sal_Int32(nMsrLn) - 1]);
@@ -1796,8 +1822,7 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
             }
             else
             {
-                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
-                        nSpaceAdd, rInf.GetKern());
+                lcl_SnapToGridEdge(rInf, &aKernArray, nGridWidth, nSpaceAdd);
             }
 
             return  TextFrameIndex(sw::Justify::GetModelPosition(aKernArray, sal_Int32(rInf.GetLen()),
@@ -2078,8 +2103,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             else
             {
                 // use 0 to calculate raw width without rInf.GetSpace().
-                sw::Justify::SnapToGridEdge(aKernArray, sal_Int32(rInf.GetLen()), nGridWidth,
-                        0, rInf.GetKern());
+                lcl_SnapToGridEdge(rInf, &aKernArray, nGridWidth, 0);
             }
 
             while(nTextBreak < rInf.GetLen() && aKernArray[sal_Int32(nTextBreak)] <= nTextWidth)

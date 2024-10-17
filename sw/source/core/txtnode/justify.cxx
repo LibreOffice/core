@@ -213,10 +213,57 @@ tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view aText, sal_Int
     return nDelta;
 }
 
+namespace
+{
+tools::Long lcl_MsoGridWidth(tools::Long nGridWidth, tools::Long nBaseFontSize,
+                             tools::Long nCellSize)
+{
+    return nCellSize + (nGridWidth - nBaseFontSize);
+}
+
+void lcl_MsoCompatSnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
+                                 tools::Long nSpace, tools::Long nKern, tools::Long nBaseFontSize)
+{
+    tools::Long nCharWidth = rKernArray[0];
+    tools::Long nEdge = lcl_MsoGridWidth(nGridWidth, nBaseFontSize, nCharWidth + nKern) + nSpace;
+
+    sal_Int32 nLast = 0;
+
+    for (sal_Int32 i = 1; i < nLen; ++i)
+    {
+        if (rKernArray[i] == rKernArray[nLast])
+            continue;
+
+        nCharWidth = rKernArray[i] - rKernArray[nLast];
+        tools::Long nMinWidth = lcl_MsoGridWidth(nGridWidth, nBaseFontSize, nCharWidth + nKern);
+        while (nLast < i)
+        {
+            rKernArray.set(nLast, nEdge);
+            ++nLast;
+        }
+
+        nEdge += nMinWidth + nSpace;
+    }
+
+    while (nLast < nLen)
+    {
+        rKernArray.set(nLast, nEdge);
+        ++nLast;
+    }
+}
+}
+
 void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
-                    tools::Long nSpace, tools::Long nKern)
+                    tools::Long nSpace, tools::Long nKern, tools::Long nBaseFontSize,
+                    bool bUseMsoCompatibleGrid)
 {
     assert(nLen <= sal_Int32(rKernArray.size()));
+
+    if (bUseMsoCompatibleGrid)
+    {
+        lcl_MsoCompatSnapToGridEdge(rKernArray, nLen, nGridWidth, nSpace, nKern, nBaseFontSize);
+        return;
+    }
 
     tools::Long nCharWidth = rKernArray[0];
     tools::Long nEdge = lcl_MinGridWidth(nGridWidth, nCharWidth + nKern) + nSpace;

@@ -58,8 +58,11 @@ SW_DLLPUBLIC tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view a
 /// @param nGridWidth width of a text grid
 /// @param nSpace amount of space distributed under justify text alignment mode.
 /// @param nKern letter spacing.
+/// @param nBaseFontSize document font size, used for MSO-compatible grid
+/// @param bUseMsoCompatibleGrid changes grid algorithm to match MSO
 SW_DLLPUBLIC void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidth,
-                                 tools::Long nSpace, tools::Long nKern);
+                                 tools::Long nSpace, tools::Long nKern, tools::Long nBaseFontSize,
+                                 bool bUseMsoCompatibleGrid);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge1)
     CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 960 };
     CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 1240 };
     aActual.InvokeWithKernArray(
-        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0, 0, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdge2)
     CharWidthArray aActual{ 640, 640, 640, 640, 640, 640, 320, 640 };
     CharWidthArray aExpected{ 840, 840, 840, 840, 840, 840, 440, 840 };
     aActual.InvokeWithKernArray(
-        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 100, 40, 80); });
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 100, 40, 80, 0, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
@@ -178,8 +178,46 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdgeIVS)
     CharWidthArray aActual{ 640, 0, 0, 640, 640, 640, 640, 640 };
     CharWidthArray aExpected{ 840, 0, 0, 840, 840, 840, 840, 840 };
     aActual.InvokeWithKernArray(
-        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0); });
+        [&] { sw::Justify::SnapToGridEdge(aActual.maArray, 8, 400, 40, 0, 0, false); });
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSnapToGridEdgeMso)
+{
+    // Base case: Font matches document font, no extra space
+    CharWidthArray aActualBase{ 200, 0, 0, 200, 200, 200, 200, 200 };
+    CharWidthArray aExpectedBase{ 200, 0, 0, 200, 200, 200, 200, 200 };
+    aActualBase.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActualBase.maArray, 8, 200, 0, 0, 200, true); });
+    CPPUNIT_ASSERT_EQUAL(aExpectedBase, aActualBase);
+
+    // Font smaller than document font, no extra space
+    CharWidthArray aActualSmallerBase{ 100, 0, 0, 100, 100, 100, 100, 100 };
+    CharWidthArray aExpectedSmallerBase{ 100, 0, 0, 100, 100, 100, 100, 100 };
+    aActualSmallerBase.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActualSmallerBase.maArray, 8, 200, 0, 0, 200, true); });
+    CPPUNIT_ASSERT_EQUAL(aExpectedSmallerBase, aActualSmallerBase);
+
+    // Font larger than document font, no extra space
+    CharWidthArray aActualBiggerBase{ 300, 0, 0, 300, 300, 300, 300, 300 };
+    CharWidthArray aExpectedBiggerBase{ 300, 0, 0, 300, 300, 300, 300, 300 };
+    aActualBiggerBase.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActualBiggerBase.maArray, 8, 200, 0, 0, 200, true); });
+    CPPUNIT_ASSERT_EQUAL(aExpectedBiggerBase, aActualBiggerBase);
+
+    // Compression: Document font larger than grid
+    CharWidthArray aActualComp{ 200, 0, 0, 200, 200, 200, 200, 200 };
+    CharWidthArray aExpectedComp{ 180, 0, 0, 180, 180, 180, 180, 180 };
+    aActualComp.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActualComp.maArray, 8, 80, 0, 0, 100, true); });
+    CPPUNIT_ASSERT_EQUAL(aExpectedComp, aActualComp);
+
+    // Expansion: Document font smaller than grid
+    CharWidthArray aActualExp{ 200, 0, 0, 200, 200, 200, 200, 200 };
+    CharWidthArray aExpectedExp{ 220, 0, 0, 220, 220, 220, 220, 220 };
+    aActualExp.InvokeWithKernArray(
+        [&] { sw::Justify::SnapToGridEdge(aActualExp.maArray, 8, 120, 0, 0, 100, true); });
+    CPPUNIT_ASSERT_EQUAL(aExpectedExp, aActualExp);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
