@@ -2620,8 +2620,7 @@ void SVGFilter::implCreateObjectsFromBackground( const Reference< css::drawing::
                 const OUString sBgId = getIdForTiledBackground( sPageId, nChecksum );
                 OString sComment = sTiledBackgroundTag + " " + sBgId.toUtf8();
                 MetaCommentAction* pCommentAction = new MetaCommentAction( sComment );
-                if( pCommentAction )
-                    aTiledMtf.AddAction( pCommentAction );
+                aTiledMtf.AddAction( pCommentAction );
             }
         }
         else if( bIsTiled && nType != MetaActionType::CLIPREGION )
