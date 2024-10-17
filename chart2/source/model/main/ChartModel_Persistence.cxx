@@ -404,19 +404,15 @@ void ChartModel::insertDefaultChart()
                 if( bIsRTL )
                     xLegend->setPropertyValue( u"AnchorPosition"_ustr, uno::Any( chart2::LegendPosition_LINE_START ));
                 if(xDiagram.is())
+                {
                     xDiagram->setLegend( xLegend );
 
-                // set simple 3D look
-                if( xDiagram.is() )
-                {
+                    // set simple 3D look
                     xDiagram->setPropertyValue( u"RightAngledAxes"_ustr, uno::Any( true ));
                     xDiagram->setPropertyValue( u"D3DScenePerspective"_ustr, uno::Any( drawing::ProjectionMode_PARALLEL ));
                     xDiagram->setScheme( ThreeDLookScheme::ThreeDLookScheme_Realistic );
-                }
 
-                //set some new 'defaults' for wall and floor
-                if( xDiagram.is() )
-                {
+                    //set some new 'defaults' for wall and floor
                     Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
                     if( xWall.is() )
                     {
