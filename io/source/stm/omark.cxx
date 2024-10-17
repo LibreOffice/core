@@ -134,6 +134,8 @@ OMarkableOutputStream::OMarkableOutputStream( )
 // XOutputStream
 void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
 {
+    std::unique_lock guard( m_mutex );
+
     if( !m_bValidStream ) {
         throw NotConnectedException();
     }
@@ -142,7 +144,6 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
         m_output->writeBytes( aData );
     }
     else {
-        std::unique_lock guard( m_mutex );
         // new data must be buffered
         m_aRingBuffer.writeAt( m_nCurrentPos , aData );
         m_nCurrentPos += aData.getLength();
