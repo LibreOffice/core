@@ -1188,6 +1188,7 @@ define gb_LinkTarget__use_cairo
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$(CAIRO_CFLAGS) \
+	-DSYSTEM_CAIRO \
 )
 $(call gb_LinkTarget_use_external,$(1),freetype_headers)
 $(call gb_LinkTarget_add_libs,$(1),$(CAIRO_LIBS))
