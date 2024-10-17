@@ -153,7 +153,7 @@ def unwrapInclude(include):
     return include[1:-1]
 
 
-def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces):
+def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespaces, finderrors):
     inAdd = False
     toAdd = []
     inRemove = False
@@ -167,6 +167,10 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
         # Bail out if IWYU gave an error due to non self-containedness
         if re.match ("(.*): error: (.*)", line):
             return -1
+
+        # Bail out if we are in finderrors mode
+        if finderrors:
+            return -2
 
         if len(line) == 0:
             if inRemove:
@@ -399,13 +403,16 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude, checknamespa
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces):
+def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces)
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces, finderrors)
+            if finderrors:
+                if p.returncode == 1:
+                    print("Running the IWYU process returned error code:\n",invocation)
             if retcode == -1 and not checknamespaces:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
@@ -431,7 +438,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop, noexclude,checknamespaces):
+def tidy(compileCommands, paths, dontstop, noexclude, checknamespaces, finderrors):
     return_code = 0
 
     try:
@@ -439,7 +446,7 @@ def tidy(compileCommands, paths, dontstop, noexclude,checknamespaces):
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude,checknamespaces))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude, checknamespaces, finderrors))
             t.daemon = True
             t.start()
 
@@ -511,6 +518,9 @@ def main(argv):
                     help='Warn about unused "using namespace" statements. '
                          'Removing these may uncover more removable headers '
                          'in a subsequent normal run')
+    parser.add_argument('--finderrors', action='store_true',
+                   help='Report IWYU failures when it returns with -1 error code. '
+                        'Use only for debugging this script!')
 
     args = parser.parse_args()
 
@@ -559,7 +569,7 @@ def main(argv):
             if not file.exists():
                 print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude, checknamespaces=args.ns, finderrors=args.finderrors)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
