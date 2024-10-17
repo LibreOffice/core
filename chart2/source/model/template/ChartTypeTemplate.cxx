@@ -514,11 +514,8 @@ void ChartTypeTemplate::createCoordinateSystems(
         if( bOk )
             return;
         // there are coordinate systems but they do not fit.  So overwrite them.
-    }
 
-    //copy as much info from former coordinate system as possible:
-    if( !aCoordinateSystems.empty() )
-    {
+        //copy as much info from former coordinate system as possible:
         rtl::Reference< BaseCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
         sal_Int32 nMaxDimensionCount = std::min( xCooSys->getDimension(), xOldCooSys->getDimension() );
 
