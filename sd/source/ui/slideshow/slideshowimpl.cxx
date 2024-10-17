@@ -1084,7 +1084,9 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
             {
                 // we are in notes page mode, so get
                 // the corresponding draw page
-                const sal_uInt16 nPgNum = ( pStartPage->GetPageNum() - 2 ) >> 1;
+                const sal_uInt16 nNotePgNum = pStartPage->GetPageNum();
+                assert(nNotePgNum >= 2);
+                const sal_uInt16 nPgNum = ( nNotePgNum - 2 ) >> 1;
                 pStartPage = mpDoc->GetSdPage( nPgNum, PageKind::Standard );
             }
         }

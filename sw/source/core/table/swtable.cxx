@@ -1210,7 +1210,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
         ColChange aChg( 0, 0 );
         aOldNew.push_front( aChg );
         std::vector<sal_uInt16> aRowSpanPos;
-        if( nCurr )
+        if (nCurr > 0)
         {
             ChangeList aCopy;
             sal_uInt16 nPos = 0;

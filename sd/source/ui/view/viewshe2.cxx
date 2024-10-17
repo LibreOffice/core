@@ -255,7 +255,7 @@ void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
     if (CanPanAcrossPages())
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        auto nCurPage = (pPage->GetPageNum() - 1) >> 1;
         sal_uInt16 nTotalPages = GetDoc()->GetSdPageCount(pPage->GetPageKind());
 
         double fVisibleHeight = mpContentWindow->GetVisibleHeight();
@@ -279,7 +279,7 @@ void ViewShell::VirtVScrollHdl(ScrollAdaptor* pVScroll)
     else if (IsPageFlipMode())
     {
         SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
-        sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) >> 1;
+        auto nCurPage = (pPage->GetPageNum() - 1) >> 1;
         sal_uInt16 nNewPage = static_cast<sal_uInt16>(pVScroll->GetThumbPos())/256;
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
