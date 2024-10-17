@@ -170,12 +170,9 @@ ContextHandlerRef ExtConditionalFormattingContext::onCreateContext(sal_Int32 nEl
             if (aExt == getExtLst().end())
             {
                 pInfo = new ScDataBarFormatData();
-                if (pInfo)
-                {
-                    auto pFormat = std::make_unique<ScDataBarFormat>(&getScDocument());
-                    pFormat->SetDataBarData(pInfo);
-                    getCondFormats().importExtFormatEntries().push_back(std::move(pFormat));
-                }
+                auto pFormat = std::make_unique<ScDataBarFormat>(&getScDocument());
+                pFormat->SetDataBarData(pInfo);
+                getCondFormats().importExtFormatEntries().push_back(std::move(pFormat));
             }
             else
             {
