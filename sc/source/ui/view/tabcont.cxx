@@ -55,24 +55,24 @@ ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
     SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nCount; i++)
     {
-        if (rDoc.IsVisible(i))
+        if (!rDoc.IsVisible(i))
+            continue;
+
+        if (!rDoc.GetName(i,aString))
+            continue;
+
+        if ( rDoc.IsScenario(i) )
+            InsertPage( static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
+        else
+            InsertPage( static_cast<sal_uInt16>(i)+1, aString );
+
+        if ( rDoc.IsTabProtected(i) )
+            SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
+
+        if ( !rDoc.IsDefaultTabBgColor(i) )
         {
-            if (rDoc.GetName(i,aString))
-            {
-                if ( rDoc.IsScenario(i) )
-                    InsertPage( static_cast<sal_uInt16>(i)+1, aString, TabBarPageBits::Blue);
-                else
-                    InsertPage( static_cast<sal_uInt16>(i)+1, aString );
-
-                if ( rDoc.IsTabProtected(i) )
-                    SetProtectionSymbol(static_cast<sal_uInt16>(i)+1, true);
-
-                if ( !rDoc.IsDefaultTabBgColor(i) )
-                {
-                    aTabBgColor = rDoc.GetTabBgColor(i);
-                    SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
-                }
-            }
+            aTabBgColor = rDoc.GetTabBgColor(i);
+            SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
         }
     }
 
