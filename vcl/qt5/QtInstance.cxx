@@ -53,6 +53,7 @@
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
 #include <comphelper/flagguard.hxx>
+#include <config_vclplug.h>
 #include <dndhelper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/sysdata.hxx>
@@ -70,6 +71,9 @@
 #ifdef EMSCRIPTEN
 #include <QtCore/QtPlugin>
 Q_IMPORT_PLUGIN(QWasmIntegrationPlugin)
+#if defined DISABLE_DYNLOADING && ENABLE_QT6
+#include <QtCore/QtResource>
+#endif
 #endif
 
 namespace
@@ -868,9 +872,23 @@ weld::MessageDialog* QtInstance::CreateMessageDialog(weld::Widget* pParent,
     }
 }
 
+static void initResources()
+{
+#if defined EMSCRIPTEN && defined DISABLE_DYNLOADING && ENABLE_QT6
+    // Make sure the resources from Qt6's plugins/platforms/libqwasm.a are not stripped out of a
+    // statically linked binary (and this code cannot be directly in extern "C" create_SalInstance,
+    // as the expansion of Q_INIT_RESOURCE contains extern function declarations that would then
+    // erroneously be C function declarations):
+    Q_INIT_RESOURCE(wasmfonts);
+    Q_INIT_RESOURCE(wasmwindow);
+#endif
+}
+
 extern "C" {
 VCLPLUG_QT_PUBLIC SalInstance* create_SalInstance()
 {
+    initResources();
+
     std::unique_ptr<char* []> pFakeArgv;
     std::unique_ptr<int> pFakeArgc;
     std::vector<FreeableCStr> aFakeArgvFreeable;
