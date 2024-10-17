@@ -153,9 +153,7 @@ public:
     // It is always possible to delete the VOCs, these are re-created on demand
     void flushViewObjectContacts(bool bWithHierarchy = true);
 
-    // helper around getPrimitive2DSequenceHierarchy to enable a given implementation
-    // to optimize getting a Primitive2DSequenceHierarchy for a child of index a
-    virtual void getPrimitive2DSequenceHierarchyOfIndex(
+    void getPrimitive2DSequenceHierarchyOfIndex(
         sal_uInt32 a, DisplayInfo& rDisplayInfo, ObjectContact& rObjectContact,
         drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor);
 };
