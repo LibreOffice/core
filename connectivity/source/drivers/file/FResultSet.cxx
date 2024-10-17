@@ -993,8 +993,6 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                 --m_nRowPos;
                 break;
             case IResultSetHelper::FIRST:
-                m_nRowPos = 0;
-                break;
             case IResultSetHelper::LAST:
                 m_nRowPos = 0;
                 break;
