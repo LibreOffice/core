@@ -242,7 +242,7 @@ uno::Sequence<SingleProofreadingError> parseJson(std::string&& json, std::string
     return {};
 }
 
-OUString DudenTypeToComment(const std::string& type, const Locale& rLocale)
+OUString DudenTypeToComment(const std::string& type, const std::locale& loc)
 {
     // TODO: consider also "errorcode", some values of which are explained
     // at https://main.dks.epc.de/doc/Relnotes.html
@@ -251,7 +251,6 @@ OUString DudenTypeToComment(const std::string& type, const Locale& rLocale)
         id = STR_DESCRIPTION_GRAMMAR_ERROR;
     else if (type == "style")
         id = STR_DESCRIPTION_STYLE_ERROR;
-    std::locale loc(Translate::Create("svt", LanguageTag(rLocale)));
     return Translate::get(id, loc);
 }
 
@@ -259,8 +258,8 @@ void parseDudenResponse(ProofreadingResult& rResult, std::string&& aJSONBody)
 {
     rResult.aErrors = parseJson(
         std::move(aJSONBody), "check-positions",
-        [& locale = rResult.aLocale](const boost::property_tree::ptree& rPos,
-                                     SingleProofreadingError& rError) {
+        [locale = Translate::Create("svt", LanguageTag(rResult.aLocale))](
+            const boost::property_tree::ptree& rPos, SingleProofreadingError& rError) {
             rError.nErrorStart = rPos.get<int>("offset", 0);
             rError.nErrorLength = rPos.get<int>("length", 0);
             rError.nErrorType = text::TextMarkupType::PROOFREADING;
