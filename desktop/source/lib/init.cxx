@@ -5383,6 +5383,9 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (!isCommandAllowed(aCommand))
         return;
 
+    if (gImpl && aCommand == ".uno:None")
+        return;
+
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     std::vector<beans::PropertyValue> aPropertyValuesVector(jsonToPropertyValuesVector(pArguments));
