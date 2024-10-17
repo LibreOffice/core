@@ -60,20 +60,28 @@ namespace salhelper {
  */
 class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {
+    static const size_t nStaticFlag = 0x80000000;
+
 public:
     SimpleReferenceObject(): m_nCount(0) {}
 
     /** @attention
-        The results are undefined if, for any individual instance of
-        SimpleReferenceObject, the total number of calls to acquire() exceeds
-        the total number of calls to release() by a platform dependent amount
-        (which, hopefully, is quite large).
+        If, for any individual instance of SimpleReferenceObject, the total
+        number of calls to acquire() exceeds the total number of calls to
+        release() by 2^31 - the object will never subsequently be released.
      */
     void acquire()
-    { osl_atomic_increment(&m_nCount); }
+    {
+        if (!(m_nCount & nStaticFlag))
+            osl_atomic_increment(&m_nCount);
+    }
 
     void release()
-    { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
+    {
+        if (!(m_nCount & nStaticFlag) &&
+            osl_atomic_decrement(&m_nCount) == 0)
+            delete this;
+    }
 
     /** see general class documentation
      */
@@ -94,6 +102,15 @@ public:
 
 protected:
     virtual ~SimpleReferenceObject() COVERITY_NOEXCEPT_FALSE;
+
+    /** mark reference count as not to be touched, and the
+     * related object as having an indefinite lifespan.
+     * NB. do not use if you have a non-empty destructor.
+     */
+    void staticize()
+    {
+        m_nCount |= nStaticFlag;
+    }
 
     oslInterlockedCount m_nCount;
 
