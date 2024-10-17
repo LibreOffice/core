@@ -399,13 +399,9 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
         {
             if (rEntry.lateInit)
             {
-                // late init
-                if (rEntry.lateInit)
-                {
-                    rEntry.value.clear(); // release factory
-                    rEntry.lateInit = false;
-                    continue;
-                }
+                rEntry.value.clear(); // release factory
+                rEntry.lateInit = false;
+                continue;
             }
 
             Reference< lang::XComponent > xComp;
