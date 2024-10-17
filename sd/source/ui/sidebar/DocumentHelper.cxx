@@ -167,8 +167,7 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage const * pMasterPage)
         // In most cases a new slide has just been inserted so start with
         // the last page.
         sal_uInt16 nPageIndex (pDocument->GetSdPageCount(PageKind::Standard)-1);
-        bool bFound (false);
-        while ( ! bFound)
+        while (true)
         {
             pCandidate = pDocument->GetSdPage(
                 nPageIndex,
@@ -178,21 +177,20 @@ SdPage* DocumentHelper::GetSlideForMasterPage (SdPage const * pMasterPage)
                 if (static_cast<SdPage*>(&pCandidate->TRG_GetMasterPage())
                     == pMasterPage)
                 {
-                    bFound = true;
                     break;
                 }
             }
 
             if (nPageIndex == 0)
+            {
+                // If no page was found, that referenced the given master page, reset
+                // the pointer that is returned.
+                pCandidate = nullptr;
                 break;
+            }
             else
                 nPageIndex --;
         }
-
-        // If no page was found, that referenced the given master page, reset
-        // the pointer that is returned.
-        if ( ! bFound)
-            pCandidate = nullptr;
     }
 
     return pCandidate;
