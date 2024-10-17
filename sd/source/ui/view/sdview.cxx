@@ -809,14 +809,11 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
             eKind = SdrEndTextEditKind::Unchanged;
         }
     }
-    else if( xObj && xObj->IsEmptyPresObj() )
+    else if( xObj && xObj->IsEmptyPresObj() && xObj->HasText() )
     {
-        if( xObj && xObj->HasText() )
-        {
-            SdrPage* pPage = xObj->getSdrPageFromSdrObject();
-            if( !pPage || !pPage->IsMasterPage() )
-                xObj->SetEmptyPresObj( false );
-        }
+        SdrPage* pPage = xObj->getSdrPageFromSdrObject();
+        if( !pPage || !pPage->IsMasterPage() )
+            xObj->SetEmptyPresObj( false );
     }
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
