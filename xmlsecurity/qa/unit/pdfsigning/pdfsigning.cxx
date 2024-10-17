@@ -102,11 +102,8 @@ std::vector<SignatureInformation> PDFSigningTest::verify(const OUString& rURL, s
     {
         CPPUNIT_ASSERT_EQUAL(nCount, aHelper.GetSignatureInformations().size());
     }
-    for (size_t i = 0; i < aHelper.GetSignatureInformations().size(); ++i)
-    {
-        const SignatureInformation& rInfo = aHelper.GetSignatureInformations()[i];
-        aRet.push_back(rInfo);
-    }
+    aRet.insert(aRet.end(), aHelper.GetSignatureInformations().begin(),
+                aHelper.GetSignatureInformations().end());
 
     return aRet;
 }
