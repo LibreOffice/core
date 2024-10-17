@@ -1205,8 +1205,7 @@ sal_Int64 SAL_CALL
                 aMarkData.FillRangeListWithMarks(mpMarkedRanges.get(), false);
             }
             // is possible, because there shouldn't be overlapped ranges in it
-            if (mpMarkedRanges)
-                nResult = mpMarkedRanges->GetCellCount();
+            nResult = mpMarkedRanges->GetCellCount();
         }
     }
     return nResult;
@@ -1234,20 +1233,17 @@ uno::Reference<XAccessible > SAL_CALL
             mpMarkedRanges.reset(new ScRangeList());
             mpViewShell->GetViewData().GetMarkData().FillRangeListWithMarks(mpMarkedRanges.get(), false);
         }
-        if (mpMarkedRanges)
+        if ((nSelectedChildIndex < 0) ||
+                (mpMarkedRanges->GetCellCount() <= o3tl::make_unsigned(nSelectedChildIndex)))
         {
-            if ((nSelectedChildIndex < 0) ||
-                    (mpMarkedRanges->GetCellCount() <= o3tl::make_unsigned(nSelectedChildIndex)))
-            {
-                throw lang::IndexOutOfBoundsException();
-            }
-            ScMyAddress addr = CalcScAddressFromRangeList(mpMarkedRanges.get(),nSelectedChildIndex);
-            auto it = m_mapSelectionSend.find(addr);
-            if( it != m_mapSelectionSend.end() )
-                xAccessible = it->second;
-            else
-                xAccessible = getAccessibleCellAt(addr.Row(), addr.Col());
+            throw lang::IndexOutOfBoundsException();
         }
+        ScMyAddress addr = CalcScAddressFromRangeList(mpMarkedRanges.get(),nSelectedChildIndex);
+        auto it = m_mapSelectionSend.find(addr);
+        if( it != m_mapSelectionSend.end() )
+            xAccessible = it->second;
+        else
+            xAccessible = getAccessibleCellAt(addr.Row(), addr.Col());
     }
     return xAccessible;
 }
