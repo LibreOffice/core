@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <set>
 #include <vector>
 #include <memory>
 #include <vcl/customweld.hxx>
@@ -167,9 +168,10 @@ private:
 
     ImplSVEvent* m_nAsyncGetFocusId;
 
-    OUString        aPosStr;
-    void*           nTipVisible;
-    bool            bFormulaMode;
+    OUString aPosStr;
+    void* nTipVisible;
+    bool bFormulaMode;
+    std::set<OUString> aRangeNames;
 
 public:
                     ScPosWnd( vcl::Window* pParent );
