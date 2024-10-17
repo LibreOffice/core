@@ -515,47 +515,49 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     OSL_ASSERT(GetViewShell() != nullptr);
     bReturn = GetViewShell()->KeyInput(rKEvt);
 
-    const SdrMarkList& rMarkList = GetView()->GetMarkedObjectList();
-    const size_t OriCount = rMarkList.GetMarkCount();
-    if(!bReturn)
+    if (sd::View* pView = GetView())
     {
-        if(useInputForSlideShow()) //IASS
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+        const size_t OriCount = rMarkList.GetMarkCount();
+        if(!bReturn)
         {
-            // use for SlideShow
-            rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
-            bReturn = xSlideShow->keyInput(rKEvt);
-        }
-        else
-        {
-            bool bConsumed = false;
-            if( GetView() )
-                bConsumed = GetView()->getSmartTags().KeyInput(rKEvt);
-
-            if( !bConsumed )
+            if(useInputForSlideShow()) //IASS
             {
-                rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
-                if( !xSelectionController.is() || !xSelectionController->onKeyInput( rKEvt, pWin ) )
+                // use for SlideShow
+                rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
+                bReturn = xSlideShow->keyInput(rKEvt);
+            }
+            else
+            {
+                bool bConsumed = false;
+                bConsumed = pView->getSmartTags().KeyInput(rKEvt);
+
+                if( !bConsumed )
                 {
-                    if(HasCurrentFunction())
-                        bReturn = GetCurrentFunction()->KeyInput(rKEvt);
-                }
-                else
-                {
-                    bReturn = true;
-                    if (HasCurrentFunction())
+                    rtl::Reference< sdr::SelectionController > xSelectionController( pView->getSelectionController() );
+                    if( !xSelectionController.is() || !xSelectionController->onKeyInput( rKEvt, pWin ) )
                     {
-                        FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
-                        if(pTextFunction != nullptr)
-                            pTextFunction->InvalidateBindings();
+                        if(HasCurrentFunction())
+                            bReturn = GetCurrentFunction()->KeyInput(rKEvt);
+                    }
+                    else
+                    {
+                        bReturn = true;
+                        if (HasCurrentFunction())
+                        {
+                            FuText* pTextFunction = dynamic_cast<FuText*>(GetCurrentFunction().get());
+                            if(pTextFunction != nullptr)
+                                pTextFunction->InvalidateBindings();
+                        }
                     }
                 }
             }
         }
+        const size_t EndCount = rMarkList.GetMarkCount();
+        // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
+        if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
+            SwitchActiveViewFireFocus();
     }
-    const size_t EndCount = rMarkList.GetMarkCount();
-    // Here, oriCount or endCount must have one value=0, another value > 0, then to switch focus between Document and shape objects
-    if(bReturn &&  (OriCount + EndCount > 0) && (OriCount * EndCount == 0))
-        SwitchActiveViewFireFocus();
 
     if(!bReturn && GetActiveWindow())
     {
