@@ -151,11 +151,10 @@ void VCLXAccessibleListItem::disposing(std::unique_lock<std::mutex>& rGuard)
     m_nClientId =  0;
     Reference< XInterface > xEventSource;
     if ( nId )
+    {
         xEventSource = *this;
 
-    // Send a disposing to all listeners.
-    if ( nId )
-    {
+        // Send a disposing to all listeners.
         rGuard.unlock();
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( nId, *this );
         rGuard.lock();
