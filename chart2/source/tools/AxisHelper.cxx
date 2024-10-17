@@ -422,9 +422,8 @@ void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
     if(!xAxis.is())
     {
         //hhhh todo create axis without axis visibility
-    }
-    if(!xAxis.is())
         return;
+    }
 
     if( bMainGrid )
         AxisHelper::makeGridVisible( xAxis->getGridProperties2() );
