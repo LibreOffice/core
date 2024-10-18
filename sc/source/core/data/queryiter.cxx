@@ -316,7 +316,6 @@ void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
             {
                 // BinarySearch() returns false in case it's all empty data,
                 // handle that specially.
-                beforeColRow = -1;
                 lastColRow = maParam.nRow2;
             }
             if (maParam.bByRow)
