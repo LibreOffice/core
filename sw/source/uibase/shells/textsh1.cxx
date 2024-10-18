@@ -150,10 +150,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 //#include <../../../../chart2/source/controller/inc/ChartController.hxx>
 //#include <DataSeries.hxx>
 
