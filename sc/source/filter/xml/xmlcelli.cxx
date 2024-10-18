@@ -1091,7 +1091,6 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
         if (maStringValue)
         {
             rDoc.setStringCell(rCurrentPos, *maStringValue);
-            bDoIncrement = true;
         }
         else if (mbEditEngineHasText)
         {
@@ -1114,12 +1113,10 @@ void ScXMLTableRowCellContext::PutTextCell( const ScAddress& rCurrentPos,
                 // is a prerequisite for using this constructor of ScEditCell.
                 rDoc.setEditCell(rCurrentPos, mpEditEngine->CreateTextObject());
             }
-            bDoIncrement = true;
         }
         else if ( nCurrentCol > 0 && pOUText && !pOUText->isEmpty() )
         {
             rDoc.setStringCell(rCurrentPos, *pOUText);
-            bDoIncrement = true;
         }
         else
             bDoIncrement = false;
