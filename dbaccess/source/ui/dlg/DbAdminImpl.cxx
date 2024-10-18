@@ -524,7 +524,6 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case ::dbaccess::DST_POSTGRES:
             {
-                sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue());
                 OUString rURL(comphelper::string::stripEnd(pUrlItem->GetValue(), '*'));
                 const SfxStringItem* pHostName = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_CONN_HOSTNAME);
                 const SfxInt32Item* pPortNumber = m_pItemSetHelper->getOutputSet()->GetItem<SfxInt32Item>(DSID_POSTGRES_PORTNUMBER);
@@ -551,8 +550,7 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
                     dbname = "'" + dbname + "'";
                     rURL += " dbname=" + dbname;
                 }
-                sNewUrl = rURL;
-                return sNewUrl;
+                return rURL;
             }
             break;
         case  ::dbaccess::DST_JDBC:
