@@ -483,8 +483,6 @@ void Connection::setupTransaction()
             aTransactionIsolation = isc_tpb_read_committed;
             break;
         case TransactionIsolation::REPEATABLE_READ:
-            aTransactionIsolation = isc_tpb_consistency;
-            break;
         case TransactionIsolation::SERIALIZABLE:
             aTransactionIsolation = isc_tpb_consistency;
             break;
