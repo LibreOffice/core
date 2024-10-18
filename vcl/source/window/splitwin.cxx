@@ -1238,15 +1238,11 @@ Size SplitWindow::CalcLayoutSizePixel( const Size& aNewSize )
             switch ( meAlign )
             {
             case WindowAlign::Top:
-                aSize.AdjustHeight(nDelta );
-                break;
             case WindowAlign::Bottom:
                 aSize.AdjustHeight(nDelta );
                 break;
-            case WindowAlign::Left:
-                aSize.AdjustWidth(nDelta );
-                break;
             case WindowAlign::Right:
+            case WindowAlign::Left:
             default:
                 aSize.AdjustWidth(nDelta );
                 break;
