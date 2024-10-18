@@ -474,7 +474,7 @@ public:
     ToolBoxMenuType     GetMenuType() const;
     SAL_DLLPRIVATE bool IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
-    SAL_DLLPRIVATE void UpdateCustomMenu();
+    SAL_DLLPRIVATE void UpdateCustomMenu(PopupMenu* pMenu);
     void                SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink );
 
     // open custommenu
