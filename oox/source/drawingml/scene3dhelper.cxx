@@ -388,7 +388,7 @@ bool Scene3DHelper::setExtrusionProperties(const oox::drawingml::Shape3DProperti
     // all cases.
     rRotZ = basegfx::deg2rad<60000>(-rnMSOShapeRotation);
 
-    if (!p3DProperties || (p3DProperties && !(*p3DProperties).mnPreset.has_value()))
+    if (!p3DProperties || !(*p3DProperties).mnPreset.has_value())
         return false;
 
     const sal_Int32 nCameraPrstID((*p3DProperties).mnPreset.value());
@@ -878,7 +878,7 @@ void lcl_tweakLightRig(std::vector<basegfx::B3DVector>& rLightDirVec, PrstLightR
 void Scene3DHelper::setLightingProperties(const oox::drawingml::Shape3DPropertiesPtr p3DProperties,
                                           const double& rfRotZ, oox::PropertyMap& rPropertyMap)
 {
-    if (!p3DProperties || (p3DProperties && !(*p3DProperties).mnLightRigType.has_value()))
+    if (!p3DProperties || !(*p3DProperties).mnLightRigType.has_value())
         return;
 
     // get index of light rig in aPrstLightRigValuesArray
