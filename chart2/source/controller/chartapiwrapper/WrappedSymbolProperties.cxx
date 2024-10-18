@@ -118,13 +118,11 @@ sal_Int32 lcl_getSymbolType( const css::chart2::Symbol& rSymbol )
         case chart2::SymbolStyle_NONE:
             break;
         case chart2::SymbolStyle_AUTO:
+        case chart2::SymbolStyle_POLYGON://new feature
             nSymbol = css::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_STANDARD:
             nSymbol = rSymbol.StandardSymbol%15;
-            break;
-        case chart2::SymbolStyle_POLYGON://new feature
-            nSymbol = css::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_GRAPHIC:
             nSymbol = css::chart::ChartSymbolType::BITMAPURL;
