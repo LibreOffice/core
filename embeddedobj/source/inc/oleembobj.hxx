@@ -253,7 +253,8 @@ protected:
                             osl::ResettableMutexGuard& rGuard);
 #ifdef _WIN32
     /// @throws css::uno::Exception
-    void StoreObjectToStream( css::uno::Reference< css::io::XOutputStream > const & xOutStream );
+    void StoreObjectToStream(css::uno::Reference<css::io::XOutputStream> const& xOutStream,
+                             osl::ResettableMutexGuard& rGuard);
 #endif
     /// @throws css::uno::Exception
     void InsertVisualCache_Impl(

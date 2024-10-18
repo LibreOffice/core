@@ -1626,7 +1626,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
         if ( !m_pUnoOleObject )
             throw uno::RuntimeException();
 
-        m_pUnoOleObject->StoreObjectToStream( xTempOutStream );
+        m_pUnoOleObject->StoreObjectToStream(xTempOutStream, aGuard);
 
         xTempOutStream->closeOutput();
         xTempOutStream.clear();
