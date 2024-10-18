@@ -611,69 +611,69 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
     ParseDriverVersion(sDriverVersion, driverVersion, versionType);
 
     bool match = false;
-    for (std::vector<DriverInfo>::size_type i = 0; i < aDeviceInfos.size(); i++)
+    for (const auto& rDeviceInfo : aDeviceInfos)
     {
         bool osMatch = false;
-        if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_ALL)
+        if (rDeviceInfo.meOperatingSystem == DRIVER_OS_ALL)
             osMatch = true;
-        else if (aDeviceInfos[i].meOperatingSystem == system)
+        else if (rDeviceInfo.meOperatingSystem == system)
             osMatch = true;
-        else if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_WINDOWS_ALL
+        else if (rDeviceInfo.meOperatingSystem == DRIVER_OS_WINDOWS_ALL
                  && system >= DRIVER_OS_WINDOWS_FIRST && system <= DRIVER_OS_WINDOWS_LAST)
             osMatch = true;
-        else if (aDeviceInfos[i].meOperatingSystem == DRIVER_OS_OSX_ALL
-                 && system >= DRIVER_OS_OSX_FIRST && system <= DRIVER_OS_OSX_LAST)
+        else if (rDeviceInfo.meOperatingSystem == DRIVER_OS_OSX_ALL && system >= DRIVER_OS_OSX_FIRST
+                 && system <= DRIVER_OS_OSX_LAST)
             osMatch = true;
         if (!osMatch)
         {
             continue;
         }
 
-        if (!aDeviceInfos[i].maAdapterVendor.equalsIgnoreAsciiCase(GetVendorId(VendorAll))
-            && !aDeviceInfos[i].maAdapterVendor.equalsIgnoreAsciiCase(sAdapterVendorID))
+        if (!rDeviceInfo.maAdapterVendor.equalsIgnoreAsciiCase(GetVendorId(VendorAll))
+            && !rDeviceInfo.maAdapterVendor.equalsIgnoreAsciiCase(sAdapterVendorID))
         {
             continue;
         }
 
-        if (std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(),
+        if (std::none_of(rDeviceInfo.maDevices.begin(), rDeviceInfo.maDevices.end(),
                          compareIgnoreAsciiCase(u"all"_ustr))
-            && std::none_of(aDeviceInfos[i].maDevices.begin(), aDeviceInfos[i].maDevices.end(),
+            && std::none_of(rDeviceInfo.maDevices.begin(), rDeviceInfo.maDevices.end(),
                             compareIgnoreAsciiCase(sAdapterDeviceID)))
         {
             continue;
         }
 
-        switch (aDeviceInfos[i].meComparisonOp)
+        switch (rDeviceInfo.meComparisonOp)
         {
             case DRIVER_LESS_THAN:
-                match = driverVersion < aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion < rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_LESS_THAN_OR_EQUAL:
-                match = driverVersion <= aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion <= rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_GREATER_THAN:
-                match = driverVersion > aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion > rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_GREATER_THAN_OR_EQUAL:
-                match = driverVersion >= aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion >= rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_EQUAL:
-                match = driverVersion == aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion == rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_NOT_EQUAL:
-                match = driverVersion != aDeviceInfos[i].mnDriverVersion;
+                match = driverVersion != rDeviceInfo.mnDriverVersion;
                 break;
             case DRIVER_BETWEEN_EXCLUSIVE:
-                match = driverVersion > aDeviceInfos[i].mnDriverVersion
-                        && driverVersion < aDeviceInfos[i].mnDriverVersionMax;
+                match = driverVersion > rDeviceInfo.mnDriverVersion
+                        && driverVersion < rDeviceInfo.mnDriverVersionMax;
                 break;
             case DRIVER_BETWEEN_INCLUSIVE:
-                match = driverVersion >= aDeviceInfos[i].mnDriverVersion
-                        && driverVersion <= aDeviceInfos[i].mnDriverVersionMax;
+                match = driverVersion >= rDeviceInfo.mnDriverVersion
+                        && driverVersion <= rDeviceInfo.mnDriverVersionMax;
                 break;
             case DRIVER_BETWEEN_INCLUSIVE_START:
-                match = driverVersion >= aDeviceInfos[i].mnDriverVersion
-                        && driverVersion < aDeviceInfos[i].mnDriverVersionMax;
+                match = driverVersion >= rDeviceInfo.mnDriverVersion
+                        && driverVersion < rDeviceInfo.mnDriverVersionMax;
                 break;
             case DRIVER_COMPARISON_IGNORED:
                 // We don't have a comparison op, so we match everything.
@@ -684,19 +684,19 @@ bool FindBlocklistedDeviceInList(std::vector<DriverInfo>& aDeviceInfos, VersionT
                 break;
         }
 
-        if (match || aDeviceInfos[i].mnDriverVersion == allDriverVersions)
+        if (match || rDeviceInfo.mnDriverVersion == allDriverVersions)
         {
             // white listed drivers
-            if (aDeviceInfos[i].mbAllowlisted)
+            if (rDeviceInfo.mbAllowlisted)
             {
                 SAL_INFO("vcl.driver", "allowlisted driver");
                 return false;
             }
 
             match = true;
-            if (!aDeviceInfos[i].maSuggestedVersion.isEmpty())
+            if (!rDeviceInfo.maSuggestedVersion.isEmpty())
             {
-                SAL_WARN("vcl.driver", "use : " << aDeviceInfos[i].maSuggestedVersion);
+                SAL_WARN("vcl.driver", "use : " << rDeviceInfo.maSuggestedVersion);
             }
             break;
         }
