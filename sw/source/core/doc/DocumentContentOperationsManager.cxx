@@ -1320,10 +1320,7 @@ namespace //local functions originally from docfmt.cxx
             xExtra.reset(new SwRedlineExtraData_FormatColl(u""_ustr, USHRT_MAX, &aSet));
         }
 
-        if (xExtra)
-        {
-            pRedline->SetExtraData(xExtra.get() );
-        }
+        pRedline->SetExtraData(xExtra.get() );
     }
 
     // create format redline(s) for the given range:
