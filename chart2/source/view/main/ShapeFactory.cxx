@@ -1170,8 +1170,6 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
             nPointCount = 5;
             break;
         case Symbol_X:
-            nPointCount = 13;
-            break;
         case Symbol_Plus:
             nPointCount = 13;
             break;
