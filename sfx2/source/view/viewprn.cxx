@@ -365,11 +365,14 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
         case view::PrintableState_JOB_SPOOLED :
         case view::PrintableState_JOB_COMPLETED :
         {
-            SfxBindings& rBind = mpViewShell->GetViewFrame().GetBindings();
-            rBind.Invalidate( SID_PRINTDOC );
-            rBind.Invalidate( SID_PRINTDOCDIRECT );
-            rBind.Invalidate( SID_SETUPPRINTER );
-            bCopyJobSetup = ! m_bTempPrinter;
+            if (mpViewShell)
+            {
+                SfxBindings& rBind = mpViewShell->GetViewFrame().GetBindings();
+                rBind.Invalidate( SID_PRINTDOC );
+                rBind.Invalidate( SID_PRINTDOCDIRECT );
+                rBind.Invalidate( SID_SETUPPRINTER );
+                bCopyJobSetup = ! m_bTempPrinter;
+            }
             break;
         }
 
