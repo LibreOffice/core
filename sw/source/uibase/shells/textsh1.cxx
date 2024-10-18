@@ -2955,7 +2955,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             }
                             else
                             {
-                                lcl_LogWarning("FillApi chart filtter type not recognised: '"
+                                lcl_LogWarning("FillApi chart filter type not recognised: '"
                                                + aItem2.first + "'");
                             }
                         }
@@ -3174,7 +3174,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             else
                             {
                                 lcl_LogWarning(
-                                    "FillApi contentControl filtter type not recognised: '"
+                                    "FillApi contentControl filter type not recognised: '"
                                     + aItem2.first + "'");
                             }
                         }
