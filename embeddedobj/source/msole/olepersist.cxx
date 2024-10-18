@@ -1022,11 +1022,12 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 }
 
 
-void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > const & xOutStream )
+void OleEmbeddedObject::StoreObjectToStream(uno::Reference<io::XOutputStream> const& xOutStream,
+                                            osl::ResettableMutexGuard& rGuard)
 {
     // this method should be used only on windows
     if ( m_pOleComponent )
-        m_pOleComponent->StoreOwnTmpIfNecessary();
+        ExecUnlocked([this] { m_pOleComponent->StoreOwnTmpIfNecessary(); }, rGuard);
 
     // now all the changes should be in temporary location
     if ( m_aTempURL.isEmpty() )
@@ -1165,7 +1166,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
         if ( !xOutStream.is() )
             throw io::IOException(); //TODO: access denied
 
-        StoreObjectToStream( xOutStream );
+        StoreObjectToStream(xOutStream, rGuard);
         bVisReplIsStored = true;
 
         if ( bSaveAs )
@@ -1736,7 +1737,7 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
             throw io::IOException(); //TODO: access denied
 
         // TODO: does this work for links too?
-        StoreObjectToStream( GetStreamForSaving() );
+        StoreObjectToStream(GetStreamForSaving(), aGuard);
 
         // the replacement is changed probably, and it must be in the object stream
         if ( !m_pOleComponent->IsWorkaroundActive() )
