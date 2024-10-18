@@ -724,9 +724,6 @@ namespace
             break;
 
         case RedlineType::FmtColl:
-            rArr.DeleteAndDestroy( rPos-- );
-            break;
-
         case RedlineType::ParagraphFormat:
             rArr.DeleteAndDestroy( rPos-- );
             break;
