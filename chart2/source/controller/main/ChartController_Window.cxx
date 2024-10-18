@@ -175,6 +175,7 @@ OUString lcl_getFormatCommandForObjectCID( std::u16string_view rCID )
             aDispatchCommand = ".uno:FormatTitle";
             break;
         case OBJECTTYPE_LEGEND_ENTRY:
+        case OBJECTTYPE_DATA_SERIES:
             aDispatchCommand = ".uno:FormatDataSeries";
             break;
         case OBJECTTYPE_AXIS:
@@ -189,9 +190,6 @@ OUString lcl_getFormatCommandForObjectCID( std::u16string_view rCID )
             break;
         case OBJECTTYPE_DATA_LABELS:
             aDispatchCommand = ".uno:FormatDataLabels";
-            break;
-        case OBJECTTYPE_DATA_SERIES:
-            aDispatchCommand = ".uno:FormatDataSeries";
             break;
         case OBJECTTYPE_DATA_LABEL:
             aDispatchCommand = ".uno:FormatDataLabel";
