@@ -2611,9 +2611,6 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
                 bMovedSuccessful = true;
                 pImplLib->implSetModified( true );
-                // Remove old library from container
-                maNameContainer->removeByName( Name );
-                maModifiable.setModified( true );
             }
         }
         catch(const Exception& )
@@ -2627,7 +2624,10 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
     }
     if( bMovedSuccessful )
     {
-           maNameContainer->insertByName( NewName, aLibAny ) ;
+        // Remove the old library from the container and insert it back with the new name
+        maNameContainer->removeByName(Name);
+        maNameContainer->insertByName(NewName, aLibAny);
+        maModifiable.setModified(true);
     }
 }
 
