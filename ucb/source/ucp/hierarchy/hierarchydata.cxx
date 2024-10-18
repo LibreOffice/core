@@ -536,8 +536,6 @@ bool HierarchyEntry::move(
         }
         else
         {
-            bDifferentParents = true;
-
             uno::Sequence<uno::Any> aArguments2(comphelper::InitAnyPropertySequence(
             {
                 {CFGPROPERTY_NODEPATH, uno::Any(aNewParentPath)}
