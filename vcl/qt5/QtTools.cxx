@@ -170,19 +170,6 @@ QString vclMessageTypeToQtTitle(VclMessageType eType)
     return title;
 }
 
-int qtResponseTypeToVclResponseType(int ret)
-{
-    if (ret == QDialog::Accepted)
-    {
-        ret = RET_OK;
-    }
-    else
-    {
-        ret = RET_CANCEL;
-    }
-    return ret;
-}
-
 QString vclToQtStringWithAccelerator(const OUString& rText)
 {
     // preserve literal '&'s and use '&' instead of '~' for the accelerator

@@ -91,7 +91,7 @@ int QtInstanceDialog::run()
         return nResult;
     }
 
-    return qtResponseTypeToVclResponseType(m_pDialog->exec());
+    return m_pDialog->exec();
 }
 
 void QtInstanceDialog::response(int nResponse)
