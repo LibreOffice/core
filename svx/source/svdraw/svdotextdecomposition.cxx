@@ -992,6 +992,13 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
     rOutliner.setVisualizedPage(GetSdrPageFromXDrawPage(aViewInformation.getVisualizedPage()));
 
+    // Do not forget to set FixedCellHeight, else the line heights will not be correct,
+    // see impDecomposeBlockTextPrimitive or impDecomposeStretchTextPrimitive in this
+    // file. The visualization for paint and in EditMode would be different. Since
+    // SetFixedCellHeight *is* used/done in ::BegTextEdit the error is that it is *not*
+    // done here (in contrast to BlockText and StretchText)
+    rOutliner.SetFixedCellHeight(rSdrAutofitTextPrimitive.isFixedCellHeight());
+
     // now get back the layouted text size from outliner
     const Size aOutlinerTextSize(rOutliner.GetPaperSize());
     const basegfx::B2DVector aOutlinerScale(aOutlinerTextSize.Width(), aOutlinerTextSize.Height());
