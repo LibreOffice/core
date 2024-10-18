@@ -169,13 +169,6 @@ SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = false )
 
 #if UNIX_DESKTOP_DETECT
 
-DesktopType lcl_get_desktop_environment()
-{
-    DesktopType ret = DESKTOP_UNKNOWN;
-    ret = get_desktop_environment();
-    return ret;
-}
-
 #if !STATIC_SAL_INSTANCE
 const char* const* autodetect_plugin_list()
 {
@@ -235,7 +228,7 @@ const char* const* autodetect_plugin_list()
     };
 #endif
 
-    DesktopType desktop = lcl_get_desktop_environment();
+    DesktopType desktop = get_desktop_environment();
     const char * const * pList = pStandardFallbackList;
 
 #if ENABLE_HEADLESS
@@ -436,7 +429,7 @@ const OUString& SalGetDesktopEnvironment()
     if( aDesktopEnvironment.isEmpty())
     {
         aDesktopEnvironment = OUString::createFromAscii(
-            desktop_strings[lcl_get_desktop_environment()]);
+            desktop_strings[get_desktop_environment()]);
     }
 #else
     static OUString aDesktopEnvironment("unknown");
