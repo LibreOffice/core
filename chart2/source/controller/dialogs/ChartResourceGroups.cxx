@@ -142,9 +142,6 @@ void StackingResourceGroup::fillControls(const ChartTypeParameter& rParameter)
                != GlobalStackMode_STACK_Z); //todo remove this condition if z stacking radio button is really used
     switch (rParameter.eStackMode)
     {
-        case GlobalStackMode_STACK_Y:
-            m_xRB_Stack_Y->set_active(true);
-            break;
         case GlobalStackMode_STACK_Y_PERCENT:
             m_xRB_Stack_Y_Percent->set_active(true);
             break;
@@ -157,6 +154,7 @@ void StackingResourceGroup::fillControls(const ChartTypeParameter& rParameter)
             */
             m_xRB_Stack_Y->set_active(true);
             break;
+        case GlobalStackMode_STACK_Y:
         default:
             m_xRB_Stack_Y->set_active(true);
             break;
