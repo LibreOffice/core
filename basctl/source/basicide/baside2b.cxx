@@ -2539,7 +2539,6 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
                         if( pNewArray != pOldArray )
                         {
                             pItem->clearWatchItem();
-                            eEnableChildren = TRISTATE_TRUE;
 
                             pItem->mpArray = pNewArray;
                             sal_Int32 nDims = pNewArray->GetDims();
