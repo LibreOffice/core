@@ -47,14 +47,10 @@ not by actual end users.
 
 ## Debugging / Playing with winaccessibility
 
-If NVDA is running when soffice starts, IA2 should be automatically enabled
-and work as expected. In order to use 'accprobe' to debug
-it is necessary to override the check for whether an AT (like NVDA) is
-running; to do that use:
+If an assistive technology like NVDA is running when soffice starts,
+IA2 should be automatically enabled and work as expected.
 
-    SAL_FORCE_IACCESSIBLE2=1 soffice.exe -writer
-
-Then you can use accprobe to introspect the accessibility hierarchy
+'accprobe' can be used to to introspect the accessibility hierarchy
 remotely, checkout:
 
 <http://accessibility.linuxfoundation.org/a11yweb/util/accprobe/>

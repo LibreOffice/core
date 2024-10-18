@@ -336,25 +336,16 @@ bool ImplInitAccessBridge()
     if( ! pSVData->mxAccessBridge.is() )
     {
         css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
-
-        if (!HasAtHook() && !getenv("SAL_FORCE_IACCESSIBLE2"))
+        try
         {
-            SAL_INFO("vcl", "Apparently no running AT -> "
-                     "not enabling IAccessible2 integration");
+            pSVData->mxAccessBridge = css::accessibility::MSAAService::create(xContext);
+            SAL_INFO("vcl", "got IAccessible2 bridge");
+            return true;
         }
-        else
+        catch (css::uno::DeploymentException &)
         {
-            try {
-                 pSVData->mxAccessBridge
-                     = css::accessibility::MSAAService::create(xContext);
-                 SAL_INFO("vcl", "got IAccessible2 bridge");
-                 return true;
-             } catch (css::uno::DeploymentException &) {
-                 TOOLS_WARN_EXCEPTION(
-                    "vcl",
-                    "got no IAccessible2 bridge");
-                 return false;
-             }
+            TOOLS_WARN_EXCEPTION("vcl", "got no IAccessible2 bridge");
+            return false;
         }
     }
 

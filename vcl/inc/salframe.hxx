@@ -326,10 +326,6 @@ public:
     virtual void  SetTaskBarState(VclTaskBarStates /*eTaskBarState*/) {}
 };
 
-#ifdef _WIN32
-bool HasAtHook();
-#endif
-
 #endif // INCLUDED_VCL_INC_SALFRAME_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
