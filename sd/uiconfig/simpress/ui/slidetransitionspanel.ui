@@ -416,7 +416,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="lable3">
+              <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="slidetransitionspanel|rb_auto_repeat">Repeat After</property>
