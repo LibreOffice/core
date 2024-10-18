@@ -209,9 +209,6 @@ OfficeInstallationDirectories::getSupportedServiceNames()
 
 void OfficeInstallationDirectories::initDirs()
 {
-    if ( m_xOfficeBrandDir)
-        return;
-
     std::unique_lock aGuard( m_aMutex );
     if ( m_xOfficeBrandDir )
         return;
