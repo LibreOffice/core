@@ -2396,20 +2396,20 @@ void DesktopLOKTest::testCommentsWriter()
     {
         CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
         CPPUNIT_ASSERT(!rComment.second.get<std::string>("author").empty());
-        CPPUNIT_ASSERT(!rComment.second.get<std::string>("text").empty());
+        CPPUNIT_ASSERT(!rComment.second.get<std::string>("html").empty());
         // Has a valid iso 8601 date time string
         css::util::DateTime aDateTime;
         OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime"));
         CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
 
         // This comment has a marked text range
-        if (rComment.second.get<std::string>("text") == "Comment 2")
+        if (rComment.second.get<std::string>("html") == "<div>Comment 2</div>")
         {
             CPPUNIT_ASSERT(!rComment.second.get<std::string>("textRange").empty());
             nComment2Id = rComment.second.get<int>("id");
         }
         // This is a reply comment
-        else if (rComment.second.get<std::string>("text") == "Reply to Comment 2")
+        else if (rComment.second.get<std::string>("html") == "<div>Reply to Comment 2</div>")
         {
             CPPUNIT_ASSERT_EQUAL(nComment2Id, rComment.second.get<int>("parentId"));
         }
@@ -2555,8 +2555,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
     int nCommentId2 = aView1.m_aCommentCallbackResult.get<int>("id");
 
     // Edit the previously added comment
@@ -2570,8 +2570,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     // parent is unchanged still
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Edited comment</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Edited comment</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
 
     // Delete the reply comment just added
     aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\":  \"" + OString::number(nCommentId2) + "\" } }";
@@ -2594,8 +2594,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView1.m_aCommentCallbackResult.get<std::string>("html"));
+    CPPUNIT_ASSERT_EQUAL(std::string("<div>Reply comment again</div>"), aView2.m_aCommentCallbackResult.get<std::string>("html"));
 
     // .uno:ViewAnnotations returns total of 5 comments
     boost::property_tree::ptree aTree;
