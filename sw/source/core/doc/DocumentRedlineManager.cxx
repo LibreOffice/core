@@ -1796,7 +1796,6 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                             // totally rotten so it does happen and we
                             // better fix it.
                             n = 0;
-                            bDec = true;
                         }
 
                         maRedlineTable.DeleteAndDestroy( nToBeDeleted );
