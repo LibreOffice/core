@@ -66,6 +66,7 @@ namespace DOM
                 (cur->type == XML_DTD_NODE)) {
                     return cur;
             }
+            cur = cur->next;
         }
         return nullptr;
     }
