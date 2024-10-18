@@ -1960,7 +1960,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
     {
         bool bIsModified = m_rDoc.getIDocumentState().IsModified();
 
-        sal_uInt16 n = m_rDoc.MakeNumRule( aNm, nullptr, false, eNumberFormatPositionAndSpaceMode );
+        sal_uInt16 n = m_rDoc.MakeNumRule( aNm, nullptr, eNumberFormatPositionAndSpaceMode );
 
         pNewRule = m_rDoc.GetNumRuleTable()[ n ];
         pNewRule->SetPoolFormatId( nId );

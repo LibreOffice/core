@@ -4621,7 +4621,7 @@ bool SwDoc::HasTableAnyProtection( const SwPosition* pPos,
     return bHasProtection;
 }
 
-SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
+SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName)
 {
     SwTableAutoFormat aTableFormat(rName);
     GetTableStyles().AddAutoFormat(aTableFormat);
@@ -4634,9 +4634,6 @@ SwTableAutoFormat* SwDoc::MakeTableStyle(const OUString& rName, bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoTableStyleMake>(rName, *this));
     }
-
-    if (bBroadcast)
-        BroadcastStyleOperation(rName, SfxStyleFamily::Table, SfxHintId::StyleSheetCreated);
 
     return pTableFormat;
 }

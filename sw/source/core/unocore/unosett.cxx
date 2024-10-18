@@ -1064,7 +1064,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
 {
     m_pImpl->StartListening(GetPageDescNotifier(&rDoc));
     m_sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
-    rDoc.MakeNumRule( m_sCreatedNumRuleName, nullptr, false,
+    rDoc.MakeNumRule( m_sCreatedNumRuleName, nullptr,
                       // #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
 }

@@ -1110,7 +1110,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     const OUString sPrefix("WW8Num" + OUString::number(m_nUniqueList++));
     // #i86652#
     sal_uInt16 nRul =
-            m_rDoc.MakeNumRule( m_rDoc.GetUniqueNumRuleName(&sPrefix), nullptr, false,
+            m_rDoc.MakeNumRule( m_rDoc.GetUniqueNumRuleName(&sPrefix), nullptr,
                               SvxNumberFormat::LABEL_ALIGNMENT );
     SwNumRule* pMyNumRule = m_rDoc.GetNumRuleTable()[nRul];
     pMyNumRule->SetAutoRule(false);

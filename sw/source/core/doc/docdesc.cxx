@@ -772,7 +772,7 @@ void SwDoc::DelPageDesc( size_t i, bool bBroadcast )
 }
 
 SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
-                            bool bRegardLanguage, bool bBroadcast)
+                            bool bRegardLanguage)
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -804,10 +804,6 @@ SwPageDesc* SwDoc::MakePageDesc(const OUString &rName, const SwPageDesc *pCpy,
 
     std::pair<SwPageDescs::const_iterator, bool> res = m_PageDescs.push_back( pNew );
     SAL_WARN_IF(!res.second, "sw", "MakePageDesc called with existing name" );
-
-    if (bBroadcast)
-        BroadcastStyleOperation(rName, SfxStyleFamily::Page,
-                                SfxHintId::StyleSheetCreated);
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {

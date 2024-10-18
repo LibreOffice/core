@@ -779,12 +779,11 @@ public:
     void RemoveAllFormatLanguageDependencies();
 
     SW_DLLPUBLIC SwFrameFormat* MakeFrameFormat(const OUString &rFormatName, SwFrameFormat *pDerivedFrom,
-                          bool bBroadcast = false, bool bAuto = true);
+                          bool bAuto = true);
     SW_DLLPUBLIC void DelFrameFormat( SwFrameFormat *pFormat, bool bBroadcast = false );
     SwFrameFormat* FindFrameFormatByName( const OUString& rName ) const;
 
-    SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom,
-                           bool bBroadcast = false );
+    SW_DLLPUBLIC SwCharFormat *MakeCharFormat(const OUString &rFormatName, SwCharFormat *pDerivedFrom);
     void       DelCharFormat(size_t nFormat, bool bBroadcast = false);
     void       DelCharFormat(SwCharFormat const * pFormat, bool bBroadcast = false);
     SwCharFormat* FindCharFormatByName( const OUString& rName ) const
@@ -797,11 +796,9 @@ public:
     const SwTextFormatColls *GetTextFormatColls() const { return mpTextFormatCollTable.get(); }
     SwTextFormatColls *GetTextFormatColls() { return mpTextFormatCollTable.get(); }
     SW_DLLPUBLIC SwTextFormatColl *MakeTextFormatColl( const OUString &rFormatName,
-                                  SwTextFormatColl *pDerivedFrom,
-                                  bool bBroadcast = false);
+                                  SwTextFormatColl *pDerivedFrom);
     SwConditionTextFormatColl* MakeCondTextFormatColl( const OUString &rFormatName,
-                                               SwTextFormatColl *pDerivedFrom,
-                                               bool bBroadcast = false);
+                                               SwTextFormatColl *pDerivedFrom);
     void DelTextFormatColl(size_t nFormat, bool bBroadcast = false);
     void DelTextFormatColl( SwTextFormatColl const * pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
@@ -927,8 +924,7 @@ public:
     void DelPageDesc( size_t i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc const * pDel);
     SW_DLLPUBLIC SwPageDesc* MakePageDesc(const OUString &rName, const SwPageDesc* pCpy = nullptr,
-                             bool bRegardLanguage = true,
-                             bool bBroadcast = false);
+                             bool bRegardLanguage = true);
     void BroadcastStyleOperation(const OUString& rName, SfxStyleFamily eFamily,
                                  SfxHintId nOp);
 
@@ -1105,7 +1101,6 @@ public:
     // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     SW_DLLPUBLIC sal_uInt16 MakeNumRule( const OUString &rName,
         const SwNumRule* pCpy = nullptr,
-        bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     sal_uInt16 FindNumRule( std::u16string_view rName ) const;
@@ -1277,7 +1272,7 @@ public:
     /// Counts table styles without triggering lazy-load of them.
     bool HasTableStyles() const { return m_pTableStyles != nullptr; }
     // Create a new table style. Tracked by Undo.
-    SW_DLLPUBLIC SwTableAutoFormat* MakeTableStyle(const OUString& rName, bool bBroadcast = false);
+    SW_DLLPUBLIC SwTableAutoFormat* MakeTableStyle(const OUString& rName);
     // Delete table style named rName. Tracked by undo.
     SW_DLLPUBLIC std::unique_ptr<SwTableAutoFormat> DelTableStyle(const OUString& rName, bool bBroadcast = false);
     // Change (replace) a table style named rName. Tracked by undo.

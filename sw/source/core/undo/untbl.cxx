@@ -3123,7 +3123,7 @@ void SwUndoTableStyleMake::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     if (m_pAutoFormat)
     {
-        SwTableAutoFormat* pFormat = rContext.GetDoc().MakeTableStyle(m_sName, true);
+        SwTableAutoFormat* pFormat = rContext.GetDoc().MakeTableStyle(m_sName);
         if (pFormat)
         {
             *pFormat = *m_pAutoFormat;
@@ -3150,7 +3150,7 @@ SwUndoTableStyleDelete::~SwUndoTableStyleDelete()
 
 void SwUndoTableStyleDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwTableAutoFormat* pNewFormat = rContext.GetDoc().MakeTableStyle(m_pAutoFormat->GetName(), true);
+    SwTableAutoFormat* pNewFormat = rContext.GetDoc().MakeTableStyle(m_pAutoFormat->GetName());
     *pNewFormat = *m_pAutoFormat;
     for (size_t i=0; i < m_rAffectedTables.size(); i++)
         m_rAffectedTables[i]->SetTableStyleName(m_pAutoFormat->GetName());

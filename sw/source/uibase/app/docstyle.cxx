@@ -2319,7 +2319,7 @@ void SwDocStyleSheet::Create()
         case SfxStyleFamily::Frame:
             m_pFrameFormat = lcl_FindFrameFormat( m_rDoc, aName );
             if( !m_pFrameFormat )
-                m_pFrameFormat = m_rDoc.MakeFrameFormat(aName, m_rDoc.GetDfltFrameFormat(), false, false);
+                m_pFrameFormat = m_rDoc.MakeFrameFormat(aName, m_rDoc.GetDfltFrameFormat(), false);
 
             break;
 
@@ -2337,7 +2337,7 @@ void SwDocStyleSheet::Create()
             {
                 const OUString sTmpNm( aName.isEmpty() ? m_rDoc.GetUniqueNumRuleName() : aName );
                 SwNumRule* pRule = m_rDoc.GetNumRuleTable()[
-                    m_rDoc.MakeNumRule( sTmpNm, nullptr, false,
+                    m_rDoc.MakeNumRule( sTmpNm, nullptr,
                                       // #i89178#
                                       numfunc::GetDefaultPositionAndSpaceMode() ) ];
                 pRule->SetAutoRule( false );

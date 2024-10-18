@@ -817,7 +817,7 @@ SwTableFormat* SwDoc::MakeTableFrameFormat( const OUString &rFormatName,
 
 SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
                             SwFrameFormat *pDerivedFrom,
-                            bool bBroadcast, bool bAuto)
+                            bool bAuto)
 {
     SwFrameFormat *pFormat = new SwFrameFormat( GetAttrPool(), rFormatName, pDerivedFrom );
 
@@ -831,27 +831,20 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
             std::make_unique<SwUndoFrameFormatCreate>(pFormat, pDerivedFrom, *this));
     }
 
-    if (bBroadcast)
-    {
-        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Frame,
-                                SfxHintId::StyleSheetCreated);
-    }
-
     return pFormat;
 }
 
 SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool bBroadcast, bool bAuto)
+                            bool /*bBroadcast*/, bool bAuto)
 {
     SwFrameFormat *pFrameFormat = dynamic_cast<SwFrameFormat*>(pDerivedFrom);
-    pFrameFormat = MakeFrameFormat( rFormatName, pFrameFormat, bBroadcast, bAuto );
+    pFrameFormat = MakeFrameFormat( rFormatName, pFrameFormat, bAuto );
     return pFrameFormat;
 }
 
 SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
-                               SwCharFormat *pDerivedFrom,
-                               bool bBroadcast )
+                               SwCharFormat *pDerivedFrom )
 {
     SwCharFormat *pFormat = new SwCharFormat( GetAttrPool(), rFormatName, pDerivedFrom );
     mpCharFormatTable->insert( pFormat );
@@ -864,28 +857,21 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
             std::make_unique<SwUndoCharFormatCreate>(pFormat, pDerivedFrom, *this));
     }
 
-    if (bBroadcast)
-    {
-        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Char,
-                                SfxHintId::StyleSheetCreated);
-    }
-
     return pFormat;
 }
 
 SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool bBroadcast, bool /*bAuto*/)
+                            bool /*bBroadcast*/, bool /*bAuto*/)
 {
     SwCharFormat *pCharFormat = dynamic_cast<SwCharFormat*>(pDerivedFrom);
-    pCharFormat = MakeCharFormat( rFormatName, pCharFormat, bBroadcast );
+    pCharFormat = MakeCharFormat( rFormatName, pCharFormat );
     return pCharFormat;
 }
 
 /// Create the FormatCollections
 SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
-                                     SwTextFormatColl *pDerivedFrom,
-                                     bool bBroadcast)
+                                     SwTextFormatColl *pDerivedFrom)
 {
     SwTextFormatColl *pFormatColl = new SwTextFormatColl( GetAttrPool(), rFormatName,
                                                 pDerivedFrom );
@@ -900,25 +886,20 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
                                                          *this));
     }
 
-    if (bBroadcast)
-        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Para,
-                                SfxHintId::StyleSheetCreated);
-
     return pFormatColl;
 }
 
 SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool bBroadcast, bool /*bAuto*/)
+                            bool /*bBroadcast*/, bool /*bAuto*/)
 {
     SwTextFormatColl *pTextFormatColl = dynamic_cast<SwTextFormatColl*>(pDerivedFrom);
-    pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl, bBroadcast );
+    pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl );
     return pTextFormatColl;
 }
 
 SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rFormatName,
-                                                  SwTextFormatColl *pDerivedFrom,
-                                                  bool bBroadcast)
+                                                  SwTextFormatColl *pDerivedFrom)
 {
     SwConditionTextFormatColl*pFormatColl = new SwConditionTextFormatColl( GetAttrPool(),
                                                     rFormatName, pDerivedFrom );
@@ -932,10 +913,6 @@ SwConditionTextFormatColl* SwDoc::MakeCondTextFormatColl( const OUString &rForma
             std::make_unique<SwUndoCondTextFormatCollCreate>(pFormatColl, pDerivedFrom,
                                                              *this));
     }
-
-    if (bBroadcast)
-        BroadcastStyleOperation(rFormatName, SfxStyleFamily::Para,
-                                SfxHintId::StyleSheetCreated);
 
     return pFormatColl;
 }

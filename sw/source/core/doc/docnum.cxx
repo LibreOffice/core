@@ -2573,7 +2573,6 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
 
 sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
             const SwNumRule* pCpy,
-            bool bBroadcast,
             const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
 {
     SwNumRule* pNew;
@@ -2607,10 +2606,6 @@ sal_uInt16 SwDoc::MakeNumRule( const OUString &rName,
         GetIDocumentUndoRedo().AppendUndo(
             std::make_unique<SwUndoNumruleCreate>(pNew, *this));
     }
-
-    if (bBroadcast)
-        BroadcastStyleOperation(pNew->GetName(), SfxStyleFamily::Pseudo,
-                                SfxHintId::StyleSheetCreated);
 
     return nRet;
 }

@@ -196,7 +196,7 @@ SwUndoTextFormatCollCreate::SwUndoTextFormatCollCreate
 
 SwFormat * SwUndoTextFormatCollCreate::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeTextFormatColl(m_sNewName, static_cast<SwTextFormatColl *>(pDerivedFrom), true);
+    return m_rDoc.MakeTextFormatColl(m_sNewName, static_cast<SwTextFormatColl *>(pDerivedFrom));
 }
 
 void SwUndoTextFormatCollCreate::Delete()
@@ -217,7 +217,7 @@ SwUndoTextFormatCollDelete::SwUndoTextFormatCollDelete(SwTextFormatColl const * 
 
 SwFormat * SwUndoTextFormatCollDelete::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeTextFormatColl(m_sOldName, static_cast<SwTextFormatColl *>(pDerivedFrom), true);
+    return m_rDoc.MakeTextFormatColl(m_sOldName, static_cast<SwTextFormatColl *>(pDerivedFrom));
 }
 
 void SwUndoTextFormatCollDelete::Delete(SwFormat * pOld)
@@ -238,7 +238,7 @@ SwUndoCondTextFormatCollCreate::SwUndoCondTextFormatCollCreate(SwConditionTextFo
 
 SwFormat * SwUndoCondTextFormatCollCreate::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeCondTextFormatColl(m_sNewName, static_cast<SwTextFormatColl *>(pDerivedFrom), true);
+    return m_rDoc.MakeCondTextFormatColl(m_sNewName, static_cast<SwTextFormatColl *>(pDerivedFrom));
 }
 
 SwUndoCondTextFormatCollDelete::SwUndoCondTextFormatCollDelete(SwTextFormatColl const * _pOld,
@@ -249,7 +249,7 @@ SwUndoCondTextFormatCollDelete::SwUndoCondTextFormatCollDelete(SwTextFormatColl 
 
 SwFormat * SwUndoCondTextFormatCollDelete::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeCondTextFormatColl(m_sOldName, static_cast<SwTextFormatColl *>(pDerivedFrom), true);
+    return m_rDoc.MakeCondTextFormatColl(m_sOldName, static_cast<SwTextFormatColl *>(pDerivedFrom));
 }
 
 SwUndoRenameFormatColl::SwUndoRenameFormatColl(const OUString & sInitOldName,
@@ -273,7 +273,7 @@ SwUndoCharFormatCreate::SwUndoCharFormatCreate(SwCharFormat * pNewFormat,
 
 SwFormat * SwUndoCharFormatCreate::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeCharFormat(m_sNewName, static_cast<SwCharFormat *>(pDerivedFrom), true);
+    return m_rDoc.MakeCharFormat(m_sNewName, static_cast<SwCharFormat *>(pDerivedFrom));
 }
 
 void SwUndoCharFormatCreate::Delete()
@@ -293,7 +293,7 @@ SwUndoCharFormatDelete::SwUndoCharFormatDelete(SwCharFormat const * pOld, SwDoc&
 
 SwFormat * SwUndoCharFormatDelete::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeCharFormat(m_sOldName, static_cast<SwCharFormat *>(pDerivedFrom), true);
+    return m_rDoc.MakeCharFormat(m_sOldName, static_cast<SwCharFormat *>(pDerivedFrom));
 }
 
 void SwUndoCharFormatDelete::Delete(SwFormat * pFormat)
@@ -327,7 +327,7 @@ SwUndoFrameFormatCreate::SwUndoFrameFormatCreate(SwFrameFormat * pNewFormat,
 
 SwFormat * SwUndoFrameFormatCreate::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeFrameFormat(m_sNewName, static_cast<SwFrameFormat *>(pDerivedFrom), true, m_pNew->IsAuto());
+    return m_rDoc.MakeFrameFormat(m_sNewName, static_cast<SwFrameFormat *>(pDerivedFrom), m_pNew->IsAuto());
 }
 
 void SwUndoFrameFormatCreate::Delete()
@@ -347,7 +347,7 @@ SwUndoFrameFormatDelete::SwUndoFrameFormatDelete(SwFrameFormat const * pOld, SwD
 
 SwFormat * SwUndoFrameFormatDelete::Create(SwFormat * pDerivedFrom)
 {
-    return m_rDoc.MakeFrameFormat(m_sOldName, static_cast<SwFrameFormat *>(pDerivedFrom), true);
+    return m_rDoc.MakeFrameFormat(m_sOldName, static_cast<SwFrameFormat *>(pDerivedFrom));
 }
 
 void SwUndoFrameFormatDelete::Delete(SwFormat * pFormat)
@@ -392,7 +392,7 @@ void SwUndoNumruleCreate::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoNumruleCreate::RedoImpl(::sw::UndoRedoContext &)
 {
-    m_rDoc.MakeNumRule(m_aNew.GetName(), &m_aNew, true);
+    m_rDoc.MakeNumRule(m_aNew.GetName(), &m_aNew);
 }
 
 SwRewriter SwUndoNumruleCreate::GetRewriter() const
@@ -418,7 +418,7 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 
 void SwUndoNumruleDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    m_rDoc.MakeNumRule(m_aOld.GetName(), &m_aOld, true);
+    m_rDoc.MakeNumRule(m_aOld.GetName(), &m_aOld);
 }
 
 void SwUndoNumruleDelete::RedoImpl(::sw::UndoRedoContext &)

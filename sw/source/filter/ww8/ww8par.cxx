@@ -3735,7 +3735,7 @@ bool SwWW8ImplReader::ReadChar(tools::Long nPosCp, tools::Long nCpOfs)
                     else if (m_bSpec)
                     {
                         SwFrameFormat* pAsCharFlyFormat =
-                            m_rDoc.MakeFrameFormat(OUString(), m_rDoc.GetDfltFrameFormat());
+                            m_rDoc.MakeFrameFormat(OUString(), m_rDoc.GetDfltFrameFormat(), true);
                         SwFormatAnchor aAnchor(RndStdIds::FLY_AS_CHAR);
                         pAsCharFlyFormat->SetFormatAttr(aAnchor);
                         pResult = ImportGraf(nullptr, pAsCharFlyFormat);

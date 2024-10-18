@@ -148,7 +148,6 @@ enum class SfxHintId {
     SdViewShell,
 
 // SFX stylesheet
-    StyleSheetCreated,  // new
     StyleSheetModified,  // changed (used by the SfxStyleSheetHint class)
     StyleSheetModifiedExtended,  // changed (used by the SfxStyleSheetModifiedHint class)
     StyleSheetChanged,  // erased and re-created (replaced)
@@ -300,7 +299,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     case SfxHintId::ScAccLeaveEditMode: return stream << "ScAccLeaveEditMode";
     case SfxHintId::ScAccMakeDrawLayer: return stream << "ScAccMakeDrawLayer";
     case SfxHintId::ScAccWindowResized: return stream << "ScAccWindowResized";
-    case SfxHintId::StyleSheetCreated: return stream << "StyleSheetCreated";
     case SfxHintId::StyleSheetModified: return stream << "StyleSheetModified";
     case SfxHintId::StyleSheetModifiedExtended: return stream << "StyleSheetModifiedExtended";
     case SfxHintId::StyleSheetChanged: return stream << "StyleSheetChanged";

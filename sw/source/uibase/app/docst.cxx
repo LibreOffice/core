@@ -712,9 +712,7 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl, LinkParamNone*, void)
     if(SfxStyleFamily::Page == m_nFamily)
         pView->InvalidateRulerPos();
 
-    if( m_bNew )
-        m_xBasePool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetCreated, *m_xTmp));
-    else
+    if( !m_bNew )
         m_xBasePool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetModified, *m_xTmp));
 
     pDoc->getIDocumentState().SetModified();
@@ -1133,9 +1131,6 @@ void SwDocShell::Edit(
         }
         if(SfxStyleFamily::Page == nFamily)
             m_pView->InvalidateRulerPos();
-
-        if( bNew )
-            m_xBasePool->Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetCreated, *xTmp));
 
         m_xDoc->getIDocumentState().SetModified();
         if( !bModified )        // Bug 57028
@@ -1613,8 +1608,6 @@ void SwDocShell::MakeByExample( const OUString &rName, SfxStyleFamily nFamily,
 
         default: break;
     }
-
-    m_xDoc->BroadcastStyleOperation(rName, nFamily, SfxHintId::StyleSheetCreated);
 }
 
 sfx::AccessibilityIssueCollection SwDocShell::runAccessibilityCheck()

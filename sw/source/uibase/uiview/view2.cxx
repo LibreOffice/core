@@ -558,7 +558,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             if(!pFormat)
                 pFormat = pDoc->MakeFrameFormat(sGraphicFormat,
                                         pDocShell->GetDoc()->GetDfltFrameFormat(),
-                                        true, false);
+                                        false);
             rSh.SetFrameFormat( pFormat );
         }
 

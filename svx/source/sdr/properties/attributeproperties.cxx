@@ -419,8 +419,7 @@ namespace sdr::properties
             bool bHintUsed(false);
 
             SfxHintId id = rHint.GetId();
-            if (id == SfxHintId::StyleSheetCreated
-                || id == SfxHintId::StyleSheetChanged
+            if (id == SfxHintId::StyleSheetChanged
                 || id == SfxHintId::StyleSheetErased
                 || id == SfxHintId::StyleSheetModified
                 || id == SfxHintId::StyleSheetInDestruction
@@ -435,11 +434,6 @@ namespace sdr::properties
 
                     switch(id)
                     {
-                        case SfxHintId::StyleSheetCreated         :
-                        {
-                            // cannot happen, nothing to do
-                            break;
-                        }
                         case SfxHintId::StyleSheetModified        :
                         case SfxHintId::StyleSheetModifiedExtended:
                         case SfxHintId::StyleSheetChanged         :

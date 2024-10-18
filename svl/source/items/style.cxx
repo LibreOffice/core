@@ -650,7 +650,6 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
     {
         xStyle = Create( rName, eFam, mask );
         StoreStyleSheet(xStyle);
-        Broadcast(SfxStyleSheetHint(SfxHintId::StyleSheetCreated, *xStyle));
     }
     return *xStyle;
 }
@@ -770,7 +769,6 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
     }
 #endif
     StoreStyleSheet(rtl::Reference< SfxStyleSheetBase >( p ) );
-    Broadcast( SfxStyleSheetHint( SfxHintId::StyleSheetCreated, *p ) );
 }
 
 void SfxStyleSheetBasePool::Clear()

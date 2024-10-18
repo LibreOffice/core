@@ -733,7 +733,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const OUString aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
-    sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr, false,
+    sal_uInt16 nRul = m_rDoc.MakeNumRule( aName, nullptr,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     m_xStyles->mpStyRule = m_rDoc.GetNumRuleTable()[nRul];
     // Auto == false-> numbering style
@@ -956,7 +956,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             // #i86652#
             pNumRule = m_rDoc.GetNumRuleTable()[
-                            m_rDoc.MakeNumRule( sNumRule, nullptr, false,
+                            m_rDoc.MakeNumRule( sNumRule, nullptr,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
         }
         if (m_xTableDesc)
