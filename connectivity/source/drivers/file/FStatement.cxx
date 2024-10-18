@@ -659,14 +659,6 @@ void OStatement_Base::SetAssignValue(const OUString& aColumnName,
     {
         switch (::comphelper::getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
-            // put criteria depending on the Type as String or double in the variable
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::LONGVARCHAR:
-            *(*m_aAssignValues)[nId] = ORowSetValue(aValue);
-            //Characterset is already converted, since the entire statement was converted
-            break;
-
         case DataType::BIT:
             if (aValue.equalsIgnoreAsciiCase("TRUE")  || aValue[0] == '1')
                 *(*m_aAssignValues)[nId] = true;
@@ -675,6 +667,10 @@ void OStatement_Base::SetAssignValue(const OUString& aColumnName,
             else
                 throwFunctionSequenceException(*this);
             break;
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+        case DataType::LONGVARCHAR:
+        //Characterset is already converted, since the entire statement was converted
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
