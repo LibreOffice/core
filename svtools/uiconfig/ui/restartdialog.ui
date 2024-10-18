@@ -23,12 +23,13 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="yes">
-                <property name="label" translatable="yes" context="restartdialog|yes">Restart Now</property>
+                <property name="label" translatable="yes" context="restartdialog|yes">_Restart Now</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -38,10 +39,11 @@
             </child>
             <child>
               <object class="GtkButton" id="no">
-                <property name="label" translatable="yes" context="restartdialog|no">Restart Later</property>
+                <property name="label" translatable="yes" context="restartdialog|no">Restart _Later</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
