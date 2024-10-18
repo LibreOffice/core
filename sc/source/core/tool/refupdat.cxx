@@ -156,11 +156,10 @@ static void Expand( R& n1, R& n2, U nStart, S nD )
 
 static bool lcl_IsWrapBig( sal_Int64 nRef, sal_Int32 nDelta )
 {
-    if ( nRef > 0 && nDelta > 0 )
-        return nRef + nDelta <= 0;
-    else if ( nRef < 0 && nDelta < 0 )
-        return nRef + nDelta >= 0;
-    return false;
+    if (nDelta > 0)
+        return nRef > std::numeric_limits<sal_Int64>::max() - nDelta;
+    else
+        return nRef < std::numeric_limits<sal_Int64>::min() - nDelta;
 }
 
 static bool lcl_MoveBig( sal_Int64& rRef, sal_Int64 nStart, sal_Int32 nDelta )
