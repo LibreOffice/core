@@ -2740,6 +2740,7 @@ bool CodeCompleteWindow::HandleKeyInput( const KeyEvent& rKeyEvt )
             case KEY_POINT:
                 break;
             case KEY_ESCAPE: // hide, do nothing
+            case KEY_SPACE:
                 HideAndRestoreFocus();
                 break;
             case KEY_RIGHT:
@@ -2793,9 +2794,6 @@ bool CodeCompleteWindow::HandleKeyInput( const KeyEvent& rKeyEvt )
                 }
                 break;
             }
-            case KEY_SPACE:
-                HideAndRestoreFocus();
-                break;
             case KEY_BACKSPACE: case KEY_DELETE:
                 if( !aFuncBuffer.isEmpty() )
                 {
