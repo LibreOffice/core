@@ -40,6 +40,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
         u"sfx/ui/licensedialog.ui"_ustr,
         u"sfx/ui/querysavedialog.ui"_ustr,
+        u"svt/ui/restartdialog.ui"_ustr,
     };
 
     return aSupportedUIFiles.contains(rUIFile);
