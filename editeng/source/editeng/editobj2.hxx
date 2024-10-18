@@ -55,6 +55,7 @@ public:
     XEditAttribute(SfxItemPool&, const SfxPoolItem&, sal_Int32 nStart, sal_Int32 nEnd );
 
     const SfxPoolItem*      GetItem() const             { return maItemHolder.getItem(); }
+    SfxPoolItemHolder&      GetItemHolder()             { return maItemHolder; }
 
     sal_Int32&              GetStart()                  { return nStart; }
     sal_Int32&              GetEnd()                    { return nEnd; }

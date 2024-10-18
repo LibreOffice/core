@@ -28,6 +28,8 @@
 #include <svx/svdundo.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/fieldupdater.hxx>
 #include <editeng/langitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/flditem.hxx>
@@ -260,29 +262,83 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
     }
 }
 
+namespace
+{
+class SvxFieldItemUpdater_BaseProperties final : public editeng::SvxFieldItemUpdater
+{
+    sdr::properties::BaseProperties& mrProps;
+
+public:
+    SvxFieldItemUpdater_BaseProperties(sdr::properties::BaseProperties& rProps)
+        : mrProps(rProps) {}
+
+    virtual void SetItem(const SvxFieldItem& rNew) override
+    {
+        mrProps.SetObjectItem(rNew);
+    }
+};
+}
+
+static void UpdatePageRelativeURLs(SdrObject& rObj, const std::function<void(const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback)
+{
+    if (SdrObjList* pChildrenObjs = rObj.getChildrenOfSdrObject())
+    {
+        for (const rtl::Reference<SdrObject>& pSubObj : *pChildrenObjs)
+            UpdatePageRelativeURLs(*pSubObj, rItemCallback);
+    }
+
+    // cannot call GetObjectItemSet on a group
+    if (rObj.GetObjIdentifier() != SdrObjKind::Group)
+    {
+        sdr::properties::BaseProperties& rProps = rObj.GetProperties();
+        const SfxItemSet& rSet = rProps.GetObjectItemSet();
+        if (const SvxFieldItem* pFieldItem = rSet.GetItemIfSet(EE_FEATURE_FIELD))
+        {
+            SvxFieldItemUpdater_BaseProperties aItemUpdater(rProps);
+            rItemCallback(*pFieldItem, aItemUpdater);
+        }
+    }
+
+    SdrTextObj* pTxtObj = DynCastSdrTextObj(&rObj);
+    if (!pTxtObj)
+        return;
+    OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
+    if (!pOutlinerParagraphObject)
+        return;
+    EditTextObject& aEdit = const_cast<EditTextObject&>(pOutlinerParagraphObject->GetTextObject());
+    if (!aEdit.IsFieldObject())
+        return;
+    const SvxFieldItem* pFieldItem = aEdit.GetField();
+    if (!pFieldItem)
+        return;
+    aEdit.GetFieldUpdater().UpdatePageRelativeURLs(rItemCallback);
+};
+
+void SdDrawDocument::UpdatePageRelativeURLsImpl(const std::function<void(const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback)
+{
+    for (sal_uInt16 nPage = 0, nPageCount = GetPageCount(); nPage < nPageCount; ++nPage)
+    {
+        SdrPage* pPage = GetPage(nPage);
+        for(size_t nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; ++nObj)
+            ::UpdatePageRelativeURLs(*pPage->GetObj(nObj), rItemCallback);
+    }
+}
+
 void SdDrawDocument::UpdatePageRelativeURLs(std::u16string_view aOldName, std::u16string_view aNewName)
 {
     if (aNewName.empty())
         return;
 
-    SfxItemPool& rPool(GetPool());
-
-    rPool.iterateItemSurrogates(EE_FEATURE_FIELD, [&](SfxItemPool::SurrogateData& rData)
+    const OUString sNotes(SdResId(STR_NOTES));
+    auto aItemCallback = [&sNotes, &aOldName, &aNewName](const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater) -> void
     {
-        const SvxFieldItem* pFieldItem(dynamic_cast<const SvxFieldItem*>(&rData.getItem()));
-
-        if (nullptr == pFieldItem)
-            return true; // continue callbacks
-
-        const SvxURLField* pURLField(dynamic_cast<const SvxURLField*>(pFieldItem->GetField()));
-
-        if (nullptr == pURLField)
-            return true; // continue callbacks
-
+        const SvxFieldData* pFieldData = rFieldItem.GetField();
+        if (pFieldData->GetClassId() != SvxURLField::CLASS_ID)
+            return;
+        const SvxURLField* pURLField(static_cast<const SvxURLField*>(pFieldData));
         OUString aURL(pURLField->GetURL());
-
         if (aURL.isEmpty() || (aURL[0] != 35) || (aURL.indexOf(aOldName, 1) != 1))
-            return true; // continue callbacks
+            return;
 
         bool bURLChange(false);
 
@@ -294,7 +350,6 @@ void SdDrawDocument::UpdatePageRelativeURLs(std::u16string_view aOldName, std::u
         }
         else
         {
-            const OUString sNotes(SdResId(STR_NOTES));
             if (aURL.getLength() == sal_Int32(aOldName.size()) + 2 + sNotes.getLength()
                 && aURL.indexOf(sNotes, aOldName.size() + 2) == sal_Int32(aOldName.size() + 2))
             {
@@ -306,36 +361,30 @@ void SdDrawDocument::UpdatePageRelativeURLs(std::u16string_view aOldName, std::u
 
         if(bURLChange)
         {
-            SvxFieldItem* pNewFieldItem(pFieldItem->Clone(&rPool));
-            const_cast<SvxURLField*>(static_cast<const SvxURLField*>(pNewFieldItem->GetField()))->SetURL(aURL);
-            rData.setItem(std::unique_ptr<SfxPoolItem>(pNewFieldItem));
+            SvxFieldItem aNewFieldItem(rFieldItem);
+            const_cast<SvxURLField*>(static_cast<const SvxURLField*>(aNewFieldItem.GetField()))->SetURL(aURL);
+            rFieldItemUpdater.SetItem(aNewFieldItem);
         }
+    };
 
-        return true; // continue callbacks
-    });
+    UpdatePageRelativeURLsImpl(aItemCallback);
 }
 
 void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPos, sal_Int32 nIncrement)
 {
     bool bNotes = (pPage->GetPageKind() == PageKind::Notes);
 
-    SfxItemPool& rPool(GetPool());
-    rPool.iterateItemSurrogates(EE_FEATURE_FIELD, [&](SfxItemPool::SurrogateData& rData)
+    auto aItemCallback = [this, nPos, bNotes, nIncrement](const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater) -> void
     {
-        const SvxFieldItem* pFieldItem(static_cast<const SvxFieldItem*>(&rData.getItem()));
-
-        if (nullptr == pFieldItem)
-            return true; // continue callbacks
-
-        const SvxURLField* pURLField(dynamic_cast<const SvxURLField*>(pFieldItem->GetField()));
+        const SvxURLField* pURLField(dynamic_cast<const SvxURLField*>(rFieldItem.GetField()));
 
         if (nullptr == pURLField)
-            return true; // continue callbacks
+            return;
 
         OUString aURL(pURLField->GetURL());
 
         if (aURL.isEmpty() || (aURL[0] != 35))
-            return true; // continue callbacks
+            return;
 
         OUString aHashSlide;
         if (meDocType == DocumentType::Draw)
@@ -344,7 +393,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
             aHashSlide = "#" + SdResId(STR_PAGE);
 
         if (!aURL.startsWith(aHashSlide))
-            return true; // continue callbacks
+            return;
 
         OUString aURLCopy = aURL;
         const OUString sNotes(SdResId(STR_NOTES));
@@ -355,7 +404,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
             && aURLCopy.endsWith(sNotes) );
 
         if (bNotesLink != bNotes)
-            return true; // no compatible link and page, continue callbacks
+            return; // no compatible link and page
 
         if (bNotes)
             aURLCopy = aURLCopy.replaceAt(aURLCopy.getLength() - sNotes.getLength(), sNotes.getLength(), u"");
@@ -364,7 +413,7 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
         sal_uInt16 realPageNumber = (nPos + 1)/ 2;
 
         if ( number < realPageNumber )
-            return true; // continue callbacks
+            return;
 
         // update link page number
         number += nIncrement;
@@ -375,12 +424,12 @@ void SdDrawDocument::UpdatePageRelativeURLs(SdPage const * pPage, sal_uInt16 nPo
             aURL += " " + sNotes;
         }
 
-        SvxFieldItem* pNewFieldItem(pFieldItem->Clone(&rPool));
-        const_cast<SvxURLField*>(static_cast<const SvxURLField*>(pNewFieldItem->GetField()))->SetURL(aURL);
-        rData.setItem(std::unique_ptr<SfxPoolItem>(pNewFieldItem));
+        SvxFieldItem aNewFieldItem(rFieldItem);
+        const_cast<SvxURLField*>(static_cast<const SvxURLField*>(aNewFieldItem.GetField()))->SetURL(aURL);
+        rFieldItemUpdater.SetItem(aNewFieldItem);
+    };
 
-        return true; // continue callbacks
-    });
+    UpdatePageRelativeURLsImpl(aItemCallback);
 }
 
 // Move page

@@ -11,6 +11,8 @@
 #define INCLUDED_EDITENG_FIELDUPDATER_HXX
 
 #include <editeng/editengdllapi.h>
+#include <editeng/flditem.hxx>
+#include <svl/itempool.hxx>
 #include <memory>
 
 class EditTextObject;
@@ -18,6 +20,7 @@ class EditTextObject;
 namespace editeng
 {
 class FieldUpdaterImpl;
+class SvxFieldItemUpdater;
 
 /**
  * Wrapper for EditTextObject to handle updating of fields without exposing
@@ -38,6 +41,20 @@ public:
      * @param nTab new table ID
      */
     void updateTableFields(int nTab);
+
+    void UpdatePageRelativeURLs(
+        const std::function<void(const SvxFieldItem& rFieldItem,
+                                 SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback);
+};
+
+// helper for updating the items we find via UpdatePageRelativeURLs
+class EDITENG_DLLPUBLIC SvxFieldItemUpdater
+{
+public:
+    virtual ~SvxFieldItemUpdater();
+
+    // write-access when SvxFieldItem needs to be modified
+    virtual void SetItem(const SvxFieldItem&) = 0;
 };
 }
 

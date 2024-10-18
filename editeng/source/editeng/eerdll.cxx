@@ -157,7 +157,7 @@ ItemInfoPackage& getItemInfoPackageEditEngine()
             { EE_FEATURE_TAB, new SfxVoidItem( EE_FEATURE_TAB ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_LINEBR, new SfxVoidItem( EE_FEATURE_LINEBR ), 0, SFX_ITEMINFOFLAG_NONE  },
             { EE_FEATURE_NOTCONV, new SvxColorItem( COL_RED, EE_FEATURE_NOTCONV ), SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEMINFOFLAG_NONE  },
-            { EE_FEATURE_FIELD, new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD ), SID_FIELD, SFX_ITEMINFOFLAG_SUPPORT_SURROGATE  }
+            { EE_FEATURE_FIELD, new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD ), SID_FIELD, SFX_ITEMINFOFLAG_NONE  }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }

@@ -18,6 +18,22 @@ using namespace com::sun::star;
 
 namespace editeng {
 
+SvxFieldItemUpdater::~SvxFieldItemUpdater() {}
+
+namespace {
+class SvxFieldItemUpdaterImpl : public SvxFieldItemUpdater
+{
+    SfxPoolItemHolder& mrItemHolder;
+public:
+    SvxFieldItemUpdaterImpl(SfxPoolItemHolder& rHolder) : mrItemHolder(rHolder) {}
+
+    virtual void SetItem(const SvxFieldItem& rNewItem)
+    {
+        mrItemHolder = SfxPoolItemHolder(mrItemHolder.getPool(), &rNewItem, false);
+    }
+};
+}
+
 class FieldUpdaterImpl
 {
     EditTextObjectImpl& mrObj;
@@ -51,6 +67,24 @@ public:
             }
         }
     }
+
+    void UpdatePageRelativeURLs(const std::function<void(const SvxFieldItem & rFieldItem, SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback)
+    {
+        EditTextObjectImpl::ContentInfosType& rContents = mrObj.GetContents();
+        for (std::unique_ptr<ContentInfo> & i : rContents)
+        {
+            ContentInfo& rContent = *i;
+            for (XEditAttribute & rAttr : rContent.GetCharAttribs())
+            {
+                const SfxPoolItem* pItem = rAttr.GetItem();
+                if (pItem->Which() != EE_FEATURE_FIELD)
+                    // This is not a field item.
+                    continue;
+                SvxFieldItemUpdaterImpl aUpdater(rAttr.GetItemHolder());
+                rItemCallback(static_cast<const SvxFieldItem&>(*pItem), aUpdater);
+            }
+        }
+    }
 };
 
 FieldUpdater::FieldUpdater(EditTextObject& rObj) : mpImpl(new FieldUpdaterImpl(rObj)) {}
@@ -63,6 +97,11 @@ FieldUpdater::~FieldUpdater()
 void FieldUpdater::updateTableFields(int nTab)
 {
     mpImpl->updateTableFields(nTab);
+}
+
+void FieldUpdater::UpdatePageRelativeURLs(const std::function<void(const SvxFieldItem & rFieldItem, SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback)
+{
+    mpImpl->UpdatePageRelativeURLs(rItemCallback);
 }
 
 }

@@ -36,6 +36,7 @@
 
 namespace com::sun::star::xml::dom { class XNode; }
 namespace com::sun::star::uno { class XInterface; }
+namespace editeng { class SvxFieldItemUpdater; }
 namespace vcl { class Font; }
 namespace com::sun::star::presentation { class XPresentation2; }
 class SdOutliner;
@@ -628,6 +629,9 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
 private:
+
+    void UpdatePageRelativeURLsImpl(const std::function<void(const SvxFieldItem & rFieldItem, editeng::SvxFieldItemUpdater& rFieldItemUpdater)>& rItemCallback);
+
     /** This member stores the printer independent layout mode.  Please
         refer to <member>SetPrinterIndependentLayout()</member> for its
         values.
