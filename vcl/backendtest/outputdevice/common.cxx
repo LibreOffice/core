@@ -1602,9 +1602,9 @@ TestResult OutputDeviceTestBitmap::checkComplexTransformedBitmap(Bitmap& rBitmap
     eResult = checkFilled(rBitmap, tools::Rectangle(Point(1, 11), Size(2, 2)), constBackgroundColor);
     checkResult(eResult, aReturnValue);
     eResult = checkFilled(rBitmap, tools::Rectangle(Point(14, 1), Size(2, 2)), constBackgroundColor);
+    checkResult(eResult, aReturnValue);
     // check the middle
     eResult = checkFilled(rBitmap, tools::Rectangle(Point(4, 3), Size(9, 8)), constFillColor);
-    checkResult(eResult, aReturnValue);
     checkResult(eResult, aReturnValue);
     int nNumberOfQuirks = 0;
     int nNumberOfErrors = 0;
