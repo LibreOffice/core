@@ -4440,11 +4440,23 @@ void WW8RStyle::ImportOldFormatStyles()
 
         if (cb != 0xFF)
         {
-            sal_uInt8 stc2(0);
-            m_rStream.ReadUChar( stc2 );
-            m_rStream.SeekRel(6);
-            nByteCount+=7;
-            sal_uInt8 nRemainder = cb-7;
+            sal_uInt8 nRemainder;
+            if (cb < 7)
+            {
+                SAL_WARN("sw.ww8", "WW8RStyle::ImportOldFormatStyles: expected byte count: "
+                    << static_cast<int>(cb) << " to be >= 7");
+                m_rStream.SeekRel(cb);
+                nByteCount += cb;
+                nRemainder = 0;
+            }
+            else
+            {
+                sal_uInt8 stc2(0);
+                m_rStream.ReadUChar(stc2);
+                m_rStream.SeekRel(6);
+                nByteCount += 7;
+                nRemainder = cb-7;
+            }
 
             aPAPXOffsets[stcp].mnOffset = m_rStream.Tell();
             aPAPXOffsets[stcp].mnSize = nRemainder;
