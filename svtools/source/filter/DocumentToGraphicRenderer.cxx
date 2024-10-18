@@ -208,6 +208,7 @@ Graphic DocumentToGraphicRenderer::renderToGraphic(
         comphelper::makePropertyValue(u"View"_ustr, mxController),
         comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true),
         comphelper::makePropertyValue(u"HasPDFExtOutDevData"_ustr, bExtOutDevData),
+        comphelper::makePropertyValue(u"IsLastPage"_ustr, true), // see PrinterController::abortJob
         comphelper::makePropertyValue(u"PageRange"_ustr, OUString::number(nCurrentPage))
     };
 
