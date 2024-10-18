@@ -253,6 +253,7 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
             }
                 break;
         case OBJECTTYPE_AXIS_UNITLABEL:
+        case OBJECTTYPE_DATA_LABEL:
                 aRet=SchResId(STR_OBJECT_LABEL);//@todo maybe a more concrete name
                 break;
         case OBJECTTYPE_GRID:
@@ -282,9 +283,6 @@ OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
                 break;
         case OBJECTTYPE_DATA_LABELS:
                 aRet=SchResId(STR_OBJECT_DATALABELS);
-                break;
-        case OBJECTTYPE_DATA_LABEL:
-                aRet=SchResId(STR_OBJECT_LABEL);
                 break;
         case OBJECTTYPE_DATA_ERRORS_X:
                 aRet=SchResId(STR_OBJECT_ERROR_BARS_X);
