@@ -1559,7 +1559,7 @@ uno::Any DomainMapper_Impl::GetInheritedParaProperty(PropertyIds eId)
 {
     StyleSheetEntryPtr pEntry;
     if ( m_bInStyleSheetImport )
-        pEntry = pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(
+        pEntry = GetStyleSheetTable()->FindStyleSheetByISTD(
             GetStyleSheetTable()->GetCurrentEntry()->m_sBaseStyleIdentifier);
     else
         pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(GetCurrentParaStyleName());
