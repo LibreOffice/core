@@ -793,10 +793,9 @@ static void FillBox_Impl(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArray,
         rBox.iter_children(*xChildParentIter);
     for (size_t i = 0; i < rTreeArray.size(); ++i)
     {
-        if (i != 0)
-            rBox.iter_next_sibling(*xChildParentIter);
         FillBox_Impl(rBox, rTreeArray[i]->getChildren(), eStyleFamily, xChildParentIter.get(),
                      blcl_insert, pViewShell, pStyleSheetPool);
+        rBox.iter_next_sibling(*xChildParentIter);
     }
 }
 
