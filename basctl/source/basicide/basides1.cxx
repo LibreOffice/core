@@ -913,6 +913,8 @@ void Shell::GetState(SfxItemSet &rSet)
             }
             break;
             case SID_DOCINFO:
+            case SID_NEWWINDOW:
+            case SID_SAVEASDOC:
             {
                 rSet.DisableItem( nWh );
             }
@@ -937,12 +939,6 @@ void Shell::GetState(SfxItemSet &rSet)
 
                 if ( bDisable )
                     rSet.DisableItem( nWh );
-            }
-            break;
-            case SID_NEWWINDOW:
-            case SID_SAVEASDOC:
-            {
-                rSet.DisableItem( nWh );
             }
             break;
             case SID_SIGNATURE:
