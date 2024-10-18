@@ -1938,7 +1938,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             bool bParserSuccess = false;
             try
             {
-                bParserSuccess = false;
                 xParser->setOrder(OUString());
                 xParser->appendOrderByColumn(xField, bSortUp);
                 bParserSuccess = true;
