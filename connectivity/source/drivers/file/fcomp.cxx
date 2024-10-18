@@ -350,17 +350,14 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode const * pPredicateNode)
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+            case DataType::DOUBLE:
+            case DataType::REAL:
                 pOb1->setValue(pOb1->getValue().getDouble());
                 pOb2->setValue(pOb2->getValue().getDouble());
                 break;
             case DataType::FLOAT:
                 pOb1->setValue(pOb1->getValue().getFloat());
                 pOb2->setValue(pOb2->getValue().getFloat());
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                pOb1->setValue(pOb1->getValue().getDouble());
-                pOb2->setValue(pOb2->getValue().getDouble());
                 break;
             case DataType::DATE:
                 pOb1->setValue(pOb1->getValue().getDate());
