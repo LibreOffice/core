@@ -566,16 +566,14 @@ void PDFIProcessor::intersectClipToStroke(const uno::Reference< rendering::XPoly
     basegfx::B2DPolyPolygon aTmpClip = basegfx::utils::mergeToSinglePolyPolygon(std::move(aFills));
 
     for (const basegfx::B2DPolygon & rExtractedHairline : aHairlines)
-    {
         aTmpClip.append(rExtractedHairline);
-    }
 
-    aNewClip = aTmpClip;
+    aNewClip = std::move(aTmpClip);
 
     if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
         aNewClip = basegfx::utils::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
-    getCurrentContext().Clip = aNewClip;
+    getCurrentContext().Clip = std::move(aNewClip);
 }
 
 void PDFIProcessor::hyperLink( const geometry::RealRectangle2D& rBounds,
