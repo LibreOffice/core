@@ -1268,7 +1268,11 @@ void ScTabView::ScrollHdl(ScrollAdaptor* pScroll)
                     // slower than they are used to. If that becomes an
                     // issue for enough users, the reduction factor may
                     // need to be lowered to find a good balance point.
+#ifdef _WIN32
+                    static const tools::Long nHScrollReductionFactor = 3;
+#else
                     static const tools::Long nHScrollReductionFactor = 8;
+#endif
 
                     // tdf#161945 increase sensitivity for negative horizontal deltas
                     // A side effect of the anti-jitter code is that it tends
