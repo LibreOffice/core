@@ -818,8 +818,6 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
-            bRet = false;
-            break;
         case DataType::BLOB:
         case DataType::CLOB:
         case DataType::OBJECT:
@@ -1959,8 +1957,6 @@ css::util::Time ORowSetValue::getTime()        const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toTime(getDouble());
-                break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
@@ -2003,8 +1999,6 @@ css::util::DateTime ORowSetValue::getDateTime()    const
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                aValue = DBTypeConversion::toDateTime(getDouble());
-                break;
             case DataType::FLOAT:
             case DataType::DOUBLE:
             case DataType::REAL:
