@@ -2696,11 +2696,12 @@ SdPage* SdPage::getImplementation( const css::uno::Reference< css::drawing::XDra
     return nullptr;
 }
 
-void SdPage::SetName (const OUString& rName)
+void SdPage::SetName (const OUString& rName, bool bUpdatePageRelativeURLs)
 {
     OUString aOldName( GetName() );
     FmFormPage::SetName (rName);
-    static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).UpdatePageRelativeURLs(aOldName, rName);
+    if (bUpdatePageRelativeURLs)
+        static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()).UpdatePageRelativeURLs(aOldName, rName);
     ActionChanged();
 }
 

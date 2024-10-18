@@ -681,6 +681,7 @@ SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 }
 
 
+// Only called for handout master
 SdXMLMasterPageContext::SdXMLMasterPageContext(
     SdXMLImport& rImport,
     sal_Int32 nElement,
@@ -688,7 +689,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     uno::Reference< drawing::XShapes > const & rShapes)
 :   SdXMLGenericPageContext( rImport, xAttrList, rShapes )
 {
-    const bool bHandoutMaster = (nElement & TOKEN_MASK) == XML_HANDOUT_MASTER;
+    assert((nElement & TOKEN_MASK) == XML_HANDOUT_MASTER); (void)nElement;
     OUString sStyleName, sPageMasterName;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
@@ -748,13 +749,110 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
 
     GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
 
-    // set page name?
-    if(!bHandoutMaster && !msDisplayName.isEmpty() && GetLocalShapesContext().is())
+    // set page-master?
+    if(!sPageMasterName.isEmpty())
     {
-        uno::Reference < container::XNamed > xNamed(GetLocalShapesContext(), uno::UNO_QUERY);
-        if(xNamed.is())
-            xNamed->setName(msDisplayName);
+        SetPageMaster( sPageMasterName );
     }
+
+    SetStyle( sStyleName );
+
+    SetLayout();
+
+    DeleteAllShapes();
+}
+
+// only called for normal master pages
+SdXMLMasterPageContext::SdXMLMasterPageContext(
+    SdXMLImport& rImport,
+    sal_Int32 nElement,
+    const uno::Reference< xml::sax::XFastAttributeList>& xAttrList,
+    uno::Reference< drawing::XDrawPages2 > const & xMasterPages)
+:   SdXMLGenericPageContext( rImport, xAttrList )
+{
+    assert((nElement & TOKEN_MASK) != XML_HANDOUT_MASTER); (void)nElement;
+    OUString sStyleName, sPageMasterName;
+
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        const OUString sValue = aIter.toString();
+        switch(aIter.getToken())
+        {
+            case XML_ELEMENT(STYLE, XML_NAME):
+            {
+                msName = sValue;
+                break;
+            }
+            case XML_ELEMENT(STYLE, XML_DISPLAY_NAME):
+            {
+                msDisplayName = sValue;
+                break;
+            }
+            case XML_ELEMENT(STYLE, XML_PAGE_LAYOUT_NAME):
+            {
+                sPageMasterName = sValue;
+                break;
+            }
+            case XML_ELEMENT(DRAW, XML_STYLE_NAME):
+            {
+                sStyleName = sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_PRESENTATION_PAGE_LAYOUT_NAME):
+            {
+                maPageLayoutName = sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_HEADER_NAME):
+            {
+                maUseHeaderDeclName =  sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_FOOTER_NAME):
+            {
+                maUseFooterDeclName =  sValue;
+                break;
+            }
+            case XML_ELEMENT(PRESENTATION, XML_USE_DATE_TIME_NAME):
+            {
+                maUseDateTimeDeclName =  sValue;
+                break;
+            }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+        }
+    }
+
+    if( msDisplayName.isEmpty() )
+        msDisplayName = msName;
+    else if( msDisplayName != msName )
+        GetImport().AddStyleDisplayName( XmlStyleFamily::MASTER_PAGE, msName, msDisplayName );
+
+    sal_Int32 nNewMasterPageCount = GetSdImport().GetNewMasterPageCount();
+    sal_Int32 nMasterPageCount = xMasterPages->getCount();
+    uno::Reference< drawing::XDrawPage > xNewMasterPage;
+    if (nNewMasterPageCount + 1 > nMasterPageCount)
+    {
+        // new page, create and insert
+        xNewMasterPage = xMasterPages->insertNamedNewByIndex(nMasterPageCount, msDisplayName);
+        SetShapes(xNewMasterPage);
+    }
+    else
+    {
+        // existing page, use it
+        xMasterPages->getByIndex(nNewMasterPageCount) >>= xNewMasterPage;
+        SetShapes(xNewMasterPage);
+        if(!msDisplayName.isEmpty())
+        {
+            uno::Reference < container::XNamed > xNamed(xNewMasterPage, uno::UNO_QUERY);
+            if(xNamed.is())
+                xNamed->setName(msDisplayName);
+        }
+    }
+    // increment global import page counter
+    GetSdImport().IncrementNewMasterPageCount();
+
+    GetImport().GetShapeImport()->startPage( GetLocalShapesContext() );
 
     // set page-master?
     if(!sPageMasterName.isEmpty())
@@ -1323,41 +1421,24 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
     else if( nElement == XML_ELEMENT(STYLE, XML_MASTER_PAGE) )
     {
         // style:masterpage inside office:styles context
-        uno::Reference< drawing::XDrawPage > xNewMasterPage;
-        uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
+        uno::Reference< drawing::XDrawPages2 > xMasterPages(GetSdImport().GetLocalMasterPages());
 
         if( xMasterPages.is() )
         {
-            sal_Int32 nNewMasterPageCount = GetSdImport().GetNewMasterPageCount();
             sal_Int32 nMasterPageCount = xMasterPages->getCount();
-            if (nNewMasterPageCount + 1 > nMasterPageCount)
-            {
-                // arbitrary limit to master pages when fuzzing to avoid deadend timeouts
-                if (nMasterPageCount >= 64 && comphelper::IsFuzzing())
-                    return nullptr;
+            // arbitrary limit to master pages when fuzzing to avoid deadend timeouts
+            if (nMasterPageCount >= 64 && comphelper::IsFuzzing())
+               return nullptr;
 
-                // new page, create and insert
-                xNewMasterPage = xMasterPages->insertNewByIndex(nMasterPageCount);
-            }
-            else
-            {
-                // existing page, use it
-                xMasterPages->getByIndex(nNewMasterPageCount) >>= xNewMasterPage;
-            }
+            // new page, create and insert
 
-            // increment global import page counter
-            GetSdImport().IncrementNewMasterPageCount();
-
-            if(xNewMasterPage.is())
+            if(GetSdImport().GetShapeImport()->GetStylesContext())
             {
-                if(GetSdImport().GetShapeImport()->GetStylesContext())
-                {
-                    const rtl::Reference<SdXMLMasterPageContext> xLclContext{
-                        new SdXMLMasterPageContext(GetSdImport(),
-                            nElement, xAttrList, xNewMasterPage)};
-                    maMasterPageList.push_back(xLclContext);
-                    return xLclContext;
-                }
+                const rtl::Reference<SdXMLMasterPageContext> xLclContext{
+                    new SdXMLMasterPageContext(GetSdImport(),
+                        nElement, xAttrList, xMasterPages)};
+                maMasterPageList.push_back(xLclContext);
+                return xLclContext;
             }
         }
     }

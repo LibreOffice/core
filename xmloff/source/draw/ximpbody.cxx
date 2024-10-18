@@ -144,7 +144,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         // because of content/style file split. Now the mechanism is to
         // compare the wanted masterpage-name with the existing masterpages
         // which were loaded and created in the styles section loading.
-        uno::Reference< drawing::XDrawPages > xMasterPages(GetSdImport().GetLocalMasterPages(), uno::UNO_QUERY);
+        uno::Reference< drawing::XDrawPages2 > xMasterPages(GetSdImport().GetLocalMasterPages());
         uno::Reference < drawing::XMasterPageTarget > xDrawPage(rShapes, uno::UNO_QUERY);
         uno::Reference< drawing::XDrawPage > xMasterPage;
 

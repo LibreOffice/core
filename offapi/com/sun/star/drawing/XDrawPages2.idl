@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+
+module com {  module sun {  module star {  module drawing {
+
+
+/**
+*/
+interface XDrawPages2 : com::sun::star::drawing::XDrawPages
+{
+
+    /** creates and inserts a new DrawPage or MasterPage
+        into this container
+
+        @param nIndex
+            the index at which the newly created DrawPage or
+            MasterPage will be inserted.
+
+        @param sName
+            The name for the new page. Currently only used for master pages.
+
+        @return
+            the newly created and already inserted DrawPage or
+            MasterPage.
+    */
+    com::sun::star::drawing::XDrawPage insertNamedNewByIndex( [in] long nIndex, [in] string sName );
+
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

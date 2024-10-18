@@ -27,6 +27,7 @@
 #include "ximppage.hxx"
 #include <xmloff/xmlstyle.hxx>
 #include <com/sun/star/view/PaperOrientation.hpp>
+#include <com/sun/star/drawing/XDrawPages2.hpp>
 #include <memory>
 #include <vector>
 
@@ -93,6 +94,13 @@ class SdXMLMasterPageContext: public SdXMLGenericPageContext
 
 public:
 
+    // called for normal master page
+    SdXMLMasterPageContext(
+        SdXMLImport& rImport,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XDrawPages2 > const & xMasterPages);
+    // Called for handout master page
     SdXMLMasterPageContext(
         SdXMLImport& rImport,
         sal_Int32 nElement,

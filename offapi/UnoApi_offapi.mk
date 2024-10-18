@@ -2370,6 +2370,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/drawing,\
 	XDrawPageSummarizer \
 	XDrawPageSupplier \
 	XDrawPages \
+	XDrawPages2 \
 	XDrawPagesSupplier \
 	XDrawSubController \
 	XDrawView \

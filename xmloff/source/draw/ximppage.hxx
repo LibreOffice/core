@@ -56,11 +56,15 @@ protected:
 
     void SetNavigationOrder();
 
+    void SetShapes(css::uno::Reference< css::drawing::XShapes > const & rShapes);
+
 public:
 
     SdXMLGenericPageContext( SvXMLImport& rImport,
         const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList,
         css::uno::Reference< css::drawing::XShapes > const & rShapes);
+    SdXMLGenericPageContext( SvXMLImport& rImport,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList>& xAttrList);
     virtual ~SdXMLGenericPageContext() override;
 
     virtual void SAL_CALL startFastElement( sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList ) override;

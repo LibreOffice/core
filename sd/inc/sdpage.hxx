@@ -312,7 +312,7 @@ public:
 
     /** Set the name of the page and broadcast a model change.
     */
-    SD_DLLPUBLIC void SetName(const OUString& rName);
+    SD_DLLPUBLIC void SetName(const OUString& rName, bool bUpdatePageRelativeURLs = true);
 
     SD_DLLPUBLIC const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
     SD_DLLPUBLIC void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );

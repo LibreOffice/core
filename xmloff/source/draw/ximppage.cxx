@@ -229,6 +229,27 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     }
 }
 
+SdXMLGenericPageContext::SdXMLGenericPageContext(
+    SvXMLImport& rImport,
+    const Reference< xml::sax::XFastAttributeList>& xAttrList)
+: SvXMLImportContext( rImport )
+{
+    for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+    {
+        if( aIter.getToken() == XML_ELEMENT(DRAW, XML_NAV_ORDER) )
+        {
+            msNavOrder = aIter.toString();
+            break;
+        }
+    }
+}
+
+void SdXMLGenericPageContext::SetShapes(Reference< drawing::XShapes > const & rShapes)
+{
+    mxShapes = rShapes;
+    mxAnnotationAccess.set( rShapes, UNO_QUERY );
+}
+
 SdXMLGenericPageContext::~SdXMLGenericPageContext()
 {
 }

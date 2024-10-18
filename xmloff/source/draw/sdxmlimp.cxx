@@ -338,7 +338,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     // prepare access to master pages
     uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
     if(xMasterPagesSupplier.is())
-        mxDocMasterPages = xMasterPagesSupplier->getMasterPages();
+        mxDocMasterPages.set(xMasterPagesSupplier->getMasterPages(), uno::UNO_QUERY_THROW);
 
     // prepare access to draw pages
     uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);

@@ -21,6 +21,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages2.hpp>
 #include <com/sun/star/drawing/XDrawPageDuplicator.hpp>
 #include <com/sun/star/drawing/XLayerSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -366,7 +367,7 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-class SdMasterPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages, css::lang::XServiceInfo, css::lang::XComponent >
+class SdMasterPagesAccess final : public ::cppu::WeakImplHelper< css::drawing::XDrawPages2, css::lang::XServiceInfo, css::lang::XComponent >
 {
 private:
     SdXImpressDocument* mpModel;
@@ -378,6 +379,9 @@ public:
     // XDrawPages
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) override;
     virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XDrawPage >& xPage ) override;
+
+    // XDrawPages2
+    virtual css::uno::Reference< ::css::drawing::XDrawPage > SAL_CALL insertNamedNewByIndex( sal_Int32 nIndex, const OUString& sName ) override;
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() override ;
@@ -396,6 +400,9 @@ public:
     virtual void SAL_CALL dispose(  ) override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+
+private:
+    virtual css::uno::Reference< ::css::drawing::XDrawPage > insertNewImpl( sal_Int32 nIndex, std::optional<OUString> oName );
 };
 
 /***********************************************************************

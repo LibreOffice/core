@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages2.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -48,7 +49,7 @@ typedef std::map<OUString, DateTimeDeclContextImpl> DateTimeDeclMap;
 class SdXMLImport: public SvXMLImport
 {
     css::uno::Reference< css::container::XNameAccess > mxDocStyleFamilies;
-    css::uno::Reference< css::container::XIndexAccess > mxDocMasterPages;
+    css::uno::Reference< css::drawing::XDrawPages2 > mxDocMasterPages;
     css::uno::Reference< css::container::XIndexAccess > mxDocDrawPages;
     css::uno::Reference< css::container::XNameAccess > mxPageLayouts;
 
@@ -103,7 +104,7 @@ public:
 
     // export local parameters concerning page access and similar
     const css::uno::Reference< css::container::XNameAccess >& GetLocalDocStyleFamilies() const { return mxDocStyleFamilies; }
-    const css::uno::Reference< css::container::XIndexAccess >& GetLocalMasterPages() const { return mxDocMasterPages; }
+    const css::uno::Reference< css::drawing::XDrawPages2 >& GetLocalMasterPages() const { return mxDocMasterPages; }
     const css::uno::Reference< css::container::XIndexAccess >& GetLocalDrawPages() const { return mxDocDrawPages; }
 
     sal_Int32 GetNewPageCount() const { return mnNewPageCount; }
