@@ -1374,7 +1374,8 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
 
                     sParentStyleDisplayName = sParentStyleDisplayName.copy( nPrefLen );
                 }
-                xStyle->setParentStyle( sParentStyleDisplayName );
+                if (xStyle->getParentStyle() != sParentStyleDisplayName)
+                    xStyle->setParentStyle( sParentStyleDisplayName );
             }
         }
         catch( const Exception& e )
