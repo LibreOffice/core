@@ -2696,10 +2696,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     for (const boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
     {
         const boost::property_tree::ptree& rComment = rValue.second;
-        sCommentText = OString(rComment.get<std::string>("text"));
+        sCommentText = OString(rComment.get<std::string>("html"));
     }
     // This was false (lost comment with spelling replacement)
-    CPPUNIT_ASSERT_EQUAL("with comment"_ostr, sCommentText);
+    CPPUNIT_ASSERT_EQUAL("<div>with comment</div>"_ostr, sCommentText);
 }
 #endif
 

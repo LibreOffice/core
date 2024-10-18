@@ -175,7 +175,7 @@ namespace {
             aAnnotation.put("id", pField->GetPostItId());
             aAnnotation.put("parentId", pField->GetParentPostItId());
             aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
-            aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
+            // Note, for just plain text we could use "text" populated by pField->GetPar2()
             aAnnotation.put("html", pWin->GetSimpleHtml());
             aAnnotation.put("resolved", pField->GetResolved() ? "true" : "false");
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));

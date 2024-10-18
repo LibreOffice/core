@@ -2016,8 +2016,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
     {
         const boost::property_tree::ptree& rComment = rValue.second;
 
-        OString aText(rComment.get<std::string>("text"));
-        CPPUNIT_ASSERT_EQUAL("Comment"_ostr, aText);
+        OString aText(rComment.get<std::string>("html"));
+        CPPUNIT_ASSERT_EQUAL("<div>Comment</div>"_ostr, aText);
     }
 }
 
