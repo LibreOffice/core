@@ -998,7 +998,6 @@ namespace sw::mark
                                   || pMark->GetMarkPos().GetContentIndex() != *oStartContentIdx;
                     break;
                 default:
-                    bDeleteMark = true;
                     break;
                 }
             }
