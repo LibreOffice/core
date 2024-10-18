@@ -508,7 +508,13 @@ void SwSendMailDialog::UpdateTransferStatus()
     sStatus = m_sErrorStatus.replaceFirst("%1", OUString::number(m_nErrorCount) );
     m_xErrorStatus->set_label(sStatus);
 
-    if (!m_pImpl->aDescriptors.empty())
+    bool bEmpty;
+    {
+        std::scoped_lock aGuard(m_pImpl->aDescriptorMutex);
+        bEmpty = m_pImpl->aDescriptors.empty();
+    }
+
+    if (!bEmpty)
     {
         assert(m_nExpectedCount && "div-by-zero");
         m_xProgressBar->set_percentage(m_nProcessedCount * 100 / m_nExpectedCount);
