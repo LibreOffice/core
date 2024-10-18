@@ -56,3 +56,10 @@ remotely, checkout:
 <http://accessibility.linuxfoundation.org/a11yweb/util/accprobe/>
 
 But often it's more useful to look at NVDA's text output window.
+
+Another tool is Accessibility Insights for Windows:
+<https://accessibilityinsights.io/>
+It does not support IAccessible2, but the Microsoft Active Accessibility
+to Microsoft UIA proxy makes some properties, methods and events available
+to UIA via the LegacyIAccessible pattern:
+<https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-implementinglegacyiaccessible>
