@@ -621,7 +621,8 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                                     &rText.getSdrText(),
                                     rText.getOutlinerParaObject(),
                                     aAnchorTransform,
-                                    bWordWrap);
+                                    bWordWrap,
+                                    rText.isFixedCellHeight());
                 }
                 else if( rText.isChainable() && !rText.isInEditMode() )
                 {

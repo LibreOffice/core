@@ -420,10 +420,12 @@ namespace drawinglayer::primitive2d
              const SdrText* pSdrText,
              const OutlinerParaObject& rParaObj,
              ::basegfx::B2DHomMatrix aTextRangeTransform,
-             bool bWordWrap)
+             bool bWordWrap,
+             bool bFixedCellHeight)
          :  SdrTextPrimitive2D(pSdrText, rParaObj),
              maTextRangeTransform(std::move(aTextRangeTransform)),
-             mbWordWrap(bWordWrap)
+             mbWordWrap(bWordWrap),
+             mbFixedCellHeight(bFixedCellHeight)
          {
          }
 
@@ -434,7 +436,8 @@ namespace drawinglayer::primitive2d
                  const SdrBlockTextPrimitive2D& rCompare = static_cast<const SdrBlockTextPrimitive2D&>(rPrimitive);
 
                  return (getTextRangeTransform() == rCompare.getTextRangeTransform()
-                     && getWordWrap() == rCompare.getWordWrap());
+                     && getWordWrap() == rCompare.getWordWrap()
+                     && isFixedCellHeight() == rCompare.isFixedCellHeight());
              }
 
              return false;
@@ -442,7 +445,12 @@ namespace drawinglayer::primitive2d
 
          rtl::Reference<SdrTextPrimitive2D> SdrAutoFitTextPrimitive2D::createTransformedClone(const ::basegfx::B2DHomMatrix& rTransform) const
          {
-             return new SdrAutoFitTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
+             return new SdrAutoFitTextPrimitive2D(
+                getSdrText(),
+                getOutlinerParaObject(),
+                rTransform * getTextRangeTransform(),
+                getWordWrap(),
+                isFixedCellHeight());
          }
 
         // provide unique ID

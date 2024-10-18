@@ -270,6 +270,7 @@ namespace drawinglayer::primitive2d
             ::basegfx::B2DHomMatrix                 maTextRangeTransform;   // text range transformation from unit range ([0.0 .. 1.0]) to text range
 
             bool                                    mbWordWrap : 1;         // for CustomShapes text layout
+            bool                                    mbFixedCellHeight : 1;
 
             // local decomposition.
             virtual Primitive2DReference create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const override;
@@ -279,11 +280,13 @@ namespace drawinglayer::primitive2d
                 const SdrText* pSdrText,
                 const OutlinerParaObject& rOutlinerParaObjectPtr,
                 ::basegfx::B2DHomMatrix aTextRangeTransform,
-                bool bWordWrap);
+                bool bWordWrap,
+                bool bFixedCellHeight);
 
             // get data
             const basegfx::B2DHomMatrix& getTextRangeTransform() const { return maTextRangeTransform; }
             bool getWordWrap() const { return mbWordWrap; }
+            bool isFixedCellHeight() const { return mbFixedCellHeight; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
