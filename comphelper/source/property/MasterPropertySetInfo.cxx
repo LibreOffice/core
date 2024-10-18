@@ -99,7 +99,7 @@ Property SAL_CALL MasterPropertySetInfo::getPropertyByName( const OUString& rNam
 
 sal_Bool SAL_CALL MasterPropertySetInfo::hasPropertyByName( const OUString& rName )
 {
-    return maMap.find ( rName ) != maMap.end();
+    return maMap.contains( rName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

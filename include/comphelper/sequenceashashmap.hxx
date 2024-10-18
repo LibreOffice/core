@@ -297,7 +297,7 @@ class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap
         bool createItemIfMissing(const OUString& sKey  ,
                                      const TValueType&      aValue)
         {
-            if (m_aMap.find(sKey) == m_aMap.end())
+            if (!m_aMap.contains(sKey))
             {
                 (*this)[sKey] = css::uno::toAny(aValue);
                 return true;

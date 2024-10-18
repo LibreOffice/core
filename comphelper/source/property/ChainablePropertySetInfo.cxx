@@ -89,7 +89,7 @@ Property SAL_CALL ChainablePropertySetInfo::getPropertyByName( const OUString& r
 
 sal_Bool SAL_CALL ChainablePropertySetInfo::hasPropertyByName( const OUString& rName )
 {
-    return maMap.find ( rName ) != maMap.end();
+    return maMap.contains( rName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
