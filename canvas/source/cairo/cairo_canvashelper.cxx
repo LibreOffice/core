@@ -168,13 +168,11 @@ namespace cairocanvas
                 compositingMode = CAIRO_OPERATOR_SOURCE;
                 break;
             case rendering::CompositeOperation::DESTINATION:
+            case rendering::CompositeOperation::UNDER:
                 compositingMode = CAIRO_OPERATOR_DEST;
                 break;
             case rendering::CompositeOperation::OVER:
                 compositingMode = CAIRO_OPERATOR_OVER;
-                break;
-            case rendering::CompositeOperation::UNDER:
-                compositingMode = CAIRO_OPERATOR_DEST;
                 break;
             case rendering::CompositeOperation::INSIDE:
                 compositingMode = CAIRO_OPERATOR_IN;
