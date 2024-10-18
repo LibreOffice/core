@@ -1273,7 +1273,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxINTEGER:
             r.ReadInt16( aData.nInteger ); break;
         case SbxLONG:
-            r.ReadInt32( aData.nLong ); break;
+        case SbxDATAOBJECT:
+            r.ReadInt32( aData.nLong );
+            break;
         case SbxSINGLE:
         {
             // Floats as ASCII
@@ -1404,9 +1406,6 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
         case SbxNULL:
         case SbxVOID:
             break;
-        case SbxDATAOBJECT:
-            r.ReadInt32( aData.nLong );
-            break;
         // #78919 For backwards compatibility
         case SbxWSTRING:
         case SbxWCHAR:
@@ -1431,7 +1430,9 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxINTEGER:
                 r.WriteInt16( aData.nInteger ); break;
             case SbxLONG:
-                r.WriteInt32( aData.nLong ); break;
+            case SbxDATAOBJECT:
+                r.WriteInt32( aData.nLong );
+                break;
             case SbxDATE:
                 // #49935: Save as double, otherwise an error during the read in
                 const_cast<SbxValue*>(this)->aData.eType = static_cast<SbxDataType>( ( nType & 0xF000 ) | SbxDOUBLE );
@@ -1505,9 +1506,6 @@ bool SbxValue::LoadData( SvStream& r, sal_uInt16 )
             case SbxEMPTY:
             case SbxNULL:
             case SbxVOID:
-                break;
-            case SbxDATAOBJECT:
-                r.WriteInt32( aData.nLong );
                 break;
             // #78919 For backwards compatibility
             case SbxWSTRING:
