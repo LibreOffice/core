@@ -422,14 +422,13 @@ const OUString& SalGetDesktopEnvironment()
     static OUString aDesktopEnvironment("iOS");
 #elif UNIX_DESKTOP_DETECT
     // Order to match desktops.hxx' DesktopType
-    static const char * const desktop_strings[] = {
-        "none", "unknown", "GNOME", "UNITY",
-        "XFCE", "MATE", "PLASMA5", "PLASMA6", "LXQT" };
+    static constexpr OUString desktop_strings[] = {
+        u"none"_ustr, u"unknown"_ustr, u"GNOME"_ustr, u"UNITY"_ustr,
+        u"XFCE"_ustr, u"MATE"_ustr, u"PLASMA5"_ustr, u"PLASMA6"_ustr, u"LXQT"_ustr };
     static OUString aDesktopEnvironment;
     if( aDesktopEnvironment.isEmpty())
     {
-        aDesktopEnvironment = OUString::createFromAscii(
-            desktop_strings[get_desktop_environment()]);
+        aDesktopEnvironment = desktop_strings[get_desktop_environment()];
     }
 #else
     static OUString aDesktopEnvironment("unknown");
