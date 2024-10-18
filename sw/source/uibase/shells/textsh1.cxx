@@ -2848,7 +2848,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                             else
                                             {
                                                 lcl_LogWarning(
-                                                    "FillApi chart resize: not enought parameters"
+                                                    "FillApi chart resize: not enough parameters"
                                                     " (x,y is needed)");
                                             }
                                         }
