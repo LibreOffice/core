@@ -299,6 +299,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
                 }
                 break;
                 case OBJ_TYPE_MODULE:
+                case OBJ_TYPE_DIALOG:
                 {
                     aName = pair.second;
                     eType = pBE->GetType();
@@ -307,12 +308,6 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
                 case OBJ_TYPE_METHOD:
                 {
                     aMethodName = pair.second;
-                    eType = pBE->GetType();
-                }
-                break;
-                case OBJ_TYPE_DIALOG:
-                {
-                    aName = pair.second;
                     eType = pBE->GetType();
                 }
                 break;
