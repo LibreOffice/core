@@ -145,20 +145,6 @@ int QtInstanceMessageDialog::run()
     return pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
 }
 
-void QtInstanceMessageDialog::response(int nResponse)
-{
-    SolarMutexGuard g;
-    QtInstance& rQtInstance = GetQtInstance();
-    if (!rQtInstance.IsMainThread())
-    {
-        rQtInstance.RunInMainThread([&] { response(nResponse); });
-        return;
-    }
-
-    assert(m_pMessageDialog);
-    m_pMessageDialog->done(nResponse);
-}
-
 void QtInstanceMessageDialog::dialogFinished(int nResult)
 {
     SolarMutexGuard g;

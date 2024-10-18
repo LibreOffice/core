@@ -43,7 +43,7 @@ public:
 
     virtual int run() override;
 
-    virtual void response(int) override;
+    virtual void response(int nResponse) override;
 
     virtual void add_button(const OUString&, int, const OUString& rHelpId = {}) override;
 

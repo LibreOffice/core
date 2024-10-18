@@ -94,7 +94,12 @@ int QtInstanceDialog::run()
     return qtResponseTypeToVclResponseType(m_pDialog->exec());
 }
 
-void QtInstanceDialog::response(int) {}
+void QtInstanceDialog::response(int nResponse)
+{
+    SolarMutexGuard g;
+    QtInstance& rQtInstance = GetQtInstance();
+    rQtInstance.RunInMainThread([&] { m_pDialog->done(nResponse); });
+}
 
 void QtInstanceDialog::add_button(const OUString&, int, const OUString&) {}
 

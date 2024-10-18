@@ -39,7 +39,6 @@ public:
     virtual void set_default_response(int nResponse) override;
     QtInstanceButton* weld_widget_for_response(int nResponse) override;
     virtual int run() override;
-    virtual void response(int nResponse) override;
 
 private:
     virtual QPushButton* buttonForResponseCode(int nResponse);
