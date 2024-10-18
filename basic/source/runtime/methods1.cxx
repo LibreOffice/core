@@ -1246,6 +1246,9 @@ void SbRtl_TypeLen(StarBASIC *, SbxArray & rPar, bool)
     case SbxDIMARRAY:
     case SbxCARRAY:
     case SbxUSERDEF:
+    case SbxOBJECT:
+    case SbxVARIANT:
+    case SbxDATAOBJECT:
         nLen = 0;
         break;
 
@@ -1269,12 +1272,6 @@ void SbRtl_TypeLen(StarBASIC *, SbxArray & rPar, bool)
     case SbxSALINT64:
     case SbxSALUINT64:
         nLen = 8;
-        break;
-
-    case SbxOBJECT:
-    case SbxVARIANT:
-    case SbxDATAOBJECT:
-        nLen = 0;
         break;
 
     case SbxCHAR:
