@@ -2457,6 +2457,25 @@ postCommandInThread (gpointer data)
 }
 
 static void
+paintTile(LOKDocViewPrivate& priv,
+    unsigned char* pBuffer,
+    const GdkRectangle& rTileRectangle,
+    gint nTileSizePixelsScaled,
+    LOEvent* pLOEvent,
+    gint nScaleFactor)
+{
+    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
+    setDocumentView(priv->m_pDocument, priv->m_nViewId);
+
+    priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
+                                         pBuffer,
+                                         nTileSizePixelsScaled, nTileSizePixelsScaled,
+                                         rTileRectangle.x, rTileRectangle.y,
+                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor),
+                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor));
+}
+
+static void
 paintTileInThread (gpointer data)
 {
     GTask* task = G_TASK(data);
@@ -2496,8 +2515,6 @@ paintTileInThread (gpointer data)
     aTileRectangle.x = pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) * pLOEvent->m_nPaintTileY;
     aTileRectangle.y = pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) * pLOEvent->m_nPaintTileX;
 
-    std::unique_lock<std::mutex> aGuard(g_aLOKMutex);
-    setDocumentView(priv->m_pDocument, priv->m_nViewId);
     std::stringstream ss;
     GTimer* aTimer = g_timer_new();
     gulong nElapsedMs;
@@ -2507,13 +2524,7 @@ paintTileInThread (gpointer data)
         << pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) << ", "
         << pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor) << ")";
 
-    priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
-                                         pBuffer,
-                                         nTileSizePixelsScaled, nTileSizePixelsScaled,
-                                         aTileRectangle.x, aTileRectangle.y,
-                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor),
-                                         pixelToTwip(nTileSizePixelsScaled, pLOEvent->m_fPaintTileZoom * nScaleFactor));
-    aGuard.unlock();
+    paintTile(priv, pBuffer, aTileRectangle, nTileSizePixelsScaled, pLOEvent, nScaleFactor);
 
     g_timer_elapsed(aTimer, &nElapsedMs);
     ss << " rendered in " << (nElapsedMs / 1000.) << " milliseconds";
