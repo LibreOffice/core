@@ -96,6 +96,8 @@ FeatureState ShapeController::getState( const OUString& rCommand )
             case ChartCommandID::ShapeTransformDialog:
             case ChartCommandID::ShapeObjectTitleDescription:
             case ChartCommandID::ShapeRenameObject:
+            case ChartCommandID::ShapeFontDialog:
+            case ChartCommandID::ShapeParagraphDialog:
                 {
                     aReturn.bEnabled = bWritable;
                     aReturn.aState <<= false;
@@ -113,13 +115,6 @@ FeatureState ShapeController::getState( const OUString& rCommand )
                 {
 
                     aReturn.bEnabled = ( bWritable && isBackwardPossible() );
-                    aReturn.aState <<= false;
-                }
-                break;
-            case ChartCommandID::ShapeFontDialog:
-            case ChartCommandID::ShapeParagraphDialog:
-                {
-                    aReturn.bEnabled = bWritable;
                     aReturn.aState <<= false;
                 }
                 break;
