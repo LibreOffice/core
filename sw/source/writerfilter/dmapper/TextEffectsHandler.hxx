@@ -14,6 +14,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <docmodel/color/ComplexColor.hxx>
+
 #include "PropertyIds.hxx"
 
 #include <oox/helper/grabbagstack.hxx>
@@ -26,7 +28,7 @@ namespace writerfilter::dmapper
 /// Class to process all text effects like glow, textOutline, ...
 class TextEffectsHandler : public LoggedProperties
 {
-private:
+protected:
     std::optional<PropertyIds> maPropertyId;
     OUString maElementName;
     std::unique_ptr<oox::GrabBagStack> mpGrabBagStack;
@@ -63,6 +65,18 @@ public:
     // LoggedProperties
     virtual void lcl_attribute(Id aName, const Value& aValue) override;
     virtual void lcl_sprm(Sprm& sprm) override;
+};
+
+class TextFillHandler : public TextEffectsHandler
+{
+    void updateComplexColor();
+    model::ComplexColor& maComplexColor;
+
+public:
+    bool mbIsHandled;
+    TextFillHandler(sal_uInt32 aElementId, model::ComplexColor& aComplexColor);
+    // LoggedProperties
+    virtual void lcl_sprm(Sprm& rSprm) override;
 };
 }
 

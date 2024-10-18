@@ -836,6 +836,7 @@ private:
     /// Attributes of the run color
     rtl::Reference<sax_fastparser::FastAttributeList> m_pColorAttrList;
     sal_uInt8 m_nCharTransparence = 0;
+    model::ComplexColor m_aComplexColor;
     /// Attributes of the paragraph background
     rtl::Reference<sax_fastparser::FastAttributeList> m_pBackgroundAttrList;
     OUString m_sOriginalBackgroundColor;
@@ -930,6 +931,9 @@ private:
 
     /// GrabBag for text effects like glow, shadow, ...
     std::vector<css::beans::PropertyValue> m_aTextEffectsGrabBag;
+
+    /// GrabBag for text fill effects
+    std::vector<css::beans::PropertyValue> m_aTextFillGrabBag;
 
     /// The current table helper
     std::unique_ptr<SwWriteTable> m_xTableWrt;

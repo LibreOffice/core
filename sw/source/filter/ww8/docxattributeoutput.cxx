@@ -298,44 +298,50 @@ auto detachFrom(rtl::Reference<sax_fastparser::FastAttributeList>& src)
     return rtl::Reference(std::move(src));
 }
 
+constexpr auto constThemeColorTypeTokenMap = frozen::make_unordered_map<model::ThemeColorType, const char*>({
+    { model::ThemeColorType::Dark1, "dark1" },
+    { model::ThemeColorType::Light1, "light1" },
+    { model::ThemeColorType::Dark2, "dark2" },
+    { model::ThemeColorType::Light2, "light2" },
+    { model::ThemeColorType::Accent1, "accent1" },
+    { model::ThemeColorType::Accent2, "accent2" },
+    { model::ThemeColorType::Accent3, "accent3" },
+    { model::ThemeColorType::Accent4, "accent4" },
+    { model::ThemeColorType::Accent5, "accent5" },
+    { model::ThemeColorType::Accent6, "accent6" },
+    { model::ThemeColorType::Hyperlink, "hyperlink" },
+    { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
+});
+
+OString lclGetSchemeType(model::ComplexColor const& rComplexColor)
+{
+    const auto iter = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
+    assert(iter != constThemeColorTypeTokenMap.end());
+    OString sSchemeType = iter->second;
+    if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
+    {
+        if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
+            sSchemeType = "text1"_ostr;
+        else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark2)
+            sSchemeType = "text2"_ostr;
+    }
+    else if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Background)
+    {
+        if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light1)
+            sSchemeType = "background1"_ostr;
+        else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light2)
+            sSchemeType = "background2"_ostr;
+    }
+    return sSchemeType;
+}
+
 void lclAddThemeValuesToCustomAttributes(
     rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor,
     sal_Int32 nThemeAttrId, sal_Int32 nThemeTintAttrId, sal_Int32 nThemeShadeAttrId)
 {
-    static constexpr auto constThemeColorTypeTokenMap = frozen::make_unordered_map<model::ThemeColorType, const char*>({
-        { model::ThemeColorType::Dark1, "dark1" },
-        { model::ThemeColorType::Light1, "light1" },
-        { model::ThemeColorType::Dark2, "dark2" },
-        { model::ThemeColorType::Light2, "light2" },
-        { model::ThemeColorType::Accent1, "accent1" },
-        { model::ThemeColorType::Accent2, "accent2" },
-        { model::ThemeColorType::Accent3, "accent3" },
-        { model::ThemeColorType::Accent4, "accent4" },
-        { model::ThemeColorType::Accent5, "accent5" },
-        { model::ThemeColorType::Accent6, "accent6" },
-        { model::ThemeColorType::Hyperlink, "hyperlink" },
-        { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
-    });
-
     if (rComplexColor.isValidThemeType())
     {
-        const auto iter = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
-        assert(iter != constThemeColorTypeTokenMap.end());
-        OString sSchemeType = iter->second;
-        if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
-        {
-            if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
-                sSchemeType = "text1"_ostr;
-            else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark2)
-                sSchemeType = "text2"_ostr;
-        }
-        else if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Background)
-        {
-            if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light1)
-                sSchemeType = "background1"_ostr;
-            else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light2)
-                sSchemeType = "background2"_ostr;
-        }
+        OString sSchemeType = lclGetSchemeType(rComplexColor);
 
         DocxAttributeOutput::AddToAttrList(pAttrList, FSNS(XML_w, nThemeAttrId), sSchemeType);
 
@@ -398,6 +404,15 @@ void lclAddThemeFillColorAttributes(rtl::Reference<sax_fastparser::FastAttribute
 void lclAddThemeColorAttributes(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList, model::ComplexColor const& rComplexColor)
 {
     lclAddThemeValuesToCustomAttributes(pAttrList, rComplexColor, XML_themeColor, XML_themeTint, XML_themeShade);
+}
+
+bool lclHasSolidFillTransformations(const model::ComplexColor& aComplexColor)
+{
+    const std::vector<model::Transformation>& transformations = aComplexColor.getTransformations();
+    auto idx = std::find_if(transformations.begin(), transformations.end(), [](const model::Transformation& transformation) {
+        return transformation.meType != model::TransformationType::Shade && transformation.meType != model::TransformationType::Tint;
+    });
+    return idx != transformations.end();
 }
 
 } // end anonymous namespace
@@ -3516,7 +3531,18 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
     pSerializer->endElement(aElementId);
 }
 
-}
+constexpr auto constTransformationToTokenId = frozen::make_unordered_map<model::TransformationType, sal_Int32>({
+    { model::TransformationType::Tint, XML_tint },
+    { model::TransformationType::Shade, XML_shade },
+    { model::TransformationType::Sat, XML_sat },
+    { model::TransformationType::SatOff, XML_satOff },
+    { model::TransformationType::SatMod, XML_satMod },
+    { model::TransformationType::Lum, XML_lum },
+    { model::TransformationType::LumOff, XML_lumOff },
+    { model::TransformationType::LumMod, XML_lumMod },
+});
+
+} // end anonymous namepsace
 
 void DocxAttributeOutput::WriteCollectedRunProperties()
 {
@@ -3542,35 +3568,81 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_lang, detachFrom( m_pCharLangAttrList ) );
     }
 
-    if (m_nCharTransparence != 0 && m_pColorAttrList && m_aTextEffectsGrabBag.empty())
+    if ((m_nCharTransparence != 0 || lclHasSolidFillTransformations(m_aComplexColor))
+            && m_pColorAttrList.is()
+            && m_aTextFillGrabBag.empty())
     {
         std::string_view pVal;
         m_pColorAttrList->getAsView(FSNS(XML_w, XML_val), pVal);
+
         if (!pVal.empty() && pVal != "auto")
         {
             m_pSerializer->startElementNS(XML_w14, XML_textFill);
             m_pSerializer->startElementNS(XML_w14, XML_solidFill);
-            m_pSerializer->startElementNS(XML_w14, XML_srgbClr, FSNS(XML_w14, XML_val), pVal.data());
-            sal_Int32 nTransparence = m_nCharTransparence * oox::drawingml::MAX_PERCENT / 255.0;
-            m_pSerializer->singleElementNS(XML_w14, XML_alpha, FSNS(XML_w14, XML_val), OString::number(nTransparence));
-            m_pSerializer->endElementNS(XML_w14, XML_srgbClr);
+
+            if (m_aComplexColor.isValidThemeType())
+            {
+                OString sSchemeType = lclGetSchemeType(m_aComplexColor);
+                m_pSerializer->startElementNS(XML_w14, XML_schemeClr, FSNS(XML_w14, XML_val), sSchemeType);
+            }
+            else
+            {
+                m_pSerializer->startElementNS(XML_w14, XML_srgbClr, FSNS(XML_w14, XML_val), pVal.data());
+            }
+
+            if (m_nCharTransparence != 0)
+            {
+                sal_Int32 nTransparence = basegfx::fround(m_nCharTransparence / 255.0 * 100.0) * oox::drawingml::PER_PERCENT;
+                m_pSerializer->singleElementNS(XML_w14, XML_alpha, FSNS(XML_w14, XML_val), OString::number(nTransparence));
+            }
+
+            for (const model::Transformation & transformation : m_aComplexColor.getTransformations())
+            {
+                sal_Int32 nValue = transformation.mnValue * drawingml::PER_PERCENT;
+                const auto iter = constTransformationToTokenId.find(transformation.meType);
+                if (iter != constTransformationToTokenId.end())
+                {
+                    sal_Int32 nElement = iter->second;
+                    m_pSerializer->singleElementNS(XML_w14, nElement, FSNS(XML_w14, XML_val), OString::number(nValue));
+                }
+            }
+
+            if (m_aComplexColor.isValidThemeType())
+            {
+                m_pSerializer->endElementNS(XML_w14, XML_schemeClr);
+            }
+            else
+            {
+                m_pSerializer->endElementNS(XML_w14, XML_srgbClr);
+            }
             m_pSerializer->endElementNS(XML_w14, XML_solidFill);
             m_pSerializer->endElementNS(XML_w14, XML_textFill);
             m_nCharTransparence = 0;
         }
     }
     m_pColorAttrList.clear();
-    for (const beans::PropertyValue & i : m_aTextEffectsGrabBag)
+
+    auto processGrabBag = [this](const beans::PropertyValue& prop)
     {
-        std::optional<sal_Int32> aElementId = lclGetElementIdForName(i.Name);
+        std::optional<sal_Int32> aElementId = lclGetElementIdForName(prop.Name);
         if(aElementId)
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
-            i.Value >>= aGrabBagSeq;
+            prop.Value >>= aGrabBagSeq;
             lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
         }
+    };
+
+    for (const beans::PropertyValue & i : m_aTextEffectsGrabBag)
+    {
+        processGrabBag(i);
+    }
+    for (const beans::PropertyValue & i : m_aTextFillGrabBag)
+    {
+        processGrabBag(i);
     }
     m_aTextEffectsGrabBag.clear();
+    m_aTextFillGrabBag.clear();
 }
 
 void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -7830,6 +7902,7 @@ void DocxAttributeOutput::CharColor(const SvxColorItem& rColorItem)
 
     AddToAttrList(m_pColorAttrList, FSNS(XML_w, XML_val), aColorString);
     m_nCharTransparence = 255 - aColor.GetAlpha();
+    m_aComplexColor = aComplexColor;
 }
 
 void DocxAttributeOutput::CharContour( const SvxContourItem& rContour )
@@ -10199,7 +10272,6 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                 rGrabBagElement.first == "CharShadowTextEffect" ||
                 rGrabBagElement.first == "CharReflectionTextEffect" ||
                 rGrabBagElement.first == "CharTextOutlineTextEffect" ||
-                rGrabBagElement.first == "CharTextFillTextEffect" ||
                 rGrabBagElement.first == "CharScene3DTextEffect" ||
                 rGrabBagElement.first == "CharProps3DTextEffect" ||
                 rGrabBagElement.first == "CharLigaturesTextEffect" ||
@@ -10211,6 +10283,12 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             beans::PropertyValue aPropertyValue;
             rGrabBagElement.second >>= aPropertyValue;
             m_aTextEffectsGrabBag.push_back(aPropertyValue);
+        }
+        else if (rGrabBagElement.first == "CharTextFillTextEffect")
+        {
+            beans::PropertyValue aPropertyValue;
+            rGrabBagElement.second >>= aPropertyValue;
+            m_aTextFillGrabBag.push_back(aPropertyValue);
         }
         else if (rGrabBagElement.first == "SdtEndBefore")
         {

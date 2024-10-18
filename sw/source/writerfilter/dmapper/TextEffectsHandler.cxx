@@ -19,6 +19,11 @@
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/color.hxx>
+
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
 
 namespace writerfilter::dmapper
 {
@@ -72,6 +77,43 @@ OUString lclGetNameForElementId(sal_uInt32 aId)
 }
 
 constexpr OUString constAttributesSequenceName = u"attributes"_ustr;
+
+constexpr auto constThemeTypeMap = frozen::make_unordered_map<std::u16string_view, model::ThemeColorType>({
+    { u"dk1", model::ThemeColorType::Dark1 },
+    { u"lt1", model::ThemeColorType::Light1 },
+    { u"dk2", model::ThemeColorType::Dark2 },
+    { u"lt2", model::ThemeColorType::Light2 },
+    { u"accent1", model::ThemeColorType::Accent1 },
+    { u"accent2", model::ThemeColorType::Accent2 },
+    { u"accent3", model::ThemeColorType::Accent3 },
+    { u"accent4", model::ThemeColorType::Accent4 },
+    { u"accent5", model::ThemeColorType::Accent5 },
+    { u"accent6", model::ThemeColorType::Accent6 },
+    { u"hlink", model::ThemeColorType::Hyperlink },
+    { u"folHlink", model::ThemeColorType::FollowedHyperlink },
+    { u"tx1", model::ThemeColorType::Dark1 },
+    { u"bg1", model::ThemeColorType::Light1 },
+    { u"tx2", model::ThemeColorType::Dark2 },
+    { u"bg2", model::ThemeColorType::Light2 },
+    { u"dark1", model::ThemeColorType::Dark1},
+    { u"light1", model::ThemeColorType::Light1},
+    { u"dark2", model::ThemeColorType::Dark2 },
+    { u"light2", model::ThemeColorType::Light2 },
+    { u"text1", model::ThemeColorType::Dark1 },
+    { u"background1", model::ThemeColorType::Light1 },
+    { u"text2", model::ThemeColorType::Dark2 },
+    { u"background2", model::ThemeColorType::Light2 },
+    { u"hyperlink", model::ThemeColorType::Hyperlink },
+    { u"followedHyperlink", model::ThemeColorType::FollowedHyperlink }
+});
+
+model::ThemeColorType lclGetThemeTypeByName(const OUString& name)
+{
+    auto it = constThemeTypeMap.find(name);
+    if (it == constThemeTypeMap.end())
+        return model::ThemeColorType::Unknown;
+    return it->second;
+}
 
 }
 
@@ -799,6 +841,154 @@ sal_uInt8 TextEffectsHandler::GetTextFillSolidFillAlpha(const css::beans::Proper
     sal_Int32 nVal = 0;
     it->second >>= nVal;
     return nVal / oox::drawingml::PER_PERCENT;
+}
+
+TextFillHandler::TextFillHandler(sal_uInt32 aElementId, model::ComplexColor& aComplexColor)
+    : TextEffectsHandler(aElementId)
+    , maComplexColor(aComplexColor)
+    , mbIsHandled(false)
+{
+}
+
+void TextFillHandler::lcl_sprm(Sprm &rSprm)
+{
+    if (mpGrabBagStack->getCurrentName() == constAttributesSequenceName)
+        mpGrabBagStack->pop();
+    sal_uInt32 nSprmId = rSprm.getId();
+    OUString aElementName = lclGetNameForElementId(nSprmId);
+    if(aElementName.isEmpty())
+    {
+        // Element is unknown -> leave.
+        return;
+    }
+    switch (nSprmId)
+    {
+        case NS_ooxml::LN_EG_FillProperties_solidFill:
+        {
+            mbIsHandled = true;
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( !pProperties )
+                return;
+            tools::SvRef<TextFillHandler> pTextEffectsHandlerPtr( new TextFillHandler(nSprmId, maComplexColor) );
+            pProperties->resolve( *pTextEffectsHandlerPtr );
+            pTextEffectsHandlerPtr->updateComplexColor();
+        }
+        break;
+        default:
+        {
+            mpGrabBagStack->push(aElementName);
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( !pProperties )
+                return;
+            pProperties->resolve( *this );
+            if (mpGrabBagStack->getCurrentName() == constAttributesSequenceName)
+                mpGrabBagStack->pop();
+            mpGrabBagStack->pop();
+        }
+    }
+}
+
+void TextFillHandler::updateComplexColor()
+{
+    auto getValue = [](const comphelper::SequenceAsHashMap& root)
+    {
+        auto it = root.find("attributes");
+        if (it == root.end())
+        {
+            return static_cast<sal_Int32>(0);
+        }
+        comphelper::SequenceAsHashMap aAttributesMap(it->second);
+        it = aAttributesMap.find("val");
+        if (it == aAttributesMap.end())
+        {
+            return static_cast<sal_Int32>(0);
+        }
+        sal_Int32 nVal = 0;
+        it->second >>= nVal;
+        return nVal;
+    };
+    auto fillProps = getInteropGrabBag();
+    uno::Sequence<beans::PropertyValue> aPropertyValues;
+    fillProps.Value >>= aPropertyValues;
+    comphelper::SequenceAsHashMap aSolidFillMap(aPropertyValues);
+    auto it = aSolidFillMap.find("srgbClr");
+    if (it == aSolidFillMap.end())
+    {
+        it = aSolidFillMap.find("schemeClr");
+        if (it == aSolidFillMap.end())
+        {
+            return;
+        }
+        else
+        {
+            oox::drawingml::Color clr;
+            comphelper::SequenceAsHashMap aSchemeClrMap(it->second);
+            auto schemeIt = aSchemeClrMap.find("attributes");
+            if (schemeIt != aSchemeClrMap.end())
+            {
+                comphelper::SequenceAsHashMap aAttributesMap(schemeIt->second);
+                schemeIt = aAttributesMap.find("val");
+                if (schemeIt != aAttributesMap.end())
+                {
+                    OUString name;
+                    schemeIt->second >>= name;
+                    if (name.getLength() > 0)
+                    {
+                        maComplexColor.setThemeColor(lclGetThemeTypeByName(name));
+                    }
+                }
+            }
+        }
+    }
+    comphelper::SequenceAsHashMap aSrgbClrMap(it->second);
+    for (auto const& prop : aSrgbClrMap)
+    {
+        if (prop.first.maString == "alpha")
+        {
+            sal_Int16 nAlpha = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::Alpha, nAlpha});
+        }
+        else if (prop.first.maString == "tint")
+        {
+            sal_Int16 nTint = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::Tint, nTint});
+        }
+        else if (prop.first.maString == "shade")
+        {
+            sal_Int16 nShade = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::Shade, nShade});
+        }
+        else if (prop.first.maString == "sat")
+        {
+            sal_Int16 nSat = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::Sat, nSat});
+        }
+        else if (prop.first.maString == "satOff")
+        {
+            sal_Int16 nSatOff = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::SatOff, nSatOff});
+        }
+        else if (prop.first.maString == "satMod")
+        {
+            sal_Int16 nSatMod = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::SatMod, nSatMod});
+        }
+        else if (prop.first.maString == "lum")
+        {
+            sal_Int16 nLum = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::Lum, nLum});
+        }
+        else if (prop.first.maString == "lumOff")
+        {
+            sal_Int16 nLumOff = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::LumOff, nLumOff});
+        }
+        else if (prop.first.maString == "lumMod")
+        {
+            sal_Int16 nLumMod = static_cast<sal_Int16>(getValue(prop.second) / oox::drawingml::PER_PERCENT);
+            maComplexColor.addTransformation({model::TransformationType::LumMod, nLumMod});
+        }
+    }
 }
 
 } // namespace

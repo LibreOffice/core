@@ -2373,6 +2373,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             {
                 m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::Any(pThemeColorHandler->mnColor));
 
+                // ComplexColor can be set in LN_textFill_textFill which has priority
+                auto aAnyComplexColor = m_pImpl->GetTopContext()->getProperty(PROP_CHAR_COMPLEX_COLOR);
+                if (aAnyComplexColor.has_value())
+                    return;
+
                 auto eType = TDefTableHandler::getThemeColorTypeIndex(pThemeColorHandler->mnIndex);
                 if (eType != model::ThemeColorType::Unknown)
                 {
@@ -3435,11 +3440,41 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_tcEnd:
         m_pImpl->m_StreamStateStack.top().nTableCellDepth--;
     break;
+    case NS_ooxml::LN_textFill_textFill:
+    {
+        model::ComplexColor aComplexColor;
+        tools::SvRef<TextFillHandler> pHandlerPtr(new TextFillHandler(nSprmId, aComplexColor));
+        std::optional<PropertyIds> aPropertyId = pHandlerPtr->getGrabBagPropertyId();
+        if (aPropertyId)
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            pProperties->resolve(*pHandlerPtr);
+            // Saving a ComplexColor (w14:solidFill) in context
+            auto xComplexColor = model::color::createXComplexColor(aComplexColor);
+            rContext->Insert(PROP_CHAR_COMPLEX_COLOR, uno::Any(xComplexColor));
+            beans::PropertyValue aGrabBag = pHandlerPtr->getInteropGrabBag();
+
+            for (auto const& transform : aComplexColor.getTransformations())
+            {
+                if (transform.meType == model::TransformationType::Alpha)
+                {
+                    sal_Int16 nTransparency = transform.mnValue;
+                    rContext->Insert(PROP_CHAR_TRANSPARENCE, uno::Any(nTransparency));
+                }
+            }
+
+            if (!pHandlerPtr->mbIsHandled)
+            {
+                rContext->Insert(*aPropertyId, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
+            }
+        }
+    }
+    break;
+
     case NS_ooxml::LN_glow_glow:
     case NS_ooxml::LN_shadow_shadow:
     case NS_ooxml::LN_reflection_reflection:
     case NS_ooxml::LN_textOutline_textOutline:
-    case NS_ooxml::LN_textFill_textFill:
     case NS_ooxml::LN_scene3d_scene3d:
     case NS_ooxml::LN_props3d_props3d:
     case NS_ooxml::LN_ligatures_ligatures:
