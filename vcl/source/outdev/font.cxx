@@ -1227,6 +1227,10 @@ void OutputDevice::GetWordKashidaPositions(const OUString& rText,
     if (!pSalLayout)
         return;
 
+    // tdf#163215: VCL cannot suggest valid kashida positions for certain fonts (e.g. AAT).
+    if (!pSalLayout->HasFontKashidaPositions())
+        return;
+
     pOutMap->resize(nEnd, false);
     for (sal_Int32 i = 0; i < nEnd; ++i)
     {

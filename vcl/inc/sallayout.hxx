@@ -69,6 +69,7 @@ public:
     SAL_DLLPRIVATE bool            GetNextGlyph(const GlyphItem** pGlyph, basegfx::B2DPoint& rPos, int& nStart,
                                  const LogicalFontInstance** ppGlyphFont = nullptr) const override;
     SAL_DLLPRIVATE bool            GetOutline(basegfx::B2DPolyPolygonVector&) const override;
+    SAL_DLLPRIVATE bool HasFontKashidaPositions() const override;
     SAL_DLLPRIVATE bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const override;
     SAL_DLLPRIVATE SalLayoutGlyphs GetGlyphs() const final override;
 
@@ -117,6 +118,7 @@ public:
     void            DrawText(SalGraphics&) const final override;
     SalLayoutGlyphs GetGlyphs() const final override;
 
+    bool HasFontKashidaPositions() const final override;
     bool            IsKashidaPosValid(int nCharPos, int nNextCharPos) const final override;
 
     // used by upper layers
@@ -171,6 +173,7 @@ private:
 
     hb_set_t*       mpVertGlyphs;
     const bool      mbFuzzing;
+    bool m_bHasFontKashidaPositions = false;
 };
 
 #endif // INCLUDED_VCL_INC_SALLAYOUT_HXX

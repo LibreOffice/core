@@ -31,13 +31,14 @@ enum class SalLayoutFlags
     KerningAsian = 0x0020,
     Vertical = 0x0040,
     DisableLigatures = 0x0200,
+    DisableKashidaValidation = 0x0400,
     ForFallback = 0x2000,
     GlyphItemsOnly = 0x4000,
     UnclusteredGlyphs = 0x8000,
 };
 namespace o3tl
 {
-template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0xE277>
+template <> struct typed_flags<SalLayoutFlags> : is_typed_flags<SalLayoutFlags, 0xE677>
 {
 };
 }

@@ -136,10 +136,13 @@ bool CanConnectToPrev(sal_Unicode cCh, sal_Unicode cPrevCh)
 
 bool isSyriacChar(sal_Unicode cCh)
 {
-    return (cCh >= 0x700 && cCh <= 0x74F) || (cCh >= 0x860 && cCh <= 0x86A);
+    return u_getIntPropertyValue(cCh, UCHAR_SCRIPT) == USCRIPT_SYRIAC;
 }
 
-bool isArabicChar(sal_Unicode cCh) { return cCh >= 0x60C && cCh <= 0x6FE; }
+bool isArabicChar(sal_Unicode cCh)
+{
+    return u_getIntPropertyValue(cCh, UCHAR_SCRIPT) == USCRIPT_ARABIC;
+}
 
 std::optional<i18nutil::KashidaPosition>
 GetWordKashidaPositionArabic(const OUString& rWord, const std::vector<bool>& pValidPositions)

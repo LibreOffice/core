@@ -1243,6 +1243,21 @@ bool MultiSalLayout::GetOutline(basegfx::B2DPolyPolygonVector& rPPV) const
     return bRet;
 }
 
+bool MultiSalLayout::HasFontKashidaPositions() const
+{
+    // tdf#163215: VCL cannot suggest valid kashida positions for certain fonts (e.g. AAT).
+    // In order to strictly validate kashida positions, all fallback fonts must allow it.
+    for (int n = 0; n < mnLevel; ++n)
+    {
+        if (!mpLayouts[n]->HasFontKashidaPositions())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 bool MultiSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const
 {
     // Check the base layout

@@ -40,6 +40,7 @@
 #include <hb-ot.h>
 #include <hb-graphite2.h>
 #include <hb-icu.h>
+#include <hb-aat.h>
 
 #include <map>
 #include <memory>
@@ -376,6 +377,14 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
     hb_font_t *pHbFont = GetFont().GetHbFont();
     bool isGraphite = GetFont().IsGraphiteFont();
 
+    // tdf#163215: Identify layouts that don't have strict kashida position validation.
+    m_bHasFontKashidaPositions = false;
+    if (!(rArgs.mnFlags & SalLayoutFlags::DisableKashidaValidation))
+    {
+        hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+        m_bHasFontKashidaPositions = !hb_aat_layout_has_substitution(pHbFace);
+    }
+
     int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos);
     m_GlyphItems.reserve(nGlyphCapacity);
 
@@ -683,7 +692,9 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                 if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
                     nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
 
-                if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL)
+                if (!m_bHasFontKashidaPositions
+                    || (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i])
+                        & HB_GLYPH_FLAG_SAFE_TO_INSERT_TATWEEL))
                     nGlyphFlags |= GlyphItemFlags::IS_SAFE_TO_INSERT_KASHIDA;
 
                 double nAdvance, nXOffset, nYOffset;
@@ -1009,6 +1020,8 @@ void GenericSalLayout::ApplyJustificationData(const JustificationData& rstJustif
         }
     }
 }
+
+bool GenericSalLayout::HasFontKashidaPositions() const { return m_bHasFontKashidaPositions; }
 
 // Kashida will be inserted between nCharPos and nNextCharPos.
 bool GenericSalLayout::IsKashidaPosValid(int nCharPos, int nNextCharPos) const

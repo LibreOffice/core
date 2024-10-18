@@ -697,4 +697,55 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testPartialArabicComposition)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(nCompleteWidth, nPartialWidth, /*delta*/ 0.01);
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf163215)
+{
+    OUString aStr = u"ببببب"_ustr;
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 2048));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // Characteristic case with kashida position validation
+    auto pLayout1 = pOutDev->ImplLayout(aStr, 0, aStr.getLength(), Point(), 0, {}, {},
+                                        SalLayoutFlags::GlyphItemsOnly);
+    CPPUNIT_ASSERT(pLayout1->HasFontKashidaPositions());
+
+    SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
+
+    std::vector<bool> aFoundPositions1;
+    for (const auto& stGlyph : *aGlyphs1.Impl(0))
+    {
+        aFoundPositions1.push_back(stGlyph.IsSafeToInsertKashida());
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aFoundPositions1.size());
+    CPPUNIT_ASSERT(aFoundPositions1.at(0));
+    CPPUNIT_ASSERT(aFoundPositions1.at(1));
+    CPPUNIT_ASSERT(aFoundPositions1.at(2));
+    CPPUNIT_ASSERT(aFoundPositions1.at(3));
+    CPPUNIT_ASSERT(!aFoundPositions1.at(4));
+
+    // Case with kashida position validation disabled
+    auto pLayout2 = pOutDev->ImplLayout(aStr, 0, aStr.getLength(), Point(), 0, {}, {},
+                                        SalLayoutFlags::GlyphItemsOnly
+                                            | SalLayoutFlags::DisableKashidaValidation);
+    CPPUNIT_ASSERT(!pLayout2->HasFontKashidaPositions());
+
+    SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
+
+    std::vector<bool> aFoundPositions2;
+    for (const auto& stGlyph : *aGlyphs2.Impl(0))
+    {
+        aFoundPositions2.push_back(stGlyph.IsSafeToInsertKashida());
+    }
+
+    // With position validation disabled, all positions must be marked as valid
+    CPPUNIT_ASSERT_EQUAL(size_t(5), aFoundPositions2.size());
+    CPPUNIT_ASSERT(aFoundPositions2.at(0));
+    CPPUNIT_ASSERT(aFoundPositions2.at(1));
+    CPPUNIT_ASSERT(aFoundPositions2.at(2));
+    CPPUNIT_ASSERT(aFoundPositions2.at(3));
+    CPPUNIT_ASSERT(aFoundPositions2.at(4));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

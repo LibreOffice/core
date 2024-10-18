@@ -107,6 +107,8 @@ public:
     }
 
     virtual void    GetCaretPositions( std::vector<double>& rCaretPositions, const OUString& rStr ) const = 0;
+
+    virtual bool HasFontKashidaPositions() const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/, int /*nNextCharPos*/ ) const = 0; // i60594
 
     // methods using glyph indexing
