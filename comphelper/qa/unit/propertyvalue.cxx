@@ -13,6 +13,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <com/sun/star/awt/Size.hpp>
+
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppu/unotype.hxx>
@@ -29,6 +31,7 @@ class MakePropertyValueTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testRvalue);
     CPPUNIT_TEST(testBitField);
     CPPUNIT_TEST(testJson);
+    CPPUNIT_TEST(testJsonAwtSize);
     CPPUNIT_TEST_SUITE_END();
 
     void testLvalue()
@@ -122,6 +125,44 @@ class MakePropertyValueTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(OUString("FieldCommand"), aFirstSeq[1].Name);
         CPPUNIT_ASSERT_EQUAL(OUString("ADDIN ZOTERO_ITEM new command 1"),
                              aFirstSeq[1].Value.get<OUString>());
+    }
+
+    void testJsonAwtSize()
+    {
+        // Given a list of beans::PropertyValues in JSON:
+        OString aJson = R"json(
+{
+    "mykey": {
+        "type": "any",
+        "value": {
+            "type": "com.sun.star.awt.Size",
+            "value": {
+                "Width": {
+                    "type": "long",
+                    "value": 42
+                },
+                "Height": {
+                    "type": "long",
+                    "value": 43
+                }
+            }
+        }
+    }
+}
+)json"_ostr;
+
+        // When parsing that:
+        std::vector<beans::PropertyValue> aRet = comphelper::JsonToPropertyValues(aJson);
+
+        // Then make sure we can construct an awt::Size:
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aRet.size());
+        beans::PropertyValue aFirst = aRet[0];
+        CPPUNIT_ASSERT_EQUAL(OUString("mykey"), aFirst.Name);
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Cannot extract an Any(void) to com.sun.star.awt.Size
+        auto aSize = aFirst.Value.get<awt::Size>();
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(42), aSize.Width);
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(43), aSize.Height);
     }
 };
 
