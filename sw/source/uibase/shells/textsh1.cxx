@@ -2765,7 +2765,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         }
                                         else if (aItem3.first.starts_with("setcolumndesc"))
                                         {
-                                            // set colimn descriptions
+                                            // set column descriptions
                                             uno::Sequence<OUString> aColDesc
                                                 = xDataArray->getColumnDescriptions();
                                             OUString* aColdata = aColDesc.getArray();
