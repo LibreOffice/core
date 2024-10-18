@@ -794,14 +794,14 @@ bool Window::HandleScrollCommand( const CommandEvent& rCmd,
                 const CommandGesturePanData* pData = rCmd.GetGesturePanData();
                 if (pData)
                 {
-                    if (pData && pData->meEventType == GestureEventPanType::Begin)
+                    if (pData->meEventType == GestureEventPanType::Begin)
                     {
                         if (pHScrl)
                             mpWindowImpl->mpFrameData->mnTouchPanPositionX = pHScrl->GetThumbPos();
                         if (pVScrl)
                             mpWindowImpl->mpFrameData->mnTouchPanPositionY = pVScrl->GetThumbPos();
                     }
-                    else if (pData && pData->meEventType == GestureEventPanType::Update)
+                    else if (pData->meEventType == GestureEventPanType::Update)
                     {
                         bool bHorz = pData->meOrientation == PanningOrientation::Horizontal;
                         Scrollable* pScrl = bHorz ? pHScrl : pVScrl;
