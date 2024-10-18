@@ -51,13 +51,11 @@ sal_uInt16 lcl_getLbEntryPosByErrorKind( SvxChartKindError eErrorKind )
         case SvxChartKindError::Percent:
         case SvxChartKindError::Const:
         case SvxChartKindError::Range:
+        case SvxChartKindError::Sigma:
             nResult = CHART_LB_FUNCTION_STD_DEV;
             break;
         case SvxChartKindError::Variant:
             nResult = CHART_LB_FUNCTION_VARIANCE;
-            break;
-        case SvxChartKindError::Sigma:
-            nResult = CHART_LB_FUNCTION_STD_DEV;
             break;
         case SvxChartKindError::BigError:
             nResult = CHART_LB_FUNCTION_ERROR_MARGIN;
