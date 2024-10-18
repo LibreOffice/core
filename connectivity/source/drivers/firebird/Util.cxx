@@ -317,8 +317,6 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = static_cast<char *>(malloc(sizeof(float)));
             break;
         case SQL_DOUBLE:
-            pVar->sqldata = static_cast<char *>(malloc(sizeof(double)));
-            break;
         case SQL_D_FLOAT:
             pVar->sqldata = static_cast<char *>(malloc(sizeof(double)));
             break;
