@@ -241,9 +241,8 @@ void ImportExcel::ReadDimensions()
     }
     else
     {
-        sal_uInt32 nXclRow1 = 0, nXclRow2 = 0;
-        nXclRow1 = maStrm.ReaduInt32();
-        nXclRow2 = maStrm.ReaduInt32();
+        sal_uInt32 nXclRow1 = maStrm.ReaduInt32();
+        sal_uInt32 nXclRow2 = maStrm.ReaduInt32();
         aXclUsedArea.maFirst.mnCol = maStrm.ReaduInt16();
         aXclUsedArea.maLast.mnCol = maStrm.ReaduInt16();
         if( nXclRow2 != 0 && (nXclRow1 < nXclRow2) && (aXclUsedArea.GetColCount() > 1) &&
@@ -251,7 +250,7 @@ void ImportExcel::ReadDimensions()
         {
             // Excel stores first unused row/column index
             --nXclRow2;
-            --aXclUsedArea.maLast.mnCol;
+            aXclUsedArea.maLast.mnCol = o3tl::sanitizing_dec(aXclUsedArea.maLast.mnCol);
             // convert row indexes to 16-bit values
             aXclUsedArea.maFirst.mnRow = static_cast< sal_uInt16 >( nXclRow1 );
             aXclUsedArea.maLast.mnRow = limit_cast< sal_uInt16 >( nXclRow2, aXclUsedArea.maFirst.mnRow, SAL_MAX_UINT16 );
