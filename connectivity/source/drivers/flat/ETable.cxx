@@ -229,7 +229,6 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
                 }
                 else
                 {
-                    bNumeric = true;
                     sal_Int32 nDot = 0;
                     sal_Int32 nDecimalDelCount = 0;
                     sal_Int32 nSpaceCount = 0;
