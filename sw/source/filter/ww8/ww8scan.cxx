@@ -6965,7 +6965,6 @@ std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
     sal_uInt16 cbStd(0);
     m_rStream.ReadUInt16(cbStd);   // read length
 
-    const sal_uInt16 nRead = m_cbSTDBaseInFile;
     if( cbStd >= m_cbSTDBaseInFile )
     {
         // Fixed part completely available
@@ -6976,7 +6975,7 @@ std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
 
         do
         {
-            if( 2 > nRead ) break;
+            if( 2 > m_cbSTDBaseInFile ) break;
 
             sal_uInt16 a16Bit = 0;
             m_rStream.ReadUInt16( a16Bit );
@@ -6986,38 +6985,38 @@ std::unique_ptr<WW8_STD> WW8Style::Read1STDFixed(sal_uInt16& rSkip)
             pStd->fHasUpe      = sal_uInt16(0 != ( a16Bit & 0x4000 ));
             pStd->fMassCopy    = sal_uInt16(0 != ( a16Bit & 0x8000 ));
 
-            if( 4 > nRead ) break;
+            if( 4 > m_cbSTDBaseInFile ) break;
             a16Bit = 0;
             m_rStream.ReadUInt16( a16Bit );
             pStd->sgc      =   a16Bit & 0x000f       ;
             pStd->istdBase = ( a16Bit & 0xfff0 ) >> 4;
 
-            if( 6 > nRead ) break;
+            if( 6 > m_cbSTDBaseInFile ) break;
             a16Bit = 0;
             m_rStream.ReadUInt16( a16Bit );
             pStd->cupx     =   a16Bit & 0x000f       ;
             pStd->istdNext = ( a16Bit & 0xfff0 ) >> 4;
 
-            if( 8 > nRead ) break;
+            if( 8 > m_cbSTDBaseInFile ) break;
             m_rStream.ReadUInt16( pStd->bchUpe );
 
             // from Ver8 this two fields should be added:
-            if(10 > nRead ) break;
+            if (10 > m_cbSTDBaseInFile) break;
             a16Bit = 0;
             m_rStream.ReadUInt16( a16Bit );
             pStd->fAutoRedef =   a16Bit & 0x0001       ;
             pStd->fHidden    = ( a16Bit & 0x0002 ) >> 1;
             // You never know: cautionary skipped
-            if (nRead > 10)
+            if (m_cbSTDBaseInFile > 10)
             {
-                auto nSkip = std::min<sal_uInt64>(nRead - 10, m_rStream.remainingSize());
+                auto nSkip = std::min<sal_uInt64>(m_cbSTDBaseInFile - 10, m_rStream.remainingSize());
                 m_rStream.Seek(m_rStream.Tell() + nSkip);
             }
         }
         while( false ); // trick: the block above will passed through exactly one time
                     //   and can be left early with a "break"
 
-        if (!m_rStream.good() || !nRead)
+        if (!m_rStream.good() || !m_cbSTDBaseInFile)
         {
             pStd.reset(); // report error with NULL
         }
