@@ -90,10 +90,6 @@ namespace drawinglayer::primitive2d
                     break;
                 }
                 case TEXT_LINE_SMALLWAVE:
-                {
-                    bWaveLine = true;
-                    break;
-                }
                 case TEXT_LINE_WAVE:
                 {
                     bWaveLine = true;
