@@ -973,12 +973,6 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 break;
 
             case vcl::PDFWriter::Link :
-                bTextDecorationType =
-                bBaselineShift =
-                bLinkAttribute =
-                bLanguage = true;
-                break;
-
             case vcl::PDFWriter::BibEntry :
                 bTextDecorationType =
                 bBaselineShift =
