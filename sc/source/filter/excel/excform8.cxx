@@ -301,11 +301,6 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                 nEptg = aIn.ReaduInt8();
                 switch( nEptg )
                 {                           //  name        size    ext     type
-                    case 0x01:              //  Lel         4       -       err
-                        aIn.Ignore( 4 );
-                        aPool << ocBad;
-                        aPool >> aStack;
-                    break;
                     case 0x02:              //  Rw          4       -       ref
                     case 0x03:              //  Col         4       -       ref
                     case 0x06:              //  RwV         4       -       val
@@ -356,6 +351,7 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                         aPool << ocBad;
                         aPool >> aStack;
                         break;
+                    case 0x01:              //  Lel         4       -       err
                     case 0x10:              //  RadicalLel  4       -       err
                     case 0x1D:              //  SxName      4       -       val
                         aIn.Ignore( 4 );
