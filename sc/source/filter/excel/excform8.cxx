@@ -583,11 +583,6 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
             case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
                 aIn.Ignore( 6 );   // There isn't any more
                 break;
-            case 0x49:
-            case 0x69:
-            case 0x29: // Variable Reference Subexpression      [331 281]
-                aIn.Ignore( 2 );   // There isn't any more
-                break;
             case 0x4C:
             case 0x6C:
             case 0x2C: // Cell Reference Within a Name          [323    ]
@@ -637,11 +632,12 @@ ConvErr ExcelToSc8::Convert( std::unique_ptr<ScTokenArray>& rpTokArray, XclImpSt
                 aStack << aPool.Store( aCRD );
                 break;
             }
+            case 0x49:
+            case 0x69:
+            case 0x29: // Variable Reference Subexpression      [331 281]
             case 0x4E:
             case 0x6E:
             case 0x2E: // Reference Subexpression Within a Name [332 282]
-                aIn.Ignore( 2 );   // There isn't any more
-                break;
             case 0x4F:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
