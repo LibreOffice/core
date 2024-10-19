@@ -3542,7 +3542,7 @@ constexpr auto constTransformationToTokenId = frozen::make_unordered_map<model::
     { model::TransformationType::LumMod, XML_lumMod },
 });
 
-} // end anonymous namepsace
+} // end anonymous namespace
 
 void DocxAttributeOutput::WriteCollectedRunProperties()
 {
