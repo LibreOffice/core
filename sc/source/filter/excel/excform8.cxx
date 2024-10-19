@@ -972,13 +972,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
 
         switch( nOp )   //                              book page:
         {           //                                      SDK4 SDK5
-            case 0x01: // Array Formula                         [325    ]
-                       // Array Formula or Shared Formula       [    277]
-                aIn.Ignore( 4 );
-                break;
-            case 0x02: // Data Table                            [325 277]
-                aIn.Ignore( 4 );
-                break;
             case 0x03: // Addition                              [312 264]
             case 0x04: // Subtraction                           [313 264]
             case 0x05: // Multiplication                        [313 264]
@@ -1046,6 +1039,9 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x22: // Function, Variable Number of Arg.     [333 283]
                 aIn.Ignore( 3 );
                 break;
+            case 0x01: // Array Formula                         [325    ]
+                       // Array Formula or Shared Formula       [    277]
+            case 0x02: // Data Table                            [325 277]
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
