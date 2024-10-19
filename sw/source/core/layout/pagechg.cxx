@@ -410,7 +410,8 @@ static void lcl_FormatLay( SwLayoutFrame *pLay )
 static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwPageFrame* pPage)
 {
     // formats are in the special table of the document
-    for(size_t i = 0; i < rSpzs.size(); ++i )
+    size_t i = 0;
+    while (i < rSpzs.size())
     {
         auto pSpz = rSpzs[i];
         const SwFormatAnchor &rAnch = pSpz->GetAnchor();
@@ -425,7 +426,10 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
                     pSpz->SetFormatAttr( aAnch );
                 }
                 else
+                {
+                    ++i;
                     continue;
+                }
             }
 
             // is it a border or a SdrObject?
@@ -435,7 +439,6 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
             {
                 OSL_FAIL( "DrawObject not found." );
                 pSpz->GetDoc()->DelFrameFormat( pSpz );
-                --i;
                 continue;
             }
             // The object might be anchored to another page, e.g. when inserting
@@ -479,6 +482,7 @@ static void lcl_MakeObjs(const sw::FrameFormats<sw::SpzFrameFormat*>& rSpzs, SwP
                 ::RegistFlys( pPg, pFly );
             }
         }
+        ++i;
     }
 }
 
