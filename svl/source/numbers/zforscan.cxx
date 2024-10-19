@@ -996,9 +996,6 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             }
             break;
         case SsGetStar:
-            eState = SsStop;
-            sSymbolBuffer.append(OUStringChar(cToken));
-            break;
         case SsGetBlank:
             eState = SsStop;
             sSymbolBuffer.append(OUStringChar(cToken));
@@ -1554,18 +1551,11 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 }
                 break;
             case SvNumFormatType::PERCENT:
-                switch (eNewType)
-                {
-                case SvNumFormatType::NUMBER:   // Only number to percent
-                    break;
-                default:
-                    return nPos;
-                }
-                break;
             case SvNumFormatType::SCIENTIFIC:
+            case SvNumFormatType::FRACTION:
                 switch (eNewType)
                 {
-                case SvNumFormatType::NUMBER:   // Only number to E
+                case SvNumFormatType::NUMBER:
                     break;
                 default:
                     return nPos;
@@ -1589,15 +1579,6 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     {
                         return nPos;
                     }
-                }
-                break;
-            case SvNumFormatType::FRACTION:
-                switch (eNewType)
-                {
-                case SvNumFormatType::NUMBER:   // Only number to fraction
-                    break;
-                default:
-                    return nPos;
                 }
                 break;
             default:
@@ -2590,6 +2571,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             {
             case NF_SYMBOLTYPE_BLANK:
             case NF_SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STRING:
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
@@ -2684,10 +2666,6 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     i++;
                     break;
                 }
-                break;
-            case NF_SYMBOLTYPE_STRING:
-                nPos = nPos + sStrArray[i].getLength();
-                i++;
                 break;
             case NF_KEY_AMPM:                       // AM/PM
             case NF_KEY_AP:                         // A/P
