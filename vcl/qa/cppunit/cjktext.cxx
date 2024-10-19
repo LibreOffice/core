@@ -84,7 +84,7 @@ static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Poin
     Bitmap bitmap = device->GetBitmap(Point(), device->GetOutputSizePixel());
     BitmapScopedReadAccess access(bitmap);
     tools::Long x = start.X();
-    while (x >= 0 && access->GetColor(start.Y(), x) != COL_BLACK)
+    while (x >= 0 && !access->GetColor(start.Y(), x).IsDark())
         --x;
     if (x < 0)
         return -1;
