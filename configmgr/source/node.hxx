@@ -50,6 +50,9 @@ public:
     void setLayer(int layer);
     int getLayer() const { return layer_;}
 
+    /// when @staticized is set all new nodes will not ref-count
+    static void setStaticizedFlag(bool staticized);
+
     void setFinalized(int layer);
     int getFinalized() const { return finalized_;}
 
@@ -67,6 +70,7 @@ private:
     int layer_;
     int finalized_;
     OUString description_;
+    static bool CreateStaticizedNodes;
 };
 
 }
