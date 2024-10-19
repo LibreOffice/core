@@ -435,16 +435,12 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
     {
         case USCRIPT_CODE_LIMIT:
         case USCRIPT_INVALID_CODE:
-            sRet = "zxx"_ostr;
-            break;
-        case USCRIPT_COMMON:
-        case USCRIPT_INHERITED:
-            sRet = "und"_ostr;
-            break;
         case USCRIPT_MATHEMATICAL_NOTATION:
         case USCRIPT_SYMBOLS:
             sRet = "zxx"_ostr;
             break;
+        case USCRIPT_COMMON:
+        case USCRIPT_INHERITED:
         case USCRIPT_UNWRITTEN_LANGUAGES:
         case USCRIPT_UNKNOWN:
             sRet = "und"_ostr;
@@ -480,6 +476,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "am"_ostr;
             break;
         case USCRIPT_GEORGIAN:
+        case USCRIPT_KHUTSURI:
             sRet = "ka"_ostr;
             break;
         case USCRIPT_GOTHIC:
@@ -489,6 +486,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "el"_ostr;
             break;
         case USCRIPT_GUJARATI:
+        case USCRIPT_KHOJKI:
             sRet = "gu"_ostr;
             break;
         case USCRIPT_GURMUKHI:
@@ -498,7 +496,9 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "zh"_ostr;
             break;
         case USCRIPT_HANGUL:
-            sRet = "ko"_ostr;
+        case USCRIPT_KOREAN:
+        case USCRIPT_JAMO:
+            sRet = "ko"_ostr;   // Jamo - elements of Hangul Syllables
             break;
         case USCRIPT_HEBREW:
             sRet = "hr"_ostr;
@@ -546,9 +546,11 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "si"_ostr;
             break;
         case USCRIPT_SYRIAC:
+        case USCRIPT_ESTRANGELO_SYRIAC:
             sRet = "syr"_ostr;
             break;
         case USCRIPT_TAMIL:
+        case USCRIPT_GRANTHA:
             sRet = "ta"_ostr;
             break;
         case USCRIPT_TELUGU:
@@ -615,6 +617,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "ch"_ostr;
             break;
         case USCRIPT_KHAROSHTHI:
+        case USCRIPT_BRAHMI:
             sRet = "pra"_ostr;
             break;
         case USCRIPT_SYLOTI_NAGRI:
@@ -638,13 +641,11 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_BLISSYMBOLS:
             sRet = "en"_ostr;
             break;
-        case USCRIPT_BRAHMI:
-            sRet = "pra"_ostr;
-            break;
         case USCRIPT_CHAM:
             sRet = "cja"_ostr;
             break;
         case USCRIPT_CIRTH:
+        case USCRIPT_TENGWAR:
             sRet = "sjn"_ostr;
             break;
         case USCRIPT_OLD_CHURCH_SLAVONIC_CYRILLIC:
@@ -654,9 +655,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_HIERATIC_EGYPTIAN:
         case USCRIPT_EGYPTIAN_HIEROGLYPHS:
             sRet = "egy"_ostr;
-            break;
-        case USCRIPT_KHUTSURI:
-            sRet = "ka"_ostr;
             break;
         case USCRIPT_SIMPLIFIED_HAN:
             sRet = "zh"_ostr;
@@ -694,6 +692,7 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_MAYAN_HIEROGLYPHS:
             sRet = "myn"_ostr;
             break;
+        case USCRIPT_MEROITIC_CURSIVE:
         case USCRIPT_MEROITIC:
             sRet = "xmr"_ostr;
             break;
@@ -721,17 +720,11 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_SARATI:
             sRet = "qya"_ostr;
             break;
-        case USCRIPT_ESTRANGELO_SYRIAC:
-            sRet = "syr"_ostr;
-            break;
         case USCRIPT_WESTERN_SYRIAC:
             sRet = "tru"_ostr;
             break;
         case USCRIPT_EASTERN_SYRIAC:
             sRet = "aii"_ostr;
-            break;
-        case USCRIPT_TENGWAR:
-            sRet = "sjn"_ostr;
             break;
         case USCRIPT_VAI:
             sRet = "vai"_ostr;
@@ -787,9 +780,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_CHAKMA:
             sRet = "ccp"_ostr;
             break;
-        case USCRIPT_KOREAN:
-            sRet = "ko"_ostr;
-            break;
         case USCRIPT_KAITHI:
             sRet = "awa"_ostr;
             break;
@@ -838,9 +828,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_ELBASAN:
             sRet = "sq"_ostr;
             break;
-        case USCRIPT_GRANTHA:
-            sRet = "ta"_ostr;
-            break;
         case USCRIPT_KPELLE:
             sRet = "kpe"_ostr;
             break;
@@ -849,9 +836,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             break;
         case USCRIPT_MENDE:
             sRet = "men"_ostr;
-            break;
-        case USCRIPT_MEROITIC_CURSIVE:
-            sRet = "xmr"_ostr;
             break;
         case USCRIPT_OLD_NORTH_ARABIAN:
             sRet = "xna"_ostr;
@@ -891,9 +875,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             break;
         case USCRIPT_ANATOLIAN_HIEROGLYPHS:
             sRet = "hlu"_ostr;
-            break;
-        case USCRIPT_KHOJKI:
-            sRet = "gu"_ostr;
             break;
         case USCRIPT_TIRHUTA:
             sRet = "mai"_ostr;
@@ -940,9 +921,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
         case USCRIPT_HAN_WITH_BOPOMOFO:
             sRet = "mis-Hanb"_ostr;   // Han with Bopomofo, zh-Hanb ?
             break;
-        case USCRIPT_JAMO:
-            sRet = "ko"_ostr;   // Jamo - elements of Hangul Syllables
-            break;
         case USCRIPT_SYMBOLS_EMOJI:
             sRet = "mis-Zsye"_ostr;   // Emoji variant
             break;
@@ -971,8 +949,6 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "rhg"_ostr;
             break;
         case USCRIPT_SOGDIAN:
-            sRet = "sog"_ostr;
-            break;
         case USCRIPT_OLD_SOGDIAN:
             sRet = "sog"_ostr;
             break;
