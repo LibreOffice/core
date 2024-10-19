@@ -238,6 +238,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             pC = " dotslow ";
             break;
         case 0x2022:
+        case 0x22c5:
             pC = " cdot ";
             break;
         case 0x2102:
@@ -280,6 +281,7 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             pC = " rightarrow ";
             break;
         case 0x0362:
+        case 0xe098:
             pC = " widevec ";
             break;
         case 0x2193:
@@ -320,6 +322,16 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         case 0x2208: // in
         case 0x2209: // notin
+        case 0x2282: // subset
+        case 0x2283: // supset
+        case 0x2284: // nsubset
+        case 0x2285: // nsupset
+        case 0x2286: // subseteq
+        case 0x2287: // supseteq
+        case 0x2288: // nsubseteq
+        case 0x2289: // nsupseteq
+        case 0x22b2: // NORMAL SUBGROUP OF
+        case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
             rRet.append(" func " + OUStringChar(nChar) + " ");
             break;
         case 0x220d: // owns
@@ -425,24 +437,8 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
         case 0x2281:
             pC = " nsucc ";
             break;
-
-        case 0x2282: // subset
-        case 0x2283: // supset
-        case 0x2284: // nsubset
-        case 0x2285: // nsupset
-        case 0x2286: // subseteq
-        case 0x2287: // supseteq
-        case 0x2288: // nsubseteq
-        case 0x2289: // nsupseteq
-        case 0x22b2: // NORMAL SUBGROUP OF
-        case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
-            rRet.append(" func " + OUStringChar(nChar) + " ");
-            break;
         case 0x22a5:
             pC = " ortho ";
-            break;
-        case 0x22c5:
-            pC = " cdot ";
             break;
         case 0x22ee:
             pC = " dotsvert ";
@@ -480,9 +476,6 @@ bool MathType::LookupChar(sal_Unicode nChar,OUStringBuffer &rRet,sal_uInt8 nVers
             break;
         case 0xe096:
             pC = " widetilde ";
-            break;
-        case 0xe098:
-            pC = " widevec ";
             break;
         case 0xE421:
             pC = " geslant ";
