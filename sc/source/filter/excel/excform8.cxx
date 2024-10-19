@@ -1092,17 +1092,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                 rRangeList.Append(aCRD.toAbs(GetDocImport().getDoc(), aEingPos), nTab);
             }
                 break;
-            case 0x46:
-            case 0x66:
-            case 0x26: // Constant Reference Subexpression      [321 271]
-            case 0x47:
-            case 0x67:
-            case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
-            case 0x48:
-            case 0x68:
-            case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
-                aIn.Ignore( 6 );   // There isn't any more
-                break;
             case 0x49:
             case 0x69:
             case 0x29: // Variable Reference Subexpression      [331 281]
@@ -1112,11 +1101,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
                 aIn.Ignore( 3 );
-                break;
-            case 0x4B:
-            case 0x6B:
-            case 0x2B: // Deleted Area Reference                [323 273]
-                aIn.Ignore( 6 );
                 break;
             case 0x4C:
             case 0x6C:
@@ -1245,6 +1229,18 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
                 }
             }
                 break;
+            case 0x46:
+            case 0x66:
+            case 0x26: // Constant Reference Subexpression      [321 271]
+            case 0x47:
+            case 0x67:
+            case 0x27: // Erroneous Constant Reference Subexpr. [322 272]
+            case 0x48:
+            case 0x68:
+            case 0x28: // Incomplete Constant Reference Subexpr.[331 281]
+            case 0x4B:
+            case 0x6B:
+            case 0x2B: // Deleted Area Reference                [323 273]
             case 0x5C:
             case 0x7C:
             case 0x3C: // Deleted 3-D Cell Reference            [    277]
