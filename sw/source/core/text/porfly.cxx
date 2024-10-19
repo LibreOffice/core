@@ -180,7 +180,7 @@ void SwTextFrame::MoveFlyInCnt(SwTextFrame *pNew,
                     RemoveFly( pFlyFrame );
                     pNew->AppendFly( pFlyFrame );
                 }
-                else if ( dynamic_cast< const SwAnchoredDrawObject *>( pAnchoredObj ) !=  nullptr )
+                else
                 {
                     RemoveDrawObj( *pAnchoredObj );
                     pNew->AppendDrawObj( *pAnchoredObj );
