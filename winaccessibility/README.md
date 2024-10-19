@@ -50,7 +50,7 @@ not by actual end users.
 If an assistive technology like NVDA is running when soffice starts,
 IA2 should be automatically enabled and work as expected.
 
-'accprobe' can be used to to introspect the accessibility hierarchy
+'accprobe' can be used to introspect the accessibility hierarchy
 remotely, checkout:
 
 <http://accessibility.linuxfoundation.org/a11yweb/util/accprobe/>
