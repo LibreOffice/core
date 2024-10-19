@@ -98,7 +98,7 @@ void GalleryCodec::Read( SvStream& rStmToRead )
         std::unique_ptr<sal_uInt8[]> pOutBuf(new sal_uInt8[ nUnCompressedSize ]);
         sal_uInt8*  pTmpBuf = pOutBuf.get();
         sal_uInt8*  pLast = pOutBuf.get() + nUnCompressedSize - 1;
-        sal_uIntPtr   nIndex = 0, nCountByte, nRunByte;
+        size_t   nIndex = 0, nCountByte, nRunByte;
         bool    bEndDecoding = false;
 
         do
