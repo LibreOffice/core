@@ -820,32 +820,14 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             rRet.append(" {");
                             break;
                         case tmLARROW:
-                            if (nPart == 0)
-                            {
-                                if (nVariation == 0)
-                                    rRet.append(" widevec ");//left arrow above
-                                else if (nVariation == 1)
-                                    rRet.append(" widevec ");//left arrow below
-                                rRet.append(" {");
-                            }
-                            break;
                         case tmRARROW:
-                            if (nPart == 0)
-                            {
-                                if (nVariation == 0)
-                                    rRet.append(" widevec ");//right arrow above
-                                else if (nVariation == 1)
-                                    rRet.append(" widevec ");//right arrow below
-                                rRet.append(" {");
-                            }
-                            break;
                         case tmBARROW:
                             if (nPart == 0)
                             {
                                 if (nVariation == 0)
-                                    rRet.append(" widevec ");//double arrow above
+                                    rRet.append(" widevec ");//arrow above
                                 else if (nVariation == 1)
-                                    rRet.append(" widevec ");//double arrow below
+                                    rRet.append(" widevec ");//arrow below
                                 rRet.append(" {");
                             }
                             break;
@@ -950,6 +932,7 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             break;
                         case tmUHBRACE:
                         case tmLHBRACE:
+                        case tmSLFRACT:
                             rRet.append(" {");
                             break;
                         case tmSUM:
@@ -1136,9 +1119,6 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                                 rRet.append("\\lline ");
                             if (nVariation == 1)
                                 rRet.append("overline ");
-                            break;
-                        case tmSLFRACT:
-                            rRet.append(" {");
                             break;
                         case tmINTOP:
                             if (nPart == 0)
