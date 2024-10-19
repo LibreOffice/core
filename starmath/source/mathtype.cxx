@@ -1180,20 +1180,20 @@ bool MathType::HandleRecords(int nLevel, sal_uInt8 nSelector,
                             break;
                         case tmUARROW:
                             if (nVariation == 0)
-                                rRet.append(" widevec ");//left below
+                                rRet.append(" widevec ");//left below - missing functionality
                             else if (nVariation == 1)
-                                rRet.append(" widevec ");//right below
+                                rRet.append(" widevec ");//right below - missing functionality
                             else if (nVariation == 2)
-                                rRet.append(" widevec ");//double headed below
+                                rRet.append(" widevec ");//double headed below - missing functionality
                             rRet.append(" {");
                             break;
                         case tmOARROW:
                             if (nVariation == 0)
-                                rRet.append(" widevec ");//left above
+                                rRet.append(" widevec ");//left above - missing functionality
                             else if (nVariation == 1)
                                 rRet.append(" widevec ");//right above
                             else if (nVariation == 2)
-                                rRet.append(" widevec ");//double headed above
+                                rRet.append(" widevec ");//double headed above - missing functionality
                             rRet.append(" {");
                             break;
                         default:
