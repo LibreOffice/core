@@ -106,22 +106,10 @@ struct TabDlg_Impl
     }
 };
 
-static Data_Impl* Find( const SfxTabDlgData_Impl& rArr, std::u16string_view rId, sal_uInt16* pPos = nullptr)
+static auto Find(const SfxTabDlgData_Impl& rArr, std::u16string_view rId)
 {
-    const sal_uInt16 nCount = rArr.size();
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        Data_Impl* pObj = rArr[i];
-
-        if ( pObj->sId == rId )
-        {
-            if ( pPos )
-                *pPos = i;
-            return pObj;
-        }
-    }
-    return nullptr;
+    return std::find_if(rArr.begin(), rArr.end(),
+                        [rId](const auto& item) { return item->sId == rId; });
 }
 
 void SfxTabPage::SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame)
@@ -430,19 +418,19 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
 */
 
 {
-    Data_Impl* pDataObject = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
-    assert(pDataObject && "Id not known");
+    auto it = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    assert(it != m_pImpl->aData.end() && "Id not known");
 
-    pDataObject->xTabPage->Reset(m_pSet.get());
+    (*it)->xTabPage->Reset(m_pSet.get());
     // Also reset relevant items of ExampleSet and OutSet to initial state
-    if (!pDataObject->fnGetRanges)
+    if (!(*it)->fnGetRanges)
         return;
 
     if (!m_xExampleSet)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const WhichRangesContainer& pTmpRanges = (pDataObject->fnGetRanges)();
+    const WhichRangesContainer& pTmpRanges = ((*it)->fnGetRanges)();
 
     for (const auto & rPair : pTmpRanges)
     {
@@ -485,17 +473,17 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
 {
     m_bStandardPushed = true;
 
-    Data_Impl* pDataObject = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
-    assert(pDataObject && "Id not known");
+    auto it = Find(m_pImpl->aData, m_xTabCtrl->get_current_page_ident());
+    assert(it != m_pImpl->aData.end() && "Id not known");
 
-    if (!pDataObject->fnGetRanges)
+    if (!(*it)->fnGetRanges)
         return;
 
     if (!m_xExampleSet)
         m_xExampleSet.reset(new SfxItemSet(*m_pSet));
 
     const SfxItemPool* pPool = m_pSet->GetPool();
-    const WhichRangesContainer& pTmpRanges = (pDataObject->fnGetRanges)();
+    const WhichRangesContainer& pTmpRanges = ((*it)->fnGetRanges)();
     SfxItemSet aTmpSet(*m_xExampleSet);
 
     for (const auto& rPair : pTmpRanges)
@@ -523,9 +511,9 @@ IMPL_LINK_NOARG(SfxTabDialogController, BaseFmtHdl, weld::Button&, void)
         }
     }
     // Set all Items as new  -> the call the current Page Reset()
-    assert(pDataObject->xTabPage && "the Page is gone");
-    pDataObject->xTabPage->Reset( &aTmpSet );
-    pDataObject->xTabPage->mpImpl->mbStandard = true;
+    assert((*it)->xTabPage && "the Page is gone");
+    (*it)->xTabPage->Reset(&aTmpSet);
+    (*it)->xTabPage->mpImpl->mbStandard = true;
 }
 
 IMPL_LINK(SfxTabDialogController, ActivatePageHdl, const OUString&, rPage, void)
@@ -543,20 +531,20 @@ void SfxTabDialogController::ActivatePage(const OUString& rPage)
 
 {
     assert(!m_pImpl->aData.empty() && "no Pages registered");
-    Data_Impl* pDataObject = Find(m_pImpl->aData, rPage);
-    if (!pDataObject)
+    auto it = Find(m_pImpl->aData, rPage);
+    if (it == m_pImpl->aData.end())
     {
         SAL_WARN("sfx.dialog", "Tab Page ID '" << rPage << "' not known, this is pretty serious and needs investigation");
         return;
     }
 
-    SfxTabPage* pTabPage = pDataObject->xTabPage.get();
+    SfxTabPage* pTabPage = (*it)->xTabPage.get();
     if (!pTabPage)
         return;
 
-    if (pDataObject->bRefresh)
+    if ((*it)->bRefresh)
         pTabPage->Reset(m_pSet.get());
-    pDataObject->bRefresh = false;
+    (*it)->bRefresh = false;
 
     if (m_xExampleSet)
         pTabPage->ActivatePage(*m_xExampleSet);
@@ -584,14 +572,14 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 
 {
     assert(!m_pImpl->aData.empty() && "no Pages registered");
-    Data_Impl* pDataObject = Find(m_pImpl->aData, aPage);
-    if (!pDataObject)
+    auto it = Find(m_pImpl->aData, aPage);
+    if (it == m_pImpl->aData.end())
     {
         SAL_WARN("sfx.dialog", "Tab Page ID not known, this is pretty serious and needs investigation");
         return false;
     }
 
-    SfxTabPage* pPage = pDataObject->xTabPage.get();
+    SfxTabPage* pPage = (*it)->xTabPage.get();
     if (!pPage)
         return true;
 
@@ -646,9 +634,9 @@ bool SfxTabDialogController::DeactivatePage(std::u16string_view aPage)
 bool SfxTabDialogController::PrepareLeaveCurrentPage()
 {
     const OUString sId = m_xTabCtrl->get_current_page_ident();
-    Data_Impl* pDataObject = Find(m_pImpl->aData, sId);
-    DBG_ASSERT( pDataObject, "Id not known" );
-    SfxTabPage* pPage = pDataObject ? pDataObject->xTabPage.get() : nullptr;
+    auto it = Find(m_pImpl->aData, sId);
+    DBG_ASSERT(it != m_pImpl->aData.end(), "Id not known");
+    SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
 
     bool bEnd = !pPage;
 
@@ -985,28 +973,27 @@ void SfxTabDialogController::RemoveTabPage(const OUString& rId)
 */
 
 {
-    sal_uInt16 nPos = 0;
     m_xTabCtrl->remove_page(rId);
-    Data_Impl* pDataObject = Find( m_pImpl->aData, rId, &nPos );
+    auto it = Find(m_pImpl->aData, rId);
 
-    if ( pDataObject )
+    if (it != m_pImpl->aData.end())
     {
-        if ( pDataObject->xTabPage )
+        if ((*it)->xTabPage)
         {
-            pDataObject->xTabPage->FillUserData();
-            OUString aPageData( pDataObject->xTabPage->GetUserData() );
+            (*it)->xTabPage->FillUserData();
+            OUString aPageData((*it)->xTabPage->GetUserData());
             if ( !aPageData.isEmpty() )
             {
                 // save settings of this page (user data)
-                SvtViewOptions aPageOpt(EViewType::TabPage, pDataObject->xTabPage->GetConfigId());
+                SvtViewOptions aPageOpt(EViewType::TabPage, (*it)->xTabPage->GetConfigId());
                 aPageOpt.SetUserItem( USERITEM_NAME, Any( aPageData ) );
             }
 
-            pDataObject->xTabPage.reset();
+            (*it)->xTabPage.reset();
         }
 
-        delete pDataObject;
-        m_pImpl->aData.erase( m_pImpl->aData.begin() + nPos );
+        delete *it;
+        m_pImpl->aData.erase(it);
     }
     else
     {
@@ -1120,9 +1107,9 @@ SfxTabPage* SfxTabDialogController::GetTabPage(std::u16string_view rPageId) cons
 */
 
 {
-    Data_Impl* pDataObject = Find(m_pImpl->aData, rPageId);
-    if (pDataObject)
-        return pDataObject->xTabPage.get();
+    auto it = Find(m_pImpl->aData, rPageId);
+    if (it != m_pImpl->aData.end())
+        return (*it)->xTabPage.get();
     return nullptr;
 }
 
@@ -1182,8 +1169,8 @@ BitmapEx SfxTabDialogController::createScreenshot() const
 OUString SfxTabDialogController::GetScreenshotId() const
 {
     const OUString sId = m_xTabCtrl->get_current_page_ident();
-    Data_Impl* pDataObject = Find(m_pImpl->aData, sId);
-    SfxTabPage* pPage = pDataObject ? pDataObject->xTabPage.get() : nullptr;
+    auto it = Find(m_pImpl->aData, sId);
+    SfxTabPage* pPage = it != m_pImpl->aData.end() ? (*it)->xTabPage.get() : nullptr;
     if (pPage)
     {
         OUString sHelpId(pPage->GetHelpId());
