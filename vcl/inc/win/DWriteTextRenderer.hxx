@@ -27,33 +27,28 @@
 
 #include <win/winlayout.hxx>
 
-enum class D2DTextAntiAliasMode
-{
-    Default,
-    Aliased,
-    AntiAliased,
-    ClearType,
-};
-
 class D2DWriteTextOutRenderer : public TextOutRenderer
 {
 public:
-    explicit D2DWriteTextOutRenderer(bool bRenderingModeNatural);
+    using MODE = std::pair<D2D1_TEXT_ANTIALIAS_MODE, DWRITE_RENDERING_MODE>;
+
+    explicit D2DWriteTextOutRenderer(MODE mode);
 
     bool operator()(GenericSalLayout const &rLayout,
         SalGraphics &rGraphics,
-        HDC hDC,
-        bool bRenderingModeNatural) override;
+        HDC hDC) override;
 
     HRESULT BindDC(HDC hDC, tools::Rectangle const & rRect = tools::Rectangle(0, 0, 1, 1));
 
-    HRESULT CreateRenderTarget(bool bRenderingModeNatural);
+    HRESULT CreateRenderTarget();
 
     bool Ready() const;
 
-    void applyTextAntiAliasMode(bool bRenderingModeNatural);
+    void applyTextAntiAliasMode();
 
-    bool GetRenderingModeNatural() const { return mbRenderingModeNatural; }
+    MODE GetRenderingMode() const { return maRenderingMode; }
+
+    static MODE GetMode(bool bRenderingModeNatural, bool bAntiAlias);
 
 private:
     // This is a singleton object disable copy ctor and assignment operator
@@ -61,14 +56,13 @@ private:
     D2DWriteTextOutRenderer & operator = (const D2DWriteTextOutRenderer &) = delete;
 
     IDWriteFontFace* GetDWriteFace(const WinFontInstance& rWinFont, float * lfSize) const;
-    bool performRender(GenericSalLayout const &rLayout, SalGraphics &rGraphics, HDC hDC, bool& bRetry, bool bRenderingModeNatural);
+    bool performRender(GenericSalLayout const &rLayout, SalGraphics &rGraphics, HDC hDC, bool& bRetry);
 
     sal::systools::COMReference<ID2D1Factory> mpD2DFactory;
     sal::systools::COMReference<ID2D1DCRenderTarget> mpRT;
     const D2D1_RENDER_TARGET_PROPERTIES mRTProps;
 
-    bool mbRenderingModeNatural;
-    D2DTextAntiAliasMode meTextAntiAliasMode;
+    MODE maRenderingMode;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
