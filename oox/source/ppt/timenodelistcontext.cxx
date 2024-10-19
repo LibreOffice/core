@@ -540,12 +540,10 @@ namespace oox::ppt {
                     sal_Int16 nEnum = 0;
                     switch(nCalcMode)
                     {
-                    case XML_discrete:
-                        nEnum = AnimationCalcMode::DISCRETE;
-                        break;
                     case XML_lin:
                         nEnum = AnimationCalcMode::LINEAR;
                         break;
+                    case XML_discrete:
                     case XML_fmla:
                     default:
                         // TODO what value is good ?
@@ -919,12 +917,10 @@ namespace oox::ppt {
         case PPT_TOKEN( animClr ):
             pCtx = new AnimColorContext( rParent, aElement, xAttribs, pNode );
             break;
-        case PPT_TOKEN( par ):
-            pCtx = new ParallelExclTimeNodeContext( rParent, aElement, pNode );
-            break;
         case PPT_TOKEN( seq ):
             pCtx = new SequenceTimeNodeContext( rParent, aElement, xAttribs, pNode );
             break;
+        case PPT_TOKEN( par ):
         case PPT_TOKEN( excl ):
             pCtx = new ParallelExclTimeNodeContext( rParent, aElement, pNode );
             break;
@@ -989,12 +985,10 @@ namespace oox::ppt {
 
         switch( aElementToken )
         {
-        case PPT_TOKEN( par ):
-            nNodeType = AnimationNodeType::PAR;
-            break;
         case PPT_TOKEN( seq ):
             nNodeType = AnimationNodeType::SEQ;
             break;
+        case PPT_TOKEN( par ):
         case PPT_TOKEN( excl ):
             // TODO pick the right type. We choose parallel for now as
             // there does not seem to be an "Exclusive"
