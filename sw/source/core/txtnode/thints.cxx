@@ -3199,7 +3199,8 @@ bool SwpHints::TryInsertHint(
         {
             // search for a reference with the same name
             SwTextAttr* pTmpHt;
-            for( size_t n = 0, nEnd = Count(); n < nEnd; ++n )
+            size_t n = 0, nEnd = Count();
+            while (n < nEnd)
             {
                 const sal_Int32 *pTmpHtEnd;
                 const sal_Int32 *pTmpHintEnd;
@@ -3236,10 +3237,12 @@ bool SwpHints::TryInsertHint(
                     if( bDelOld )
                     {
                         NoteInHistory( pTmpHt );
-                        rNode.DestroyAttr( Cut( n-- ) );
+                        rNode.DestroyAttr( Cut( n ) );
                         --nEnd;
+                        continue; // n removed, nEnd adjusted
                     }
                 }
+                ++n;
             }
         }
         break;
