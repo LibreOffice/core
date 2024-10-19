@@ -4227,8 +4227,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                     nLen = 2;
                 nLen2 = o3tl::narrowing<sal_uInt16>(nLen);
             }
-            sal_uLong nRead = 0;
-            for( nLen2 -= 2; nRead < nLen2;  )
+            sal_uLong nRead = 2;
+            while (nRead < nLen2)
             {
                 sal_uInt8 nBChar(0);
                 rStrm.ReadUChar( nBChar );
