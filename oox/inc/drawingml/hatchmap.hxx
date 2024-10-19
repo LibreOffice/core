@@ -33,6 +33,7 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 450;
             break;
         case XML_pct20:
+        case XML_dashUpDiag:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 150;
             aHatch.Angle = 450;
@@ -48,6 +49,7 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 450;
             break;
         case XML_pct40:
+        case XML_weave:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
             aHatch.Distance = 150;
             aHatch.Angle = 450;
@@ -83,6 +85,7 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 450;
             break;
         case XML_horz:
+        case XML_wave:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 100;
             aHatch.Angle = 0;
@@ -93,11 +96,13 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 900;
             break;
         case XML_ltHorz:
+        case XML_narHorz:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 50;
             aHatch.Angle = 0;
             break;
         case XML_ltVert:
+        case XML_narVert:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 50;
             aHatch.Angle = 900;
@@ -112,16 +117,6 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Distance = 25;
             aHatch.Angle = 900;
             break;
-        case XML_narHorz:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 0;
-            break;
-        case XML_narVert:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 900;
-            break;
         case XML_dashHorz:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 150;
@@ -133,59 +128,39 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 900;
             break;
         case XML_cross:
+        case XML_lgGrid:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
             aHatch.Distance = 100;
             aHatch.Angle = 0;
             break;
         case XML_dnDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 100;
-            aHatch.Angle = 1350;
-            break;
-        case XML_upDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 100;
-            aHatch.Angle = 450;
-            break;
-        case XML_ltDnDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 1350;
-            break;
-        case XML_ltUpDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 450;
-            break;
-        case XML_dkDnDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 1350;
-            break;
-        case XML_dkUpDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 50;
-            aHatch.Angle = 450;
-            break;
         case XML_wdDnDiag:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 100;
             aHatch.Angle = 1350;
             break;
+        case XML_upDiag:
         case XML_wdUpDiag:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 100;
+            aHatch.Angle = 450;
+            break;
+        case XML_ltDnDiag:
+        case XML_dkDnDiag:
+            aHatch.Style = drawing::HatchStyle_SINGLE;
+            aHatch.Distance = 50;
+            aHatch.Angle = 1350;
+            break;
+        case XML_ltUpDiag:
+        case XML_dkUpDiag:
+            aHatch.Style = drawing::HatchStyle_SINGLE;
+            aHatch.Distance = 50;
             aHatch.Angle = 450;
             break;
         case XML_dashDnDiag:
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 150;
             aHatch.Angle = 1350;
-            break;
-        case XML_dashUpDiag:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 150;
-            aHatch.Angle = 450;
             break;
         case XML_diagCross:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
@@ -205,11 +180,6 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
         case XML_smGrid:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
             aHatch.Distance = 50;
-            aHatch.Angle = 0;
-            break;
-        case XML_lgGrid:
-            aHatch.Style = drawing::HatchStyle_DOUBLE;
-            aHatch.Distance = 100;
             aHatch.Angle = 0;
             break;
         case XML_dotGrid:
@@ -233,6 +203,7 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Angle = 0;
             break;
         case XML_diagBrick:
+        case XML_dotDmnd:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
             aHatch.Distance = 300;
             aHatch.Angle = 450;
@@ -247,11 +218,6 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Distance = 100;
             aHatch.Angle = 450;
             break;
-        case XML_dotDmnd:
-            aHatch.Style = drawing::HatchStyle_DOUBLE;
-            aHatch.Distance = 300;
-            aHatch.Angle = 450;
-            break;
         case XML_plaid:
             aHatch.Style = drawing::HatchStyle_TRIPLE;
             aHatch.Distance = 200;
@@ -262,11 +228,6 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Distance = 100;
             aHatch.Angle = 0;
             break;
-        case XML_weave:
-            aHatch.Style = drawing::HatchStyle_DOUBLE;
-            aHatch.Distance = 150;
-            aHatch.Angle = 450;
-            break;
         case XML_divot:
             aHatch.Style = drawing::HatchStyle_TRIPLE;
             aHatch.Distance = 400;
@@ -276,11 +237,6 @@ static drawing::Hatch createHatch(sal_Int32 nHatchToken, ::Color nColor)
             aHatch.Style = drawing::HatchStyle_SINGLE;
             aHatch.Distance = 200;
             aHatch.Angle = 1350;
-            break;
-        case XML_wave:
-            aHatch.Style = drawing::HatchStyle_SINGLE;
-            aHatch.Distance = 100;
-            aHatch.Angle = 0;
             break;
         case XML_trellis:
             aHatch.Style = drawing::HatchStyle_DOUBLE;
