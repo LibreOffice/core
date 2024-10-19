@@ -928,24 +928,15 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTFKeyword::DS:
-            if (m_aStates.top().getDestination() == Destination::STYLESHEET
-                || m_aStates.top().getDestination() == Destination::STYLEENTRY)
-            {
-                m_nCurrentStyleIndex = nParam;
-                auto pValue = new RTFValue(0); // TODO no value in enum StyleType?
-                m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
-                                                         pValue); // section style
-            }
-            break;
         case RTFKeyword::TS:
             if (m_aStates.top().getDestination() == Destination::STYLESHEET
                 || m_aStates.top().getDestination() == Destination::STYLEENTRY)
             {
                 m_nCurrentStyleIndex = nParam;
-                // FIXME the correct value would be NS_ooxml::LN_Value_ST_StyleType_table but maybe table styles mess things up in dmapper, be cautious and disable them for now
+                // table styles mess things up in dmapper and there is no section style support at all
                 auto pValue = new RTFValue(0);
                 m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_type,
-                                                         pValue); // table style
+                                                         pValue); // section/table style
             }
             break;
         case RTFKeyword::DEFF:
