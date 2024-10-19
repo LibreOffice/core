@@ -941,6 +941,7 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
         nDirection++;
         [[fallthrough]];
     case FadeEffect_FADE_FROM_RIGHT :
+    case FadeEffect_ROLL_FROM_RIGHT :
         nPPTTransitionType = PPT_TRANSITION_TYPE_WIPE;
         break;
 
@@ -953,9 +954,6 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
     case FadeEffect_ROLL_FROM_BOTTOM :
         nDirection++;
         [[fallthrough]];
-    case FadeEffect_ROLL_FROM_RIGHT :
-        nPPTTransitionType = PPT_TRANSITION_TYPE_WIPE;
-        break;
 
     case FadeEffect_FADE_TO_CENTER :
         nDirection++;
