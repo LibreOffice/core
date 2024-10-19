@@ -91,8 +91,6 @@ namespace toolkit
         switch (nPropId)
         {
                 case BASEPROPERTY_COMPLETE:
-                    aReturn <<= true;
-                    break;
                 case BASEPROPERTY_ACTIVATED:
                     aReturn <<= true;
                     break;
