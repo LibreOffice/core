@@ -394,6 +394,12 @@ QAccessible::Role QtAccessibleWidget::role() const
             return QAccessible::NoRole;
         case AccessibleRole::ALERT:
             return QAccessible::AlertMessage;
+        case AccessibleRole::BLOCK_QUOTE:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+            return QAccessible::BlockQuote;
+#else
+            return QAccessible::Paragraph;
+#endif
         case AccessibleRole::COLUMN_HEADER:
             return QAccessible::ColumnHeader;
         case AccessibleRole::CANVAS:
@@ -482,7 +488,6 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::PANEL:
             return QAccessible::Pane;
         case AccessibleRole::PARAGRAPH:
-        case AccessibleRole::BLOCK_QUOTE:
             return QAccessible::Paragraph;
         case AccessibleRole::PASSWORD_TEXT:
             // Qt API doesn't have a separate role to distinguish password edits,
