@@ -959,6 +959,7 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
         case ::sd::ViewShell::ST_IMPRESS:
         case ::sd::ViewShell::ST_NOTES:
         case ::sd::ViewShell::ST_HANDOUT:
+        case ::sd::ViewShell::ST_DRAW:
             mpToolBarManager->AddToolBar(
                 ToolBarManager::ToolBarGroup::Permanent,
                 ToolBarManager::msToolBar);
@@ -973,18 +974,6 @@ void ToolBarRules::MainViewShellChanged (ViewShell::ShellType nShellType)
         case ::sd::ViewShell::ST_NOTESPANEL:
             mpToolBarManager->AddToolBarShell(ToolBarManager::ToolBarGroup::Permanent,
                                               ToolbarId::Draw_Text_Toolbox_Sd);
-            break;
-
-        case ::sd::ViewShell::ST_DRAW:
-            mpToolBarManager->AddToolBar(
-                ToolBarManager::ToolBarGroup::Permanent,
-                ToolBarManager::msToolBar);
-            mpToolBarManager->AddToolBar(
-                ToolBarManager::ToolBarGroup::Permanent,
-                ToolBarManager::msOptionsToolBar);
-            mpToolBarManager->AddToolBar(
-                ToolBarManager::ToolBarGroup::Permanent,
-                ToolBarManager::msViewerToolBar);
             break;
 
         case ViewShell::ST_OUTLINE:
