@@ -668,7 +668,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
     }
 }
 
-} // end anonymous namnespace
+} // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
