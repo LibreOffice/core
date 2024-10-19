@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SW_INC_SWAPPLETIMPL_HXX
-#define INCLUDED_SW_INC_SWAPPLETIMPL_HXX
+#pragma once
 
 #include <config_java.h>
 
@@ -62,6 +60,5 @@ public:
     const OUString& GetAltText() const { return m_sAlt; }
     void SetAltText( const OUString& rAlt ) {m_sAlt = rAlt;}
 };
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

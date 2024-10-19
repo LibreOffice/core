@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef TOXWHITESPACESTRIPPER_HXX_
-#define TOXWHITESPACESTRIPPER_HXX_
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <vector>
@@ -44,4 +43,4 @@ private:
 
 } // end namespace sw
 
-#endif /* TOXWHITESPACESTRIPPER_HXX_ */
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

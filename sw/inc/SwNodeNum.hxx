@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SW_INC_SWNODENUM_HXX
-#define INCLUDED_SW_INC_SWNODENUM_HXX
+#pragma once
 
 #include "SwNumberTree.hxx"
 
@@ -95,7 +93,5 @@ private:
 
     virtual void NotifyNode() override;
 };
-
-#endif // INCLUDED_SW_INC_SWNODENUM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -6,9 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-
-#ifndef SW_TOXLINKPROCESSOR_HXX_
-#define SW_TOXLINKPROCESSOR_HXX_
+#pragma once
 
 #include "fmtinfmt.hxx"
 #include <rtl/ustring.hxx>
@@ -90,7 +88,5 @@ private:
 };
 
 }
-
-#endif /* SW_TOXLINKPROCESSOR_HXX_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

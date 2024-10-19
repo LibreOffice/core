@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SW_INC_POSTITMGR_HXX
-#define INCLUDED_SW_INC_POSTITMGR_HXX
+#pragma once
 
 #include <sal/config.h>
 #include "swdllapi.h"
@@ -255,7 +253,5 @@ class SAL_DLLPUBLIC_RTTI SwPostItMgr final : public SfxListener,
 
         sw::sidebarwindows::SidebarPosition GetSidebarPos(const Point& rPointLogic);
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
