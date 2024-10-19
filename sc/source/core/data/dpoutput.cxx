@@ -1039,7 +1039,7 @@ void ScDPOutput::outputColumnHeaders(SCTAB nTab, ScDPOutputImpl& rOutputImpl)
                 SCCOL nEndColPos = mnDataStartCol + SCCOL(nEnd); //TODO: check for overflow
                 if (nField + 1 < mpColFields.size())
                 {
-                    if (nField == mpColFields.size() - 2)
+                    if (nField + 2 == mpColFields.size())
                     {
                         rOutputImpl.AddCol( nColPos );
                         if (nColPos + 1 == nEndColPos)
