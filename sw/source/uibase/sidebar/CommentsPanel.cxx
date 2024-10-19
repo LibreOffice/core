@@ -682,7 +682,7 @@ IMPL_LINK_NOARG(CommentsPanel, FilterByAuthor, weld::ComboBox&, void)
     {
         for (auto & [ nId, pComment ] : mpCommentsMap)
         {
-            if (!mbResetDate && mxFilterDate->get_date() != pComment->GetDate())
+            if (mbDateSelected && mxFilterDate->get_date() != pComment->GetDate())
                 continue;
             pComment->get_widget()->set_visible(true);
         }
@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(CommentsPanel, FilterByAuthor, weld::ComboBox&, void)
         {
             if (sAuthor == pComment->GetAuthor())
             {
-                if (!mbResetDate && mxFilterDate->get_date() != pComment->GetDate())
+                if (mbDateSelected && mxFilterDate->get_date() != pComment->GetDate())
                     continue;
                 pComment->get_widget()->set_visible(true);
             }
@@ -707,6 +707,7 @@ IMPL_LINK_NOARG(CommentsPanel, FilterByAuthor, weld::ComboBox&, void)
 
 IMPL_LINK_NOARG(CommentsPanel, FilterByDate, SvtCalendarBox&, void)
 {
+    mbDateSelected = true;
     Date aDate(mxFilterDate->get_date());
     for (auto & [ nId, pComment ] : mpCommentsMap)
     {
@@ -724,9 +725,8 @@ IMPL_LINK_NOARG(CommentsPanel, FilterByDate, SvtCalendarBox&, void)
 
 IMPL_LINK_NOARG(CommentsPanel, ResetDate, weld::Button&, void)
 {
-    mbResetDate = true;
+    mbDateSelected = false;
     FilterByAuthor(*mxFilterAuthor);
-    mbResetDate = false;
 }
 
 IMPL_LINK_NOARG(CommentsPanel, ShowTimeHdl, weld::Toggleable&, void)

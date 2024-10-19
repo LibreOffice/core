@@ -169,7 +169,7 @@ private:
     std::unique_ptr<weld::Box> mxThreadsContainer;
 
     sal_uInt16 mnThreads = 0;
-    bool mbResetDate = false;
+    bool mbDateSelected = false;
 
     // utility functions
     sw::annotation::SwAnnotationWin* getRootCommentWin(const SwFormatField* pField);
