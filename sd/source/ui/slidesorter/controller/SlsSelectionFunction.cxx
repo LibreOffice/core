@@ -977,10 +977,6 @@ bool NormalModeHandler::ProcessButtonDownEvent (
 
     switch (rDescriptor.mnEventCode)
     {
-        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
-            SetCurrentPage(rDescriptor.mpHitDescriptor);
-            break;
-
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
             break;
 
@@ -999,6 +995,7 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             break;
 
             // Right button for context menu.
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
             // Single right click and shift+F10 select as preparation to
             // show the context menu.  Change the selection only when the
@@ -1013,12 +1010,6 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
-            // Remember the current selection so that when a multi selection
-            // is started, we can restore the previous selection.
-            mrSlideSorter.GetModel().SaveCurrentSelection();
-            DeselectAllPages();
-            break;
-
         case ANY_MODIFIER(BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
             // Remember the current selection so that when a multi selection
             // is started, we can restore the previous selection.
