@@ -1028,11 +1028,6 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x21: // Function, Fixed Number of Arguments   [333 282]
                 aIn.Ignore( 2 );
                 break;
-            case 0x42:
-            case 0x62:
-            case 0x22: // Function, Variable Number of Arg.     [333 283]
-                aIn.Ignore( 3 );
-                break;
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
             case 0x02: // Data Table                            [325 277]
@@ -1093,6 +1088,9 @@ ConvErr ExcelToSc8::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std
             case 0x29: // Variable Reference Subexpression      [331 281]
                 aIn.Ignore( 2 );   // There isn't any more
                 break;
+            case 0x42:
+            case 0x62:
+            case 0x22: // Function, Variable Number of Arg.     [333 283]
             case 0x4A:
             case 0x6A:
             case 0x2A: // Deleted Cell Reference                [323 273]
