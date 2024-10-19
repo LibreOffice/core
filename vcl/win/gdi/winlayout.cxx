@@ -50,7 +50,7 @@
 #include <shlwapi.h>
 #include <winver.h>
 
-TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatural)
+TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatural, bool bAntiAlias)
 {
     SalData* const pSalData = GetSalData();
 
@@ -62,14 +62,16 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatura
 
     if (bUseDWrite)
     {
-        if (!pSalData->m_pD2DWriteTextOutRenderer
-            || static_cast<D2DWriteTextOutRenderer*>(pSalData->m_pD2DWriteTextOutRenderer.get())
-                       ->GetRenderingModeNatural()
-                   != bRenderingModeNatural)
+        const auto mode = D2DWriteTextOutRenderer::GetMode(bRenderingModeNatural, bAntiAlias);
+        if (pSalData->m_pD2DWriteTextOutRenderer)
         {
-            pSalData->m_pD2DWriteTextOutRenderer.reset(
-                new D2DWriteTextOutRenderer(bRenderingModeNatural));
+            auto pRenderer
+                = static_cast<D2DWriteTextOutRenderer*>(pSalData->m_pD2DWriteTextOutRenderer.get());
+            if (pRenderer->GetRenderingMode() == mode)
+                return *pSalData->m_pD2DWriteTextOutRenderer;
         }
+
+        pSalData->m_pD2DWriteTextOutRenderer.reset(new D2DWriteTextOutRenderer(mode));
         return *pSalData->m_pD2DWriteTextOutRenderer;
     }
     if (!pSalData->m_pExTextOutRenderer)
@@ -80,7 +82,7 @@ TextOutRenderer& TextOutRenderer::get(bool bUseDWrite, bool bRenderingModeNatura
 }
 
 bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics& /*rGraphics*/,
-                                   HDC hDC, bool /*bRenderingModeNatural*/)
+                                   HDC hDC)
 {
     int nStart = 0;
     basegfx::B2DPoint aPos;
@@ -197,8 +199,8 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bool bUseDWrite,
                                     bool bRenderingModeNatural)
 {
-    TextOutRenderer& render = TextOutRenderer::get(bUseDWrite, bRenderingModeNatural);
-    render(rLayout, *this, hDC, bRenderingModeNatural);
+    auto& render = TextOutRenderer::get(bUseDWrite, bRenderingModeNatural, getAntiAlias());
+    render(rLayout, *this, hDC);
 }
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
