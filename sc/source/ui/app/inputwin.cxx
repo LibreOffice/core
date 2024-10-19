@@ -558,8 +558,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 
 void ScInputWindow::SetPosString( const OUString& rStr )
 {
-    if (!comphelper::LibreOfficeKit::isActive())
-        aWndPos->SetPos( rStr );
+    aWndPos->SetPos( rStr );
 }
 
 void ScInputWindow::SetTextString( const OUString& rString, bool bKitUpdate )
