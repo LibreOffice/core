@@ -1273,9 +1273,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, tools::Long nAngle1, co
     XPolygon aXP2(ImpCalcObjToCenter(aPt2,nAngle2,aBewareRect2,aMeeting));
     sal_uInt16 nXP1Cnt=aXP1.GetPointCount();
     sal_uInt16 nXP2Cnt=aXP2.GetPointCount();
+    assert(nXP1Cnt >= 2 && nXP2Cnt >= 2 && "ImpCalcObjToCenter inserts a min of 2 points");
     if (pInfo) {
-        pInfo->m_nObj1Lines=nXP1Cnt; if (nXP1Cnt>1) pInfo->m_nObj1Lines--;
-        pInfo->m_nObj2Lines=nXP2Cnt; if (nXP2Cnt>1) pInfo->m_nObj2Lines--;
+        pInfo->m_nObj1Lines=nXP1Cnt; pInfo->m_nObj1Lines--;
+        pInfo->m_nObj2Lines=nXP2Cnt; pInfo->m_nObj2Lines--;
     }
     Point aEP1(aXP1[nXP1Cnt-1]);
     Point aEP2(aXP2[nXP2Cnt-1]);
