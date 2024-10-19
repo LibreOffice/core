@@ -1476,12 +1476,13 @@ void SectionPropertyMap::CreateEvenOddPageStyleCopy(DomainMapper_Impl& rDM_Impl,
     const uno::Sequence<beans::Property> propertyList(pagePropertiesInfo->getProperties());
 
     // Ignore write-only properties.
-    static constexpr frozen::unordered_set<std::u16string_view, 14> staticDenylist = {
+    static constexpr auto staticDenylist = frozen::make_unordered_set<std::u16string_view>({
         u"FooterBackGraphicURL", u"BackGraphicURL", u"HeaderBackGraphicURL",
         u"HeaderIsOn", u"FooterIsOn",
         u"HeaderIsShared", u"FooterIsShared", u"FirstIsShared",
         u"HeaderText", u"HeaderTextLeft", u"HeaderTextFirst",
-        u"FooterText", u"FooterTextLeft", u"FooterTextFirst" };
+        u"FooterText", u"FooterTextLeft", u"FooterTextFirst"
+    });
 
     bool isMirrorMargins = PageBreakType::Even == eBreakType && rDM_Impl.GetSettingsTable()->GetMirrorMarginSettings();
     for (const auto& rProperty : propertyList)

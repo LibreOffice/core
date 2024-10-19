@@ -32,8 +32,9 @@ XMLRtlGutterPropertyHandler::~XMLRtlGutterPropertyHandler() = default;
 
 namespace
 {
-constexpr frozen::unordered_set<std::u16string_view, 4> constRtlModes{ u"rl-tb", u"tb-rl", u"rl",
-                                                                       u"tb" };
+constexpr auto constRtlModes
+    = frozen::make_unordered_set<std::u16string_view>({ u"rl-tb", u"tb-rl", u"rl", u"tb" });
+
 } // end anonymous ns
 
 bool XMLRtlGutterPropertyHandler::importXML(const OUString& rStrImpValue, uno::Any& rValue,
