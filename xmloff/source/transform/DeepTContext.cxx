@@ -89,9 +89,6 @@ rtl::Reference<XMLTransformerContext> XMLPersElemContentTContext::CreateChildCon
         switch( (*aIter).second.m_nActionType )
         {
         case XML_ETACTION_COPY:
-            pContext.set(new XMLPersMixedContentTContext( GetTransformer(),
-                                                       rQName ));
-            break;
         case XML_ETACTION_COPY_TEXT:
             pContext.set(new XMLPersMixedContentTContext( GetTransformer(),
                                                        rQName ));
