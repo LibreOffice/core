@@ -918,8 +918,6 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
         {           //                                      SDK4 SDK5
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
-                nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
-                break;
             case 0x02: // Data Table                            [325 277]
                 nIgnore = (meBiff == EXC_BIFF2) ? 3 : 4;
                 break;
@@ -1000,6 +998,9 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
                 nIgnore = 1;
                 break;
             case 0x1E: // Integer                               [315 266]
+            case 0x58:
+            case 0x78:
+            case 0x38: // Command-Equivalent Function           [333    ]
                 nIgnore = 2;
                 break;
             case 0x1F: // Number                                [315 266]
@@ -1153,11 +1154,6 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
             case 0x6F:
             case 0x2F: // Incomplete Reference Subexpression... [332 282]
                 nIgnore = (meBiff == EXC_BIFF2) ? 1 : 2;
-                break;
-            case 0x58:
-            case 0x78:
-            case 0x38: // Command-Equivalent Function           [333    ]
-                nIgnore = 2;
                 break;
             case 0x59:
             case 0x79:
