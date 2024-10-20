@@ -909,14 +909,11 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, TriStateHdl, weld::Toggleable&, void)
 {
     switch (mePrevToggleAllState)
     {
-        case TRISTATE_FALSE:
-            mxChkToggleAll->set_state(TRISTATE_TRUE);
-            setAllMemberState(true);
-        break;
         case TRISTATE_TRUE:
             mxChkToggleAll->set_state(TRISTATE_FALSE);
             setAllMemberState(false);
         break;
+        case TRISTATE_FALSE:
         case TRISTATE_INDET:
         default:
             mxChkToggleAll->set_state(TRISTATE_TRUE);
