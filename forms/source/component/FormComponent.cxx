@@ -862,8 +862,6 @@ Any OControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
             aReturn <<= true;
             break;
         case PROPERTY_ID_STANDARD_THEME:
-            aReturn <<= false;
-            break;
         case PROPERTY_ID_GENERATEVBAEVENTS:
             aReturn <<= false;
             break;
