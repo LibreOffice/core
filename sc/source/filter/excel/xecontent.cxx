@@ -869,8 +869,6 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             pRet = "notBetween";
             break;
         case ScConditionMode::Duplicate:
-            pRet = nullptr;
-            break;
         case ScConditionMode::NotDuplicate:
             pRet = nullptr;
             break;
