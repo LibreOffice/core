@@ -831,10 +831,6 @@ bool SdXMLShapeContext::processAttribute( const sax_fastparser::FastAttributeLis
         case XML_ELEMENT(DRAW_EXT, XML_LAYER):
             maLayerName = aIter.toString();
             break;
-        case XML_ELEMENT(DRAW, XML_TRANSFORM):
-        case XML_ELEMENT(DRAW_EXT, XML_TRANSFORM):
-            mnTransform.SetString(aIter.toString(), GetImport().GetMM100UnitConverter());
-            break;
         case XML_ELEMENT(DRAW, XML_DISPLAY):
         case XML_ELEMENT(DRAW_EXT, XML_DISPLAY):
             mbVisible = IsXMLToken( aIter, XML_ALWAYS ) || IsXMLToken( aIter, XML_SCREEN );
@@ -883,6 +879,8 @@ bool SdXMLShapeContext::processAttribute( const sax_fastparser::FastAttributeLis
             else if (maSize.Height < 0)
                 maSize.Height = o3tl::saturating_add<sal_Int32>(maSize.Height, -1);
             break;
+        case XML_ELEMENT(DRAW, XML_TRANSFORM):
+        case XML_ELEMENT(DRAW_EXT, XML_TRANSFORM):
         case XML_ELEMENT(SVG, XML_TRANSFORM):
         case XML_ELEMENT(SVG_COMPAT, XML_TRANSFORM):
             // because of #85127# take svg:transform into account and handle like
