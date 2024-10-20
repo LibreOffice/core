@@ -337,7 +337,6 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
             //     => close our frame only - nothing else.
             if (!aCheck2.m_lOtherVisibleFrames.empty() || (!aCheck2.m_bReferenceIsBacking && aCheck2.m_xBackingComponent.is()))
                 bCloseFrame = true;
-            else
 
             // c2) if we close the current view ... but not all other views
             //     to the same document, we must close the current frame only!
