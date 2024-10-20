@@ -80,10 +80,6 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             break;
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
-            {
-                mrAnnotationData.mbUseShapePos = true;
-            }
-            break;
             case XML_ELEMENT(SVG, XML_Y):
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
             {
