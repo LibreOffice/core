@@ -301,7 +301,7 @@ static bool GetTableAndCellsFromRangeRep(
             // need to switch start and end cell ?
             // (does not check for normalization here)
             if (bSortStartEndCells && 1 == sw_CompareCellsByColFirst( aStartCell, aEndCell ))
-                std::swap(aStartCell, aStartCell);
+                std::swap(aStartCell, aEndCell);
         }
         else    // a single cell like in "Table1.B3"
         {
