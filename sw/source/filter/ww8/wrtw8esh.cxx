@@ -2208,8 +2208,10 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
         m_pTextBxs = mrWrt.m_pTextBxs.get();
     }
 
-    for( ; i--; pSdrObjs = mrWrt.m_pSdrObjs.get(), m_pTextBxs = mrWrt.m_pTextBxs.get() )
+    while (i > 0)
     {
+        --i;
+
         // "dummy char" (or any Count ?) - why? Only Microsoft knows it.
         GetStream().WriteChar( i );
 
@@ -2308,6 +2310,9 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             CloseContainer();   // ESCHER_SpContainer
         }
         CloseContainer();   // ESCHER_DgContainer
+
+        pSdrObjs = mrWrt.m_pSdrObjs.get();
+        m_pTextBxs = mrWrt.m_pTextBxs.get();
     }
 }
 
