@@ -88,8 +88,6 @@ void CGM::ImplDoClass0()
         }
         break;
         case 0x06 : /*Begin Segment*/
-            pElement->bSegmentCount = true;
-        break;
         case 0x07 : /*End Segment*/
             pElement->bSegmentCount = true;
         break;
