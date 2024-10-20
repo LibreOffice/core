@@ -1147,9 +1147,8 @@ void SAL_CALL InternalDataProvider::registerDataSequenceForChanges( const Refere
 void SAL_CALL InternalDataProvider::insertDataSeries(::sal_Int32 nAfterIndex)
 {
     // call the dialog insertion
-    rtl::Reference<ChartModel> xChartModel(m_xChartModel);
-    DataBrowserModel* pDBM = new DataBrowserModel(xChartModel);
-    pDBM->insertDataSeries(nAfterIndex);
+    DataBrowserModel aDBM(m_xChartModel);
+    aDBM.insertDataSeries(nAfterIndex);
 }
 
 // ____ XRangeXMLConversion ____
