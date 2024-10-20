@@ -662,7 +662,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     const bool bSourceMod = m_xSourceEd->get_value_changed_from_saved();
     const bool bTypeMod = m_xTypeEd->get_value_changed_from_saved();
     const bool bCommentMod = m_xCommentEd->get_value_changed_from_saved();
-    if (!(bTitleMod || bThemeMod || bKeywordsMod || bTitleMod || bThemeMod || bKeywordsMod
+    if (!(bTitleMod || bThemeMod || bKeywordsMod
           || bContributorMod || bCoverageMod || bIdentifierMod || bPublisherMod || bRelationMod
           || bRightsMod || bSourceMod || bTypeMod || bCommentMod))
     {
