@@ -852,7 +852,7 @@ void SwWrtShell::NavigatorPaste(const NaviContentBookmark& rBkmk)
             eRefMarkType = REFERENCEMARK::REF_ONLYSEQNO;
         else
         {
-            assert(!"unknown reference mark type");
+            assert(false && "unknown reference mark type");
             return;
         }
 
