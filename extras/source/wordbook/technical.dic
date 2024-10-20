@@ -54,6 +54,7 @@ Carefx
 Cassandra
 CDMA
 CentOS=
+ChatGPT
 Chrome
 Cisco=
 CLI=
@@ -112,6 +113,8 @@ Fujitsu
 Gateway
 gcc
 gcj
+Gemini
+GenAI
 Gentoo
 Gerrit
 GHz
@@ -219,6 +222,7 @@ NNTP
 Nokia
 Novell
 NRadius
+Nvidia
 ODBC
 Ogg
 OnDemand
@@ -281,6 +285,7 @@ SMTP
 Solaris=
 Sony
 Soyuz
+SpaceX
 Spamassassin
 SPI
 SQLite
