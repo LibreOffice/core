@@ -253,10 +253,10 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
     bool bBtnGetOneObjectEnabled = m_xBtnGetOneObject->get_sensitive();
 
     // calculate overall time
-    ::tools::Time aTime( 0 );
     ::tools::Long nFullTime;
     if( m_xRbtBitmap->get_active() )
     {
+        ::tools::Time aTime(::tools::Time::EMPTY);
         for (size_t i = 0; i < nCount; ++i)
         {
             aTime += m_FrameList[i].second;
@@ -266,7 +266,6 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
     else
     {
         nFullTime = nCount * 100;
-        aTime.MakeTimeFromMS( nFullTime );
     }
 
     // StatusBarManager from 1 second

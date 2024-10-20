@@ -3102,7 +3102,7 @@ namespace weld
 {
     tools::Time TimeFormatter::ConvertValue(int nValue)
     {
-        tools::Time aTime(0);
+        tools::Time aTime(tools::Time::EMPTY);
         aTime.MakeTimeFromMS(nValue);
         return aTime;
     }
@@ -3156,7 +3156,7 @@ namespace weld
     {
         const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
 
-        tools::Time aResult(0);
+        tools::Time aResult(tools::Time::EMPTY);
         bool bRet = ::TimeFormatter::TextToTime(GetEntryText(), aResult, m_eFormat, m_bDuration, rLocaleDataWrapper);
         if (bRet)
             *result = ConvertValue(aResult);

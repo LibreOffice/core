@@ -222,7 +222,7 @@ OUString GetDateTimeString(sal_Int32 _nDate, sal_Int32 _nTime)
     const LocaleDataWrapper& rLoDa = GetLocaleData();
 
     Date aDate(_nDate);
-    tools::Time aTime(_nTime * tools::Time::nanoPerCenti);
+    tools::Time aTime(tools::Time::fromEncodedTime(_nTime * tools::Time::nanoPerCenti));
     return rLoDa.getDate(aDate) + ", " + rLoDa.getTime(aTime);
 }
 

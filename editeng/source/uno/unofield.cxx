@@ -206,7 +206,7 @@ static util::DateTime getTime(sal_Int64 const nTime)
 {
     util::DateTime aTime;
 
-    tools::Time aTempTime( nTime );
+    tools::Time aTempTime(tools::Time::fromEncodedTime(nTime));
 
     aTime.NanoSeconds = aTempTime.GetNanoSec();
     aTime.Seconds = aTempTime.GetSec();

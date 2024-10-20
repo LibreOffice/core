@@ -947,7 +947,7 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
 
                 if (rName == SC_UNONAME_DATETIME)
                 {
-                    tools::Time aT(p->GetFixTime());
+                    tools::Time aT(tools::Time::fromEncodedTime(p->GetFixTime()));
                     maDateTime.Year = 0;
                     maDateTime.Month = 0;
                     maDateTime.Day = 0;

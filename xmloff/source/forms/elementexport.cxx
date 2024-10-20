@@ -1069,7 +1069,7 @@ namespace xmloff
 
                 sal_Int32 nRepeatDelay = 0;
                 m_xProps->getPropertyValue( PROPERTY_REPEAT_DELAY ) >>= nRepeatDelay;
-                tools::Time aTime( tools::Time::SYSTEM );
+                tools::Time aTime(tools::Time::EMPTY);
                 aTime.MakeTimeFromMS( nRepeatDelay );
                 util::Duration aDuration;
                 aDuration.Hours   = aTime.GetHour();

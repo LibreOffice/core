@@ -48,7 +48,7 @@ public:
                     explicit DateTime( DateTimeInitSystem );
                     DateTime( const DateTime& rDateTime ) :
                         Date( rDateTime ), Time( rDateTime ) {}
-                    explicit DateTime( const Date& rDate ) : Date( rDate ), Time(0) {}
+                    explicit DateTime( const Date& rDate ) : Date( rDate ), Time(Time::EMPTY) {}
                     explicit DateTime( const tools::Time& rTime ) : Date(0), Time( rTime ) {}
                     DateTime( const Date& rDate, const tools::Time& rTime ) :
                         Date( rDate ), Time( rTime ) {}

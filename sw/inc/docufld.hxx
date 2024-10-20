@@ -486,8 +486,8 @@ public:
     virtual std::unique_ptr<SwField> Copy() const override;
 
     const DateTime&         GetDateTime() const             { return m_aDateTime; }
-    Date       GetDate() const                 { return Date(m_aDateTime.GetDate()); }
-    tools::Time GetTime() const                 { return tools::Time(m_aDateTime.GetTime()); }
+    Date       GetDate() const                 { return Date(m_aDateTime); }
+    tools::Time GetTime() const                 { return tools::Time(m_aDateTime); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
     void SetPostItId(const sal_uInt32 nPostItId = 0);
     void SetParentPostItId(const sal_uInt32 nParentPostItId = 0);

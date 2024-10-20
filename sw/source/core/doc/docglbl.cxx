@@ -245,7 +245,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
     DateTime aTmplDate( DateTime::SYSTEM );
     {
-        tools::Time a2Min( 0 ); a2Min.SetMin( 2 );
+        tools::Time a2Min(0, 2);
         aTmplDate += a2Min;
     }
 

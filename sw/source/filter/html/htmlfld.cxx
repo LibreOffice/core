@@ -346,7 +346,7 @@ void SwHTMLParser::NewField()
                 nSub = TIMEFLD;
                 pFormatTable = aHTMLTimeFieldFormatTable;
                 if( !aValue.isEmpty() )
-                    nTime = static_cast<sal_uLong>(aValue.toInt32());
+                    nTime = static_cast<sal_uLong>(aValue.toInt32()); // Is this OK? 32-bit encoded time?
             }
             if( !aValue.isEmpty() )
                 nSub |= FIXEDFLD;
@@ -373,7 +373,7 @@ void SwHTMLParser::NewField()
             xNewField.reset(new SwDateTimeField(static_cast<SwDateTimeFieldType *>(pType), nSub, nNumFormat));
 
             if (nSub & FIXEDFLD)
-                static_cast<SwDateTimeField *>(xNewField.get())->SetDateTime(DateTime(Date(nDate), tools::Time(nTime)));
+                static_cast<SwDateTimeField *>(xNewField.get())->SetDateTime(DateTime(Date(nDate), tools::Time::fromEncodedTime(nTime)));
         }
         break;
 

@@ -721,7 +721,9 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
                 sal_Int32 nInt32Val = 0;
                 if (aVal >>= nInt32Val)
                 {
-                    ::tools::Time aTime(nInt32Val);
+                    // Is this 32-bit number actually encoded time? Or should rather
+                    // Time::MakeTimeFromNS be used here?
+                    ::tools::Time aTime(tools::Time::fromEncodedTime(nInt32Val));
                     OUStringBuffer aBuffer;
                     appendDigits( aTime.GetHour(), 2, aBuffer );
                     aBuffer.append( '-' );

@@ -263,8 +263,6 @@ void SfxObjectShell::UpdateTime_Impl(
 
     // Initialize some local member! It's necessary for follow operations!
     DateTime     aNow( DateTime::SYSTEM );   // Date and time at current moment
-    tools::Time  n24Time     (24,0,0,0)  ;   // Time-value for 24 hours - see follow calculation
-    tools::Time  nAddTime    (0)         ;   // Value to add on aOldTime
 
     // Save impossible cases!
     // User has changed time to the past between last editing and now... it's not possible!!!
@@ -276,6 +274,7 @@ void SfxObjectShell::UpdateTime_Impl(
     {
         // Count of days between now and last editing
         sal_Int32 nDays = aNow.GetSecFromDateTime(Date(pImpl->nTime.GetDate()))/86400 ;
+        tools::Time nAddTime(tools::Time::EMPTY); // Value to add on aOldTime
 
         if (nDays==0)
         {
@@ -289,8 +288,9 @@ void SfxObjectShell::UpdateTime_Impl(
 
             // If 1 or up to 31 days between now and last editing - calculate time indirectly.
             // nAddTime = (24h - nTime) + (nDays * 24h) + aNow
+            tools::Time n24Time (24,0,0,0); // Time-value for 24 hours
             --nDays;
-            nAddTime     =  tools::Time( nDays * n24Time.GetTime());
+            nAddTime.MakeTimeFromNS(nDays * n24Time.GetNSFromTime());
             nAddTime    +=  n24Time-static_cast<const tools::Time&>(pImpl->nTime);
             nAddTime    +=  aNow                    ;
         }

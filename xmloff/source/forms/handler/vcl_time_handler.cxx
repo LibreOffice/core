@@ -78,7 +78,7 @@ namespace xmloff
             }
             // legacy integer was in centiseconds
             nVCLTime *= ::tools::Time::nanoPerCenti;
-            aTime = ::tools::Time(nVCLTime).GetUNOTime();
+            aTime = tools::Time::fromEncodedTime(nVCLTime).GetUNOTime();
         }
 
         const Any aPropertyValue( aTime );

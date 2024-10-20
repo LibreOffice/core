@@ -1177,7 +1177,8 @@ bool ImportContext::importTimeProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        ::tools::Time aTTime(toInt32( aValue ) * ::tools::Time::nanoPerCenti);
+        // Is it really the legacy "encoded value in centiseconds"?
+        tools::Time aTTime(tools::Time::fromEncodedTime(toInt32(aValue) * tools::Time::nanoPerCenti));
         util::Time aUTime(aTTime.GetUNOTime());
         _xControlModel->setPropertyValue( rPropName, Any( aUTime ) );
         return true;

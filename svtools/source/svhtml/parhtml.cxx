@@ -2080,7 +2080,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                     if (valid)
                     {
                         Date aDate(nDate);
-                        tools::Time aTime(nTime);
+                        tools::Time aTime(tools::Time::fromEncodedTime(nTime));
                         uDT = DateTime(aDate, aTime).GetUNODateTime();
                     }
                 }

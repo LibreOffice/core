@@ -1891,12 +1891,17 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 
     SvxAutoCorrectLanguageLists* pLists = nullptr;
 
-    tools::Time nMinTime( 0, 2 ), nAktTime( tools::Time::SYSTEM ), nLastCheckTime( tools::Time::EMPTY );
+    tools::Time nAktTime(tools::Time::SYSTEM);
 
     auto nFndPos = aLastFileTable.find(rLanguageTag);
-    if(nFndPos != aLastFileTable.end() &&
-       (nLastCheckTime.SetTime(nFndPos->second), nLastCheckTime < nAktTime) &&
-       nAktTime - nLastCheckTime < nMinTime)
+    bool lastCheckLessThan2MinutesAgo = nFndPos != aLastFileTable.end();
+    if (lastCheckLessThan2MinutesAgo)
+    {
+        const tools::Time nLastCheckTime(tools::Time::fromEncodedTime(nFndPos->second));
+        lastCheckLessThan2MinutesAgo
+            = nLastCheckTime < nAktTime && nAktTime - nLastCheckTime < tools::Time(0, 2);
+    }
+    if (lastCheckLessThan2MinutesAgo)
     {
         // no need to test the file, because the last check is not older then
         // 2 minutes.

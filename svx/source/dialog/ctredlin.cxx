@@ -173,7 +173,7 @@ void SvxRedlinTable::UpdateFilterTest()
     Date aDateMax( Date::SYSTEM );
     aDateMax.AddYears(100);
     Date aDateMin(1,1,1989);
-    tools::Time aTMin(0);
+    tools::Time aTMin(tools::Time::EMPTY);
     tools::Time aTMax(23,59,59);
 
     DateTime aDTMin(aDateMin);
@@ -947,7 +947,7 @@ IMPL_LINK(SvxTPFilter, ModifyDate, SvtCalendarBox&, rTF, void)
 
 IMPL_LINK(SvxTPFilter, ModifyTime, weld::FormattedSpinButton&, rTF, void)
 {
-    tools::Time aTime(0);
+    tools::Time aTime(tools::Time::EMPTY);
     if (m_xTfDate.get() == &rTF)
     {
         if (m_xTfDate->get_text().isEmpty())

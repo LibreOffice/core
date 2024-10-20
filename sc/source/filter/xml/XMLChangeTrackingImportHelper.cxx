@@ -402,7 +402,7 @@ void ScXMLChangeTrackingImportHelper::ConvertInfo(const ScMyActionInfo& aInfo, O
 
 std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateInsertAction(const ScMyInsAction* pAction)
 {
-    DateTime aDateTime( Date(0), tools::Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(tools::Time::EMPTY) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -414,7 +414,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateInsertAct
 
 std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateDeleteAction(const ScMyDelAction* pAction)
 {
-    DateTime aDateTime( Date(0), tools::Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(tools::Time::EMPTY) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -429,7 +429,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateMoveActio
     OSL_ENSURE(pAction->pMoveRanges, "no move ranges");
     if (pAction->pMoveRanges)
     {
-        DateTime aDateTime( Date(0), tools::Time(0) );
+        DateTime aDateTime( Date(0), tools::Time(tools::Time::EMPTY) );
         OUString aUser;
         ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -443,7 +443,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateMoveActio
 
 std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateRejectionAction(const ScMyRejAction* pAction)
 {
-    DateTime aDateTime( Date(0), tools::Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(tools::Time::EMPTY) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 
@@ -463,7 +463,7 @@ std::unique_ptr<ScChangeAction> ScXMLChangeTrackingImportHelper::CreateContentAc
         sInputString = pAction->pCellInfo->sInputString;
     }
 
-    DateTime aDateTime( Date(0), tools::Time(0) );
+    DateTime aDateTime( Date(0), tools::Time(tools::Time::EMPTY) );
     OUString aUser;
     ConvertInfo(pAction->aInfo, aUser, aDateTime);
 

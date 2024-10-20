@@ -96,7 +96,7 @@ private:
     void SetTimeDiff(const Time& rStart, const Time& rEnd);
 
 private:
-    Time maTime = Time(0);
+    Time maTime = Time(Time::EMPTY);
     sal_Int32 mnDays = 0;
 };
 }

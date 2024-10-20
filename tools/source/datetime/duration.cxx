@@ -105,7 +105,7 @@ Duration::Duration(sal_Int32 nDays, sal_uInt32 nHours, sal_uInt32 nMinutes, sal_
 }
 
 Duration::Duration(sal_Int32 nDays, sal_Int64 nTime)
-    : maTime(nTime)
+    : maTime(Time::fromEncodedTime(nTime))
     , mnDays(nDays)
 {
 }

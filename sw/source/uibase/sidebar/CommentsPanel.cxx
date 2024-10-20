@@ -132,8 +132,8 @@ void Comment::InitControls(const SwPostItField* pPostItField)
         return;
     msText = pPostItField->GetText();
     msAuthor = pPostItField->GetPar1();
-    maDate = Date(pPostItField->GetDateTime().GetDate());
-    maTime = tools::Time(pPostItField->GetDateTime().GetTime());
+    maDate = Date(pPostItField->GetDateTime());
+    maTime = tools::Time(pPostItField->GetDateTime());
     mbResolved = pPostItField->GetResolved();
 
     OUString sDate = sw::sidebar::CommentsPanel::FormatDate(maDate);
@@ -351,10 +351,10 @@ bool CommentsPanel::comp_dateTime(SwFormatField* a, SwFormatField* b)
     SwPostItField* pA = static_cast<SwPostItField*>(a->GetField());
     SwPostItField* pB = static_cast<SwPostItField*>(b->GetField());
 
-    Date aDateA(pA->GetDateTime().GetDate());
-    tools::Time aTimeA(pA->GetDateTime().GetTime());
-    Date aDateB(pB->GetDateTime().GetDate());
-    tools::Time aTimeB(pB->GetDateTime().GetTime());
+    Date aDateA(pA->GetDateTime());
+    tools::Time aTimeA(pA->GetDateTime());
+    Date aDateB(pB->GetDateTime());
+    tools::Time aTimeB(pB->GetDateTime());
 
     OUString sDateTimeA = FormatTime(aTimeA) + " " + FormatDate(aDateA);
     OUString sDateTimeB = FormatTime(aTimeB) + " " + FormatDate(aDateB);

@@ -171,7 +171,7 @@ bool INetMIMEMessage::ParseDateField (
     else if (comphelper::string::isdigitAsciiString(aDateField))
     {
         // Format: delta seconds.
-        tools::Time aDelta (0);
+        tools::Time aDelta(tools::Time::EMPTY);
         aDelta.SetTime (aDateField.toInt32() * 100);
 
         DateTime aNow( DateTime::SYSTEM );

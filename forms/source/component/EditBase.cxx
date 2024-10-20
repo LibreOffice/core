@@ -185,7 +185,7 @@ void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
         }
         else if ((nAnyMask & DEFAULT_TIME) == DEFAULT_TIME)
         {
-            m_aDefault <<= ::tools::Time(_rxInStream->readHyper()).GetUNOTime();
+            m_aDefault <<= ::tools::Time::fromEncodedTime(_rxInStream->readHyper()).GetUNOTime();
         }
         else if ((nAnyMask & DEFAULT_DATE) == DEFAULT_DATE)
         {

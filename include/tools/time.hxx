@@ -40,6 +40,7 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Time
 {
 private:
     sal_Int64       nTime;
+    explicit Time(sal_Int64 _nTime) { nTime = _nTime; }
     static sal_Int64 assemble(sal_uInt32 h, sal_uInt32 m, sal_uInt32 s, sal_uInt64 ns);
     short GetSign() const { return (nTime >= 0) ? +1 : -1; }
 
@@ -78,12 +79,14 @@ public:
                     explicit Time( TimeInitEmpty )
                         { nTime = 0; }
                     explicit Time( TimeInitSystem );
-                    explicit Time( sal_Int64 _nTime ) { Time::nTime = _nTime; }
                     Time( const tools::Time& rTime ) = default;
                     explicit Time( const css::util::Time& rTime );
                     explicit Time( const css::util::DateTime& rDateTime );
                     Time( sal_uInt32 nHour, sal_uInt32 nMin,
                           sal_uInt32 nSec = 0, sal_uInt64 nNanoSec = 0 );
+
+    // The argument is not nanoseconds, it's what nTime must contain!
+    static Time fromEncodedTime(sal_Int64 _nTime) { return Time(_nTime); }
 
     void            SetTime( sal_Int64 nNewTime ) { nTime = nNewTime; }
     sal_Int64       GetTime() const { return nTime; }

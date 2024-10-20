@@ -1436,7 +1436,7 @@ void DocumentFieldsManager::SetFixFields( const DateTime* pNewDateTime )
                     {
                         bChgd = true;
                         static_cast<SwDateTimeField*>(pFormatField->GetField())->SetDateTime(
-                                                    DateTime(Date(nDate), tools::Time(nTime)) );
+                                                    DateTime(Date(nDate), tools::Time::fromEncodedTime(nTime)) );
                     }
                     break;
 

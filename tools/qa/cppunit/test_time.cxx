@@ -31,7 +31,7 @@ void TimeTest::testTime()
     Time aOrigTime(1, 56, 10);
     auto nMS = aOrigTime.GetMSFromTime();
 
-    Time aNewTime(0);
+    Time aNewTime(tools::Time::EMPTY);
     aNewTime.MakeTimeFromMS(nMS);
 
     CPPUNIT_ASSERT(bool(aOrigTime == aNewTime));

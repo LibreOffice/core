@@ -28,7 +28,7 @@ public:
 void DurationTest::testDuration()
 {
     {
-        const Duration aD(Time(0), Time(12, 0, 0));
+        const Duration aD(Time(Time::EMPTY), Time(12, 0, 0));
         CPPUNIT_ASSERT_EQUAL(0.5, aD.GetInDays());
     }
     {

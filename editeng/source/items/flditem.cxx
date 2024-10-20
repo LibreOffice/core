@@ -621,11 +621,8 @@ bool SvxExtTimeField::operator==( const SvxFieldData& rOther ) const
 
 OUString SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
 {
-    tools::Time aTime( tools::Time::EMPTY );
-    if ( eType == SvxTimeType::Fix )
-        aTime.SetTime(m_nFixTime);
-    else
-        aTime = tools::Time( tools::Time::SYSTEM ); // current time
+    tools::Time aTime(eType == SvxTimeType::Fix ? tools::Time::fromEncodedTime(m_nFixTime)
+                                                : tools::Time(tools::Time::SYSTEM)); // current time
     return GetFormatted( aTime, eFormat, rFormatter, eLang );
 }
 
