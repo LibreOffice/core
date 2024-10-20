@@ -1973,7 +1973,7 @@ void SAL_CALL ODatabaseDocument::addStorageChangeListener( const Reference< XSto
 void SAL_CALL ODatabaseDocument::removeStorageChangeListener( const Reference< XStorageChangeListener >& Listener )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
-    m_aStorageListeners.addInterface( Listener );
+    m_aStorageListeners.removeInterface( Listener );
 }
 
 Reference< XStorageBasedLibraryContainer > SAL_CALL ODatabaseDocument::getBasicLibraries()
