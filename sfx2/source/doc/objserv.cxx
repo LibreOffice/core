@@ -1430,13 +1430,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
-            case SID_DOCTEMPLATE :
-            {
-                if ( isExportLocked())
-                    rSet.DisableItem( nWhich );
-                break;
-            }
-
             case SID_CHECKOUT:
                 {
                     bool bShow = false;
@@ -1563,6 +1556,7 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                 break;
             }
 
+            case SID_DOCTEMPLATE:
             case SID_EXPORTDOC:
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
