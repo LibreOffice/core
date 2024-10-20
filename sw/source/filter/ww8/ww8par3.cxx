@@ -880,6 +880,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     switch( aLVL.nAlign )
     {
         case 0:
+        case 3: // Writer here cannot do block justification
             eAdj = SvxAdjust::Left;
             break;
         case 1:
@@ -887,10 +888,6 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
             break;
         case 2:
             eAdj = SvxAdjust::Right;
-            break;
-        case 3:
-            // Writer here cannot do block justification
-            eAdj = SvxAdjust::Left;
             break;
          default:
             // undefined value
