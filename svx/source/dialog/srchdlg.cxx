@@ -1528,7 +1528,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
 
             if(!sDesc.isEmpty())
             {
-                if (!m_xReplaceAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
+                if (!m_xSearchAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
                 {
                     m_xSearchAttrText->show();
                     m_xReplaceAttrText->show();
@@ -1559,7 +1559,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl, weld::Toggleable&, void)
 
         if(!sDesc.isEmpty())
         {
-            if (!m_xReplaceAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
+            if (!m_xSearchAttrText->get_visible() || !m_xReplaceAttrText->get_visible())
             {
                 m_xSearchAttrText->show();
                 m_xReplaceAttrText->show();
