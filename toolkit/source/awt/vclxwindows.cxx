@@ -2562,7 +2562,7 @@ void SAL_CALL VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabList
 void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener )
 {
     SolarMutexGuard aGuard;
-    maTabListeners.addInterface( xListener );
+    maTabListeners.removeInterface( xListener );
 }
 
 void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< beans::NamedValue >& Properties )
