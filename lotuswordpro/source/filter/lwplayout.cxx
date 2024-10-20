@@ -872,10 +872,6 @@ enumXFTextDir LwpMiddleLayout::GetTextDirection()
             break;
         }
         case TEXT_ORIENT_RLBT: // not supported now
-        {
-            eTextDir = enumXFTextDirNone;
-            break;
-        }
         case TEXT_ORIENT_BTLR: // not supported now
         {
             eTextDir = enumXFTextDirNone;
