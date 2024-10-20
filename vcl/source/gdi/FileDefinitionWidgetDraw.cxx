@@ -152,14 +152,11 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
             return true;
-        case ControlType::Combobox:
-            if (ePart == ControlPart::HasBackgroundTexture)
-                return false;
-            return true;
         case ControlType::Editbox:
         case ControlType::EditboxNoBorder:
         case ControlType::MultilineEditbox:
             return true;
+        case ControlType::Combobox:
         case ControlType::Listbox:
             if (ePart == ControlPart::HasBackgroundTexture)
                 return false;
@@ -894,15 +891,6 @@ bool FileDefinitionWidgetDraw::getNativeControlRegion(
         }
         break;
         case ControlType::Checkbox:
-        {
-            auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
-            if (!pPart)
-                return false;
-
-            Size aSize(pPart->mnWidth, pPart->mnHeight);
-            rNativeContentRegion = tools::Rectangle(Point(), aSize);
-            return true;
-        }
         case ControlType::Radiobutton:
         {
             auto const& pPart = m_pWidgetDefinition->getDefinition(eType, ControlPart::Entire);
