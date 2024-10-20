@@ -1174,7 +1174,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles() const
     {
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"graphics"_ustr), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u"");
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::SD_GRAPHICS_ID, u""_ustr);
     }
     catch( uno::Exception& )
     {
@@ -1188,7 +1188,7 @@ void SdXMLStylesContext::ImpSetCellStyles() const
     {
         uno::Reference< container::XNameAccess > xGraphicPageStyles( GetSdImport().GetLocalDocStyleFamilies()->getByName(u"cell"_ustr), uno::UNO_QUERY_THROW );
 
-        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u"");
+        ImpSetGraphicStyles(xGraphicPageStyles, XmlStyleFamily::TABLE_CELL, u""_ustr);
     }
     catch( uno::Exception& )
     {
@@ -1230,41 +1230,33 @@ static bool canSkipReset(std::u16string_view rName, const XMLPropStyleContext* p
 
 // help function used by ImpSetGraphicStyles() and ImpSetMasterPageStyles()
 
-void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess > const & xPageStyles,  XmlStyleFamily nFamily, std::u16string_view rPrefix) const
+void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAccess > const & xPageStyles,  XmlStyleFamily nFamily, const OUString& rPrefix) const
 {
-    sal_Int32 nPrefLen(rPrefix.size());
-
-    sal_uInt32 a;
+    sal_Int32 nPrefLen(rPrefix.getLength());
 
     // set defaults
-    for( a = 0; a < GetStyleCount(); a++)
+    auto [itStart1, itEnd1] = FindStyleChildContextByPrefix(nFamily, u""_ustr);
+    for (auto it = itStart1; it != itEnd1; ++it)
     {
-        const SvXMLStyleContext* pStyle = GetStyle(a);
-
-        if(nFamily == pStyle->GetFamily() && pStyle->IsDefaultStyle())
+        const SvXMLStyleContext* pStyle = *it;
+        if(pStyle->IsDefaultStyle())
         {
             const_cast<SvXMLStyleContext*>(pStyle)->SetDefaults();
         }
     }
 
     // create all styles and set properties
-    for( a = 0; a < GetStyleCount(); a++)
+    auto [itStart, itEnd] = FindStyleChildContextByPrefix(nFamily, rPrefix);
+    for (auto it = itStart; it != itEnd; ++it)
     {
+        const SvXMLStyleContext* pStyle = *it;
         try
         {
-            const SvXMLStyleContext* pStyle = GetStyle(a);
-            if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
+            if(!pStyle->IsDefaultStyle())
             {
                 OUString aStyleName(pStyle->GetDisplayName());
-
                 if( nPrefLen )
-                {
-                    sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
-                    if( (nPrefLen != nStylePrefLen) || !aStyleName.startsWith(rPrefix) )
-                        continue;
-
                     aStyleName = aStyleName.copy( nPrefLen );
-                }
 
                 XMLPropStyleContext* pPropStyle = dynamic_cast< XMLPropStyleContext* >(const_cast< SvXMLStyleContext* >( pStyle ) );
 
@@ -1345,21 +1337,17 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
     }
 
     // now set parents for all styles (when necessary)
-    for(a = 0; a < GetStyleCount(); a++)
+    for (auto it = itStart; it != itEnd; ++it)
     {
-        const SvXMLStyleContext* pStyle = GetStyle(a);
+        const SvXMLStyleContext* pStyle = *it;
 
-        if(pStyle && !pStyle->GetDisplayName().isEmpty() && (nFamily == pStyle->GetFamily())) try
+        if(pStyle->GetDisplayName().isEmpty())
+            continue;
+        try
         {
             OUString aStyleName(pStyle->GetDisplayName());
             if( nPrefLen )
-            {
-                sal_Int32 nStylePrefLen = aStyleName.lastIndexOf( '-' ) + 1;
-                if( (nPrefLen != nStylePrefLen) || !aStyleName.startsWith( rPrefix ) )
-                    continue;
-
                 aStyleName = aStyleName.copy( nPrefLen );
-            }
 
             uno::Reference< style::XStyle > xStyle( xPageStyles->getByName(aStyleName), UNO_QUERY );
             if(xStyle.is())

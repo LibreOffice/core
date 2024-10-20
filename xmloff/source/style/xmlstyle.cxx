@@ -155,67 +155,30 @@ bool SvXMLStyleContext::IsTransient() const
 }
 
 namespace {
-
-class SvXMLStyleIndex_Impl
+struct StyleVectorCompare
 {
-    OUString               sName;
-    XmlStyleFamily         nFamily;
-    // we deliberately don't use a reference here, to avoid creating a ref-count-cycle
-    SvXMLStyleContext*     mpStyle;
-
-public:
-
-    SvXMLStyleIndex_Impl( XmlStyleFamily nFam, OUString aName ) :
-        sName(std::move( aName )),
-        nFamily( nFam ),
-        mpStyle(nullptr)
+    bool operator()(const SvXMLStyleContext* r1, const SvXMLStyleContext* r2) const
     {
-    }
-
-    SvXMLStyleIndex_Impl( const rtl::Reference<SvXMLStyleContext> &rStl ) :
-        sName( rStl->GetName() ),
-        nFamily( rStl->GetFamily() ),
-        mpStyle ( rStl.get() )
-    {
-    }
-
-    const OUString& GetName() const { return sName; }
-    XmlStyleFamily GetFamily() const { return nFamily; }
-    const SvXMLStyleContext *GetStyle() const { return mpStyle; }
-};
-
-struct SvXMLStyleIndexCmp_Impl
-{
-    bool operator()(const SvXMLStyleIndex_Impl& r1, const SvXMLStyleIndex_Impl& r2) const
-    {
-        sal_Int32 nRet;
-
-        if( r1.GetFamily() < r2.GetFamily() )
-            nRet = -1;
-        else if( r1.GetFamily() > r2.GetFamily() )
-            nRet = 1;
-        else
-            nRet = r1.GetName().compareTo( r2.GetName() );
-
-        return nRet < 0;
+        if( r1->GetFamily() < r2->GetFamily() )
+            return true;
+        if( r1->GetFamily() > r2->GetFamily() )
+            return false;
+        return r1->GetName() < r2->GetName();
     }
 };
-
 }
 
 class SvXMLStylesContext_Impl
 {
-    typedef std::set<SvXMLStyleIndex_Impl, SvXMLStyleIndexCmp_Impl> IndicesType;
-
     std::vector<rtl::Reference<SvXMLStyleContext>> aStyles;
-    mutable std::unique_ptr<IndicesType> pIndices;
+    // it would be better if we could share one vector for the styles and the index, but some code in calc
+    // is sensitive to having styles re-ordered
+    mutable SvXMLStylesContext::StyleIndex maStylesIndex;
     bool bAutomaticStyle;
 
 #if OSL_DEBUG_LEVEL > 0
     mutable sal_uInt32 m_nIndexCreated;
 #endif
-
-    void FlushIndex() { pIndices.reset(); }
 
 public:
     explicit SvXMLStylesContext_Impl( bool bAuto );
@@ -233,7 +196,15 @@ public:
     const SvXMLStyleContext *FindStyleChildContext( XmlStyleFamily nFamily,
                                                     const OUString& rName,
                                                     bool bCreateIndex ) const;
+
+    std::pair<SvXMLStylesContext::StyleIndex::const_iterator, SvXMLStylesContext::StyleIndex::const_iterator>
+    FindStyleChildContextByPrefix( XmlStyleFamily nFamily,
+                                    const OUString& rPrefix ) const;
+
     bool IsAutomaticStyle() const { return bAutomaticStyle; }
+
+private:
+    void BuildIndex() const;
 };
 
 SvXMLStylesContext_Impl::SvXMLStylesContext_Impl( bool bAuto ) :
@@ -252,12 +223,11 @@ inline void SvXMLStylesContext_Impl::AddStyle( SvXMLStyleContext *pStyle )
 #endif
     aStyles.emplace_back(pStyle );
 
-    FlushIndex();
+    maStylesIndex.clear();
 }
 
 void SvXMLStylesContext_Impl::dispose()
 {
-    FlushIndex();
     aStyles.clear();
 }
 
@@ -267,23 +237,22 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( XmlStyl
 {
     const SvXMLStyleContext *pStyle = nullptr;
 
-    if( !pIndices && bCreateIndex && !aStyles.empty() )
-    {
-        pIndices = std::make_unique<IndicesType>(aStyles.begin(), aStyles.end());
-        SAL_WARN_IF(pIndices->size() != aStyles.size(), "xmloff.style", "Here is a duplicate Style");
-#if OSL_DEBUG_LEVEL > 0
-        SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
-                    "Performance warning: sdbcx::Index created multiple times");
-        ++m_nIndexCreated;
-#endif
-    }
+    if( maStylesIndex.empty() && bCreateIndex && !aStyles.empty() )
+        BuildIndex();
 
-    if( pIndices )
+    if( !maStylesIndex.empty() )
     {
-        SvXMLStyleIndex_Impl aIndex( nFamily, rName );
-        IndicesType::iterator aFind = pIndices->find(aIndex);
-        if( aFind != pIndices->end() )
-            pStyle = aFind->GetStyle();
+        auto it = std::lower_bound(maStylesIndex.begin(), maStylesIndex.end(), true,
+            [&nFamily, &rName](const SvXMLStyleContext* lhs, bool /*rhs*/)
+            {
+                if (lhs->GetFamily() < nFamily)
+                    return true;
+                if (lhs->GetFamily() > nFamily)
+                    return false;
+                return lhs->GetName() < rName;
+            });
+        if (it != maStylesIndex.end() && (*it)->GetFamily() == nFamily && (*it)->GetName() == rName)
+            pStyle = *it;
     }
     else
     {
@@ -298,6 +267,55 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext( XmlStyl
     return pStyle;
 }
 
+namespace
+{
+struct PrefixProbe
+{
+    XmlStyleFamily nFamily;
+    const OUString& rPrefix;
+
+    bool operator()(const SvXMLStyleContext* lhs, bool /*rhs*/)
+    {
+        if (lhs->GetFamily() < nFamily)
+            return true;
+        if (lhs->GetFamily() > nFamily)
+            return false;
+        const OUString& lhsName = lhs->GetName();
+        return lhsName.subView(0, std::min(lhsName.getLength(), rPrefix.getLength())) < rPrefix;
+    }
+    bool operator()(bool /*lhs*/, const SvXMLStyleContext* rhs)
+    {
+        if (nFamily < rhs->GetFamily())
+            return true;
+        if (nFamily > rhs->GetFamily())
+            return false;
+        const OUString& rhsName = rhs->GetName();
+        return rPrefix < rhsName.subView(0, std::min(rhsName.getLength(), rPrefix.getLength()));
+    }
+};
+}
+
+std::pair<SvXMLStylesContext::StyleIndex::const_iterator, SvXMLStylesContext::StyleIndex::const_iterator>
+SvXMLStylesContext_Impl::FindStyleChildContextByPrefix( XmlStyleFamily nFamily,
+                                                        const OUString& rPrefix ) const
+{
+    if( maStylesIndex.empty() )
+        BuildIndex();
+    return std::equal_range(maStylesIndex.begin(), maStylesIndex.end(), true, PrefixProbe{nFamily,rPrefix});
+}
+
+void SvXMLStylesContext_Impl::BuildIndex() const
+{
+    maStylesIndex.reserve(aStyles.size());
+    for (const auto & i : aStyles)
+        maStylesIndex.push_back(i.get());
+    std::sort(maStylesIndex.begin(), maStylesIndex.end(), StyleVectorCompare());
+#if OSL_DEBUG_LEVEL > 0
+    SAL_WARN_IF(0 != m_nIndexCreated, "xmloff.style",
+                "Performance warning: sdbcx::Index created multiple times");
+    ++m_nIndexCreated;
+#endif
+}
 
 sal_uInt32 SvXMLStylesContext::GetStyleCount() const
 {
@@ -811,6 +829,14 @@ const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
                                   bool bCreateIndex ) const
 {
     return mpImpl->FindStyleChildContext( nFamily, rName, bCreateIndex );
+}
+
+std::pair<SvXMLStylesContext::StyleIndex::const_iterator, SvXMLStylesContext::StyleIndex::const_iterator>
+SvXMLStylesContext::FindStyleChildContextByPrefix(
+                                  XmlStyleFamily nFamily,
+                                  const OUString& rNamePrefix ) const
+{
+    return mpImpl->FindStyleChildContextByPrefix( nFamily, rNamePrefix );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

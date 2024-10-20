@@ -485,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390_4)
         {
             const SvxFontHeightItem* pFontHeight
                 = dynamic_cast<const SvxFontHeightItem*>((*it).pAttr);
-            if (pFontHeight && (*it).nStart == 18)
+            if (pFontHeight && (*it).nStart == 19)
                 CPPUNIT_ASSERT_EQUAL_MESSAGE("Font height is wrong", static_cast<sal_uInt32>(1129),
                                              pFontHeight->GetHeight());
             const SvxFontItem* pFont = dynamic_cast<const SvxFontItem*>((*it).pAttr);

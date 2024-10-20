@@ -26,6 +26,7 @@
 #include <sal/types.h>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/families.hxx>
+#include <vector>
 #include <memory>
 
 class SvXMLStylesContext_Impl;
@@ -164,6 +165,8 @@ protected:
 
 public:
 
+    typedef std::vector<SvXMLStyleContext*> StyleIndex;
+
     SvXMLStylesContext( SvXMLImport& rImport,
         bool bAutomatic = false );
 
@@ -180,6 +183,10 @@ public:
                                       XmlStyleFamily nFamily,
                                       const OUString& rName,
                                       bool bCreateIndex = false ) const;
+    std::pair<StyleIndex::const_iterator, StyleIndex::const_iterator>
+                             FindStyleChildContextByPrefix(
+                                      XmlStyleFamily nFamily,
+                                      const OUString& rNamePrefix) const;
     static XmlStyleFamily GetFamily( std::u16string_view rFamily );
     virtual rtl::Reference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
                         XmlStyleFamily nFamily ) const;
