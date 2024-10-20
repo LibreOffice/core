@@ -538,7 +538,7 @@ void SAL_CALL TreeControlPeer::addSelectionChangeListener( const Reference< XSel
 
 void SAL_CALL TreeControlPeer::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& xListener )
 {
-    maSelectionListeners.addInterface( xListener );
+    maSelectionListeners.removeInterface( xListener );
 }
 
 
