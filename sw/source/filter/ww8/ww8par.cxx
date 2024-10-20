@@ -867,13 +867,6 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
             switch( eTextAnchor )
             {
                 case mso_anchorTop:
-                {
-                    if ( bVerticalText )
-                        eTHA = SDRTEXTHORZADJUST_RIGHT;
-                    else
-                        eTVA = SDRTEXTVERTADJUST_TOP;
-                }
-                break;
                 case mso_anchorTopCentered:
                 {
                     if ( bVerticalText )
@@ -887,13 +880,6 @@ rtl::Reference<SdrObject> SwMSDffManager::ProcessObj(SvStream& rSt,
                 case mso_anchorMiddleCentered:
                 break;
                 case mso_anchorBottom:
-                {
-                    if ( bVerticalText )
-                        eTHA = SDRTEXTHORZADJUST_LEFT;
-                    else
-                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                }
-                break;
                 case mso_anchorBottomCentered:
                 {
                     if ( bVerticalText )
