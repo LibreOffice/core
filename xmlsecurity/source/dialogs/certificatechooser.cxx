@@ -276,7 +276,6 @@ void CertificateChooser::ImplInitialize(bool mbSearch)
             // If we are searching and there is no match skip
             if (mbSearch
                 && rCharClass.uppercase(sIssuer).indexOf(aSearchStr) < 0
-                && rCharClass.uppercase(sIssuer).indexOf(aSearchStr) < 0
                 && !aSearchStr.isEmpty())
                     continue;
 
