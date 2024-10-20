@@ -41,11 +41,6 @@ class TPGalleryThemeProperties;
 
 typedef std::vector< sal_Int32 > TokenList_impl;
 
-struct FilterEntry
-{
-    OUString  aFilterName;
-};
-
 class SearchThread: public salhelper::Thread
 {
 private:
@@ -217,8 +212,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ExchangeData*           pData;
     std::vector<OUString>   aFoundList;
-    std::vector< std::unique_ptr<FilterEntry> >
-                            aFilterEntryList;
+    std::vector<OUString>   aFilterEntryList;
     Timer                   aPreviewTimer;
     OUString                aLastFilterName;
     OUString                aPreviewString;

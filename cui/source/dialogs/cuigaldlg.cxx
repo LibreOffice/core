@@ -97,7 +97,7 @@ void SearchThread::execute()
             nBeginFormat = nEndFormat = nFileNumber;
 
         for (sal_Int32 i = nBeginFormat; i <= nEndFormat; ++i)
-            aFormats.push_back( mpBrowser->aFilterEntryList[ i ]->aFilterName.toAsciiLowerCase() );
+            aFormats.push_back( mpBrowser->aFilterEntryList[ i ].toAsciiLowerCase() );
 
         ImplSearch( maStartURL, aFormats, mpBrowser->bSearchRecursive );
     }
@@ -665,8 +665,6 @@ void TPGalleryThemeProperties::FillFilterList()
     {
         aExt = rFilter.GetImportFormatShortName( i );
         aName = rFilter.GetImportFormatName( i );
-        size_t entryIndex = 0;
-        FilterEntry* pTestEntry = aFilterEntryList.empty() ? nullptr : aFilterEntryList[ entryIndex ].get();
         bool bInList = false;
 
         OUString aExtensions;
@@ -686,22 +684,14 @@ void TPGalleryThemeProperties::FillFilterList()
         }
         aName = addExtension( aName, aExtensions );
 
-        while( pTestEntry )
-        {
-            if ( pTestEntry->aFilterName == aExt )
-            {
-                bInList = true;
-                break;
-            }
-            pTestEntry = ( ++entryIndex < aFilterEntryList.size() )
-                       ? aFilterEntryList[ entryIndex ].get() : nullptr;
-        }
+        auto it = std::find(aFilterEntryList.begin(), aFilterEntryList.end(), aExt);
+        if (it != aFilterEntryList.end())
+            bInList = true;
+
         if ( !bInList )
         {
-            std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
-            pFilterEntry->aFilterName = aExt;
             m_xCbbFileType->append_text(aName);
-            aFilterEntryList.push_back(std::move(pFilterEntry));
+            aFilterEntryList.push_back(aExt);
         }
     }
 
@@ -716,11 +706,10 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             OUString aFilterWildcard( aWildcard );
 
-            std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
-            pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
-            aFilterWildcard += pFilterEntry->aFilterName;
+            OUString aFilterName = aFilter.second.getToken( 0, ';', nIndex );
+            aFilterWildcard += aFilterName;
             m_xCbbFileType->append_text(addExtension(aFilter.first, aFilterWildcard));
-            aFilterEntryList.push_back( std::move(pFilterEntry) );
+            aFilterEntryList.push_back( aFilterName );
         }
     }
 #endif
@@ -766,12 +755,11 @@ void TPGalleryThemeProperties::FillFilterList()
         aExtensions = "*.*";
 #endif
 
-    std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
-    pFilterEntry->aFilterName = CuiResId(RID_CUISTR_GALLERY_ALLFILES);
-    pFilterEntry->aFilterName = addExtension(pFilterEntry->aFilterName, aExtensions);
-    m_xCbbFileType->insert_text(0, pFilterEntry->aFilterName);
+    OUString aFilterName = CuiResId(RID_CUISTR_GALLERY_ALLFILES);
+    aFilterName = addExtension(aFilterName, aExtensions);
+    m_xCbbFileType->insert_text(0, aFilterName);
     m_xCbbFileType->set_active(0);
-    aFilterEntryList.insert(aFilterEntryList.begin(), std::move(pFilterEntry));
+    aFilterEntryList.insert(aFilterEntryList.begin(), aFilterName);
 }
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl, weld::ComboBox&, void)
