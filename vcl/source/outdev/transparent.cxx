@@ -853,9 +853,6 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
                 break;
 
             case MetaActionType::BMPEXSCALE:
-                aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
-                break;
-
             case MetaActionType::BMPEXSCALEPART:
                 aBmpEx = static_cast<const MetaBmpExScaleAction&>(rAct).GetBitmapEx();
                 break;
@@ -915,11 +912,8 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
     switch( rAct.GetType() )
     {
         case MetaActionType::POINT:
-            if( !bLineTransparency )
-                bRet = true;
-            break;
-
         case MetaActionType::LINE:
+        case MetaActionType::POLYLINE:
             if( !bLineTransparency )
                 bRet = true;
             break;
@@ -951,11 +945,6 @@ bool ImplIsNotTransparent( const MetaAction& rAct, const OutputDevice& rOut )
 
         case MetaActionType::CHORD:
             if( !bLineTransparency || !bFillTransparency )
-                bRet = true;
-            break;
-
-        case MetaActionType::POLYLINE:
-            if( !bLineTransparency )
                 bRet = true;
             break;
 
