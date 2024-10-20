@@ -838,14 +838,10 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
                 case BitmapMarkerKind::Elli_9x11:         eNextBigger = BitmapMarkerKind::Elli_11x9;    break;
                 case BitmapMarkerKind::Elli_11x9:         eNextBigger = BitmapMarkerKind::Elli_9x11;    break;
                 case BitmapMarkerKind::RectPlus_11x11:    eNextBigger = BitmapMarkerKind::Rect_13x13;   break;
-
-                case BitmapMarkerKind::Crosshair:
-                    eNextBigger = BitmapMarkerKind::Glue;
-                    break;
-
                 case BitmapMarkerKind::Glue:
                     eNextBigger = BitmapMarkerKind::Crosshair;
                     break;
+                case BitmapMarkerKind::Crosshair:
                 case BitmapMarkerKind::Glue_Deselected:
                     eNextBigger = BitmapMarkerKind::Glue;
                     break;
