@@ -60,12 +60,21 @@ Time::Time( TimeInitSystem )
 Time::Time( sal_uInt32 nHour, sal_uInt32 nMin, sal_uInt32 nSec, sal_uInt64 nNanoSec )
 {
     // normalize time
-    nSec += nNanoSec / nanoSecPerSec;
-    nNanoSec %= nanoSecPerSec;
-    nMin += nSec / secondPerMinute;
-    nSec %= secondPerMinute;
-    nHour += nMin / minutePerHour;
-    nMin %= minutePerHour;
+    if (nNanoSec >= nanoSecPerSec)
+    {
+        nSec += nNanoSec / nanoSecPerSec;
+        nNanoSec %= nanoSecPerSec;
+    }
+    if (nSec >= secondPerMinute)
+    {
+        nMin += nSec / secondPerMinute;
+        nSec %= secondPerMinute;
+    }
+    if (nMin >= minutePerHour)
+    {
+        nHour += nMin / minutePerHour;
+        nMin %= minutePerHour;
+    }
 
     // 922337 * HOUR_MASK = 9223370000000000000 largest possible value, 922338
     // would be -9223364073709551616.
