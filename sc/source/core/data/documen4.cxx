@@ -430,18 +430,19 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,  // multiple (repeate
     ScFormulaCell aRefCell( *this, ScAddress( nCol1, nRow1, nTab1 ), aForString.makeStringAndClear(),
            formula::FormulaGrammar::GRAM_NATIVE, ScMatrixMode::NONE );
     for( j = nCol1; j <= nCol2; j++ )
+    {
         for( k = nRow1; k <= nRow2; k++ )
-            for (i = 0; i < GetTableCount(); i++)
+        {
+            for (const auto& rTab : rMark)
             {
-                for (const auto& rTab : rMark)
-                {
-                    if (rTab >= nMax)
-                        break;
-                    if( maTabs[rTab] )
-                        maTabs[rTab]->SetFormulaCell(
-                            j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, rTab), ScCloneFlags::StartListening));
-                }
+                if (rTab >= nMax)
+                    break;
+                if( maTabs[rTab] )
+                    maTabs[rTab]->SetFormulaCell(
+                        j, k, new ScFormulaCell(aRefCell, *this, ScAddress(j, k, rTab), ScCloneFlags::StartListening));
             }
+        }
+    }
 }
 
 namespace {
