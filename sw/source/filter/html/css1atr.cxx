@@ -733,6 +733,8 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             case RES_POOLCOLL_HEADLINE_BASE:
             case RES_POOLCOLL_STANDARD:
                 // do not export this template
+            case RES_POOLCOLL_HTML_HR:
+                // do not export HR !
                 bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_TEXT:
@@ -790,10 +792,6 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
                 }
                 else
                     rToken = OOO_STRING_SVTOOLS_HTML_parabreak ""_ostr;
-                break;
-            case RES_POOLCOLL_HTML_HR:
-                // do not export HR !
-                bStop = (nDeep==0);
                 break;
             case RES_POOLCOLL_FOOTNOTE:
                 if( !nDeep )
