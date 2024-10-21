@@ -308,13 +308,10 @@ void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
     }
 }
 
-std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson)
+static std::vector<css::beans::PropertyValue> JsonToPropertyValues(const boost::property_tree::ptree& aTree)
 {
     std::vector<beans::PropertyValue> aArguments;
-    boost::property_tree::ptree aTree, aNodeNull, aNodeValue;
-    std::stringstream aStream((std::string(rJson)));
-    boost::property_tree::read_json(aStream, aTree);
-
+    boost::property_tree::ptree aNodeNull, aNodeValue;
     for (const auto& rPair : aTree)
     {
         const std::string& rType = rPair.second.get<std::string>("type", "");
@@ -378,10 +375,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         else if (rType == "[]com.sun.star.beans.PropertyValue")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);
-            std::stringstream s;
-            boost::property_tree::write_json(s, aNodeValue);
-            std::vector<beans::PropertyValue> aPropertyValues = JsonToPropertyValues(OString(s.str()));
-            aValue.Value <<= comphelper::containerToSequence(aPropertyValues);
+            aValue.Value <<= comphelper::containerToSequence(JsonToPropertyValues(aNodeValue));
         }
         else if (rType == "[][]com.sun.star.beans.PropertyValue")
         {
@@ -389,10 +383,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
             std::vector<uno::Sequence<beans::PropertyValue>> aSeqs;
             for (const auto& rItem : aNodeValue)
             {
-                std::stringstream s;
-                boost::property_tree::write_json(s, rItem.second);
-                std::vector<beans::PropertyValue> aPropertyValues = JsonToPropertyValues(OString(s.str()));
-                aSeqs.push_back(comphelper::containerToSequence(aPropertyValues));
+                aSeqs.push_back(comphelper::containerToSequence(JsonToPropertyValues(rItem.second)));
             }
             aValue.Value <<= comphelper::containerToSequence(aSeqs);
         }
@@ -401,6 +392,14 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         aArguments.push_back(aValue);
     }
     return aArguments;
+}
+
+std::vector<css::beans::PropertyValue> JsonToPropertyValues(std::string_view rJson)
+{
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream((std::string(rJson)));
+    boost::property_tree::read_json(aStream, aTree);
+    return JsonToPropertyValues(aTree);
 }
 
 } // namespace comphelper

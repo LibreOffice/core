@@ -53,7 +53,7 @@ namespace comphelper
         return vResult;
     }
 
-    COMPHELPER_DLLPUBLIC std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson);
+    COMPHELPER_DLLPUBLIC std::vector<css::beans::PropertyValue> JsonToPropertyValues(std::string_view rJson);
 }   // namespace comphelper
 
 
