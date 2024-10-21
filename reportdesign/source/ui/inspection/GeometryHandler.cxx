@@ -731,10 +731,6 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
-            aOut.HasPrimaryButton = true;
-            aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , false);
-            break;
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
             aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
             aOut.HasPrimaryButton = true;
@@ -1028,6 +1024,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
         case PROPERTY_ID_SCOPE:
         case PROPERTY_ID_FORMULALIST:
         case PROPERTY_ID_AREA:
+        case PROPERTY_ID_MIMETYPE:
             aPropertyValue = _rControlValue;
             break;
         case PROPERTY_ID_TYPE:
@@ -1049,9 +1046,6 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 if (nFound != RESARRAY_INDEX_NOTFOUND)
                     aPropertyValue <<= nFound;
             }
-            break;
-        case PROPERTY_ID_MIMETYPE:
-            aPropertyValue = _rControlValue;
             break;
         case PROPERTY_ID_VERTICALALIGN:
             {
