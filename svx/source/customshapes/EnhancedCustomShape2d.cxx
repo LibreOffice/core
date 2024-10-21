@@ -1044,10 +1044,6 @@ void EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedCusto
         }
         break;
         case EnhancedCustomShapeParameterType::LEFT :
-        {
-            rRetValue  = 0.0;
-        }
-        break;
         case EnhancedCustomShapeParameterType::TOP :
         {
             rRetValue  = 0.0;
