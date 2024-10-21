@@ -595,14 +595,12 @@ void FormulaParserImpl::initializeImport( const ScAddress& rBaseAddr, FormulaTyp
         case FormulaType::Cell:
             mbSpecialTokens = true;
         break;
+
         case FormulaType::Array:
         break;
+
         case FormulaType::SharedFormula:
-            mbRelativeAsOffset = true;
-        break;
         case FormulaType::CondFormat:
-            mbRelativeAsOffset = true;
-        break;
         case FormulaType::Validation:
             mbRelativeAsOffset = true;
         break;
