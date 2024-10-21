@@ -89,7 +89,7 @@
 
 bool SwViewShell::sbLstAct = false;
 ShellResource *SwViewShell::spShellRes = nullptr;
-vcl::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::spCareDialog {};
+tools::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::spCareDialog {};
 
 static bool bInSizeNotify = false;
 

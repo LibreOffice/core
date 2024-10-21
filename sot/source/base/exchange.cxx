@@ -21,6 +21,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/globname.hxx>
+#include <tools/lazydelete.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
@@ -210,9 +211,9 @@ const DataFlavorRepresentation* FormatArray_Impl()
 
 static tDataFlavorList& InitFormats_Impl()
 {
-    static tDataFlavorList gImplData;
+    static tools::DeleteOnDeinit<tDataFlavorList> gImplData;
 
-    return gImplData;
+    return *gImplData.get();
 }
 
 /*************************************************************************

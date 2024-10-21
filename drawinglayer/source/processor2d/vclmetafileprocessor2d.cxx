@@ -522,7 +522,7 @@ void VclMetafileProcessor2D::popList()
 }
 
 // init static break iterator
-vcl::DeleteOnDeinit<uno::Reference<css::i18n::XBreakIterator>>
+tools::DeleteOnDeinit<uno::Reference<css::i18n::XBreakIterator>>
     VclMetafileProcessor2D::mxBreakIterator;
 
 VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,

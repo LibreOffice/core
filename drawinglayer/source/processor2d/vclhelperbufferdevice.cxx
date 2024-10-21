@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <mutex>
@@ -383,7 +383,7 @@ VDevBuffer& getVDevBuffer()
     // secure global instance with Vcl's safe destroyer of external (seen by
     // library base) stuff, the remembered VDevs need to be deleted before
     // Vcl's deinit
-    static vcl::DeleteOnDeinit<VDevBuffer> aVDevBuffer{};
+    static tools::DeleteOnDeinit<VDevBuffer> aVDevBuffer{};
     return *aVDevBuffer.get();
 }
 

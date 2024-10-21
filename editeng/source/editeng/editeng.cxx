@@ -67,7 +67,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <vcl/help.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/transfer.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -1714,7 +1714,7 @@ rtl::Reference<SfxItemPool> EditEngine::CreatePool()
 
 SfxItemPool& EditEngine::GetGlobalItemPool()
 {
-    static vcl::DeleteOnDeinit<rtl::Reference<SfxItemPool>> pGlobalPool(CreatePool());
+    static tools::DeleteOnDeinit<rtl::Reference<SfxItemPool>> pGlobalPool(CreatePool());
     return **pGlobalPool.get();
 }
 

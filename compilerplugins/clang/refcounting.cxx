@@ -337,7 +337,7 @@ bool containsSalhelperReferenceObjectSubclass(const clang::Type* pType0) {
             if (dc.Class("Reference").Namespace("rtl").GlobalNamespace()
                 || (dc.Class("OStoreHandle").AnonymousNamespace().Namespace("store")
                     .GlobalNamespace())
-                || (dc.Class("DeleteRtlReferenceOnDeinit").Namespace("vcl")
+                || (dc.Class("DeleteRtlReferenceOnDeinit").Namespace("tools")
                     .GlobalNamespace()))
             {
                 return false;

@@ -52,7 +52,7 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
@@ -776,7 +776,7 @@ BitmapEx ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, BitmapColorIndex eIndex)
 
     // if we can't load the marker...
 
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet {};
+    static tools::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet {};
     return aModernSet.get()->GetBitmapEx(eKindOfMarker, sal_uInt16(eIndex));
 }
 

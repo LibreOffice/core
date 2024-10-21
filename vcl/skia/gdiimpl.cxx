@@ -23,7 +23,7 @@
 #include <skia/salbmp.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <skia/utils.hxx>

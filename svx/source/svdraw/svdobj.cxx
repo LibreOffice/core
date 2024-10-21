@@ -119,7 +119,7 @@
 #include <rtl/character.hxx>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 
 using namespace ::com::sun::star;
 
@@ -509,7 +509,7 @@ void SdrObject::handlePageChange(SdrPage*, SdrPage* )
 // init global static itempool
 SdrItemPool& SdrObject::GetGlobalDrawObjectItemPool()
 {
-    static vcl::DeleteRtlReferenceOnDeinit<SdrItemPool> xGlobalItemPool( []() {
+    static tools::DeleteRtlReferenceOnDeinit<SdrItemPool> xGlobalItemPool( []() {
         rtl::Reference<SdrItemPool> xNewPool(new SdrItemPool());
         rtl::Reference<SfxItemPool> pGlobalOutlPool = EditEngine::CreatePool();
         xNewPool->SetSecondaryPool(pGlobalOutlPool.get());

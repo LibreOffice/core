@@ -128,7 +128,6 @@ namespace vcl
 {
     class DisplayConnectionDispatch;
     class SettingsConfigItem;
-    class DeleteOnDeinitBase;
     class Window;
 }
 
@@ -421,7 +420,6 @@ struct ImplSVData
 
     css::uno::Reference< css::lang::XComponent > mxAccessBridge;
     std::unique_ptr<vcl::SettingsConfigItem> mpSettingsConfigItem;
-    std::vector< vcl::DeleteOnDeinitBase* > maDeinitDeleteList;
     std::unordered_map< int, OUString > maPaperNames;
 
     css::uno::Reference<css::i18n::XCharacterClassification> m_xCharClass;

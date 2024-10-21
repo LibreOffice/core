@@ -17,42 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/lazydelete.hxx>
-#include <svdata.hxx>
+#include <tools/lazydelete.hxx>
 #include <sal/log.hxx>
+#include <vector>
 
-namespace vcl
+namespace tools
 {
-DeleteOnDeinitBase::~DeleteOnDeinitBase()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if (!pSVData)
-        return;
-    auto& rList = pSVData->maDeinitDeleteList;
-    std::erase(rList, this);
-}
+static std::vector<tools::DeleteOnDeinitBase*> gDeinitDeleteList;
+static bool gShutdown = false;
+
+DeleteOnDeinitBase::~DeleteOnDeinitBase() { std::erase(gDeinitDeleteList, this); }
 
 void DeleteOnDeinitBase::addDeinitContainer(DeleteOnDeinitBase* i_pContainer)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-
-    SAL_WARN_IF(pSVData->mbDeInit, "vcl", "DeleteOnDeinit added after DeiInitVCL !");
-    if (pSVData->mbDeInit)
+    if (gShutdown)
+    {
+        SAL_WARN("tools", "DeleteOnDeinit added after DeiInitVCL !");
         return;
+    }
 
-    pSVData->maDeinitDeleteList.push_back(i_pContainer);
+    gDeinitDeleteList.push_back(i_pContainer);
 }
 
 void DeleteOnDeinitBase::ImplDeleteOnDeInit()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    for (auto const& deinitDelete : pSVData->maDeinitDeleteList)
+    gShutdown = true;
+    for (auto const& deinitDelete : gDeinitDeleteList)
     {
         deinitDelete->doCleanup();
     }
-    pSVData->maDeinitDeleteList.clear();
+    gDeinitDeleteList.clear();
 }
 
-} // namespace vcl
+} // namespace tools
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

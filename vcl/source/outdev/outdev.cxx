@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/graph.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/svapp.hxx>
@@ -788,7 +788,7 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-    static vcl::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory> xStaticCanvasFactory(
+    static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory> xStaticCanvasFactory(
         css::rendering::CanvasFactory::create( xContext ) );
     Reference<css::lang::XMultiComponentFactory> xCanvasFactory(xStaticCanvasFactory.get());
     Reference< css::rendering::XCanvas > xCanvas;

@@ -67,7 +67,7 @@ public:
     void SetCacheGlyphsWhenDoingFallbackFonts(bool bOK);
 
     static SalLayoutGlyphsCache* self();
-    SalLayoutGlyphsCache(int size) // needs to be public for vcl::DeleteOnDeinit
+    SalLayoutGlyphsCache(int size) // needs to be public for tools::DeleteOnDeinit
         : mCachedGlyphs(size)
     {
     }

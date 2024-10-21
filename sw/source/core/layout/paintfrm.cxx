@@ -19,7 +19,7 @@
 
 #include <utility>
 #include <vcl/canvastools.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
@@ -6400,19 +6400,19 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, nullptr, *_pViewShell->GetOut() );
 
-    static vcl::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow> shadowMaskObj(
+    static tools::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow> shadowMaskObj(
             vcl::bitmap::loadFromName(BMP_PAGE_SHADOW_MASK,
                                       ImageLoadFlags::IgnoreDarkTheme | ImageLoadFlags::IgnoreScalingFactor));
 
     drawinglayer::primitive2d::DiscreteShadow& shadowMask = *shadowMaskObj.get();
-    static vcl::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageBottomRightShadowObj {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageBottomLeftShadowObj  {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageBottomShadowBaseObj  {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageRightShadowBaseObj  {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageTopShadowBaseObj  {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageTopLeftShadowObj  {};
-    static vcl::DeleteOnDeinit< BitmapEx > aPageLeftShadowBaseObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageTopRightShadowObj {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageBottomRightShadowObj {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageBottomLeftShadowObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageBottomShadowBaseObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageRightShadowBaseObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageTopShadowBaseObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageTopLeftShadowObj  {};
+    static tools::DeleteOnDeinit< BitmapEx > aPageLeftShadowBaseObj  {};
     BitmapEx& aPageTopRightShadow = *aPageTopRightShadowObj.get();
     BitmapEx& aPageBottomRightShadow = *aPageBottomRightShadowObj.get();
     BitmapEx& aPageBottomLeftShadow = *aPageBottomLeftShadowObj.get();

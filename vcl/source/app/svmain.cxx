@@ -45,7 +45,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <configsettings.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/menu.hxx>
@@ -468,7 +468,7 @@ void DeInitVCL()
     // Some events may need to access objects destroyed in ImplDeleteOnDeInit, so process them first
     Scheduler::ProcessEventsToIdle();
 
-    vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
+    tools::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
 #if OSL_DEBUG_LEVEL > 0
     OStringBuffer aBuf( 256 );

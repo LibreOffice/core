@@ -24,7 +24,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
 #include <comphelper/configuration.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
@@ -1051,7 +1051,7 @@ void OutputDevice::DrawWaveLine(const Point& rStartPos, const Point& rEndPos, to
 
     if ( fOrientation == 0.0 )
     {
-        static vcl::DeleteOnDeinit< WavyLineCache > snLineCache {};
+        static tools::DeleteOnDeinit< WavyLineCache > snLineCache {};
         if ( !snLineCache.get() )
             return;
         WavyLineCache& rLineCache = *snLineCache.get();

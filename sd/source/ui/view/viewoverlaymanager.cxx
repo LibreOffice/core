@@ -24,7 +24,7 @@
 #include <sfx2/dispatch.hxx>
 
 #include <vcl/help.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
 
@@ -88,8 +88,16 @@ constexpr OUString aBigPlaceHolders[] =
 
 static BitmapEx& getButtonImage( int index, bool large )
 {
-    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
-    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = { vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty, vcl::DeleteOnDeinitFlag::Empty };
+    static ::tools::DeleteOnDeinit< BitmapEx > gSmallButtonImages[SAL_N_ELEMENTS(aSmallPlaceHolders)] = {
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty };
+    static ::tools::DeleteOnDeinit< BitmapEx > gLargeButtonImages[SAL_N_ELEMENTS(aBigPlaceHolders)] = {
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty,
+            ::tools::DeleteOnDeinitFlag::Empty, ::tools::DeleteOnDeinitFlag::Empty };
 
     assert(SAL_N_ELEMENTS(aSmallPlaceHolders) == SAL_N_ELEMENTS(aBigPlaceHolders));
 

@@ -348,7 +348,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/metaact.hxx>

@@ -21,7 +21,7 @@
 #include <utility>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/vcllayout.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
 #include <TextLayoutCache.hxx>
@@ -234,7 +234,7 @@ void SalLayoutGlyphsCache::clear() { mCachedGlyphs.clear(); }
 
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
-    static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
+    static tools::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
         !comphelper::IsFuzzing() ? officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get()
                                  : 20000000);
     return cache.get();

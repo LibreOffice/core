@@ -18,7 +18,7 @@
  */
 
 #include <sdr/primitive2d/sdrprimitivetools.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <mutex>
 
@@ -29,7 +29,7 @@ namespace drawinglayer::primitive2d
 {
         BitmapEx createDefaultCross_3x3(const basegfx::BColor& rBColor)
         {
-            static vcl::DeleteOnDeinit< BitmapEx > aRetVal(vcl::DeleteOnDeinitFlag::Empty);
+            static tools::DeleteOnDeinit< BitmapEx > aRetVal(tools::DeleteOnDeinitFlag::Empty);
             static basegfx::BColor aBColor;
             static std::mutex aMutex;
 

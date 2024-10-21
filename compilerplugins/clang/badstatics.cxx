@@ -113,7 +113,7 @@ public:
         if (!pDefinition) { // maybe no definition if it's a pointer/reference
             return std::make_pair(false, std::vector<FieldDecl const*>());
         }
-        if (   type.Class("DeleteOnDeinit").Namespace("vcl").GlobalNamespace()
+        if (   type.Class("DeleteOnDeinit").Namespace("tools").GlobalNamespace()
             || type.Class("weak_ptr").StdNamespace() // not owning
             || type.Class("ImplWallpaper").GlobalNamespace() // very odd static instance here
             || type.Class("Application").GlobalNamespace() // numerous odd subclasses in vclmain::createApplication()

@@ -9,7 +9,7 @@
 
 #include "lokclipboard.hxx"
 #include <unordered_map>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sal/log.hxx>
@@ -20,7 +20,7 @@ using namespace css;
 using namespace css::uno;
 
 /* static */ osl::Mutex LOKClipboardFactory::gMutex;
-static vcl::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>> gClipboards{};
+static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>> gClipboards{};
 
 rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {

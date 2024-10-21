@@ -27,7 +27,7 @@
 #include <stack>
 #include <vcl/mapmod.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/window.hxx>
 
 namespace com::sun::star::accessibility { class XAccessible; }
@@ -193,7 +193,7 @@ class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
 
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
-    static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.
+    static tools::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     tools::Rectangle        maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.

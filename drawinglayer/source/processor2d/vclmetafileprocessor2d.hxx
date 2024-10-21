@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/pdfextoutdevdata.hxx> // vcl::PDFExtOutDevData support
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 
 class GDIMetaFile;
 namespace tools
@@ -176,7 +176,7 @@ private:
         constructed VclMetafileProcessor2D. It's still incarnated on demand,
         but exists for OOo runtime now by purpose.
      */
-    static vcl::DeleteOnDeinit<css::uno::Reference<css::i18n::XBreakIterator>> mxBreakIterator;
+    static tools::DeleteOnDeinit<css::uno::Reference<css::i18n::XBreakIterator>> mxBreakIterator;
 
     /*  vcl::PDFExtOutDevData support
         For the first step, some extra actions at vcl::PDFExtOutDevData need to

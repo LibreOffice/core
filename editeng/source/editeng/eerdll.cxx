@@ -65,7 +65,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
 #include <tools/mapunit.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/editids.hrc>
 
@@ -78,7 +78,7 @@ EditDLL& EditDLL::Get()
       Previously this data was function-static, but then data in i18npool would
       be torn down before the destructor here ran, causing a crash.
     */
-    static vcl::DeleteOnDeinit< EditDLL > gaEditDll;
+    static tools::DeleteOnDeinit< EditDLL > gaEditDll;
     return *gaEditDll.get();
 }
 

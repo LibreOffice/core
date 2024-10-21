@@ -19,18 +19,18 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
+#include <tools/toolsdllapi.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <rtl/ref.hxx>
 
 #include <optional>
 
-namespace vcl
+namespace tools
 {
     /*
-    You may not access vcl objects after DeInitVCL has been called this includes their destruction
-    therefore disallowing the existence of static vcl object like e.g. a static BitmapEx
+    You may not access some objects after DeInitVCL has been called this includes their destruction
+    therefore disallowing the existence of static object like e.g. a static BitmapEx
     To work around this use DeleteOnDeinit<BitmapEx> which will allow you to have a static object container,
     that will have its contents destroyed on DeinitVCL. The single drawback is that you need to check on the
     container object whether it still contains content before actually accessing it.
@@ -46,17 +46,17 @@ namespace vcl
 
     SomeWindow::Paint()
     {
-        static vcl::DeleteOnDeinit< BitmapEx > aBmp( ... );
+        static tools::DeleteOnDeinit< BitmapEx > aBmp( ... );
 
         if( aBmp.get() ) // check whether DeInitVCL has been called already
             DrawBitmapEx( Point( 10, 10 ), *aBmp );
     }
     */
 
-    class VCL_DLLPUBLIC DeleteOnDeinitBase
+    class TOOLS_DLLPUBLIC DeleteOnDeinitBase
     {
     public:
-        static void SAL_DLLPRIVATE ImplDeleteOnDeInit();
+        static void ImplDeleteOnDeInit();
         virtual ~DeleteOnDeinitBase();
     protected:
         static void addDeinitContainer( DeleteOnDeinitBase* i_pContainer );
@@ -109,7 +109,7 @@ namespace vcl
                 \<do something with xFactory>
     */
     template <typename I>
-    class DeleteUnoReferenceOnDeinit final : public vcl::DeleteOnDeinitBase
+    class DeleteUnoReferenceOnDeinit final : public tools::DeleteOnDeinitBase
     {
         css::uno::Reference<I> m_xI;
         virtual void doCleanup() override { set(nullptr); }
@@ -144,7 +144,7 @@ namespace vcl
                 \<do something with xFactory>
     */
     template <typename I>
-    class DeleteRtlReferenceOnDeinit final : public vcl::DeleteOnDeinitBase
+    class DeleteRtlReferenceOnDeinit final : public tools::DeleteOnDeinitBase
     {
         rtl::Reference<I> m_xI;
         virtual void doCleanup() override { set(nullptr); }

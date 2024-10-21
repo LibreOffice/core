@@ -34,7 +34,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/settings.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
@@ -135,7 +135,7 @@ void ViewContactOfPageShadow::createViewIndependentPrimitive2DSequence(drawingla
     }
     else
     {
-        static vcl::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow((
+        static tools::DeleteOnDeinit< drawinglayer::primitive2d::DiscreteShadow > aDiscreteShadow((
                 BitmapEx(SIP_SA_PAGESHADOW35X35)));
 
         if(aDiscreteShadow.get())

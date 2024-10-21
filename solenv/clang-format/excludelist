@@ -6101,6 +6101,7 @@ include/tools/helpers.hxx
 include/tools/inetmime.hxx
 include/tools/inetmsg.hxx
 include/tools/inetstrm.hxx
+include/tools/lazydelete.hxx
 include/tools/line.hxx
 include/tools/lineend.hxx
 include/tools/link.hxx
@@ -6295,7 +6296,6 @@ include/vcl/inputtypes.hxx
 include/vcl/jobset.hxx
 include/vcl/keycod.hxx
 include/vcl/layout.hxx
-include/vcl/lazydelete.hxx
 include/vcl/lineinfo.hxx
 include/vcl/mapmod.hxx
 include/vcl/menu.hxx

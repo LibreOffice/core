@@ -26,7 +26,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/lazydelete.hxx>
+#include <tools/lazydelete.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -72,7 +72,7 @@ constexpr Color gWaveCol(COL_GRAY);
 
 tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
-static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
+static tools::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
 
 void SwFntCache::Flush( )
 {
