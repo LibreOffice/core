@@ -801,6 +801,8 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
     switch (mnServiceId)
     {
         case text::textfield::Type::DATE:
+        case text::textfield::Type::TIME:
+        case text::textfield::Type::EXTENDED_TIME:
             pServices[2] = "com.sun.star.text.TextField.DateTime";
             pServices[3] = "com.sun.star.text.textfield.DateTime";
         break;
@@ -816,10 +818,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
             pServices[2] = "com.sun.star.text.TextField.PageCount";
             pServices[3] = "com.sun.star.text.textfield.PageCount";
         break;
-        case text::textfield::Type::TIME:
-            pServices[2] = "com.sun.star.text.TextField.DateTime";
-            pServices[3] = "com.sun.star.text.textfield.DateTime";
-        break;
         case text::textfield::Type::DOCINFO_TITLE:
             pServices[2] = "com.sun.star.text.TextField.docinfo.Title";
             pServices[3] = "com.sun.star.text.textfield.docinfo.Title";
@@ -827,10 +825,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
         case text::textfield::Type::TABLE:
             pServices[2] = "com.sun.star.text.TextField.SheetName";
             pServices[3] = "com.sun.star.text.textfield.SheetName";
-        break;
-        case text::textfield::Type::EXTENDED_TIME:
-            pServices[2] = "com.sun.star.text.TextField.DateTime";
-            pServices[3] = "com.sun.star.text.textfield.DateTime";
         break;
         case text::textfield::Type::EXTENDED_FILE:
             pServices[2] = "com.sun.star.text.TextField.FileName";
