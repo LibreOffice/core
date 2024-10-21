@@ -760,10 +760,8 @@ void ListsManager::lcl_attribute( Id nName, const Value& rVal )
             AbstractListDef::SetValue( nName );
         break;
         case NS_ooxml::LN_CT_NumLvl_ilvl:
-            //add a new level to the level vector and make it the current one
-            m_pCurrentDefinition->AddLevel(rVal.getString().toUInt32());
-        break;
         case NS_ooxml::LN_CT_Lvl_ilvl:
+            //add a new level to the level vector and make it the current one
             m_pCurrentDefinition->AddLevel(rVal.getString().toUInt32());
         break;
         case NS_ooxml::LN_CT_AbstractNum_abstractNumId:
