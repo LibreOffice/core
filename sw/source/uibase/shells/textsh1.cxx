@@ -1155,7 +1155,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // remove the languages from that)
             o3tl::sorted_vector<sal_uInt16> aAttribs;
 
-            constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+            static constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
                 // tdf#40496: we don't want to change writing direction, so exclude RES_FRAMEDIR:
                 { RES_FRMATR_BEGIN, RES_FRAMEDIR - 1 },
                 { RES_FRAMEDIR + 1, RES_FRMATR_END - 1 },

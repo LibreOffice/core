@@ -25,7 +25,7 @@ class SocketTest : public CppUnit::TestFixture
 
     void test_createInetSocketAddr()
     {
-        OUString constexpr in(u"123.4.56.78"_ustr);
+        static constexpr OUString in(u"123.4.56.78"_ustr);
         auto const addr = osl_createInetSocketAddr(in.pData, 100);
         CPPUNIT_ASSERT(addr != nullptr);
         CPPUNIT_ASSERT_EQUAL(osl_Socket_FamilyInet, osl_getFamilyOfSocketAddr(addr));

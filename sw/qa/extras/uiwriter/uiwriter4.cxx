@@ -653,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    constexpr const char* aPath("/office:document-content/office:body/office:text/text:p");
+    const char* const aPath("/office:document-content/office:body/office:text/text:p");
 
     const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
     CPPUNIT_ASSERT_EQUAL(0, pos1); // found, and it is first
@@ -824,7 +824,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNew)
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
 
-    constexpr const char* aPath("/office:document-content/office:body/office:text/text:p");
+    const char* const aPath("/office:document-content/office:body/office:text/text:p");
 
     CPPUNIT_ASSERT_ASSERTION_FAIL(getXPathPosition(pXmlDoc, aPath, "bookmark")); // not found
     const int pos2 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
@@ -887,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
 
     // load only content.xml from the resaved document
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    constexpr const char* aPath("/office:document-content/office:body/office:text/text:p");
+    const char* const aPath("/office:document-content/office:body/office:text/text:p");
 
     const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark");
     const int pos2 = getXPathPosition(pXmlDoc, aPath, "text");
@@ -1300,7 +1300,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"middle"_ustr);
     SwView* pView = pDocShell->GetView();
-    constexpr OUString aAuthor(u"A U. Thor"_ustr);
+    static constexpr OUString aAuthor(u"A U. Thor"_ustr);
     pView->SetRedlineAuthor(aAuthor);
     pDocShell->SetView(pView);
 
@@ -2203,7 +2203,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     createSwDoc();
 
     // insert an annotation with a text
-    constexpr OUString aSomeText(u"some text"_ustr);
+    static constexpr OUString aSomeText(u"some text"_ustr);
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
         { "Text", uno::Any(aSomeText) },
         { "Author", uno::Any(u"me"_ustr) },

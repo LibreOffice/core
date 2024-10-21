@@ -60,7 +60,7 @@ void RectangleTest::testConstruction()
         CPPUNIT_ASSERT_EQUAL(tools::Long(0), aRect3.getOpenWidth());
     }
     {
-        constexpr tools::Rectangle aRect(Point(), Size(-1, -2));
+        static constexpr tools::Rectangle aRect(Point(), Size(-1, -2));
         static_assert(!aRect.IsEmpty());
         static_assert(aRect.Right() == 0);
         static_assert(aRect.Bottom() == -1);
@@ -69,17 +69,17 @@ void RectangleTest::testConstruction()
         aRect2.SetSize(Size(-1, -2));
         CPPUNIT_ASSERT_EQUAL(aRect, aRect2);
 
-        constexpr tools::Rectangle aRect3(Point(), Size(0, 0));
+        static constexpr tools::Rectangle aRect3(Point(), Size(0, 0));
         static_assert(aRect3.IsEmpty());
         static_assert(aRect3.Right() == 0);
         static_assert(aRect3.Bottom() == 0);
 
-        constexpr tools::Rectangle aRect4(Point(), Size(1, 1));
+        static constexpr tools::Rectangle aRect4(Point(), Size(1, 1));
         static_assert(!aRect4.IsEmpty());
         static_assert(aRect4.Right() == 0);
         static_assert(aRect4.Bottom() == 0);
 
-        constexpr tools::Rectangle aRect5(Point(), Size(-1, -1));
+        static constexpr tools::Rectangle aRect5(Point(), Size(-1, -1));
         static_assert(!aRect5.IsEmpty());
         static_assert(aRect5.Right() == 0);
         static_assert(aRect5.Bottom() == 0);
@@ -124,8 +124,8 @@ void RectangleTest::testOpenClosedSize()
 void RectangleTest::testUnitConvesion()
 {
     {
-        constexpr tools::Rectangle aRectTwip(100, 100, 100, 100);
-        constexpr tools::Rectangle aRectMm100(
+        static constexpr tools::Rectangle aRectTwip(100, 100, 100, 100);
+        static constexpr tools::Rectangle aRectMm100(
             o3tl::convert(aRectTwip, o3tl::Length::twip, o3tl::Length::mm100));
         static_assert(!aRectMm100.IsEmpty());
         // Make sure that we use coordinates for conversion, not width/height:
@@ -136,8 +136,8 @@ void RectangleTest::testUnitConvesion()
     }
 
     {
-        constexpr tools::Rectangle aRectTwip(1, 1);
-        constexpr tools::Rectangle aRectMm100(
+        static constexpr tools::Rectangle aRectTwip(1, 1);
+        static constexpr tools::Rectangle aRectMm100(
             o3tl::convert(aRectTwip, o3tl::Length::twip, o3tl::Length::mm100));
         // Make sure that result keeps the empty flag
         static_assert(aRectMm100.IsEmpty());
@@ -150,10 +150,10 @@ void RectangleTest::testUnitConvesion()
 
 void RectangleTest::testSetOperators()
 {
-    constexpr tools::Rectangle rect(Point(0, 0), Size(20, 20));
-    constexpr tools::Rectangle inside(Point(10, 10), Size(10, 10));
-    constexpr tools::Rectangle overlap(Point(10, 10), Size(20, 20));
-    constexpr tools::Rectangle outside(Point(20, 20), Size(10, 10));
+    static constexpr tools::Rectangle rect(Point(0, 0), Size(20, 20));
+    static constexpr tools::Rectangle inside(Point(10, 10), Size(10, 10));
+    static constexpr tools::Rectangle overlap(Point(10, 10), Size(20, 20));
+    static constexpr tools::Rectangle outside(Point(20, 20), Size(10, 10));
     CPPUNIT_ASSERT(rect.Contains(inside));
     CPPUNIT_ASSERT(rect.Contains(rect));
     CPPUNIT_ASSERT(!rect.Contains(overlap));

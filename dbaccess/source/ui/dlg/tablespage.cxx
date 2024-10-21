@@ -332,7 +332,7 @@ namespace dbaui
     Sequence< OUString > OTableSubscriptionPage::collectDetailedSelection() const
     {
         Sequence< OUString > aTableFilter;
-        constexpr OUString sWildcard = u"%"_ustr;
+        static constexpr OUString sWildcard = u"%"_ustr;
 
         std::unique_ptr<weld::TreeIter> xAllObjectsEntry(m_xTablesList->getAllObjectsEntry());
         if (!xAllObjectsEntry)

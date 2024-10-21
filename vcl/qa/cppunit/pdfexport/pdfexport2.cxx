@@ -4592,7 +4592,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testRexportMediaBoxOrigin)
     auto pInnerIm = aDocument.LookupObject(12);
     CPPUNIT_ASSERT(pInnerIm);
 
-    constexpr sal_Int32 aOrigin[2] = { -800, -600 };
+    static constexpr sal_Int32 aOrigin[2] = { -800, -600 };
     sal_Int32 aSize[2] = { 0, 0 };
 
     auto pBBox = dynamic_cast<vcl::filter::PDFArrayElement*>(pInnerIm->Lookup("BBox"_ostr));
@@ -4692,11 +4692,11 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152246)
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
 
     // Position array
-    constexpr double aPos[5][4] = { { 55.699, 706.701, 132.401, 722.499 },
-                                    { 197.499, 706.701, 274.201, 722.499 },
-                                    { 302.349, 679.101, 379.051, 694.899 },
-                                    { 479.599, 679.101, 556.301, 694.899 },
-                                    { 55.699, 651.501, 132.401, 667.299 } };
+    static constexpr double aPos[5][4] = { { 55.699, 706.701, 132.401, 722.499 },
+                                           { 197.499, 706.701, 274.201, 722.499 },
+                                           { 302.349, 679.101, 379.051, 694.899 },
+                                           { 479.599, 679.101, 556.301, 694.899 },
+                                           { 55.699, 651.501, 132.401, 667.299 } };
 
     // Get page annotations.
     auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));

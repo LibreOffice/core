@@ -971,7 +971,7 @@ void DocxExport::WriteDocVars(const sax_fastparser::FSHelperPtr& pFS)
 
     // Only write docVars if there will be at least a single docVar.
     bool bStarted = false;
-    constexpr OUString aPrefix(u"com.sun.star.text.fieldmaster.User."_ustr);
+    static constexpr OUString aPrefix(u"com.sun.star.text.fieldmaster.User."_ustr);
     for (const auto& rMasterName : aMasterNames)
     {
         if (!rMasterName.startsWith(aPrefix))

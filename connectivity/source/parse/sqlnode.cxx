@@ -360,7 +360,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
 
     if(sLimitValue.getLength() > 0)
     {
-        constexpr char SELECT_KEYWORD[] = "SELECT";
+        static constexpr char SELECT_KEYWORD[] = "SELECT";
         sBuffer.insert(sBuffer.indexOf(SELECT_KEYWORD) + strlen(SELECT_KEYWORD),
                 Concat2View(" FIRST " + sLimitValue));
     }

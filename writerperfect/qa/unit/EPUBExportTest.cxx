@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(EPUBExportTest, testMimetype)
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(m_xContext->getServiceManager(),
                                                     uno::UNO_QUERY);
-    constexpr OUString aServiceName(u"com.sun.star.comp.Writer.EPUBExportFilter"_ustr);
+    static constexpr OUString aServiceName(u"com.sun.star.comp.Writer.EPUBExportFilter"_ustr);
     uno::Reference<document::XFilter> xFilter(xMSF->createInstance(aServiceName), uno::UNO_QUERY);
     // Should result in no errors.
     xFilter->cancel();

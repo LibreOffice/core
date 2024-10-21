@@ -4138,7 +4138,7 @@ void SvxCurrencyToolBoxControl::GetCurrencySymbols(std::vector<OUString>& rList,
 {
     rCurrencyList.clear();
 
-    constexpr OUString aTwoSpace = u"  "_ustr;
+    static constexpr OUString aTwoSpace = u"  "_ustr;
     const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount = rCurrencyTable.size();
 

@@ -4245,7 +4245,7 @@ std::shared_ptr<SfxItemSet> DocumentContentOperationsManager::lcl_createDelSet(S
                         RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END - 1>(rDoc.GetAttrPool()));
     o3tl::sorted_vector<sal_uInt16> aAttribs;
 
-    constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+    static constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
         // tdf#40496: we don't want to change writing direction, so exclude RES_FRAMEDIR:
         { RES_TXTATR_CHARFMT,RES_TXTATR_CHARFMT },
         { RES_FRMATR_BEGIN, RES_FRAMEDIR - 1 },

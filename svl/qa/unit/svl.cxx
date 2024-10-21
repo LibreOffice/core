@@ -1379,7 +1379,7 @@ void Test::testUserDefinedNumberFormats()
     OUString sCode, sExpected;
     SvNumberFormatter aFormatter(m_xContext, eLang);
     // tdf#158890 replace '?' with figure blank (0x2007)
-    constexpr OUString sBlankDigit = u" "_ustr;
+    static constexpr OUString sBlankDigit = u" "_ustr;
     {  // tdf#97835: suppress decimal separator
         sCode = "0.##\" m\"";
         sExpected = "12 m";

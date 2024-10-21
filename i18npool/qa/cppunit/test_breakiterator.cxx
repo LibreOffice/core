@@ -293,7 +293,7 @@ void TestBreakIterator::testLineBreaking()
                     aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
 
-            constexpr OUString str = u"range of \u2212100.000 to 100.000"_ustr;
+            static constexpr OUString str = u"range of \u2212100.000 to 100.000"_ustr;
             aResult = m_xBreak->getLineBreak(
                     str, strlen("range of -"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{9}, aResult.breakIndex);
@@ -311,7 +311,7 @@ void TestBreakIterator::testLineBreaking()
 
             // Also the mathematical minus sign:
 
-            constexpr OUString str = u"EURO is \u221210,50"_ustr;
+            static constexpr OUString str = u"EURO is \u221210,50"_ustr;
             aResult = m_xBreak->getLineBreak(
                     str, strlen("EURO is -"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{8}, aResult.breakIndex);
@@ -327,7 +327,7 @@ void TestBreakIterator::testLineBreaking()
 
             // But not the non-breaking hyphen:
 
-            constexpr OUString str = u"und \u2011"_ustr;
+            static constexpr OUString str = u"und \u2011"_ustr;
             aResult = m_xBreak->getLineBreak(
                     str, strlen("und -ko"), aLocale, 0, aHyphOptions, aUserOptions);
             CPPUNIT_ASSERT_EQUAL(sal_Int32{5}, aResult.breakIndex);
@@ -672,7 +672,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=13494
     {
-        constexpr OUString aBase(u"xxAAxxBBxxCCxx"_ustr);
+        static constexpr OUString aBase(u"xxAAxxBBxxCCxx"_ustr);
         const sal_Unicode aTests[] =
         {
             '\'', ';', ',', '.', '!', '@', '#', '%', '&', '*',

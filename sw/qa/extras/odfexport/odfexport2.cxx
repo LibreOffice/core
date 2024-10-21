@@ -1676,7 +1676,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableInFrameAnchoredToPage)
         const OUString styleName = getXPath(pXmlDoc, path, attr);
         return "//office:automatic-styles/style:style[@style:name='" + styleName.toUtf8() + "']";
     };
-    constexpr OString xPathTextBox = "//office:body/office:text/draw:frame/draw:text-box"_ostr;
+    static constexpr OString xPathTextBox = "//office:body/office:text/draw:frame/draw:text-box"_ostr;
 
     // Check also, that autostyles defined inside that frame are stored correctly. If not, then
     // these paragraphs would refer to styles in <office::styles>, not in <office:automatic-styles>,

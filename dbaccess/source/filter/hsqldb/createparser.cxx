@@ -83,7 +83,7 @@ sal_Int32 lcl_getAutoIncrementDefault(std::u16string_view sColumnDef)
 
 std::u16string_view lcl_getDefaultValue(std::u16string_view sColumnDef)
 {
-    constexpr std::u16string_view DEFAULT_KW = u"DEFAULT";
+    static constexpr std::u16string_view DEFAULT_KW = u"DEFAULT";
     size_t nDefPos = sColumnDef.find(DEFAULT_KW);
     if (nDefPos > 0 && nDefPos != std::u16string_view::npos
         && lcl_getAutoIncrementDefault(sColumnDef) < 0)

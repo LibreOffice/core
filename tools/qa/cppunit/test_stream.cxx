@@ -313,7 +313,7 @@ namespace
 
     void Test::test_write_unicode()
     {
-        constexpr OUString write(u"abc"_ustr);
+        static constexpr OUString write(u"abc"_ustr);
         utl::TempFileNamed aTempFile(u"test_write_unicode");
         aTempFile.EnableKillingFile();
         {

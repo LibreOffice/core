@@ -698,7 +698,7 @@ void ScImportAsciiDlg::SetSeparators( sal_Unicode cSep )
     {
         // Exclusively set a separator, maFieldSeparators needs not be
         // modified, it's obtained by GetSeparators() after this call.
-        constexpr sal_Unicode aSeps[] = { '\t', ';', ',', ' ' };
+        static constexpr sal_Unicode aSeps[] = { '\t', ';', ',', ' ' };
         for (const sal_Unicode c : aSeps)
         {
             const bool bSet = (c == cSep);

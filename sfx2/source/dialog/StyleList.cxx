@@ -99,9 +99,9 @@ namespace
 {
 Color ColorHash(std::u16string_view rString)
 {
-    constexpr auto aSaturationArray = std::to_array<sal_uInt16>({ 90, 75, 60 });
-    constexpr auto aBrightnessArray = std::to_array<sal_uInt16>({ 100, 80, 60 });
-    constexpr auto aTintOrShadeArray
+    static constexpr auto aSaturationArray = std::to_array<sal_uInt16>({ 90, 75, 60 });
+    static constexpr auto aBrightnessArray = std::to_array<sal_uInt16>({ 100, 80, 60 });
+    static constexpr auto aTintOrShadeArray
         = std::to_array<sal_Int16>({ 1'500, 3'000, 4'500, 6'500, 7'500 });
 
     sal_uInt32 nStringHash = rtl_ustr_hashCode_WithLength(rString.data(), rString.length());

@@ -3298,7 +3298,7 @@ SwHTMLWriter& OutCSS1_SvxBox( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 
     if( rHt.Which() == RES_CHRATR_BOX )
     {
-        constexpr std::string_view inline_block("inline-block");
+        static constexpr std::string_view inline_block("inline-block");
         if( rWrt.m_bTagOn )
         {
             // Inline-block to make the line height changing correspond to the character border

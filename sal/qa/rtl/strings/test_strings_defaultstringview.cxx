@@ -50,7 +50,8 @@ class Test : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.startsWithIgnoreAsciiCase(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.endsWith(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, u"foo"_ustr.endsWithIgnoreAsciiCase(std::u16string_view()));
-        OUString constexpr foo(u"foo"_ustr); // avoid loplugin:stringconstant, loplugin:stringview
+        static constexpr OUString foo(
+            u"foo"_ustr); // avoid loplugin:stringconstant, loplugin:stringview
         CPPUNIT_ASSERT_EQUAL(false, foo == std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(true, foo != std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(false, foo < std::u16string_view());

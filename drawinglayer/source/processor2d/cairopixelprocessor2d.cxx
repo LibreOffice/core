@@ -770,7 +770,7 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
     // and the short loop (for nR, nG and nB resp.) like:
     //    for(unsigned short a(0); a < 256; a++)
     //        std::cout << ((a * nR) / 255) << ", ";
-    constexpr std::array<sal_uInt8, 256> nRArray
+    static constexpr std::array<sal_uInt8, 256> nRArray
         = { 0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  3,  3,  3,  3,  4,  4,  4,
             4,  4,  5,  5,  5,  5,  5,  6,  6,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  8,  8,  9,
             9,  9,  9,  9,  10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 13, 13, 13, 13,
@@ -783,7 +783,7 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
             41, 42, 42, 42, 42, 42, 43, 43, 43, 43, 44, 44, 44, 44, 44, 45, 45, 45, 45, 45, 46, 46,
             46, 46, 47, 47, 47, 47, 47, 48, 48, 48, 48, 48, 49, 49, 49, 49, 49, 50, 50, 50, 50, 51,
             51, 51, 51, 51, 52, 52, 52, 52, 52, 53, 53, 53, 53, 54 };
-    constexpr std::array<sal_uInt8, 256> nGArray
+    static constexpr std::array<sal_uInt8, 256> nGArray
         = { 0,   0,   1,   2,   2,   3,   4,   5,   5,   6,   7,   7,   8,   9,   10,  10,
             11,  12,  12,  13,  14,  15,  15,  16,  17,  17,  18,  19,  20,  20,  21,  22,
             22,  23,  24,  25,  25,  26,  27,  27,  28,  29,  30,  30,  31,  32,  33,  33,
@@ -800,7 +800,7 @@ void LuminanceToAlpha(cairo_surface_t* pMask)
             149, 149, 150, 151, 152, 152, 153, 154, 155, 155, 156, 157, 157, 158, 159, 160,
             160, 161, 162, 162, 163, 164, 165, 165, 166, 167, 167, 168, 169, 170, 170, 171,
             172, 172, 173, 174, 175, 175, 176, 177, 177, 178, 179, 180, 180, 181, 182, 183 };
-    constexpr std::array<sal_uInt8, 256> nBArray
+    static constexpr std::array<sal_uInt8, 256> nBArray
         = { 0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,
             1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  3,
             3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  4,  4,  4,  4,
@@ -3388,7 +3388,7 @@ void CairoPixelProcessor2D::renderTextSimpleOrDecoratedPortionPrimitive2D(
         constexpr double fPlus(1.0);
         constexpr double fMinus(-1.0);
 
-        constexpr std::array<std::pair<double, double>, 8> offsets{
+        static constexpr std::array<std::pair<double, double>, 8> offsets{
             std::pair<double, double>{ fMinus, fMinus }, std::pair<double, double>{ fZero, fMinus },
             std::pair<double, double>{ fPlus, fMinus },  std::pair<double, double>{ fMinus, fZero },
             std::pair<double, double>{ fPlus, fZero },   std::pair<double, double>{ fMinus, fPlus },

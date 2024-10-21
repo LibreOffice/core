@@ -1524,7 +1524,7 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
 }
 
 bool SfxDispatcher::IsCommandAllowedInLokReadOnlyViewMode (OUString commandName) {
-    constexpr OUString allowedList[] = {
+    static constexpr OUString allowedList[] = {
         u".uno:InsertAnnotation"_ustr,
         u".uno:ReplyComment"_ustr,
         u".uno:ResolveComment"_ustr,

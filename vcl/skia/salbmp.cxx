@@ -529,10 +529,10 @@ bool SkiaSalBitmap::ConvertToGreyscale()
         // values from Bitmap::ImplMakeGreyscales(). Do not use kGray_8_SkColorType,
         // Skia would use its gray conversion formula.
         // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
-        constexpr SkColorMatrix toGray(77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // R column
-                                       77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // G column
-                                       77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // B column
-                                       0, 0, 0, 1, 0); // don't modify alpha
+        static constexpr SkColorMatrix toGray(77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // R column
+                                              77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // G column
+                                              77 / 256.0, 151 / 256.0, 28 / 256.0, 0, 0, // B column
+                                              0, 0, 0, 1, 0); // don't modify alpha
         paint.setColorFilter(SkColorFilters::Matrix(toGray));
         surface->getCanvas()->drawImage(mImage, 0, 0, SkSamplingOptions(), &paint);
         mBitCount = 8;
@@ -987,10 +987,10 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
         // Move the R channel value to the alpha channel. This seems to be the only
         // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
         // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
-        constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
-                                           0, 0, 0, 0, 0, // G column
-                                           0, 0, 0, 0, 0, // B column
-                                           1, 0, 0, 0, 0); // A column
+        static constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
+                                                  0, 0, 0, 0, 0, // G column
+                                                  0, 0, 0, 0, 0, // B column
+                                                  1, 0, 0, 0, 0); // A column
         SkPaint paint;
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         if (scaling)
@@ -1046,10 +1046,10 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
         // Move the R channel value to the alpha channel. This seems to be the only
         // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
         // NOTE: The matrix is 4x5 organized as columns (i.e. each line is a column, not a row).
-        constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
-                                           0, 0, 0, 0, 0, // G column
-                                           0, 0, 0, 0, 0, // B column
-                                           1, 0, 0, 0, 0); // A column
+        static constexpr SkColorMatrix redToAlpha(0, 0, 0, 0, 0, // R column
+                                                  0, 0, 0, 0, 0, // G column
+                                                  0, 0, 0, 0, 0, // B column
+                                                  1, 0, 0, 0, 0); // A column
         paint.setColorFilter(SkColorFilters::Matrix(redToAlpha));
         surface->getCanvas()->drawImage(GetAsSkBitmap().asImage(), 0, 0, SkSamplingOptions(),
                                         &paint);

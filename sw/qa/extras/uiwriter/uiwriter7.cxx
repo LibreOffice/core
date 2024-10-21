@@ -2392,8 +2392,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testUnicodeNotationToggle)
     sDocString = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     CPPUNIT_ASSERT_EQUAL(sOriginalDocString, sDocString);
 
-    constexpr OUString sWithCombiningSMPName = u"xyzU+4faeU+e0101"_ustr;
-    constexpr OUString sWithCombiningSMP = u"xyz\U00004fae\U000e0101"_ustr;
+    static constexpr OUString sWithCombiningSMPName = u"xyzU+4faeU+e0101"_ustr;
+    static constexpr OUString sWithCombiningSMP = u"xyz\U00004fae\U000e0101"_ustr;
     pWrtShell->SplitNode();
     pWrtShell->Insert2(sWithCombiningSMPName);
     dispatchCommand(mxComponent, u".uno:UnicodeNotationToggle"_ustr, aPropertyValues);

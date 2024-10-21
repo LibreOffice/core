@@ -437,9 +437,9 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
 
     OUStringBuffer aSql = "UPDATE " + m_aComposedTableName + " SET ";
     // list all columns that should be set
-    constexpr OUStringLiteral aPara(u" = ?,");
+    static constexpr OUStringLiteral aPara(u" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
-    constexpr OUString aAnd(u" AND "_ustr);
+    static constexpr OUString aAnd(u" AND "_ustr);
     OUString sIsNull(u" IS NULL"_ustr);
     OUString sParam(u" = ?"_ustr);
 

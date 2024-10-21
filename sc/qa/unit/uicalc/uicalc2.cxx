@@ -340,7 +340,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf124816)
     // The actual result is completely unrelated to this test and behaviour of
     // OFFSET() was changed as of tdf#85551 and here result of that test
     // document is now Err:502 instead of 0.
-    constexpr OUString aExpectedResult(u"Err:502"_ustr);
+    static constexpr OUString aExpectedResult(u"Err:502"_ustr);
     lcl_AssertCurrentCursorPosition(*pDocSh, u"D10");
     CPPUNIT_ASSERT_EQUAL(aExpectedResult, pDoc->GetString(ScAddress(3, 9, 0)));
 

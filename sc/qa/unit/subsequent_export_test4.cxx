@@ -567,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf154445_unused_pagestyles)
     createScDoc("ods/tdf108188_pagestyle.ods");
 
     // Check if the user defined page style is present
-    constexpr OUString aTestPageStyle = u"TestPageStyle"_ustr;
+    static constexpr OUString aTestPageStyle = u"TestPageStyle"_ustr;
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
 

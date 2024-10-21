@@ -1558,8 +1558,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
     rExtDoc.InsertTab(1, aExtSh2Name);
     rExtDoc.InsertTab(2, aExtSh3Name);
 
-    OUString constexpr name(u"Name"_ustr);
-    OUString constexpr value(u"Value"_ustr);
+    static OUString constexpr name(u"Name"_ustr);
+    static OUString constexpr value(u"Value"_ustr);
 
     // Sheet 1
     rExtDoc.SetString(0, 0, 0, name);
@@ -1717,7 +1717,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRangeName)
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString constexpr aExtDocName(u"file:///extdata.fake"_ustr);
+    static OUString constexpr aExtDocName(u"file:///extdata.fake"_ustr);
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -3515,8 +3515,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaErrorPropagation)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScAddress aPos, aPos2;
-    constexpr OUString aTRUE(u"TRUE"_ustr);
-    constexpr OUString aFALSE(u"FALSE"_ustr);
+    static constexpr OUString aTRUE(u"TRUE"_ustr);
+    static constexpr OUString aFALSE(u"FALSE"_ustr);
 
     aPos.Set(0, 0, 0); // A1
     m_pDoc->SetValue(aPos, 1.0);

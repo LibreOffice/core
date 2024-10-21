@@ -74,8 +74,8 @@ void BigInt::Normalize()
 
         if (nLen < 2)
         {
-            constexpr sal_uInt32 maxForPosInt32 = std::numeric_limits<sal_Int32>::max();
-            constexpr sal_uInt32 maxForNegInt32 = -sal_Int64(std::numeric_limits<sal_Int32>::min());
+            static constexpr sal_uInt32 maxForPosInt32 = std::numeric_limits<sal_Int32>::max();
+            static constexpr sal_uInt32 maxForNegInt32 = -sal_Int64(std::numeric_limits<sal_Int32>::min());
             sal_uInt32 nNum0 = nNum[0];
             if (bIsNeg && nNum0 <= maxForNegInt32)
             {

@@ -156,7 +156,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
             size_t (*funclen)() = nullptr;
 
 #ifndef DISABLE_DYNLOADING
-            constexpr OUString sModuleName( u"" SAL_MODULENAME( "i18npool" ) ""_ustr );
+            static constexpr OUString sModuleName( u"" SAL_MODULENAME( "i18npool" ) ""_ustr );
             hModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_DEFAULT );
             if (hModule) {
                 OUStringBuffer aBuf("get_collator_data_" + rLocale.Language + "_");

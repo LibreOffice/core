@@ -1610,7 +1610,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf140865Wordart3D)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
 
     // without the fix in place a:sp3d was lost on round trip, and so extrusion was lost.
-    constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr"_ostr);
+    static constexpr OString sPathStart("//p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:bodyPr"_ostr);
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "extrusionH", u"342900");
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d", "contourW", u"12700");
     assertXPath(pXmlDoc, sPathStart + "/a:sp3d/a:bevelT", "w", u"114300");

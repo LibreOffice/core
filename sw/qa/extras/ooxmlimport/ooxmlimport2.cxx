@@ -1121,7 +1121,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf154319)
 
     // tdf#154360: check tab stops between the number and the entry text
     // The last (10th) level does not correspond to any MS level (only 9 levels there)
-    constexpr sal_Int32 levelTabStops[]
+    static constexpr sal_Int32 levelTabStops[]
         = { 776, 1552, 2328, 3104, 3881, 4657, 5433, 6209, 6985, -1 };
 
     //start with level 1, 0 is the header level

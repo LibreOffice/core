@@ -969,7 +969,7 @@ namespace
                         SwPaM aPam( *pTNd, pTNd->GetText().getLength() );
                         o3tl::sorted_vector<sal_uInt16> aResetAttrsArray;
 
-                        constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
+                        static constexpr std::pair<sal_uInt16, sal_uInt16> aResetableSetRange[] = {
                             { RES_PARATR_BEGIN, RES_PARATR_END - 1 },
                             { RES_PARATR_LIST_BEGIN, RES_FRMATR_END - 1 },
                         };

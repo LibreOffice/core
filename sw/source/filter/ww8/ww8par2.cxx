@@ -729,7 +729,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     if( m_xStyles->mpStyRule )         // Bullet-Style already present
         return m_xStyles->mpStyRule;
 
-    constexpr OUString aBaseName(u"WW8StyleNum"_ustr);
+    static constexpr OUString aBaseName(u"WW8StyleNum"_ustr);
     const OUString aName( m_rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
     // #i86652#
@@ -811,7 +811,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
         // If NumRuleItems were set, either directly or through inheritance, disable them now
         m_pCurrentColl->SetFormatAttr( SwNumRuleItem() );
 
-        constexpr OUString aName(u"Outline"_ustr);
+        static constexpr OUString aName(u"Outline"_ustr);
         SwNumRule aNR( m_rDoc.GetUniqueNumRuleName( &aName ),
                        SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
                        OUTLINE_RULE );

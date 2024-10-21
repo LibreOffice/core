@@ -836,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf161327_LatheEndAngle)
 
     // get scene object
     uno::Reference<drawing::XShape> xSceneShape(getShape(0));
-    constexpr OUString sExpected(u"com.sun.star.drawing.Shape3DSceneObject"_ustr);
+    static constexpr OUString sExpected(u"com.sun.star.drawing.Shape3DSceneObject"_ustr);
     CPPUNIT_ASSERT_EQUAL(sExpected, xSceneShape->getShapeType());
 
     // Examine child objects

@@ -1404,7 +1404,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula, testFormulaAnnotateTrimOnDoubleRefs)
     constexpr sal_Int32 nRows = 5;
 
     // Values in A1:B5
-    constexpr sal_Int32 aMat[nRows][nCols] = {
+    static constexpr sal_Int32 aMat[nRows][nCols] = {
         {4, 50},
         {5, 30},
         {4, 40},

@@ -1135,7 +1135,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf126879)
 {
     createSwDoc("tdf126879.odt");
     save(mpFilter);
-    constexpr OString aExpected("<!DOCTYPE html>"_ostr);
+    static constexpr OString aExpected("<!DOCTYPE html>"_ostr);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     const OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));
@@ -2749,7 +2749,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
     // Given a document with leading, trailing, and repeating intermediate spaces:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
+    static constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
     pWrtShell->Insert(paraText);
 
     // When exporting to plain HTML, using PreserveSpaces:
@@ -2778,7 +2778,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     // Given a document with leading, trailing, and repeating intermediate spaces:
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
+    static constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
     pWrtShell->Insert(paraText);
 
     // When exporting to ReqIF, using PreserveSpaces:

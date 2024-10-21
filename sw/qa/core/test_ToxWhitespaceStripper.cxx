@@ -113,7 +113,7 @@ void ToxWhitespaceStripperTest::StrippingWhitespacesFromVariousStringsWorks()
 
 void ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
 {
-    OUString constexpr test(u"abc"_ustr);
+    static OUString constexpr test(u"abc"_ustr);
     ToxWhitespaceStripper sut(test);
     sal_Int32 expected = test.getLength();
     CPPUNIT_ASSERT_EQUAL(expected, sut.GetPositionInStrippedString(test.getLength()));

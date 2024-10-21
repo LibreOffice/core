@@ -580,7 +580,7 @@ static QuoteType lcl_isFieldEndQuote( const sal_Unicode* p, const sal_Unicode* p
     // to be checked.
     if (!rcDetectSep)
     {
-        constexpr sal_Unicode vSep[] = { ',', '\t', ';' };
+        static constexpr sal_Unicode vSep[] = { ',', '\t', ';' };
         for (const sal_Unicode c : vSep)
         {
             if (p[1] == c)

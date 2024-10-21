@@ -1521,7 +1521,7 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
             // by clipping.
             getDrawCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
             aPaint.setStrokeWidth(2);
-            constexpr float intervals[] = { 4.0f, 4.0f };
+            static constexpr float intervals[] = { 4.0f, 4.0f };
             aPaint.setStyle(SkPaint::kStroke_Style);
             aPaint.setPathEffect(SkDashPathEffect::Make(intervals, std::size(intervals), 0));
         }

@@ -382,7 +382,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
 {
     // Test that the text adjusts to contour properly
 
-    constexpr OUString sText
+    static constexpr OUString sText
         = u"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum consequat mi quis "
           "pretium semper. Proin luctus orci ac neque venenatis, quis commodo dolor posuere. "
           "Curabitur dignissim sapien quis cursus egestas. Donec blandit auctor arcu, nec "

@@ -1420,7 +1420,7 @@ void doubleToString(rtl_tString** pResult, sal_Int32* pResultCapacity, sal_Int32
     if (std::isnan(fValue))
     {
         // #i112652# XMLSchema-2
-        constexpr std::string_view nan{ "NaN" };
+        static constexpr std::string_view nan{ "NaN" };
         return append(pResult, pResultCapacity, nResultOffset, nan);
     }
 

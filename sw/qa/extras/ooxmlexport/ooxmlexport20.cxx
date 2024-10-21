@@ -1133,7 +1133,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159110)
     // Given a text with an URL with multiple spaces
     loadAndReload("multi_space_url.fodt");
 
-    constexpr OUString sExpectedURL = u"http://www.example.org/path%20%20with%20%20spaces"_ustr;
+    static constexpr OUString sExpectedURL
+        = u"http://www.example.org/path%20%20with%20%20spaces"_ustr;
 
     // Without the fix, this would have failed with
     // - Expected: http://www.example.org/path%20%20with%20%20spaces

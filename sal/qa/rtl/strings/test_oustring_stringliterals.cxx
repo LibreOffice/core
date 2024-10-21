@@ -409,7 +409,7 @@ void test::oustring::StringLiterals::checkUtf16() {
 void test::oustring::StringLiterals::checkEmbeddedNul() {
     using namespace std::literals;
     rtl::OUString const s("foobar");
-    constexpr char16_t const a[] = u"foo\0hidden";
+    static constexpr char16_t const a[] = u"foo\0hidden";
     char16_t const * const p = a;
     CPPUNIT_ASSERT(s.startsWith(a));
     CPPUNIT_ASSERT(s.startsWith(p));

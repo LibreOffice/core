@@ -1387,7 +1387,7 @@ DECLARE_OOXMLEXPORT_TEST(testActiveXOptionButtonGroup, "activex_option_button_gr
 {
     // Optionbutton groups were not handled
     // The two optionbutton should have the same group name
-    constexpr OUString sGroupName = u"GroupX"_ustr;
+    static constexpr OUString sGroupName = u"GroupX"_ustr;
 
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xControlShape.is());

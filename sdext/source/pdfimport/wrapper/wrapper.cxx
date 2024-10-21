@@ -1085,7 +1085,7 @@ bool xpdf_ImportFromFile(const OUString& rURL,
 
     // spawn separate process to keep LGPL/GPL code apart.
 
-    constexpr OUString aOptFlag(u"-o"_ustr);
+    static constexpr OUString aOptFlag(u"-o"_ustr);
     std::vector<rtl_uString*> args({ aSysUPath.pData });
     if (!rFilterOptions.isEmpty())
     {

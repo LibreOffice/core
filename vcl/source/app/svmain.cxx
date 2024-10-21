@@ -197,7 +197,7 @@ int ImplSVMain()
 #if !defined(_WIN32) && !defined(SYSTEM_OPENSSL)
     if (!bWasInitVCL)
     {
-        OUString constexpr name(u"SSL_CERT_FILE"_ustr);
+        static constexpr OUString name(u"SSL_CERT_FILE"_ustr);
         OUString temp;
         if (osl_getEnvironment(name.pData, &temp.pData) == osl_Process_E_NotFound)
         {

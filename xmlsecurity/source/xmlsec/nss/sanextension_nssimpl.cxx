@@ -152,7 +152,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
 OString SanExtensionImpl::removeOIDFromString( const OString &oidString)
 {
     OString objID;
-    constexpr std::string_view oid("OID.");
+    static constexpr std::string_view oid("OID.");
     if (oidString.match(oid))
         objID = oidString.copy(oid.size());
     else

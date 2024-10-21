@@ -2272,7 +2272,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         sal_uInt16 nWhichId;
         OUString pPropNm;
     };
-    constexpr CtrlFontMapEntry aMapTable[] =
+    static constexpr CtrlFontMapEntry aMapTable[] =
     {
         { RES_CHRATR_COLOR,           u"TextColor"_ustr },
         { RES_CHRATR_FONT,            u"FontName"_ustr },

@@ -3027,7 +3027,7 @@ void Test::testInvalidUtf8() {
         auto const converter = rtl_createTextToUnicodeConverter(
             RTL_TEXTENCODING_JAVA_UTF8);
         CPPUNIT_ASSERT(converter != nullptr);
-        constexpr OString input(u8"\U00010000"_ostr);
+        static constexpr OString input(u8"\U00010000"_ostr);
         sal_Unicode buf[TEST_STRING_SIZE];
         sal_uInt32 info;
         sal_Size converted;

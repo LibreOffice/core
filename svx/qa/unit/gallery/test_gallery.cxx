@@ -166,7 +166,7 @@ void GalleryObjTest::TestThemeURLCase()
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
 
     // Mixed Case Theme Name
-    constexpr OUString myThemeName = u"AddyTestTheme"_ustr;
+    static constexpr OUString myThemeName = u"AddyTestTheme"_ustr;
 
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
@@ -243,7 +243,7 @@ void GalleryObjTest::TestGalleryThemeEntry()
 
     std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
-    constexpr OUString myThemeName = u"addytesttheme"_ustr;
+    static constexpr OUString myThemeName = u"addytesttheme"_ustr;
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
 
@@ -463,7 +463,7 @@ void GalleryObjTest::TestGetThemeNameFromGalleryTheme()
 
     std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
-    constexpr OUString myThemeName = u"addytesttheme"_ustr;
+    static constexpr OUString myThemeName = u"addytesttheme"_ustr;
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
 

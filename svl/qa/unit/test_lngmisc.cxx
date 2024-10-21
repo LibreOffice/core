@@ -134,7 +134,7 @@ void LngMiscTest::testReplaceControlChars()
 
 void LngMiscTest::testGetThesaurusReplaceText()
 {
-    constexpr OUString str2(u"asdf"_ustr);
+    static constexpr OUString str2(u"asdf"_ustr);
 
     OUString r = linguistic::GetThesaurusReplaceText(u""_ustr);
     CPPUNIT_ASSERT(r.isEmpty());

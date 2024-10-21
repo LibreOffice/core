@@ -160,14 +160,14 @@ void ScannerTest::testBlankLines()
 
 void ScannerTest::testOperators()
 {
-    constexpr OUString sourceE(u"="_ustr);
-    constexpr OUString sourceLT(u"<"_ustr);
-    constexpr OUString sourceGT(u">"_ustr);
-    constexpr OUString sourceLTE(u"<="_ustr);
-    constexpr OUString sourceGTE(u">="_ustr);
-    constexpr OUString sourceNE(u"<>"_ustr);
-    constexpr OUString sourceA(u":="_ustr);
-    constexpr OUString sourceNot(u"Not"_ustr);
+    static constexpr OUString sourceE(u"="_ustr);
+    static constexpr OUString sourceLT(u"<"_ustr);
+    static constexpr OUString sourceGT(u">"_ustr);
+    static constexpr OUString sourceLTE(u"<="_ustr);
+    static constexpr OUString sourceGTE(u">="_ustr);
+    static constexpr OUString sourceNE(u"<>"_ustr);
+    static constexpr OUString sourceA(u":="_ustr);
+    static constexpr OUString sourceNot(u"Not"_ustr);
 
     std::vector<Symbol> symbols;
 
@@ -239,12 +239,12 @@ void ScannerTest::testOperators()
 
 void ScannerTest::testAlphanum()
 {
-    constexpr OUString source1(u"asdfghefg"_ustr);
-    constexpr OUString source3(u"AdfsaAUdsl10987"_ustr);
-    constexpr OUString source4(u"asdfa_mnvcnm"_ustr);
-    constexpr OUString source5(u"_asdf1"_ustr);
-    constexpr OUString source6(u"_6"_ustr);
-    constexpr OUString source7(u"joxclk_"_ustr);
+    static constexpr OUString source1(u"asdfghefg"_ustr);
+    static constexpr OUString source3(u"AdfsaAUdsl10987"_ustr);
+    static constexpr OUString source4(u"asdfa_mnvcnm"_ustr);
+    static constexpr OUString source5(u"_asdf1"_ustr);
+    static constexpr OUString source6(u"_6"_ustr);
+    static constexpr OUString source7(u"joxclk_"_ustr);
 
     std::vector<Symbol> symbols;
 

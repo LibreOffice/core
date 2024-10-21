@@ -604,7 +604,7 @@ CPPUNIT_TEST_FIXTURE(ScParallelismTest, testFormulaGroupSpanEvalNonGroup)
     m_xDocShell->DoHardRecalc();
 
     constexpr size_t nNumChanges = 12;
-    constexpr size_t nChangeRows[nNumChanges] = {10, 11, 12, 101, 102, 103, 251, 252, 253, 503, 671, 1029};
+    static constexpr size_t nChangeRows[nNumChanges] = {10, 11, 12, 101, 102, 103, 251, 252, 253, 503, 671, 1029};
     for (size_t nIdx = 0; nIdx < nNumChanges; ++nIdx)
     {
         size_t nRow = nChangeRows[nIdx];

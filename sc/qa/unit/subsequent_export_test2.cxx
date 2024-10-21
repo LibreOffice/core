@@ -1040,7 +1040,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf112567)
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf75702)
 {
     // The problem was that line breaks were not imported.
-    constexpr OUString sA1(u"line1\nline2"_ustr);
+    static constexpr OUString sA1(u"line1\nline2"_ustr);
 
     createScDoc("ods/tdf75702_textLineBreak.ods");
     ScDocument* pDoc = getScDoc();
@@ -1059,8 +1059,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf103829)
 {
     // The problem was that tabspaces were not imported or exported at all.
     // These strings match the current implementations of CELLTYPE_EDIT and CELLTYPE_STRING.
-    constexpr OUString sA1(u"\x001Leading tab\nTHREE tabs inside: [\x001\x001\x001]"_ustr);
-    constexpr OUString sA2(u"\tLeading tab. THREE tabs inside: [\t\t\t]"_ustr);
+    static constexpr OUString sA1(u"\x001Leading tab\nTHREE tabs inside: [\x001\x001\x001]"_ustr);
+    static constexpr OUString sA2(u"\tLeading tab. THREE tabs inside: [\t\t\t]"_ustr);
 
     createScDoc("ods/tdf103829_textTab.ods");
     ScDocument* pDoc = getScDoc();

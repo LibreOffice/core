@@ -38,8 +38,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963)
     //tests xlsx -> ods -> ods of property "TotalsRow"
     createScDoc("xlsx/tdf162963_TableWithTotalsEnabled.xlsx");
 
-    constexpr OUString sDBName(u"myData"_ustr);
-    constexpr OUString sPropName(u"TotalsRow"_ustr);
+    static constexpr OUString sDBName(u"myData"_ustr);
+    static constexpr OUString sPropName(u"TotalsRow"_ustr);
 
     // Make sure the database range "myData" has TotalsRow TRUE after import from xlsx.
     {

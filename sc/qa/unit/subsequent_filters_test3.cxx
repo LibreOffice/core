@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testWrapAndShrinkXLSXML)
         bool bShrinkToFit;
     };
 
-    constexpr Check aChecks[] = {
+    static constexpr Check aChecks[] = {
         { 1, 0, false, false },
         { 1, 1, true, false },
         { 1, 2, false, true },
@@ -1775,7 +1775,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)
     createScDoc("ods/tdf108188_pagestyle.ods");
 
     // Check if the user defined page style is present
-    constexpr OUString aTestPageStyle = u"TestPageStyle"_ustr;
+    static constexpr OUString aTestPageStyle = u"TestPageStyle"_ustr;
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
 

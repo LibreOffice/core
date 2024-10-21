@@ -1855,7 +1855,7 @@ IMPL_LINK_NOARG(OfaLanguagesTabPage, LocaleSettingHdl, weld::ComboBox&, void)
 
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry(
             (eLang == LANGUAGE_USER_SYSTEM_CONFIG) ? MsLangId::getConfiguredSystemLanguage() : eLang);
-    constexpr OUString aDefaultID = u"default"_ustr;
+    static constexpr OUString aDefaultID = u"default"_ustr;
     // Update the "Default ..." currency.
     m_xCurrencyLB->remove_id(aDefaultID);
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();

@@ -1226,13 +1226,13 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 
     if ( m_aExternalFeatures.empty() )
     {
-        constexpr OUString aURLs[] {
+        static constexpr OUString aURLs[] {
             u".uno:DataSourceBrowser/DocumentDataSource"_ustr,
             u".uno:DataSourceBrowser/FormLetter"_ustr,
             u".uno:DataSourceBrowser/InsertColumns"_ustr,
             u".uno:DataSourceBrowser/InsertContent"_ustr,
         };
-        constexpr sal_uInt16 nIds[] = {
+        static constexpr sal_uInt16 nIds[] = {
             ID_BROWSER_DOCUMENT_DATASOURCE,
             ID_BROWSER_FORMLETTER,
             ID_BROWSER_INSERTCOLUMNS,

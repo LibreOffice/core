@@ -3512,7 +3512,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
                 xOLE->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorderProps));
                 xOLE->setPropertyValue(u"BottomBorder"_ustr, uno::Any(aBorderProps));
             }
-            constexpr OUString pProperties[] = {
+            static constexpr OUString pProperties[] = {
                 u"AnchorType"_ustr,
                 u"Surround"_ustr,
                 u"SurroundContour"_ustr,
@@ -5351,7 +5351,7 @@ static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
     //  The command looks like: " PAGE \* Arabic "
     // tdf#132185: but may as well be "PAGE \* Arabic"
     OUString sNumber;
-    constexpr OUString rSeparator(u"\\* "_ustr);
+    static constexpr OUString rSeparator(u"\\* "_ustr);
     if (size_t nStartIndex = rCommand.find(rSeparator); nStartIndex != std::u16string_view::npos)
     {
         sal_Int32 nStartIndex2 = nStartIndex + rSeparator.getLength();
