@@ -814,6 +814,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bChecked = getContainer()->getPreviewMode() == PreviewMode::Document;
                 break;
             case ID_BROWSER_UNDO:
+            case SID_DB_APP_SENDREPORTTOWRITER:
+            case SID_DB_APP_DBADMIN:
                 aReturn.bEnabled = false;
                 break;
             case SID_MAIL_SENDDOC:
@@ -824,10 +826,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     ElementType eType = getContainer()->getElementType();
                     aReturn.bEnabled = E_REPORT == eType && getContainer()->getSelectionCount() > 0 && getContainer()->isALeafSelected();
                 }
-                break;
-            case SID_DB_APP_SENDREPORTTOWRITER:
-            case SID_DB_APP_DBADMIN:
-                aReturn.bEnabled = false;
                 break;
             case SID_DB_APP_STATUS_TYPE:
                 aReturn.bEnabled = m_xDataSource.is();
@@ -1248,8 +1246,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_DB_APP_QUERY_OPEN:
             case SID_DB_APP_FORM_OPEN:
             case SID_DB_APP_REPORT_OPEN:
-                doAction( _nId, ElementOpenMode::Normal );
-                break;
             case SID_DB_APP_CONVERTTOVIEW:
                 doAction( _nId, ElementOpenMode::Normal );
                 break;
