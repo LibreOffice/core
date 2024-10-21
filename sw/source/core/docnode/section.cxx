@@ -470,12 +470,6 @@ void SwSection::Notify(SfxHint const& rHint)
         break;
 
     case RES_FTN_AT_TXTEND:
-        if( pNew && pOld )
-        {
-            bUpdateFootnote = true;
-        }
-        break;
-
     case RES_END_AT_TXTEND:
         if( pNew && pOld )
         {
@@ -760,8 +754,6 @@ void SwSectionFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 
     case RES_FTN_AT_TXTEND:
     case RES_END_AT_TXTEND:
-        GetNotifier().Broadcast(sw::LegacyModifyHint(pOld, pNew));
-        return;
     case RES_PROTECT:
     case RES_EDIT_IN_READONLY: // edit in readonly sections
         // Pass through these Messages until the End of the tree!
