@@ -689,8 +689,6 @@ void OQueryController::impl_initialize(const ::comphelper::NamedValueCollection&
     switch ( m_nCommandType )
     {
     case CommandType::QUERY:
-        m_sName = sCommand;
-        break;
     case CommandType::TABLE:
         m_sName = sCommand;
         break;
