@@ -4068,9 +4068,11 @@ void SalInstanceTreeView::bulk_insert_for_each(
     for (int i = 0; i < nSourceCount; ++i)
     {
         aVclIter.iter = new SvTreeListEntry;
-        if (bHasAutoCheckButton || bGoingToSetText)
+        if (bHasAutoCheckButton)
             AddStringItem(aVclIter.iter, u""_ustr, -1);
         aVclIter.iter->AddItem(std::make_unique<SvLBoxContextBmp>(aDummy, aDummy, false));
+        if (bGoingToSetText)
+            AddStringItem(aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
         m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
         func(aVclIter, i);
 
