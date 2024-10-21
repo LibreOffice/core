@@ -334,13 +334,13 @@ public:
 
 class SmSymbolDialog final : public weld::GenericDialogController
 {
-    SmViewShell        &rViewSh;
-    SmSymbolManager    &rSymbolMgr;
+    SmViewShell        &m_rViewSh;
+    SmSymbolManager    &m_rSymbolMgr;
 
-    OUString       aSymbolSetName;
-    SymbolPtrVec_t      aSymbolSet;
+    OUString       m_aSymbolSetName;
+    SymbolPtrVec_t      m_aSymbolSet;
 
-    VclPtr<OutputDevice> pFontListDev;
+    VclPtr<OutputDevice> m_pFontListDev;
 
     SmShowSymbol m_aSymbolDisplay;
 

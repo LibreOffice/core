@@ -1327,7 +1327,7 @@ void SmSymbolDialog::FillSymbolSets()
     m_xSymbolSets->clear();
     m_xSymbolSets->set_active(-1);
 
-    std::set< OUString >  aSymbolSetNames( rSymbolMgr.GetSymbolSetNames() );
+    std::set< OUString >  aSymbolSetNames( m_rSymbolMgr.GetSymbolSetNames() );
     for (const auto& rSymbolSetName : aSymbolSetNames)
         m_xSymbolSets->append_text(rSymbolSetName);
 }
@@ -1344,7 +1344,7 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl, SmShowSymbolSet&, void )
 
 IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
 {
-    SmSymDefineDialog aDialog(m_xDialog.get(), pFontListDev, rSymbolMgr);
+    SmSymDefineDialog aDialog(m_xDialog.get(), m_pFontListDev, m_rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
     const OUString  aSymSetName (m_xSymbolSets->get_active_text()),
@@ -1360,9 +1360,9 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
     sal_uInt16 nSymPos = m_xSymbolSetDisplay->GetSelectSymbol();
 
     // adapt dialog to data of the SymbolSet manager, which might have changed
-    if (aDialog.run() == RET_OK && rSymbolMgr.IsModified())
+    if (aDialog.run() == RET_OK && m_rSymbolMgr.IsModified())
     {
-        rSymbolMgr.Save();
+        m_rSymbolMgr.Save();
         FillSymbolSets();
     }
 
@@ -1372,13 +1372,13 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
     else
     {
         // just update display of current symbol set
-        assert(aSymbolSetName == aSymSetName); //unexpected change in symbol set name
-        aSymbolSet = rSymbolMgr.GetSymbolSet( aSymbolSetName );
-        m_xSymbolSetDisplay->SetSymbolSet( aSymbolSet );
+        assert(m_aSymbolSetName == aSymSetName); //unexpected change in symbol set name
+        m_aSymbolSet = m_rSymbolMgr.GetSymbolSet( m_aSymbolSetName );
+        m_xSymbolSetDisplay->SetSymbolSet( m_aSymbolSet );
     }
 
-    if (nSymPos >= aSymbolSet.size())
-        nSymPos = static_cast< sal_uInt16 >(aSymbolSet.size()) - 1;
+    if (nSymPos >= m_aSymbolSet.size())
+        nSymPos = static_cast< sal_uInt16 >(m_aSymbolSet.size()) - 1;
     SelectSymbol( nSymPos );
 }
 
@@ -1405,7 +1405,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, GetClickHdl, weld::Button&, void)
     {
         OUString aText = "%" + pSym->GetUiName() + " ";
 
-        rViewSh.GetViewFrame().GetDispatcher()->ExecuteList(
+        m_rViewSh.GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_INSERTSPECIAL, SfxCallMode::RECORD,
                 { new SfxStringItem(SID_INSERTSPECIAL, aText) });
     }
@@ -1414,9 +1414,9 @@ IMPL_LINK_NOARG(SmSymbolDialog, GetClickHdl, weld::Button&, void)
 SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevice,
                                SmSymbolManager &rMgr, SmViewShell &rViewShell)
     : GenericDialogController(pParent, u"modules/smath/ui/catalogdialog.ui"_ustr, u"CatalogDialog"_ustr)
-    , rViewSh(rViewShell)
-    , rSymbolMgr(rMgr)
-    , pFontListDev(pFntListDevice)
+    , m_rViewSh(rViewShell)
+    , m_rSymbolMgr(rMgr)
+    , m_pFontListDev(pFntListDevice)
     , m_aSymbolDisplay(rViewShell)
     , m_xSymbolSets(m_xBuilder->weld_combo_box(u"symbolset"_ustr))
     , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true), rViewShell))
@@ -1428,8 +1428,8 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
 {
     m_xSymbolSets->make_sorted();
 
-    aSymbolSetName.clear();
-    aSymbolSet.clear();
+    m_aSymbolSetName.clear();
+    m_aSymbolSet.clear();
     FillSymbolSets();
     if (m_xSymbolSets->get_count() > 0)
         SelectSymbolSet(m_xSymbolSets->get_text(0));
@@ -1451,24 +1451,24 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
     bool bRet = false;
     sal_Int32 nPos = m_xSymbolSets->find_text(rSymbolSetName);
 
-    aSymbolSetName.clear();
-    aSymbolSet.clear();
+    m_aSymbolSetName.clear();
+    m_aSymbolSet.clear();
     if (nPos != -1)
     {
         m_xSymbolSets->set_active(nPos);
 
-        aSymbolSetName  = rSymbolSetName;
-        aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
+        m_aSymbolSetName  = rSymbolSetName;
+        m_aSymbolSet      = m_rSymbolMgr.GetSymbolSet( m_aSymbolSetName );
 
         // sort symbols by Unicode position (useful for displaying Greek characters alphabetically)
-        std::sort( aSymbolSet.begin(), aSymbolSet.end(),
+        std::sort( m_aSymbolSet.begin(), m_aSymbolSet.end(),
                    [](const SmSym *pSym1, const SmSym *pSym2)
                    {
                        return pSym1->GetCharacter() < pSym2->GetCharacter();
                    } );
 
-        const bool bEmptySymbolSet = aSymbolSet.empty();
-        m_xSymbolSetDisplay->SetSymbolSet( aSymbolSet );
+        const bool bEmptySymbolSet = m_aSymbolSet.empty();
+        m_xSymbolSetDisplay->SetSymbolSet( m_aSymbolSet );
         if (!bEmptySymbolSet)
             SelectSymbol(0);
 
@@ -1483,8 +1483,8 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 {
     const SmSym *pSym = nullptr;
-    if (!aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size()))
-        pSym = aSymbolSet[ nSymbolNo ];
+    if (!m_aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(m_aSymbolSet.size()))
+        pSym = m_aSymbolSet[ nSymbolNo ];
 
     m_xSymbolSetDisplay->SelectSymbol(nSymbolNo);
     m_aSymbolDisplay.SetSymbol(pSym);
@@ -1494,8 +1494,8 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 const SmSym* SmSymbolDialog::GetSymbol() const
 {
     sal_uInt16 nSymbolNo = m_xSymbolSetDisplay->GetSelectSymbol();
-    bool bValid = !aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(aSymbolSet.size());
-    return bValid ? aSymbolSet[ nSymbolNo ] : nullptr;
+    bool bValid = !m_aSymbolSetName.isEmpty()  &&  nSymbolNo < static_cast< sal_uInt16 >(m_aSymbolSet.size());
+    return bValid ? m_aSymbolSet[ nSymbolNo ] : nullptr;
 }
 
 void SmShowChar::Resize()
