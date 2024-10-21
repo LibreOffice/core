@@ -180,7 +180,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 {
                     xValuesX = aValueSeqVec[nIndex++];
                     if( xValuesX.is())
-                        SetRole( xValuesY->getValues(), u"values-x"_ustr);
+                        SetRole( xValuesX->getValues(), u"values-x"_ustr);
                 }
             }
             if( xValuesY.is())
