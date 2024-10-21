@@ -606,6 +606,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 break;
 
             case REF_OUTLINE:
+            case REF_SETREFATTR:
                 nStart = nNumStart;
                 nEnd = nNumEnd;
                 break;
@@ -631,11 +632,6 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
             case REF_STYLE:
                 nStart = 0;
                 nEnd = nLen;
-                break;
-
-            case REF_SETREFATTR:
-                nStart = nNumStart;
-                nEnd = nNumEnd;
                 break;
 
             default:
