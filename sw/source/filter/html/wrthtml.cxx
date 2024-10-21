@@ -1462,7 +1462,7 @@ TypedWhichId<SvxLanguageItem> SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16
         nWhichId = RES_CHRATR_CJK_LANGUAGE;
         break;
     case CSS1_OUTMODE_CTL:
-        nWhichId = RES_CHRATR_CJK_LANGUAGE;
+        nWhichId = RES_CHRATR_CTL_LANGUAGE;
         break;
     default:
         nWhichId = RES_CHRATR_LANGUAGE;
