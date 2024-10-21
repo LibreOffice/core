@@ -1372,7 +1372,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
     else
     {
         // just update display of current symbol set
-        assert(aSymSetName == aSymSetName); //unexpected change in symbol set name
+        assert(aSymbolSetName == aSymSetName); //unexpected change in symbol set name
         aSymbolSet = rSymbolMgr.GetSymbolSet( aSymbolSetName );
         m_xSymbolSetDisplay->SetSymbolSet( aSymbolSet );
     }
