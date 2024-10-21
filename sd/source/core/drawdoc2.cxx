@@ -125,7 +125,7 @@ SdrObject* SdDrawDocument::GetObj(std::u16string_view rObjName) const
 // Find SdPage by name
 sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIsMasterPage) const
 {
-    SdPage* pPage = nullptr;
+    const SdPage* pPage = nullptr;
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = GetPageCount();
     sal_uInt16 nPageNum = SDRPAGE_NOTFOUND;
@@ -136,8 +136,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIs
     // ignored)
     while (nPage < nMaxPages && nPageNum == SDRPAGE_NOTFOUND)
     {
-        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
-            GetPage(nPage)));
+        pPage = static_cast<const SdPage*>(GetPage(nPage));
 
         if (pPage != nullptr
             && pPage->GetPageKind() != PageKind::Handout
@@ -155,8 +154,7 @@ sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIs
 
     while (nPage < nMaxMasterPages && nPageNum == SDRPAGE_NOTFOUND)
     {
-        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
-            GetMasterPage(nPage)));
+        pPage = static_cast<const SdPage*>(GetMasterPage(nPage));
 
         if (pPage && pPage->GetName() == rPgName)
         {
@@ -173,14 +171,14 @@ sal_uInt16 SdDrawDocument::GetPageByName(std::u16string_view rPgName, bool& rbIs
 bool SdDrawDocument::IsPageNameUnique( std::u16string_view rPgName ) const
 {
     sal_uInt16 nCount = 0;
-    SdPage* pPage = nullptr;
+    const SdPage* pPage = nullptr;
 
     // Search all regular pages and all notes pages (handout pages are ignored)
     sal_uInt16 nPage = 0;
     sal_uInt16 nMaxPages = GetPageCount();
     while (nPage < nMaxPages)
     {
-        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetPage(nPage)));
+        pPage = static_cast<const SdPage*>(GetPage(nPage));
 
         if (pPage && pPage->GetName() == rPgName && pPage->GetPageKind() != PageKind::Handout)
             nCount++;
@@ -193,7 +191,7 @@ bool SdDrawDocument::IsPageNameUnique( std::u16string_view rPgName ) const
     nMaxPages = GetMasterPageCount();
     while (nPage < nMaxPages)
     {
-        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(GetMasterPage(nPage)));
+        pPage = static_cast<const SdPage*>(GetMasterPage(nPage));
 
         if (pPage && pPage->GetName() == rPgName)
             nCount++;
