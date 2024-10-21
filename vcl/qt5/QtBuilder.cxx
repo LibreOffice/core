@@ -17,6 +17,7 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -154,6 +155,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkFrame")
     {
         pObject = new QGroupBox(pParentWidget);
+    }
+    else if (sName == u"GtkGrid")
+    {
+        pObject = new QGridLayout(pParentWidget);
     }
     else if (sName == u"GtkLabel")
     {
