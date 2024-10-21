@@ -671,8 +671,6 @@ void CairoCommon::SetROPLineColor(SalROPColor nROPColor)
             m_oLineColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            m_oLineColor = Color(0xff, 0xff, 0xff);
-            break;
         case SalROPColor::Invert:
             m_oLineColor = Color(0xff, 0xff, 0xff);
             break;
@@ -687,8 +685,6 @@ void CairoCommon::SetROPFillColor(SalROPColor nROPColor)
             m_oFillColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            m_oFillColor = Color(0xff, 0xff, 0xff);
-            break;
         case SalROPColor::Invert:
             m_oFillColor = Color(0xff, 0xff, 0xff);
             break;
