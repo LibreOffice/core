@@ -79,6 +79,7 @@ static sal_Int32 skipSpace(std::u16string_view Text, sal_Int32 nPos, sal_Int32 l
     sal_Int32 pos=nPos;
     switch (rWordType) {
         case WordType::ANYWORD_IGNOREWHITESPACES:
+        case WordType::WORD_COUNT:
             if (bDirection)
                 while (nPos < len)
                 {
@@ -110,24 +111,6 @@ static sal_Int32 skipSpace(std::u16string_view Text, sal_Int32 nPos, sal_Int32 l
                 {
                     ch = o3tl::iterateCodePoints(Text, &pos, -1);
                     if (!u_isWhitespace(ch) && !isZWSP(ch) && (ch == 0x002E || u_isalnum(ch)))
-                        break;
-                    nPos = pos;
-                }
-            break;
-        case WordType::WORD_COUNT:
-            if (bDirection)
-                while (nPos < len)
-                {
-                    ch = o3tl::iterateCodePoints(Text, &pos);
-                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
-                        break;
-                    nPos = pos;
-                }
-            else
-                while (nPos > 0)
-                {
-                    ch = o3tl::iterateCodePoints(Text, &pos, -1);
-                    if (!u_isUWhiteSpace(ch) && !isZWSP(ch))
                         break;
                     nPos = pos;
                 }
