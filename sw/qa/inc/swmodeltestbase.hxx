@@ -7,8 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SW_QA_INC_SWMODELTESTBASE_HXX
-#define INCLUDED_SW_QA_INC_SWMODELTESTBASE_HXX
+#pragma once
 
 #include <memory>
 #include <string_view>
@@ -283,7 +282,5 @@ inline void assertBorderEqual(
 
 #define CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, aActual) \
         assertBorderEqual( aExpected, aActual, CPPUNIT_SOURCELINE() ) \
-
-#endif // INCLUDED_SW_QA_INC_SWMODELTESTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
