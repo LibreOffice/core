@@ -67,8 +67,7 @@ LngParser::LngParser(OString sLngFile)
 
     bool bFirstLine = true;
     std::string s;
-    std::getline(aStream, s);
-    while (!aStream.eof())
+    while (std::getline(aStream, s))
     {
         OString sLine(s.data(), s.length());
 
@@ -80,7 +79,6 @@ LngParser::LngParser(OString sLngFile)
         }
 
         mvLines.push_back( sLine );
-        std::getline(aStream, s);
     }
     mvLines.push_back( OString() );
 }
