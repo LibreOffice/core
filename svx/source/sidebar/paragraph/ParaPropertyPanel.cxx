@@ -75,14 +75,6 @@ void ParaPropertyPanel::HandleContextChange (
     {
         case CombinedEnumContext(Application::Calc, Context::DrawText):
         case CombinedEnumContext(Application::WriterVariants, Context::DrawText):
-            mxTBxVertAlign->show();
-            mxTBxBackColor->hide();
-            mxTBxNumBullet->hide();
-            set_hyphenation_base_visible(false);
-            set_hyphenation_other_visible(false);
-            ReSize();
-            break;
-
         case CombinedEnumContext(Application::DrawImpress, Context::Draw):
         case CombinedEnumContext(Application::DrawImpress, Context::TextObject):
         case CombinedEnumContext(Application::DrawImpress, Context::Graphic):
