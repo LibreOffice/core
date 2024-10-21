@@ -7989,8 +7989,6 @@ immobilized_viewport_get_property(GObject* object,
             g_value_set_object(value, priv->vadjustment);
             break;
         case PROP_HSCROLL_POLICY:
-            g_value_set_enum(value, GTK_SCROLL_MINIMUM);
-            break;
         case PROP_VSCROLL_POLICY:
             g_value_set_enum(value, GTK_SCROLL_MINIMUM);
             break;
