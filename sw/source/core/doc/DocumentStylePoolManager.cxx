@@ -1554,10 +1554,10 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
             {
                 case POOLGRP_CHARFMT:
-                    pNewFormat = m_rDoc.MakeCharFormat_(aNm, pDeriveFormat, false, true);
+                    pNewFormat = m_rDoc.MakeCharFormat_(aNm, pDeriveFormat, true);
                     break;
                 case POOLGRP_FRAMEFMT:
-                    pNewFormat = m_rDoc.MakeFrameFormat_(aNm, pDeriveFormat, false, true);
+                    pNewFormat = m_rDoc.MakeFrameFormat_(aNm, pDeriveFormat, true);
                     break;
                 default:
                     break;

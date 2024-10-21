@@ -836,7 +836,7 @@ SwFrameFormat *SwDoc::MakeFrameFormat(const OUString &rFormatName,
 
 SwFormat *SwDoc::MakeFrameFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool /*bBroadcast*/, bool bAuto)
+                            bool bAuto)
 {
     SwFrameFormat *pFrameFormat = dynamic_cast<SwFrameFormat*>(pDerivedFrom);
     pFrameFormat = MakeFrameFormat( rFormatName, pFrameFormat, bAuto );
@@ -862,7 +862,7 @@ SwCharFormat *SwDoc::MakeCharFormat( const OUString &rFormatName,
 
 SwFormat *SwDoc::MakeCharFormat_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool /*bBroadcast*/, bool /*bAuto*/)
+                            bool /*bAuto*/)
 {
     SwCharFormat *pCharFormat = dynamic_cast<SwCharFormat*>(pDerivedFrom);
     pCharFormat = MakeCharFormat( rFormatName, pCharFormat );
@@ -891,7 +891,7 @@ SwTextFormatColl* SwDoc::MakeTextFormatColl( const OUString &rFormatName,
 
 SwFormat *SwDoc::MakeTextFormatColl_(const OUString &rFormatName,
                             SwFormat *pDerivedFrom,
-                            bool /*bBroadcast*/, bool /*bAuto*/)
+                            bool /*bAuto*/)
 {
     SwTextFormatColl *pTextFormatColl = dynamic_cast<SwTextFormatColl*>(pDerivedFrom);
     pTextFormatColl = MakeTextFormatColl( rFormatName, pTextFormatColl );
@@ -1149,7 +1149,7 @@ SwFormat* SwDoc::CopyFormat( const SwFormat& rFormat,
 
     // Create the format and copy the attributes
     // #i40550#
-    SwFormat* pNewFormat = (this->*fnCopyFormat)( rFormat.GetName(), pParent, false, true );
+    SwFormat* pNewFormat = (this->*fnCopyFormat)( rFormat.GetName(), pParent, true );
     pNewFormat->SetAuto( rFormat.IsAuto() );
     pNewFormat->CopyAttrs( rFormat );           // copy the attributes
 
@@ -1290,7 +1290,7 @@ void SwDoc::CopyFormatArr( const SwFormatsBase& rSourceArr,
                 MakeCondTextFormatColl( pSrc->GetName(), static_cast<SwTextFormatColl*>(&rDfltFormat) );
             else
                 // #i40550#
-                (this->*fnCopyFormat)( pSrc->GetName(), &rDfltFormat, false, true );
+                (this->*fnCopyFormat)( pSrc->GetName(), &rDfltFormat, true );
         }
     }
 

@@ -350,7 +350,7 @@ private:
                                 SwFrameFormat* );
     sal_Int8 SetFlyFrameAnchor( SwFrameFormat& rFlyFormat, SfxItemSet& rSet, bool bNewFrames );
 
-    typedef SwFormat* (SwDoc::*FNCopyFormat)( const OUString&, SwFormat*, bool, bool );
+    typedef SwFormat* (SwDoc::*FNCopyFormat)( const OUString&, SwFormat*, bool );
     SwFormat* CopyFormat( const SwFormat& rFormat, const SwFormatsBase& rFormatArr,
                         FNCopyFormat fnCopyFormat, const SwFormat& rDfltFormat );
     void CopyFormatArr( const SwFormatsBase& rSourceArr, SwFormatsBase const & rDestArr,
@@ -391,11 +391,11 @@ private:
     DECL_LINK( DoUpdateModifiedOLE, Timer *, void );
 
 public:
-    SW_DLLPUBLIC SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool, bool );
-    SwFormat *MakeFrameFormat_(const OUString &, SwFormat *, bool, bool );
+    SW_DLLPUBLIC SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool );
+    SwFormat *MakeFrameFormat_(const OUString &, SwFormat *, bool );
 
 private:
-    SwFormat *MakeTextFormatColl_(const OUString &, SwFormat *, bool, bool );
+    SwFormat *MakeTextFormatColl_(const OUString &, SwFormat *, bool );
 
 private:
     OUString msDocAccTitle;
