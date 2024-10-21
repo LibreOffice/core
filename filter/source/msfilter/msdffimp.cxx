@@ -698,12 +698,6 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
                                                         break;
 
                                                         case EnhancedCustomShapeSegmentCommand::CURVETO :
-                                                        {
-                                                            nC--;
-                                                            nPt += 3;
-                                                        }
-                                                        break;
-
                                                         case EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO :
                                                         case EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE :
                                                         {
