@@ -752,6 +752,10 @@ private:
             aBackgroundColor = nParaBackColor;
         else
         {
+            SwDocShell* pDocShell = pTextNode->GetDoc().GetDocShell();
+            if (!pDocShell)
+                return;
+
             OUString sCharStyleName;
             Color nCharStyleBackColor(COL_AUTO);
             if (xProperties->getPropertyValue(u"CharStyleName"_ustr) >>= sCharStyleName)
@@ -759,7 +763,7 @@ private:
                 try
                 {
                     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(
-                        pTextNode->GetDoc().GetDocShell()->GetModel(), uno::UNO_QUERY);
+                        pDocShell->GetModel(), uno::UNO_QUERY);
                     uno::Reference<container::XNameAccess> xCont
                         = xStyleFamiliesSupplier->getStyleFamilies();
                     uno::Reference<container::XNameAccess> xStyleFamily(
@@ -1661,6 +1665,14 @@ public:
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
         SwDoc& rDocument = pTextNode->GetDoc();
+        SwDocShell* pDocShell = rDocument.GetDocShell();
+        if (!pDocShell)
+            return;
+
+        SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+        if (!pWrtShell)
+            return;
+
         auto nParagraphLength = pTextNode->GetText().getLength();
         if (nParagraphLength == 0)
         {
@@ -1668,8 +1680,7 @@ public:
             if (!pPrevTextNode)
                 return;
 
-            SwWrtShell* pWrtShell = rDocument.GetDocShell()->GetWrtShell();
-            if (pWrtShell && pPrevTextNode->getLayoutFrame(pWrtShell->GetLayout()))
+            if (pPrevTextNode->getLayoutFrame(pWrtShell->GetLayout()))
             {
                 if (pPrevTextNode->GetText().getLength() == 0)
                 {
@@ -1683,8 +1694,7 @@ public:
         }
         else
         {
-            SwWrtShell* pWrtShell = rDocument.GetDocShell()->GetWrtShell();
-            if (pWrtShell && pTextNode->getLayoutFrame(pWrtShell->GetLayout()))
+            if (pTextNode->getLayoutFrame(pWrtShell->GetLayout()))
             {
                 // Check for excess lines inside this paragraph
                 const OUString& sParagraphText = pTextNode->GetText();
@@ -2391,7 +2401,10 @@ public:
     }
     void check(SwDoc* pDoc) override
     {
-        rtl::Reference<SwXTextDocument> xDoc = pDoc->GetDocShell()->GetBaseModel();
+        SwDocShell* pDocShell = pDoc->GetDocShell();
+        if (!pDocShell)
+            return;
+        rtl::Reference<SwXTextDocument> xDoc = pDocShell->GetBaseModel();
         if (!xDoc)
             return;
         uno::Reference<container::XNameAccess> xStyleFamilies = xDoc->getStyleFamilies();
