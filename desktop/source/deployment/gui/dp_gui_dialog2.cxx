@@ -776,7 +776,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleCloseBtn, weld::Button&, void)
 
 IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     bool bLockInterface = static_cast<bool>(_bLockInterface);
 
     if ( m_bStartProgress && !m_bHasProgress )
@@ -815,7 +815,7 @@ IMPL_LINK( ExtMgrDialog, startProgress, void*, _bLockInterface, void )
 
 void ExtMgrDialog::showProgress( bool _bStart )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     bool bStart = _bStart;
 
@@ -839,7 +839,7 @@ void ExtMgrDialog::showProgress( bool _bStart )
 
 void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_nProgress != nProgress )
     {
         m_nProgress = nProgress;
@@ -851,7 +851,7 @@ void ExtMgrDialog::updateProgress( const tools::Long nProgress )
 void ExtMgrDialog::updateProgress( const OUString &rText,
                                    const uno::Reference< task::XAbortChannel > &xAbortChannel)
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
 
     m_xAbortChannel = xAbortChannel;
     m_sProgressText = rText;
@@ -945,7 +945,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
 {
-    std::unique_lock aGuard( m_aMutex );
+    SolarMutexGuard aGuard;
     if ( m_bStopProgress )
     {
         m_bHasProgress = false;
