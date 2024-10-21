@@ -640,6 +640,7 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                     pRet = new SvxShapePolyPolygon( pObj );
                     break;
                 case SdrObjKind::Rectangle:
+                case SdrObjKind::Annotation:
                     pRet = new SvxShapeRect( pObj );
                     break;
                 case SdrObjKind::CircleOrEllipse:
@@ -765,9 +766,6 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                     break;
                 case SdrObjKind::Table:
                     pRet = new SvxTableShape( pObj );
-                    break;
-                case SdrObjKind::Annotation:
-                    pRet = new SvxShapeRect( pObj );
                     break;
                 default: // unknown 2D-object on page
                     assert(false && "Not implemented Starone-Shape created");
