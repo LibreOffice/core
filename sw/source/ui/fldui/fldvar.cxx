@@ -763,15 +763,6 @@ void SwFieldVarPage::FillFormatLB(SwFieldTypesEnum nTypeId)
         break;
 
         case SwFieldTypesEnum::Formel:
-        {
-            OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
-            int nOldIndex = rWidget.get_selected_index();
-            rWidget.insert(0, SwResId(FMT_GETVAR_NAME), &sId, nullptr, nullptr);
-            if (nOldIndex != -1)
-                rWidget.select(nOldIndex + 1);
-        }
-        break;
-
         case SwFieldTypesEnum::Get:
         {
             OUString sId(OUString::number(NUMBERFORMAT_ENTRY_NOT_FOUND));
