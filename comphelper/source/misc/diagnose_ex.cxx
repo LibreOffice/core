@@ -323,14 +323,6 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         }
     }
     {
-        css::xml::dom::DOMException specialized;
-        if ( caught >>= specialized )
-        {
-            sMessage.append(" Code: ");
-            sMessage.append(toOString(comphelper::anyToString( css::uno::Any(specialized.Code) )));
-        }
-    }
-    {
         css::xml::sax::SAXException specialized;
         if ( caught >>= specialized )
         {
