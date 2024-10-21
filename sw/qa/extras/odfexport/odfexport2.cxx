@@ -1800,6 +1800,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf163703)
                              + autostylename.toUtf8() + "']/style:text-properties";
     assertXPath(pXml, autoStyleXPath, "font-style", u"italic");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf36709)
+{
+    // Verifies that loext:text-indent correctly round-trips
+    loadAndReload("tdf36709.fodt");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+
+    // Style P1 should have been rewritten as fo:text-indent
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties[@fo:text-indent]", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties[@loext:text-indent]", 0);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P1']/style:paragraph-properties", "text-indent", u"3in");
+
+    // Style P2 should have round-tripped as loext:text-indent
+    assertXPath(pXmlDoc, "//style:style[@style:name='P2']/style:paragraph-properties[@fo:text-indent]", 0);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P2']/style:paragraph-properties[@loext:text-indent]", 1);
+    assertXPath(pXmlDoc, "//style:style[@style:name='P2']/style:paragraph-properties", "text-indent", u"6em");
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

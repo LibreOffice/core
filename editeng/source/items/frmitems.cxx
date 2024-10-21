@@ -28,6 +28,7 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 #include <com/sun/star/frame/status/LeftRightMarginScale.hpp>
@@ -500,6 +501,7 @@ void SvxFirstLineIndentItem::SetTextFirstLineOffset(
 {
     ASSERT_CHANGE_REFCOUNTED_ITEM;
     m_nFirstLineOffset = short((tools::Long(nF) * nProp ) / 100);
+    m_nUnit = css::util::MeasureUnit::TWIP;
     m_nPropFirstLineOffset = nProp;
 }
 
@@ -944,20 +946,45 @@ SvxFirstLineIndentItem::SvxFirstLineIndentItem(const short nFirst, const sal_uIn
 
 bool SvxFirstLineIndentItem::QueryValue(uno::Any& rVal, sal_uInt8 nMemberId) const
 {
-    bool bRet = true;
+    bool bRet = false;
     bool bConvert = 0 != (nMemberId & CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch (nMemberId)
     {
         case MID_FIRST_LINE_INDENT:
-            rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(m_nFirstLineOffset) : m_nFirstLineOffset);
-            break;
+            // MID_FIRST_LINE_INDENT only supports statically-convertible measures.
+            // In practice, these are always stored here in twips.
+            if (m_nUnit == css::util::MeasureUnit::TWIP)
+            {
+                rVal <<= static_cast<sal_Int32>(bConvert ? convertTwipToMm100(m_nFirstLineOffset)
+                                                         : m_nFirstLineOffset);
+                bRet = true;
+            }
+        break;
+
         case MID_FIRST_LINE_REL_INDENT:
             rVal <<= static_cast<sal_Int16>(m_nPropFirstLineOffset);
+            bRet = true;
             break;
+
+        case MID_FIRST_LINE_UNIT_INDENT:
+            // MID_FIRST_LINE_UNIT_INDENT is used for any values that must be serialized
+            // as a unit-value pair. In practice, this will be limited to font-relative
+            // units (e.g. em, ic), and all other units will be pre-converted to twips.
+            if (m_nUnit != css::util::MeasureUnit::TWIP)
+            {
+                rVal <<= css::beans::Pair<double, sal_Int16>{
+                    static_cast<double>(m_nFirstLineOffset), m_nUnit
+                };
+                bRet = true;
+            }
+        break;
+
         case MID_FIRST_AUTO:
             rVal <<= IsAutoFirst();
+            bRet = true;
             break;
+
         default:
             assert(false);
             bRet = false;
@@ -983,6 +1010,7 @@ bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
                 return false;
             }
             m_nFirstLineOffset = bConvert ? o3tl::toTwips(nVal, o3tl::Length::mm100) : nVal;
+            m_nUnit = css::util::MeasureUnit::TWIP;
             m_nPropFirstLineOffset = 100;
             break;
         }
@@ -997,6 +1025,19 @@ bool SvxFirstLineIndentItem::PutValue(const uno::Any& rVal, sal_uInt8 nMemberId)
             {
                 return false;
             }
+            break;
+        }
+        case MID_FIRST_LINE_UNIT_INDENT:
+        {
+            css::beans::Pair<double, sal_Int16> stVal;
+            if (!(rVal >>= stVal))
+            {
+                return false;
+            }
+
+            m_nFirstLineOffset = stVal.First;
+            m_nUnit = stVal.Second;
+            m_nPropFirstLineOffset = 100;
             break;
         }
         case MID_FIRST_AUTO:
@@ -1017,6 +1058,7 @@ bool SvxFirstLineIndentItem::operator==(const SfxPoolItem& rAttr) const
     const SvxFirstLineIndentItem& rOther = static_cast<const SvxFirstLineIndentItem&>(rAttr);
 
     return (m_nFirstLineOffset == rOther.GetTextFirstLineOffset()
+        && m_nUnit == rOther.GetTextFirstLineOffsetUnit()
         && m_nPropFirstLineOffset == rOther.GetPropTextFirstLineOffset()
         && m_bAutoFirst == rOther.IsAutoFirst());
 }
@@ -1025,6 +1067,7 @@ size_t SvxFirstLineIndentItem::hashCode() const
 {
     std::size_t seed(0);
     o3tl::hash_combine(seed, m_nFirstLineOffset);
+    o3tl::hash_combine(seed, m_nUnit);
     o3tl::hash_combine(seed, m_nPropFirstLineOffset);
     o3tl::hash_combine(seed, m_bAutoFirst);
     return seed;
@@ -1096,6 +1139,7 @@ void SvxFirstLineIndentItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SvxFirstLineIndentItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFirstLineOffset"), BAD_CAST(OString::number(m_nFirstLineOffset).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nUnit"), BAD_CAST(OString::number(m_nUnit).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nPropFirstLineOffset"), BAD_CAST(OString::number(m_nPropFirstLineOffset).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_bAutoFirst"), BAD_CAST(OString::number(int(m_bAutoFirst)).getStr()));
     (void)xmlTextWriterEndElement(pWriter);

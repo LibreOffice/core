@@ -27,6 +27,7 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/beans/Pair.hpp>
 #include <xmloff/xmltoken.hxx>
 
 #include <limits.h>
@@ -198,6 +199,58 @@ bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
     {
         OUStringBuffer aOut;
         rUnitConverter.convertMeasureToXML( aOut, nValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = true;
+    }
+
+    return bRet;
+}
+
+
+bool XMLUnitMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
+{
+    double fValue = 0.0;
+    std::optional<sal_Int16> nValueUnit;
+
+    auto bRet = ::sax::Converter::convertMeasureUnit( fValue, nValueUnit, rStrImpValue );
+
+    if(bRet)
+    {
+        // This importer may only accept font-relative units.
+        // Discard all other units to allow fall-through to other attributes.
+        if (css::util::MeasureUnit::FONT_EM != nValueUnit
+            && css::util::MeasureUnit::FONT_IC != nValueUnit)
+        {
+            return false;
+        }
+
+        css::beans::Pair<double, sal_Int16> stValue{fValue, nValueUnit.value()};
+        rValue <<= stValue;
+    }
+
+    return bRet;
+}
+
+bool XMLUnitMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+{
+    bool bRet = false;
+    css::beans::Pair<double, sal_Int16> stValue{0.0, css::util::MeasureUnit::MM_100TH};
+
+    if( rValue >>= stValue )
+    {
+        auto [fValue, nValueUnit] = stValue;
+
+        // This exporter may only produce font-relative units.
+        // Discard all other units to allow fall-through to other attributes.
+        if (css::util::MeasureUnit::FONT_EM != nValueUnit
+            && css::util::MeasureUnit::FONT_IC != nValueUnit)
+        {
+            return false;
+        }
+
+        OUStringBuffer aOut;
+        ::sax::Converter::convertMeasureUnit( aOut, fValue, nValueUnit );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = true;

@@ -3098,6 +3098,25 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4165 -->
+  <rng:define name="cssLength">
+    <rng:data type="string">
+      <rng:param name="pattern">-?([0-9]+(\.[0-9]*)?|\.[0-9]+)((cm)|(mm)|(in)|(pt)|(pc)|(px)|(ic)|(em))</rng:param>
+    </rng:data>
+  </rng:define>
+
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4165 -->
+  <rng:define name="style-paragraph-properties-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:text-indent">
+        <rng:choice>
+          <rng:ref name="cssLength"/>
+          <rng:ref name="percent"/>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="chart-data-point-attlist" combine="interleave">
     <rng:optional>

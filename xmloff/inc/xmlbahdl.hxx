@@ -69,6 +69,16 @@ public:
 };
 
 /**
+    PropertyHandler for the XML-data-type: XML_TYPE_UNIT_MEASURE
+*/
+class XMLUnitMeasurePropHdl : public XMLPropertyHandler
+{
+public:
+    bool importXML( const OUString& rStrImpValue, css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+    bool exportXML( OUString& rStrExpValue, const css::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const override;
+};
+
+/**
     PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
 */
 class XMLPercentPropHdl : public XMLPropertyHandler

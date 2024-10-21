@@ -489,6 +489,7 @@ inline constexpr OUString PROP_ParaContextMargin = u"ParaContextMargin"_ustr;
 inline constexpr OUString PROP_ParaExpandSingleWord = u"ParaExpandSingleWord"_ustr;
 inline constexpr OUString PROP_ParaFirstLineIndent = u"ParaFirstLineIndent"_ustr;
 inline constexpr OUString PROP_ParaFirstLineIndentRelative = u"ParaFirstLineIndentRelative"_ustr;
+inline constexpr OUString PROP_ParaFirstLineIndentUnit = u"ParaFirstLineIndentUnit"_ustr;
 inline constexpr OUString PROP_ParaHyphenationMaxHyphens = u"ParaHyphenationMaxHyphens"_ustr;
 inline constexpr OUString PROP_ParaHyphenationMaxLeadingChars
     = u"ParaHyphenationMaxLeadingChars"_ustr;

@@ -64,6 +64,7 @@ inline constexpr OUString UNO_NAME_PARA_IS_AUTO_FIRST_LINE_INDENT
 inline constexpr OUString UNO_NAME_PARA_FIRST_LINE_INDENT = u"ParaFirstLineIndent"_ustr;
 inline constexpr OUString UNO_NAME_PARA_FIRST_LINE_INDENT_RELATIVE
     = u"ParaFirstLineIndentRelative"_ustr;
+inline constexpr OUString UNO_NAME_PARA_FIRST_LINE_INDENT_UNIT = u"ParaFirstLineIndentUnit"_ustr;
 inline constexpr OUString UNO_NAME_PARA_IS_HYPHENATION = u"ParaIsHyphenation"_ustr;
 inline constexpr OUString UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS
     = u"ParaHyphenationMaxLeadingChars"_ustr;

@@ -299,6 +299,26 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                 }
             }
         }
+        else if (!pNode->GetFirstLineOfsWithNum(nFLOfst)
+                 && rFirstLine.GetTextFirstLineOffsetUnit() != css::util::MeasureUnit::TWIP)
+        {
+            auto nFntHeight = GetFnt()->GetSize(GetFnt()->GetActual()).Height();
+
+            // tdf#36709: TODO: Complete and consolidate unit conversion code
+            switch (rFirstLine.GetTextFirstLineOffsetUnit())
+            {
+                case css::util::MeasureUnit::FONT_IC:
+                case css::util::MeasureUnit::FONT_EM:
+                    nFirstLineOfs
+                        = static_cast<tools::Long>(static_cast<double>(nFntHeight)
+                                                   * rFirstLine.GetTextFirstLineOffsetDouble());
+                    break;
+
+                default:
+                    nFirstLineOfs = 0;
+                    break;
+            }
+        }
         else
             nFirstLineOfs = nFLOfst;
 

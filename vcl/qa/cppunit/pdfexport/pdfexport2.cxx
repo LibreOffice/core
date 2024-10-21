@@ -5822,6 +5822,57 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf140767SyriacJustification)
     CPPUNIT_ASSERT_LESS(90.0, aRect.at(5).getWidth());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf36709FirstLineIndentEm)
+{
+    saveAsPDF(u"tdf36709.fodt");
+
+    auto pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPdfPage = pPdfDocument->openPage(/*nIndex*/ 0);
+    CPPUNIT_ASSERT(pPdfPage);
+    auto pTextPage = pPdfPage->getTextPage();
+    CPPUNIT_ASSERT(pTextPage);
+
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(8, nPageObjectCount);
+
+    std::vector<OUString> aText;
+    std::vector<basegfx::B2DRectangle> aRect;
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        auto pPageObject = pPdfPage->getObject(i);
+        CPPUNIT_ASSERT_MESSAGE("no object", pPageObject != nullptr);
+        if (pPageObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            aText.push_back(pPageObject->getText(pTextPage));
+            aRect.push_back(pPageObject->getBounds());
+        }
+    }
+
+    CPPUNIT_ASSERT_EQUAL(size_t(8), aText.size());
+
+    CPPUNIT_ASSERT_EQUAL(u"0 em constant size"_ustr, aText.at(0).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(57.256, aRect.at(0).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"1 em constant size"_ustr, aText.at(1).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(69.856, aRect.at(1).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"2 em constant size"_ustr, aText.at(2).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(81.328, aRect.at(2).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"3 em constant size"_ustr, aText.at(3).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(93.376, aRect.at(3).getMinX(), /*delta*/ 2.0);
+
+    CPPUNIT_ASSERT_EQUAL(u"2 em variable size"_ustr, aText.at(4).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(81.328, aRect.at(4).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"2 em variable size"_ustr, aText.at(5).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(89.504, aRect.at(5).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"2 em variable size"_ustr, aText.at(6).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(97.680, aRect.at(6).getMinX(), /*delta*/ 2.0);
+    CPPUNIT_ASSERT_EQUAL(u"2 em variable size"_ustr, aText.at(7).trim());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(105.856, aRect.at(7).getMinX(), /*delta*/ 2.0);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

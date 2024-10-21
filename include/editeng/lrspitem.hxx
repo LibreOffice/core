@@ -21,6 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <editeng/editengdllapi.h>
+#include <com/sun/star/util/MeasureUnit.hpp>
 
 
 // class SvxLRSpaceItem --------------------------------------------------
@@ -136,6 +137,7 @@ class EDITENG_DLLPUBLIC SvxFirstLineIndentItem final : public SfxPoolItem
 private:
     /// First-line indent always relative to GetTextLeft()
     short m_nFirstLineOffset = 0;
+    sal_Int16 m_nUnit = css::util::MeasureUnit::TWIP;
     sal_uInt16 m_nPropFirstLineOffset = 100;
     /// Automatic calculation of the first line indent
     bool m_bAutoFirst = false;
@@ -146,12 +148,18 @@ public:
 
     void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
     short GetTextFirstLineOffset() const { return m_nFirstLineOffset; }
+    double GetTextFirstLineOffsetDouble() const { return m_nFirstLineOffset; }
+    sal_Int16 GetTextFirstLineOffsetUnit() const { return m_nUnit; }
     void SetPropTextFirstLineOffset(const sal_uInt16 nProp)
                     { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nPropFirstLineOffset = nProp; }
     sal_uInt16 GetPropTextFirstLineOffset() const
                     { return m_nPropFirstLineOffset; }
     void SetTextFirstLineOffsetValue(const short nValue)
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nFirstLineOffset = nValue; }
+    {
+        ASSERT_CHANGE_REFCOUNTED_ITEM;
+        m_nFirstLineOffset = nValue;
+        m_nUnit = css::util::MeasureUnit::TWIP;
+    }
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
     SvxFirstLineIndentItem(const short nOffset, const sal_uInt16 nId);

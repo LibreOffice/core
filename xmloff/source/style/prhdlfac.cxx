@@ -195,6 +195,9 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
         case XML_TYPE_MEASURE16:
             pPropHdl.reset(new XMLMeasurePropHdl( 2 ));
             break;
+        case XML_TYPE_UNIT_MEASURE:
+            pPropHdl = std::make_unique<XMLUnitMeasurePropHdl>();
+            break;
         case XML_TYPE_PERCENT :
             pPropHdl.reset(new XMLPercentPropHdl( 4 ));
             break;
