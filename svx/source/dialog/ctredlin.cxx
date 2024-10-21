@@ -191,11 +191,6 @@ void SvxRedlinTable::UpdateFilterTest()
                                 aDaTiFilterLast=aDTMax;
                                 break;
         case SvxRedlinDateMode::EQUAL:
-                                aDaTiFilterFirst=aDaTiFirst;
-                                aDaTiFilterLast=aDaTiFirst;
-                                aDaTiFilterFirst.SetTime(aTMin.GetTime());
-                                aDaTiFilterLast.SetTime(aTMax.GetTime());
-                                break;
         case SvxRedlinDateMode::NOTEQUAL:
                                 aDaTiFilterFirst=aDaTiFirst;
                                 aDaTiFilterLast=aDaTiFirst;
@@ -793,19 +788,11 @@ IMPL_LINK_NOARG(SvxTPFilter, SelDateHdl, weld::ComboBox&, void)
     switch(nKind)
     {
         case SvxRedlinDateMode::BEFORE:
-            EnableDateLine1(true);
-            EnableDateLine2(false);
-            break;
         case SvxRedlinDateMode::SINCE:
             EnableDateLine1(true);
             EnableDateLine2(false);
             break;
         case SvxRedlinDateMode::EQUAL:
-            EnableDateLine1(true);
-            m_xTfDate->set_sensitive(false);
-            m_xTfDate->set_text(OUString());
-            EnableDateLine2(false);
-            break;
         case SvxRedlinDateMode::NOTEQUAL:
             EnableDateLine1(true);
             m_xTfDate->set_sensitive(false);
