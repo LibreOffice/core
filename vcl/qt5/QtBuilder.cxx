@@ -17,7 +17,6 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
@@ -291,9 +290,62 @@ void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rPropertie
     }
 }
 
-void QtBuilder::applyPackingProperties(QObject*, QObject*, const stringmap&)
+void QtBuilder::applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& rGrid,
+                                           const stringmap& rPackingProperties)
 {
-    SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not implemented yet");
+    if (!rCurrentChild.isWidgetType())
+        return;
+
+    QWidget& rCurrentWidget = static_cast<QWidget&>(rCurrentChild);
+
+    int nCurrentRow = -1;
+    int nCurrentColumn = -1;
+    for (int i = 0; i < rGrid.rowCount(); i++)
+    {
+        for (int j = 0; j < rGrid.columnCount(); j++)
+        {
+            if (QLayoutItem* pLayoutItem = rGrid.itemAtPosition(i, j))
+            {
+                if (pLayoutItem->widget() == &rCurrentWidget)
+                {
+                    nCurrentRow = i;
+                    nCurrentColumn = j;
+                    break;
+                }
+            }
+        }
+    }
+    assert(nCurrentRow >= 0 && nCurrentColumn >= 0 && "Widget not contained in parent grid layout");
+
+    for (auto const & [ rKey, rValue ] : rPackingProperties)
+    {
+        if (rKey == u"left-attach")
+        {
+            const sal_Int32 nNewColumn = rValue.toInt32();
+            rGrid.removeWidget(&rCurrentWidget);
+            rGrid.addWidget(&rCurrentWidget, nCurrentRow, nNewColumn);
+            nCurrentColumn = nNewColumn;
+        }
+        else if (rKey == u"top-attach")
+        {
+            const sal_Int32 nNewRow = rValue.toInt32();
+            rGrid.removeWidget(&rCurrentWidget);
+            rGrid.addWidget(&rCurrentWidget, nNewRow, nCurrentColumn);
+            nCurrentRow = nNewRow;
+        }
+    }
+}
+
+void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
+                                       const stringmap& rPackingProperties)
+{
+    if (!pCurrentChild)
+        return;
+
+    if (QGridLayout* pGrid = qobject_cast<QGridLayout*>(pParent))
+        applyGridPackingProperties(*pCurrentChild, *pGrid, rPackingProperties);
+    else
+        SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }
 
 void QtBuilder::set_response(std::u16string_view sID, short nResponse)

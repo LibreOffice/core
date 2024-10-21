@@ -14,6 +14,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
 
@@ -73,6 +74,9 @@ private:
     static void setProperties(QObject* obj, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
+
+    static void applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& rGrid,
+                                           const stringmap& rPackingProperties);
 };
 
 template <typename T> inline T* QtBuilder::get(std::u16string_view sID)
