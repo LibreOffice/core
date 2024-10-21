@@ -625,6 +625,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                 break;
 
             case SID_INSERT_SIGNATURELINE:
+            case SID_INSERT_QRCODE:
                 if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0))
                     rSet.DisableItem( nWhich );
                 break;
@@ -634,10 +635,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
                 break;
 
-            case SID_INSERT_QRCODE:
-                if ( bTabProt || bShared || (pSdrView && pSdrView->GetMarkedObjectList().GetMarkCount() != 0))
-                    rSet.DisableItem( nWhich );
-                break;
             case SID_EDIT_QRCODE:
                 if (!IsQRCodeSelected())
                     rSet.DisableItem(nWhich);
