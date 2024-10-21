@@ -8161,6 +8161,8 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_INFO         : break;
                 case FIELD_INCLUDEPICTURE: break;
                 case FIELD_KEYWORDS     :
+                case FIELD_SUBJECT      :
+                case FIELD_TITLE        :
                 {
                     if (!sFirstParam.isEmpty())
                     {
@@ -8393,16 +8395,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                     handleFieldSet(pContext, xFieldInterface);
                 break;
                 case FIELD_SKIPIF       : break;
-                case FIELD_SUBJECT      :
-                {
-                    if (!sFirstParam.isEmpty())
-                    {
-                        xFieldInterface->setPropertyValue(
-                                getPropertyName( PROP_IS_FIXED ), uno::Any( true ));
-                        //PROP_CURRENT_PRESENTATION is set later anyway
-                    }
-                }
-                break;
                 case FIELD_SYMBOL:
                 {
                     FieldContextPtr pOuter = GetParentFieldContext(m_aFieldStack);
@@ -8470,16 +8462,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                         pContext->m_bSetDateValue = true;
                     }
                     SetNumberFormat( pContext->GetCommand(), xFieldInterface );
-                }
-                break;
-                case FIELD_TITLE        :
-                {
-                    if (!sFirstParam.isEmpty())
-                    {
-                        xFieldInterface->setPropertyValue(
-                                getPropertyName( PROP_IS_FIXED ), uno::Any( true ));
-                        //PROP_CURRENT_PRESENTATION is set later anyway
-                    }
                 }
                 break;
                 case FIELD_USERADDRESS  : //todo: user address collects street, city ...
