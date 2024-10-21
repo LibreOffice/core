@@ -6978,6 +6978,8 @@ if test $_os = Darwin; then
     if test -n "$PKG_CONFIG"; then
         if test "$PKG_CONFIG" = /usr/bin/pkg-config && ls -l /usr/bin/pkg-config | $GREP -q Mono.framework; then
             AC_MSG_ERROR([yes, from Mono. This *will* break the build. Please remove or hide $PKG_CONFIG])
+        elif test "$PKG_CONFIG" = "/opt/homebrew/bin/pkg-config"; then
+            AC_MSG_RESULT([yes, from Homebrew. This is OK.])
         else
             if test "$enable_bogus_pkg_config" = "yes"; then
                 AC_MSG_RESULT([yes, user-approved from unknown origin.])
