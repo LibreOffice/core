@@ -678,9 +678,6 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
         case EventMultiplexerEventId::ShapeChanged:
         case EventMultiplexerEventId::ShapeInserted:
         case EventMultiplexerEventId::ShapeRemoved:
-            UpdateSelection();
-            break;
-
         case EventMultiplexerEventId::CurrentPageChanged:
         case EventMultiplexerEventId::SlideSortedSelection:
             UpdateSelection();
