@@ -775,6 +775,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         break;
         // Push button cannot be set to flat in Excel
         case FormCompType::COMMANDBUTTON:
+        // Group box does not support flat style (#i34712#)
+        case FormCompType::GROUPBOX:
             nApiBorder = AwtVisualEffect::LOOK3D;
         break;
         // Label does not support a border in Excel
@@ -787,10 +789,6 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         case FormCompType::SPINBUTTON:
             nApiButton = AwtVisualEffect::LOOK3D;
             nApiBorder = AwtVisualEffect::NONE;
-        break;
-        // Group box does not support flat style (#i34712#)
-        case FormCompType::GROUPBOX:
-            nApiBorder = AwtVisualEffect::LOOK3D;
         break;
     }
     mbFlatButton = nApiButton != AwtVisualEffect::LOOK3D;
