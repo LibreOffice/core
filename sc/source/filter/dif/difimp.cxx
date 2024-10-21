@@ -76,11 +76,6 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
             }
                 break;
             case T_VECTORS:
-            {
-                if( aDifParser.nVector != 0 )
-                    bSyntErrWarn = true;
-            }
-                break;
             case T_TUPLES:
             {
                 if( aDifParser.nVector != 0 )
