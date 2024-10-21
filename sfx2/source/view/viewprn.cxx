@@ -341,7 +341,7 @@ void SfxPrinterController::jobFinished( css::view::PrintableState nState )
         {
             // "real" problem (not simply printing cancelled by user)
             OUString aMsg( SfxResId(STR_NOSTARTPRINTER) );
-            if ( !m_bApi )
+            if ( !m_bApi && mpViewShell )
             {
                 std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(mpViewShell->GetFrameWeld(),
                                                                          VclMessageType::Warning, VclButtonsType::Ok,
