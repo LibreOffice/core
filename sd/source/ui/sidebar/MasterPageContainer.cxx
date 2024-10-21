@@ -715,11 +715,6 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
                 break;
 
             case PS_PREPARING:
-                aPreview = GetPreviewSubstitution(
-                    STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION,
-                    ePreviewSize);
-                break;
-
             case PS_CREATABLE:
                 aPreview = GetPreviewSubstitution(
                     STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION,
