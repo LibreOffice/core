@@ -688,8 +688,6 @@ void SkiaSalGraphicsImpl::SetROPLineColor(SalROPColor nROPColor)
             moLineColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            moLineColor = Color(0xff, 0xff, 0xff);
-            break;
         case SalROPColor::Invert:
             moLineColor = Color(0xff, 0xff, 0xff);
             break;
@@ -705,8 +703,6 @@ void SkiaSalGraphicsImpl::SetROPFillColor(SalROPColor nROPColor)
             moFillColor = Color(0, 0, 0);
             break;
         case SalROPColor::N1:
-            moFillColor = Color(0xff, 0xff, 0xff);
-            break;
         case SalROPColor::Invert:
             moFillColor = Color(0xff, 0xff, 0xff);
             break;
