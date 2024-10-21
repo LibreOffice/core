@@ -559,6 +559,7 @@ static double barrier_term(double S, double vol, double rd, double rf,
     double   c   = 12.0*(rd-rf)/(vol*vol*vol*vol); // helper -db/dvol
     switch(greek) {
     case types::Value:
+    case types::Theta:
         val = vanilla_trunc(sc*S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek)
               - pow(B/S,a)*
               vanilla_trunc(sc*B*B/S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
@@ -582,11 +583,6 @@ static double barrier_term(double S, double vol, double rd, double rf,
                   + sqr(sqr(B/S))*sc*sc*
                   vanilla_trunc(sc*B*B/S,vol,rd,rf,tau,K,B1,B2,pc,fd,types::Gamma)
               );
-        break;
-    case types::Theta:
-        val = vanilla_trunc(sc*S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek)
-              - pow(B/S,a)*
-              vanilla_trunc(sc*B*B/S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek);
         break;
     case types::Vega:
         val = vanilla_trunc(sc*S,vol,rd,rf,tau,K,B1,B2,pc,fd,greek)
