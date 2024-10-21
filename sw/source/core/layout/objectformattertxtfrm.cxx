@@ -733,7 +733,7 @@ bool SwObjectFormatterTextFrame::CheckMovedFwdCondition(
                                 // "below" and the row could potentially be split
                                 // TODO refine check if needed
                                 if (!pInBodyFrameAnchoredObj->IsInTab()
-                                    || FindTopLevelRowFrame(pInBodyFrameAnchoredObj)
+                                    || FindTopLevelRowFrame(pInBodyFrameObj)
                                         != FindTopLevelRowFrame(pInBodyFrameAnchoredObj))
                                 {   // anchored in next chain on same page
                                     SAL_INFO("sw.layout", "SwObjectFormatterTextFrame::CheckMovedFwdCondition(): o_rbPageHasFlysAnchoredBelowThis because next chain on same page");
