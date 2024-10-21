@@ -2256,7 +2256,7 @@ SwXText::convertToSwTable(
         {
             try
             {
-                constexpr auto vDenylist = frozen::make_unordered_set<std::u16string_view>({
+                static constexpr auto vDenylist = frozen::make_unordered_set<std::u16string_view>({
                     u"BottomBorder",
                     u"CharAutoKerning",
                     u"CharFontName",
