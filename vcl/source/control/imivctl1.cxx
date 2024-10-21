@@ -624,14 +624,8 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
         case KEY_ADD:
         case KEY_DIVIDE :
         case KEY_A:
-                bKeyUsed = false;
-            break;
-
         case KEY_SUBTRACT:
         case KEY_COMMA :
-            bKeyUsed = false;
-            break;
-
         case KEY_RETURN:
             bKeyUsed = false;
             break;
