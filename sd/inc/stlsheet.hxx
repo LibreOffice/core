@@ -54,7 +54,8 @@ typedef cppu::ImplInheritanceHelper< SfxUnoStyleSheet,
 class SdStyleSheet final : public SdStyleSheetBase
 {
 public:
-    SdStyleSheet( const OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily, SfxStyleSearchBits nMask );
+    SdStyleSheet( const OUString& rDisplayName, SfxStyleSheetBasePool& rPool, SfxStyleFamily eFamily,
+            SfxStyleSearchBits nMask, const OUString& rParentStyleSheetName = u""_ustr );
 
     virtual bool        SetParent (const OUString& rParentName) override;
     virtual SfxItemSet& GetItemSet() override;

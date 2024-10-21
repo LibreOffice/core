@@ -140,8 +140,11 @@ void ModifyListenerForwarder::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*r
         mpStyleSheet->notifyModifyListener();
 }
 
-SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask)
-: SdStyleSheetBase( rDisplayName, _rPool, eFamily, _nMask)
+SdStyleSheet::SdStyleSheet(const OUString& rDisplayName, SfxStyleSheetBasePool& _rPool,
+                           SfxStyleFamily eFamily,
+                           SfxStyleSearchBits _nMask,
+                           const OUString& rParentStyleSheetName)
+: SdStyleSheetBase( rDisplayName, _rPool, eFamily, _nMask, rParentStyleSheetName)
 , msApiName( rDisplayName )
 , mxPool( &_rPool )
 {

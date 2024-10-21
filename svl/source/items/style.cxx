@@ -101,10 +101,12 @@ public:
 };
 
 
-SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePool* p, SfxStyleFamily eFam, SfxStyleSearchBits mask )
+SfxStyleSheetBase::SfxStyleSheetBase( const OUString& rName, SfxStyleSheetBasePool* p,
+        SfxStyleFamily eFam, SfxStyleSearchBits mask, const OUString& rParentStyleSheetName )
     : m_pPool( p )
     , nFamily( eFam )
     , aName( rName )
+    , aParent( rParentStyleSheetName )
     , aFollow( rName )
     , pSet( nullptr )
     , nMask(mask)
@@ -627,10 +629,11 @@ rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create
 (
     const OUString& rName,
     SfxStyleFamily eFam,
-    SfxStyleSearchBits mask
+    SfxStyleSearchBits mask,
+    const OUString& sParentStyleSheetName
 )
 {
-    return new SfxStyleSheetBase( rName, this, eFam, mask );
+    return new SfxStyleSheetBase( rName, this, eFam, mask, sParentStyleSheetName );
 }
 
 rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create( const SfxStyleSheetBase& r )
@@ -638,7 +641,8 @@ rtl::Reference<SfxStyleSheetBase> SfxStyleSheetBasePool::Create( const SfxStyleS
     return new SfxStyleSheetBase( r );
 }
 
-SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, SfxStyleSearchBits mask)
+SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleFamily eFam, SfxStyleSearchBits mask,
+        const OUString& sParentStyleSheetName)
 {
     OSL_ENSURE( eFam != SfxStyleFamily::All, "svl::SfxStyleSheetBasePool::Make(), FamilyAll is not an allowed Family" );
 
@@ -648,7 +652,7 @@ SfxStyleSheetBase& SfxStyleSheetBasePool::Make( const OUString& rName, SfxStyleF
 
     if( !xStyle.is() )
     {
-        xStyle = Create( rName, eFam, mask );
+        xStyle = Create( rName, eFam, mask, sParentStyleSheetName );
         StoreStyleSheet(xStyle);
     }
     return *xStyle;
@@ -797,8 +801,9 @@ void SfxStyleSheetBasePool::ChangeParent(std::u16string_view rOld,
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,
                              SfxStyleFamily eFam,
-                             SfxStyleSearchBits mask )
-    : SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool* >( &r_Pool ), eFam, mask)
+                             SfxStyleSearchBits mask,
+                             const OUString& rParentStyleSheetName)
+    : SfxStyleSheetBase(rName, const_cast< SfxStyleSheetBasePool* >( &r_Pool ), eFam, mask, rParentStyleSheetName)
 {
 }
 
@@ -866,13 +871,14 @@ SfxStyleSheetPool::SfxStyleSheetPool( SfxItemPool const& rSet)
 }
 
 rtl::Reference<SfxStyleSheetBase> SfxStyleSheetPool::Create( const OUString& rName,
-                                              SfxStyleFamily eFam, SfxStyleSearchBits mask )
+                                              SfxStyleFamily eFam, SfxStyleSearchBits mask,
+                                              const OUString& rParentStyleSheetName)
 {
-    return new SfxStyleSheet( rName, *this, eFam, mask );
+    return new SfxStyleSheet( rName, *this, eFam, mask, rParentStyleSheetName );
 }
 
-SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, SfxStyleSearchBits _nMask )
-: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle>(_rName, _rPool, _eFamily, _nMask)
+SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, SfxStyleSearchBits _nMask, const OUString& rParentStyleSheetName )
+: cppu::ImplInheritanceHelper<SfxStyleSheet, css::style::XStyle>(_rName, _rPool, _eFamily, _nMask, rParentStyleSheetName)
 {
 }
 

@@ -57,7 +57,8 @@ public:
     ScStyleSheet*       FindAutoStyle(const OUString& rName);
 
     SC_DLLPUBLIC virtual SfxStyleSheetBase& Make( const OUString&, SfxStyleFamily eFam,
-                                     SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
+                                     SfxStyleSearchBits nMask = SfxStyleSearchBits::All,
+                                     const OUString& rParentStyleSheetName = u""_ustr) override;
 
     void setAllParaStandard();
 
@@ -68,7 +69,8 @@ private:
 
     virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&  rName,
                                        SfxStyleFamily   eFamily,
-                                       SfxStyleSearchBits     nMask) override;
+                                       SfxStyleSearchBits     nMask,
+                                       const OUString& rParentStyleSheetName) override;
     virtual rtl::Reference<SfxStyleSheetBase> Create( const SfxStyleSheetBase& rStyle ) override;
 
     SfxStyleSheetBase*  pActualStyleSheet;

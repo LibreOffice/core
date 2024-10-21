@@ -26,7 +26,7 @@ class MockedStyleSheet : public SfxStyleSheetBase
 {
     public:
     MockedStyleSheet(const OUString& name, SfxStyleFamily fam = SfxStyleFamily::Char)
-    : SfxStyleSheetBase(name, nullptr, fam, SfxStyleSearchBits::Auto)
+    : SfxStyleSheetBase(name, nullptr, fam, SfxStyleSearchBits::Auto, u""_ustr)
     {}
 
 };

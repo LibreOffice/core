@@ -60,7 +60,8 @@ private:
                 ScStyleSheet( const OUString&   rName,
                               const ScStyleSheetPool& rPool,
                               SfxStyleFamily    eFamily,
-                              SfxStyleSearchBits nMask );
+                              SfxStyleSearchBits nMask,
+                              const OUString& rParentStyleSheetName );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 

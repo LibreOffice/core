@@ -130,9 +130,10 @@ SdStyleSheetPool::~SdStyleSheetPool()
     DBG_ASSERT( mpDoc == nullptr, "sd::SdStyleSheetPool::~SdStyleSheetPool(), dispose me first!" );
 }
 
-rtl::Reference<SfxStyleSheetBase> SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily, SfxStyleSearchBits _nMask )
+rtl::Reference<SfxStyleSheetBase> SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamily eFamily,
+            SfxStyleSearchBits _nMask, const OUString& rParentStyleSheetName )
 {
-    return new SdStyleSheet(rName, *this, eFamily, _nMask);
+    return new SdStyleSheet(rName, *this, eFamily, _nMask, rParentStyleSheetName);
 }
 
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(std::u16string_view rLayoutName)
@@ -211,10 +212,19 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
         if (!Find(aLevelName, SfxStyleFamily::Page))
         {
             bCreated = true;
-            pSheet = &Make(aLevelName, SfxStyleFamily::Page,nUsedMask);
-            pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
-            pSheet->SetParent( OUString() );
+            OUString sParentStyleSheetName;
+            // if we created outline styles, we need to chain them
+            if (nLevel > 1)
+            {
+                OUString aPreviousLevelName( aPrefix + aName + " " + OUString::number( nLevel-1 ) );
+                SfxStyleSheetBase* pParent = Find(aPreviousLevelName, SfxStyleFamily::Page);
+                if (pParent)
+                    sParentStyleSheetName = pParent->GetName();
+            }
+
+            pSheet = &Make(aLevelName, SfxStyleFamily::Page, nUsedMask, sParentStyleSheetName);
+            pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
 
             // attributing for level 1, the others levels inherit
             if (nLevel == 1)
@@ -294,27 +304,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
             // Line distance (upwards). Stuff around here cleaned up in i35937
             aSvxULSpaceItem.SetUpper(nUpper);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
-        }
-    }
-
-    // if we created outline styles, we need to chain them
-    if( bCreated )
-    {
-        SfxStyleSheetBase* pParent = nullptr;
-        for (sal_Int32 nLevel = 1; nLevel < 10; nLevel++)
-        {
-            OUString aLevelName( aPrefix + aName + " " + OUString::number( nLevel ) );
-
-            pSheet = Find(aLevelName, SfxStyleFamily::Page);
-
-            DBG_ASSERT( pSheet, "missing layout style!");
-
-            if( pSheet )
-            {
-                if (pParent)
-                    pSheet->SetParent(pParent->GetName());
-                pParent = pSheet;
-            }
         }
     }
 

@@ -129,9 +129,10 @@ public:
 
     using SfxStyleSheetPool::Create;
     rtl::Reference<SfxStyleSheetBase> Create(const OUString& rName, SfxStyleFamily eFamily,
-                                             SfxStyleSearchBits nMask) override
+                                             SfxStyleSearchBits nMask,
+                                             const OUString& rParentStyleSheetName) override
     {
-        return new EEStyleSheet(rName, *this, eFamily, nMask);
+        return new EEStyleSheet(rName, *this, eFamily, nMask, rParentStyleSheetName);
     }
 
     void Notify(SfxBroadcaster&, const SfxHint& rHint) override
@@ -573,7 +574,7 @@ void SwStyleSheetIterator::SwPoolFormatList::Append( SfxStyleFamily eFam, const 
 SwDocStyleSheet::SwDocStyleSheet(   SwDoc&                rDocument,
                                     SwDocStyleSheetPool&  rPool) :
 
-    SfxStyleSheetBase( OUString(), &rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto ),
+    SfxStyleSheetBase( OUString(), &rPool, SfxStyleFamily::Char, SfxStyleSearchBits::Auto, u""_ustr ),
     m_pCharFormat(nullptr),
     m_pColl(nullptr),
     m_pFrameFormat(nullptr),
@@ -2631,7 +2632,8 @@ SwDocStyleSheetPool::~SwDocStyleSheetPool()
 
 SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
                                                 SfxStyleFamily  eFam,
-                                                SfxStyleSearchBits _nMask)
+                                                SfxStyleSearchBits _nMask,
+                                                const OUString& rParentStyleSheetName)
 {
     mxStyleSheet->PresetName(rName);
     mxStyleSheet->PresetParent(OUString());
@@ -2639,6 +2641,7 @@ SfxStyleSheetBase&   SwDocStyleSheetPool::Make( const OUString&   rName,
     mxStyleSheet->SetMask(_nMask) ;
     mxStyleSheet->SetFamily(eFam);
     mxStyleSheet->SetPhysical(true);
+    mxStyleSheet->SetParent(rParentStyleSheetName);
     mxStyleSheet->Create();
 
     return *mxStyleSheet;
@@ -2651,7 +2654,7 @@ rtl::Reference<SfxStyleSheetBase> SwDocStyleSheetPool::Create( const SfxStyleShe
 }
 
 rtl::Reference<SfxStyleSheetBase> SwDocStyleSheetPool::Create( const OUString &,
-                                                  SfxStyleFamily, SfxStyleSearchBits )
+                                                  SfxStyleFamily, SfxStyleSearchBits, const OUString& )
 {
     OSL_ENSURE( false, "Create in SW-Stylesheet-Pool not possible" );
     return nullptr;

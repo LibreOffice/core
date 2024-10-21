@@ -52,9 +52,10 @@ constexpr auto HFDIST_CM = o3tl::convert(250, o3tl::Length::mm100, o3tl::Length:
 ScStyleSheet::ScStyleSheet( const OUString&     rName,
                             const ScStyleSheetPool& rPoolP,
                             SfxStyleFamily      eFamily,
-                            SfxStyleSearchBits  nMaskP )
+                            SfxStyleSearchBits  nMaskP,
+                            const OUString& rParentStyleSheetName)
 
-    : SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
+    : SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP, rParentStyleSheetName )
     , eUsage( Usage::UNKNOWN )
 {
 }

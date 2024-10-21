@@ -212,7 +212,7 @@ class SwDocStyleSheetPool final : public SfxStyleSheetBasePool
     SwDoc&              m_rDoc;
     bool                m_bOrganizer : 1;     ///< Organizer
 
-    virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits nMask) override;
+    virtual rtl::Reference<SfxStyleSheetBase> Create( const OUString&, SfxStyleFamily, SfxStyleSearchBits nMask, const OUString& rParentStyleSheetName) override;
     virtual rtl::Reference<SfxStyleSheetBase> Create( const SfxStyleSheetBase& ) override;
 
     using SfxStyleSheetBasePool::Find;
@@ -221,7 +221,8 @@ public:
     SwDocStyleSheetPool( SwDoc&, bool bOrganizer );
 
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
-            SfxStyleSearchBits nMask = SfxStyleSearchBits::All) override;
+            SfxStyleSearchBits nMask = SfxStyleSearchBits::All,
+            const OUString& rParentStyleSheetName = u""_ustr) override;
 
     virtual SfxStyleSheetBase* Find( const OUString&, SfxStyleFamily eFam,
                                     SfxStyleSearchBits n=SfxStyleSearchBits::All ) override;

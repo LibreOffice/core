@@ -69,7 +69,8 @@ void ScStyleSheetPool::SetDocument( ScDocument* pDocument )
 }
 
 SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
-                                           SfxStyleFamily eFam, SfxStyleSearchBits mask)
+                                           SfxStyleFamily eFam, SfxStyleSearchBits mask,
+                                           const OUString& rParentStyleSheetName)
 {
     if ( rName == STRING_STANDARD && Find( rName, eFam ) != nullptr )
     {
@@ -85,21 +86,22 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
         {
             OUString aNewName = ScResId(STR_STYLENAME_STANDARD) + OUString::number( nAdd );
             if ( Find( aNewName, eFam ) == nullptr )
-                return SfxStyleSheetPool::Make(aNewName, eFam, mask);
+                return SfxStyleSheetPool::Make(aNewName, eFam, mask, rParentStyleSheetName);
         }
     }
 
     // Core uses translated names for both naming and display.
     // This for all three, loading standard builtin styles from styles.xml
     // configuration, loading documents and updating from templates.
-    return SfxStyleSheetPool::Make( ScStyleNameConversion::ProgrammaticToDisplayName( rName, eFam), eFam, mask);
+    return SfxStyleSheetPool::Make( ScStyleNameConversion::ProgrammaticToDisplayName( rName, eFam), eFam, mask, rParentStyleSheetName);
 }
 
 rtl::Reference<SfxStyleSheetBase> ScStyleSheetPool::Create( const OUString&   rName,
                                              SfxStyleFamily  eFamily,
-                                             SfxStyleSearchBits nMaskP )
+                                             SfxStyleSearchBits nMaskP,
+                                             const OUString& rParentStyleSheetName )
 {
-    rtl::Reference<ScStyleSheet> pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
+    rtl::Reference<ScStyleSheet> pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP, rParentStyleSheetName );
     if ( eFamily != SfxStyleFamily::Page && ScResId(STR_STYLENAME_STANDARD) != rName )
         pSheet->SetParent( ScResId(STR_STYLENAME_STANDARD) );
 
