@@ -571,8 +571,6 @@ void SmXMLContext_Helper::RetrieveAttrs(
                 sFontFamily = aIter.toString();
                 break;
             case XML_COLOR:
-                sColor = aIter.toString();
-                break;
             case XML_MATHCOLOR:
                 sColor = aIter.toString();
                 break;
@@ -735,6 +733,10 @@ void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
             vVariant.push_back(TNITALIC);
             break;
         case MathMLMathvariantValue::Bold:
+        case MathMLMathvariantValue::BoldFraktur:
+            // TODO: Fraktur
+        case MathMLMathvariantValue::BoldScript:
+            // TODO: Script
             vVariant.push_back(TBOLD);
             break;
         case MathMLMathvariantValue::Italic:
@@ -747,16 +749,8 @@ void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
         case MathMLMathvariantValue::DoubleStruck:
             // TODO
             break;
-        case MathMLMathvariantValue::BoldFraktur:
-            // TODO: Fraktur
-            vVariant.push_back(TBOLD);
-            break;
         case MathMLMathvariantValue::Script:
             // TODO
-            break;
-        case MathMLMathvariantValue::BoldScript:
-            // TODO: Script
-            vVariant.push_back(TBOLD);
             break;
         case MathMLMathvariantValue::Fraktur:
             // TODO
@@ -1946,8 +1940,6 @@ uno::Reference<xml::sax::XFastContextHandler> SmXMLDocContext_Impl::createFastCh
     {
         //Consider semantics a dummy except for any starmath annotations
         case XML_ELEMENT(MATH, XML_SEMANTICS):
-            xContext = new SmXMLRowContext_Impl(GetSmImport());
-            break;
         /*General Layout Schemata*/
         case XML_ELEMENT(MATH, XML_MROW):
             xContext = new SmXMLRowContext_Impl(GetSmImport());
