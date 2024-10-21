@@ -713,6 +713,8 @@ OUString    Desktop::CreateErrorMsgString(
 
         /// the bootstrap INI file could not be found or read
         case ::utl::Bootstrap::MISSING_BOOTSTRAP_FILE:
+        /// the version locator INI file could not be found or read
+        case ::utl::Bootstrap::MISSING_VERSION_FILE:
         {
             aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_MISSING);
         }
@@ -724,13 +726,6 @@ OUString    Desktop::CreateErrorMsgString(
          case ::utl::Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY:
         {
             aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_CORRUPT);
-        }
-        break;
-
-        /// the version locator INI file could not be found or read
-        case ::utl::Bootstrap::MISSING_VERSION_FILE:
-        {
-            aMsg = DpResId(STR_BOOTSTRAP_ERR_FILE_MISSING);
         }
         break;
 
