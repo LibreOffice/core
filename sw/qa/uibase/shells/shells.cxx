@@ -543,7 +543,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
         ]
     }
 }
-)json"_ostr);
+)json");
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateBookmarks"_ustr, aArgs);
 
@@ -829,7 +829,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
         ]
     }
 }
-)json"_ostr);
+)json");
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateFields"_ustr, aArgs);
 
@@ -887,7 +887,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
         }
     }
 }
-)json"_ostr);
+)json");
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateTextFormField"_ustr, aArgs);
 
@@ -938,7 +938,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSections)
         ]
     }
 }
-)json"_ostr);
+)json");
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateSections"_ustr, aArgs);
 
@@ -1035,7 +1035,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
         }
     }
 }
-)json"_ostr);
+)json");
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateBookmark"_ustr, aArgs);
 
@@ -1089,7 +1089,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
         }
     }
 }
-)json"_ostr);
+)json");
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:UpdateField"_ustr, aArgs);
 
@@ -1127,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
         "value": "ZOTERO_BREF_"
     }
 }
-)json"_ostr);
+)json");
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:DeleteBookmarks"_ustr, aArgs);
 
@@ -1164,7 +1164,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFields)
         "value": "ZOTERO_ITEM CSL_CITATION"
     }
 }
-)json"_ostr);
+)json");
     aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:DeleteFields"_ustr, aArgs);
 

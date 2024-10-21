@@ -126,7 +126,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
         }
     }
 }
-)json"_ostr);
+)json");
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::containerToSequence(aArgsVec);
     dispatchCommand(mxComponent, u".uno:SetDocumentProperties"_ustr, aArgs);
 
