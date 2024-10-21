@@ -1386,7 +1386,7 @@ static bool isMasterPageLayoutNameUnique(const SdDrawDocument& rDoc, std::u16str
 
     for(sal_uInt16 a(0); a < nPageCount; a++)
     {
-        const SdrPage* pCandidate = rDoc.GetMasterPage(a);
+        const SdPage* pCandidate = static_cast<const SdPage*>(rDoc.GetMasterPage(a));
         OUString aPageLayoutName(pCandidate->GetLayoutName());
         sal_Int32 nIndex = aPageLayoutName.indexOf(SD_LT_SEPARATOR);
         if( nIndex != -1 )
