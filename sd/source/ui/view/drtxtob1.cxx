@@ -683,9 +683,6 @@ SET_ADJUST:
 
                     // attributes for TextObjectBar
                     case SID_ATTR_CHAR_FONT:
-                        mpViewShell->GetViewFrame()->GetDispatcher()->
-                            Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
-                    break;
                     case SID_ATTR_CHAR_FONTHEIGHT:
                         mpViewShell->GetViewFrame()->GetDispatcher()->
                             Execute( SID_CHAR_DLG, SfxCallMode::ASYNCHRON );
