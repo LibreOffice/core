@@ -629,7 +629,7 @@ ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalpositio
         }
         case word::WdRelativeHorizontalPosition::wdRelativeHorizontalPositionColumn:
         {
-            nType = text::RelOrientation::PAGE_FRAME;
+            nType = text::RelOrientation::FRAME;
             break;
         }
         case word::WdRelativeHorizontalPosition::wdRelativeHorizontalPositionMargin:
