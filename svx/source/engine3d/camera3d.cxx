@@ -173,7 +173,7 @@ void Camera3D::SetFocalLength(double fLen)
 {
     if (fLen < 5)
         fLen = 5;
-    SetPRP(basegfx::B3DPoint(0.0, 0.0, fLen / 35.0 * aViewWin.W));
+    SetPRP(basegfx::B3DPoint(0.0, 0.0, fLen / 35.0 * m_aViewWin.W));
     m_fFocalLength = fLen;
 }
 

@@ -47,24 +47,24 @@ enum class ProjectionType { Parallel, Perspective };
 class SVXCORE_DLLPUBLIC Viewport3D
 {
  protected:
-    basegfx::B3DHomMatrix       aViewTf;        // the real transformations matrix
-    basegfx::B3DPoint           aVRP;           // View Reference Point
-    basegfx::B3DVector          aVPN;           // View Plane Normal
-    basegfx::B3DVector          aVUV;           // View Up Vector
-    basegfx::B3DPoint           aPRP;           // Projection Reference Point(View-coordinates)
+    basegfx::B3DHomMatrix       m_aViewTf;        // the real transformations matrix
+    basegfx::B3DPoint           m_aVRP;           // View Reference Point
+    basegfx::B3DVector          m_aVPN;           // View Plane Normal
+    basegfx::B3DVector          m_aVUV;           // View Up Vector
+    basegfx::B3DPoint           m_aPRP;           // Projection Reference Point(View-coordinates)
                                                 // up to now only the z-coordinate is considered
 
-    ProjectionType  eProjection;    // kind of the projection
-    tools::Rectangle aDeviceRect;          // position and size of the output area
+    ProjectionType  m_eProjection;    // kind of the projection
+    tools::Rectangle m_aDeviceRect;          // position and size of the output area
 
     struct
     {
         double X, Y, W, H;          // position and size of the view window
-    } aViewWin;                     // in view coordinates
+    } m_aViewWin;                     // in view coordinates
 
-    basegfx::B3DPoint       aViewPoint;     //observers position in world coordinates;
+    basegfx::B3DPoint       m_aViewPoint;     //observers position in world coordinates;
                                     // is calculated by the transformation
-    bool            bTfValid;       // flag, if transformation is valid
+    bool            m_bTfValid;       // flag, if transformation is valid
 
  public:
     Viewport3D();
@@ -74,17 +74,17 @@ class SVXCORE_DLLPUBLIC Viewport3D
     void SetVUV(const basegfx::B3DVector& rNewVUV);
     void SetPRP(const basegfx::B3DPoint& rNewPRP);
 
-    const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
-    const basegfx::B3DVector&   GetVUV() const  { return aVUV; }
+    const basegfx::B3DPoint&    GetVRP() const  { return m_aVRP; }
+    const basegfx::B3DVector&   GetVUV() const  { return m_aVUV; }
 
     void SetProjection(ProjectionType ePrj)
-        { eProjection = ePrj; bTfValid = false; }
-    ProjectionType GetProjection() const { return eProjection; }
+        { m_eProjection = ePrj; m_bTfValid = false; }
+    ProjectionType GetProjection() const { return m_eProjection; }
 
     void SetViewWindow(double fX, double fY, double fW, double fH);
 
     void SetDeviceWindow(const tools::Rectangle& rRect);
-    const tools::Rectangle& GetDeviceWindow() const { return aDeviceRect; }
+    const tools::Rectangle& GetDeviceWindow() const { return m_aDeviceRect; }
 
     // returns observers position in world coordinates
     const basegfx::B3DPoint&    GetViewPoint();
