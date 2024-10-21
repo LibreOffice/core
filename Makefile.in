@@ -9,7 +9,7 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck uicheck screenshot
 
-.PHONY : check-if-root bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : check-if-root check-makefile-version bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download etags fetch get-submodules id install install-gdb-printers install-strip tags debugrun help showmodules translations packageinfo coverage internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=build
 build_goal:=$(if $(filter build uicheck,$(MAKECMDGOALS)),build)\
@@ -76,6 +76,14 @@ check-if-root:
 			echo; \
 			exit 1; \
 		fi \
+	fi
+
+check-makefile-version:
+	@if awk 'BEGIN {exit ($(MAKE_VERSION) >= 4.0) ;}' ; then \
+		echo; \
+		echo "Running with make $(MAKE_VERSION) is likely to cause problems, try with $$GNUMAKE instead."; \
+		echo; \
+		exit 1; \
 	fi
 
 gb_Side ?= host
@@ -289,7 +297,7 @@ endif
 #
 # Bootstrap
 #
-bootstrap: check-if-root compilerplugins
+bootstrap: check-if-root check-makefile-version compilerplugins
 
 #
 # Build
