@@ -776,11 +776,6 @@ static bool UCBOpenContentSync(
                 break;
             }
         case Moderator::ResultType::COMMANDABORTED:
-            {
-                bAborted = true;
-                xLockBytes->SetError( ERRCODE_ABORT );
-                break;
-            }
         case Moderator::ResultType::COMMANDFAILED:
             {
                 bAborted = true;
