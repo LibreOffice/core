@@ -33,17 +33,15 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     OUString aNamespaceName( aName );
 
     // delete preceding "xmlns"
-    constexpr char aXMLAttributeNamespace[] = "xmlns";
-    if ( aNamespaceName.startsWith( aXMLAttributeNamespace ) )
+    if (std::u16string_view rest; aNamespaceName.startsWith("xmlns", &rest))
     {
-        constexpr sal_Int32 nXMLNamespaceLength = RTL_CONSTASCII_LENGTH(aXMLAttributeNamespace);
-        if ( aNamespaceName.getLength() == nXMLNamespaceLength )
+        if (rest.empty())
         {
             aNamespaceName.clear();
         }
-        else if ( aNamespaceName.getLength() >= nXMLNamespaceLength+2 )
+        else if (rest.size() > 1)
         {
-            aNamespaceName = aNamespaceName.copy( nXMLNamespaceLength+1 );
+            aNamespaceName = rest.substr(1);
         }
         else
         {
