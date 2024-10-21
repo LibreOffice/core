@@ -336,14 +336,8 @@ namespace fileaccess {
                     // not enough memory for allocating structures
                     ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
                     break;
-                case FileBase::E_BUSY:
-                    // Text file busy
-                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
-                    break;
-                case FileBase::E_AGAIN:
-                    // Operation would block
-                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
-                    break;
+                case FileBase::E_BUSY:   // Text file busy
+                case FileBase::E_AGAIN:  // Operation would block
                 case FileBase::E_NOLCK:  // No record locks available
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
@@ -476,15 +470,12 @@ namespace fileaccess {
                     // Is a directory
                     ioErrorCode = IOErrorCode_NO_FILE;
                     break;
-                case FileBase::E_AGAIN:
-                    // Operation would block
+                case FileBase::E_AGAIN:  // Operation would block
+                case FileBase::E_NOLCK:  // No record locks available
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
                 case FileBase::E_TIMEDOUT:
                     ioErrorCode = IOErrorCode_DEVICE_NOT_READY;
-                    break;
-                case FileBase::E_NOLCK:  // No record locks available
-                    ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
                     break;
                 case FileBase::E_IO:     // I/O error
                 case FileBase::E_BADF:   // Bad file
@@ -686,6 +677,8 @@ namespace fileaccess {
                     ioErrorCode = IOErrorCode_ACCESS_DENIED;
                     break;
                 case FileBase::E_PERM:          // Operation not permitted
+                case FileBase::E_ISDIR:         // Is a directory
+                case FileBase::E_ROFS:          // Read-only file system
                     ioErrorCode = IOErrorCode_NOT_SUPPORTED;
                     break;
                 case FileBase::E_NAMETOOLONG:   // File name too long
@@ -694,10 +687,6 @@ namespace fileaccess {
                 case FileBase::E_NOLINK:        // Link has been severed
                 case FileBase::E_NOENT:         // No such file or directory
                     ioErrorCode = IOErrorCode_NOT_EXISTING;
-                    break;
-                case FileBase::E_ISDIR:         // Is a directory
-                case FileBase::E_ROFS:          // Read-only file system
-                    ioErrorCode = IOErrorCode_NOT_SUPPORTED;
                     break;
                 case FileBase::E_BUSY:          // Device or resource busy
                     ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
