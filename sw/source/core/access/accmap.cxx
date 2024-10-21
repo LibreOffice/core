@@ -1612,7 +1612,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(bool bInvalidateFocusMode /*=fa
             uno::Reference< XAccessible > xPara = pAccShape->getAccessibleParent();
             uno::Reference< XAccessibleContext > xParaContext = xPara->getAccessibleContext();
             if (xParaContext.is() && (xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH
-                                      || xParaContext->getAccessibleRole() == AccessibleRole::PARAGRAPH))
+                                      || xParaContext->getAccessibleRole() == AccessibleRole::BLOCK_QUOTE))
             {
                 SwAccessibleParagraph* pAccPara = static_cast< SwAccessibleParagraph *>(xPara.get());
                 if (m_setParaAdd.count(pAccPara) == 0 )
