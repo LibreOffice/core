@@ -252,8 +252,6 @@ SdrGrafObj::SdrGrafObj(SdrModel& rSdrModel, SdrGrafObj const & rSource)
     {
         SetGraphicLink( m_aFileName );
     }
-
-    ImpSetAttrToGrafInfo();
 }
 
 SdrGrafObj::SdrGrafObj(
@@ -412,12 +410,22 @@ GraphicAttr SdrGrafObj::GetGraphicAttr( SdrGrafObjTransformsAttrs nTransformFlag
         const bool      bRotate = bool( nTransformFlags & SdrGrafObjTransformsAttrs::ROTATE ) &&
             (maGeo.m_nRotationAngle && maGeo.m_nRotationAngle != 18000_deg100);
 
-        // Need cropping info earlier
-        const_cast<SdrGrafObj*>(this)->ImpSetAttrToGrafInfo();
-
         // Actually transform the graphic only in this case.
         // Cropping always happens, though.
-        aActAttr = m_aGrafInfo;
+        const SfxItemSet& rSet = GetObjectItemSet();
+        const sal_uInt16 nTrans = rSet.Get( SDRATTR_GRAFTRANSPARENCE ).GetValue();
+        const SdrGrafCropItem&  rCrop = rSet.Get( SDRATTR_GRAFCROP );
+
+        aActAttr.SetLuminance( rSet.Get( SDRATTR_GRAFLUMINANCE ).GetValue() );
+        aActAttr.SetContrast( rSet.Get( SDRATTR_GRAFCONTRAST ).GetValue() );
+        aActAttr.SetChannelR( rSet.Get( SDRATTR_GRAFRED ).GetValue() );
+        aActAttr.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
+        aActAttr.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
+        aActAttr.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
+        aActAttr.SetAlpha(255 - basegfx::fround<sal_uInt8>(nTrans * 2.55));
+        aActAttr.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
+        aActAttr.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
+        aActAttr.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
 
         if( bMirror )
         {
@@ -481,12 +489,14 @@ Size SdrGrafObj::getOriginalSize() const
     else
         aSize = OutputDevice::LogicToLogic(aSize, GetGrafPrefMapMode(), MapMode(getSdrModelFromSdrObject().GetScaleUnit()));
 
-    if (m_aGrafInfo.IsCropped())
+    const SfxItemSet& rSet = GetObjectItemSet();
+    const SdrGrafCropItem&  rCrop = rSet.Get( SDRATTR_GRAFCROP );
+    if ( rCrop.GetLeft() != 0 || rCrop.GetTop() != 0 || rCrop.GetRight() != 0 || rCrop.GetBottom() != 0 ) // if is cropped
     {
-        const tools::Long aCroppedWidth(aSize.getWidth() - m_aGrafInfo.GetLeftCrop()
-                                        - m_aGrafInfo.GetRightCrop());
-        const tools::Long aCroppedHeight(aSize.getHeight() - m_aGrafInfo.GetTopCrop()
-                                         - m_aGrafInfo.GetBottomCrop());
+        const tools::Long aCroppedWidth(aSize.getWidth() - rCrop.GetLeft()
+                                        - rCrop.GetRight());
+        const tools::Long aCroppedHeight(aSize.getHeight() - rCrop.GetTop()
+                                         - rCrop.GetBottom());
 
         aSize = Size(aCroppedWidth, aCroppedHeight);
     }
@@ -1018,34 +1028,12 @@ void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SetXPolyDirty();
     SdrRectObj::Notify( rBC, rHint );
-    ImpSetAttrToGrafInfo();
 }
 
 
 void SdrGrafObj::SetMirrored( bool _bMirrored )
 {
     m_bMirrored = _bMirrored;
-}
-
-void SdrGrafObj::ImpSetAttrToGrafInfo()
-{
-    const SfxItemSet& rSet = GetObjectItemSet();
-    const sal_uInt16 nTrans = rSet.Get( SDRATTR_GRAFTRANSPARENCE ).GetValue();
-    const SdrGrafCropItem&  rCrop = rSet.Get( SDRATTR_GRAFCROP );
-
-    m_aGrafInfo.SetLuminance( rSet.Get( SDRATTR_GRAFLUMINANCE ).GetValue() );
-    m_aGrafInfo.SetContrast( rSet.Get( SDRATTR_GRAFCONTRAST ).GetValue() );
-    m_aGrafInfo.SetChannelR( rSet.Get( SDRATTR_GRAFRED ).GetValue() );
-    m_aGrafInfo.SetChannelG( rSet.Get( SDRATTR_GRAFGREEN ).GetValue() );
-    m_aGrafInfo.SetChannelB( rSet.Get( SDRATTR_GRAFBLUE ).GetValue() );
-    m_aGrafInfo.SetGamma( rSet.Get( SDRATTR_GRAFGAMMA ).GetValue() * 0.01 );
-    m_aGrafInfo.SetAlpha(255 - basegfx::fround<sal_uInt8>(nTrans * 2.55));
-    m_aGrafInfo.SetInvert( rSet.Get( SDRATTR_GRAFINVERT ).GetValue() );
-    m_aGrafInfo.SetDrawMode( rSet.Get( SDRATTR_GRAFMODE ).GetValue() );
-    m_aGrafInfo.SetCrop( rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom() );
-
-    SetXPolyDirty();
-    SetBoundAndSnapRectsDirty();
 }
 
 void SdrGrafObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrinkOnly )

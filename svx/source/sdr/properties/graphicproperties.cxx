@@ -101,14 +101,6 @@ namespace sdr::properties
             // local changes
             rObj.SetXPolyDirty();
 
-            // #i29367# Update GraphicAttr, too. This was formerly
-            // triggered by SdrGrafObj::Notify, which is no longer
-            // called nowadays. BTW: strictly speaking, the whole
-            // ImpSetAttrToGrafInfostuff could
-            // be dumped, when SdrGrafObj::aGrafInfo is removed and
-            // always created on the fly for repaint.
-            rObj.ImpSetAttrToGrafInfo();
-
             // call parent
             RectangleProperties::ItemSetChanged(aChangedItems, nDeletedWhich, bAdjustTextFrameWidthAndHeight);
         }
@@ -122,9 +114,6 @@ namespace sdr::properties
             // local changes
             SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
             rObj.SetXPolyDirty();
-
-            // local changes
-            rObj.ImpSetAttrToGrafInfo();
         }
 
         void GraphicProperties::ForceDefaultAttributes()

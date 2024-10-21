@@ -78,9 +78,6 @@ private:
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     SAL_DLLPRIVATE virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
-    SAL_DLLPRIVATE void ImpSetAttrToGrafInfo(); // Copy values from the pool
-    GraphicAttr m_aGrafInfo;
-
     OUString m_aFileName; // If it's a Link, the filename can be found in here
     OUString m_aFilterName;
     std::unique_ptr<GraphicObject> mpGraphicObject; // In order to speed up output of bitmaps, especially rotated ones
