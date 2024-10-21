@@ -157,12 +157,6 @@ extern "C"
 #endif
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-        // init gdk thread protection
-        bool const sup = g_thread_supported();
-            // extracted from the 'if' to avoid Clang -Wunreachable-code
-        if ( !sup )
-            g_thread_init( nullptr );
-
         gdk_threads_set_lock_functions (GdkThreadsEnter, GdkThreadsLeave);
         SAL_INFO("vcl.gtk", "Hooked gdk threads locks");
 #endif
