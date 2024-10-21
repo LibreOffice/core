@@ -135,13 +135,11 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  )
             switch( aAPIAlignment )
             {
                 case table::CellVertJustify2::BOTTOM:
+                case table::CellVertJustify2::STANDARD:
                     aResult <<= excel::XlVAlign::xlVAlignBottom;
                     break;
                 case table::CellVertJustify2::CENTER:
                     aResult <<= excel::XlVAlign::xlVAlignCenter;
-                    break;
-                case table::CellVertJustify2::STANDARD:
-                    aResult <<= excel::XlVAlign::xlVAlignBottom;
                     break;
                 case table::CellVertJustify2::TOP:
                     aResult <<= excel::XlVAlign::xlVAlignTop;
@@ -171,13 +169,11 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const uno::Any& HorizontalAlignme
         switch ( nAlignment )
         {
             case excel::XlHAlign::xlHAlignJustify:
+            case excel::XlHAlign::xlHAlignDistributed:
                 aVal <<= table::CellHoriJustify_BLOCK;
                 break;
             case excel::XlHAlign::xlHAlignCenter:
                 aVal <<= table::CellHoriJustify_CENTER;
-                break;
-            case excel::XlHAlign::xlHAlignDistributed:
-                aVal <<= table::CellHoriJustify_BLOCK;
                 break;
             case excel::XlHAlign::xlHAlignLeft:
                 aVal <<= table::CellHoriJustify_LEFT;
