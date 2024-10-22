@@ -303,8 +303,6 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXWindow* _pXWindow )
 {
-    Reference< XAccessibleContext > xContext;
-
     VclPtr<vcl::Window> pWindow = _pXWindow->GetWindow();
     if ( pWindow )
     {
@@ -315,50 +313,50 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
             Reference< XAccessible > xAcc( pWindow->GetAccessible() );
             if ( xAcc.is() )
             {
-                Reference< XAccessibleContext > xCont( xAcc->getAccessibleContext() );
+                Reference<XAccessibleContext > xContext(xAcc->getAccessibleContext());
                 if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
-                    ( xCont.is() && xCont->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
+                    ( xContext.is() && xContext->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
                 {
-                    xContext = std::move(xCont);
+                    return xContext;
                 }
             }
         }
 
         else if ( nType == WindowType::STATUSBAR )
         {
-            xContext = new VCLXAccessibleStatusBar(_pXWindow);
+            return new VCLXAccessibleStatusBar(_pXWindow);
         }
 
         else if ( nType == WindowType::TABCONTROL )
         {
-            xContext = new VCLXAccessibleTabControl(_pXWindow);
+            return new VCLXAccessibleTabControl(_pXWindow);
         }
 
         else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
         {
-            xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
+            return new VCLXAccessibleTabPageWindow(_pXWindow);
         }
 
         else if ( nType == WindowType::FLOATINGWINDOW )
         {
-            xContext = new FloatingWindowAccessible( _pXWindow );
+            return new FloatingWindowAccessible(_pXWindow);
         }
 
         else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
         {
-            xContext = new FloatingWindowAccessible( _pXWindow );
+            return new FloatingWindowAccessible(_pXWindow);
         }
 
         else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
         {
-            xContext = new VCLXAccessibleFixedText(_pXWindow);
+            return new VCLXAccessibleFixedText(_pXWindow);
         }
         else
         {
-            xContext = new VCLXAccessibleComponent(_pXWindow);
+            return new VCLXAccessibleComponent(_pXWindow);
         }
     }
-    return xContext;
+    return nullptr;
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXToolBox* _pXWindow )
