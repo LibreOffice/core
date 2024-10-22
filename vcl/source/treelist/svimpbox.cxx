@@ -2400,6 +2400,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 ExpandAll();
             break;
 
+        case KEY_DIVIDE :
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( true );
@@ -2433,13 +2434,6 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         CollapseTo(m_pCursor);
                 }
             }
-            else
-                bKeyUsed = false;
-            break;
-
-        case KEY_DIVIDE :
-            if( bMod1 )
-                SelAllDestrAnch( true );
             else
                 bKeyUsed = false;
             break;
