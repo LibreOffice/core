@@ -100,8 +100,6 @@ void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
             maLinked = rValue;
             break;
         case XML_ELEMENT(STYLE, XML_HIDDEN):
-            mbHidden = rValue.toBoolean();
-            break;
         case XML_ELEMENT(LO_EXT, XML_HIDDEN):
             mbHidden = rValue.toBoolean();
             break;
