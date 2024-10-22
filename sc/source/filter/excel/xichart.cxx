@@ -2239,6 +2239,7 @@ void XclImpChType::ReadChType( XclImpStream& rStrm )
         case EXC_ID_CHAREA:
         case EXC_ID_CHRADARLINE:
         case EXC_ID_CHRADARAREA:
+        case EXC_ID_CHSURFACE:
             maData.mnFlags = rStrm.ReaduInt16();
         break;
 
@@ -2266,10 +2267,6 @@ void XclImpChType::ReadChType( XclImpStream& rStrm )
             }
             else
                 maData.mnFlags = 0;
-        break;
-
-        case EXC_ID_CHSURFACE:
-            maData.mnFlags = rStrm.ReaduInt16();
         break;
 
         default:
