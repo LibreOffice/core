@@ -33,7 +33,7 @@ def main():
     b_pdf = args.b_pdf + "[" + args.page + "]"
     run(["convert", "-density", args.density, b_pdf, "-colorspace", "RGB", b_png.name])
     composite_png = tempfile.NamedTemporaryFile(suffix=".png")
-    run(["convert", "-composite", a_png.name, b_png.name, composite_png.name])
+    run(["convert", a_png.name, b_png.name, "-composite", composite_png.name])
     run(["convert", composite_png.name, "-background", "white", "-flatten", args.diff_png])
 
 if __name__ == "__main__":
