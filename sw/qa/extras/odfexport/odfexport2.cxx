@@ -547,6 +547,12 @@ CPPUNIT_TEST_FIXTURE(Test, tdf99631)
     assertXPathContent(pXmlDoc2, "//config:config-item[@config:name='VisibleAreaHeight']"_ostr, u"1355"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, tdf163575)
+{
+    // crashes/assert at export time
+    loadAndReload("tdf163575.docx");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, tdf145871)
 {
     loadAndReload("tdf145871.odt");
