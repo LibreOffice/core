@@ -90,6 +90,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/lokhelper.hxx>
 #include <SfxRedactionHelper.hxx>
 
 #include <com/sun/star/util/XCloseable.hpp>
@@ -614,6 +615,27 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             else
             {
+                // See if a signing cert is passed as a parameter: if so, parse that.
+                std::string aSignatureCert;
+                std::string aSignatureKey;
+                const SfxStringItem* pSignatureCert = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
+                if (pSignatureCert)
+                {
+                    aSignatureCert = pSignatureCert->GetValue().toUtf8();
+                }
+                const SfxStringItem* pSignatureKey = rReq.GetArg<SfxStringItem>(FN_PARAM_2);
+                if (pSignatureKey)
+                {
+                    aSignatureKey = pSignatureKey->GetValue().toUtf8();
+                }
+                SfxViewFrame* pFrame = GetFrame();
+                SfxViewShell* pViewShell = pFrame ? pFrame->GetViewShell() : nullptr;
+                if (!aSignatureCert.empty() && !aSignatureKey.empty() && pViewShell)
+                {
+                    xCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                    pViewShell->SetSigningCertificate(xCertificate);
+                }
+
                 // Async, all code before return has to go into the callback.
                 SignDocumentContent(pDialogParent, [this, pDialogParent] (bool bSigned) {
                     AfterSignContent(bSigned, pDialogParent);
