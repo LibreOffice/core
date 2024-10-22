@@ -140,7 +140,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, weld::Button&, rButton, void)
         std::shared_ptr<const SfxFilter> pFlt = aIter.First();
         while( pFlt )
         {
-            if( pFlt && pFlt->IsAllowedAsTemplate() )
+            if( pFlt->IsAllowedAsTemplate() )
             {
                 const OUString sWild = pFlt->GetWildcard().getGlob();
                 xFP->appendFilter( pFlt->GetUIName(), sWild );
