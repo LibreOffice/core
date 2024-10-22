@@ -412,7 +412,7 @@ def run_tool(task_queue, failed_files, dontstop, noexclude, checknamespaces, fin
             retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude, checknamespaces, finderrors)
             if finderrors:
                 if p.returncode == 1:
-                    print("Running the IWYU process returned error code:\n",invocation)
+                    print("Running the IWYU process returned error code:\n" + invocation)
             if retcode == -1 and not checknamespaces:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
