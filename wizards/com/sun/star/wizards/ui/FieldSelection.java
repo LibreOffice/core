@@ -169,7 +169,7 @@ public class FieldSelection
             Integer cmdShiftButtonPosX = Integer.valueOf((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
             Integer ListBoxPosY = Integer.valueOf(CompPosY + lblVertiDist + lblHeight);
             Integer ListBoxHeight = Integer.valueOf(CompHeight - 8 - 2);
-            Integer SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
+            Integer SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist + 2);
 
             IStep = Integer.valueOf(_iStep);
             if (bshowFourButtons)
