@@ -1618,7 +1618,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
             {
                 if (SwSectionFrame *const pSection = pLay->FindSctFrame())
                 {
-                    if (pSection && pSection->ContainsAny() == pFrame)
+                    if (pSection->ContainsAny() == pFrame)
                     {   // tdf#146258 section PrtArea depends on paragraph upper margin
                         pSection->InvalidatePrt();
                     }
