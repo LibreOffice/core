@@ -274,6 +274,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     }
                     break;
                 case css::drawing::MeasureTextVertPos_CENTERED:
+                case css::drawing::MeasureTextVertPos_AUTO:
                     switch( eHPos )
                     {
                     case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
@@ -290,16 +291,6 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MB; break;
                     case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RB; break;
                     case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MB; break;
-                    default: break;
-                    }
-                    break;
-                case css::drawing::MeasureTextVertPos_AUTO:
-                    switch( eHPos )
-                    {
-                    case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
-                    case css::drawing::MeasureTextHorzPos_INSIDE:         eRP = RectPoint::MM; break;
-                    case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:   eRP = RectPoint::RM; break;
-                    case css::drawing::MeasureTextHorzPos_AUTO:          eRP = RectPoint::MM; break;
                     default: break;
                     }
                     break;
