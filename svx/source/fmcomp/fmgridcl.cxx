@@ -800,10 +800,9 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
         std::unique_ptr<SfxBoolItem> pItem;
         SfxItemState eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
-        if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
+        if (eState >= SfxItemState::DEFAULT && pItem)
         {
-            bool bChecked = pItem && pItem->GetValue();
-            rMenu.set_active(u"column"_ustr, bChecked);
+            rMenu.set_active(u"column"_ustr, pItem->GetValue());
         }
     }
 }
