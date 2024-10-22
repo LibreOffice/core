@@ -660,6 +660,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Hyperlink</value>
         </prop>
+        <prop oor:name="TargetURL" oor:type="xs:string">
+          <value>.uno:HyperlinkDialog</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertLinebreak" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
