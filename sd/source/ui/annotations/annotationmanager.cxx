@@ -1011,7 +1011,10 @@ void AnnotationManagerImpl::SyncAnnotationObjects()
         SdrObject* pObject = xAnnotation->findAnnotationObject();
 
         if (pObject)
+        {
+            nIndex++;
             continue;
+        }
 
         if (!bAnnotatonInserted && mpDoc->IsUndoEnabled())
             mpDoc->BegUndo(SdResId(STR_ANNOTATION_UNDO_INSERT));
