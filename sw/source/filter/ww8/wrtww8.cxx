@@ -2106,11 +2106,11 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
                     0, static_cast<const SwTextNode*>(pCNd)->GetText().getLength());
                 if ( const SvxCharRotateItem * pRotate = aCoreSet.GetItemIfSet(RES_CHRATR_ROTATE))
                 {
-                    if(pRotate && pRotate->GetValue() == 900_deg10)
+                    if(pRotate->GetValue() == 900_deg10)
                     {
                         nFlags = nFlags | 0x0004 | 0x0008;
                     }
-                    else if(pRotate && pRotate->GetValue() == 2700_deg10 )
+                    else if(pRotate->GetValue() == 2700_deg10 )
                     {
                         nFlags = nFlags | 0x0004 | 0x0010;
                     }
