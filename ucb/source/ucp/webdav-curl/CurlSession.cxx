@@ -1105,9 +1105,7 @@ auto CurlProcessor::ProcessRequestImpl(
                 {
                     // Sharepoint 2016 workaround: contains unencoded U+0020
                     OUString const redirectURL(::rtl::Uri::encode(
-                        pRedirectURL
-                            ? OUString(pRedirectURL, strlen(pRedirectURL), RTL_TEXTENCODING_UTF8)
-                            : OUString(),
+                        OUString(pRedirectURL, strlen(pRedirectURL), RTL_TEXTENCODING_UTF8),
                         rtl_UriCharClassUric, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8));
 
                     throw DAVException(DAVException::DAV_HTTP_REDIRECT, redirectURL);
