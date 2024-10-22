@@ -218,8 +218,6 @@ class SwUINumRuleItem;
 
 #define FN_INSERT_REF_FIELD     (FN_INSERT + 13)  /* Insert Reference Field */
 
-#define FN_INSERT_HYPERLINK     (FN_INSERT + 14)  /* Character dialogue / hyperlink page */
-
 #define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Newline */
 #define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* Field dialog for mail merge*/
 #define FN_INSERT_CONTENT_CONTROL (FN_INSERT + 20)  /* Rich text content control */
