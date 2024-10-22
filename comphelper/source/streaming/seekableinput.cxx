@@ -108,7 +108,7 @@ void OSeekableInputWrapper::PrepareCopy_Impl()
             m_xCopyInput.set( xTempOut, uno::UNO_QUERY );
             if ( m_xCopyInput.is() )
             {
-                m_xCopySeek = xTempSeek;
+                m_xCopySeek = std::move(xTempSeek);
                 m_pCopyByteReader = dynamic_cast<comphelper::ByteReader*>(xTempOut.get());
                 assert(m_pCopyByteReader);
             }

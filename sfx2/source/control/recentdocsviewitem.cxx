@@ -385,7 +385,7 @@ void RecentDocsViewItem::OpenDocument()
     // executed. VCL is not able to survive this as it wants to call listeners
     // after select!!!
     sfx2::LoadRecentFile *const pLoadRecentFile = new sfx2::LoadRecentFile;
-    pLoadRecentFile->xDispatch = xDispatch;
+    pLoadRecentFile->xDispatch = std::move(xDispatch);
     pLoadRecentFile->aTargetURL = std::move(aTargetURL);
     pLoadRecentFile->aArgSeq = aArgsList;
     pLoadRecentFile->pView = &mrParentView;

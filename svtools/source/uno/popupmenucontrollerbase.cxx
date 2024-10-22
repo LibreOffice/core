@@ -324,7 +324,7 @@ void PopupMenuControllerBase::initializeImpl( std::unique_lock<std::mutex>& /*rG
 
     if ( xFrame.is() && !aCommandURL.isEmpty() )
     {
-        m_xFrame        = xFrame;
+        m_xFrame        = std::move(xFrame);
         m_aCommandURL   = aCommandURL;
         m_aBaseURL      = determineBaseURL( aCommandURL );
         m_bInitialized  = true;

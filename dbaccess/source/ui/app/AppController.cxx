@@ -2034,7 +2034,7 @@ void OApplicationController::renameEntry()
                                     Reference<XHierarchicalNameContainer> xParent(xChild->getParent(),UNO_QUERY);
                                     if ( xParent.is() )
                                     {
-                                        xHNames = xParent;
+                                        xHNames = std::move(xParent);
                                         Reference<XPropertySet>(xRename,UNO_QUERY_THROW)->getPropertyValue(PROPERTY_NAME) >>= sName;
                                     }
                                 }

@@ -985,7 +985,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
             xValue, UNO_QUERY );
         if( xTmpObjectResolver.is() )
-            mxEmbeddedResolver = xTmpObjectResolver;
+            mxEmbeddedResolver = std::move(xTmpObjectResolver);
 
         uno::Reference<beans::XPropertySet> xTmpPropSet( xValue, UNO_QUERY );
         if( xTmpPropSet.is() )

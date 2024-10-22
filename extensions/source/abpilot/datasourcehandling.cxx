@@ -118,7 +118,7 @@ namespace abp
         if (xContext.is())
         {
             //  xDynamicContext->registerObject( _rName, xNewDataSource );
-            _rxNewDataSource = xNewDataSource;
+            _rxNewDataSource = std::move(xNewDataSource);
         }
     }
 

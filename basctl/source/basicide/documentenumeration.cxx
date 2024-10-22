@@ -117,7 +117,7 @@ namespace basctl::docs {
 
                     // create a DocumentDescriptor
                     DocumentDescriptor aDescriptor;
-                    aDescriptor.xModel = xModel;
+                    aDescriptor.xModel = std::move(xModel);
                     lcl_getDocumentControllers_nothrow( aDescriptor );
 
                     // consult filter, if there is one

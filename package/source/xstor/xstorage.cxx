@@ -1172,7 +1172,7 @@ void OStorage_Impl::Commit()
     }
     else if ( !m_bCommited )
     {
-        m_xPackageFolder = xNewPackageFolder;
+        m_xPackageFolder = std::move(xNewPackageFolder);
         m_bCommited = true;
     }
 

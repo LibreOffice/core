@@ -3738,7 +3738,7 @@ void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             Reference < XComponentContext > xFirstParamContext;
             Any aArg1 = sbxToUnoValue(pParams->Get(1));
             if( (aArg1 >>= xFirstParamContext) && xFirstParamContext.is() )
-                xContextToUse = xFirstParamContext;
+                xContextToUse = std::move(xFirstParamContext);
         }
 
         if( !xContextToUse.is() )

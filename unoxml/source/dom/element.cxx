@@ -198,7 +198,7 @@ namespace DOM
         {}
 
         // restore after children have been processed
-        i_rContext.mxCurrentHandler = xParentHandler;
+        i_rContext.mxCurrentHandler = std::move(xParentHandler);
         popContext(i_rContext);
     }
 

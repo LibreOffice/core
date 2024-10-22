@@ -151,7 +151,7 @@ bool XMLSectionExport::GetIndex(
             // if the enclosing section is "our" section, then we are an index!
             if (rSection == xEnclosingSection)
             {
-                rIndex = xDocumentIndex;
+                rIndex = std::move(xDocumentIndex);
                 bRet = true;
             }
             // else: index header or regular section

@@ -1774,7 +1774,7 @@ void CustomAnimationPane::onAdd()
         if( getTextSelection( maViewSelection, xShape, aParaList ) )
         {
             ParagraphTarget aParaTarget;
-            aParaTarget.Shape = xShape;
+            aParaTarget.Shape = std::move(xShape);
 
             for( const auto& rPara : aParaList )
             {

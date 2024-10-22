@@ -465,7 +465,7 @@ namespace cppcanvas::internal
                     xTextLayout->applyKashidaPositions(aKashidaPositions);
                 }
 
-                io_rTextLayout = xTextLayout;
+                io_rTextLayout = std::move(xTextLayout);
             }
 
 

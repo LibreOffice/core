@@ -159,9 +159,9 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     // SAFE -> ------------------------------
     aLock.lock();
 
-    m_xGlobalCfg = xGlobalCfg;
-    m_xModuleCfg = xModuleCfg;
-    m_xDocCfg    = xDocCfg   ;
+    m_xGlobalCfg = std::move(xGlobalCfg);
+    m_xModuleCfg = std::move(xModuleCfg);
+    m_xDocCfg    = std::move(xDocCfg);
 
     aLock.unlock();
     // <- SAFE ----------------------------------

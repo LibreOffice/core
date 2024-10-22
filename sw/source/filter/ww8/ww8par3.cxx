@@ -2586,7 +2586,7 @@ bool SwMSConvertControls::InsertControl(
     xControlShape->setControl( xControlModel );
 
     if (pShape)
-        *pShape = xShape;
+        *pShape = std::move(xShape);
 
     return true;
 }

@@ -132,7 +132,7 @@ namespace DOM
         Reference< XDocumentBuilder > aBuilder(DocumentBuilder::create(m_xContext));
         Reference< XDocument > aDocument = aBuilder->newDocument();
         m_aNodeStack.push(aDocument);
-        m_aDocument = aDocument;
+        m_aDocument = std::move(aDocument);
         m_aState = SAXDocumentBuilderState_BUILDING_DOCUMENT;
     }
 

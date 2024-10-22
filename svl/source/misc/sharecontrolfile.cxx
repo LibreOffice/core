@@ -93,7 +93,7 @@ ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
         m_xInputStream.set( xStream->getInputStream(), uno::UNO_SET_THROW );
         m_xOutputStream.set( xStream->getOutputStream(), uno::UNO_SET_THROW );
         m_xTruncate.set( m_xOutputStream, uno::UNO_QUERY_THROW );
-        m_xStream = xStream;
+        m_xStream = std::move(xStream);
     }
 
     if ( !IsValid() )

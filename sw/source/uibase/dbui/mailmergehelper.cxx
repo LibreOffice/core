@@ -128,7 +128,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                         rConfigItem.GetInServerPort(),
                         u"Insecure"_ustr);
             xInMailService->connect(xConnectionContext, xAuthenticator);
-            rxInMailService = xInMailService;
+            rxInMailService = std::move(xInMailService);
         }
         uno::Reference< mail::XAuthenticator> xAuthenticator;
         if(rConfigItem.IsAuthentication() &&

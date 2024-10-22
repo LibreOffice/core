@@ -152,7 +152,7 @@ Reference< XDriver > SAL_CALL OPoolCollection::getDriverByURL( const OUString& _
         }
         if (xExistentProxy.is())
         {
-            xDriver = xExistentProxy;
+            xDriver = std::move(xExistentProxy);
         }
         else
         {   // create a new proxy for the driver

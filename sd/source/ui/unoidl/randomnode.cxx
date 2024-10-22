@@ -527,7 +527,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
     }
 
     if( !maTarget.hasValue() && !mxFirstNode.is() )
-        mxFirstNode = xAnimate;
+        mxFirstNode = std::move(xAnimate);
 
     return newChild;
 }

@@ -1853,17 +1853,17 @@ bool XclExpChSeries::ConvertDataSeries(
             {
                 if( !xYValueSeq.is() && (aRole == EXC_CHPROP_ROLE_YVALUES) )
                 {
-                    xYValueSeq = xTmpValueSeq;
+                    xYValueSeq = std::move(xTmpValueSeq);
                     if( !xTitleSeq.is() )
                         xTitleSeq = rLabeledSeq->getLabel(); // ignore role of label sequence
                 }
                 else if( !xXValueSeq.is() && !rTypeInfo.mbCategoryAxis && (aRole == EXC_CHPROP_ROLE_XVALUES) )
                 {
-                    xXValueSeq = xTmpValueSeq;
+                    xXValueSeq = std::move(xTmpValueSeq);
                 }
                 else if( !xBubbleSeq.is() && (rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES) && (aRole == EXC_CHPROP_ROLE_SIZEVALUES) )
                 {
-                    xBubbleSeq = xTmpValueSeq;
+                    xBubbleSeq = std::move(xTmpValueSeq);
                     xTitleSeq = rLabeledSeq->getLabel();     // ignore role of label sequence
                 }
             }

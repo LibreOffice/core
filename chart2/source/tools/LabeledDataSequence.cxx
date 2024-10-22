@@ -70,8 +70,8 @@ LabeledDataSequence::LabeledDataSequence( const LabeledDataSequence& rSource ) :
     if( xValuesCloneable.is())
         xNewValues.set( xValuesCloneable->createClone(), uno::UNO_QUERY );
 
-    m_xData = xNewValues;
-    m_xLabel = xNewLabel;
+    m_xData = std::move(xNewValues);
+    m_xLabel = std::move(xNewLabel);
 
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );

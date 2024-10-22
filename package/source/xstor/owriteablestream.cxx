@@ -2849,7 +2849,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
             throw lang::IllegalArgumentException(); // TODO
         }
 
-        m_pImpl->m_xNewRelInfoStream = xInRelStream;
+        m_pImpl->m_xNewRelInfoStream = std::move(xInRelStream);
         m_pImpl->m_aNewRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
         m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
     }

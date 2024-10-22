@@ -520,7 +520,7 @@ void FmPropBrw::impl_ensurePropertyBrowser_nothrow( FmFormShell* _pFormShell )
     {
         DBG_UNHANDLED_EXCEPTION("svx");
     }
-    m_xLastKnownDocument = xDocument;
+    m_xLastKnownDocument = std::move(xDocument);
 }
 
 

@@ -982,7 +982,7 @@ void PresenterWindowManager::ProvideBackgroundBitmap()
     }
     else
     {
-        mxScaledBackgroundBitmap = xBitmap;
+        mxScaledBackgroundBitmap = std::move(xBitmap);
     }
 }
 

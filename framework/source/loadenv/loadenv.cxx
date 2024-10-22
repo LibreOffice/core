@@ -1417,9 +1417,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
 
     css::uno::Reference< css::frame::XFrame > xResult;
     if (xTask.is())
-        xResult = xTask;
+        xResult = std::move(xTask);
     else if (xHiddenTask.is())
-        xResult = xHiddenTask;
+        xResult = std::move(xHiddenTask);
 
     if (xResult.is())
     {

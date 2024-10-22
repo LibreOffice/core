@@ -3433,13 +3433,13 @@ void FmXFormShell::CreateExternalView_Lock()
             Reference< XResultSet> xForm(xCurrentNavController->getModel(), UNO_QUERY);
             aArg.Value <<= xForm;
 
-            m_xExternalDisplayedForm = xForm;
+            m_xExternalDisplayedForm = std::move(xForm);
                 // do this before dispatching the "attach" command, as the attach may result in a call to our queryDispatch (for the FormSlots)
                 // which needs the m_xExternalDisplayedForm
 
             xAttachDispatch->dispatch(aAttachURL, Sequence< PropertyValue>(&aArg, 1));
 
-            m_xExtViewTriggerController = xCurrentNavController;
+            m_xExtViewTriggerController = std::move(xCurrentNavController);
 
             // we want to know modifications done in the external view
             // if the external controller is a XFormController we can use all our default handlings for it

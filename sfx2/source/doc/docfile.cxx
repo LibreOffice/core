@@ -4799,7 +4799,7 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
             SetPhysicalName_Impl( OUString() );
             SetName( aOrigURL );
             GetMedium_Impl();
-            pImpl->xStorage = xStorage;
+            pImpl->xStorage = std::move(xStorage);
         }
     }
 

@@ -312,8 +312,8 @@ void lcl_clear( STLCONTAINER& i_container )
         if ( !xDelegator.is() )
             throw IllegalArgumentException( OUString(), *this, 1 );
 
-        m_delegator = xDelegator;
-        m_collator = xCollator;
+        m_delegator = std::move(xDelegator);
+        m_collator = std::move(xCollator);
 
         m_delegator->addGridDataListener( this );
 

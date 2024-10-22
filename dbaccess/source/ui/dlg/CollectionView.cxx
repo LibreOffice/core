@@ -229,7 +229,7 @@ IMPL_LINK_NOARG(OCollectionView, Dbl_Click_FileView, weld::TreeView&, bool)
                     xContent.set(xNameAccess->getByName(sSubFolder),UNO_QUERY);
                 if ( xContent.is() )
                 {
-                    m_xContent = xContent;
+                    m_xContent = std::move(xContent);
                     Initialize();
                     initCurrentPath();
                 }

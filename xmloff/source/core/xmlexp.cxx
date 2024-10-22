@@ -681,7 +681,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             xValue, UNO_QUERY );
         if( xTmpDocHandler.is() )
         {
-            mxHandler = xTmpDocHandler;
+            mxHandler = std::move(xTmpDocHandler);
             rAny >>= mxExtHandler;
 
             if (mxNumberFormatsSupplier.is() && mpNumExport == nullptr)

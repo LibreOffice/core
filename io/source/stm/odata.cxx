@@ -1149,7 +1149,7 @@ void OObjectInputStream::connectToMarkable()
         Reference<  XMarkableStream > markable( rTry , UNO_QUERY );
         if( markable.is() )
         {
-            m_rMarkable = markable;
+            m_rMarkable = std::move(markable);
             break;
         }
         Reference < XActiveDataSink > sink( rTry , UNO_QUERY );
