@@ -221,6 +221,7 @@ SwBidiPortion::SwBidiPortion(TextFrameIndex const nEnd, sal_uInt8 nLv)
 
 SwTwips SwBidiPortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo& rInf ) const
 {
+    nSpaceAdd = nSpaceAdd > LONG_MAX/2 ? LONG_MAX/2 - nSpaceAdd : nSpaceAdd;
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt(rInf)) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
@@ -507,6 +508,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTextFormatInfo &rInf )
 
 SwTwips SwDoubleLinePortion::CalcSpacing( tools::Long nSpaceAdd, const SwTextSizeInfo & ) const
 {
+    nSpaceAdd = nSpaceAdd > LONG_MAX/2 ? LONG_MAX/2 - nSpaceAdd : nSpaceAdd;
     return HasTabulator() ? 0 : sal_Int32(GetSpaceCnt()) * nSpaceAdd / SPACING_PRECISION_FACTOR;
 }
 
