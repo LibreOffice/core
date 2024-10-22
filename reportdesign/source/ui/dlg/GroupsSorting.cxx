@@ -1093,9 +1093,8 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
         case report::GroupOn::DEFAULT:
             nPos = 0;
             break;
+        case report::GroupOn::INTERVAL:
         case report::GroupOn::PREFIX_CHARACTERS:
-            nPos = 1;
-            break;
         case report::GroupOn::YEAR:
             nPos = 1;
             break;
@@ -1116,9 +1115,6 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
             break;
         case report::GroupOn::MINUTE:
             nPos = 7;
-            break;
-        case report::GroupOn::INTERVAL:
-            nPos = 1;
             break;
         default:
             nPos = 0;
