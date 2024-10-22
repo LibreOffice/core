@@ -379,6 +379,12 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         if (pOpt)
         {
             *pOpt = *pAddPrinterAttr;
+            SwPagePreview* pPagePreview = dynamic_cast<SwPagePreview*>( SfxViewShell::Current());
+            if( pPagePreview !=nullptr )
+            {
+                pPagePreview->GetViewShell()->getIDocumentDeviceAccess().setPrintData(*pOpt);
+                pPagePreview->PrintSettingsChanged();
+            }
         }
     }
 

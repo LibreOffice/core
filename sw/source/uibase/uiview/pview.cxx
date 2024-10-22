@@ -579,6 +579,10 @@ void SwPagePreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
+void SwPagePreviewWin::ReInit()
+{
+    mpPgPreviewLayout->ReInit();
+}
 /** help method to execute SfxRequest FN_PAGEUP and FN_PAGEDOWN */
 void SwPagePreview::ExecPgUpAndPgDown( const bool  _bPgUp,
                                         SfxRequest* _pReq )
@@ -1388,6 +1392,12 @@ void SwPagePreview::SetVisArea( const tools::Rectangle &rRect )
     ChgPage( SwPagePreviewWin::MV_NEWWINSIZE );
 
     m_pViewWin->Invalidate();
+}
+
+void SwPagePreview::PrintSettingsChanged()
+{
+    m_pViewWin->ReInit();
+    ChgPage( SwPagePreviewWin::MV_DOC_STT );
 }
 
 IMPL_LINK(SwPagePreview, HoriScrollHdl, weld::Scrollbar&, rScrollbar, void)

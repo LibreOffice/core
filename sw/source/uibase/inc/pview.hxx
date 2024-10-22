@@ -152,6 +152,8 @@ public:
     bool SetBookPreviewMode( const bool _bBookPreview );
 
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() override;
+
+    void ReInit();
 };
 
 /**
@@ -288,6 +290,8 @@ public:
         scrollbar.
     */
     void SetVScrollbarThumbPos( const sal_uInt16 _nNewThumbPos );
+
+    void PrintSettingsChanged();
 
     SwPagePreview(SfxViewFrame& rFrame, SfxViewShell*);
     virtual ~SwPagePreview() override;
