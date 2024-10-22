@@ -421,9 +421,6 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                 case NumberFormat::ALL:
                     nNumberFormat = NumberFormat::ALL;
                     break;
-                case NumberFormat::DEFINED:
-                    nNumberFormat = NumberFormat::TEXT;
-                    break;
                 case NumberFormat::DATE:
                     switch(_nOldNumberFormat)
                     {
@@ -459,12 +456,10 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                 case NumberFormat::CURRENCY:
                     switch(_nOldNumberFormat)
                     {
-                        case NumberFormat::NUMBER:
-                            nNumberFormat = NumberFormat::CURRENCY;
-                            break;
                         case NumberFormat::CURRENCY:
                             nNumberFormat = _nOldNumberFormat;
                             break;
+                        case NumberFormat::NUMBER:
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::CURRENCY;
                             break;
@@ -496,6 +491,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                 case NumberFormat::TEXT:
                 case NumberFormat::UNDEFINED:
                 case NumberFormat::LOGICAL:
+                case NumberFormat::DEFINED:
                     nNumberFormat = NumberFormat::TEXT; // Text overwrites everything
                     break;
                 case NumberFormat::DATETIME:
@@ -548,13 +544,6 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
 
         switch ( nType )
         {
-            case NumberFormat::ALL:
-                nDataType  = DataType::DOUBLE;
-                break;
-            case NumberFormat::DEFINED:
-                nDataType   = DataType::VARCHAR;
-                nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
-                break;
             case NumberFormat::DATE:
                 nDataType  = DataType::DATE;
                 break;
@@ -569,12 +558,14 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
                 nScale      = 4;
                 nLength     = 19;
                 break;
+            case NumberFormat::ALL:
             case NumberFormat::NUMBER:
             case NumberFormat::SCIENTIFIC:
             case NumberFormat::FRACTION:
             case NumberFormat::PERCENT:
                 nDataType  = DataType::DOUBLE;
                 break;
+            case NumberFormat::DEFINED:
             case NumberFormat::TEXT:
             case NumberFormat::UNDEFINED:
             case NumberFormat::LOGICAL:
