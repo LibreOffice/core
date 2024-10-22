@@ -2332,8 +2332,6 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
             Append(u"\"");
             break;
         case TNUMBER:
-            Append( pNode->GetToken().aText );
-            break;
         case TIDENT:
             Append( pNode->GetToken().aText );
             break;
@@ -2460,9 +2458,6 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case MS_ALEPH:
             Append(u"aleph");
             break;
-        case 0x0362:
-            Append(u"widevec");
-            break;
         case MS_DLARROW:
             Append(u"dlarrow");
             break;
@@ -2500,8 +2495,6 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
             Append(u"infinity");
             break;
         case 0x22b2: // NORMAL SUBGROUP OF
-            Append(OUStringChar(cChar));
-            break;
         case 0x22b3: // CONTAINS AS NORMAL SUBGROUP
             Append(OUStringChar(cChar));
             break;
@@ -2529,6 +2522,7 @@ void SmNodeToTextVisitor::Visit( SmMathSymbolNode* pNode )
         case 0xe096:
             Append(u"widetilde");
             break;
+        case 0x0362:
         case 0xe098:
             Append(u"widevec");
             break;
