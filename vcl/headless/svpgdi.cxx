@@ -46,12 +46,11 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-bool SvpSalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+bool SvpSalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return SalGraphics::ShouldDownscaleIconsAtSurface(pScaleOut);
-    if (pScaleOut)
-        *pScaleOut = m_aCairoCommon.m_fScale;
+        return SalGraphics::ShouldDownscaleIconsAtSurface(rScaleOut);
+    rScaleOut = m_aCairoCommon.m_fScale;
     return true;
 }
 

@@ -399,7 +399,7 @@ public:
     // surface is hidpi then pScaleOut contains the scaling factor. So we can
     // create larger hires bitmaps which we know will be logically scaled down
     // by this factor but physically just copied
-    virtual bool ShouldDownscaleIconsAtSurface(double* pScaleOut) const;
+    virtual bool ShouldDownscaleIconsAtSurface(double& rScaleOut) const;
 
 
 #if ENABLE_CAIRO_CANVAS

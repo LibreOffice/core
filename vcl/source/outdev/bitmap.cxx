@@ -162,7 +162,7 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                     // but hidpi surfaces like the cairo one have their own scale, so don't downscale
                     // past the surface scaling which can retain the extra detail
                     double fScale(1.0);
-                    if (mpGraphics->ShouldDownscaleIconsAtSurface(&fScale))
+                    if (mpGraphics->ShouldDownscaleIconsAtSurface(fScale))
                     {
                         nScaleX *= fScale;
                         nScaleY *= fScale;

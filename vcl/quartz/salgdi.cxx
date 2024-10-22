@@ -331,12 +331,11 @@ void AquaSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
 #ifdef MACOSX
 
-bool AquaSalGraphics::ShouldDownscaleIconsAtSurface(double* pScaleOut) const
+bool AquaSalGraphics::ShouldDownscaleIconsAtSurface(double& rScaleOut) const
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return SalGraphics::ShouldDownscaleIconsAtSurface(pScaleOut);
-    if (pScaleOut)
-        *pScaleOut = sal::aqua::getWindowScaling();
+        return SalGraphics::ShouldDownscaleIconsAtSurface(rScaleOut);
+    rScaleOut = sal::aqua::getWindowScaling();
     return true;
 }
 

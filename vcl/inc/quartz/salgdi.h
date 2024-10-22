@@ -474,7 +474,7 @@ public:
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
 #ifdef MACOSX
-    virtual bool            ShouldDownscaleIconsAtSurface(double* pScaleOut) const override;
+    virtual bool            ShouldDownscaleIconsAtSurface(double& rScaleOut) const override;
 #endif
 
     virtual SystemGraphicsData

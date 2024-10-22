@@ -68,7 +68,7 @@ bool ImplImage::loadStockAtScale(SalGraphics* pGraphics, BitmapEx &rBitmapEx)
     if (aIconTheme.endsWith("_svg"))
     {
 #endif
-        if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(&fScale)) // scale at the surface
+        if (pGraphics && pGraphics->ShouldDownscaleIconsAtSurface(fScale)) // scale at the surface
         {
             nScalePercentage = fScale * 100.0;
             eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
@@ -164,7 +164,7 @@ BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled, SalGraphics* pGr
     if ((isStock() || mxMetaFile) && pGraphics)
     {   // check we have the right bitmap cached.
         double fScale = 1.0;
-        pGraphics->ShouldDownscaleIconsAtSurface(&fScale);
+        pGraphics->ShouldDownscaleIconsAtSurface(fScale);
         Size aTarget(maSizePixel.Width()*fScale,
                      maSizePixel.Height()*fScale);
         if (maBitmapEx.GetSizePixel() != aTarget)
