@@ -61,7 +61,7 @@ public:
                                                                             FieldUnit) override;
     virtual std::unique_ptr<weld::FormattedSpinButton>
     weld_formatted_spin_button(const OUString&) override;
-    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OUString&) override;
+    virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OUString& rId) override;
     virtual std::unique_ptr<weld::EntryTreeView>
     weld_entry_tree_view(const OUString&, const OUString&, const OUString&) override;
     virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OUString&) override;

@@ -13,6 +13,7 @@
 
 #include <QtBuilder.hxx>
 #include <QtInstanceCheckButton.hxx>
+#include <QtInstanceComboBox.hxx>
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
@@ -230,10 +231,12 @@ QtInstanceBuilder::weld_formatted_spin_button(const OUString&)
     return nullptr;
 }
 
-std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString&)
+std::unique_ptr<weld::ComboBox> QtInstanceBuilder::weld_combo_box(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QComboBox* pComboBox = m_xBuilder->get<QComboBox>(rId);
+    std::unique_ptr<weld::ComboBox> xRet(pComboBox ? std::make_unique<QtInstanceComboBox>(pComboBox)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::EntryTreeView>

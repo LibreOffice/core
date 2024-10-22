@@ -15,6 +15,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGroupBox>
@@ -142,6 +143,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkCheckButton")
     {
         pObject = new QCheckBox(pParentWidget);
+    }
+    else if (sName == u"GtkComboBoxText")
+    {
+        pObject = new QComboBox(pParentWidget);
     }
     else if (sName == u"GtkDialog")
     {
