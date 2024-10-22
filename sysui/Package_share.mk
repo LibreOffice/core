@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,sysui_share,$(share_WORKDIR)/libreoffice))
+$(eval $(call gb_Package_Package,sysui_share,$(share_WORKDIR)/zetaoffice))
 
 $(eval $(call gb_Package_add_files,sysui_share,share/xdg,\
 	$(addsuffix .desktop,$(LAUNCHERLIST)) \
