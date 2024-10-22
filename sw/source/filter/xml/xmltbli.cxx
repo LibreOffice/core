@@ -1926,7 +1926,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             // default num format?
             if( const SwTableBoxNumFormat* pNumFormat = pBoxFormat2->GetItemIfSet( RES_BOXATR_FORMAT, false ) )
             {
-                if (pNumFormat && (pNumFormat->GetValue() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
+                if ((pNumFormat->GetValue() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 {
                     // only one text node?
                     SwNodeIndex aNodeIndex( *(pCell->GetStartNode()), 1 );
@@ -1980,8 +1980,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                     const SwDoc* pDoc = m_pBoxFormat->GetDoc();
                     const SvNumberFormatter* pNumberFormatter = pDoc ?
                         pDoc->GetNumberFormatter() : nullptr;
-                    if( pNumFormat != nullptr && pNumberFormatter &&
-                        !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
+                    if( pNumberFormatter && !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
                         m_pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
                 }
             }
