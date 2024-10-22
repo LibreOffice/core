@@ -982,21 +982,15 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 {
     SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
-    bool bIsAction = false;
-    {
-        DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
-        if(!pChartWindow || !pDrawViewWrapper)
-            return;
-        bIsAction = m_pDrawViewWrapper->IsAction();
-    }
+    DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper.get();
+    if(!pChartWindow || !pDrawViewWrapper)
+        return;
+    bool bIsAction = m_pDrawViewWrapper->IsAction();
 
     // pop-up menu
     if(rCEvt.GetCommand() == CommandEventId::ContextMenu && !bIsAction)
     {
-        {
-            if(pChartWindow)
-                pChartWindow->ReleaseMouse();
-        }
+        pChartWindow->ReleaseMouse();
 
         if( m_aSelection.isSelectionDifferentFromBeforeMouseDown() )
             impl_notifySelectionChangeListeners();
@@ -1006,8 +1000,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         Point aPos( rCEvt.GetMousePosPixel() );
         if( !rCEvt.IsMouseEvent() )
         {
-            if(pChartWindow)
-                aPos = pChartWindow->GetPointerState().maPos;
+            aPos = pChartWindow->GetPointerState().maPos;
         }
 
         OUString aMenuName;
