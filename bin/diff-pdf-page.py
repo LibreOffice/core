@@ -8,6 +8,8 @@
 # red is meant to reduce as fixing progresses. Sample usage:
 #
 # bin/diff-pdf-page.py reference.pdf test.pdf diff.png
+#
+# using the ImageMagick tooling
 
 import argparse
 import tempfile
@@ -26,15 +28,17 @@ def main():
     parser.add_argument("diff_png")
     args = parser.parse_args()
 
+    CONVERT_CMD="convert" # use "magick" if Windows has installed ImageMagick and GhostScript
+
     a_png = tempfile.NamedTemporaryFile(suffix=".png")
     a_pdf = args.a_pdf + "[" + args.page + "]"
-    run(["convert", "-density", args.density, a_pdf, "-colorspace", "RGB", "-fuzz", "95%", "-fill", "red", "-opaque", "black", a_png.name])
+    run([CONVERT_CMD, "-density", args.density, a_pdf, "-colorspace", "RGB", "-fuzz", "95%", "-fill", "red", "-opaque", "black", a_png.name])
     b_png = tempfile.NamedTemporaryFile(suffix=".png")
     b_pdf = args.b_pdf + "[" + args.page + "]"
-    run(["convert", "-density", args.density, b_pdf, "-colorspace", "RGB", b_png.name])
+    run([CONVERT_CMD, "-density", args.density, b_pdf, "-colorspace", "RGB", b_png.name])
     composite_png = tempfile.NamedTemporaryFile(suffix=".png")
-    run(["convert", a_png.name, b_png.name, "-composite", composite_png.name])
-    run(["convert", composite_png.name, "-background", "white", "-flatten", args.diff_png])
+    run([CONVERT_CMD, a_png.name, b_png.name, "-composite", composite_png.name])
+    run([CONVERT_CMD, composite_png.name, "-background", "white", "-flatten", args.diff_png])
 
 if __name__ == "__main__":
     main()
