@@ -4127,8 +4127,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     m_pSerializer->startElementNS(XML_w, XML_rPr);
 
                     // Output the redline item set
-                    if (pChangesSet)
-                        m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
+                    m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
