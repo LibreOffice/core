@@ -47,8 +47,6 @@ void Deflater::init (sal_Int32 nLevelArg, bool bNowrap)
         case Z_OK:
             break;
         case Z_MEM_ERROR:
-            pStream.reset();
-            break;
         case Z_STREAM_ERROR:
             pStream.reset();
             break;
