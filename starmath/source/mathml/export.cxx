@@ -90,11 +90,6 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 
     // Medium item set
     SfxItemSet& rMediumItemSet = rMedium.GetItemSet();
-    if (pDocShell == nullptr)
-    {
-        SAL_WARN("starmath", "Failed to get medium item set");
-        return false;
-    }
 
     // Progress bar ~
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
