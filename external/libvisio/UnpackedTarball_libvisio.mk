@@ -15,9 +15,4 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,0))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libvisio))
 
-$(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
-    external/libvisio/ubsan.patch \
-    external/libvisio/solid-fill-style.patch \
-))
-
 # vim: set noet sw=4 ts=4:
