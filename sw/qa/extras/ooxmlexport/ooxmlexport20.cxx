@@ -259,13 +259,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
     // original inline paragraph, keeping also ODF ToC/PDF bookmark support.
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    // This was 22 (the 5 inline headings were not inline, i.e. normal paragraphs)
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p", 17);
-
-    // Still existing headings (duplicated by alternate content)
-    assertXPath(pXmlDoc, "//w:p", 27);
-    assertXPath(pXmlDoc, "//w:txbxContent/w:p", 10);
-    assertXPath(pXmlDoc, "//w:pStyle[@w:val='Heading2']", 10);
+    // This was 0 (lost style separators)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:rPr/w:specVanish", 7);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo77129)

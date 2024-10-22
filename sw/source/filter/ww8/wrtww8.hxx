@@ -1576,7 +1576,7 @@ public:
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
-    bool HasFlysAt(sal_Int32 nSwPos) const;
+    bool HasFlysAt(sal_Int32 nSwPos, const ww8::Frame** pInlineHeading = nullptr) const;
 
     sal_Int32 WhereNext() const { return m_nCurrentSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }

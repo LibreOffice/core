@@ -2097,7 +2097,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_EG_RPrBase_specVanish:
         if ( nIntValue && !IsStyleSheetImport() )
+        {
+            // put inline heading inside a text frame to get the same layout with ToC/PDF bookmark support
             m_pImpl->m_StreamStateStack.top().bIsInlineParagraph = true;
+            m_pImpl->GetTopContext()->Insert( PROP_INLINE_HEADING, uno::Any( true ), false, PARA_GRAB_BAG );
+        }
         break;
     case NS_ooxml::LN_EG_RPrBase_sz:
     case NS_ooxml::LN_EG_RPrBase_szCs:

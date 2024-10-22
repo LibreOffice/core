@@ -398,6 +398,7 @@ enum PropertyIds
         ,PROP_CURSOR_NOT_IGNORE_TABLES_IN_HF
         ,PROP_PARA_CONNECT_BORDERS
         ,PROP_CHAR_FONT_FAMILY
+        ,PROP_INLINE_HEADING
     };
 
 //Returns the UNO string equivalent to eId.

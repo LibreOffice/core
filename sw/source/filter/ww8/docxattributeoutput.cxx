@@ -3643,6 +3643,12 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     }
     m_aTextEffectsGrabBag.clear();
     m_aTextFillGrabBag.clear();
+
+    if ( m_bParaInlineHeading )
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_specVanish);
+        m_bParaInlineHeading = false;
+    }
 }
 
 void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -10195,6 +10201,8 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             // Handled already in StartParagraph().
         }
+        else if (rGrabBagElement.first == "ParaInlineHeading")
+            m_bParaInlineHeading = true;
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << rGrabBagElement.first );
     }
@@ -10350,7 +10358,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0)
+      m_nParaAfterSpacing(0),
+      m_bParaInlineHeading(false)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
 {
     m_nHyperLinkCount.push_back(0);

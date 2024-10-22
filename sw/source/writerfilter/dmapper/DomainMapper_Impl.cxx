@@ -2773,6 +2773,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         xRangeStart = xParaCursor->getStart();
                         xRangeEnd = xParaCursor->getEnd();
 
+                        comphelper::SequenceAsHashMap aFrameGrabBag;
+                        aFrameGrabBag[u"FrameInlineHeading"_ustr] <<= true;
+
                         // TODO anchor as character
                         std::vector<beans::PropertyValue> aFrameProperties
                         {
@@ -2782,7 +2785,9 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), text::HoriOrientation::LEFT),
                             comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false),
                             comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN),
-                            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN)
+                            comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN),
+                            comphelper::makePropertyValue(u"FrameInteropGrabBag"_ustr,
+                                            aFrameGrabBag.getAsConstPropertyValueList())
                         };
 
                         fillEmptyFrameProperties(aFrameProperties, false);

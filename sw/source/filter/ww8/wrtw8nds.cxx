@@ -179,6 +179,34 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
     return sLinkChainName;
 }
 
+static bool lcl_IsInlineHeading(const ww8::Frame &rFrame)
+{
+    const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
+
+    uno::Reference<drawing::XShape> xShape;
+    const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
+    if (pSdrObj)
+        xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
+    {
+        uno::Sequence<beans::PropertyValue> propList;
+        xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
+        auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
+                                  [](const beans::PropertyValue& rProp) {
+                                      return rProp.Name == "FrameInlineHeading";
+                                  });
+        if (pProp != std::cend(propList))
+            return true;
+    }
+
+    return false;
+}
+
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
     : m_pOld( rExport.m_pChpIter ), m_rExport( rExport )
 {
@@ -724,7 +752,7 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( SwNodeOffset nNodePos )
     return nNodePos == maFlyIter->GetPosition().GetNodeIndex();
 }
 
-bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
+bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos, const ww8::Frame** pInlineHeading) const
 {
     for (const auto& rFly : maFlyFrames)
     {
@@ -732,7 +760,16 @@ bool SwWW8AttrIter::HasFlysAt(sal_Int32 nSwPos) const
         const sal_Int32 nPos = rAnchor.GetContentIndex();
         if (nPos == nSwPos)
         {
-            return true;
+            if ( pInlineHeading )
+            {
+                if ( lcl_IsInlineHeading(rFly) )
+                {
+                    *pInlineHeading = &rFly;
+                    return true;
+                }
+            }
+            else
+                return true;
         }
     }
 
@@ -835,6 +872,10 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
                  {
                        // Should not write watermark object in the main body text
                  }
+            }
+            else if ( lcl_IsInlineHeading(*maFlyIter) )
+            {
+                 // Should not write inline heading again
             }
             else
             {
@@ -2306,6 +2347,21 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 {
     SAL_INFO( "sw.ww8", "<OutWW8_SwTextNode>" );
 
+    SwWW8AttrIter aWatermarkAttrIter( *this, rNode );
+
+    // export inline heading
+    const ww8::Frame* pInlineHeading;
+    if (aWatermarkAttrIter.HasFlysAt(0, &pInlineHeading))
+    {
+        if (pInlineHeading->GetContent()->IsTextNode())
+        {
+            SwTextNode *pTextNode =
+                const_cast<SwTextNode*>(pInlineHeading->GetContent()->GetTextNode());
+            if (pTextNode)
+                OutputTextNode(*pTextNode);
+        }
+    }
+
     ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo( m_pTableInfo->getTableNodeInfo( &rNode ) );
 
     //For i120928,identify the last node
@@ -2320,7 +2376,6 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
     // In order to make sure watermark is stored in 'header.xml', check nTextTyp.
     // if it is document.xml, don't write the tags (watermark should be only in the 'header')
-    SwWW8AttrIter aWatermarkAttrIter( *this, rNode );
     if (( TXT_HDFT != m_nTextTyp) && aWatermarkAttrIter.IsWatermarkFrame())
     {
         return;

@@ -396,6 +396,7 @@ OUString getPropertyName( PropertyIds eId )
         { PROP_DECORATIVE, u"Decorative"_ustr},
         { PROP_PAPER_TRAY, u"PrinterPaperTray"_ustr},
         { PROP_CHAR_FONT_FAMILY, u"CharFontFamily"_ustr},
+        { PROP_INLINE_HEADING, u"ParaInlineHeading"_ustr},
     };
     auto iterator = constPropertyMap.find(eId);
     if (iterator != constPropertyMap.end())
