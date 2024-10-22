@@ -286,9 +286,6 @@ struct CryptoImpl
                 mechanism = CKM_AES_ECB;
                 break;
             case Crypto::CryptoType::AES_128_CBC:
-                mechanism = CKM_AES_CBC;
-                pIvItem = &ivItem;
-                break;
             case Crypto::CryptoType::AES_256_CBC:
                 mechanism = CKM_AES_CBC;
                 pIvItem = &ivItem;
