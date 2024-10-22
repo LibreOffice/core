@@ -328,8 +328,6 @@ const char* GetOperatorString(ScConditionMode eMode)
             pRet = "notBetween";
             break;
         case ScConditionMode::Duplicate:
-            pRet = nullptr;
-            break;
         case ScConditionMode::NotDuplicate:
             pRet = nullptr;
             break;
@@ -526,8 +524,6 @@ XclExpExtConditionalFormatting::XclExpExtConditionalFormatting( const XclExpRoot
             }
             break;
             case ScFormatEntry::Type::Databar:
-                maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, rItem.aGUID, rItem.nPriority));
-            break;
             case ScFormatEntry::Type::ExtCondition:
                 maCfRules.AppendNewRecord(new XclExpExtCfRule( *this, *pEntry, aAddr, rItem.aGUID, rItem.nPriority));
             break;
