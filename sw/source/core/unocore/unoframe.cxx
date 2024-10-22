@@ -921,11 +921,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const SfxI
     if (pFollowTextFlow)
     {
         SwFormatFollowTextFlow aFormatFollowTextFlow;
-        if( pFollowTextFlow )
-        {
-            aFormatFollowTextFlow.PutValue(*pFollowTextFlow, MID_FOLLOW_TEXT_FLOW);
-        }
-
+        aFormatFollowTextFlow.PutValue(*pFollowTextFlow, MID_FOLLOW_TEXT_FLOW);
         rToSet.Put(aFormatFollowTextFlow);
     }
 
