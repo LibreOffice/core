@@ -2529,7 +2529,7 @@ void FmXGridPeer::releaseDispatchProviderInterceptor(const Reference< css::frame
             }
         }
 
-        xChainWalk = xSlave;
+        xChainWalk = std::move(xSlave);
     }
     // our interceptor chain has changed and we're alive ?
     if (!isDesignMode())

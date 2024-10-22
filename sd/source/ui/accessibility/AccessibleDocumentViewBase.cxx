@@ -280,7 +280,7 @@ uno::Reference<XAccessible > SAL_CALL
                     && (aPoint.X < aBBox.X+aBBox.Width)
                     && (aPoint.Y < aBBox.Y+aBBox.Height) )
                 {
-                    xChildAtPosition = xChild;
+                    xChildAtPosition = std::move(xChild);
                     break;
                 }
             }

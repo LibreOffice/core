@@ -1961,8 +1961,8 @@ void cppuhelper::ServiceManager::preloadImplementations() {
             if (!rEntry.second->constructorName.isEmpty() && fpFactory)
                 rEntry.second->constructorFn = WrapperConstructorFn(reinterpret_cast<ImplementationConstructorFn *>(fpFactory));
 
-            rEntry.second->factory1 = xSCFactory;
-            rEntry.second->factory2 = xSSFactory;
+            rEntry.second->factory1 = std::move(xSCFactory);
+            rEntry.second->factory2 = std::move(xSSFactory);
             rEntry.second->status = Data::Implementation::STATUS_LOADED;
 
         }

@@ -425,7 +425,7 @@ namespace xmloff
                     aContainerHistory.push(xLoop);
                     aIndexHistory.push(nChildPos);
 
-                    xLoop = xNextContainer;
+                    xLoop = std::move(xNextContainer);
                     nChildPos = -1; // will be incremented below
                 }
                 ++nChildPos;

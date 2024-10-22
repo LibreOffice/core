@@ -62,7 +62,7 @@ css::uno::Reference<css::frame::XDispatch>& LokChartHelper::GetXDispatcher()
             ::css::uno::Reference< ::css::frame::XDispatch > xDispatcher( xChartController, uno::UNO_QUERY );
             if( xDispatcher.is() )
             {
-                mxDispatcher = xDispatcher;
+                mxDispatcher = std::move(xDispatcher);
             }
         }
     }

@@ -349,10 +349,7 @@ namespace accessibility
         return Application::GetSettings().GetLanguageTag().getLocale();
     }
 
-
     // XAccessibleComponent
-
-
     Reference< XAccessible > AccessibleTabBar::getAccessibleAtPoint( const awt::Point& rPoint )
     {
         OExternalLockGuard aGuard( this );
@@ -370,7 +367,7 @@ namespace accessibility
                     Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                     if ( aRect.Contains( aPos ) )
                     {
-                        xChild = xAcc;
+                        xChild = std::move(xAcc);
                         break;
                     }
                 }
@@ -379,7 +376,6 @@ namespace accessibility
 
         return xChild;
     }
-
 
     void AccessibleTabBar::grabFocus(  )
     {

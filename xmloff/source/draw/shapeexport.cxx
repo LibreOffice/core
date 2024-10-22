@@ -285,7 +285,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     uno::Reference< drawing::XShape > xCustomShapeReplacement = checkForCustomShapeReplacement( xShape );
     if ( xCustomShapeReplacement.is() )
-        aShapeInfo.xCustomShapeReplacement = xCustomShapeReplacement;
+        aShapeInfo.xCustomShapeReplacement = std::move(xCustomShapeReplacement);
 
     // first compute the shapes type
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);

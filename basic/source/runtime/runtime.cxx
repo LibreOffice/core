@@ -1205,7 +1205,7 @@ void SbiRuntime::PushForEach()
         else if (aAny >>= xIndexAccess)
         {
             p->eForType = ForType::EachXIndexAccess;
-            p->xIndexAccess = xIndexAccess;
+            p->xIndexAccess = std::move(xIndexAccess);
             p->nCurCollectionIndex = 0;
         }
         else if ( isVBAEnabled() && pUnoObj->isNativeCOMObject() )

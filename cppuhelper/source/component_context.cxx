@@ -547,7 +547,7 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
     }
     else
     {
-        xContext = xDelegate;
+        xContext = std::move(xDelegate);
     }
 
     *ppContext = pTarget2curr->mapInterface(xContext.get(), cppu::UnoType<decltype(xContext)>::get());

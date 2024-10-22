@@ -112,7 +112,7 @@ PresenterPaneContainer::SharedPaneDescriptor
         {
             Reference<awt::XWindow> xWindow (rxPane->getWindow());
             pDescriptor->mxContentWindow = xWindow;
-            pDescriptor->mxPaneId = xPaneId;
+            pDescriptor->mxPaneId = std::move(xPaneId);
             pDescriptor->mxPane = rxPane;
             pDescriptor->mxPane->SetTitle(pDescriptor->msTitle);
 

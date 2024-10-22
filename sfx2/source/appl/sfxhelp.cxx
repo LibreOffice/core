@@ -575,8 +575,8 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 
     xHelpContent->setName(u"OFFICE_HELP"_ustr);
 
-    rHelpTask    = xHelpTask;
-    rHelpContent = xHelpContent;
+    rHelpTask    = std::move(xHelpTask);
+    rHelpContent = std::move(xHelpContent);
     return pHelpWindow;
 }
 

@@ -236,13 +236,13 @@ static Reference< XDictionaryEntry > lcl_GetRulingDictionaryEntry(
         Reference< XDictionaryEntry > xNegEntry( SearchDicList( xDList,
                 rWord, nLanguage, false, true ) );
         if (xNegEntry.is())
-            xRes = xNegEntry;
+            xRes = std::move(xNegEntry);
         else
         {
             Reference< XDictionaryEntry > xPosEntry( SearchDicList( xDList,
                     rWord, nLanguage, true, true ) );
             if (xPosEntry.is())
-                xRes = xPosEntry;
+                xRes = std::move(xPosEntry);
         }
     }
 

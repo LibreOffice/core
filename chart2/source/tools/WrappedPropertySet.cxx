@@ -66,7 +66,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
         {
             xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-            m_xInfo = xInfo;
+            m_xInfo = std::move(xInfo);
         }
     }
     else

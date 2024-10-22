@@ -2740,7 +2740,7 @@ Reference< XControlModel > EmbeddedForm::convertAndInsert( const EmbeddedControl
 
         // convert the control properties
         if( rControl.convertProperties( xCtrlModel, maControlConv ) )
-            xRet = xCtrlModel;
+            xRet = std::move(xCtrlModel);
         // insert the control into the form
         Reference< XIndexContainer > xFormIC( createXForm(), UNO_SET_THROW );
         rnCtrlIndex = xFormIC->getCount();

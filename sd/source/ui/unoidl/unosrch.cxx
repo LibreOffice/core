@@ -621,7 +621,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( const uno:
                     if(!xParent.is() || xText.get() == xParent.get())
                         return xShape;
 
-                    xText = xParent;
+                    xText = std::move(xParent);
                 }
             } while( !xShape.is() );
         }

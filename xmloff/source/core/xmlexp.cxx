@@ -692,7 +692,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference<beans::XPropertySet> xTmpPropertySet(
             xValue, UNO_QUERY );
         if( xTmpPropertySet.is() )
-            mxExportInfo = xTmpPropertySet;
+            mxExportInfo = std::move(xTmpPropertySet);
     }
 
     if( !mxExportInfo.is() )
@@ -1288,7 +1288,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             SAL_WARN_IF(!xTmpDocHandler.is(), "xmloff.core", "can't instantiate OASIS transformer component" );
             if( xTmpDocHandler.is() )
             {
-                mxHandler = xTmpDocHandler;
+                mxHandler = std::move(xTmpDocHandler);
                 mxExtHandler.set( mxHandler, UNO_QUERY );
             }
         }

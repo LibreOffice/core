@@ -284,7 +284,7 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement)
     }
     if ( xSel != m_xSelection )
     {
-        m_xSelection = xSel;
+        m_xSelection = std::move(xSel);
         aGuard.clear();
         m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, EventObject( *this ) );
         return true;

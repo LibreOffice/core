@@ -135,7 +135,7 @@ void XMLPersAttrListTContext::StartElement(
     }
     else if( pMutableAttrList )
     {
-        m_xAttrList = xAttrList;
+        m_xAttrList = std::move(xAttrList);
     }
     else
     {

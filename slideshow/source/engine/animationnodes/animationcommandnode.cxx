@@ -95,7 +95,7 @@ AnimationCommandNode::AnimationCommandNode( uno::Reference<animations::XAnimatio
                                               uno::UNO_QUERY );
     ShapeSharedPtr pShape( getContext().mpSubsettableShapeManager->lookupShape( xShape ) );
     mpShape = ::std::dynamic_pointer_cast< IExternalMediaShapeBase >( pShape );
-    mxShape = xShape;
+    mxShape = std::move(xShape);
 }
 
 void AnimationCommandNode::dispose()

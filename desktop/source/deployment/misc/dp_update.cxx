@@ -169,7 +169,7 @@ void getDefaultUpdateInfos(
                 dp_misc::GREATER)
             {
                 j->second.version = v;
-                j->second.info = node;
+                j->second.info = std::move(node);
             }
         }
     }

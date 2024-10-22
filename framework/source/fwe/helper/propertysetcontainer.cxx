@@ -126,7 +126,7 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::
             static_cast<OWeakObject *>(this), 2 );
     }
 
-    m_aPropertySetVector[ Index ] = aPropertySetElement;
+    m_aPropertySetVector[ Index ] = std::move(aPropertySetElement);
 }
 
 // XIndexAccess

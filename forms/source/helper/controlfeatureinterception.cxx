@@ -99,7 +99,7 @@ namespace frm
                 break;
             }
 
-            xChainWalk = xSlave;
+            xChainWalk = std::move(xSlave);
         }
     }
 

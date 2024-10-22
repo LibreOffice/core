@@ -319,7 +319,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
                 if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
                     ( xCont.is() && xCont->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
                 {
-                    xContext = xCont;
+                    xContext = std::move(xCont);
                 }
             }
         }

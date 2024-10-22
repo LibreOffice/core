@@ -72,7 +72,7 @@ ScParserFactoryMap::ScParserFactoryMap() :
             // store factory in the map
             OUString aNamespace = xParser->getSupportedNamespace();
             if( !aNamespace.isEmpty() )
-                maFactories[ aNamespace ] = xCompFactory;
+                maFactories[ aNamespace ] = std::move(xCompFactory);
         }
         catch( Exception& )
         {

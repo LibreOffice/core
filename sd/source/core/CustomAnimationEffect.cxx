@@ -2542,7 +2542,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( const CustomAnimatio
         }
 
         ParagraphTarget aTarget;
-        aTarget.Shape = xTarget;
+        aTarget.Shape = std::move(xTarget);
 
         for( const auto i : aParaList )
         {

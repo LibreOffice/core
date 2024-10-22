@@ -545,7 +545,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                     GetPropertySet()->getPropertyValue( u"Symbol"_ustr ) >>= aSymbol;
                     if( aSymbol.Graphic != xGraphic )
                     {
-                        aSymbol.Graphic = xGraphic;
+                        aSymbol.Graphic = std::move(xGraphic);
                         GetPropertySet()->setPropertyValue( u"Symbol"_ustr , uno::Any( aSymbol ));
                         bChanged = true;
                     }

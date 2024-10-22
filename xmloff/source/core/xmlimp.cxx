@@ -990,7 +990,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference<beans::XPropertySet> xTmpPropSet( xValue, UNO_QUERY );
         if( xTmpPropSet.is() )
         {
-            mxImportInfo = xTmpPropSet;
+            mxImportInfo = std::move(xTmpPropSet);
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = mxImportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {

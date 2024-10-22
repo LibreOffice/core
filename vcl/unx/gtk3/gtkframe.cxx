@@ -5226,20 +5226,18 @@ gboolean GtkInstDropTarget::signalDragDrop(GtkDropTargetAsync* context, GdkDrop*
     if (!(mask & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)))
         aEvent.DropAction |= css::datatransfer::dnd::DNDConstants::ACTION_DEFAULT;
 
-    css::uno::Reference<css::datatransfer::XTransferable> xTransferable;
     // For LibreOffice internal D&D we provide the Transferable without Gtk
     // intermediaries as a shortcut, see tdf#100097 for how dbaccess depends on this
     if (GtkInstDragSource::g_ActiveDragSource)
-        xTransferable = GtkInstDragSource::g_ActiveDragSource->GetTransferable();
+        aEvent.Transferable = GtkInstDragSource::g_ActiveDragSource->GetTransferable();
     else
     {
 #if GTK_CHECK_VERSION(4,0,0)
-        xTransferable = new GtkDnDTransferable(drop);
+        aEvent.Transferable = new GtkDnDTransferable(drop);
 #else
-        xTransferable = new GtkDnDTransferable(context, time, pWidget, this);
+        aEvent.Transferable = new GtkDnDTransferable(context, time, pWidget, this);
 #endif
     }
-    aEvent.Transferable = xTransferable;
 
     fire_drop(aEvent);
 

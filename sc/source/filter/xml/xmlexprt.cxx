@@ -2498,7 +2498,7 @@ void ScXMLExport::collectAutoStyles()
                 OUString sName( rTextEntry.maName );
                 GetAutoStylePool()->AddNamed(sName, XmlStyleFamily::TEXT_TEXT, OUString(), std::move(aPropStates));
                 GetAutoStylePool()->RegisterName(XmlStyleFamily::TEXT_TEXT, sName);
-                xPrevCursorProp = xCursorProp;
+                xPrevCursorProp = std::move(xCursorProp);
                 aPrevPos = aPos;
             }
         }

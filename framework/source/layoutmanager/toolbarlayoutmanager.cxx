@@ -516,7 +516,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
                     // Reuse a local entry so we are able to use the latest
                     // UI changes for this document.
                     implts_setElementData(rElement, xDockWindow);
-                    rElement.m_xUIElement = xUIElement;
+                    rElement.m_xUIElement = std::move(xUIElement);
                     bVisible = rElement.m_bVisible;
                     bFloating = rElement.m_bFloating;
                 }

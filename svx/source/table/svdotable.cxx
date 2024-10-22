@@ -402,7 +402,7 @@ SdrTableObjImpl& SdrTableObjImpl::operator=( const SdrTableObjImpl& rSource )
     }
 
     // set that TableStyle
-    mxTableStyle = xNewTableStyle;
+    mxTableStyle = std::move(xNewTableStyle);
 
     // Apply Style to Cells
     ApplyCellStyles();

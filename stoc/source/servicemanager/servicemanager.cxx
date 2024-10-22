@@ -671,7 +671,7 @@ void OServiceManager::setPropertyValue(
     }
 
     MutexGuard aGuard( m_aMutex );
-    m_xContext = xContext;
+    m_xContext = std::move(xContext);
 }
 
 Any OServiceManager::getPropertyValue(const OUString& PropertyName)

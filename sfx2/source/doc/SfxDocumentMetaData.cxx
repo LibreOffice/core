@@ -1928,7 +1928,7 @@ SfxDocumentMetaData::loadFromStorage(
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
     css::xml::sax::InputSource input;
-    input.aInputStream = xInStream;
+    input.aInputStream = std::move(xInStream);
 
     sal_uInt64 version = SotStorage::GetVersion( xStorage );
     // Oasis is also the default (0)

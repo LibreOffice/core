@@ -1035,7 +1035,7 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
             if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
             {
                 ScShapeChild aShape;
-                aShape.mxShape = xShape;
+                aShape.mxShape = std::move(xShape);
                 aShape.mnRangeId = nRangeId;
                 if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
                 {

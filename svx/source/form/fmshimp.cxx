@@ -2072,7 +2072,7 @@ void FmXFormShell::startListening_Lock()
                                     break;
                             }
                         }
-                        m_xNavigationController = xParent;
+                        m_xNavigationController = std::move(xParent);
                     }
                     break;
 
@@ -2522,7 +2522,7 @@ void FmXFormShell::UpdateForms_Lock(bool _bInvalidate)
     if ( m_xForms != xForms )
     {
         RemoveElement_Lock( m_xForms );
-        m_xForms = xForms;
+        m_xForms = std::move(xForms);
         AddElement_Lock(m_xForms);
     }
 

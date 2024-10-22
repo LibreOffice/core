@@ -1201,18 +1201,17 @@ uno::Reference< style::XStyle> getUsedStyle(const uno::Reference< report::XRepor
     uno::Reference<container::XNameAccess> xStyles = _xReport->getStyleFamilies();
     uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName(u"PageStyles"_ustr),uno::UNO_QUERY);
 
-    uno::Reference< style::XStyle> xReturn;
     const uno::Sequence< OUString> aSeq = xPageStyles->getElementNames();
     for(const OUString& rName : aSeq)
     {
         uno::Reference< style::XStyle> xStyle(xPageStyles->getByName(rName),uno::UNO_QUERY);
         if ( xStyle->isInUse() )
         {
-            xReturn = xStyle;
+            return xStyle;
             break;
         }
     }
-    return xReturn;
+    return nullptr;
 }
 
 

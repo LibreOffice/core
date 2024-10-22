@@ -379,7 +379,7 @@ void DocumentHandlerImpl::initialize(
     {
         throw RuntimeException( u"missing root instance!"_ustr );
     }
-    m_xRoot = xRoot;
+    m_xRoot = std::move(xRoot);
 }
 
 // XNamespaceMapping

@@ -171,7 +171,7 @@ static void ImpAddFillBitmapEntity( const Reference< XComponentContext >& rxMSF,
                     }
                     GraphicCollector::GraphicUser aUser;
                     aUser.mxPropertySet = rxPropertySet;
-                    aUser.mxGraphic = xGraphic;
+                    aUser.mxGraphic = std::move(xGraphic);
                     aUser.mbFillBitmap = true;
                     aUser.maLogicalSize = aLogicalSize;
                     aUser.mxPagePropertySet = rxPagePropertySet;

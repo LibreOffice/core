@@ -179,7 +179,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             {
                 Reference<XContent> xParent(Reference<XChild>(aFile.get(),UNO_QUERY_THROW)->getParent(),UNO_QUERY_THROW);
                 Reference<XContentIdentifier> xIdent = xParent->getIdentifier();
-                m_xContent = xParent;
+                m_xContent = std::move(xParent);
 
                 ::ucbhelper::Content aParent(xIdent->getContentIdentifier(), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext());
                 m_xDir = aParent.createDynamicCursor(aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY );

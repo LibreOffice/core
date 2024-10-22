@@ -1726,7 +1726,7 @@ bool PPTConvertOCXControls::InsertControl(
                     {
                         xControlShape->setControl( xControlModel );
                         if (pShape)
-                            *pShape = xShape;
+                            *pShape = std::move(xShape);
                         bRetValue = true;
                     }
                 }
