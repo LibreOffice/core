@@ -62,6 +62,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <comphelper/lok.hxx>
 
 using namespace com::sun::star;
 
@@ -1104,7 +1105,18 @@ const SfxItemSet* SdrObject::getBackgroundFillSet() const
             {
                 if (!pOwnerPage->IsMasterPage() && pOwnerPage->TRG_HasMasterPage())
                 {
-                    pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+                    // See unomodel.cxx: "It is guaranteed, that after a standard page the corresponding notes page follows."
+                    bool notesPage = pOwnerPage->GetPageNum() % 2 == 0;
+
+                    if (!comphelper::LibreOfficeKit::isActive() || !notesPage || !pOwnerPage->getSdrModelFromSdrPage().IsImpress())
+                        pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+                    else {
+                        // See sdrmasterpagedescriptor.cxx: e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+                        if (pOwnerPage->getSdrModelFromSdrPage().GetPage(pOwnerPage->GetPageNum() - 1))
+                            pBackgroundFillSet = &pOwnerPage->getSdrModelFromSdrPage().GetPage(pOwnerPage->GetPageNum() - 1)->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+                        else
+                            pBackgroundFillSet = &pOwnerPage->TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+                    }
                 }
             }
         }
