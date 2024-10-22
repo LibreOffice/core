@@ -484,10 +484,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
                     impl_initializeAccessible();
 
-                    {
-                        if( pChartWindow )
-                            pChartWindow->Invalidate();
-                    }
+                    pChartWindow->Invalidate();
                 }
 
                 m_bConnectingToView = false;
