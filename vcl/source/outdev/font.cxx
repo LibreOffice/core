@@ -462,9 +462,6 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
     {
         case DefaultFontType::SANS_UNICODE:
         case DefaultFontType::UI_SANS:
-            aFont.SetFamily( FAMILY_SWISS );
-            break;
-
         case DefaultFontType::SANS:
         case DefaultFontType::LATIN_HEADING:
         case DefaultFontType::LATIN_SPREADSHEET:
@@ -494,9 +491,6 @@ vcl::Font OutputDevice::GetDefaultFont( DefaultFontType nType, LanguageType eLan
         case DefaultFontType::CJK_SPREADSHEET:
         case DefaultFontType::CJK_HEADING:
         case DefaultFontType::CJK_DISPLAY:
-            aFont.SetFamily( FAMILY_SYSTEM ); // don't care, but don't use font subst config later...
-            break;
-
         case DefaultFontType::CTL_TEXT:
         case DefaultFontType::CTL_PRESENTATION:
         case DefaultFontType::CTL_SPREADSHEET:
