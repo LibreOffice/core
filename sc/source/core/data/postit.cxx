@@ -786,8 +786,7 @@ void ScPostIt::RemoveCaption()
         {
             pDrawPage->RecalcObjOrdNums();
             // create drawing undo action (before removing the object to have valid draw page in undo action)
-            bool bRecording = (pDrawLayer && pDrawLayer->IsRecording());
-            if (bRecording)
+            if (pDrawLayer->IsRecording())
                 pDrawLayer->AddCalcUndo( std::make_unique<SdrUndoDelObj>( *maNoteData.mxCaption ));
             // remove the object from the drawing page
             rtl::Reference<SdrObject> pRemovedObj = pDrawPage->RemoveObject( maNoteData.mxCaption->GetOrdNum() );
