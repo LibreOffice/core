@@ -567,7 +567,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         while( pFlt )
                         {
                             // --> OD #i117339#
-                            if( pFlt && pFlt->IsAllowedAsTemplate() &&
+                            if( pFlt->IsAllowedAsTemplate() &&
                                 ( pFlt->GetUserData() == "CXML" ||
                                   pFlt->GetUserData() == "CXMLV" ) )
                             {
