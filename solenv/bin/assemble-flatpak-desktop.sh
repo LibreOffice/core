@@ -11,32 +11,32 @@
 # Flatpak from a Fedora libreoffice.spec file.
 #
 # Arguments:
-# $1  pathname, ending in a slash, of the directory containing the source libreoffice-*.desktop
+# $1  pathname, ending in a slash, of the directory containing the source zetaoffice-*.desktop
 #     files
 # $2  pathname, ending in a slash, of the directory into which to put the target
-#     org.libreoffice.LibreOffice.*.desktop files
+#     de.allotropia.ZetaOffice.*.desktop files
 
 set -e
 
-## libreoffice-*.desktop -> org.libreoffice.LibreOffice.*.desktop:
-for i in "${1?}"libreoffice-*.desktop
+## zetaoffice-*.desktop -> de.allotropia.ZetaOffice.*.desktop:
+for i in "${1?}"zetaoffice-*.desktop
 do
- sed -e 's/^Icon=libreoffice-/Icon=org.libreoffice.LibreOffice./' "$i" \
-  >"${2?}"org.libreoffice.LibreOffice."${i#"${1?}"libreoffice-}"
+ sed -e 's/^Icon=zetaoffice-/Icon=de.allotropia.ZetaOffice./' "$i" \
+  >"${2?}"de.allotropia.ZetaOffice."${i#"${1?}"zetaoffice-}"
 done
-mv "${2?}"org.libreoffice.LibreOffice.startcenter.desktop "${2?}"org.libreoffice.LibreOffice.desktop
+mv "${2?}"de.allotropia.ZetaOffice.startcenter.desktop "${2?}"de.allotropia.ZetaOffice.desktop
 
 # Flatpak .desktop exports take precedence over system ones due to
 # the order of XDG_DATA_DIRS - re-associating text/plain seems a bit much
-sed -i "s/text\/plain;//" "${2?}"org.libreoffice.LibreOffice.writer.desktop
+sed -i "s/text\/plain;//" "${2?}"de.allotropia.ZetaOffice.writer.desktop
 
-desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-startcenter \
- --set-key=X-Flatpak-RenamedFrom --set-value='libreoffice-startcenter.desktop;' \
- "${2?}"org.libreoffice.LibreOffice.desktop
+desktop-file-edit --set-key=X-Endless-Alias --set-value=zetaoffice-startcenter \
+ --set-key=X-Flatpak-RenamedFrom --set-value='zetaoffice-startcenter.desktop;' \
+ "${2?}"de.allotropia.ZetaOffice.desktop
 for i in base calc draw impress math writer xsltfilter
 do
- desktop-file-edit --set-key=X-Endless-Alias --set-value=libreoffice-"$i" \
+ desktop-file-edit --set-key=X-Endless-Alias --set-value=zetaoffice-"$i" \
   --set-key=X-Flatpak-RenamedFrom \
-  --set-value="libreoffice-$i.desktop;org.libreoffice.LibreOffice-$i.desktop;" \
-  "${2?}"org.libreoffice.LibreOffice."$i".desktop
+  --set-value="zetaoffice-$i.desktop;de.allotropia.ZetaOffice-$i.desktop;" \
+  "${2?}"de.allotropia.ZetaOffice."$i".desktop
 done

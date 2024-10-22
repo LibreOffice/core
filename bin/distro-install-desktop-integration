@@ -94,7 +94,7 @@ add_wrapper()
 
 # install desktop integration from plain packages
 sysui_temp=`mktemp -d -t distro-pack-desktop-integration-XXXXXX`
-cp -a workdir/CustomTarget/sysui/share/libreoffice/* "$sysui_temp"
+cp -a workdir/CustomTarget/sysui/share/zetaoffice/* "$sysui_temp"
 cp -a "${SRCDIR?}"/sysui/desktop/share/create_tree.sh "$sysui_temp"
 cd $sysui_temp
 # we want non-versioned stuff in the distro packages
@@ -145,20 +145,20 @@ fi
 
 # wrappers and man pages
 # FIXME: do not have desktop file and MIME icon for unopkg
-add_wrapper lobase         soffice "--base"       "libreoffice" "libreoffice-base.desktop"        "gid_Module_Brand_Prg_Base"
-add_wrapper localc         soffice "--calc"       "libreoffice" "libreoffice-calc.desktop"        "gid_Module_Brand_Prg_Calc"
-add_wrapper lodraw         soffice "--draw"       "libreoffice" "libreoffice-draw.desktop"        "gid_Module_Brand_Prg_Draw"
-add_wrapper lomath         soffice "--math"       "libreoffice" "libreoffice-math.desktop"        "gid_Module_Brand_Prg_Math"
-add_wrapper loimpress      soffice "--impress"    "libreoffice" "libreoffice-impress.desktop"     "gid_Module_Brand_Prg_Impress"
+add_wrapper lobase         soffice "--base"       "libreoffice" "zetaoffice-base.desktop"        "gid_Module_Brand_Prg_Base"
+add_wrapper localc         soffice "--calc"       "libreoffice" "zetaoffice-calc.desktop"        "gid_Module_Brand_Prg_Calc"
+add_wrapper lodraw         soffice "--draw"       "libreoffice" "zetaoffice-draw.desktop"        "gid_Module_Brand_Prg_Draw"
+add_wrapper lomath         soffice "--math"       "libreoffice" "zetaoffice-math.desktop"        "gid_Module_Brand_Prg_Math"
+add_wrapper loimpress      soffice "--impress"    "libreoffice" "zetaoffice-impress.desktop"     "gid_Module_Brand_Prg_Impress"
 add_wrapper loweb          soffice "--web"        "libreoffice" ""                                "gid_Module_Brand_Prg_Wrt"
-add_wrapper lowriter       soffice "--writer"     "libreoffice" "libreoffice-writer.desktop"      "gid_Module_Brand_Prg_Wrt"
+add_wrapper lowriter       soffice "--writer"     "libreoffice" "zetaoffice-writer.desktop"      "gid_Module_Brand_Prg_Wrt"
 add_wrapper lofromtemplate soffice ".uno:NewDoc"  "libreoffice" ""                                "gid_Module_Root_Brand"
-add_wrapper libreoffice    soffice ""            "libreoffice" "libreoffice-startcenter.desktop" "gid_Module_Root_Brand"
+add_wrapper zetaoffice    soffice ""            "libreoffice" "zetaoffice-startcenter.desktop" "gid_Module_Root_Brand"
 add_wrapper loffice        soffice ""            "libreoffice" ""                                "gid_Module_Root_Brand"
 add_wrapper unopkg         unopkg  ""            "unopkg"      ""                                "gid_Module_Root_Brand"
 
 # there are two more desktop files for optional filters
-test -f $DESTDIR/gid_Module_Optional_Xsltfiltersamples && echo "$PREFIXDIR/share/applications/libreoffice-xsltfilter.desktop" >>"$DESTDIR/gid_Module_Optional_Xsltfiltersamples"
+test -f $DESTDIR/gid_Module_Optional_Xsltfiltersamples && echo "$PREFIXDIR/share/applications/zetaoffice-xsltfilter.desktop" >>"$DESTDIR/gid_Module_Optional_Xsltfiltersamples"
 
 # $BINDIR/ooffice symlink is necessary by java UNO components to find
 # the UNO installation using $PATH, see

@@ -13,36 +13,36 @@
 
 set -e
 
-cp -r "${PREFIXDIR?}"/lib/libreoffice /app/
-ln -s /app/libreoffice/program/soffice /app/bin/libreoffice
+cp -r "${PREFIXDIR?}"/lib/zetaoffice /app/
+ln -s /app/zetaoffice/program/soffice /app/bin/zetaoffice
 
 mkdir -p /app/share/applications
 "${SRCDIR?}"/solenv/bin/assemble-flatpak-desktop.sh "${PREFIXDIR?}"/share/applications/ \
  /app/share/applications/
 
-## icons/hicolor/*/apps/libreoffice-* ->
-## icons/hicolor/*/apps/org.libreoffice.LibreOffice-*:
+## icons/hicolor/*/apps/zetaoffice-* ->
+## icons/hicolor/*/apps/de.allotropia.ZetaOffice-*:
 mkdir -p /app/share/icons
-for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/libreoffice-*
+for i in "${PREFIXDIR?}"/share/icons/hicolor/*/apps/zetaoffice-*
 do
  mkdir -p \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"
  cp -a "$i" \
   "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/"$(basename "$i")"
  cp -a "$i" \
-  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/org.libreoffice.LibreOffice."${i##*/apps/libreoffice-}"
+  "$(dirname /app/share/icons/hicolor/"${i#"${PREFIXDIR?}"/share/icons/hicolor/}")"/de.allotropia.ZetaOffice."${i##*/apps/zetaoffice-}"
 done
 
 mkdir -p /app/share/runtime/locale
-for i in $(ls /app/libreoffice/program/resource)
+for i in $(ls /app/zetaoffice/program/resource)
 do
   lang="${i%[_@]*}"
   mkdir -p /app/share/runtime/locale/"${lang}"/resource
-  mv /app/libreoffice/program/resource/"${i}" /app/share/runtime/locale/"${lang}"/resource
-  ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/libreoffice/program/resource
+  mv /app/zetaoffice/program/resource/"${i}" /app/share/runtime/locale/"${lang}"/resource
+  ln -s ../../../share/runtime/locale/"${lang}"/resource/"${i}" /app/zetaoffice/program/resource
 done
 
-for i in /app/libreoffice/share/registry/Langpack-*.xcd /app/libreoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
+for i in /app/zetaoffice/share/registry/Langpack-*.xcd /app/zetaoffice/share/registry/res/{fcfg_langpack,registry}_*.xcd
 do
   basename="$(basename "${i}" .xcd)"
   lang="${basename#Langpack-}"
