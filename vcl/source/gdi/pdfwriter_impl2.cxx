@@ -1055,11 +1055,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 break;
 
                 case MetaActionType::RASTEROP:
-                {
-                    // !!! >>> we don't want to support this actions
-                }
-                break;
-
                 case MetaActionType::REFPOINT:
                 {
                     // !!! >>> we don't want to support this actions
