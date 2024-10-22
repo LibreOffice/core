@@ -660,7 +660,7 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
     //  even if size is still the same
     //  (individual rows/columns can have been changed))
 
-    bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
+    bool bNegativePage = pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
     // Disable mass broadcasts from drawing objects' position changes.
     bool bWasLocked = isLocked();
