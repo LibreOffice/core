@@ -1031,7 +1031,15 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     if (xPropertySet.is())
-        xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
+        // try..catch is for tdf#161359
+        try
+        {
+            xPropertySet->setPropertyValue("Graphic", uno::Any(xGraphic));
+        }
+        catch (const css::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("sw");
+        }
 
     // check if the picture is in an OLE object and if the \objdata element is used
     // (see RTFKeyword::OBJECT in RTFDocumentImpl::dispatchDestination)
