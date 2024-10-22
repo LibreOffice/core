@@ -354,7 +354,6 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
-        Reference< XAccessible > xChild;
         for( sal_Int64 i = 0; i < getAccessibleChildCount(); ++i )
         {
             Reference< XAccessible > xAcc = getAccessibleChild( i );
@@ -367,14 +366,13 @@ namespace accessibility
                     Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                     if ( aRect.Contains( aPos ) )
                     {
-                        xChild = std::move(xAcc);
-                        break;
+                        return xAcc;
                     }
                 }
             }
         }
 
-        return xChild;
+        return nullptr;
     }
 
     void AccessibleTabBar::grabFocus(  )
