@@ -98,11 +98,11 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLLayerContext::cre
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >&  )
 {
-    if( nElement == XML_ELEMENT(SVG, XML_TITLE) )
+    if( nElement == XML_ELEMENT(SVG, XML_TITLE) || nElement == XML_ELEMENT(SVG_COMPAT, XML_TITLE) )
     {
         return new XMLStringBufferImportContext( GetImport(), sTitleBuffer);
     }
-    else if( nElement == XML_ELEMENT(SVG, XML_DESC) )
+    else if( nElement == XML_ELEMENT(SVG, XML_DESC) || nElement == XML_ELEMENT(SVG_COMPAT, XML_DESC) )
     {
         return new XMLStringBufferImportContext( GetImport(), sDescriptionBuffer);
     }
