@@ -250,6 +250,7 @@ void SwPagePreviewLayout::ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
 */
 void SwPagePreviewLayout::ReInit()
 {
+    mbPrintEmptyPages = mrParentViewShell.getIDocumentDeviceAccess().getPrintData().IsPrintEmptyPages();
     // check environment and parameters
     {
         bool bLayoutSettingsValid = mbLayoutInfoValid && mbLayoutSizesValid;
