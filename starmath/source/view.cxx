@@ -1508,27 +1508,21 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     break;
                 }
 
-                bool bCallExec = nullptr == pWin;
-                if( !bCallExec )
+                if( pWin )
                 {
-                    if (pWin)
-                    {
-                        TransferableDataHelper aDataHelper(
-                            TransferableDataHelper::CreateFromClipboard(
-                                                        pWin->GetClipboard()));
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromClipboard(
+                                                    pWin->GetClipboard()));
 
-                        if( aDataHelper.GetTransferable().is() &&
-                            aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
-                            pWin->Paste();
-                        else
-                            bCallExec = true;
+                    if( aDataHelper.GetTransferable().is() &&
+                        aDataHelper.HasFormat( SotClipboardFormatId::STRING ))
+                        pWin->Paste();
+                    else
+                    {
+                        GetViewFrame().GetDispatcher()->ExecuteList(
+                                SID_PASTEOBJECT, SfxCallMode::RECORD,
+                                { new SfxVoidItem(SID_PASTEOBJECT) });
                     }
-                }
-                if( bCallExec )
-                {
-                    GetViewFrame().GetDispatcher()->ExecuteList(
-                            SID_PASTEOBJECT, SfxCallMode::RECORD,
-                            { new SfxVoidItem(SID_PASTEOBJECT) });
                 }
             }
             break;
