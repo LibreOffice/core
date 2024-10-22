@@ -278,11 +278,6 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
         }
         break;
 
-        case SID_3D_SPHERE:
-        {
-        }
-        break;
-
         case SID_3D_SHELL:
         case SID_3D_HALF_SPHERE:
         {
@@ -290,6 +285,7 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject const * p3DOb
         }
         break;
 
+        case SID_3D_SPHERE:
         case SID_3D_CYLINDER:
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
