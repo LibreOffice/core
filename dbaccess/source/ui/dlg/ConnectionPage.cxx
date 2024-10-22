@@ -101,9 +101,6 @@ namespace dbaui
                 m_xFT_Connection->set_label(DBA_RES(STR_WRITER_PATH_OR_FILE));
                 m_xConnectionURL->set_help_id(HID_DSADMIN_WRITER_PATH);
                 break;
-            case  ::dbaccess::DST_ADO:
-                m_xFT_Connection->set_label(DBA_RES(STR_COMMONURL));
-                break;
             case  ::dbaccess::DST_MSACCESS:
                 m_xFT_Connection->set_label(DBA_RES(STR_MSACCESS_MDB_FILE));
                 m_xConnectionURL->set_help_id(HID_DSADMIN_MSACCESS_MDB_FILE);
@@ -150,6 +147,7 @@ namespace dbaui
                 }
                 m_xConnectionURL->hide();
                 break;
+            case  ::dbaccess::DST_ADO:
             case  ::dbaccess::DST_JDBC:
             default:
                 m_xFT_Connection->set_label(DBA_RES(STR_COMMONURL));
