@@ -230,6 +230,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         }
         break;
 
+        case SID_VERSION:
         case SID_CLOSEDOC:
         {
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
@@ -241,12 +242,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
             const SvxColorListItem* pColItem = GetItem( SID_COLOR_TABLE );
             const XColorListRef& pList = pColItem->GetColorList();
             rReq.SetReturnValue( OfaXColorListItem( SID_GET_COLORLIST, pList ) );
-        }
-        break;
-
-        case SID_VERSION:
-        {
-            ExecuteSlot( rReq, SfxObjectShell::GetStaticInterface() );
         }
         break;
 
