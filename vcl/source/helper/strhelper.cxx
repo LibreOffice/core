@@ -266,7 +266,7 @@ OUString WhitespaceToSpace( std::u16string_view rLine )
 
     while( pRun != pEnd )
     {
-        if( pRun != pEnd && isSpace( *pRun ) )
+        if( isSpace( *pRun ) )
         {
             *pLeap = ' ';
             pLeap++;
@@ -326,7 +326,7 @@ OString WhitespaceToSpace(std::string_view rLine)
 
     while( pRun != pEnd )
     {
-        if( pRun != pEnd && isSpace( *pRun ) )
+        if( isSpace( *pRun ) )
         {
             *pLeap = ' ';
             pLeap++;
