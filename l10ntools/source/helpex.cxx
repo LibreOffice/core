@@ -84,8 +84,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     pMergeDataFile.reset(new MergeDataFile(aArgs.m_sMergeSrc, "", false, false ));
                 }
                 std::string sTemp;
-                aInput >> sTemp;
-                while( !aInput.eof() )
+                while ( aInput >> sTemp )
                 {
                     // coverity[tainted_data] - this is a build time tool
                     const OString sXhpFile( sTemp.data(), static_cast<sal_Int32>(sTemp.length()) );
@@ -98,7 +97,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                     {
                         hasNoError = false;
                     }
-                    aInput >> sTemp;
                 }
                 aInput.close();
             }
