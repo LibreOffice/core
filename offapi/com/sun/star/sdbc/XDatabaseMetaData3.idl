@@ -56,7 +56,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *  <LI><B>TYPE_SCHEM</B> String {@code =>} type schema (may be {@code null})
      *  <LI><B>TYPE_NAME</B> String {@code =>} type name
      *  <LI><B>ATTR_NAME</B> String {@code =>} attribute name
-     *  <LI><B>DATA_TYPE</B> int {@code =>} attribute type SQL type from java.sql.Types
+     *  <LI><B>DATA_TYPE</B> int {@code =>} attribute type SQL type from com::sun::star::sdbc::DataType
      *  <LI><B>ATTR_TYPE_NAME</B> String {@code =>} Data source dependent type name.
      *  For a UDT, the type name is fully qualified. For a REF, the type name is
      *  fully qualified and represents the target type of the reference type.
@@ -95,7 +95,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *  <LI><B>SCOPE_TABLE</B> String {@code =>} table name that is the scope of a
      *      reference attribute ({@code null} if the DATA_TYPE isn't REF)
      * <LI><B>SOURCE_DATA_TYPE</B> short {@code =>} source type of a distinct type or user-generated
-     *      Ref type, SQL type from java.sql.Types ({@code null} if DATA_TYPE
+     *      Ref type, SQL type from com::sun::star::sdbc::DataType ({@code null} if DATA_TYPE
      *      isn't DISTINCT or user-generated REF)
      * </OL>
      * @param catalog a catalog name; must match the catalog name as it
@@ -235,7 +235,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *      <LI> functionColumnResult - Indicates that the parameter or column
      *  is a column in the {@code ResultSet}
      *      </UL>
-     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from java.sql.Types
+     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from com::sun::star::sdbc::DataType
      *  <LI><B>TYPE_NAME</B> String {@code =>} SQL type name, for a UDT type the
      *  type name is fully qualified
      *  <LI><B>PRECISION</B> int {@code =>} precision
@@ -332,7 +332,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *  <LI><B>TABLE_SCHEM</B> String {@code =>} table schema (may be {@code null})
      *  <LI><B>TABLE_NAME</B> String {@code =>} table name
      *  <LI><B>COLUMN_NAME</B> String {@code =>} column name
-     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from java.sql.Types
+     *  <LI><B>DATA_TYPE</B> int {@code =>} SQL type from com::sun::star::sdbc::DataType
      *  <LI><B>COLUMN_SIZE</B> int {@code =>} column size.
      *  <LI><B>DECIMAL_DIGITS</B> int {@code =>} the number of fractional digits. Null is returned for data types where
      * DECIMAL_DIGITS is not applicable.
@@ -406,18 +406,19 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *  <LI><B>TABLE_CATALOG</B> String {@code =>} catalog name (may be {@code null})
      *  </OL>
      *
-     *
-     * @param catalog a catalog name; must match the catalog name as it is stored
-     * in the database;"" retrieves those without a catalog; null means catalog
-     * name should not be used to narrow down the search.
-     * @param schemaPattern a schema name; must match the schema name as it is
-     * stored in the database; null means
-     * schema name should not be used to narrow down the search.
+     * @param catalog an optional catalog name;
+     *        if absent (catalog.IsPresent is false), catalog name is not used to narrow down the search.
+     *        if present, then only the results for which  catalog.Value matches the catalog name as it
+     *        is stored in the database;
+     *        Note that catalog.IsPresent and catalog.Value == "" retrieves those without a catalog
+     * @param schemaPattern a optional schema name;
+     *        if absent means it should not be used to narrow down the search
+     *        if present, must match the schema name as it is stored in the database
      * @return a {@code ResultSet} object in which each row is a
      *         schema description
      * @throws SQLException if a database access error occurs
      */
-    XResultSet getSchemasFiltered([in]string catalog, [in]string schemaPattern) raises (SQLException);
+    XResultSet getSchemasFiltered([in] com::sun::star::beans::Optional<string> catalog, [in] com::sun::star::beans::Optional<string> schemaPattern) raises (SQLException);
 
     /**
      * Indicates whether the SQLSTATE returned by {@code SQLException.getSQLState}
@@ -513,13 +514,12 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      */
     boolean locatorsUpdateCopy() raises (SQLException);
 
-    /**     `TRUE`
-            , if the Database supports the CONVERT between the given SQL types
-            otherwise `FALSE` in general (see supportsConvert for specific fromType and toType).
-        @returns
-            `TRUE` if so
-        @throws SQLException
-            if a database access error occurs.
+    /**
+     * Retrieves whether this database supports the SQL function CONVERT for the conversion
+     * between the data types defined in com::sun::star::sdbc::DataType
+     * (see supportsConvert in com::sun::star::sdbc::XDatabaseMetadata to test for support between specific types)
+     * @return true if so; false otherwise
+     * @throws SQLException if a database access error occurs.
      */
     boolean supportsConvertInGeneral()
         raises (SQLException);
