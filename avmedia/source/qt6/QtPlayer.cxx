@@ -21,8 +21,8 @@
 #include <rtl/string.hxx>
 #include <tools/link.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
@@ -351,14 +351,7 @@ void QtPlayer::createMediaPlayerWidget()
     }
     else
     {
-        BitmapEx aPlaceholderIcon(u"avmedia/res/avaudiologo.png"_ustr);
-        SvMemoryStream aMemoryStream;
-        vcl::PngImageWriter aWriter(aMemoryStream);
-        aWriter.write(aPlaceholderIcon);
-        QPixmap aAudioPixmap;
-        aAudioPixmap.loadFromData(static_cast<const uchar*>(aMemoryStream.GetData()),
-                                  aMemoryStream.TellEnd());
-        assert(!aAudioPixmap.isNull() && "Failed to load audio logo");
+        QPixmap aAudioPixmap = loadQPixmapIcon(u"avmedia/res/avaudiologo.png"_ustr);
         aAudioPixmap
             = aAudioPixmap.scaled(QSize(m_aPlayerWidgetRect.Width, m_aPlayerWidgetRect.Height));
 
