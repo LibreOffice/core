@@ -13,8 +13,10 @@
 
 #include <QtWidgets/QComboBox>
 
-class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBox
+class QtInstanceComboBox : public QObject, public QtInstanceWidget, public virtual weld::ComboBox
 {
+    Q_OBJECT
+
     QComboBox* m_pComboBox;
     bool m_bSorted;
 
@@ -83,6 +85,9 @@ public:
 
 private:
     void sortItems();
+
+private slots:
+    void handleCurrentIndexChanged();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

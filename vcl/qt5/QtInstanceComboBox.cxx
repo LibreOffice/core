@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceComboBox.hxx>
+#include <QtInstanceComboBox.moc>
 
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     : QtInstanceWidget(pComboBox)
@@ -15,6 +16,9 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     , m_bSorted(false)
 {
     assert(pComboBox);
+
+    QObject::connect(m_pComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+                     &QtInstanceComboBox::handleCurrentIndexChanged);
 }
 
 void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
@@ -248,5 +252,7 @@ void QtInstanceComboBox::set_mru_entries(const OUString&)
 void QtInstanceComboBox::set_max_drop_down_rows(int) { assert(false && "Not implemented yet"); }
 
 void QtInstanceComboBox::sortItems() { m_pComboBox->model()->sort(0, Qt::AscendingOrder); }
+
+void QtInstanceComboBox::handleCurrentIndexChanged() { signal_changed(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
