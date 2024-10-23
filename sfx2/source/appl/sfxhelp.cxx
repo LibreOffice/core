@@ -1101,13 +1101,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                 xChanges->commit();
                 aBusy.decBusy();
             }
-
             // Checks whether the user clicked "Read Help Online" (RET_OK) or "Information on downloading offline help" (RET_YES)
-            if(retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
+            if(!bShowOfflineHelpPopUp || retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
             {
                 bool bTopicExists;
 
-                if (retOnlineHelpBox == RET_OK)
+                if (!bShowOfflineHelpPopUp || retOnlineHelpBox == RET_OK)
                 {
                     bTopicExists = impl_showOnlineHelp(aHelpURL, pWeldWindow);
                 }
@@ -1288,13 +1287,12 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                 xChanges->commit();
                 aBusy.decBusy();
             }
-
             // Checks whether the user clicked "Read Help Online" (RET_OK) or "Information on downloading offline help" (RET_YES)
-            if(retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
+            if(!bShowOfflineHelpPopUp || retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
             {
                 bool bTopicExists;
 
-                if (retOnlineHelpBox == RET_OK)
+                if (!bShowOfflineHelpPopUp || retOnlineHelpBox == RET_OK)
                 {
                     bTopicExists = impl_showOnlineHelp(aHelpURL, pWidget);
                 }
