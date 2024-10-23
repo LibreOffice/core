@@ -2285,25 +2285,22 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // But since import has just copied para-style's PROP_NUMBERING_STYLE_NAME directly onto the paragraph,
             // the numbering indents now have the priority.
             // So now import must also copy the para-style indents directly onto the paragraph to compensate.
-            std::optional<PropertyMap::Property> oProperty;
-            const StyleSheetEntryPtr pParent = lcl_getParent(pEntry, GetStyleSheetTable());
-            const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->m_pProperties.get() : nullptr;
-            if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
+            auto getOptProperty
+                = [&pEntry, parent = lcl_getParent(pEntry, GetStyleSheetTable())](PropertyIds id, bool useParent)
             {
-                oProperty = pEntry->m_pProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
-                if ( oProperty
-                    // If the numbering comes from a base style, indent of the base style has also priority.
-                    || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT))) )
-                    pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
-            }
-            oProperty = pEntry->m_pProperties->getProperty(PROP_PARA_LEFT_MARGIN);
-            if ( oProperty
-                || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_LEFT_MARGIN))) )
+                auto p = pEntry->m_pProperties->getProperty(id);
+                if (!p && useParent && parent && parent->m_pProperties)
+                    p = parent->m_pProperties->getProperty(id);
+                return p;
+            };
+            if (auto oProperty = getOptProperty(PROP_PARA_FIRST_LINE_INDENT, bNumberingFromBaseStyle))
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
+            if (auto oProperty = getOptProperty(PROP_PARA_LEFT_MARGIN, bNumberingFromBaseStyle))
                 pParaContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
 
             // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
-            sal_Int32 nParaRightMargin;
-            if  ( pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_RIGHT_MARGIN)) && (nParaRightMargin = oProperty->second.get<sal_Int32>()) != 0 )
+            if (auto oProperty = getOptProperty(PROP_PARA_RIGHT_MARGIN, true);
+                oProperty && oProperty->second.get<sal_Int32>() != 0)
             {
                 // If we're setting the right margin, we should set the first / left margin as well from the numbering style.
                 const sal_Int32 nFirstLineIndent = getNumberingProperty(nListId, nListLevel, u"FirstLineIndent"_ustr);
@@ -2313,11 +2310,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 if (nParaLeftMargin != 0)
                     pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::Any(nParaLeftMargin), /*bOverwrite=*/false);
 
-                // Override right margin value with value from current style, if any
-                if (pEntry->m_pProperties->isSet(PROP_PARA_RIGHT_MARGIN))
-                    nParaRightMargin = pEntry->m_pProperties->getProperty(PROP_PARA_RIGHT_MARGIN)->second.get<sal_Int32>();
-
-                pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::Any(nParaRightMargin), /*bOverwrite=*/false);
+                pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, oProperty->second, /*bOverwrite=*/false);
             }
         }
         // Paragraph style based right paragraph indentation affects not paragraph style based lists in DOCX.
