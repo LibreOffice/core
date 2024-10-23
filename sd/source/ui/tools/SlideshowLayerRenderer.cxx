@@ -44,11 +44,15 @@ using namespace ::com::sun::star;
 
 namespace sd
 {
-struct RenderContext
+/// Sets up the virtual device for rendering, and cleans up afterwards
+class RenderContext
 {
+private:
     SdrModel& mrModel;
 
     EEControlBits mnSavedControlBits;
+
+public:
     ScopedVclPtrInstance<VirtualDevice> maVirtualDevice;
 
     RenderContext(unsigned char* pBuffer, SdrModel& rModel, SdrPage& rPage, Size const& rSlideSize)
@@ -104,6 +108,7 @@ bool hasFields(SdrObject* pObject)
     return false;
 }
 
+/// Sets visible for all kinds of polypolys in the container
 void changePolyPolys(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                      bool bRenderObject)
 {
@@ -120,6 +125,7 @@ void changePolyPolys(drawinglayer::primitive2d::Primitive2DContainer& rContainer
     }
 }
 
+/// Searches for rectangle primitive and changes if the background should be rendered
 void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
                       bool bRenderObject)
 {
@@ -136,6 +142,7 @@ void changeBackground(drawinglayer::primitive2d::Primitive2DContainer const& rCo
     }
 }
 
+/// Find the text block in the primitive containder, decompose if necessary
 drawinglayer::primitive2d::TextHierarchyBlockPrimitive2D*
 findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
               drawinglayer::geometry::ViewInformation2D const& rViewInformation2D)
@@ -180,6 +187,7 @@ findTextBlock(drawinglayer::primitive2d::Primitive2DContainer const& rContainer,
     return nullptr;
 }
 
+/// show/hide paragraphs in the container
 void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContainer,
                       drawinglayer::geometry::ViewInformation2D const& rViewInformation2D,
                       std::deque<sal_Int32> const& rPreserveIndices, bool bRenderObject)
@@ -215,44 +223,51 @@ void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContaine
     }
 }
 
-/** VOC redirector to control which object should be rendered and which not */
-class ObjectRedirector : public sdr::contact::ViewObjectContactRedirector
+/// Analyze the renderng and create rendering passes
+class AnalyzeRenderingRedirector : public sdr::contact::ViewObjectContactRedirector
 {
 protected:
     RenderState& mrRenderState;
 
+    RenderPass* mpCurrentRenderPass;
+    RenderStage mePreviousStage = RenderStage::Master;
+
 public:
-    ObjectRedirector(RenderState& rRenderState)
+    AnalyzeRenderingRedirector(RenderState& rRenderState)
         : mrRenderState(rRenderState)
+        , mpCurrentRenderPass(newRenderPass())
     {
+    }
+
+    // Adds a new rendering pass to the list and returns it
+    RenderPass* newRenderPass()
+    {
+        mrRenderState.maRenderPasses.emplace_back();
+        return &mrRenderState.maRenderPasses.back();
+    }
+
+    // Closes current rendering pass, and creates a new empty current one
+    void closeRenderPass()
+    {
+        if (mpCurrentRenderPass->maObjectsAndParagraphs.empty())
+            return;
+
+        mpCurrentRenderPass = newRenderPass();
     }
 
     virtual void createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
-        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& /*rVisitor*/) override
     {
-        // Generate single pass for background layer
-        if (mrRenderState.meStage == RenderStage::Background)
-        {
-            mrRenderState.mnRenderedObjectsInPass++;
-            mrRenderState.mbSkipAllInThisPass = true;
-            return;
-        }
-
-        if (mrRenderState.mbSkipAllInThisPass)
-            return;
-
         SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-
-        drawinglayer::geometry::ViewInformation2D const& rViewInformation2D
-            = rOriginal.GetObjectContact().getViewInformation2D();
 
         // Check if we are rendering an object that is valid to render (exists, and not empty)
         if (pObject == nullptr || pObject->IsEmptyPresObj())
             return;
 
         SdrPage* pPage = pObject->getSdrPageFromSdrObject();
+
         // Does the object have a page
         if (pPage == nullptr)
             return;
@@ -264,123 +279,133 @@ public:
         if (!bVisible)
             return;
 
-        // Check if we have already rendered the object
-        if (mrRenderState.isObjectAlreadyRendered(pObject))
-            return;
+        // Determine the current stage, depending on the page
+        RenderStage eCurrentStage
+            = pPage->IsMasterPage() ? RenderStage::Master : RenderStage::Slide;
 
-        // Check if we are in correct stage
-        if (mrRenderState.meStage == RenderStage::Master && !pPage->IsMasterPage())
-        {
-            if (mrRenderState.isFirstObjectInPass())
-            {
-                // if this is the first object - change from master to slide
-                // means we are done with rendering of master layers
-                mrRenderState.meStage = RenderStage::Slide;
-            }
-            else
-            {
-                // if not, we have to stop rendering all further objects
-                mrRenderState.mbSkipAllInThisPass = true;
-                return;
-            }
-        }
+        // We switched from master objecst to slide objects
+        if (eCurrentStage == RenderStage::Slide && mePreviousStage == RenderStage::Master)
+            closeRenderPass();
 
-        // Paragraph rendering switches
-        bool bRenderOtherParagraphs = false;
-        std::deque<sal_Int32> nOtherParagraphs;
-
-        // check if object is in animation
+        // check if object is in an animation
         auto aIterator = mrRenderState.maAnimationRenderInfoList.find(pObject);
         if (aIterator != mrRenderState.maAnimationRenderInfoList.end())
         {
-            // Animated object has to be only one in the render
-            mrRenderState.mbSkipAllInThisPass = true; // skip all next objects
-
-            // Force a new layer
-            if (!mrRenderState.isFirstObjectInPass())
-                return;
+            closeRenderPass();
 
             AnimationRenderInfo aInfo = aIterator->second;
 
-            if (mrRenderState.maParagraphsToRender.empty()
-                && !aInfo.maParagraphs.empty()) // we need to render paragraphs
+            if (!aInfo.maParagraphs.empty()) // we need to render paragraphs
             {
                 auto* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
                 if (pTextObject)
                 {
                     sal_Int32 nNumberOfParagraphs = pTextObject->GetOutlinerParaObject()->Count();
 
+                    std::deque<sal_Int32> nOtherParagraphs;
                     for (sal_Int32 nParagraph = 0; nParagraph < nNumberOfParagraphs; ++nParagraph)
-                        nOtherParagraphs.push_back(nParagraph);
+                    {
+                        if (std::find(aInfo.maParagraphs.begin(), aInfo.maParagraphs.end(),
+                                      nParagraph)
+                            == aInfo.maParagraphs.end())
+                            nOtherParagraphs.push_back(nParagraph);
+                    }
+                    // Add the non-animated part of the object that has animated paragraphs
+                    mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, nOtherParagraphs);
+                    mpCurrentRenderPass->meStage = eCurrentStage;
+                    mpCurrentRenderPass->mbRenderObjectBackground = true;
+                    mpCurrentRenderPass->mbAnimation = true;
+                    mpCurrentRenderPass->mpAnimatedObject = pObject;
+                    closeRenderPass();
 
+                    // Add all the animated paragraphs
                     for (sal_Int32 nParagraph : aInfo.maParagraphs)
                     {
-                        mrRenderState.maParagraphsToRender.push_back(nParagraph);
-                        std::erase(nOtherParagraphs, nParagraph);
+                        mpCurrentRenderPass->maObjectsAndParagraphs.emplace(
+                            pObject, std::deque<sal_Int32>{ nParagraph });
+                        mpCurrentRenderPass->meStage = eCurrentStage;
+                        mpCurrentRenderPass->mbAnimation = true;
+                        mpCurrentRenderPass->mpAnimatedObject = pObject;
+                        mpCurrentRenderPass->mnAnimatedParagraph = nParagraph;
+                        closeRenderPass();
                     }
-                    bRenderOtherParagraphs = true;
                 }
             }
+            else
+            {
+                // Add the animated object - paragraphs are not animated
+                mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject,
+                                                                    std::deque<sal_Int32>());
+                mpCurrentRenderPass->meStage = eCurrentStage;
+                mpCurrentRenderPass->mbAnimation = true;
+                mpCurrentRenderPass->mpAnimatedObject = pObject;
+                closeRenderPass();
+            }
         }
-        else if (mrRenderState.meStage == RenderStage::Master && hasFields(pObject)
-                 && mrRenderState.mbStopRenderingWhenField && !mrRenderState.isFirstObjectInPass())
+        // Check if the object has fields (slide number)
+        else if (eCurrentStage == RenderStage::Master && hasFields(pObject))
         {
-            mrRenderState.mbStopRenderingWhenField = false;
-            mrRenderState.mbSkipAllInThisPass = true;
-            return;
-        }
+            closeRenderPass();
 
-        mrRenderState.mpCurrentTarget = pObject;
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+            closeRenderPass();
+        }
+        // No specal handling is needed, just add the object to the current rendering pass
+        else
+        {
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+        }
+        mePreviousStage = eCurrentStage;
+    }
+};
+
+/// Render one render pass
+class RenderPassObjectRedirector : public sdr::contact::ViewObjectContactRedirector
+{
+protected:
+    RenderState& mrRenderState;
+    RenderPass const& mrRenderPass;
+
+public:
+    RenderPassObjectRedirector(RenderState& rRenderState, RenderPass const& rRenderPass)
+        : mrRenderState(rRenderState)
+        , mrRenderPass(rRenderPass)
+    {
+    }
+
+    virtual void createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override
+    {
+        SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
+
+        if (!pObject)
+            return;
+
+        // check if object is in animation
+        auto aIterator = mrRenderPass.maObjectsAndParagraphs.find(pObject);
+        if (aIterator == mrRenderPass.maObjectsAndParagraphs.end())
+            return;
 
         // render the object
         sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
             rOriginal, rDisplayInfo, rVisitor);
 
-        if (!mrRenderState.maParagraphsToRender.empty())
+        auto const& rParagraphs = aIterator->second;
+
+        if (!rParagraphs.empty())
         {
+            auto const& rViewInformation2D = rOriginal.GetObjectContact().getViewInformation2D();
             auto rContainer
                 = static_cast<drawinglayer::primitive2d::Primitive2DContainer&>(rVisitor);
-
-            if (bRenderOtherParagraphs)
-            {
-                modifyParagraphs(rContainer, rViewInformation2D, nOtherParagraphs,
-                                 true); // render the object
-                mrRenderState.mnCurrentTargetParagraph = -1;
-            }
-            else
-            {
-                sal_Int32 nParagraph = mrRenderState.maParagraphsToRender.front();
-                mrRenderState.maParagraphsToRender.pop_front();
-
-                std::deque<sal_Int32> aPreserveParagraphs{ nParagraph };
-                mrRenderState.mnCurrentTargetParagraph = nParagraph;
-                // render only the paragraphs
-                modifyParagraphs(rContainer, rViewInformation2D, aPreserveParagraphs, false);
-            }
-        }
-
-        if (mrRenderState.maParagraphsToRender.empty())
-        {
-            mrRenderState.mnRenderedObjectsInPass++;
-            mrRenderState.maObjectsDone.insert(pObject);
+            modifyParagraphs(rContainer, rViewInformation2D, rParagraphs,
+                             mrRenderPass.mbRenderObjectBackground);
         }
     }
 };
-
-bool hasEmptyMaster(SdrPage const& rPage)
-{
-    if (!rPage.TRG_HasMasterPage())
-        return true;
-
-    SdrPage& rMaster = rPage.TRG_GetMasterPage();
-    for (size_t i = 0; i < rMaster.GetObjCount(); i++)
-    {
-        auto pObject = rMaster.GetObj(i);
-        if (!pObject->IsEmptyPresObj())
-            return false;
-    }
-    return true;
-}
 
 SdrObject* getObjectForShape(uno::Reference<drawing::XShape> const& xShape)
 {
@@ -505,7 +530,8 @@ Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePi
     return maSlideSize;
 }
 
-void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext)
+void SlideshowLayerRenderer::createViewAndDraw(
+    RenderContext& rRenderContext, sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     SdrView aView(mrModel, rRenderContext.maVirtualDevice);
     aView.SetPageVisible(false);
@@ -522,8 +548,7 @@ void SlideshowLayerRenderer::createViewAndDraw(RenderContext& rRenderContext)
     Point aPoint;
 
     vcl::Region aRegion(::tools::Rectangle(aPoint, aPageSize));
-    ObjectRedirector aRedirector(maRenderState);
-    aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, &aRedirector);
+    aView.CompleteRedraw(rRenderContext.maVirtualDevice, aRegion, pRedirector);
 }
 
 namespace
@@ -621,21 +646,43 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
     maRenderState.resetPass();
 
     RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize);
-    createViewAndDraw(aRenderContext);
 
-    // Check if we are done rendering all passes and there is no more output
-    if (maRenderState.noMoreOutput())
-        return false;
-
-    writeJSON(rJsonMsg);
-
-    maRenderState.mnCurrentPass++;
-
+    // Render Background and analyze other passes
     if (maRenderState.meStage == RenderStage::Background)
-        maRenderState.meStage = RenderStage::Master;
+    {
+        // Render no objects, just the background, but analyze and create rendering passes
+        AnalyzeRenderingRedirector aRedirector(maRenderState);
+        createViewAndDraw(aRenderContext, &aRedirector);
 
-    if (hasEmptyMaster(mrPage))
-        maRenderState.meStage = RenderStage::Slide;
+        // Last rendering pass might be empty - delete
+        if (maRenderState.maRenderPasses.back().isEmpty())
+            maRenderState.maRenderPasses.pop_back();
+
+        // Write JSON for the Background layer
+        writeJSON(rJsonMsg);
+
+        maRenderState.meStage = RenderStage::Master;
+    }
+    else
+    {
+        if (maRenderState.maRenderPasses.empty())
+            return false;
+
+        auto const& rRenderPass = maRenderState.maRenderPasses.front();
+        maRenderState.meStage = rRenderPass.meStage;
+        RenderPassObjectRedirector aRedirector(maRenderState, rRenderPass);
+        createViewAndDraw(aRenderContext, &aRedirector);
+
+        if (rRenderPass.mbAnimation)
+        {
+            maRenderState.mpCurrentTarget = rRenderPass.mpAnimatedObject;
+            maRenderState.mnCurrentTargetParagraph = rRenderPass.mnAnimatedParagraph;
+        }
+
+        writeJSON(rJsonMsg);
+
+        maRenderState.maRenderPasses.pop_front();
+    }
 
     return true;
 }
