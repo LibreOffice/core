@@ -2710,55 +2710,6 @@ bool MiscSettings::GetDisablePrinting() const
 
 bool MiscSettings::GetEnableATToolSupport() const
 {
-
-#ifdef _WIN32
-    if( mxData->mnEnableATT == TRISTATE_INDET )
-    {
-        // Check in the Windows registry if an AT tool wants Accessibility support to
-        // be activated ..
-        HKEY hkey;
-
-        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER,
-            L"Software\\LibreOffice\\Accessibility\\AtToolSupport",
-            &hkey) )
-        {
-            DWORD dwType;
-            wchar_t Data[6]; // possible values: "true", "false", "1", "0", DWORD
-            DWORD cbData = sizeof(Data);
-
-            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"SupportAssistiveTechnology",
-                nullptr, &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
-            {
-                switch (dwType)
-                {
-                    case REG_SZ:
-                        mxData->mnEnableATT = ((0 == wcsicmp(Data, L"1")) || (0 == wcsicmp(Data, L"true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
-                        break;
-                    case REG_DWORD:
-                        switch (reinterpret_cast<DWORD *>(Data)[0]) {
-                        case 0:
-                            mxData->mnEnableATT = TRISTATE_FALSE;
-                            break;
-                        case 1:
-                            mxData->mnEnableATT = TRISTATE_TRUE;
-                            break;
-                        default:
-                            mxData->mnEnableATT = TRISTATE_INDET;
-                                //TODO: or TRISTATE_TRUE?
-                            break;
-                        }
-                        break;
-                    default:
-                        // Unsupported registry type
-                        break;
-                }
-            }
-
-            RegCloseKey(hkey);
-        }
-    }
-#endif
-
     if( mxData->mnEnableATT == TRISTATE_INDET )
     {
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
@@ -2790,43 +2741,7 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
         mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
 
         if (o3tl::IsRunningUnitTest())
-            return; // No registry changing; no SettingsConfigItem modification
-
-        HKEY hkey;
-
-        // If the accessibility key in the Windows registry exists, change it synchronously
-        if( ERROR_SUCCESS == RegOpenKeyW(HKEY_CURRENT_USER,
-            L"Software\\LibreOffice\\Accessibility\\AtToolSupport",
-            &hkey) )
-        {
-            DWORD dwType;
-            wchar_t Data[6]; // possible values: "true", "false", 1, 0
-            DWORD cbData = sizeof(Data);
-
-            if( ERROR_SUCCESS == RegQueryValueExW(hkey, L"SupportAssistiveTechnology",
-                nullptr,   &dwType, reinterpret_cast<LPBYTE>(Data), &cbData) )
-            {
-                switch (dwType)
-                {
-                    case REG_SZ:
-                        RegSetValueExW(hkey, L"SupportAssistiveTechnology",
-                            0, dwType,
-                            reinterpret_cast<const BYTE*>(bEnable ? L"true" : L"false"),
-                            bEnable ? sizeof(L"true") : sizeof(L"false"));
-                        break;
-                    case REG_DWORD:
-                        reinterpret_cast<DWORD *>(Data)[0] = bEnable ? 1 : 0;
-                        RegSetValueExW(hkey, L"SupportAssistiveTechnology",
-                            0, dwType, reinterpret_cast<const BYTE*>(Data), sizeof(DWORD));
-                        break;
-                    default:
-                        // Unsupported registry type
-                        break;
-                }
-            }
-
-            RegCloseKey(hkey);
-        }
+            return; // no SettingsConfigItem modification
 
         vcl::SettingsConfigItem::get()->
             setValue( "Accessibility",
