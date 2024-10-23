@@ -16,6 +16,7 @@
 class QtInstanceComboBox : public QtInstanceWidget, public virtual weld::ComboBox
 {
     QComboBox* m_pComboBox;
+    bool m_bSorted;
 
 public:
     QtInstanceComboBox(QComboBox* pComboBox);
@@ -79,6 +80,9 @@ public:
     virtual void set_mru_entries(const OUString& rEntries) override;
 
     virtual void set_max_drop_down_rows(int nRows) override;
+
+private:
+    void sortItems();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

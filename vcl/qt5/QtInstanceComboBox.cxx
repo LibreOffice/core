@@ -12,6 +12,7 @@
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     : QtInstanceWidget(pComboBox)
     , m_pComboBox(pComboBox)
+    , m_bSorted(false)
 {
     assert(pComboBox);
 }
@@ -23,7 +24,11 @@ void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* 
         assert(false && "Handling for these not implemented yet");
 
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pComboBox->insertItem(nPos, toQString(rStr)); });
+    GetQtInstance().RunInMainThread([&] {
+        m_pComboBox->insertItem(nPos, toQString(rStr));
+        if (m_bSorted)
+            sortItems();
+    });
 }
 
 void QtInstanceComboBox::insert_vector(const std::vector<weld::ComboBoxEntry>&, bool)
@@ -44,7 +49,12 @@ int QtInstanceComboBox::get_count() const
     return nCount;
 }
 
-void QtInstanceComboBox::make_sorted() { assert(false && "Not implemented yet"); }
+void QtInstanceComboBox::make_sorted()
+{
+    SolarMutexGuard g;
+    m_bSorted = true;
+    GetQtInstance().RunInMainThread([&] { sortItems(); });
+}
 
 void QtInstanceComboBox::clear()
 {
@@ -236,5 +246,7 @@ void QtInstanceComboBox::set_mru_entries(const OUString&)
 }
 
 void QtInstanceComboBox::set_max_drop_down_rows(int) { assert(false && "Not implemented yet"); }
+
+void QtInstanceComboBox::sortItems() { m_pComboBox->model()->sort(0, Qt::AscendingOrder); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
