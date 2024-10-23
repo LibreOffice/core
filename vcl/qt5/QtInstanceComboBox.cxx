@@ -26,12 +26,16 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
 void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
                                 const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    if (pId || pIconName || pImageSurface)
+    if (pIconName || pImageSurface)
         assert(false && "Handling for these not implemented yet");
 
     SolarMutexGuard g;
     GetQtInstance().RunInMainThread([&] {
-        m_pComboBox->insertItem(nPos, toQString(rStr));
+        QVariant aUserData;
+        if (pId)
+            aUserData = QVariant::fromValue(toQString(*pId));
+
+        m_pComboBox->insertItem(nPos, toQString(rStr), aUserData);
         if (m_bSorted)
             sortItems();
     });
@@ -120,18 +124,41 @@ OUString QtInstanceComboBox::get_active_id() const
 
 void QtInstanceComboBox::set_active_id(const OUString&) { assert(false && "Not implemented yet"); }
 
-OUString QtInstanceComboBox::get_id(int) const
+OUString QtInstanceComboBox::get_id(int nPos) const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aUserData = m_pComboBox->itemData(nPos);
+        if (aUserData.canConvert<QString>())
+            sId = toOUString(aUserData.toString());
+    });
+
+    return sId;
 }
 
-void QtInstanceComboBox::set_id(int, const OUString&) { assert(false && "Not implemented yet"); }
-
-int QtInstanceComboBox::find_id(const OUString&) const
+void QtInstanceComboBox::set_id(int nRow, const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return -1;
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aUserData = QVariant::fromValue(toQString(rId));
+        m_pComboBox->setItemData(nRow, aUserData);
+    });
+}
+
+int QtInstanceComboBox::find_id(const OUString& rId) const
+{
+    SolarMutexGuard g;
+
+    int nIndex;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aUserData = toQString(rId);
+        nIndex = m_pComboBox->findData(aUserData);
+    });
+
+    return nIndex;
 }
 
 bool QtInstanceComboBox::changed_by_direct_pick() const
