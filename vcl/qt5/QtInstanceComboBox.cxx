@@ -41,9 +41,29 @@ void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* 
     });
 }
 
-void QtInstanceComboBox::insert_vector(const std::vector<weld::ComboBoxEntry>&, bool)
+void QtInstanceComboBox::insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
+                                       bool bKeepExisting)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (!bKeepExisting)
+            m_pComboBox->clear();
+
+        // if sorted, only sort once at the end
+        const bool bSorted = m_bSorted;
+        m_bSorted = false;
+
+        for (const weld::ComboBoxEntry& rEntry : rItems)
+        {
+            const OUString* pId = rEntry.sId.isEmpty() ? nullptr : &rEntry.sId;
+            const OUString* pImage = rEntry.sImage.isEmpty() ? nullptr : &rEntry.sImage;
+            insert(m_pComboBox->count(), rEntry.sString, pId, pImage, nullptr);
+        }
+
+        m_bSorted = bSorted;
+        if (m_bSorted)
+            sortItems();
+    });
 }
 
 void QtInstanceComboBox::insert_separator(int nPos, const OUString&)
