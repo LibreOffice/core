@@ -99,8 +99,7 @@ PropParser::PropParser(
     if( aIfstream.is_open() )
     {
         std::string s;
-        std::getline( aIfstream, s );
-        while( !aIfstream.eof() )
+        while( std::getline( aIfstream, s ) )
         {
             OString sLine( s.data(), s.length() );
             if( bMergeMode ||
@@ -108,7 +107,6 @@ PropParser::PropParser(
             {
                 m_vLines.push_back( sLine );
             }
-            std::getline( aIfstream, s );
         }
     }
     else
