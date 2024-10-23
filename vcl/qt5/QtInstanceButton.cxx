@@ -9,6 +9,8 @@
 
 #include <QtInstanceButton.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceButton::QtInstanceButton(QPushButton* pButton)
     : QtInstanceWidget(pButton)
     , m_pButton(pButton)
@@ -42,9 +44,13 @@ void QtInstanceButton::set_image(const css::uno::Reference<css::graphic::XGraphi
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceButton::set_from_icon_name(const OUString& /*rIconName*/)
+void QtInstanceButton::set_from_icon_name(const OUString& rIconName)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QPixmap aIcon = loadQPixmapIcon(rIconName);
+        m_pButton->setIcon(aIcon);
+    });
 }
 
 OUString QtInstanceButton::get_label() const
