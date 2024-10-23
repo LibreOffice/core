@@ -9,6 +9,8 @@
 
 #include <QtInstanceEntry.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
     : QtInstanceWidget(pLineEdit)
     , m_pLineEdit(pLineEdit)

@@ -58,6 +58,7 @@
 #endif
 
 #include <window.h>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/syswin.hxx>
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>

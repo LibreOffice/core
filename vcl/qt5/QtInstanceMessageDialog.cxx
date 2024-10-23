@@ -10,6 +10,8 @@
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceMessageDialog.moc>
 
+#include <vcl/qt/QtUtils.hxx>
+
 #include <QtWidgets/QPushButton>
 
 QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)

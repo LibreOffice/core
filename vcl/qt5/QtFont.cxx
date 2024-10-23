@@ -22,6 +22,8 @@
 #include <QtFont.hxx>
 #include <QtTools.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 #include <QtGui/QFont>
 #include <QtGui/QRawFont>
 #include <QtGui/QPainterPath>

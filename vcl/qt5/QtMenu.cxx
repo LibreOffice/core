@@ -38,6 +38,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
 

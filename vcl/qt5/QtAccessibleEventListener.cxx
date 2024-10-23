@@ -28,6 +28,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
+#include <vcl/qt/QtUtils.hxx>
 
 #include <QtGui/QAccessible>
 #include <QtGui/QAccessibleTextSelectionEvent>

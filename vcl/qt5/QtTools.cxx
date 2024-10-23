@@ -25,6 +25,7 @@
 #include <vcl/event.hxx>
 #include <vcl/image.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 

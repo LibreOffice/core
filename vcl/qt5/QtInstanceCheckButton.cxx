@@ -9,6 +9,8 @@
 
 #include <QtInstanceCheckButton.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceCheckButton::QtInstanceCheckButton(QCheckBox* pCheckBox)
     : QtInstanceWidget(pCheckBox)
     , m_pCheckBox(pCheckBox)

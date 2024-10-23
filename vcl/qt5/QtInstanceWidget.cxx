@@ -10,6 +10,7 @@
 #include <QtInstanceWidget.hxx>
 
 #include <vcl/transfer.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 /** Name of QObject property used for the help ID. */
 const char* const PROPERTY_HELP_ID = "help-id";

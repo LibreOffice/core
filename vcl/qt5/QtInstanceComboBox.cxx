@@ -10,6 +10,8 @@
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceComboBox.moc>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     : QtInstanceWidget(pComboBox)
     , m_pComboBox(pComboBox)

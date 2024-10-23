@@ -9,6 +9,8 @@
 
 #include <QtInstanceWindow.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
     : QtInstanceContainer(pWidget)
 {

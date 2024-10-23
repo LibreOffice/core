@@ -48,6 +48,7 @@
 #include <cairo.h>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <window.h>
 #include <comphelper/diagnose_ex.hxx>

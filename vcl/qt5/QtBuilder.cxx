@@ -13,6 +13,7 @@
 #include <QtTools.hxx>
 
 #include <rtl/ustrbuf.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>

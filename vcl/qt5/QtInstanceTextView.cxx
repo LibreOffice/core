@@ -9,6 +9,8 @@
 
 #include <QtInstanceTextView.hxx>
 
+#include <vcl/qt/QtUtils.hxx>
+
 #include <QtGui/QTextCursor>
 
 QtInstanceTextView::QtInstanceTextView(QPlainTextEdit* pTextEdit)

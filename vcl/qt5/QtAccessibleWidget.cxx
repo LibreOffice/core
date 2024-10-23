@@ -57,6 +57,7 @@
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 using namespace css;
 using namespace css::accessibility;

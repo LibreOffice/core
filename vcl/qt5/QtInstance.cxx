@@ -55,6 +55,7 @@
 #include <comphelper/flagguard.hxx>
 #include <config_vclplug.h>
 #include <dndhelper.hxx>
+#include <vcl/qt/QtUtils.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/sysdata.hxx>
 #include <sal/log.hxx>

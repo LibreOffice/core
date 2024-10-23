@@ -21,9 +21,15 @@
 #include <rtl/ustring.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 
+#include <QtCore/QString>
 #include <QtGui/QPixmap>
 
-QPixmap loadQPixmapIcon(const OUString& rIconName)
+inline QString toQString(const OUString& rStr)
+{
+    return QString::fromUtf16(rStr.getStr(), rStr.getLength());
+}
+
+inline QPixmap loadQPixmapIcon(const OUString& rIconName)
 {
     BitmapEx aIcon(rIconName);
     SvMemoryStream aMemoryStream;

@@ -48,6 +48,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/process.h>
 #include <sal/log.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 #include <QtCore/QDebug>
 #include <QtCore/QRegularExpression>

@@ -36,14 +36,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-inline QString toQString(const OUString& rStr)
-{
-    return QString::fromUtf16(rStr.getStr(), rStr.getLength());
-}
-}
-
 namespace avmedia::qt
 {
 QtPlayer::QtPlayer()

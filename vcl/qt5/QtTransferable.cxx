@@ -15,6 +15,7 @@
 #include <sal/log.hxx>
 #include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
+#include <vcl/qt/QtUtils.hxx>
 
 #include <QtWidgets/QApplication>
 

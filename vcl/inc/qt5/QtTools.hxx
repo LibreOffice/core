@@ -49,11 +49,6 @@ inline OUString toOUString(const QString& s)
     return OUString(reinterpret_cast<const sal_Unicode*>(s.data()), s.length());
 }
 
-inline QString toQString(const OUString& s)
-{
-    return QString::fromUtf16(s.getStr(), s.getLength());
-}
-
 inline QRect toQRect(const tools::Rectangle& rRect)
 {
     return QRect(rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight());
