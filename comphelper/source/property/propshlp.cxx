@@ -176,6 +176,8 @@ Any OPropertySetHelper::getPropertyValueImpl(std::unique_lock<std::mutex>& rGuar
     IPropertyArrayHelper& rPH = getInfoHelper();
     // map the name to the handle
     sal_Int32 nHandle = rPH.getHandleByName(rPropertyName);
+    if (nHandle == -1)
+        throw UnknownPropertyException(rPropertyName);
     // call the method of the XFastPropertySet interface
     Any aAny;
     getFastPropertyValue(rGuard, aAny, nHandle);
