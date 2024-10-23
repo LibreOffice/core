@@ -218,6 +218,13 @@ static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rx
     }
 }
 
+static StyleSheetEntryPtr lcl_getParent(StyleSheetEntryPtr pEntry, StyleSheetTablePtr pStyleSheet)
+{
+    if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
+        return pStyleSheet->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
+    return nullptr;
+}
+
 /**
  Very similar to DomainMapper_Impl::GetPropertyFromStyleSheet
  It is focused on paragraph properties search in current & parent stylesheet entries.
@@ -242,10 +249,7 @@ static uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleShe
             }
         }
         //search until the property is set or no parent is available
-        StyleSheetEntryPtr pNewEntry;
-        if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
-            pNewEntry = rStyleSheet->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
-
+        StyleSheetEntryPtr pNewEntry = lcl_getParent(pEntry, rStyleSheet);
         SAL_WARN_IF(pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
         if (pEntry == pNewEntry) //fdo#49587
@@ -1496,9 +1500,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId, const Sty
             }
         }
         //search until the property is set or no parent is available
-        StyleSheetEntryPtr pNewEntry;
-        if ( !pEntry->m_sBaseStyleIdentifier.isEmpty() )
-            pNewEntry = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
+        StyleSheetEntryPtr pNewEntry = lcl_getParent(pEntry, GetStyleSheetTable());
 
         SAL_WARN_IF( pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
 
@@ -1833,9 +1835,7 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
         {
             vProps.emplace_back(&pStyle->m_pProperties->props());
             assert(pStyle->m_sBaseStyleIdentifier != pStyle->m_sStyleName);
-            if (pStyle->m_sBaseStyleIdentifier.isEmpty())
-                break;
-            pStyle = GetStyleSheetTable()->FindStyleSheetByISTD(pStyle->m_sBaseStyleIdentifier);
+            pStyle = lcl_getParent(pStyle, GetStyleSheetTable());
         }
         SAL_WARN_IF(!nSafetyLimit, "writerfilter.dmapper", "Inheritance loop likely: early exit");
 
@@ -2091,11 +2091,7 @@ static sal_Int32 lcl_getListId(const StyleSheetEntryPtr& rEntry, const StyleShee
     if (nListId >= 0)
         return nListId;
 
-    // The style has no parent.
-    if (rEntry->m_sBaseStyleIdentifier.isEmpty())
-        return -1;
-
-    const StyleSheetEntryPtr pParent = rStyleTable->FindStyleSheetByISTD(rEntry->m_sBaseStyleIdentifier);
+    const StyleSheetEntryPtr pParent = lcl_getParent(rEntry, rStyleTable);
     // No such parent style or loop in the style hierarchy.
     if (!pParent || pParent == rEntry)
         return -1;
@@ -2136,11 +2132,7 @@ sal_Int16 DomainMapper_Impl::GetListLevel(const StyleSheetEntryPtr& pEntry,
     if (nListLevel >= 0)
         return nListLevel;
 
-    // The style has no parent.
-    if (pEntry->m_sBaseStyleIdentifier.isEmpty())
-        return -1;
-
-    const StyleSheetEntryPtr pParent = GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier);
+    const StyleSheetEntryPtr pParent = lcl_getParent(pEntry, GetStyleSheetTable());
     // No such parent style or loop in the style hierarchy.
     if (!pParent || pParent == pEntry)
         return -1;
@@ -2294,7 +2286,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             // the numbering indents now have the priority.
             // So now import must also copy the para-style indents directly onto the paragraph to compensate.
             std::optional<PropertyMap::Property> oProperty;
-            const StyleSheetEntryPtr pParent = (!pEntry->m_sBaseStyleIdentifier.isEmpty()) ? GetStyleSheetTable()->FindStyleSheetByISTD(pEntry->m_sBaseStyleIdentifier) : nullptr;
+            const StyleSheetEntryPtr pParent = lcl_getParent(pEntry, GetStyleSheetTable());
             const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->m_pProperties.get() : nullptr;
             if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
             {
