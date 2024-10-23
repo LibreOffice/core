@@ -775,7 +775,7 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
     sal_Int32           nMaxExp = 307;
     sal_uInt16          nDigCnt = 18;   // max. number of digits to read in, rest doesn't matter
 
-    enum State  { S_End = 0, S_Sign, S_IntStart, S_Int, S_IgnoreIntDigs, S_Frac, S_IgnoreFracDigs, S_ExpSign, S_Exp };
+    enum State  { S_End, S_Sign, S_IntStart, S_Int, S_IgnoreIntDigs, S_Frac, S_IgnoreFracDigs, S_ExpSign, S_Exp };
 
     State           eS = S_Sign;
 
@@ -785,7 +785,7 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
     const sal_Unicode*  p = rp;
     sal_Unicode         c;
 
-    while( eS )
+    while( eS != S_End )
     {
         c = *p;
         switch( eS )
