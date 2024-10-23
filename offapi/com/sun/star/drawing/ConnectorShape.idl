@@ -67,15 +67,15 @@ published service ConnectorShape
     [property] com::sun::star::drawing::XShape EndShape;
 
 
-    /** this property holds the index of the gluepoint the end point of
-        this connector is glued on.
+    /** this is the position of the connectors end point in 100th/mm. For
+        unconnected end points you can get and set the position. For
+        connected end points you can only get the position.
     */
     [property] com::sun::star::awt::Point EndPosition;
 
 
-    /** this is the position of the connectors end point in 100th/mm. For
-        unconnected end points you can get and set the position. For
-        connected end points you can only get the position.
+    /** this property holds the index of the gluepoint the end point of
+        this connector is glued on.
     */
     [property] long EndGluePointIndex;
 
