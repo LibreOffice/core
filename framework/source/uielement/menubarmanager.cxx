@@ -605,26 +605,23 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     }
 
     // Try to set accelerator keys
+    if ( bShowShortcuts )
+        RetrieveShortcuts( m_aMenuItemHandlerVector );
+    for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
     {
-        if ( bShowShortcuts )
-            RetrieveShortcuts( m_aMenuItemHandlerVector );
-
-        for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
+        if ( !bShowShortcuts )
         {
-            if ( !bShowShortcuts )
-            {
-                pMenu->SetAccelKey( menuItemHandler->nItemId, vcl::KeyCode() );
-            }
-            else if ( menuItemHandler->aMenuItemURL == aCmdHelpIndex )
-            {
-                // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
-                // Only non-popup menu items can have a short-cut
-                vcl::KeyCode aKeyCode( KEY_F1 );
-                pMenu->SetAccelKey( menuItemHandler->nItemId, aKeyCode );
-            }
-            else if ( pMenu->GetPopupMenu( menuItemHandler->nItemId ) == nullptr )
-                pMenu->SetAccelKey( menuItemHandler->nItemId, menuItemHandler->aKeyCode );
+            pMenu->SetAccelKey( menuItemHandler->nItemId, vcl::KeyCode() );
         }
+        else if ( menuItemHandler->aMenuItemURL == aCmdHelpIndex )
+        {
+            // Set key code, workaround for hard-coded shortcut F1 mapped to .uno:HelpIndex
+            // Only non-popup menu items can have a short-cut
+            vcl::KeyCode aKeyCode( KEY_F1 );
+            pMenu->SetAccelKey( menuItemHandler->nItemId, aKeyCode );
+        }
+        else if ( pMenu->GetPopupMenu( menuItemHandler->nItemId ) == nullptr )
+            pMenu->SetAccelKey( menuItemHandler->nItemId, menuItemHandler->aKeyCode );
     }
 
     URL aTargetURL;
