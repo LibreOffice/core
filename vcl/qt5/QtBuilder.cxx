@@ -147,7 +147,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkComboBoxText")
     {
-        pObject = new QComboBox(pParentWidget);
+        QComboBox* pComboBox = new QComboBox(pParentWidget);
+        pComboBox->setEditable(extractEntry(rMap));
+        pObject = pComboBox;
     }
     else if (sName == u"GtkDialog")
     {
@@ -213,8 +215,16 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
 }
 
 void QtBuilder::tweakInsertedChild(QObject* pParent, QObject* pCurrentChild, std::string_view sType,
-                                   std::string_view)
+                                   std::string_view sInternalChild)
 {
+    if (sInternalChild == "entry" && qobject_cast<QComboBox*>(pParent))
+    {
+        // an editable GtkComboBox has an internal GtkEntry child,
+        // but QComboBox doesn't need a separate widget for it, so
+        // delete it
+        pCurrentChild->deleteLater();
+    }
+
     if (sType == "label")
     {
         if (QLabel* pLabel = qobject_cast<QLabel*>(pCurrentChild))
