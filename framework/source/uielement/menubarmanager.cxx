@@ -560,8 +560,6 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     bool bDontHide           = officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool bShowMenuImages     = rSettings.GetUseImagesInMenus();
-    bool bShowShortcuts      = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
-    bool bHasDisabledEntries = SvtCommandOptions().HasEntriesDisabled();
 
     SolarMutexGuard g;
 
@@ -605,6 +603,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
     }
 
     // Try to set accelerator keys
+    bool bShowShortcuts = m_bHasMenuBar || rSettings.GetContextMenuShortcuts();
     if ( bShowShortcuts )
         RetrieveShortcuts( m_aMenuItemHandlerVector );
     for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
@@ -650,7 +649,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
 
                 m_xURLTransformer->parseStrict( aTargetURL );
 
-                if ( bHasDisabledEntries )
+                if (SvtCommandOptions().HasEntriesDisabled())
                 {
                     if ( aCmdOptions.LookupDisabled( aTargetURL.Path ))
                         pMenu->HideItem( menuItemHandler->nItemId );
