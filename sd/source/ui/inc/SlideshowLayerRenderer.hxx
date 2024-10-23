@@ -34,17 +34,21 @@ namespace com::sun::star::animations
 class XAnimate;
 }
 
+namespace sdr::contact
+{
+class ViewObjectContactRedirector;
+}
+
 namespace sd
 {
-struct RenderContext;
+class RenderContext;
 
 enum class RenderStage
 {
-    Background,
-    Master,
-    Slide,
-    TextFields,
-    Count
+    Background = 0,
+    Master = 1,
+    Slide = 2,
+    TextFields = 3,
 };
 
 struct AnimationLayerInfo
@@ -60,31 +64,36 @@ struct AnimationRenderInfo
     std::unordered_map<sal_Int32, AnimationLayerInfo> maParagraphInfos;
 };
 
+// Holds information used when doing one rendering pass
+struct RenderPass
+{
+    RenderStage meStage = RenderStage::Background;
+    std::unordered_map<SdrObject*, std::deque<sal_Int32>> maObjectsAndParagraphs;
+    bool mbRenderObjectBackground = false;
+
+    bool mbAnimation = false;
+    SdrObject* mpAnimatedObject = nullptr;
+    sal_Int32 mnAnimatedParagraph = -1;
+
+    bool isEmpty() { return maObjectsAndParagraphs.empty(); }
+};
+
 /** Holds rendering state, properties and switches through all rendering passes */
 struct RenderState
 {
+    std::deque<RenderPass> maRenderPasses;
+
     RenderStage meStage = RenderStage::Background;
-
-    bool mbStopRenderingWhenField = true;
-
-    std::unordered_set<SdrObject*> maObjectsDone;
 
     std::unordered_map<SdrObject*, AnimationRenderInfo> maAnimationRenderInfoList;
 
-    sal_Int32 mnIndex[static_cast<unsigned>(RenderStage::Count)] = { 0, 0, 0, 0 };
+    std::array<sal_Int32, 4> maIndices = { 0, 0, 0, 0 };
+
     SdrObject* mpCurrentTarget = nullptr;
     sal_Int32 mnCurrentTargetParagraph = -1;
 
-    sal_Int32 mnRenderedObjectsInPass = 0;
-
-    bool mbSkipAllInThisPass = false;
-
-    sal_Int32 mnCurrentPass = 0;
-
-    std::deque<sal_Int32> maParagraphsToRender;
-
     /// increments index depending on the current render stage
-    void incrementIndex() { mnIndex[static_cast<unsigned>(meStage)]++; }
+    void incrementIndex() { maIndices[size_t(meStage)]++; }
 
     /// returns the current stage as string
     OString stageString() const
@@ -99,7 +108,7 @@ struct RenderState
     }
 
     /// returns the current index depending on the current render stage
-    sal_Int32 currentIndex() const { return mnIndex[static_cast<unsigned>(meStage)]; }
+    sal_Int32 currentIndex() const { return maIndices[size_t(meStage)]; }
 
     /// returns the current target element for which layer is created if any
     SdrObject* currentTarget() const { return mpCurrentTarget; }
@@ -110,31 +119,12 @@ struct RenderState
     /// resets properties that are valid for one pass
     void resetPass()
     {
-        mnRenderedObjectsInPass = 0;
-        mbSkipAllInThisPass = false;
         mpCurrentTarget = nullptr;
         mnCurrentTargetParagraph = -1;
     }
 
-    bool hasPassAnyRenderedOutput() const { return mnRenderedObjectsInPass > 0; }
-
-    /// is first rendered object in pass
-    bool isFirstObjectInPass() const { return mnRenderedObjectsInPass == 0; }
-
-    /// return if there was no rendering output in the pass
-    bool noMoreOutput() const
-    {
-        // no output and we didn't skip anything and nothing was rendered
-        return !hasPassAnyRenderedOutput() && !mbSkipAllInThisPass;
-    }
-
     /// should include background in rendering
     bool includeBackground() const { return meStage == RenderStage::Background; }
-
-    bool isObjectAlreadyRendered(SdrObject* pObject) const
-    {
-        return maObjectsDone.find(pObject) != maObjectsDone.end();
-    }
 };
 
 /** Renders a slide */
@@ -146,7 +136,8 @@ private:
     Size maSlideSize;
     RenderState maRenderState;
 
-    void createViewAndDraw(RenderContext& rRenderContext);
+    void createViewAndDraw(RenderContext& rRenderContext,
+                           sdr::contact::ViewObjectContactRedirector* pRedirector);
     void writeJSON(OString& rJsonMsg);
 
     void setupAnimations();
