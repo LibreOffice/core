@@ -28,7 +28,7 @@ public:
     virtual void insert_vector(const std::vector<weld::ComboBoxEntry>& rItems,
                                bool bKeepExisting) override;
 
-    virtual void insert_separator(int pos, const OUString& rId) override;
+    virtual void insert_separator(int nPos, const OUString& rId) override;
 
     virtual int get_count() const override;
     virtual void make_sorted() override;

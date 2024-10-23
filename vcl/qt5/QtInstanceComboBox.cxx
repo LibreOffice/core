@@ -46,9 +46,14 @@ void QtInstanceComboBox::insert_vector(const std::vector<weld::ComboBoxEntry>&, 
     assert(false && "Not implemented yet");
 }
 
-void QtInstanceComboBox::insert_separator(int, const OUString&)
+void QtInstanceComboBox::insert_separator(int nPos, const OUString&)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (nPos == -1)
+            nPos = m_pComboBox->count();
+        m_pComboBox->insertSeparator(nPos);
+    });
 }
 
 int QtInstanceComboBox::get_count() const
