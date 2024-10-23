@@ -123,6 +123,7 @@ ta \
 te \
 tg \
 th \
+tl \
 tn \
 tr \
 ts \

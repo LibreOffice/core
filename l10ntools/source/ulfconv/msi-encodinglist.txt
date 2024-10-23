@@ -162,6 +162,7 @@ tg       0  1064   # Tajik
 th       0  1054
 ti       0  1139   # Tigrinya
 ti-ER    0  1139   # Tigrinya
+tl       0  1592   # Tagalog, fake LCID
 tn       0  1074   # Setsuana
 tr       0  1055   # Turkish
 ts       0  1073   # Tsonga
