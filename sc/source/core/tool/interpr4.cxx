@@ -253,7 +253,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
     {
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
-            rStr = mrStrPool.intern(rCell.getString(&mrDoc));
+            rStr = rCell.getSharedString(&mrDoc, mrStrPool);
         break;
         case CELLTYPE_FORMULA:
         {

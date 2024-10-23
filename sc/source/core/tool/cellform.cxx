@@ -21,6 +21,7 @@
 
 #include <svl/numformat.hxx>
 #include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -130,12 +131,10 @@ OUString ScCellFormat::GetString(
 
 OUString ScCellFormat::GetInputString(
     const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext, const ScDocument& rDoc,
-    const svl::SharedString** pShared, bool bFiltering, bool bForceSystemLocale )
+    bool bFiltering, bool bForceSystemLocale )
 {
     ScInterpreterContext& rContext = pContext ? *pContext : rDoc.GetNonThreadedContext();
 
-    if(pShared != nullptr)
-        *pShared = nullptr;
     switch (rCell.getType())
     {
         case CELLTYPE_STRING:
@@ -160,32 +159,60 @@ OUString ScCellFormat::GetInputString(
                 rContext.NFGetInputLineString(pFC->GetValue(), nFormat, *str, bFiltering, bForceSystemLocale);
             }
             else
-            {
-                const svl::SharedString& shared = pFC->GetString();
-                // Allow callers to optimize by avoiding converting later back to OUString.
-                // To avoid refcounting that won't be needed, do not even return the OUString.
-                if( pShared != nullptr )
-                    *pShared = &shared;
-                else
-                    str = shared.getString();
-            }
+                str = pFC->GetString().getString();
 
             const FormulaError nErrCode = pFC->GetErrCode();
             if (nErrCode != FormulaError::NONE)
-            {
                 str.reset();
-                if( pShared != nullptr )
-                    *pShared = nullptr;
-            }
 
             return str ? std::move(*str) : svl::SharedString::EMPTY_STRING;
         }
         case CELLTYPE_NONE:
-            if( pShared != nullptr )
-                *pShared = &svl::SharedString::getEmptyString();
             return svl::SharedString::EMPTY_STRING;
         default:
             return svl::SharedString::EMPTY_STRING;
+    }
+}
+
+svl::SharedString ScCellFormat::GetInputSharedString(
+    const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext, const ScDocument& rDoc,
+    svl::SharedStringPool& rStrPool,
+    bool bFiltering, bool bForceSystemLocale )
+{
+    ScInterpreterContext& rContext = pContext ? *pContext : rDoc.GetNonThreadedContext();
+
+    switch (rCell.getType())
+    {
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return rCell.getSharedString(&rDoc, rStrPool);
+        case CELLTYPE_VALUE:
+        {
+            OUString str;
+            rContext.NFGetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
+            return rStrPool.intern(str);
+        }
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFC = rCell.getFormula();
+            const FormulaError nErrCode = pFC->GetErrCode();
+            if (nErrCode != FormulaError::NONE)
+                return svl::SharedString::getEmptyString();
+            else if (pFC->IsEmptyDisplayedAsString())
+                return svl::SharedString::getEmptyString();
+            else if (pFC->IsValue())
+            {
+                OUString str;
+                rContext.NFGetInputLineString(pFC->GetValue(), nFormat, str, bFiltering, bForceSystemLocale);
+                return rStrPool.intern(str);
+            }
+            else
+                return pFC->GetString();
+        }
+        case CELLTYPE_NONE:
+        default:
+            return svl::SharedString::getEmptyString();
     }
 }
 

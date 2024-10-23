@@ -118,8 +118,8 @@ public:
                                const ScRefCellValue& rCell);
     static bool isQueryByString(ScQueryOp eOp, ScQueryEntry::QueryType eType,
                                 const ScRefCellValue& rCell);
-    OUString getCellString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol,
-                           const svl::SharedString** sharedString);
+    OUString getCellString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol);
+    svl::SharedString getCellSharedString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol);
     static bool isMatchWholeCell(const ScDocument& rDoc, ScQueryOp eOp);
 };
 

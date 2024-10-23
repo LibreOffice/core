@@ -3163,7 +3163,7 @@ double* ScColumn::GetValueCell( SCROW nRow )
 OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, bool bForceSystemLocale ) const
 {
     sal_uInt32 nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
-    return ScCellFormat::GetInputString(aCell, nFormat, nullptr, GetDoc(), nullptr, false, bForceSystemLocale);
+    return ScCellFormat::GetInputString(aCell, nFormat, nullptr, GetDoc(), false, bForceSystemLocale);
 }
 
 double ScColumn::GetValue( SCROW nRow ) const

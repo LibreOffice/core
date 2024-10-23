@@ -19,6 +19,7 @@
 #include <formula/token.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/sharedstring.hxx>
+#include <svl/sharedstringpool.hxx>
 
 namespace {
 
@@ -657,6 +658,26 @@ double ScRefCellValue::getRawValue() const
 OUString ScRefCellValue::getString( const ScDocument* pDoc ) const
 {
     return getStringImpl(*this, pDoc);
+}
+
+svl::SharedString ScRefCellValue::getSharedString( const ScDocument* pDoc, svl::SharedStringPool& rStrPool ) const
+{
+    switch (getType())
+    {
+        case CELLTYPE_VALUE:
+            return rStrPool.intern(OUString::number(getDouble()));
+        case CELLTYPE_STRING:
+            return *getSharedString();
+        case CELLTYPE_EDIT:
+            if (auto pEditText = getEditText())
+                return rStrPool.intern(ScEditUtil::GetString(*pEditText, pDoc));
+            break;
+        case CELLTYPE_FORMULA:
+            return getFormula()->GetString();
+        default:
+            ;
+    }
+    return svl::SharedString::getEmptyString();
 }
 
 OUString ScRefCellValue::getRawString( const ScDocument& rDoc ) const

@@ -295,8 +295,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByValue(const ScRefCellValue& rCe
     return std::pair<bool, bool>(bOk, bTestEqual);
 }
 
-OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol,
-                                         const svl::SharedString** sharedString)
+OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol)
 {
     if (rCell.getType() == CELLTYPE_FORMULA
         && rCell.getFormula()->GetErrCode() != FormulaError::NONE)
@@ -311,20 +310,50 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
             assert(pos.second); // inserted
             it = pos.first;
         }
-        *sharedString = &it->second;
-        return OUString();
+        return it->second.getString();
     }
     else if (rCell.getType() == CELLTYPE_STRING)
     {
-        *sharedString = rCell.getSharedString();
-        return OUString();
+        return rCell.getSharedString()->getString();
     }
     else
     {
         sal_uInt32 nFormat
             = mpContext ? mrTab.GetNumberFormat(*mpContext, ScAddress(nCol, nRow, mrTab.GetTab()))
                         : mrTab.GetNumberFormat(nCol, nRow);
-        return ScCellFormat::GetInputString(rCell, nFormat, mpContext, mrDoc, sharedString, true);
+        return ScCellFormat::GetInputString(rCell, nFormat, mpContext, mrDoc, true);
+    }
+}
+
+svl::SharedString ScQueryEvaluator::getCellSharedString(const ScRefCellValue& rCell, SCROW nRow,
+                                                        SCCOL nCol)
+{
+    if (rCell.getType() == CELLTYPE_FORMULA
+        && rCell.getFormula()->GetErrCode() != FormulaError::NONE)
+    {
+        // Error cell is evaluated as string (for now).
+        const FormulaError error = rCell.getFormula()->GetErrCode();
+        auto it = mCachedSharedErrorStrings.find(error);
+        if (it == mCachedSharedErrorStrings.end())
+        {
+            svl::SharedString str = mrStrPool.intern(ScGlobal::GetErrorString(error));
+            auto pos = mCachedSharedErrorStrings.insert({ error, str });
+            assert(pos.second); // inserted
+            it = pos.first;
+        }
+        return it->second;
+    }
+    else if (rCell.getType() == CELLTYPE_STRING)
+    {
+        return *rCell.getSharedString();
+    }
+    else
+    {
+        sal_uInt32 nFormat
+            = mpContext ? mrTab.GetNumberFormat(*mpContext, ScAddress(nCol, nRow, mrTab.GetTab()))
+                        : mrTab.GetNumberFormat(nCol, nRow);
+        return ScCellFormat::GetInputSharedString(rCell, nFormat, mpContext, mrDoc, mrStrPool,
+                                                  true);
     }
 }
 
@@ -705,16 +734,14 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
             }
         }
     }
-    const svl::SharedString* cellSharedString = nullptr;
-    std::optional<OUString> oCellString;
+    svl::SharedString cellSharedString;
     const bool bFastCompareByString = isFastCompareByString(rEntry);
     if (rEntry.eOp == SC_EQUAL && rItems.size() >= 10 && bFastCompareByString)
     {
         // The same as above but for strings. Try to optimize the case when
         // it's a svl::SharedString comparison. That happens when SC_EQUAL is used
         // and simple matching is used, see compareByString()
-        if (!oCellString)
-            oCellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
+        cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
         // Allow also checking ScQueryEntry::ByValue if the cell is not numeric,
         // as in that case isQueryByNumeric() would be false and isQueryByString() would
         // be true because of SC_EQUAL making isTextMatchOp() true.
@@ -722,51 +749,45 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         // For ScQueryEntry::ByString check that the cell is represented by a shared string,
         // which means it's either a string cell or a formula error. This is not as
         // generous as isQueryByString() but it should be enough and better be safe.
-        if (cellSharedString != nullptr)
+        if (rItems.size() >= 100)
         {
-            if (rItems.size() >= 100)
+            // Sort, cache and binary search for the string in items.
+            // Since each SharedString is identified by pointer value,
+            // sorting by pointer value is enough.
+            if (mCachedSortedItemStrings.size() <= nEntryIndex)
             {
-                // Sort, cache and binary search for the string in items.
-                // Since each SharedString is identified by pointer value,
-                // sorting by pointer value is enough.
-                if (mCachedSortedItemStrings.size() <= nEntryIndex)
-                {
-                    mCachedSortedItemStrings.resize(nEntryIndex + 1);
-                    auto& values = mCachedSortedItemStrings[nEntryIndex];
-                    values.reserve(rItems.size());
-                    for (const auto& rItem : rItems)
-                    {
-                        if (rItem.meType == ScQueryEntry::ByString
-                            || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
-                        {
-                            values.push_back(mrParam.bCaseSens
-                                                 ? rItem.maString.getData()
-                                                 : rItem.maString.getDataIgnoreCase());
-                        }
-                    }
-                    std::sort(values.begin(), values.end());
-                }
+                mCachedSortedItemStrings.resize(nEntryIndex + 1);
                 auto& values = mCachedSortedItemStrings[nEntryIndex];
-                const rtl_uString* string = mrParam.bCaseSens
-                                                ? cellSharedString->getData()
-                                                : cellSharedString->getDataIgnoreCase();
-                auto it = std::lower_bound(values.begin(), values.end(), string);
-                if (it != values.end() && *it == string)
-                    return std::make_pair(true, true);
-            }
-            else
-            {
+                values.reserve(rItems.size());
                 for (const auto& rItem : rItems)
                 {
-                    if ((rItem.meType == ScQueryEntry::ByString
-                         || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
-                        && (mrParam.bCaseSens
-                                ? cellSharedString->getData() == rItem.maString.getData()
-                                : cellSharedString->getDataIgnoreCase()
-                                      == rItem.maString.getDataIgnoreCase()))
+                    if (rItem.meType == ScQueryEntry::ByString
+                        || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
                     {
-                        return std::make_pair(true, true);
+                        values.push_back(mrParam.bCaseSens ? rItem.maString.getData()
+                                                           : rItem.maString.getDataIgnoreCase());
                     }
+                }
+                std::sort(values.begin(), values.end());
+            }
+            auto& values = mCachedSortedItemStrings[nEntryIndex];
+            const rtl_uString* string = mrParam.bCaseSens ? cellSharedString.getData()
+                                                          : cellSharedString.getDataIgnoreCase();
+            auto it = std::lower_bound(values.begin(), values.end(), string);
+            if (it != values.end() && *it == string)
+                return std::make_pair(true, true);
+        }
+        else
+        {
+            for (const auto& rItem : rItems)
+            {
+                if ((rItem.meType == ScQueryEntry::ByString
+                     || (compareByValue && rItem.meType == ScQueryEntry::ByValue))
+                    && (mrParam.bCaseSens ? cellSharedString.getData() == rItem.maString.getData()
+                                          : cellSharedString.getDataIgnoreCase()
+                                                == rItem.maString.getDataIgnoreCase()))
+                {
+                    return std::make_pair(true, true);
                 }
             }
         }
@@ -794,15 +815,12 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         }
         else if (isQueryByString(rEntry.eOp, rItem.meType, aCell))
         {
-            if (!oCellString)
-                oCellString = getCellString(aCell, nRow, rEntry.nField, &cellSharedString);
+            cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
             std::pair<bool, bool> aThisRes;
-            if (cellSharedString && bFastCompareByString) // fast
-                aThisRes = compareByString<true>(rEntry, rItem, cellSharedString, nullptr);
-            else if (cellSharedString)
-                aThisRes = compareByString(rEntry, rItem, cellSharedString, nullptr);
+            if (bFastCompareByString) // fast
+                aThisRes = compareByString<true>(rEntry, rItem, &cellSharedString, nullptr);
             else
-                aThisRes = compareByString(rEntry, rItem, nullptr, &*oCellString);
+                aThisRes = compareByString(rEntry, rItem, &cellSharedString, nullptr);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }

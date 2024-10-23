@@ -28,6 +28,7 @@ class ScAddress;
 class ScDocument;
 struct ScInterpreterContext;
 struct ScRefCellValue;
+namespace svl { class SharedStringPool; }
 
 class SC_DLLPUBLIC ScCellFormat
 {
@@ -43,18 +44,14 @@ public:
         const Color** ppColor, ScInterpreterContext* pContext, bool bNullVals = true,
         bool bFormula  = false );
 
-    // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
-    static OUString GetInputString(
+    static svl::SharedString GetInputSharedString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
-        const ScDocument& rDoc, const svl::SharedString** pShared = nullptr, bool bFiltering = false,
-        bool bForceSystemLocale = false );
+        const ScDocument& rDoc, svl::SharedStringPool& rStrPool,
+        bool bFiltering = false, bool bForceSystemLocale = false );
 
     static OUString GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
-        const ScDocument& rDoc, bool bFiltering, bool bForceSystemLocale = false )
-    {
-        return GetInputString( rCell, nFormat, pContext, rDoc, nullptr, bFiltering, bForceSystemLocale );
-    }
+        const ScDocument& rDoc, bool bFiltering = false, bool bForceSystemLocale = false );
 
     static OUString GetOutputString(
         ScDocument& rDoc, const ScAddress& rPos, const ScRefCellValue& rCell );

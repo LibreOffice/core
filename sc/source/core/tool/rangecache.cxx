@@ -186,10 +186,7 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
                 assert(!ScQueryEvaluator::isQueryByValue(mQueryOp, mQueryType, cell));
                 if (ScQueryEvaluator::isQueryByString(mQueryOp, mQueryType, cell))
                 {
-                    const svl::SharedString* sharedString = nullptr;
-                    OUString string = evaluator.getCellString(cell, nRow, nCol, &sharedString);
-                    if (sharedString)
-                        string = sharedString->getString();
+                    OUString string = evaluator.getCellString(cell, nRow, nCol);
                     colrowData.push_back(ColRowData{ mRowSearch ? nRow : nCol, string });
                 }
             }

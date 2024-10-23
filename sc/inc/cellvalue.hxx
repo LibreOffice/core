@@ -22,6 +22,7 @@ struct ScRefCellValue;
 namespace sc {
 struct ColumnBlockPosition;
 }
+namespace svl { class SharedStringPool; }
 
 /**
  * Store arbitrary cell value of any kind.  It only stores cell value and
@@ -174,6 +175,7 @@ public:
      *          ScEditUtil::GetString().
      */
     SC_DLLPUBLIC OUString getString( const ScDocument* pDoc ) const;
+    SC_DLLPUBLIC svl::SharedString getSharedString( const ScDocument* pDoc, svl::SharedStringPool& rStrPool ) const;
 
     /**
      * Retrieve a string value without modifying the states of any objects in
