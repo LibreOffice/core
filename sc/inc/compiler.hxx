@@ -412,6 +412,23 @@ public:
     SC_DLLPUBLIC static void CheckTabQuotes( OUString& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
+    /** Concatenates two sheet names in Excel syntax, i.e. 'Sheet1:Sheet2'
+        instead of 'Sheet1':'Sheet2' or 'Sheet1':Sheet2 or Sheet1:'Sheet2'.
+
+        @param  rBuf
+                Contains the first sheet name already, in the correct quoted 'Sheet''1' or
+                unquoted Sheet1 form if plain name.
+
+        @param  nQuotePos
+                Start position, of the first sheet name if unquoted, or its
+                opening quote.
+
+        @param  rEndTabName
+                Second sheet name to append, in the correct quoted 'Sheet''2'
+                or unquoted Sheet2 form if plain name.
+     */
+    static void FormExcelSheetRange( OUStringBuffer& rBuf, sal_Int32 nQuotePos, const OUString& rEndTabName );
+
     /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc...
 
         @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
