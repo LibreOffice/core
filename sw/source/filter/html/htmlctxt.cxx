@@ -575,17 +575,17 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         {
         case RES_MARGIN_FIRSTLINE:
             {
-                pFirstLineItem = static_cast<const SvxFirstLineIndentItem*>(pItem);
+                pFirstLineItem = &(pItem->StaticWhichCast(RES_MARGIN_FIRSTLINE));
             }
             break;
         case RES_MARGIN_TEXTLEFT:
             {
-                pTextLeftMargin = static_cast<const SvxTextLeftMarginItem*>(pItem);
+                pTextLeftMargin = &(pItem->StaticWhichCast(RES_MARGIN_TEXTLEFT));
             }
             break;
         case RES_MARGIN_RIGHT:
             {
-                pRightMargin = static_cast<const SvxRightMarginItem*>(pItem);
+                pRightMargin = &(pItem->StaticWhichCast(RES_MARGIN_RIGHT));
             }
             break;
         }
@@ -669,7 +669,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             {
                 sal_uInt16 nUpper = 0, nLower = 0;
                 GetULSpaceFromContext( nUpper, nLower );
-                SvxULSpaceItem aULSpace( *static_cast<const SvxULSpaceItem *>(pItem) );
+                SvxULSpaceItem aULSpace( pItem->StaticWhichCast(RES_UL_SPACE) );
                 if( !rPropInfo.m_bTopMargin )
                     aULSpace.SetUpper( nUpper );
                 if( !rPropInfo.m_bBottomMargin )
@@ -708,7 +708,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             if( bCharLvl )
             {
                 // Convert the Frame attribute to a Char attribute (if needed)
-                SvxBrushItem aBrushItem( *static_cast<const SvxBrushItem *>(pItem) );
+                SvxBrushItem aBrushItem( pItem->StaticWhichCast(RES_BACKGROUND) );
                 aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
 
                 // Set the attribute
@@ -728,7 +728,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         case RES_BOX:
             if( bCharLvl )
             {
-                SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
+                SvxBoxItem aBoxItem( pItem->StaticWhichCast(RES_BOX) );
                 aBoxItem.SetWhich( RES_CHRATR_BOX );
 
                 NewAttr(m_xAttrTab, &m_xAttrTab->pCharBox, aBoxItem);

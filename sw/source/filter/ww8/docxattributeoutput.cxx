@@ -1569,8 +1569,8 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
             }
             else if (nWhichId == RES_TXTATR_AUTOFMT)
             {
-                const SwFormatAutoFormat* pAutoFormat = static_cast<const SwFormatAutoFormat*>(pItem);
-                lcl_writeParagraphMarkerProperties(rAttributeOutput, *pAutoFormat->GetStyleHandle());
+                const SwFormatAutoFormat pAutoFormat = pItem->StaticWhichCast(RES_TXTATR_AUTOFMT);
+                lcl_writeParagraphMarkerProperties(rAttributeOutput, *pAutoFormat.GetStyleHandle());
             }
         }
         nWhichId = aIter.NextWhich();
@@ -4957,53 +4957,53 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
     switch (rHt.Which())
     {
         case RES_CHRATR_CASEMAP:
-            bMustWrite = static_cast< const SvxCaseMapItem& >(rHt).GetCaseMap() != SvxCaseMap::NotMapped;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CASEMAP).GetCaseMap() != SvxCaseMap::NotMapped;
             break;
         case RES_CHRATR_COLOR:
-            bMustWrite = static_cast< const SvxColorItem& >(rHt).GetValue() != COL_AUTO;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_COLOR).GetValue() != COL_AUTO;
             break;
         case RES_CHRATR_CONTOUR:
-            bMustWrite = static_cast< const SvxContourItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CONTOUR).GetValue();
             break;
         case RES_CHRATR_CROSSEDOUT:
-            bMustWrite = static_cast< const SvxCrossedOutItem& >(rHt).GetStrikeout() != STRIKEOUT_NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CROSSEDOUT).GetStrikeout() != STRIKEOUT_NONE;
             break;
         case RES_CHRATR_ESCAPEMENT:
-            bMustWrite = static_cast< const SvxEscapementItem& >(rHt).GetEscapement() != SvxEscapement::Off;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_ESCAPEMENT).GetEscapement() != SvxEscapement::Off;
             break;
         case RES_CHRATR_FONT:
             bMustWrite = true;
             break;
         case RES_CHRATR_FONTSIZE:
-            bMustWrite = static_cast< const SvxFontHeightItem& >(rHt).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_FONTSIZE).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
             break;
         case RES_CHRATR_KERNING:
-            bMustWrite = static_cast< const SvxKerningItem& >(rHt).GetValue() != 0;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_KERNING).GetValue() != 0;
             break;
         case RES_CHRATR_LANGUAGE:
             bMustWrite = true;
             break;
         case RES_CHRATR_POSTURE:
-            bMustWrite = static_cast< const SvxPostureItem& >(rHt).GetPosture() != ITALIC_NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_POSTURE).GetPosture() != ITALIC_NONE;
             break;
         case RES_CHRATR_SHADOWED:
-            bMustWrite = static_cast< const SvxShadowedItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_SHADOWED).GetValue();
             break;
         case RES_CHRATR_UNDERLINE:
-            bMustWrite = static_cast< const SvxUnderlineItem& >(rHt).GetLineStyle() != LINESTYLE_NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_UNDERLINE).GetLineStyle() != LINESTYLE_NONE;
             break;
         case RES_CHRATR_WEIGHT:
-            bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_WEIGHT).GetWeight() != WEIGHT_NORMAL;
             break;
         case RES_CHRATR_AUTOKERN:
-            bMustWrite = static_cast< const SvxAutoKernItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_AUTOKERN).GetValue();
             break;
         case RES_CHRATR_BLINK:
-            bMustWrite = static_cast< const SvxBlinkItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_BLINK).GetValue();
             break;
         case RES_CHRATR_BACKGROUND:
             {
-                const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
+                const SvxBrushItem& rBrushItem = rHt.StaticWhichCast(RES_CHRATR_BACKGROUND);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
                               rBrushItem.GetGraphicObject() != nullptr);
@@ -5030,39 +5030,39 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = true;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
-            bMustWrite = static_cast< const SvxFontHeightItem& >(rHt).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CTL_FONTSIZE).GetHeight() != 200; // see StyleSheetTable_Impl::StyleSheetTable_Impl() where we set this default
             break;
         case RES_CHRATR_CTL_LANGUAGE:
             bMustWrite = true;
             break;
         case RES_CHRATR_CTL_POSTURE:
-            bMustWrite = static_cast< const SvxPostureItem& >(rHt).GetPosture() != ITALIC_NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CTL_POSTURE).GetPosture() != ITALIC_NONE;
             break;
         case RES_CHRATR_CTL_WEIGHT:
-            bMustWrite = static_cast< const SvxWeightItem& >(rHt).GetWeight() != WEIGHT_NORMAL;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_CTL_WEIGHT).GetWeight() != WEIGHT_NORMAL;
             break;
 
         case RES_CHRATR_ROTATE:
-            bMustWrite = static_cast< const SvxCharRotateItem& >(rHt).GetValue() != 0_deg10;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_ROTATE).GetValue() != 0_deg10;
             break;
         case RES_CHRATR_EMPHASIS_MARK:
-            bMustWrite = static_cast< const SvxEmphasisMarkItem& >(rHt).GetEmphasisMark() != FontEmphasisMark::NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_EMPHASIS_MARK).GetEmphasisMark() != FontEmphasisMark::NONE;
             break;
         case RES_CHRATR_TWO_LINES:
-            bMustWrite = static_cast< const SvxTwoLinesItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_TWO_LINES).GetValue();
             break;
         case RES_CHRATR_SCALEW:
-            bMustWrite = static_cast< const SvxCharScaleWidthItem& >(rHt).GetValue() != 100;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_SCALEW).GetValue() != 100;
             break;
         case RES_CHRATR_RELIEF:
-            bMustWrite = static_cast< const SvxCharReliefItem& >(rHt).GetValue() != FontRelief::NONE;
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_RELIEF).GetValue() != FontRelief::NONE;
             break;
         case RES_CHRATR_HIDDEN:
-            bMustWrite = static_cast< const SvxCharHiddenItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_CHRATR_HIDDEN).GetValue();
             break;
         case RES_CHRATR_BOX:
             {
-                const SvxBoxItem& rBoxItem = static_cast< const SvxBoxItem& >(rHt);
+                const SvxBoxItem& rBoxItem = rHt.StaticWhichCast(RES_CHRATR_BOX);
                 bMustWrite = rBoxItem.GetTop() || rBoxItem.GetLeft() ||
                              rBoxItem.GetBottom() || rBoxItem.GetRight() ||
                              rBoxItem.GetSmallestDistance();
@@ -5070,7 +5070,7 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             break;
         case RES_CHRATR_HIGHLIGHT:
             {
-                const SvxBrushItem& rBrushItem = static_cast< const SvxBrushItem& >(rHt);
+                const SvxBrushItem& rBrushItem = rHt.StaticWhichCast(RES_CHRATR_HIGHLIGHT);
                 bMustWrite = (rBrushItem.GetColor() != COL_AUTO ||
                               rBrushItem.GetShadingValue() != ShadingPattern::CLEAR ||
                               rBrushItem.GetGraphicObject() != nullptr);
@@ -5078,25 +5078,25 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             break;
 
         case RES_PARATR_LINESPACING:
-            bMustWrite = static_cast< const SvxLineSpacingItem& >(rHt).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_LINESPACING).GetInterLineSpaceRule() != SvxInterLineSpaceRule::Off;
             break;
         case RES_PARATR_ADJUST:
-            bMustWrite = static_cast< const SvxAdjustItem& >(rHt).GetAdjust() != SvxAdjust::Left;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_ADJUST).GetAdjust() != SvxAdjust::Left;
             break;
         case RES_PARATR_SPLIT:
-            bMustWrite = !static_cast< const SvxFormatSplitItem& >(rHt).GetValue();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_SPLIT).GetValue();
             break;
         case RES_PARATR_WIDOWS:
-            bMustWrite = static_cast< const SvxWidowsItem& >(rHt).GetValue();
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_WIDOWS).GetValue();
             break;
         case RES_PARATR_TABSTOP:
-            bMustWrite = static_cast< const SvxTabStopItem& >(rHt).Count() != 0;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_TABSTOP).Count() != 0;
             break;
         case RES_PARATR_HYPHENZONE:
             bMustWrite = true;
             break;
         case RES_PARATR_NUMRULE:
-            bMustWrite = !static_cast< const SwNumRuleItem& >(rHt).GetValue().isEmpty();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty();
             break;
         case RES_PARATR_SCRIPTSPACE:
             bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
@@ -5108,10 +5108,10 @@ void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
             bMustWrite = !static_cast< const SfxBoolItem& >(rHt).GetValue();
             break;
         case RES_PARATR_VERTALIGN:
-            bMustWrite = static_cast< const SvxParaVertAlignItem& >(rHt).GetValue() != SvxParaVertAlignItem::Align::Automatic;
+            bMustWrite = rHt.StaticWhichCast(RES_PARATR_VERTALIGN).GetValue() != SvxParaVertAlignItem::Align::Automatic;
             break;
         case RES_PARATR_SNAPTOGRID:
-            bMustWrite = !static_cast< const SvxParaGridItem& >(rHt).GetValue();
+            bMustWrite = !rHt.StaticWhichCast(RES_PARATR_SNAPTOGRID).GetValue();
             break;
         case RES_CHRATR_GRABBAG:
             bMustWrite = true;
