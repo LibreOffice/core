@@ -117,6 +117,39 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkComboBoxText" id="name">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="name-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|name">Lists the installed printers on your operating system. To change the default printer, select a printer name from the list.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="properties">
+                    <property name="label" translatable="yes" context="printersetupdialog|properties">Properties...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="properties-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|properties">Changes the printer settings of your operating system for the current document.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -210,39 +243,6 @@
                     <property name="left-attach">1</property>
                     <property name="top-attach">3</property>
                     <property name="width">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="properties">
-                    <property name="label" translatable="yes" context="printersetupdialog|properties">Properties...</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="properties-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|properties">Changes the printer settings of your operating system for the current document.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="name">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="hexpand">True</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="name-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="printersetupdialog|extended_tip|name">Lists the installed printers on your operating system. To change the default printer, select a printer name from the list.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
                   </packing>
                 </child>
               </object>
