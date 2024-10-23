@@ -972,18 +972,6 @@ namespace
         return bCloseable;
     }
 
-    bool extractEntry(VclBuilder::stringmap &rMap)
-    {
-        bool bHasEntry = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"has-entry"_ustr);
-        if (aFind != rMap.end())
-        {
-            bHasEntry = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bHasEntry;
-    }
-
     bool extractVerticalTabPos(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
@@ -3766,7 +3754,17 @@ bool BuilderBase::hasOrientationVertical(VclBuilder::stringmap &rMap)
     return bVertical;
 }
 
-
+bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
+{
+    bool bHasEntry = false;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"has-entry"_ustr);
+    if (aFind != rMap.end())
+    {
+        bHasEntry = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bHasEntry;
+}
 
 bool BuilderBase::extractVisible(VclBuilder::stringmap& rMap)
 {
