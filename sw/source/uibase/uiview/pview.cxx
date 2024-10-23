@@ -1779,25 +1779,21 @@ bool SwPagePreview::HandleWheelCommands( const CommandEvent& rCEvt )
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if( pWData && CommandWheelMode::ZOOM == pWData->GetMode() )
     {
-        //only the Preference shouldn't control the Zoom, it is better to detect AT tools running. So the bridge can be used here
-        if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
+        sal_uInt16 nFactor = GetViewShell()->GetViewOptions()->GetZoom();
+        const sal_uInt16 nOffset = 10;
+        if( 0L > pWData->GetDelta() )
         {
-            sal_uInt16 nFactor = GetViewShell()->GetViewOptions()->GetZoom();
-            const sal_uInt16 nOffset = 10;
-            if( 0L > pWData->GetDelta() )
-            {
-                nFactor -= nOffset;
-                if(nFactor < MIN_PREVIEW_ZOOM)
-                    nFactor = MIN_PREVIEW_ZOOM;
-            }
-            else
-            {
-                nFactor += nOffset;
-                if(nFactor > MAX_PREVIEW_ZOOM)
-                    nFactor = MAX_PREVIEW_ZOOM;
-            }
-            SetZoom(SvxZoomType::PERCENT, nFactor);
+            nFactor -= nOffset;
+            if(nFactor < MIN_PREVIEW_ZOOM)
+                nFactor = MIN_PREVIEW_ZOOM;
         }
+        else
+        {
+            nFactor += nOffset;
+            if(nFactor > MAX_PREVIEW_ZOOM)
+                nFactor = MAX_PREVIEW_ZOOM;
+        }
+        SetZoom(SvxZoomType::PERCENT, nFactor);
         bOk = true;
     }
     else
