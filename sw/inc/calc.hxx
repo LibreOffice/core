@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_INC_CALC_HXX
-#define INCLUDED_SW_INC_CALC_HXX
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -215,7 +214,5 @@ public:
     SW_DLLPUBLIC static bool IsValidVarName( const OUString& rStr,
                                     OUString* pValidName = nullptr );
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
