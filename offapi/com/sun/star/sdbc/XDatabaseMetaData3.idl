@@ -181,7 +181,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *      </UL>
      *  <LI><B>SPECIFIC_NAME</B> String  {@code =>} the name which uniquely identifies
      *  this function within its schema.  This is a user specified, or DBMS
-     * generated, name that may be different then the {@code FUNCTION_NAME}
+     * generated, name that may be different from the {@code FUNCTION_NAME}
      * for example with overload functions
      *  </OL>
      * <p>
@@ -268,7 +268,7 @@ interface XDatabaseMetaData3 : XDatabaseMetaData2
      *       </UL>
      *  <LI><B>SPECIFIC_NAME</B> String  {@code =>} the name which uniquely identifies
      * this function within its schema.  This is a user specified, or DBMS
-     * generated, name that may be different then the {@code FUNCTION_NAME}
+     * generated, name that may be different from the {@code FUNCTION_NAME}
      * for example with overload functions
      *  </OL>
      *
