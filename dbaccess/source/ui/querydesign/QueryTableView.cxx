@@ -493,10 +493,10 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                         if ( pTabWinTmp == pNewTabWin )
                             continue;
 
+                        assert(pTabWinTmp && "TableWindow is null!");
                         if ( pTabWinTmp->GetData()->isQuery() )
                             continue;
 
-                        assert(pTabWinTmp && "TableWindow is null!");
                         Reference< XPropertySet > xFKKey = getKeyReferencedTo( pTabWinTmp->GetData()->getKeys(), pNewTabWin->GetComposedName() );
                         if ( !xFKKey.is() )
                             continue;
