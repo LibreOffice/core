@@ -9,7 +9,7 @@ Globals
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
             WINDOWSBASISROOTNAME ZetaOffice
-            UNIXBASISROOTNAME zetaoffice
+            UNIXBASISROOTNAME zetaoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX
             BASISPACKAGEPREFIX zetaofficebasis
