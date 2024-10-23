@@ -2232,13 +2232,12 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
     const StyleSheetEntryPtr pEntry = GetStyleSheetTable()->FindStyleSheetByConvertedStyleName( GetCurrentParaStyleName() );
     SAL_WARN_IF(!pEntry, "writerfilter.dmapper", "no style sheet found");
-    const StyleSheetPropertyMap* pStyleSheetProperties = pEntry ? pEntry->m_pProperties.get() : nullptr;
     sal_Int32 nListId = pParaContext ? pParaContext->props().GetListId() : -1;
     bool isNumberingViaStyle(false);
     bool isNumberingViaRule = nListId > -1;
-    if ( !bRemove && pStyleSheetProperties && pParaContext )
+    if (!bRemove && pEntry && pEntry->m_pProperties && pParaContext)
     {
-        if (!pEntry || pEntry->m_nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
+        if (pEntry->m_nStyleTypeCode != StyleType::STYLE_TYPE_PARA) {
             // We could not resolve paragraph style or it is not a paragraph style
             // Remove this style reference, otherwise it will cause exceptions during further
             // processing and not all paragraph styles will be initialized.
@@ -2299,13 +2298,13 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             const StyleSheetPropertyMap* pParentProperties = pParent ? pParent->m_pProperties.get() : nullptr;
             if (!pEntry->m_sBaseStyleIdentifier.isEmpty())
             {
-                oProperty = pStyleSheetProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
+                oProperty = pEntry->m_pProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT);
                 if ( oProperty
                     // If the numbering comes from a base style, indent of the base style has also priority.
                     || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_FIRST_LINE_INDENT))) )
                     pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, oProperty->second, /*bOverwrite=*/false);
             }
-            oProperty = pStyleSheetProperties->getProperty(PROP_PARA_LEFT_MARGIN);
+            oProperty = pEntry->m_pProperties->getProperty(PROP_PARA_LEFT_MARGIN);
             if ( oProperty
                 || (bNumberingFromBaseStyle && pParentProperties && (oProperty = pParentProperties->getProperty(PROP_PARA_LEFT_MARGIN))) )
                 pParaContext->Insert(PROP_PARA_LEFT_MARGIN, oProperty->second, /*bOverwrite=*/false);
@@ -2323,8 +2322,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                     pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::Any(nParaLeftMargin), /*bOverwrite=*/false);
 
                 // Override right margin value with value from current style, if any
-                if (pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN))
-                    nParaRightMargin = pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN)->second.get<sal_Int32>();
+                if (pEntry->m_pProperties->isSet(PROP_PARA_RIGHT_MARGIN))
+                    nParaRightMargin = pEntry->m_pProperties->getProperty(PROP_PARA_RIGHT_MARGIN)->second.get<sal_Int32>();
 
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::Any(nParaRightMargin), /*bOverwrite=*/false);
             }
