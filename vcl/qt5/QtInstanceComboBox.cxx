@@ -19,7 +19,7 @@ QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
 void QtInstanceComboBox::insert(int nPos, const OUString& rStr, const OUString* pId,
                                 const OUString* pIconName, VirtualDevice* pImageSurface)
 {
-    if (pId || pIconName || !pImageSurface)
+    if (pId || pIconName || pImageSurface)
         assert(false && "Handling for these not implemented yet");
 
     SolarMutexGuard g;
