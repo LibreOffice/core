@@ -1123,7 +1123,6 @@ OUString WinSalInstance::getOSVersion()
         }
         // Now use RtlGetVersion (which is not subject to deprecation for GetVersion(Ex) API)
         // to get build number and SP info
-        bool bHaveVerFromRtlGetVersion = false;
         DWORD nBuildNumber = 0;
         if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
         {
@@ -1138,7 +1137,6 @@ OUString WinSalInstance::getOSVersion()
                         aNtVersion = (OUString::number(vi2.dwMajorVersion) + "."
                                       + OUString::number(vi2.dwMinorVersion));
                     nBuildNumber = vi2.dwBuildNumber;
-                    bHaveVerFromRtlGetVersion = true;
                 }
             }
         }
