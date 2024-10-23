@@ -23,7 +23,7 @@
 
 enum FUNC_TYPE
 {
-    FT_Return = 0,  // End Formula
+    FT_Return,      // End Formula
     FT_FuncFix0,    // Function, 0 Parameter
     FT_FuncFix1,    // Function, 0 Parameter
     FT_FuncFix2,    // Function, 0 Parameter

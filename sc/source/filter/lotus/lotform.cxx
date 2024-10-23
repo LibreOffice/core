@@ -426,7 +426,7 @@ void LotusToSc::Convert( std::unique_ptr<ScTokenArray>& rpErg, sal_Int32& rRest 
 
     nBytesLeft = rRest;
 
-    while( eType )      // != FT_Return (==0)
+    while( eType != FT_Return )
     {
         sal_uInt8 nOc;
         Read(nOc);
