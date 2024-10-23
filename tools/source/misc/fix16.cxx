@@ -76,7 +76,7 @@ fix16_t fix16_mul(fix16_t inArg0, fix16_t inArg1)
     return result;
 }
 
-static uint32_t mask(int bits) { return (1 << bits) - 1; }
+static uint32_t mask(int bits) { return (1U << bits) - 1; }
 
 /* 32-bit implementation of fix16_div. Fastest version for e.g. ARM Cortex M3.
  * Performs 32-bit divisions repeatedly to reduce the remainder. For this to
