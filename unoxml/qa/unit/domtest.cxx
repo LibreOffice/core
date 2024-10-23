@@ -561,6 +561,185 @@ public:
         }
     }
 
+    void testXText()
+    {
+        Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
+        CPPUNIT_ASSERT(xDocument);
+        uno::Reference<xml::dom::XText> xText = xDocument->createTextNode(u"foobar"_ustr);
+        CPPUNIT_ASSERT(xText);
+
+        CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, xText->getData());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xText->getLength());
+
+        xText->setData(u"foo"_ustr);
+
+        xText->appendData(u"baz"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"foobaz"_ustr, xText->getData());
+
+        try
+        {
+            xText->deleteData(999, 999);
+            CPPUNIT_FAIL("XText.deleteData(999,999)");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_INDEX_SIZE_ERR, e.Code);
+        }
+
+        xText->deleteData(0, 3);
+        CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, xText->getData());
+
+        try
+        {
+            xText->insertData(999, u"blah"_ustr);
+            CPPUNIT_FAIL("XText.insertData(999,\"blah\")");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_INDEX_SIZE_ERR, e.Code);
+        }
+
+        xText->insertData(1, u"arb"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"barbaz"_ustr, xText->getData());
+
+        try
+        {
+            xText->replaceData(999, 999, u"x"_ustr);
+            CPPUNIT_FAIL("XText.replaceData(999, 999, \"x\")");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_INDEX_SIZE_ERR, e.Code);
+        }
+
+        xText->replaceData(3, 3, u"foo"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"barfoo"_ustr, xText->getData());
+
+        xText->setData(u"quux"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"quux"_ustr, xText->getData());
+
+        try
+        {
+            xText->subStringData(999, 999);
+            CPPUNIT_FAIL("XText.subStringData(999, 999)");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_INDEX_SIZE_ERR, e.Code);
+        }
+
+        CPPUNIT_ASSERT_EQUAL(u"x"_ustr, xText->subStringData(3, 1));
+
+        // XNode
+        {
+            uno::Reference<xml::dom::XNode> xTextCloneN = xText->cloneNode(false);
+            CPPUNIT_ASSERT(xTextCloneN);
+            uno::Reference<xml::dom::XText> xTextClone(xTextCloneN, uno::UNO_QUERY_THROW);
+            CPPUNIT_ASSERT(xTextClone);
+            CPPUNIT_ASSERT(!xTextClone->hasChildNodes());
+        }
+        {
+            uno::Reference<xml::dom::XNode> xTextCloneN = xText->cloneNode(true);
+            CPPUNIT_ASSERT(xTextCloneN);
+            uno::Reference<xml::dom::XText> xTextClone(xTextCloneN, uno::UNO_QUERY_THROW);
+            CPPUNIT_ASSERT(xTextClone);
+            CPPUNIT_ASSERT(!xTextClone->hasChildNodes());
+        }
+
+        CPPUNIT_ASSERT(!xText->getAttributes());
+
+        uno::Reference<xml::dom::XNodeList> xChildList = xText->getChildNodes();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xChildList->getLength());
+
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xText->getLocalName());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xText->getNamespaceURI());
+        CPPUNIT_ASSERT(!xText->getNextSibling());
+        CPPUNIT_ASSERT_EQUAL(u"#text"_ustr, xText->getNodeName());
+        CPPUNIT_ASSERT_EQUAL(xml::dom::NodeType::NodeType_TEXT_NODE, xText->getNodeType());
+        CPPUNIT_ASSERT_EQUAL(u"quux"_ustr, xText->getNodeValue());
+        CPPUNIT_ASSERT_EQUAL(xDocument, xText->getOwnerDocument());
+        CPPUNIT_ASSERT(!xText->getParentNode());
+        CPPUNIT_ASSERT_EQUAL(u""_ustr, xText->getPrefix());
+        CPPUNIT_ASSERT(!xText->getPreviousSibling());
+        CPPUNIT_ASSERT(!xText->hasAttributes());
+        CPPUNIT_ASSERT(!xText->hasChildNodes());
+        CPPUNIT_ASSERT(!xText->isSupported(u"frobnication"_ustr, u"v99.33.0.0.0.1"_ustr));
+
+        xText->normalize();
+        xText->setNodeValue(u"42"_ustr);
+        CPPUNIT_ASSERT_EQUAL(u"42"_ustr, xText->getNodeValue());
+
+        try
+        {
+            xText->setPrefix(u"foo"_ustr);
+            CPPUNIT_FAIL("XText.setPrefix()");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_NO_MODIFICATION_ALLOWED_ERR, e.Code);
+        }
+
+        uno::Reference<xml::dom::XText> xText2 = xDocument->createTextNode(u"foobar"_ustr);
+        uno::Reference<xml::dom::XText> xText3 = xDocument->createTextNode(u"foobar"_ustr);
+
+        try
+        {
+            xText->appendChild(nullptr);
+            CPPUNIT_FAIL("XText.appendChild(null)");
+        }
+        catch (css::uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xText->appendChild(xText2);
+            CPPUNIT_FAIL("XText.appendChild(xText2)");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_HIERARCHY_REQUEST_ERR, e.Code);
+        }
+
+        try
+        {
+            xText->insertBefore(xText2, xText3);
+            CPPUNIT_FAIL("XText.insertBefore");
+        }
+        catch (xml::dom::DOMException&)
+        {
+        }
+
+        try
+        {
+            xText->replaceChild(xText2, xText3);
+            CPPUNIT_FAIL("XText.replaceChild");
+        }
+        catch (xml::dom::DOMException&)
+        {
+        }
+
+        try
+        {
+            xText->removeChild(nullptr);
+            CPPUNIT_FAIL("XText.removeChild(null)");
+        }
+        catch (css::uno::RuntimeException&)
+        {
+        }
+
+        try
+        {
+            xText->removeChild(xText2);
+            CPPUNIT_FAIL("XText.removeChild");
+        }
+        catch (xml::dom::DOMException& e)
+        {
+            CPPUNIT_ASSERT_EQUAL(xml::dom::DOMExceptionType::DOMExceptionType_HIERARCHY_REQUEST_ERR, e.Code);
+        }
+
+    }
+
     void testXProcessingInstruction()
     {
         Reference< xml::dom::XDocument > xDocument = mxDomBuilder->newDocument();
@@ -866,6 +1045,7 @@ public:
     CPPUNIT_TEST(testXDocumentBuilder);
     CPPUNIT_TEST(testXXPathAPI);
     CPPUNIT_TEST(testXXPathObject);
+    CPPUNIT_TEST(testXText);
     CPPUNIT_TEST(testXProcessingInstruction);
     CPPUNIT_TEST(testXNamedNodeMap_AttributesMap);
     CPPUNIT_TEST(testXNodeList_ChildList);
