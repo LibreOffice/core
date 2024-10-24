@@ -44,6 +44,8 @@ public:
     typedef stringmap Adjustment;
     typedef stringmap TextBuffer;
 
+    static sal_Int32 extractActive(stringmap& rMap);
+
 protected:
     BuilderBase(std::u16string_view sUIDir, const OUString& rUIFile, bool bLegacy);
     virtual ~BuilderBase() = default;

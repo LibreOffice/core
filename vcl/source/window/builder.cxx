@@ -1285,18 +1285,6 @@ bool VclBuilder::extractAdjustmentToMap(const OUString& id, VclBuilder::stringma
 
 namespace
 {
-    sal_Int32 extractActive(VclBuilder::stringmap &rMap)
-    {
-        sal_Int32 nActiveId = 0;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"active"_ustr);
-        if (aFind != rMap.end())
-        {
-            nActiveId = aFind->second.toInt32();
-            rMap.erase(aFind);
-        }
-        return nActiveId;
-    }
-
     bool extractSelectable(VclBuilder::stringmap &rMap)
     {
         bool bSelectable = false;
@@ -3495,7 +3483,7 @@ template<typename T> static bool insertItems(vcl::Window *pWindow, VclBuilder::s
     if (!pContainer)
         return false;
 
-    sal_uInt16 nActiveId = extractActive(rMap);
+    sal_uInt16 nActiveId = BuilderBase::extractActive(rMap);
     for (auto const& item : rItems)
     {
         sal_Int32 nPos = pContainer->InsertEntry(item.m_sItem);
@@ -3752,6 +3740,18 @@ bool BuilderBase::hasOrientationVertical(VclBuilder::stringmap &rMap)
         rMap.erase(aFind);
     }
     return bVertical;
+}
+
+sal_Int32 BuilderBase::extractActive(VclBuilder::stringmap& rMap)
+{
+    sal_Int32 nActiveId = 0;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"active"_ustr);
+    if (aFind != rMap.end())
+    {
+        nActiveId = aFind->second.toInt32();
+        rMap.erase(aFind);
+    }
+    return nActiveId;
 }
 
 bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
