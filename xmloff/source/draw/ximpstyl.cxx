@@ -1308,7 +1308,7 @@ void SdXMLStylesContext::ImpSetGraphicStyles( uno::Reference< container::XNameAc
                         if(xNewStyle.is())
                         {
                             // remember style
-                            xStyle = xNewStyle;
+                            xStyle = std::move(xNewStyle);
 
                             // add new style to graphics style pool
                             uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);

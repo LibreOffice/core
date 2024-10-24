@@ -329,7 +329,7 @@ bool SlideBackgroundInfo::getFillStyleImpl(const uno::Reference<drawing::XDrawPa
                     maFillStyle = aFillStyle;
                     if (aFillStyle != drawing::FillStyle_NONE)
                     {
-                        mxBackground = xBackground;
+                        mxBackground = std::move(xBackground);
                         return true;
                     }
                 }

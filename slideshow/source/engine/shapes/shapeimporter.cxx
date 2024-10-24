@@ -207,7 +207,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         const XShapesEntry& rTop = maShapesStack.top();
         css::uno::Reference<css::drawing::XDrawPage> xMasterPage(rTop.mxShapes, uno::UNO_QUERY_THROW);
         if (xMasterPage.is())
-            xPage = xMasterPage;
+            xPage = std::move(xMasterPage);
     }
 
     if( shapeType == u"com.sun.star.drawing.MediaShape" || shapeType == u"com.sun.star.presentation.MediaShape" )

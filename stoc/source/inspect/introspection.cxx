@@ -813,11 +813,11 @@ void ImplIntrospectionAccess::cacheXNameContainer(const std::unique_lock<std::mu
 
     {
         if( !mxObjNameContainer.is() )
-            mxObjNameContainer = xNameContainer;
+            mxObjNameContainer = std::move(xNameContainer);
         if( !mxObjNameReplace.is() )
-            mxObjNameReplace = xNameReplace;
+            mxObjNameReplace = std::move(xNameReplace);
         if( !mxObjNameAccess.is() )
-            mxObjNameAccess = xNameAccess;
+            mxObjNameAccess = std::move(xNameAccess);
     }
 }
 
