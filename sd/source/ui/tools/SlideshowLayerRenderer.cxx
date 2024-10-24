@@ -24,6 +24,8 @@
 #include <editeng/editeng.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sdpage.hxx>
+#include <drawdoc.hxx>
+#include <unokywds.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/animations/XAnimate.hpp>
@@ -227,18 +229,11 @@ void modifyParagraphs(drawinglayer::primitive2d::Primitive2DContainer& rContaine
 /// Analyze the rendering and create rendering passes
 class AnalyzeRenderingRedirector : public sdr::contact::ViewObjectContactRedirector
 {
-protected:
+private:
     RenderState& mrRenderState;
 
     RenderPass* mpCurrentRenderPass;
     RenderStage mePreviousStage = RenderStage::Master;
-
-public:
-    AnalyzeRenderingRedirector(RenderState& rRenderState)
-        : mrRenderState(rRenderState)
-        , mpCurrentRenderPass(newRenderPass())
-    {
-    }
 
     // Adds a new rendering pass to the list and returns it
     RenderPass* newRenderPass()
@@ -254,6 +249,48 @@ public:
             return;
 
         mpCurrentRenderPass = newRenderPass();
+    }
+
+    OUString getMasterTextFieldString(SdrObject* pObject)
+    {
+        OUString aType;
+
+        uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
+        if (!xShape.is())
+            return aType;
+
+        OUString sShapeType = xShape->getShapeType();
+
+        if (mrRenderState.mbSlideNumberEnabled
+            && sShapeType == u"com.sun.star.presentation.SlideNumberShape")
+            aType = u"SlideNumber"_ustr;
+        else if (mrRenderState.mbFooterEnabled
+                 && sShapeType == u"com.sun.star.presentation.FooterShape")
+            aType = u"Footer"_ustr;
+        else if (mrRenderState.mbDateTimeEnabled
+                 && sShapeType == u"com.sun.star.presentation.DateTimeShape")
+            aType = u"DateTime"_ustr;
+
+        return aType;
+    }
+
+public:
+    AnalyzeRenderingRedirector(RenderState& rRenderState)
+        : mrRenderState(rRenderState)
+        , mpCurrentRenderPass(newRenderPass())
+    {
+    }
+
+    void finalizeRenderPasses()
+    {
+        // Last rendering pass might be empty - delete
+        if (mrRenderState.maRenderPasses.back().isEmpty())
+            mrRenderState.maRenderPasses.pop_back();
+
+        for (auto& rRenderWork : mrRenderState.maTextFields)
+        {
+            mrRenderState.maRenderPasses.push_back(rRenderWork);
+        }
     }
 
     virtual void createRedirectedPrimitive2DSequence(
@@ -288,6 +325,8 @@ public:
         if (eCurrentStage == RenderStage::Slide && mePreviousStage == RenderStage::Master)
             closeRenderPass();
 
+        OUString sTextFieldString = getMasterTextFieldString(pObject);
+
         // check if object is in an animation
         auto aIterator = mrRenderState.maAnimationRenderInfoList.find(pObject);
         if (aIterator != mrRenderState.maAnimationRenderInfoList.end())
@@ -316,7 +355,7 @@ public:
                     mpCurrentRenderPass->meStage = eCurrentStage;
                     mpCurrentRenderPass->mbRenderObjectBackground = true;
                     mpCurrentRenderPass->mbAnimation = true;
-                    mpCurrentRenderPass->mpAnimatedObject = pObject;
+                    mpCurrentRenderPass->mpObject = pObject;
                     closeRenderPass();
 
                     // Add all the animated paragraphs
@@ -326,8 +365,8 @@ public:
                             pObject, std::deque<sal_Int32>{ nParagraph });
                         mpCurrentRenderPass->meStage = eCurrentStage;
                         mpCurrentRenderPass->mbAnimation = true;
-                        mpCurrentRenderPass->mpAnimatedObject = pObject;
-                        mpCurrentRenderPass->mnAnimatedParagraph = nParagraph;
+                        mpCurrentRenderPass->mpObject = pObject;
+                        mpCurrentRenderPass->mnParagraph = nParagraph;
                         closeRenderPass();
                     }
                 }
@@ -339,17 +378,38 @@ public:
                                                                     std::deque<sal_Int32>());
                 mpCurrentRenderPass->meStage = eCurrentStage;
                 mpCurrentRenderPass->mbAnimation = true;
-                mpCurrentRenderPass->mpAnimatedObject = pObject;
+                mpCurrentRenderPass->mpObject = pObject;
                 closeRenderPass();
             }
         }
-        // Check if the object has fields (slide number)
+        // Check if the object has slide number, footer, date/time
+        else if (eCurrentStage == RenderStage::Master && !sTextFieldString.isEmpty())
+        {
+            closeRenderPass();
+
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+            mpCurrentRenderPass->mbPlaceholder = true;
+            mpCurrentRenderPass->maFieldType = sTextFieldString;
+            mpCurrentRenderPass->mpObject = pObject;
+            closeRenderPass();
+
+            RenderPass aTextFieldPass;
+            aTextFieldPass.maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            aTextFieldPass.meStage = RenderStage::TextFields;
+            aTextFieldPass.maFieldType = sTextFieldString;
+            aTextFieldPass.mpObject = pObject;
+
+            mrRenderState.maTextFields.push_back(aTextFieldPass);
+        }
+        // Check if the object has fields
         else if (eCurrentStage == RenderStage::Master && hasFields(pObject))
         {
             closeRenderPass();
 
             mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
             mpCurrentRenderPass->meStage = eCurrentStage;
+            mpCurrentRenderPass->mpObject = pObject;
             closeRenderPass();
         }
         // No special handling is needed, just add the object to the current rendering pass
@@ -426,6 +486,7 @@ SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage)
 {
     maRenderState.meStage = RenderStage::Background;
     setupAnimations();
+    setupMasterPageFields();
 }
 
 void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffect)
@@ -522,6 +583,42 @@ void SlideshowLayerRenderer::setupAnimations()
     }
 }
 
+void SlideshowLayerRenderer::setupMasterPageFields()
+{
+    auto* pSdPage = dynamic_cast<SdPage*>(&mrPage);
+
+    if (!pSdPage)
+        return;
+
+    SdDrawDocument& rDocument(static_cast<SdDrawDocument&>(pSdPage->getSdrModelFromSdrPage()));
+
+    if (rDocument.GetMasterPageCount())
+    {
+        SdrLayerAdmin& rLayerAdmin = rDocument.GetLayerAdmin();
+        SdrLayerIDSet aVisibleLayers = pSdPage->TRG_GetMasterPageVisibleLayers();
+        maRenderState.mbShowMasterPageObjects
+            = aVisibleLayers.IsSet(rLayerAdmin.GetLayerID(sUNO_LayerName_background_objects));
+    }
+
+    if (maRenderState.mbShowMasterPageObjects)
+    {
+        const sd::HeaderFooterSettings& rSettings = pSdPage->getHeaderFooterSettings();
+
+        if (rSettings.mbFooterVisible && !rSettings.maFooterText.isEmpty())
+            maRenderState.mbFooterEnabled = true;
+
+        if (rSettings.mbDateTimeVisible)
+        {
+            maRenderState.mbDateTimeEnabled = true;
+
+            if (rSettings.mbDateTimeIsFixed && rSettings.maDateTimeText.isEmpty())
+                maRenderState.mbDateTimeEnabled = false;
+        }
+
+        maRenderState.mbSlideNumberEnabled = rSettings.mbSlideNumberVisible;
+    }
+}
+
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
 {
     double fRatio = double(mrPage.GetHeight()) / mrPage.GetWidth();
@@ -592,21 +689,33 @@ void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& r
 
 } // end anonymous namespace
 
-void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
+void SlideshowLayerRenderer::writeBackgroundJSON(OString& rJsonMsg)
+{
+    ::tools::JsonWriter aJsonWriter;
+    aJsonWriter.put("group", maRenderState.stageString());
+    aJsonWriter.put("index", maRenderState.currentIndex());
+    aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
+    aJsonWriter.put("type", "bitmap");
+    writeContentNode(aJsonWriter);
+    rJsonMsg = aJsonWriter.finishAndGetAsOString();
+    maRenderState.incrementIndex();
+}
+
+void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRenderPass)
 {
     ::tools::JsonWriter aJsonWriter;
     aJsonWriter.put("group", maRenderState.stageString());
     aJsonWriter.put("index", maRenderState.currentIndex());
     aJsonWriter.put("slideHash", GetInterfaceHash(GetXDrawPageForSdrPage(&mrPage)));
 
-    SdrObject* pObject = maRenderState.currentTarget();
-    sal_Int32 nParagraph = maRenderState.currentTargetParagraph();
+    SdrObject* pObject = rRenderPass.mpObject;
+    sal_Int32 nParagraph = rRenderPass.mnParagraph;
 
     auto aIterator = maRenderState.maAnimationRenderInfoList.find(pObject);
+    // Animation object
     if (aIterator != maRenderState.maAnimationRenderInfoList.end())
     {
         AnimationRenderInfo& rInfo = aIterator->second;
-        assert(pObject);
 
         if (nParagraph >= 0)
         {
@@ -630,8 +739,26 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg)
     {
         if (pObject && hasFields(pObject))
             aJsonWriter.put("isField", true); // TODO: to be removed, implement properly
-        aJsonWriter.put("type", "bitmap");
-        writeContentNode(aJsonWriter);
+
+        if (rRenderPass.mbPlaceholder)
+        {
+            aJsonWriter.put("type", "placeholder");
+            {
+                auto aContentNode = aJsonWriter.startNode("content");
+                aJsonWriter.put("type", rRenderPass.maFieldType);
+            }
+        }
+        else if (rRenderPass.meStage == RenderStage::TextFields)
+        {
+            auto aContentNode = aJsonWriter.startNode("content");
+            aJsonWriter.put("type", rRenderPass.maFieldType);
+            writeContentNode(aJsonWriter);
+        }
+        else
+        {
+            aJsonWriter.put("type", "bitmap");
+            writeContentNode(aJsonWriter);
+        }
     }
 
     rJsonMsg = aJsonWriter.finishAndGetAsOString();
@@ -643,9 +770,6 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, double& rScale, OStr
 {
     // We want to render one pass (one iteration through objects)
 
-    // Reset state for this pass
-    maRenderState.resetPass();
-
     RenderContext aRenderContext(pBuffer, mrModel, mrPage, maSlideSize, Fraction(rScale));
 
     // Render Background and analyze other passes
@@ -654,13 +778,10 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, double& rScale, OStr
         // Render no objects, just the background, but analyze and create rendering passes
         AnalyzeRenderingRedirector aRedirector(maRenderState);
         createViewAndDraw(aRenderContext, &aRedirector);
-
-        // Last rendering pass might be empty - delete
-        if (maRenderState.maRenderPasses.back().isEmpty())
-            maRenderState.maRenderPasses.pop_back();
+        aRedirector.finalizeRenderPasses();
 
         // Write JSON for the Background layer
-        writeJSON(rJsonMsg);
+        writeBackgroundJSON(rJsonMsg);
 
         maRenderState.meStage = RenderStage::Master;
     }
@@ -671,16 +792,13 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, double& rScale, OStr
 
         auto const& rRenderPass = maRenderState.maRenderPasses.front();
         maRenderState.meStage = rRenderPass.meStage;
-        RenderPassObjectRedirector aRedirector(maRenderState, rRenderPass);
-        createViewAndDraw(aRenderContext, &aRedirector);
-
-        if (rRenderPass.mbAnimation)
+        if (!rRenderPass.mbPlaceholder) // no need to render if placehodler
         {
-            maRenderState.mpCurrentTarget = rRenderPass.mpAnimatedObject;
-            maRenderState.mnCurrentTargetParagraph = rRenderPass.mnAnimatedParagraph;
+            RenderPassObjectRedirector aRedirector(maRenderState, rRenderPass);
+            createViewAndDraw(aRenderContext, &aRedirector);
         }
 
-        writeJSON(rJsonMsg);
+        writeJSON(rJsonMsg, rRenderPass);
 
         maRenderState.maRenderPasses.pop_front();
     }
