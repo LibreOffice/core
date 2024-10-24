@@ -1979,6 +1979,26 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testChangesAuthorDateXLSX)
     pBatch->commit();
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf163554)
+{
+    createScDoc("xlsx/tdf163554.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =SUM($'time (misc) - last'.B1:$'time (pnrst)'.B1)
+    // - Actual  : =SUM('time (pnrst)':$'time (misc) - last'.B1:B1)
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($'time (misc) - last'.B1:$'time (pnrst)'.B1)"_ustr,
+                         pDoc->GetFormula(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    pDoc = getScDoc();
+
+    CPPUNIT_ASSERT_EQUAL(u"=SUM($'time (misc) - last'.B1:$'time (pnrst)'.B1)"_ustr,
+                         pDoc->GetFormula(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testNotesAuthor)
 {
     createScDoc("xlsx/cell-note.xlsx");
