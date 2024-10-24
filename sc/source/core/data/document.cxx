@@ -3620,7 +3620,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
                 sal_uInt32 nIndex = pFormatter->GetStandardFormat(
                                     SvNumFormatType::NUMBER,
                                     ScGlobal::eLnge);
-                pFormatter->GetInputLineString(fVal, nIndex, aStr);
+                aStr = pFormatter->GetInputLineString(fVal, nIndex);
             }
             else
                 aStr = pFCell->GetString().getString();
@@ -3632,7 +3632,7 @@ FormulaError ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& r
             sal_uInt32 nIndex = pFormatter->GetStandardFormat(
                                     SvNumFormatType::NUMBER,
                                     ScGlobal::eLnge);
-            pFormatter->GetInputLineString(fVal, nIndex, aStr);
+            aStr = pFormatter->GetInputLineString(fVal, nIndex);
         }
         break;
         default:

@@ -238,16 +238,14 @@ sal_uInt32 ScInterpreterContext::NFGetStandardFormat(sal_uInt32 nFIndex, SvNumFo
                                          nFIndex, eType, eLnge);
 }
 
-void ScInterpreterContext::NFGetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex,
-                                                OUString& rOutString, bool bFiltering,
-                                                bool bForceSystemLocale) const
+OUString ScInterpreterContext::NFGetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex,
+                                                    bool bFiltering, bool bForceSystemLocale) const
 {
     if (!mpDoc->IsThreadedGroupCalcInProgress())
-        return GetFormatTable()->GetInputLineString(fOutNumber, nFIndex, rOutString, bFiltering,
+        return GetFormatTable()->GetInputLineString(fOutNumber, nFIndex, bFiltering,
                                                     bForceSystemLocale);
     return SvNFEngine::GetInputLineString(*mxLanguageData, *mpFormatData, *mpNatNum, maROPolicy,
-                                          fOutNumber, nFIndex, rOutString, bFiltering,
-                                          bForceSystemLocale);
+                                          fOutNumber, nFIndex, bFiltering, bForceSystemLocale);
 }
 void ScInterpreterContext::NFGetOutputString(const double& fOutNumber, sal_uInt32 nFIndex,
                                              OUString& sOutString, const Color** ppColor,

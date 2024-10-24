@@ -657,11 +657,7 @@ OUString SwValueFieldType::GetInputOrDateTime( const OUString& rInput, const dou
         SvNumberFormatter* pFormatter = m_pDoc->GetNumberFormatter();
         const SvNumberformat* pEntry = pFormatter->GetEntry(nFormat);
         if (pEntry && (pEntry->GetType() & SvNumFormatType::DATETIME))
-        {
-            OUString aEdit;
-            pFormatter->GetInputLineString( rVal, nFormat, aEdit);
-            return aEdit;
-        }
+            return pFormatter->GetInputLineString( rVal, nFormat );
     }
     return rInput;
 }

@@ -1943,14 +1943,14 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                                      eType, pFormat, eForLocale);
 }
 
-void SvNFEngine::GetInputLineString(SvNFLanguageData& rCurrentLanguage,
+OUString SvNFEngine::GetInputLineString(SvNFLanguageData& rCurrentLanguage,
                                     const SvNFFormatData& rFormatData,
                                     const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
                                     const double& fOutNumber,
                                     sal_uInt32 nFIndex,
-                                    OUString& sOutString,
                                     bool bFiltering, bool bForceSystemLocale)
 {
+    OUString sOutString;
     const Color* pColor;
     sal_uInt32 nRealKey = nFIndex;
 
@@ -2032,16 +2032,16 @@ void SvNFEngine::GetInputLineString(SvNFLanguageData& rCurrentLanguage,
     {
         rCurrentLanguage.ChangeStandardPrec(nOldPrec);
     }
+    return sOutString;
 }
 
-void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
+OUString SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
-                                           OUString& sOutString,
                                            bool bFiltering, bool bForceSystemLocale)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
-    SvNFEngine::GetInputLineString(m_aCurrentLanguage, m_aFormatData, GetNatNum(),
-                                   m_aRWPolicy, fOutNumber, nFIndex, sOutString,
+    return SvNFEngine::GetInputLineString(m_aCurrentLanguage, m_aFormatData, GetNatNum(),
+                                   m_aRWPolicy, fOutNumber, nFIndex,
                                    bFiltering, bForceSystemLocale);
 }
 

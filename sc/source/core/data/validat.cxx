@@ -526,8 +526,7 @@ bool ScValidationData::IsDataValidTextLen( std::u16string_view rTest, const ScAd
         // determine length, otherwise an once accepted value maybe could
         // not be edited again, for example abbreviated dates or leading
         // zeros or trailing zeros after decimal separator change length.
-        OUString aStr;
-        pDataNumeric->mpFormatter->GetInputLineString( pDataNumeric->mfVal, pDataNumeric->mnFormat, aStr);
+        OUString aStr = pDataNumeric->mpFormatter->GetInputLineString( pDataNumeric->mfVal, pDataNumeric->mnFormat);
         nLen = aStr.getLength();
     }
     ScRefCellValue aTmpCell( static_cast<double>(nLen));
@@ -960,7 +959,7 @@ bool ScValidationData::GetSelectionFromFormula(
                     }
                     else
                     {
-                        pFormatter->GetInputLineString( nMatVal.fVal, nDestFormat, aValStr );
+                        aValStr = pFormatter->GetInputLineString( nMatVal.fVal, nDestFormat );
                     }
                 }
 

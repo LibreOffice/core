@@ -188,8 +188,8 @@ public:
         a number rounded by the cell format, which rounded value is used
         in the filtering condition now), instead of the EditFormat string
         (e.g a not rounded value, which is visible during editing).*/
-    void GetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex, OUString& rOutString,
-                            bool bFiltering = false, bool bForceSystemLocale = false);
+    OUString GetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex,
+                                bool bFiltering = false, bool bForceSystemLocale = false);
 
     /** Format a number according to a format code string to be scanned.
         @return

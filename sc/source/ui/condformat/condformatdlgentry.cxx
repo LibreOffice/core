@@ -486,9 +486,7 @@ namespace {
 OUString convertNumberToString(double nVal, const ScDocument* pDoc)
 {
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    OUString aText;
-    pNumberFormatter->GetInputLineString(nVal, 0, aText);
-    return aText;
+    return pNumberFormatter->GetInputLineString(nVal, 0);
 }
 
 const struct
@@ -955,8 +953,7 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, weld::ComboBox& rLbT
             {
                 double nVal = rEntry.GetValue();
                 SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-                OUString aText;
-                pNumberFormatter->GetInputLineString(nVal, 0, aText);
+                OUString aText = pNumberFormatter->GetInputLineString(nVal, 0);
                 rEdit.set_text(aText);
             }
             break;

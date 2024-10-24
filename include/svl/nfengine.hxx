@@ -349,11 +349,11 @@ public:
     static sal_uInt16 GetFormatPrecision(SvNFLanguageData& rCurrentLanguage,
                                          const SvNFFormatData& rFormatData, sal_uInt32 nFormat);
 
-    static void GetInputLineString(SvNFLanguageData& rCurrentLanguage,
-                                   const SvNFFormatData& rFormatData,
-                                   const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
-                                   const double& fOutNumber, sal_uInt32 nFIndex,
-                                   OUString& sOutString, bool bFiltering, bool bForceSystemLocale);
+    static OUString GetInputLineString(SvNFLanguageData& rCurrentLanguage,
+                                       const SvNFFormatData& rFormatData,
+                                       const NativeNumberWrapper& rNatNum, const Accessor& rFuncs,
+                                       const double& fOutNumber, sal_uInt32 nFIndex,
+                                       bool bFiltering, bool bForceSystemLocale);
 
     static sal_uInt32 GetEditFormat(SvNFLanguageData& rCurrentLanguage,
                                     const SvNFFormatData& rFormatData,

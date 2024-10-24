@@ -51,9 +51,7 @@ void GetType(const weld::ComboBox& rLstBox, const weld::Entry& rEd, ScColorScale
 OUString convertNumberToString(double nVal, const ScDocument* pDoc)
 {
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    OUString aText;
-    pNumberFormatter->GetInputLineString(nVal, 0, aText);
-    return aText;
+    return pNumberFormatter->GetInputLineString(nVal, 0);
 }
 
 void SetValue( const ScDocument* pDoc, const ScColorScaleEntry* pEntry, weld::Entry& rEdit)

@@ -306,7 +306,7 @@ void Formatter::SetTextFormatted(const OUString& rStr)
     if( IsUsingInputStringForFormatting() &&
         GetOrCreateFormatter()->IsNumberFormat(m_sCurrentTextValue, nTempFormatKey, dNumber) )
     {
-        GetOrCreateFormatter()->GetInputLineString(dNumber, m_nFormatKey, sFormatted);
+        sFormatted = GetOrCreateFormatter()->GetInputLineString(dNumber, m_nFormatKey);
     }
     else
     {
@@ -774,7 +774,7 @@ void Formatter::ImplSetValue(double dVal, bool bForce)
         {
             if( IsUsingInputStringForFormatting())
             {
-                GetOrCreateFormatter()->GetInputLineString(dVal, m_nFormatKey, sNewText);
+                sNewText = GetOrCreateFormatter()->GetInputLineString(dVal, m_nFormatKey);
             }
             else
             {

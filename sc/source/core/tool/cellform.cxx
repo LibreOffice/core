@@ -141,11 +141,7 @@ OUString ScCellFormat::GetInputString(
         case CELLTYPE_EDIT:
             return rCell.getString(&rDoc);
         case CELLTYPE_VALUE:
-        {
-            OUString str;
-            rContext.NFGetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
-            return str;
-        }
+            return rContext.NFGetInputLineString(rCell.getDouble(), nFormat, bFiltering, bForceSystemLocale);
         break;
         case CELLTYPE_FORMULA:
         {
@@ -154,10 +150,7 @@ OUString ScCellFormat::GetInputString(
             if (pFC->IsEmptyDisplayedAsString())
                 ; // empty
             else if (pFC->IsValue())
-            {
-                str.emplace();
-                rContext.NFGetInputLineString(pFC->GetValue(), nFormat, *str, bFiltering, bForceSystemLocale);
-            }
+                str = rContext.NFGetInputLineString(pFC->GetValue(), nFormat, bFiltering, bForceSystemLocale);
             else
                 str = pFC->GetString().getString();
 
@@ -187,11 +180,7 @@ svl::SharedString ScCellFormat::GetInputSharedString(
         case CELLTYPE_EDIT:
             return rCell.getSharedString(&rDoc, rStrPool);
         case CELLTYPE_VALUE:
-        {
-            OUString str;
-            rContext.NFGetInputLineString(rCell.getDouble(), nFormat, str, bFiltering, bForceSystemLocale);
-            return rStrPool.intern(str);
-        }
+            return rStrPool.intern(rContext.NFGetInputLineString(rCell.getDouble(), nFormat, bFiltering, bForceSystemLocale));
         break;
         case CELLTYPE_FORMULA:
         {
@@ -202,11 +191,7 @@ svl::SharedString ScCellFormat::GetInputSharedString(
             else if (pFC->IsEmptyDisplayedAsString())
                 return svl::SharedString::getEmptyString();
             else if (pFC->IsValue())
-            {
-                OUString str;
-                rContext.NFGetInputLineString(pFC->GetValue(), nFormat, str, bFiltering, bForceSystemLocale);
-                return rStrPool.intern(str);
-            }
+                return rStrPool.intern(rContext.NFGetInputLineString(pFC->GetValue(), nFormat, bFiltering, bForceSystemLocale));
             else
                 return pFC->GetString();
         }

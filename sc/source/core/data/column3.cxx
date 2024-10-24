@@ -2654,7 +2654,7 @@ class FilterEntriesHandler
             // Convert string representation to ISO 8601 date to eliminate
             // locale dependent behaviour later when filtering for dates.
             sal_uInt32 nIndex = rContext.NFGetFormatIndex( NF_DATE_DIN_YYYYMMDD);
-            rContext.NFGetInputLineString( fVal, nIndex, aStr);
+            aStr = rContext.NFGetInputLineString( fVal, nIndex);
         }
         else if (nType == SvNumFormatType::DATETIME)
         {
@@ -2662,7 +2662,7 @@ class FilterEntriesHandler
             // Convert string representation to ISO 8601 (with blank instead of T) datetime
             // to eliminate locale dependent behaviour later when filtering for datetimes.
             sal_uInt32 nIndex = rContext.NFGetFormatIndex(NF_DATETIME_ISO_YYYYMMDD_HHMMSS);
-            rContext.NFGetInputLineString(fVal, nIndex, aStr);
+            aStr = rContext.NFGetInputLineString(fVal, nIndex);
         }
         // store the formatted/rounded value for filtering
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)

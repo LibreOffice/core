@@ -255,14 +255,11 @@ OUString SAL_CALL SvNumberFormatterServiceObj::getInputString( sal_Int32 nKey, d
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OUString aRet;
     SvNumberFormatter* pFormatter = xSupplier.is() ? xSupplier->GetNumberFormatter() : nullptr;
     if (!pFormatter)
         throw uno::RuntimeException();
 
-    pFormatter->GetInputLineString(fValue, nKey, aRet);
-
-    return aRet;
+    return pFormatter->GetInputLineString(fValue, nKey);
 }
 
 // XNumberFormatPreviewer

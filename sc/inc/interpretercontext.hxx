@@ -79,8 +79,8 @@ struct ScInterpreterContext
     bool NFIsNumberFormat(const OUString& sString, sal_uInt32& F_Index, double& fOutNumber,
                           SvNumInputOptions eInputOptions = SvNumInputOptions::NONE);
 
-    void NFGetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex, OUString& rOutString,
-                              bool bFiltering = false, bool bForceSystemLocale = false) const;
+    OUString NFGetInputLineString(const double& fOutNumber, sal_uInt32 nFIndex,
+                                  bool bFiltering = false, bool bForceSystemLocale = false) const;
 
     void NFGetOutputString(const double& fOutNumber, sal_uInt32 nFIndex, OUString& sOutString,
                            const Color** ppColor, bool bUseStarFormat = false) const;

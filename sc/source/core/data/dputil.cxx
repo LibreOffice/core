@@ -43,9 +43,7 @@ OUString getTwoDigitString(sal_Int32 nValue)
 void appendDateStr(OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter)
 {
     sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
-    OUString aString;
-    pFormatter->GetInputLineString(fValue, nFormat, aString);
-    rBuffer.append(aString);
+    rBuffer.append(pFormatter->GetInputLineString(fValue, nFormat));
 }
 
 OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pFormatter)
@@ -190,9 +188,7 @@ namespace {
 void lcl_AppendDateStr( OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
 {
     sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
-    OUString aString;
-    pFormatter->GetInputLineString( fValue, nFormat, aString );
-    rBuffer.append( aString );
+    rBuffer.append( pFormatter->GetInputLineString( fValue, nFormat ) );
 }
 
 OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,

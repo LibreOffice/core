@@ -779,9 +779,7 @@ svl::SharedString ScMatrixImpl::GetString( ScInterpreterContext& rContext, SCSIZ
 
     sal_uInt32 nKey = rContext.NFGetStandardFormat( SvNumFormatType::NUMBER,
             ScGlobal::eLnge);
-    OUString aStr;
-    rContext.NFGetInputLineString( fVal, nKey, aStr);
-    return svl::SharedString( aStr);    // string not interned
+    return svl::SharedString(rContext.NFGetInputLineString( fVal, nKey )); // string not interned
 }
 
 ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
@@ -2718,16 +2716,14 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
                 nErrors[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = nErr;
                 return;
             }
-            OUString aStr;
-            rContext.NFGetInputLineString( nVal, nKey, aStr);
+            OUString aStr = rContext.NFGetInputLineString( nVal, nKey );
             aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc =
         [&](size_t nRow, size_t nCol, bool nVal)
         {
-            OUString aStr;
-            rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
+            OUString aStr = rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey);
             aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr;
         };
 
@@ -2780,16 +2776,14 @@ void ScMatrixImpl::MatConcat(SCSIZE nMaxCol, SCSIZE nMaxRow, const ScMatrixRef& 
                 nErrors[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = nErr;
                 return;
             }
-            OUString aStr;
-            rContext.NFGetInputLineString( nVal, nKey, aStr);
+            OUString aStr = rContext.NFGetInputLineString( nVal, nKey );
             aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 
     std::function<void(size_t, size_t, bool)> aBoolFunc2 =
         [&](size_t nRow, size_t nCol, bool nVal)
         {
-            OUString aStr;
-            rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey, aStr);
+            OUString aStr = rContext.NFGetInputLineString( nVal ? 1.0 : 0.0, nKey);
             aSharedString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] = rStringPool.intern(aString[get_index(nMaxRow, nRow, nCol, nRowOffset, nColOffset)] + aStr);
         };
 

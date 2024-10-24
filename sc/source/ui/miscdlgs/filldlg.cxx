@@ -169,13 +169,12 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
     m_xEdStartVal->set_text( aStartStrVal);
 
-    OUString aIncrTxt;
-    rDoc.GetFormatTable()->GetInputLineString( fIncrement, 0, aIncrTxt );
+    OUString aIncrTxt = rDoc.GetFormatTable()->GetInputLineString( fIncrement, 0 );
     m_xEdIncrement->set_text( aIncrTxt );
 
     OUString aEndTxt;
     if ( fEndVal != MAXDOUBLE )
-        rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
+        aEndTxt = rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0 );
     m_xEdEndVal->set_text( aEndTxt );
 }
 

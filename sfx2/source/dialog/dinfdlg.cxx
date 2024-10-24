@@ -1218,8 +1218,7 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
                 sal_uInt32 nIndex = aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
                 if ( seqValue.hasElements() )
                 {
-                    OUString sValue;
-                    aNumberFormatter.GetInputLineString( seqValue[0], nIndex, sValue );
+                    OUString sValue = aNumberFormatter.GetInputLineString( seqValue[0], nIndex );
                     m_xShowSizeFT->set_label( CreateSizeText( sValue.toInt64( ) ) );
                 }
             }
@@ -1926,7 +1925,7 @@ void CustomPropertiesWindow::ReloadLinesContent()
         else if (rAny >>= nTmpValue)
         {
             sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex(NF_NUMBER_SYSTEM);
-            m_aNumberFormatter.GetInputLineString(nTmpValue, nIndex, sValue);
+            sValue = m_aNumberFormatter.GetInputLineString(nTmpValue, nIndex);
             pLine->m_xValueEdit->set_text(sValue);
             nType = Custom_Type_Number;
         }
@@ -2314,8 +2313,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         for (const auto& rValue : seqValue)
         {
-            OUString sValue;
-            m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
+            OUString sValue = m_aNumberFormatter.GetInputLineString( rValue, nIndex );
             std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );
@@ -2328,8 +2326,7 @@ void CmisPropertiesWindow::AddLine( const OUString& sId, const OUString& sName,
         sal_uInt32 nIndex = m_aNumberFormatter.GetFormatIndex( NF_NUMBER_SYSTEM );
         for (const auto& rValue : seqValue)
         {
-            OUString sValue;
-            m_aNumberFormatter.GetInputLineString( rValue, nIndex, sValue );
+            OUString sValue = m_aNumberFormatter.GetInputLineString( rValue, nIndex );
             std::unique_ptr<CmisValue> pValue(new CmisValue(m_xBox.get(), sValue));
             pValue->m_xValueEdit->set_editable(bUpdatable);
             pNewLine->m_aValues.push_back( std::move(pValue) );

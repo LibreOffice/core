@@ -71,7 +71,7 @@ const ScCellValue& ScMyCellInfo::CreateCell(ScDocument& rDoc)
             nFormat = rDoc.GetFormatTable()->GetStandardFormat( SvNumFormatType::DATE, ScGlobal::eLnge );
         else if (nType == css::util::NumberFormat::TIME)
             nFormat = rDoc.GetFormatTable()->GetStandardFormat( SvNumFormatType::TIME, ScGlobal::eLnge );
-        rDoc.GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
+        sInputString = rDoc.GetFormatTable()->GetInputLineString(fValue, nFormat);
     }
 
     return maCell;

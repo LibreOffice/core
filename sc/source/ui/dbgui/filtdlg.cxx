@@ -1540,17 +1540,15 @@ void ScFilterDlg::SetValString( const OUString& rQueryStr, const ScQueryEntry::I
         if (rItem.meType == ScQueryEntry::ByValue)
         {
             if (pDoc)
-            {
-                pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, rValStr);
-            }
+                rValStr = pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
         }
         else if (rItem.meType == ScQueryEntry::ByDate)
         {
             if (pDoc)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                pFormatter->GetInputLineString(rItem.mfVal,
-                                               pFormatter->GetStandardFormat( SvNumFormatType::DATE), rValStr);
+                rValStr = pFormatter->GetInputLineString(rItem.mfVal,
+                                               pFormatter->GetStandardFormat( SvNumFormatType::DATE));
             }
         }
         else

@@ -1085,8 +1085,7 @@ void fillQueryParam(
 
             if (rItem.meType == ScQueryEntry::ByValue)
             {
-                OUString aStr;
-                pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+                OUString aStr = pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
                 rItem.maString = rPool.intern(aStr);
             }
         }
@@ -1142,8 +1141,7 @@ void fillQueryParam(
 
                 if (aItem.meType == ScQueryEntry::ByValue)
                 {
-                    OUString aStr;
-                    pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0, aStr);
+                    OUString aStr = pDoc->GetFormatTable()->GetInputLineString(aItem.mfVal, 0);
                     aItem.maString = rPool.intern(aStr);
                 }
                 else if (aItem.meType == ScQueryEntry::ByTextColor
@@ -1321,8 +1319,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
 
         if (rItem.meType != ScQueryEntry::ByString)
         {
-            OUString aStr;
-            rDoc.GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+            OUString aStr = rDoc.GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
             rItem.maString = rPool.intern(aStr);
         }
 

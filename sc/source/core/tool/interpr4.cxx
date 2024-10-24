@@ -2534,9 +2534,7 @@ svl::SharedString ScInterpreter::GetStringFromDouble( double fVal )
     sal_uLong nIndex = mrContext.NFGetStandardFormat(
                         SvNumFormatType::NUMBER,
                         ScGlobal::eLnge);
-    OUString aStr;
-    mrContext.NFGetInputLineString(fVal, nIndex, aStr);
-    return mrStrPool.intern(aStr);
+    return mrStrPool.intern(mrContext.NFGetInputLineString(fVal, nIndex));
 }
 
 void ScInterpreter::ScDBGet()

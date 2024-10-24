@@ -919,8 +919,7 @@ OString HTMLOutFuncs::CreateTableDataOptionsValNum(
     if ( bValue )
     {
         // printf / scanf is not precise enough
-        OUString aValStr;
-        rFormatter.GetInputLineString( fVal, 0, aValStr );
+        OUString aValStr = rFormatter.GetInputLineString( fVal, 0 );
         OString sTmp(OUStringToOString(aValStr, RTL_TEXTENCODING_UTF8));
         aStrTD.append(" " OOO_STRING_SVTOOLS_HTML_O_SDval "=\"" +
                 sTmp + "\"");

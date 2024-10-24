@@ -5373,8 +5373,7 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
             ScQueryEntry::Item& rItem = rItems.front();
             if (rItem.meType != ScQueryEntry::ByString)
             {
-                OUString aStr;
-                pDocSh->GetDocument().GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+                OUString aStr = pDocSh->GetDocument().GetFormatTable()->GetInputLineString(rItem.mfVal, 0);
                 rItem.maString = rPool.intern(aStr);
             }
         }
