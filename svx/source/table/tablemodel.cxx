@@ -378,11 +378,17 @@ uno::Reference<css::table::XCell> SAL_CALL TableModel::getCellByPosition( sal_In
 {
     ::SolarMutexGuard aGuard;
 
-    CellRef xCell( getCell( nColumn, nRow ) );
-    if( xCell.is() )
-        return xCell;
+    sal_Int32 nRowCount = getRowCountImpl();
+    if( nRow < 0 || nRow >= nRowCount )
+        throw lang::IndexOutOfBoundsException(OUString::Concat("row ") + OUString::number(nRow)
+                    + " out of range 0.." + OUString::number(nRowCount));
 
-    throw lang::IndexOutOfBoundsException();
+    sal_Int32 nColCount = getColumnCountImpl();
+    if( nColumn < 0 || nColumn >= nColCount )
+        throw lang::IndexOutOfBoundsException(OUString::Concat("col ") + OUString::number(nColumn)
+                    + " out of range 0.." + OUString::number(nColCount));
+
+    return maRows[nRow]->maCells[nColumn];
 }
 
 

@@ -330,15 +330,15 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             auto xText = xCellTextRange->getText();
             xText->insertString(xText->getStart(), rString, false);
             auto xTextPropertySet = getFirstParagraphProperties(xText);
-            if (!xTextPropertySet.is())
-                continue;
-
-            bool bLeft
-                = (bOutline && nColumn == 1) || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
-            bool bRight = (bOutline && nColumn == nColumnCount)
-                          || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
-            setCellCharAndParagraphProperties(xTextPropertySet);
-            setCellProperties(xPropertySet, bLeft, bOutline, bRight, bOutline);
+            if (xTextPropertySet)
+            {
+                bool bLeft = (bOutline && nColumn == 1)
+                             || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
+                bool bRight = (bOutline && nColumn == nColumnCount)
+                              || (bVBorder && nColumn > 1 && nColumn < nColumnCount);
+                setCellCharAndParagraphProperties(xTextPropertySet);
+                setCellProperties(xPropertySet, bLeft, bOutline, bRight, bOutline);
+            }
         }
         nColumn++;
     }
@@ -399,18 +399,19 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
             auto xText = xCellTextRange->getText();
             xText->insertString(xText->getStart(), rSeriesName, false);
             auto xTextPropertySet = getFirstParagraphProperties(xText);
-            if (!xTextPropertySet.is())
-                continue;
-            setCellCharAndParagraphProperties(xTextPropertySet);
-            setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
-
-            xCellPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
-                                               uno::Any(style::ParagraphAdjust_LEFT));
-            if (bKeys)
+            if (xTextPropertySet)
             {
-                xCellPropertySet->setPropertyValue(
-                    u"ParaLeftMargin"_ustr,
-                    uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
+                setCellCharAndParagraphProperties(xTextPropertySet);
+                setCellProperties(xCellPropertySet, bOutline, bTop, bOutline, bBottom);
+
+                xCellPropertySet->setPropertyValue(u"ParaAdjust"_ustr,
+                                                   uno::Any(style::ParagraphAdjust_LEFT));
+                if (bKeys)
+                {
+                    xCellPropertySet->setPropertyValue(
+                        u"ParaLeftMargin"_ustr,
+                        uno::Any(nMaxSymbolWidth + sal_Int32(2 * constSymbolMargin)));
+                }
             }
         }
         nRow++;
@@ -418,11 +419,22 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
 
     // TABLE
     nRow = 1;
+    const sal_Int32 nTableModelRowCount = m_xTable->getRowCount();
+    const sal_Int32 nTableModelColCount = m_xTable->getColumnCount();
+    // tdf#153182 the broken bounds are most likely because we dont know if the
+    // data-table has header rows and columns. Most likely it does not.
+    bool bBrokenBounds = false;
     for (auto const& rSeries : m_pDataSeriesValues)
     {
         nColumn = 1;
         for (auto const& rValue : rSeries)
         {
+            if (nRow >= nTableModelRowCount || nColumn >= nTableModelColCount)
+            {
+                bBrokenBounds = true;
+                SAL_WARN("chart2", "exceeding bounds of table model?");
+                break;
+            }
             uno::Reference<table::XCell> xCell = m_xTable->getCellByPosition(nColumn, nRow);
             uno::Reference<beans::XPropertySet> xCellPropertySet(xCell, uno::UNO_QUERY);
             uno::Reference<text::XTextRange> xCellTextRange(xCell, uno::UNO_QUERY);
@@ -431,31 +443,33 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
                 auto xText = xCellTextRange->getText();
                 xText->insertString(xText->getStart(), rValue, false);
                 auto xTextPropertySet = getFirstParagraphProperties(xText);
-                if (!xTextPropertySet.is())
-                    continue;
+                if (xTextPropertySet.is())
+                {
+                    bool bLeft = false;
+                    bool bTop = false;
+                    bool bRight = false;
+                    bool bBottom = false;
 
-                bool bLeft = false;
-                bool bTop = false;
-                bool bRight = false;
-                bool bBottom = false;
+                    if (nColumn > 1 && bVBorder)
+                        bLeft = true;
 
-                if (nColumn > 1 && bVBorder)
-                    bLeft = true;
+                    if (nRow > 1 && bHBorder)
+                        bTop = true;
 
-                if (nRow > 1 && bHBorder)
-                    bTop = true;
+                    if (nRow == nRowCount && bOutline)
+                        bBottom = true;
 
-                if (nRow == nRowCount && bOutline)
-                    bBottom = true;
+                    if (nColumn == nColumnCount && bOutline)
+                        bRight = true;
 
-                if (nColumn == nColumnCount && bOutline)
-                    bRight = true;
-
-                setCellCharAndParagraphProperties(xTextPropertySet);
-                setCellProperties(xCellPropertySet, bLeft, bTop, bRight, bBottom);
+                    setCellCharAndParagraphProperties(xTextPropertySet);
+                    setCellProperties(xCellPropertySet, bLeft, bTop, bRight, bBottom);
+                }
             }
             nColumn++;
         }
+        if (bBrokenBounds)
+            break;
         nRow++;
     }
 
