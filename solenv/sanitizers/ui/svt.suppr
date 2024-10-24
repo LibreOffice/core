@@ -14,7 +14,6 @@ svtools/uiconfig/ui/printersetupdialog.ui://GtkLabel[@id='comment'] orphan-label
 svtools/uiconfig/ui/printersetupdialog.ui://GtkLabel[@id='location'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_java'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_mailmerge_install'] orphan-label
-svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_pdf'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_bibliography_install'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_assigning_folders'] orphan-label
 svtools/uiconfig/ui/restartdialog.ui://GtkLabel[@id='reason_assigning_javaparameters'] orphan-label
