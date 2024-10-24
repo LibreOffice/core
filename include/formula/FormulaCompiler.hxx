@@ -23,6 +23,7 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
+#include <optional>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <formula/formuladllapi.h>
@@ -35,6 +36,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/debug.hxx>
+#include <unotools/saveopt.hxx>
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
 #define FORMULA_MAXTOKENS     8192  /* maximum number of tokens in formula */
@@ -430,6 +432,9 @@ protected:
         short nParaCount = 3; // minimum required parameter count: 3
         std::unordered_set<OUString> aNameSet;
     } m_aLambda;
+
+    // ODF version at time of saving. Set by ScXMLExport::WriteCell().
+    std::optional< SvtSaveOptions::ODFSaneDefaultVersion > m_oODFSavingVersion;
 
 public:
     enum InitSymbols

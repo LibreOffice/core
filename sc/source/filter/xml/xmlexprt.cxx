@@ -3214,7 +3214,7 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
                             const formula::FormulaGrammar::Grammar eGrammar = pDoc->GetStorageGrammar();
                             mpCompileFormulaCxt.reset(new sc::CompileFormulaContext(*pDoc, eGrammar));
                         }
-
+                        mpCompileFormulaCxt->setODFSavingVersion(getSaneDefaultVersion());
                         OUString aFormula = pFormulaCell->GetFormula(*mpCompileFormulaCxt);
                         sal_uInt16 nNamespacePrefix =
                             (mpCompileFormulaCxt->getGrammar() == formula::FormulaGrammar::GRAM_ODFF ? XML_NAMESPACE_OF : XML_NAMESPACE_OOOC);

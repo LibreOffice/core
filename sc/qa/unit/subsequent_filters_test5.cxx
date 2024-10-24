@@ -108,6 +108,33 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162963_ODF)
                 0);
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest5, testTdf162177_EastersundayODF14)
+{
+    // EASTERSUNDAY was added to ODFF in ODF 1.4. LibreOffice has written it as
+    // ORG.OPENOFFICE.EASTERSUNDAY for ODF 1.2 and ODF 1.3.
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    createScDoc("fods/tdf162177_Eastersunday.fods");
+
+    // File has it as ORG.OPENOFFICE.EASTERSUNDAY in ODF 1.3. Test, that it is read correctly.
+    ScDocument* pDoc = getScDoc();
+    OUString aFormula = pDoc->GetFormula(0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(u"=EASTERSUNDAY(2024)"_ustr, aFormula);
+
+    // Verify that saving to ODF1.3 produces ORG.OPENOFFICE.EASTERSUNDAY
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_013);
+    save(u"calc8"_ustr); // this saves to .ods not to .fods
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    const OString sPath = "/office:document-content/office:body/office:spreadsheet/table:table/"
+                          "table:table-row/table:table-cell"_ostr;
+    assertXPath(pXmlDoc, sPath, "formula", u"of:=ORG.OPENOFFICE.EASTERSUNDAY(2024)");
+
+    // Verify that saving to ODF1.4 produces EASTERSUNDAY
+    SetODFDefaultVersion(SvtSaveOptions::ODFDefaultVersion::ODFVER_014);
+    save(u"calc8"_ustr); // this saves to .ods not to .fods
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, sPath, "formula", u"of:=EASTERSUNDAY(2024)");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

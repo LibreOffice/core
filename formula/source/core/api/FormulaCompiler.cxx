@@ -2609,6 +2609,16 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         else
             rBuffer.append( mxSymbols->getSymbol( eOp));
     }
+    else if ( eOp == ocEasterSunday)
+    {
+        // EASTERSUNDAY belongs to ODFF since ODF 1.4
+        if (m_oODFSavingVersion.has_value()
+            && m_oODFSavingVersion.value() >= SvtSaveOptions::ODFSVER_012
+            && m_oODFSavingVersion.value() < SvtSaveOptions::ODFSVER_014)
+            rBuffer.append(u"ORG.OPENOFFICE." + mxSymbols->getSymbol(eOp));
+        else
+            rBuffer.append(mxSymbols->getSymbol(eOp));
+    }
     else if( static_cast<sal_uInt16>(eOp) < mxSymbols->getSymbolCount())        // Keyword:
         rBuffer.append( mxSymbols->getSymbol( eOp));
     else

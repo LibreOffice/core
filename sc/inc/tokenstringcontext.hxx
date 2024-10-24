@@ -50,6 +50,8 @@ class SC_DLLPUBLIC CompileFormulaContext
     ScDocument& mrDoc;
     formula::FormulaGrammar::Grammar meGram;
     std::vector<OUString> maTabNames;
+    // Used in FormulaCompiler::CreateStringFromToken(), set by ScXMLExport::WriteCell()
+    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> m_oODFSavingVersion;
 
     void updateTabNames();
 
@@ -59,6 +61,15 @@ public:
 
     formula::FormulaGrammar::Grammar getGrammar() const { return meGram; }
     void setGrammar(formula::FormulaGrammar::Grammar eGram);
+
+    void setODFSavingVersion(SvtSaveOptions::ODFSaneDefaultVersion eDefaultVersion)
+    {
+        m_oODFSavingVersion = eDefaultVersion;
+    }
+    std::optional<SvtSaveOptions::ODFSaneDefaultVersion> getODFSavingVersion()
+    {
+        return m_oODFSavingVersion;
+    }
 
     const std::vector<OUString>& getTabNames() const { return maTabNames; }
 

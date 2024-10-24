@@ -1883,6 +1883,7 @@ ScCompiler::ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, 
     maTabNames(rCxt.getTabNames())
 {
     SetGrammar(rCxt.getGrammar());
+    m_oODFSavingVersion = rCxt.getODFSavingVersion();
 }
 
 ScCompiler::ScCompiler( ScDocument& rDocument, const ScAddress& rPos, ScTokenArray& rArr,
@@ -3000,7 +3001,7 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
             // Renamed old names, still accept them:
             { "B",              ocB },              // B -> BINOM.DIST.RANGE
             { "TDIST",          ocTDist },          // TDIST -> LEGACY.TDIST
-            { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
+            { "ORG.OPENOFFICE.EASTERSUNDAY",   ocEasterSunday },   // ORG.OPENOFFICE.EASTERSUNDAY -> EASTERSUNDAY
             { "ZGZ",            ocRRI },            // ZGZ -> RRI
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
             { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
