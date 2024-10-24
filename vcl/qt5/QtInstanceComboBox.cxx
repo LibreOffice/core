@@ -145,11 +145,27 @@ int QtInstanceComboBox::find_text(const OUString& rStr) const
 
 OUString QtInstanceComboBox::get_active_id() const
 {
-    assert(false && "Not implemented yet");
-    return OUString();
+    SolarMutexGuard g;
+
+    OUString sId;
+    GetQtInstance().RunInMainThread([&] {
+        QVariant aUserData = m_pComboBox->currentData();
+        if (aUserData.canConvert<QString>())
+            sId = toOUString(aUserData.toString());
+    });
+
+    return sId;
 }
 
-void QtInstanceComboBox::set_active_id(const OUString&) { assert(false && "Not implemented yet"); }
+void QtInstanceComboBox::set_active_id(const OUString& rId)
+{
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        int nIndex = find_id(rId);
+        set_active(nIndex);
+    });
+}
 
 OUString QtInstanceComboBox::get_id(int nPos) const
 {
