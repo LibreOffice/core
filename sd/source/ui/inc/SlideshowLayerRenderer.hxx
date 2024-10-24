@@ -72,8 +72,10 @@ struct RenderPass
     bool mbRenderObjectBackground = false;
 
     bool mbAnimation = false;
-    SdrObject* mpAnimatedObject = nullptr;
-    sal_Int32 mnAnimatedParagraph = -1;
+    SdrObject* mpObject = nullptr;
+    sal_Int32 mnParagraph = -1;
+    bool mbPlaceholder = false;
+    OUString maFieldType;
 
     bool isEmpty() { return maObjectsAndParagraphs.empty(); }
 };
@@ -82,6 +84,7 @@ struct RenderPass
 struct RenderState
 {
     std::deque<RenderPass> maRenderPasses;
+    std::vector<RenderPass> maTextFields;
 
     RenderStage meStage = RenderStage::Background;
 
@@ -91,6 +94,11 @@ struct RenderState
 
     SdrObject* mpCurrentTarget = nullptr;
     sal_Int32 mnCurrentTargetParagraph = -1;
+
+    bool mbShowMasterPageObjects = false;
+    bool mbFooterEnabled = false;
+    bool mbDateTimeEnabled = false;
+    bool mbSlideNumberEnabled = false;
 
     /// increments index depending on the current render stage
     void incrementIndex() { maIndices[size_t(meStage)]++; }
@@ -109,19 +117,6 @@ struct RenderState
 
     /// returns the current index depending on the current render stage
     sal_Int32 currentIndex() const { return maIndices[size_t(meStage)]; }
-
-    /// returns the current target element for which layer is created if any
-    SdrObject* currentTarget() const { return mpCurrentTarget; }
-
-    /// returns the current target paragraph index or -1 if paragraph is not relevant
-    sal_Int32 currentTargetParagraph() const { return mnCurrentTargetParagraph; }
-
-    /// resets properties that are valid for one pass
-    void resetPass()
-    {
-        mpCurrentTarget = nullptr;
-        mnCurrentTargetParagraph = -1;
-    }
 
     /// should include background in rendering
     bool includeBackground() const { return meStage == RenderStage::Background; }
@@ -153,9 +148,11 @@ private:
 
     void createViewAndDraw(RenderContext& rRenderContext,
                            sdr::contact::ViewObjectContactRedirector* pRedirector);
-    void writeJSON(OString& rJsonMsg);
+    void writeBackgroundJSON(OString& rJsonMsg);
+    void writeJSON(OString& rJsonMsg, RenderPass const& rRenderPass);
 
     void setupAnimations();
+    void setupMasterPageFields();
     void resolveEffect(CustomAnimationEffectPtr const& rEffect);
 
 public:
