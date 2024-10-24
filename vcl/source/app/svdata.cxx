@@ -330,7 +330,7 @@ BlendFrameCache* ImplGetBlendFrameCache()
 }
 
 #ifdef _WIN32
-bool ImplInitAccessBridge()
+void ImplInitAccessBridge()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mxAccessBridge.is() )
@@ -340,16 +340,13 @@ bool ImplInitAccessBridge()
         {
             pSVData->mxAccessBridge = css::accessibility::MSAAService::create(xContext);
             SAL_INFO("vcl", "got IAccessible2 bridge");
-            return true;
         }
         catch (css::uno::DeploymentException &)
         {
             TOOLS_WARN_EXCEPTION("vcl", "got no IAccessible2 bridge");
-            return false;
+            assert(false && "failed to create IAccessible2 bridge");
         }
     }
-
-    return true;
 }
 #endif
 

@@ -1634,25 +1634,11 @@ void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 }
 
-bool InitAccessBridge()
+void InitAccessBridge()
 {
-// Disable MSAA bridge on UNIX
-#if defined UNX
-    return true;
-#else
-    bool bRet = ImplInitAccessBridge();
-
-    if( !bRet )
-    {
-        // disable accessibility if the user chooses to continue
-        AllSettings aSettings = Application::GetSettings();
-        MiscSettings aMisc = aSettings.GetMiscSettings();
-        aMisc.SetEnableATToolSupport( false );
-        aSettings.SetMiscSettings( aMisc );
-        Application::SetSettings( aSettings );
-    }
-    return bRet;
-#endif // !UNX
+#ifdef _WIN32
+    ImplInitAccessBridge();
+#endif
 }
 
 // MT: AppEvent was in oldsv.cxx, but is still needed...

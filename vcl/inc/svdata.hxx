@@ -462,7 +462,7 @@ VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
 VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
 #ifdef _WIN32
-bool ImplInitAccessBridge();
+void ImplInitAccessBridge();
 #endif
 
 const FieldUnitStringList& ImplGetFieldUnits();

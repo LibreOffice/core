@@ -2735,8 +2735,8 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 {
     if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mxData->mnEnableATT )
     {
-        if( bEnable && !ImplInitAccessBridge() )
-            return;
+        if (bEnable)
+            ImplInitAccessBridge();
 
         mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
 
