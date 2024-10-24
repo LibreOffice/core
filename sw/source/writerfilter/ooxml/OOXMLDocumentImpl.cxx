@@ -453,7 +453,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxModel, uno::UNO_QUERY);
         uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
         comphelper::SequenceAsHashMap aMap(xDocumentProperties->getDocumentStatistics());
-        if (aMap.find(u"ParagraphCount"_ustr) != aMap.end())
+        if (aMap.contains(u"ParagraphCount"_ustr))
         {
             sal_Int32 nValue;
             if (aMap[u"ParagraphCount"_ustr] >>= nValue)

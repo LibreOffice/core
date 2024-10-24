@@ -416,7 +416,7 @@ void CommentsPanel::populateComments()
             continue;
         sal_uInt32 nRootId = getPostItId(pRootNote);
 
-        if (mpThreadsMap.find(nRootId) != mpThreadsMap.end())
+        if (mpThreadsMap.contains(nRootId))
         {
             if (mxSortbyPosition->get_active())
                 continue;
@@ -491,7 +491,7 @@ void CommentsPanel::addComment(const SwFormatField* pField)
     sw::annotation::SwAnnotationWin* pNote
         = mpPostItMgr->GetAnnotationWin(static_cast<const SwPostItField*>(pField->GetField()));
     // If comment is added to an existing thread
-    if (mpThreadsMap.find(nRootId) != mpThreadsMap.end())
+    if (mpThreadsMap.contains(nRootId))
     {
         auto& pThread = mpThreadsMap[nRootId];
         auto pComment = std::make_unique<Comment>(pThread->getCommentBoxWidget(), *this);
@@ -561,7 +561,7 @@ void CommentsPanel::deleteComment(sal_uInt32 nId)
     if (--pThread->mnComments == 0)
     {
         mxThreadsContainer->move(pThread->get_widget(), nullptr);
-        if (mpThreadsMap.find(nRootId) != mpThreadsMap.end())
+        if (mpThreadsMap.contains(nRootId))
             mpThreadsMap.erase(nRootId);
         mnThreads--;
     }
