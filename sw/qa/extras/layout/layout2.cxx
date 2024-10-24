@@ -2577,9 +2577,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     save(u"Office Open XML Text"_ustr);
 
     // The second part: check if the reloaded doc has flys inside a fly
-    uno::Reference<lang::XComponent> xComponent
-        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
-    uno::Reference<text::XTextDocument> xTextDoc(xComponent, uno::UNO_QUERY);
+    loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     auto pSecondDoc = getSwDoc();
     auto pSecondFormats = pSecondDoc->GetSpzFrameFormats();
 
