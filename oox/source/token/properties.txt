@@ -608,6 +608,7 @@ TopBorderComplexColor
 TopBorderDistance
 TopMargin
 TotalsRow
+TotalsRowBelow
 Transformation
 TransitionDirection
 TransitionDuration

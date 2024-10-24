@@ -3567,6 +3567,12 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     }
 
     pDBData->GetSubTotalParam( aSubTotalParam );
+
+    ScDocument& rDoc = GetViewData().GetDocument();
+    SCTAB nTab = GetViewData().GetTabNo();
+    if (!rDoc.GetTotalsRowBelow(nTab))
+        aSubTotalParam.bSummaryBelow = false;
+
     aSubTotalParam.bRemoveOnly = false;
     if (bAnonymous)
     {

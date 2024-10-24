@@ -380,6 +380,18 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf81470)
     assertXPath(pHeaders, "/x:headers/x:header[3]"_ostr, "userName"_ostr, u"Kohei Yoshida"_ustr);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162262)
+{
+    createScDoc("xlsx/subtotal-above.xlsx");
+
+    save(u"Calc Office Open XML"_ustr);
+
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+
+    assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:outlinePr", "summaryBelow", u"0"_ustr);
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf122331)
 {
     createScDoc("ods/tdf122331.ods");

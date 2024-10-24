@@ -26,7 +26,7 @@ ScSubTotalParam::ScSubTotalParam()
 ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
         bRemoveOnly(r.bRemoveOnly),bReplace(r.bReplace),bPagebreak(r.bPagebreak),bCaseSens(r.bCaseSens),
-        bDoSort(r.bDoSort),bAscending(r.bAscending),bUserDef(r.bUserDef),
+        bDoSort(r.bDoSort), bSummaryBelow(r.bSummaryBelow), bAscending(r.bAscending), bUserDef(r.bUserDef),
         bIncludePattern(r.bIncludePattern)
 {
     for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
@@ -59,7 +59,7 @@ void ScSubTotalParam::Clear()
     nRow1=nRow2 = 0;
     nUserIndex = 0;
     bPagebreak=bCaseSens=bUserDef=bIncludePattern=bRemoveOnly = false;
-    bAscending=bReplace=bDoSort = true;
+    bAscending=bReplace=bDoSort=bSummaryBelow = true;
 
     for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
     {
@@ -90,6 +90,7 @@ ScSubTotalParam& ScSubTotalParam::operator=( const ScSubTotalParam& r )
     bPagebreak      = r.bPagebreak;
     bCaseSens       = r.bCaseSens;
     bDoSort         = r.bDoSort;
+    bSummaryBelow   = r.bSummaryBelow;
     bAscending      = r.bAscending;
     bUserDef        = r.bUserDef;
     nUserIndex      = r.nUserIndex;
@@ -135,6 +136,7 @@ bool ScSubTotalParam::operator==( const ScSubTotalParam& rOther ) const
                  && (bReplace       == rOther.bReplace)
                  && (bPagebreak     == rOther.bPagebreak)
                  && (bDoSort        == rOther.bDoSort)
+                 && (bSummaryBelow  == rOther.bSummaryBelow)
                  && (bCaseSens      == rOther.bCaseSens)
                  && (bAscending     == rOther.bAscending)
                  && (bUserDef       == rOther.bUserDef)

@@ -447,6 +447,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions(weld::Container* pPage, weld::DialogCon
     , m_xBtnPagebreak(m_xBuilder->weld_check_button(u"pagebreak"_ustr))
     , m_xBtnCase(m_xBuilder->weld_check_button(u"case"_ustr))
     , m_xBtnSort(m_xBuilder->weld_check_button(u"sort"_ustr))
+    , m_xBtnSummary(m_xBuilder->weld_check_button(u"summarybelow"_ustr))
     , m_xFlSort(m_xBuilder->weld_label(u"label2"_ustr))
     , m_xBtnAscending(m_xBuilder->weld_radio_button(u"ascending"_ustr))
     , m_xBtnDescending(m_xBuilder->weld_radio_button(u"descending"_ustr))
@@ -490,6 +491,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
     m_xBtnCase->set_active( rSubTotalData.bCaseSens );
     m_xBtnFormats->set_active( rSubTotalData.bIncludePattern );
     m_xBtnSort->set_active( rSubTotalData.bDoSort );
+    m_xBtnSummary->set_active( rSubTotalData.bSummaryBelow );
     m_xBtnAscending->set_active( rSubTotalData.bAscending );
     m_xBtnDescending->set_active( !rSubTotalData.bAscending );
 
@@ -524,6 +526,10 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     theSubTotalData.bCaseSens       = m_xBtnCase->get_active();
     theSubTotalData.bIncludePattern = m_xBtnFormats->get_active();
     theSubTotalData.bDoSort         = m_xBtnSort->get_active();
+
+    theSubTotalData.bSummaryBelow   = m_xBtnSummary->get_active();
+    pDoc->SetTotalsRowBelow(pViewData->GetTabNo(), theSubTotalData.bSummaryBelow);
+
     theSubTotalData.bAscending      = m_xBtnAscending->get_active();
     theSubTotalData.bUserDef        = m_xBtnUserDef->get_active();
     theSubTotalData.nUserIndex      = (m_xBtnUserDef->get_active())

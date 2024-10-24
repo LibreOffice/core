@@ -368,8 +368,8 @@ XclExpWsbool::XclExpWsbool( bool bFitToPages )
         SetValue( GetValue() | EXC_WSBOOL_FITTOPAGE );
 }
 
-XclExpXmlSheetPr::XclExpXmlSheetPr( bool bFitToPages, SCTAB nScTab, const Color& rTabColor, XclExpFilterManager* pManager ) :
-    mnScTab(nScTab), mpManager(pManager), mbFitToPage(bFitToPages), maTabColor(rTabColor) {}
+XclExpXmlSheetPr::XclExpXmlSheetPr( bool bFitToPages, SCTAB nScTab, const Color& rTabColor, bool bSummaryBelow, XclExpFilterManager* pManager ) :
+    mnScTab(nScTab), mpManager(pManager), mbFitToPage(bFitToPages), maTabColor(rTabColor), mbSummaryBelow(bSummaryBelow) {}
 
 void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 {
@@ -388,10 +388,12 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     // Note : the order of child elements is significant. Don't change the order.
 
-    // OOXTODO: XML_outlinePr
-
     if (maTabColor != COL_AUTO)
         rWorksheet->singleElement(XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor));
+
+    // OOXTODO: XML_outlinePr --> XML_applyStyles, XML_showOutlineSymbols, XML_summaryBelow, XML_summaryRight
+    if (!mbSummaryBelow)
+        rWorksheet->singleElement(XML_outlinePr, XML_summaryBelow, "0");
 
     rWorksheet->singleElement(XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,

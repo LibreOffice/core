@@ -191,6 +191,7 @@ inline constexpr OUString SC_UNONAME_TABLAYOUT        = u"TableLayout"_ustr;
 inline constexpr OUString SC_UNONAME_AUTOPRINT        = u"AutomaticPrintArea"_ustr;
 inline constexpr OUString SC_UNONAME_TABCOLOR         = u"TabColor"_ustr;
 inline constexpr OUString SC_UNONAME_CONDFORMAT       = u"ConditionalFormats"_ustr;
+inline constexpr OUString SC_UNONAME_TOTALBELOW       = u"TotalsRowBelow"_ustr;
 
 inline constexpr OUString SC_UNONAME_VISFLAG          = u"VisibleFlag"_ustr;
 

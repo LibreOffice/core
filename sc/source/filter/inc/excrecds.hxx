@@ -304,7 +304,7 @@ class XclExpXmlSheetPr : public XclExpRecordBase
 {
 public:
     explicit XclExpXmlSheetPr(
-        bool bFitToPages, SCTAB nScTab, const Color& rTabColor, XclExpFilterManager* pManager );
+        bool bFitToPages, SCTAB nScTab, const Color& rTabColor, bool bSummaryBelow, XclExpFilterManager* pManager );
 
     virtual void SaveXml( XclExpXmlStream& rStrm ) override;
 
@@ -313,6 +313,7 @@ private:
     XclExpFilterManager* mpManager;
     bool mbFitToPage;
     Color maTabColor;
+    bool mbSummaryBelow;
 };
 
 class XclExpFiltermode : public XclExpEmptyRecord

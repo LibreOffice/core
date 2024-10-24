@@ -2060,9 +2060,10 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
         if (nResCount > 0)                                      // otherwise only sort
         {
+            SCROW nAboveRows = rParam.bSummaryBelow ? nStartRow : nStartRow + nLevel;
             for (sal_uInt16 i = 0; i <= aRowEntry.nGroupNo; ++i)
             {
-                aSubString = GetString( nGroupCol[i], nStartRow );
+                aSubString = GetString( nGroupCol[i], nAboveRows );
                 if ( bIgnoreCase )
                     aCompString[i] = ScGlobal::getCharClass().uppercase( aSubString );
                 else
@@ -2070,8 +2071,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
             }                                                   // aSubString stays on the last
 
             bool bBlockVis = false;             // group visible?
-            aRowEntry.nSubStartRow = nStartRow;
-            for (SCROW nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
+            aRowEntry.nSubStartRow = nAboveRows;
+            for (SCROW nRow=nAboveRows; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
             {
                 bool bChanged;
                 if (nRow>nEndRow)
@@ -2099,9 +2100,21 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 }
                 if ( bChanged )
                 {
-                    aRowEntry.nDestRow   = nRow;
-                    aRowEntry.nFuncStart = aRowEntry.nSubStartRow;
-                    aRowEntry.nFuncEnd   = nRow-1;
+                    if (rParam.bSummaryBelow)
+                    {
+                        aRowEntry.nDestRow = nRow;
+                        aRowEntry.nFuncStart = aRowEntry.nSubStartRow;
+                        aRowEntry.nFuncEnd = nRow - 1;
+                    }
+                    else
+                    {
+                        aRowEntry.nDestRow = aRowEntry.nSubStartRow;
+                        aRowEntry.nFuncStart = aRowEntry.nSubStartRow + 1;
+                        if (nRow != nEndRow + 1)
+                            aRowEntry.nFuncEnd = nRow - nLevel;
+                        else
+                            aRowEntry.nFuncEnd = nRow;
+                    }
 
                     bSpaceLeft = rDocument.InsertRow( 0, nTab, rDocument.MaxCol(), nTab,
                             aRowEntry.nDestRow, 1 );
@@ -2157,16 +2170,26 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     if (!aRowVector.empty())
     {
-        // generate global total
-        SCROW nGlobalStartRow = aRowVector[0].nSubStartRow;
-        SCROW nGlobalStartFunc = aRowVector[0].nFuncStart;
         SCROW nGlobalEndRow = 0;
         SCROW nGlobalEndFunc = 0;
-        for (const auto& rRowEntry : aRowVector)
+        for (auto& rRowEntry : aRowVector)
         {
+            if (!rParam.bSummaryBelow)
+            {
+                // if we have Global summary above, we need to shift summary rows down
+                rRowEntry.nDestRow = rRowEntry.nDestRow + nLevelCount;
+                rRowEntry.nFuncEnd = rRowEntry.nFuncEnd + nLevelCount;
+                rRowEntry.nFuncStart = rRowEntry.nFuncStart + nLevelCount - rRowEntry.nGroupNo;
+                rRowEntry.nSubStartRow = rRowEntry.nSubStartRow + nLevelCount;
+            }
+
             nGlobalEndRow = (nGlobalEndRow < rRowEntry.nDestRow) ? rRowEntry.nDestRow : nGlobalEndRow;
             nGlobalEndFunc = (nGlobalEndFunc < rRowEntry.nFuncEnd) ? rRowEntry.nFuncEnd : nGlobalEndRow;
         }
+
+        // generate global total
+        SCROW nGlobalStartRow = aRowVector[0].nSubStartRow;
+        SCROW nGlobalStartFunc = aRowVector[0].nFuncStart;
 
         for (sal_uInt16 nLevel = 0; nLevel<nLevelCount; nLevel++)
         {
@@ -2179,18 +2202,30 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 continue;
             }
 
-            // increment end row
-            nGlobalEndRow++;
+            if (rParam.bSummaryBelow)
+            {
+                // increment end row
+                nGlobalEndRow++;
 
-            // add row entry for formula
-            aRowEntry.nGroupNo = nGroupNo;
-            aRowEntry.nSubStartRow = nGlobalStartRow;
-            aRowEntry.nFuncStart = nGlobalStartFunc;
-            aRowEntry.nDestRow = nGlobalEndRow;
-            aRowEntry.nFuncEnd = nGlobalEndFunc;
+                // add row entry for formula
+                aRowEntry.nGroupNo = nGroupNo;
+                aRowEntry.nSubStartRow = nGlobalStartRow;
+                aRowEntry.nFuncStart = nGlobalStartFunc;
+                aRowEntry.nDestRow = nGlobalEndRow;
+                aRowEntry.nFuncEnd = nGlobalEndFunc;
 
-            // increment row
-            nGlobalEndFunc++;
+                // increment row
+                nGlobalEndFunc++;
+            }
+            else
+            {
+                // if we have Global summary we need to shift summary rows down
+                aRowEntry.nGroupNo = nGroupNo;
+                aRowEntry.nSubStartRow = nGlobalStartRow - nGroupNo - 1;
+                aRowEntry.nFuncStart = nGlobalStartFunc - nGroupNo - 1;
+                aRowEntry.nDestRow = nGlobalStartRow - nGroupNo - 1;
+                aRowEntry.nFuncEnd = nGlobalEndFunc;
+            }
 
             bSpaceLeft = rDocument.InsertRow(0, nTab, rDocument.MaxCol(), nTab, aRowEntry.nDestRow, 1);
 

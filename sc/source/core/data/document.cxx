@@ -228,6 +228,25 @@ bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
     return false;
 }
 
+bool ScDocument::SetTotalsRowBelow( SCTAB nTab, bool bVal )
+{
+    if (ScTable* pTable = FetchTable(nTab))
+    {
+        pTable->SetTotalsRowBelow(bVal);
+        return true;
+    }
+    return false;
+}
+
+bool ScDocument::GetTotalsRowBelow( SCTAB nTab ) const
+{
+    if (const ScTable* pTable = FetchTable(nTab))
+    {
+        return pTable->GetTotalsRowBelow();
+    }
+    return true;
+}
+
 bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
 {
     static OUString aCacheName, aCacheUpperName;

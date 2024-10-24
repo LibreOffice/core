@@ -287,6 +287,12 @@ void WorksheetSettings::finalizeImport()
         ::Color nColor = maSheetSettings.maTabColor.getColor( getBaseFilter().getGraphicHelper() );
         aPropSet.setProperty( PROP_TabColor, nColor );
     }
+
+    // Summary data below or above the contents
+    if ( !maSheetSettings.mbSummaryBelow )
+    {
+        aPropSet.setProperty( PROP_TotalsRowBelow, false );
+    }
 }
 
 } // namespace oox::xls

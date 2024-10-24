@@ -24,6 +24,7 @@ struct SC_DLLPUBLIC ScSubTotalParam
     bool            bPagebreak:1;               ///< page break at change of group
     bool            bCaseSens:1;
     bool            bDoSort:1;                  ///< presort
+    bool            bSummaryBelow:1;            ///< Summary below or above (default: below)
     bool            bAscending:1;               ///< sort ascending
     bool            bUserDef:1;                 ///< sort user defined
     bool            bIncludePattern:1;          ///< sort formats

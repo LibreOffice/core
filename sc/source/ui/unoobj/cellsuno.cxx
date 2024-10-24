@@ -784,6 +784,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
         { SC_UNONAME_TABCOLOR, SC_WID_UNO_TABCOLOR, cppu::UnoType<sal_Int32>::get(), 0, 0 },
         { SC_UNO_CODENAME,        SC_WID_UNO_CODENAME, cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNO_NAMEDRANGES, SC_WID_UNO_NAMES, cppu::UnoType<sheet::XNamedRanges>::get(), 0, 0 },
+        { SC_UNONAME_TOTALBELOW, SC_WID_UNO_TOTALBELOW, cppu::UnoType<bool>::get(), 0, 0 },
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
     return &aSheetPropertySet;
@@ -8057,6 +8058,11 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMapEntry* pEntry
         {
             // how to set the format correctly
         }
+    }
+    else if (pEntry->nWID == SC_WID_UNO_TOTALBELOW)
+    {
+        bool bTotalsRowBelow = ScUnoHelpFunctions::GetBoolFromAny(aValue);
+        rDoc.SetTotalsRowBelow(nTab, bTotalsRowBelow);
     }
     else
         ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID

@@ -253,6 +253,7 @@ private:
     bool            bActiveScenario:1;
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
+    bool            mbTotalsRowBelow:1;
     /** this is touched from formula group threading context */
     std::atomic<bool> bStreamValid;
 
@@ -393,6 +394,9 @@ public:
 
     const OUString& GetCodeName() const { return aCodeName; }
     void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
+
+    bool        GetTotalsRowBelow() const { return mbTotalsRowBelow; }
+    void        SetTotalsRowBelow( bool bNewVal ) { mbTotalsRowBelow = bNewVal; }
 
     const OUString& GetUpperName() const;
 
