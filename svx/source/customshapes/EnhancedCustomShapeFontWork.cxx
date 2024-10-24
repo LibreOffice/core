@@ -839,7 +839,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                             Point aPoint = rOutlinePoly.GetPoint(nPointIdx2)
                                            - rOutlinePoly.GetPoint(nPointIdx1);
 
-                            double fLen = sqrt(aPoint.X() * aPoint.X() + aPoint.Y() * aPoint.Y());
+                            double fLen = hypot(aPoint.X(), aPoint.Y());
 
                             if (fLen > 0)
                             {
@@ -878,7 +878,7 @@ static void FitTextOutlinesToShapeOutlines(const tools::PolyPolygon& aOutlines2d
                                     //calculate distances between points on the outer outline
                                     const double fDx = vCurOutline[i].X() - vCurOutline[i - 1].X();
                                     const double fDy = vCurOutline[i].Y() - vCurOutline[i - 1].Y();
-                                    vCurDistances[i] = sqrt(fDx * fDx + fDy * fDy);
+                                    vCurDistances[i] = hypot(fDx, fDy);
                                 }
                                 else
                                     vCurDistances[i] = 0;
