@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceEntry.hxx>
+#include <QtInstanceEntry.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
@@ -16,6 +17,10 @@ QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
     , m_pLineEdit(pLineEdit)
 {
     assert(m_pLineEdit);
+
+    QObject::connect(m_pLineEdit, &QLineEdit::cursorPositionChanged, this,
+                     [&] { signal_cursor_position(); });
+    QObject::connect(m_pLineEdit, &QLineEdit::textEdited, this, [&] { signal_changed(); });
 }
 
 void QtInstanceEntry::set_text(const OUString& rText)
