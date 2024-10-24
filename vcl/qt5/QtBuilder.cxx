@@ -55,10 +55,26 @@ QObject* QtBuilder::get_by_name(std::u16string_view sID)
     return nullptr;
 }
 
-void QtBuilder::insertComboBoxOrListBoxItems(QObject*, stringmap&,
-                                             const std::vector<ComboBoxTextItem>&)
+void QtBuilder::insertComboBoxOrListBoxItems(QObject* pObject, stringmap& rMap,
+                                             const std::vector<ComboBoxTextItem>& rItems)
 {
-    assert(false && "comboboxes and list boxes are not supported yet");
+    if (QComboBox* pComboBox = qobject_cast<QComboBox*>(pObject))
+    {
+        for (const ComboBoxTextItem& rItem : rItems)
+        {
+            QVariant aUserData;
+            if (!rItem.m_sId.isEmpty())
+                aUserData = QVariant::fromValue(toQString(rItem.m_sId));
+
+            pComboBox->addItem(toQString(rItem.m_sItem), aUserData);
+        }
+
+        const int nActiveId = BuilderBase::extractActive(rMap);
+        pComboBox->setCurrentIndex(nActiveId);
+        return;
+    }
+
+    assert(false && "list boxes are not supported yet");
 }
 
 QObject* QtBuilder::insertObject(QObject* pParent, const OUString& rClass, const OUString& rID,
