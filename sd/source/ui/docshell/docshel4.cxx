@@ -38,6 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/infobar.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
@@ -296,8 +297,10 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     if( bRet )
     {
+        SdDrawDocument* pDoc = GetDoc();
+
         // for legacy markup in OOoXML filter, convert the animations now
-        EffectMigration::DocumentLoaded(*GetDoc());
+        EffectMigration::DocumentLoaded(*pDoc);
         UpdateTablePointers();
 
         // If we're an embedded OLE object, use tight bounds
@@ -317,6 +320,15 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
         const INetURLObject aUrl;
         SfxObjectShell::SetAutoLoad( aUrl, 0, false );
+
+        const sal_uInt16 nMasterPages = pDoc->GetMasterSdPageCount(PageKind::Standard);
+        if (nMasterPages > 100)
+        {
+            const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+            OUString sMasterPages = rLocaleData.getNum(nMasterPages, 0, true, false);
+            AppendInfoBarWhenReady(u"toomanymasterpages"_ustr, SdResId(STR_MANY_MASTER_PAGES).replaceFirst("%n", sMasterPages),
+                                   SdResId(STR_MANY_MASTER_PAGES_DETAIL), InfobarType::INFO);
+        }
     }
     else
     {

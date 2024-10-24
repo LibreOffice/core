@@ -469,4 +469,8 @@
 #define STR_INSERT_TABLESTYLE                           NC_("STR_INSERT_TABLESTYLE", "Add a new design")
 #define STR_REMOVE_TABLESTYLE                           NC_("STR_REMOVE_TABLESTYLE", "The selected style is in use in this document.\nIf you will delete this style, tables using it will revert to the default style.\nDo you still wish to delete this style?\n")
 
+// To translators: %n is replaced by a large number, 100 at the time of introduction
+#define STR_MANY_MASTER_PAGES                           NC_("STR_MANY_MASTER_PAGES", "%n Master Slides")
+#define STR_MANY_MASTER_PAGES_DETAIL                    NC_("STR_MANY_MASTER_PAGES_DETAIL", "Large amounts of Master Slides degrade loading performance")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
