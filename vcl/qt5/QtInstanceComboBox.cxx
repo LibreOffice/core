@@ -12,6 +12,8 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtWidgets/QLineEdit>
+
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
     : QtInstanceWidget(pComboBox)
     , m_pComboBox(pComboBox)
@@ -215,12 +217,39 @@ void QtInstanceComboBox::set_entry_width_chars(int) { assert(false && "Not imple
 
 void QtInstanceComboBox::set_entry_max_length(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceComboBox::select_entry_region(int, int) { assert(false && "Not implemented yet"); }
-
-bool QtInstanceComboBox::get_entry_selection_bounds(int&, int&)
+void QtInstanceComboBox::select_entry_region(int nStartPos, int nEndPos)
 {
-    assert(false && "Not implemented yet");
-    return false;
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        QLineEdit* pEdit = m_pComboBox->lineEdit();
+        if (pEdit)
+        {
+            if (nEndPos == -1)
+                nEndPos = pEdit->text().length();
+
+            const int nLength = nEndPos - nStartPos;
+            pEdit->setSelection(nStartPos, nLength);
+        }
+    });
+}
+
+bool QtInstanceComboBox::get_entry_selection_bounds(int& rStartPos, int& rEndPos)
+{
+    SolarMutexGuard g;
+
+    bool bHasSelection = false;
+    GetQtInstance().RunInMainThread([&] {
+        QLineEdit* pEdit = m_pComboBox->lineEdit();
+        if (pEdit)
+        {
+            bHasSelection = pEdit->hasSelectedText();
+            rStartPos = pEdit->selectionStart();
+            rEndPos = pEdit->selectionEnd();
+        }
+    });
+
+    return bHasSelection;
 }
 
 void QtInstanceComboBox::set_entry_completion(bool, bool)
