@@ -663,18 +663,18 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         // status indicator
         uno::Reference<task::XStatusIndicator> xTmpStatus( xValue, UNO_QUERY );
         if ( xTmpStatus.is() )
-            mxStatusIndicator = xTmpStatus;
+            mxStatusIndicator = std::move(xTmpStatus);
 
         // graphic storage handler
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(xValue, UNO_QUERY);
         if (xGraphicStorageHandler.is())
-            mxGraphicStorageHandler = xGraphicStorageHandler;
+            mxGraphicStorageHandler = std::move(xGraphicStorageHandler);
 
         // object resolver
         uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
             xValue, UNO_QUERY );
         if ( xTmpObjectResolver.is() )
-            mxEmbeddedResolver = xTmpObjectResolver;
+            mxEmbeddedResolver = std::move(xTmpObjectResolver);
 
         // document handler
         uno::Reference<xml::sax::XDocumentHandler> xTmpDocHandler(

@@ -2517,7 +2517,7 @@ sal_Bool SAL_CALL OReportController::attachModel(const uno::Reference< frame::XM
     if ( !xTestSuppUndo.is() )
         return false;
 
-    m_xReportDefinition = xReportDefinition;
+    m_xReportDefinition = std::move(xReportDefinition);
     return true;
 }
 

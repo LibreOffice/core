@@ -1163,7 +1163,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     // the outer one.
     rShape.getProperties().clear();
 
-    m_xShape = xShape;
+    m_xShape = std::move(xShape);
 }
 
 void RTFSdrImport::close() { m_rImport.Mapper().endShape(); }

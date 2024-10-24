@@ -659,7 +659,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
             xTmpDicList->addDictionary( xTmp );
             xTmp->setActive( true );
         }
-        xDic = xTmp;
+        xDic = std::move(xTmp);
     }
 #if OSL_DEBUG_LEVEL > 1
     uno::Reference< XStorable >      xStor( xDic, UNO_QUERY );

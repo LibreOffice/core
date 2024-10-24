@@ -632,7 +632,7 @@ ContextHandlerRef BlipExtensionContext::onCreateContext(sal_Int32 nElement, cons
                     // Overwrite the fill graphic with the one containing SVG
                     mrBlipProps.mxFillGraphic = xGraphic;
                     if (mpBlipFill)
-                        mpBlipFill->mxGraphic = xGraphic;
+                        mpBlipFill->mxGraphic = std::move(xGraphic);
                 }
             }
             // TODO - link

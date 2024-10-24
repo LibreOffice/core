@@ -83,7 +83,7 @@ public:
         Reference< T > xElement;
         if ( ! ( aElement >>= xElement ) )
             throw IllegalArgumentException();
-        it->second = xElement;
+        it->second = std::move(xElement);
     }
     virtual Any SAL_CALL getByName( const OUString& aName ) override
     {

@@ -411,7 +411,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
             xHatchWindow->setController( uno::Reference< embed::XHatchWindowController >(
                                                 static_cast< embed::XHatchWindowController* >( this ) ) );
 
-            xMyParent = xHatchWinPeer;
+            xMyParent = std::move(xHatchWinPeer);
         }
         else
         {
@@ -453,8 +453,8 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         // the call will create, initialize the frame, and register it in the parent
         m_xFrame.set( xFrameFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );
 
-        m_xHatchWindow = xHWindow;
-        m_xOwnWindow = xOwnWindow;
+        m_xHatchWindow = std::move(xHWindow);
+        m_xOwnWindow = std::move(xOwnWindow);
 
         if ( !SetFrameLMVisibility( m_xFrame, false ) )
         {

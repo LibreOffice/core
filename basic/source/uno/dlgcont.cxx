@@ -324,7 +324,7 @@ Any SfxDialogLibraryContainer::importLibraryElement
         return aRetAny;
 
     InputSource source;
-    source.aInputStream = xInput;
+    source.aInputStream = std::move(xInput);
     source.sSystemId    = aFile;
 
     try {

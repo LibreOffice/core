@@ -215,7 +215,7 @@ QrCodeGenDialog::QrCodeGenDialog(weld::Widget* pParent, Reference<XModel> xModel
     m_xComboType->set_active(aBarCode.Type);
 
     // Mark this as existing shape
-    m_xExistingShapeProperties = xProps;
+    m_xExistingShapeProperties = std::move(xProps);
 }
 
 short QrCodeGenDialog::run()

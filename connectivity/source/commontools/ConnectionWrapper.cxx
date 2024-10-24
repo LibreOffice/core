@@ -82,7 +82,7 @@ void OConnectionWrapper::setDelegation(const Reference< XConnection >& _xConnect
     if (xConProxy.is())
     {
         // transfer the (one and only) real ref to the aggregate to our member
-        m_xProxyConnection = xConProxy;
+        m_xProxyConnection = std::move(xConProxy);
 
         // set ourself as delegator
         Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );

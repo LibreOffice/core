@@ -638,7 +638,7 @@ AnimationsExporter::AnimationsExporter(::tools::JsonWriter& rWriter,
             }
         }
         if (mbHasEffects)
-            mxRootNode = xRootNode;
+            mxRootNode = std::move(xRootNode);
     }
     catch (const RuntimeException&)
     {

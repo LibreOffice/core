@@ -499,7 +499,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
                     if ( aDlgLib.is() )
                     {
                         bDocDialog = true;
-                        xModel = xNextModel;
+                        xModel = std::move(xNextModel);
                         break;
                     }
                 }

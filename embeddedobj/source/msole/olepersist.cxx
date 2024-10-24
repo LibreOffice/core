@@ -1241,7 +1241,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
     if ( bSaveAs )
     {
         m_bWaitSaveCompleted = true;
-        m_xNewObjectStream = xTargetStream;
+        m_xNewObjectStream = std::move(xTargetStream);
         m_xNewParentStorage = xStorage;
         m_aNewEntryName = sEntName;
         m_bNewVisReplInStream = bStoreVis;
@@ -1252,7 +1252,7 @@ void OleEmbeddedObject::StoreToLocation_Impl(
             if ( bNeedLocalCache )
                 m_xNewCachedVisRepl = GetNewFilledTempStream_Impl( xCachedVisualRepresentation->getInputStream() );
             else
-                m_xNewCachedVisRepl = xCachedVisualRepresentation;
+                m_xNewCachedVisRepl = std::move(xCachedVisualRepresentation);
         }
 
         // TODO: register listeners for storages above, in case they are disposed

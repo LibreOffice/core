@@ -801,7 +801,7 @@ void OWriteStream_Impl::Commit()
     }
 
     // the stream should be free soon, after package is stored
-    m_xPackageStream = xNewPackageStream;
+    m_xPackageStream = std::move(xNewPackageStream);
     m_bHasDataToFlush = false;
     m_bFlushed = true; // will allow to use transaction on stream level if will need it
 }

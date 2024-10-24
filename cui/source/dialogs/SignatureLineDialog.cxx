@@ -88,7 +88,7 @@ SignatureLineDialog::SignatureLineDialog(weld::Widget* pParent, Reference<XModel
     m_xCheckboxShowSignDate->set_active(bShowSignDate);
 
     // Mark this as existing shape
-    m_xExistingShapeProperties = xProps;
+    m_xExistingShapeProperties = std::move(xProps);
 }
 
 void SignatureLineDialog::Apply()

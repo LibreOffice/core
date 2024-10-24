@@ -646,7 +646,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
         Reference< XComponent > xTest( mxLastFocusModel );
         if( checkComponent( xTest, rServiceName ) )
         {
-            xRet = xTest;
+            xRet = std::move(xTest);
         }
         else
         {
@@ -654,7 +654,7 @@ Reference< XComponent > XMLFilterTestDialog::getFrontMostDocument( const OUStrin
 
             if( checkComponent( xTest, rServiceName ) )
             {
-                xRet = xTest;
+                xRet = std::move(xTest);
             }
             else
             {

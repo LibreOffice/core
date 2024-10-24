@@ -692,7 +692,7 @@ SfxDocumentMetaData::setMetaText(std::unique_lock<std::mutex>& rGuard, const OUS
             if (xNode.is()) { // delete
                 m_xParent->removeChild(xNode);
                 xNode.clear();
-                m_meta[name] = xNode;
+                m_meta[name] = std::move(xNode);
                 return true;
             } else {
                 return false;
@@ -987,7 +987,7 @@ SfxDocumentMetaData::updateElement(std::unique_lock<std::mutex>& /*rGuard*/, con
             }
             m_xParent->appendChild(xNode);
         }
-        m_meta[name] = xNode;
+        m_meta[name] = std::move(xNode);
     } catch (const css::xml::dom::DOMException &) {
         css::uno::Any anyEx = cppu::getCaughtException();
         throw css::lang::WrappedTargetRuntimeException(
@@ -1201,7 +1201,7 @@ void SfxDocumentMetaData::init(
                 i_xDoc->createElementNS(s_nsODF, sOfficeMeta),
                 css::uno::UNO_QUERY_THROW);
             xRElem->appendChild(xParent);
-            m_xParent = xParent;
+            m_xParent = std::move(xParent);
         } catch (const css::xml::dom::DOMException &) {
             css::uno::Any anyEx = cppu::getCaughtException();
             throw css::lang::WrappedTargetRuntimeException(
@@ -1220,11 +1220,10 @@ void SfxDocumentMetaData::init(
         // document, it will contain the duplicates unchanged.
         // The ODF spec says that handling multiple occurrences is
         // application-specific.
-        css::uno::Reference<css::xml::dom::XNode> xNode =
-                getChildNodeByName(m_xParent, name);
+
         // Do not create an empty element if it is missing;
         // for certain elements, such as dateTime, this would be invalid
-        m_meta[name] = xNode;
+        m_meta[name] = getChildNodeByName(m_xParent, name);
     }
 
     // select nodes for elements of which we handle all occurrences

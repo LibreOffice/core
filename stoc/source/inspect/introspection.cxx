@@ -874,11 +874,11 @@ void ImplIntrospectionAccess::cacheXIndexContainer(const std::unique_lock<std::m
 
     {
         if( !mxObjIndexContainer.is() )
-            mxObjIndexContainer = xIndexContainer;
+            mxObjIndexContainer = std::move(xIndexContainer);
         if( !mxObjIndexReplace.is() )
-            mxObjIndexReplace = xIndexReplace;
+            mxObjIndexReplace = std::move(xIndexReplace);
         if( !mxObjIndexAccess.is() )
-            mxObjIndexAccess = xIndexAccess;
+            mxObjIndexAccess = std::move(xIndexAccess);
     }
 }
 

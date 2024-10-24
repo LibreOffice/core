@@ -272,7 +272,7 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
                     UNO_QUERY_THROW );
                 xNode->appendChild( xChild );
             }
-            xNode = xChild;
+            xNode = std::move(xChild);
 
             OSL_ENSURE( xNode.is() &&
                         xNode->getNodeType() == NodeType_TEXT_NODE,

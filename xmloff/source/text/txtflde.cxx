@@ -170,7 +170,7 @@ uno::Reference<text::XText> GetToplevelText(const uno::Reference<text::XText>& x
 
         uno::Reference<text::XText> xParent;
         if (xPropertySet->getPropertyValue(u"ParentText"_ustr) >>= xParent)
-            xRet = xParent;
+            xRet = std::move(xParent);
         else
             return xRet;
     }

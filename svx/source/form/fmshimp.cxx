@@ -1971,7 +1971,7 @@ bool FmXFormShell::setCurrentSelection_Lock( InterfaceBag&& _rSelection )
 
         if ( !xNewCurrentForm.is() )
         {   // the first form we encountered
-            xNewCurrentForm = xThisRoundsForm;
+            xNewCurrentForm = std::move(xThisRoundsForm);
         }
         else if ( xNewCurrentForm != xThisRoundsForm )
         {   // different forms -> no "current form" at all
@@ -2215,7 +2215,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
         DBG_ASSERT(xModelSet.is(), "FmXFormShell::OnFoundData : invalid control model (no property set) !");
         xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, Any( true ) );
         xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, Any( COL_LIGHTRED ) );
-        m_xLastGridFound = xControlModel;
+        m_xLastGridFound = std::move(xControlModel);
 
         if ( xGrid.is() )
             xGrid->setCurrentColumnPosition(static_cast<sal_Int16>(nGridColumn));
@@ -2441,7 +2441,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest_Lock, FmSearchContext&, rfmscCont
         return 0;
     }
 
-    rfmscContextInfo.xCursor = xIter;
+    rfmscContextInfo.xCursor = std::move(xIter);
     rfmscContextInfo.strUsedFields = strFieldList;
     rfmscContextInfo.sFieldDisplayNames = sFieldDisplayNames;
 

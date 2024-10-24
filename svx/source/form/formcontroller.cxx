@@ -366,7 +366,7 @@ void ColumnInfoCache::initializeControls( const Sequence< Reference< XControl > 
                     if ( gridCol < gridColCount )
                     {
                         // found a grid column which is bound to the given
-                        rCol.xFirstGridWithInputRequiredColumn = xGrid;
+                        rCol.xFirstGridWithInputRequiredColumn = std::move(xGrid);
                         rCol.nRequiredGridColumn = gridCol;
                         break;
                     }

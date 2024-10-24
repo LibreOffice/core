@@ -161,7 +161,7 @@ static bool LoadFromURL_impl(
         if (bClose)
             CloseModelAndDocSh( rxModel, rxDocSh );
         // set new stuff
-        rxModel = xTmpModel;
+        rxModel = std::move(xTmpModel);
         rxDocSh = pTmpDocShell;
         bRes = true;
     }

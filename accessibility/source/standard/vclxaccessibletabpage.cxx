@@ -412,7 +412,7 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
                 Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
-                    xChild = xAcc;
+                    xChild = std::move(xAcc);
                     break;
                 }
             }

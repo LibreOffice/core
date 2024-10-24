@@ -506,7 +506,7 @@ void Shape::addShape(
                     {
                         // Our drawingml::Shape is in the list of an internal name, remember the now
                         // inserted XShape.
-                        it->second = xShape;
+                        it->second = std::move(xShape);
                     }
                 }
             }

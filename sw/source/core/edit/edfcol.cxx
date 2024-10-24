@@ -569,7 +569,7 @@ uno::Reference<text::XTextField> lcl_FindParagraphClassificationField(const rtl:
         uno::Reference<text::XTextField> xField(xServiceInfo, uno::UNO_QUERY);
         if (lcl_IsParagraphClassificationField(xModel, xField, sKey))
         {
-            xTextField = xField;
+            xTextField = std::move(xField);
             break;
         }
     }

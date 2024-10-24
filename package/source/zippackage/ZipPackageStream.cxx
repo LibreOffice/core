@@ -1123,7 +1123,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
     uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY_THROW );
     xSeek->seek( 0 );
     uno::Reference< io::XInputStream > xOldStream = m_xStream;
-    m_xStream = xNewStream;
+    m_xStream = std::move(xNewStream);
     if ( !ParsePackageRawStream() )
     {
         m_xStream = std::move(xOldStream);

@@ -1207,7 +1207,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                             errorBar = "ErrorBarZ";
 
                         xSeries->getPropertyValue( errorBar ) >>= xErrorBarProp;
-                        xObjectProperties = xErrorBarProp;
+                        xObjectProperties = std::move(xErrorBarProp);
                     }
                     break;
                 }

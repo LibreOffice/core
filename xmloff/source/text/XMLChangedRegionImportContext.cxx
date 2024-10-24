@@ -166,7 +166,7 @@ void XMLChangedRegionImportContext::UseRedlineText()
     if (xNewCursor.is())
     {
         // save old cursor and install new one
-        xOldCursor = xCursor;
+        xOldCursor = std::move(xCursor);
         rHelper->SetCursor( xNewCursor );
     }
     // else: leave as is

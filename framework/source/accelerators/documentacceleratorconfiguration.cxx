@@ -97,7 +97,7 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
     css::uno::Reference<css::embed::XStorage> xRoot;
     if (lArguments.getLength() == 1 && (lArguments[0] >>= xRoot))
     {
-        m_xDocumentRoot = xRoot;
+        m_xDocumentRoot = std::move(xRoot);
     }
     else
     {

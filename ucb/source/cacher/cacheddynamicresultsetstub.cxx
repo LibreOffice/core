@@ -216,7 +216,7 @@ void SAL_CALL CachedDynamicResultSetStubFactory
                 xSortFactory->createSortedDynamicResultSet(
                     Source, SortingInfo, CompareFactory ) );
             if( xSorted.is() )
-                xSource = xSorted;
+                xSource = std::move(xSorted);
         }
     }
 

@@ -714,7 +714,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( comphelper::containerToSequence( aMembers ) );
                 SAL_WARN_IF( xDPGroupField.is() == xDPNewField.is(), "sc", "PivotCacheField::createParentGroupField - missing group field" );
                 if( !xDPGroupField.is() )
-                    xDPGroupField = xDPNewField;
+                    xDPGroupField = std::move(xDPNewField);
 
                 // get current grouping info
                 DataPilotFieldGroupInfo aGroupInfo;
