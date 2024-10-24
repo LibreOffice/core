@@ -85,6 +85,10 @@
 #include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <fmtfsize.hxx>
+#include <svl/ptitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1170,6 +1174,71 @@ void SwDocShell::Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidde
     }
 }
 
+#define MAX_CHAR_IN_INLINE_HEADING 75
+bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, const sal_uInt16 nMode)
+{
+    // insert an inline heading frame, if only MAX_CHAR_IN_INLINE_HEADING or less
+    // characters are selected beginning of a single paragraph, but not the full paragraph
+    // TODO extend it for multiple selections
+    if ( pSh->IsSelOnePara() && !pSh->IsSelFullPara() && pSh->IsSelStartPara() &&
+            GetView()->GetSelectionText().getLength() < MAX_CHAR_IN_INLINE_HEADING &&
+            0 < GetView()->GetSelectionText().getLength() )
+    {
+        SwTextFormatColl *pLocal = pColl? pColl: (*GetDoc()->GetTextFormatColls())[0];
+
+        // put inside a single Undo
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, pLocal->GetName());
+        GetWrtShell()->StartUndo(SwUndoId::SETFMTCOLL, &aRewriter);
+
+        // anchor as character
+        SfxUInt16Item aAnchor(FN_INSERT_FRAME, static_cast<sal_uInt16>(1));
+        SvxSizeItem aSizeItem(FN_PARAM_2, Size(1, 1));
+        GetView()->GetViewFrame().GetDispatcher()->ExecuteList(FN_INSERT_FRAME,
+                SfxCallMode::SYNCHRON|SfxCallMode::RECORD, { &aAnchor, &aSizeItem });
+        if ( pSh->IsFrameSelected() )
+        {
+            // use the borderless frame style "Formula"
+            // TODO add a new frame style "Inline Heading"
+            SwDocStyleSheet* pStyle2 = static_cast<SwDocStyleSheet*>(
+                            m_xBasePool->Find( "Formula", SfxStyleFamily::Frame));
+            pSh->SetFrameFormat( pStyle2->GetFrameFormat() );
+
+            // set variable width frame to extend for the width of the text content
+            SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet(pSh->GetAttrPool());
+            pSh->GetFlyFrameAttr( aSet );
+            SwTwips nMinWidth = 100;
+            SwFormatFrameSize aSize(SwFrameSize::Variable, nMinWidth, nMinWidth);
+            aSize.SetWidthSizeType(SwFrameSize::Variable);
+            aSet.Put(aSize);
+            pSh->SetFlyFrameAttr( aSet );
+
+            // select the text content of the frame, and apply the paragraph style
+            pSh->UnSelectFrame();
+            pSh->LeaveSelFrameMode();
+            pSh->MoveSection( GoCurrSection, fnSectionEnd );
+            pSh->SelAll();
+
+            pSh->SetTextFormatColl( pColl, true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
+
+            // zero the upper and lower margins of the paragraph (also an interoperability issue)
+            SfxItemSetFixed<RES_UL_SPACE, RES_UL_SPACE> aSet2(pSh->GetAttrPool());
+            pSh->GetCurAttr( aSet2 );
+            SvxULSpaceItem aUL( 0, 0, RES_UL_SPACE );
+            pSh->SetAttrItem( aUL );
+
+            // leave the inline heading frame
+            GetView()->GetViewFrame().GetDispatcher()->Execute(FN_ESCAPE, SfxCallMode::ASYNCHRON);
+            GetView()->GetViewFrame().GetDispatcher()->Execute(FN_ESCAPE, SfxCallMode::ASYNCHRON);
+            GetView()->GetViewFrame().GetDispatcher()->Execute(FN_ESCAPE, SfxCallMode::SYNCHRON);
+
+            GetWrtShell()->EndUndo();
+            return true;
+        }
+    }
+    return false;
+}
+
 // apply template
 SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFamily,
                                SwWrtShell* pShell, const sal_uInt16 nMode )
@@ -1211,10 +1280,17 @@ SfxStyleFamily SwDocShell::ApplyStyles(const OUString &rName, SfxStyleFamily nFa
                 // outline node become folded content of the previous outline node if the previous
                 // outline node's content is folded.
                 MakeAllOutlineContentTemporarilyVisible a(GetDoc());
+
+                // if the first 75 or less characters are selected, but not the full paragraph,
+                // create an inline heading from the selected text
+                SwTextFormatColl* pColl = pStyle->GetCollection();
+                if ( MakeInlineHeading( pSh, pColl, nMode ) )
+                    break;
+
                 // #i62675#
                 // clear also list attributes at affected text nodes, if paragraph
                 // style has the list style attribute set.
-                pSh->SetTextFormatColl( pStyle->GetCollection(), true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
+                pSh->SetTextFormatColl( pColl, true, (nMode & KEY_MOD1) ? SetAttrMode::REMOVE_ALL_ATTR : SetAttrMode::DEFAULT);
             }
             break;
         }

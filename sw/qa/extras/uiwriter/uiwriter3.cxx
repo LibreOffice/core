@@ -1315,6 +1315,50 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
                                                            u"HyperLinkURL"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf48459)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // insert paragraph text
+    pWrtShell->Insert(u"Heading and normal text"_ustr);
+
+    // select the first word (proposed for inline heading)
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 7, /*bBasicCall=*/false);
+
+    // apply styles only on the selected word -> create inline heading
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::Any(u"Heading 1"_ustr) },
+        { "FamilyName", uno::Any(u"ParagraphStyles"_ustr) },
+    });
+    dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
+
+    uno::Reference<frame::XFrames> xFrames = mxDesktop->getFrames();
+
+    // inline heading frame
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFrames->getCount());
+
+    pWrtShell->EndOfSection(false);
+
+    // insert table of contents to check ToC content (containing only the inline heading)
+    SwTOXMgr mgr(pWrtShell);
+    SwTOXDescription desc{ TOX_CONTENT };
+    mgr.UpdateOrInsertTOX(desc, nullptr, nullptr);
+
+    CPPUNIT_ASSERT_EQUAL(int(3), getParagraphs());
+
+    // first paragraph: selected text moved to the inline heading frame
+    CPPUNIT_ASSERT_EQUAL(u" and normal text"_ustr, getParagraph(1)->getString());
+
+    // ToC title
+    CPPUNIT_ASSERT_EQUAL(u"Table of Contents"_ustr, getParagraph(2)->getString());
+
+    // ToC contains only the inline heading
+    CPPUNIT_ASSERT_EQUAL(u"Heading\t1"_ustr, getParagraph(3)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 {
     createSwDoc("tdf144840.odt");

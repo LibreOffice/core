@@ -54,6 +54,7 @@ class SwDrawModel;
 class SwViewShell;
 class SwDocStyleSheetPool;
 class SwXTextDocument;
+class SwTextFormatColl;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -143,6 +144,8 @@ class SW_DLLPUBLIC SwDocShell
 
     SAL_DLLPRIVATE void                  Delete(const OUString &rName, SfxStyleFamily nFamily);
     SAL_DLLPRIVATE void                  Hide(const OUString &rName, SfxStyleFamily nFamily, bool bHidden);
+    SAL_DLLPRIVATE bool                  MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl,
+                                               const sal_uInt16 nMode);
     SAL_DLLPRIVATE SfxStyleFamily        ApplyStyles(const OUString &rName,
         const SfxStyleFamily nFamily,
         SwWrtShell* pShell,

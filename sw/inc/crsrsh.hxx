@@ -552,6 +552,9 @@ public:
     // Check if selection is within one paragraph.
     bool IsSelOnePara() const;
 
+    // Check if selection starts a paragraph.
+    bool IsSelStartPara() const;
+
     /*
      * Returns SRectangle, at which the cursor is located.
      */

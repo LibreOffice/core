@@ -1394,6 +1394,45 @@ bool SwCursorShell::IsSelOnePara() const
     return false;
 }
 
+bool SwCursorShell::IsSelStartPara() const
+{
+    if (m_pCurrentCursor->IsMultiSelection())
+    {
+        return false;
+    }
+    if (m_pCurrentCursor->GetPoint()->GetContentIndex() == 0 ||
+                    m_pCurrentCursor->GetMark()->GetContentIndex() == 0)
+    {
+        return true;
+    }
+    if (GetLayout()->HasMergedParas())
+    {
+        SwTextNode const*const pNode(m_pCurrentCursor->GetPoint()->GetNode().GetTextNode());
+        if (pNode)
+        {
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(
+                        pNode->getLayoutFrame(GetLayout())));
+            if (pFrame)
+            {
+                return pFrame->MapModelToViewPos(*m_pCurrentCursor->GetPoint())
+                    == TextFrameIndex(0);
+            }
+        }
+        SwTextNode const*const pNode2(m_pCurrentCursor->GetMark()->GetNode().GetTextNode());
+        if (pNode2)
+        {
+            SwTextFrame const*const pFrame(static_cast<SwTextFrame*>(
+                        pNode2->getLayoutFrame(GetLayout())));
+            if (pFrame)
+            {
+                return pFrame->MapModelToViewPos(*m_pCurrentCursor->GetMark())
+                    == TextFrameIndex(0);
+            }
+        }
+    }
+    return false;
+}
+
 bool SwCursorShell::IsSttPara() const
 {
     if (GetLayout()->HasMergedParas())
