@@ -171,13 +171,6 @@ private:
      */
     double mfCurrentUnifiedTransparence;
 
-    /*  break iterator support
-        made static so it only needs to be fetched once, even with many single
-        constructed VclMetafileProcessor2D. It's still incarnated on demand,
-        but exists for OOo runtime now by purpose.
-     */
-    static tools::DeleteOnDeinit<css::uno::Reference<css::i18n::XBreakIterator>> mxBreakIterator;
-
     /*  vcl::PDFExtOutDevData support
         For the first step, some extra actions at vcl::PDFExtOutDevData need to
         be emulated with the VclMetafileProcessor2D. These are potentially temporarily

@@ -72,7 +72,6 @@ constexpr Color gWaveCol(COL_GRAY);
 
 tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
-static tools::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
 
 void SwFntCache::Flush( )
 {
@@ -992,6 +991,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     Point aTextOriginPos( rInf.GetPos() );
     if( !bPrt )
     {
+        static tools::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
         if( rInf.GetpOut() != *s_pFntObjPixOut.get() || rInf.GetOut().GetMapMode() != *s_pPixMap )
         {
             *s_pPixMap = rInf.GetOut().GetMapMode();

@@ -89,7 +89,12 @@
 
 bool SwViewShell::sbLstAct = false;
 ShellResource *SwViewShell::spShellRes = nullptr;
-tools::DeleteOnDeinit<std::shared_ptr<weld::Window>> SwViewShell::spCareDialog {};
+
+static tools::DeleteOnDeinit<std::shared_ptr<weld::Window>>& getCareDialog()
+{
+    static tools::DeleteOnDeinit<std::shared_ptr<weld::Window>> spCareDialog {}; ///< Avoid this window.
+    return spCareDialog;
+}
 
 static bool bInSizeNotify = false;
 
@@ -2731,9 +2736,18 @@ ShellResource* SwViewShell::GetShellRes()
     return spShellRes;
 }
 
+//static
 void SwViewShell::SetCareDialog(const std::shared_ptr<weld::Window>& rNew)
 {
+    auto& spCareDialog = getCareDialog();
     (*spCareDialog.get()) = rNew;
+}
+
+//static
+weld::Window* SwViewShell::GetCareDialog(SwViewShell const & rVSh)
+{
+    auto& spCareDialog = getCareDialog();
+    return (*spCareDialog.get()) ? spCareDialog.get()->get() : CareChildWin(rVSh);
 }
 
 sal_uInt16 SwViewShell::GetPageCount() const

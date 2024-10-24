@@ -803,6 +803,7 @@ void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
 {
     if ( pLiteral )
     {
+        auto& s_xLocaleData = getLocaleData();
         if ( s_xLocaleData.get()->get()->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
         {
             pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
@@ -1118,6 +1119,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
     OUString aValue;
     if(!m_xCharClass.is())
         m_xCharClass  = CharacterClassification::create( m_xContext );
+    auto& s_xLocaleData = getLocaleData();
     if( s_xLocaleData.get() )
     {
         try
@@ -1248,10 +1250,13 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
                 s_pScanner->SetRule(OSQLScanner::GetSTRINGRule());
                 break;
             default:
+            {
+                auto& s_xLocaleData = getLocaleData();
                 if ( s_xLocaleData.get()->get()->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
                     s_pScanner->SetRule(OSQLScanner::GetGERRule());
                 else
                     s_pScanner->SetRule(OSQLScanner::GetENGRule());
+            }
         }
 
     }
@@ -1334,6 +1339,7 @@ OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xConte
         s_pScanner->setScanner();
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
+        auto& s_xLocaleData = getLocaleData();
         if(!s_xLocaleData.get())
             s_xLocaleData.set(LocaleData::create(m_xContext));
 
@@ -1473,6 +1479,12 @@ OSQLParser::OSQLParser(css::uno::Reference< css::uno::XComponentContext > xConte
     m_pData->aLocale = m_pContext->getPreferredLocale();
 }
 
+//static
+tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>>& OSQLParser::getLocaleData()
+{
+    static tools::DeleteOnDeinit<css::uno::Reference< css::i18n::XLocaleData4>> s_xLocaleData(tools::DeleteOnDeinitFlag::Empty);
+    return s_xLocaleData;
+}
 
 OSQLParser::~OSQLParser()
 {

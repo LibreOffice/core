@@ -521,10 +521,6 @@ void VclMetafileProcessor2D::popList()
     popStructureElement(vcl::PDFWriter::List);
 }
 
-// init static break iterator
-tools::DeleteOnDeinit<uno::Reference<css::i18n::XBreakIterator>>
-    VclMetafileProcessor2D::mxBreakIterator;
-
 VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation,
                                                OutputDevice& rOutDev)
     : VclProcessor2D(rViewInformation, rOutDev)
@@ -1495,14 +1491,22 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
 
     // #i101169# if(pTextDecoratedCandidate)
     {
+        /*  break iterator support
+            made static so it only needs to be fetched once, even with many single
+            constructed VclMetafileProcessor2D. It's still incarnated on demand,
+            but exists for OOo runtime now by purpose.
+         */
+        static tools::DeleteOnDeinit<css::uno::Reference<css::i18n::XBreakIterator>>
+            gxBreakIterator;
+
         // support for TEXT_ MetaFile actions only for decorated texts
-        if (!mxBreakIterator.get() || !mxBreakIterator.get()->get())
+        if (!gxBreakIterator.get() || !gxBreakIterator.get()->get())
         {
             uno::Reference<uno::XComponentContext> xContext(
                 ::comphelper::getProcessComponentContext());
-            mxBreakIterator.set(i18n::BreakIterator::create(xContext));
+            gxBreakIterator.set(i18n::BreakIterator::create(xContext));
         }
-        auto& rBreakIterator = *mxBreakIterator.get()->get();
+        auto& rBreakIterator = *gxBreakIterator.get()->get();
 
         const OUString& rTxt = rTextCandidate.getText();
         const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());

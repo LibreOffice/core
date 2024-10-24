@@ -20,7 +20,12 @@ using namespace css;
 using namespace css::uno;
 
 /* static */ osl::Mutex LOKClipboardFactory::gMutex;
-static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>> gClipboards{};
+static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>& getClipboards()
+{
+    static tools::DeleteOnDeinit<std::unordered_map<int, rtl::Reference<LOKClipboard>>>
+        gClipboards{};
+    return gClipboards;
+}
 
 rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 {
@@ -28,6 +33,7 @@ rtl::Reference<LOKClipboard> LOKClipboardFactory::getClipboardForCurView()
 
     osl::MutexGuard aGuard(gMutex);
 
+    auto& gClipboards = getClipboards();
     auto it = gClipboards.get()->find(nViewId);
     if (it != gClipboards.get()->end())
     {
@@ -44,6 +50,7 @@ void LOKClipboardFactory::releaseClipboardForView(int nViewId)
 {
     osl::MutexGuard aGuard(gMutex);
 
+    auto& gClipboards = getClipboards();
     if (nViewId < 0) // clear all
     {
         gClipboards.get()->clear();

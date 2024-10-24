@@ -193,7 +193,6 @@ class SAL_DLLPUBLIC_RTTI SwViewShell : public sw::Ring<SwViewShell>
 
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
-    static tools::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.
 
     SwRect                  maVisArea;       ///< The modern version of VisArea.
     tools::Rectangle        maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
@@ -477,8 +476,7 @@ public:
 
     static weld::Window*   CareChildWin(SwViewShell const & rVSh);
     SW_DLLPUBLIC static void SetCareDialog(const std::shared_ptr<weld::Window>& rNew);
-    static weld::Window*  GetCareDialog(SwViewShell const & rVSh)
-                          { return (*spCareDialog.get()) ? spCareDialog.get()->get() : CareChildWin(rVSh); }
+    static weld::Window*  GetCareDialog(SwViewShell const & rVSh);
 
     SfxViewShell   *GetSfxViewShell() const { return mpSfxViewShell; }
     void           SetSfxViewShell(SfxViewShell *pNew) { mpSfxViewShell = pNew; }
