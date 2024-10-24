@@ -586,8 +586,9 @@ void ExcTable::FillAsTableXml()
     XclExtLstRef xExtLst = new XclExtLst( GetRoot() );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
+    bool bSummaryBelow = GetRoot().GetDoc().GetTotalsRowBelow(mnScTab);
     Color aTabColor = GetRoot().GetDoc().GetTabBgColor(mnScTab);
-    Add(new XclExpXmlSheetPr(bFitToPages, mnScTab, aTabColor, &GetFilterManager()));
+    Add(new XclExpXmlSheetPr(bFitToPages, mnScTab, aTabColor, bSummaryBelow, &GetFilterManager()));
 
     // GUTS (count & size of outline icons)
     aRecList.AppendRecord( mxCellTable->CreateRecord( EXC_ID_GUTS ) );

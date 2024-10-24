@@ -982,6 +982,8 @@ public:
     SC_DLLPUBLIC bool GetName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool GetCodeName( SCTAB nTab, OUString& rName ) const;
     SC_DLLPUBLIC bool SetCodeName( SCTAB nTab, const OUString& rName );
+    SC_DLLPUBLIC bool GetTotalsRowBelow( SCTAB nTab ) const;
+    SC_DLLPUBLIC bool SetTotalsRowBelow( SCTAB nTab, bool bVal );
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC SCCOL MaxCol() const { return mxSheetLimits->mnMaxCol; }
     SC_DLLPUBLIC SCROW MaxRow() const { return mxSheetLimits->mnMaxRow; }

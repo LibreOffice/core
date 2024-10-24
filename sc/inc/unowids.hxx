@@ -75,7 +75,8 @@
 #define SC_WID_UNO_FORMRT2          ( SC_WID_UNO_START + 46 )
 #define SC_WID_UNO_CELLCONTENTTYPE  ( SC_WID_UNO_START + 47 )
 #define SC_WID_UNO_SOLVERSETTINGS   ( SC_WID_UNO_START + 48 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 48 )
+#define SC_WID_UNO_TOTALBELOW       ( SC_WID_UNO_START + 49 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 49 )
 
 inline bool IsScUnoWid( sal_uInt16 nWid )
 {

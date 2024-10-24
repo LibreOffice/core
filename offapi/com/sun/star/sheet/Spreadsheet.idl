@@ -169,6 +169,19 @@ service Spreadsheet
     /** specifies all conditional formats of that sheet
      */
     [optional, property] com::sun::star::sheet::XConditionalFormats ConditionalFormats;
+
+    /** specifies whether summary rows appear below detail in an outline,
+        when applying an outline.
+
+    <p> When true a summary row is inserted below the detailed data being
+        summarized and a new outline level is established on that row.</p>
+
+    <p> When false a summary row is inserted above the detailed data being
+        summarized and a new outline level is established on that row.</p>
+
+        @since LibreOffice 25.2
+    */
+    [optional, property] boolean TotalsRowBelow;
 };
 
 

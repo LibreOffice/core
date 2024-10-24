@@ -135,6 +135,7 @@ private:
     std::unique_ptr<weld::CheckButton> m_xBtnPagebreak;
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
     std::unique_ptr<weld::CheckButton> m_xBtnSort;
+    std::unique_ptr<weld::CheckButton> m_xBtnSummary;
     std::unique_ptr<weld::Label> m_xFlSort;
     std::unique_ptr<weld::RadioButton> m_xBtnAscending;
     std::unique_ptr<weld::RadioButton> m_xBtnDescending;
