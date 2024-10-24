@@ -1313,7 +1313,6 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
 {
     //Preserve the page vertical alignment setting for .doc
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SwPageDesc* pDesc = &pDoc->GetPageDesc( 0 );
     drawing::TextVerticalAdjust nVA = pDesc->GetVerticalAdjustment();
@@ -1343,7 +1342,6 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
 DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
 {
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     for (SwNodeOffset n(0); ; n++)
     {
@@ -1566,7 +1564,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
 DECLARE_WW8EXPORT_TEST(testContinuousSectionsNoPageBreak, "continuous-sections.doc")
 {
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // Continuous section breaks should not add new pages
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetPageDescCnt());

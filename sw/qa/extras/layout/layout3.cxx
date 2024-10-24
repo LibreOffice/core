@@ -857,8 +857,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf115094)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf112290)
 {
     createSwDoc("tdf112290.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     auto pXml = parseLayoutDump();
     assertXPath(pXml, "/root/page/body/txt/SwParaPortion/SwLineLayout[2]", "portion", u"Xxxx Xxxx");
 }

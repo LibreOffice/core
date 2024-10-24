@@ -298,7 +298,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
     createSwDoc();
 
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -727,7 +726,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     // Undoing/redoing a replacement must select the new text
     createSwDoc();
     SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -754,8 +752,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
 {
     createSwDoc("tdf162326.odt");
-    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -783,8 +779,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
 {
     createSwDoc("tdf162326.odt");
-    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 

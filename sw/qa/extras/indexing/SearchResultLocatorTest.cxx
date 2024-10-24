@@ -45,7 +45,6 @@ void SearchResultLocatorTest::testSearchResultLocator()
 
     createSwDoc("IndexingExport_VariousParagraphs.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
     std::vector<sw::search::SearchIndexData> aDataVector;
@@ -73,7 +72,6 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingXmlPayload()
 
     createSwDoc("IndexingExport_VariousParagraphs.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
     OString payload = "<indexing>"
@@ -102,7 +100,6 @@ void SearchResultLocatorTest::testSearchResultLocatorUsingJsonPayload()
 
     createSwDoc("IndexingExport_VariousParagraphs.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
     OString payload = "["
@@ -131,7 +128,6 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjects()
 
     createSwDoc("IndexingExport_Shapes.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
     std::vector<sw::search::SearchIndexData> aDataVector;
@@ -159,7 +155,6 @@ void SearchResultLocatorTest::testSearchResultLocatorForSdrObjectsUsingJsonPaylo
 
     createSwDoc("IndexingExport_Shapes.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     sw::search::SearchResultLocator aLocator(pDoc);
     OString payload = "["

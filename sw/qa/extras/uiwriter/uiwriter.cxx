@@ -1466,7 +1466,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo85554)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
 {
     createSwDoc("merge-change1.odt");
-    SwDoc* pDoc1 = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
     auto xDoc2Component(loadFromDesktop(
             createFileURL(u"merge-change2.odt"),
@@ -1476,7 +1476,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
     CPPUNIT_ASSERT(pxDoc2Document);
     SwDoc* const pDoc2(pxDoc2Document->GetDocShell()->GetDoc());
 
-    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
     pEditShell->MergeDoc(*pDoc2);
 

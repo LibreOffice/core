@@ -47,8 +47,6 @@ void HybridPdfTest::testHybridWithAdditionalStreams()
     // Load PDF document with an embedded ODT document
     // The ODT document is embedded in "/AdditionalStreams" structure that is in the PDF trailer
     createSwDoc("Hybrid_AdditionalStreamsOnly.pdf");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT
@@ -62,8 +60,6 @@ void HybridPdfTest::testHybridWithAdditionalStreamsAndAttachedFile()
     // The ODT document is embedded in "/AdditionalStreams" structure that is in the PDF trailer
     // and is included as an attached file conforming to the PDF specs
     createSwDoc("Hybrid_AdditionalStreamsAndPDFAttachedFile.pdf");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // We can access the document text in a single paragraph that spans multiple rows
     // This wouldn't be possible with a PDF, so the opened document has to be ODT

@@ -68,7 +68,6 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
 DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart.docx")
 {
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT( pDoc );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote doesn't restart every Page", FTNNUM_PAGE, pDoc->GetFootnoteInfo().m_eNum );
 
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);

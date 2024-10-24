@@ -934,7 +934,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
     // Save it as DOCX & load it again
     saveAndReload(u"Office Open XML Text"_ustr);
     pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwCursorShell* pShell(pDoc->GetEditShell());
@@ -956,8 +955,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115065)
     // Source table (first one) has two rows;
     // destination (second one) has only one row
     createSwDoc("tdf115065.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -983,7 +980,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf84806_MovingMultipleTableRows)
     // destination (second one) has only one row
     createSwDoc("tdf115065.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1044,7 +1040,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
     // destination (second one) has only one row
     createSwDoc("tdf115065.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1126,7 +1121,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1207,7 +1201,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1257,7 +1250,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1341,7 +1333,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154771_MovingMultipleColumns)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1397,7 +1388,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
     // allow resizing table rows, if cursor outside the table
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1463,7 +1453,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
     // allow resizing table rows & columns using a minimal hit area
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1531,7 +1520,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
     // allow resizing table rows & columns using a normal hit area
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1598,7 +1586,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
 {
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -1635,7 +1622,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
 {
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1685,7 +1671,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161261)
 {
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -1747,7 +1732,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
 {
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -1808,7 +1792,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426)
 {
     createSwDoc("tdf161426.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -1870,7 +1853,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426_content)
 {
     createSwDoc("tdf161426.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -1963,7 +1945,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
 {
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
@@ -2025,8 +2006,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
 {
     // load a table with objects positioned at beginning of text lines
     createSwDoc("tdf157533.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     auto pShell = getSwDocShell()->GetFEShell();
@@ -2079,8 +2058,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -3140,8 +3117,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInsertLongDateFormat)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf129270)
 {
     createSwDoc("tdf129270.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -3199,7 +3174,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143760WrapContourToOff)
     // to change a shape by dispatchCommand.
     createSwDoc("tdf143760_ContourToWrapOff.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"SurroundContour"_ustr));
 
     // Mark the object

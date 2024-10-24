@@ -45,8 +45,6 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
 {
     createSwDoc("ThemeColorInHeading.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1),
                                                                           u"CharComplexColor"_ustr);
@@ -57,8 +55,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeadingODT)
 {
     createSwDoc("ThemeColorInHeading.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1),
                                                                           u"CharComplexColor"_ustr);
@@ -341,7 +337,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
 {
     createSwDoc("ThemeColorInHeading.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     CPPUNIT_ASSERT(pModel);
@@ -387,7 +382,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
 {
     createSwDoc("ThemeColorInHeading.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     CPPUNIT_ASSERT(pModel);
@@ -415,7 +409,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 {
     createSwDoc("ThemeColorInHeading.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
@@ -558,7 +551,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_customTransferable)
     createSwDoc("theme_foo.fodt");
 
     auto pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     CPPUNIT_ASSERT(pModel);
@@ -605,7 +597,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         createSwDoc("theme_bar.odt");
 
         auto pDoc = getSwDoc();
-        CPPUNIT_ASSERT(pDoc);
 
         auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         CPPUNIT_ASSERT(pModel);
@@ -632,7 +623,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         createSwDoc("theme_foo.fodt");
 
         auto pDoc = getSwDoc();
-        CPPUNIT_ASSERT(pDoc);
 
         auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         CPPUNIT_ASSERT(pModel);

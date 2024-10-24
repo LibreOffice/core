@@ -48,7 +48,6 @@ void IndexingExportTest::testIndexingExport_Paragraphs()
 {
     createSwDoc("IndexingExport_VariousParagraphs.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -84,7 +83,6 @@ void IndexingExportTest::testIndexingExport_Images()
 {
     createSwDoc("IndexingExport_Images.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -107,7 +105,6 @@ void IndexingExportTest::testIndexingExport_OLE()
 {
     createSwDoc("IndexingExport_OLE.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -127,7 +124,6 @@ void IndexingExportTest::testIndexingExport_Shapes()
 {
     createSwDoc("IndexingExport_Shapes.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -167,7 +163,6 @@ void IndexingExportTest::testIndexingExport_Tables()
 {
     createSwDoc("IndexingExport_Tables.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -235,7 +230,6 @@ void IndexingExportTest::testIndexingExport_Sections()
 {
     createSwDoc("IndexingExport_Sections.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -267,7 +261,6 @@ void IndexingExportTest::testIndexingExport_Fontwork()
 {
     createSwDoc("IndexingExport_Fontwork.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);
@@ -292,7 +285,6 @@ void IndexingExportTest::testIndexingExport_Header_Footer()
 {
     createSwDoc("IndexingExport_Header_Footer.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SvMemoryStream aMemoryStream;
     sw::IndexingExport aIndexingExport(aMemoryStream, pDoc);

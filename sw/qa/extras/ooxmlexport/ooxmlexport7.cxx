@@ -1056,7 +1056,6 @@ DECLARE_OOXMLEXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustmen
 {
     //Preserve the page vertical alignment setting for .docx
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     SwPageDesc* pDesc = &pDoc->GetPageDesc( 0 );
     drawing::TextVerticalAdjust nVA = pDesc->GetVerticalAdjustment();

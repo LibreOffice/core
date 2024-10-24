@@ -1950,8 +1950,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137819)
 {
     // Open the bugdoc and check if it went wrong
     createSwDoc("tdf137819.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // Change the anchor if the textbox to As_char
     uno::Reference<beans::XPropertySet> xShapePropSet(getShape(1), uno::UNO_QUERY);
@@ -2482,7 +2480,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
 {
     createSwDoc("Tdf121509.odt");
     auto pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // Get all shape/frame formats
     auto vFrameFormats = pDoc->GetSpzFrameFormats();

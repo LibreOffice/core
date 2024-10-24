@@ -140,7 +140,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146622)
 {
     createSwDoc("TC-table-del-add.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -194,7 +193,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     // load a 2-row table, set Hide Changes mode and delete the first row with change tracking
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -246,7 +244,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
     // imported as floating tables in Writer)
     createSwDoc("tdf159026.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -301,7 +298,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     // load a 2-row table, set Hide Changes mode and delete the table with change tracking
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -351,8 +347,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153819)
 {
     // copy a table before a deleted table in Hide Changes mode
     createSwDoc("tdf153819.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -375,7 +369,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
     // load a 2-row table, set Hide Changes mode and delete the first row with change tracking
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -428,8 +421,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
 
     // load a 2-row table
     createSwDoc("tdf116789.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -512,8 +503,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
 
     // load a 2-row table
     createSwDoc("tdf116789.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -2790,12 +2779,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf103612)
 {
     createSwGlobalDoc("DUMMY.odm");
-    SwDoc* pGlobalDoc = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL(
-        size_t(1),
-        pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
-    pGlobalDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(
-        false, false, nullptr, u""_ustr);
+        size_t(1), pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks().size());
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks(false, false, nullptr,
+                                                                            u""_ustr);
 
     xmlDocUniquePtr pLayout = parseLayoutDump();
 

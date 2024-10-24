@@ -125,8 +125,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
 {
     createSwDoc("tdf146449.odt");
 
-    auto pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pDoc);
     auto pShell = getSwDocShell()->GetFEShell();
     CPPUNIT_ASSERT(pShell);
 
@@ -648,8 +646,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testBookmarkCollapsed)
 {
     // load document
     createSwDoc("collapsed_bookmark.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // save original document
     save(u"writer8"_ustr);
@@ -866,7 +862,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRemoveBookmarkTextAndAddNewAfterReload
     // load document
     createSwDoc("collapsed_bookmark.odt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // write "abc" to area marked with "testBookmark" bookmark
     {
@@ -1613,9 +1608,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104425)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf104814)
 {
     createSwDoc("tdf104814.docx");
-    SwDoc* pDoc1 = getSwDoc();
+    SwDoc* pDoc = getSwDoc();
 
-    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
 
     // accept all redlines
@@ -1645,7 +1640,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly)
 {
     createSwDoc("TC-table-del-add.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1712,7 +1706,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
 {
     createSwDoc("TC-table-del-add.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1767,7 +1760,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelec
 {
     createSwDoc("TC-table-del-add.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -1950,8 +1942,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107362)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105417)
 {
     createSwDoc("tdf105417.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwView* pView = getSwDocShell()->GetView();
     CPPUNIT_ASSERT(pView);
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();

@@ -745,7 +745,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTextFormFieldInsertion)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -782,7 +781,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -831,7 +829,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDropDownFormFieldInsertion)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -872,7 +869,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testMixedFormFieldInsertion)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
@@ -1498,7 +1494,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldInsertion)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -1535,7 +1530,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -1568,7 +1562,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -1622,7 +1615,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT(pMarkAccess);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
@@ -1999,7 +1991,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_row)
     // load a 2-row table, and select row 2 by clicking before it
     createSwDoc("select-column.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
@@ -2033,7 +2024,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf47979_column)
     // load a 2-row table, and select column B by clicking before them
     createSwDoc("select-column.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 

@@ -712,8 +712,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFlyHiddenParagraph)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
 {
     createSwDoc("field_hide_section.fodt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row", 1);
@@ -751,8 +749,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestI94666)
 {
     createSwDoc("i94666.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     {
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -796,8 +792,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestI94666)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 {
     createSwDoc("tdf134472.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "height", u"843");
     assertXPath(pXmlDoc, "/root/page[1]/header/txt[2]/infos/bounds", "bottom", u"2819");
@@ -806,8 +800,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134272)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestNestedTableMoveFwd)
 {
     createSwDoc("tabellen_test_windows_1.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // the row with the nested table should not be split but be the first row on page 2
     assertXPathContent(pXmlDoc, "/root/page[1]/body/tab[1]/row[last()]/cell[1]/txt[1]",
@@ -821,7 +813,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
 {
     createSwDoc("tdf136613.docx");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     //get the flys and the root frame
     const auto vFlyFormats = pDoc->GetFlyFrameFormats(FLYCNTTYPE_ALL, true);
@@ -852,8 +843,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136613)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
 {
     createSwDoc("tdf88496.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 4, table fallback "switch off repeating header" started on a new page
     assertXPath(pXmlDoc, "/root/page", 3);
@@ -1343,8 +1332,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 {
     // Check the padding of the textbox
     createSwDoc("tdf137025.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
 

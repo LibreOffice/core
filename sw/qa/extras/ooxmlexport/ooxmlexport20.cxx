@@ -723,7 +723,6 @@ CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
     // get the document
 
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
 
     // get two different nodes
     SwNodeIndex aDocEnd(pDoc->GetNodes().GetEndOfContent());

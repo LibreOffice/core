@@ -458,7 +458,12 @@ void SwModelTestBase::createSwGlobalDoc(const char* pName)
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.text.GlobalDocument"_ustr));
 }
 
-SwDoc* SwModelTestBase::getSwDoc() { return getSwDocShell()->GetDoc(); }
+SwDoc* SwModelTestBase::getSwDoc()
+{
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    return pDoc;
+}
 
 SwDocShell* SwModelTestBase::getSwDocShell()
 {

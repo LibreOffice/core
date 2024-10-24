@@ -1235,7 +1235,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128188)
 {
     loadAndReload("footnote-collect-at-end-of-section.fodt");
     SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
     // Section1
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), rFootnotes[0]->GetFootnote().GetNumber());
@@ -1829,7 +1828,6 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
         // mbVertical==true, but mbVertLRBT==false, even if the writing direction in the doc model was
         // btlr.
         SwDoc* pDoc = getSwDoc();
-        CPPUNIT_ASSERT(pDoc);
 
         SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
         CPPUNIT_ASSERT(pLayout);

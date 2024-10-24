@@ -264,8 +264,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf105481)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf117982)
 {
     createSwDoc("tdf117982.docx");
-    SwDoc* pDocument = getSwDoc();
-    SwDocShell* pShell = pDocument->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -278,8 +277,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf128959)
 {
     // no orphan/widow control in table cells
     createSwDoc("tdf128959.docx");
-    SwDoc* pDocument = getSwDoc();
-    CPPUNIT_ASSERT(pDocument);
+    SwDoc* pDoc = getSwDoc();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // first two lines of the paragraph in the split table cell on the first page
@@ -298,7 +296,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf128959)
                 "portion", u"amet commodo magna eros quis urna.");
 
     // Also check that the widow control for the paragraph is not turned off:
-    sw::TableFrameFormats& rTableFormats = *pDocument->GetTableFrameFormats();
+    sw::TableFrameFormats& rTableFormats = *pDoc->GetTableFrameFormats();
     SwFrameFormat* pTableFormat = rTableFormats[0];
     SwTable* pTable = SwTable::FindTable(pTableFormat);
     const SwTableBox* pCell = pTable->GetTableBox(u"A1"_ustr);
