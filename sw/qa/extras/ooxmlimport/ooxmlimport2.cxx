@@ -627,9 +627,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112443)
     createSwDoc("tdf112443.docx");
     // the position of the flying text frame should be off page
     // 30624 below its anchor
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pRootFrame = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     const SwRect aPageRect = pRootFrame->getFrameArea();
     const SwRect aShapeRect(getShape(1)->getPosition().X, getShape(1)->getPosition().Y,

@@ -484,10 +484,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf137185)
 {
     // First load the sample bugdoc
     createSwDoc("tdf137185.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     // Get the doc shell
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
 
     // Get the DrawObject from page
     auto pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();

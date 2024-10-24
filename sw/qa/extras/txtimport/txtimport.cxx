@@ -53,9 +53,7 @@ public:
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
 {
     createSwDoc("bullets.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // just the 5th paragraph - no bullet
@@ -83,9 +81,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf112191)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 {
     createSwDoc("UTF8WITHOUTBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -96,9 +92,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 {
     createSwDoc("UTF8WITHBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -109,9 +103,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 {
     createSwDoc("UTF16LEWITHOUTBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -122,9 +114,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 {
     createSwDoc("UTF16LEWITHBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -135,9 +125,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
 {
     createSwDoc("GB18030.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -148,9 +136,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 {
     createSwDoc("UTF16BEWITHOUTBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
@@ -161,9 +147,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
 {
     createSwDoc("UTF16BEWITHBOM.txt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));

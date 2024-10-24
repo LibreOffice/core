@@ -1142,9 +1142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152015)
 CPPUNIT_TEST_FIXTURE(Test, testTdf123829)
 {
     createSwDoc("tdf123829.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "Compatibility: collapse cell paras should not be set", false,
         pDoc->getIDocumentSettingAccess().get(DocumentSettingId::COLLAPSE_EMPTY_CELL_PARA));

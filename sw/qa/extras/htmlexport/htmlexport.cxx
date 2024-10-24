@@ -2183,9 +2183,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     ImportFromReqif(maTempFile.GetURL());
 
     // Then make sure that line-break is not lost:
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pDoc = getSwDoc();
     pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     OUString aActual = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     // Without the accompanying fix in place, this test would have failed, as the trailing

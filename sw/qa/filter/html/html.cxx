@@ -66,8 +66,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspect)
     createSwDoc("relative-keep-aspect.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
-    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     const auto pFormat = rFormats[0];
     const SwFormatFrameSize& rSize = pFormat->GetFrameSize();
@@ -87,8 +86,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRelativeKeepAspectImage)
     createSwDoc("relative-keep-aspect-image.xhtml");
 
     // Then make sure that the aspect ratio of the image is kept:
-    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     const auto pFormat = rFormats[0];
     const SwFormatFrameSize& rSize = pFormat->GetFrameSize();

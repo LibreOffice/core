@@ -91,8 +91,7 @@ CPPUNIT_TEST_FIXTURE(Test, testImageLazyRead0size)
     createSwDoc("image-lazy-read-0size.doc");
     // Load a document with a single bitmap in it: it's declared as a WMF one, but actually a TGA
     // bitmap.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwNode* pNode = pDoc->GetNodes()[SwNodeOffset(6)];
     SwGrfNode* pGrfNode = pNode->GetGrfNode();
     CPPUNIT_ASSERT(pGrfNode);
@@ -107,10 +106,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
 {
     createSwDoc("tdf106799.doc");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+        = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -131,9 +128,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf106799)
 CPPUNIT_TEST_FIXTURE(Test, testTdf121734)
 {
     createSwDoc("tdf121734.doc");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There is only one fly frame in the document: the one with the imported floating table
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
@@ -177,8 +172,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf125281)
     // debug builds, reason is not known at the moment.
 
     // Load a .doc file which has an embedded .emf image.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwNode* pNode = pDoc->GetNodes()[SwNodeOffset(6)];
     CPPUNIT_ASSERT(pNode->IsGrfNode());
     SwGrfNode* pGrfNode = pNode->GetGrfNode();
@@ -200,9 +194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122425_1)
     createSwDoc("tdf122425_1.doc");
     // This is for header text in case we use a hack for fixed-height headers
     // (see SwWW8ImplReader::Read_HdFtTextAsHackedFrame)
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There are two fly frames in the document: for first page's header, and for other pages'
     CPPUNIT_ASSERT_EQUAL(size_t(2), aPosFlyFrames.size());
@@ -266,10 +258,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf142003)
 {
     createSwDoc("changes-in-footnote.doc");
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    SwEditShell* const pEditShell(getSwDoc()->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
     pEditShell->AcceptRedline(0);
 

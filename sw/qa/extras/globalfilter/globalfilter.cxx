@@ -172,9 +172,7 @@ void Test::testLinkedGraphicRT()
         // Export the document and import again for a check
         saveAndReload(rFilterName);
 
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
         SwNodes& aNodes = pDoc->GetNodes();
 
@@ -200,7 +198,7 @@ void Test::testLinkedGraphicRT()
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_uLong(864900), aGraphic.GetSizeBytes());
 
         // Check if linked graphic is registered in LinkManager
-        SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+        SwEditShell* const pEditShell(getSwDoc()->GetEditShell());
         CPPUNIT_ASSERT(pEditShell);
         sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), size_t(1), rLinkManager.GetLinks().size());
@@ -843,60 +841,6 @@ void Test::testSkipImages()
 }
 #endif
 
-auto verifyNestedFieldmark(OUString const& rTestName,
-        uno::Reference<lang::XComponent> const& xComponent) -> void
-{
-    SwDoc const*const pDoc(dynamic_cast<SwXTextDocument&>(*xComponent).GetDocShell()->GetDoc());
-    IDocumentMarkAccess const& rIDMA(*pDoc->getIDocumentMarkAccess());
-
-    // no spurious bookmarks have been created
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
-            sal_Int32(0), rIDMA.getBookmarksCount());
-
-    // check inner fieldmark
-    SwNodeIndex const node1(*pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), +2);
-    SwPosition const innerPos(*node1.GetNode().GetTextNode(),
-        node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
-            sal_Int32(1), innerPos.GetContentIndex());
-    ::sw::mark::Fieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
-    CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
-    OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
-        OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), innerString);
-
-    // check outer fieldmark
-    SwNodeIndex const node2(node1, -1);
-    SwPosition const outerPos(*node2.GetNode().GetTextNode(),
-        node2.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
-            sal_Int32(0), outerPos.GetContentIndex());
-    ::sw::mark::Fieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
-    CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pOuter);
-    OUString const outerString(SwPaM(pOuter->GetMarkPos(), pOuter->GetOtherMarkPos()).GetText());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
-        OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" " + OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND) + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" foo " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz" + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
-        + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), outerString);
-
-    // must return innermost mark
-    CPPUNIT_ASSERT_EQUAL(pInner, rIDMA.getInnerFieldmarkFor(innerPos));
-}
-
 void Test::testNestedFieldmark()
 {
     // experimental config setting
@@ -911,6 +855,58 @@ void Test::testNestedFieldmark()
     officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::set(true, pBatch);
     pBatch->commit();
 
+    auto verify = [this](OUString const& rTestName) {
+        SwDoc* pDoc = getSwDoc();
+        IDocumentMarkAccess const& rIDMA(*pDoc->getIDocumentMarkAccess());
+
+        // no spurious bookmarks have been created
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+                sal_Int32(0), rIDMA.getBookmarksCount());
+
+        // check inner fieldmark
+        SwNodeIndex const node1(*pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), +2);
+        SwPosition const innerPos(*node1.GetNode().GetTextNode(),
+            node1.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+                sal_Int32(1), innerPos.GetContentIndex());
+        ::sw::mark::Fieldmark *const pInner(rIDMA.getFieldmarkAt(innerPos));
+        CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pInner);
+        OUString const innerString(SwPaM(pInner->GetMarkPos(), pInner->GetOtherMarkPos()).GetText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
+            OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), innerString);
+
+        // check outer fieldmark
+        SwNodeIndex const node2(node1, -1);
+        SwPosition const outerPos(*node2.GetNode().GetTextNode(),
+            node2.GetNode().GetTextNode()->GetText().indexOf(CH_TXT_ATR_FIELDSTART));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(),
+                sal_Int32(0), outerPos.GetContentIndex());
+        ::sw::mark::Fieldmark const*const pOuter(rIDMA.getFieldmarkAt(outerPos));
+        CPPUNIT_ASSERT_MESSAGE(rTestName.toUtf8().getStr(), pOuter);
+        OUString const outerString(SwPaM(pOuter->GetMarkPos(), pOuter->GetOtherMarkPos()).GetText());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rTestName.toUtf8().getStr(), OUString(
+            OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" " + OUStringChar(CH_TXT_ATR_FIELDSTART) + u" QUOTE  \"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND) + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz\" " + OUStringChar(CH_TXT_ATR_FIELDSEP) + u"foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" foo " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u" bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz" + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"bar " + OUStringChar(CH_TXTATR_NEWLINE)
+            + u"baz" + OUStringChar(CH_TXT_ATR_FIELDEND)), outerString);
+
+        // must return innermost mark
+        CPPUNIT_ASSERT_EQUAL(pInner, rIDMA.getInnerFieldmarkFor(innerPos));
+    };
+
     std::pair<OUString, OUString> const aFilterNames[] = {
         {"writer8", "fieldmark_QUOTE_nest.fodt"},
         {"Office Open XML Text", "fieldmark_QUOTE_nest.docx"},
@@ -921,12 +917,12 @@ void Test::testNestedFieldmark()
     {
         createSwDoc(rFilterName.second.toUtf8().getStr());
 
-        verifyNestedFieldmark(rFilterName.first + ", load", mxComponent);
+        verify(rFilterName.first + ", load");
 
         // Export the document and import again
         saveAndReload(rFilterName.first);
 
-        verifyNestedFieldmark(rFilterName.first + " exported-reload", mxComponent);
+        verify(rFilterName.first + " exported-reload");
     }
 }
 
@@ -1790,9 +1786,7 @@ void Test::testTextFormField()
         saveAndReload(rFilterName);
 
         // Check the document after round trip
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
         // We have two text form fields
@@ -1842,9 +1836,7 @@ void Test::testCheckBoxFormField()
         saveAndReload(rFilterName);
 
         // Check the document after round trip
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
         // We have two check box form fields
@@ -1895,9 +1887,7 @@ void Test::testDropDownFormField()
         saveAndReload(rFilterName);
 
         // Check the document after round trip
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(2), pMarkAccess->getAllMarksCount());
@@ -1972,9 +1962,7 @@ void Test::testDateFormField()
         // Check the document after round trip
         if (rFilterName == "writer8")
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(5), pMarkAccess->getAllMarksCount());
@@ -2154,9 +2142,7 @@ void Test::testDateFormFieldCharacterFormatting()
         // Check the document after round trip
         if (rFilterName == "writer8")
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
 
             // Check that we have the field at the right place

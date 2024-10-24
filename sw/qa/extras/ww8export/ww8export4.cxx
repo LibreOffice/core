@@ -108,8 +108,7 @@ DECLARE_WW8EXPORT_TEST(testTdf117994_CRnumformatting, "tdf117994_CRnumformatting
 
 DECLARE_WW8EXPORT_TEST(testTdf151548_formFieldMacros, "tdf151548_formFieldMacros.doc")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {
@@ -494,9 +493,7 @@ CPPUNIT_TEST_FIXTURE(Test, testEmptyGroup)
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
 

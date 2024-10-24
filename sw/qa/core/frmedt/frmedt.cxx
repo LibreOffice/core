@@ -44,8 +44,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
 {
     // Load a document with a textframe and a textbox(shape+textframe).
     createSwDoc("textbox-reanchor.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pDrawPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pDrawShape = pDrawPage->GetObj(1);
     CPPUNIT_ASSERT_EQUAL(u"draw shape"_ustr, pDrawShape->GetName());
@@ -102,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRect aBoundRect;
     RndStdIds eAnchorType = RndStdIds::FLY_AT_CHAR;
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     const auto& rFrameFormats = *pDoc->GetFrameFormats();
     const SwFormatAnchor* pFormatAhchor = &rFrameFormats[0]->GetAnchor();
     sal_Int16 eHoriRelOrient = text::RelOrientation::PAGE_FRAME;

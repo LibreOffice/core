@@ -150,9 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
         xPageStyle.set(getStyles(u"ParagraphStyles"_ustr)->getByName(u"Endnote"_ustr), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Endnote style is cyan3 color", Color(0x2BD0D2), getProperty< Color >(xPageStyle, u"CharColor"_ustr));
 
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         // The footnote numbering type of ARABIC will not transfer over when those footnotes are converted to endnotes.
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote numbering type", SVX_NUM_ARABIC, pDoc->GetFootnoteInfo().m_aFormat.GetNumberingType() );
         // The original document has a real endnote using ROMAN_LOWER numbering, so that setting MUST remain unchanged.
@@ -537,9 +535,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70838)
     loadAndReload("tdf70838.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     tools::Rectangle aRect = pPage->GetObj(0)->GetSnapRect();
     CPPUNIT_ASSERT(aRect.GetHeight() > aRect.GetWidth());
@@ -550,9 +546,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf70838b_verticalRotation)
     loadAndReload("tdf70838b_verticalRotation.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     tools::Rectangle aGroupShape = pPage->GetObj(0)->GetSnapRect();
     tools::Rectangle aLine = pPage->GetObj(2)->GetSnapRect();

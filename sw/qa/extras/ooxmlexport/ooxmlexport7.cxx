@@ -1055,9 +1055,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExportAdjustmentValue)
 DECLARE_OOXMLEXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.docx")
 {
     //Preserve the page vertical alignment setting for .docx
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     SwPageDesc* pDesc = &pDoc->GetPageDesc( 0 );

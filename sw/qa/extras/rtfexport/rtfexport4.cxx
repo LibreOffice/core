@@ -157,9 +157,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCjklist31)
 CPPUNIT_TEST_FIXTURE(Test, test148518)
 {
     auto verify = [this]() {
-        SwXTextDocument* const pTextDoc(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* const pDoc(pTextDoc->GetDocShell()->GetDoc());
+        SwDoc* const pDoc(getSwDoc());
 
         CPPUNIT_ASSERT(pDoc->getIDocumentMarkAccess()->getFieldmarksBegin()
                        != pDoc->getIDocumentMarkAccess()->getFieldmarksEnd());
@@ -319,8 +317,7 @@ CPPUNIT_TEST_FIXTURE(Test, test150382)
 CPPUNIT_TEST_FIXTURE(Test, testAnchoredAtSamePosition)
 {
     auto verify = [this](bool bIsExport = false) {
-        SwXTextDocument* const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        SwDoc* const pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* const pDoc = getSwDoc();
 
         CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, getParagraph(1)->getString());
 

@@ -220,9 +220,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148897)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
 {
     createSwDoc("redline_charatr.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
@@ -401,9 +399,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineCharAttributes)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineShowHideFootnotePagination)
 {
     createSwDoc("redline_footnote_pagination.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
 
@@ -2431,10 +2427,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117923)
 {
     createSwDoc("tdf117923.doc");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -2459,10 +2452,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127606)
 {
     createSwDoc("tdf117923.docx");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -2590,9 +2580,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     uno::Reference<lang::XComponent> xComponent
         = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     uno::Reference<text::XTextDocument> xTextDoc(xComponent, uno::UNO_QUERY);
-    auto pTextDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    auto pSecondDoc = pTextDoc->GetDocShell()->GetDoc();
+    auto pSecondDoc = getSwDoc();
     auto pSecondFormats = pSecondDoc->GetSpzFrameFormats();
 
     bool bFlyInFlyFound = false;

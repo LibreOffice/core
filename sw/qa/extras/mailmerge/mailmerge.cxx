@@ -52,8 +52,6 @@ DECLARE_FILE_MAILMERGE_TEST(testMissingDefaultLineColor, "missing-default-line-c
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(5), uno::UNO_QUERY);
     // Lines do not have a line color.
     CPPUNIT_ASSERT( !xPropertySet->getPropertySetInfo()->hasPropertyByName( u"LineColor"_ustr ));
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     uno::Reference< lang::XMultiServiceFactory > xFact( mxComponent, uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( u"com.sun.star.drawing.Defaults"_ustr ), uno::UNO_QUERY );
     CPPUNIT_ASSERT( xDefaults.is());
@@ -196,9 +194,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     // copied marks were off by one
     executeMailMerge();
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    IDocumentMarkAccess const *pIDMA = pTextDoc->GetDocShell()->GetDoc()->getIDocumentMarkAccess();
+    IDocumentMarkAccess const *pIDMA = getSwDoc()->getIDocumentMarkAccess();
     // There is just one mark...
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pIDMA->getAllMarksCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pIDMA->getBookmarksCount());
@@ -209,7 +205,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
     SwNodeOffset src_pos = (*mark)->GetMarkPos().GetNodeIndex();
 
     // Get the size of the document in nodes
-    SwDoc *doc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc *doc = getSwDoc();
     SwNodeOffset size = doc->GetNodes().GetEndOfContent().GetIndex() - doc->GetNodes().GetEndOfExtras().GetIndex();
     CPPUNIT_ASSERT_EQUAL( SwNodeOffset(13), size );
     size -= SwNodeOffset(2); // For common start and end nodes
@@ -285,11 +281,8 @@ DECLARE_SHELL_MAILMERGE_TEST(test_sections_first_last, "sections_first_last.odt"
     // Originally we were losing the trailing section during merge
     executeMailMerge();
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
     // Get the size of the document in nodes
-    SwDoc *pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc *pDoc = getSwDoc();
     SwNodeOffset nSize = pDoc->GetNodes().GetEndOfContent().GetIndex() - pDoc->GetNodes().GetEndOfExtras().GetIndex();
     nSize -= SwNodeOffset(2); // The common start and end node
     CPPUNIT_ASSERT_EQUAL( SwNodeOffset(13), nSize );
@@ -436,9 +429,7 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyODT, "tdf35798-legacy.odt", "5-
     for (int doc = 0; doc < 5; ++doc)
     {
         loadMailMergeDocument(doc);
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         pDoc->RemoveInvisibleContent();
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         for (int i = 0; i < 8; ++i)
@@ -460,9 +451,7 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewODT, "tdf35798-new.odt", "5-with-b
     for (int doc = 0; doc < 5; ++doc)
     {
         loadMailMergeDocument(doc);
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         pDoc->RemoveInvisibleContent();
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         int i;
@@ -488,9 +477,7 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesLegacyFODT, "tdf35798-legacy.fodt", "
     for (int doc = 0; doc < 5; ++doc)
     {
         loadMailMergeDocument(doc);
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         pDoc->RemoveInvisibleContent();
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         for (int i = 0; i < 8; ++i)
@@ -512,9 +499,7 @@ DECLARE_FILE_MAILMERGE_TEST(testEmptyValuesNewFODT, "tdf35798-new.fodt", "5-with
     for (int doc = 0; doc < 5; ++doc)
     {
         loadMailMergeDocument(doc);
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         pDoc->RemoveInvisibleContent();
         CPPUNIT_ASSERT_EQUAL(1, getPages());
         int i;

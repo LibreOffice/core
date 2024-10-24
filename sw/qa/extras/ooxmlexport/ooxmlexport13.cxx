@@ -370,9 +370,7 @@ DECLARE_OOXMLEXPORT_TEST(testTbrlTextbox, "tbrl-textbox.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testBtlrShape, "btlr-textbox.docx")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rFormats.size());
     CPPUNIT_ASSERT_EQUAL(o3tl::narrowing<sal_uInt16>(RES_DRAWFRMFMT), rFormats[0]->Which());
@@ -543,9 +541,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf123912_protectedForm)
 {
     loadAndReload("tdf123912_protectedForm.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Compatibility: Protect form", true,
                                  pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 

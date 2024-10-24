@@ -220,8 +220,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
     // tdf#138050: a freshly opened document containing a shape with a text box
     // should not appear to be modified
     createSwDoc("textbox-phantom-change.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // Without the fix in place this test would have shown that the document
     // was modified due to a fix to tdf#135198
@@ -231,8 +230,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxNotModifiedOnOpen)
 CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextBoxAutoGrowVertical)
 {
     createSwDoc("textbox-autogrow-vertical.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pShape = pPage->GetObj(0);
     tools::Rectangle aShapeRect = pShape->GetCurrentBoundRect();
@@ -280,8 +278,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrNestedCell)
 {
     // Load a document with a nested table, the inner A1 cell has a btlr text direction.
     createSwDoc("btlr-nested-cell.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage = pLayout->GetLower();
     SwFrame* pBody = pPage->GetLower();

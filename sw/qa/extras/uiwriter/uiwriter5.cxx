@@ -3366,9 +3366,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
 
     // save it to DOCX
     saveAndReload(u"Office Open XML Text"_ustr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
 
@@ -3376,7 +3374,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145089_RedlineTableRowInsertionDOCX
     assertXPath(pXmlDoc, "//page[1]//body/tab/row", 3);
 
     // reject redlines
-    SwDoc* pDOCXDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDOCXDoc(getSwDoc());
     SwEditShell* const pEditShell(pDOCXDoc->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
@@ -3553,9 +3551,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf145091)
 
     // save it to DOCX
     saveAndReload(u"Office Open XML Text"_ustr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 

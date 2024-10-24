@@ -1234,7 +1234,7 @@ CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
 CPPUNIT_TEST_FIXTURE(Test, testTdf128188)
 {
     loadAndReload("footnote-collect-at-end-of-section.fodt");
-    SwDoc *const pDoc = dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
     SwFootnoteIdxs const& rFootnotes(pDoc->GetFootnoteIdxs());
     // Section1
@@ -1828,10 +1828,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBtlrFrame)
         // Without the accompanying fix in place, this test would have failed, as the fly frame had
         // mbVertical==true, but mbVertLRBT==false, even if the writing direction in the doc model was
         // btlr.
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         CPPUNIT_ASSERT(pDoc);
 
         SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();

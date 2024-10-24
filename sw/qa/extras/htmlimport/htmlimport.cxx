@@ -46,10 +46,8 @@ class HtmlImportTest : public SwModelTestBase
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
 {
     createSwWebDoc("picture.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     // The document contains two pictures stored as a link.
-    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    SwEditShell* const pEditShell(getSwDoc()->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
     sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
     CPPUNIT_ASSERT_EQUAL(size_t(2), rLinkManager.GetLinks().size());
@@ -65,11 +63,9 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testPictureImport)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 {
     createSwWebDoc("inlined_image.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     // The document contains only one embedded picture inlined in img's src attribute.
 
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwEditShell* pEditShell = pDoc->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
 
@@ -103,12 +99,10 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImage)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testInlinedImagesPageAndParagraph)
 {
     createSwWebDoc("PageAndParagraphFilled.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // The document contains embedded pictures inlined for PageBackground and
     // ParagraphBackground, check for their existence after import
-    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    SwEditShell* const pEditShell(getSwDoc()->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
 
     // images are not linked, check for zero links
@@ -209,9 +203,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testMetaIsoDates)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageWidthAuto)
 {
     createSwWebDoc("image-width-auto.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwEditShell* const pEditShell(pTextDoc->GetDocShell()->GetDoc()->GetEditShell());
+    SwEditShell* const pEditShell(getSwDoc()->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
     SwTextAttr const*const pAttr(pEditShell->GetCursor()->GetPointNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT(pAttr);
@@ -414,9 +406,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf142781)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf122789)
 {
     createSwWebDoc("tdf122789.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFormats.size());
     // This failed, the image had an absolute size, not a relative one.
@@ -427,8 +417,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testTdf118579)
 {
     createSwWebDoc("tdf118579.html");
     //Without the fix in place, the file fails to load
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testReqIfPageStyle)

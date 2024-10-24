@@ -318,9 +318,7 @@ DECLARE_WW8EXPORT_TEST(testCp1000044, "cp1000044.doc")
     // It wasn't possible to fill out this form.
     CPPUNIT_ASSERT_EQUAL(false, bool(xStorable->isReadonly()));
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 
     uno::Sequence<beans::PropertyValue> aGrabBag = getProperty< uno::Sequence<beans::PropertyValue> >(mxComponent, u"InteropGrabBag"_ustr);
@@ -676,10 +674,7 @@ DECLARE_WW8EXPORT_TEST(testTdf128605, "tdf128605.doc")
 
 DECLARE_WW8EXPORT_TEST(testTdf112535, "tdf112535.doc")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc->GetSpzFrameFormats());
 
     auto& rFormats = *pDoc->GetSpzFrameFormats();
@@ -729,9 +724,7 @@ DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
       * Table 2 has { 1, 1, 0 }
       * Table 3 has { 0, 1, 1 }
       ****/
-    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc*           pDoc         = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc*           pDoc         = getSwDoc();
     SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
     SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
     SwNodeIndex      aIdx( pShellCursor->Start()->GetNode() );
@@ -779,9 +772,7 @@ DECLARE_WW8EXPORT_TEST(testTdf79639, "tdf79639.doc")
 DECLARE_WW8EXPORT_TEST(testTdf122425_2, "tdf122425_2.doc")
 {
     // This is for graphic objects in headers/footers
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwPosFlyFrames aPosFlyFrames = pDoc->GetAllFlyFormats(nullptr, false);
     // There is one fly frame in the document: the text box
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPosFlyFrames.size());
@@ -1322,9 +1313,7 @@ DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
 DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.doc")
 {
     //Preserve the page vertical alignment setting for .doc
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     SwPageDesc* pDesc = &pDoc->GetPageDesc( 0 );
@@ -1354,9 +1343,7 @@ DECLARE_WW8EXPORT_TEST(testTextVerticalAdjustment, "tdf36117_verticalAdjustment.
 
 DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     for (SwNodeOffset n(0); ; n++)
@@ -1581,9 +1568,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99474)
 
 DECLARE_WW8EXPORT_TEST(testContinuousSectionsNoPageBreak, "continuous-sections.doc")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // Continuous section breaks should not add new pages

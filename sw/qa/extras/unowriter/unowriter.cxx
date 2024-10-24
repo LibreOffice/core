@@ -1016,9 +1016,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
 {
     // Load a document with an at-char image in it (and a comment on the image).
     createSwDoc("image-comment-at-char.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
 
     // Verify that we have an annotation mark (comment with a text range) in the document.
     // Without the accompanying fix in place, this test would have failed, as comments lost their

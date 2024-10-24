@@ -610,9 +610,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf95213, "tdf95213.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf97371, "tdf97371.docx")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pShape = pPage->GetObj(0);
     SdrObject* pTextBox = pPage->GetObj(1);
@@ -962,9 +960,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf138093)
         }
         else
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-            CPPUNIT_ASSERT(pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
@@ -1062,9 +1058,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131722)
         }
         else
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-            CPPUNIT_ASSERT(pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getFieldmarksCount());
 

@@ -208,10 +208,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119908)
 {
     createSwDoc("tdf130088.docx");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -229,10 +226,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158333)
 {
     createSwDoc("tdf130088.docx");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -270,10 +264,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf159085)
 {
     createSwDoc("tdf159085.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -295,10 +286,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -337,10 +325,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163042)
     SwDocShell* pShell = pDoc->GetDocShell();
 
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -375,10 +360,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163060)
     createSwDoc("tdf163060.fodt");
 
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -399,10 +381,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162109)
 {
     createSwDoc("tdf162109.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -416,10 +395,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162220)
 {
     createSwDoc("tdf162220.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -433,10 +409,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)
 {
     createSwDoc("tdf162725.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -534,10 +507,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_always)
 
     createSwDoc("tdf132599_always.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -561,10 +531,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_same_page_no_hyphe
 
     createSwDoc("tdf132599_frames_on_same_page_no_hyphenation.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -584,10 +551,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_same_page_hyphenat
 
     createSwDoc("tdf132599_frames_on_same_page_hyphenation.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -608,10 +572,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_right_pages_no_hyp
 
     createSwDoc("tdf132599_frames_on_right_pages_no_hyphenation.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -632,10 +593,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf132599_frames_on_spread_hyphenation
 
     createSwDoc("tdf132599_frames_on_spread_hyphenation.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -652,10 +610,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     CPPUNIT_ASSERT(pViewShell);
     pViewShell->Reformat();
 
@@ -1582,9 +1537,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testShapeAllowOverlap)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Now verify that the rectangle of the anchored objects don't overlap.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPageFrame = pLayout->GetLower();
     SwFrame* pBodyFrame = pPageFrame->GetLower();
@@ -1640,9 +1593,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testShapeAllowOverlapWrap)
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Now verify that the rectangle of the anchored objects do overlap.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPageFrame = pLayout->GetLower();
     SwFrame* pBodyFrame = pPageFrame->GetLower();

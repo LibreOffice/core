@@ -749,9 +749,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo53985, "fdo53985.docx")
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xTables->getCount()); // Only 4 tables were imported.
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT_MESSAGE("Compatibility: Protect form", pDoc->getIDocumentSettingAccess().get( DocumentSettingId::PROTECT_FORM ) );
 
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
@@ -974,9 +972,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN820509)
 {
     // M.d.yyyy date format was unhandled.
     createSwDoc("n820509.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
@@ -1022,8 +1018,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN820509)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf151548_activeContentDemo, "tdf151548_activeContentDemo.docm")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     for(auto aIter = pMarkAccess->getFieldmarksBegin(); aIter != pMarkAccess->getFieldmarksEnd(); ++aIter)
     {

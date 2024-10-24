@@ -115,9 +115,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf156077)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFootnotes)
 {
     createSwDoc("redline_footnotes.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
@@ -284,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -868,7 +866,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -1436,7 +1434,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -2238,7 +2236,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -2835,7 +2833,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
@@ -3179,9 +3177,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 {
     createSwDoc("redline_sections.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
@@ -3275,25 +3271,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineSections)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_images)
 {
     createSwDoc("tdf69647_images.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TDF69647_text)
 {
     createSwDoc("tdf69647_text.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of pages does not match!", 2, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 {
     createSwDoc("redline_table.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
@@ -3371,9 +3361,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
 {
     createSwDoc("tdf144057.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
@@ -3429,9 +3417,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144057)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 {
     createSwDoc("tdf144057.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
 
     // enable redlining
@@ -3481,9 +3467,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf144347)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
 {
     createSwDoc("tdf144057.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc(pTextDoc->GetDocShell()->GetDoc());
+    SwDoc* pDoc(getSwDoc());
     SwRootFrame* pLayout(pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
 

@@ -128,9 +128,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdfChangeNumberingListAutoFormat)
 
     // save it to DOCX
     saveAndReload(u"Office Open XML Text"_ustr);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
     pXmlDoc = parseLayoutDump();
     // this was 220
@@ -2293,8 +2291,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     saveAndReload(u"Office Open XML Text"_ustr);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwViewShell* pViewShell
-        = pTextDoc->GetDocShell()->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
 
     CPPUNIT_ASSERT_EQUAL(u"Heading 2"_ustr,

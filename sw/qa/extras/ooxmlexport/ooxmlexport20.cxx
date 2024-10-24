@@ -721,10 +721,8 @@ CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
     loadAndReload("tdf122201_editUnprotectedText.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // get the document
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
     // get two different nodes

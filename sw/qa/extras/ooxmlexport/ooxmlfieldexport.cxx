@@ -589,9 +589,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtDateDuplicate)
         }
         else
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-            CPPUNIT_ASSERT(pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
@@ -801,9 +799,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldInShape)
         }
         else
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-            CPPUNIT_ASSERT(pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
@@ -844,9 +840,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateFieldAtEndOfParagraph)
         }
         else
         {
-            SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-            CPPUNIT_ASSERT(pTextDoc);
-            SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+            SwDoc* pDoc = getSwDoc();
             IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getAllMarksCount());
 
@@ -871,9 +865,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
         // In MSO, there is a limit of 25 for the items in a drop-down form field.
         // So we truncate the list of items to not exceed this limit.
 
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+        SwDoc* pDoc = getSwDoc();
         IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
 
