@@ -1377,8 +1377,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testMultiParaListItem)
 {
     // Create a document with 3 list items: A, B&C and D.
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"A"_ustr);
     SwDoc* pDoc = pWrtShell->GetDoc();
     {
@@ -1514,8 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeading)
 {
     // Given a document with a list heading:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"list header"_ustr);
     SwDoc* pDoc = pWrtShell->GetDoc();
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
@@ -1545,8 +1543,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedList)
 {
     // Given a document with a list, first para is numbered, second is not:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"list header"_ustr);
     SwDoc* pDoc = pWrtShell->GetDoc();
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
@@ -1584,8 +1581,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testPartiallyNumberedListHTML)
 {
     // Given a document with a list, first para is numbered, second is not:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"list header"_ustr);
     SwDoc* pDoc = pWrtShell->GetDoc();
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
@@ -1624,8 +1620,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListHeaderAndItem)
 {
     // Given a document with a list, first para is not numbered, but the second is:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"not numbered"_ustr);
     SwDoc* pDoc = pWrtShell->GetDoc();
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
@@ -2026,8 +2021,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testListsHeading)
 {
     // Given a document with lh, lh, li, li, lh and lh nodes:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"list 1, header 1"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"list 1, header 2"_ustr);
@@ -2126,7 +2120,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     // Given a documented with nested lists:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"first"_ustr);
     sal_uInt16 nPos = pDoc->MakeNumRule(pDoc->GetUniqueNumRuleName());
     SwNumRule* pNumRule = pDoc->GetNumRuleTable()[nPos];
@@ -2162,8 +2156,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
 {
     // Given a document with a trailing line-break:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"test\n"_ustr);
 
     // When exporting to reqif-xhtml:
@@ -2183,8 +2176,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
     ImportFromReqif(maTempFile.GetURL());
 
     // Then make sure that line-break is not lost:
-    pDoc = getSwDoc();
-    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell = getSwDocShell()->GetWrtShell();
     OUString aActual = pWrtShell->GetCursor()->GetPointNode().GetTextNode()->GetText();
     // Without the accompanying fix in place, this test would have failed, as the trailing
     // line-break was lost.
@@ -2195,8 +2187,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
 {
     // Given a document with leading tabs:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"\t first"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"\t\t second"_ustr);
@@ -2228,8 +2219,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
 {
     // Given a document with leading tabs:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"\t test"_ustr);
 
     // When exporting to plain HTML, using LeadingTabWidth=2:
@@ -2296,8 +2286,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
     // Given a document with two tables: first stable has a background, second table has a
     // background in its first row:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
                                              /*nRowsToRepeat=*/0);
     pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/1, /*nCols=*/1);
@@ -2366,8 +2355,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSectionDir)
 {
     // Given a document with a section:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     pWrtShell->SelAll();
     SwSectionData aSectionData(SectionType::Content, u"mysect"_ustr);
@@ -2389,8 +2377,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTdf114769)
     // Create document from scratch since relative urls to filesystem can be replaced
     // by absolute during save/load
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"Hyperlink1"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"Hyperlink2"_ustr);
@@ -2761,8 +2748,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
 {
     // Given a document with leading, trailing, and repeating intermediate spaces:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
     pWrtShell->Insert(paraText);
 
@@ -2791,8 +2777,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
 {
     // Given a document with leading, trailing, and repeating intermediate spaces:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
     pWrtShell->Insert(paraText);
 

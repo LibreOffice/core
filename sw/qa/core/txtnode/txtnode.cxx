@@ -59,8 +59,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     // tbrl ("Chinese") directions. Make sure that Chinese text is handled the same way in the btlr
     // case as it's handled in the Latin case.
     createSwDoc("btlr-cell-chinese.doc");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -79,8 +78,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)
     createSwDoc("special-insert-after-merged-cells.fodt");
     SwDoc* pDoc = getSwDoc();
     SwNodeOffset const nNodes(pDoc->GetNodes().Count());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     // go to the merged cell
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -101,8 +99,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 {
     createSwDoc("textbox-copy-anchor.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     SwDoc aClipboard;
     pWrtShell->SelAll();
@@ -129,8 +126,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxNodeSplit)
 {
     createSwDoc("textbox-node-split.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStart=*/false);
     // Without the accompanying fix in place, this would have crashed in
@@ -175,7 +171,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     createSwDoc("title-field-invalidate.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     pTextDoc->initializeForTiledRendering({});
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     SwDoc* pDoc = pShell->GetDoc();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
@@ -209,8 +205,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlyAnchorUndo)
 {
     // Given a document with a fly frame, anchored after the last char of the document:
     createSwDoc("fly-anchor-undo.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     SwDoc* pDoc = pShell->GetDoc();
     const auto& rSpz = *pDoc->GetSpzFrameFormats();
     sal_Int32 nExpected = rSpz[0]->GetAnchor().GetAnchorContentOffset();
@@ -234,8 +229,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
 {
     // Given a document with superscript text at the end of a paragraph:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"1st"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
     SfxItemSetFixed<RES_CHRATR_ESCAPEMENT, RES_CHRATR_ESCAPEMENT> aSet(pWrtShell->GetAttrPool());
@@ -271,7 +265,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
  *    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
  *
  *    SwDoc* pDoc = getSwDoc();
- *    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+ *    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
  *    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
  *    SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
  *    std::vector<SwTextAttr*> aAttrs
@@ -301,8 +295,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testInsertDropDownContentControlTwice)
 {
     // Given an already selected dropdown content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When trying to insert an inner one, make sure that we don't crash:
@@ -313,8 +306,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testCheckboxContentControlKeyboard)
 {
     // Given an already selected checkbox content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
     SwEditWin& rEditWin = pWrtShell->GetView().GetEditWin();
 
@@ -338,8 +330,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDropdownContentControlKeyboard)
 {
     // Given an already selected dropdown content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When checking if alt-down should open a popup:
@@ -360,8 +351,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testPictureContentControlKeyboard)
 {
     // Given an already selected picture content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::PICTURE);
     pWrtShell->GotoObj(/*bNext=*/true, GotoObjFlags::Any);
 
@@ -389,8 +379,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDateContentControlKeyboard)
 {
     // Given an already selected date content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
     // When checking if alt-down should open a popup:
@@ -412,7 +401,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testContentControlCopy)
     // Given a document with a content control:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // When copying that content control:

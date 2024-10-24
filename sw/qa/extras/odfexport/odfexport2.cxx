@@ -1730,8 +1730,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf122452)
     // FIXME:  Error: element "text:insertion" was found where no element may occur
     skipValidation();
     loadAndReload("tdf122452.doc");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Without the fix in place this fails with:
     // Expected: 1

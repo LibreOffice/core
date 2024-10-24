@@ -341,8 +341,7 @@ CPPUNIT_TEST_FIXTURE(SwAutoCorrectTest, testFieldMark)
     // getString also strips it out, use GetText instead
 
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
     // don't autocapitalize after a field mark

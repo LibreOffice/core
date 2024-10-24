@@ -280,10 +280,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf136588)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInBody)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(getSwDoc());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->Insert(u"foo"_ustr);
@@ -722,7 +720,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testFieldHideSection)
     assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row", 1);
     assertXPath(pXmlDoc, "/root/page", 2);
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     ::std::unique_ptr<SwField> pField(pWrtShell->GetCurField()->CopyField());
     SwFieldMgr manager(pWrtShell);
 
@@ -765,7 +763,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestI94666)
             "portion", u"pulled off ");
     }
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GotoPage(2, false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 11, /*bBasicCall=*/false);
     pWrtShell->SetMark();
@@ -864,10 +862,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf88496)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInHeader)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(getSwDoc());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", /*bHeader*/ true, /*bOn*/ true, false);
@@ -1281,9 +1277,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf150606)
 {
     createSwDoc("tdf150606-1-min.odt");
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
@@ -1432,10 +1426,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf137025)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(getSwDoc());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->InsertFootnote(u""_ustr);
@@ -2021,8 +2013,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFootnote)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
 {
     createSwDoc("tdf143239-1-min.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // These are unstable on macOS and Win64 builds,
     // so only test that they restore original values for now
@@ -2107,9 +2098,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableOverlapFooterFly)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
 {
     createSwDoc("tdf134277.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
@@ -2123,8 +2112,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, TestTdf134277)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
 {
     createSwDoc("tdf116486.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     OUString aTop = getXPath(
         pXmlDoc,
@@ -2166,8 +2153,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf152106)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128198)
 {
     createSwDoc("tdf128198-1.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pLayout = parseLayoutDump();
     // the problem was that line 5 was truncated at "this  "
     // due to the fly anchored in previous paragraph
@@ -2234,10 +2219,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(getSwDoc());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->Insert(u"foo"_ustr);
@@ -2831,10 +2814,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysInFlys)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineFlysAtFlys)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* pDoc(getSwDoc());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->Insert(u"foo"_ustr);

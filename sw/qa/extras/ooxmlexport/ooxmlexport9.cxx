@@ -116,16 +116,12 @@ CPPUNIT_TEST_FIXTURE(DocmTest, testDocmSave)
 CPPUNIT_TEST_FIXTURE(DocmTest, testBadDocm)
 {
     createSwDoc("bad.docm");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
-    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 
     saveAndReload(mpFilter);
-    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     // This was 'MS Word 2007 XML', broken docm files were not recognized.
-    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"MS Word 2007 XML VBA"_ustr, getSwDocShell()->GetMedium()->GetFilter()->GetName());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109063)

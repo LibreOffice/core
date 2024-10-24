@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextboxReanchor)
 
     // Select the shape of the textbox.
     Point aPoint;
-    SwWrtShell* pShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pShell = getSwDocShell()->GetWrtShell();
     pShell->SelectObj(aPoint, /*nFlag=*/0, pDrawShape);
 
     // Anchor the shape of the textbox into its own textframe.
@@ -97,8 +97,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testVertPosFromBottomBoundingBox)
 
     // Calculate the allowed bounding box of the shape, e.g. the shape's position & size dialog uses
     // this to limit the vertical position to sensible values.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRect aBoundRect;
     RndStdIds eAnchorType = RndStdIds::FLY_AT_CHAR;
     SwDoc* pDoc = getSwDoc();
@@ -124,8 +123,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testPasteFlyInTextBox)
 {
     // Given a document that contains a textbox, which contains an sw image (fly frame)
     createSwDoc("paste-fly-in-textbox.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwDoc* pDoc = pDocShell->GetDoc();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -160,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextBoxSelectCursorPos)
     SdrObject* pFlyObject = pPage->GetObj(1);
     SwContact* pFlyContact = static_cast<SwContact*>(pFlyObject->GetUserCall());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(RES_FLYFRMFMT), pFlyContact->GetFormat()->Which());
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SelectObj(Point(), 0, pFlyObject);
 
     // Then make sure the cursor is the anchor of the draw format:

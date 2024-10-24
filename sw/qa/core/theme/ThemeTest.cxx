@@ -416,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
     createSwDoc("ThemeColorInHeading.docx");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     CPPUNIT_ASSERT(pModel);
@@ -440,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
         // check that the theme colors are as expected
         CPPUNIT_ASSERT_EQUAL(u"LibreOffice"_ustr, pNewColorSet->getName());
 
-        sw::ThemeColorChanger aChanger(pDoc->GetDocShell());
+        sw::ThemeColorChanger aChanger(getSwDocShell());
         aChanger.apply(pNewColorSet);
     }
 
@@ -570,7 +570,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_customTransferable)
     CPPUNIT_ASSERT_EQUAL(Color(0x008000), pTheme->GetColor(model::ThemeColorType::Dark2));
 
     // Select all and check the original text in the document:
-    auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    auto pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SelAll();
     CPPUNIT_ASSERT_EQUAL(u"Theme foo"_ustr, pWrtShell->GetSelText());
 
@@ -617,7 +617,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         CPPUNIT_ASSERT_EQUAL(Color(0x800000), pTheme->GetColor(model::ThemeColorType::Dark2));
 
         // Select all and check the original text in the document:
-        auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        auto pWrtShell = getSwDocShell()->GetWrtShell();
         pWrtShell->SelAll();
         CPPUNIT_ASSERT_EQUAL(u"Theme bar"_ustr, pWrtShell->GetSelText());
 
@@ -644,7 +644,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testTdf162715_ownTransferable)
         CPPUNIT_ASSERT_EQUAL(Color(0x008000), pTheme->GetColor(model::ThemeColorType::Dark2));
 
         // Select all and check the original text in the second document:
-        auto pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        auto pWrtShell = getSwDocShell()->GetWrtShell();
         pWrtShell->SelAll();
         CPPUNIT_ASSERT_EQUAL(u"Theme foo"_ustr, pWrtShell->GetSelText());
 

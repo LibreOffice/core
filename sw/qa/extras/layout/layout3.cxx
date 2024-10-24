@@ -283,7 +283,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf158419)
 {
     createSwDoc("tdf130088.docx");
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -322,7 +322,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163042)
 {
     createSwDoc("tdf163042.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Ensure that all text portions are calculated before testing.
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -423,8 +423,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
 {
     createSwDoc("tdf161810.fodt");
     // Ensure that all text portions are calculated before testing.
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -457,8 +456,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
 {
     createSwDoc("tdf163149.docx");
     // Ensure that all text portions are calculated before testing.
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1021,8 +1019,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testBtlrCell)
 {
     createSwDoc("btlr-cell.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1102,6 +1099,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testBtlrCell)
 
     // Test that clicking "below" the second paragraph positions the cursor at the start of the
     // second paragraph.
+    SwDoc* pDoc = getSwDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     SwPosition aPosition(aCellStart);
     SwTwips nSecondParaLeft
@@ -1239,8 +1237,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf118719)
 {
     // Insert a page break.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Enable hide whitespace mode.
     SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
@@ -1275,8 +1272,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testImageComment)
     // Load a document that has "aaa" in it, then a commented image (4th char is the as-char image,
     // 5th char is the comment anchor).
     createSwDoc("image-comment.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Look up a layout position which is on the right of the image.
     SwRootFrame* pRoot = pWrtShell->GetLayout();
@@ -1310,8 +1306,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testScriptField)
 {
     // Test clicking script field inside table ( tdf#141079 )
     createSwDoc("tdf141079.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Look up layout position which is the first cell in the table
     SwRootFrame* pRoot = pWrtShell->GetLayout();
@@ -1344,8 +1339,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testCommentCursorPosition)
 {
     // Load a document that has "aaa" in it, followed by three comments.
     createSwDoc("endOfLineComments.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     SwRootFrame* pRoot = pWrtShell->GetLayout();
     CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
@@ -1378,8 +1372,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testCombiningCharacterCursorPosition)
 {
     // Load a document that has "a" in it, followed by a combining acute in a separate rext span
     createSwDoc("tdf138592-a-acute.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     SwRootFrame* pRoot = pWrtShell->GetLayout();
     CPPUNIT_ASSERT(pRoot->GetLower()->IsPageFrame());
@@ -1418,8 +1411,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf64222)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf113014)
 {
     createSwDoc("tdf113014.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1438,8 +1430,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf113014)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf130218)
 {
     createSwDoc("tdf130218.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1695,7 +1686,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf124770)
     pDoc->ChgPageDesc(0, rPageDesc);
 
     // Set font to italic 20pt Liberation Serif.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SfxItemSet aTextSet(pWrtShell->GetView().GetPool(),
                         svl::Items<RES_CHRATR_BEGIN, RES_CHRATR_END - 1>);
     SvxFontItem aFont(RES_CHRATR_FONT);
@@ -1727,7 +1718,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testContinuousEndnotesInsertPageAtStart)
 
     // Insert a second page, and an endnote on the 2nd page (both the anchor and the endnote is on
     // the 2nd page).
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertPageBreak();
     pWrtShell->InsertFootnote(u"endnote"_ustr, /*bEndNote=*/true, /*bEdit=*/false);
 
@@ -1754,7 +1745,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testContinuousEndnotesDeletePageAtStart)
 
     // Insert a second page, and an endnote on the 2nd page (both the anchor and the endnote is on
     // the 2nd page).
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertPageBreak();
     pWrtShell->InsertFootnote(u"endnote"_ustr, /*bEndNote=*/true, /*bEdit=*/false);
 
@@ -1785,7 +1776,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128399)
     const SwRect& rRow2Rect = pRow2->getFrameArea();
     Point aPoint = rRow2Rect.Center();
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwPosition aPosition = *pWrtShell->GetCursor()->Start();
     SwPosition aFirstRow(aPosition);
     SwCursorMoveState aState(CursorMoveState::NONE);

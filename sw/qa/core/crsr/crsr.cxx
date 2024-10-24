@@ -90,8 +90,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testSelAllStartsWithTable)
 {
     createSwDoc("sel-all-starts-with-table.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwDoc* pDoc = pDocShell->GetDoc();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
@@ -113,7 +112,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlLineBreak)
 {
     // Given a document with a (rich text) content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -126,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlLineBreak)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When pressing "enter" in the middle of that content control:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     // Go after "t".
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -145,7 +143,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
 {
     // Given a document with a checkbox content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -160,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When entering the content control:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
@@ -173,8 +170,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
 CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testTdf135451)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Insert narrow no-break space and move the cursor right before it
     pWrtShell->Insert(u"a" + OUStringChar(CHAR_NNBSP) + "b");
@@ -194,8 +190,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testDropdownContentControl)
 {
     // Given a document with a dropdown content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When entering the content control:
@@ -212,8 +207,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlProtectedSection)
 {
     // Given a document with a date content control in a protected section:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
     pWrtShell->SelAll();
     OUString aSectionName = pWrtShell->GetUniqueSectionName();

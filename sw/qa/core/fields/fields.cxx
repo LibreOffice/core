@@ -60,7 +60,6 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
 {
     // Create a document with a bibliography reference in it.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -78,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // Get the tooltip of the field.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwPaM* pCursor = pWrtShell->GetCursor();
     auto pField = dynamic_cast<SwAuthorityField*>(

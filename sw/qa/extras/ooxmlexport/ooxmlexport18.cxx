@@ -77,8 +77,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCellSdtRedline)
 CPPUNIT_TEST_FIXTURE(Test, testTdf148956_directEndFormatting)
 {
     auto verify = [this](bool bIsExport = false) {
-        SwDoc* pDoc = getSwDoc();
-        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
         // pWrtShell->EndPara(/*bSelect=*/true);
         dispatchCommand(mxComponent, u".uno:GotoEndOfPara"_ustr, {});

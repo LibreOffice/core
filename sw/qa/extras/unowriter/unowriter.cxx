@@ -689,7 +689,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     createSwDoc();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* const pWrtShell(pTextDoc->GetDocShell()->GetWrtShell());
+    SwWrtShell* const pWrtShell(getSwDocShell()->GetWrtShell());
     SwDoc* const pDoc(pWrtShell->GetDoc());
 
     // insert some text
@@ -737,9 +737,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnum)
 {
     createSwDoc("selection-in-table-enum.odt");
     // Select the A1 cell's text.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
@@ -771,9 +769,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSelectionInTableEnumEnd)
 {
     createSwDoc("selection-in-table-enum.odt");
     // Select from "Before" till the table end.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->Down(/*bSelect=*/true);
 
@@ -954,9 +950,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testPasteListener)
     xBroadcaster->addPasteEventListener(xListener);
 
     // Cut "DE" and then paste it.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 2, /*bBasicCall=*/false);
@@ -1044,7 +1038,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testImageCommentAtChar)
     // center of the page (horizontally) where the image is.  On macOS, though, with the fix in
     // place the actual value consistently is even greater with 6283 now instead of 5892, for
     // whatever reason.
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
     for (const auto& pItem : *pPostItMgr)
     {

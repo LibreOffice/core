@@ -134,8 +134,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
 {
     // Given a document with a single table cell, its cell value is set to double:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
@@ -165,8 +164,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableRowSpanInAllCells)
 {
     // Given a document with a 2x2 table, A1:A2 and B1:B2 is merged:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
@@ -198,8 +196,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
 {
     // Given a document with a centered table:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::NONE, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);

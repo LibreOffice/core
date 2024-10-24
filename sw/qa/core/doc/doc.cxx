@@ -60,7 +60,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testMathInsertAnchorType)
     SwDoc* pDoc = getSwDoc();
 
     // When inserting an a math object.
-    SwWrtShell* pShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pShell = getSwDocShell()->GetWrtShell();
     SvGlobalName aGlobalName(SO3_SM_CLASSID);
     pShell->InsertObject(svt::EmbeddedObjectRef(), &aGlobalName);
 
@@ -100,8 +100,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
 {
     createSwDoc("num-down-indent.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
@@ -124,8 +123,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpaceOff)
     pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = false;
 
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
@@ -148,8 +146,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
     pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = true;
 
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
@@ -169,8 +166,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testLocaleIndependentTemplate)
 {
     createSwDoc("locale-independent-template.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SfxItemSet aSet(pWrtShell->GetAttrPool(), svl::Items<RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE>);
     pWrtShell->GetCurAttr(aSet);
@@ -208,11 +204,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
 {
     // Given a document with an as-char textbox (as-char draw format + at-char fly format):
     createSwDoc("textbox-makeflyframe.docx");
-    SwDoc* pDoc = getSwDoc();
 
     // When cutting the textbox and pasting it to a new document:
     selectShape(1);
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
@@ -246,7 +241,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testIMEGrouping)
     Scheduler::ProcessEventsToIdle();
 
     // When pressing two keys via IME:
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     rEditWin.PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
     rEditWin.PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
@@ -297,7 +292,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
 {
     // Given a document with a content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -310,7 +304,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testContentControlDelete)
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When deleting the dummy character at the end of the content control:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->DelLeft();
 

@@ -34,7 +34,6 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
 {
     // Given a document with 2 biblio fields, same properties, but different page number in the URL:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -65,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(Test, testBiblioPageNumberUpdate)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When changing the page number in the second field's URL:
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -98,7 +97,6 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
 {
     // Given an empty document:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
 
     // When inserting a refmark with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
@@ -110,7 +108,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // Then make sure that we create a refmark that covers that text:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     std::vector<SwTextAttr*> aAttrs = pTextNode->GetTextAttrsAt(0, RES_TXTATR_REFMARK);
     // Without the accompanying fix in place, this test would have failed with:
@@ -125,8 +123,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf68364InsertConditionalFieldWithTwoDots)
 {
     // Create an empty document
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Insert a conditional field containing exactly two dots for its condition
     SwFieldMgr aFieldMgr(pWrtShell);
@@ -145,8 +142,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
 {
     // Given a document with a single selected word:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert2(u"myword"_ustr);
     pWrtShell->SelAll();
 

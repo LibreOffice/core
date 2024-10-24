@@ -1115,9 +1115,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158451)
 DECLARE_OOXMLEXPORT_TEST(testTdf160827, "tdf160827.docx")
 {
     // it crashes at import time
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+    CPPUNIT_ASSERT(getSwDocShell()->IsSecurityOptOpenReadOnly());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159110)

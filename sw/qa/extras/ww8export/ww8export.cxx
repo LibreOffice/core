@@ -724,8 +724,7 @@ DECLARE_WW8EXPORT_TEST( testTdf105570, "tdf105570.doc" )
       * Table 2 has { 1, 1, 0 }
       * Table 3 has { 0, 1, 1 }
       ****/
-    SwDoc*           pDoc         = getSwDoc();
-    SwWrtShell*      pWrtShell    = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell*      pWrtShell    = getSwDocShell()->GetWrtShell();
     SwShellCursor*   pShellCursor = pWrtShell->getShellCursor( false );
     SwNodeIndex      aIdx( pShellCursor->Start()->GetNode() );
 
@@ -1498,9 +1497,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearFramePams)
 CPPUNIT_TEST_FIXTURE(Test, testTdf94386)
 {
     createSwDoc("tdf94386.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // emulate the behavior from tdf#94386 - insert an envelope to the
     // document

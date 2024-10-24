@@ -41,8 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
 {
     // Given a document with a 2x2 table
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
 
@@ -151,8 +150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144576_ascii)
 CPPUNIT_TEST_FIXTURE(Test, testTdf162180)
 {
     createSwDoc("tdf162180.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Select the whole table
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});

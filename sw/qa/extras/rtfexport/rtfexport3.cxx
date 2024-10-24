@@ -668,8 +668,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
         // Given a document with a top margin and a border which has more spacing than the margin on
         // its 2nd page:
         createSwDoc();
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        SwDocShell* pDocShell = pTextDoc->GetDocShell();
+        SwDocShell* pDocShell = getSwDocShell();
         SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
         pWrtShell->Insert(u"first"_ustr);
         pWrtShell->SplitNode();
@@ -694,8 +693,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNegativePageBorder)
 
     // Then make sure that the border distance is negative, so the first line of body text appears
     // on top of the page border:
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     OUString aPageStyle = pWrtShell->GetCurPageStyle();

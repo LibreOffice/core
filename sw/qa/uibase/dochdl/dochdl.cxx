@@ -29,8 +29,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testSelectPasteFormat)
 {
     // Create a new document and cut a character.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2(u"x"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
@@ -56,8 +55,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelection)
 {
     // Given a document where a text node has hints, but no as-char images.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2(u"abc"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -82,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseDochdlTest, testComplexSelectionAtChar)
     // Given a document with an at-char anchored image:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SfxItemSet aFrameSet(pDoc->GetAttrPool(), svl::Items<RES_FRMATR_BEGIN, RES_FRMATR_END - 1>);
     SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);

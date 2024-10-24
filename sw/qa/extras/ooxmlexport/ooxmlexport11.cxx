@@ -754,9 +754,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107969, "tdf107969.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testOpenDocumentAsReadOnly, "open-as-read-only.docx")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+    CPPUNIT_ASSERT(getSwDocShell()->IsSecurityOptOpenReadOnly());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testNoDefault, "noDefault.docx")

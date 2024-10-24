@@ -182,9 +182,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testMetaIsoDates)
 {
     createSwWebDoc("meta-ISO8601-dates.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDocShell* pDocShell(pTextDoc->GetDocShell());
+    SwDocShell* pDocShell(getSwDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
 
     CPPUNIT_ASSERT(pDocShell);
@@ -224,9 +222,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
 {
     createSwWebDoc("meta-changedby.html");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDocShell* pDocShell(pTextDoc->GetDocShell());
+    SwDocShell* pDocShell(getSwDocShell());
     uno::Reference<document::XDocumentProperties> xDocProps;
 
     CPPUNIT_ASSERT(pDocShell);

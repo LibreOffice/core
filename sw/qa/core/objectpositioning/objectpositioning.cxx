@@ -57,8 +57,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOverlapCrash)
                               uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert a new paragraph at the start.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     // Without the accompanying fix in place, this test would have crashed.
     pWrtShell->SplitNode();

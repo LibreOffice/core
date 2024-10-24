@@ -721,9 +721,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89802)
 CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
 {
     createSwDoc("fdo37606.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     {
@@ -770,9 +768,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo37606)
 CPPUNIT_TEST_FIXTURE(Test, testFdo37606Copy)
 {
     createSwDoc("fdo37606.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ctrl-A
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
@@ -799,9 +795,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69862)
 {
     createSwDoc("fdo69862.odt");
     // The test doc is special in that it starts with a table and it also has a footnote.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->SelAll(); // Selects A1.
     pWrtShell->SelAll(); // Selects the whole table.
@@ -819,9 +813,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69979)
 {
     createSwDoc("fdo69979.odt");
     // The test doc is special in that it starts with a table and it also has a header.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     pWrtShell->SelAll(); // Selects A1.
@@ -838,9 +830,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo69979)
 CPPUNIT_TEST_FIXTURE(Test, testSpellmenuRedline)
 {
     createSwDoc("spellmenu-redline.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
     SwSpellPopup aPopup(pWrtShell, xAlt, OUString());
     Menu& rMenu = aPopup.GetMenu();
@@ -1160,9 +1150,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf123968)
 {
     createSwDoc("tdf123968.odt");
     // The test doc is special in that it starts with a table and it also has a header.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
 
     pWrtShell->SelAll();
@@ -1299,10 +1287,9 @@ CPPUNIT_TEST_FIXTURE(Test, testVerticallyMergedCellBorder)
 {
     // Given a document with two cells, vertically merged, when loading the document:
     createSwDoc("vmerge-cell-border.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // Then make sure that the first cell has a right border while the second has no right border:
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(/*bBlock=*/false);
@@ -1620,9 +1607,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf161054)
 CPPUNIT_TEST_FIXTURE(Test, testTdf162398)
 {
     createSwDoc("tdf162398.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Ctrl-A
     pWrtShell->SelAll(); // Selects the whole document.
 

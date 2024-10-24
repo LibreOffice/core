@@ -31,8 +31,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
 {
     // Given a document with a split table, table borders are defined, but cell borders are not:
     createSwDoc("split-table-border.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -74,8 +73,7 @@ CPPUNIT_TEST_FIXTURE(Test, testRTLBorderMerge)
 {
     // Given a document with an RTL table:
     createSwDoc("rtl-table.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -115,8 +113,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableMergedBorder)
 {
     // Given a document with a split table, first row in frame 1 has merged cells:
     createSwDoc("split-table-merged-border.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();

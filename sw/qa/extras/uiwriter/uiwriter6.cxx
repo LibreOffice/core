@@ -190,7 +190,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
     CPPUNIT_ASSERT_EQUAL(u"5"_ustr, pDoc->GetNodes()[nPara5Node]->GetTextNode()->GetText());
 
     // Remove paragraph "4".
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     while (pWrtShell->GetCursor()->GetPointNode().GetIndex() < nPara4Node)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
@@ -282,8 +282,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113445)
 #if HAVE_MORE_FONTS
     // Force multiple-page view.
     createSwDoc("tdf113445.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwView* pView = pDocShell->GetView();
     pView->SetViewLayout(/*nColumns=*/2, /*bBookMode=*/false);
     calcLayout();
@@ -296,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113445)
     CPPUNIT_ASSERT_GREATER(nPage1Left, nPage2Left);
 
     // Insert a new paragraph at the start of the document.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->StartOfSection();
     pWrtShell->SplitNode();
     pXmlDoc = parseLayoutDump();
@@ -344,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113686)
                          pDoc->GetNodes()[nPage2FirstNode]->GetTextNode()->GetText());
 
     // Remove page 2.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     while (pWrtShell->GetCursor()->Start()->GetNodeIndex() < nPage1LastNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
@@ -458,7 +457,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable4)
                          pDoc->GetNodes()[nPage3FirstNode]->GetTextNode()->GetText());
 
     // Remove page 2.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     while (pWrtShell->GetCursor()->Start()->GetNodeIndex() < nPage1LastNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
@@ -497,7 +496,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112160)
                          pDoc->GetNodes()[nA2CellNode]->GetTextNode()->GetText());
 
     // Append a new paragraph to the end of the A2 cell.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     while (pWrtShell->GetCursor()->GetPointNode().GetIndex() < nA2CellNode)
         pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara();
@@ -525,10 +524,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf114536)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testParagraphOfTextRange)
 {
     createSwDoc("paragraph-of-text-range.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // Enter the table.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT(pWrtShell->IsCursorInTable());
     // Enter the section.
@@ -550,7 +548,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfContents)
 {
     createSwDoc("tdf99689.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
@@ -579,7 +577,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfFigures)
 {
     createSwDoc("tdf99689_figures.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
@@ -606,7 +604,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
 {
     createSwDoc("tdf99689_tables.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->GotoNextTOXBase();
     const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
     pWrtShell->UpdateTableOf(*pTOXBase);
@@ -645,8 +643,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112448)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
 {
     createSwDoc("tdf113790.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Create the clipboard document.
     SwDoc aClipboard;
     aClipboard.SetClipBoard(true);
@@ -670,7 +667,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
 {
     createSwDoc("tdf130088.docx");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // select paragraph
     pWrtShell->SelPara(nullptr);
@@ -758,7 +755,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157667)
 {
     createSwDoc("tdf130088.docx");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // select the first three words
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 25, /*bBasicCall=*/false);
@@ -808,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158039)
 {
     createSwDoc("tdf130088.docx");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // select the first sentence
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 26, /*bBasicCall=*/false);
@@ -875,8 +872,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113481)
 {
     createSwDoc("tdf113481-IVS.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // One backspace should completely remove the CJK ideograph variation sequence
     pWrtShell->EndPara();
@@ -925,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
         SwDBData aDBData;
         aDBData.sDataSource = sDataSource;
         aDBData.sCommand = "Sheet1";
-        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         CPPUNIT_ASSERT(pWrtShell);
         SwDBFieldType* pFieldType = static_cast<SwDBFieldType*>(
             pWrtShell->InsertFieldType(SwDBFieldType(pDoc, sColumnName, aDBData)));
@@ -939,7 +935,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
     saveAndReload(u"Office Open XML Text"_ustr);
     pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwCursorShell* pShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pShell);
@@ -962,7 +958,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115065)
     createSwDoc("tdf115065.odt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     pWrtShell->GotoTable(u"Table2"_ustr);
@@ -988,7 +984,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf84806_MovingMultipleTableRows)
     createSwDoc("tdf115065.odt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1049,7 +1045,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
     createSwDoc("tdf115065.odt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1131,7 +1127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Create a table
@@ -1212,7 +1208,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Create a table with less columns than rows
@@ -1262,7 +1258,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Create a table
@@ -1346,7 +1342,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154771_MovingMultipleColumns)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Create a table with less columns than rows
@@ -1402,7 +1398,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // insert an empty paragraph
@@ -1440,7 +1436,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
     // double the row height
     Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 2 * nRowHeight);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
                            MOUSE_LEFT);
@@ -1451,9 +1447,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf44773)
     TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
     // drag & drop of cell border inside the document (and outside the table)
     // still based on the ruler code, use that to simulate dragging
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
     TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
     Scheduler::ProcessEventsToIdle();
     rEditWin.CaptureMouse();
     rEditWin.ReleaseMouse();
@@ -1468,7 +1464,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // insert an empty paragraph
@@ -1506,7 +1502,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
     // double the row height
     Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 2 * nRowHeight);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     Point aArea(aFrom.X(), aFrom.Y() + 2);
     MouseEvent aClickEvent(aArea, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
@@ -1518,9 +1514,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157833)
     TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
     // drag & drop of cell border inside the document (and outside the table)
     // still based on the ruler code, use that to simulate dragging
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
     TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
     Scheduler::ProcessEventsToIdle();
     rEditWin.CaptureMouse();
     rEditWin.ReleaseMouse();
@@ -1536,7 +1532,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // insert an empty paragraph
@@ -1574,7 +1570,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
     // double the row height
     Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 2 * nRowHeight);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     Point aArea(aFrom.X(), aFrom.Y() + 5);
     MouseEvent aClickEvent(aArea, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
@@ -1586,9 +1582,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155692)
     TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
     // drag & drop of cell border inside the document (and outside the table)
     // still based on the ruler code, use that to simulate dragging
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
     TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
     Scheduler::ProcessEventsToIdle();
     rEditWin.CaptureMouse();
     rEditWin.ReleaseMouse();
@@ -1603,7 +1599,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1625,7 +1621,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160842)
     auto nRowHeight = rCellA2Rect.Height();
     // select center of the bottom cell
     Point ptFrom(rCellA2Rect.Left() + rCellA2Rect.Width() / 2, rCellA2Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -1640,7 +1636,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // set table row height by drag & drop at images cropped by the fixed row height
@@ -1663,7 +1659,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight);
     // halve the row height
     Point ptTo(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + 0.5 * nRowHeight);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK | MouseEventModifiers::SELECT,
                            MOUSE_LEFT);
@@ -1674,9 +1670,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf160836)
     TrackingEvent aTEvt(aMoveEvent, TrackingEventFlags::Repeat);
     // drag & drop of cell border inside the document (and outside the table)
     // still based on the ruler code, use that to simulate dragging
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt);
     TrackingEvent aTEvt2(aMoveEvent, TrackingEventFlags::End);
-    pDoc->GetDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
+    getSwDocShell()->GetView()->GetVRuler().Tracking(aTEvt2);
     Scheduler::ProcessEventsToIdle();
     rEditWin.CaptureMouse();
     rEditWin.ReleaseMouse();
@@ -1690,7 +1686,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161261)
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1713,7 +1709,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161261)
 
     // select image by clicking on it at the center of the upper cell
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -1752,7 +1748,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1775,7 +1771,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161332)
 
     // select text frame by clicking on it at the right side of the upper cell
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width(), rCellA1Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -1813,7 +1809,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426)
     createSwDoc("tdf161426.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1837,7 +1833,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426)
 
     // select text frame by clicking on it at the right side of the upper right cell
     Point ptFrom(rCellB1Rect.Left() + rCellB1Rect.Width(), rCellB1Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -1875,7 +1871,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426_content)
     createSwDoc("tdf161426.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1899,7 +1895,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161426_content)
 
     // select content of the B1 by clicking on the center of it
     Point ptFrom(rCellB1Rect.Left() + rCellB1Rect.Width() / 2, rCellB1Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -1968,7 +1964,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
     createSwDoc("tdf160842.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // the cursor is not in the table
     CPPUNIT_ASSERT(!pWrtShell->IsCursorInTable());
@@ -1991,7 +1987,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf161360)
 
     // select image by clicking on it at the center of the upper cell
     Point ptFrom(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() + nRowHeight / 2);
-    vcl::Window& rEditWin = pDoc->GetDocShell()->GetView()->GetEditWin();
+    vcl::Window& rEditWin = getSwDocShell()->GetView()->GetEditWin();
     Point aFrom = rEditWin.LogicToPixel(ptFrom);
     MouseEvent aClickEvent(aFrom, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
     rEditWin.MouseButtonDown(aClickEvent);
@@ -2031,9 +2027,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157533)
     createSwDoc("tdf157533.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    auto pShell = pDoc->GetDocShell()->GetFEShell();
+    auto pShell = getSwDocShell()->GetFEShell();
     CPPUNIT_ASSERT(pShell);
 
     auto xModel = mxComponent.queryThrow<frame::XModel>();
@@ -2085,7 +2081,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115132)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     std::vector<OUString> vTestTableNames;
@@ -2163,14 +2159,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testXDrawPagesSupplier)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116403)
 {
     createSwDoc("tdf116403-considerborders.odt");
-    SwDoc* pDoc = getSwDoc();
     // Check that before ToX update, the tab stop position is the old one
     uno::Reference<text::XTextRange> xParagraph = getParagraph(2, u"1\t1"_ustr);
     auto aTabs = getProperty<uno::Sequence<style::TabStop>>(xParagraph, u"ParaTabStops"_ustr);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aTabs.getLength());
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(17000), aTabs[0].Position);
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwTOXBase* pTOX = pWrtShell->GetTOX(0);
     CPPUNIT_ASSERT(pTOX);
     pWrtShell->UpdateTableOf(*pTOX);
@@ -2245,7 +2240,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf51223)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     pWrtShell->Insert(u"i"_ustr);
@@ -2506,8 +2501,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     bool bSet = pOpt->IsOnlineSpell();
 
@@ -2526,7 +2520,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
@@ -2577,7 +2571,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
@@ -2630,7 +2624,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
@@ -2670,7 +2664,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
 {
     createSwDoc("tdf65535.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
         = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
@@ -2745,7 +2739,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 
     dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -2813,8 +2807,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 {
     createSwDoc("redline-autocorrect2.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -2842,8 +2835,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
 {
     createSwDoc("redline-autocorrect3.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -2897,8 +2889,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
 {
     // Hungarian test document with right-to-left paragraph setting
     createSwDoc("tdf133589.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // translitere words to Old Hungarian
@@ -2994,8 +2985,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testAutoCorr)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -3020,7 +3010,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf130274)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -3045,7 +3035,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
 {
     createSwDoc("tdf83260-1.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -3152,7 +3142,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf129270)
     createSwDoc("tdf129270.odt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
@@ -3213,7 +3203,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143760WrapContourToOff)
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getShape(1), u"SurroundContour"_ustr));
 
     // Mark the object
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     CPPUNIT_ASSERT(pObject);
@@ -3369,8 +3359,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828_Comment2)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf151828)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // insert a table
     SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
@@ -3405,7 +3394,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
     createSwDoc();
 
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursorShell* pShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pShell);
     SwPaM* pCursor = pShell->GetCursor();
@@ -3440,7 +3429,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacem
     SwCursorShell* pShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pShell);
     SwPaM* pCursor = pShell->GetCursor();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Move the cursor into the fly frame of the document's header
     pWrtShell->GotoFly(u"FrameInHeader"_ustr, FLYCNTTYPE_FRM, false);
@@ -3457,8 +3446,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacem
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158454)
 {
     createSwDoc("tdf158454.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 

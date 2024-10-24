@@ -141,7 +141,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146622)
     createSwDoc("TC-table-del-add.docx");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     CPPUNIT_ASSERT_MESSAGE("redlining should be on",
@@ -195,7 +195,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146962)
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // enable redlining
@@ -247,7 +247,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf159026)
     createSwDoc("tdf159026.docx");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // enable redlining
@@ -302,7 +302,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147347)
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // enable redlining
@@ -353,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153819)
     createSwDoc("tdf153819.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // hide changes
@@ -376,7 +376,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148345)
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // enable redlining
@@ -430,7 +430,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141391)
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // select the table, and copy it into at paragraph start of cell "A2"
@@ -514,7 +514,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148791)
     createSwDoc("tdf116789.fodt");
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // select and copy the table, and Paste As Rows Above
@@ -679,8 +679,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
         return;
     }
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert(u"Hello World"_ustr);
@@ -749,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert(u"Lorem"_ustr);
@@ -812,8 +811,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert(u"This is a test"_ustr);
@@ -845,8 +843,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
 {
     createSwDoc("stylewithlistandindents.fodt");
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     pWrtShell->FwdPara();
@@ -965,8 +962,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     // expands autotext (via F3)
@@ -990,8 +986,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146248)
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Delete the header
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
@@ -1009,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf161741)
     // Redo of header change causes LO to crash
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
     uno::Reference<beans::XPropertySet> xPageStyle(
@@ -1104,8 +1099,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
     xmlDocUniquePtr pLayout = parseLayoutDump();
     assertXPath(pLayout, "/root/page[1]/header/tab/row", 2);
 
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Delete the header
     pWrtShell->ChangeHeaderOrFooter(u"Default Page Style", true, false, false);
 
@@ -1121,8 +1115,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107427)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf141613)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert(u"Test"_ustr);
@@ -1199,8 +1192,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf107494)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133358)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtSh);
 
     pWrtSh->Insert(u"Test"_ustr);
@@ -1522,8 +1514,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145621)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
 {
     createSwDoc("tdf134626.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(u"Apple"_ustr, getParagraph(1)->getString());
 
@@ -1533,8 +1524,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
 
     // Create a new document
     createSwDoc();
-    pDoc = getSwDoc();
-    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Without the fix in place, this test would have crashed here
@@ -1561,8 +1551,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf134626)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf139566)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::Any(sal_Int32(1)) }, { "Columns", uno::Any(sal_Int32(1)) } }));
@@ -1707,8 +1696,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf39828)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
 {
     createSwDoc("tdf39828.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // remove redlines, add a footnote, and change the value
     // of the cell with the footnote
@@ -1746,8 +1734,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
 {
     createSwDoc("tdf157132.odt");
 
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Go to cell A2
     pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
@@ -1804,7 +1791,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147938)
     createSwDoc("tdf147938.fodt");
 
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
     CPPUNIT_ASSERT_EQUAL(u"Bar\nbaz "_ustr,
@@ -1859,8 +1846,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)
     // load a document with table formulas with comma delimiter,
     // but with a document language with default point delimiter
     createSwDoc("tdf148799.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // check formula update
 
@@ -1892,8 +1878,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151993)
     // load a document with table formulas with comma delimiter
     // (with a document language with default comma delimiter)
     createSwDoc("tdf151993.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // check formula update
 
@@ -1920,7 +1905,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148849)
     // load a document with a table and an empty paragraph before the table
     createSwDoc("tdf148849.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // record changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1955,7 +1940,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf150576)
     // load a document with a table and an empty paragraph before the table
     createSwDoc("tdf148849.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // record changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -2325,17 +2310,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132637_protectTrackChanges)
 {
     createSwDoc("tdf132637_protectTrackChanges.doc");
-    SwDoc* pDoc = getSwDoc();
 
     // The password should only prevent turning off track changes, not open as read-only
-    CPPUNIT_ASSERT(!pDoc->GetDocShell()->IsReadOnly());
+    CPPUNIT_ASSERT(!getSwDocShell()->IsReadOnly());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf127652)
 {
     createSwDoc("tdf127652.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     // get a page cursor
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
@@ -2465,7 +2449,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf137964)
 {
     createSwDoc("tdf137964.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
@@ -2748,7 +2732,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
 
     mxComponent = loadFromDesktop(maTempFile.GetURL());
 
-    SwWrtShell* pWrtShell = getSwDoc()->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwDoc* const pMasterDoc(pWrtShell->GetDoc());
     CPPUNIT_ASSERT_EQUAL(
         size_t(2),
@@ -2836,7 +2820,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf97899)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursorShell* pShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pShell);
     SwPaM* pCursor = pShell->GetCursor();
@@ -2939,8 +2923,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 
     // Create a new document
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 
@@ -2967,8 +2950,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCursorPositionAfterUndo)
 {
     createSwDoc("cursor_position_after_undo.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // switch on "Outline Folding" mode
     dispatchCommand(mxComponent, u".uno:ShowOutlineContentVisibilityButton"_ustr, {});
@@ -3009,8 +2991,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
 {
     // Given a document with a first paragraph having a manually set page break with page style
     createSwDoc("pageBreakWithPageStyle.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(u"Right Page"_ustr, pWrtShell->GetCurPageStyle());
 
@@ -3041,8 +3022,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf73483)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf62032ApplyStyle)
 {
     createSwDoc("tdf62032_apply_style.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtSh = getSwDocShell()->GetWrtShell();
 
     pWrtSh->Down(/*bSelect=*/false);
 
@@ -3080,7 +3060,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf158459)
     createSwDoc("tdf158459_tracked_changes_across_nodes.fodt");
     SwDoc* pDoc = getSwDoc();
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->FwdPara(); // Skip first paragraph
     pWrtShell->EndOfSection(true); // Select everything to the end

@@ -414,8 +414,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testStableAtPageAnchoredFlyPosition)
     // if you add a break to page 2, or append some text to page 4 (or just toggle display field names),
     // the page anchored frame on page 4 vanishes, as it is incorrectly moved out of the page bounds.
     createSwDoc("stable-at-page-anchored-fly-position.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // look up the layout position of the page-bound frame on page four
     SwRect aOrigRect = lcl_getVisibleFlyObjRect(pWrtShell);
@@ -564,8 +563,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf135035)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf146704_EndnoteInSection)
 {
     createSwDoc("tdf146704_EndnoteInSection.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the fix, the endnote placed to 2. page
     assertXPath(pXmlDoc, "/root/page", 1);
@@ -574,8 +571,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf146704_EndnoteInSection)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage)
 {
     createSwDoc("tdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage.docx");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the fix, it would be 5 pages, but with the fix the whole document
     // would fit into 1 page, but it will be 2 pages right now, because
@@ -593,8 +588,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccup
     // Note: Somewhy this test miscalculates the layout of the old odt file.
     // It will be 4 pages long, while opened in Writer it is 5 pages long.
     createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_Old.odt");
-    SwDoc* pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     Scheduler::ProcessEventsToIdle();
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page");
@@ -603,8 +596,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf54465_ColumnsWithFootnoteDoNotOccup
     xmlXPathFreeObject(pXmlObj);
 
     createSwDoc("tdf54465_ColumnsWithFootnoteDoNotOccupyEntirePage_New.odt");
-    pDoc = getSwDoc();
-    CPPUNIT_ASSERT(pDoc);
     pXmlDoc = parseLayoutDump();
     assertXPath(pXmlDoc, "/root/page", 1);
 }
@@ -977,8 +968,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159443)
 {
     // Given a document with chart, which have a datatable
     createSwDoc("tdf159443.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1007,8 +997,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159422)
 {
     // Given a document with chart, which have a datatable
     createSwDoc("charttable.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1043,8 +1032,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter4, testTdf159456)
 {
     // Given a document with chart, which have a datatable
     createSwDoc("charttable.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();

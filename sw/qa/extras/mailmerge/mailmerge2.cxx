@@ -389,7 +389,7 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), getSwDocShell()->GetWrtShell()->GetPhyPageNum());
 
     // check grabbag
     uno::Reference<beans::XPropertySet> const xModel(

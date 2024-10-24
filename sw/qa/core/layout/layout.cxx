@@ -93,8 +93,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBorderCollapseCompat)
     // Load a document with a border conflict: top cell has a dotted bottom border, bottom cell has
     // a solid upper border.
     createSwDoc("border-collapse-compat.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
@@ -113,8 +112,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testBtlrTableRowSpan)
     // Load a document which has a table. The A1 cell has btlr text direction, and the A1..A3 cells
     // are merged.
     createSwDoc("btlr-table-row-span.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
@@ -149,8 +147,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTablesMoveBackwards)
 {
     // Load a document with 1 pages: empty content on first page, then 21 tables on the second page.
     createSwDoc("tables-move-backwards.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
     // Delete the content on the first page.
@@ -251,8 +248,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testTextboxModification)
 {
     // Load a document with a textbox in it: the layout will have to position the shape part.
     createSwDoc("textbox-modification.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
 
     // Without the accompanying fix in place, this test would have failed, as the document was
     // marked as modified right after the import.
@@ -375,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->InsertPageBreak();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -435,7 +431,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
 #if !defined(MACOSX) && !defined(_WIN32)
     // Given a document with a non-0 gutter margin.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<beans::XPropertySet> xStandard(
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
@@ -448,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     xStandard->setPropertyValue(u"LeftBorder"_ustr, uno::Any(aBorder));
 
     // Then make sure border is at the left edge of the text area.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -470,8 +465,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
 {
     // Given a document with a table: 2 columns, 5 rows. B2 -> B5 is merged:
     createSwDoc("vmerge-cell-border.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering the table:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -550,8 +544,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testLinkedBullet)
 {
     // Given a document with a graphic bullet, where the image is a linked one:
     createSwDoc("linked-bullet.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -570,8 +563,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
 {
     // Given a table with both outer and inner borders:
     createSwDoc("inner-border.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering table borders:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -686,8 +678,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
 {
     // Given a table with a left and right double border, outer is thick, inner is thin:
     createSwDoc("double-border-vertical.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -735,8 +726,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
 {
     // Given a table with a top and bottom double border, outer is thin, inner is thick:
     createSwDoc("double-border-horizontal.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering table borders:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -784,8 +774,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testParaBorderInCellClip)
 {
     // Given a document which has outside-cell borders defined, which should not be visible:
     createSwDoc("para-border-in-cell-clip.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering those borders:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -805,8 +794,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoublePageBorder)
 {
     // Given a page with a top and bottom double border, outer is thick, inner is thin:
     createSwDoc("double-page-border.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -859,8 +847,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorder)
 
     // Given a document with a top margin and a negative border distance:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
@@ -902,8 +889,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNegativePageBorderNoMargin)
 
     // Given a document with no top margin and a negative border distance:
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert(u"test"_ustr);
     uno::Reference<beans::XPropertySet> xPageStyle(
@@ -939,7 +925,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testFollowTextFlowWrapInBackground)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
     pDoc->getIDocumentSettingAccess().set(DocumentSettingId::USE_FORMER_TEXT_WRAPPING, true);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
@@ -972,13 +958,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testPageRemoveFlyTable)
 {
     // Given a document with a ToC and several tables, one table marked with a bookmark:
     createSwDoc("page-remove-fly-table.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // When updating the ToC and incrementally formatting the document:
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     SfxDispatcher& rDispatcher = *pView->GetViewFrame().GetDispatcher();
     rDispatcher.Execute(FN_UPDATE_TOX);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Reformat();
 
     // Then make sure that the 2nd table below the bookmark has no unwanted top margin:
@@ -1011,7 +996,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testNewFollowTextFlowWrapInBackground)
     // through and follow-text-flow set to true, legacy USE_FORMER_TEXT_WRAPPING is not set:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
     pWrtShell->InsertTable(aTableOptions, 1, 1);
     pWrtShell->MoveTable(GotoPrevTable, fnTableStart);

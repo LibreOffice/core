@@ -62,8 +62,7 @@ public:
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testFootnoteConnect)
 {
     createSwDoc("footnote-connect.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Jump to the start of the next page.
     pWrtShell->SttNxtPg();
     // Remove the page break.
@@ -93,9 +92,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     xTextRange->setString(u"x"_ustr);
 
     // Render the document to a metafile.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDocShell* pDocShell = pTextDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     CPPUNIT_ASSERT(pDocShell);
     std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
     CPPUNIT_ASSERT(xMetaFile);
@@ -139,7 +136,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf156146)
                          getProperty<sal_Int32>(getParagraph(1), u"ParaRightMargin"_ustr));
 
     SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
-        static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
+        static_cast<SwPageFrame*>(getSwDocShell()->GetWrtShell()->GetLayout()->GetLower())
             ->FindFirstBodyContent()));
     CPPUNIT_ASSERT(pFrame);
     // this appears to be the only way to get the actual computed margins
@@ -171,7 +168,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf159903)
                          getProperty<sal_Int32>(getParagraph(1), u"ParaRightMargin"_ustr));
 
     SwTextFrame* const pFrame(dynamic_cast<SwTextFrame*>(
-        static_cast<SwPageFrame*>(getSwDoc()->GetDocShell()->GetWrtShell()->GetLayout()->GetLower())
+        static_cast<SwPageFrame*>(getSwDocShell()->GetWrtShell()->GetLayout()->GetLower())
             ->FindFirstBodyContent()));
     CPPUNIT_ASSERT(pFrame);
     // this appears to be the only way to get the actual computed margins
@@ -572,8 +569,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testLineWidth)
 {
     // Given a document with an as-char image, width in twips not fitting into sal_uInt16:
     createSwDoc("line-width.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     sal_Int32 nOldLeft = pWrtShell->GetCharRect().Left();
 
     // When moving the cursor to the right:
@@ -881,7 +877,6 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
 {
     // Given a document with an as-char image:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr), uno::UNO_QUERY);
@@ -893,7 +888,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xBodyText->insertTextContent(xCursor, xTextContent, false);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pRootFrame = pWrtShell->GetLayout();
     SwFrame* pPageFrame = pRootFrame->GetLower();
     SwFrame* pBodyFrame = pPageFrame->GetLower();
@@ -926,7 +921,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
     // Given a document with A4 paper size, some text, redlining on, but hidden:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     {
         // Set page size to A4.
@@ -966,11 +961,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf120715_CursorMoveWhenTypingSpaceAtCenteredLineEnd)
 {
     createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
-    pDoc->GetDocShell()->GetPreviewBitmap();
+    getSwDocShell()->GetPreviewBitmap();
 
     // Move the cursor to the last character of the document.
     pWrtShell->EndOfSection();
@@ -989,11 +983,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf43100_CursorMoveToSpacesOverMargin)
     // - alignment (left, center, right, justified),
     // - line count (1 line, 2 lines, blank line containing only spaces)
     createSwDoc("tdf43100_tdf120715_cursorOnSpacesOverMargin.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Make a paint to force the call of AddExtraBlankWidth, that calculate width for holePortions.
-    pDoc->GetDocShell()->GetPreviewBitmap();
+    getSwDocShell()->GetPreviewBitmap();
 
     // Move the cursor to the 2. line.
     pWrtShell->Down(/*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1042,8 +1035,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1090,8 +1082,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPlaceholderPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a content control, in placeholder mode:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
 
     // When exporting to PDF:
@@ -1119,8 +1110,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testCheckboxContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a checkbox content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
 
     // When exporting to PDF:
@@ -1150,8 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDropdownContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a dropdown content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DROP_DOWN_LIST);
 
     // When exporting to PDF:
@@ -1206,8 +1195,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testDateContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a date content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::DATE);
 
     // When exporting to PDF:
@@ -1240,8 +1228,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testContentControlPDFFont)
     SwExportFormFieldsGuard g;
     // Given a document with a custom 24pt font size and a content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SfxItemSetFixed<RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE> aSet(pWrtShell->GetAttrPool());
     SvxFontHeightItem aItem(480, 100, RES_CHRATR_FONTSIZE);
     aSet.Put(aItem);
@@ -1273,8 +1260,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testComboContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a combo box content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::COMBO_BOX);
 
     // When exporting to PDF:
@@ -1305,8 +1291,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a rich content control, its value set to "xxx<b>yyy</b>":
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::RICH_TEXT);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1411,8 +1396,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     // Measure the X position of sections after NBSPs in a legacy file (no option value set)
     {
         createSwDoc("tdf41652_legacy.fodt");
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        SwDocShell* pShell = pTextDoc->GetDocShell();
+        SwDocShell* pShell = getSwDocShell();
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
@@ -1424,8 +1408,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     // Measure the X of sections after NBSPs in a file with the option enabled
     {
         createSwDoc("tdf41652_variableNBSPdisabled.fodt");
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        SwDocShell* pShell = pTextDoc->GetDocShell();
+        SwDocShell* pShell = getSwDocShell();
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
@@ -1439,8 +1422,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf41652NBSPWidth)
     // Measure the X of the sections after NBSPs in a file with the option enabled
     {
         createSwDoc("tdf41652_variableNBSPenabled.fodt");
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        SwDocShell* pShell = pTextDoc->GetDocShell();
+        SwDocShell* pShell = getSwDocShell();
         std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
@@ -1624,8 +1606,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
     createSwDoc("tdf129810.odt");
 
     // Render the document to a metafile.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     CPPUNIT_ASSERT(xMetaFile);
 

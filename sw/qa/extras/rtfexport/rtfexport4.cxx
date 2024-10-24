@@ -740,9 +740,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126309)
 CPPUNIT_TEST_FIXTURE(Test, testTdf116358)
 {
     auto verify = [this]() {
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         CPPUNIT_ASSERT(pWrtShell);
 
         // Insert a paragraph break

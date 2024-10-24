@@ -31,7 +31,6 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
 {
     // Given an empty document:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
 
     // When inserting a section with text:
     uno::Sequence<css::beans::PropertyValue> aArgs = {
@@ -42,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertSection)
     dispatchCommand(mxComponent, u".uno:InsertSection"_ustr, aArgs);
 
     // Then make sure that we created a section that covers that text:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->EndOfSection(/*bSelect=*/true);
     SwCursor* pCursor = pWrtShell->GetCursor();

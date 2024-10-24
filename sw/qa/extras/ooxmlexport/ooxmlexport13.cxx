@@ -597,8 +597,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121867)
 {
     loadAndReload("tdf121867.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwEditShell* pEditShell = pTextDoc->GetDocShell()->GetEditShell();
+    SwEditShell* pEditShell = getSwDocShell()->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 3; Actual  : 0', i.e. page width zoom was lost on export.

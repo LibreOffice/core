@@ -264,9 +264,7 @@ DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-te
     // A document with two labels merged with 5 datasets should result in three pages
     executeMailMerge();
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>( mxComponent.get() );
-    CPPUNIT_ASSERT( pTextDoc );
-    SwWrtShell *pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell *pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT( pWrtShell->IsLabelDoc() );
 
     CPPUNIT_ASSERT( mxSwTextDocument );

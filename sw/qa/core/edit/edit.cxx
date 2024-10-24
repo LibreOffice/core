@@ -31,15 +31,14 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineHidden)
 {
     // Given a document with ShowRedlineChanges=false:
     createSwDoc("redline-hidden.fodt");
-    SwDoc* pDoc = getSwDoc();
 
     // When formatting a paragraph by setting the para adjust to center, then make sure setting the
     // new item set on the paragraph doesn't crash:
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     SfxItemSet aSet(pView->GetPool(), svl::Items<RES_PARATR_ADJUST, RES_PARATR_ADJUST>);
     SvxAdjustItem aItem(SvxAdjust::Center, RES_PARATR_ADJUST);
     aSet.Put(aItem);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SetAttrSet(aSet, SetAttrMode::DEFAULT, nullptr, true);
 }
 
@@ -60,8 +59,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSelNormalize)
 {
     // Given a read-only document with a fillable form, the placeholder text is selected:
     createSwDoc("delete-sel-normalize.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->GotoFormControl(/*bNext=*/true);
 

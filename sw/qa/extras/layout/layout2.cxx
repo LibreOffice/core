@@ -513,8 +513,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf150790)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
 {
     createSwDoc("tdf129357.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -530,8 +529,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129357)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 {
     createSwDoc("tdf42748.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -555,8 +553,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
 {
     createSwDoc("tdf115523.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -577,8 +574,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
 {
     createSwDoc("tdf115524.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -599,12 +595,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering2)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 {
     createSwDoc("tdf149710.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // Show Changes
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
 
@@ -614,7 +607,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
     dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
 
@@ -642,12 +635,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149710_RedlineNumberingEditing)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
 {
     createSwDoc("tdf149709.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // Show Changes
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
 
@@ -657,7 +647,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf149709_RedlineNumberingLevel)
     pWrtShell->SplitNode(false);
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
 
@@ -844,8 +834,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf158885_not_compound_remain)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
 {
     createSwDoc("tdf85610.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -864,7 +853,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 {
     createSwDoc("tdf42748.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // create a 3-element list without change tracking
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -893,7 +882,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
 {
     createSwDoc("tdf42748.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // create a 3-element list without change tracking
     SwEditShell* const pEditShell(pDoc->GetEditShell());
@@ -905,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)
     // at least 6 characters with an inner space after stripping white spaces
     // of the redline
     dispatchCommand(mxComponent, u".uno:GoToStartOfDoc"_ustr, {});
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"An Item"_ustr);
 
     // move down first list item with track changes
@@ -928,7 +917,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 {
     createSwDoc("tdf104797.docx");
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
@@ -994,8 +983,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
 {
     createSwDoc("tdf145719.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1011,8 +999,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145719)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
 {
     createSwDoc("changed_table_rows.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1031,8 +1018,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testChangedTableRows)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf155187_TableInTextChange)
 {
     createSwDoc("table_in_text_change.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1050,8 +1036,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
 {
     createSwDoc("tdf42748.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // create a 3-element list without change tracking
     // (because the fixed problem depends on the own changes)
@@ -1062,7 +1046,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
 
     // Show Changes
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
 
@@ -1087,8 +1071,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
 {
     createSwDoc("tdf54819.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // enable Record Changes
     dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, {});
@@ -1097,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
 
     // set Hide Changes mode
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(pLayout->IsHideRedlines());
 
@@ -1120,8 +1102,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideCh
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 {
     createSwDoc("tdf125300.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1144,8 +1125,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116830)
 {
     createSwDoc("tdf116830.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1172,8 +1152,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116830)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114163)
 {
     createSwDoc("tdf114163.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1198,8 +1177,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf131707)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 {
     createSwDoc("tdf122225.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1224,8 +1202,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122225)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
 {
     createSwDoc("tdf125335.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1240,8 +1217,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125335)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
 {
     createSwDoc("legend-itemorder-min.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1256,8 +1232,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134247)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
 {
     createSwDoc("tdf75659.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1274,8 +1249,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf75659)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
 {
     createSwDoc("tdf136816.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1290,8 +1264,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136816)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126425)
 {
     createSwDoc("long_legendentry.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1324,8 +1297,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUnusedOLEprops)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
 {
     createSwDoc("tdf123268.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1343,8 +1315,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf123268)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
 {
     createSwDoc("tdf133005.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1370,8 +1341,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf133005)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
 {
     createSwDoc("tdf115630.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1396,8 +1366,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf115630)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
 {
     createSwDoc("tdf108021.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1412,8 +1381,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108021)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
 {
     createSwDoc("tdf125334.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1429,8 +1397,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125334)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
 {
     createSwDoc("tdf122800.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1445,8 +1412,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122800)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
 {
     createSwDoc("testTruncatedAxisLabel.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1464,8 +1430,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTruncatedAxisLabel)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
 {
     createSwDoc("tdf128996.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1479,8 +1444,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf128996)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
 {
     createSwDoc("tdf126244.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1502,8 +1466,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf126244)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
 {
     createSwDoc("tdf127304.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1523,8 +1486,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf127304)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
 {
     createSwDoc("horizontal_multilevel.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1616,8 +1578,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
 {
     createSwDoc("xaxis-labelbreak.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1655,8 +1616,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146272)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
 {
     createSwDoc("tdf138773.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1674,8 +1634,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138773)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 {
     createSwDoc("tdf124796.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1693,8 +1652,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124796)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
 {
     createSwDoc("tdf72727.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1713,8 +1671,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf72727)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
 {
     createSwDoc("tdf130969.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1729,8 +1686,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130969)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
 {
     createSwDoc("tdf40260.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
@@ -1748,8 +1704,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf40260)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 {
     createSwDoc("tdf129054.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1775,8 +1730,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129054)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
 {
     createSwDoc("testAreaChartNumberFormat.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1791,8 +1745,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129173)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
 {
     createSwDoc("tdf134866.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1807,8 +1760,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134866)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
 {
     createSwDoc("tdf137116.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1828,8 +1780,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137116)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
 {
     createSwDoc("tdf137154.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1849,8 +1800,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf137154)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
 {
     createSwDoc("outside_long_data_label.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1868,8 +1818,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138777)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
 {
     createSwDoc("tdf130031.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1888,8 +1837,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130031)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
 {
     createSwDoc("tdf130242.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1916,8 +1864,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130242)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
 {
     createSwDoc("piechart_leaderline.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1932,8 +1879,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134121)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
 {
     createSwDoc("tdf138018.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1950,8 +1896,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138018)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 {
     createSwDoc("tdf130380.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1974,8 +1919,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf130380)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
 {
     createSwDoc("tdf129095.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -1990,8 +1934,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129095)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf132956)
 {
     createSwDoc("tdf132956.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2078,8 +2021,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkLineHeight)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
 {
     createSwDoc("tdf122014.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2096,8 +2038,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf122014)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
 {
     createSwDoc("tdf134659.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2114,8 +2055,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134659)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134235)
 {
     createSwDoc("tdf134235.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2132,8 +2072,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134235)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
 {
     createSwDoc("tdf134676.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2150,8 +2089,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134676)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
 {
     createSwDoc("tdf134146.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2170,8 +2108,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf134146)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
 {
     createSwDoc("tdf136061.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2185,8 +2122,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf136061)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
 {
     createSwDoc("tdf116925.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2206,8 +2142,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116925)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 {
     createSwDoc("tdf117028.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2226,8 +2161,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf117028)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
 {
     createSwDoc("tdf106390.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2245,8 +2179,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106390)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion1)
 {
     createSwDoc("table-extrusion1.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
@@ -2266,8 +2199,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion1)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableExtrusion2)
 {
     createSwDoc("table-extrusion2.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
 
     // Dump the rendering of the first page as an XML file.
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();

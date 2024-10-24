@@ -341,8 +341,7 @@ void SwModelTestBase::selectShape(int number)
     xSelectionSupplier->select(uno::Any(getShape(number)));
     CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     // Make sure SwTextShell is replaced with SwDrawShell right now, not after 120 ms, as set in the
     // SwView ctor.
     pView->StopShellTimer();

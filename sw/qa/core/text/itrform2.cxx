@@ -207,8 +207,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckedCheckboxContentControlPDF)
     SwExportFormFieldsGuard g;
     // Given a file with a checked checkbox content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->InsertContentControl(SwContentControlType::CHECKBOX);
     // Toggle it, so we get a checked one:
     SwTextContentControl* pTextContentControl = pWrtShell->CursorInsideContentControl();

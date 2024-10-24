@@ -812,9 +812,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf121440)
 {
     createSwDoc("tdf121440.docx");
     // Insert some text in front of footnote
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwRootFrame* pLayout(pWrtShell->GetLayout());
     CPPUNIT_ASSERT(!pLayout->IsHideRedlines());
     pWrtShell->Insert(u"test"_ustr);
@@ -850,9 +848,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127825)
     createSwDoc("tdf127825.docx");
     // The document has a shape with Japanese-style text in it. The shape has relative size and also
     // has automatic height.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     CPPUNIT_ASSERT(pLayout);
@@ -952,9 +948,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129659)
 CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 {
     createSwDoc("tdf129912.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Goto*FootnoteAnchor iterates the footnotes in a ring, so we need the amount of footnotes to stop the loop

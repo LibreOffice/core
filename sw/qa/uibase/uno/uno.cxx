@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPosition)
     // Given a document with 2 characters, and the pixel position of the point between them:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Insert2(u"AZ"_ustr);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -124,7 +124,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionGraphic)
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xBodyText->insertTextContent(xCursor, xTextContent, false);
     SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwFrame* pPage = pLayout->GetLower();
@@ -175,8 +175,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testCreateTextRangeByPixelPositionAtPageGr
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
     uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
     xBodyText->insertTextContent(xCursor, xTextContent, false);
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwFrame* pPage = pLayout->GetLower();
@@ -249,8 +248,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetDocumentProperties)
 {
     // Given a document with 3 custom properties: 2 Zotero ones and one other:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel(),
                                                                uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDP = xDPS->getDocumentProperties();
@@ -323,8 +321,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetFields)
 {
     // Given a document with a refmark:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     OUString aName(u"ZOTERO_ITEM CSL_CITATION {} "_ustr);
     for (int i = 0; i < 5; ++i)
     {
@@ -390,8 +387,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
 
     // When stepping into the fieldmark with the cursor and getting the command value for
     // uno:TextFormField:
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     tools::JsonWriter aJsonWriter;
@@ -455,8 +451,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetBookmark)
 
     // When stepping into the bookmark with the cursor and getting the command value for
     // .uno:Bookmark:
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     tools::JsonWriter aJsonWriter;
@@ -489,8 +484,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetField)
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
 
     // When in the refmark with the cursor and getting the command value for .uno:Field:
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     tools::JsonWriter aJsonWriter;

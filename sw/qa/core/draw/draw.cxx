@@ -36,7 +36,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxDeleteAsChar)
     // Load a document with an as-char shape in it that has a textbox and an image in it.
     createSwDoc("as-char-textbox.docx");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     sal_Int32 nActual = pPage->GetObjCount();
     // 3 objects on the draw page: a shape + fly frame pair and a Writer image.
@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
     // - picture
     createSwDoc("textbox-undo-ordnum.docx");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const auto& rFormats = *pDoc->GetSpzFrameFormats();
     // Test the state before del + undo.
     for (const auto& pFormat : rFormats)

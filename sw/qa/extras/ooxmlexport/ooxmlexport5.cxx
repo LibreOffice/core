@@ -116,24 +116,18 @@ CPPUNIT_TEST_FIXTURE(Test, testfdo79008)
     assertXPath(pXmlSettings, "/w:comments/w:comment", 1);
 
     // Read-only is set, but it is not enforced, so it should be off...
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+    CPPUNIT_ASSERT(!getSwDocShell()->IsSecurityOptOpenReadOnly());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf120852_readOnlyProtection)
 {
     createSwDoc("tdf120852_readOnlyProtection.docx");
     // Read-only is set, so Enforcement must enable it.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+    CPPUNIT_ASSERT(getSwDocShell()->IsSecurityOptOpenReadOnly());
 
     saveAndReload(mpFilter);
 
-    pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT(pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+    CPPUNIT_ASSERT(getSwDocShell()->IsSecurityOptOpenReadOnly());
 
     xmlDocUniquePtr pXmlSettings = parseExport(u"word/settings.xml"_ustr);
     assertXPath(pXmlSettings, "/w:settings/w:documentProtection", "enforcement", u"1");
@@ -146,9 +140,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf120852_readOnlyUnProtected)
     auto verify = [this](bool bIsExport = false) {
         // Readonly is not enforced, just a suggestion,
         // so when a section is protected, the document should enable forms protection.
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
-        CPPUNIT_ASSERT(pTextDoc);
-        CPPUNIT_ASSERT(!pTextDoc->GetDocShell()->IsSecurityOptOpenReadOnly());
+        CPPUNIT_ASSERT(!getSwDocShell()->IsSecurityOptOpenReadOnly());
 
         uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY_THROW);

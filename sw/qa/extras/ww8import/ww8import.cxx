@@ -240,9 +240,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf110987)
     // The input document is an empty .doc, but without file name
     // extension. Check that it was loaded as a normal .doc document,
     // and not a template.
-    SwXTextDocument* pTextDoc     = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    OUString sFilterName = pTextDoc->GetDocShell()->GetMedium()->GetFilter()->GetFilterName();
+    OUString sFilterName = getSwDocShell()->GetMedium()->GetFilter()->GetFilterName();
     CPPUNIT_ASSERT(sFilterName != "MS Word 97 Vorlage");
 }
 

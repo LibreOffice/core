@@ -299,7 +299,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
 
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // Add 5 empty paragraphs
@@ -335,8 +335,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159816)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf34804)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Simulate a keyboard shortcut to SID_ATTR_CHAR_COLOR2 (which must use the shared button color)
     dispatchCommand(mxComponent, u".uno:FontColor"_ustr, {});
@@ -354,7 +353,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
     // Test to see if preceding space is cut when cutting a word with track changes (redline) on
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Insert(u"New World!\""_ustr);
     // Assert that the string, New World!", is inserted correctly into the document
@@ -413,7 +412,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     CPPUNIT_ASSERT(pTextDoc);
 
     // Check that the particular setting is turned on by default
-    const SwViewOption* pVwOpt = pTextDoc->GetDocShell()->GetWrtShell()->GetViewOptions();
+    const SwViewOption* pVwOpt = getSwDocShell()->GetWrtShell()->GetViewOptions();
     CPPUNIT_ASSERT(pVwOpt);
     CPPUNIT_ASSERT(pVwOpt->IsEncloseWithCharactersOn());
 
@@ -490,8 +489,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
 {
     createSwDoc("tdf159054_disableOutlineNumbering.docx");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     const uno::Reference<text::XTextRange> xPara1 = getParagraph(1, u"Heading A"_ustr);
     const uno::Reference<text::XTextRange> xPara2 = getParagraph(2, u"Heading B"_ustr);
@@ -613,8 +611,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158375_ole_object_disable)
 
     // Load a document with a Draw doc in it.
     createSwDoc("ole-save-while-edit.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     selectShape(1);
 
@@ -731,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
     createSwDoc();
     SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     emulateTyping(*pDoc, u"Some Text");
@@ -759,7 +756,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Pargraph)
     createSwDoc("tdf162326.odt");
     SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
@@ -788,7 +785,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf162326_Character)
     createSwDoc("tdf162326.odt");
     SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pDoc);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,

@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf130179)
                                        &aFrameSet, &aGrfSet, nullptr));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
 
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     selectShape(1);
 
     std::unique_ptr<SfxPoolItem> pItem;
@@ -91,8 +91,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
 #if !defined(MACOSX) && !defined(_WIN32)
     // Create a document with a rectangle in it.
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     Point aStartPos(1000, 1000);
     pWrtShell->BeginCreate(SdrObjKind::Rectangle, aStartPos);
     Point aMovePos(2000, 2000);
@@ -100,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     pWrtShell->EndCreate(SdrCreateCmd::ForceEnd);
 
     // Start shape text edit.
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     // Select the shape.
     selectShape(1);
     // Start the actual text edit.
@@ -175,7 +174,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
 {
     // Given a document with a bibliography field:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -194,7 +192,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyUrlContextMenu)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When selecting the field and opening the context menu:
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher();
@@ -265,7 +263,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
 {
     // Given a document with a bibliography field's local copy:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -285,7 +282,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testBibliographyLocalCopyContextMenu)
     xText->insertTextContent(xCursor, xContent, /*bAbsorb=*/false);
 
     // When selecting the field and opening the context menu:
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SfxDispatcher* pDispatcher = pDocShell->GetViewShell()->GetViewFrame().GetDispatcher();
@@ -304,7 +301,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
 {
     // Given a document with a content control and a cursor inside the content control:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -315,7 +311,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testContentControlPageBreak)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr), uno::UNO_QUERY);
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
@@ -347,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormField)
     dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // Then make sure that it's type/name is correct:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
     pCursor->SttEndDoc(/*bSttDoc=*/true);
     sw::mark::Fieldmark* pFieldmark
@@ -421,8 +417,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmarks)
     dispatchCommand(mxComponent, u".uno:TextFormFields"_ustr, aArgs);
 
     // Then make sure that the document text contains the new field results:
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     SwCursor* pCursor = pWrtShell->GetCursor();
     OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
@@ -471,8 +466,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testGotoMark)
 {
     // Given a document with 2 paragraphs, a bookmark on the second one:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SplitNode();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->SetBookmark(vcl::KeyCode(), u"mybookmark"_ustr);
@@ -499,7 +493,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmarks)
     // Given a document with 2 bookmarks, first covering "B" and second covering "D":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"ABCDE"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -573,7 +567,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertFieldmarkReadonly)
     };
     dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursor* pCursor = pWrtShell->GetCursor();
     pCursor->SttEndDoc(/*bSttDoc=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -783,14 +777,13 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmarks)
 {
     // Given a document with two refmarks, one is not interesting the other is a citation:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(u"Name"_ustr, uno::Any(u"some other old refmark"_ustr)),
         comphelper::makePropertyValue(u"Content"_ustr, uno::Any(u"some other old content"_ustr)),
     };
     dispatchCommand(mxComponent, u".uno:InsertField"_ustr, aArgs);
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->SplitNode();
     pWrtShell->SttEndDoc(/*bStt=*/false);
@@ -855,8 +848,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateFieldmark)
     dispatchCommand(mxComponent, u".uno:TextFormField"_ustr, aArgs);
 
     // When updating that fieldmark to have new field command & result:
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/false);
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     std::vector<beans::PropertyValue> aArgsVec = comphelper::JsonToPropertyValues(R"json(
@@ -993,7 +985,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteFieldmarks)
     // i.e. the fieldmarks were not deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          pDoc->getIDocumentMarkAccess()->getAllMarksCount());
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     SwCursor* pCursor = pWrtShell->GetCursor();
     OUString aActual = pCursor->Start()->GetNode().GetTextNode()->GetText();
@@ -1005,7 +997,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateBookmark)
     // Given a document with a bookmarks, covering "BC":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"ABCD"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1055,7 +1047,6 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
 {
     // Given a document with a refmark:
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"TypeName"_ustr, uno::Any(u"SetRef"_ustr)),
         comphelper::makePropertyValue(u"Name"_ustr,
@@ -1094,7 +1085,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateRefmark)
     dispatchCommand(mxComponent, u".uno:UpdateField"_ustr, aArgs);
 
     // Then make sure that the document text features the new content:
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: new content
@@ -1108,7 +1099,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDeleteBookmarks)
     // Given a document with 2 bookmarks, first covering "B" and second covering "D":
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"ABCDE"_ustr);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
@@ -1247,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     // Given an empty doc:
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwCursorShell* pShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pShell);
     SwPaM* pCursor = pShell->GetCursor();

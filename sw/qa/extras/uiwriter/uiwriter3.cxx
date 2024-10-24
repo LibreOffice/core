@@ -45,8 +45,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPaste)
     {
         createSwDoc();
 
-        SwDoc* const pDoc = getSwDoc();
-        SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
         pWrtShell->Insert(u"AAA"_ustr);
         pWrtShell->SplitNode();
         pWrtShell->Insert(u"BBB"_ustr);
@@ -60,8 +59,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testPlaceholderHTMLPaste)
     createSwDoc("placeholder-bold.fodt");
 
     // select placeholder field
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
@@ -343,8 +341,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf114973)
 {
     createSwDoc("tdf114973.fodt");
 
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(true);
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
@@ -679,8 +676,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148868)
 {
     createSwDoc("tdf148868.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -1019,7 +1015,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf61154)
 {
     createSwDoc("tdf61154.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->GotoNextTOXBase();
 
@@ -1077,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf100691)
 {
     createSwDoc("tdf100691.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->GotoNextTOXBase();
 
@@ -1154,8 +1150,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132321)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135056)
 {
     createSwDoc("tdf135056.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pWrtShell->GetTOXCount());
 
@@ -1230,8 +1225,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150845)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147961)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1253,7 +1247,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // insert empty paragraph and heading text
     pWrtShell->SplitNode();
@@ -1479,8 +1473,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130094)
 {
     createSwDoc("tdf130094.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(u"First"_ustr, getParagraph(1)->getString());
     CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, getParagraph(2)->getString());
@@ -1520,8 +1513,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130094)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 {
     createSwDoc("tdf135733.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -1606,9 +1598,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf124722)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
 {
     createSwDoc("udindex3.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwView& rView(*pDoc->GetDocShell()->GetView());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView& rView(*getSwDocShell()->GetView());
 
     // update indexes
     for (auto i = pWrtShell->GetTOXCount(); 0 < i;)
@@ -2409,8 +2400,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf111969_lastHalfcharOfSelection)
     // Given a document with a selected character,
     // the last half of the character should also be considered to be "in the selection"
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
     // move the cursor after the "o" (this is better/safer than testing cursor at end of paragraph)
     pWrtShell->Insert2(u"Hello!"_ustr);

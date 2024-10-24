@@ -158,8 +158,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Insert(u"1"_ustr);
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"1"_ustr);
@@ -183,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf70423)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     constexpr sal_Int32 size = 30000; // It should be multiple of 10
     constexpr sal_Int32 parts = size / 10;

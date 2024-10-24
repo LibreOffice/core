@@ -58,8 +58,7 @@ protected:
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 {
     createSwDoc("tdf47471_paraStyleBackground.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(u"00Background"_ustr,
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
@@ -142,8 +141,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 {
     // Copy the first paragraph of the document.
     createSwDoc("tdf101534.fodt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
@@ -171,12 +169,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf101534)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testExtendedSelectAllHang)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->InsertFootnote(u""_ustr);
     pWrtShell->StartOfSection();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     SfxStringItem aLangString(SID_LANGUAGE_STATUS, u"Default_Spanish (Bolivia)"_ustr);
     // this looped
     pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_LANGUAGE_STATUS, SfxCallMode::SYNCHRON,
@@ -186,8 +183,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testExtendedSelectAllHang)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Insert(u" foo"_ustr);
     pWrtShell->SttEndDoc(true);
@@ -220,8 +216,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineInHiddenSection)
 {
     createSwDoc();
-    SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->SplitNode();
     pWrtShell->Insert(u"foo"_ustr);
@@ -279,7 +274,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
 {
     createSwDoc("try2.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
     // these are required so that IsBlank() is true
@@ -319,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Insert(u"A"_ustr);
 
@@ -394,8 +389,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bReplaceStyles = true;
     SvxSwAutoFormatFlags flags(*SwEditShell::GetAutoFormatFlags());
@@ -481,9 +475,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134250)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134436)
 {
     createSwDoc("tdf134436.fodt");
-    SwDoc* pDoc = getSwDoc();
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -613,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136452)
 
     SwNodeOffset const nNodes(pDoc->GetNodes().Count());
 
-    SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+    SwWrtShell* const pWrtShell(getSwDocShell()->GetWrtShell());
 
     // first deletion spanning 2 sections
     pWrtShell->SttEndDoc(false);
@@ -657,7 +650,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)
 {
     createSwDoc("tdf136453.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+    SwWrtShell* const pWrtShell(getSwDocShell()->GetWrtShell());
 
     SwNodeOffset const nNodes(pDoc->GetNodes().Count());
 
@@ -703,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137245)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
     corr.GetSwFlags().bSetBorder = true;
     // sigh, it's a global... err i mean Singleton design pattern *eyeroll*
@@ -786,7 +779,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132236)
     SwDoc* pDoc = getSwDoc();
 
     // select everything and delete
-    SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+    SwWrtShell* const pWrtShell(getSwDocShell()->GetWrtShell());
     pWrtShell->Down(true);
     pWrtShell->Down(true);
     pWrtShell->Down(true);
@@ -805,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf131912)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
 
@@ -954,7 +947,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140007)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Insert(u"foo"_ustr);
     pWrtShell->SplitNode();
@@ -1029,7 +1022,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139982)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     // turn on redlining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1080,7 +1073,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf135976)
 {
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Insert(u"foobar"_ustr);
 
@@ -1210,7 +1203,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
     CPPUNIT_ASSERT_EQUAL(u"dolor sit"_ustr, getParagraph(2)->getString());
 
     // move down second paragraph with change tracking
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Up(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -1246,7 +1239,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
     CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
     // move down once and move up two times second paragraph with change tracking
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     dispatchCommand(mxComponent, u".uno:MoveDown"_ustr, {});
     dispatchCommand(mxComponent, u".uno:MoveUp"_ustr, {});
@@ -1322,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819)
                                pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // remove first paragraph with paragraph break
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     dispatchCommand(mxComponent, u".uno:Cut"_ustr, {});
@@ -1362,7 +1355,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
                                pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // remove heading with paragraph break
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -1399,7 +1392,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf54819_keep_numbering_with_Undo)
 
     // heading, manual test is correct
     // TODO: it works well, but the test fails...
-    // SwWrtShell* const pWrtShell2 = pDoc->GetDocShell()->GetWrtShell();
+    // SwWrtShell* const pWrtShell2 = getSwDocShell()->GetWrtShell();
     // CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"),
     //                     getProperty<OUString>(getParagraph(2), "ParaStyleName"));
     // CPPUNIT_ASSERT_EQUAL(OUString("Outline"),
@@ -1453,7 +1446,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Undo)
                                pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // remove only end part of the heading and the next numbered paragraph with paragraph break
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -1555,7 +1548,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
                                pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // remove only end part of the heading and the next numbered paragraph with paragraph break
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -1609,7 +1602,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
     createSwDoc();
     SwDoc* const pDoc = getSwDoc();
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     // hide
     dispatchCommand(mxComponent, u".uno:ShowTrackedChanges"_ustr, {});
@@ -1647,7 +1640,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
     pWrtShell->Insert(u"foo"_ustr);
@@ -1698,7 +1691,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     // need 2 paragraphs to get to the bMoveNds case
     pWrtShell->Insert(u"foo"_ustr);
@@ -1745,7 +1738,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
 
     pWrtShell->Insert(u"Abc"_ustr);
@@ -1775,8 +1768,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
 {
     createSwDoc();
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // somehow bug happens only with 2 tables
@@ -1833,8 +1825,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf80194_autoSubscript)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
     createSwDoc("tdf64242_optimizeTable.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -1877,8 +1868,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf45525)
 {
     createSwDoc("tdf45525.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -1911,8 +1901,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf45525)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 {
     createSwDoc("tdf126784_distributeSelectedColumns.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -1939,8 +1928,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf126784_distributeSelectedColumns)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
 {
     createSwDoc("tdf144317.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
@@ -1970,8 +1958,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144317)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
 {
     createSwDoc("tdf108687_tabstop.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwNodeOffset nStartIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), nStartIndex);
 
@@ -2005,7 +1992,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // join paragraphs by removing the end of the first one with paragraph break
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
@@ -2037,7 +2024,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf144058)
 
     // join first and last but one paragraphs by removing the end of the first paragraph
     // with paragraph break, and by removing two tables of the selected range completely
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Down(/*bSelect=*/true);
     pWrtShell->Down(/*bSelect=*/true);
@@ -2078,7 +2065,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 {
     // check handling of overlapping redlines
     createSwDoc("tdf119019.docx");
-    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus."_ustr,
                          getParagraph(2)->getString());
@@ -2088,7 +2074,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119019)
 
     // delete last word of the second paragraph to remove tracked paragraph formatting
     // of this paragraph to track and show word deletion correctly.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -2127,7 +2113,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119824)
 
     // delete last word of the third paragraph to remove tracked paragraph formatting
     // of this paragraph to track and show word deletion correctly.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
@@ -2188,7 +2174,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Set Heading 1 paragraph style in the 3th paragraph.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
@@ -2208,7 +2194,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
 {
     createSwDoc("num-parent-style.docx");
-    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"Heading 2"_ustr,
                          getProperty<OUString>(getParagraph(2), u"ParaStyleName"_ustr));
@@ -2226,7 +2211,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
 
     // set Heading 2 style of paragraph 2 to Heading 1
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
@@ -2290,7 +2275,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     // save it to DOCX
     saveAndReload(u"Office Open XML Text"_ustr);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwViewShell* pViewShell = getSwDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->Reformat();
 
@@ -2310,7 +2294,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
 
     // set Heading 2 style of paragraph 2 to Heading 1
 
-    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
@@ -2370,7 +2354,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
 {
     createSwDoc("tdf76817.docx");
-    SwDoc* pDoc = getSwDoc();
 
     CPPUNIT_ASSERT_EQUAL(u"Heading 1"_ustr,
                          getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
@@ -2397,7 +2380,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
 
     // set Heading 2 style of paragraph 2 to Heading 1
 
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
@@ -2438,8 +2421,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonSmallTable)
 {
     // The floating table in the test document is too small, so we don't provide an unfloat button
     createSwDoc("small_floating_table.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     const SwSortedObjs* pAnchored
@@ -2471,8 +2453,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButton)
         OString sFailureMessage = OString::Concat("Failure in the test file: ") + sTestFileName;
 
         createSwDoc(sTestFileName.getStr());
-        SwDoc* pDoc = getSwDoc();
-        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
 
         const SwSortedObjs* pAnchored;
@@ -2499,8 +2480,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloatButtonReadOnlyMode)
 {
     // In read only mode we don't show the unfloat button even if we have a multipage floating table
     createSwDoc("unfloatable_floating_table.odt");
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
     pWrtShell->SetReadonlyOption(true);
 
@@ -2534,8 +2514,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testUnfloating)
 
         // Test what happens when pushing the unfloat button
         createSwDoc(sTestFileName.getStr());
-        SwDoc* pDoc = getSwDoc();
-        SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         CPPUNIT_ASSERT_MESSAGE(sFailureMessage.getStr(), pWrtShell);
 
         SwFlyFrame* pFlyFrame;
@@ -2631,7 +2610,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122893)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Set center-aligned paragraph with preset double line spacing in the 3th paragraph.
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
@@ -2676,7 +2655,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122901)
 
     // Increase paragraph borders in the 3th paragraph, similar to the default icon of the UI
     // "Increase Paragraph Spacing".
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->EndPara(/*bSelect=*/false);
@@ -2697,7 +2676,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf122942)
 {
     createSwDoc("tdf122942.odt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Do the moral equivalent of mouse button down, move and up.
     // Start creating a custom shape that overlaps with the rounded rectangle
@@ -2751,12 +2730,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf132160)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
 {
     createSwDoc("tdf132160.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // select and delete a word
@@ -2776,12 +2754,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137526)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
 {
     createSwDoc("tdf132160.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // select and delete a word letter by letter
@@ -2806,12 +2783,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137684)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137503)
 {
     createSwDoc("tdf132160.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // select and delete the first two paragraphs
@@ -2838,7 +2814,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
 {
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
 
     // turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert
@@ -2866,12 +2842,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138605)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf138135)
 {
     createSwDoc("tdf132160.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // select and delete a word letter by letter by using backspace
@@ -2910,12 +2885,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf52391)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
 {
     createSwDoc("tdf132160.odt");
-    SwDoc* pDoc = getSwDoc();
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // delete a word at the end of the paragraph.
@@ -2928,7 +2902,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137771)
     CPPUNIT_ASSERT(getParagraph(1)->getString().endsWith("to be "));
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -2968,7 +2942,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142130)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -3009,7 +2983,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142196)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
 
@@ -3054,7 +3028,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf142700)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
 
@@ -3093,7 +3067,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // turn on red-lining and show changes
@@ -3123,7 +3097,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
     CPPUNIT_ASSERT_EQUAL(u"dolor sit amet."_ustr, getParagraph(2)->getString());
 
     // Dump the rendering of the first page as an XML file.
-    SwDocShell* pShell = pDoc->GetDocShell();
+    SwDocShell* pShell = getSwDocShell();
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
     MetafileXmlDump dumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
@@ -3145,7 +3119,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testJoinParaChangesInMargin)
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // turn on red-lining and show changes
@@ -3183,7 +3157,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140757)
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
 
-    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsShowChangesInMargin());
 
     // turn on red-lining and show changes
