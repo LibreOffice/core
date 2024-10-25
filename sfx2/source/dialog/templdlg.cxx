@@ -34,6 +34,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/lok.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -255,6 +256,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl(SfxBindings* pB, weld
 {
     mxFilterLb->set_help_id(HID_TEMPLATE_FILTER);
     mxPreviewCheckbox->set_active(officecfg::Office::Common::StylesAndFormatting::Preview::get());
+    if (comphelper::LibreOfficeKit::isActive())
+        mxPreviewCheckbox->hide();
 }
 
 void SfxTemplateDialog_Impl::EnableEdit(bool bEnable, StyleList* rStyleList)
@@ -806,6 +809,10 @@ SfxTemplateDialog_Impl::SfxTemplateDialog_Impl(SfxBindings* pB, SfxTemplatePanel
     m_xActionTbR->set_item_menu("newmenu", m_xToolMenu.get());
     m_xToolMenu->connect_activate(LINK(this, SfxTemplateDialog_Impl, ToolMenuSelectHdl));
     m_xActionTbR->set_item_help_id("update", HID_TEMPLDLG_UPDATEBYEXAMPLE);
+
+    // Features not working in LOK yet
+    if (comphelper::LibreOfficeKit::isActive())
+        m_xActionTbR->hide();
 
     Initialize();
 }
