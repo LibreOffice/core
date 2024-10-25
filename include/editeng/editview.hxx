@@ -37,6 +37,12 @@
 #include <editeng/editengdllapi.h>
 
 
+#if defined(YRS)
+class IYrsTransactionSupplier;
+typedef struct TransactionInner YTransaction;
+typedef struct YTextEvent YTextEvent;
+#endif
+
 class EditTextObject;
 class EditEngine;
 class ImpEditEngine;
@@ -403,6 +409,14 @@ public:
     /// To inform editeng that negated x document coordinates are in use.
     void SetNegativeX(bool bSet);
     bool IsNegativeX() const;
+
+#if defined(YRS)
+    void SetYrsCommentId(IYrsTransactionSupplier *, OString const& rId);
+    void YrsWriteEEState();
+    void YrsReadEEState(YTransaction *);
+    void YrsApplyEEDelta(YTransaction *, YTextEvent const* pEvent);
+    OString GetYrsCommentId() const;
+#endif
 };
 
 #endif // INCLUDED_EDITENG_EDITVIEW_HXX

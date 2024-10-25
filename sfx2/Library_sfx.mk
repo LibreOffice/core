@@ -44,6 +44,10 @@ $(eval $(call gb_Library_set_include,sfx,\
 
 $(eval $(call gb_Library_add_defs,sfx,-DSFX2_DLLIMPLEMENTATION))
 
+ifneq ($(WITH_YRS),)
+$(eval $(call gb_Library_add_defs,sfx,-DYRS))
+endif
+
 $(eval $(call gb_Library_use_libraries,sfx,\
     basegfx \
     comphelper \

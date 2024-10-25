@@ -21,16 +21,29 @@
 
 #include <IDocumentState.hxx>
 
+#if defined(YRS)
+#include <rtl/ref.hxx>
+#include <com/sun/star/connection/XAcceptor.hpp>
+#include <com/sun/star/connection/XConnector.hpp>
+struct SwPosition;
+#endif
+
 class SwDoc;
 
 
 namespace sw {
+
+#if defined(YRS)
+class YrsThread;
+class YrsTransactionSupplier;
+#endif
 
 class DocumentStateManager final : public IDocumentState
 {
 
 public:
     DocumentStateManager( SwDoc& i_rSwdoc );
+    ~DocumentStateManager();
 
     void SetModified() override;
     void ResetModified() override;
@@ -55,6 +68,26 @@ private:
     bool mbUpdateExpField;    //< TRUE: Update expression fields.
     bool mbNewDoc        ;    //< TRUE: new Doc.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.
+
+#if defined(YRS)
+    friend class YrsThread;
+    ::rtl::Reference<YrsThread> m_pYrsReader;
+    css::uno::Reference<css::connection::XAcceptor> m_xAcceptor;
+    ::std::unique_ptr<YrsTransactionSupplier> m_pYrsSupplier;
+
+public:
+    void YrsInitAcceptor() override;
+    void YrsInitConnector(css::uno::Any const& raConnector) override;
+    IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) override;
+    void YrsCommitModified() override;
+
+    void YrsNotifySetResolved(OString const& rCommentId, SwPostItField const& rField) override;
+    void YrsAddCommentImpl(SwPosition const& rPos, OString const& rCommentId) override;
+    void YrsAddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
+            SwPostItField const& rField, bool isInsert) override;
+    void YrsRemoveCommentImpl(OString const& rCommentId) override;
+    void YrsRemoveComment(SwPosition const& rPos, OString const& rCommentId) override;
+#endif
 };
 
 }

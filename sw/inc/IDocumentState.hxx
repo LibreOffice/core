@@ -19,6 +19,14 @@
 
 #pragma once
 
+#if defined(YRS)
+#include <com/sun/star/uno/Any.h>
+#include <editeng/yrs.hxx>
+#include <optional>
+struct SwPosition;
+class SwPostItField;
+#endif
+
 /** Get information about the current document state
  */
 class IDocumentState
@@ -46,6 +54,21 @@ public:
 
     virtual bool IsEnableSetModified() const = 0;
     virtual void SetEnableSetModified(bool bEnableSetModified) = 0;
+
+#if defined(YRS)
+    virtual void YrsInitAcceptor() = 0;
+    virtual void YrsInitConnector(css::uno::Any const& raConnector) = 0;
+    virtual IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) = 0;
+    virtual void YrsCommitModified() = 0;
+
+    virtual void YrsNotifySetResolved(OString const& rCommentId, SwPostItField const& rField) = 0;
+    virtual void YrsAddCommentImpl(SwPosition const& rPos, OString const& rCommentId) = 0;
+    virtual void YrsAddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
+                               SwPostItField const& rField, bool isInsert)
+        = 0;
+    virtual void YrsRemoveCommentImpl(rtl::OString const& rCommentId) = 0;
+    virtual void YrsRemoveComment(SwPosition const& rPos, rtl::OString const& rCommentId) = 0;
+#endif
 
 protected:
     virtual ~IDocumentState(){};

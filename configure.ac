@@ -2830,6 +2830,12 @@ AC_ARG_WITH(hamcrest,
          --without-junit disables those tests. Not relevant in the --without-java case.]),
 ,with_hamcrest=yes)
 
+AC_ARG_WITH(yrs,
+    AS_HELP_STRING([--with-yrs=<absolute path to yrs build>],
+        [Specifies the built yrs git repo for very experimental experiments.]),
+    WITH_YRS=$withval)
+AC_SUBST(WITH_YRS)
+
 AC_ARG_WITH(perl-home,
     AS_HELP_STRING([--with-perl-home=<abs. path to Perl 5 home>],
         [If you have installed Perl 5 Distribution, on your system, please

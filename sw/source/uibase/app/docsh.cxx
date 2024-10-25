@@ -1209,6 +1209,22 @@ void SwDocShell::LoadingFinished()
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( m_xDoc->getIDocumentState().IsModified() && m_xDoc->getIDocumentLinksAdministration().LinksUpdated() );
 
+#if defined(YRS)
+#if 0
+    // this doesn't even filter as advertised!
+    auto const args{GetBaseModel()->getArgs2({u"YrsConnect"_ustr})};
+#endif
+    // when loading, it is only available from SfxMedium, not SfxBaseModel
+    for (auto const& rArg : GetMedium()->GetArgs())
+    {
+        if (rArg.Name == "YrsConnect")
+        {
+            m_xDoc->getIDocumentState().YrsInitConnector(rArg.Value);
+            break;
+        }
+    }
+#endif
+
     FinishedLoading();
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)

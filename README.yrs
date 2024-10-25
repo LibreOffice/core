@@ -1,0 +1,46 @@
+
+## Experimental Writer comments editing collaboration with yrs
+
+### How to build
+
+First, build yrs C FFI bindings:
+
+```
+ git clone https://github.com/y-crdt/y-crdt.git
+ cd y-crdt
+ git checkout v0.23.1
+ cargo build -p yffi
+```
+
+Then, put the yrs build directory in autogen.input:
+
+`--with-yrs=/path/to/y-crdt`
+
+### How to run
+
+To prevent crashes at runtime, set the environment variable
+EDIT_COMMENT_IN_READONLY_MODE=1 and open documents in read-only mode: only
+inserting/deleting comments, and editing inside comments will be enabled.
+
+Currently, communication happens over a hard-coded pipe:
+
+* start an soffice with YRSACCEPT=1 load a Writer document and it will listen
+  and block until connect
+  (you can also create a new Writer document but that will be boring if all
+  you can do is insert comments into empty doc)
+
+* start another soffice with a different user profile, create new Writer
+  document, and it will connect and load the document from the other side
+
+All sorts of paragraph and character formattings should work inside comments.
+
+Inserting hyperlinks also works, although sadly i wasn't able to figure out
+how to enable the menu items in read-only mode, so it only works in editable
+mode.
+
+Undo/Redo doesn't work at all, it's disabled in readonly mode anyway.
+
+Switching to editable mode is also possible, but only comment-related editing
+is synced via yrs, so if other editing operations change the positions of
+comments, a crash will be inevitable.
+

@@ -4449,4 +4449,21 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 endif
 
+ifneq ($(WITH_YRS),)
+
+define gb_LinkTarget__use_yrs
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(WITH_YRS)/tests-ffi/include \
+)
+$(call gb_LinkTarget_add_defs,$(1),-DYRS)
+$(call gb_LinkTarget_add_libs,$(1),$(WITH_YRS)/target/debug/libyrs.a)
+endef
+
+else
+
+gb_LinkTarget__use_yrs :=
+
+endif
+
 # vim: set noet sw=4 ts=4:
