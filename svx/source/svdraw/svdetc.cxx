@@ -39,6 +39,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/xfltrit.hxx>
 #include <svl/itempool.hxx>
 #include <comphelper/configuration.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -242,12 +243,13 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj& rObj)
 std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
 {
     drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
-
+    Color aResult;
     switch(eFill)
     {
         case drawing::FillStyle_SOLID:
         {
-            return rSet.Get(XATTR_FILLCOLOR).GetColorValue();
+            aResult = rSet.Get(XATTR_FILLCOLOR).GetColorValue();
+            break;
         }
         case drawing::FillStyle_HATCH:
         {
@@ -262,14 +264,16 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
             }
 
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
-            return Color(aAverageColor);
+            aResult = Color(aAverageColor);
+            break;
         }
         case drawing::FillStyle_GRADIENT: {
             const basegfx::BGradient& rGrad=rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
             Color aCol1(Color(rGrad.GetColorStops().front().getStopColor()));
             Color aCol2(Color(rGrad.GetColorStops().back().getStopColor()));
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
-            return Color(aAverageColor);
+            aResult = Color(aAverageColor);
+            break;
         }
         case drawing::FillStyle_BITMAP:
         {
@@ -309,14 +313,38 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
                 nGn /= nCount;
                 nBl /= nCount;
 
-                return Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
+                aResult = Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
             }
             break;
         }
-        default: break;
+        default:
+            return {};
     }
 
-    return {};
+    sal_uInt16 nTransparencyPercentage = rSet.Get(XATTR_FILLTRANSPARENCE).GetValue();
+    if (!nTransparencyPercentage)
+        return aResult;
+
+    auto nTransparency = nTransparencyPercentage / 100.0;
+    auto nOpacity = 1 - nTransparency;
+
+    svtools::ColorConfig aColorConfig;
+    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+
+    // https://en.wikipedia.org/wiki/Alpha_compositing
+    // We are here calculating transperency fill color against background with
+    // To put it is simple words with example
+    // I.E: fill is Red (FF0000) and background is pure white (FFFFFF)
+    // If we add 50% transperency to fill color will look like Pink(ff7777)
+
+    // TODO: calculate this colors based on object in background  and not just the doc color
+    aResult.SetRed(
+        std::min(aResult.GetRed() * nOpacity + aBackground.GetRed() * nTransparency, 255.0));
+    aResult.SetGreen(
+        std::min(aResult.GetGreen() * nOpacity + aBackground.GetGreen() * nTransparency, 255.0));
+    aResult.SetBlue(
+        std::min(aResult.GetBlue() * nOpacity + aBackground.GetBlue() * nTransparency, 255.0));
+    return aResult;
 }
 
 std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
