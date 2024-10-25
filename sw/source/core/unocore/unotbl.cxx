@@ -1757,7 +1757,7 @@ public:
     SwTableProperties_Impl();
 
     void SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& aVal);
-    bool GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny);
+    const uno::Any* GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId);
     void AddItemToSet(SfxItemSet& rSet, std::function<std::unique_ptr<SfxPoolItem>()> aItemFactory,
                         sal_uInt16 nWhich, std::initializer_list<sal_uInt16> vMember, bool bAddTwips = false);
     void ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc);
@@ -1773,9 +1773,11 @@ void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMember
         m_aAnyMap.SetValue(nWhichId, nMemberId, rVal);
     }
 
-bool SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& rpAny )
+const uno::Any* SwTableProperties_Impl::GetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId)
     {
-        return m_aAnyMap.FillValue(nWhichId, nMemberId, rpAny);
+        const uno::Any* pAny = nullptr;
+        m_aAnyMap.FillValue(nWhichId, nMemberId, pAny);
+        return pAny;
     }
 
 void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet,
@@ -1785,9 +1787,7 @@ void SwTableProperties_Impl::AddItemToSet(SfxItemSet& rSet,
     std::vector< std::pair<sal_uInt16, const uno::Any* > > vMemberAndAny;
     for(sal_uInt16 nMember : vMember)
     {
-        const uno::Any* pAny = nullptr;
-        GetProperty(nWhich, nMember, pAny);
-        if(pAny)
+        if (const uno::Any* pAny = GetProperty(nWhich, nMember))
             vMemberAndAny.emplace_back(nMember, pAny);
     }
     if(!vMemberAndAny.empty())
@@ -1808,9 +1808,8 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             RES_KEEP, RES_KEEP,
             RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT>
         aSet(rDoc.GetAttrPool());
-    const uno::Any* pRepHead;
     const SwFrameFormat &rFrameFormat = *rTable.GetFrameFormat();
-    if(GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff, pRepHead ))
+    if (const uno::Any* pRepHead = GetProperty(FN_TABLE_HEADLINE_REPEAT, 0xff))
     {
         bool bVal(pRepHead->get<bool>());
         const_cast<SwTable&>(rTable).SetRowsToRepeat( bVal ? 1 : 0 );  // TODO: MULTIHEADER
@@ -1824,8 +1823,10 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
         MID_GRAPHIC_FILTER });
 
     bool bPutBreak = true;
-    const uno::Any* pPage;
-    if(GetProperty(FN_UNO_PAGE_STYLE, 0, pPage) || GetProperty(RES_PAGEDESC, 0xff, pPage))
+    const uno::Any* pPage = GetProperty(FN_UNO_PAGE_STYLE, 0);
+    if (!pPage)
+        pPage = GetProperty(RES_PAGEDESC, 0xff);
+    if (pPage)
     {
         OUString sPageStyle = pPage->get<OUString>();
         if(!sPageStyle.isEmpty())
@@ -1835,8 +1836,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
             if(pDesc)
             {
                 SwFormatPageDesc aDesc(pDesc);
-                const uno::Any* pPgNo;
-                if(GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET, pPgNo))
+                if (const uno::Any* pPgNo = GetProperty(RES_PAGEDESC, MID_PAGEDESC_PAGENUMOFFSET))
                 {
                     aDesc.SetNumOffset(pPgNo->get<sal_Int16>());
                 }
@@ -1853,23 +1853,19 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetKeep().Clone()); }, RES_KEEP, {0});
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetHoriOrient().Clone()); }, RES_HORI_ORIENT, {MID_HORIORIENT_ORIENT}, true);
 
-    const uno::Any* pSzRel(nullptr);
-    GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel);
-    const uno::Any* pRelWidth(nullptr);
-    GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff, pRelWidth);
-    const uno::Any* pWidth(nullptr);
-    GetProperty(FN_TABLE_WIDTH, 0xff, pWidth);
+    const uno::Any* pSzRel = GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff);
+    const uno::Any* pRelWidth = GetProperty(FN_TABLE_RELATIVE_WIDTH, 0xff);
 
-    bool bPutSize = pWidth != nullptr;
+    bool bPutSize = false;
     SwFormatFrameSize aSz(SwFrameSize::Variable);
-    if(pWidth)
+    if (const uno::Any* pWidth = GetProperty(FN_TABLE_WIDTH, 0xff))
     {
         aSz.PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
     }
     if(pSzRel && pSzRel->get<bool>() && pRelWidth)
     {
-        aSz.PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);
+        aSz.PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS); // CONVERT_TWIPS here???
         bPutSize = true;
     }
     if(bPutSize)
@@ -1884,8 +1880,7 @@ void SwTableProperties_Impl::ApplyTableAttr(const SwTable& rTable, SwDoc& rDoc)
     AddItemToSet(aSet, [&rFrameFormat]() { return std::unique_ptr<SfxPoolItem>(rFrameFormat.GetULSpace().Clone()); }, RES_UL_SPACE, {
         MID_UP_MARGIN|CONVERT_TWIPS,
         MID_LO_MARGIN|CONVERT_TWIPS });
-    const::uno::Any* pSplit(nullptr);
-    if(GetProperty(RES_LAYOUT_SPLIT, 0, pSplit))
+    if (const ::uno::Any* pSplit = GetProperty(RES_LAYOUT_SPLIT, 0))
     {
         SwFormatLayoutSplit aSp(pSplit->get<bool>());
         aSet.Put(aSp);
@@ -2123,8 +2118,7 @@ SwXTextTable::attach(const uno::Reference<text::XTextRange> & xTextRange)
         }
 
         OUString tableName;
-        if (const::uno::Any* pName;
-            m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0, pName))
+        if (const uno::Any* pName = m_pImpl->m_pTableProps->GetProperty(FN_UNO_TABLE_NAME, 0))
         {
             tableName = pName->get<OUString>();
         }
@@ -2965,11 +2959,10 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
     }
     else if (m_pImpl->IsDescriptor())
     {
-        const uno::Any* pAny = nullptr;
-        if (!m_pImpl->m_pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId, pAny))
-            throw lang::IllegalArgumentException();
-        else if(pAny)
+        if (const uno::Any* pAny = m_pImpl->m_pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId))
             aRet = *pAny;
+        else
+            throw lang::IllegalArgumentException();
     }
     else
         throw uno::RuntimeException();
