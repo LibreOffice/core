@@ -734,14 +734,13 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
             }
         }
     }
-    svl::SharedString cellSharedString;
     const bool bFastCompareByString = isFastCompareByString(rEntry);
     if (rEntry.eOp == SC_EQUAL && rItems.size() >= 10 && bFastCompareByString)
     {
         // The same as above but for strings. Try to optimize the case when
         // it's a svl::SharedString comparison. That happens when SC_EQUAL is used
         // and simple matching is used, see compareByString()
-        cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
+        svl::SharedString cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
         // Allow also checking ScQueryEntry::ByValue if the cell is not numeric,
         // as in that case isQueryByNumeric() would be false and isQueryByString() would
         // be true because of SC_EQUAL making isTextMatchOp() true.
@@ -815,7 +814,7 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
         }
         else if (isQueryByString(rEntry.eOp, rItem.meType, aCell))
         {
-            cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
+            svl::SharedString cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
             std::pair<bool, bool> aThisRes;
             if (bFastCompareByString) // fast
                 aThisRes = compareByString<true>(rEntry, rItem, &cellSharedString, nullptr);
