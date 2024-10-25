@@ -8,14 +8,19 @@
  */
 
 #include <QtInstanceLinkButton.hxx>
+#include <QtInstanceLinkButton.moc>
 
 #include <vcl/qt/QtUtils.hxx>
+
+#include <QtGui/QDesktopServices>
 
 QtInstanceLinkButton::QtInstanceLinkButton(QtHyperlinkLabel* pLabel)
     : QtInstanceWidget(pLabel)
     , m_pLabel(pLabel)
 {
     assert(m_pLabel);
+
+    connect(m_pLabel, &QtHyperlinkLabel::linkActivated, this, &QtInstanceLinkButton::linkActivated);
 }
 
 void QtInstanceLinkButton::set_label(const OUString& rText)
@@ -46,6 +51,14 @@ OUString QtInstanceLinkButton::get_uri() const
     OUString sUri;
     GetQtInstance().RunInMainThread([&] { sUri = toOUString(m_pLabel->uri()); });
     return sUri;
+}
+
+void QtInstanceLinkButton::linkActivated(const QString& rUrl)
+{
+    if (signal_activate_link())
+        return;
+
+    QDesktopServices::openUrl(rUrl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

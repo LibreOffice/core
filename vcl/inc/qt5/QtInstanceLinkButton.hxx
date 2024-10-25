@@ -14,8 +14,12 @@
 
 #include <QtWidgets/QLabel>
 
-class QtInstanceLinkButton : public QtInstanceWidget, public virtual weld::LinkButton
+class QtInstanceLinkButton : public QObject,
+                             public QtInstanceWidget,
+                             public virtual weld::LinkButton
 {
+    Q_OBJECT
+
     QtHyperlinkLabel* m_pLabel;
 
 public:
@@ -26,6 +30,9 @@ public:
     virtual void set_label_wrap(bool bWrap) override;
     virtual void set_uri(const OUString& rUri) override;
     virtual OUString get_uri() const override;
+
+private Q_SLOTS:
+    void linkActivated(const QString& rUrl);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

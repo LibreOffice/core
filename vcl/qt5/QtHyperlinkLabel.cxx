@@ -12,6 +12,7 @@
 QtHyperlinkLabel::QtHyperlinkLabel(QWidget* pParent)
     : QLabel(pParent)
 {
+    setTextInteractionFlags(Qt::LinksAccessibleByMouse | Qt::LinksAccessibleByKeyboard);
 }
 
 void QtHyperlinkLabel::setDisplayText(const QString& rDisplayText)
