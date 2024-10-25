@@ -186,94 +186,90 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( std::u16string_view rPath, SvStream&
 
 static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& rConfigItem )
 {
-    Graphic     aGraphic;
+    if ( rGraphic.GetType() == GraphicType::NONE )
+        return rGraphic;
 
     sal_Int32 nLogicalWidth = rConfigItem.ReadInt32( u"LogicalWidth"_ustr, 0 );
     sal_Int32 nLogicalHeight = rConfigItem.ReadInt32( u"LogicalHeight"_ustr, 0 );
+    sal_Int32 nMode = rConfigItem.ReadInt32( u"ExportMode"_ustr, -1 );
+    if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
+    {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
+        nMode = 0;      // then we are defaulting this mode to 0
+        if ( nLogicalWidth || nLogicalHeight )
+            nMode = 2;
+    }
 
-    if ( rGraphic.GetType() != GraphicType::NONE )
+    Graphic aGraphic;
+    Size aPrefSize( rGraphic.GetPrefSize() );
+    Size aOriginalSize;
+    MapMode aPrefMapMode( rGraphic.GetPrefMapMode() );
+    if (aPrefMapMode.GetMapUnit() == MapUnit::MapPixel)
+        aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
+    else
+        aOriginalSize = OutputDevice::LogicToLogic(aPrefSize, aPrefMapMode, MapMode(MapUnit::Map100thMM));
+    if ( !nLogicalWidth )
+        nLogicalWidth = aOriginalSize.Width();
+    if ( !nLogicalHeight )
+        nLogicalHeight = aOriginalSize.Height();
+
+    if( rGraphic.GetType() == GraphicType::Bitmap )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( u"ExportMode"_ustr, -1 );
 
-        if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
-        {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
-            nMode = 0;      // then we are defaulting this mode to 0
-            if ( nLogicalWidth || nLogicalHeight )
-                nMode = 2;
-        }
-
-        Size aOriginalSize;
-        Size aPrefSize( rGraphic.GetPrefSize() );
-        MapMode aPrefMapMode( rGraphic.GetPrefMapMode() );
-        if (aPrefMapMode.GetMapUnit() == MapUnit::MapPixel)
-            aOriginalSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-        else
-            aOriginalSize = OutputDevice::LogicToLogic(aPrefSize, aPrefMapMode, MapMode(MapUnit::Map100thMM));
-        if ( !nLogicalWidth )
-            nLogicalWidth = aOriginalSize.Width();
-        if ( !nLogicalHeight )
-            nLogicalHeight = aOriginalSize.Height();
-        if( rGraphic.GetType() == GraphicType::Bitmap )
+        // Resolution is set
+        if( nMode == 1 )
         {
+            BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
+            MapMode     aMap( MapUnit::Map100thInch );
 
-            // Resolution is set
-            if( nMode == 1 )
-            {
-                BitmapEx    aBitmap( rGraphic.GetBitmapEx() );
-                MapMode     aMap( MapUnit::Map100thInch );
+            sal_Int32   nDPI = rConfigItem.ReadInt32( u"Resolution"_ustr, 75 );
+            Fraction    aFrac( 1, std::clamp( nDPI, sal_Int32(75), sal_Int32(600) ) );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( u"Resolution"_ustr, 75 );
-                Fraction    aFrac( 1, std::clamp( nDPI, sal_Int32(75), sal_Int32(600) ) );
+            aMap.SetScaleX( aFrac );
+            aMap.SetScaleY( aFrac );
 
-                aMap.SetScaleX( aFrac );
-                aMap.SetScaleY( aFrac );
-
-                Size aOldSize = aBitmap.GetSizePixel();
-                aGraphic = rGraphic;
-                aGraphic.SetPrefMapMode( aMap );
-                aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
-                                            aOldSize.Height() * 100 ) );
-            }
-            // Size is set
-            else if( nMode == 2 )
-            {
-               aGraphic = rGraphic;
-               aGraphic.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
-               aGraphic.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
-            }
-            else
-                aGraphic = rGraphic;
-
-            sal_Int32 nColors = rConfigItem.ReadInt32( u"Color"_ustr, 0 );
-            if ( nColors )  // graphic conversion necessary ?
-            {
-                BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
-                aBmpEx.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
-                aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
-            }                                               // allowed to cast them
+            Size aOldSize = aBitmap.GetSizePixel();
+            aGraphic = rGraphic;
+            aGraphic.SetPrefMapMode( aMap );
+            aGraphic.SetPrefSize( Size( aOldSize.Width() * 100,
+                                        aOldSize.Height() * 100 ) );
+        }
+        // Size is set
+        else if( nMode == 2 )
+        {
+           aGraphic = rGraphic;
+           aGraphic.SetPrefMapMode( MapMode( MapUnit::Map100thMM ) );
+           aGraphic.SetPrefSize( Size( nLogicalWidth, nLogicalHeight ) );
         }
         else
+            aGraphic = rGraphic;
+
+        sal_Int32 nColors = rConfigItem.ReadInt32( u"Color"_ustr, 0 );
+        if ( nColors )  // graphic conversion necessary ?
         {
-            if( ( nMode == 1 ) || ( nMode == 2 ) )
-            {
-                GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-                Size aNewSize( OutputDevice::LogicToLogic(Size(nLogicalWidth, nLogicalHeight), MapMode(MapUnit::Map100thMM), aMtf.GetPrefMapMode()) );
-
-                if( aNewSize.Width() && aNewSize.Height() )
-                {
-                    const Size aPreferredSize( aMtf.GetPrefSize() );
-                    aMtf.Scale( Fraction( aNewSize.Width(), aPreferredSize.Width() ),
-                                Fraction( aNewSize.Height(), aPreferredSize.Height() ) );
-                }
-                aGraphic = Graphic( aMtf );
-            }
-            else
-                aGraphic = rGraphic;
-        }
-
+            BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
+            aBmpEx.Convert( static_cast<BmpConversion>(nColors) );   // the entries in the xml section have the same meaning as
+            aGraphic = aBmpEx;                          // they have in the BmpConversion enum, so it should be
+        }                                               // allowed to cast them
     }
     else
-        aGraphic = rGraphic;
+    {
+        if( ( nMode == 1 ) || ( nMode == 2 ) )
+        {
+            GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
+            Size aNewSize( OutputDevice::LogicToLogic(Size(nLogicalWidth, nLogicalHeight), MapMode(MapUnit::Map100thMM), aMtf.GetPrefMapMode()) );
+
+            if( aNewSize.Width() && aNewSize.Height() )
+            {
+                const Size aPreferredSize( aMtf.GetPrefSize() );
+                aMtf.Scale( Fraction( aNewSize.Width(), aPreferredSize.Width() ),
+                            Fraction( aNewSize.Height(), aPreferredSize.Height() ) );
+            }
+            aGraphic = Graphic( aMtf );
+        }
+        else
+            aGraphic = rGraphic;
+    }
+
 
     return aGraphic;
 }
