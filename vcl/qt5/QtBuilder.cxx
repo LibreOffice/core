@@ -243,6 +243,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         // add layout to parent layout
         if (QBoxLayout* pParentBoxLayout = qobject_cast<QBoxLayout*>(pParentLayout))
             pParentBoxLayout->addLayout(pLayout);
+        else if (QGridLayout* pParentGridLayout = qobject_cast<QGridLayout*>(pParentLayout))
+            pParentGridLayout->addLayout(pLayout, pParentGridLayout->rowCount(), 0);
     }
 
     m_aChildren.emplace_back(sID, pObject);
