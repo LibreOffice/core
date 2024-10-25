@@ -421,7 +421,7 @@ void DataTableView::createShapes(basegfx::B2DVector const& rStart, basegfx::B2DV
     nRow = 1;
     const sal_Int32 nTableModelRowCount = m_xTable->getRowCount();
     const sal_Int32 nTableModelColCount = m_xTable->getColumnCount();
-    // tdf#153182 the broken bounds are most likely because we dont know if the
+    // tdf#153182 the broken bounds are most likely because we don't know if the
     // data-table has header rows and columns. Most likely it does not.
     bool bBrokenBounds = false;
     for (auto const& rSeries : m_pDataSeriesValues)
