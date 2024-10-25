@@ -929,11 +929,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    OUString const url(createFileURL(u"tdf122607_leerzeile.odt"));
-
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
@@ -943,14 +938,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
     };
 
     // inline the loading because currently properties can't be passed...
-    mxComponent = loadFromDesktop(url, u"com.sun.star.text.TextDocument"_ustr,
-                                  comphelper::containerToSequence(aFilterOptions));
-    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-    }));
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), props);
+    OUString const url(createFileURL(u"tdf122607_leerzeile.odt"));
+    loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
+    save(u"writer_pdf_Export"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
@@ -963,17 +953,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607_regression)
     // this was 3034, causing the overlap
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "top", u"3218");
     assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "height", u"164");
-
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    OUString const url(createFileURL(u"in_056132_mod.odt"));
-
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
@@ -983,14 +966,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
     };
 
     // inline the loading because currently properties can't be passed...
-    mxComponent = loadFromDesktop(url, u"com.sun.star.text.TextDocument"_ustr,
-                                  comphelper::containerToSequence(aFilterOptions));
-    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
-    }));
-    utl::TempFileNamed aTempFile;
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    xStorable->storeToURL(aTempFile.GetURL(), props);
+    OUString const url(createFileURL(u"in_056132_mod.odt"));
+    loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
+    save(u"writer_pdf_Export"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     CPPUNIT_ASSERT(pXmlDoc);
@@ -1010,8 +988,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf150616)
                 u"697");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab[3]/row[2]/cell[2]/txt[3]/infos/bounds", "top",
                 u"8178");
-
-    aTempFile.EnableKillingFile();
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testBtlrCell)
@@ -1791,11 +1767,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128399)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    OUString const url(createFileURL(u"fdo56797-2-min.odt"));
-
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
@@ -1805,8 +1776,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     };
 
     // inline the loading because currently properties can't be passed...
-    mxComponent = loadFromDesktop(url, u"com.sun.star.text.TextDocument"_ustr,
-                                  comphelper::containerToSequence(aFilterOptions));
+    OUString const url(createFileURL(u"fdo56797-2-min.odt"));
+    loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
     save(u"writer_pdf_Export"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

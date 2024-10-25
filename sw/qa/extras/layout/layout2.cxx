@@ -937,11 +937,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMovingDOCX)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
 {
-    if (mxComponent.is())
-        mxComponent->dispose();
-
-    OUString const url(createFileURL(u"table_cell_overlap.fodt"));
-
     // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
     // does *not* forward initial VCL Window Resize and thereby triggers a
     // layout which does not happen on soffice --convert-to pdf.
@@ -951,8 +946,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableCellInvalidate)
     };
 
     // inline the loading because currently properties can't be passed...
-    mxComponent = loadFromDesktop(url, u"com.sun.star.text.TextDocument"_ustr,
-                                  comphelper::containerToSequence(aFilterOptions));
+    OUString const url(createFileURL(u"table_cell_overlap.fodt"));
+    loadWithParams(url, comphelper::containerToSequence(aFilterOptions));
     save(u"writer_pdf_Export"_ustr);
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();

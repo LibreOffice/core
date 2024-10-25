@@ -1034,7 +1034,7 @@ CPPUNIT_TEST_FIXTURE(Test, testtdf158044)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
 {
     // Given a table immediately followed by a section break
-    loadFromFile(u"section_break_after_table.docx");
+    createSwDoc("section_break_after_table.docx");
 
     // Check that the import doesn't produce an extra empty paragraph before a page break
     CPPUNIT_ASSERT_EQUAL(2, getPages()); // was 3
@@ -1053,7 +1053,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf158855)
 CPPUNIT_TEST_FIXTURE(Test, testTdf158971)
 {
     // Given a section break and an SDT in the following paragraph
-    loadFromFile(u"sdt_after_section_break.docx");
+    createSwDoc("sdt_after_section_break.docx");
 
     // Check that the import doesn't introduce unwanted character properties in the paragraph after
     // the section break

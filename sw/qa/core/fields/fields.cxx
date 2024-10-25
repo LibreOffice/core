@@ -158,7 +158,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChapterFieldsFollowedBy)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf86790)
 {
-    loadFromFile(u"tdf86790.docx");
+    createSwDoc("tdf86790.docx");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -385,7 +385,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteStyleRef)
 /// STYLEREFs with the REFFLDFLAG_HIDE_NON_NUMERICAL flag should hide all characters that are not numerical or delimiters
 CPPUNIT_TEST_FIXTURE(Test, testNumericalStyleRef)
 {
-    loadFromFile(u"suppress-non-numerical.docx");
+    createSwDoc("suppress-non-numerical.docx");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -415,7 +415,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumericalStyleRef)
 ///        this docx only has such stylerefs to avoid confusion)
 CPPUNIT_TEST_FIXTURE(Test, testOOXMLStyleRefFlags)
 {
-    loadFromFile(u"styleref-flags.docx");
+    createSwDoc("styleref-flags.docx");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(
@@ -446,6 +446,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLStyleRefFlags)
 ///        this docx only has such stylerefs to avoid confusion)
 CPPUNIT_TEST_FIXTURE(Test, testODFStyleRef)
 {
+    // if createSwDoc is used then calcLayout is called and the field values are different
     loadFromFile(u"styleref.odt");
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

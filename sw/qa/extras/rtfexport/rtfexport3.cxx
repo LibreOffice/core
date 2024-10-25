@@ -796,7 +796,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf152784_1)
 CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
 {
     // Given a document with a floating table:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    createSwDoc();
     // Insert a table:
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),

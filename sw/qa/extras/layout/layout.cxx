@@ -3474,15 +3474,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf155345)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf109137)
 {
     createSwDoc("tdf109137.docx");
-    // FIXME: it's not possible to use 'reload' here because the validation fails with
-    // Error: attribute "text:start-value" has a bad value
-    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
-        { "FilterName", uno::Any(u"writer8"_ustr) },
-    }));
-    xStorable->storeToURL(maTempFile.GetURL(), aDescriptor);
-    mxComponent->dispose();
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
+    // FIXME: Error: attribute "text:start-value" has a bad value
+    skipValidation();
+    saveAndReload(u"writer8"_ustr);
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // This was 0, the blue rectangle moved from the 1st to the 2nd page.
     assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly/notxt",

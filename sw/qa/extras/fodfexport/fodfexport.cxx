@@ -25,7 +25,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
 {
-    loadFromFile(u"tdf113696.odt");
+    createSwDoc("tdf113696.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
@@ -42,7 +42,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf113696)
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf113696WriterImage)
 {
-    loadFromFile(u"tdf113696-writerimage.odt");
+    createSwDoc("tdf113696-writerimage.odt");
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());

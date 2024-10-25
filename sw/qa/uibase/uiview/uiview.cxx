@@ -117,10 +117,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testUpdateReplacementNosetting)
 CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
 {
     // Given a document with a custom KeepRatio:
-    OUString aURL = createFileURL(u"keep-ratio.fodt");
-
-    // When loading that document:
-    mxComponent = loadFromDesktop(aURL);
+    createSwDoc("keep-ratio.fodt");
 
     // Then make sure we read the custom value:
     auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());

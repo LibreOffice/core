@@ -722,7 +722,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf162551, "tdf162551_notLayoutInCell_charLeft_from
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf159207_footerFramePrBorder)
 {
-    loadFromFile(u"tdf159207_footerFramePrBorder.docx"); // re-imports as editeng Frame/Shape
+    createSwDoc("tdf159207_footerFramePrBorder.docx"); // re-imports as editeng Frame/Shape
 
     // given a doc with footer paragraphs frame (with a top border, but no left border)
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
@@ -1063,7 +1063,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128460)
 CPPUNIT_TEST_FIXTURE(Test, testTdf131288)
 {
     // Given a document with an embedded chart
-    loadFromFile(u"tdf131288.docx");
+    createSwDoc("tdf131288.docx");
 
     // Edit the document and save **twice**
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

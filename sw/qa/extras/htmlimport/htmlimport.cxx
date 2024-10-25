@@ -443,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlOptionsImportTest, testAllowedRTFOLEMimeTypes)
         comphelper::makePropertyValue(u"AllowedRTFOLEMimeTypes"_ustr, aTypes),
     };
     OUString aURL = createFileURL(u"allowed-rtf-ole-mime-types.xhtml");
-    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr, aLoadProperties);
+    loadWithParams(aURL, aLoadProperties);
     uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
                                                      uno::UNO_QUERY);

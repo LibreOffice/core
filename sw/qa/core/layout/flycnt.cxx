@@ -733,9 +733,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyThenTable)
     uno::Sequence<beans::PropertyValue> aFilterOptions = {
         comphelper::makePropertyValue(u"Hidden"_ustr, true),
     };
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(u"/sw/qa/core/layout/data/")
-                                      + "floattable-then-table.docx",
-                                  u"com.sun.star.text.TextDocument"_ustr, aFilterOptions);
+    loadWithParams(createFileURL(u"floattable-then-table.docx"), aFilterOptions);
 
     // When layout is calculated during PDF export:
     // Then make sure that finishes without errors:

@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxContentControlDropdownEmptyDisplayText)
 CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
 {
     // Create document with symbol character and font Wingdings
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    createSwDoc();
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -643,7 +643,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf71749_with_footnote)
 {
     // Without the fix in place,
     // loading the document would hang.
-    loadFromFile(u"tdf71749_with_footnote.doc");
+    createSwDoc("tdf71749_with_footnote.doc");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
@@ -651,7 +651,7 @@ CPPUNIT_TEST_FIXTURE(Test, tdf71749_without_footnote)
 {
     // Without the fix in place,
     // loading the document would hang.
-    loadFromFile(u"tdf71749_without_footnote.doc");
+    createSwDoc("tdf71749_without_footnote.doc");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 }
