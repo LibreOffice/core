@@ -91,9 +91,9 @@ class ScQueryEvaluator
 
     bool isFastCompareByString(const ScQueryEntry& rEntry) const;
     template <bool bFast = false>
-    std::pair<bool, bool>
-    compareByString(const ScQueryEntry& rEntry, const ScQueryEntry::Item& rItem,
-                    const svl::SharedString* pValueSource1, const OUString* pValueSource2);
+    std::pair<bool, bool> compareByString(const ScQueryEntry& rEntry,
+                                          const ScQueryEntry::Item& rItem,
+                                          const svl::SharedString* pValueSource1);
     std::pair<bool, bool> compareByTextColor(SCCOL nCol, SCROW nRow,
                                              const ScQueryEntry::Item& rItem);
     std::pair<bool, bool> compareByBackgroundColor(SCCOL nCol, SCROW nRow,
