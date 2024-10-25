@@ -937,7 +937,7 @@ bool ImpEditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView
             }
 
             default:    // is then possible edited below.
-                eFunc = KeyFuncType::DONTKNOW;
+                break;
         }
     }
 
