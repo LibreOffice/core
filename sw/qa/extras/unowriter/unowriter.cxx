@@ -687,8 +687,6 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testSetPagePrintSettings)
 CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
     SwWrtShell* const pWrtShell(getSwDocShell()->GetWrtShell());
     SwDoc* const pDoc(pWrtShell->GetDoc());
 
@@ -710,8 +708,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDeleteFlyAtCharAtStart)
     // check fly
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<text::XTextContent> const xShape(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     // anchored at start of body text?
-    uno::Reference<text::XText> const xText(pTextDoc->getText());
+    uno::Reference<text::XText> const xText(xTextDocument->getText());
     uno::Reference<text::XTextRangeCompare> const xTextRC(xText, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0),
                          xTextRC->compareRegionStarts(xText->getStart(), xShape->getAnchor()));

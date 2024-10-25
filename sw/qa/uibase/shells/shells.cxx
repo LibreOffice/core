@@ -754,8 +754,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureExtractChart)
     //extract
     tools::JsonWriter aJsonWriter;
     std::string_view aCommand(".uno:ExtractDocumentStructure");
-    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pXTextDocument->getCommandValues(aJsonWriter, aCommand);
+    getSwTextDoc()->getCommandValues(aJsonWriter, aCommand);
 
     OString aExpectedStr
         = "{ \"DocStructure\": { \"Charts.ByEmbedIndex.0\": { \"name\": \"Object1\", \"title\": "

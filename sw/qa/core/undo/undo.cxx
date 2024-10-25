@@ -100,9 +100,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testTableCopyRedline)
 CPPUNIT_TEST_FIXTURE(SwCoreUndoTest, testImagePropsCreateUndoAndModifyDoc)
 {
     createSwDoc("image-as-character.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     css::uno::Reference<css::beans::XPropertySet> xImage(
         pTextDoc->getGraphicObjects()->getByName(u"Image1"_ustr), css::uno::UNO_QUERY_THROW);
 

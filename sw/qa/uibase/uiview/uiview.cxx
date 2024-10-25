@@ -119,8 +119,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testKeepRatio)
     createSwDoc("keep-ratio.fodt");
 
     // Then make sure we read the custom value:
-    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pViewOption = pWrtShell->GetViewOptions();
     comphelper::ScopeGuard g([pWrtShell, pViewOption] {
         SwViewOption aViewOption(*pViewOption);

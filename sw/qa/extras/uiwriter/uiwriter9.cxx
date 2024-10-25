@@ -68,8 +68,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf158785)
 {
     // given a document with a hyperlink surrounded by N-dashes (–www.dordt.edu–)
     createSwDoc("tdf158785_hyperlink.fodt");
-    SwDoc& rDoc = *getSwDoc();
-    SwWrtShell* pWrtShell = rDoc.GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // go to the end of the hyperlink
@@ -123,8 +122,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969)
 {
     // given a document with a field surrounded by N-dashes (–date–)
     createSwDoc("tdf111969_field.fodt");
-    SwDoc& rDoc = *getSwDoc();
-    SwWrtShell* pWrtShell = rDoc.GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // go to the end of the field
@@ -178,8 +176,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf111969B)
 {
     // given a document with a field surrounded by two N-dashes (––date––)
     createSwDoc("tdf111969_fieldB.fodt");
-    SwDoc& rDoc = *getSwDoc();
-    SwWrtShell* pWrtShell = rDoc.GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
     // go to the start of the field
@@ -214,8 +211,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159049)
     selectShape(1);
 
     // Bring shape into text edit mode
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
@@ -408,8 +404,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf139631)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     // Check that the particular setting is turned on by default
     const SwViewOption* pVwOpt = getSwDocShell()->GetWrtShell()->GetViewOptions();
@@ -429,33 +423,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
     uno::Sequence<beans::PropertyValue> aArgsInsert(
         comphelper::InitPropertySequence({ { "Text", uno::Any(u"abcd"_ustr) } }));
     dispatchCommand(mxComponent, u".uno:InsertText"_ustr, aArgsInsert);
-    CPPUNIT_ASSERT_EQUAL(u"abcd"_ustr, pTextDoc->getText()->getString());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"abcd"_ustr, xTextDocument->getText()->getString());
 
     // Successfully enclose the text; afterwards the selection should exist with the new
     // enclosed text
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"(abcd)"_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"(abcd)"_ustr, xTextDocument->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"[(abcd)]"_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"[(abcd)]"_ustr, xTextDocument->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"{[(abcd)]}"_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"{[(abcd)]}"_ustr, xTextDocument->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString(sStartSingleQuote + "{[(abcd)]}" + sEndSingleQuote),
-                         pTextDoc->getText()->getString());
+                         xTextDocument->getText()->getString());
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(OUString(sStartDoubleQuote + sStartSingleQuote + "{[(abcd)]}"
                                   + sEndSingleQuote + sEndDoubleQuote),
-                         pTextDoc->getText()->getString());
+                         xTextDocument->getText()->getString());
 
     // Disable the setting and check that enclosing doesn't happen anymore
     const_cast<SwViewOption*>(pVwOpt)->SetEncloseWithCharactersOn(false);
@@ -463,27 +459,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf151710)
 
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '(', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"("_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"("_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '[', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"["_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"["_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '{', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(u"{"_ustr, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(u"{"_ustr, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\'', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(sStartSingleQuote, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(sStartSingleQuote, xTextDocument->getText()->getString());
 
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '\"', 0);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(sStartDoubleQuote, xTextDocument->getText()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159054_disableOutlineNumbering)
@@ -636,8 +632,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
 {
     // Given a document with a number rule at the start of a paragraph and two drawing objects:
     createSwDoc("tdf146190.odt");
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
     const SdrMarkList& rMrkList = pWrtShell->GetDrawView()->GetMarkedObjectList();
@@ -652,7 +647,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
     CPPUNIT_ASSERT_EQUAL(u"Shape 1"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 
     // Move to the next drawing object by Tab key press:
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     // Without the fix in place, this test would have failed with:
     // equality assertion failed
@@ -662,7 +658,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf146190)
     CPPUNIT_ASSERT_EQUAL(u"Shape 2"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 
     // Tab key press should now select 'Shape 1':
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(u"Shape 1"_ustr, rMrkList.GetMark(0)->GetMarkedSdrObj()->GetName());
 }
@@ -671,8 +667,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf160898)
 {
     // Given a document with a 1-cell table in another 1-cell table:
     createSwDoc("table-in-table.fodt");
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
 
     // Move to the normally hidden paragraph inside the outer table cell, following the inner table
@@ -726,11 +721,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf144752)
 {
     // Undoing/redoing a replacement must select the new text
     createSwDoc();
-    SwXTextDocument* pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
 
-    emulateTyping(*pDoc, u"Some Text");
+    emulateTyping(u"Some Text");
     CPPUNIT_ASSERT(!pWrtShell->HasSelection());
     // Select "Text", and replace with "Word"
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect*/ true, 4, /*bBasicCall*/ false);

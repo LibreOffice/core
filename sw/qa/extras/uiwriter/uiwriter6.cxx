@@ -1135,9 +1135,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
     // fill table with data
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (int i = 0; i < 3; ++i)
     {
         pWrtShell->Insert(u"x"_ustr);
@@ -1264,9 +1263,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
     // fill table with data
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (int i = 0; i < 4; ++i)
     {
         pWrtShell->Insert(u"x"_ustr);
@@ -2516,8 +2514,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     {
         // Type a correct word
 
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        emulateTyping(*pTextDoc, u"the ");
+        emulateTyping(u"the ");
         SwCursorShell* pShell(pDoc->GetEditShell());
         CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
@@ -2527,7 +2524,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
         // Create a bad word from the good: "the" -> "thex"
 
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-        emulateTyping(*pTextDoc, u"x");
+        emulateTyping(u"x");
         // tdf#92036 pending spell checking
         bool bPending = !pNode->GetWrong() || !pNode->GetWrong()->Count();
         CPPUNIT_ASSERT(bPending);
@@ -2564,8 +2561,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
         = LanguageTag::convertToLanguageType(lang::Locale(u"en"_ustr, u"US"_ustr, OUString()));
     if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
     {
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        emulateTyping(*pTextDoc, u"baaad http://www.baaad.org baaad");
+        emulateTyping(u"baaad http://www.baaad.org baaad");
         SwCursorShell* pShell(pDoc->GetEditShell());
         CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
@@ -2576,12 +2572,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
 
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 10, /*bBasicCall=*/false);
-        emulateTyping(*pTextDoc, u" ");
+        emulateTyping(u" ");
 
         CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode->GetWrong()->Count());
 
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
-        emulateTyping(*pTextDoc, u" ");
+        emulateTyping(u" ");
 
         // Move down to trigger spell checking
         pWrtShell->Down(/*bSelect=*/false, 1);
@@ -2623,8 +2619,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
         // Spell with digits is disabled by default
         CPPUNIT_ASSERT_EQUAL(sal_False, xLinguProperties->getIsSpellWithDigits());
 
-        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-        emulateTyping(*pTextDoc, u"ErrorError Treee2 ");
+        emulateTyping(u"ErrorError Treee2 ");
         SwCursorShell* pShell(pDoc->GetEditShell());
         CPPUNIT_ASSERT(pShell);
         SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
@@ -2639,7 +2634,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
 {
     createSwDoc("tdf65535.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     uno::Sequence<beans::PropertyValue> params
@@ -2660,13 +2654,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     {
         // trigger online spell checking by (a few) spaces to be sure to get it
 
-        emulateTyping(*pTextDoc, u" ");
+        emulateTyping(u" ");
 
         // FIXME: inserting a space before the bad word removes the red underline
         // Insert a second space to get the red underline (back)
 
         pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-        emulateTyping(*pTextDoc, u" ");
+        emulateTyping(u" ");
 
         // Select the bad word (right to left, as during right click)
 
@@ -2692,6 +2686,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     // check the remaining comment
 
     tools::JsonWriter aJsonWriter;
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
     std::stringstream aStream((std::string(pChar)));
@@ -2717,7 +2712,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // show tracked deletion with enabled change tracking
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
@@ -2728,7 +2722,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     CPPUNIT_ASSERT_MESSAGE("redlining should be on",
                            pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
-    emulateTyping(*pTextDoc, u" ");
+    emulateTyping(u" ");
 
     // tdf#83419 This was "Ts " removing the deletion of "t" silently by sentence capitalization
     OUString sReplaced(u"ts "_ustr);
@@ -2740,7 +2734,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     // repeat it with not visible redlining
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    emulateTyping(*pTextDoc, u" ");
+    emulateTyping(u" ");
 
     sReplaced = "S ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
@@ -2757,25 +2751,25 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    emulateTyping(*pTextDoc, u"et ");
+    emulateTyping(u"et ");
     // This was "Ttest" removing the tracked deletion silently.
     // Don't replace, if a redline starts or ends within the text.
     sReplaced = "tset ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Otherwise replace it
-    emulateTyping(*pTextDoc, u"tset ");
+    emulateTyping(u"tset ");
     sReplaced = "tset test ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Including capitalization
-    emulateTyping(*pTextDoc, u"end. word ");
+    emulateTyping(u"end. word ");
     sReplaced = "tset test end. Word ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tracked deletions after the correction point doesn't affect autocorrect
     dispatchCommand(mxComponent, u".uno:GoToStartOfDoc"_ustr, {});
-    emulateTyping(*pTextDoc, u"a ");
+    emulateTyping(u"a ");
     sReplaced = "A tset test end. Word ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
@@ -2785,7 +2779,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
     createSwDoc("redline-autocorrect2.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     dispatchCommand(mxComponent, u".uno:GoToEndOfDoc"_ustr, {});
 
@@ -2795,7 +2788,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
     pWrtShell->SetRedlineFlags(nMode);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
-    emulateTyping(*pTextDoc, u"... ");
+    emulateTyping(u"... ");
 
     // This was "LoremLorem,…," (duplicating the deleted comma, but without deletion)
     // Don't replace, if a redline starts or ends within the text.
@@ -2803,7 +2796,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Continue it:
-    emulateTyping(*pTextDoc, u"Lorem,... ");
+    emulateTyping(u"Lorem,... ");
     sReplaced = u"Lorem,... Lorem,… "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
@@ -2813,13 +2806,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
     createSwDoc("redline-autocorrect3.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // Emoji replacement (:snowman: -> ☃)
 
     // without change tracking
     CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
-    emulateTyping(*pTextDoc, u":snowman:");
+    emulateTyping(u":snowman:");
     OUString sReplaced = u"☃Lorem,"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
@@ -2830,7 +2822,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
     CPPUNIT_ASSERT(nMode & RedlineFlags::On);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
-    emulateTyping(*pTextDoc, u":snowman:");
+    emulateTyping(u":snowman:");
     sReplaced = u"☃☃Lorem,"_ustr;
 
     // tdf#140674 This was ":snowman:" instead of autocorrect
@@ -2845,13 +2837,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf153423)
     flags.bSetNumRule = true;
     SwEditShell::SetAutoFormatFlags(&flags);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    emulateTyping(*pTextDoc, u"1. Item 1");
+    emulateTyping(u"1. Item 1");
 
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have failed with
@@ -2867,93 +2857,92 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     createSwDoc("tdf133589.fodt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // translitere words to Old Hungarian
-    emulateTyping(*pTextDoc, u"székely ");
+    emulateTyping(u"székely ");
     OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // disambiguate consonants: asszony -> asz|szony
-    emulateTyping(*pTextDoc, u"asszony ");
+    emulateTyping(u"asszony ");
     sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // disambiguate consonants: kosszarv -> kos|szarv
     // (add explicit ZWSP temporarily for consonant disambiguation, because the requested
     // hu_HU hyphenation dictionary isn't installed on all testing platform)
     // pWrtShell->Insert(u"kosszarv");
-    emulateTyping(*pTextDoc, u"kos\u200Bszarv ");
+    emulateTyping(u"kos\u200Bszarv ");
     sReplaced += u"𐳓𐳛𐳤𐳥𐳀𐳢𐳮 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // transliterate numbers to Old Hungarian
-    emulateTyping(*pTextDoc, u"2020 ");
+    emulateTyping(u"2020 ");
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tdf#147546 transliterate punctuation marks
 
     // question mark
-    emulateTyping(*pTextDoc, u"Kérdőjel?");
+    emulateTyping(u"Kérdőjel?");
     sReplaced += u"𐲓𐳋𐳢𐳇𐳟𐳒𐳉𐳖";
     OUString sReplaced2(sReplaced + "?");
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u" ");
+    emulateTyping(u" ");
     sReplaced += u"⸮ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // comma
-    emulateTyping(*pTextDoc, u"Vessző,");
+    emulateTyping(u"Vessző,");
     sReplaced += u"𐲮𐳉𐳥𐳥𐳟";
     sReplaced2 = sReplaced + ",";
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u" ");
+    emulateTyping(u" ");
     sReplaced += u"⹁ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // semicolon
-    emulateTyping(*pTextDoc, u"pontosvessző;");
+    emulateTyping(u"pontosvessző;");
     sReplaced += u"𐳠𐳛𐳙𐳦𐳛𐳤𐳮𐳉𐳥𐳥𐳟";
     sReplaced2 = sReplaced + ";";
     CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
-    emulateTyping(*pTextDoc, u" ");
+    emulateTyping(u" ");
     sReplaced += u"⁏ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // quotation marks
-    emulateTyping(*pTextDoc, u"„idézőjel” ");
+    emulateTyping(u"„idézőjel” ");
     sReplaced += u"⹂𐳐𐳇𐳋𐳯𐳟𐳒𐳉𐳖‟ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tdf#148672 transliterate word with closing bracket
-    emulateTyping(*pTextDoc, u"word] ");
+    emulateTyping(u"word] ");
     sReplaced += u"𐳮𐳛𐳢𐳇] "; // This was "word]" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tdf#148672 transliterate words with parenthesis (libnumbertext 1.0.11)
-    emulateTyping(*pTextDoc, u"(word) ");
+    emulateTyping(u"(word) ");
     sReplaced += u"(𐳮𐳛𐳢𐳇) "; // This was "(word)" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"(word ");
+    emulateTyping(u"(word ");
     sReplaced += u"(𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"word) ");
+    emulateTyping(u"word) ");
     sReplaced += u"𐳮𐳛𐳢𐳇) "; // This was "word)" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"{word} ");
+    emulateTyping(u"{word} ");
     sReplaced += u"{𐳮𐳛𐳢𐳇} "; // This was "(word)" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"{word ");
+    emulateTyping(u"{word ");
     sReplaced += u"{𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"word} ");
+    emulateTyping(u"word} ");
     sReplaced += u"𐳮𐳛𐳢𐳇} "; // This was "word)" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"[word] ");
+    emulateTyping(u"[word] ");
     sReplaced += u"[𐳮𐳛𐳢𐳇] "; // This was "(word)" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
-    emulateTyping(*pTextDoc, u"[word ");
+    emulateTyping(u"[word ");
     sReplaced += u"[𐳮𐳛𐳢𐳇 "; // This was "(word" (no transliteration)
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
@@ -2963,20 +2952,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testAutoCorr)
     createSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     //Normal AutoCorrect
-    emulateTyping(*pTextDoc, u"tset ");
+    emulateTyping(u"tset ");
     CPPUNIT_ASSERT_EQUAL(u"Test "_ustr, getParagraph(1)->getString());
 
     //AutoCorrect with change style to bolt
-    emulateTyping(*pTextDoc, u"Bolt ");
+    emulateTyping(u"Bolt ");
     const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2);
     CPPUNIT_ASSERT_EQUAL(u"Bolt"_ustr, xRun->getString());
     CPPUNIT_ASSERT_EQUAL(u"Arial"_ustr, getProperty<OUString>(xRun, u"CharFontName"_ustr));
 
     //AutoCorrect inserts Table with 2 rows and 3 columns
-    emulateTyping(*pTextDoc, u"4xx ");
+    emulateTyping(u"4xx ");
     const uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
@@ -2988,21 +2976,20 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf130274)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* const pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
     CPPUNIT_ASSERT(
         !IDocumentRedlineAccess::IsRedlineOn(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // "tset" may be replaced by the AutoCorrect in the test profile
-    emulateTyping(*pTextDoc, u"tset");
+    emulateTyping(u"tset");
     // select from left to right
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
 
     pWrtShell->SetRedlineFlags(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
     // this would crash in AutoCorrect
-    emulateTyping(*pTextDoc, u".");
+    emulateTyping(u".");
 
     CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
 }
@@ -3013,7 +3000,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // enabled but not shown
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
@@ -3027,7 +3013,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
 
     // the document contains redlines that are combined with CompressRedlines()
     // if that happens during AutoCorrect then indexes in Undo are off -> crash
-    emulateTyping(*pTextDoc, u"tset ");
+    emulateTyping(u"tset ");
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     auto const nActions(rUndoManager.GetUndoActionCount());
     for (auto i = nActions; 0 < i; --i)
@@ -3069,12 +3055,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf139922)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    emulateTyping(*pTextDoc, u"this is a SEntence. this is a SEntence.");
+    emulateTyping(u"this is a SEntence. this is a SEntence.");
 
     // Without the fix in place, this test would have failed with
     // - Expected: This is a Sentence. This is a Sentence.
@@ -3118,12 +3104,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf129270)
     createSwDoc("tdf129270.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // Go to document end
     pWrtShell->SttEndDoc(/*bStt=*/false);
 
     // Press enter
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -3232,7 +3218,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     // This crashed here before the fix.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
@@ -3421,18 +3407,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158454)
     createSwDoc("tdf158454.odt");
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // * without change tracking
     CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
 
     // Thai single autocorrect (อนุญาติ -> อนุญาต)
-    emulateTyping(*pTextDoc, u"อนุญาติ ");
+    emulateTyping(u"อนุญาติ ");
     OUString sReplaced = u"อนุญาต (จบ)"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Thai multiple autocorrects (กงศุลสังเกตุกระทันหัน -> กงสุลสังเกตกะทันหัน)
-    emulateTyping(*pTextDoc, u"กงศุลสังเกตุกระทันหัน ");
+    emulateTyping(u"กงศุลสังเกตุกระทันหัน ");
     sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน (จบ)"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
@@ -3444,12 +3429,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158454)
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
     // Thai single autocorrect (อนุญาติ -> อนุญาต)
-    emulateTyping(*pTextDoc, u"อนุญาติ ");
+    emulateTyping(u"อนุญาติ ");
     sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน อนุญาต (จบ)"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Thai multiple autocorrects (กงศุลสังเกตุกระทันหัน -> กงสุลสังเกตกะทันหัน)
-    emulateTyping(*pTextDoc, u"กงศุลสังเกตุกระทันหัน ");
+    emulateTyping(u"กงศุลสังเกตุกระทันหัน ");
     sReplaced = u"อนุญาต กงสุลสังเกตกะทันหัน อนุญาต กงสุลสังเกตกะทันหัน (จบ)"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }

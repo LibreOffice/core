@@ -386,20 +386,19 @@ DECLARE_MAILMERGE_TEST(testGrabBag, "grabbagtest.docx", "onecell.xlsx", "Sheet1"
 
     loadMailMergeDocument(0, ".docx");
 
-    SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), getSwDocShell()->GetWrtShell()->GetPhyPageNum());
 
     // check grabbag
     uno::Reference<beans::XPropertySet> const xModel(
         mxComponent, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    pTextDoc->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
+    xTextDocumentPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), aInteropGrabBag.getLength());
 
     // check table border - comes from table style "Tabellenraster"
-    uno::Reference<text::XTextTable> const xTable(getParagraphOrTable(1, pTextDoc->getText()), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> const xTable(getParagraphOrTable(1, xTextDocument->getText()), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> const xTableProps(xTable, uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(table::TableBorder(
                 table::BorderLine(util::Color(0), 0, 18, 0), true,

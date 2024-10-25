@@ -242,16 +242,21 @@ protected:
     SwDocShell* getSwDocShell();
 
     /**
+     * Gets SwXTextDocument from loaded component
+     */
+    SwXTextDocument* getSwTextDoc();
+
+    /**
      * Wraps a reqif-xhtml fragment into an XHTML file, and XML-parses it.
      */
     xmlDocUniquePtr WrapReqifFromTempFile();
 
-    void emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr);
+    void emulateTyping(const std::u16string_view& rStr);
 
 private:
     void loadURL(OUString const& rURL, const char* pPassword = nullptr);
 
-    void dumpLayout(const css::uno::Reference< css::lang::XComponent > & rComponent);
+    void dumpLayout(SwDoc* pDoc);
 };
 
 /**

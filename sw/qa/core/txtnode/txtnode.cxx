@@ -169,8 +169,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
 
     // Given a document with a title field:
     createSwDoc("title-field-invalidate.fodt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pTextDoc->initializeForTiledRendering({});
+    getSwTextDoc()->initializeForTiledRendering({});
     SwDocShell* pShell = getSwDocShell();
     SwDoc* pDoc = pShell->GetDoc();
     SwWrtShell* pWrtShell = pShell->GetWrtShell();

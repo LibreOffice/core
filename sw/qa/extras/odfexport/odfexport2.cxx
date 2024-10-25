@@ -1276,8 +1276,7 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
     // some Mac has 3110
 #if !defined(_WIN32) && !defined(MACOSX)
     {
-        SwDocShell *const pShell(dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell());
-        std::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
+        std::shared_ptr<GDIMetaFile> pMetaFile = getSwDocShell()->GetPreviewMetaFile();
         MetafileXmlDump aDumper;
         xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *pMetaFile);
 

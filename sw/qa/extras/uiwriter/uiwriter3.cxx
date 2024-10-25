@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf151974)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     dispatchCommand(mxComponent, u".uno:GoDown"_ustr, {});
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -255,7 +255,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
 {
     createSwDoc("tdf143574.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
@@ -268,6 +267,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf143574)
     dispatchCommand(mxComponent, u".uno:EnterGroup"_ustr, {});
 
     // Select a shape in the group
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
@@ -563,8 +563,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
 {
     createSwDoc("tdf147126.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
 
     xmlDocUniquePtr pLayoutXML1 = parseLayoutDump();
 
@@ -613,6 +611,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         CPPUNIT_ASSERT_LESS(nDraw4, nFlyBottom);
     }
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (auto nLineBreakCount = 0; nLineBreakCount < 4; ++nLineBreakCount)
     {
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
@@ -1233,9 +1232,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147961)
 
     pWrtShell->Insert(u"++"_ustr);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
     // Without the fix in place, this test would have crashed here
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -1939,9 +1937,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
     // the anchor moving does the same for it.
 
     createSwDoc("AsCharTxBxTest.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // Add 3x tab to the doc
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -1985,7 +1983,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, TestAsCharTextBox)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)
 {
     createSwDoc("tdf155028.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShapes> xGroupShape(getShape(1), uno::UNO_QUERY);
@@ -1995,6 +1992,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155028)
     dispatchCommand(mxComponent, u".uno:EnterGroup"_ustr, {});
 
     // Select a shape in the group
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
@@ -2055,7 +2053,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140975)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 {
     createSwDoc("tdf76636.doc");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -2066,6 +2063,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
 
     //go to middle row
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
@@ -2093,7 +2091,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
 {
     createSwDoc("tdf76636.doc");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -2103,6 +2100,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf76636_2)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTextTable->getColumns()->getCount());
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
@@ -2310,7 +2308,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf136778)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 {
     createSwDoc("tdf123285.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(true,
                          getParagraph(1)->getString().endsWith(
@@ -2319,6 +2316,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 
     dispatchCommand(mxComponent, u".uno:GoToEndOfPage"_ustr, {});
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -2332,7 +2330,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf123285)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
 {
     createSwDoc("tdf130746.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -2348,6 +2345,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130746)
                                               uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -2536,23 +2534,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130680)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf150457)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
-    emulateTyping(*pTextDoc, u"a");
+    emulateTyping(u"a");
     dispatchCommand(mxComponent, u".uno:InsertFootnote"_ustr, {});
-    emulateTyping(*pTextDoc, u"abc");
+    emulateTyping(u"abc");
 
-    auto xFootnotes = pTextDoc->getFootnotes();
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFootnotes = xFootnotesSupplier->getFootnotes();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xFootnotes->getCount());
     auto xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"abc"_ustr, xParagraph->getString());
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_PAGEUP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    emulateTyping(*pTextDoc, u"d");
+    emulateTyping(u"d");
 
     dispatchCommand(mxComponent, u".uno:InsertFootnote"_ustr, {});
-    emulateTyping(*pTextDoc, u"def");
+    emulateTyping(u"def");
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFootnotes->getCount());
     xParagraph = uno::Reference<text::XTextRange>(xFootnotes->getByIndex(1), uno::UNO_QUERY);

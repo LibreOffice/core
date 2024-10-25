@@ -71,7 +71,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf139127)
 {
     createSwDoc("tdf139127.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
@@ -96,7 +95,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf139127)
     dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
     dispatchCommand(mxComponent, u".uno:SwBackspace"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(1, getPages());
-    CPPUNIT_ASSERT_EQUAL(u"First page"_ustr, pTextDoc->getText()->getString());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"First page"_ustr, xTextDocument->getText()->getString());
 
     // Undo
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
@@ -1188,7 +1188,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     selectShape(1);
 
 #if !defined(MACOSX)
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Calc the left edge of the as-char frame.
     SwRootFrame* pLayout = pWrtShell->GetLayout();
     SwFrame* pPage = pLayout->GetLower();
@@ -1221,6 +1220,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testImageComment)
     // I.e. the anchor position had a non-empty size, which meant different rendering via tiled
     // rendering and on the desktop.
     tools::JsonWriter aJsonWriter;
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
     std::stringstream aStream((std::string(pChar)));
@@ -3180,11 +3180,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128335)
     // Select the 3rd textbox.
     SwView* pView = getSwDocShell()->GetView();
     selectShape(1);
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.
@@ -3557,11 +3557,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf128603)
     // Select the 3rd textbox.
     SwView* pView = getSwDocShell()->GetView();
     selectShape(1);
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // Cut it.

@@ -635,7 +635,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135014)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130629)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
@@ -651,6 +650,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf130629)
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
     // Shape toolbar is active, use ESC before inserting a new shape
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
@@ -742,8 +742,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf140731)
 
     pWrtSh->Insert(u"Lorem"_ustr);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
@@ -806,7 +805,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf116315)
     pWrtSh->Insert(u"This is a test"_ustr);
     pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 4, /*bBasicCall=*/false);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 5; ++i)
     {
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_F3);
@@ -840,7 +839,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
     // expands autotext (via F3)
     pWrtShell->Insert(u" jacr"_ustr);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
@@ -957,7 +956,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf144364)
     // expands autotext (via F3)
     pWrtSh->Insert(u"AR"_ustr);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_F3);
     Scheduler::ProcessEventsToIdle();
 
@@ -1423,12 +1422,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146356)
 {
     createSwDoc("tdf146356.odt");
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD2 | awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    emulateTyping(*pTextDoc, u"Some Text");
+    emulateTyping(u"Some Text");
 
     // Without the fix in place, this test would have failed with
     // - Expected: Some Text
@@ -1473,9 +1471,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf121546)
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-
     // Without the fix in place, this test would have crashed here
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
@@ -1997,7 +1994,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf150576)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aPropertyValues
         = comphelper::InitPropertySequence({ { "Text", uno::Any(u"Comment"_ustr) } });
@@ -2010,6 +2006,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     tools::JsonWriter aJsonWriter;
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->getPostIts(aJsonWriter);
     OString pChar = aJsonWriter.finishAndGetAsOString();
     std::stringstream aStream((std::string(pChar)));
@@ -2027,7 +2024,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf132603)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf117601)
 {
     createSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         { { "Rows", uno::Any(sal_Int32(5)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
@@ -2049,6 +2045,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf117601)
     xCellB2->setString(u"test2"_ustr);
 
     //go to middle row
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_UP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
@@ -2126,7 +2123,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf136385)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145207)
 {
     createSwDoc("tdf145207.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
@@ -2134,6 +2130,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145207)
     //select one shape and use the TAB key to iterate over the different shapes
     selectShape(1);
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 10; ++i)
     {
         // Without the fix in place, this test would have crashed here
@@ -2145,7 +2142,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145207)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128782)
 {
     createSwDoc("tdf128782.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     uno::Reference<drawing::XShape> xShape1 = getShape(1);
@@ -2158,6 +2154,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128782)
     //select shape 2 and move it down
     selectShape(2);
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
@@ -2180,7 +2177,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128782)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
 {
     createSwDoc("tdf135623.docx");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(2, getPages());
@@ -2195,6 +2191,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
     //select shape 1 and move it down
     selectShape(1);
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
     Scheduler::ProcessEventsToIdle();
 
@@ -2221,7 +2218,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf135623)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
 {
     createSwDoc("tdf133490.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
@@ -2249,6 +2245,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf133490)
     //select shape 2 and move it to the right
     selectShape(2);
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 5; ++i)
     {
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
@@ -2439,7 +2436,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf137964)
     createSwDoc("tdf137964.odt");
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<drawing::XShape> xShape(getShape(1), uno::UNO_QUERY);
@@ -2453,6 +2449,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf137964)
 
     pWrtShell->SelectObj(Point(), 0, pObject);
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_UP);
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_LEFT);
     Scheduler::ProcessEventsToIdle();
@@ -2505,7 +2502,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf143244)
 
     dispatchCommand(mxComponent, u".uno:GoUp"_ustr, {});
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (sal_Int32 i = 0; i < 6; ++i)
     {
         pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
@@ -3037,7 +3034,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156560)
         getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, u"HeaderIsOn"_ustr));
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_PAGEUP);
 
     // Insert header

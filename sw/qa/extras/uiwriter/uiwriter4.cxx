@@ -1058,10 +1058,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695)
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     // Now Enter + a key should add some text.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    emulateTyping(*pXTextDocument, u"a");
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    emulateTyping(u"a");
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, Enter did not start the fly frame edit mode.
@@ -1083,9 +1082,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695NormalChar)
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     // Now pressing 'a' should add a character.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    emulateTyping(*pXTextDocument, u"a");
+    emulateTyping(u"a");
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
     // This was empty, pressing a normal character did not start the fly frame edit mode.
@@ -1107,10 +1104,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf84695Tab)
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     // Now pressing 'tab' should jump to the other shape.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     // And finally make sure the selection has changed.
@@ -1473,7 +1469,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
     // have their contents selected upon entry into the control (i.e. no placeholder text).
     createSwDoc("tdf151548_tabNavigation2.docx");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), pMarkAccess->getFieldmarksCount());
@@ -1486,16 +1481,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
     }
 
     // Toggle on the legacy checkbox
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
     // Tab to the next control - the modern checkbox
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     // Tab to the next control - the second legacy checkbox, and toggle it on.
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
     // Tab to the next control - a plain text control without placeholder text
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     // Tab to the next control - a combobox with custom text
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
 
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
@@ -1509,13 +1505,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation2)
         // so the next tab should take us back to the beginning with the first legacy checkbox.
 
         // Tab to the legacy checkbox, and toggle it off.
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE);
         Scheduler::ProcessEventsToIdle();
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
         // Tab to the next content control
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     }
 }
 
@@ -1526,19 +1522,19 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
     // we want to test that tab navigation completes and loops around to continue at the beginning.
     createSwDoc("tdf151548_tabNavigation.docm");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pMarkAccess->getFieldmarksCount());
 
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     // Tab and toggle 4 times, verifying beforehand that the state was unchecked
     for (auto it = pMarkAccess->getFieldmarksBegin(); it != pMarkAccess->getFieldmarksEnd(); ++it)
     {
         sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
 
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox on
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
         Scheduler::ProcessEventsToIdle();
     }
 
@@ -1549,11 +1545,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf151548_tabNavigation)
         sw::mark::CheckboxFieldmark* pCheckBox = dynamic_cast<::sw::mark::CheckboxFieldmark*>(*it);
 
         CPPUNIT_ASSERT(pCheckBox->IsChecked());
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 32, KEY_SPACE); // toggle checkbox off
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT(!pCheckBox->IsChecked());
-        pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB); // move to next control
     }
 }
 
@@ -2414,7 +2410,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     // This test also covers tdf#117185 tdf#110442
 
     createSwDoc("tdf107975.odt");
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Reference<text::XTextGraphicObjectsSupplier> xTextGraphicObjectsSupplier(mxComponent,
                                                                                   uno::UNO_QUERY);
@@ -2453,7 +2448,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107975)
     //try again with anchor at start of doc which is another special case
     xShape.set(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> const xStart = pTextDoc->getText()->getStart();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> const xStart = xTextDocument->getText()->getStart();
     xShapeContent->attach(xStart);
 
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,

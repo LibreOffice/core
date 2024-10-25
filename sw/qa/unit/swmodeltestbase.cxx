@@ -73,7 +73,7 @@ void SwModelTestBase::executeLoadVerifyReloadVerify(const char* filename, const 
     maTempFile.EnableKillingFile();
 }
 
-void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rComponent)
+void SwModelTestBase::dumpLayout(SwDoc* pDoc)
 {
     // create the xml writer
     mpXmlBuffer = xmlBufferCreate();
@@ -81,9 +81,6 @@ void SwModelTestBase::dumpLayout(const uno::Reference<lang::XComponent>& rCompon
     (void)xmlTextWriterStartDocument(pXmlWriter, nullptr, nullptr, nullptr);
 
     // create the dump
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(rComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     pLayout->dumpAsXml(pXmlWriter);
 
@@ -141,9 +138,13 @@ uno::Reference<style::XAutoStyleFamily> SwModelTestBase::getAutoStyles(const OUS
 xmlDocUniquePtr SwModelTestBase::parseLayoutDump(const uno::Reference<lang::XComponent>& xComponent)
 {
     if (xComponent)
-        dumpLayout(xComponent);
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(xComponent.get());
+        CPPUNIT_ASSERT(pTextDoc);
+        dumpLayout(pTextDoc->GetDocShell()->GetDoc());
+    }
     else
-        dumpLayout(mxComponent);
+        dumpLayout(getSwDoc());
 
     auto pBuffer = reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer));
     SAL_INFO("sw.qa", "SwModelTestBase::parseLayoutDump: pBuffer is '" << pBuffer << "'");
@@ -335,9 +336,8 @@ uno::Reference<drawing::XShape> SwModelTestBase::getShape(int number)
 
 void SwModelTestBase::selectShape(int number)
 {
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(
-        pXTextDocument->getCurrentController(), uno::UNO_QUERY);
+        getSwTextDoc()->getCurrentController(), uno::UNO_QUERY);
     xSelectionSupplier->select(uno::Any(getShape(number)));
     CPPUNIT_ASSERT(xSelectionSupplier->getSelection().hasValue());
 
@@ -465,12 +465,13 @@ SwDoc* SwModelTestBase::getSwDoc()
     return pDoc;
 }
 
-SwDocShell* SwModelTestBase::getSwDocShell()
+SwDocShell* SwModelTestBase::getSwDocShell() { return getSwTextDoc()->GetDocShell(); }
+
+SwXTextDocument* SwModelTestBase::getSwTextDoc()
 {
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
-
-    return pTextDoc->GetDocShell();
+    return pTextDoc;
 }
 
 xmlDocUniquePtr SwModelTestBase::WrapReqifFromTempFile()
@@ -487,12 +488,13 @@ xmlDocUniquePtr SwModelTestBase::WrapReqifFromTempFile()
     return pXmlDoc;
 }
 
-void SwModelTestBase::emulateTyping(SwXTextDocument& rTextDoc, const std::u16string_view& rStr)
+void SwModelTestBase::emulateTyping(const std::u16string_view& rStr)
 {
+    SwXTextDocument* pTextDoc = getSwTextDoc();
     for (const char16_t c : rStr)
     {
-        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
-        rTextDoc.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
 }

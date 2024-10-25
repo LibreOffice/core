@@ -81,8 +81,7 @@ SwXTextDocument* SwTiledRenderingTest::createDoc(const char* pName)
         createSwDoc();
     else
         createSwDoc(pName);
-    auto pTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pTextDocument);
+    SwXTextDocument* pTextDocument = getSwTextDoc();
     pTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     return pTextDocument;
 }

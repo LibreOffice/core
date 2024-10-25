@@ -2264,9 +2264,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
 
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    emulateTyping(*pXTextDocument, u"a b");
+    emulateTyping(u"a b");
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
@@ -2283,7 +2281,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf127635)
                            pDoc->getIDocumentRedlineAccess().IsRedlineOn());
     CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
 
-    emulateTyping(*pXTextDocument, u"c d");
+    emulateTyping(u"c d");
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT(pEditShell);
@@ -2432,9 +2430,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89954)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->EndPara();
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    emulateTyping(*pXTextDocument, u"test.");
+    emulateTyping(u"test.");
 
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).

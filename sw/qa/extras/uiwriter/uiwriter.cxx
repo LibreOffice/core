@@ -1025,8 +1025,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkPosition)
         SwEditShell* pEditShell = pDoc->GetEditShell();
         CPPUNIT_ASSERT(pEditShell);
         SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-        rtl::Reference<SwXTextDocument> xModel = getSwDocShell()->GetBaseModel();
-        uno::Reference<container::XNameAccess> xStyleFamilies = xModel->getStyleFamilies();
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
+                                                                         uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
 
         // 1. Add additional page breaks
         for (int j = 0; j < aAdditionalPagesCount[i]; ++j)
@@ -1463,11 +1464,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
     createSwDoc("merge-change1.odt");
     SwDoc* pDoc = getSwDoc();
 
-    auto xDoc2Component(loadFromDesktop(
+    mxComponent2 = loadFromDesktop(
             createFileURL(u"merge-change2.odt"),
-            u"com.sun.star.text.TextDocument"_ustr));
+            u"com.sun.star.text.TextDocument"_ustr);
     auto pxDoc2Document(
-            dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));
+            dynamic_cast<SwXTextDocument *>(mxComponent2.get()));
     CPPUNIT_ASSERT(pxDoc2Document);
     SwDoc* const pDoc2(pxDoc2Document->GetDocShell()->GetDoc());
 
@@ -1487,8 +1488,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testMergeDoc)
     getParagraph(5, u"Para Six: One Three Four Five"_ustr);
     getParagraph(6, u""_ustr);
     getParagraph(7, u""_ustr);
-
-    xDoc2Component->dispose();
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCreatePortions)

@@ -49,10 +49,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAutocorrect)
 
     // When typing a string, which contains a "-", then make sure no memory corruption happens when
     // it gets auto-corrected to "–":
-    auto pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Without the accompanying fix in place, this test would have failed with a
     // heap-use-after-free:
-    emulateTyping(*pTextDoc, u"But not now - with ");
+    emulateTyping(u"But not now - with ");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testDeleteSelNormalize)

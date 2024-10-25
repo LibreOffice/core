@@ -752,12 +752,8 @@ CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
 {
     loadAndReload("TestPuzzleExport.odt");
     // See tdf#148342 for details
-    // Get the doc
-    uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
-    auto pSwDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
-    CPPUNIT_ASSERT(pSwDoc);
     // Create a metafile
-    auto pMeta = pSwDoc->GetDocShell()->GetPreviewMetaFile();
+    auto pMeta = getSwDocShell()->GetPreviewMetaFile();
     CPPUNIT_ASSERT(pMeta);
     MetafileXmlDump aDumper;
     auto pMetaXml = dumpAndParse(aDumper, *pMeta);

@@ -401,10 +401,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
     const sal_Unicode cIns = ':';
     pWrtShell->AutoCorrect(corr, cIns);
 
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RETURN);
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, this test would have crashed here
@@ -1171,7 +1170,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
     // check move down with redlining
     createSwDoc("tdf39721.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     //turn on red-lining and show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
@@ -1183,7 +1181,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
         IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
 
     // store original text of the document for checking Undo
-    OUString sOrigText(pTextDoc->getText()->getString());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    OUString sOrigText(xTextDocument->getText()->getString());
 
     // first paragraph is "Lorem ipsum" with deleted "m ips"
     CPPUNIT_ASSERT_EQUAL(u"Lorem ipsum"_ustr, getParagraph(1)->getString());
@@ -1197,7 +1196,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
     // Undo and repeat it with the second paragraph
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sOrigText, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(sOrigText, xTextDocument->getText()->getString());
 
     // second paragraph is "dolor sit" with deleted "lor "
     CPPUNIT_ASSERT_EQUAL(u"dolor sit"_ustr, getParagraph(2)->getString());
@@ -1215,7 +1214,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf39721)
 
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
 
-    CPPUNIT_ASSERT_EQUAL(sOrigText, pTextDoc->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(sOrigText, xTextDocument->getText()->getString());
 #endif
 }
 
@@ -1252,11 +1251,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145066_bad_paragraph_deletion)
     // TODO fix unnecessary insertion of a new list item at the end of the document
     CPPUNIT_ASSERT(getParagraphs() >= 3);
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // This was "Loremdolsit\namet.\n" (bad deletion of "m\n" at the end of item 1)
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Loremm" SAL_NEWLINE_STRING "dolsit" SAL_NEWLINE_STRING
                          "amet." SAL_NEWLINE_STRING ""_ustr,
-                         pTextDoc->getText()->getString());
+                         xTextDocument->getText()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf145311_move_over_empty_paragraphs)
@@ -1963,10 +1962,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf108687_tabstop)
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(9), nStartIndex);
 
     // Now pressing 'tab' should jump to the radio buttons.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    CPPUNIT_ASSERT(pXTextDocument);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
-    pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
+    SwXTextDocument* pTextDoc = getSwTextDoc();
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
     //sal_Int32 nEndIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     //CPPUNIT_ASSERT_EQUAL(sal_Int32(11), nEndIndex);
@@ -3062,7 +3060,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
 {
     createSwDoc("tdf54819.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     // switch on "Show changes in margin" mode
     dispatchCommand(mxComponent, u".uno:ShowChangesInMargin"_ustr, {});
@@ -3086,7 +3083,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf139120)
         dispatchCommand(mxComponent, u".uno:Delete"_ustr, {});
     }
 
-    CPPUNIT_ASSERT_EQUAL(u"Lorem ipsum sit amet."_ustr, pTextDoc->getText()->getString());
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Lorem ipsum sit amet."_ustr, xTextDocument->getText()->getString());
 
     for (int i = 0; i < 6; ++i)
     {

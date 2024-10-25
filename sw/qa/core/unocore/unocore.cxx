@@ -802,8 +802,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControls)
 {
     // Given an empty document:
     createSwDoc();
-    auto pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
-    uno::Reference<container::XIndexAccess> xContentControls = pXTextDocument->getContentControls();
+    uno::Reference<container::XIndexAccess> xContentControls = getSwTextDoc()->getContentControls();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xContentControls->getCount());
 
     // When inserting content controls:

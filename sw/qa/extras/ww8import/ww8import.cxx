@@ -292,11 +292,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf127048)
     // Use loadComponentFromURL so MacrosTest::loadFromDesktop is not called.
     // Otherwise it sets MacroExecutionMode to ALWAYS_EXECUTE_NO_WARN
     mxComponent = mxDesktop->loadComponentFromURL(createFileURL(u"tdf127048.doc"), u"_default"_ustr, 0, {});
-
-    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModel);
-    SfxObjectShell* pShell = pModel->GetObjectShell();
-    CPPUNIT_ASSERT_EQUAL(false, pShell->GetMacroCallsSeenWhileLoading());
+    CPPUNIT_ASSERT_EQUAL(false, getSwDocShell()->GetMacroCallsSeenWhileLoading());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf134902)

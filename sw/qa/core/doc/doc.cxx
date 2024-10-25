@@ -212,17 +212,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextBoxMakeFlyFrame)
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable(*pWrtShell);
     pTransfer->Cut();
     TransferableDataHelper aHelper(pTransfer);
-    uno::Reference<lang::XComponent> xDoc2 = loadFromDesktop(
-        u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr, {});
-    SwXTextDocument* pTextDoc2 = dynamic_cast<SwXTextDocument*>(xDoc2.get());
+    mxComponent2 = loadFromDesktop(u"private:factory/swriter"_ustr,
+                                   u"com.sun.star.text.TextDocument"_ustr, {});
+    SwXTextDocument* pTextDoc2 = dynamic_cast<SwXTextDocument*>(mxComponent2.get());
     SwDocShell* pDocShell2 = pTextDoc2->GetDocShell();
     SwWrtShell* pWrtShell2 = pDocShell2->GetWrtShell();
     SwTransferable::Paste(*pWrtShell2, aHelper);
 
     // Then make sure its fly frame is created.
-    mxComponent->dispose();
-    mxComponent = xDoc2;
-    xmlDocUniquePtr pLayout = parseLayoutDump();
+    xmlDocUniquePtr pLayout = parseLayoutDump(mxComponent2);
     // Without the accompanying fix in place, this test would have failed, because the first text
     // frame in the body frame had an SwAnchoredDrawObject anchored to it, but not a fly frame, so
     // a blank square was painted, not the image.
@@ -663,11 +661,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAtCharImageCopy)
     rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell1);
     xTransfer->Copy();
     // Don't use createSwDoc(), UnoApiTest::loadWithParams() would dispose the first document.
-    uno::Reference<lang::XComponent> xComponent2 = loadFromDesktop(u"private:factory/swriter"_ustr);
-    comphelper::ScopeGuard g([xComponent2] { xComponent2->dispose(); });
+    mxComponent2 = loadFromDesktop(u"private:factory/swriter"_ustr);
 
     // When copying the body text from that document to a new one:
-    auto pXTextDocument2 = dynamic_cast<SwXTextDocument*>(xComponent2.get());
+    auto pXTextDocument2 = dynamic_cast<SwXTextDocument*>(mxComponent2.get());
     SwDocShell* pDocShell2 = pXTextDocument2->GetDocShell();
     SwWrtShell* pWrtShell2 = pDocShell2->GetWrtShell();
     TransferableDataHelper aHelper(xTransfer);
