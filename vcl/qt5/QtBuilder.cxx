@@ -344,12 +344,10 @@ void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rPropertie
     }
 }
 
-void QtBuilder::applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& rGrid,
+void QtBuilder::applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& rGrid,
                                            const stringmap& rPackingProperties)
 {
-    if (!rCurrentChild.isWidgetType())
-        return;
-
+    assert(pCurrentChild);
     assert(rPackingProperties.contains(u"left-attach"_ustr)
            && "left-attach property missing for grid item");
     assert(rPackingProperties.contains(u"top-attach"_ustr)
@@ -358,9 +356,18 @@ void QtBuilder::applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& 
     const sal_Int32 nColumn = rPackingProperties.at(u"left-attach"_ustr).toInt32();
     const sal_Int32 nRow = rPackingProperties.at(u"top-attach"_ustr).toInt32();
 
-    QWidget& rCurrentWidget = static_cast<QWidget&>(rCurrentChild);
-    rGrid.removeWidget(&rCurrentWidget);
-    rGrid.addWidget(&rCurrentWidget, nRow, nColumn);
+    if (pCurrentChild->isWidgetType())
+    {
+        QWidget* pWidget = static_cast<QWidget*>(pCurrentChild);
+        rGrid.removeWidget(pWidget);
+        rGrid.addWidget(pWidget, nRow, nColumn);
+        return;
+    }
+
+    // if it's not a QWidget, it must be a QLayout
+    QLayout* pLayout = static_cast<QLayout*>(pCurrentChild);
+    rGrid.removeItem(pLayout);
+    rGrid.addLayout(pLayout, nRow, nColumn);
 }
 
 void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
@@ -370,7 +377,7 @@ void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
         return;
 
     if (QGridLayout* pGrid = qobject_cast<QGridLayout*>(pParent))
-        applyGridPackingProperties(*pCurrentChild, *pGrid, rPackingProperties);
+        applyGridPackingProperties(pCurrentChild, *pGrid, rPackingProperties);
     else
         SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }

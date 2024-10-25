@@ -75,7 +75,7 @@ private:
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
 
-    static void applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& rGrid,
+    static void applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& rGrid,
                                            const stringmap& rPackingProperties);
 };
 
