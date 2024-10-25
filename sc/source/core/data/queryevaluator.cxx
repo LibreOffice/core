@@ -370,12 +370,12 @@ bool ScQueryEvaluator::isFastCompareByString(const ScQueryEntry& rEntry) const
            && isMatchWholeCell(rEntry.eOp);
 }
 
-// The value is placed inside one parameter: [pValueSource1].
+// The value is placed inside parameter rValueSource.
 // For the template argument see isFastCompareByString().
 template <bool bFast>
 std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEntry,
                                                         const ScQueryEntry::Item& rItem,
-                                                        const svl::SharedString* pValueSource1)
+                                                        const svl::SharedString& rValueSource)
 {
     bool bOk = false;
     bool bTestEqual = false;
@@ -387,11 +387,9 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
     const bool bRealWildOrRegExp = !bFast && isRealWildOrRegExp(rEntry);
     const bool bTestWildOrRegExp = !bFast && isTestWildOrRegExp(rEntry);
 
-    assert(pValueSource1);
-
     if (!bFast && (bRealWildOrRegExp || bTestWildOrRegExp))
     {
-        const OUString& rValue = pValueSource1->getString();
+        const OUString& rValue = rValueSource.getString();
 
         sal_Int32 nStart = 0;
         sal_Int32 nEnd = rValue.getLength();
@@ -467,11 +465,11 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                 // This is the bFast path, all conditions should lead here on bFast == true.
                 if (mrParam.bCaseSens)
                 {
-                    bOk = pValueSource1->getData() == rItem.maString.getData();
+                    bOk = rValueSource.getData() == rItem.maString.getData();
                 }
                 else
                 {
-                    bOk = pValueSource1->getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
+                    bOk = rValueSource.getDataIgnoreCase() == rItem.maString.getDataIgnoreCase();
                 }
 
                 if (!bFast && rEntry.eOp == SC_NOT_EQUAL)
@@ -484,10 +482,8 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
 
                 if (!mbCaseSensitive)
                 { // Common case for vlookup etc.
-                    const svl::SharedString rSource(*pValueSource1);
-
                     const rtl_uString* pQuer = rItem.maString.getDataIgnoreCase();
-                    const rtl_uString* pCellStr = rSource.getDataIgnoreCase();
+                    const rtl_uString* pCellStr = rValueSource.getDataIgnoreCase();
 
                     assert(pCellStr != nullptr);
                     if (pQuer == nullptr)
@@ -512,7 +508,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
                 }
                 else
                 {
-                    const OUString& rValue = pValueSource1->getString();
+                    const OUString& rValue = rValueSource.getString();
                     const OUString aQueryStr = rItem.maString.getString();
                     const LanguageType nLang
                         = ScGlobal::oSysLocale->GetLanguageTag().getLanguageType();
@@ -559,7 +555,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
         }
         else
         { // use collator here because data was probably sorted
-            const OUString& rValue = pValueSource1->getString();
+            const OUString& rValue = rValueSource.getString();
             setupCollatorIfNeeded();
             sal_Int32 nCompare = mpCollator->compareString(rValue, rItem.maString.getString());
             switch (rEntry.eOp)
@@ -794,9 +790,9 @@ std::pair<bool, bool> ScQueryEvaluator::processEntry(SCROW nRow, SCCOL nCol, ScR
             svl::SharedString cellSharedString = getCellSharedString(aCell, nRow, rEntry.nField);
             std::pair<bool, bool> aThisRes;
             if (bFastCompareByString) // fast
-                aThisRes = compareByString<true>(rEntry, rItem, &cellSharedString);
+                aThisRes = compareByString<true>(rEntry, rItem, cellSharedString);
             else
-                aThisRes = compareByString(rEntry, rItem, &cellSharedString);
+                aThisRes = compareByString(rEntry, rItem, cellSharedString);
             aRes.first |= aThisRes.first;
             aRes.second |= aThisRes.second;
         }
