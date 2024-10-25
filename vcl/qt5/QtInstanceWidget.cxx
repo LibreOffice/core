@@ -187,7 +187,15 @@ void QtInstanceWidget::set_size_request(int, int) {}
 
 Size QtInstanceWidget::get_size_request() const { return Size(); }
 
-Size QtInstanceWidget::get_preferred_size() const { return Size(); }
+Size QtInstanceWidget::get_preferred_size() const
+{
+    SolarMutexGuard g;
+
+    Size aPreferredSize;
+    GetQtInstance().RunInMainThread([&] { aPreferredSize = toSize(m_pWidget->sizeHint()); });
+
+    return aPreferredSize;
+}
 
 float QtInstanceWidget::get_approximate_digit_width() const { return 1.0; }
 
