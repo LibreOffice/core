@@ -389,7 +389,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormatInsertStartList)
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     assert(pView);
 
-    // Insert a string at the begining of a list item
+    // Insert a string at the beginning of a list item
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, u"a"_ustr);
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, u""_ustr);
     Scheduler::ProcessEventsToIdle();
