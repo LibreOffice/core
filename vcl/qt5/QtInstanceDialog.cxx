@@ -148,8 +148,6 @@ void QtInstanceDialog::dialogFinished(int nResult)
         return;
     }
 
-    assert(m_aRunAsyncFunc);
-
     disconnect(m_pDialog.get(), &QDialog::finished, this, &QtInstanceDialog::dialogFinished);
 
     // use local variables for these, as members might have got de-allocated by the time they're reset
@@ -160,7 +158,8 @@ void QtInstanceDialog::dialogFinished(int nResult)
     m_xRunAsyncDialogController.reset();
     m_xRunAsyncDialog.reset();
 
-    aFunc(nResult);
+    if (aFunc)
+        aFunc(nResult);
 
     xRunAsyncDialogController.reset();
     xRunAsyncDialog.reset();
