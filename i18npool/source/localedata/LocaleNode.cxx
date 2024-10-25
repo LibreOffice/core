@@ -588,7 +588,13 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             if (mnSection > 0)
                 incError( "DateAcceptancePattern only handled in LC_FORMAT, not LC_FORMAT_1");
             else
-                theDateAcceptancePatterns.push_back( currNode->getValue());
+            {
+                auto val = currNode->getValue();
+                if (std::find(theDateAcceptancePatterns.begin(), theDateAcceptancePatterns.end(), val) == theDateAcceptancePatterns.end())
+                    theDateAcceptancePatterns.push_back(val);
+                else
+                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s\n", val);
+            }
             --formatCount;
             continue;   // for
         }
@@ -1170,8 +1176,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     OSTR( aPattern), OSTR( sTheDateEditFormat),
                     int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY),
                     OSTR( OUString(&cDateSep, 1)));
-            // Insert at front so full date pattern is first in checks.
-            theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern);
+
+            if (std::find(theDateAcceptancePatterns.begin(), theDateAcceptancePatterns.end(), aPattern) == theDateAcceptancePatterns.end())
+                theDateAcceptancePatterns.push_back(aPattern);
+            else
+                incErrorStr( "Error: Duplicated DateAcceptancePattern: %s\n", aPattern);
         }
         if (!aPatternBuf2.isEmpty())
         {
@@ -1188,7 +1197,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 fprintf( stderr, "Generated  2nd acceptance pattern: '%s' from '%s' (formatindex=\"%d\")\n",
                         OSTR( aPattern2), OSTR( sTheDateEditFormat),
                         int(cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY));
-                theDateAcceptancePatterns.insert( theDateAcceptancePatterns.begin(), aPattern2);
+
+                if (std::find(theDateAcceptancePatterns.begin(), theDateAcceptancePatterns.end(), aPattern2) == theDateAcceptancePatterns.end())
+                    theDateAcceptancePatterns.push_back(aPattern2);
+                else
+                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s\n", aPattern2);
             }
         }
 
@@ -1208,23 +1221,6 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                 OSTR(elem), OSTR( aDecSep));
                     }
                 }
-            }
-        }
-
-        // Check for duplicates.
-        for (std::vector<OUString>::const_iterator aIt = theDateAcceptancePatterns.begin();
-                aIt != theDateAcceptancePatterns.end(); ++aIt)
-        {
-            for (std::vector<OUString>::iterator aComp = theDateAcceptancePatterns.begin();
-                    aComp != theDateAcceptancePatterns.end(); /*nop*/)
-            {
-                if (aIt != aComp && *aIt == *aComp)
-                {
-                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s\n", *aComp);
-                    aComp = theDateAcceptancePatterns.erase( aComp);
-                }
-                else
-                    ++aComp;
             }
         }
 

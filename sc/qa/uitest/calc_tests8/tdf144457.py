@@ -26,7 +26,7 @@ class tdf144457(UITestCase):
 
                 xDatePatterns = xDialog.getChild("datepatterns")
 
-                self.assertEqual("M/D/Y;M/D", get_state_as_dict(xDatePatterns)['Text'])
+                self.assertEqual("M/D;M/D/Y", get_state_as_dict(xDatePatterns)['Text'])
 
                 try:
                     xDatePatterns.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
