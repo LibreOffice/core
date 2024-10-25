@@ -407,6 +407,21 @@ basegfx::B2DSize Graphic::GetPPI() const
     return basegfx::B2DSize(nGrfDPIx, nGrfDPIy);
 }
 
+basegfx::B2DSize Graphic::GetPPM() const
+{
+    const MapMode aGrfMap(GetPrefMapMode());
+    const Size aGrfPixelSize(GetSizePixel());
+    const Size aGrfPrefMapModeSize(GetPrefSize());
+    const Size aGrf100thMMSize = OutputDevice::LogicToLogic(
+            aGrfPrefMapModeSize, aGrfMap, MapMode(MapUnit::Map100thMM));
+    double nGrfDPMx = aGrf100thMMSize.Width() == 0
+        ? 0.0 : 100000.0 * aGrfPixelSize.Width() / aGrf100thMMSize.Width();
+    double nGrfDPMy = aGrf100thMMSize.Height() == 0
+        ? 0.0 : 100000.0 * aGrfPixelSize.Height() / aGrf100thMMSize.Height();
+
+    return basegfx::B2DSize(nGrfDPMx, nGrfDPMy);
+}
+
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
 {
     Size aRet;

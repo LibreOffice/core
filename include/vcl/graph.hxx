@@ -140,7 +140,10 @@ public:
     MapMode         GetPrefMapMode() const;
     void            SetPrefMapMode( const MapMode& rPrefMapMode );
 
+    /** pixels per inch i.e. DPI */
     basegfx::B2DSize GetPPI() const;
+    /** pixels per meter */
+    basegfx::B2DSize GetPPM() const;
 
     Size            GetSizePixel( const OutputDevice* pRefDevice = nullptr ) const;
 
