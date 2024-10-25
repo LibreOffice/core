@@ -105,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceFrame \
     vcl/qt5/QtInstanceMessageDialog \
     vcl/qt5/QtInstanceLabel \
+    vcl/qt5/QtInstanceRadioButton \
     vcl/qt5/QtInstanceTextView \
     vcl/qt5/QtInstanceWidget \
     vcl/qt5/QtInstanceWindow \

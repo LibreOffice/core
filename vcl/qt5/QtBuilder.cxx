@@ -25,6 +25,7 @@
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
 
 namespace
@@ -187,6 +188,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         extractMnemonicWidget(sID, rMap);
         pObject = new QLabel(pParentWidget);
+    }
+    else if (sName == u"GtkRadioButton")
+    {
+        pObject = new QRadioButton(pParentWidget);
     }
     else if (sName == u"GtkScrolledWindow")
     {
@@ -420,14 +425,15 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
             }
         }
     }
-    else if (QCheckBox* pCheckBox = qobject_cast<QCheckBox*>(pObject))
+    else if (qobject_cast<QCheckBox*>(pObject) || qobject_cast<QRadioButton*>(pObject))
     {
+        QAbstractButton* pButton = static_cast<QAbstractButton*>(pObject);
         for (auto const & [ rKey, rValue ] : rProps)
         {
             if (rKey == u"active")
-                pCheckBox->setChecked(toBool(rValue));
+                pButton->setChecked(toBool(rValue));
             else if (rKey == u"label")
-                pCheckBox->setText(convertAccelerator(rValue));
+                pButton->setText(convertAccelerator(rValue));
         }
     }
     else if (QDialog* pDialog = qobject_cast<QDialog*>(pObject))

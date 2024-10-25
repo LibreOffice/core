@@ -18,6 +18,7 @@
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
+#include <QtInstanceRadioButton.hxx>
 #include <QtInstanceTextView.hxx>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
@@ -160,10 +161,12 @@ std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const 
     return nullptr;
 }
 
-std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OUString&)
+std::unique_ptr<weld::RadioButton> QtInstanceBuilder::weld_radio_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QRadioButton* pRadioButton = m_xBuilder->get<QRadioButton>(rId);
+    std::unique_ptr<weld::RadioButton> xRet(
+        pRadioButton ? std::make_unique<QtInstanceRadioButton>(pRadioButton) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::CheckButton> QtInstanceBuilder::weld_check_button(const OUString& rId)
