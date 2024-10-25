@@ -184,6 +184,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         pObject = new QGridLayout(pParentWidget);
     }
+    else if (sName == u"GtkImage")
+    {
+        pObject = new QLabel(pParentWidget);
+    }
     else if (sName == u"GtkLabel")
     {
         extractMnemonicWidget(sID, rMap);

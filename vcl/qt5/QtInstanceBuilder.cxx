@@ -16,6 +16,7 @@
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceFrame.hxx>
+#include <QtInstanceImage.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceRadioButton.hxx>
@@ -202,10 +203,11 @@ std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
     return nullptr;
 }
 
-std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString&)
+std::unique_ptr<weld::Image> QtInstanceBuilder::weld_image(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
+    std::unique_ptr<weld::Image> xRet(pLabel ? std::make_unique<QtInstanceImage>(pLabel) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Calendar> QtInstanceBuilder::weld_calendar(const OUString&)
