@@ -29,6 +29,13 @@ public:
     virtual void set_font(const vcl::Font& rFont) override;
     virtual void set_custom_button(VirtualDevice* pDevice) override;
 
+    virtual void connect_clicked(const Link<Button&, void>& rLink) override;
+
+    // whether a custom click handler is set for the given button
+    // (s.a. weld::Button::is_custom_handler_set which would give the
+    // same result if called on the corresponding QtInstanceButton)
+    static bool hasCustomClickHandler(QAbstractButton& rButton);
+
 private slots:
     void buttonClicked();
 };

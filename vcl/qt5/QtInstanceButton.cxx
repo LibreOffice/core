@@ -11,6 +11,11 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+// Name of QObject property to indicate whether a click handler
+// was set on the QPushButton: If that property is set and has a value
+// of true, then a custom click handler is set, otherwise not.
+const char* const PROPERTY_CLICK_HANDLER_SET = "click-handler-set";
+
 QtInstanceButton::QtInstanceButton(QPushButton* pButton)
     : QtInstanceWidget(pButton)
     , m_pButton(pButton)
@@ -76,6 +81,22 @@ void QtInstanceButton::set_font(const vcl::Font& /*rFont*/)
 void QtInstanceButton::set_custom_button(VirtualDevice* /*pDevice*/)
 {
     assert(false && "Not implemented yet");
+}
+
+void QtInstanceButton::connect_clicked(const Link<Button&, void>& rLink)
+{
+    weld::Button::connect_clicked(rLink);
+    m_pButton->setProperty(PROPERTY_CLICK_HANDLER_SET, QVariant::fromValue(rLink.IsSet()));
+}
+
+bool QtInstanceButton::hasCustomClickHandler(QAbstractButton& rButton)
+{
+    QVariant aProp = rButton.property(PROPERTY_CLICK_HANDLER_SET);
+    if (!aProp.isValid())
+        return false;
+
+    assert(aProp.canConvert<bool>());
+    return aProp.toBool();
 }
 
 void QtInstanceButton::buttonClicked() { signal_clicked(); }

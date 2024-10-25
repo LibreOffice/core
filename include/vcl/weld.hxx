@@ -1540,7 +1540,7 @@ public:
        set_accessible_name if you do. */
     virtual void set_custom_button(VirtualDevice* pDevice) = 0;
 
-    void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
+    virtual void connect_clicked(const Link<Button&, void>& rLink) { m_aClickHdl = rLink; }
 };
 
 class VCL_DLLPUBLIC Toggleable : virtual public Widget

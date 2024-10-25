@@ -10,6 +10,8 @@
 #include <QtInstanceDialog.hxx>
 #include <QtInstanceDialog.moc>
 
+#include <QtInstanceButton.hxx>
+
 #include <vcl/help.hxx>
 
 const char* const QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE = "response-code";
@@ -173,6 +175,10 @@ void QtInstanceDialog::handleButtonClick(QDialog& rDialog, QAbstractButton& rBut
         rQtInstance.RunInMainThread([&] { handleButtonClick(rDialog, rButton); });
         return;
     }
+
+    // skip default handling if a custom click handler is set
+    if (QtInstanceButton::hasCustomClickHandler(rButton))
+        return;
 
     QVariant aResponseProperty = rButton.property(QtInstanceDialog::PROPERTY_VCL_RESPONSE_CODE);
     if (!aResponseProperty.isValid())
