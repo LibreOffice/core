@@ -979,7 +979,10 @@ bool SwEditShell::GetGrammarCorrection(
             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( mxDoc->GetGCIterator() );
             if (xGCIterator.is())
             {
-                rtl::Reference< SwXTextDocument > xDoc = mxDoc->GetDocShell()->GetBaseModel();
+                SwDocShell* pShell = mxDoc->GetDocShell();
+                if (!pShell)
+                    return bRes;
+                rtl::Reference< SwXTextDocument > xDoc = pShell->GetBaseModel();
 
                 // Expand the string:
                 const ModelToViewHelper aConversionMap(*pNode, GetLayout());

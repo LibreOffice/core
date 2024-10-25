@@ -49,13 +49,13 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     const INetURLObject* pIURL = static_cast<const INetURLHistoryHint&>(rHint).GetObject();
     OUString sURL( pIURL->GetMainURL( INetURLObject::DecodeMechanism::NONE ) ), sBkmk;
 
-    SwEditShell* pESh = m_rDoc.GetEditShell();
-
-    if( m_rDoc.GetDocShell() && m_rDoc.GetDocShell()->GetMedium() &&
+    SwDocShell* pShell = m_rDoc.GetDocShell();
+    if( pShell && pShell->GetMedium() &&
         // If this is our Doc, we can also have local jumps!
-        m_rDoc.GetDocShell()->GetMedium()->GetName() == sURL )
+        pShell->GetMedium()->GetName() == sURL )
         sBkmk = "#" + pIURL->GetMark();
 
+    SwEditShell* pESh = m_rDoc.GetEditShell();
     bool bAction = false, bUnLockView = false;
     m_rDoc.ForEachINetFormat(
         [&sURL, &sBkmk, &bAction, &pESh, &bUnLockView] (const SwFormatINetFormat& rFormatItem) -> bool

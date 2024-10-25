@@ -252,6 +252,10 @@ void AccessibilityIssue::quickFixIssue() const
     if (!m_pDoc)
         return;
 
+    SwDocShell* pShell = m_pDoc->GetDocShell();
+    if (!pShell)
+        return;
+
     if (canGotoIssue())
         gotoIssue();
 
@@ -270,7 +274,7 @@ void AccessibilityIssue::quickFixIssue() const
                 OUString aTitle(pFlyFormat->GetObjTitle());
                 bool isDecorative(pFlyFormat->IsDecorative());
 
-                SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+                SwWrtShell* pWrtShell = pShell->GetWrtShell();
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 VclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(
                     pWrtShell->GetView().GetFrameWeld(), aTitle, aDescription, isDecorative));
@@ -296,7 +300,7 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::SHAPE:
         case IssueObject::FORM:
         {
-            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            SwWrtShell* pWrtShell = pShell->GetWrtShell();
             auto pPage = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
             SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
             if (pObj)
@@ -329,7 +333,7 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::HYPERLINKTEXT:
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            SwWrtShell* pWrtShell = pShell->GetWrtShell();
             ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
                 pWrtShell->GetView().GetFrameWeld(), OUString(), SwResId(STR_HYPERLINK_NO_NAME_DLG),
                 SwResId(STR_HYPERLINK_NO_NAME_DLG)));
@@ -356,16 +360,12 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::DOCUMENT_TITLE:
         {
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            SwWrtShell* pWrtShell = pShell->GetWrtShell();
             ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
                 pWrtShell->GetView().GetFrameWeld(), OUString(),
                 SwResId(STR_DOCUMENT_TITLE_DLG_DESC), SwResId(STR_DOCUMENT_TITLE_DLG_TITLE)));
             if (aNameDialog->Execute() == RET_OK)
             {
-                SwDocShell* pShell = m_pDoc->GetDocShell();
-                if (!pShell)
-                    return;
-
                 const uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     pShell->GetModel(), uno::UNO_QUERY_THROW);
                 const uno::Reference<document::XDocumentProperties> xDocumentProperties(
@@ -378,8 +378,7 @@ void AccessibilityIssue::quickFixIssue() const
         break;
         case IssueObject::DOCUMENT_BACKGROUND:
         {
-            uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
-                                                 uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XModel> xModel(pShell->GetModel(), uno::UNO_QUERY_THROW);
 
             comphelper::dispatchCommand(u".uno:PageAreaDialog"_ustr,
                                         xModel->getCurrentController()->getFrame(), {});
@@ -387,8 +386,7 @@ void AccessibilityIssue::quickFixIssue() const
         break;
         case IssueObject::LANGUAGE_NOT_SET:
         {
-            uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
-                                                 uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XModel> xModel(pShell->GetModel(), uno::UNO_QUERY_THROW);
 
             if (m_sObjectID.isEmpty())
             {

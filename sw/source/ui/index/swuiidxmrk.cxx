@@ -1884,10 +1884,13 @@ IMPL_LINK(SwCreateAuthEntryDlg_Impl, BrowseHdl, weld::Button&, rButton, void)
     }
     else
     {
-        OUString aBaseURL = m_rWrtSh.GetDoc()->GetDocShell()->getDocumentBaseURL();
-        if (!aBaseURL.isEmpty())
+        if (SwDocShell* pShell = m_rWrtSh.GetDoc()->GetDocShell())
         {
-            aFileDlg.SetDisplayDirectory(aBaseURL);
+            OUString aBaseURL = pShell->getDocumentBaseURL();
+            if (!aBaseURL.isEmpty())
+            {
+                aFileDlg.SetDisplayDirectory(aBaseURL);
+            }
         }
     }
 

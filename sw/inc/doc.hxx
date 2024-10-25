@@ -1383,8 +1383,8 @@ public:
     */
 
     // Pointer to SfxDocShell from Doc. Can be 0!!
-          SwDocShell* GetDocShell()         { return mpDocShell; }
-    const SwDocShell* GetDocShell() const   { return mpDocShell; }
+    SAL_RET_MAYBENULL SwDocShell* GetDocShell()         { return mpDocShell; }
+    SAL_RET_MAYBENULL const SwDocShell* GetDocShell() const   { return mpDocShell; }
     void SetDocShell( SwDocShell* pDSh );
 
     /** in case during copying of embedded object a new shell is created,

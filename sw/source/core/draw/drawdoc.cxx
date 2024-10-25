@@ -133,9 +133,9 @@ uno::Reference< frame::XModel > SwDrawModel::createUnoModel()
 
     try
     {
-        if ( GetDoc().GetDocShell() )
+        if ( SwDocShell* pShell = GetDoc().GetDocShell() )
         {
-            xModel = GetDoc().GetDocShell()->GetModel();
+            xModel = pShell->GetModel();
         }
     }
     catch( uno::RuntimeException& )

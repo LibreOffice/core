@@ -42,8 +42,12 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
 {
     OSL_ENSURE(xSourceDocProps.is(), "null reference");
 
+    SwDocShell* pShell = GetDocShell();
+    if (!pShell)
+        return;
+
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+        pShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps(
         xDPS->getDocumentProperties() );
     OSL_ENSURE(xDocProps.is(), "null reference");
@@ -82,14 +86,18 @@ void SwDoc::ReplaceUserDefinedDocumentProperties(
 
 void SwDoc::ReplaceDocumentProperties(const SwDoc& rSource, bool mailMerge)
 {
+    SwDocShell* pShell = GetDocShell();
+    const SwDocShell* pSourceShell = rSource.GetDocShell();
+    if (!pShell || !pSourceShell)
+        return;
     uno::Reference<document::XDocumentPropertiesSupplier> xSourceDPS(
-        rSource.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+        pSourceShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xSourceDocProps(
         xSourceDPS->getDocumentProperties() );
     OSL_ENSURE(xSourceDocProps.is(), "null reference");
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-        GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);
+        pShell->GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps(
         xDPS->getDocumentProperties() );
     OSL_ENSURE(xDocProps.is(), "null reference");

@@ -1295,16 +1295,19 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
             pPam = pCursor;
         }
 
-        SvMemoryStream aStrm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
-                                StreamMode::READ );
-        aStrm.Seek( 0 );
-
-        // TODO/MBA: it's impossible to set a BaseURL here!
-        SwReader aTmpReader( aStrm, OUString(), pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );
-
-        if( ! aTmpReader.Read( *pRead ).IsError() )
+        if (SwDocShell* pShell = pDoc->GetDocShell())
         {
-            rSection.SetConnectFlag();
+            SvMemoryStream aStrm( const_cast<sal_Int8 *>(aSeq.getConstArray()), aSeq.getLength(),
+                                    StreamMode::READ );
+            aStrm.Seek( 0 );
+
+            // TODO/MBA: it's impossible to set a BaseURL here!
+            SwReader aTmpReader( aStrm, OUString(), pShell->GetMedium()->GetBaseURL(), *pPam );
+
+            if( ! aTmpReader.Read( *pRead ).IsError() )
+            {
+                rSection.SetConnectFlag();
+            }
         }
 
         if( pESh )

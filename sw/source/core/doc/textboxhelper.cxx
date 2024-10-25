@@ -106,9 +106,11 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (!xTextContentAppend)
     {
-        rtl::Reference<SwXTextDocument> xTextDocument(
-            pShape->GetDoc()->GetDocShell()->GetBaseModel());
-        xTextContentAppend.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+        if (SwDocShell* pShell = pShape->GetDoc()->GetDocShell())
+        {
+            rtl::Reference<SwXTextDocument> xTextDocument(pShell->GetBaseModel());
+            xTextContentAppend.set(xTextDocument->getText(), uno::UNO_QUERY_THROW);
+        }
     }
 
     if (xAnchor)

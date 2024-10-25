@@ -1267,29 +1267,31 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 static uno::Reference< rdf::XURI > xODF_SHADING(
                     rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
 
-                rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(
-                    rDoc.GetDocShell()->GetBaseModel());
-
-                const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
-                const uno::Reference<rdf::XRepository>& xRepository =
-                    xDocumentMetadataAccess->getRDFRepository();
-                const uno::Reference<container::XEnumeration> xEnum(
-                    xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
-
-                while (xEnum->hasMoreElements())
+                if (const SwDocShell* pShell = rDoc.GetDocShell())
                 {
-                    rdf::Statement stmt;
-                    if (!(xEnum->nextElement() >>= stmt)) {
-                        throw uno::RuntimeException();
+                    rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(pShell->GetBaseModel());
+
+                    const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
+                    const uno::Reference<rdf::XRepository>& xRepository =
+                        xDocumentMetadataAccess->getRDFRepository();
+                    const uno::Reference<container::XEnumeration> xEnum(
+                        xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
+
+                    while (xEnum->hasMoreElements())
+                    {
+                        rdf::Statement stmt;
+                        if (!(xEnum->nextElement() >>= stmt)) {
+                            throw uno::RuntimeException();
+                        }
+                        const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
+                        if (!xObject.is()) continue;
+                        if (xEnum->hasMoreElements()) {
+                            SAL_INFO("sw.uno", "ignoring other odf:shading statements");
+                        }
+                        Color rColor = Color::STRtoRGB(xObject->getValue());
+                        pMetaPor->SetShadowColor(rColor);
+                        break;
                     }
-                    const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
-                    if (!xObject.is()) continue;
-                    if (xEnum->hasMoreElements()) {
-                        SAL_INFO("sw.uno", "ignoring other odf:shading statements");
-                    }
-                    Color rColor = Color::STRtoRGB(xObject->getValue());
-                    pMetaPor->SetShadowColor(rColor);
-                    break;
                 }
             }
             pPor = pMetaPor;

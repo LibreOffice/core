@@ -1681,18 +1681,21 @@ SwUndoParagraphSigning::SwUndoParagraphSigning(SwDoc& rDoc,
     m_bRemove(bRemove)
 {
     // Save the metadata and field content to undo/redo.
-    rtl::Reference<SwXTextDocument> xModel = m_rDoc.GetDocShell()->GetBaseModel();
-    const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, m_xField);
-    const auto it = aStatements.find(ParagraphSignatureIdRDFName);
-    if (it != aStatements.end())
-        m_signature = it->second;
+    if (SwDocShell* pShell = m_rDoc.GetDocShell())
+    {
+        rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
+        const std::map<OUString, OUString> aStatements = lcl_getRDFStatements(xModel, m_xField);
+        const auto it = aStatements.find(ParagraphSignatureIdRDFName);
+        if (it != aStatements.end())
+            m_signature = it->second;
 
-    const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
-    if (it2 != aStatements.end())
-        m_usage = it2->second;
+        const auto it2 = aStatements.find(ParagraphSignatureUsageRDFName);
+        if (it2 != aStatements.end())
+            m_usage = it2->second;
 
-    uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
-    m_display = xText->getString();
+        uno::Reference<css::text::XTextRange> xText(m_xField, uno::UNO_QUERY);
+        m_display = xText->getString();
+    }
 }
 
 void SwUndoParagraphSigning::UndoImpl(::sw::UndoRedoContext&)
@@ -1731,8 +1734,11 @@ void SwUndoParagraphSigning::Insert()
             m_rDoc.GetIDocumentUndoRedo().DoUndo(isUndoEnabled);
         });
 
-    m_xField = lcl_InsertParagraphSignature(m_rDoc.GetDocShell()->GetBaseModel(), m_xParent, m_signature, m_usage);
-    lcl_DoUpdateParagraphSignatureField(m_rDoc, m_xField, m_display);
+    if (SwDocShell* pShell = m_rDoc.GetDocShell())
+    {
+        m_xField = lcl_InsertParagraphSignature(pShell->GetBaseModel(), m_xParent, m_signature, m_usage);
+        lcl_DoUpdateParagraphSignatureField(m_rDoc, m_xField, m_display);
+    }
 }
 
 void SwUndoParagraphSigning::Remove()

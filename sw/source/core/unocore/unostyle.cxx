@@ -1297,7 +1297,10 @@ static uno::Reference<container::XNameAccess> lcl_InitStyleFamily(SwDoc* pDoc, c
             && rEntry.family() != SfxStyleFamily::Para
             && rEntry.family() != SfxStyleFamily::Page)
         return {};
-    rtl::Reference<SwXTextDocument> xModel(pDoc->GetDocShell()->GetBaseModel());
+    SwDocShell* pShell = pDoc->GetDocShell();
+    if (!pShell)
+        return {};
+    rtl::Reference<SwXTextDocument> xModel(pShell->GetBaseModel());
     auto xFamilies = xModel->getStyleFamilies();
     auto aResult(xFamilies->getByName(rEntry.name()));
     if(!aResult.has<return_t>())
@@ -1722,10 +1725,13 @@ void SwXStyle::SetPropertyValue<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&
                 && !SwXNumberingRules::isInvalidStyle(rBulletName)
                 && (!pFormat->GetBulletFont() || pFormat->GetBulletFont()->GetFamilyName() != rBulletName))
         {
-            const auto pFontListItem(static_cast<const SvxFontListItem*>(m_pDoc->GetDocShell()->GetItem(SID_ATTR_CHAR_FONTLIST)));
-            const auto pList(pFontListItem->GetFontList());
-            vcl::Font aFont(pList->Get(rBulletName, WEIGHT_NORMAL, ITALIC_NONE));
-            aFormat.SetBulletFont(&aFont);
+            if (SwDocShell* pShell = m_pDoc->GetDocShell())
+            {
+                const auto pFontListItem(static_cast<const SvxFontListItem*>(pShell->GetItem(SID_ATTR_CHAR_FONTLIST)));
+                const auto pList(pFontListItem->GetFontList());
+                vcl::Font aFont(pList->Get(rBulletName, WEIGHT_NORMAL, ITALIC_NONE));
+                aFormat.SetBulletFont(&aFont);
+            }
         }
         aSetRule.Set(i, &aFormat);
     }
@@ -1935,7 +1941,9 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PARATR_DROP)>(const SfxItemProper
     const auto sValue(rValue.get<OUString>());
     OUString sStyle;
     SwStyleNameMapper::FillUIName(sValue, sStyle, SwGetPoolIdFromName::ChrFmt);
-    auto pStyle(static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char)));
+    SwDocStyleSheet* pStyle = nullptr;
+    if (SwDocShell* pShell = m_pDoc->GetDocShell())
+        pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle, SfxStyleFamily::Char));
     //default character style must not be set as default format
     if(!pStyle || pStyle->GetCharFormat() == m_pDoc->GetDfltCharFormat() )
     {

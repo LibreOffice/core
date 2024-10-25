@@ -6754,9 +6754,12 @@ void SwWW8ImplReader::NotifyMacroEventRead()
 {
     if (m_bNotifyMacroEventRead)
         return;
-    uno::Reference<frame::XModel> const xModel(static_cast<SfxBaseModel*>(m_rDoc.GetDocShell()->GetBaseModel().get()));
-    comphelper::DocumentInfo::notifyMacroEventRead(xModel);
-    m_bNotifyMacroEventRead = true;
+    if (SwDocShell* pShell = m_rDoc.GetDocShell())
+    {
+        uno::Reference<frame::XModel> const xModel(static_cast<SfxBaseModel*>(pShell->GetBaseModel().get()));
+        comphelper::DocumentInfo::notifyMacroEventRead(xModel);
+        m_bNotifyMacroEventRead = true;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

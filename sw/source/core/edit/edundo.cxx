@@ -43,7 +43,10 @@ static void lcl_SelectSdrMarkList( SwEditShell* pShell,
 
 bool SwEditShell::CursorsLocked() const
 {
-    return GetDoc()->GetDocShell()->GetModel()->hasControllersLocked();
+    SwDocShell* pShell = GetDoc()->GetDocShell();
+    if (!pShell)
+        return false;
+    return pShell->GetModel()->hasControllersLocked();
 }
 
 void SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)

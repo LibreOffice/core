@@ -368,7 +368,8 @@ void SwRedlineAcceptDlg::InitAuthors()
         pFilterPage->SelectAuthor(aStrings[0]);
 
     weld::TreeView& rTreeView = m_pTable->GetWidget();
-    bool const bEnable = pSh && !pSh->GetDoc()->GetDocShell()->IsReadOnly()
+    SwDocShell* pShell = pSh ? pSh->GetDoc()->GetDocShell() : nullptr;
+    bool const bEnable = pShell && !pShell->IsReadOnly()
         && rTreeView.n_children() != 0
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     bool bSel = rTreeView.get_selected(nullptr);
@@ -1393,7 +1394,8 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         }
     }
 
-    bool const bEnable = !pSh->GetDoc()->GetDocShell()->IsReadOnly()
+    SwDocShell* pShell = pSh ? pSh->GetDoc()->GetDocShell() : nullptr;
+    bool const bEnable = pShell && !pShell->IsReadOnly()
         && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().hasElements();
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );

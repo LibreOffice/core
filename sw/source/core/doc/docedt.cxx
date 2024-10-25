@@ -621,45 +621,48 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
-                                rtl::Reference< SwXTextDocument > xDoc = GetDocShell()->GetBaseModel();
-                                // Expand the string:
-                                const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
-                                const OUString& aExpandText = aConversionMap.getViewText();
-
-                                // get XFlatParagraph to use...
-                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNd->GetTextNode(), aExpandText, aConversionMap );
-
-                                // get error position of cursor in XFlatParagraph
-                                linguistic2::ProofreadingResult aResult;
-                                bool bGrammarErrors;
-                                do
+                                if (const SwDocShell* pShell = GetDocShell())
                                 {
-                                    aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
-                                    aResult = xGCIterator->checkSentenceAtPosition(
-                                            cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
+                                    rtl::Reference< SwXTextDocument > xDoc = pShell->GetBaseModel();
+                                    // Expand the string:
+                                    const ModelToViewHelper aConversionMap(*pNd->GetTextNode(), pLayout);
+                                    const OUString& aExpandText = aConversionMap.getViewText();
 
-                                    lcl_syncGrammarError( *pNd->GetTextNode(), aResult, aConversionMap );
+                                    // get XFlatParagraph to use...
+                                    uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNd->GetTextNode(), aExpandText, aConversionMap );
 
-                                    // get suggestions to use for the specific error position
-                                    bGrammarErrors = aResult.aErrors.hasElements();
-                                    // if grammar checking doesn't have any progress then quit
-                                    if( aResult.nStartOfNextSentencePosition <= nBeginGrammarCheck )
-                                        break;
-                                    // prepare next iteration
-                                    nBeginGrammarCheck = aResult.nStartOfNextSentencePosition;
-                                }
-                                while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !bGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
+                                    // get error position of cursor in XFlatParagraph
+                                    linguistic2::ProofreadingResult aResult;
+                                    bool bGrammarErrors;
+                                    do
+                                    {
+                                        aConversionMap.ConvertToViewPosition( nBeginGrammarCheck );
+                                        aResult = xGCIterator->checkSentenceAtPosition(
+                                                cppu::getXWeak(xDoc.get()), xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
-                                if( bGrammarErrors && nSpellErrorPosition >= aResult.nBehindEndOfSentencePosition )
-                                {
-                                    aRet <<= aResult;
-                                    //put the cursor to the current error
-                                    const linguistic2::SingleProofreadingError &rError = aResult.aErrors[0];
-                                    pSttPos->Assign(nCurrNd, pSttPos->GetContentIndex());
-                                    pEndPos->Assign(nCurrNd, pEndPos->GetContentIndex());
-                                    pSpellArgs->pStartPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
-                                    nCurrNd = nEndNd;
+                                        lcl_syncGrammarError( *pNd->GetTextNode(), aResult, aConversionMap );
+
+                                        // get suggestions to use for the specific error position
+                                        bGrammarErrors = aResult.aErrors.hasElements();
+                                        // if grammar checking doesn't have any progress then quit
+                                        if( aResult.nStartOfNextSentencePosition <= nBeginGrammarCheck )
+                                            break;
+                                        // prepare next iteration
+                                        nBeginGrammarCheck = aResult.nStartOfNextSentencePosition;
+                                    }
+                                    while( nSpellErrorPosition > aResult.nBehindEndOfSentencePosition && !bGrammarErrors && aResult.nBehindEndOfSentencePosition < nEndGrammarCheck );
+
+                                    if( bGrammarErrors && nSpellErrorPosition >= aResult.nBehindEndOfSentencePosition )
+                                    {
+                                        aRet <<= aResult;
+                                        //put the cursor to the current error
+                                        const linguistic2::SingleProofreadingError &rError = aResult.aErrors[0];
+                                        pSttPos->Assign(nCurrNd, pSttPos->GetContentIndex());
+                                        pEndPos->Assign(nCurrNd, pEndPos->GetContentIndex());
+                                        pSpellArgs->pStartPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                        pSpellArgs->pEndPos->Assign(*pNd->GetTextNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                        nCurrNd = nEndNd;
+                                    }
                                 }
                             }
                         }

@@ -1005,9 +1005,12 @@ static OUString lcl_CreateOutlineString(const size_t nIndex, const SwDoc* pDoc)
             nVal -= pOutlRule->Get(nLevel).GetStart();
             sEntry.append( OUString::number(nVal) + ".");
         }
-    OUString sOutlineText = pDoc->getIDocumentOutlineNodes().getOutlineText(
-                nIndex, pDoc->GetDocShell()->GetWrtShell()->GetLayout(), false);
-    sEntry.append(sOutlineText);
+    if (const SwDocShell* pShell = pDoc->GetDocShell())
+    {
+        OUString sOutlineText = pDoc->getIDocumentOutlineNodes().getOutlineText(
+                    nIndex, pShell->GetWrtShell()->GetLayout(), false);
+        sEntry.append(sOutlineText);
+    }
     return sEntry.makeStringAndClear();
 }
 
@@ -3176,8 +3179,8 @@ void SAL_CALL SwXTextDocument::render(
                             m_pHiddenViewFrame = nullptr;
 
                             // prevent crash described in #i108805
-                            SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-                            pRenderDocShell->GetMedium()->GetItemSet().Put( SfxBoolItem( SID_HIDDEN, false ) );
+                            if (SwDocShell *pRenderDocShell = pDoc->GetDocShell())
+                                pRenderDocShell->GetMedium()->GetItemSet().Put( SfxBoolItem( SID_HIDDEN, false ) );
 
                         }
                     }

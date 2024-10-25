@@ -2677,9 +2677,10 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                 || pHt->HasDummyChar() )
             {
                 // do not delete note and later add it -> sidebar flickering
-                if (GetDoc().GetDocShell())
+                SwDocShell* pShell = GetDoc().GetDocShell();
+                if (pShell)
                 {
-                    GetDoc().GetDocShell()->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
+                    pShell->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
                 }
                 // move attribute
                 m_pSwpHints->Delete( pHt );
@@ -2699,9 +2700,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwContentIndex & rDest
                 pDest->InsertHint( pHt,
                           SetAttrMode::NOTXTATRCHR
                         | SetAttrMode::DONTREPLACE );
-                if (GetDoc().GetDocShell())
+                if (pShell)
                 {
-                    GetDoc().GetDocShell()->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
+                    pShell->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
                 }
                 continue;           // iterate while loop, no ++ !
             }
@@ -4456,7 +4457,8 @@ void SwTextNode::AddToList()
     // "default" list: visible items in Show Changes mode (tracked insertions and deletions)
     // "hidden" list: visible items in Hide Changes mode (tracked insertions, but not deletions)
     // "orig" list: visible items rejecting all changes (no tracked insertions and deletions)
-    bool bRecordChanges = GetDoc().GetDocShell() && GetDoc().GetDocShell()->IsChangeRecording();
+    SwDocShell* pShell = GetDoc().GetDocShell();
+    bool bRecordChanges = pShell && pShell->IsChangeRecording();
     if (!bRecordChanges || GetDoc().IsInXMLImport() || GetDoc().IsInWriterfilterImport() )
     {
         const SwRedlineTable& rRedTable = GetDoc().getIDocumentRedlineAccess().GetRedlineTable();

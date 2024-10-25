@@ -125,9 +125,12 @@ void SwTextAPIEditSource::UpdateData()
 SwTextAPIEditSource::SwTextAPIEditSource(SwDoc* pDoc)
 : m_pImpl(new SwTextAPIEditSource_Impl)
 {
-    m_pImpl->mpPool = &pDoc->GetDocShell()->GetPool();
-    m_pImpl->mpDoc = pDoc;
-    m_pImpl->mnRef = 1;
+    if (SwDocShell* pShell = pDoc->GetDocShell())
+    {
+        m_pImpl->mpPool = &pShell->GetPool();
+        m_pImpl->mpDoc = pDoc;
+        m_pImpl->mnRef = 1;
+    }
 }
 
 SwTextAPIEditSource::~SwTextAPIEditSource()
@@ -148,12 +151,15 @@ void SwTextAPIEditSource::EnsureOutliner()
 {
     if( !m_pImpl->mpOutliner )
     {
-        //init draw model first
-        m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
-        m_pImpl->mpOutliner->SetStyleSheetPool(
-            static_cast<SwDocStyleSheetPool*>(m_pImpl->mpDoc->GetDocShell()->GetStyleSheetPool())->GetEEStyleSheetPool());
-        m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
+        if (SwDocShell* pShell = m_pImpl->mpDoc->GetDocShell())
+        {
+            //init draw model first
+            m_pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+            m_pImpl->mpOutliner.reset(new Outliner(m_pImpl->mpPool, OutlinerMode::TextObject));
+            m_pImpl->mpOutliner->SetStyleSheetPool(
+                static_cast<SwDocStyleSheetPool*>(pShell->GetStyleSheetPool())->GetEEStyleSheetPool());
+            m_pImpl->mpDoc->SetCalcFieldValueHdl(m_pImpl->mpOutliner.get());
+        }
     }
 }
 

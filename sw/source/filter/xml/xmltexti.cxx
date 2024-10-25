@@ -541,7 +541,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         uno::Sequence< beans::PropertyValue > aMediaDescriptor{ comphelper::makePropertyValue(
             u"URL"_ustr, aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE )) };
 
-        if (SfxMedium* pMedium = pDoc->GetDocShell() ? pDoc->GetDocShell()->GetMedium() : nullptr)
+        SwDocShell* pShell = pDoc->GetDocShell();
+        if (SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr)
         {
             uno::Reference< task::XInteractionHandler > xInteraction = pMedium->GetInteractionHandler();
             if ( xInteraction.is() )

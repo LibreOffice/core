@@ -866,13 +866,16 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                             if(!pCharFormat)
                             {
-                                SfxStyleSheetBasePool* pPool = rDoc.GetDocShell()->GetStyleSheetPool();
-                                SfxStyleSheetBase* pBase;
-                                pBase = pPool->Find(pNewCharStyles[i], SfxStyleFamily::Char);
-                            // shall it really be created?
-                                if(!pBase)
-                                    pBase = &pPool->Make(pNewCharStyles[i], SfxStyleFamily::Page);
-                                pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
+                                if (SwDocShell* pShell = rDoc.GetDocShell())
+                                {
+                                    SfxStyleSheetBasePool* pPool = pShell->GetStyleSheetPool();
+                                    SfxStyleSheetBase* pBase;
+                                    pBase = pPool->Find(pNewCharStyles[i], SfxStyleFamily::Char);
+                                    // shall it really be created?
+                                    if(!pBase)
+                                        pBase = &pPool->Make(pNewCharStyles[i], SfxStyleFamily::Page);
+                                    pCharFormat = static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat();
+                                }
                             }
                             if(pCharFormat)
                                 aFormat.SetCharFormat(pCharFormat);
@@ -885,14 +888,17 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                        (!aFormat.GetBulletFont() || aFormat.GetBulletFont()->GetFamilyName() != pBulletFontNames[i])
                       )
                     {
-                        const SvxFontListItem* pFontListItem =
-                                static_cast<const SvxFontListItem* >(rDoc.GetDocShell()
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
-                        const FontList* pList = pFontListItem->GetFontList();
+                        if (SwDocShell* pShell = rDoc.GetDocShell())
+                        {
+                            const SvxFontListItem* pFontListItem =
+                                    static_cast<const SvxFontListItem* >(
+                                                        pShell->GetItem( SID_ATTR_CHAR_FONTLIST ));
+                            const FontList* pList = pFontListItem->GetFontList();
 
-                        vcl::Font aFont(pList->Get(
-                            pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE));
-                        aFormat.SetBulletFont(&aFont);
+                            vcl::Font aFont(pList->Get(
+                                pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE));
+                            aFormat.SetBulletFont(&aFont);
+                        }
                     }
                     aRule.Set( i, aFormat );
                 }
@@ -1038,7 +1044,6 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
 
     std::unique_ptr<SfxMedium> pMed;
     SwDoc& rDoc = pUnoCursor->GetDoc();
-    SwDocShell* pDocSh = rDoc.GetDocShell();
     utl::MediaDescriptor aMediaDescriptor( rOptions );
     OUString sFileName = rURL;
     OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
@@ -1059,6 +1064,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     if ( !xInputStream.is() && xStream.is() )
         xInputStream = xStream->getInputStream();
 
+    SwDocShell* pDocSh = rDoc.GetDocShell();
     if(!pDocSh || (sFileName.isEmpty() && !xInputStream.is()))
         return;
 

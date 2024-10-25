@@ -5859,7 +5859,8 @@ bool DocxAttributeOutput::ExportAsActiveXControl(const SdrObject* pObject) const
     if (!xControlModel.is())
         return false;
 
-    uno::Reference< css::frame::XModel > xModel( m_rExport.m_rDoc.GetDocShell() ? m_rExport.m_rDoc.GetDocShell()->GetModel() : nullptr );
+    SwDocShell* pShell = m_rExport.m_rDoc.GetDocShell();
+    uno::Reference< css::frame::XModel > xModel( pShell ? pShell->GetModel() : nullptr );
     if (!xModel.is())
         return false;
 

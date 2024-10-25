@@ -3518,8 +3518,8 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 pPage->PaintSwFrame( rRenderContext, aPaintRect, isPaintHellOverHF ? PAINT_NON_HEADER_FOOTER : PAINT_ALL);
 
                 // no paint of page border and shadow, if writer is in place mode.
-                if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
-                    !pSh->GetDoc()->GetDocShell()->IsInPlaceActive() )
+                SwDocShell* pShell = pSh->GetDoc()->GetDocShell();
+                if( pSh->GetWin() && pShell && !pShell->IsInPlaceActive() )
                 {
                     SwPageFrame::PaintBorderAndShadow( pPage->getFrameArea(), pSh, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
                     SwPageFrame::PaintNotesSidebar( pPage->getFrameArea(), pSh, pPage->GetPhyPageNum(), bRightSidebar);

@@ -358,6 +358,10 @@ void SwXMLExport::ExportFontDecls_()
 
 void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
+    SwDoc *pDoc = getDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+    if (!pShell)
+        return;
     aProps.realloc(7);
      // Currently exporting 9 properties
     PropertyValue *pValue = aProps.getArray();
@@ -366,10 +370,8 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[0].Name = "Views";
     pValue[0].Value <<= uno::Reference< container::XIndexContainer >(xBox);
 
-    SwDoc *pDoc = getDoc();
-    const tools::Rectangle rRect =
-        pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
-    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MapUnit::MapTwip;
+    const tools::Rectangle rRect = pShell->GetVisArea( ASPECT_CONTENT );
+    bool bTwip = pShell->GetMapUnit ( ) == MapUnit::MapTwip;
 
     OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 

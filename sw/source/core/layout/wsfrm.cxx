@@ -2220,9 +2220,10 @@ SwTwips SwContentFrame::GrowFrame(SwTwips nDist, SwResizeLimitReason& reason, bo
         SwTabFrame *pTab = (nOld && IsInTab()) ? FindTabFrame() : nullptr;
         if (pTab)
         {
+            SwDocShell* pShell = pTab->GetFormat()->GetDoc()->GetDocShell();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
-                 !pTab->GetFormat()->GetDoc()->GetDocShell()->IsReadOnly() )
+                 pShell && !pShell->IsReadOnly() )
             {
                 pTab->InvalidatePos();
                 pTab->SetResizeHTMLTable();
@@ -2319,9 +2320,10 @@ SwTwips SwContentFrame::ShrinkFrame( SwTwips nDist, bool bTst, bool bInfo )
         SwTabFrame *pTab = IsInTab() ? FindTabFrame() : nullptr;
         if (pTab)
         {
+            SwDocShell* pShell = pTab->GetFormat()->GetDoc()->GetDocShell();
             if ( pTab->GetTable()->GetHTMLTableLayout() &&
                  !pTab->IsJoinLocked() &&
-                 !pTab->GetFormat()->GetDoc()->GetDocShell()->IsReadOnly() )
+                 pShell && !pShell->IsReadOnly() )
             {
                 pTab->InvalidatePos();
                 pTab->SetResizeHTMLTable();

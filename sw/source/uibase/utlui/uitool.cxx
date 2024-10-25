@@ -439,6 +439,9 @@ namespace
 bool IsOwnFormat(const SwDoc& rDoc)
 {
     const SwDocShell* pDocShell = rDoc.GetDocShell();
+    if (!pDocShell)
+        return false;
+
     SfxMedium* pMedium = pDocShell->GetMedium();
     if (!pMedium)
     {

@@ -733,7 +733,8 @@ bool SwCursor::IsAtValidPos( bool bPoint ) const
     }
 
     // #i45129# - in UI-ReadOnly everything is allowed
-    if( !rDoc.GetDocShell() || !rDoc.GetDocShell()->IsReadOnlyUI() )
+    const SwDocShell* pShell = rDoc.GetDocShell();
+    if( !pShell || !pShell->IsReadOnlyUI() )
         return true;
 
     const bool bCursorInReadOnly = IsReadOnlyAvailable();

@@ -76,16 +76,19 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             OUString sObjReplacements( u"ObjectReplacements"_ustr );
             if ( m_xRoot->hasByName( sObjReplacements ) )
             {
-                uno::Reference< document::XStorageBasedDocument > xDocStor( m_xDoc->GetDocShell()->GetModel(), uno::UNO_QUERY );
-                if (xDocStor)
+                if (SwDocShell* pShell = m_xDoc->GetDocShell())
                 {
-                    uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
-                    if ( xStr.is() )
+                    uno::Reference< document::XStorageBasedDocument > xDocStor( pShell->GetModel(), uno::UNO_QUERY );
+                    if (xDocStor)
                     {
-                        m_xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
-                        uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
-                        if ( xTrans.is() )
-                            xTrans->commit();
+                        uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
+                        if ( xStr.is() )
+                        {
+                            m_xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
+                            uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
+                            if ( xTrans.is() )
+                                xTrans->commit();
+                        }
                     }
                 }
             }
@@ -495,9 +498,12 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
     const uno::Reference< uno::XComponentContext >& xContext =
         comphelper::getProcessComponentContext();
 
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if (!pShell)
+        return ERR_SWG_WRITE_ERROR;
+
     // Get model
-    uno::Reference< lang::XComponent > xModelComp =
-        m_xDoc->GetDocShell()->GetModel();
+    uno::Reference< lang::XComponent > xModelComp = pShell->GetModel();
     OSL_ENSURE( xModelComp.is(), "XMLWriter::Write: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_WRITE_ERROR;

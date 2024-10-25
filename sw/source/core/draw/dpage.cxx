@@ -223,9 +223,12 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         if (!sText.isEmpty())
         {
             // #i80029#
-            bool bExecHyperlinks = m_pDoc->GetDocShell()->IsReadOnly();
-            if (!bExecHyperlinks && !bTooltip)
-                sText = SfxHelp::GetURLHelpText(sText);
+            if (SwDocShell* pDocShell = m_pDoc->GetDocShell())
+            {
+                bool bExecHyperlinks = pDocShell->IsReadOnly();
+                if (!bExecHyperlinks && !bTooltip)
+                    sText = SfxHelp::GetURLHelpText(sText);
+            }
 
             // then display the help:
             tools::Rectangle aScreenRect(pWindow->OutputToScreenPixel(aPixRect.TopLeft()),

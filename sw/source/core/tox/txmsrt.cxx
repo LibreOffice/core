@@ -883,32 +883,34 @@ void SwTOXAuthority::FillText(SwTextNode& rNd, const SwContentIndex& rInsPos, sa
 
         // Convert URL to a relative one if requested.
         SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(m_rField.GetField()->GetTyp())->GetDoc();
-        SwDocShell* pDocShell = pDoc->GetDocShell();
-        const OUString aBaseURL = pDocShell->getDocumentBaseURL();
-        std::u16string_view aBaseURIScheme;
-        sal_Int32 nSep = aBaseURL.indexOf(':');
-        if (nSep != -1)
+        if (SwDocShell* pDocShell = pDoc->GetDocShell())
         {
-            aBaseURIScheme = aBaseURL.subView(0, nSep);
-        }
+            std::u16string_view aBaseURIScheme;
+            const OUString aBaseURL = pDocShell->getDocumentBaseURL();
+            sal_Int32 nSep = aBaseURL.indexOf(':');
+            if (nSep != -1)
+            {
+                aBaseURIScheme = aBaseURL.subView(0, nSep);
+            }
 
-        uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
-            = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
-        uno::Reference<uri::XUriReference> xUriRef;
-        try
-        {
-            xUriRef = xUriReferenceFactory->parse(aText);
-        }
-        catch (const uno::Exception& rException)
-        {
-            SAL_WARN("sw.core",
-                     "SwTOXAuthority::FillText: failed to parse url: " << rException.Message);
-        }
+            uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory
+                = uri::UriReferenceFactory::create(comphelper::getProcessComponentContext());
+            uno::Reference<uri::XUriReference> xUriRef;
+            try
+            {
+                xUriRef = xUriReferenceFactory->parse(aText);
+            }
+            catch (const uno::Exception& rException)
+            {
+                SAL_WARN("sw.core",
+                         "SwTOXAuthority::FillText: failed to parse url: " << rException.Message);
+            }
 
-        bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
-        if (xUriRef.is() && bSaveRelFSys && xUriRef->getScheme() == aBaseURIScheme)
-        {
-            aText = INetURLObject::GetRelURL(aBaseURL, aText);
+            bool bSaveRelFSys = officecfg::Office::Common::Save::URL::FileSystem::get();
+            if (xUriRef.is() && bSaveRelFSys && xUriRef->getScheme() == aBaseURIScheme)
+            {
+                aText = INetURLObject::GetRelURL(aBaseURL, aText);
+            }
         }
     }
 

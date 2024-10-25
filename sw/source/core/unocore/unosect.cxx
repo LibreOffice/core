@@ -680,11 +680,14 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     {
                         pSectionData->SetType(SectionType::FileLink);
                     }
-                    const OUString sTmp(!aLink.FileURL.isEmpty()
-                        ? URIHelper::SmartRel2Abs(
-                            pFormat->GetDoc()->GetDocShell()->GetMedium()->GetURLObject(),
-                            aLink.FileURL, URIHelper::GetMaybeFileHdl())
-                        : OUString());
+                    OUString sTmp;
+                    SwDocShell* pShell = pFormat->GetDoc()->GetDocShell();
+                    if (pShell && !aLink.FileURL.isEmpty())
+                    {
+                        sTmp = URIHelper::SmartRel2Abs(
+                            pShell->GetMedium()->GetURLObject(),
+                            aLink.FileURL, URIHelper::GetMaybeFileHdl());
+                    }
                     const OUString sFileName(
                         sTmp + OUStringChar(sfx2::cTokenSeparator) +
                         aLink.FilterName + OUStringChar(sfx2::cTokenSeparator) +

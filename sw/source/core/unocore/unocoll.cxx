@@ -593,12 +593,15 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
 #if HAVE_FEATURE_SCRIPTING
         {
             uno::Any aGlobs;
-            BasicManager *pBasicMan = rDoc.GetDocShell()->GetBasicManager();
-            if (pBasicMan && !pBasicMan->GetGlobalUNOConstant(u"VBAGlobals"_ustr, aGlobs))
+            if (SwDocShell* pShell = rDoc.GetDocShell())
             {
-                uno::Sequence< uno::Any > aArgs{ uno::Any(rDoc.GetDocShell()->GetModel()) };
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
-                pBasicMan->SetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs );
+                BasicManager *pBasicMan = pShell->GetBasicManager();
+                if (pBasicMan && !pBasicMan->GetGlobalUNOConstant(u"VBAGlobals"_ustr, aGlobs))
+                {
+                    uno::Sequence< uno::Any > aArgs{ uno::Any(pShell->GetModel()) };
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( u"ooo.vba.word.Globals"_ustr, aArgs );
+                    pBasicMan->SetGlobalUNOConstant( u"VBAGlobals"_ustr, aGlobs );
+                }
             }
             aGlobs >>= xRet;
         }
@@ -812,16 +815,18 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = SvUnoImageMapPolygonObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SwServiceType::Chart2DataProvider:
+        {
             // #i64497# If a chart is in a temporary document during clipboard
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
-            if (rDoc.GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED)
+            SwDocShell* pShell = rDoc.GetDocShell();
+            if (pShell && pShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED)
                 xRet = getXWeak(rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ ));
             else
                 SAL_WARN("sw.uno",
                     "not creating chart data provider for embedded object");
-
+        }
         break;
         case SwServiceType::TypeMeta:
             xRet = getXWeak(SwXMeta::CreateXMeta(rDoc, false).get());

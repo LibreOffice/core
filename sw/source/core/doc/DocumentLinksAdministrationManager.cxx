@@ -189,19 +189,20 @@ const sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager() co
 // to new SwDoc::UpdateLinks():
 void DocumentLinksAdministrationManager::UpdateLinks()
 {
-    if (!m_rDoc.GetDocShell())
+    SwDocShell* pShell = m_rDoc.GetDocShell();
+    if (!pShell)
         return;
-    SfxObjectCreateMode eMode = m_rDoc.GetDocShell()->GetCreateMode();
+    SfxObjectCreateMode eMode = pShell->GetCreateMode();
     if (eMode == SfxObjectCreateMode::INTERNAL)
         return;
     if (eMode == SfxObjectCreateMode::ORGANIZER)
         return;
-    if (m_rDoc.GetDocShell()->IsPreview())
+    if (pShell->IsPreview())
         return;
     if (GetLinkManager().GetLinks().empty())
         return;
     sal_uInt16 nLinkMode = m_rDoc.GetDocumentSettingManager().getLinkUpdateMode(true);
-    sal_uInt16 nUpdateDocMode = m_rDoc.GetDocShell()->GetUpdateDocMode();
+    sal_uInt16 nUpdateDocMode = pShell->GetUpdateDocMode();
     if (nLinkMode == NEVER && nUpdateDocMode != document::UpdateDocMode::FULL_UPDATE)
         return;
 
@@ -215,20 +216,20 @@ void DocumentLinksAdministrationManager::UpdateLinks()
     }
     if (nLinkMode == AUTOMATIC && !bAskUpdate)
     {
-        SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
+        SfxMedium * medium = pShell->GetMedium();
         if (!SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
                 medium == nullptr ? OUString() : medium->GetName()))
         {
             bAskUpdate = true;
         }
     }
-    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = m_rDoc.GetDocShell()->getEmbeddedObjectContainer();
+    comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
     if (bUpdate)
     {
         rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
 
-        weld::Window* pDlgParent = GetFrameWeld(m_rDoc.GetDocShell());
-        SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
+        weld::Window* pDlgParent = GetFrameWeld(pShell);
+        SfxMedium * medium = pShell->GetMedium();
         GetLinkManager().UpdateAllLinks(
             bAskUpdate, false, pDlgParent, medium == nullptr ? OUString() : medium->GetName());
     }

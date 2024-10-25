@@ -487,21 +487,21 @@ SwHTMLParser::~SwHTMLParser()
         Application::RemoveUserEvent( m_nEventId );
 
     // the DocumentDetected maybe can delete the DocShells, therefore fetch again
-    if( m_xDoc->GetDocShell() )
+    if (SwDocShell* pShell = m_xDoc->GetDocShell())
     {
         // update linked sections
         sal_uInt16 nLinkMode = m_xDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
-            SfxObjectCreateMode::INTERNAL!=m_xDoc->GetDocShell()->GetCreateMode() )
+            SfxObjectCreateMode::INTERNAL != pShell->GetCreateMode() )
         {
-            SfxMedium * medium = m_xDoc->GetDocShell()->GetMedium();
+            SfxMedium * medium = pShell->GetMedium();
             m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, false, nullptr, medium == nullptr ? OUString() : medium->GetName() );
         }
 
-        if ( m_xDoc->GetDocShell()->IsLoading() )
+        if ( pShell->IsLoading() )
         {
             // #i59688#
-            m_xDoc->GetDocShell()->LoadingFinished();
+            pShell->LoadingFinished();
         }
     }
 
@@ -534,8 +534,9 @@ SwHTMLParser::~SwHTMLParser()
         m_pTempViewFrame->DoClose();
 
         // the temporary view frame is hidden, so the hidden flag might need to be removed
-        if ( m_bRemoveHidden && m_xDoc.is() && m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->GetMedium() )
-            m_xDoc->GetDocShell()->GetMedium()->GetItemSet().ClearItem( SID_HIDDEN );
+        SwDocShell* pShell = m_xDoc.is() ? m_xDoc->GetDocShell() : nullptr;
+        if ( m_bRemoveHidden && pShell && pShell->GetMedium() )
+            pShell->GetMedium()->GetItemSet().ClearItem( SID_HIDDEN );
     }
 }
 
@@ -545,7 +546,8 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 
     // #i47907# - If the document has already been destructed,
     // the parser should be aware of this:
-    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if( ( pShell && pShell->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
         // was the import aborted by SFX?
@@ -635,7 +637,8 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
     // we still continue, so that we clean up properly.
     OSL_ENSURE( SvParserState::Error!=eState,
             "SwHTMLParser::Continue: already set an error" );
-    if( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if( pShell && pShell->IsAbortingImport() )
         eState = SvParserState::Error;
 
     // Fetch SwViewShell from document, save it and set as current.
@@ -659,12 +662,12 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
     }
 
     m_bSetModEnabled = false;
-    if( m_xDoc->GetDocShell() )
+    if( pShell )
     {
-        m_bSetModEnabled = m_xDoc->GetDocShell()->IsEnableSetModified();
+        m_bSetModEnabled = pShell->IsEnableSetModified();
         if( m_bSetModEnabled )
         {
-            m_xDoc->GetDocShell()->EnableSetModified( false );
+            pShell->EnableSetModified( false );
         }
     }
 
@@ -952,9 +955,9 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
         m_xDoc->SetOle2Link( aOLELink );
         if( !bModified )
             m_xDoc->getIDocumentState().ResetModified();
-        if( m_bSetModEnabled && m_xDoc->GetDocShell() )
+        if( m_bSetModEnabled && pShell )
         {
-            m_xDoc->GetDocShell()->EnableSetModified();
+            pShell->EnableSetModified();
             m_bSetModEnabled = false; // this is unnecessary here
         }
     }
@@ -999,7 +1002,8 @@ void SwHTMLParser::DocumentDetected()
 // is called for every token that is recognised in CallParser
 void SwHTMLParser::NextToken( HtmlTokenId nToken )
 {
-    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if( ( pShell && pShell->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
         // Was the import cancelled by SFX? If a pending stack
@@ -1048,9 +1052,10 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 OUString sTitle = m_sTitle.makeStringAndClear();
                 if( IsNewDoc() && !sTitle.isEmpty() )
                 {
-                    if( m_xDoc->GetDocShell() ) {
+                    if (pShell)
+                    {
                         uno::Reference<document::XDocumentPropertiesSupplier>
-                            xDPS(m_xDoc->GetDocShell()->GetModel(),
+                            xDPS(pShell->GetModel(),
                             uno::UNO_QUERY_THROW);
                         uno::Reference<document::XDocumentProperties> xDocProps(
                             xDPS->getDocumentProperties());
@@ -1059,7 +1064,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                             xDocProps->setTitle(sTitle);
                         }
 
-                        m_xDoc->GetDocShell()->SetTitle(sTitle);
+                        pShell->SetTitle(sTitle);
                     }
                 }
                 m_bInTitle = false;
@@ -2591,7 +2596,8 @@ void SwHTMLParser::Show()
 
     Application::Reschedule();
 
-    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if( ( pShell && pShell->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
         // was the import aborted by SFX?
@@ -2628,7 +2634,8 @@ void SwHTMLParser::ShowStatline()
     {
         Application::Reschedule();
 
-        if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+        SwDocShell* pShell = m_xDoc->GetDocShell();
+        if( ( pShell && pShell->IsAbortingImport() )
             || 1 == m_xDoc->getReferenceCount() )
             // was the import aborted by SFX?
             eState = SvParserState::Error;

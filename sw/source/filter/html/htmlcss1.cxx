@@ -1707,7 +1707,8 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
     }
 
     // was aborted?
-    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+    SwDocShell* pShell = m_xDoc->GetDocShell();
+    if( ( pShell && pShell->IsAbortingImport() )
         || 1 == m_xDoc->getReferenceCount() )
     {
         // was the import aborted from SFX?

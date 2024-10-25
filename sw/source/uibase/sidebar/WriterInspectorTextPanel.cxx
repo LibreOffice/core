@@ -766,6 +766,9 @@ IMPL_LINK(WriterInspectorTextPanel, AttrChangedNotify, LinkParamNone*, pLink, vo
     }
 
     SwDocShell* pDocSh = m_pShell->GetDoc()->GetDocShell();
+    if (!pDocSh)
+        return;
+
     std::vector<svx::sidebar::TreeNode> aStore;
 
     if (m_pShell->GetCursor()->GetPointNode().GetTextNode())

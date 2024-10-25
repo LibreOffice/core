@@ -124,8 +124,11 @@ void DocxTableStyleExport::CnfStyle(const uno::Sequence<beans::PropertyValue>& r
 
 void DocxTableStyleExport::TableStyles(sal_Int32 nCountStylesToWrite)
 {
+    SwDocShell* pShell = m_pImpl->getDoc().GetDocShell();
+    if (!pShell)
+        return;
     // Do we have table styles from InteropGrabBag available?
-    rtl::Reference<SwXTextDocument> xPropertySet(m_pImpl->getDoc().GetDocShell()->GetBaseModel());
+    rtl::Reference<SwXTextDocument> xPropertySet(pShell->GetBaseModel());
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
     xPropertySet->getPropertyValue(u"InteropGrabBag"_ustr) >>= aInteropGrabBag;
     uno::Sequence<beans::PropertyValue> aTableStyles;

@@ -1162,23 +1162,26 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || m_bOrganizerMode || !GetModel().is() )
         return;
 
+    SwDoc *pDoc = getDoc();
+    SwDocShell* pShell = pDoc->GetDocShell();
+    if (!pShell)
+        return;
+
     // this method will modify the document directly -> lock SolarMutex
     SolarMutexGuard aGuard;
 
-    SwDoc *pDoc = getDoc();
     tools::Rectangle aRect;
-    if( pDoc->GetDocShell() )
-        aRect = pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
-        //TODO/LATER: why that cast?!
-        //aRect = ((SfxInPlaceObject *)pDoc->GetDocShell())->GetVisArea();
+    aRect = pShell->GetVisArea( ASPECT_CONTENT );
+    //TODO/LATER: why that cast?!
+    //aRect = ((SfxInPlaceObject *)pShell)->GetVisArea();
 
     sal_Int64 nTmp = 0;
     bool bShowRedlineChanges = false, bBrowseMode = false;
     bool bChangeShowRedline = false, bChangeBrowseMode = false;
 
     //TODO/LATER: why that cast?!
-    bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MapUnit::MapTwip;
-    //sal_Bool bTwip = pDoc->GetDocShell()->SfxInPlaceObject::GetMapUnit ( ) == MapUnit::MapTwip;
+    bool bTwip = pShell->GetMapUnit ( ) == MapUnit::MapTwip;
+    //sal_Bool bTwip = pShell->SfxInPlaceObject::GetMapUnit ( ) == MapUnit::MapTwip;
 
     for (const PropertyValue& rValue : aViewProps)
     {
@@ -1218,8 +1221,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bChangeBrowseMode = true;
         }
     }
-    if( pDoc->GetDocShell() )
-        pDoc->GetDocShell()->SetVisArea ( aRect );
+    pShell->SetVisArea ( aRect );
 
     if (bChangeBrowseMode)
         pDoc->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bBrowseMode );

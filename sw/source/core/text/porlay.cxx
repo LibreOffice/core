@@ -881,25 +881,28 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
-        rtl::Reference<SwXTextDocument> xModel = rDoc.GetDocShell()->GetBaseModel();
-
-        static uno::Reference< uno::XComponentContext > xContext(
-            ::comphelper::getProcessComponentContext());
-
-        static uno::Reference< rdf::XURI > xODF_SHADING(
-            rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
-
-        const uno::Reference<rdf::XRepository>& xRepository =
-            xModel->getRDFRepository();
-        const uno::Reference<container::XEnumeration> xEnum(
-            xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
-
-        rdf::Statement stmt;
-        if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
+        if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
-            const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
-            if ( xObject.is() )
-                c = Color::STRtoRGB(xObject->getValue());
+            rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
+
+            static uno::Reference< uno::XComponentContext > xContext(
+                ::comphelper::getProcessComponentContext());
+
+            static uno::Reference< rdf::XURI > xODF_SHADING(
+                rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
+
+            const uno::Reference<rdf::XRepository>& xRepository =
+                xModel->getRDFRepository();
+            const uno::Reference<container::XEnumeration> xEnum(
+                xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
+
+            rdf::Statement stmt;
+            if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
+            {
+                const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
+                if ( xObject.is() )
+                    c = Color::STRtoRGB(xObject->getValue());
+            }
         }
     }
     catch (const lang::IllegalArgumentException&)
@@ -920,27 +923,30 @@ static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmar
         const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::MarkBase*>(static_cast<const sw::mark::MarkBase*>(pBookmark)));
         const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
-        rtl::Reference<SwXTextDocument> xModel = rDoc.GetDocShell()->GetBaseModel();
-
-        static uno::Reference< uno::XComponentContext > xContext(
-            ::comphelper::getProcessComponentContext());
-
-        static uno::Reference< rdf::XURI > xODF_PREFIX(
-            rdf::URI::createKnown(xContext, rdf::URIs::RDF_TYPE), uno::UNO_SET_THROW);
-
-        uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
-            rDoc.GetDocShell()->GetBaseModel());
-        const uno::Reference<rdf::XRepository>& xRepository =
-            xDocumentMetadataAccess->getRDFRepository();
-        const uno::Reference<container::XEnumeration> xEnum(
-            xRepository->getStatements(xSubject, xODF_PREFIX, nullptr), uno::UNO_SET_THROW);
-
-        rdf::Statement stmt;
-        if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
+        if (const SwDocShell* pShell = rDoc.GetDocShell())
         {
-            const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
-            if ( xObject.is() )
-                sRet = xObject->getValue();
+            rtl::Reference<SwXTextDocument> xModel = pShell->GetBaseModel();
+
+            static uno::Reference< uno::XComponentContext > xContext(
+                ::comphelper::getProcessComponentContext());
+
+            static uno::Reference< rdf::XURI > xODF_PREFIX(
+                rdf::URI::createKnown(xContext, rdf::URIs::RDF_TYPE), uno::UNO_SET_THROW);
+
+            uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
+                pShell->GetBaseModel());
+            const uno::Reference<rdf::XRepository>& xRepository =
+                xDocumentMetadataAccess->getRDFRepository();
+            const uno::Reference<container::XEnumeration> xEnum(
+                xRepository->getStatements(xSubject, xODF_PREFIX, nullptr), uno::UNO_SET_THROW);
+
+            rdf::Statement stmt;
+            if ( xEnum->hasMoreElements() && (xEnum->nextElement() >>= stmt) )
+            {
+                const uno::Reference<rdf::XLiteral> xObject(stmt.Object, uno::UNO_QUERY);
+                if ( xObject.is() )
+                    sRet = xObject->getValue();
+            }
         }
     }
     catch (const lang::IllegalArgumentException&)

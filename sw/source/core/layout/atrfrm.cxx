@@ -2933,8 +2933,15 @@ SdrObject* SwFrameFormat::FindRealSdrObject()
         if( pFly )
             return pFly->GetVirtDrawObj();
 
-        if( !GetDoc() || !GetDoc()->GetDocShell() ||
-            GetDoc()->GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
+        SwDoc* pDoc = GetDoc();
+        if (!pDoc)
+            return nullptr;
+
+        SwDocShell* pShell = pDoc->GetDocShell();
+        if (!pShell)
+            return nullptr;
+
+        if (pShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             return nullptr;
 
         // tdf#126477 fix lost charts in embedded documents

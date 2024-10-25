@@ -476,7 +476,8 @@ std::pair<OString, OString> DocxExport::WriteActiveXObject(const uno::Reference<
     {
         oox::ole::OleStorage aOleStorage(m_rFilter.getComponentContext(), xOutStorage, false);
         uno::Reference<io::XOutputStream> xOutputStream(aOleStorage.openOutputStream(u"contents"_ustr), uno::UNO_SET_THROW);
-        uno::Reference< css::frame::XModel > xModel( m_rDoc.GetDocShell() ? m_rDoc.GetDocShell()->GetModel() : nullptr );
+        SwDocShell* pShell = m_rDoc.GetDocShell();
+        uno::Reference< css::frame::XModel > xModel( pShell ? pShell->GetModel() : nullptr );
         oox::ole::OleFormCtrlExportHelper exportHelper(comphelper::getProcessComponentContext(), xModel, rxControlModel);
         if ( !exportHelper.isValid() )
             return std::make_pair<OString, OString>(OString(), OString());
@@ -1803,7 +1804,11 @@ void DocxExport::WriteCustomXml()
 
 void DocxExport::WriteVBA()
 {
-    rtl::Reference<SwXTextDocument> xStorageBasedDocument(m_rDoc.GetDocShell()->GetBaseModel());
+    SwDocShell* pShell = m_rDoc.GetDocShell();
+    if (!pShell)
+        return;
+
+    rtl::Reference<SwXTextDocument> xStorageBasedDocument(pShell->GetBaseModel());
     if (!xStorageBasedDocument.is())
         return;
 
@@ -1862,7 +1867,11 @@ void DocxExport::WriteVBA()
 
 void DocxExport::WriteEmbeddings()
 {
-    rtl::Reference< SwXTextDocument > xPropSet( m_rDoc.GetDocShell()->GetBaseModel() );
+    SwDocShell* pShell = m_rDoc.GetDocShell();
+    if (!pShell)
+        return;
+
+    rtl::Reference< SwXTextDocument > xPropSet( pShell->GetBaseModel() );
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
     OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;

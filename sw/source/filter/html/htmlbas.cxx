@@ -253,7 +253,11 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
     if( !m_bCfgStarBasic )
         return;
 
-    BasicManager *pBasicMan = m_pDoc->GetDocShell()->GetBasicManager();
+    SwDocShell* pShell = m_pDoc->GetDocShell();
+    if (!pShell)
+        return;
+
+    BasicManager *pBasicMan = pShell->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Where is the Basic-Manager?" );
     // Only write DocumentBasic
     if( !pBasicMan || pBasicMan == SfxApplication::GetBasicManager() )

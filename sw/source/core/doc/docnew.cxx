@@ -147,6 +147,8 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
     bool bVisible = false;
     bool bStarted = false;
     const SwDocShell *pDocShell = GetDocShell();
+    if (!pDocShell)
+        return bStarted;
     SfxViewFrame     *pFrame = SfxViewFrame::GetFirst( pDocShell, false );
     while (pFrame && !bVisible)
     {
@@ -164,7 +166,7 @@ bool SwDoc::StartGrammarChecking( bool bSkipStart )
         uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( GetGCIterator() );
         if ( xGCIterator.is() )
         {
-            rtl::Reference< SwXTextDocument >  xDoc = GetDocShell()->GetBaseModel();
+            rtl::Reference< SwXTextDocument >  xDoc = pDocShell->GetBaseModel();
             uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc );
 
             // start automatic background checking if not active already

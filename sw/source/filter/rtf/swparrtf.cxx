@@ -85,7 +85,11 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     rDoc.SetTextFormatColl(
         rPam, rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false));
 
+    auto ret = ERRCODE_NONE;
     SwDocShell* pDocShell(rDoc.GetDocShell());
+    if (!pDocShell)
+        return ret;
+
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(
         comphelper::getProcessServiceFactory());
     uno::Reference<uno::XInterface> xInterface(
@@ -106,7 +110,6 @@ ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& r
           { "InsertMode", uno::Any(true) },
           { "TextInsertModeRange",
             uno::Any(uno::Reference<text::XTextRange>(xInsertTextRange)) } }));
-    auto ret = ERRCODE_NONE;
     try
     {
         xFilter->filter(aDescriptor);

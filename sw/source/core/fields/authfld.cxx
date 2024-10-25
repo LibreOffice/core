@@ -651,6 +651,8 @@ OUString SwAuthorityField::GetAbsoluteURL() const
             ? AUTH_FIELD_URL : AUTH_FIELD_TARGET_URL);
     SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
+    if (!pDocShell)
+        return OUString();
     OUString aBasePath = pDocShell->getDocumentBaseURL();
     return INetURLObject::GetAbsURL(aBasePath, rURL, INetURLObject::EncodeMechanism::WasEncoded,
                                     INetURLObject::DecodeMechanism::WithCharset);
@@ -662,6 +664,8 @@ OUString SwAuthorityField::GetRelativeURI() const
 
     SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(GetTyp())->GetDoc();
     SwDocShell* pDocShell = pDoc->GetDocShell();
+    if (!pDocShell)
+        return OUString();
     const OUString aBaseURL = pDocShell->getDocumentBaseURL();
     std::u16string_view aBaseURIScheme;
     sal_Int32 nSep = aBaseURL.indexOf(':');

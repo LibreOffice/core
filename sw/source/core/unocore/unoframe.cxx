@@ -952,8 +952,11 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
         OUString sStyle;
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
-        pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SfxStyleFamily::Frame));
+        if (SwDocShell* pShell = pDoc->GetDocShell())
+        {
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle,
+                                                        SfxStyleFamily::Frame));
+        }
     }
 
     if ( pStyle )
@@ -1031,8 +1034,11 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         OUString sStyle;
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, SwGetPoolIdFromName::FrmFmt);
-        pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SfxStyleFamily::Frame));
+        if (SwDocShell* pShell = pDoc->GetDocShell())
+        {
+            pStyle = static_cast<SwDocStyleSheet*>(pShell->GetStyleSheetPool()->Find(sStyle,
+                                                        SfxStyleFamily::Frame));
+        }
     }
 
     if ( pStyle )
@@ -1127,11 +1133,15 @@ SwXFrame::SwXFrame(FlyCntType eSet, const ::SfxItemPropertySet* pSet, SwDoc *pDo
     , m_nVisibleAreaWidth(0)
     , m_nVisibleAreaHeight(0)
 {
+    SwDocShell* pShell = pDoc->GetDocShell();
+    if (!pShell)
+        return;
+
     // Register ourselves as a listener to the document (via the page descriptor)
     StartListening(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD)->GetNotifier());
     // get the property set for the default style data
     // First get the model
-    rtl::Reference < SwXTextDocument > xModel = pDoc->GetDocShell()->GetBaseModel();
+    rtl::Reference < SwXTextDocument > xModel = pShell->GetBaseModel();
     // Get the style families
     uno::Reference < XNameAccess > xFamilies = xModel->getStyleFamilies();
     // Get the Frame family (and keep it for later)
@@ -2162,9 +2172,10 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
                         {
                             // when exposing the EmbeddedObject, ensure it has a client site
-                            OSL_ENSURE( pDoc->GetDocShell(), "no doc shell => no client site" );
-                            if ( pDoc->GetDocShell() )
-                                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
+                            SwDocShell* pShell = pDoc->GetDocShell();
+                            OSL_ENSURE( pShell, "no doc shell => no client site" );
+                            if ( pShell )
+                                pShell->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
                             aAny <<= xIP;
                         }
                         else if ( xModel.is() )
@@ -2902,8 +2913,9 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
 
                     // set parent to get correct VisArea(in case of object needing parent printer)
                     uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
-                    if ( xChild.is() )
-                        xChild->setParent( pDoc->GetDocShell()->GetModel() );
+                    SwDocShell* pShell = pDoc->GetDocShell();
+                    if ( xChild.is() && pShell )
+                        xChild->setParent( pShell->GetModel() );
 
                     //The Size should be suggested by the OLE server if not manually set
                     MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
@@ -2938,9 +2950,12 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                         aPam, xObjRef, &aFrameSet );
 
                 // store main document name to show in the title bar
-                uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
-                if( xModelTitle.is() )
-                    xIPObj->setContainerName( xModelTitle->getTitle() );
+                if (SwDocShell* pShell = pDoc->GetDocShell())
+                {
+                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), css::uno::UNO_QUERY );
+                    if( xModelTitle.is() )
+                        xIPObj->setContainerName( xModelTitle->getTitle() );
+                }
 
                 assert(pFormat2 && "Doc->Insert(notxt) failed.");
 
@@ -2973,9 +2988,10 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             if( pNd )
             {
                 uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
-                if( xObj.is() )
+                SwDocShell* pShell = pDoc->GetDocShell();
+                if( xObj.is() && pShell )
                 {
-                    uno::Reference< frame::XTitle > xModelTitle( pDoc->GetDocShell()->GetModel(), css::uno::UNO_QUERY );
+                    uno::Reference< frame::XTitle > xModelTitle( pShell->GetModel(), css::uno::UNO_QUERY );
                     if( xModelTitle.is() )
                         xObj->setContainerName( xModelTitle->getTitle() );
                 }
@@ -3421,8 +3437,8 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         if ( svt::EmbeddedObjectRef::TryRunningState( xResult ) )
         {
             // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
-            if ( pDoc->GetDocShell() )
-                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xResult, embed::Aspects::MSOLE_CONTENT ) );
+            if (SwDocShell* pShell = pDoc->GetDocShell())
+                pShell->GetIPClient( svt::EmbeddedObjectRef( xResult, embed::Aspects::MSOLE_CONTENT ) );
 
             uno::Reference < lang::XComponent > xComp( xResult->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xComp, uno::UNO_QUERY);
