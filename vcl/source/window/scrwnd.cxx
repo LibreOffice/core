@@ -46,6 +46,8 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
             mnTimeout       ( DEF_TIMEOUT ),
             mnWheelMode     ( WheelMode::NONE ),
             mnActDist       ( 0 ),
+            mnStepDeltaX    ( 0 ),
+            mnStepDeltaY    ( 0 ),
             mnActDeltaX     ( 0 ),
             mnActDeltaY     ( 0 )
 {
@@ -189,11 +191,12 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     }
     else
     {
-        sal_uInt64 nCurTime;
+        sal_uInt64 nCurTime;        // Scrolling time interval
 
         // calc current time
         if( mnMaxWidth )
         {
+            // Time interval for each unit of scrolling. Mouse further from start point -> shorter time interval -> faster scrolling.
             const double fExp = ( static_cast<double>(mnActDist) / mnMaxWidth ) * log10( double(MAX_TIME) / MIN_TIME );
             nCurTime = static_cast<sal_uInt64>( MAX_TIME / pow( 10., fExp ) );
         }
@@ -203,19 +206,23 @@ void ImplWheelWindow::ImplRecalcScrollValues()
         if( !nCurTime )
             nCurTime = 1;
 
-        if( mnRepaintTime <= nCurTime )
-            mnTimeout = nCurTime - mnRepaintTime;
-        else
+        if( mnRepaintTime <= nCurTime )     // Draw time less than scroll time interval
         {
-            sal_uInt64 nMult = mnRepaintTime / nCurTime;
+            mnActDeltaX = mnStepDeltaX;     // Scroll 1 unit
+            mnActDeltaY = mnStepDeltaY;
+            mnTimeout = nCurTime - mnRepaintTime;       // Call handler again after remaining interval elapsed
+        }
+        else    // Draw time greater than scroll time
+        {
+            sal_uInt64 nMult = mnRepaintTime / nCurTime;        // Scroll # units based on how many scroll intervals elapsed
 
             if( !( mnRepaintTime % nCurTime ) )
                 mnTimeout = 0;
             else
                 mnTimeout = ++nMult * nCurTime - mnRepaintTime;
 
-            double fValX = static_cast<double>(mnActDeltaX) * nMult;
-            double fValY = static_cast<double>(mnActDeltaY) * nMult;
+            double fValX = static_cast<double>(mnStepDeltaX) * nMult;       // Get scroll distance from # units * step
+            double fValY = static_cast<double>(mnStepDeltaY) * nMult;
 
             mnActDeltaX = o3tl::saturating_cast<tools::Long>(fValX);
             mnActDeltaY = o3tl::saturating_cast<tools::Long>(fValY);
@@ -308,23 +315,32 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     const StartAutoScrollFlags nFlags = ImplGetSVData()->mpWinData->mnAutoScrollFlags;
     const bool          bHorz( nFlags & StartAutoScrollFlags::Horz );
     const bool          bVert( nFlags & StartAutoScrollFlags::Vert );
-    const bool          bOuter = mnActDist > WHEEL_RADIUS;
+    const bool          bOuter = mnActDist > WHEEL_RADIUS;      // More than minimum distance from start point?
 
-    if( bOuter && ( maLastMousePos != aMousePos ) )
+    if( maLastMousePos != aMousePos )
     {
-        switch( eActStyle )
+        if( bOuter )    // More than minimum distance
         {
-            case PointerStyle::AutoScrollN:   mnActDeltaX = +0; mnActDeltaY = +1; break;
-            case PointerStyle::AutoScrollS:   mnActDeltaX = +0; mnActDeltaY = -1; break;
-            case PointerStyle::AutoScrollW:   mnActDeltaX = +1; mnActDeltaY = +0; break;
-            case PointerStyle::AutoScrollE:   mnActDeltaX = -1; mnActDeltaY = +0; break;
-            case PointerStyle::AutoScrollNW:  mnActDeltaX = +1; mnActDeltaY = +1; break;
-            case PointerStyle::AutoScrollNE:  mnActDeltaX = -1; mnActDeltaY = +1; break;
-            case PointerStyle::AutoScrollSW:  mnActDeltaX = +1; mnActDeltaY = -1; break;
-            case PointerStyle::AutoScrollSE:  mnActDeltaX = -1; mnActDeltaY = -1; break;
+            switch( eActStyle )
+            {
+                case PointerStyle::AutoScrollN:   mnStepDeltaX = +0; mnStepDeltaY = +1; break;
+                case PointerStyle::AutoScrollS:   mnStepDeltaX = +0; mnStepDeltaY = -1; break;
+                case PointerStyle::AutoScrollW:   mnStepDeltaX = +1; mnStepDeltaY = +0; break;
+                case PointerStyle::AutoScrollE:   mnStepDeltaX = -1; mnStepDeltaY = +0; break;
+                case PointerStyle::AutoScrollNW:  mnStepDeltaX = +1; mnStepDeltaY = +1; break;
+                case PointerStyle::AutoScrollNE:  mnStepDeltaX = -1; mnStepDeltaY = +1; break;
+                case PointerStyle::AutoScrollSW:  mnStepDeltaX = +1; mnStepDeltaY = -1; break;
+                case PointerStyle::AutoScrollSE:  mnStepDeltaX = -1; mnStepDeltaY = -1; break;
 
-            default:
-            break;
+                default:
+                    mnStepDeltaX = 0; mnStepDeltaY = 0;
+                break;
+            }
+        }
+        else    // Less than minimum distance
+        {
+            mnStepDeltaX = 0;
+            mnStepDeltaY = 0;
         }
     }
 
@@ -371,6 +387,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl, Timer *, void)
         }
     }
 
+    // Call this handler again based on scrolling time interval
     if ( mnTimeout != mpTimer->GetTimeout() )
         mpTimer->SetTimeout( mnTimeout );
     mpTimer->Start();
