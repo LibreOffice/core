@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -32,6 +31,7 @@
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <tuple>
 
 namespace basegfx
 {
@@ -72,23 +72,12 @@ namespace basegfx
         public:
             PN*                     mpPN;
 
+            // For this to be a strict weak ordering, the assumption is that none of the involved
+            // maPoint coordinates are NaN:
             bool operator<(const SN& rComp) const
             {
-                if(fTools::equal(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX()))
-                {
-                    if(fTools::equal(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY()))
-                    {
-                        return (mpPN->mnI < rComp.mpPN->mnI);
-                    }
-                    else
-                    {
-                        return fTools::less(mpPN->maPoint.getY(), rComp.mpPN->maPoint.getY());
-                    }
-                }
-                else
-                {
-                    return fTools::less(mpPN->maPoint.getX(), rComp.mpPN->maPoint.getX());
-                }
+                return std::tie(mpPN->maPoint, mpPN->mnI)
+                    < std::tie(rComp.mpPN->maPoint, rComp.mpPN->mnI);
             }
         };
 
