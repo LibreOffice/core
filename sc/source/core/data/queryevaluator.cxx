@@ -337,7 +337,7 @@ svl::SharedString ScQueryEvaluator::getCellSharedString(const ScRefCellValue& rC
         if (it == mCachedSharedErrorStrings.end())
         {
             svl::SharedString str = mrStrPool.intern(ScGlobal::GetErrorString(error));
-            auto pos = mCachedSharedErrorStrings.insert({ error, str });
+            auto pos = mCachedSharedErrorStrings.insert({ error, std::move(str) });
             assert(pos.second); // inserted
             it = pos.first;
         }
