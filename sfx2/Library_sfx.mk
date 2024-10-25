@@ -42,7 +42,7 @@ $(eval $(call gb_Library_set_include,sfx,\
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_Library_add_defs,sfx,-DSFX2_DLLIMPLEMENTATION))
+$(eval $(call gb_Library_add_defs,sfx,-DSFX2_DLLIMPLEMENTATION -DYRS))
 
 $(eval $(call gb_Library_use_libraries,sfx,\
     basegfx \

@@ -47,6 +47,12 @@
 class ImpEditEngine;
 enum class TextRotation;
 
+#if defined(YRS)
+class IYrsTransactionSupplier;
+typedef struct TransactionInner YTransaction;
+typedef struct YTextEvent YTextEvent;
+#endif
+
 
 #define CHARPOSGROW     16
 #define DEFTAB          720
@@ -122,6 +128,20 @@ private:
     bool            mbModified:1;
     bool            mbDisableAttributeExpanding:1;
 
+#if defined(YRS)
+    OString m_CommentId;
+    IYrsTransactionSupplier * m_pYrsSupplier{nullptr};
+public:
+//    void SetYrsTransactionSupplier(IYrsTransactionSupplier *);
+    void SetYrsCommentId(IYrsTransactionSupplier *, OString const& rId);
+    void YrsWriteEEState();
+    void YrsReadEEState(YTransaction *, ImpEditEngine & rIEE);
+    void YrsApplyEEDelta(YTransaction *, YTextEvent const* pEvent, ImpEditEngine & rIEE);
+    void YrsSetStyle(sal_Int32 nPara, ::std::u16string_view rStyle);
+    void YrsSetParaAttr(sal_Int32 nPara, SfxPoolItem const& rItem);
+    OString GetCommentId() const;
+#endif
+
 public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
@@ -142,21 +162,19 @@ public:
     void            CreateDefFont( bool bUseStyles );
     const SvxFont&  GetDefFont() const { return maDefFont; }
 
-    void            SetDefTab(sal_uInt16 nTab)
-    {
-        mnDefTab = nTab ? nTab : DEFTAB;
-    }
+    void            SetDefTab(sal_uInt16 nTab);
 
     sal_uInt16      GetDefTab() const
     {
         return mnDefTab;
     }
 
-    void            SetVertical( bool bVertical )   { mbIsVertical = bVertical; }
+    void            SetVertical(bool bVertical);
+
     bool            IsEffectivelyVertical() const;
     bool            IsTopToBottom() const;
     bool            GetVertical() const;
-    void            SetRotation( TextRotation nRotation )   { mnRotation = nRotation; }
+    void            SetRotation(TextRotation nRotation);
     TextRotation    GetRotation() const                     { return mnRotation; }
 
     void            SetFixedCellHeight( bool bUseFixedCellHeight )

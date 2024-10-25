@@ -21,16 +21,29 @@
 
 #include <IDocumentState.hxx>
 
+#if defined(YRS)
+#include <rtl/ref.hxx>
+#include <com/sun/star/connection/XAcceptor.hpp>
+#include <com/sun/star/connection/XConnector.hpp>
+struct SwPosition;
+#endif
+
 class SwDoc;
 
 
 namespace sw {
+
+#if defined(YRS)
+class YrsThread;
+class YrsTransactionSupplier;
+#endif
 
 class DocumentStateManager final : public IDocumentState
 {
 
 public:
     DocumentStateManager( SwDoc& i_rSwdoc );
+    ~DocumentStateManager();
 
     void SetModified() override;
     void ResetModified() override;
@@ -55,6 +68,30 @@ private:
     bool mbUpdateExpField;    //< TRUE: Update expression fields.
     bool mbNewDoc        ;    //< TRUE: new Doc.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.
+
+#if defined(YRS)
+    friend class YrsThread;
+    ::rtl::Reference<YrsThread> m_pYrsReader;
+    css::uno::Reference<css::connection::XAcceptor> m_xAcceptor;
+//    css::uno::Reference<css::connection::XConnector> m_xConnector;
+    ::std::unique_ptr<YrsTransactionSupplier> m_pYrsSupplier;
+//    YDoc * m_pYDoc { nullptr };
+    // TODO move this to PostItMgr?
+//    int m_nLocalComments { 0 };
+
+public:
+    void InitAcceptor() override;
+    void InitConnector(css::uno::Any const& raConnector) override;
+    IYrsTransactionSupplier::Mode SetYrsMode(IYrsTransactionSupplier::Mode mode) override;
+    void CommitModified() override;
+
+    void AddCommentImpl(/*YTransaction *const pTxn, YDoc const*const pDoc,*/ SwPosition const& rPos, OString const& rCommentId/*, SwPosition pEnd, SwPostIt pComment*/) override;
+    void AddComment(SwPosition const& rPos, ::std::optional<SwPosition> oAnchorStart,
+            SwPostItField const& rField, bool isInsert) override;
+    void RemoveCommentImpl(OString const& rCommentId) override;
+    void RemoveComment(SwPosition const& rPos, OString const& rCommentId) override;
+    void UpdateCursor() override;
+#endif
 };
 
 }

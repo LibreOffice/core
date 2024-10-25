@@ -530,6 +530,17 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection()
 
 sal_Bool SwXTextDocument::attachResource(const OUString& aURL, const Sequence< beans::PropertyValue >& aArgs)
 {
+#if defined(YRS)
+    // this is for new document
+    for (auto const& rArg : aArgs)
+    {
+        if (rArg.Name == "YrsConnect")
+        {
+            m_pDocShell->GetDoc()->getIDocumentState().InitConnector(rArg.Value);
+            break;
+        }
+    }
+#endif
     return SfxBaseModel::attachResource(aURL, aArgs);
 }
 

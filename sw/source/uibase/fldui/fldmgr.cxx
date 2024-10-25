@@ -75,6 +75,10 @@
 #include <txmsrt.hxx>
 #include <unotools/useroptions.hxx>
 #include <IDocumentContentOperations.hxx>
+#if defined(YRS)
+#include <IDocumentState.hxx>
+#include <txtfld.hxx>
+#endif
 #include <translatehelper.hxx>
 
 using namespace com::sun::star::uno;
@@ -1516,7 +1520,8 @@ bool SwFieldMgr::InsertField(
     // insert
     pCurShell->StartAllAction();
 
-    bool const isSuccess = pCurShell->InsertField2(*pField, rData.m_oAnnotationRange ? &*rData.m_oAnnotationRange : nullptr);
+    ::std::optional<SwPosition> oAnchorStart;
+    bool const isSuccess = pCurShell->InsertField2(*pField, rData.m_oAnnotationRange ? &*rData.m_oAnnotationRange : nullptr, &oAnchorStart);
 
     if (isSuccess)
     {
@@ -1558,6 +1563,21 @@ bool SwFieldMgr::InsertField(
     pField.reset();
 
     pCurShell->EndAllAction();
+
+#if defined(YRS)
+    if (isSuccess)
+    {
+        // now the SwAnnotationWin are created
+        // shell cursor is behind field
+        SwPosition const pos{pCurShell->GetCursor()->GetPoint()->nContent, -1};
+        pCurShell->GetDoc()->getIDocumentState().AddComment(
+            pos, oAnchorStart,
+            static_cast<SwPostItField const&>(*SwCursorShell::GetTextFieldAtPos(&pos, ::sw::GetTextAttrMode::Default)->GetFormatField().GetField()),
+            true);
+        pCurShell->GetDoc()->getIDocumentState().CommitModified();
+    }
+#endif
+
     return isSuccess;
 }
 

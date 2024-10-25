@@ -55,6 +55,9 @@
 #include <wrtsh.hxx>
 #include <AnnotationWin.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#if defined(YRS)
+#include <IDocumentState.hxx>
+#endif
 #include <redline.hxx>
 #include <memory>
 
@@ -198,6 +201,14 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
 
     return OUString();
 }
+
+#if defined(YRS)
+void SidebarTextControl::EditViewInvalidate(const tools::Rectangle& rRect)
+{
+    mrDocView.GetDocShell()->GetDoc()->getIDocumentState().CommitModified();
+    return WeldEditView::EditViewInvalidate(rRect);
+}
+#endif
 
 void SidebarTextControl::EditViewScrollStateChange()
 {

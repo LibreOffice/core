@@ -61,6 +61,9 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#if defined(YRS)
+#include <IDocumentState.hxx>
+#endif
 #include <SwUndoField.hxx>
 #include <edtwin.hxx>
 #include "ShadowOverlayObject.hxx"
@@ -206,6 +209,9 @@ void SwAnnotationWin::SetPostItText()
     // get text from SwPostItField and insert into our textview
     mpOutliner->SetModifyHdl( Link<LinkParamNone*,void>() );
     mpOutliner->EnableUndo( false );
+#if defined(YRS)
+    auto const mode = mrView.GetDocShell()->GetDoc()->getIDocumentState().SetYrsMode(IYrsTransactionSupplier::Mode::Replay);
+#endif
     if( mpField->GetTextObject() )
         mpOutliner->SetText( *mpField->GetTextObject() );
     else
@@ -214,6 +220,9 @@ void SwAnnotationWin::SetPostItText()
         GetOutlinerView()->SetStyleSheet(SwResId(STR_POOLCOLL_COMMENT));
         GetOutlinerView()->InsertText(sNewText);
     }
+#if defined(YRS)
+    mrView.GetDocShell()->GetDoc()->getIDocumentState().SetYrsMode(mode);
+#endif
 
     mpOutliner->ClearModifyFlag();
     mpOutliner->GetUndoManager().Clear();

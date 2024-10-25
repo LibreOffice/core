@@ -46,6 +46,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#if defined(YRS)
+#include <com/sun/star/io/SequenceInputStream.hpp>
+#include <com/sun/star/connection/Connector.hpp>
+#endif
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -623,6 +627,45 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     // did the caller already pass a model?
     Reference< XModel2 > xModel = aDescriptor.getOrDefault( u"Model"_ustr, Reference< XModel2 >() );
     const bool bExternalModel = xModel.is();
+
+#if defined(YRS)
+    uno::Reference<connection::XConnection> xConnection;
+    if (!xModel.is() && aDescriptor.getOrDefault(u"URL"_ustr, OUString()) == "private:factory/swriter" && !getenv("YRSACCEPT"))
+    {
+        SAL_DEBUG("YRS connect sfx2");
+
+        // must read this SYNC
+        auto const conn = u"pipe,name=ytest"_ustr;
+        auto const xConnector = css::connection::Connector::create(m_aContext);
+        xConnection = xConnector->connect(conn);
+        uno::Sequence<sal_Int8> buf;
+        if (xConnection->read(buf, 4) != 4)
+        {
+            abort();
+        }
+        sal_Int32 const size{static_cast<sal_uInt8>(buf[0])
+                | static_cast<sal_uInt8>(buf[1]) << 8
+                | static_cast<sal_uInt8>(buf[2]) << 16
+                | static_cast<sal_uInt8>(buf[3]) << 24};
+        if (size != 0)
+        {
+            SAL_DEBUG("YRS connect reading file of size " << size);
+            uno::Sequence<sal_Int8> buff(size);
+            if (xConnection->read(buff, size) != size)
+            {
+                abort();
+            }
+            uno::Reference<io::XInputStream> const xInStream{
+                io::SequenceInputStream::createStreamFromSequence(m_aContext, buff)};
+            assert(xInStream.is());
+
+            aDescriptor.put(u"URL"_ustr, u"private:stream"_ustr);
+            aDescriptor.put(u"InputStream"_ustr, uno::Any(xInStream));
+        }
+        aDescriptor.put(u"ReadOnly"_ustr, uno::Any(true));
+        aDescriptor.put(u"YrsConnect"_ustr, uno::Any(xConnection));
+    }
+#endif
 
     // check for factory URLs to create a new doc, instead of loading one
     const OUString sURL = aDescriptor.getOrDefault( u"URL"_ustr, OUString() );

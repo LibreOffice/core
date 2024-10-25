@@ -1005,6 +1005,9 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     // Set DocShell
     m_xGlueDocShell.reset(new SwViewGlueDocShell(*this, rDocSh));
     m_pPostItMgr.reset(new SwPostItMgr(this));
+#if defined(YRS)
+    m_pWrtShell->GetDoc()->getIDocumentState().InitAcceptor();
+#endif
 
     // Check and process the DocSize. Via the handler, the shell could not
     // be found, because the shell is not known in the SFX management

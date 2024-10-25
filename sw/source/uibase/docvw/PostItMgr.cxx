@@ -45,6 +45,9 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
+#if defined(YRS)
+#include <IDocumentState.hxx>
+#endif
 #include <docstyle.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -517,6 +520,11 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
         [&pBroadcast](const std::unique_ptr<SwAnnotationItem>& pField) { return pField->GetBroadcaster() == pBroadcast; });
     if (i != mvPostItFields.end())
     {
+#if defined(YRS)
+        mpView->GetDocShell()->GetDoc()->getIDocumentState().RemoveComment(
+            (*i)->GetAnchorPosition(),
+            (*i)->mpPostIt->GetOutlinerView()->GetEditView().GetCommentId());
+#endif
         std::unique_ptr<SwAnnotationItem> p = std::move(*i);
         // tdf#120487 remove from list before dispose, so comment window
         // won't be recreated due to the entry still in the list if focus
@@ -900,6 +908,7 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
         pPostIt->InitControls();
         pPostIt->SetReadonly(mbReadOnly);
         rItem.mpPostIt = pPostIt;
+        SAL_DEBUG("YRS GetOrCreateAnnotationWindow " << rItem.mpPostIt);
         if (mpAnswer)
         {
             if (pPostIt->GetPostItField()->GetParentPostItId() != 0) //do we really have another note in front of this one
@@ -908,6 +917,7 @@ VclPtr<SwAnnotationWin> SwPostItMgr::GetOrCreateAnnotationWindow(SwAnnotationIte
             }
             mpAnswer.reset();
         }
+//        GetDoc()->getIDocumentState()->AddComment();
     }
     return rItem.mpPostIt;
 }

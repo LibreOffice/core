@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_externals,editeng_editeng,\
     boost_headers \
     icuuc \
     libxml2 \
+	yrs \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,editeng_editeng,\

@@ -66,11 +66,18 @@
 #include <strings.hrc>
 #include <officecfg/Office/Common.hxx>
 
-bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
+bool SwWrtShell::InsertField2(SwField const& rField,
+    SwPaM* pAnnotationRange, ::std::optional<SwPosition> *const poAnchorStart)
 {
     ResetCursorStack();
     if(!CanInsert())
         return false;
+    return InsertField2Impl(rField, pAnnotationRange, poAnchorStart);
+}
+
+bool SwWrtShell::InsertField2Impl(SwField const& rField,
+        SwPaM* pAnnotationRange, ::std::optional<SwPosition> *const poAnchorStart)
+{
     StartAllAction();
 
     SwRewriter aRewriter;
@@ -135,7 +142,11 @@ bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
                     pAnnotationTextRange->Start()->AdjustContent(-1);
             }
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
-            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, OUString() );
+            auto pMark{pMarksAccess->makeAnnotationMark(*pAnnotationTextRange, OUString())};
+            if (poAnchorStart)
+            {
+                poAnchorStart->emplace(pMark->GetMarkStart());
+            }
         }
         pAnnotationTextRange.reset();
     }

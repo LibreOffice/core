@@ -167,6 +167,7 @@ $(eval $(call gb_Library_use_externals,editeng,\
 	icuuc \
 	icu_headers \
 	libxml2 \
+	yrs \
 ))
 
 # vim: set noet sw=4 ts=4:

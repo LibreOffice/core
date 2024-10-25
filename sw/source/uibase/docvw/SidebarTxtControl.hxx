@@ -57,6 +57,9 @@ class SidebarTextControl : public WeldEditView
 
         virtual EditEngine* GetEditEngine() const override;
 
+#if defined(YRS)
+        virtual void EditViewInvalidate(const tools::Rectangle& rRect) override;
+#endif
         virtual void EditViewScrollStateChange() override;
 
         void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;

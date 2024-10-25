@@ -313,7 +313,10 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     int     IntelligentCut(SelectionType nSelectionType, bool bCut = true);
 
     // edit
-    SW_DLLPUBLIC bool InsertField2(SwField const &, SwPaM* pAnnotationRange = nullptr);
+    bool InsertField2Impl(SwField const &, SwPaM* pAnnotationRange,
+            ::std::optional<SwPosition> *const poAnchorStart);
+    SW_DLLPUBLIC bool InsertField2(SwField const &, SwPaM* pAnnotationRange = nullptr,
+            ::std::optional<SwPosition> *const poAnchorStart = nullptr);
     SW_DLLPUBLIC void Insert(const OUString &);
     // graphic
     void    InsertGraphic( const OUString &rPath, const OUString &rFilter,
