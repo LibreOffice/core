@@ -15,6 +15,7 @@
 #include <QtInstanceCheckButton.hxx>
 #include <QtInstanceComboBox.hxx>
 #include <QtInstanceEntry.hxx>
+#include <QtInstanceFrame.hxx>
 #include <QtInstanceLabel.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceTextView.hxx>
@@ -105,10 +106,12 @@ std::unique_ptr<weld::Paned> QtInstanceBuilder::weld_paned(const OUString&)
     return nullptr;
 }
 
-std::unique_ptr<weld::Frame> QtInstanceBuilder::weld_frame(const OUString&)
+std::unique_ptr<weld::Frame> QtInstanceBuilder::weld_frame(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QGroupBox* pGroupBox = m_xBuilder->get<QGroupBox>(rId);
+    std::unique_ptr<weld::Frame> xRet(pGroupBox ? std::make_unique<QtInstanceFrame>(pGroupBox)
+                                                : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ScrolledWindow> QtInstanceBuilder::weld_scrolled_window(const OUString&, bool)

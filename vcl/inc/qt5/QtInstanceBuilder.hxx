@@ -37,7 +37,7 @@ public:
     virtual std::unique_ptr<weld::Container> weld_container(const OUString&) override;
     virtual std::unique_ptr<weld::Box> weld_box(const OUString&) override;
     virtual std::unique_ptr<weld::Paned> weld_paned(const OUString&) override;
-    virtual std::unique_ptr<weld::Frame> weld_frame(const OUString&) override;
+    virtual std::unique_ptr<weld::Frame> weld_frame(const OUString& rId) override;
     virtual std::unique_ptr<weld::ScrolledWindow>
     weld_scrolled_window(const OUString&, bool bUserManagedScrolling = false) override;
     virtual std::unique_ptr<weld::Notebook> weld_notebook(const OUString&) override;
