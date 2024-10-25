@@ -136,6 +136,6 @@ void sfx2::openUriExternally(const OUString& sURI, bool bHandleSystemShellExecut
 {
     URITools* uriTools = new URITools(pDialogParent);
     uriTools->openURI(sURI, bHandleSystemShellExecuteException);
-}
+} //-V773
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
