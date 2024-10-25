@@ -350,44 +350,17 @@ void QtBuilder::applyGridPackingProperties(QObject& rCurrentChild, QGridLayout& 
     if (!rCurrentChild.isWidgetType())
         return;
 
+    assert(rPackingProperties.contains(u"left-attach"_ustr)
+           && "left-attach property missing for grid item");
+    assert(rPackingProperties.contains(u"top-attach"_ustr)
+           && "top-attach property missing for grid item");
+
+    const sal_Int32 nColumn = rPackingProperties.at(u"left-attach"_ustr).toInt32();
+    const sal_Int32 nRow = rPackingProperties.at(u"top-attach"_ustr).toInt32();
+
     QWidget& rCurrentWidget = static_cast<QWidget&>(rCurrentChild);
-
-    int nCurrentRow = -1;
-    int nCurrentColumn = -1;
-    for (int i = 0; i < rGrid.rowCount(); i++)
-    {
-        for (int j = 0; j < rGrid.columnCount(); j++)
-        {
-            if (QLayoutItem* pLayoutItem = rGrid.itemAtPosition(i, j))
-            {
-                if (pLayoutItem->widget() == &rCurrentWidget)
-                {
-                    nCurrentRow = i;
-                    nCurrentColumn = j;
-                    break;
-                }
-            }
-        }
-    }
-    assert(nCurrentRow >= 0 && nCurrentColumn >= 0 && "Widget not contained in parent grid layout");
-
-    for (auto const & [ rKey, rValue ] : rPackingProperties)
-    {
-        if (rKey == u"left-attach")
-        {
-            const sal_Int32 nNewColumn = rValue.toInt32();
-            rGrid.removeWidget(&rCurrentWidget);
-            rGrid.addWidget(&rCurrentWidget, nCurrentRow, nNewColumn);
-            nCurrentColumn = nNewColumn;
-        }
-        else if (rKey == u"top-attach")
-        {
-            const sal_Int32 nNewRow = rValue.toInt32();
-            rGrid.removeWidget(&rCurrentWidget);
-            rGrid.addWidget(&rCurrentWidget, nNewRow, nCurrentColumn);
-            nCurrentRow = nNewRow;
-        }
-    }
+    rGrid.removeWidget(&rCurrentWidget);
+    rGrid.addWidget(&rCurrentWidget, nRow, nColumn);
 }
 
 void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
