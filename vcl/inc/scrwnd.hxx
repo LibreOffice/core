@@ -52,8 +52,10 @@ private:
     WheelMode           mnWheelMode;
     sal_uLong           mnMaxWidth;
     sal_uLong           mnActDist;
-    tools::Long                mnActDeltaX;
-    tools::Long                mnActDeltaY;
+    tools::Long         mnStepDeltaX;       // x component of scroll direction
+    tools::Long         mnStepDeltaY;       // y component of scroll direction
+    tools::Long         mnActDeltaX;        // x component of scroll distance
+    tools::Long         mnActDeltaY;        // y component of scroll distance
     void                ImplCreateImageList();
     void                ImplSetRegion(const Bitmap& rRegionBmp);
     using Window::ImplGetMousePointer;
