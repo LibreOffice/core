@@ -372,6 +372,66 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkRotateAngle)
     // i.e. the rotation angle was 270 for an A4 page, not the requested 45 degrees.
     CPPUNIT_ASSERT_EQUAL(nExpectedRotateAngle, nActualRotateAngle);
 }
+
+#ifdef UNX
+CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
+{
+    // Given an empty document:
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
+        = xml::crypto::SEInitializer::create(m_xContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
+        = xSecurityContext->getSecurityEnvironment();
+    OUString aKeyPath = createFileURL(u"key.pem");
+    SvFileStream aKeyStream(aKeyPath, StreamMode::READ);
+    OUString aKeyPem
+        = OUString::fromUtf8(read_uInt8s_ToOString(aKeyStream, aKeyStream.remainingSize()));
+    OUString aCertPath = createFileURL(u"cert.pem");
+    SvFileStream aCertStream(aCertPath, StreamMode::READ);
+    OUString aCertPem
+        = OUString::fromUtf8(read_uInt8s_ToOString(aCertStream, aCertStream.remainingSize()));
+    OUString aCaPath = createFileURL(u"ca.pem");
+    SvFileStream aCaStream(aCaPath, StreamMode::READ);
+    OUString aCaPem
+        = OUString::fromUtf8(read_uInt8s_ToOString(aCaStream, aCaStream.remainingSize()));
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("SignPDF", true),
+        comphelper::makePropertyValue("SignCertificateCertPem", aCertPem),
+        comphelper::makePropertyValue("SignCertificateKeyPem", aKeyPem),
+        comphelper::makePropertyValue("aSignCertificateCaPem", aCaPem),
+    };
+    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // When exporting to PDF, and referring to a certificate using a cert/key/ca PEM, which is not
+    // in the NSS database:
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
+    uno::Reference<document::XFilter> xFilter(
+        xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
+    uno::Reference<document::XExporter> xExporter(xFilter, uno::UNO_QUERY);
+    xExporter->setSourceDocument(mxComponent);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("FilterName", OUString("writer_pdf_Export")),
+        comphelper::makePropertyValue("FilterData", aFilterData),
+        comphelper::makePropertyValue("OutputStream", xOutputStream),
+    };
+    xFilter->filter(aDescriptor);
+
+    // Then make sure the resulting PDF has a signature:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
+    // Without the accompanying fix in place, this test would have failed, as signing was enabled
+    // without configured certificate, so the whole export failed.
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getSignatureCount());
+}
+#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

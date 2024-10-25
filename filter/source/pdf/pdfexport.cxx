@@ -40,6 +40,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/compbase.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sfx2/lokhelper.hxx>
 
 #include "pdfexport.hxx"
 #include <strings.hrc>
@@ -526,6 +527,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.DocumentInfo.Creator = aCreator;
 
             OUString aSignCertificateSubjectName;
+            OUString aSignCertificateCertPem;
+            OUString aSignCertificateKeyPem;
+            OUString aSignCertificateCaPem;
             for ( const beans::PropertyValue& rProp : rFilterData )
             {
                 if ( rProp.Name == "PageRange" )
@@ -689,6 +693,12 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= aSignCertificate;
                 else if (rProp.Name == "SignCertificateSubjectName")
                     rProp.Value >>= aSignCertificateSubjectName;
+                else if (rProp.Name == "SignCertificateCertPem")
+                    rProp.Value >>= aSignCertificateCertPem;
+                else if (rProp.Name == "SignCertificateKeyPem")
+                    rProp.Value >>= aSignCertificateKeyPem;
+                else if (rProp.Name == "SignCertificateCaPem")
+                    rProp.Value >>= aSignCertificateCaPem;
                 else if ( rProp.Name == "SignatureTSA" )
                     rProp.Value >>= sSignTSA;
                 else if ( rProp.Name == "ExportPlaceholders" )
@@ -714,6 +724,24 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             if (!aSignCertificate.is() && !aSignCertificateSubjectName.isEmpty())
             {
                 aSignCertificate = GetCertificateFromSubjectName(aSignCertificateSubjectName);
+            }
+
+            if (!aSignCertificate.is())
+            {
+                // Still no signing certificate configured, see if we got a ca/cert/key in PEM
+                // format:
+                if (!aSignCertificateCaPem.isEmpty())
+                {
+                    std::string aSignatureCa(aSignCertificateCaPem.toUtf8());
+                    std::vector<std::string> aCerts = SfxLokHelper::extractCertificates(aSignatureCa);
+                    SfxLokHelper::addCertificates(aCerts);
+                }
+                if (!aSignCertificateCertPem.isEmpty() && !aSignCertificateKeyPem.isEmpty())
+                {
+                    std::string aSignatureCert(aSignCertificateCertPem.toUtf8());
+                    std::string aSignatureKey(aSignCertificateKeyPem.toUtf8());
+                    aSignCertificate = SfxLokHelper::getSigningCertificate(aSignatureCert, aSignatureKey);
+                }
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
