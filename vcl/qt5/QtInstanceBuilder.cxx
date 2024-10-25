@@ -42,6 +42,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"cui/ui/optnewdictionarydialog.ui"_ustr,
         u"modules/scalc/ui/inputstringdialog.ui"_ustr,
         u"modules/schart/ui/insertaxisdlg.ui"_ustr,
+        u"modules/smath/ui/alignmentdialog.ui"_ustr,
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/wordcount.ui"_ustr,
