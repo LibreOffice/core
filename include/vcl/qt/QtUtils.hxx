@@ -20,6 +20,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/image.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QPixmap>
@@ -29,17 +30,31 @@ inline QString toQString(const OUString& rStr)
     return QString::fromUtf16(rStr.getStr(), rStr.getLength());
 }
 
-inline QPixmap loadQPixmapIcon(const OUString& rIconName)
+inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
 {
-    BitmapEx aIcon(rIconName);
     SvMemoryStream aMemoryStream;
     vcl::PngImageWriter aWriter(aMemoryStream);
-    aWriter.write(aIcon);
+    aWriter.write(rBitmapEx);
     QPixmap aPixmap;
     aPixmap.loadFromData(static_cast<const uchar*>(aMemoryStream.GetData()),
                          aMemoryStream.TellEnd());
     assert(!aPixmap.isNull() && "Failed to create icon pixmap");
     return aPixmap;
+}
+
+inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rImage)
+{
+    if (!rImage.is())
+        return QPixmap();
+
+    Image aImage(rImage);
+    return toQPixmap(aImage.GetBitmapEx());
+}
+
+inline QPixmap loadQPixmapIcon(const OUString& rIconName)
+{
+    BitmapEx aIcon(rIconName);
+    return toQPixmap(aIcon);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -25,9 +25,9 @@ void QtInstanceImage::set_from_icon_name(const OUString&)
 
 void QtInstanceImage::set_image(VirtualDevice*) { assert(false && "Not implemented yet"); }
 
-void QtInstanceImage::set_image(const css::uno::Reference<css::graphic::XGraphic>&)
+void QtInstanceImage::set_image(const css::uno::Reference<css::graphic::XGraphic>& rGraphic)
 {
-    assert(false && "Not implemented yet");
+    m_pLabel->setPixmap(toQPixmap(rGraphic));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
