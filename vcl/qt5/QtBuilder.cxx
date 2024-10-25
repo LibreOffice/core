@@ -356,18 +356,24 @@ void QtBuilder::applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& 
     const sal_Int32 nColumn = rPackingProperties.at(u"left-attach"_ustr).toInt32();
     const sal_Int32 nRow = rPackingProperties.at(u"top-attach"_ustr).toInt32();
 
+    auto aWidthIt = rPackingProperties.find(u"width"_ustr);
+    sal_Int32 nColumnSpan = (aWidthIt == rPackingProperties.end()) ? 1 : aWidthIt->second.toInt32();
+
+    auto aHeightIt = rPackingProperties.find(u"height"_ustr);
+    sal_Int32 nRowSpan = (aHeightIt == rPackingProperties.end()) ? 1 : aHeightIt->second.toInt32();
+
     if (pCurrentChild->isWidgetType())
     {
         QWidget* pWidget = static_cast<QWidget*>(pCurrentChild);
         rGrid.removeWidget(pWidget);
-        rGrid.addWidget(pWidget, nRow, nColumn);
+        rGrid.addWidget(pWidget, nRow, nColumn, nRowSpan, nColumnSpan);
         return;
     }
 
     // if it's not a QWidget, it must be a QLayout
     QLayout* pLayout = static_cast<QLayout*>(pCurrentChild);
     rGrid.removeItem(pLayout);
-    rGrid.addLayout(pLayout, nRow, nColumn);
+    rGrid.addLayout(pLayout, nRow, nColumn, nRowSpan, nColumnSpan);
 }
 
 void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
