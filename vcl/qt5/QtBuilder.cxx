@@ -9,6 +9,7 @@
 
 #include <QtBuilder.hxx>
 
+#include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtTools.hxx>
 
@@ -192,6 +193,16 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         extractMnemonicWidget(sID, rMap);
         pObject = new QLabel(pParentWidget);
+    }
+    else if (sName == u"GtkLinkButton")
+    {
+        QtHyperlinkLabel* pLabel = new QtHyperlinkLabel(pParentWidget);
+        if (rMap.contains(u"label"_ustr))
+            pLabel->setDisplayText(toQString(rMap[u"label"_ustr]));
+        if (rMap.contains(u"uri"_ustr))
+            pLabel->setUri(toQString(rMap[u"label"_ustr]));
+
+        pObject = pLabel;
     }
     else if (sName == u"GtkRadioButton")
     {

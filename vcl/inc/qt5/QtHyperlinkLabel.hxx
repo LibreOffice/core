@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <QtWidgets/QLabel>
+
+/**
+ * QLabel subclass for a label that holds a hyperlink,
+ * with convenient getters/setters for the displayed text
+ * and the hyperlink target.
+ */
+class QtHyperlinkLabel : public QLabel
+{
+    QString m_sDisplayText;
+    QString m_sUri;
+
+public:
+    QtHyperlinkLabel(QWidget* pParent);
+
+    QString displayText() const { return m_sDisplayText; }
+    void setDisplayText(const QString& rDisplayText);
+
+    QString uri() const { return m_sUri; }
+    void setUri(const QString& rUri);
+
+private:
+    void update();
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

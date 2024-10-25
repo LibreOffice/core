@@ -18,6 +18,7 @@
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceImage.hxx>
 #include <QtInstanceLabel.hxx>
+#include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceRadioButton.hxx>
 #include <QtInstanceTextView.hxx>
@@ -151,10 +152,12 @@ std::unique_ptr<weld::MenuToggleButton> QtInstanceBuilder::weld_menu_toggle_butt
     return nullptr;
 }
 
-std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUString&)
+std::unique_ptr<weld::LinkButton> QtInstanceBuilder::weld_link_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QtHyperlinkLabel* pLabel = m_xBuilder->get<QtHyperlinkLabel>(rId);
+    std::unique_ptr<weld::LinkButton> xRet(pLabel ? std::make_unique<QtInstanceLinkButton>(pLabel)
+                                                  : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::ToggleButton> QtInstanceBuilder::weld_toggle_button(const OUString&)

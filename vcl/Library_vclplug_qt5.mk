@@ -93,6 +93,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtGraphics_Controls \
     vcl/qt5/QtGraphics_GDI \
     vcl/qt5/QtGraphics_Text \
+    vcl/qt5/QtHyperlinkLabel \
     vcl/qt5/QtInstance \
     vcl/qt5/QtInstance_Print \
     vcl/qt5/QtInstanceBuilder \
@@ -104,6 +105,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceEntry \
     vcl/qt5/QtInstanceFrame \
     vcl/qt5/QtInstanceImage \
+    vcl/qt5/QtInstanceLinkButton \
     vcl/qt5/QtInstanceMessageDialog \
     vcl/qt5/QtInstanceLabel \
     vcl/qt5/QtInstanceRadioButton \
