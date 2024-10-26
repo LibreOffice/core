@@ -371,9 +371,28 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     if (nVItemSpace == -1) // auto, split up extra space to use as vertical spacing
         nVItemSpace = nVSpace / (mnVisLines+1);
 
+    // tdf#162510 - calculate maximum number of rows
+    size_t nItemCountPinned = 0;
+#if !ENABLE_WASM_STRIP_RECENT
+    bool bPinnedItems = true;
+    for (size_t i = 0; bPinnedItems && i < nItemCount; ++i)
+    {
+        ThumbnailViewItem& rItem = *mFilteredItemList[i];
+        if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(&rItem))
+        {
+            if (pRecentDocsItem->isPinned())
+                ++nItemCountPinned;
+            else
+                bPinnedItems = false;
+        }
+    }
+#endif
+
     // calculate maximum number of rows
     // Floor( (M+N-1)/N )==Ceiling( M/N )
-    mnLines = (static_cast<tools::Long>(nItemCount)+mnCols-1) / mnCols;
+    mnLines = (static_cast<tools::Long>(nItemCount - nItemCountPinned) + mnCols - 1) / mnCols;
+    // tdf#162510 - add pinned items to number of lines
+    mnLines += (static_cast<tools::Long>(nItemCountPinned) + mnCols - 1) / mnCols;
 
     if ( !mnLines )
         mnLines = 1;
@@ -407,87 +426,73 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     size_t nFirstItem = (bScrollBarUsed ? nHiddenLines : mnFirstLine) * mnCols;
     size_t nLastItem = nFirstItem + (mnVisLines + 1) * mnCols;
 
-    // If want also draw parts of items in the last line,
-    // then we add one more line if parts of this line are visible
-
-#if !ENABLE_WASM_STRIP_RECENT
-    bool bPinnedItems = true;
-#endif
-    size_t nCurCount = 0;
-    for ( size_t i = 0; i < nItemCount; i++ )
+    // tdf#162510 - helper for in order to handle accessibility events
+    auto handleAccessibleEvent = [&](ThumbnailViewItem& rItem, bool bIsVisible)
     {
-        ThumbnailViewItem& rItem = *mFilteredItemList[i];
-
-#if !ENABLE_WASM_STRIP_RECENT
-        // tdf#38742 - show pinned items in a separate line
-        if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(&rItem))
+        if (ImplHasAccessibleListeners())
         {
-            if (bPinnedItems && !pRecentDocsItem->isPinned())
-            {
-                bPinnedItems = false;
-                // Start a new line only if the entire line is not filled
-                if (nCurCount % mnCols && nCurCount > nFirstItem)
-                {
-                    x = nStartX;
-                    y += mnItemHeight + nVItemSpace;
-                }
-                nCurCount = 0;
-            }
+            css::uno::Any aOldAny, aNewAny;
+            if (bIsVisible)
+                aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(
+                    rItem.GetAccessible(false));
+            else
+                aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(
+                    rItem.GetAccessible(false));
+            ImplFireAccessibleEvent(css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny);
         }
-#endif
+    };
 
-        if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
+    // tdf#162510 - helper to set visibility and update layout
+    auto updateItemLayout = [&](ThumbnailViewItem& rItem, bool bIsVisible, size_t& nVisibleCount)
+    {
+        if (bIsVisible != rItem.isVisible())
         {
-            if( !rItem.isVisible())
-            {
-                if ( ImplHasAccessibleListeners() )
-                {
-                    css::uno::Any aOldAny, aNewAny;
+            handleAccessibleEvent(rItem, bIsVisible);
+            rItem.show(bIsVisible);
+            maItemStateHdl.Call(&rItem);
+        }
 
-                    aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible( false ));
-                    ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                }
+        if (bIsVisible)
+        {
+            rItem.setDrawArea(::tools::Rectangle(Point(x, y), Size(mnItemWidth, mnItemHeight)));
+            rItem.calculateItemsPosition(mnThumbnailHeight, mnItemPadding,
+                                         mpItemAttrs->nMaxTextLength, mpItemAttrs.get());
 
-                rItem.show(true);
-
-                maItemStateHdl.Call(&rItem);
-            }
-
-            rItem.setDrawArea(::tools::Rectangle( Point(x,y), Size(mnItemWidth, mnItemHeight) ));
-            rItem.calculateItemsPosition(mnThumbnailHeight,mnItemPadding,mpItemAttrs->nMaxTextLength,mpItemAttrs.get());
-
-            if ( !((nCurCount+1) % mnCols) )
+            if ((nVisibleCount + 1) % mnCols)
+                x += mnItemWidth + nHItemSpace;
+            else
             {
                 x = nStartX;
-                y += mnItemHeight+nVItemSpace;
+                y += mnItemHeight + nVItemSpace;
             }
-            else
-                x += mnItemWidth+nHItemSpace;
+            ++nVisibleCount;
         }
-        else
-        {
-            if( rItem.isVisible())
-            {
-                if ( ImplHasAccessibleListeners() )
-                {
-                    css::uno::Any aOldAny, aNewAny;
+    };
 
-                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(rItem.GetAccessible( false ));
-                    ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
-                }
+    size_t nCurCountVisible = 0;
+#if !ENABLE_WASM_STRIP_RECENT
+    // tdf#162510 - process pinned items
+    for (size_t i = 0; i < nItemCountPinned; i++)
+        updateItemLayout(*mFilteredItemList[i], nFirstItem <= i && i < nLastItem, nCurCountVisible);
 
-                rItem.show(false);
-
-                maItemStateHdl.Call(&rItem);
-            }
-
-        }
-
-        ++nCurCount;
+    // tdf#162510 - start a new line only if the entire line is not filled with pinned items
+    if (nCurCountVisible && nCurCountVisible % mnCols)
+    {
+        x = nStartX;
+        y += mnItemHeight + nVItemSpace;
     }
 
-    // arrange ScrollBar, set values and show it
-    mnLines = (nCurCount+mnCols-1)/mnCols;
+    // tdf#162510 - adjust first item to take into account the new line after pinned items
+    auto nFirstItemAdjustment = mnCols - nItemCountPinned % mnCols;
+    if (nFirstItemAdjustment <= nFirstItem)
+        nFirstItem -= nFirstItemAdjustment;
+#endif
+
+    // If want also draw parts of items in the last line,
+    // then we add one more line if parts of this line are visible
+    nCurCountVisible = 0;
+    for (size_t i = nItemCountPinned; i < nItemCount; i++)
+        updateItemLayout(*mFilteredItemList[i], nFirstItem <= i && i < nLastItem, nCurCountVisible);
 
     // check if scroll is needed
     mbScroll = mnLines > mnVisLines;
