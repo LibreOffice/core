@@ -402,7 +402,7 @@ void ExportDialog::GetGraphicSource()
             uno::Reference< drawing::XDrawPage > xCurrentPage( xDrawView->getCurrentPage() );
             if ( xCurrentPage.is() )
             {
-                mxPage = xCurrentPage;      // exporting whole page
+                mxPage = std::move(xCurrentPage);      // exporting whole page
             }
         }
     }

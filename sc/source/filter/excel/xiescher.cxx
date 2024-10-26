@@ -3768,7 +3768,7 @@ bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFor
 
         // set control model at control shape and pass back shape to caller
         xCtrlShape->setControl( xCtrlModel );
-        if( pxShape ) *pxShape = xShape;
+        if( pxShape ) *pxShape = std::move(xShape);
         return true;
     }
     catch( const Exception& )

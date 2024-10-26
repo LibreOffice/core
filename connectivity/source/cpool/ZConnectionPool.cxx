@@ -215,7 +215,7 @@ Reference< XConnection> OConnectionPool::createNewConnection(const OUString& _rU
         aPack.nALiveCount               = m_nALiveCount;
         TActiveConnectionInfo aActiveInfo;
         aActiveInfo.aPos                = m_aPool.emplace(nId,aPack).first;
-        aActiveInfo.xPooledConnection   = xPooledConnection;
+        aActiveInfo.xPooledConnection   = std::move(xPooledConnection);
         m_aActiveConnections.emplace(xConnection,aActiveInfo);
 
         if(m_xInvalidator->isExpired())

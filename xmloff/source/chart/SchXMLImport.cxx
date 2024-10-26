@@ -93,7 +93,7 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
     Reference< chart::XChartDocument > xDoc( rChartModel, uno::UNO_QUERY );
     if( xDoc.is())
     {
-        mxChartDoc = xDoc;
+        mxChartDoc = std::move(xDoc);
         pContext = new SchXMLChartContext( *this, rImport );
     }
     else

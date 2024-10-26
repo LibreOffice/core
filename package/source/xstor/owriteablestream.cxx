@@ -500,7 +500,7 @@ void OWriteStream_Impl::FillTempGetFileName()
             uno::Reference< io::XStream > xCacheStream = CreateMemoryStream( m_xContext );
             SAL_WARN_IF( !xCacheStream.is(), "package.xstor", "If the stream can not be created an exception must be thrown!" );
             m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
-            m_xCacheStream = xCacheStream;
+            m_xCacheStream = std::move(xCacheStream);
         }
         else
         {
@@ -521,7 +521,7 @@ void OWriteStream_Impl::FillTempGetFileName()
                     xOutStream->writeBytes( aData );
                 }
                 m_xCacheSeek.set( xCacheStream, uno::UNO_QUERY_THROW );
-                m_xCacheStream = xCacheStream;
+                m_xCacheStream = std::move(xCacheStream);
                 m_xCacheSeek->seek( 0 );
             }
             else if ( !m_oTempFile.has_value() )

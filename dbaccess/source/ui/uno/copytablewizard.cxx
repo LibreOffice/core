@@ -875,7 +875,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     while ( false );
 
     if ( xInteractionHandler != m_xInteractionHandler )
-        _out_rxDocInteractionHandler = xInteractionHandler;
+        _out_rxDocInteractionHandler = std::move(xInteractionHandler);
 
     return xConnection;
 }
@@ -1499,7 +1499,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
         impl_ensureDataAccessDescriptor_throw( _rArguments, 1, m_xDestConnection, xDestDocHandler );
 
         if ( xDestDocHandler.is() && !m_xInteractionHandler.is() )
-            m_xInteractionHandler = xDestDocHandler;
+            m_xInteractionHandler = std::move(xDestDocHandler);
 
         Reference< XPropertySet > xInteractionHandler(m_xInteractionHandler, UNO_QUERY);
         if (xInteractionHandler.is())

@@ -551,7 +551,7 @@ void ScXMLExport::CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount)
                 aMyShape.aEndAddress.SetTab( nTable );
                 aMyShape.nEndX = pAnchor->maEndOffset.X();
                 aMyShape.nEndY = pAnchor->maEndOffset.Y();
-                aMyShape.xShape = xShape;
+                aMyShape.xShape = std::move(xShape);
                 pSharedData->AddNewShape(aMyShape);
                 pSharedData->SetLastColumn(nTable, pAnchor->maStart.Col());
                 pSharedData->SetLastRow(nTable, pAnchor->maStart.Row());

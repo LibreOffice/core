@@ -216,7 +216,7 @@ namespace dbtools
 
                     sStatement = xComposer->getQuery();
 
-                    _rData.xComposer = xComposer;
+                    _rData.xComposer = std::move(xComposer);
                     _rData.bComposerDirty = false;
                 }
             }

@@ -585,7 +585,7 @@ SdrObject* ShapeController::getFirstAdditionalShape()
                 {
                     if ( xShape.is() && xShape != xChartRoot )
                     {
-                        xFirstShape = xShape;
+                        xFirstShape = std::move(xShape);
                         break;
                     }
                 }

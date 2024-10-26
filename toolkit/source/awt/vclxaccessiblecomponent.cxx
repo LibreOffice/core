@@ -701,7 +701,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessi
                 Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
-                    xChild = xAcc;
+                    xChild = std::move(xAcc);
                     break;
                 }
             }

@@ -1747,7 +1747,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                 throw css::lang::IllegalArgumentException();
             }
 
-            m_xLabelControl = xAsPropSet;
+            m_xLabelControl = std::move(xAsPropSet);
             Reference<css::lang::XComponent> xComp(m_xLabelControl, UNO_QUERY);
             if (xComp.is())
                 xComp->addEventListener(static_cast<css::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));

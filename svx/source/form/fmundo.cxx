@@ -1236,7 +1236,7 @@ void FmUndoModelReplaceAction::Undo()
             m_pObject->SetUnoControlModel(m_xReplaced);
             m_pObject->SetChanged();
 
-            m_xReplaced = xCurrentModel;
+            m_xReplaced = std::move(xCurrentModel);
         }
     }
     catch(Exception&)

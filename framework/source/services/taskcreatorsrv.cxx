@@ -251,7 +251,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
         aDescriptor.Type                =   css::awt::WindowClass_TOP;
         aDescriptor.WindowServiceName   =   "dockingwindow";
         aDescriptor.ParentIndex         =   1;
-        aDescriptor.Parent              =   xParentWindowPeer;
+        aDescriptor.Parent              =   std::move(xParentWindowPeer);
         aDescriptor.Bounds              =   aPosSize;
         aDescriptor.WindowAttributes    =   css::awt::VclWindowPeerAttribute::CLIPCHILDREN;
     }

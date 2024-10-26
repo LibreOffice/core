@@ -1631,7 +1631,7 @@ void CustomAnimationPane::onChangeCurrentPage()
         Reference< XDrawPage > xNewPage( mxView->getCurrentPage() );
         if( xNewPage != mxCurrentPage )
         {
-            mxCurrentPage = xNewPage;
+            mxCurrentPage = std::move(xNewPage);
             SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
             if( pPage )
             {

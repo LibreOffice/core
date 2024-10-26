@@ -1969,7 +1969,7 @@ bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XData
             OUString aRole;
             if( aValueProp.GetProperty( aRole, EXC_CHPROP_ROLE ) && (aRole == rValueRole) )
             {
-                xYValueSeq = xTmpValueSeq;
+                xYValueSeq = std::move(xTmpValueSeq);
                 xTitleSeq = rLabeledSeq->getLabel();     // ignore role of label sequence
                 break;
             }

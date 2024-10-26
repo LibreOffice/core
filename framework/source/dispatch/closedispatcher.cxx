@@ -605,7 +605,7 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
             return xTarget;
 
         // c1) check parent frame inside next loop ...
-        xTarget = xParent;
+        xTarget = std::move(xParent);
     }
 }
 

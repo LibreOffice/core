@@ -207,7 +207,7 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
         rValue >>= aJob;
         if ( !aJob.is() )
             throw lang::IllegalArgumentException();
-        mrJob = aJob;
+        mrJob = std::move(aJob);
     }
     else if (rPropertyName == PROPERTY_SHOW_MENUICON ) {
         bool bShowMenuIcon = false;

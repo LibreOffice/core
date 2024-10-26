@@ -97,7 +97,7 @@ registerAtUcb(
         catch (lang::IllegalArgumentException const &) {}
 
         if (xInstance.is())
-            xProvider = xInstance;
+            xProvider = std::move(xInstance);
     }
 
     bool bSuccess = false;

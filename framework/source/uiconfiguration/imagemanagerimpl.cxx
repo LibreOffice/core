@@ -916,7 +916,7 @@ void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUS
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           <<= nImageType;
         aReplaceEvent.Accessor        <<= xOwner;
-        aReplaceEvent.Source          = xOwner;
+        aReplaceEvent.Source          = std::move(xOwner);
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(pReplacedImages);

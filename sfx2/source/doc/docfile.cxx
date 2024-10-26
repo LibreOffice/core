@@ -2935,7 +2935,7 @@ void SfxMedium::GetLockingStream_Impl()
             pImpl->xStream = pImpl->m_xLockingStream;
 
         if ( xInputStream.is() )
-            pImpl->xInputStream = xInputStream;
+            pImpl->xInputStream = std::move(xInputStream);
 
         if ( !pImpl->xInputStream.is() && pImpl->xStream.is() )
             pImpl->xInputStream = pImpl->xStream->getInputStream();

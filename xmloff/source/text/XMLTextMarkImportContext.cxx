@@ -416,7 +416,7 @@ void XMLTextMarkImportContext::endFastElement(sal_Int32 nElement)
                     if (m_sBookmarkName.startsWith("__RefHeading__"))
                     {
                         assert(xContent.is());
-                        m_rxCrossRefHeadingBookmark = xContent;
+                        m_rxCrossRefHeadingBookmark = std::move(xContent);
                     }
                 }
                 // else: beginning/end in different XText -> ignore!

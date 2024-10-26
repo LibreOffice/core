@@ -427,9 +427,9 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     {
         SolarMutexGuard g;
-        m_xWorkingStorageShare = xShare;
-        m_xWorkingStorageNoLang= xNoLang;
-        m_xWorkingStorageUser  = xUser;
+        m_xWorkingStorageShare = std::move(xShare);
+        m_xWorkingStorageNoLang= std::move(xNoLang);
+        m_xWorkingStorageUser  = std::move(xUser);
         m_sRelPathShare        = sRelPathShare;
         m_sRelPathUser         = sRelPathUser;
     }

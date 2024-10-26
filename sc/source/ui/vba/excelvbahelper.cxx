@@ -83,7 +83,7 @@ GetAutoFiltRange( const ScDocShell* pShell, sal_Int16 nSheet )
         xProps->getPropertyValue(u"AutoFilter"_ustr) >>= bHasAuto;
         if ( bHasAuto )
         {
-            xDataBaseRange=xDBRange;
+            xDataBaseRange = std::move(xDBRange);
         }
     }
     return xDataBaseRange;

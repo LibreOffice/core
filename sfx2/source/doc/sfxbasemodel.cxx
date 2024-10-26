@@ -3754,7 +3754,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             }
         }
 
-        m_pData->m_xUIConfigurationManager = xNewUIConfMan;
+        m_pData->m_xUIConfigurationManager = std::move(xNewUIConfMan);
     }
 
     return m_pData->m_xUIConfigurationManager;

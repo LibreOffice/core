@@ -4198,7 +4198,7 @@ static uno::Reference< sheet::XCellRangeReferrer > getNamedRange( const uno::Ref
         {
             if ( thisRange == xName->getReferredCells() )
             {
-                xNamedRange = xName;
+                xNamedRange = std::move(xName);
                 break;
             }
         }

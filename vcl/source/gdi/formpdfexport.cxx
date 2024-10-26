@@ -217,7 +217,7 @@ namespace toolkitform
                     {
                         // step down the hierarchy
                         aAncestors.push_back( xCurrentContainer );
-                        xCurrentContainer = xNewContainer;
+                        xCurrentContainer = std::move(xNewContainer);
                         aPath.push_back( i );
                         nStartWithChild = 0;
                         break;

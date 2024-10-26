@@ -326,7 +326,7 @@ VclPtr<vcl::Window> SubToolBarController::createVclPopupWindow(vcl::Window* /*pP
 
                 // keep reference to UIElement to avoid its destruction
                 disposeUIElement();
-                m_xUIElement = xUIElement;
+                m_xUIElement = std::move(xUIElement);
 
                 VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
                 if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )

@@ -1697,7 +1697,7 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     }
 
     InputSource source;
-    source.aInputStream = xInput;
+    source.aInputStream = std::move(xInput);
     source.sSystemId    = aLibInfoPath;
 
     // start parsing

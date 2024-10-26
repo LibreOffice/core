@@ -514,7 +514,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     m_settings.user = OUString( p, strlen(p), RTL_TEXTENCODING_UTF8);
     p = PQdb( m_settings.pConnection );
     m_settings.catalog = OUString( p, strlen(p), RTL_TEXTENCODING_UTF8);
-    m_settings.tc = tc;
+    m_settings.tc = std::move(tc);
 
     SAL_INFO("connectivity.postgresql", "connection to '" << url << "' successfully opened");
 }

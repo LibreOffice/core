@@ -443,7 +443,7 @@ void PropBrw::ImplUpdate( const Reference< XModel >& _rxContextDocument, SdrView
 
     if ( xContextDocument != m_xContextDocument )
     {
-        m_xContextDocument = xContextDocument;
+        m_xContextDocument = std::move(xContextDocument);
         ImplReCreateController();
     }
 

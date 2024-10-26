@@ -1304,7 +1304,7 @@ bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             aMouseEvent.Y = e.Y;
             aMouseEvent.ClickCount = e.ClickCount;
             aMouseEvent.PopupTrigger = e.PopupTrigger;
-            aMouseEvent.Target = xTarget;
+            aMouseEvent.Target = std::move(xTarget);
             aMouseEvent.Modifiers = e.Modifiers;
 
             // Listener's handler may remove it from the listeners list

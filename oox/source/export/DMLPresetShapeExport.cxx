@@ -36,7 +36,7 @@ DMLPresetShapeExporter::DMLPresetShapeExporter(DrawingML* pDMLExporter,
     // This class only work with custom shapes!
     OSL_ASSERT(xShape->getShapeType() == "com.sun.star.drawing.CustomShape");
 
-    m_xShape = xShape;
+    m_xShape = std::move(xShape);
     m_bHasHandleValues = false;
     uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
     css::uno::Sequence<css::beans::PropertyValue> aCustomShapeGeometry

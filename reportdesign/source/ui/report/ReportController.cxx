@@ -2954,7 +2954,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
         aPropertyMediation.emplace( PROPERTY_FILTER, TPropertyConverter(PROPERTY_FILTER,aNoConverter) );
 
         m_xRowSetMediator = new OPropertyMediator( m_xReportDefinition, xRowSetProp, std::move(aPropertyMediation) );
-        m_xRowSet = xRowSet;
+        m_xRowSet = std::move(xRowSet);
     }
     catch(const uno::Exception&)
     {
@@ -3393,7 +3393,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         OSL_VERIFY( xParamCol->getPropertyValue(u"Name"_ustr) >>= sParamName );
                         if ( sParamName == sColumnName )
                         {
-                            xField = xParamCol;
+                            xField = std::move(xParamCol);
                             break;
                         }
                     }

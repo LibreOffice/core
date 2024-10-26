@@ -1668,7 +1668,7 @@ Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
     if ( nMenuBarIndex >= 0 )
         pSeq[nMenuBarIndex] = xMenuBar;
     if ( nStatusBarIndex >= 0 )
-        pSeq[nStatusBarIndex] = xStatusBar;
+        pSeq[nStatusBarIndex] = std::move(xStatusBar);
 
     return aSeq;
 }

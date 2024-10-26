@@ -254,7 +254,7 @@ void ComplexToolbarController::addNotifyInfo(
     NotifyInfo* pNotifyInfo = new NotifyInfo;
 
     pNotifyInfo->aEventName      = aEventName;
-    pNotifyInfo->xNotifyListener = xControlNotify;
+    pNotifyInfo->xNotifyListener = std::move(xControlNotify);
     pNotifyInfo->aSourceURL      = getInitializedURL();
 
     // Add frame as source to the information sequence

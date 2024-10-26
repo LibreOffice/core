@@ -1318,7 +1318,7 @@ void OTableController::assignTable()
     if (!xProp.is())
         return;
 
-    m_xTable = xProp;
+    m_xTable = std::move(xProp);
     startTableListening();
 
     // check if we set the table editable

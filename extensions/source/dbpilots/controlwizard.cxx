@@ -340,7 +340,7 @@ namespace dbp
             {
                 DBG_ASSERT(xPage.is(), "OControlWizard::implDeterminePage: can't determine the page (no model)!");
             }
-            m_aContext.xDrawPage = xPage;
+            m_aContext.xDrawPage = std::move(xPage);
         }
         catch(const Exception&)
         {

@@ -1070,7 +1070,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 }
 
                 if (sCommandURL == sToken) {
-                    xTemp = xChild;
+                    xTemp = std::move(xChild);
                     break;
                 }
             }

@@ -42,7 +42,7 @@ css::uno::Reference<css::frame::XController>& LokChartHelper::GetXController()
                     ::css::uno::Reference< ::css::frame::XController > xChartController = xChart->getCurrentController();
                     if( xChartController.is() )
                     {
-                        mxController = xChartController;
+                        mxController = std::move(xChartController);
                     }
                 }
             }

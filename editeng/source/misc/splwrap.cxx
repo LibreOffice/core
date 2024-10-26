@@ -394,7 +394,7 @@ Reference< XDictionary >  SvxSpellWrapper::GetAllRightDic()
                     Reference< frame::XStorable >  xStor( xTmp, UNO_QUERY );
                     if (xStor.is() && xStor->hasLocation() && !xStor->isReadonly())
                     {
-                        xDic = xTmp;
+                        xDic = std::move(xTmp);
                     }
                 }
             }

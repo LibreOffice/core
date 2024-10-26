@@ -756,7 +756,7 @@ void cppuhelper::ServiceManager::Data::Implementation::updateDisposeInstance(
         if (comp.is()) {
             std::unique_lock g(mutex);
             if (dispose) {
-                disposeInstance = comp;
+                disposeInstance = std::move(comp);
             }
         }
     }
@@ -872,8 +872,8 @@ void cppuhelper::ServiceManager::loadImplementation(
     {
         implementation->status = Data::Implementation::STATUS_LOADED;
         implementation->constructorFn = std::move(ctor);
-        implementation->factory1 = f1;
-        implementation->factory2 = f2;
+        implementation->factory1 = std::move(f1);
+        implementation->factory2 = std::move(f2);
     }
 }
 

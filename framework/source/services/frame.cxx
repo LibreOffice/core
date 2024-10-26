@@ -994,7 +994,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
 
     else if ( sTargetFrameName==SPECIALTARGET_PARENT )
     {
-        xTarget = xParent;
+        xTarget = std::move(xParent);
     }
 
     // I.III) "_top"

@@ -164,7 +164,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
         {
             guard.clear();
             try_dispose( xRet );
-            xRet = xAlreadyIn;
+            xRet = std::move(xAlreadyIn);
         }
         else
         {

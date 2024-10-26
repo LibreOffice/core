@@ -538,9 +538,9 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 if ( !sFieldService.isEmpty() )
                     xThisRoundCol = xFactory->createColumn(sFieldService);
                 if (nColCount)
-                    xSecondCol = xThisRoundCol;
+                    xSecondCol = std::move(xThisRoundCol);
                 else
-                    xCol = xThisRoundCol;
+                    xCol = std::move(xThisRoundCol);
             }
         }
 

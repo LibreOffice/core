@@ -436,7 +436,7 @@ void StatusIndicatorFactory::impl_createProgress()
     }
 
     std::scoped_lock g(m_mutex);
-    m_xProgress = xProgress;
+    m_xProgress = std::move(xProgress);
 }
 
 void StatusIndicatorFactory::impl_showProgress()

@@ -417,7 +417,7 @@ void SAL_CALL TableDesignStyle::replaceByName( const OUString& rName, const Any&
     if (xNewStyle && xNewStyle->isUserDefined())
         mbModified = true;
 
-    maCellStyles[nIndex] = xNewStyle;
+    maCellStyles[nIndex] = std::move(xNewStyle);
 }
 
 

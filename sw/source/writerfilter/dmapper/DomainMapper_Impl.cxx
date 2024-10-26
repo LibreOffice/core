@@ -9390,11 +9390,11 @@ void DomainMapper_Impl::AddAnnotationPosition(
     AnnotationPosition& aAnnotationPosition = m_aAnnotationPositions[ nAnnotationId ];
     if (bStart)
     {
-        aAnnotationPosition.m_xStart = xCurrent;
+        aAnnotationPosition.m_xStart = std::move(xCurrent);
     }
     else
     {
-        aAnnotationPosition.m_xEnd = xCurrent;
+        aAnnotationPosition.m_xEnd = std::move(xCurrent);
     }
     m_aAnnotationPositions[ nAnnotationId ] = aAnnotationPosition;
 }

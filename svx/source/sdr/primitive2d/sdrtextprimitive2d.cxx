@@ -225,7 +225,7 @@ namespace drawinglayer::primitive2d
                     aNewTextBackgroundColor = rDrawOutliner.GetBackgroundColor();
                 }
 
-                const_cast< SdrTextPrimitive2D* >(this)->mxLastVisualizingPage = xCurrentlyVisualizingPage;
+                const_cast< SdrTextPrimitive2D* >(this)->mxLastVisualizingPage = std::move(xCurrentlyVisualizingPage);
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageNumber = nCurrentlyValidPageNumber;
                 const_cast< SdrTextPrimitive2D* >(this)->mnLastPageCount = nCurrentlyValidPageCount;
                 const_cast< SdrTextPrimitive2D* >(this)->maLastTextBackgroundColor = aNewTextBackgroundColor;

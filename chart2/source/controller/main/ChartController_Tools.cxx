@@ -425,7 +425,7 @@ void ChartController::impl_PasteShapes( SdrModel* pModel )
 
                 pDestPage->InsertObject( pNewObj.get() );
                 m_pDrawViewWrapper->AddUndo( std::make_unique<SdrUndoInsertObj>( *pNewObj ) );
-                xSelShape = xShape;
+                xSelShape = std::move(xShape);
             }
         }
     }

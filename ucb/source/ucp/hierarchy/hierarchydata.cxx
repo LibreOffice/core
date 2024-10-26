@@ -646,7 +646,7 @@ bool HierarchyEntry::move(
         if ( bDifferentParents )
             xNewParentNameAccess.set( xNewParentBatch, uno::UNO_QUERY );
         else
-            xNewParentNameAccess = xOldParentNameAccess;
+            xNewParentNameAccess = std::move(xOldParentNameAccess);
 
         OSL_ENSURE( xNewParentNameAccess.is(),
                     "HierarchyEntry::move - No name access!" );
@@ -667,7 +667,7 @@ bool HierarchyEntry::move(
             }
         }
         else
-            xNewNameContainer = xOldNameContainer;
+            xNewNameContainer = std::move(xOldNameContainer);
 
         if ( !xNewNameContainer.is() )
             return false;

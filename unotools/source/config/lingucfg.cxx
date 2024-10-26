@@ -1152,7 +1152,7 @@ OUString SvtLinguConfig::GetVendorImageUrl_Impl(
         OUString aVendorImagesNode;
         if (aAny >>= aVendorImagesNode)
         {
-            xNA = xImagesNA;
+            xNA = std::move(xImagesNA);
             xNA.set( xNA->getByName(u"VendorImages"_ustr), uno::UNO_QUERY_THROW );
             xNA.set( xNA->getByName( aVendorImagesNode ), uno::UNO_QUERY_THROW );
             aAny = xNA->getByName( rImageName );

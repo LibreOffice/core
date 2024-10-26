@@ -213,7 +213,7 @@ void SAL_CALL ConvDicNameContainer::replaceByName(
     rElement >>= xNew;
     if (!xNew.is() || xNew->getName() != rName)
         throw IllegalArgumentException();
-    aConvDics[ nRplcIdx ] = xNew;
+    aConvDics[ nRplcIdx ] = std::move(xNew);
 }
 
 void SAL_CALL ConvDicNameContainer::insertByName(

@@ -1419,7 +1419,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
         aZipOut.finish();
 
         if( bUseTemp )
-            xResult = xTempIn;
+            xResult = std::move(xTempIn);
 
         // Update our References to point to the new temp file
         if( !bUseTemp )

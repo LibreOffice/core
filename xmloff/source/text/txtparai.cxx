@@ -1075,7 +1075,7 @@ bool XMLIndexMarkImportContext_Impl::CreateMark(
     {
         Reference<beans::XPropertySet> xPropSet( xFactory->createInstance(rServiceName), UNO_QUERY );
         if (xPropSet.is())
-            rPropSet = xPropSet;
+            rPropSet = std::move(xPropSet);
         return true;
     }
 

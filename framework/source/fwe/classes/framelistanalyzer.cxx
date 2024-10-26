@@ -230,12 +230,12 @@ void FrameListAnalyzer::impl_analyze()
 
             if (bHidden)
             {
-                m_lOtherHiddenFrames[nHiddenStep] = xFrame;
+                m_lOtherHiddenFrames[nHiddenStep] = std::move(xFrame);
                 ++nHiddenStep;
             }
             else
             {
-                m_lOtherVisibleFrames[nVisibleStep] = xFrame;
+                m_lOtherVisibleFrames[nVisibleStep] = std::move(xFrame);
                 ++nVisibleStep;
             }
         }

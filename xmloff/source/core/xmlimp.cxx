@@ -976,11 +976,11 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         uno::Reference<task::XStatusIndicator> xTmpStatusIndicator(
             xValue, UNO_QUERY );
         if( xTmpStatusIndicator.is() )
-            mxStatusIndicator = xTmpStatusIndicator;
+            mxStatusIndicator = std::move(xTmpStatusIndicator);
 
         uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler(xValue, UNO_QUERY);
         if (xGraphicStorageHandler.is())
-            mxGraphicStorageHandler = xGraphicStorageHandler;
+            mxGraphicStorageHandler = std::move(xGraphicStorageHandler);
 
         uno::Reference<document::XEmbeddedObjectResolver> xTmpObjectResolver(
             xValue, UNO_QUERY );

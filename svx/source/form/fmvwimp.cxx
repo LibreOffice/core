@@ -714,7 +714,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate, void*, void)
             Reference< XFormController > xActiveController(fad(xController));
             if (xActiveController.is())
             {
-                xControllerToActivate = xActiveController;
+                xControllerToActivate = std::move(xActiveController);
                 break;
             }
         }

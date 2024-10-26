@@ -221,7 +221,7 @@ namespace toolkit
         vcl::Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : nullptr;
 
         if ( _pxUNOWindow )
-            *_pxUNOWindow = xWindow;
+            *_pxUNOWindow = std::move(xWindow);
 
         return pWindow;
     }

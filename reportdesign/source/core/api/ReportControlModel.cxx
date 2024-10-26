@@ -93,7 +93,7 @@ void OReportControlModel::replaceByIndex(::sal_Int32 Index, const uno::Any& Elem
         ::osl::MutexGuard aGuard(m_rMutex);
         xBroadcaster = m_pOwner;
         checkIndex(Index);
-        m_aFormatConditions[Index] = xElement;
+        m_aFormatConditions[Index] = std::move(xElement);
     }
     container::ContainerEvent aEvent(xBroadcaster, uno::Any(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced, aEvent);

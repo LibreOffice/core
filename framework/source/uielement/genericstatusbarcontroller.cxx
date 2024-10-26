@@ -101,7 +101,7 @@ void SAL_CALL GenericStatusbarController::statusChanged(
     }
     else if ( ( rEvent.State >>= aGraphic ) && m_bOwnerDraw )
     {
-        m_xGraphic = aGraphic;
+        m_xGraphic = std::move(aGraphic);
     }
 
     // when the status is updated, and the controller is responsible for

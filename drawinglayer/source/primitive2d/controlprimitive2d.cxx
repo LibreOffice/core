@@ -74,7 +74,7 @@ namespace drawinglayer::primitive2d
                 xXControl->setModel(getControlModel());
 
                 // remember XControl
-                mxXControl = xXControl;
+                mxXControl = std::move(xXControl);
             }
         }
 

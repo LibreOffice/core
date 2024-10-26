@@ -579,7 +579,7 @@ void TableDesignWidget::onSelectionChanged()
 
     if( mxSelectedTable != xNewSelection )
     {
-        mxSelectedTable = xNewSelection;
+        mxSelectedTable = std::move(xNewSelection);
         updateControls();
     }
 }

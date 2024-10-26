@@ -993,7 +993,7 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
                         // error case
                         return true;
                     }
-                    xStyle = xParentStyle;
+                    xStyle = std::move(xParentStyle);
                 }
             }
         }

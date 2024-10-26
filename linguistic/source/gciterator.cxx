@@ -694,7 +694,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                                     aRes.nBehindEndOfSentencePosition = nSuggestedEnd;
                                 }
 
-                                aRes.xFlatParagraph = xFlatPara;
+                                aRes.xFlatParagraph = std::move(xFlatPara);
                                 aRes.nStartOfSentencePosition = nStartPos;
                             }
                             else
@@ -702,7 +702,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
                                 // no grammar checker -> no error
                                 // but we need to provide the data below in order to continue with the next sentence
                                 aRes.aDocumentIdentifier = aCurDocId;
-                                aRes.xFlatParagraph = xFlatPara;
+                                aRes.xFlatParagraph = std::move(xFlatPara);
                                 aRes.aText = aCurTxt;
                                 aRes.aLocale = std::move(aCurLocale);
                                 aRes.nStartOfSentencePosition = nStartPos;

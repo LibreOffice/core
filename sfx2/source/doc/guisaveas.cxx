@@ -617,8 +617,8 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName, bool
 
                         if ( bIsAsync )
                         {
-                            m_xFilterProperties = xFilterProperties;
-                            m_xFilterDialog = xAsyncFilterDialog;
+                            m_xFilterProperties = std::move(xFilterProperties);
+                            m_xFilterDialog = std::move(xAsyncFilterDialog);
 
                             auto aDialogClosedListener = rtl::Reference(new svt::DialogClosedListener());
                             aDialogClosedListener->SetDialogClosedLink( LINK( this, ModelData_Impl, OptionsDialogClosedHdl ) );

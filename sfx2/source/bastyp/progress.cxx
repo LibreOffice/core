@@ -214,7 +214,7 @@ void SfxProgress::SetState
                     const SfxUnoAnyItem* pIndicatorItem = pMedium->GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL, false);
                     Reference< XStatusIndicator > xInd;
                     if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
-                        pImpl->xStatusInd = xInd;
+                        pImpl->xStatusInd = std::move(xInd);
                 }
             }
         }
