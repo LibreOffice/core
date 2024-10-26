@@ -548,6 +548,8 @@ void AnimationWindow::UpdateControl(bool const bDisableCtrls)
 
     if (!m_FrameList.empty() && !bMovie)
     {
+        assert(m_nCurrentFrame != EMPTY_FRAMELIST && "only arises when m_FrameList.empty()");
+
         size_t nIndex = m_nCurrentFrame + 1;
         m_xNumFldBitmap->set_value(nIndex);
 
