@@ -500,7 +500,7 @@ WidgetStatusListener::WidgetStatusListener(weld::Widget* widget, const OUString&
     if (!xFrame.is())
         xFrame = xDesktop;
 
-    mxFrame = xFrame;
+    mxFrame = std::move(xFrame);
 
     maCommandURL.Complete = aCommand;
     css::uno::Reference<css::util::XURLTransformer> xParser

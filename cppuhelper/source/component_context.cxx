@@ -410,11 +410,11 @@ void ComponentContext::disposing(std::unique_lock<std::mutex>& rGuard)
             {
                 if ( rName == TDMGR_SINGLETON )
                 {
-                    xTDMgr = xComp;
+                    xTDMgr = std::move(xComp);
                 }
                 else if ( rName == AC_SINGLETON )
                 {
-                    xAC = xComp;
+                    xAC = std::move(xComp);
                 }
                 else // dispose immediately
                 {

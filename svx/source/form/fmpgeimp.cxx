@@ -135,7 +135,7 @@ namespace
                 throw RuntimeException( u"Found inconsistent form component hierarchies (2)!"_ustr );
 
             if ( lhsControlModel.is() )
-                m_rControlModelMap[ lhsControlModel ] = rhsControlModel;
+                m_rControlModelMap[ lhsControlModel ] = std::move(rhsControlModel);
         }
 
     private:

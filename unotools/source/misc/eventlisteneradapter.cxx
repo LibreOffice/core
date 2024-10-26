@@ -67,7 +67,7 @@ namespace utl
         _rxComp->addEventListener(xMeMyselfAndI);
 
         m_xComponent = _rxComp;
-        m_xKeepMeAlive = xMeMyselfAndI;
+        m_xKeepMeAlive = std::move(xMeMyselfAndI);
     }
 
     void OEventListenerImpl::dispose()

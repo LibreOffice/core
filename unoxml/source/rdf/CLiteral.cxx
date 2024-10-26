@@ -120,7 +120,7 @@ void SAL_CALL CLiteral::initialize(const css::uno::Sequence< css::uno::Any > & a
             throw css::lang::IllegalArgumentException(
                 u"CLiteral::initialize: argument is null"_ustr, *this, 1);
         }
-        m_xDatatype = xURI;
+        m_xDatatype = std::move(xURI);
     } else {
         throw css::lang::IllegalArgumentException(
             u"CLiteral::initialize: argument must be string or URI"_ustr, *this, 1);

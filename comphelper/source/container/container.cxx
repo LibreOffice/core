@@ -99,7 +99,7 @@ css::uno::Reference< css::uno::XInterface> const & IndexAccessIterator::Next()
                         break;
                     }
                     // Finally, if there's nothing more to do in this row (to the right), we'll move on to the next row.
-                    xSearchLoop = xParent;
+                    xSearchLoop = std::move(xParent);
                     bCheckingStartingPoint = false;
                 }
 

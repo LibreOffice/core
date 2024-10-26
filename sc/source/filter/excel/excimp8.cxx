@@ -130,7 +130,7 @@ public:
         uno::Reference< container::XIndexContainer > xElement;
         if ( ! ( aElement >>= xElement ) )
             throw lang::IllegalArgumentException();
-        it->second = xElement;
+        it->second = std::move(xElement);
     }
 };
 

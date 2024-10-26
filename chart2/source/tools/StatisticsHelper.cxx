@@ -200,7 +200,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorL
     uno::Reference< chart2::data::XLabeledDataSequence > xLSeq =
         lcl_getErrorBarLabeledSequence( xDataSource, bPositiveValue, bYError, aRole );
     if( xLSeq.is())
-        xResult = xLSeq;
+        xResult = std::move(xLSeq);
 
     return xResult;
 }

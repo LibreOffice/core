@@ -928,7 +928,7 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
             mxTreeView->insert(nullptr, -1, &aDescription, &sId, nullptr, nullptr, false, xEntry.get());
 
             // and the new root entry becomes the possible next group header
-            mxLastTargetShape = xTargetShape;
+            mxLastTargetShape = std::move(xTargetShape);
             mnLastGroupId = nGroupId;
             mxLastParentEntry = std::move(xEntry);
         }

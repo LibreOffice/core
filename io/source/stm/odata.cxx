@@ -888,7 +888,7 @@ void OObjectOutputStream::connectToMarkable()
         Reference < XMarkableStream > markable( rTry , UNO_QUERY );
         if( markable.is() )
         {
-            m_rMarkable = markable;
+            m_rMarkable = std::move(markable);
             break;
         }
         Reference < XActiveDataSource > source( rTry , UNO_QUERY );

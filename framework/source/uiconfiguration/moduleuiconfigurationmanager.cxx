@@ -821,7 +821,7 @@ void ModuleUIConfigurationManager::impl_Initialize()
 
         m_aUIElements[LAYER_DEFAULT][i].nElementType = i;
         m_aUIElements[LAYER_DEFAULT][i].bModified = false;
-        m_aUIElements[LAYER_DEFAULT][i].xStorage = xElementTypeStorage;
+        m_aUIElements[LAYER_DEFAULT][i].xStorage = std::move(xElementTypeStorage);
     }
 }
 

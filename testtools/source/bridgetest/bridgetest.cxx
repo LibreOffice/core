@@ -1245,7 +1245,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
                     rArgs[0], m_xContext);
             }
             if (!stress) {
-                xOriginal = o;
+                xOriginal = std::move(o);
                 break;
             }
         }

@@ -2408,7 +2408,7 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTar
                     ::ucbhelper::Content aTargetContent( aURL, xEnv, comphelper::getProcessComponentContext() );
 
                     InsertCommandArgument aInsertArg;
-                    aInsertArg.Data = xInStream;
+                    aInsertArg.Data = std::move(xInStream);
                     const SfxBoolItem* pOverWrite = aTargetSet.GetItem<SfxBoolItem>(SID_OVERWRITE, false);
                     if ( pOverWrite && !pOverWrite->GetValue() ) // argument says: never overwrite
                         aInsertArg.ReplaceExisting = false;

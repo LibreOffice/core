@@ -100,7 +100,7 @@ namespace DOM
         m_aDocument = ownerDoc;
         Reference< XDocumentFragment > aFragment = m_aDocument->createDocumentFragment();
         m_aNodeStack.push(aFragment);
-        m_aFragment = aFragment;
+        m_aFragment = std::move(aFragment);
         m_aState = SAXDocumentBuilderState_BUILDING_FRAGMENT;
     }
 
