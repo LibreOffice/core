@@ -3396,6 +3396,7 @@ SwCursorShell::SwCursorShell( SwDoc& rDoc, vcl::Window *pInitWin,
     m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
     m_bGCAttr = m_bIgnoreReadonly = m_bSelTableCells = m_bBasicHideCursor =
     m_bOverwriteCursor = false;
+    m_bIsCursorPosChanged = false;
     m_bSendAccessibleCursorEvents = true;
     m_bCallChgLnk = m_bHasFocus = m_bAutoUpdateCells = true;
     m_bSVCursorVis = true;
