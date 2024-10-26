@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
@@ -381,45 +384,24 @@ void Graphic::SetPrefMapMode( const MapMode& rPrefMapMode )
     mxImpGraphic->setPrefMapMode( rPrefMapMode );
 }
 
-basegfx::B2DSize Graphic::GetPPI() const
+basegfx::B2DSize Graphic::GetPPUnit(const MapMode& unit) const
 {
-    double nGrfDPIx;
-    double nGrfDPIy;
-
-    const MapMode aGrfMap(GetPrefMapMode());
-    const Size aGrfPixelSize(GetSizePixel());
     const Size aGrfPrefMapModeSize(GetPrefSize());
-    if (aGrfMap.GetMapUnit() == MapUnit::MapInch)
-    {
-        nGrfDPIx = aGrfPixelSize.Width() / ( static_cast<double>(aGrfMap.GetScaleX()) * aGrfPrefMapModeSize.Width() );
-        nGrfDPIy = aGrfPixelSize.Height() / ( static_cast<double>(aGrfMap.GetScaleY()) * aGrfPrefMapModeSize.Height() );
-    }
-    else
-    {
-        const Size aGrf1000thInchSize = OutputDevice::LogicToLogic(
-                aGrfPrefMapModeSize, aGrfMap, MapMode(MapUnit::Map1000thInch));
-        nGrfDPIx = aGrf1000thInchSize.Width() == 0
-            ? 0.0 : 1000.0 * aGrfPixelSize.Width() / aGrf1000thInchSize.Width();
-        nGrfDPIy = aGrf1000thInchSize.Height() == 0
-            ? 0.0 : 1000.0 * aGrfPixelSize.Height() / aGrf1000thInchSize.Height();
-    }
-
-    return basegfx::B2DSize(nGrfDPIx, nGrfDPIy);
+    if (aGrfPrefMapModeSize.IsEmpty())
+        return {};
+    const Size aGrfPixelSize(GetSizePixel());
+    basegfx::B2DHomMatrix toPixels = basegfx::utils::createScaleB2DHomMatrix(
+        double(aGrfPixelSize.Width()) / aGrfPrefMapModeSize.Width(),
+        double(aGrfPixelSize.Height()) / aGrfPrefMapModeSize.Height());
+    toPixels *= OutputDevice::LogicToLogic(unit, GetPrefMapMode());
+    return toPixels * basegfx::B2DSize(1, 1);
 }
+
+basegfx::B2DSize Graphic::GetPPI() const { return GetPPUnit(MapMode(MapUnit::MapInch)); }
 
 basegfx::B2DSize Graphic::GetPPM() const
 {
-    const MapMode aGrfMap(GetPrefMapMode());
-    const Size aGrfPixelSize(GetSizePixel());
-    const Size aGrfPrefMapModeSize(GetPrefSize());
-    const Size aGrf100thMMSize = OutputDevice::LogicToLogic(
-            aGrfPrefMapModeSize, aGrfMap, MapMode(MapUnit::Map100thMM));
-    double nGrfDPMx = aGrf100thMMSize.Width() == 0
-        ? 0.0 : 100000.0 * aGrfPixelSize.Width() / aGrf100thMMSize.Width();
-    double nGrfDPMy = aGrf100thMMSize.Height() == 0
-        ? 0.0 : 100000.0 * aGrfPixelSize.Height() / aGrf100thMMSize.Height();
-
-    return basegfx::B2DSize(nGrfDPMx, nGrfDPMy);
+    return GetPPUnit(MapMode(MapUnit::MapMM, {}, { 1000, 1 }, { 1000, 1 }));
 }
 
 Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const

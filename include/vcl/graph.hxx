@@ -83,6 +83,7 @@ class VCL_DLLPUBLIC Graphic
 private:
     std::shared_ptr<ImpGraphic> mxImpGraphic;
     SAL_DLLPRIVATE void ImplTestRefCount();
+    basegfx::B2DSize GetPPUnit(const MapMode& unit) const;
 
 public:
     SAL_DLLPRIVATE ImpGraphic* ImplGetImpGraphic() const { return mxImpGraphic.get(); }
