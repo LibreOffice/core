@@ -694,7 +694,11 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
 
         if( bNumbered )
         {
-            if( !rWrt.m_aBulletGrfs[nBulletGrfLvl].isEmpty()  )
+            // disable PVS False positive 557 "Array underrun is possible"
+            // we know here that nBulletGrfLvl < 10
+            // we're in the case bInNumberBulletList && bNumbered
+            // so we retrieved nLvl which comes from SwHTMLNumRuleInfo::GetLevel()
+            if( !rWrt.m_aBulletGrfs[nBulletGrfLvl].isEmpty()  ) //-V557
                 bNumbered = false;
             else
                 nBulletGrfLvl = 255;
