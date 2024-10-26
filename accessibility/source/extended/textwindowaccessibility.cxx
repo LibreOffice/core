@@ -1005,14 +1005,14 @@ Document::retrieveCharacterAttributes(
     // sort the attributes
     auto nLength = static_cast<size_t>(aRes.getLength());
     std::unique_ptr<sal_Int32[]> pIndices( new sal_Int32[nLength] );
-    std::iota(&pIndices[0], &pIndices[nLength-1], 0);
-    std::sort(&pIndices[0], &pIndices[nLength-1],
+    std::iota(&pIndices[0], &pIndices[nLength], 0);
+    std::sort(&pIndices[0], &pIndices[nLength],
         [&aRes](sal_Int32 a, sal_Int32 b) { return aRes[a].Name < aRes[b].Name; });
 
     // create sorted sequences according to index array
     std::vector<css::beans::PropertyValue> aNewValues;
     aNewValues.reserve(nLength);
-    std::transform(&pIndices[0], &pIndices[nLength-1], std::back_inserter(aNewValues),
+    std::transform(&pIndices[0], &pIndices[nLength], std::back_inserter(aNewValues),
         [&aRes](const sal_Int32 nIdx) -> const css::beans::PropertyValue& { return aRes[nIdx]; });
 
     return comphelper::containerToSequence(aNewValues);
