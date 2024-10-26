@@ -41,6 +41,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
+#include <itabenum.hxx>
 #include <ndtxt.hxx>
 #include <toxmgr.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -832,6 +833,29 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf163340)
     xSelSupplier->select(uno::Any(xParaCursor));
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
     CPPUNIT_ASSERT_EQUAL(u"A."_ustr, getProperty<OUString>(xParaCursor, u"ListLabelString"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest9, testTdf159023)
+{
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/2, /*nCols=*/2);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+
+    dispatchCommand(mxComponent, u".uno:SelectTable"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
+
+    pWrtShell->InsertFootnote(u""_ustr);
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
+
+    dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoLeft"_ustr, {});
+    dispatchCommand(mxComponent, u".uno:GoLeft"_ustr, {});
+
+    // Without the fix in place, this test would have crashed here
+    CPPUNIT_ASSERT(pWrtShell->IsCursorInFootnote());
 }
 
 } // end of anonymous namespace
