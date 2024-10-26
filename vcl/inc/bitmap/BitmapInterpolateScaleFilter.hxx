@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef VCL_INC_BITMAP_BITMAPINTERPOLATESCALEFILTER_HXX
-#define VCL_INC_BITMAP_BITMAPINTERPOLATESCALEFILTER_HXX
+#pragma once
 
 #include <vcl/bitmap/BitmapFilter.hxx>
 
@@ -28,7 +27,5 @@ private:
     double mfScaleX;
     double mfScaleY;
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
