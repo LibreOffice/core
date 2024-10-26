@@ -217,11 +217,8 @@ bool MultiSelection::Select( sal_Int32 nIndex, bool bSelect )
         else
         {
             // split the sub selection
-            if ( nSubSelPos < aSels.size() ) {
-                aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
-            } else {
-                aSels.push_back( Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
-            }
+            // we know nSubSelPos < aSels.size() since it's been tested some lines before
+            aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
             aSels[ nSubSelPos+1 ].Min() = nIndex + 1;
         }
     }
@@ -323,11 +320,7 @@ void MultiSelection::Insert( sal_Int32 nIndex, sal_Int32 nCount )
         if (  aSels[ nSubSelPos ].Min() != nIndex
            && aSels[ nSubSelPos ].Contains(nIndex)
         ) { // split the sub selection
-            if ( nSubSelPos < aSels.size() ) {
-                aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
-            } else {
-                aSels.push_back( Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
-            }
+            aSels.insert( aSels.begin() + nSubSelPos, Range( aSels[ nSubSelPos ].Min(), nIndex-1 ) );
             ++nSubSelPos;
             aSels[ nSubSelPos ].Min() = nIndex;
         }
