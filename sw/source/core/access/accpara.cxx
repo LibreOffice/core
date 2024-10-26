@@ -237,7 +237,7 @@ void SwAccessibleParagraph::GetStates( sal_Int64& rStateSet )
     assert(pFrame);
     if (pCaret != nullptr &&
         sw::FrameContainsNode(*pFrame, pCaret->GetPoint()->GetNodeIndex()) &&
-        m_nOldCaretPos != -1)
+        HasCursor())
     {
         vcl::Window *pWin = GetWindow();
         if( pWin && pWin->HasFocus() )
