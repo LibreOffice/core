@@ -280,55 +280,60 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, weld::Button&, rButton, void )
     sal_uLong nTmpTime = 0;
     size_t i = 0;
     bool bCount = i < nCount;
-    if( bReverse )
+    if (bCount)
     {
-        i = nCount - 1;
-    }
-    while( bCount && bMovie )
-    {
-        // make list and view consistent
-        assert(i < m_FrameList.size());
-        m_nCurrentFrame = i;
-
-        UpdateControl(bDisableCtrls);
-
-        if( m_xRbtBitmap->get_active() )
-        {
-            ::tools::Time const & rTime = m_FrameList[i].second;
-
-            m_xFormatter->SetTime( rTime );
-            sal_uLong nTime = rTime.GetMSFromTime();
-
-            WaitInEffect( nTime, nTmpTime, pProgress.get() );
-            nTmpTime += nTime;
-        }
-        else
-        {
-            WaitInEffect( 100, nTmpTime, pProgress.get() );
-            nTmpTime += 100;
-        }
         if( bReverse )
+            i = nCount - 1;
+
+        while (bMovie)
         {
-            if (i == 0)
+            // make list and view consistent
+            assert(i < m_FrameList.size());
+            m_nCurrentFrame = i;
+
+            UpdateControl(bDisableCtrls);
+
+            if( m_xRbtBitmap->get_active() )
             {
-                // Terminate loop.
-                bCount = false;
+                ::tools::Time const & rTime = m_FrameList[i].second;
+
+                m_xFormatter->SetTime( rTime );
+                sal_uLong nTime = rTime.GetMSFromTime();
+
+                WaitInEffect( nTime, nTmpTime, pProgress.get() );
+                nTmpTime += nTime;
             }
             else
             {
-                --i;
+                WaitInEffect( 100, nTmpTime, pProgress.get() );
+                nTmpTime += 100;
             }
-        }
-        else
-        {
-            i++;
-            if (i >= nCount)
+            if( bReverse )
             {
-                // Terminate loop.
-                bCount = false;
-                // Move i back into valid range.
-                i = nCount - 1;
+                if (i == 0)
+                {
+                    // Terminate loop.
+                    bCount = false;
+                }
+                else
+                {
+                    --i;
+                }
             }
+            else
+            {
+                i++;
+                if (i >= nCount)
+                {
+                    // Terminate loop.
+                    bCount = false;
+                    // Move i back into valid range.
+                    i = nCount - 1;
+                }
+            }
+
+            if (!bCount)
+                break;
         }
     }
 
