@@ -21,6 +21,7 @@
 #include <queryevaluator.hxx>
 
 #include <cellform.hxx>
+#include <cellformtmpl.hxx>
 #include <cellvalue.hxx>
 #include <document.hxx>
 #include <docoptio.hxx>
@@ -325,8 +326,9 @@ OUString ScQueryEvaluator::getCellString(const ScRefCellValue& rCell, SCROW nRow
     }
 }
 
-svl::SharedString ScQueryEvaluator::getCellSharedString(const ScRefCellValue& rCell, SCROW nRow,
-                                                        SCCOL nCol)
+template <typename TFunctor>
+auto ScQueryEvaluator::visitCellSharedString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol,
+                                             const TFunctor& rOper)
 {
     if (rCell.getType() == CELLTYPE_FORMULA
         && rCell.getFormula()->GetErrCode() != FormulaError::NONE)
@@ -341,20 +343,47 @@ svl::SharedString ScQueryEvaluator::getCellSharedString(const ScRefCellValue& rC
             assert(pos.second); // inserted
             it = pos.first;
         }
-        return it->second;
+        return rOper(it->second);
     }
     else if (rCell.getType() == CELLTYPE_STRING)
     {
-        return *rCell.getSharedString();
+        return rOper(*rCell.getSharedString());
     }
     else
     {
         sal_uInt32 nFormat
             = mpContext ? mrTab.GetNumberFormat(*mpContext, ScAddress(nCol, nRow, mrTab.GetTab()))
                         : mrTab.GetNumberFormat(nCol, nRow);
-        return ScCellFormat::GetInputSharedString(rCell, nFormat, mpContext, mrDoc, mrStrPool,
-                                                  true);
+        return ScCellFormat::visitInputSharedString(rCell, nFormat, mpContext, mrDoc, mrStrPool,
+                                                    true, false, rOper);
     }
+}
+
+svl::SharedString ScQueryEvaluator::getCellSharedString(const ScRefCellValue& rCell, SCROW nRow,
+                                                        SCCOL nCol)
+{
+    return visitCellSharedString(rCell, nRow, nCol,
+                                 [](const svl::SharedString& arg) { return arg; });
+}
+
+static bool equalCellSharedString(const svl::SharedString& rValueSource,
+                                  const svl::SharedString& rString, bool bCaseSens)
+{
+    // Fast string equality check by comparing string identifiers.
+    // This is the bFast path, all conditions should lead here on bFast == true.
+    if (bCaseSens)
+        return rValueSource.getData() == rString.getData();
+    return rValueSource.getDataIgnoreCase() == rString.getDataIgnoreCase();
+}
+
+bool ScQueryEvaluator::equalCellSharedString(const ScRefCellValue& rCell, SCROW nRow,
+                                             SCCOLROW nField, bool bCaseSens,
+                                             const svl::SharedString& rString)
+{
+    return visitCellSharedString(rCell, nRow, nField,
+                                 [&rString, bCaseSens](const svl::SharedString& arg) {
+                                     return ::equalCellSharedString(arg, rString, bCaseSens);
+                                 });
 }
 
 bool ScQueryEvaluator::isFastCompareByString(const ScQueryEntry& rEntry) const
@@ -462,26 +491,19 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
             }
             else
             {
-                svl::SharedString rValueSource = getCellSharedString(rCell, nRow, rEntry.nField);
                 if (bFast || bMatchWholeCell)
                 {
-                    // Fast string equality check by comparing string identifiers.
-                    // This is the bFast path, all conditions should lead here on bFast == true.
-                    if (mrParam.bCaseSens)
-                    {
-                        bOk = rValueSource.getData() == rItem.maString.getData();
-                    }
-                    else
-                    {
-                        bOk = rValueSource.getDataIgnoreCase()
-                              == rItem.maString.getDataIgnoreCase();
-                    }
+                    bOk = equalCellSharedString(rCell, nRow, rEntry.nField, mrParam.bCaseSens,
+                                                rItem.maString);
 
                     if (!bFast && rEntry.eOp == SC_NOT_EQUAL)
                         bOk = !bOk;
                 }
                 else
                 {
+                    svl::SharedString rValueSource
+                        = getCellSharedString(rCell, nRow, rEntry.nField);
+
                     // Where do we find a match (if at all)
                     sal_Int32 nStrPos;
 

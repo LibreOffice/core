@@ -106,6 +106,13 @@ class ScQueryEvaluator
     std::pair<bool, bool> processEntry(SCROW nRow, SCCOL nCol, ScRefCellValue& aCell,
                                        const ScQueryEntry& rEntry, size_t nEntryIndex);
 
+    bool equalCellSharedString(const ScRefCellValue& rCell, SCROW nRow, SCCOLROW nField,
+                               bool bCaseSens, const svl::SharedString& rString);
+
+    template <typename TFunctor>
+    auto visitCellSharedString(const ScRefCellValue& rCell, SCROW nRow, SCCOL nCol,
+                               const TFunctor& rOper);
+
 public:
     ScQueryEvaluator(ScDocument& rDoc, const ScTable& rTab, const ScQueryParam& rParam,
                      ScInterpreterContext* pContext = nullptr, bool* pTestEqualCondition = nullptr,

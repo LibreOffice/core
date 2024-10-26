@@ -49,6 +49,14 @@ public:
         const ScDocument& rDoc, svl::SharedStringPool& rStrPool,
         bool bFiltering = false, bool bForceSystemLocale = false );
 
+    // Similar to GetInputSharedString, but can be used to visit the source of the
+    // svl::SharedString to avoid reference counting overhead
+    template <typename TFunctor>
+    static auto visitInputSharedString(
+        const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
+        const ScDocument& rDoc, svl::SharedStringPool& rStrPool,
+        bool bFiltering, bool bForceSystemLocale, const TFunctor& rOper);
+
     static OUString GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, ScInterpreterContext* pContext,
         const ScDocument& rDoc, bool bFiltering = false, bool bForceSystemLocale = false );
