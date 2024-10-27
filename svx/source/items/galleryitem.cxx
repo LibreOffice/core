@@ -115,8 +115,8 @@ bool SvxGalleryItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /* nMemberId
 
     m_nType = nType;
     m_aURL = aURL;
-    m_xDrawing = xDrawing;
-    m_xGraphic = xGraphic;
+    m_xDrawing = std::move(xDrawing);
+    m_xGraphic = std::move(xGraphic);
 
     return true;
 }

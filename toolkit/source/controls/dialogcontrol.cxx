@@ -112,7 +112,7 @@ public:
         Reference< T > xElement;
         if ( ! ( aElement >>= xElement ) )
             throw IllegalArgumentException();
-        things[ aName ] = xElement;
+        things[ aName ] = std::move(xElement);
     }
     virtual void SAL_CALL removeByName( const OUString& aName ) override
     {

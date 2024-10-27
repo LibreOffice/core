@@ -310,7 +310,7 @@ namespace pcr
 
         m_xComponent.set( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
-        m_xComponentIntrospectionAccess = xIntrospectionAccess;
+        m_xComponentIntrospectionAccess = std::move(xIntrospectionAccess);
         m_xPropertyState.set(m_xComponent, css::uno::UNO_QUERY);
 
         m_bPropertyMapInitialized = false;

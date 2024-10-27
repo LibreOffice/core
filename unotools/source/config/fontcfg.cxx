@@ -154,7 +154,7 @@ OUString DefaultFontConfiguration::tryLocale( const OUString& rBcp47, const OUSt
                 {
                     Any aAny = m_xConfigAccess->getByName( it->second.aConfigLocaleString );
                     if( aAny >>= xNode )
-                        it->second.xAccess = xNode;
+                        it->second.xAccess = std::move(xNode);
                 }
             }
             catch (const NoSuchElementException&)

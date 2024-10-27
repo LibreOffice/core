@@ -324,7 +324,7 @@ uno::Reference< css::uno::XInterface > SAL_CALL SdUnoSearchReplaceShape::findNex
                     // get next shape on our page
                     uno::Reference< drawing::XShape > xFound2( GetNextShape( mpPage, xCurrentShape ) );
                     if( xFound2.is() && (xFound2.get() != xCurrentShape.get()) )
-                        xCurrentShape = xFound2;
+                        xCurrentShape = std::move(xFound2);
                     else
                         xCurrentShape = nullptr;
 

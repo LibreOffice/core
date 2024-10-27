@@ -1786,7 +1786,7 @@ namespace svxform
                     Reference< XNameContainer > xContainer = xFormsSupp->getXForms();
                     if ( xContainer.is() )
                     {
-                        m_xDataContainer = xContainer;
+                        m_xDataContainer = std::move(xContainer);
                         const Sequence< OUString > aNameList = m_xDataContainer->getElementNames();
                         for ( const OUString& rName : aNameList )
                         {
@@ -2311,7 +2311,7 @@ namespace svxform
                     Reference< css::xml::dom::XNode > xNewNode =
                         m_xUIHelper->renameNode( m_pItemNode->m_xNode, m_xNameED->get_text() );
                     m_xUIHelper->setNodeValue( xNewNode, m_xDefaultED->get_text() );
-                    m_pItemNode->m_xNode = xNewNode;
+                    m_pItemNode->m_xNode = std::move(xNewNode);
                 }
             }
             catch ( Exception const & )
@@ -2979,7 +2979,7 @@ namespace svxform
                                 m_xBindLB->append_text(sEntry);
 
                                 if ( !m_xTempBinding.is() )
-                                    m_xTempBinding = xPropSet;
+                                    m_xTempBinding = std::move(xPropSet);
                             }
                         }
                     }

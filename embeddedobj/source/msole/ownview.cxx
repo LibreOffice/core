@@ -142,7 +142,7 @@ bool OwnView_Impl::CreateModelFromURL( const OUString& aFileURL )
                     xCloseable->addCloseListener( uno::Reference< util::XCloseListener >(this) );
 
                     ::osl::MutexGuard aGuard( m_aMutex );
-                    m_xModel = xModel;
+                    m_xModel = std::move(xModel);
                     bResult = true;
                 }
             }

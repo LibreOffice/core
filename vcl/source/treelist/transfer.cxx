@@ -2204,7 +2204,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
                    if( xTransferable.is() )
                    {
                            aRet = TransferableDataHelper( xTransferable );
-                           aRet.mxClipboard = xSelection;
+                           aRet.mxClipboard = std::move(xSelection);
                    }
                }
            catch( const css::uno::Exception& )

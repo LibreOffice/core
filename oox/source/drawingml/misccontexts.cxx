@@ -323,7 +323,7 @@ BlipContext::BlipContext(ContextHandler2Helper const & rParent, const AttributeL
         auto xGraphic = aGraphic.GetXGraphic();
         mrBlipProps.mxFillGraphic = xGraphic;
         if (mpBlipFill)
-            mpBlipFill->mxGraphic = xGraphic;
+            mpBlipFill->mxGraphic = std::move(xGraphic);
     }
 }
 

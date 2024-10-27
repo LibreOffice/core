@@ -1039,7 +1039,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
         xDataSource->getDataSequences());
 
     aSequences.realloc( aSequences.getLength() + 1 );
-    aSequences.getArray()[ aSequences.getLength() - 1 ] = xLabelSeq;
+    aSequences.getArray()[ aSequences.getLength() - 1 ] = std::move(xLabelSeq);
     xDataSink->setData( aSequences );
 
 }

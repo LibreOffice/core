@@ -9530,7 +9530,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
         {
             // Remember this object is anchored to the current paragraph.
             AnchoredObjectInfo aInfo;
-            aInfo.m_xAnchoredObject = xTextContent;
+            aInfo.m_xAnchoredObject = std::move(xTextContent);
             if (m_pGraphicImport)
             {
                 // We still have the graphic import around, remember the original margin, so later
@@ -9549,7 +9549,7 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
             {
                 // Remember this object is anchored to the current paragraph.
                 AnchoredObjectInfo aInfo;
-                aInfo.m_xAnchoredObject = xTextContent;
+                aInfo.m_xAnchoredObject = std::move(xTextContent);
                 aInfo.m_xRedlineForInline = m_aRedlines.top().back();
                 m_aTextAppendStack.top().m_aAnchoredObjects.push_back(aInfo);
             }

@@ -151,7 +151,7 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 
             if (xCurrChildComp.is()
                 && VCLUnoHelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
-                xChild = xCurrChild;
+                xChild = std::move(xCurrChild);
         }
     }
     return xChild;

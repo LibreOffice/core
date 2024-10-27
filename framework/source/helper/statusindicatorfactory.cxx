@@ -319,7 +319,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if (xFrame.is())
         xParentWindow = xFrame->getContainerWindow();
     else
-        xParentWindow = xPluggWindow;
+        xParentWindow = std::move(xPluggWindow);
 
     // don't disturb user in case he put the loading document into the background!
     // Suppress any setVisible() or toFront() call in case the initial show was
@@ -477,7 +477,7 @@ void StatusIndicatorFactory::impl_showProgress()
     }
 
     std::scoped_lock g(m_mutex);
-    m_xProgress = xProgress;
+    m_xProgress = std::move(xProgress);
 }
 
 void StatusIndicatorFactory::impl_hideProgress()

@@ -875,7 +875,7 @@ bool HierarchyEntry::first( iterator & it )
                 OSL_ENSURE( xHierNameAccess.is(),
                             "HierarchyEntry::first - No hier. name access!" );
 
-                it.dir = xHierNameAccess;
+                it.dir = std::move(xHierNameAccess);
 
                 it.officeDirs = m_xOfficeInstDirs;
             }

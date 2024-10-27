@@ -306,7 +306,7 @@ bool SdGRFFilter::Export()
                             uno::Any aSelection( pDrawController->getSelection() );
                             uno::Reference< lang::XComponent > xSelection;
                             if ( aSelection >>= xSelection )
-                                xSource = xSelection;
+                                xSource = std::move(xSelection);
                         }
                     }
                     xExporter->setSourceDocument( xSource );

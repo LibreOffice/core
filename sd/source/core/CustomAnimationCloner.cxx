@@ -108,7 +108,7 @@ namespace sd
                         Reference< XShape > xTarget( pTarget->getUnoShape(), UNO_QUERY );
                         if( xSource.is() && xTarget.is() )
                         {
-                            maShapeMap[xSource] = xTarget;
+                            maShapeMap[xSource] = std::move(xTarget);
                         }
                     }
                 }

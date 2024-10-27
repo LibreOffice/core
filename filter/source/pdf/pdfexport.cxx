@@ -997,7 +997,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignContact = sSignContact;
             aContext.SignReason = sSignReason;
             aContext.SignPassword = sSignPassword;
-            aContext.SignCertificate = aSignCertificate;
+            aContext.SignCertificate = std::move(aSignCertificate);
             aContext.SignTSA = sSignTSA;
             aContext.UseReferenceXObject = bUseReferenceXObject;
 

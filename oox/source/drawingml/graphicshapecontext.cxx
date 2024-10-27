@@ -84,7 +84,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
             Reference<XInputStream> xMediaStream = lcl_GetMediaStream(path, getFilter());
             if (xMediaStream.is())
             {
-                mpShapePtr->getGraphicProperties().m_xMediaStream = xMediaStream;
+                mpShapePtr->getGraphicProperties().m_xMediaStream = std::move(xMediaStream);
                 mpShapePtr->getGraphicProperties().m_sMediaPackageURL = lcl_GetMediaReference(path);
             }
         }

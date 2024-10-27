@@ -853,7 +853,7 @@ bool UpdateHandler::showWarning( const OUString &rWarningText,
     aDescriptor.Type              = awt::WindowClass_MODALTOP;
     aDescriptor.WindowServiceName = "warningbox";
     aDescriptor.ParentIndex       = -1;
-    aDescriptor.Parent            = xPeer;
+    aDescriptor.Parent            = std::move(xPeer);
     aDescriptor.Bounds            = awt::Rectangle( 10, 10, 250, 150 );
     aDescriptor.WindowAttributes  = nWindowAttributes;
 

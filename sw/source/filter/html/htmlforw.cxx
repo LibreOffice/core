@@ -311,7 +311,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         {
             // A form should be opened in the table/area which isn't completely
             // inside the table. Then we must also now open the form.
-            xNewFormComps = xCurrentFormComps;
+            xNewFormComps = std::move(xCurrentFormComps);
         }
     }
 
@@ -329,7 +329,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         //!!!nWarn = 1; // Control will be assigned to wrong form
     }
 
-    mxFormComps = xNewFormComps;
+    mxFormComps = std::move(xNewFormComps);
 
     OutForm( true, mxFormComps );
     uno::Reference< beans::XPropertySet >  xTmp;

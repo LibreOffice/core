@@ -1431,7 +1431,7 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     }
 
     m_bWaitSaveCompleted = true;
-    m_xNewObjectStorage = xSubStorage;
+    m_xNewObjectStorage = std::move(xSubStorage);
     m_xNewParentStorage = xStorage;
     m_aNewEntryName = sEntName;
     m_aNewDocMediaDescriptor = GetValuableArgs_Impl( lArguments, true );

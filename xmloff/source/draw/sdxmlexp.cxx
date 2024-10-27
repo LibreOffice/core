@@ -1517,11 +1517,11 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
             if( xPropSet2.is() )
                 xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
             else
-                xPropSet = xPropSet1;
+                xPropSet = std::move(xPropSet1);
         }
         else
         {
-            xPropSet = xPropSet1;
+            xPropSet = std::move(xPropSet1);
         }
 
         const rtl::Reference< SvXMLExportPropertyMapper > aMapperRef( GetPresPagePropsMapper() );

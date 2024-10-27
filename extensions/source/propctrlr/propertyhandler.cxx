@@ -85,7 +85,7 @@ namespace pcr
         OSL_ENSURE( m_aPropertyListeners.getLength() == 0, "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
 
         // remember the new component, and give derived classes the chance to react on it
-        m_xComponent = xNewComponent;
+        m_xComponent = std::move(xNewComponent);
         onNewComponent();
 
         // add the listeners, again

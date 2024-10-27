@@ -125,7 +125,7 @@ void SAL_CALL OFunctions::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
         TFunctions::iterator aPos = m_aFunctions.begin();
         ::std::advance(aPos,Index);
         aOldElement <<= *aPos;
-        *aPos = xFunction;
+        *aPos = std::move(xFunction);
     }
 
     container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), Element, aOldElement);

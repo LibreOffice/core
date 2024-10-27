@@ -4383,7 +4383,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                 throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
             }
 
-            m_pImpl->m_xNewRelInfoStream = xInRelStream;
+            m_pImpl->m_xNewRelInfoStream = std::move(xInRelStream);
             m_pImpl->m_aRelInfo = uno::Sequence< uno::Sequence< beans::StringPair > >();
             m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED_STREAM;
             m_pImpl->m_bBroadcastModified = true;

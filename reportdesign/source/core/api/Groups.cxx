@@ -128,7 +128,7 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
         TGroups::iterator aPos = m_aGroups.begin();
         ::std::advance(aPos,Index);
         aOldElement <<= *aPos;
-        *aPos = xGroup;
+        *aPos = std::move(xGroup);
     }
 
     container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), Element, aOldElement);

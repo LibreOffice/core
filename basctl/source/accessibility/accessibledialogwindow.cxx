@@ -671,10 +671,7 @@ Locale AccessibleDialogWindow::getLocale(  )
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-
 // XAccessibleComponent
-
-
 Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     OExternalLockGuard aGuard( this );
@@ -692,7 +689,7 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
                 Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
-                    xChild = xAcc;
+                    xChild = std::move(xAcc);
                     break;
                 }
             }
@@ -702,7 +699,6 @@ Reference< XAccessible > AccessibleDialogWindow::getAccessibleAtPoint( const awt
     return xChild;
 }
 
-
 void AccessibleDialogWindow::grabFocus(  )
 {
     OExternalLockGuard aGuard( this );
@@ -710,7 +706,6 @@ void AccessibleDialogWindow::grabFocus(  )
     if ( m_pDialogWindow )
         m_pDialogWindow->GrabFocus();
 }
-
 
 sal_Int32 AccessibleDialogWindow::getForeground(  )
 {

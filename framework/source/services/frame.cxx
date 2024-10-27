@@ -1165,7 +1165,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL XFrameImpl::findFrame( const 
                )
             {
                 if (xParent->getName() == sTargetFrameName)
-                    xTarget = xParent;
+                    xTarget = std::move(xParent);
                 else
                 {
                     sal_Int32 nRightFlags  = nSearchFlags & ~css::frame::FrameSearchFlag::CHILDREN;

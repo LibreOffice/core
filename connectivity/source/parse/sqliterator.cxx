@@ -455,7 +455,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
     // get the object representing this table/query
     OSQLTable aTable = impl_locateRecordSource( aComposedName );
     if ( aTable.is() )
-        _rTables[ aTableRange ] = aTable;
+        _rTables[ aTableRange ] = std::move(aTable);
 }
 
 void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition)

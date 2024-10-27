@@ -208,7 +208,7 @@ namespace slideshow::internal
                         if( xTargetShape.is() )
                         {
                             // override target shape with parent-supplied
-                            aTarget.mxRef = xTargetShape;
+                            aTarget.mxRef = std::move(xTargetShape);
                             aTarget.mnParagraphIndex = nParagraphIndex;
                         }
                         else

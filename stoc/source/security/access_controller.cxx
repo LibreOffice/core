@@ -445,7 +445,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
         MutexGuard guard( m_aMutex );
         if (! m_xPolicy.is())
         {
-            m_xPolicy = xPolicy;
+            m_xPolicy = std::move(xPolicy);
         }
     }
     return m_xPolicy;

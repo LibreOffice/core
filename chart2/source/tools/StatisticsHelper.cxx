@@ -133,7 +133,7 @@ void lcl_addSequenceToDataSource(
         xDataSource->getDataSequences());
     aSequences.realloc( aSequences.getLength() + 1 );
     auto pSequences = aSequences.getArray();
-    pSequences[ aSequences.getLength() - 1 ] = xLSeq;
+    pSequences[ aSequences.getLength() - 1 ] = std::move(xLSeq);
     xSink->setData( aSequences );
 }
 

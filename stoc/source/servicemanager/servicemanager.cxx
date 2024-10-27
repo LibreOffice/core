@@ -526,7 +526,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         }
 
         MutexGuard aGuard( m_aMutex );
-        m_xContext = xContext;
+        m_xContext = std::move(xContext);
 
     }
     else

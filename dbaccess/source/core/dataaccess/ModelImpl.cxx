@@ -1398,7 +1398,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(
         {
             task::DocumentMacroConfirmationRequest aRequest;
             aRequest.DocumentURL = m_sDocFileLocation;
-            aRequest.DocumentStorage = xStorage;
+            aRequest.DocumentStorage = std::move(xStorage);
             aRequest.DocumentSignatureInformation = aInfo;
             aRequest.DocumentVersion = aODFVersion;
             aRequest.Classification = task::InteractionClassification_QUERY;

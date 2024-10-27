@@ -621,7 +621,7 @@ ScVbaApplication::getActiveSheet()
             xWorkbook->getActiveSheet();
         if ( xWorksheet.is() )
         {
-            result = xWorksheet;
+            result = std::move(xWorksheet);
         }
     }
 

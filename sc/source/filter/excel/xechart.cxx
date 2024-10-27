@@ -1769,7 +1769,7 @@ bool XclExpChSerErrorBar::Convert( XclExpChSourceLink& rValueLink, sal_uInt16& r
                         OUString aCurrRole;
                         if( aValueProp.GetProperty( aCurrRole, EXC_CHPROP_ROLE ) && (aCurrRole == aRole) )
                         {
-                            xValueSeq = xTmpValueSeq;
+                            xValueSeq = std::move(xTmpValueSeq);
                             break;
                         }
                     }

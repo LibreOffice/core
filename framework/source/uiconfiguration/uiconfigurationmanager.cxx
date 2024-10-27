@@ -660,7 +660,7 @@ void UIConfigurationManager::impl_Initialize()
 
             m_aUIElements[i].nElementType = i;
             m_aUIElements[i].bModified = false;
-            m_aUIElements[i].xStorage = xElementTypeStorage;
+            m_aUIElements[i].xStorage = std::move(xElementTypeStorage);
         }
     }
     else

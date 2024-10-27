@@ -98,7 +98,7 @@ ProviderCache::getAllProviders()
             Reference<provider::XScriptProvider> xScriptProvider = rDetail.second.provider;
             if ( xScriptProvider.is() )
             {
-                pproviders[ providerIndex++ ] = xScriptProvider;
+                pproviders[ providerIndex++ ] = std::move(xScriptProvider);
             }
             else
             {
@@ -106,7 +106,7 @@ ProviderCache::getAllProviders()
                 try
                 {
                     xScriptProvider = createProvider(rDetail.second);
-                    pproviders[ providerIndex++ ] = xScriptProvider;
+                    pproviders[ providerIndex++ ] = std::move(xScriptProvider);
                 }
                 catch ( const Exception& )
                 {
@@ -158,7 +158,7 @@ ProviderCache::populateCache()
                 {
                     serviceName = *pName;
                     ProviderDetails details;
-                    details.factory = factory;
+                    details.factory = std::move(factory);
                     m_hProviderDetailsCache[ serviceName ] = std::move(details);
                 }
             }

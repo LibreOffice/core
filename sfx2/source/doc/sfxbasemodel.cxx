@@ -3233,7 +3233,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     if ( bCopyTo )
     {
         // restore DocumentProperties if a copy was created
-        m_pData->m_xDocumentProperties = xOldDocProps;
+        m_pData->m_xDocumentProperties = std::move(xOldDocProps);
     }
 
     Reference < task::XInteractionHandler > xHandler;

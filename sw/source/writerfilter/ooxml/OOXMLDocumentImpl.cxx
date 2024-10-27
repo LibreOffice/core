@@ -211,19 +211,17 @@ void OOXMLDocumentImpl::importSubStreamRelations(const OOXMLStream::Pointer_t& p
 
         if(xRelation.is())
         {
-            mxCustomXmlProsDom = xRelation;
+            mxCustomXmlProsDom = std::move(xRelation);
         }
     }
     else if(OOXMLStream::EMBEDDINGS == nType)
     {
-        mxEmbeddings = xcpInputStream;
+        mxEmbeddings = std::move(xcpInputStream);
     }
     else if(OOXMLStream::CHARTS == nType)
     {
         importSubStreamRelations(cStream, OOXMLStream::EMBEDDINGS);
     }
-
-
 }
 
 void OOXMLDocumentImpl::setXNoteId(const sal_Int32 nId)

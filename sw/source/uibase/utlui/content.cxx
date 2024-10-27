@@ -6089,7 +6089,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                     Reference< XIndexAccess> xIdxAcc(xModel->getDocumentIndexes());
                     Reference< XNameAccess >xLocalNameAccess(xIdxAcc, UNO_QUERY);
                     if(EditEntryMode::RENAME == nMode)
-                        xNameAccess = xLocalNameAccess;
+                        xNameAccess = std::move(xLocalNameAccess);
                     else if(xLocalNameAccess.is() && xLocalNameAccess->hasByName(pBase->GetTOXName()))
                     {
                         Any aIdx = xLocalNameAccess->getByName(pBase->GetTOXName());

@@ -106,7 +106,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             if ( aIter == rMasterPageList.end() )
             {
                 MasterPageEntity aMasterPageEntity;
-                aMasterPageEntity.xMasterPage = xMasterPage;
+                aMasterPageEntity.xMasterPage = std::move(xMasterPage);
                 aMasterPageEntity.bUsed = false;
                 rMasterPageList.push_back( aMasterPageEntity );
             }

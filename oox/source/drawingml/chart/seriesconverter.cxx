@@ -399,7 +399,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                         xCustomLabel->setString( pRun->getText() );
                         xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_TEXT );
                     }
-                    aSequenceRange[ nPos++ ] = xCustomLabel;
+                    aSequenceRange[ nPos++ ] = std::move(xCustomLabel);
                 }
 
                 if( nParagraphs > 1 && nPos < nSequenceSize )
@@ -407,7 +407,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                     css::uno::Reference< XDataPointCustomLabelField > xCustomLabel = DataPointCustomLabelField::create( xContext );
                     xCustomLabel->setFieldType( DataPointCustomLabelFieldType::DataPointCustomLabelFieldType_NEWLINE );
                     xCustomLabel->setString(u"\n"_ustr);
-                    aSequenceRange[ nPos++ ] = xCustomLabel;
+                    aSequenceRange[ nPos++ ] = std::move(xCustomLabel);
                 }
             }
 

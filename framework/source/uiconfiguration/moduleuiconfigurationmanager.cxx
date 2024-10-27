@@ -1313,7 +1313,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = std::move(xIfac);
                 aEvent.Element <<= xRemovedSettings;
                 aEvent.ReplacedElement <<= pDefaultDataSettings->xSettings;
 
@@ -1328,7 +1328,7 @@ void SAL_CALL ModuleUIConfigurationManager::removeSettings( const OUString& Reso
 
                 aEvent.ResourceURL = ResourceURL;
                 aEvent.Accessor <<= xThis;
-                aEvent.Source = xIfac;
+                aEvent.Source = std::move(xIfac);
                 aEvent.Element <<= xRemovedSettings;
 
                 aGuard.clear();

@@ -148,7 +148,7 @@ check(dp_misc::DescriptionInfoset const & infoset) {
                     minimalVersionOpenOfficeOrg));
         }
         if (!sat) {
-            unsatisfiedRange[unsat++] = e;
+            unsatisfiedRange[unsat++] = std::move(e);
         }
     }
     unsatisfied.realloc(unsat);

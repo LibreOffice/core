@@ -225,7 +225,7 @@ namespace pcr
                     if( xStringResourceResolver.is() &&
                         xStringResourceResolver->getLocales().hasElements() )
                     {
-                        xRet = xStringResourceResolver;
+                        xRet = std::move(xStringResourceResolver);
                     }
                 }
                 catch(const UnknownPropertyException&)

@@ -706,7 +706,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                         {
                             if ( xChildNode->getType() == AnimationNodeType::AUDIO )
                             {
-                                xAudioNode = xChildNode;
+                                xAudioNode = std::move(xChildNode);
                                 nAudioGroup = mnCurrentGroup;
                             }
                             else

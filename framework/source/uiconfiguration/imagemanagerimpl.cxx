@@ -818,7 +818,7 @@ void ImageManagerImpl::replaceImages(
         ConfigurationEvent aReplaceEvent;
         aReplaceEvent.aInfo           <<= nImageType;
         aReplaceEvent.Accessor        <<= xOwner;
-        aReplaceEvent.Source          = xOwner;
+        aReplaceEvent.Source          = std::move(xOwner);
         aReplaceEvent.ResourceURL     = m_aResourceString;
         aReplaceEvent.ReplacedElement = Any();
         aReplaceEvent.Element         <<= uno::Reference< XNameAccess >(pReplacedImages);
@@ -1062,7 +1062,7 @@ void ImageManagerImpl::reload()
                 ConfigurationEvent aRemoveEvent;
                 aRemoveEvent.aInfo           <<= static_cast<sal_uInt16>(i);
                 aRemoveEvent.Accessor        <<= xOwner;
-                aRemoveEvent.Source          = xOwner;
+                aRemoveEvent.Source          = std::move(xOwner);
                 aRemoveEvent.ResourceURL     = m_aResourceString;
                 aRemoveEvent.Element         <<= uno::Reference< XNameAccess >( pRemovedImages );
                 implts_notifyContainerListener( aRemoveEvent, NotifyOp_Remove );

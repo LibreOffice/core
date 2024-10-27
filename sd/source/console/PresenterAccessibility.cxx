@@ -715,7 +715,7 @@ void PresenterAccessible::AccessibleObject::SetWindow (
         mxContentWindow->removeWindowListener(this);
     }
 
-    mxContentWindow = xContentWindow;
+    mxContentWindow = std::move(xContentWindow);
     mxBorderWindow.set(rxBorderWindow, UNO_QUERY);
 
     if (mxContentWindow.is())

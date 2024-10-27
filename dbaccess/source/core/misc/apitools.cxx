@@ -74,7 +74,7 @@ void OSubComponent::release() noexcept
             if (xParent.is())
             {
                 MutexGuard aGuard( rBHelper.rMutex );
-                m_xParent = xParent;
+                m_xParent = std::move(xParent);
             }
 
             // destroy the object if xHoldAlive decrement the refcount to 0

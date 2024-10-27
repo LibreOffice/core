@@ -1392,7 +1392,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     // Identifier changed?
     bool bNewId = ( xId->getContentIdentifier()
                             != m_xIdentifier->getContentIdentifier() );
-    m_xIdentifier = xId;
+    m_xIdentifier = std::move(xId);
 
     if ( !storeData() )
     {

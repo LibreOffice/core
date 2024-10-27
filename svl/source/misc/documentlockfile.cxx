@@ -91,7 +91,7 @@ bool GenDocumentLockFile::CreateOwnLockFile()
         ::ucbhelper::Content aTargetContent( GetURL(), xEnv, comphelper::getProcessComponentContext() );
 
         ucb::InsertCommandArgument aInsertArg;
-        aInsertArg.Data = xInput;
+        aInsertArg.Data = std::move(xInput);
         aInsertArg.ReplaceExisting = false;
         uno::Any aCmdArg;
         aCmdArg <<= aInsertArg;

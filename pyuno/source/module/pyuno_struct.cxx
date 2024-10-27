@@ -407,7 +407,7 @@ PyRef PyUNOStruct_new (
     if (self == nullptr)
         return PyRef(); // == error
     self->members = new PyUNOInternals;
-    self->members->xInvocation = xInvocation;
+    self->members->xInvocation = std::move(xInvocation);
     self->members->wrappedObject = targetInterface;
     return PyRef( reinterpret_cast<PyObject*>(self), SAL_NO_ACQUIRE );
 

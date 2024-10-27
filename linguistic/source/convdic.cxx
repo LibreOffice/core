@@ -86,7 +86,7 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
 
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
-    aParserInput.aInputStream = xIn;
+    aParserInput.aInputStream = std::move(xIn);
 
     // finally, parser the stream
     try
