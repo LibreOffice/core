@@ -575,6 +575,8 @@ SwAnchoredObject* SwObjectFormatterTextFrame::GetFirstObjWithMovedFwdAnchor(
 static SwRowFrame const* FindTopLevelRowFrame(SwFrame const*const pFrame)
 {
     SwRowFrame * pRow = const_cast<SwFrame*>(pFrame)->FindRowFrame();
+    if (!pRow)
+        return nullptr;
     // looks like SwTabFrame has mbInfTab = true so go up 2 levels
     while (pRow->GetUpper()->GetUpper()->IsInTab())
     {
