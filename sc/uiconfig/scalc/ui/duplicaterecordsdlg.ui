@@ -94,7 +94,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|compare">Compare:</property>
+                <property name="label" translatable="yes" context="duplicaterecordsdialog|compare">Compare by:</property>
                 <property name="mnemonic-widget">row</property>
               </object>
               <packing>
@@ -282,7 +282,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="includesheaders">
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|includesheaders">Data contains row/col headers</property>
+                <property name="label" translatable="no" context="duplicaterecordsdialog|includesheaders">Data contains row/col headers</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -301,7 +301,7 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes" context="duplicaterecordsdialog|records">Records:</property>
+                <property name="label" translatable="no" context="duplicaterecordsdialog|records">Records:</property>
                 <property name="mnemonic-widget">allcheckbtn</property>
               </object>
               <packing>

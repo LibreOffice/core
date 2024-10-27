@@ -52,6 +52,7 @@ public:
 private:
     void Init();
     void SetDialogData(bool bToggle);
+    void SetDialogLabels();
     std::unique_ptr<weld::CheckButton> m_xIncludesHeaders;
     std::unique_ptr<weld::RadioButton> m_xRadioRow;
     std::unique_ptr<weld::RadioButton> m_xRadioColumn;
@@ -59,6 +60,7 @@ private:
     std::unique_ptr<weld::RadioButton> m_xRadioRemove;
     std::unique_ptr<weld::TreeView> m_xCheckList;
     std::unique_ptr<weld::CheckButton> m_xAllChkBtn;
+    std::unique_ptr<weld::Label> m_xRecordsLabel;
 
     std::unique_ptr<weld::Button> m_xOkBtn;
     std::unique_ptr<weld::Button> m_xHelpBtn;

@@ -40,6 +40,7 @@ ScDuplicateRecordsDlg::ScDuplicateRecordsDlg(weld::Window* pParent,
     , m_xRadioRemove(m_xBuilder->weld_radio_button("remove"))
     , m_xCheckList(m_xBuilder->weld_tree_view("checklist"))
     , m_xAllChkBtn(m_xBuilder->weld_check_button("allcheckbtn"))
+    , m_xRecordsLabel(m_xBuilder->weld_label("records"))
     , m_xOkBtn(m_xBuilder->weld_button("okbtn"))
     , m_xHelpBtn(m_xBuilder->weld_button("helpbutton"))
     , mrCellData(rData)
@@ -120,6 +121,20 @@ void ScDuplicateRecordsDlg::SetDialogData(bool bToggle)
     m_xCheckList->thaw();
 }
 
+void ScDuplicateRecordsDlg::SetDialogLabels()
+{
+    if (m_xRadioRow->get_active())
+    {
+        m_xIncludesHeaders->set_label(ScResId(STR_DUPLICATERECORDS_DATACONATINSROWHEADERS));
+        m_xRecordsLabel->set_label(ScResId(STR_DUPLICATERECORDS_RECORDSCOLUMNS));
+    }
+    else
+    {
+        m_xIncludesHeaders->set_label(ScResId(STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS));
+        m_xRecordsLabel->set_label(ScResId(STR_DUPLICATERECORDS_RECORDSROWS));
+    }
+}
+
 void ScDuplicateRecordsDlg::InsertEntry(const OUString& rTxt, bool bToggle)
 {
     m_xCheckList->append();
@@ -149,21 +164,14 @@ void ScDuplicateRecordsDlg::Init()
     m_xRadioSelect->set_active(
         !officecfg::Office::Calc::Misc::HandleDuplicateRecords::RemoveRecords::get());
 
-    const OUString aHeaderLabel = m_xRadioRow->get_active()
-                                      ? ScResId(STR_DUPLICATERECORDS_DATACONATINSROWHEADERS)
-                                      : ScResId(STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS);
-    m_xIncludesHeaders->set_label(aHeaderLabel);
-
+    SetDialogLabels();
     m_xAllChkBtn->set_state(TRISTATE_FALSE);
     SetDialogData(true);
 }
 
 IMPL_LINK_NOARG(ScDuplicateRecordsDlg, OrientationHdl, weld::Toggleable&, void)
 {
-    const OUString aHeaderLabel = m_xRadioRow->get_active()
-                                      ? ScResId(STR_DUPLICATERECORDS_DATACONATINSROWHEADERS)
-                                      : ScResId(STR_DUPLICATERECORDS_DATACONATINSCOLUMNHEADERS);
-    m_xIncludesHeaders->set_label(aHeaderLabel);
+    SetDialogLabels();
     SetDialogData(true);
 }
 
