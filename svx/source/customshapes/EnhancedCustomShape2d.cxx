@@ -2808,7 +2808,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
             {
                 Color aFillColor = GetColorData(
                     rCustomShapeSet.Get( XATTR_FILLCOLOR ).GetColorValue(),
-                    std::min(nColorIndex, nColorCount-1),
+                    nColorCount ? std::min(nColorIndex, nColorCount-1) : nColorIndex,
                     dBrightness );
                 rObj.SetMergedItem( XFillColorItem( u""_ustr, aFillColor ) );
             }
@@ -2827,7 +2827,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                         candidate.getStopOffset(),
                         GetColorData(
                             Color(candidate.getStopColor()),
-                            std::min(nColorIndex, nColorCount-1),
+                            nColorCount ? std::min(nColorIndex, nColorCount-1) : nColorIndex,
                             dBrightness ).getBColor());
                 }
                 aBGradient.SetColorStops(aColorStops);
@@ -2845,7 +2845,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                 aXHatch.SetColor(
                     GetColorData(
                         aXHatch.GetColor(),
-                        std::min(nColorIndex, nColorCount-1),
+                        nColorCount ? std::min(nColorIndex, nColorCount-1) : nColorIndex,
                         dBrightness ));
             }
 
@@ -2859,7 +2859,7 @@ void EnhancedCustomShape2d::AdaptObjColor(
                 BitmapEx aBitmap(rObj.GetMergedItem(XATTR_FILLBITMAP).GetGraphicObject().GetGraphic().GetBitmapEx());
 
                 short nLuminancePercent = static_cast< short > ( GetLuminanceChange(
-                        std::min(nColorIndex, nColorCount-1)));
+                        nColorCount ? std::min(nColorIndex, nColorCount-1) : nColorIndex));
                 aBitmap.Adjust( nLuminancePercent, 0, 0, 0, 0 );
 
                 rObj.SetMergedItem(XFillBitmapItem(OUString(), Graphic(aBitmap)));
