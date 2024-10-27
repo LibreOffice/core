@@ -486,6 +486,14 @@ void SlideshowLayerRenderer::setupAnimations()
     {
         resolveEffect(rEffect);
     }
+
+    for (auto const& rISequence : rMain->getInteractiveSequenceVector())
+    {
+        for (auto const& rEffect : rISequence->getSequence())
+        {
+            resolveEffect(rEffect);
+        }
+    }
 }
 
 Size SlideshowLayerRenderer::calculateAndSetSizePixel(Size const& rDesiredSizePixel)
