@@ -287,7 +287,7 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
             if (mxNumberEntry->get_visible())
                 mxNumberEntry->set_text(condEntry->GetExpression(aRange.GetTopLeftCorner(), 0));
             if (mxNumberEntry2->get_visible())
-                mxNumberEntry->set_text(condEntry->GetExpression(aRange.GetTopLeftCorner(), 1));
+                mxNumberEntry2->set_text(condEntry->GetExpression(aRange.GetTopLeftCorner(), 1));
         }
         else if (type == ScFormatEntry::Type::Date)
         {
