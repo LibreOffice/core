@@ -1807,6 +1807,8 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
     SCSIZE nPos = 0;
     while (nPos < mvData.size())
     {
+        bool bIterateNext = true;
+
         SCROW nEnd = mvData[nPos].nEndRow;
         if (mvData[nPos].getScPatternAttr()->GetStyleSheet() == pStyleSheet)
         {
@@ -1825,12 +1827,14 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
                 if (Concat(nPos))
                 {
                     Search(nStart, nPos);
-                    --nPos;   // because ++ at end
+                    bIterateNext = false; // because ++ at end otherwise
                 }
             }
         }
         nStart = nEnd + 1;
-        ++nPos;
+
+        if (bIterateNext)
+            ++nPos;
     }
 }
 
