@@ -112,25 +112,24 @@ static MapUnit GetMapUnit( sal_Int32 nUnit )
 
 sal_Int32 ExportDialog::GetDefaultUnit() const
 {
-    sal_Int32 nDefaultUnit = UNIT_CM;
+    sal_Int32 nDefaultUnit;
     switch( mrFltCallPara.eFieldUnit )
     {
 //      case FieldUnit::NONE :
 //      case FieldUnit::PERCENT :
 //      case FieldUnit::CUSTOM :
+        case FieldUnit::KM :         // PASSTHROUGH INTENDED
+        case FieldUnit::M :
+        case FieldUnit::MM_100TH :
+        case FieldUnit::CM :
         default:                nDefaultUnit = UNIT_CM; break;
 
         case FieldUnit::MILE :       // PASSTHROUGH INTENDED
         case FieldUnit::FOOT :
         case FieldUnit::TWIP :
-        case FieldUnit::PICA :       nDefaultUnit = UNIT_INCH; break;
-
-        case FieldUnit::KM :         // PASSTHROUGH INTENDED
-        case FieldUnit::M :
-        case FieldUnit::MM_100TH :   nDefaultUnit = UNIT_CM; break;
-
+        case FieldUnit::PICA :
         case FieldUnit::INCH :       nDefaultUnit = UNIT_INCH; break;
-        case FieldUnit::CM :         nDefaultUnit = UNIT_CM; break;
+
         case FieldUnit::MM :         nDefaultUnit = UNIT_MM; break;
         case FieldUnit::POINT :      nDefaultUnit = UNIT_POINT; break;
     }
