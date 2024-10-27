@@ -159,7 +159,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
     try
     {
         LoadEnv aEnv(xContext);
-
         LoadEnvFeatures loadEnvFeatures = LoadEnvFeatures::WorkWithUI;
         // tdf#118238 Only disable UI interaction when loading as hidden
         if (comphelper::NamedValueCollection::get(lArgs, u"Hidden") == uno::Any(true) || Application::IsHeadlessModeEnabled())
@@ -1103,8 +1102,9 @@ bool LoadEnv::impl_loadContent()
     bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
     bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
     bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW, false);
+    bool bStartPres = m_lMediaDescriptor.contains("StartPresentation");
 
-    if (!bHidden && !bMinimized && !bPreview)
+    if (!bHidden && !bMinimized && !bPreview && !bStartPres)
     {
         css::uno::Reference<css::task::XStatusIndicator> xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(
             utl::MediaDescriptor::PROP_STATUSINDICATOR, css::uno::Reference<css::task::XStatusIndicator>());
@@ -1596,6 +1596,8 @@ void LoadEnv::impl_reactForLoadingState()
         css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
         bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN, false);
         bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED, false);
+        bool                                 bStartPres = m_lMediaDescriptor.contains("StartPresentation");
+
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
 
         if (bMinimized)
@@ -1605,7 +1607,7 @@ void LoadEnv::impl_reactForLoadingState()
             if (pWindow && pWindow->IsSystemWindow())
                 static_cast<WorkWindow*>(pWindow.get())->Minimize();
         }
-        else if (!bHidden)
+        else if (!bHidden && !bStartPres)
         {
             // show frame ... if it's not still visible ...
             // But do nothing if it's already visible!

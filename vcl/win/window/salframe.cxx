@@ -813,8 +813,8 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         }
         nScreenX = aRect.Left();
         nScreenY = aRect.Top();
-        nScreenDX = aRect.GetWidth();
-        nScreenDY = aRect.GetHeight();
+        nScreenDX = aRect.GetWidth() + 1;
+        nScreenDY = aRect.GetHeight() + 1;
     }
     catch( Exception& )
     {
