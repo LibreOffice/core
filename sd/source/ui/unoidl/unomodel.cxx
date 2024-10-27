@@ -578,6 +578,7 @@ public:
     AnimationsExporter(::tools::JsonWriter& rWriter,
                        const Reference<drawing::XDrawPage>& xDrawPage);
     void exportAnimations();
+    void exportTriggers() const;
     [[nodiscard]] bool hasEffects() const { return mbHasEffects; }
 
 private:
@@ -588,7 +589,10 @@ private:
     void exportAnimate(const Reference<XAnimate>& xAnimate);
 
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
-    void convertTiming(OStringBuffer& sTmp, const Any& rValue) const;
+    void convertTiming(OStringBuffer& sTmp, const Any& rValue);
+
+    void appendTrigger(const css::uno::Any& rTarget, const OString& rTriggerHash);
+    void exportTriggersImpl(const uno::Reference<drawing::XShapes>& xShapes) const;
 
 private:
     ::tools::JsonWriter& mrWriter;
@@ -596,6 +600,7 @@ private:
     Reference<XPropertySet> mxPageProps;
     Reference<XAnimationNode> mxRootNode;
     bool mbHasEffects;
+    std::unordered_map<SdrObject*, OString> maEventTriggerSet;
 };
 
 AnimationsExporter::AnimationsExporter(::tools::JsonWriter& rWriter,
@@ -965,7 +970,7 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
     }
 }
 
-void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue) const
+void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue)
 {
     if (!rValue.hasValue())
         return;
@@ -1007,8 +1012,14 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue) c
         {
             if (pEvent->Source.hasValue())
             {
-                anim::convertTarget(sTmp, pEvent->Source);
+                OStringBuffer aTriggerBuffer;
+                // hash must not start with a digit or on client it is parsed as a time in seconds
+                aTriggerBuffer.append("id");
+                anim::convertTarget(aTriggerBuffer, pEvent->Source);
+                OString sTriggerHash(aTriggerBuffer.makeStringAndClear());
+                sTmp.append(sTriggerHash);
                 sTmp.append('.');
+                appendTrigger(pEvent->Source, sTriggerHash);
             }
 
             convertEnum(sTmp2, pEvent->Trigger, constEventTriggerToString);
@@ -1032,6 +1043,69 @@ void AnimationsExporter::convertTiming(OStringBuffer& sTmp, const Any& rValue) c
     {
         OSL_FAIL("sd.unomodel: AnimationsExporter::convertTiming, invalid value type!");
     }
+}
+
+void AnimationsExporter::appendTrigger(const css::uno::Any& rTarget, const OString& rTriggerHash)
+{
+    css::uno::Reference<css::uno::XInterface> xRef;
+    rTarget >>= xRef;
+
+    uno::Reference<drawing::XShape> xShape(xRef, uno::UNO_QUERY);
+    if (!xShape.is())
+    {
+        if (auto xParagraphTarget = o3tl::tryAccess<css::presentation::ParagraphTarget>(rTarget))
+        {
+            xShape = xParagraphTarget->Shape;
+        }
+    }
+    if (xShape.is())
+    {
+        auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        maEventTriggerSet[pObject] = rTriggerHash;
+    }
+}
+
+void AnimationsExporter::exportTriggersImpl(const uno::Reference<drawing::XShapes>& xShapes) const
+{
+    if (!xShapes.is())
+        return;
+
+    sal_Int32 nCount = xShapes->getCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        auto xObject = xShapes->getByIndex(i);
+        uno::Reference<drawing::XShape> xShape(xObject, uno::UNO_QUERY);
+        if (!xShape.is())
+            continue;
+
+        auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        if (maEventTriggerSet.find(pObject) == maEventTriggerSet.end())
+            continue;
+        {
+            auto aShape = mrWriter.startStruct();
+            mrWriter.put("hash", maEventTriggerSet.at(pObject));
+            {
+                auto const& rRectangle = pObject->GetLogicRect();
+                auto aRectangle
+                    = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+                auto aRect = mrWriter.startNode("bounds");
+                mrWriter.put("x", aRectangle.Left());
+                mrWriter.put("y", aRectangle.Top());
+                mrWriter.put("width", aRectangle.GetWidth());
+                mrWriter.put("height", aRectangle.GetHeight());
+            }
+        }
+    }
+}
+
+void AnimationsExporter::exportTriggers() const
+{
+    uno::Reference<drawing::XShapes> const xShapes(mxDrawPage, uno::UNO_QUERY_THROW);
+    if (!xShapes.is())
+        return;
+
+    auto aTriggerList = mrWriter.startArray("triggers");
+    exportTriggersImpl(xShapes);
 }
 
 void AnimationsExporter::convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp,
@@ -4640,8 +4714,11 @@ OString SdXImpressDocument::getPresentationInfo() const
                 AnimationsExporter aAnimationExporter(aJsonWriter, pSlide);
                 if (aAnimationExporter.hasEffects())
                 {
-                    auto aAnimationsNode = aJsonWriter.startNode("animations");
-                    aAnimationExporter.exportAnimations();
+                    {
+                        auto aAnimationsNode = aJsonWriter.startNode("animations");
+                        aAnimationExporter.exportAnimations();
+                    }
+                    aAnimationExporter.exportTriggers();
                 }
             }
         }
