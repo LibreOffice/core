@@ -210,6 +210,8 @@ PageCache::~PageCache()
 
 void PageCache::rescale_Impl (std::size_t new_size)
 {
+    assert(new_size > 0 && "coverity 2023.12.2");
+
     std::size_t new_bytes = new_size * sizeof(Entry*);
     Entry ** new_table = static_cast<Entry**>(std::malloc(new_bytes));
 
