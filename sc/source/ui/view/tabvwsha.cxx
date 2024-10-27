@@ -962,8 +962,8 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
     bool bStyleToMarked = false;
     bool bListAction = false;
     bool bAddUndo = false;          // add ScUndoModifyStyle (style modified)
-    ScStyleSaveData aOldData;       // for undo/redo
-    ScStyleSaveData aNewData;
+    auto xOldData = std::make_shared<ScStyleSaveData>();       // for undo/redo
+    auto xNewData = std::make_shared<ScStyleSaveData>();
 
     SfxStyleFamily eFamily = SfxStyleFamily::Para;
     const SfxUInt16Item* pFamItem;
@@ -1052,7 +1052,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                 pStyleSheet = pStylePool->Find( aStyleName, eFamily );
 
-                aOldData.InitFromStyle( pStyleSheet );
+                xOldData->InitFromStyle( pStyleSheet );
             }
             break;
 
@@ -1236,7 +1236,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
 
                         if ( pStyleSheet )
                         {
-                            aOldData.InitFromStyle( pStyleSheet );
+                            xOldData->InitFromStyle( pStyleSheet );
 
                             if ( bUndo )
                             {
@@ -1254,7 +1254,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                         }
                     }
 
-                    aNewData.InitFromStyle( pStyleSheet );
+                    xNewData->InitFromStyle( pStyleSheet );
                     bAddUndo = true;
                     rReq.Done();
                 }
@@ -1365,7 +1365,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                         if ( bUsed )
                             ScPrintFunc( pDocSh, GetPrinter(true), nInTab ).UpdatePages();
 
-                        aNewData.InitFromStyle( pStyleSheet );
+                        xNewData->InitFromStyle( pStyleSheet );
                         bAddUndo = true;
                         rReq.Done();
                         nRetMask = sal_uInt16(true);
@@ -1442,7 +1442,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     else
                     {
                         pStyleSheet = GetDrawView()->GetStyleSheet();
-                        aOldData.InitFromStyle( pStyleSheet );
+                        xOldData->InitFromStyle( pStyleSheet );
                     }
 
                     if ( bUndo )
@@ -1459,7 +1459,7 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
                     pStyleSet->Put(aCoreSet);
                     static_cast<SfxStyleSheet*>(pStyleSheet)->Broadcast(SfxHint(SfxHintId::DataChanged));
 
-                    aNewData.InitFromStyle( pStyleSheet );
+                    xNewData->InitFromStyle( pStyleSheet );
                     bAddUndo = true;
 
                     //  call SetStyleSheet after adding the ScUndoModifyStyle
@@ -1483,18 +1483,19 @@ void ScTabViewShell::ExecStyle( SfxRequest& rReq )
         if (pStyleSheet)
         {
             ExecuteStyleEdit(rReq, pStyleSheet, nRetMask, nSlotId, bAddUndo, bUndo,
-                    aOldData, aNewData, eFamily, bStyleToMarked, bListAction, pEditObject, aSelection);
+                    xOldData, xNewData, eFamily, bStyleToMarked, bListAction, pEditObject, aSelection);
             return; // skip calling ExecuteStyleEditPost because we invoked an async dialog
         }
     }
 
     ExecuteStyleEditPost(rReq, pStyleSheet, nSlotId, nRetMask, bAddUndo, bUndo,
-            eFamily, aOldData, aNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
+            eFamily, *xOldData, *xNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
 }
 
 void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask,
                         sal_uInt16 nSlotId, bool bAddUndo, bool bUndo,
-                        ScStyleSaveData& rOldData, ScStyleSaveData& rNewData, SfxStyleFamily eFamily,
+                        const std::shared_ptr<ScStyleSaveData>& rOldData,
+                        const std::shared_ptr<ScStyleSaveData>& rNewData, SfxStyleFamily eFamily,
                         bool bStyleToMarked, bool bListAction,
                         SdrObject* pEditObject, ESelection aSelection)
 {
@@ -1583,16 +1584,16 @@ void ScTabViewShell::ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyl
     pDlg->StartExecuteAsync(
         [this, pDlg, xRequest=std::move(xRequest), pStyleSheet,
             nRetMask, xOldSet=std::move(xOldSet), nSlotId, bAddUndo, bUndo,
-            aOldData=rOldData, aNewData=rNewData, aOldName, eFamily, bStyleToMarked,
+            xOldData = rOldData, xNewData = rNewData, aOldName, eFamily, bStyleToMarked,
             bListAction, pEditObject, aSelection]
         (sal_Int32 nResult) mutable -> void
         {
             SetInFormatDialog(false);
             ExecuteStyleEditDialog(pDlg, pStyleSheet, nResult, nRetMask, xOldSet, nSlotId,
-                    bAddUndo, aNewData, aOldName);
+                    bAddUndo, *xNewData, aOldName);
             pDlg->disposeOnce();
             ExecuteStyleEditPost(*xRequest, pStyleSheet, nSlotId, nRetMask, bAddUndo, bUndo, eFamily,
-                    aOldData, aNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
+                    *xOldData, *xNewData, bStyleToMarked, bListAction, pEditObject, aSelection);
         }
     );
 }

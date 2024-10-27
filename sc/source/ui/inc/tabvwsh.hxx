@@ -487,7 +487,8 @@ private:
     bool DoTableBackgroundDialog( sal_Int32 nResult, const VclPtr<AbstractScTabBgColorDlg>& pDlg, const std::shared_ptr<SfxRequest>& xReq, Color aOldTabBgColor, sal_uInt16 nSlot );
     void ExecuteStyleEdit(SfxRequest& rReq, SfxStyleSheetBase* pStyleSheet, sal_uInt16 nRetMask, sal_uInt16 nSlotId,
                             bool bAddUndo, bool bUndo,
-                            ScStyleSaveData& rOldData, ScStyleSaveData& rNewData,
+                            const std::shared_ptr<ScStyleSaveData>& rOldData,
+                            const std::shared_ptr<ScStyleSaveData>& rNewData,
                             SfxStyleFamily eFamily, bool bStyleToMarked, bool bListAction,
                             SdrObject* pEditObject, ESelection aSelection);
     void ExecuteStyleEditDialog(VclPtr<SfxAbstractTabDialog> pDlg,
