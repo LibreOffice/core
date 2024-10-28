@@ -83,6 +83,7 @@ protected:
     stringmap collectPackingProperties(xmlreader::XmlReader& reader);
     void collectProperty(xmlreader::XmlReader& rReader, stringmap& rMap) const;
     static bool extractEntry(stringmap& rMap);
+    static OUString extractIconName(stringmap& rMap);
     static bool extractVisible(stringmap& rMap);
     void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
                                             OUString& rId, OUString& rCustomProperty);

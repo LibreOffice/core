@@ -1009,32 +1009,6 @@ namespace
         return bInconsistent;
     }
 
-    OUString extractIconName(VclBuilder::stringmap &rMap)
-    {
-        OUString sIconName;
-        // allow pixbuf, but prefer icon-name
-        {
-            VclBuilder::stringmap::iterator aFind = rMap.find(u"pixbuf"_ustr);
-            if (aFind != rMap.end())
-            {
-                sIconName = aFind->second;
-                rMap.erase(aFind);
-            }
-        }
-        {
-            VclBuilder::stringmap::iterator aFind = rMap.find(u"icon-name"_ustr);
-            if (aFind != rMap.end())
-            {
-                sIconName = aFind->second;
-                rMap.erase(aFind);
-            }
-        }
-        if (sIconName == "missing-image")
-            return OUString();
-        OUString sReplace = mapStockToImageResource(sIconName);
-        return !sReplace.isEmpty() ? sReplace : sIconName;
-    }
-
     WinBits extractRelief(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK;
@@ -3764,6 +3738,33 @@ bool BuilderBase::extractEntry(VclBuilder::stringmap &rMap)
         rMap.erase(aFind);
     }
     return bHasEntry;
+}
+
+
+OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
+{
+    OUString sIconName;
+    // allow pixbuf, but prefer icon-name
+    {
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"pixbuf"_ustr);
+        if (aFind != rMap.end())
+        {
+            sIconName = aFind->second;
+            rMap.erase(aFind);
+        }
+    }
+    {
+        VclBuilder::stringmap::iterator aFind = rMap.find(u"icon-name"_ustr);
+        if (aFind != rMap.end())
+        {
+            sIconName = aFind->second;
+            rMap.erase(aFind);
+        }
+    }
+    if (sIconName == "missing-image")
+        return OUString();
+    OUString sReplace = mapStockToImageResource(sIconName);
+    return !sReplace.isEmpty() ? sReplace : sIconName;
 }
 
 bool BuilderBase::extractVisible(VclBuilder::stringmap& rMap)
