@@ -953,11 +953,6 @@ void FixedImage::SetImage( const Image& rImage )
     }
 }
 
-Image FixedImage::loadThemeImage(const OUString &rFileName)
-{
-    return Image(StockImage::Yes, rFileName);
-}
-
 bool FixedImage::set_property(const OUString &rKey, const OUString &rValue)
 {
     if (rKey == "icon-size")

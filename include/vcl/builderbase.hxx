@@ -12,6 +12,7 @@
 #include <config_options.h>
 
 #include <vcl/dllapi.h>
+#include <vcl/image.hxx>
 #include <vcl/EnumContext.hxx>
 
 #include <com/sun/star/uno/Exception.hpp>
@@ -87,6 +88,7 @@ protected:
     static bool extractVisible(stringmap& rMap);
     void extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reader, OUString& rClass,
                                             OUString& rId, OUString& rCustomProperty);
+    static Image loadThemeImage(const OUString& rFileName);
 
     void handleActionWidget(xmlreader::XmlReader& reader);
     void handleInterfaceDomain(xmlreader::XmlReader& rReader);

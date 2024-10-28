@@ -173,8 +173,6 @@ public:
     const Image&    GetModeImage( ) const { return maImage;}
     SAL_DLLPRIVATE virtual bool    set_property(const OUString &rKey, const OUString &rValue) override;
 
-    SAL_DLLPRIVATE static Image loadThemeImage(const OUString &rFileName);
-
     SAL_DLLPRIVATE void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 

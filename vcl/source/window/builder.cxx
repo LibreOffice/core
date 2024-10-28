@@ -1964,7 +1964,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
         VclPtr<FixedImage> xFixedImage = VclPtr<FixedImage>::Create(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
         OUString sIconName = extractIconName(rMap);
         if (!sIconName.isEmpty())
-            xFixedImage->SetImage(FixedImage::loadThemeImage(sIconName));
+            xFixedImage->SetImage(loadThemeImage(sIconName));
         m_pVclParserState->m_aImageSizeMap[id] = getImageSize(rMap);
         xWindow = xFixedImage;
         //such parentless GtkImages are temps used to set icons on buttons
@@ -2106,7 +2106,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
 
             OUString sIconName(extractIconName(rMap));
             if (!sIconName.isEmpty())
-                pToolBox->SetItemImage(nItemId, FixedImage::loadThemeImage(sIconName));
+                pToolBox->SetItemImage(nItemId, loadThemeImage(sIconName));
 
             if (!extractVisible(rMap))
                 pToolBox->HideItem(nItemId);
@@ -2619,7 +2619,7 @@ void VclBuilder::handleTabChild(vcl::Window *pParent, xmlreader::XmlReader &read
         {
             OUString sLabel(BuilderUtils::convertMnemonicMarkup(aFind->second));
             OUString sIconName(extractIconName(aProperties));
-            pVerticalTabControl->InsertPage(sIDs.front(), sLabel, FixedImage::loadThemeImage(sIconName), sTooltip,
+            pVerticalTabControl->InsertPage(sIDs.front(), sLabel, loadThemeImage(sIconName), sTooltip,
                                             pVerticalTabControl->GetPageParent()->GetWindow(GetWindowType::LastChild));
         }
     }
@@ -3501,6 +3501,12 @@ void BuilderBase::extractClassAndIdAndCustomProperty(xmlreader::XmlReader& reade
             }
         }
     }
+}
+
+
+Image BuilderBase::loadThemeImage(const OUString& rFileName)
+{
+    return Image(StockImage::Yes, rFileName);
 }
 
 void BuilderBase::handleInterfaceDomain(xmlreader::XmlReader& rReader)
