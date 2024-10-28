@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0  -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="liststore1">
@@ -453,7 +453,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=2 -->
+          <!-- n-columns=2 n-rows=1 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -461,25 +461,6 @@
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
             <property name="row-spacing">6</property>
-            <child>
-              <object class="GtkCheckButton" id="acctool">
-                <property name="label" translatable="yes" context="optaccessibilitypage|acctool">Support _assistive technology tools (program restart required)</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="acctool-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|acctool">Allows you to use assistive tools, such as external screen readers, Braille devices or speech recognition input devices. The Java Runtime Environment must be installed on your computer before you can enable assistive support.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkCheckButton" id="textselinreadonly">
                 <property name="label" translatable="yes" context="optaccessibilitypage|textselinreadonly">Use te_xt selection cursor in read-only text documents</property>
@@ -496,24 +477,11 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkImage" id="locktextselinreadonly">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="icon-name">res/lock.png</property>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkImage" id="lockacctool">
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="halign">center</property>

@@ -24,7 +24,6 @@
 
 class SvxAccessibilityOptionsTabPage : public SfxTabPage
 {
-    std::unique_ptr<weld::CheckButton> m_xAccessibilityTool;
     std::unique_ptr<weld::CheckButton> m_xTextSelectionInReadonly;
     std::unique_ptr<weld::Widget> m_xTextSelectionInReadonlyImg;
     std::unique_ptr<weld::ComboBox> m_xAnimatedGraphics;

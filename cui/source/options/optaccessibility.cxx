@@ -65,7 +65,6 @@ namespace
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* pPage, weld::DialogController* pController,
     const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, u"cui/ui/optaccessibilitypage.ui"_ustr, u"OptAccessibilityPage"_ustr, &rSet)
-    , m_xAccessibilityTool(m_xBuilder->weld_check_button(u"acctool"_ustr))
     , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button(u"textselinreadonly"_ustr))
     , m_xTextSelectionInReadonlyImg(m_xBuilder->weld_widget(u"locktextselinreadonly"_ustr))
     , m_xAnimatedGraphics(m_xBuilder->weld_combo_box(u"animatedgraphicenabled"_ustr))
@@ -87,10 +86,6 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     , m_xOptionsLB(m_xBuilder->weld_tree_view(u"options"_ustr))
     , m_xDefaultPB(m_xBuilder->weld_button(u"default"_ustr))
 {
-#ifdef UNX
-    // UNIX: read the gconf2 setting instead to use the checkbox
-    m_xAccessibilityTool->hide();
-#endif
 
     m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
@@ -127,7 +122,7 @@ OUString SvxAccessibilityOptionsTabPage::GetAllStrings()
             sAllStrings += pString->get_label() + " ";
     }
 
-    OUString checkButton[] = { u"acctool"_ustr,      u"textselinreadonly"_ustr,
+    OUString checkButton[] = { u"textselinreadonly"_ustr,
                                u"autofontcolor"_ustr,     u"systempagepreviewcolor"_ustr };
 
     for (const auto& check : checkButton)
@@ -297,15 +292,6 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
         }
     }
     batch->commit();
-
-    AllSettings aAllSettings = Application::GetSettings();
-    MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-#ifndef UNX
-    aMiscSettings.SetEnableATToolSupport(m_xAccessibilityTool->get_active());
-#endif
-    aAllSettings.SetMiscSettings(aMiscSettings);
-    Application::MergeSystemSettings( aAllSettings );
-    Application::SetSettings(aAllSettings);
 
     return false;
 }
@@ -504,10 +490,6 @@ void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
         m_xOptionsLB->set_toggle(i, value);
         m_aSavedOptions[aIssues.first] = value;
     }
-
-    AllSettings aAllSettings = Application::GetSettings();
-    const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();
-    m_xAccessibilityTool->set_active(aMiscSettings.GetEnableATToolSupport());
 }
 
 IMPL_LINK_NOARG(SvxAccessibilityOptionsTabPage, UseAsDefaultHdl, weld::Button&, void)
