@@ -14,11 +14,10 @@
 #include <vcl/scheduler.hxx>
 
 #include <test/a11y/accessibletestbase.hxx>
-#include <test/a11y/swaccessibletestbase.hxx>
 
 using namespace css;
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestImpressDefaultStructure)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultStructure)
 {
     load(u"private:factory/simpress"_ustr);
     Scheduler::ProcessEventsToIdle();
@@ -64,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultLayout)
 }
 
 // test a11y tree order is stable (https://bugs.documentfoundation.org/show_bug.cgi?id=150064)
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, tdf150064)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf150064)
 {
     loadFromSrc(u"/sd/qa/unit/a11y/data/tdf150064.fodp"_ustr);
     Scheduler::ProcessEventsToIdle();

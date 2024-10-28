@@ -11,13 +11,13 @@
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
-#include <test/a11y/swaccessibletestbase.hxx>
+#include <test/a11y/accessibletestbase.hxx>
 
 using namespace css;
 using namespace accessibility;
 
 // Checks fetching multi-unit characters
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSP)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestUnicodeSP)
 {
     loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf"_ustr);
 
@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSP)
 }
 
 // Checks getTextBehindIndex() with multi-unit characters
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSPBehindIndex)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestUnicodeSPBehindIndex)
 {
     loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf"_ustr);
 

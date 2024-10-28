@@ -16,13 +16,13 @@
 
 #include <vcl/scheduler.hxx>
 
-#include <test/a11y/swaccessibletestbase.hxx>
+#include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
 
 /* This test only works if spell checking is available for en_US */
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, tdf155705)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf155705)
 {
     loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/tdf155705.fodt"_ustr);
 

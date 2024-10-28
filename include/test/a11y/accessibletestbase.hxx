@@ -37,6 +37,10 @@ namespace test
 {
 class OOO_DLLPUBLIC_TEST AccessibleTestBase : public test::BootstrapFixture
 {
+private:
+    void collectText(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
+                     rtl::OUStringBuffer& buffer, bool onlyChildren = false);
+
 protected:
     css::uno::Reference<css::frame::XDesktop2> mxDesktop;
     css::uno::Reference<css::lang::XComponent> mxDocument;
@@ -50,6 +54,18 @@ protected:
     css::uno::Reference<css::accessibility::XAccessibleContext> getWindowAccessibleContext();
     virtual css::uno::Reference<css::accessibility::XAccessibleContext>
     getDocumentAccessibleContext();
+
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getPreviousFlowingSibling(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+    static css::uno::Reference<css::accessibility::XAccessibleContext> getNextFlowingSibling(
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+
+    /** Collects contents of @p xContext in a dummy markup form */
+    OUString
+    collectText(const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
+
+    /** Collects contents of the current document */
+    OUString collectText() { return collectText(getDocumentAccessibleContext()); }
 
     void documentPostKeyEvent(int nType, int nCharCode, int nKeyCode)
     {

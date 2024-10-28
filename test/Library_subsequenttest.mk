@@ -49,7 +49,6 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/a11y/AccessibilityTools \
 	test/source/a11y/accessibletestbase \
 	test/source/a11y/eventposter \
-	test/source/a11y/swaccessibletestbase \
 	test/source/beans/xpropertyset \
 	test/source/chart/xchartdata \
 	test/source/container/xchild \

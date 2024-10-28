@@ -11,6 +11,9 @@
 
 #include <string>
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -29,6 +32,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
+#include <rtl/ustrbuf.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
@@ -110,6 +114,126 @@ test::AccessibleTestBase::getDocumentAccessibleContext()
 }
 
 uno::Reference<accessibility::XAccessibleContext>
+test::AccessibleTestBase::getPreviousFlowingSibling(
+    const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    return getFirstRelationTargetOfType(xContext,
+                                        accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM);
+}
+
+uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getNextFlowingSibling(
+    const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    return getFirstRelationTargetOfType(xContext,
+                                        accessibility::AccessibleRelationType::CONTENT_FLOWS_TO);
+}
+
+/* Care has to be taken not to walk sideways as the relation is also used
+ * with children of nested containers (possibly as the "natural"/"perceived" flow?). */
+std::deque<uno::Reference<accessibility::XAccessibleContext>>
+test::AccessibleTestBase::getAllChildren(
+    const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    /* first, get all "natural" children */
+    std::deque<uno::Reference<accessibility::XAccessibleContext>> children;
+    auto childCount = xContext->getAccessibleChildCount();
+
+    for (sal_Int64 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
+    {
+        auto child = xContext->getAccessibleChild(i);
+        children.push_back(child->getAccessibleContext());
+    }
+
+    if (!children.size())
+        return children;
+
+    /* then, try and find flowing siblings at the same levels that are not included in the list */
+    /* first, backwards: */
+    auto child = getPreviousFlowingSibling(children.front());
+    while (child.is() && children.size() < AccessibilityTools::MAX_CHILDREN)
+    {
+        auto childParent = child->getAccessibleParent();
+        if (childParent.is()
+            && AccessibilityTools::equals(xContext, childParent->getAccessibleContext()))
+            children.push_front(child);
+        child = getPreviousFlowingSibling(child);
+    }
+    /* then forward */
+    child = getNextFlowingSibling(children.back());
+    while (child.is() && children.size() < AccessibilityTools::MAX_CHILDREN)
+    {
+        auto childParent = child->getAccessibleParent();
+        if (childParent.is()
+            && AccessibilityTools::equals(xContext, childParent->getAccessibleContext()))
+            children.push_back(child);
+        child = getNextFlowingSibling(child);
+    }
+
+    return children;
+}
+
+void test::AccessibleTestBase::collectText(
+    const uno::Reference<accessibility::XAccessibleContext>& xContext, rtl::OUStringBuffer& buffer,
+    bool onlyChildren)
+{
+    const auto& roleName = AccessibilityTools::getRoleName(xContext->getAccessibleRole());
+
+    std::cout << "collecting text for child of role " << roleName << "..." << std::endl;
+
+    if (!onlyChildren)
+    {
+        const struct
+        {
+            std::u16string_view name;
+            rtl::OUString value;
+        } attrs[] = {
+            { u"name", xContext->getAccessibleName() },
+            { u"description", xContext->getAccessibleDescription() },
+        };
+
+        buffer.append('<');
+        buffer.append(roleName);
+        for (auto& attr : attrs)
+        {
+            if (attr.value.getLength() == 0)
+                continue;
+            buffer.append(' ');
+            buffer.append(attr.name);
+            buffer.append(u"=\"" + attr.value.replaceAll(u"\"", u"&quot;") + "\"");
+        }
+        buffer.append('>');
+    }
+    auto openTagLength = buffer.getLength();
+
+    uno::Reference<accessibility::XAccessibleText> xText(xContext, uno::UNO_QUERY);
+    if (xText.is())
+        buffer.append(xText->getText());
+
+    for (auto& childContext : getAllChildren(xContext))
+        collectText(childContext, buffer);
+
+    if (!onlyChildren)
+    {
+        if (buffer.getLength() != openTagLength)
+            buffer.append("</" + roleName + ">");
+        else
+        {
+            /* there was no content, so make is a short tag for more concise output */
+            buffer[openTagLength - 1] = '/';
+            buffer.append('>');
+        }
+    }
+}
+
+OUString test::AccessibleTestBase::collectText(
+    const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    rtl::OUStringBuffer buf;
+    collectText(xContext, buf, isDocumentRole(xContext->getAccessibleRole()));
+    return buf.makeStringAndClear();
+}
+
+uno::Reference<accessibility::XAccessibleContext>
 test::AccessibleTestBase::getFirstRelationTargetOfType(
     const uno::Reference<accessibility::XAccessibleContext>& xContext, sal_Int16 relationType)
 {
@@ -133,22 +257,6 @@ test::AccessibleTestBase::getFirstRelationTargetOfType(
     }
 
     return nullptr;
-}
-
-std::deque<uno::Reference<accessibility::XAccessibleContext>>
-test::AccessibleTestBase::getAllChildren(
-    const uno::Reference<accessibility::XAccessibleContext>& xContext)
-{
-    std::deque<uno::Reference<accessibility::XAccessibleContext>> children;
-    auto childCount = xContext->getAccessibleChildCount();
-
-    for (sal_Int64 i = 0; i < childCount && i < AccessibilityTools::MAX_CHILDREN; i++)
-    {
-        auto child = xContext->getAccessibleChild(i);
-        children.push_back(child->getAccessibleContext());
-    }
-
-    return children;
 }
 
 /** Prints the tree of accessible objects starting at @p xContext to stdout */

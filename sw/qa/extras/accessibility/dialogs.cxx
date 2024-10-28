@@ -12,7 +12,7 @@
 
 #include <vcl/scheduler.hxx>
 
-#include <test/a11y/swaccessibletestbase.hxx>
+#include <test/a11y/accessibletestbase.hxx>
 #include <test/a11y/AccessibilityTools.hxx>
 
 using namespace css;
@@ -20,7 +20,7 @@ using namespace css;
 // FIXME: dialog API doesn't work on macos yet
 #if !defined(MACOSX)
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSpecialCharactersDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -58,7 +58,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
 }
 
 /* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocus)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestSpecialCharactersDialogFocus)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -89,7 +89,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>!</PARAGRAPH>"_ustr, collectText());
 }
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestHyperlinkDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -112,7 +112,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>https://libreoffice.org/</PARAGRAPH>"_ustr, collectText());
 }
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestBookmarkDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -135,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>#Test Bookmark 1 Bookmark </PARAGRAPH>"_ustr, collectText());
 }
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestSectionDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
     CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH/><PARAGRAPH/>"_ustr, collectText());
 }
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFontworkDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
@@ -173,7 +173,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
                          collectText());
 }
 
-CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, BasicTestFrameDialog)
 {
     load(u"private:factory/swriter"_ustr);
 
