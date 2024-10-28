@@ -348,10 +348,12 @@ void QtBuilder::applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& 
                                            const stringmap& rPackingProperties)
 {
     assert(pCurrentChild);
-    assert(rPackingProperties.contains(u"left-attach"_ustr)
-           && "left-attach property missing for grid item");
-    assert(rPackingProperties.contains(u"top-attach"_ustr)
-           && "top-attach property missing for grid item");
+
+    // properties not set when there's no explicit GtkGrid in the .ui file,
+    // like for the QGridLayout that's the (implicit) layout of a QMessageBox
+    if (!rPackingProperties.contains(u"left-attach"_ustr)
+        || !rPackingProperties.contains(u"top-attach"_ustr))
+        return;
 
     const sal_Int32 nColumn = rPackingProperties.at(u"left-attach"_ustr).toInt32();
     const sal_Int32 nRow = rPackingProperties.at(u"top-attach"_ustr).toInt32();
