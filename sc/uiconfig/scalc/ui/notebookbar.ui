@@ -7265,22 +7265,54 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom13">
+                          <object class="GtkBox" id="GroupB93">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="valign">center</property>
-                            <property name="vexpand">True</property>
-                            <property name="toolbar_style">both</property>
-                            <property name="show_arrow">False</property>
-                            <property name="icon_size">3</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkToolButton" id="Data-Calculate">
+                              <object class="sfxlo-NotebookbarToolBox" id="LeftParaMargin8">
                                 <property name="visible">True</property>
-                                <property name="action_name">.uno:Calculate</property>
+                                <property name="can_focus">True</property>
+                                <property name="toolbar_style">both-horiz</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Data-Calculate">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="action_name">.uno:Calculate</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
-                                <property name="homogeneous">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="sfxlo-NotebookbarToolBox" id="belowspacing8">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="toolbar_style">both-horiz</property>
+                                <child>
+                                  <object class="GtkToolButton" id="Data-HandleDuplicateRecords">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="action_name">.uno:HandleDuplicateRecords</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="homogeneous">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
