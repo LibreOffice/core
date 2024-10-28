@@ -203,7 +203,9 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
     if( bInternalMove )
     {
-        sal_uInt16 nPageId = ShowDropPos( aPos ) - 1;
+        sal_uInt16 nDropPos = ShowDropPos( aPos );
+        assert(nDropPos > 0);
+        sal_uInt16 nPageId = nDropPos - 1;
 
         switch (rEvt.mnAction)
         {
