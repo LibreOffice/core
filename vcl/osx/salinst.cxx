@@ -740,7 +740,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
             NSEventMaskLeftMouseUp      | NSEventMaskRightMouseUp      | NSEventMaskOtherMouseUp      |
             NSEventMaskLeftMouseDragged | NSEventMaskRightMouseDragged | NSEventMaskOtherMouseDragged |
             NSEventMaskScrollWheel      |
-            // NSEventMaskMouseMoved    |
+            NSEventMaskMouseMoved       |
             NSEventMaskMouseEntered     | NSEventMaskMouseExited;
 
         // Related: tdf#155266 stop delaying painting timer while swiping
