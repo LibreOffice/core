@@ -334,7 +334,6 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int64 i )
 
 Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Point& rPoint )
 {
-    Reference< XAccessible > xChild;
     for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
@@ -347,14 +346,13 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChildAt( const awt::Po
                 Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
-                    xChild = std::move(xAcc);
-                    break;
+                    return xAcc;
                 }
             }
         }
     }
 
-    return xChild;
+    return nullptr;
 }
 
 
