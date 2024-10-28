@@ -111,6 +111,7 @@ enum class SalEvent;
     BOOL            mbInCommitMarkedText;
     NSAttributedString* mpLastMarkedText;
     BOOL            mbTextInputWantsNonRepeatKeyDown;
+    NSTrackingArea* mpLastTrackingArea;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
@@ -146,6 +147,8 @@ enum class SalEvent;
 -(BOOL)handleKeyDownException:(NSEvent*)pEvent;
 -(void)clearLastEvent;
 -(void)clearLastMarkedText;
+-(void)clearLastTrackingArea;
+-(void)updateTrackingAreas;
 /*
     text action methods
 */

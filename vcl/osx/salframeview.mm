@@ -774,6 +774,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         mbInCommitMarkedText = NO;
         mpLastMarkedText = nil;
         mbTextInputWantsNonRepeatKeyDown = NO;
+        mpLastTrackingArea = nil;
     }
 
     return self;
@@ -783,6 +784,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
 {
     [self clearLastEvent];
     [self clearLastMarkedText];
+    [self clearLastTrackingArea];
     [self revokeWrapper];
 
     [super dealloc];
@@ -2127,6 +2129,38 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     }
 
     mbTextInputWantsNonRepeatKeyDown = NO;
+}
+
+-(void)clearLastTrackingArea
+{
+    if (mpLastTrackingArea)
+    {
+        [self removeTrackingArea: mpLastTrackingArea];
+        [mpLastTrackingArea release];
+        mpLastTrackingArea = nil;
+    }
+}
+
+-(void)updateTrackingAreas
+{
+    [super updateTrackingAreas];
+
+    // tdf#155092 use tracking areas instead of tracking rectangles
+    // Apparently, the older, tracking rectangles selectors cause
+    // unexpected window resizing upon the first mouse down after the
+    // window has been manually resized so switch to the newer,
+    // tracking areas selectors. Also, the NSTrackingInVisibleRect
+    // option allows us to create one single tracking area that
+    // resizes itself automatically over the lifetime of the view.
+    // Note: for some unknown reason, both NSTrackingMouseMoved and
+    // NSTrackingAssumeInside are necessary options for this fix
+    // to work.
+    // Note: for some unknown reason, [mpLastTrackingArea rect]
+    // returns an empty NSRect (at least on macOS Sequoia) so always
+    // remove the old tracking area and add a new one.
+    [self clearLastTrackingArea];
+    mpLastTrackingArea = [[NSTrackingArea alloc] initWithRect: [self bounds] options: ( NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways | NSTrackingAssumeInside | NSTrackingInVisibleRect ) owner: self userInfo: nil];
+    [self addTrackingArea: mpLastTrackingArea];
 }
 
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
