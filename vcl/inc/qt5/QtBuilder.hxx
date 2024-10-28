@@ -71,7 +71,7 @@ public:
     virtual void set_response(std::u16string_view sID, short nResponse) override;
 
 private:
-    static void setProperties(QObject* obj, stringmap& rProps);
+    void setProperties(QObject* obj, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
 

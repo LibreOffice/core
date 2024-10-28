@@ -42,13 +42,15 @@ inline QPixmap toQPixmap(const BitmapEx& rBitmapEx)
     return aPixmap;
 }
 
+inline QPixmap toQPixmap(const Image& rImage) { return toQPixmap(rImage.GetBitmapEx()); }
+
 inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rImage)
 {
     if (!rImage.is())
         return QPixmap();
 
     Image aImage(rImage);
-    return toQPixmap(aImage.GetBitmapEx());
+    return toQPixmap(aImage);
 }
 
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)

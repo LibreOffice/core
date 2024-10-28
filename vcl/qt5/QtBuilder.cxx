@@ -187,7 +187,14 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkImage")
     {
-        pObject = new QLabel(pParentWidget);
+        QLabel* pLabel = new QLabel(pParentWidget);
+        const OUString sIconName = extractIconName(rMap);
+        if (!sIconName.isEmpty())
+        {
+            const Image aImage = loadThemeImage(sIconName);
+            pLabel->setPixmap(toQPixmap(aImage));
+        }
+        pObject = pLabel;
     }
     else if (sName == u"GtkLabel")
     {
@@ -473,8 +480,24 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
     {
         for (auto const & [ rKey, rValue ] : rProps)
         {
-            if (rKey == u"label")
+            if (rKey == u"image")
+            {
+                QLabel* pImageLabel = get<QLabel>(rValue);
+                assert(pImageLabel && "Button has non-existent image set");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                pButton->setIcon(QIcon(pImageLabel->pixmap()));
+#else
+                pButton->setIcon(QIcon(pImageLabel->pixmap(Qt::ReturnByValue)));
+#endif
+                // parentless GtkImage in .ui file is only used for setting button
+                // image, so the object is no longer needed after doing so
+                if (!pImageLabel->parent())
+                    pImageLabel->deleteLater();
+            }
+            else if (rKey == u"label")
+            {
                 pButton->setText(convertAccelerator(rValue));
+            }
         }
     }
 }
