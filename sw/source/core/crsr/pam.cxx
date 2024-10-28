@@ -1140,7 +1140,10 @@ void GoStartSection( SwPosition * pPos )
     SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
     if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
+    {
+        assert(nLevel > 0);
         nLevel--;
+    }
     do { SwNodes::GoStartOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // already on a ContentNode
