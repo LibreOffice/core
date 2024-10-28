@@ -306,7 +306,7 @@ BlipContext::BlipContext(ContextHandler2Helper const & rParent, const AttributeL
             auto xGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic(aFragmentPath);
             mrBlipProps.mxFillGraphic = xGraphic;
             if (mpBlipFill)
-                mpBlipFill->mxGraphic = xGraphic;
+                mpBlipFill->mxGraphic = std::move(xGraphic);
         }
     }
     else if( rAttribs.hasAttribute( R_TOKEN( link ) ) )
