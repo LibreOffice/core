@@ -2199,7 +2199,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
     CPPUNIT_ASSERT(!xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
     // Now open again the saved result, and instead of 'save as', just 'save'.
-    mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(maTempFile.GetURL());
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->store();
 }
@@ -2807,7 +2807,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf117225)
     OUString aTargetFile = aTargetDirectory + "tdf117225.odt";
     OUString aSourceFile = createFileURL(u"tdf117225.odt");
     osl::File::copy(aSourceFile, aTargetFile);
-    mxComponent = loadFromDesktop(aTargetFile);
+    loadFromURL(aTargetFile);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     int nExpected = CountFilesInDirectory(aTargetDirectory);
     xStorable->store();

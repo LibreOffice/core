@@ -2495,12 +2495,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf121509)
     aNewAnch.SetAnchor(aCursor.Start());
     CPPUNIT_ASSERT(pTriangleShapeFormat->SetFormatAttr(aNewAnch));
 
-    // Reload (docx)
-    // FIXME: if we use 'reload' here, it fails with
-    //  Assertion `!m_pFirst && !m_pLast && "There are still indices registered"' failed.
     save(u"Office Open XML Text"_ustr);
 
     // The second part: check if the reloaded doc has flys inside a fly
+    // FIXME: if we use 'saveAndReload' or 'loadFromURL' here, it fails with
+    //  Assertion `!m_pFirst && !m_pLast && "There are still indices registered"' failed.
     loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
     auto pSecondDoc = getSwDoc();
     auto pSecondFormats = pSecondDoc->GetSpzFrameFormats();

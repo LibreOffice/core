@@ -80,7 +80,7 @@ void UnoApiTest::setTestInteractionHandler(const char* pPassword,
     rPropertyValue.Value <<= xInteraction;
 }
 
-void UnoApiTest::load(OUString const& rURL, const char* pPassword)
+void UnoApiTest::loadFromURL(OUString const& rURL, const char* pPassword)
 {
     std::vector<beans::PropertyValue> aFilterOptions;
 
@@ -129,7 +129,7 @@ void UnoApiTest::loadWithParams(OUString const& rURL,
 OUString UnoApiTest::loadFromFile(std::u16string_view aFileBase, const char* pPassword)
 {
     OUString aFileName = createFileURL(aFileBase);
-    load(aFileName, pPassword);
+    loadFromURL(aFileName, pPassword);
     return aFileName;
 }
 
@@ -216,8 +216,7 @@ void UnoApiTest::saveWithParams(const uno::Sequence<beans::PropertyValue>& rPara
 void UnoApiTest::saveAndReload(const OUString& rFilter, const char* pPassword)
 {
     save(rFilter, pPassword);
-
-    load(maTempFile.GetURL(), pPassword);
+    loadFromURL(maTempFile.GetURL(), pPassword);
 }
 
 std::unique_ptr<vcl::pdf::PDFiumDocument> UnoApiTest::parsePDFExport(const OString& rPassword)

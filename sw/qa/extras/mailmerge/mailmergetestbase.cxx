@@ -261,12 +261,9 @@ public:
     void loadMailMergeDocument(const OUString& filename)
     {
         assert(mnCurOutputType == text::MailMergeType::FILE);
-        if (mxComponent.is())
-            mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         std::cout << filename << ",";
-        mxComponent = loadFromDesktop(msMailMergeOutputURL + "/" + filename,
-                                      u"com.sun.star.text.TextDocument"_ustr);
+        loadFromURL(msMailMergeOutputURL + "/" + filename);
         calcLayout();
     }
 

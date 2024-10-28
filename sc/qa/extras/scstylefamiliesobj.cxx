@@ -118,7 +118,7 @@ void ScStyleFamiliesObj::setUp()
 {
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     m_xSrcComponent = loadFromDesktop(getTestURL());
 }

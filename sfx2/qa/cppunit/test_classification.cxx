@@ -82,7 +82,7 @@ void ClassificationTest::testClassification()
 void ClassificationTest::testWriter()
 {
     // Test SID_CLASSIFICATION_APPLY handling in SwDocShell::Execute().
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -90,7 +90,7 @@ void ClassificationTest::testWriter()
 void ClassificationTest::testCalc()
 {
     // Test SID_CLASSIFICATION_APPLY handling in ScFormatShell::ExecuteStyle().
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr, u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }
@@ -98,7 +98,7 @@ void ClassificationTest::testCalc()
 void ClassificationTest::testImpress()
 {
     // Test SID_CLASSIFICATION_APPLY handling in sd::DrawViewShell::FuTemporary().
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr, u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     // This resulted in a beans::UnknownPropertyException when the request wasn't handled.
     testClassification();
 }

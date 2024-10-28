@@ -1019,8 +1019,7 @@ void Test::testODF13()
         assertXPath(pStylesXml, "/office:document-styles/office:master-styles/style:master-page/style:footer-first", 0);
 
         // reload
-        mxComponent->dispose();
-        mxComponent = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
+        loadFromURL(maTempFile.GetURL());
 
         // check model
         verifyText13("1.2 Extended reload");

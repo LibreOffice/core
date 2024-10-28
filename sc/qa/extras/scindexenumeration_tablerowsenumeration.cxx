@@ -73,7 +73,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableRowsEnumeration::init()
 void ScIndexEnumeration_TableRowsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_TableRowsEnumeration);

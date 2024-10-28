@@ -55,7 +55,7 @@ uno::Reference<uno::XInterface> CheckXCellRangesQuery::init()
     // create a calc document
     if (!mxComponent.is())
         // Load an empty document.
-        mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+        loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 

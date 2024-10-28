@@ -71,7 +71,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_NamedRangesEnumeration::init(
 void ScIndexEnumeration_NamedRangesEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_NamedRangesEnumeration);

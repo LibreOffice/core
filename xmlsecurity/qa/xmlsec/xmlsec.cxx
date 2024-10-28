@@ -50,7 +50,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertPrivateKey)
         = xml::crypto::SEInitializer::create(getComponentContext());
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
         = mxSEInitializer->createSecurityContext(OUString());
-    load("private:factory/swriter");
+    loadFromURL("private:factory/swriter");
     save("writer8");
     DocumentSignatureManager aManager(getComponentContext(), DocumentSignatureMode::Content);
     CPPUNIT_ASSERT(aManager.init());

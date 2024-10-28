@@ -35,8 +35,7 @@ public:
 void HybridPdfTest::testNoHybridDataInPDF()
 {
     // Load PDF document without attached ODT document
-    UnoApiXmlTest::load(createFileURL(u"PDFOnly.pdf"), nullptr);
-    CPPUNIT_ASSERT(mxComponent.is());
+    loadFromFile(u"PDFOnly.pdf");
     uno::Reference<lang::XServiceInfo> xServiceInfo(mxComponent, uno::UNO_QUERY_THROW);
     // Draw document is expected in this case - default when importing PDF
     CPPUNIT_ASSERT(xServiceInfo->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr));

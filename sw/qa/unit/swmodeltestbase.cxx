@@ -381,7 +381,7 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pPassword)
     // Output name at load time, so in the case of a hang, the name of the hanging input file is visible.
     std::cout << rURL << ":\n";
 
-    UnoApiXmlTest::load(rURL, pPassword);
+    loadFromURL(rURL, pPassword);
 
     CPPUNIT_ASSERT(!getSwDocShell()->GetMedium()->GetWarningError());
 

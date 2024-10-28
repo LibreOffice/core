@@ -38,8 +38,7 @@ public:
 
     uno::Reference<uno::XInterface> init() override
     {
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
-                                      u"com.sun.star.text.TextDocument"_ustr);
+        loadFromURL(u"private:factory/swriter"_ustr);
         uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY_THROW);
         uno::Reference<text::XTextFrame> xTextFrame(

@@ -47,7 +47,7 @@ RowSetClones::RowSetClones()
 void RowSetClones::test()
 {
     createTempCopy(u"RowSetClones.odb");
-    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    loadFromURL(maTempFile.GetURL());
 
     uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
 

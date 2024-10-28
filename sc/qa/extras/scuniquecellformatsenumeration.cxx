@@ -100,7 +100,7 @@ uno::Reference<uno::XInterface> ScUniqueCellFormatsEnumeration::init()
 void ScUniqueCellFormatsEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 void ScUniqueCellFormatsEnumeration::changeColor(const uno::Reference<sheet::XSpreadsheet>& xSheet,

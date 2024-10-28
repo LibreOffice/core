@@ -52,7 +52,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 {
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
         { "Text", uno::Any(u"comment"_ustr) },
     });
@@ -92,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
 {
     // Given a document with a biblio field, with non-empty LocalURL:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -134,7 +134,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyTargetURL1)
 {
     // Given a document with a biblio field, with non-empty LocalURL:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(
         xFactory->createInstance(u"com.sun.star.text.TextField.Bibliography"_ustr), uno::UNO_QUERY);
@@ -326,7 +326,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdState)
 {
     // tdf#149668: given a document with 3 paragraphs: an outer numbering on para 1 & 3, an inner
     // numbering on para 2:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     auto xTextDocument(mxComponent.queryThrow<text::XTextDocument>());
     auto xText(xTextDocument->getText());
     xText->insertControlCharacter(xText->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK,
@@ -420,7 +420,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListIdOnRestart)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
 {
     // Given a document with a clearing break:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
@@ -480,7 +480,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
 {
     // Given a document with an 50% wide text frame:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies
@@ -518,7 +518,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
 {
     // Given a broken document where both IsSyncHeightToWidth and IsSyncWidthToHeight are set to
     // true:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xTextFrame(
@@ -547,7 +547,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthAndHeight)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
 {
     // Given a document with a content control around one or more text portions:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -606,7 +606,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
 {
     // Given a document with a checkbox content control around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -679,7 +679,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
 {
     // Given a document with a dropdown content control around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -776,7 +776,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlExport)
 {
     // Given a document with a picture content control around an as-char image:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -835,7 +835,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPictureContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlExport)
 {
     // Given a document with a date content control around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -905,7 +905,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDateContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlExport)
 {
     // Given a document with a plain text content control around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -960,7 +960,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testPlainTextContentControlImport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
 {
     // Given a document with a combo box content control around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -988,7 +988,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testComboBoxContentControlExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testAliasContentControlExport)
 {
     // Given a document with a content control and its alias around a text portion:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -1130,7 +1130,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testScaleWidthRedline)
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
 {
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
@@ -1173,7 +1173,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testThemeExport)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFloatingTableExport)
 {
     // Given a document with a floating table:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     // Insert a table:
     uno::Sequence<beans::PropertyValue> aArgs = {
         comphelper::makePropertyValue(u"Rows"_ustr, static_cast<sal_Int32>(1)),

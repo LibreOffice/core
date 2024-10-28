@@ -149,8 +149,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testSemiTransparentMultiParaText)
 {
     // Given a shape with semi-transparent, multi-paragraph text:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.drawing.DrawingDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);
@@ -266,8 +265,7 @@ CPPUNIT_TEST_FIXTURE(SvgFilterTest, attributeRedefinedTest)
 CPPUNIT_TEST_FIXTURE(SvgFilterTest, testTab)
 {
     // Given a shape with "A\tB" text:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.TextShape"_ustr), uno::UNO_QUERY);

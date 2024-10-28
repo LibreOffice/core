@@ -637,7 +637,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testLargePage)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageResourceInlineXObjectRef)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -701,7 +701,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageResourceInlineXObjectRef)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDefaultVersion)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save as PDF.
     aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_pdf_Export"_ustr;
@@ -716,7 +716,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDefaultVersion)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion15)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Save as PDF.
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
@@ -1555,7 +1555,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf152235)
           { "WatermarkFontName", uno::Any(u"Liberation Sans"_ustr) },
           { "SelectPdfVersion", uno::Any(sal_Int32(17)) } }));
     aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 
     vcl::filter::PDFDocument aDocument;
@@ -4003,7 +4003,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf142129)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageRotate180)
 {
     // Create an empty document.
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -4238,7 +4238,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testURIs)
     // Create an empty document.
     // Note: The test harness gets very upset if we try and create multiple
     // documents, or recreate it; so reuse one instance for all the links
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -4330,7 +4330,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageAnnots)
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testPdfImageEncryption)
 {
     // Given an empty document, with an inserted PDF image:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();

@@ -2719,6 +2719,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf128106)
         = comphelper::InitPropertySequence({ { "FileName", css::uno::Any(maTempFile.GetURL()) } });
     dispatchCommand(mxComponent, u".uno:NewGlobalDoc"_ustr, aPropertyValues);
 
+    // Use loadFromDesktop instead of loadFromURL to avoid calling mxComponent->dispose()
+    // Otherwise it fails with 'DeInitVCL: some top Windows are still alive'
     mxComponent = loadFromDesktop(maTempFile.GetURL());
 
     SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();

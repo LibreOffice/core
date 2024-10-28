@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
 
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDFa)
 {
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
                                                                   uno::UNO_QUERY);
@@ -962,7 +962,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
 
 CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
 {
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(mxComponent,
                                                                          uno::UNO_QUERY);

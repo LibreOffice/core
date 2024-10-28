@@ -56,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(Test, testOOXMLCustomShapeBitmapFill)
 CPPUNIT_TEST_FIXTURE(Test, testThemeExport)
 {
     // Given a document with a master slide and a theme, lt1 is set to 0x000002:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     {
         uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<drawing::XMasterPageTarget> xDrawPage(

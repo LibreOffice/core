@@ -376,22 +376,17 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testPasteTableAtFlyAnchor)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCopyPastePageBreak)
 {
-    {
-        createSwDoc("pagebreak-source.fodt");
+    createSwDoc("pagebreak-source.fodt");
 
-        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
-        CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5669), pWrtShell->GetLayout()->GetLower()->getFramePrintArea().Top());
 
-        pWrtShell->SelAll();
-        dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
-
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
+    pWrtShell->SelAll();
+    dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     createSwDoc("pagebreak-target.fodt");
     SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell = getSwDocShell()->GetWrtShell();
 
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"WithMargin"_ustr, getProperty<OUString>(getParagraph(1), u"PageDescName"_ustr));

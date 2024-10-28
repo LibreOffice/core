@@ -545,7 +545,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testHardLinks)
     int nRet = link(aOld.getStr(), aNew.getStr());
     CPPUNIT_ASSERT_EQUAL(0, nRet);
 
-    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(aURL);
 
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     xStorable->store();
@@ -580,7 +580,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testtestOverwriteReadOnly)
     aFile.open(osl_File_OpenFlag_Create);
     aFile.close();
     osl::File::setAttributes(aURL, osl_File_Attribute_OwnRead);
-    mxComponent = loadFromDesktop(aURL, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(aURL);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     bool bFail = false;
 
@@ -604,8 +604,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testtestOverwriteReadOnly)
 CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
 {
     // tdf#60237 - try to overwrite an existing file using the different settings of the Overwrite option
-    mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(maTempFile.GetURL());
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xStorable.is());
 

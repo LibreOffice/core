@@ -34,7 +34,7 @@ public:
 
 CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     {
         uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
 

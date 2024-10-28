@@ -107,7 +107,7 @@ void ScDrawPageObj::setUp()
 {
     UnoApiTest::setUp();
     // create calc document
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScDrawPageObj);

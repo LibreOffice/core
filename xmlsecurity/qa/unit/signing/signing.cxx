@@ -138,7 +138,7 @@ SigningTest::getCertificate(DocumentSignatureManager& rSignatureManager,
 CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"writer8"_ustr);
 
@@ -170,7 +170,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDescription)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"writer8"_ustr);
 
@@ -204,7 +204,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSA)
 CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAOOXML)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"MS Word 2007 XML"_ustr);
 
@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 {
     // Create an empty document and store it to a tempfile, finally load it as
     // a stream.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"writer_pdf_Export"_ustr);
 
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testECDSAPDF)
 CPPUNIT_TEST_FIXTURE(SigningTest, testOOXMLDescription)
 {
     // Create an empty document and store it to a tempfile, finally load it as a storage.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"MS Word 2007 XML"_ustr);
 
@@ -893,7 +893,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdESNotype)
 CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 {
     // Create an empty document, store it to a tempfile and load it as a storage.
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"writer8"_ustr);
 
@@ -946,7 +946,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testXAdES)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 {
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"writer8"_ustr);
     {
@@ -1008,7 +1008,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
     Scheduler::ProcessEventsToIdle();
 
-    load(maTempFile.GetURL());
+    loadFromURL(maTempFile.GetURL());
 
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1019,7 +1019,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_ODT)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 {
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     save(u"MS Word 2007 XML"_ustr);
     {
@@ -1079,7 +1079,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testSigningMultipleTimes_OOXML)
 
     Scheduler::ProcessEventsToIdle();
 
-    load(maTempFile.GetURL());
+    loadFromURL(maTempFile.GetURL());
 
     SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
@@ -1373,7 +1373,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature12_ODF)
                        SignatureState::OK, ODFVER_012_TEXT);
 
         // create new document from template
-        load(aURL);
+        loadFromURL(aURL);
         CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                                mxComponent.is());
 
@@ -1428,7 +1428,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testDropMacroTemplateSignature)
                    SignatureState::NOTVALIDATED, OUString());
 
     // create new document from template
-    load(aURL);
+    loadFromURL(aURL);
     CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                            mxComponent.is());
 
@@ -1485,7 +1485,7 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testPreserveMacroTemplateSignature10)
                        SignatureState::NOTVALIDATED, OUString());
 
         // create new document from template
-        load(aURL);
+        loadFromURL(aURL);
         CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sLoadMessage, RTL_TEXTENCODING_UTF8).getStr(),
                                mxComponent.is());
 

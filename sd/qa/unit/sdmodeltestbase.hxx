@@ -49,7 +49,7 @@ public:
     void createSdImpressDoc(const char* pName = nullptr, const char* pPassword = nullptr)
     {
         if (!pName)
-            load(u"private:factory/simpress"_ustr);
+            loadFromURL(u"private:factory/simpress"_ustr);
         else
             loadFromFile(OUString::createFromAscii(pName), pPassword);
 
@@ -63,7 +63,7 @@ public:
     void createSdDrawDoc(const char* pName = nullptr, const char* pPassword = nullptr)
     {
         if (!pName)
-            load(u"private:factory/sdraw"_ustr);
+            loadFromURL(u"private:factory/sdraw"_ustr);
         else
             loadFromFile(OUString::createFromAscii(pName), pPassword);
 

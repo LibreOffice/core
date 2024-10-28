@@ -572,7 +572,7 @@ void ScUcalcTestBase::tearDown()
 void ScModelTestBase::createScDoc(const char* pName, const char* pPassword, bool bCheckWarningError)
 {
     if (!pName)
-        load(u"private:factory/scalc"_ustr);
+        loadFromURL(u"private:factory/scalc"_ustr);
     else
         loadFromFile(OUString::createFromAscii(pName), pPassword);
 

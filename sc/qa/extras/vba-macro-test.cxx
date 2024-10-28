@@ -445,7 +445,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVba)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -478,7 +478,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf149579)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaRangeSort)
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
@@ -688,10 +688,10 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf118247)
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
 {
-    auto xComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     // Save a copy of the file to get its URL
-    uno::Reference<frame::XStorable> xDocStorable(xComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);
     utl::TempFileNamed aTempFile(u"testWindowsActivate", true, u".ods");
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> descSaveAs(
@@ -699,7 +699,7 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     xDocStorable->storeAsURL(aTempFile.GetURL(), descSaveAs);
 
     // Insert initial library
-    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(mxComponent, uno::UNO_QUERY_THROW);
     auto xLibs = xDocScr->getBasicLibraries();
     auto xLibrary = xLibs->createLibrary(u"TestLibrary"_ustr);
     xLibrary->insertByName(
@@ -729,12 +729,12 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     uno::Sequence<sal_Int16> aOutParamIndex;
     uno::Sequence<uno::Any> aOutParam;
 
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(pDocSh);
 
     ErrCode result
-        = SfxObjectShell::CallXScript(xComponent,
+        = SfxObjectShell::CallXScript(mxComponent,
                                       u"vnd.sun.Star.script:TestLibrary.TestModule."
                                       "TestWindowsActivate?language=Basic&location=document"_ustr,
                                       {}, aRet, aOutParamIndex, aOutParam);
@@ -744,13 +744,11 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testTdf126457)
     sal_Int16 nReturnValue;
     aRet >>= nReturnValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), nReturnValue);
-
-    pDocSh->DoClose();
 }
 
 CPPUNIT_TEST_FIXTURE(VBAMacroTest, testVbaPDFExport)
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     // Save a copy of the file to get its URL
     uno::Reference<frame::XStorable> xDocStorable(mxComponent, uno::UNO_QUERY);

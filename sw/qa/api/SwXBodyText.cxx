@@ -68,8 +68,7 @@ SwXBodyText::SwXBodyText()
 
 Reference<XInterface> SwXBodyText::init()
 {
-    mxComponent
-        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
     Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
 

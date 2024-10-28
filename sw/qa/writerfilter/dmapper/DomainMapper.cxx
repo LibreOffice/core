@@ -194,8 +194,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleParaBorder)
 CPPUNIT_TEST_FIXTURE(Test, testRTFStylePaste)
 {
     // Given an empty Writer document:
-    mxComponent
-        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When pasting RTF that has unreferenced paragraph styles:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

@@ -98,7 +98,7 @@ void ScEditFieldObj_Header::setUp()
 {
     UnoApiTest::setUp();
     // Load an empty document.
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 void ScEditFieldObj_Header::tearDown()

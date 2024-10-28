@@ -62,8 +62,7 @@ void AccessibleRelationSet::init(uno::Reference<css::accessibility::XAccessible>
                                  uno::Reference<css::accessibility::XAccessible>& para2,
                                  uno::Reference<css::accessibility::XAccessible>& para3)
 {
-    mxComponent
-        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY);
 
     css::uno::Reference<text::XText> oText(xTextDoc->getText(), uno::UNO_SET_THROW);

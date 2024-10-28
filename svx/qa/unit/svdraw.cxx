@@ -89,7 +89,7 @@ xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 {
     // Create a new Draw document with a rectangle.
-    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
+    loadFromURL(u"private:factory/sdraw"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 {
     // Given a path object:
-    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
+    loadFromURL(u"private:factory/sdraw"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.ClosedBezierShape"_ustr), uno::UNO_QUERY);
@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
 {
     // Given a document with a groupshape, which has 2 children.
-    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
+    loadFromURL(u"private:factory/sdraw"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xRect1(
         xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);

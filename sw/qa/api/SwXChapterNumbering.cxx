@@ -43,8 +43,7 @@ public:
 
     Reference<XInterface> init() override
     {
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
-                                      u"com.sun.star.text.TextDocument"_ustr);
+        loadFromURL(u"private:factory/swriter"_ustr);
         Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
 
         Reference<text::XChapterNumberingSupplier> xCNSupplier(xTextDocument, UNO_QUERY_THROW);

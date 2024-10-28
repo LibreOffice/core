@@ -51,7 +51,7 @@ public:
 };
 
 uno::Reference<XOfficeDatabaseDocument> DBTestBase::getDocumentForUrl(OUString const & url) {
-    mxComponent = loadFromDesktop(url);
+    loadFromURL(url);
     uno::Reference< XOfficeDatabaseDocument > xDocument(mxComponent, UNO_QUERY_THROW);
     return xDocument;
 }
@@ -81,7 +81,7 @@ void DBTestBase::createDBDocument(const OUString& rDriverURL)
 
     xStorable->storeAsURL(maTempFile.GetURL(), uno::Sequence< beans::PropertyValue >());
 
-    mxComponent = loadFromDesktop(maTempFile.GetURL());
+    loadFromURL(maTempFile.GetURL());
     CPPUNIT_ASSERT(mxComponent);
 }
 

@@ -75,7 +75,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DDELinksEnumeration::init()
 void ScIndexEnumeration_DDELinksEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_DDELinksEnumeration);

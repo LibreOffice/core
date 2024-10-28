@@ -1541,10 +1541,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBrokenPackage_Tdf159474)
     // Given an invalid ODF having a stream not referenced in manifest.xml
     const OUString url = createFileURL(u"unreferenced_stream.odt");
     // It expectedly fails to load normally:
-    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromDesktop(url, {}, {}));
+    CPPUNIT_ASSERT_ASSERTION_FAIL(loadFromURL(url));
     // importing it must succeed with RepairPackage set to true.
-    mxComponent
-        = loadFromDesktop(url, {}, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
+    loadWithParams(url, { comphelper::makePropertyValue(u"RepairPackage"_ustr, true) });
     // The document imports in repair mode; the original broken package is used as a template,
     // and the loaded document has no URL:
     CPPUNIT_ASSERT(mxComponent.queryThrow<frame::XModel>()->getURL().isEmpty());

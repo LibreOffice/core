@@ -41,7 +41,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
     // Load a document and select the first shape.
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"ReadOnly"_ustr, true) };
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr, u""_ustr, aArgs);
+    loadWithParams(u"private:factory/simpress"_ustr, aArgs);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage(
@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNoGrabBagShape)
 CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
 {
     // Create a test file in a directory that contains the URL-encoded "testÿ" string.
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     OUString aTargetDir
@@ -75,10 +75,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
     css::uno::Sequence<css::beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
         u"FilterName"_ustr, u"writer8"_ustr) };
     pBaseModel->storeAsURL(aTargetFile, aArgs);
-    mxComponent->dispose();
 
     // Load it and export to PDF.
-    mxComponent = loadFromDesktop(aTargetFile);
+    loadFromURL(aTargetFile);
     pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     OUString aPdfTarget = aTargetDir + "/test.pdf";
     css::uno::Sequence<css::beans::PropertyValue> aPdfArgs{ comphelper::makePropertyValue(
@@ -93,7 +92,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTempFilePath)
 CPPUNIT_TEST_FIXTURE(Test, testSetDocumentPropertiesUpdate)
 {
     // Given a document with 3 custom props, 2 Zotero ones and one other:
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     auto pBaseModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     CPPUNIT_ASSERT(pBaseModel);
     uno::Reference<document::XDocumentProperties> xDP = pBaseModel->getDocumentProperties();

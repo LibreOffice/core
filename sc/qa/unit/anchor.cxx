@@ -159,7 +159,7 @@ void ScAnchorTest::testUndoAnchor()
 
 void ScAnchorTest::testTdf76183()
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(mxComponent);
     ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     ScDocument& rDoc = pDocSh->GetDocument();

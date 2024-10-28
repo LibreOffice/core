@@ -105,7 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSaveOnThread)
         comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
     };
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    loadWithParams(aURL, aLoadProperties);
 
     // When saving that document on a thread:
     OdtExportThread aThread(mxComponent, maTempFile.GetURL());

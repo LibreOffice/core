@@ -64,7 +64,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_DatabaseRangesEnumeration::in
 void ScIndexEnumeration_DatabaseRangesEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_DatabaseRangesEnumeration);

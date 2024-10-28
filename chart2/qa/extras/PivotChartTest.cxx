@@ -540,7 +540,7 @@ void PivotChartTest::testPivotChartWithOneColumnField()
 
     // SETUP DATA and PIVOT TABLE
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -624,7 +624,7 @@ void PivotChartTest::testPivotChartWithOneRowField()
 
     // SETUP DATA and PIVOT TABLE
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -684,7 +684,7 @@ void PivotChartTest::testPivotTableDataProvider_PivotTableFields()
 {
     // SETUP DATA and PIVOT TABLE
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -791,7 +791,7 @@ void PivotChartTest::testPivotChartRowFieldInOutlineMode()
 {
     // SETUP DATA and PIVOT TABLE
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 
@@ -923,7 +923,7 @@ void PivotChartTest::testPivotChartWithDateRowField()
 {
     // SETUP DATA and PIVOT TABLE
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xSheetDoc(mxComponent, uno::UNO_QUERY_THROW);
 

@@ -103,8 +103,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTdf93998)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
 {
     // Create an Impress document an insert a table shape.
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(
         xFactory->createInstance(u"com.sun.star.drawing.TableShape"_ustr), uno::UNO_QUERY);
@@ -160,8 +159,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTableShadowDirect)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
 {
     // Create a title shape with 2 paragraphs in it.
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPages> xDrawPages = xSupplier->getDrawPages();
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
@@ -193,8 +191,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)
 {
     // Given an empty Impress document:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
 
     // When exporting that document to PNG with a JSON size:
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);

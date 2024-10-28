@@ -90,7 +90,7 @@ Color asColor(com::sun::star::rendering::RGBColor const& rRGBColor)
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
 {
     // Given an empty document with default fonts (Liberation Sans, Lucida Sans, etc):
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When saving that document to ODT:
     save(u"writer8"_ustr);

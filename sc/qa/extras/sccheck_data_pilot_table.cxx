@@ -79,7 +79,7 @@ uno::Reference<uno::XInterface> CheckDataPilotTable::init()
     // create a calc document
     if (!mxComponent.is())
         // Load an empty document.
-        mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+        loadFromURL(u"private:factory/scalc"_ustr);
     else
         return mxObject;
 

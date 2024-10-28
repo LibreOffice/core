@@ -50,7 +50,7 @@ void Chart2UiChartTest::testCopyPasteToNewSheet(uno::Reference<chart::XChartDocu
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf99969)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new writer document
-    load(u"private:factory/swriter"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf98690)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
@@ -519,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf153706)
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
 
     // create a new document
-    load(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     // Paste; this must create a chart with own data source having a proper copy of the data
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});

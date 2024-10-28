@@ -105,8 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
 CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
 {
     // Given a document with a table shape, editing cell text:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"Rows"_ustr, sal_Int32(2)),
             comphelper::makePropertyValue(u"Columns"_ustr, sal_Int32(2)) };

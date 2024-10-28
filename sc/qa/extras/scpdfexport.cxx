@@ -259,7 +259,7 @@ void ScPDFExportTest::testPopupRectangleSize_Tdf162955()
 void ScPDFExportTest::testExportRange_Tdf120161()
 {
     // create test document
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
@@ -319,7 +319,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
 void ScPDFExportTest::testExportFitToPage_Tdf103516()
 {
     // create test document
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
@@ -775,7 +775,7 @@ void ScPDFExportTest::testTdf120190()
         return;
     }
 
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);

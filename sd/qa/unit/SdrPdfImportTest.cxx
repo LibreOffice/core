@@ -238,7 +238,7 @@ CPPUNIT_TEST_FIXTURE(SdrPdfImportTest, testAnnotationsImportExport)
                              pPDFAnnotation2->getSubType()); // Pop-up annotation
 
         // Load document again
-        mxComponent = loadFromDesktop(maTempFile.GetURL());
+        loadFromURL(maTempFile.GetURL());
         auto pNewImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
         sd::ViewShell* pNewViewShell = pNewImpressDocument->GetDocShell()->GetViewShell();
         CPPUNIT_ASSERT(pNewViewShell);

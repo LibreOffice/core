@@ -44,7 +44,7 @@ void DialogSaveTest::test()
 {
     createTempCopy(u"testDialogSave.odb");
     {
-        mxComponent = loadFromDesktop(maTempFile.GetURL());
+        loadFromURL(maTempFile.GetURL());
         uno::Reference< frame::XStorable > xDocStorable(mxComponent, UNO_QUERY_THROW);
         uno::Reference< document::XEmbeddedScripts > xDocScr(mxComponent, UNO_QUERY_THROW);
         uno::Reference< script::XStorageBasedLibraryContainer > xStorBasLib(xDocScr->getBasicLibraries());

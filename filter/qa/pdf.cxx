@@ -71,8 +71,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     }
 
     // Given an empty document:
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting to PDF, and referring to a certificate using a subject name:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -106,8 +105,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
         return;
 
     // Given an empty Writer document:
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When inserting a 267 points wide PDF image into the document:
     uno::Sequence<beans::PropertyValue> aArgs = {
@@ -189,8 +187,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkColor)
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting that as PDF with a red watermark:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -234,8 +231,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontHeight)
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting that as PDF with a 100pt-sized watermark:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -280,8 +276,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkFontName)
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting that as PDF with a serif watermark:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -326,8 +321,7 @@ CPPUNIT_TEST_FIXTURE(Test, testWatermarkRotateAngle)
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
     if (!pPDFium)
         return;
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting that as PDF with a rotated watermark:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
@@ -405,7 +399,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificatePEM)
         comphelper::makePropertyValue("SignCertificateKeyPem", aKeyPem),
         comphelper::makePropertyValue("aSignCertificateCaPem", aCaPem),
     };
-    mxComponent.set(loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When exporting to PDF, and referring to a certificate using a cert/key/ca PEM, which is not
     // in the NSS database:

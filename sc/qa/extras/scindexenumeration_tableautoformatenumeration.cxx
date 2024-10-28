@@ -60,7 +60,7 @@ uno::Reference<uno::XInterface> ScIndexEnumeration_TableAutoFormatEnumeration::i
 void ScIndexEnumeration_TableAutoFormatEnumeration::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScIndexEnumeration_TableAutoFormatEnumeration);

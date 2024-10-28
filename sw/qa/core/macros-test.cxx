@@ -424,7 +424,7 @@ void SwMacrosTest::testFdo68983()
 
 void SwMacrosTest::testFdo87530()
 {
-    mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     {
         // insert initial password protected library
@@ -481,8 +481,7 @@ void SwMacrosTest::testFdo87530()
 void SwMacrosTest::testFindReplace()
 {
     // we need a full document with view and layout etc. because ::GetNode()
-    mxComponent =
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     SwXTextDocument *const pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);

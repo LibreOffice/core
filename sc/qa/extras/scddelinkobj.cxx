@@ -95,7 +95,7 @@ void ScDDELinkObj::setUp()
     Application::SetAppName(u"soffice"_ustr); // Enable DDE
     UnoApiTest::setUp();
     // create a calc document
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     createTempCopy(u"ScDDELinksObj.ods");
 }

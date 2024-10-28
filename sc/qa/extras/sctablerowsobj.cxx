@@ -114,7 +114,7 @@ uno::Reference<uno::XInterface> ScTableRowsObj::getXCellRange()
 void ScTableRowsObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScTableRowsObj);

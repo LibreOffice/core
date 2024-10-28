@@ -57,8 +57,7 @@ public:
 
     Reference<XInterface> init() override
     {
-        mxComponent = loadFromDesktop(u"private:factory/swriter"_ustr,
-                                      u"com.sun.star.text.TextDocument"_ustr);
+        loadFromURL(u"private:factory/swriter"_ustr);
         mxTextDocument = Reference<text::XTextDocument>(mxComponent, UNO_QUERY_THROW);
         Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
         Reference<text::XDocumentIndex> xDocumentIndex(

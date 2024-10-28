@@ -35,7 +35,7 @@ public:
 
 void ScRecordChangesTest::testSetRecordChanges()
 {
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDocSettingsPropSet(xDoc, UNO_QUERY_THROW);

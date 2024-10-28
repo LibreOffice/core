@@ -35,8 +35,7 @@ public:
 CPPUNIT_TEST_FIXTURE(Test, testPasteBulletListStyleName)
 {
     // Given a document with a WWNum1 list style:
-    mxComponent
-        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent,
                                                                          uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies

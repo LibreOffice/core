@@ -93,8 +93,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
 {
     // Given an empty Impress document with a (title) shape:
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr,
-                                  u"com.sun.star.presentation.PresentationDocument"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
 
     // When setting the theme index of the shape's fill color:
     uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);

@@ -55,7 +55,7 @@ void MathMLExportTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
 
 void MathMLExportTest::testBlank()
 {
-    mxComponent = loadFromDesktop(u"private:factory/smath"_ustr);
+    loadFromURL(u"private:factory/smath"_ustr);
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"x`y~~z"_ustr);
@@ -68,7 +68,7 @@ void MathMLExportTest::testBlank()
 
 void MathMLExportTest::testTdf97049()
 {
-    mxComponent = loadFromDesktop(u"private:factory/smath"_ustr);
+    loadFromURL(u"private:factory/smath"_ustr);
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"intd {{1 over x} dx}"_ustr);
@@ -107,7 +107,7 @@ void MathMLExportTest::checkMathVariant(SmDocShell& rDocShell, bool bCapital, bo
 
 void MathMLExportTest::testTdf101022()
 {
-    mxComponent = loadFromDesktop(u"private:factory/smath"_ustr);
+    loadFromURL(u"private:factory/smath"_ustr);
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
 
@@ -122,7 +122,7 @@ void MathMLExportTest::testTdf101022()
 
 void MathMLExportTest::testMaj()
 {
-    mxComponent = loadFromDesktop(u"private:factory/smath"_ustr);
+    loadFromURL(u"private:factory/smath"_ustr);
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(
@@ -136,7 +136,7 @@ void MathMLExportTest::testMaj()
 
 void MathMLExportTest::testHadd()
 {
-    mxComponent = loadFromDesktop(u"private:factory/smath"_ustr);
+    loadFromURL(u"private:factory/smath"_ustr);
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(u"hadd to { \U0001EE4E } from { \U0001EE4E } \U0001EE4E"_ustr);

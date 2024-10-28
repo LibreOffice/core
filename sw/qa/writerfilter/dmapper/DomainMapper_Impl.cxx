@@ -233,8 +233,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
 CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
 {
     // Given an empty document:
-    mxComponent
-        = loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr);
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // When pasting RTF into that document:
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);

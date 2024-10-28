@@ -122,7 +122,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf141301_Extrusion_Angle)
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
 {
     // Create an Impress document which has a master page which has a theme associated with it.
-    mxComponent = loadFromDesktop(u"private:factory/simpress"_ustr);
+    loadFromURL(u"private:factory/simpress"_ustr);
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
@@ -279,7 +279,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
 
     save(u"impress8"_ustr);
 
-    load(maTempFile.GetURL());
+    loadFromURL(maTempFile.GetURL());
 
     checkFillAndLineComplexColors(getShape(0));
 }
@@ -734,7 +734,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     // Without fix for tdf#156975 it was not written at all.
     // The test needs to be adapted, when themes are available in ODF.
 
-    mxComponent = loadFromDesktop(u"private:factory/sdraw"_ustr);
+    loadFromURL(u"private:factory/sdraw"_ustr);
     // generate a theme to be sure we have got one and know the values
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(

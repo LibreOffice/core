@@ -100,7 +100,7 @@ ScAnnotationShapeObj::ScAnnotationShapeObj()
 void ScAnnotationShapeObj::setUp()
 {
     UnoApiTest::setUp();
-    mxComponent = loadFromDesktop(u"private:factory/scalc"_ustr);
+    loadFromURL(u"private:factory/scalc"_ustr);
 }
 
 void ScAnnotationShapeObj::tearDown()

@@ -46,8 +46,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
                                                                                    pBatchReset);
         pBatchReset->commit();
     });
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
@@ -79,8 +78,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
         officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::set(true, pBatchReset);
         pBatchReset->commit();
     });
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
@@ -112,8 +110,7 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
         officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::set(true, pBatchReset);
         pBatchReset->commit();
     });
-    mxComponent.set(
-        loadFromDesktop(u"private:factory/swriter"_ustr, u"com.sun.star.text.TextDocument"_ustr));
+    loadFromURL(u"private:factory/swriter"_ustr);
 
     // Insert a PDF file as an embedded object.
     uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
