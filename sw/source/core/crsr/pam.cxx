@@ -1164,7 +1164,10 @@ void GoEndSection( SwPosition * pPos )
     SwNodes& rNodes = pPos->GetNodes();
     sal_uInt16 nLevel = SwNodes::GetSectionLevel( pPos->GetNode() );
     if( pPos->GetNode() < *rNodes.GetEndOfContent().StartOfSectionNode() )
+    {
+        assert(nLevel > 0);
         nLevel--;
+    }
     do { SwNodes::GoEndOfSection( &pPos->nNode ); } while( nLevel-- );
 
     // now on an EndNode, thus to the previous ContentNode
