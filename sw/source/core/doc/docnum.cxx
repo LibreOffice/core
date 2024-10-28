@@ -2670,10 +2670,12 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
         if( nullptr != pNumRule )
         {
             const OUString sNm = pNumRule->GetName();
-            if( sNm.startsWith( aName ) )
+            std::u16string_view aSuffix;
+            if( sNm.startsWith( aName, &aSuffix ) && aSuffix.size() > 0 )
             {
                 // Determine Number and set the Flag
-                nNum = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sNm.subView( nNmLen )));
+                nNum = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(aSuffix));
+                assert(nNum > 0);
                 if( nNum-- && nNum < mpNumRuleTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
