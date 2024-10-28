@@ -134,27 +134,24 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
 
-    css::uno::Reference< css::accessibility::XAccessible > xChild;
     sal_Int32 nIndex = 0;
     if (mpBrowseBox->ConvertPointToControlIndex(nIndex, VCLUnoHelper::ConvertToVCLPoint(rPoint)))
-        xChild = mpBrowseBox->CreateAccessibleControl( nIndex );
-    else
-    {
-        // try whether point is in one of the fixed children
-        // (table, header bars, corner control)
-        Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
-        for( nIndex = 0; (nIndex < vcl::BBINDEX_FIRSTCONTROL) && !xChild.is(); ++nIndex )
-        {
-            css::uno::Reference< css::accessibility::XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
-            css::uno::Reference< css::accessibility::XAccessibleComponent >
-                xCurrChildComp( xCurrChild, uno::UNO_QUERY );
+        return mpBrowseBox->CreateAccessibleControl(nIndex);
 
-            if (xCurrChildComp.is()
-                && VCLUnoHelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
-                xChild = std::move(xCurrChild);
-        }
+    // try whether point is in one of the fixed children
+    // (table, header bars, corner control)
+    Point aPoint(VCLUnoHelper::ConvertToVCLPoint(rPoint));
+    for (nIndex = 0; nIndex < vcl::BBINDEX_FIRSTCONTROL; ++nIndex)
+    {
+        css::uno::Reference< css::accessibility::XAccessible > xCurrChild(implGetFixedChild(nIndex));
+        css::uno::Reference< css::accessibility::XAccessibleComponent >
+            xCurrChildComp( xCurrChild, uno::UNO_QUERY );
+
+        if (xCurrChildComp.is()
+            && VCLUnoHelper::ConvertToVCLRect(xCurrChildComp->getBounds()).Contains(aPoint))
+            return xCurrChild;
     }
-    return xChild;
+    return nullptr;
 }
 
 
