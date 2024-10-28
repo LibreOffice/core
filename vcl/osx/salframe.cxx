@@ -244,20 +244,6 @@ void AquaSalFrame::initWindowAndView()
 
     [mpNSWindow setRestorable:NO];
 
-    // tdf#155092 use tracking areas instead of tracking rectangles
-    // Apparently, the older, tracking rectangles selectors cause
-    // unexpected window resizing upon the first mouse down after the
-    // window has been manually resized so switch to the newer,
-    // tracking areas selectors. Also, the NSTrackingInVisibleRect
-    // option allows us to create one single tracking area that
-    // resizes itself automatically over the lifetime of the view.
-    // Note: for some unknown reason, both NSTrackingMouseMoved and
-    // NSTrackingAssumeInside are necessary options for this fix
-    // to work.
-    NSTrackingArea *pTrackingArea = [[NSTrackingArea alloc] initWithRect: [mpNSView bounds] options: ( NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved | NSTrackingActiveAlways | NSTrackingAssumeInside | NSTrackingInVisibleRect ) owner: mpNSView userInfo: nil];
-    [mpNSView addTrackingArea: pTrackingArea];
-    [pTrackingArea release];
-
     maSysData.mpNSView = mpNSView;
 
     UpdateFrameGeometry();
