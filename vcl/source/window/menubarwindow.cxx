@@ -794,7 +794,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
                 }
                 if ( nCode == KEY_RIGHT || nCode == KEY_HOME )
                 {
-                    n++;
+                    n = (n == ITEMPOS_INVALID) ? 0 : n + 1;
                     if ( n >= m_pMenu->GetItemCount() )
                         n = 0;
                 }
