@@ -1691,12 +1691,8 @@ sal_Int32 SwXFootnotes::getCount()
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = 0;
-    auto& rIdxs = GetDoc().GetFootnoteIdxs();
-    const size_t nFootnoteCnt = rIdxs.size();
-    SwTextFootnote* pTextFootnote;
-    for( size_t n = 0; n < nFootnoteCnt; ++n )
+    for (const SwTextFootnote* pTextFootnote : GetDoc().GetFootnoteIdxs())
     {
-        pTextFootnote = rIdxs[n];
         const SwFormatFootnote& rFootnote = pTextFootnote->GetFootnote();
         if ( rFootnote.IsEndNote() != m_bEndnote )
             continue;
@@ -1707,38 +1703,28 @@ sal_Int32 SwXFootnotes::getCount()
 
 uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 {
+    if (nIndex < 0)
+        throw IndexOutOfBoundsException();
     return uno::Any(uno::Reference< XFootnote >(getFootnoteByIndex(nIndex)));
 }
 
 rtl::Reference<SwXFootnote> SwXFootnotes::getFootnoteByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    rtl::Reference<SwXFootnote> xRef;
     sal_Int32 nCount = 0;
 
     auto& rDoc = GetDoc();
-    auto& rIdxs = rDoc.GetFootnoteIdxs();
-    const size_t nFootnoteCnt = rIdxs.size();
-    SwTextFootnote* pTextFootnote;
-    for( size_t n = 0; n < nFootnoteCnt; ++n )
+    for (const SwTextFootnote* pTextFootnote : rDoc.GetFootnoteIdxs())
     {
-        pTextFootnote = rIdxs[n];
         const SwFormatFootnote& rFootnote = pTextFootnote->GetFootnote();
         if ( rFootnote.IsEndNote() != m_bEndnote )
             continue;
 
         if(nCount == nIndex)
-        {
-            xRef = SwXFootnote::CreateXFootnote(rDoc,
-                    &const_cast<SwFormatFootnote&>(rFootnote));
-            break;
-        }
+            return SwXFootnote::CreateXFootnote(rDoc, &const_cast<SwFormatFootnote&>(rFootnote));
         nCount++;
     }
-    if(!xRef.is())
-        throw IndexOutOfBoundsException();
-
-    return xRef;
+    throw IndexOutOfBoundsException();
 }
 
 uno::Type SAL_CALL SwXFootnotes::getElementType()
@@ -1789,56 +1775,36 @@ sal_Int32 SwXReferenceMarks::getCount()
 
 uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
 {
-    SolarMutexGuard aGuard;
-    uno::Any aRet;
-    uno::Reference< XTextContent >  xRef;
     if(0 <= nIndex && nIndex < SAL_MAX_UINT16)
     {
+        SolarMutexGuard aGuard;
         auto& rDoc = GetDoc();
-        SwFormatRefMark *const pMark = const_cast<SwFormatRefMark*>(
-                rDoc.GetRefMark(o3tl::narrowing<sal_uInt16>(nIndex)));
-        if(pMark)
-        {
-            xRef = SwXReferenceMark::CreateXReferenceMark(rDoc, pMark);
-            aRet <<= xRef;
-        }
+        if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(nIndex)))
+            return uno::Any(
+                uno::Reference<XTextContent>(SwXReferenceMark::CreateXReferenceMark(rDoc, pMark)));
     }
-    if(!xRef.is())
-        throw IndexOutOfBoundsException();
-    return aRet;
+    throw IndexOutOfBoundsException();
 }
 
 uno::Any SwXReferenceMarks::getByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
-
     auto& rDoc = GetDoc();
-    SwFormatRefMark *const pMark =
-        const_cast<SwFormatRefMark*>(rDoc.GetRefMark(rName));
-    if(!pMark)
-        throw NoSuchElementException();
+    if (auto* const pMark = const_cast<SwFormatRefMark*>(rDoc.GetRefMark(rName)))
+        return uno::Any(
+            uno::Reference<XTextContent>(SwXReferenceMark::CreateXReferenceMark(rDoc, pMark)));
 
-    uno::Reference<XTextContent> const xRef =
-        SwXReferenceMark::CreateXReferenceMark(rDoc, pMark);
-    aRet <<= xRef;
-
-    return aRet;
+    throw NoSuchElementException();
 }
 
 uno::Sequence< OUString > SwXReferenceMarks::getElementNames()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aRet;
 
     std::vector<OUString> aStrings;
-    const sal_uInt16 nCount = GetDoc().GetRefMarks(&aStrings);
-    aRet.realloc(nCount);
-    OUString* pNames = aRet.getArray();
-    for(sal_uInt16 i = 0; i < nCount; i++)
-        pNames[i] = aStrings[i];
+    GetDoc().GetRefMarks(&aStrings);
 
-    return aRet;
+    return comphelper::containerToSequence(aStrings);
 }
 
 sal_Bool SwXReferenceMarks::hasByName(const OUString& rName)
