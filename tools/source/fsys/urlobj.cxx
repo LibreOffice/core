@@ -2849,6 +2849,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
                         goto done;
                 else if (rtl::isAsciiDigit(*p) && nDigits < 3)
                 {
+                    assert(nNumber < 999);
                     nNumber = 10 * nNumber + INetMIME::getWeight(*p);
                     ++nDigits;
                 }
