@@ -399,7 +399,6 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
 {
     OExternalLockGuard aGuard( this );
 
-    Reference< XAccessible > xChild;
     for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
     {
         Reference< XAccessible > xAcc = getAccessibleChild( i );
@@ -412,14 +411,13 @@ Reference< XAccessible > VCLXAccessibleTabPage::getAccessibleAtPoint( const awt:
                 Point aPos = VCLUnoHelper::ConvertToVCLPoint(rPoint);
                 if ( aRect.Contains( aPos ) )
                 {
-                    xChild = std::move(xAcc);
-                    break;
+                    return xAcc;
                 }
             }
         }
     }
 
-    return xChild;
+    return nullptr;
 }
 
 
