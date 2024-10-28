@@ -332,10 +332,10 @@ std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
     Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
 
     // https://en.wikipedia.org/wiki/Alpha_compositing
-    // We are here calculating transperency fill color against background with
+    // We are here calculating transparency fill color against background with
     // To put it is simple words with example
     // I.E: fill is Red (FF0000) and background is pure white (FFFFFF)
-    // If we add 50% transperency to fill color will look like Pink(ff7777)
+    // If we add 50% transparency to fill color will look like Pink(ff7777)
 
     // TODO: calculate this colors based on object in background  and not just the doc color
     aResult.SetRed(
