@@ -176,7 +176,7 @@ private:
         while (!isTerminateRequested())
         {
             std::optional<DataStream::LinesType> oLines;
-            std::unique_lock aGuard(maMtxLines);
+            std::unique_lock aGuard(getLinesMutex());
 
             if (!maUsedLines.empty())
             {
