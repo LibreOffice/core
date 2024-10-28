@@ -252,6 +252,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
 
             // filter group names
             pLine++;
+            assert(nLineLen > 0);
             nLineLen--;
             // remove spaces and tabs
             while ( (*pLine == ' ') || (*pLine == '\t') )
