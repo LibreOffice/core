@@ -54,7 +54,7 @@
     </group>
     <group oor:name="ConfigurableSettings" oor:extensible="true">
       <info>
-        <desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: "EnableATToolSupport" (valid values = "true", "false").</desc>
+        <desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing whether printing is deactivated is: "DisablePrinting" (valid values = "true", "false").</desc>
       </info>
     </group>
     <group oor:name="ExtraLanguage">

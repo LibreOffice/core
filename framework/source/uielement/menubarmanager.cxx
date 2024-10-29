@@ -959,7 +959,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, static_cast<MenuBar *>(pMenu) );
     }
 
-    bool    bAccessibilityEnabled( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() );
+    const bool bAccessibilityEnabled = MiscSettings::GetEnableATToolSupport();
     sal_uInt16 nItemCount = pMenu->GetItemCount();
     OUString aItemCommand;
     m_aMenuItemHandlerVector.reserve(nItemCount);

@@ -663,10 +663,7 @@ class VCL_DLLPUBLIC MiscSettings
 public:
                                     MiscSettings();
 
-#ifdef _WIN32
-    void                            SetEnableATToolSupport( bool bEnable );
-#endif
-    bool                            GetEnableATToolSupport() const;
+    static bool                     GetEnableATToolSupport();
     bool                            GetDisablePrinting() const;
     void                            SetEnableLocalizedDecimalSep( bool bEnable );
     bool                            GetEnableLocalizedDecimalSep() const;

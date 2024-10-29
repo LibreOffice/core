@@ -5612,19 +5612,6 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     uno::Reference<accessibility::XMSAAService> xMSAA;
     if (ImplSalYieldMutexTryToAcquire())
     {
-        if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
-        {
-            // IA2 should be enabled automatically
-            AllSettings aSettings = Application::GetSettings();
-            MiscSettings aMisc = aSettings.GetMiscSettings();
-            aMisc.SetEnableATToolSupport(true);
-            // The above is enough, since aMisc changes the same shared ImplMiscData as used in global
-            // settings, so no need to call aSettings.SetMiscSettings and Application::SetSettings
-
-            if (!Application::GetSettings().GetMiscSettings().GetEnableATToolSupport())
-                return false; // locked down somehow ?
-        }
-
         ImplSVData* pSVData = ImplGetSVData();
 
         // Make sure to launch Accessibility only the following criteria are satisfied
@@ -5638,8 +5625,7 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
     }
     else
     {   // tdf#155794: access without locking: hopefully this should be fine
-        // as the bridge is typically inited in Desktop::Main() already and the
-        // WM_GETOBJECT is received only on the main thread and by the time in
+        // as WM_GETOBJECT is received only on the main thread and by the time in
         // VCL shutdown when ImplSvData dies there should not be Windows any
         // more that could receive messages.
         xMSAA.set(ImplGetSVData()->mxAccessBridge, uno::UNO_QUERY);

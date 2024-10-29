@@ -224,7 +224,6 @@ struct ImplStyleData
 struct ImplMiscData
 {
                                     ImplMiscData();
-    TriState                        mnEnableATT;
     bool                            mbEnableLocalizedDecimalSep;
     TriState                        mnDisablePrinting;
 };
@@ -2666,7 +2665,6 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 }
 
 ImplMiscData::ImplMiscData() :
-    mnEnableATT(TRISTATE_INDET),
     mnDisablePrinting(TRISTATE_INDET)
 {
     static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
@@ -2683,8 +2681,7 @@ bool MiscSettings::operator ==( const MiscSettings& rSet ) const
     if ( mxData == rSet.mxData )
         return true;
 
-    return (mxData->mnEnableATT           == rSet.mxData->mnEnableATT ) &&
-         (mxData->mnDisablePrinting     == rSet.mxData->mnDisablePrinting ) &&
+    return (mxData->mnDisablePrinting     == rSet.mxData->mnDisablePrinting ) &&
          (mxData->mbEnableLocalizedDecimalSep == rSet.mxData->mbEnableLocalizedDecimalSep );
 }
 
@@ -2708,48 +2705,15 @@ bool MiscSettings::GetDisablePrinting() const
     return mxData->mnDisablePrinting != TRISTATE_FALSE;
 }
 
-bool MiscSettings::GetEnableATToolSupport() const
+bool MiscSettings::GetEnableATToolSupport()
 {
-    if( mxData->mnEnableATT == TRISTATE_INDET )
-    {
-        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( !pEnv || !*pEnv )
-        {
-            OUString aEnable =
-                vcl::SettingsConfigItem::get()->
-                getValue( u"Accessibility"_ustr,
-                          u"EnableATToolSupport"_ustr );
-            mxData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
-        }
-        else
-        {
-            mxData->mnEnableATT = TRISTATE_TRUE;
-        }
-    }
+    static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED");
+    if (pEnv && *pEnv)
+        return true;
 
-    return mxData->mnEnableATT != TRISTATE_FALSE;
+    ImplSVData* pSVData = ImplGetSVData();
+    return pSVData->mxAccessBridge.is();
 }
-
-#ifdef _WIN32
-void MiscSettings::SetEnableATToolSupport( bool bEnable )
-{
-    if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mxData->mnEnableATT )
-    {
-        if (bEnable)
-            ImplInitAccessBridge();
-
-        mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
-
-        if (o3tl::IsRunningUnitTest())
-            return; // no SettingsConfigItem modification
-
-        vcl::SettingsConfigItem::get()->
-            setValue( "Accessibility",
-                      "EnableATToolSupport",
-                      bEnable ? OUString("true") : OUString("false" ) );
-    }
-}
-#endif
 
 void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 {

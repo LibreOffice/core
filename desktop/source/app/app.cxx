@@ -1403,10 +1403,6 @@ int Desktop::Main()
             return EXIT_FAILURE;
         }
     }
-
-    // check if accessibility is enabled
-    if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
-        InitAccessBridge();
 #endif
 
     // terminate if requested...
