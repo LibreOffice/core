@@ -51,7 +51,7 @@ public:
     virtual std::unique_ptr<weld::CheckButton> weld_check_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::Scale> weld_scale(const OUString&) override;
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OUString&) override;
-    virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString&) override;
+    virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& rId) override;
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OUString&) override;
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& rId) override;
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString&) override;

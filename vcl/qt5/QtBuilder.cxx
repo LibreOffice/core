@@ -25,6 +25,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
@@ -200,6 +201,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         extractMnemonicWidget(sID, rMap);
         pObject = new QLabel(pParentWidget);
+    }
+    else if (sName == u"GtkLevelBar")
+    {
+        QProgressBar* pProgressBar = new QProgressBar(pParentWidget);
+        // don't show progress in percent as text
+        pProgressBar->setTextVisible(false);
+        pObject = pProgressBar;
     }
     else if (sName == u"GtkLinkButton")
     {

@@ -18,6 +18,7 @@
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceImage.hxx>
 #include <QtInstanceLabel.hxx>
+#include <QtInstanceLevelBar.hxx>
 #include <QtInstanceLinkButton.hxx>
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceRadioButton.hxx>
@@ -198,10 +199,12 @@ std::unique_ptr<weld::ProgressBar> QtInstanceBuilder::weld_progress_bar(const OU
     return nullptr;
 }
 
-std::unique_ptr<weld::LevelBar> QtInstanceBuilder::weld_level_bar(const OUString&)
+std::unique_ptr<weld::LevelBar> QtInstanceBuilder::weld_level_bar(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QProgressBar* pProgressBar = m_xBuilder->get<QProgressBar>(rId);
+    std::unique_ptr<weld::LevelBar> xRet(
+        pProgressBar ? std::make_unique<QtInstanceLevelBar>(pProgressBar) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Spinner> QtInstanceBuilder::weld_spinner(const OUString&)
