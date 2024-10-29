@@ -2896,6 +2896,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151462)
                 "portion", u"another sub three");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf153636)
+{
+    createSwDoc("tdf153636.odt");
+    dispatchCommand(mxComponent, u".uno:UpdateAllIndexes"_ustr, {});
+    saveAndReload(u"writer8"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    for (int i = 1; i <= 3; i += 2)
+    {
+        const OUString frameStyleName
+            = getXPath(pXmlDoc,
+                       "/office:document-content/office:body/office:text/"
+                       "text:user-index[@text:name='User-Defined1']/text:index-body/text:p["
+                           + OString::number(i) + "]",
+                       "style-name");
+        const OUString tableStyleName
+            = getXPath(pXmlDoc,
+                       "/office:document-content/office:body/office:text/"
+                       "text:user-index[@text:name='User-Defined1']/text:index-body/text:p["
+                           + OString::number(i + 1) + "]",
+                       "style-name");
+
+        // Without the fix in place, the frame and table indentation would differ
+        CPPUNIT_ASSERT_EQUAL(frameStyleName, tableStyleName);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157129)
 {
     // Unit test for tdf#157129

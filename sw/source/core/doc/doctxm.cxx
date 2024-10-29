@@ -743,8 +743,9 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
     return false;
 }
 
-static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
-        SwRootFrame const*const pLayout, sal_uInt8 const nLvl = 0 )
+static const SwTextNode* lcl_FindChapterNode(const SwNode& rNd, SwRootFrame const* const pLayout,
+                                             sal_uInt8 const nLvl = 0,
+                                             const bool bIsFromChapter = true)
 {
     const SwNode* pNd = &rNd;
     if( pNd->GetNodes().GetEndOfExtras().GetIndex() > pNd->GetIndex() )
@@ -759,8 +760,10 @@ static const SwTextNode* lcl_FindChapterNode( const SwNode& rNd,
             SwPosition aPos( *pNd );
             pNd = GetBodyTextNode( pNd->GetDoc(), aPos, *pFrame );
             OSL_ENSURE( pNd, "Where's the paragraph?" );
-            // tdf#151462 - search for outline node containing the current node
-            return pNd ? pNd->FindOutlineNodeOfLevel(pNd->GetSectionLevel() - 1, pLayout) : nullptr;
+            // tdf#153636 - search for outline node only if the index is for the current chapter
+            if (bIsFromChapter)
+                // tdf#151462 - search for outline node containing the current node
+                return pNd->FindOutlineNodeOfLevel(pNd->GetSectionLevel() - 1, pLayout);
         }
     }
     return pNd->FindOutlineNodeOfLevel(nLvl, pLayout);
@@ -1638,8 +1641,8 @@ void SwTOXBaseSection::UpdateContent( SwTOXElement eMyType,
                     TOX_ILLUSTRATIONS != SwTOXBase::GetType() &&
                     TOX_OBJECTS != SwTOXBase::GetType() )
             {
-                const SwTextNode* pOutlNd = ::lcl_FindChapterNode( *pCNd,
-                                                pLayout, MAXLEVEL - 1);
+                const SwTextNode* pOutlNd
+                    = ::lcl_FindChapterNode(*pCNd, pLayout, MAXLEVEL - 1, IsFromChapter());
                 if( pOutlNd )
                 {
                     if( pOutlNd->GetTextColl()->IsAssignedToListLevelOfOutlineStyle())
@@ -1697,8 +1700,8 @@ void SwTOXBaseSection::UpdateTable(const SwTextNode* pOwnChapterNode,
                     std::unique_ptr<SwTOXTable> pNew(new SwTOXTable( *pCNd ));
                     if( IsLevelFromChapter() && TOX_TABLES != SwTOXBase::GetType())
                     {
-                        const SwTextNode* pOutlNd =
-                            ::lcl_FindChapterNode(*pCNd, pLayout, MAXLEVEL - 1);
+                        const SwTextNode* pOutlNd
+                            = ::lcl_FindChapterNode(*pCNd, pLayout, MAXLEVEL - 1, IsFromChapter());
                         if( pOutlNd )
                         {
                             if( pOutlNd->GetTextColl()->IsAssignedToListLevelOfOutlineStyle())
