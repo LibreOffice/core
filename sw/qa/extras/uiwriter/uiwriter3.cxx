@@ -563,7 +563,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
 {
     createSwDoc("tdf147126.docx");
-    CPPUNIT_ASSERT(mxComponent);
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
 

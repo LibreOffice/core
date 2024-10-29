@@ -660,7 +660,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
 
     // Save it as DOCX & load it again
     saveAndReload(u"Office Open XML Text"_ustr);
-    CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
@@ -3228,6 +3227,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
 {
     createSwDoc("tdf149550.docx");
 
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
     dispatchCommand(mxComponent, u".uno:SelectAll"_ustr, {});
     dispatchCommand(mxComponent, u".uno:Copy"_ustr, {});
     // This crashed here before the fix.
@@ -3236,7 +3237,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testNestedGroupTextBoxCopyCrash)
     Scheduler::ProcessEventsToIdle();
     dispatchCommand(mxComponent, u".uno:Paste"_ustr, {});
 
-    CPPUNIT_ASSERT_MESSAGE("Where is the doc, it crashed, isn't it?!", mxComponent);
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     auto pLayout = parseLayoutDump();
     // There must be 2 textboxes!
@@ -3269,10 +3270,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCrashOnExit)
     CPPUNIT_ASSERT_EQUAL(true, xProperties->getPropertyValue(u"TextBox"_ustr).get<bool>());
 
     // save and reload
-    saveAndReload(u"writer8"_ustr);
-
     // Before the fix this crashed here and could not reopen.
-    CPPUNIT_ASSERT_MESSAGE("Crash on exit, isn't it?", mxComponent);
+    saveAndReload(u"writer8"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testCaptionShape)

@@ -835,8 +835,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153874, "image_through_shape.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTextBoxZOrder, "testTextBoxZOrder.docx")
 {
-    // Is load successful?
-    CPPUNIT_ASSERT(mxComponent);
     // Collect the z-order values of the textboxes
     std::vector<sal_uInt64> ShapeZorders;
     std::vector<sal_uInt64> FrameZorders;

@@ -1535,7 +1535,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
 {
     // Open bugdoc
     createSwDoc("tdf116256.docx");
-    CPPUNIT_ASSERT(mxComponent);
 
     // Get the textbox
     uno::Reference<beans::XPropertySet> xTextBox(getShape(2), uno::UNO_QUERY_THROW);

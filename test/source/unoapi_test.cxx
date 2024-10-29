@@ -124,6 +124,7 @@ void UnoApiTest::loadWithParams(OUString const& rURL,
     }
 
     mxComponent = loadFromDesktop(rURL, OUString(), rParams);
+    CPPUNIT_ASSERT(mxComponent);
 }
 
 OUString UnoApiTest::loadFromFile(std::u16string_view aFileBase, const char* pPassword)

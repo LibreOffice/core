@@ -215,9 +215,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 
 DECLARE_OOXMLEXPORT_TEST(testTdf146802, "tdf146802.docx")
 {
-    // First check if the load failed, as before the fix.
-    CPPUNIT_ASSERT(mxComponent);
-
     // There is a group shape with text box inside having an embedded VML formula,
     // check if something missing.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Where is the formula?", 2, getShapes());
@@ -553,9 +550,6 @@ CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 
 DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
 {
-    // Check if the load failed.
-    CPPUNIT_ASSERT(mxComponent);
-
     // Get the WPG
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xGroupProperties(xGroup, uno::UNO_QUERY_THROW);
@@ -766,9 +760,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
 {
-    // Is load successful?
-    CPPUNIT_ASSERT(mxComponent);
-
     // There are a WPG shape and a picture
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
@@ -899,8 +890,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148111)
 
 DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
 {
-    // Ensure, the bugdoc is opened
-    CPPUNIT_ASSERT(mxComponent);
     // Get the groupshape
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
 

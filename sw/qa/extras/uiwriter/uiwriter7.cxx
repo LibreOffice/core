@@ -2180,7 +2180,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testEmbeddedDataSource)
 
     // Reload: should still have a component and a data source, too.
     saveAndReload(u"writer8"_ustr);
-    CPPUNIT_ASSERT(mxComponent.is());
     CPPUNIT_ASSERT(xDatabaseContext->hasByName(u"calc-data-source"_ustr));
 
     // Data source has a table named Sheet1 after saving to a different directory.

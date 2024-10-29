@@ -82,7 +82,6 @@ void DBTestBase::createDBDocument(const OUString& rDriverURL)
     xStorable->storeAsURL(maTempFile.GetURL(), uno::Sequence< beans::PropertyValue >());
 
     loadFromURL(maTempFile.GetURL());
-    CPPUNIT_ASSERT(mxComponent);
 }
 
 void DBTestBase::createTables(Reference<XConnection> xConnection)

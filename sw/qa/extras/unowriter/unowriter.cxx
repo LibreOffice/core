@@ -896,8 +896,6 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
 {
     createSwDoc("renderable-page-position.odt");
     // Make sure that the document has 2 pages.
-    uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(mxComponent.is());
 
     uno::Any aSelection(mxComponent);
 
@@ -914,6 +912,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
         comphelper::makePropertyValue(u"RenderToGraphic"_ustr, true),
     };
 
+    uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
     sal_Int32 nPages = xRenderable->getRendererCount(aSelection, aRenderOptions);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nPages);
 
