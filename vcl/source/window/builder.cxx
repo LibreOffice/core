@@ -922,18 +922,6 @@ namespace
         return sRet;
     }
 
-    bool extractResizable(VclBuilder::stringmap &rMap)
-    {
-        bool bResizable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"resizable"_ustr);
-        if (aFind != rMap.end())
-        {
-            bResizable = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bResizable;
-    }
-
 #if HAVE_FEATURE_DESKTOP
     bool extractModal(VclBuilder::stringmap &rMap)
     {
@@ -1186,7 +1174,7 @@ namespace
     WinBits extractDeferredBits(VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_3DLOOK|WB_HIDE;
-        if (extractResizable(rMap))
+        if (BuilderBase::extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         if (extractCloseable(rMap))
             nBits |= WB_CLOSEABLE;
@@ -3757,6 +3745,18 @@ OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
         return OUString();
     OUString sReplace = mapStockToImageResource(sIconName);
     return !sReplace.isEmpty() ? sReplace : sIconName;
+}
+
+bool BuilderBase::extractResizable(stringmap& rMap)
+{
+    bool bResizable = true;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"resizable"_ustr);
+    if (aFind != rMap.end())
+    {
+        bResizable = toBool(aFind->second);
+        rMap.erase(aFind);
+    }
+    return bResizable;
 }
 
 OUString BuilderBase::extractTooltipText(stringmap& rMap)
