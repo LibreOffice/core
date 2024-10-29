@@ -1050,7 +1050,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf162259)
             }
             else
             {
-                OString msg("Pixel: "_ostr + OString::number(x) + "," + OString::number(y));
+                OString msg("Pixel: " + OString::number(x) + "," + OString::number(y));
                 CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), COL_WHITE, bmp.GetPixelColor(x, y));
             }
         }
