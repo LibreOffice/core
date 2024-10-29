@@ -18,9 +18,9 @@ QtInstanceImage::QtInstanceImage(QLabel* pLabel)
     assert(m_pLabel);
 }
 
-void QtInstanceImage::set_from_icon_name(const OUString&)
+void QtInstanceImage::set_from_icon_name(const OUString& rIconName)
 {
-    assert(false && "Not implemented yet");
+    m_pLabel->setPixmap(loadQPixmapIcon(rIconName));
 }
 
 void QtInstanceImage::set_image(VirtualDevice*) { assert(false && "Not implemented yet"); }
