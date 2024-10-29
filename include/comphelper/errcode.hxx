@@ -137,7 +137,7 @@ public:
     }
 
     /// Return a string suitable for debug output, the same as the operator<< function
-    UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) OUString toString() const;
+    COMPHELPER_DLLPUBLIC OUString toString() const;
     
     template <typename... Args> bool anyOf(Args... args) const
     {
