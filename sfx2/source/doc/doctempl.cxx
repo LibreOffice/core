@@ -1404,7 +1404,6 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
     return nullptr;
 }
 
-
 void RegionData_Impl::DeleteEntry( size_t nIndex )
 {
     if ( nIndex < maEntries.size() )
@@ -1415,32 +1414,28 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
     }
 }
 
-
 int RegionData_Impl::Compare( RegionData_Impl const * pCompare ) const
 {
     return maTitle.compareTo( pCompare->maTitle );
 }
 
-
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
-: mbConstructed( false )
-, mnLockCounter( 0 )
+    : maStandardGroup(DocTemplLocaleHelper::GetStandardGroupString())
+    , mbConstructed(false)
+    , mnLockCounter(0)
 {
 }
-
 
 SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
 {
     gpTemplateData = nullptr;
 }
 
-
 void SfxDocTemplate_Impl::IncrementLock()
 {
     std::unique_lock aGuard( maMutex );
     mnLockCounter++;
 }
-
 
 void SfxDocTemplate_Impl::DecrementLock()
 {
@@ -1449,14 +1444,12 @@ void SfxDocTemplate_Impl::DecrementLock()
         mnLockCounter--;
 }
 
-
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 {
     if ( nIndex < maRegions.size() )
         return maRegions[ nIndex ].get();
     return nullptr;
 }
-
 
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( std::u16string_view rName )
     const
@@ -1587,7 +1580,6 @@ bool SfxDocTemplate_Impl::Construct( )
     mbConstructed = true;
     maRootURL = aRootContent->getIdentifier()->getContentIdentifier();
 
-    maStandardGroup = DocTemplLocaleHelper::GetStandardGroupString();
     Content aTemplRoot( aRootContent, aCmdEnv, xContext );
     CreateFromHierarchy( aGuard, aTemplRoot );
 
