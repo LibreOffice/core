@@ -289,6 +289,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     if (format)
     {
         const ScFormatEntry* entry = format->GetEntry(mnEntryIndex);
+        if (!entry)
+            return;
         ScFormatEntry::Type type = entry->GetType();
         if (type == ScFormatEntry::Type::Condition)
         {
