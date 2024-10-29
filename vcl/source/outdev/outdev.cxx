@@ -228,6 +228,11 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
         return SystemGraphicsData();
     assert(mpGraphics);
 
+#if USE_HEADLESS_CODE
+    if (OUTDEV_WINDOW == GetOutDevType())
+        mpGraphics->ApplyFullDamage();
+#endif
+
     return mpGraphics->GetGraphicsData();
 }
 

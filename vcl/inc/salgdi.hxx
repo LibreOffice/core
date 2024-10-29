@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <vcl/outdev.hxx>
+#include <config_vclplug.h>
 
 #include "font/FontMetricData.hxx"
 #include "salgdiimpl.hxx"
@@ -393,6 +394,9 @@ public:
     SAL_DLLPRIVATE virtual OUString getRenderBackendName() const;
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
+#if USE_HEADLESS_CODE
+    virtual void ApplyFullDamage() const {}
+#endif
 
     // Backends like the svp/gtk ones use cairo and hidpi scale at the surface
     // but bitmaps aren't hidpi, so if this returns true for the case that the

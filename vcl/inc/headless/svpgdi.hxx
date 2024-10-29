@@ -83,6 +83,9 @@ public:
     virtual bool            ShouldDownscaleIconsAtSurface(double& rScaleOut) const override;
 
     virtual SystemGraphicsData GetGraphicsData() const override;
+#if USE_HEADLESS_CODE
+    virtual void ApplyFullDamage() const override;
+#endif
 
 #if ENABLE_CAIRO_CANVAS
     SAL_DLLPRIVATE virtual bool            SupportsCairo() const override;

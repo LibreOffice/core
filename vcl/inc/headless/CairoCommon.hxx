@@ -147,6 +147,7 @@ struct VCL_DLLPUBLIC CairoCommon
     cairo_t* getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const;
     void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
                              const basegfx::B2DRange& rExtents) const;
+    void applyFullDamage() const;
 
     cairo_t* createTmpCompatibleCairoContext() const;
 

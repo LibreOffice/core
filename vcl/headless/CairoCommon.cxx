@@ -491,6 +491,17 @@ void CairoCommon::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
     }
 }
 
+void CairoCommon::applyFullDamage() const
+{
+    if (nullptr == m_pSurface)
+        return;
+    DamageHandler* pDamage
+        = static_cast<DamageHandler*>(cairo_surface_get_user_data(m_pSurface, getDamageKey()));
+    if (nullptr == pDamage)
+        return;
+    pDamage->damaged(pDamage->handle, 0, 0, m_aFrameSize.getX(), m_aFrameSize.getY());
+}
+
 void CairoCommon::doXorOnRelease(sal_Int32 nExtentsLeft, sal_Int32 nExtentsTop,
                                  sal_Int32 nExtentsRight, sal_Int32 nExtentsBottom,
                                  cairo_surface_t* const surface, sal_Int32 nWidth) const

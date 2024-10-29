@@ -89,4 +89,11 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
     return aGraphicsData;
 }
 
+#if USE_HEADLESS_CODE
+void SvpSalGraphics::ApplyFullDamage() const
+{
+    m_aCairoCommon.applyFullDamage();
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
