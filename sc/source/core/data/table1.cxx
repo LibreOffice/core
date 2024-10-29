@@ -282,6 +282,7 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bActiveScenario(false),
     mbPageBreaksValid(false),
     mbForceBreaks(false),
+    mbTotalsRowBelow(true),
     bStreamValid(false)
 {
     aDefaultColData.InitAttrArray(new ScAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr));
