@@ -14,8 +14,12 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QRadioButton>
 
-class QtInstanceRadioButton : public QtInstanceWidget, public virtual weld::RadioButton
+class QtInstanceRadioButton : public QObject,
+                              public QtInstanceWidget,
+                              public virtual weld::RadioButton
 {
+    Q_OBJECT
+
     QRadioButton* m_pRadioButton;
 
 public:

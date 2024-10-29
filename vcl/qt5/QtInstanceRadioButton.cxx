@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceRadioButton.hxx>
+#include <QtInstanceRadioButton.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
@@ -16,6 +17,7 @@ QtInstanceRadioButton::QtInstanceRadioButton(QRadioButton* pRadioButton)
     , m_pRadioButton(pRadioButton)
 {
     assert(m_pRadioButton);
+    connect(m_pRadioButton, &QRadioButton::toggled, this, [&] { signal_toggled(); });
 }
 
 void QtInstanceRadioButton::set_active(bool bActive)
