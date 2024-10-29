@@ -2722,7 +2722,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
     aSet.ClearItem();
     pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 1, 2);
     pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
-    CPPUNIT_ASSERT(*pPoolItem == aBoldWeightItem); // a bold
+    CPPUNIT_ASSERT(pPoolItem->operator==(aBoldWeightItem)); // a bold
     aSet.ClearItem();
     pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 2, 3);
     pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
