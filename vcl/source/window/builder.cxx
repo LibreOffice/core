@@ -1066,20 +1066,6 @@ namespace
         return Size(sWidthRequest.toInt32(), sHeightRequest.toInt32());
     }
 
-    OUString extractTooltipText(VclBuilder::stringmap &rMap)
-    {
-        OUString sTooltipText;
-        VclBuilder::stringmap::iterator aFind = rMap.find(u"tooltip-text"_ustr);
-        if (aFind == rMap.end())
-            aFind = rMap.find(u"tooltip-markup"_ustr);
-        if (aFind != rMap.end())
-        {
-            sTooltipText = aFind->second;
-            rMap.erase(aFind);
-        }
-        return sTooltipText;
-    }
-
     float extractAlignment(VclBuilder::stringmap &rMap)
     {
         float f = 0.0;
@@ -3771,6 +3757,20 @@ OUString BuilderBase::extractIconName(VclBuilder::stringmap &rMap)
         return OUString();
     OUString sReplace = mapStockToImageResource(sIconName);
     return !sReplace.isEmpty() ? sReplace : sIconName;
+}
+
+OUString BuilderBase::extractTooltipText(stringmap& rMap)
+{
+    OUString sTooltipText;
+    VclBuilder::stringmap::iterator aFind = rMap.find(u"tooltip-text"_ustr);
+    if (aFind == rMap.end())
+        aFind = rMap.find(u"tooltip-markup"_ustr);
+    if (aFind != rMap.end())
+    {
+        sTooltipText = aFind->second;
+        rMap.erase(aFind);
+    }
+    return sTooltipText;
 }
 
 bool BuilderBase::extractVisible(VclBuilder::stringmap& rMap)
