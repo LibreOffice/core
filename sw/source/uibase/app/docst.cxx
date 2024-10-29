@@ -1198,20 +1198,10 @@ bool SwDocShell::MakeInlineHeading(SwWrtShell *pSh, SwTextFormatColl* pColl, con
                 SfxCallMode::SYNCHRON|SfxCallMode::RECORD, { &aAnchor, &aSizeItem });
         if ( pSh->IsFrameSelected() )
         {
-            // use the borderless frame style "Formula"
-            // TODO add a new frame style "Inline Heading"
+            // use the associated borderless frame style "Inline Heading"
             SwDocStyleSheet* pStyle2 = static_cast<SwDocStyleSheet*>(
-                            m_xBasePool->Find( "Formula", SfxStyleFamily::Frame));
+                            m_xBasePool->Find( "Inline Heading", SfxStyleFamily::Frame));
             pSh->SetFrameFormat( pStyle2->GetFrameFormat() );
-
-            // set variable width frame to extend for the width of the text content
-            SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet(pSh->GetAttrPool());
-            pSh->GetFlyFrameAttr( aSet );
-            SwTwips nMinWidth = 100;
-            SwFormatFrameSize aSize(SwFrameSize::Variable, nMinWidth, nMinWidth);
-            aSize.SetWidthSizeType(SwFrameSize::Variable);
-            aSet.Put(aSize);
-            pSh->SetFlyFrameAttr( aSet );
 
             // select the text content of the frame, and apply the paragraph style
             pSh->UnSelectFrame();

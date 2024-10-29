@@ -640,6 +640,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetFrameFormatProgNameArray()
         u"Marginalia"_ustr,
         u"Watermark"_ustr,
         u"Labels"_ustr, // RES_POOLFRM_LABEL
+        u"Inline Heading"_ustr,
     };
     return s_aFrameFormatProgNameArray;
 }

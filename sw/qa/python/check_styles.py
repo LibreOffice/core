@@ -147,7 +147,7 @@ class CheckStyle(unittest.TestCase):
     def test_FrameFamily(self):
         xDoc = CheckStyle._uno.openEmptyWriterDoc()
         xFrameStyles = xDoc.StyleFamilies["FrameStyles"]
-        vEmptyDocStyles = ['Formula', 'Frame', 'Graphics', 'Labels', 'Marginalia', 'OLE', 'Watermark']
+        vEmptyDocStyles = ['Formula', 'Frame', 'Graphics', 'Inline Heading', 'Labels', 'Marginalia', 'OLE', 'Watermark']
         self.__test_StyleFamily(xFrameStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyIndex(xFrameStyles, vEmptyDocStyles, "SwXStyle")
         self.__test_StyleFamilyInsert(xDoc, xFrameStyles, vEmptyDocStyles, "com.sun.star.style.FrameStyle", "com.sun.star.style.CharacterStyle")

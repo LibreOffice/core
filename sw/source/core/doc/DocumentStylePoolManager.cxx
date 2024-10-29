@@ -500,7 +500,8 @@ const TranslateId STR_POOLFRM_ARY[] =
     STR_POOLFRM_FORMEL,
     STR_POOLFRM_MARGINAL,
     STR_POOLFRM_WATERSIGN,
-    STR_POOLFRM_LABEL
+    STR_POOLFRM_LABEL,
+    STR_POOLFRM_INLINE_HEADING
 };
 
 const TranslateId STR_POOLPAGE_ARY[] =
@@ -1695,10 +1696,24 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
         }
         break;
     case RES_POOLFRM_FORMEL:
+    case RES_POOLFRM_INLINE_HEADING:
         {
             aSet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 0, 0, 0, RES_LR_SPACE ) );
+
+            if ( RES_POOLFRM_INLINE_HEADING == nId )
+            {
+                // Set the default width to 0.5 cm, use the minimum value for the height
+                SwFormatFrameSize aSize(SwFrameSize::Variable,
+                                       o3tl::toTwips(5, o3tl::Length::mm),
+                                       o3tl::toTwips(1, o3tl::Length::mm));
+                // variable width of the inline heading frame follows its text content
+                aSize.SetWidthSizeType(SwFrameSize::Variable);
+                aSet.Put(aSize);
+            }
+            else
+                aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:

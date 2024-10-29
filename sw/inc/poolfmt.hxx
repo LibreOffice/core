@@ -158,6 +158,7 @@ RES_POOLFRM_FORMEL,                                 ///< Formula.
 RES_POOLFRM_MARGINAL,                               ///< Marginalia.
 RES_POOLFRM_WATERSIGN,                              ///< Watermark.
 RES_POOLFRM_LABEL,                                  ///< Labels.
+RES_POOLFRM_INLINE_HEADING,                         ///< Inline Heading.
 
 RES_POOLFRM_END
 };
