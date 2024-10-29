@@ -263,11 +263,11 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
 
     ScRangeList aRange;
     mpViewData->GetMarkData().FillRangeListWithMarks(&aRange, false);
+    ScConditionalFormat* format
+        = mpDocument->GetCondFormList(mpViewData->GetTabNo())->GetFormat(mnFormatKey);
     if (aRange.empty() && mnFormatKey != -1 && mnEntryIndex != -1)
     {
-        aRange = mpDocument->GetCondFormList(mpViewData->GetTabNo())
-                     ->GetFormat(mnFormatKey)
-                     ->GetRangeList();
+        aRange = format->GetRangeList();
     }
     else if (aRange.empty())
     {
@@ -283,8 +283,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     aRange.Format(sRangeString, ScRefFlags::VALID, *mpDocument, mpDocument->GetAddressConvention());
     mxRangeEntry->SetText(sRangeString);
 
-    ScConditionalFormat* format = mpViewData->GetDocument().GetCondFormat(
-        maPosition.Col(), maPosition.Row(), maPosition.Tab());
     OUString sStyleName;
     if (format)
     {
