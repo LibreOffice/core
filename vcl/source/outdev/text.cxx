@@ -849,12 +849,13 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
         return {};
     }
 
-    std::unique_ptr<std::vector<double>> xDXPixelArray;
+    std::vector<double> aDXPixelArray;
+    std::vector<double>* pDXPixelArray = nullptr;
     if(pDXAry)
     {
-        xDXPixelArray.reset(new std::vector<double>(nPartLen));
+        aDXPixelArray.resize(nPartLen);
+        pDXPixelArray = &aDXPixelArray;
     }
-    std::vector<double>* pDXPixelArray = xDXPixelArray.get();
 
     double nWidth = 0.0;
 
