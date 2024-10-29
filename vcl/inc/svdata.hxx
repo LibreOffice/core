@@ -461,10 +461,6 @@ VCL_DLLPUBLIC bool        ImplCallPreNotify( NotifyEvent& rEvt );
 VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData();
 VCL_PLUGIN_PUBLIC void ImplHideSplash();
 
-#ifdef _WIN32
-void ImplInitAccessBridge();
-#endif
-
 const FieldUnitStringList& ImplGetFieldUnits();
 const FieldUnitStringList& ImplGetCleanedFieldUnits();
 

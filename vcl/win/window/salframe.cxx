@@ -17,10 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/accessibility/MSAAService.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -30,6 +32,7 @@
 
 #include <svsys.h>
 
+#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/windowserrorstring.hxx>
 
 #include <rtl/bootstrap.hxx>
@@ -5618,7 +5621,17 @@ ImplHandleGetObject(HWND hWnd, LPARAM lParam, WPARAM wParam, LRESULT & nRet)
         // to avoid RFT interrupts regular accessibility processing
         if ( !pSVData->mxAccessBridge.is() )
         {
-            InitAccessBridge();
+            css::uno::Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+            try
+            {
+                pSVData->mxAccessBridge = css::accessibility::MSAAService::create(xContext);
+                SAL_INFO("vcl", "got IAccessible2 bridge");
+            }
+            catch (css::uno::DeploymentException&)
+            {
+                TOOLS_WARN_EXCEPTION("vcl", "got no IAccessible2 bridge");
+                assert(false && "failed to create IAccessible2 bridge");
+            }
         }
         xMSAA.set(pSVData->mxAccessBridge, uno::UNO_QUERY);
         ImplSalYieldMutexRelease();

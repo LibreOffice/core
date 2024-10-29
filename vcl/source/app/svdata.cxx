@@ -50,8 +50,6 @@
 #include <units.hrc>
 #include <print.h>
 
-#include <com/sun/star/accessibility/MSAAService.hpp>
-
 #include <config_features.h>
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <mutex>
@@ -328,27 +326,6 @@ BlendFrameCache* ImplGetBlendFrameCache()
 
     return pSVData->mpBlendFrameCache.get();
 }
-
-#ifdef _WIN32
-void ImplInitAccessBridge()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mxAccessBridge.is() )
-    {
-        css::uno::Reference< XComponentContext > xContext(comphelper::getProcessComponentContext());
-        try
-        {
-            pSVData->mxAccessBridge = css::accessibility::MSAAService::create(xContext);
-            SAL_INFO("vcl", "got IAccessible2 bridge");
-        }
-        catch (css::uno::DeploymentException &)
-        {
-            TOOLS_WARN_EXCEPTION("vcl", "got no IAccessible2 bridge");
-            assert(false && "failed to create IAccessible2 bridge");
-        }
-    }
-}
-#endif
 
 void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, ConfigurationHints nHint )
 {

@@ -1634,13 +1634,6 @@ void Application::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     pSVData->mpDefInst->AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
 }
 
-void InitAccessBridge()
-{
-#ifdef _WIN32
-    ImplInitAccessBridge();
-#endif
-}
-
 // MT: AppEvent was in oldsv.cxx, but is still needed...
 void Application::AppEvent( const ApplicationEvent& /*rAppEvent*/ )
 {
