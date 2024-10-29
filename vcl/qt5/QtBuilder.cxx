@@ -176,7 +176,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkEntry")
     {
-        pObject = new QLineEdit(pParentWidget);
+        QLineEdit* pLineEdit = new QLineEdit(pParentWidget);
+        auto aIt = rMap.find(u"visibility"_ustr);
+        if (aIt != rMap.end() && !toBool(aIt->second))
+            pLineEdit->setEchoMode(QLineEdit::Password);
+
+        pObject = pLineEdit;
     }
     else if (sName == u"GtkFrame")
     {
