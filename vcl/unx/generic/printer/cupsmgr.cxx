@@ -649,6 +649,18 @@ void CUPSManager::getOptionsFromDocumentSetup(const JobData& rJob, bool bBanner,
                 OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
                 OString aValue = OUStringToOString( sPayLoad, RTL_TEXTENCODING_ASCII_US );
                 rNumOptions = cupsAddOption(aKey.getStr(), aValue.getStr(), rNumOptions, ppOptions);
+
+                // for duplex, also set the corresponding CUPS "sides" option, see section
+                // "Printing On Both Sides of the Paper" at https://www.cups.org/doc/options.html
+                if (aKey == "Duplex")
+                {
+                    if (aValue == "None")
+                        rNumOptions = cupsAddOption("sides", "one-sided", rNumOptions, ppOptions);
+                    else if (aValue == "DuplexTumble")
+                        rNumOptions = cupsAddOption("sides", "two-sided-short-edge", rNumOptions, ppOptions);
+                    else if (aValue == "DuplexNoTumble")
+                        rNumOptions = cupsAddOption("sides", "two-sided-long-edge", rNumOptions, ppOptions);
+                }
             }
         }
     }
