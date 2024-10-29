@@ -2147,7 +2147,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
 
     // number format
     if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
-        mnXclNumFmt = nForceScNumFmt;
+        mnScNumFmt = nForceScNumFmt;
     else
     {
         // Built-in formats of dedicated languages may be attributed using the
