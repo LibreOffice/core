@@ -2933,7 +2933,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     pDlg->SetModified();
 
                 pDlg->StartExecuteAsync(
-                    [pDlg, &rData, aPos](sal_Int32 nRet)
+                    [pDlg, &rData, pTabViewShell, rDlgItem, aPos](sal_Int32 nRet)
                     {
                         std::unique_ptr<ScConditionalFormatList> pCondFormatList
                             = pDlg->GetConditionalFormatList();
@@ -2952,6 +2952,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                         else
                             pCondFormatList.reset();
+
+                        if (rDlgItem)
+                            pTabViewShell->setScCondFormatDlgItem(nullptr);
 
                         pDlg->disposeOnce();
                     });
