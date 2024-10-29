@@ -196,6 +196,171 @@ namespace {
         }
     }
 
+    class FilterFunctor
+    {
+    public:
+        virtual bool operator()(const SwFormatField* pField) const = 0;
+        virtual ~FilterFunctor() {}
+    };
+
+    class IsPostitField : public FilterFunctor
+    {
+    public:
+        bool operator()(const SwFormatField* pField) const override
+        {
+            return pField->GetField()->GetTyp()->Which() == SwFieldIds::Postit;
+        }
+    };
+
+    class IsPostitFieldWithAuthorOf : public FilterFunctor
+    {
+        OUString m_sAuthor;
+    public:
+        explicit IsPostitFieldWithAuthorOf(OUString aAuthor)
+            : m_sAuthor(std::move(aAuthor))
+        {
+        }
+        bool operator()(const SwFormatField* pField) const override
+        {
+            if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
+                return false;
+            return static_cast<const SwPostItField*>(pField->GetField())->GetPar1() == m_sAuthor;
+        }
+    };
+
+    class IsPostitFieldWithPostitId : public FilterFunctor
+    {
+        sal_uInt32 m_nPostItId;
+    public:
+        explicit IsPostitFieldWithPostitId(sal_uInt32 nPostItId)
+            : m_nPostItId(nPostItId)
+            {}
+
+        bool operator()(const SwFormatField* pField) const override
+        {
+            if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
+                return false;
+            return static_cast<const SwPostItField*>(pField->GetField())->GetPostItId() == m_nPostItId;
+        }
+    };
+
+    class IsFieldNotDeleted : public FilterFunctor
+    {
+    private:
+        IDocumentRedlineAccess const& m_rIDRA;
+        FilterFunctor const& m_rNext;
+
+    public:
+        IsFieldNotDeleted(IDocumentRedlineAccess const& rIDRA,
+                const FilterFunctor & rNext)
+            : m_rIDRA(rIDRA)
+            , m_rNext(rNext)
+        {
+        }
+        bool operator()(const SwFormatField* pField) const override
+        {
+            if (!m_rNext(pField))
+                return false;
+            if (!pField->GetTextField())
+                return false;
+            return !sw::IsFieldDeletedInModel(m_rIDRA, *pField->GetTextField());
+        }
+    };
+
+    //Manages the passed in vector by automatically removing entries if they are deleted
+    //and automatically adding entries if they appear in the document and match the
+    //functor.
+    //
+    //This will completely refill in the case of a "anonymous" NULL pField stating
+    //rather unhelpfully that "something changed" so you may process the same
+    //Fields more than once.
+    class FieldDocWatchingStack : public SfxListener
+    {
+        std::vector<std::unique_ptr<SwSidebarItem>>& m_aSidebarItems;
+        std::vector<const SwFormatField*> m_aFormatFields;
+        SwDocShell& m_rDocShell;
+        FilterFunctor& m_rFilter;
+
+        virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) override
+        {
+            if ( rHint.GetId() != SfxHintId::SwFormatField )
+                return;
+            const SwFormatFieldHint* pHint = static_cast<const SwFormatFieldHint*>(&rHint);
+
+            bool bAllInvalidated = false;
+            if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)
+            {
+                const SwFormatField* pField = pHint->GetField();
+                bAllInvalidated = pField == nullptr;
+                if (!bAllInvalidated && m_rFilter(pField))
+                {
+                    EndListening(const_cast<SwFormatField&>(*pField));
+                    std::erase(m_aFormatFields, pField);
+                }
+            }
+            else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
+            {
+                const SwFormatField* pField = pHint->GetField();
+                bAllInvalidated = pField == nullptr;
+                if (!bAllInvalidated && m_rFilter(pField))
+                {
+                    StartListening(const_cast<SwFormatField&>(*pField));
+                    m_aFormatFields.push_back(pField);
+                }
+            }
+
+            if (bAllInvalidated)
+                FillVector();
+
+            return;
+        }
+
+    public:
+        FieldDocWatchingStack(std::vector<std::unique_ptr<SwSidebarItem>>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
+            : m_aSidebarItems(in)
+            , m_rDocShell(rDocShell)
+            , m_rFilter(rFilter)
+        {
+            FillVector();
+            StartListening(m_rDocShell);
+        }
+        void FillVector()
+        {
+            EndListeningToAllFields();
+            m_aFormatFields.clear();
+            m_aFormatFields.reserve(m_aSidebarItems.size());
+            for (auto const& p : m_aSidebarItems)
+            {
+                const SwFormatField& rField = p->GetFormatField();
+                if (!m_rFilter(&rField))
+                    continue;
+                StartListening(const_cast<SwFormatField&>(rField));
+                m_aFormatFields.push_back(&rField);
+            }
+        }
+        void EndListeningToAllFields()
+        {
+            for (auto const& pField : m_aFormatFields)
+            {
+                EndListening(const_cast<SwFormatField&>(*pField));
+            }
+        }
+        virtual ~FieldDocWatchingStack() override
+        {
+            EndListeningToAllFields();
+            EndListening(m_rDocShell);
+        }
+        const SwFormatField* pop()
+        {
+            if (m_aFormatFields.empty())
+                return nullptr;
+            const SwFormatField* p = m_aFormatFields.back();
+            EndListening(const_cast<SwFormatField&>(*p));
+            m_aFormatFields.pop_back();
+            return p;
+        }
+    };
+
 } // anonymous namespace
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
@@ -315,6 +480,9 @@ SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExisten
     SwSidebarItem* pAnnotationItem = nullptr;
     if (auto pSwFormatField = dynamic_cast< SwFormatField *>( pItem ))
     {
+        IsPostitField isPostitField;
+        if (!isPostitField(pSwFormatField))
+            return nullptr;
         mvPostItFields.push_back(std::make_unique<SwAnnotationItem>(*pSwFormatField, bFocus));
         pAnnotationItem = mvPostItFields.back().get();
     }
@@ -1408,175 +1576,6 @@ void SwPostItMgr::RemoveSidebarWin()
 
     // all postits removed, no items should be left in pages
     PreparePageContainer();
-}
-
-namespace {
-
-class FilterFunctor
-{
-public:
-    virtual bool operator()(const SwFormatField* pField) const = 0;
-    virtual ~FilterFunctor() {}
-};
-
-class IsPostitField : public FilterFunctor
-{
-public:
-    bool operator()(const SwFormatField* pField) const override
-    {
-        return pField->GetField()->GetTyp()->Which() == SwFieldIds::Postit;
-    }
-};
-
-class IsPostitFieldWithAuthorOf : public FilterFunctor
-{
-    OUString m_sAuthor;
-public:
-    explicit IsPostitFieldWithAuthorOf(OUString aAuthor)
-        : m_sAuthor(std::move(aAuthor))
-    {
-    }
-    bool operator()(const SwFormatField* pField) const override
-    {
-        if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
-            return false;
-        return static_cast<const SwPostItField*>(pField->GetField())->GetPar1() == m_sAuthor;
-    }
-};
-
-class IsPostitFieldWithPostitId : public FilterFunctor
-{
-    sal_uInt32 m_nPostItId;
-public:
-    explicit IsPostitFieldWithPostitId(sal_uInt32 nPostItId)
-        : m_nPostItId(nPostItId)
-        {}
-
-    bool operator()(const SwFormatField* pField) const override
-    {
-        if (pField->GetField()->GetTyp()->Which() != SwFieldIds::Postit)
-            return false;
-        return static_cast<const SwPostItField*>(pField->GetField())->GetPostItId() == m_nPostItId;
-    }
-};
-
-class IsFieldNotDeleted : public FilterFunctor
-{
-private:
-    IDocumentRedlineAccess const& m_rIDRA;
-    FilterFunctor const& m_rNext;
-
-public:
-    IsFieldNotDeleted(IDocumentRedlineAccess const& rIDRA,
-            const FilterFunctor & rNext)
-        : m_rIDRA(rIDRA)
-        , m_rNext(rNext)
-    {
-    }
-    bool operator()(const SwFormatField* pField) const override
-    {
-        if (!m_rNext(pField))
-            return false;
-        if (!pField->GetTextField())
-            return false;
-        return !sw::IsFieldDeletedInModel(m_rIDRA, *pField->GetTextField());
-    }
-};
-
-//Manages the passed in vector by automatically removing entries if they are deleted
-//and automatically adding entries if they appear in the document and match the
-//functor.
-//
-//This will completely refill in the case of a "anonymous" NULL pField stating
-//rather unhelpfully that "something changed" so you may process the same
-//Fields more than once.
-class FieldDocWatchingStack : public SfxListener
-{
-    std::vector<std::unique_ptr<SwSidebarItem>>& m_aSidebarItems;
-    std::vector<const SwFormatField*> m_aFormatFields;
-    SwDocShell& m_rDocShell;
-    FilterFunctor& m_rFilter;
-
-    virtual void Notify(SfxBroadcaster&, const SfxHint& rHint) override
-    {
-        if ( rHint.GetId() != SfxHintId::SwFormatField )
-            return;
-        const SwFormatFieldHint* pHint = static_cast<const SwFormatFieldHint*>(&rHint);
-
-        bool bAllInvalidated = false;
-        if (pHint->Which() == SwFormatFieldHintWhich::REMOVED)
-        {
-            const SwFormatField* pField = pHint->GetField();
-            bAllInvalidated = pField == nullptr;
-            if (!bAllInvalidated && m_rFilter(pField))
-            {
-                EndListening(const_cast<SwFormatField&>(*pField));
-                std::erase(m_aFormatFields, pField);
-            }
-        }
-        else if (pHint->Which() == SwFormatFieldHintWhich::INSERTED)
-        {
-            const SwFormatField* pField = pHint->GetField();
-            bAllInvalidated = pField == nullptr;
-            if (!bAllInvalidated && m_rFilter(pField))
-            {
-                StartListening(const_cast<SwFormatField&>(*pField));
-                m_aFormatFields.push_back(pField);
-            }
-        }
-
-        if (bAllInvalidated)
-            FillVector();
-
-        return;
-    }
-
-public:
-    FieldDocWatchingStack(std::vector<std::unique_ptr<SwSidebarItem>>& in, SwDocShell &rDocShell, FilterFunctor& rFilter)
-        : m_aSidebarItems(in)
-        , m_rDocShell(rDocShell)
-        , m_rFilter(rFilter)
-    {
-        FillVector();
-        StartListening(m_rDocShell);
-    }
-    void FillVector()
-    {
-        EndListeningToAllFields();
-        m_aFormatFields.clear();
-        m_aFormatFields.reserve(m_aSidebarItems.size());
-        for (auto const& p : m_aSidebarItems)
-        {
-            const SwFormatField& rField = p->GetFormatField();
-            if (!m_rFilter(&rField))
-                continue;
-            StartListening(const_cast<SwFormatField&>(rField));
-            m_aFormatFields.push_back(&rField);
-        }
-    }
-    void EndListeningToAllFields()
-    {
-        for (auto const& pField : m_aFormatFields)
-        {
-            EndListening(const_cast<SwFormatField&>(*pField));
-        }
-    }
-    virtual ~FieldDocWatchingStack() override
-    {
-        EndListeningToAllFields();
-        EndListening(m_rDocShell);
-    }
-    const SwFormatField* pop()
-    {
-        if (m_aFormatFields.empty())
-            return nullptr;
-        const SwFormatField* p = m_aFormatFields.back();
-        EndListening(const_cast<SwFormatField&>(*p));
-        m_aFormatFields.pop_back();
-        return p;
-    }
-};
-
 }
 
 // copy to new vector, otherwise RemoveItem would operate and delete stuff on mvPostItFields as well
