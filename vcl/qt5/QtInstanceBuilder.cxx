@@ -55,6 +55,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/swriter/ui/wordcount.ui"_ustr,
         u"sfx/ui/licensedialog.ui"_ustr,
         u"sfx/ui/querysavedialog.ui"_ustr,
+        u"sfx/ui/safemodequerydialog.ui"_ustr,
         u"svt/ui/printersetupdialog.ui"_ustr,
         u"svt/ui/restartdialog.ui"_ustr,
         u"writerperfect/ui/exportepub.ui"_ustr,
