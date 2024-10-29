@@ -317,8 +317,8 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRegisterCallback)
 {
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     // Insert a character at the beginning of the document.
     pWrtShell->Insert(u"x"_ustr);
@@ -332,8 +332,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRegisterCallback)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostKeyEvent)
 {
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
@@ -347,7 +347,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostKeyEvent)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostMouseEvent)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     // Did we manage to go after the first character?
@@ -365,7 +365,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPostMouseEvent)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetTextSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
@@ -393,7 +393,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelection)
     // No crash, just empty output for unexpected mime type.
     CPPUNIT_ASSERT_EQUAL(OString(), apitest::helper::transferable::getTextSelection(pXTextDocument->getSelection(), "foo/bar"_ostr));
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Move the cursor into the first word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     // Create a selection by on the word.
@@ -424,7 +424,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetTextSelectionLineLimit)
 
     SwXTextDocument* pXTextDocument = createDoc("estonian.odt");
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Move the cursor into the first word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 2, /*bBasicCall=*/false);
     // Create a selection.
@@ -466,7 +466,7 @@ Heading on second page");
 
     SwXTextDocument* pXTextDocument = createDoc("multiline.odt");
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Create a selection.
     pWrtShell->SelAll();
 
@@ -484,7 +484,7 @@ Heading on second page");
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     pWrtShell->SelectObj(Point(), 0, pObject);
@@ -508,7 +508,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetGraphicSelection)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResetSelection)
 {
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Select one character.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -535,7 +535,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testResetSelection)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertShape)
 {
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
     comphelper::dispatchCommand(u".uno:BasicShapes.circle"_ustr, uno::Sequence<beans::PropertyValue>());
@@ -563,8 +563,8 @@ static void lcl_search(bool bBackward)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     SwNodeOffset nNode = pWrtShell->getShellCursor(false)->Start()->GetNode().GetIndex();
 
@@ -603,8 +603,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearch)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Go to the second page, 1-based.
     pWrtShell->GotoPage(2, false);
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -628,8 +628,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchViewArea)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrame)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
@@ -643,8 +643,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrame)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchTextFrameWrapAround)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
@@ -662,7 +662,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentSizeChanged)
 {
     // Get the current document size.
     SwXTextDocument* pXTextDocument = createDoc("2-pages.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     Size aSize = pXTextDocument->getDocumentSize();
 
@@ -677,8 +677,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDocumentSizeChanged)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAll)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
@@ -695,8 +695,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAll)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSearchAllNotifications)
 {
-    SwXTextDocument* pXTextDocument = createDoc("search.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("search.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     // Reset notification counter before search.
     m_nSelectionBeforeSearchResult = 0;
@@ -723,7 +723,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPageDownInvalidation)
                 {".uno:HideWhitespace", uno::Any(true)},
                 }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     comphelper::dispatchCommand(u".uno:PageDown"_ustr, uno::Sequence<beans::PropertyValue>());
 
@@ -981,13 +981,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMissingInvalidation)
 
     // First view: put the cursor into the first word.
     SfxLokHelper::setView(nView1);
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
 
     // Second view: select the first word.
     SfxLokHelper::setView(nView2);
-    CPPUNIT_ASSERT(pXTextDocument->GetDocShell()->GetWrtShell() != pWrtShell);
-    pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(getSwDocShell()->GetWrtShell() != pWrtShell);
+    pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->SelWrd();
 
@@ -1004,7 +1004,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMissingInvalidation)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursors)
 {
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    createDoc("dummy.fodt");
     ViewCallback aView1;
     SfxLokHelper::createView();
     ViewCallback aView2;
@@ -1023,7 +1023,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursors)
     aView1.m_bViewSelectionSet = false;
     aView2.m_bOwnSelectionSet = false;
     aView2.m_bViewSelectionSet = false;
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
@@ -1048,7 +1048,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeViewCursors)
     SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
     ViewCallback aView2;
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
     // Start shape text in the second view.
     SdrPage* pPage = pWrtShell2->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -1088,7 +1088,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorVisibility)
 
     // Click on the shape in the second view.
     aView1.m_bViewCursorVisible = true;
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     Point aCenter = pObject->GetSnapRect().Center();
@@ -1110,7 +1110,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewCursorCleanup)
         ViewCallback aView2;
 
         // Click on the shape in the second view.
-        SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
         SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
         SdrObject* pObject = pPage->GetObj(0);
         Point aCenter = pObject->GetSnapRect().Center();
@@ -1140,7 +1140,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testViewLock)
 
     // Begin text edit in the second view and assert that the first gets a lock
     // notification.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -1164,7 +1164,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTextEditViewInvalidations)
     ViewCallback aView2;
 
     // Begin text edit in the second view.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -1192,7 +1192,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoInvalidations)
     SfxLokHelper::setView(nView1);
 
     // Insert a character the end of the document.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->EndOfSection();
     emulateTyping(u"c");
     // ProcessEventsToIdle resets the view; set it again
@@ -1215,13 +1215,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoLimiting)
 {
     // Load a document and create two views.
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
 
     // Insert a character the end of the document in the second view.
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->EndOfSection();
     emulateTyping(u"c");
     SwShellCursor* pShellCursor = pWrtShell2->getShellCursor(false);
@@ -1241,11 +1241,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReordering)
 {
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -1281,11 +1281,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo)
 {
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -1327,11 +1327,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingRedo2)
 {
     // Create two views.
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
     // Type in the first view.
     SfxLokHelper::setView(nView1);
@@ -1369,11 +1369,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
 {
     // Create two views and a document of 2 paragraphs.
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SplitNode();
     SfxLokHelper::setView(nView1);
     pWrtShell1->SttEndDoc(/*bStt=*/true);
@@ -1412,11 +1412,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoShapeLimiting)
 {
     // Load a document and create a view.
     SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     int nView1 = SfxLokHelper::getView();
     int nView2 = SfxLokHelper::createView();
     pXTextDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
 
     // Start shape text in the second view.
     SdrPage* pPage = pWrtShell2->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
@@ -1427,7 +1427,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoShapeLimiting)
     pWrtShell2->EndTextEdit();
 
     // Assert that the first view can't and the second view can undo the insertion.
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     rUndoManager.SetView(&pWrtShell1->GetView());
     // This was 1: first view could undo the change of the second view.
@@ -1458,7 +1458,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoDispatch)
 
     // Click before the first word in the second view.
     SfxLokHelper::setView(nView2);
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
@@ -1495,7 +1495,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
 
     // Assert that by default the second view can't undo the action.
     SfxLokHelper::setView(nView2);
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     comphelper::dispatchCommand(u".uno:Undo"_ustr, {});
@@ -1523,11 +1523,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoRepairDispatch)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoShells)
 {
     // Load a document and create a view.
-    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    createDoc("shape.fodt");
     sal_Int32 nView1 = SfxLokHelper::getView();
 
     // Begin text edit.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -1536,7 +1536,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoShells)
     pWrtShell->EndTextEdit();
 
     // Make sure that the undo item remembers who created it.
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rUndoManager.GetUndoActionCount());
     CPPUNIT_ASSERT_EQUAL(u"Edit text of Shape 'Shape1'"_ustr, rUndoManager.GetUndoActionComment(0));
@@ -1553,7 +1553,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoGroupShells)
     sal_Int32 nView1 = SfxLokHelper::getView();
 
     // Begin text edit.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -1564,7 +1564,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoGroupShells)
     Scheduler::ProcessEventsToIdle();
 
     // Make sure that the undo item remembers who created it.
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     CPPUNIT_ASSERT_EQUAL(size_t(0), rUndoManager.GetUndoActionCount());
 
@@ -1603,12 +1603,12 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShapeTextUndoGroupShells)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChanges)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    createDoc("dummy.fodt");
 
     // Turn on track changes, type "zzz" at the end, and move to the start.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     ViewCallback aView(pWrtShell->GetSfxViewShell());
     pWrtShell->EndOfSection();
     pWrtShell->Insert(u"zzz"_ustr);
@@ -1636,8 +1636,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChanges)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Turn on track changes and type "x".
@@ -1663,8 +1663,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesCallback)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Turn on track changes, type "xx" and delete the second one.
@@ -1708,7 +1708,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         SwViewOption aViewOptions;
         aViewOptions.SetViewMetaChars(true);
         aViewOptions.SetOnlineSpell(true);
-        pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
+        getSwDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
     CPPUNIT_ASSERT_EQUAL("PS;Default"_ostr, pXTextDocument->getViewRenderState());
 
@@ -1721,7 +1721,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
         SwViewOption aViewOptions;
         aViewOptions.SetViewMetaChars(false);
         aViewOptions.SetOnlineSpell(true);
-        pXTextDocument->GetDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
+        getSwDocShell()->GetWrtShell()->ApplyViewOptions(aViewOptions);
     }
     CPPUNIT_ASSERT_EQUAL("S;Default"_ostr, pXTextDocument->getViewRenderState());
 
@@ -1732,8 +1732,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
     // Switch back to the second view, and change to dark mode
     SfxLokHelper::setView(nSecondViewId);
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1804,8 +1803,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     ViewCallback aView1;
     // Set first view to light scheme
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1822,8 +1820,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     ViewCallback aView2;
     // Set second view to dark scheme
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1841,8 +1838,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
     CPPUNIT_ASSERT_EQUAL(aDarkColor, getTilePixelColor(pXTextDocument, 255, 255));
     // Switch second view back to light scheme
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1865,8 +1861,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     ViewCallback aView1;
     // Set view to dark scheme
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1883,8 +1878,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     ViewCallback aView2;
     // Set second view to dark scheme
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1898,8 +1892,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     // Set view 1 to invert document background
     SfxLokHelper::setView(nFirstViewId);
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1917,8 +1910,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
 
     // Set view 2 to invert document background
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1937,8 +1929,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInvertBackgroundViewSeparation)
     SfxLokHelper::setView(nSecondViewId);
     // Set view 2 to regular document background
     {
-        SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-        SwView* pView = pDoc->GetDocShell()->GetView();
+        SwView* pView = getSwDocShell()->GetView();
         uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
         uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
@@ -1960,11 +1951,10 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeChangeBackgroundCallback)
 {
     Color aDarkColor(0x1c, 0x1c, 0x1c);
     addDarkLightThemes(aDarkColor, COL_WHITE);
-    SwXTextDocument* pXTextDocument = createDoc();
+    createDoc();
     ViewCallback aView;
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
 
     {
@@ -2000,7 +1990,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
     SfxLokHelper::setView(nView1);
 
     // Mark the textframe in the first view.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -2016,11 +2006,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSetViewGraphicSelection)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateViewGraphicSelection)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("frame.odt");
+    createDoc("frame.odt");
     ViewCallback aView1;
 
     // Mark the textframe in the first view.
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
     SdrView* pView = pWrtShell->GetDrawView();
@@ -2049,11 +2039,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateViewGraphicSelection)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCreateViewTextSelection)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
+    createDoc("dummy.fodt");
     ViewCallback aView1;
 
     // Create a text selection:
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     // Move the cursor into the second word.
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 5, /*bBasicCall=*/false);
     // Create a selection on the word.
@@ -2079,7 +2069,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineColors)
     // Turn on track changes, type "zzz" at the end.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
     xPropertySet->setPropertyValue(u"RecordChanges"_ustr, uno::Any(true));
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->EndOfSection();
     pWrtShell->Insert(u"zzz"_ustr);
 
@@ -2129,9 +2119,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCommentInsert)
 {
     // Load a document with an as-char image in it.
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
-    SwXTextDocument* pXTextDocument = createDoc("image-comment.odt");
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    createDoc("image-comment.odt");
+    SwView* pView = getSwDocShell()->GetView();
 
     selectShape(1);
 
@@ -2293,8 +2282,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDisableUndoRepair)
     int nView2 = SfxLokHelper::getView();
 
     {
-        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
-        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        SfxItemSet aItemSet1(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        SfxItemSet aItemSet2(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, aItemSet1.GetItemState(SID_UNDO));
         pView2->GetState(aItemSet2);
@@ -2310,8 +2299,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDisableUndoRepair)
     SfxLokHelper::setView(nView2);
     emulateTyping(u"u");
     {
-        SfxItemSet aItemSet1(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
-        SfxItemSet aItemSet2(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        SfxItemSet aItemSet1(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
+        SfxItemSet aItemSet2(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<SID_UNDO, SID_UNDO>);
         // second view, undo enabled
         pView2->GetState(aItemSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
@@ -2550,14 +2539,13 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf115088)
 
     mxComponent->dispose();
     mxComponent.clear();
-    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineField)
 {
     // Load a document.
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("dummy.fodt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
 
     // Turn on track changes and type "x".
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
@@ -2606,7 +2594,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMESupport)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
 
@@ -2710,7 +2697,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
     // check the actual weight format of the text
     SvxWeightItem aBoldWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
-    SfxItemSet aSet(pXTextDocument->GetDocShell()->GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
+    SfxItemSet aSet(getSwDocShell()->GetDoc()->GetAttrPool(), svl::Items<RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT>);
     pShellCursor->GetPoint()->GetNode().GetTextNode()->GetParaAttr(aSet, 0, 1);
     SfxPoolItem const* pPoolItem = aSet.GetItem(RES_CHRATR_WEIGHT);
     CPPUNIT_ASSERT(*pPoolItem != aBoldWeightItem); // b not bold
@@ -2726,7 +2713,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAtEndOfParagraph)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testIMEFormattingAfterHeader)
 {
-    comphelper::LibreOfficeKit::setActive();
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
     VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
 
@@ -2796,7 +2782,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSplitNodeRedlineCallback)
 {
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("splitnode_redline_callback.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // 1. test case
@@ -2854,7 +2840,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeleteNodeRedlineCallback)
 {
     // Load a document.
     SwXTextDocument* pXTextDocument = createDoc("removenode_redline_callback.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // 1. test case
@@ -2991,7 +2977,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testVisCursorInvalidation)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDeselectCustomShape)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
     Point aStart = pShellCursor->GetSttPos();
     aStart.setX(aStart.getX() - 1000);
@@ -3294,11 +3280,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testClipText)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnchorTypes)
 {
-    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    createDoc("shape.fodt");
     selectShape(1);
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pXTextDocument->GetDocShell()->GetView();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwView* pView = getSwDocShell()->GetView();
     SfxItemSet aSet(pDoc->GetAttrPool(), svl::Items<FN_TOOL_ANCHOR_PAGE, FN_TOOL_ANCHOR_PAGE>);
     SfxBoolItem aItem(FN_TOOL_ANCHOR_PAGE);
     aSet.Put(aItem);
@@ -3311,8 +3297,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnchorTypes)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testLanguageStatus)
 {
-    SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwView* pView = pXTextDocument->GetDocShell()->GetView();
+    createDoc("dummy.fodt");
+    SwView* pView = getSwDocShell()->GetView();
     std::unique_ptr<SfxPoolItem> pItem;
     pView->GetViewFrame().GetBindings().QueryState(SID_LANGUAGE_STATUS, pItem);
     auto pStringListItem = dynamic_cast<SfxStringListItem*>(pItem.get());
@@ -3327,8 +3313,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineNotificationDuringSave)
 {
     // Load a document with redlines which are hidden at a layout level.
     // It's an empty document, just settings.xml and content.xml are custom.
-    SwXTextDocument* pXTextDocument = createDoc("redline-notification-during-save.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc("redline-notification-during-save.odt");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Save the document.
@@ -3344,7 +3330,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testHyperlink)
 {
     comphelper::LibreOfficeKit::setViewIdForVisCursorInvalidation(true);
     SwXTextDocument* pXTextDocument = createDoc("hyperlink.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     m_callbackWrapper.setLOKViewId(SfxLokHelper::getView(pWrtShell->GetSfxViewShell()));
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -3372,7 +3358,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
@@ -3445,7 +3431,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonEditing)
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field2.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
@@ -3502,7 +3488,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoSelectio
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field_noselection.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
@@ -3552,10 +3538,9 @@ static void lcl_extractHandleParameters(std::string_view selection, sal_Int32& i
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testMoveShapeHandle)
 {
-    comphelper::LibreOfficeKit::setActive();
-    SwXTextDocument* pXTextDocument = createDoc("shape.fodt");
+    createDoc("shape.fodt");
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
     SdrObject* pObject = pPage->GetObj(0);
@@ -3588,7 +3573,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButtonNoItem)
     SwXTextDocument* pXTextDocument = createDoc("drop_down_form_field_noitem.odt");
     pXTextDocument->setClientVisibleArea(tools::Rectangle(0, 0, 10000, 4000));
 
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
 
     // Move the cursor to trigger displaying of the field button.
@@ -3625,7 +3610,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTablePaintInvalidate)
 {
     // Load a document with a table in it.
     SwXTextDocument* pXTextDocument = createDoc("table-paint-invalidate.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     // Enter the table.
     pWrtShell->Down(/*bSelect=*/false);
@@ -3654,12 +3639,11 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTablePaintInvalidate)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
     // Load a document with a comment in a table.
     SwXTextDocument* pXTextDocument = createDoc("testTableCommentRemoveCallback.odt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     ViewCallback aView;
 
@@ -3678,7 +3662,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTableCommentRemoveCallback)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSpellOnlineRenderParameter)
 {
     SwXTextDocument* pXTextDocument = createDoc("dummy.fodt");
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     const SwViewOption* pOpt = pWrtShell->GetViewOptions();
     bool bSet = pOpt->IsOnlineSpell();
 
@@ -3710,7 +3694,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testExtTextInputReadOnly)
     CPPUNIT_ASSERT(getParagraph(1)->getString().isEmpty());
 
     // Try to type into the protected section, is it still empty?
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT, u"x"_ustr);
     SfxLokHelper::postExtTextEventAsync(pEditWin, LOK_EXT_TEXTINPUT_END, u"x"_ustr);
@@ -3733,8 +3717,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testExtTextInputReadOnly)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletDeleteInvalidation)
 {
     // Given a document with 3 paragraphs: first 2 is bulleted, the last is not.
-    SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SplitNode();
     pWrtShell->Up(/*bSelect=*/false);
     pWrtShell->StartAllAction();
@@ -3764,8 +3748,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletDeleteInvalidation)
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf155349)
 {
-    SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     Scheduler::ProcessEventsToIdle();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     pWrtShell->Insert2(u"a"_ustr);
@@ -3780,8 +3764,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf155349)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletNoNumInvalidation)
 {
     // Given a document with 3 paragraphs: all are bulleted.
-    SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->StartAllAction();
     pWrtShell->BulletOn();
     pWrtShell->EndAllAction();
@@ -3812,8 +3796,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletNoNumInvalidation)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBulletMultiDeleteInvalidation)
 {
     // Given a document with 5 paragraphs: all are bulleted.
-    SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->StartAllAction();
     pWrtShell->BulletOn();
     pWrtShell->EndAllAction();
@@ -3853,7 +3837,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testCondCollCopy)
         = { comphelper::makePropertyValue(u"Style"_ustr, u"Text body"_ustr),
             comphelper::makePropertyValue(u"FamilyName"_ustr, u"ParagraphStyles"_ustr) };
     dispatchCommand(mxComponent, u".uno:StyleApply"_ustr, aPropertyValues);
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SelAll();
 
     // When getting the text selection, then make sure it doesn't crash:
@@ -3871,8 +3855,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlinePortions)
 {
     // Given a document with 3 portions: before insert redline (foo), the insert redline (ins) and after insert
     // redline (bar):
-    SwXTextDocument* pXTextDocument = createDoc();
-    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    createDoc();
+    SwDocShell* pDocShell = getSwDocShell();
     SwView* pView = pDocShell->GetView();
     pView->SetRedlineAuthor(u"first"_ustr);
     pDocShell->SetView(pView);
@@ -3918,7 +3902,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testContentControl)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue(u"Alias"_ustr, uno::Any(u"my alias"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     pWrtShell->SttEndDoc(/*bStt=*/true);
     m_aContentControl.clear();
@@ -3959,7 +3943,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
 {
     // Given a document with a dropdown content control:
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -4034,7 +4018,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
 {
     // Given a document with a picture content control:
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -4100,7 +4084,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
 {
     // Given a document with a date content control:
     SwXTextDocument* pXTextDocument = createDoc();
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -4273,8 +4257,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSwitchingChartToDarkMode)
     SwXTextDocument* pXTextDocument = createDoc("large-chart-labels.odt");
     CPPUNIT_ASSERT(pXTextDocument);
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
         {
@@ -4319,8 +4302,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFill)
     SwXTextDocument* pXTextDocument = createDoc("tdf159626_yellowPatternFill.docx");
     CPPUNIT_ASSERT(pXTextDocument);
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
 
     Bitmap aBitmap(getTile(pXTextDocument));
@@ -4351,8 +4333,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFillB)
     SwXTextDocument* pXTextDocument = createDoc("tdf159626_yellowPatternFillB.docx");
     CPPUNIT_ASSERT(pXTextDocument);
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
 
     Bitmap aBitmap(getTile(pXTextDocument));
@@ -4381,10 +4362,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_yellowPatternFillB)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTdf159626_blackPatternFill)
 {
     SwXTextDocument* pXTextDocument = createDoc("tdf159626_blackPatternFill.docx");
-    CPPUNIT_ASSERT(pXTextDocument);
 
-    SwDoc* pDoc = pXTextDocument->GetDocShell()->GetDoc();
-    SwView* pView = pDoc->GetDocShell()->GetView();
+    SwView* pView = getSwDocShell()->GetView();
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame().GetFrame().GetFrameInterface();
 
     Bitmap aBitmap(getTile(pXTextDocument));

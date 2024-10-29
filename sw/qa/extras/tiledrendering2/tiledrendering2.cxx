@@ -165,7 +165,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     // Given a document with 2 pages, first view on page 1, second view on page 2:
     SwXTextDocument* pXTextDocument = createDoc();
     int nView1 = SfxLokHelper::getView();
-    SwWrtShell* pWrtShell1 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
     pWrtShell1->InsertPageBreak();
     SwRootFrame* pLayout = pWrtShell1->getIDocumentLayoutAccess().GetCurrentLayout();
     SwFrame* pPage1 = pLayout->GetLower();
@@ -182,7 +182,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testStatusBarPageNumber)
     pWrtShell1->GetView().SetVisArea(pPage1->getFrameArea().SVRect());
     SfxLokHelper::setView(nView2);
     ViewCallback aView2;
-    SwWrtShell* pWrtShell2 = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
     pWrtShell2->SttEndDoc(/*bStt=*/false);
     pWrtShell2->Insert(u"end"_ustr);
     pWrtShell2->GetView().SetVisArea(pPage2->getFrameArea().SVRect());
@@ -219,10 +219,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRules)
 {
     // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have
     // bullets:
-    SwXTextDocument* pXTextDocument = createDoc("numrules.odt");
-    CPPUNIT_ASSERT(pXTextDocument);
+    createDoc("numrules.odt");
     ViewCallback aView;
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Insert(u"test"_ustr);
@@ -251,10 +250,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRulesBullet)
 {
     // Given a document with 3 pages: first page is ~empty, then page break, then pages 2 & 3 have
     // bullets:
-    SwXTextDocument* pXTextDocument = createDoc("numrules.odt");
-    CPPUNIT_ASSERT(pXTextDocument);
+    createDoc("numrules.odt");
     ViewCallback aView;
-    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->Down(/*bSelect=*/false);
     pWrtShell->Insert(u"test"_ustr);
@@ -284,8 +282,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteInvalidateNumRulesBullet)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
 {
     // Given a document with 3 pages, the first page is visible:
-    SwXTextDocument* pXTextDocument = createDoc();
-    CPPUNIT_ASSERT(pXTextDocument);
+    createDoc();
     ViewCallback aView;
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -321,8 +318,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAsyncLayout)
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAnyInput)
 {
     // Given a document with 3 pages, the first page is visible:
-    SwXTextDocument* pXTextDocument = createDoc();
-    CPPUNIT_ASSERT(pXTextDocument);
+    createDoc();
     ViewCallback aView;
     SwDocShell* pDocShell = getSwDocShell();
     SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
@@ -363,7 +359,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testSignatureState)
 {
     // Given a document with a signature where the digest matches:
     SwXTextDocument* pXTextDocument = createDoc("signed-doc.odt");
-    CPPUNIT_ASSERT(pXTextDocument);
 
     // When initializing tiled rendering with an author name:
     uno::Sequence<beans::PropertyValue> aPropertyValues
@@ -383,7 +378,6 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testFormatInsertStartList)
 {
     // Given a document containing a list where the text has a changed font
     SwXTextDocument* pXTextDocument = createDoc("format-insert-list.docx");
-    CPPUNIT_ASSERT(pXTextDocument);
     VclPtr<vcl::Window> pDocWindow = pXTextDocument->getDocWindow();
     SwView* pView = dynamic_cast<SwView*>(SfxViewShell::Current());
     assert(pView);
