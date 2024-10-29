@@ -238,6 +238,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
 
         QtInstanceWidget::setHelpId(*pWidget, getHelpRoot() + sID);
 
+        pWidget->setToolTip(toQString(extractTooltipText(rMap)));
         pWidget->setVisible(extractVisible(rMap));
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
