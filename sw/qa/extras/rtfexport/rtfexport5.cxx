@@ -674,6 +674,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107413)
             = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "left"_ostr).toDouble();
         const double nRightFooter
             = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "right"_ostr).toDouble();
+        const double nTopFooter
+            = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "top"_ostr).toDouble();
         const double nBottomFooter
             = getXPath(pDump, "/root/page[1]/footer/infos/bounds"_ostr, "bottom"_ostr).toDouble();
 
@@ -689,6 +691,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107413)
             = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr,
                        "right"_ostr)
                   .toDouble();
+        const double nTopFly
+            = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr, "top"_ostr)
+                  .toDouble();
         const double nBottomFly
             = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds"_ostr,
                        "bottom"_ostr)
@@ -697,6 +702,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf107413)
         CPPUNIT_ASSERT_EQUAL(nLeftFooter, nLeftFly);
         CPPUNIT_ASSERT_EQUAL(nRightFooter, nRightFly);
         CPPUNIT_ASSERT_EQUAL(nBottomFooter, nBottomFly);
+        CPPUNIT_ASSERT_EQUAL(nTopFooter + 1056.0, nTopFly);
     };
     createSwDoc("tdf107413.rtf");
     verify();
