@@ -1962,7 +1962,7 @@ namespace emfio
                                             }
                                         }
 
-                                        aDXAry.set(i, 0);
+                                        aDXAry[i] = 0;
                                         if (nOptions & ETO_PDY)
                                         {
                                             pDYAry[i] = 0;
@@ -1972,7 +1972,7 @@ namespace emfio
                                         {
                                             sal_Int32 nDxTmp = 0;
                                             mpInputStream->ReadInt32(nDxTmp);
-                                            aDXAry.set(i, o3tl::saturating_add(aDXAry[i], nDxTmp));
+                                            aDXAry[i] += nDxTmp;
                                             if (nOptions & ETO_PDY)
                                             {
                                                 sal_Int32 nDyTmp = 0;

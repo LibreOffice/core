@@ -446,7 +446,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf161810)
 
             // Assert we are using the expected position for the last char
             // This was 9369, now 9165, according to the fixed space shrinking
-            CPPUNIT_ASSERT_LESS(sal_Int32(9300), pDXArray[72]);
+            CPPUNIT_ASSERT_LESS(sal_Int32(9300), sal_Int32(pDXArray[72]));
             break;
         }
     }
@@ -491,7 +491,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163149)
 
             // Assert we are using the expected position for the last char
             // This was 4673, now 4163, according to the fixed space shrinking
-            CPPUNIT_ASSERT_LESS(sal_Int32(4200), pDXArray[45]);
+            CPPUNIT_ASSERT_LESS(sal_Int32(4200), sal_Int32(pDXArray[45]));
             break;
         }
     }
@@ -920,7 +920,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf122607)
     assertXPath(pXmlDoc,
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/SwParaPortion/SwLineLayout/child::*[1]",
-                "width", u"428");
+                "width", u"427");
     assertXPath(pXmlDoc,
                 "/root/page[1]/anchored/fly/txt[1]/anchored/fly/tab/row[2]/cell/txt[7]/anchored/"
                 "fly/txt/SwParaPortion/SwLineLayout/child::*[1]",

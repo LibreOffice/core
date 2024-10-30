@@ -18,6 +18,7 @@
 #if HAVE_MORE_FONTS
 // must be declared before inclusion of test/bootstrapfixture.hxx
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec);
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>& rVec);
 #endif
 #include <test/bootstrapfixture.hxx>
 
@@ -32,6 +33,15 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int
 
 #if HAVE_MORE_FONTS
 static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int32>& rVec)
+{
+    rStream << "{ ";
+    for (size_t i = 0; i < rVec.size() - 1; i++)
+        rStream << rVec[i] << ", ";
+    rStream << rVec.back();
+    rStream << " }";
+    return rStream;
+}
+static std::ostream& operator<<(std::ostream& rStream, const std::vector<double>& rVec)
 {
     rStream << "{ ";
     for (size_t i = 0; i < rVec.size() - 1; i++)
@@ -82,17 +92,17 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
 
     // absolute character widths AKA text array.
     tools::Long nRefTextWidth = 12595;
-    std::vector<sal_Int32> aRefCharWidths = { 989, 1558, 2824, 2824, 3899,
+    KernArray aRefCharWidths = { 989, 1558, 2824, 2824, 3899,
         3899, 4550, 5119, 5689, 5689, 6307, 6925, 8484, 9135, 9705, 10927,
         10927, 11497, 12595, 12595 };
     KernArray aCharWidths;
     tools::Long nTextWidth
         = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aOneTwoThree, &aCharWidths).nWidth);
 
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aOneTwoThree));
@@ -258,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
 
     OUString aText;
     KernArray aCharWidths;
-    std::vector<sal_Int32> aRefCharWidths;
+    KernArray aRefCharWidths;
     tools::Long nTextWidth, nTextWidth2, nRefTextWidth;
 
     // A. RTL text
@@ -270,18 +280,18 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     aRefCharWidths = { 1168, 1168, 1819, 2389, 3611, 3611 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ false).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 2) Caret placement DX array, ligature width is distributed over its
     // components.
     aRefCharWidths = { 584, 1168, 1819, 2389, 3000, 3611 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ true).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 3) caret placement with combining marks, they should not add to ligature
     // component count.
@@ -293,10 +303,10 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     CPPUNIT_ASSERT_EQUAL(aCharWidths[2], aCharWidths[3]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[6], aCharWidths[7]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[8], aCharWidths[9]);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth2);
     CPPUNIT_ASSERT_EQUAL(nTextWidth, nTextWidth2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // B. LTR text
     aText = u"fi fl ffi ffl"_ustr;
@@ -307,18 +317,18 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     aRefCharWidths = { 1290, 1290, 1941, 3231, 3231, 3882, 5862, 5862, 5862, 6513, 8493, 8493, 8493 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ false).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 2) Caret placement DX array, ligature width is distributed over its
     // components.
     aRefCharWidths = { 645, 1290, 1941, 2586, 3231, 3882, 4542, 5202, 5862, 6513, 7173, 7833, 8493 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ true).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 #endif
 }
 
@@ -332,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     vcl::Font aFont;
     OUString aText;
     KernArray aCharWidths;
-    std::vector<sal_Int32> aRefCharWidths;
+    KernArray aRefCharWidths;
     tools::Long nTextWidth, nTextWidth2, nRefTextWidth;
 
     // A. RTL text
@@ -348,18 +358,18 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     aRefCharWidths= { 582, 582, 842, 1111, 1710, 1710 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ false).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 2) Caret placement DX array, ligature width is distributed over its
     // components.
     aRefCharWidths = { 291, 582, 842, 1111, 1410, 1710 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ true).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 3) caret placement with combining marks, they should not add to ligature
     // component count.
@@ -371,10 +381,10 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     CPPUNIT_ASSERT_EQUAL(aCharWidths[2], aCharWidths[3]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[6], aCharWidths[7]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[8], aCharWidths[9]);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth2);
     CPPUNIT_ASSERT_EQUAL(nTextWidth, nTextWidth2);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // B. LTR text
     // Set font size to its UPEM to decrease rounding issues
@@ -390,9 +400,9 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
                        3544, 3544, 3544, 3836, 4634, 4634, 4926, 5996, 5996, 5996 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ false).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // 2) Caret placement DX array, ligature width is distributed over its
     // components.
@@ -400,9 +410,9 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
                        3004, 3278, 3544, 3836, 4138, 4634, 4926, 5199, 5494, 5996 };
     nTextWidth = basegfx::fround<tools::Long>(
         pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/ true).nWidth);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 #endif
 }
 
@@ -417,25 +427,25 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
     pOutDev->SetFont(aFont);
 
     // get an compare the default text array
-    std::vector<sal_Int32> aRefCharWidths{ 934, 2341, 2341, 3689, 4647, 5495 };
+    KernArray aRefCharWidths{ 934, 2341, 2341, 3689, 4647, 5495 };
     tools::Long nRefTextWidth(5495);
 
     KernArray aCharWidths;
     tools::Long nTextWidth
         = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aText, &aCharWidths).nWidth);
 
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // Simulate Kashida insertion using Kashida array and extending text array
     // to have room for Kashida.
     std::vector<sal_Bool> aKashidaArray{ false, false, false, true, false, false };
     auto nKashida = 4000;
 
-    aCharWidths.set(3, aCharWidths[3] + nKashida);
-    aCharWidths.set(4, aCharWidths[4] + nKashida);
-    aCharWidths.set(5, aCharWidths[5] + nKashida);
+    aCharWidths[3] += nKashida;
+    aCharWidths[4] += nKashida;
+    aCharWidths[5] += nKashida;
     auto pLayout = pOutDev->ImplLayout(aText, 0, -1, Point(0, 0), 0, aCharWidths, aKashidaArray);
 
     // Without the fix this fails with:
@@ -463,7 +473,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048_2)
     // Without the fix this fails with:
     // - Expected: 158
     // - Actual  : 118
-    CPPUNIT_ASSERT_EQUAL(aCharWidths.back(), sal_Int32(nTextWidth));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(aCharWidths.back()), nTextWidth);
 #endif
 }
 
@@ -525,14 +535,14 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advanceme
 
     // absolute character widths AKA text array.
     tools::Long nRefTextWidth = 704;
-    std::vector<sal_Int32> aRefCharWidths = { 72, 144, 190, 236, 259, 305, 333, 379, 425, 474, 523, 551, 567, 612, 658, 704 };
+    KernArray aRefCharWidths = { 72, 144, 190, 236, 259, 305, 333, 379, 425, 474, 523, 551, 567, 612, 658, 704 };
     KernArray aCharWidths;
     tools::Long nTextWidth
         = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aTestScript, &aCharWidths).nWidth);
 
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths);
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aTestScript));

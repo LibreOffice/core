@@ -891,13 +891,13 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString& rText, K
         {
             if (!pDXArray.empty())
             {
-                aOwnArray.assign(pDXArray);
+                aOwnArray.assign(pDXArray.begin(), pDXArray.end());
                 pDX = aOwnArray;
             }
             const double fFactor = static_cast<double>(nWidth) / nNormWidth;
 
             for( i = 0; i < ( nLen - 1 ); i++ )
-                aOwnArray.set(i, basegfx::fround(aOwnArray[i] * fFactor));
+                aOwnArray[i] *= fFactor;
         }
     }
 

@@ -2982,7 +2982,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
-    CPPUNIT_ASSERT_EQUAL("1898, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
+    CPPUNIT_ASSERT_EQUAL("1897, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 
     // deselect & check
     m_aTextSelectionStart = ""_ostr;
@@ -3003,7 +3003,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     CPPUNIT_ASSERT_EQUAL(aText, OString(pText));
     free(pText);
     CPPUNIT_ASSERT_EQUAL("1418, 1418, 0, 275"_ostr, m_aTextSelectionStart);
-    CPPUNIT_ASSERT_EQUAL("1898, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
+    CPPUNIT_ASSERT_EQUAL("1897, 1418, 0, 275"_ostr, m_aTextSelectionEnd);
 }
 
 void DesktopLOKTest::testDialogPaste()

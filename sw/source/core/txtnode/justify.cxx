@@ -152,23 +152,23 @@ void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText, sal_Int
         }
 
         cChPrev = nCh;
-        rKernArray.adjust(nPrevIdx, nKernSum + nSpaceSum);
+        rKernArray[nPrevIdx] += nKernSum + nSpaceSum;
         // In word line mode and for Arabic, we disabled the half space trick. If a portion
         // ends with a blank, the full nSpaceAdd value has been added to the character in
         // front of the blank. This leads to painting artifacts, therefore we remove the
         // nSpaceAdd value again:
         if (bNoHalfSpace && i + 1 == nLen && nCh == CH_BLANK)
-            rKernArray.adjust(nPrevIdx, -nSpaceAdd);
+            rKernArray[nPrevIdx] += -nSpaceAdd;
 
         // Advance nPrevIdx and assign kern values to previous cluster.
         for (tools::Long nValue = rKernArray[nPrevIdx++]; nPrevIdx < i; ++nPrevIdx)
-            rKernArray.set(nPrevIdx, nValue);
+            rKernArray[nPrevIdx] = nValue;
     }
 
     // the layout engine requires the total width of the output
     while (nPrevIdx < nLen)
     {
-        rKernArray.adjust(nPrevIdx, nKernSum + nSpaceSum);
+        rKernArray[nPrevIdx] += nKernSum + nSpaceSum;
         ++nPrevIdx;
     }
 }
@@ -199,14 +199,14 @@ tools::Long SnapToGrid(KernArray& rKernArray, std::u16string_view aText, sal_Int
 
         while (nLast < i)
         {
-            rKernArray.set(nLast, nX);
+            rKernArray[nLast] = nX;
             ++nLast;
         }
     }
 
     while (nLast < nLen)
     {
-        rKernArray.set(nLast, nEdge);
+        rKernArray[nLast] = nEdge;
         ++nLast;
     }
 
@@ -238,7 +238,7 @@ void lcl_MsoCompatSnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::L
         tools::Long nMinWidth = lcl_MsoGridWidth(nGridWidth, nBaseFontSize, nCharWidth + nKern);
         while (nLast < i)
         {
-            rKernArray.set(nLast, nEdge);
+            rKernArray[nLast] = nEdge;
             ++nLast;
         }
 
@@ -247,7 +247,7 @@ void lcl_MsoCompatSnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::L
 
     while (nLast < nLen)
     {
-        rKernArray.set(nLast, nEdge);
+        rKernArray[nLast] = nEdge;
         ++nLast;
     }
 }
@@ -279,7 +279,7 @@ void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidt
         tools::Long nMinWidth = lcl_MinGridWidth(nGridWidth, nCharWidth + nKern);
         while (nLast < i)
         {
-            rKernArray.set(nLast, nEdge);
+            rKernArray[nLast] = nEdge;
             ++nLast;
         }
 
@@ -288,7 +288,7 @@ void SnapToGridEdge(KernArray& rKernArray, sal_Int32 nLen, tools::Long nGridWidt
 
     while (nLast < nLen)
     {
-        rKernArray.set(nLast, nEdge);
+        rKernArray[nLast] = nEdge;
         ++nLast;
     }
 }

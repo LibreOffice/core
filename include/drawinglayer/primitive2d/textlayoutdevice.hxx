@@ -25,6 +25,7 @@
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <vector>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <vcl/kernarray.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/fontenum.hxx>
 #include <span>
@@ -34,7 +35,6 @@ class VirtualDevice;
 class GDIMetaFile;
 enum class DrawTextFlags;
 class SalLayout;
-class KernArray;
 namespace vcl
 {
 class Font;

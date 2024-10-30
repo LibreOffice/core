@@ -677,7 +677,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
-    maDXAry.assign(pDXAry);
+    maDXAry.assign(pDXAry.begin(), pDXAry.end());
 }
 
 MetaTextArrayAction::MetaTextArrayAction(const Point& rStartPt, OUString aStr, KernArraySpan pDXAry,
@@ -693,7 +693,7 @@ MetaTextArrayAction::MetaTextArrayAction(const Point& rStartPt, OUString aStr, K
     , mnLayoutContextIndex(nLayoutContextIndex)
     , mnLayoutContextLen(nLayoutContextLen)
 {
-    maDXAry.assign(pDXAry);
+    maDXAry.assign(pDXAry.begin(), pDXAry.end());
 }
 
 MetaTextArrayAction::~MetaTextArrayAction()
@@ -733,7 +733,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     if ( !maDXAry.empty() && mnLen )
     {
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
-            maDXAry.set(i, basegfx::fround(maDXAry[i] * fabs(fScaleX)));
+            maDXAry[i] *= fabs(fScaleX);
     }
 }
 

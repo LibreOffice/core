@@ -805,7 +805,7 @@ namespace emfio
                                     }
                                 }
 
-                                aDXAry.set(i, nDx);
+                                aDXAry[i] = nDx;
                                 if ( nOptions & ETO_PDY )
                                 {
                                     pDYAry[i] = nDy;
@@ -1303,7 +1303,7 @@ namespace emfio
                                                     {
                                                         sal_Int32 val;
                                                         aMemoryStream.ReadInt32(val);
-                                                        aDXAry.set(i, val);
+                                                        aDXAry[i] = val;
                                                     }
                                                     aMemoryStream.ReadUInt32(mnSkipActions);
                                                     DrawText(aPt, aString,

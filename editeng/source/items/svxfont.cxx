@@ -480,10 +480,10 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
     if( IsFixKerning() && ( nLen > 1 ) && !bStacked)
     {
-        auto nKern = GetFixKerning();
-        tools::Long nOldValue = (*pDXArray)[0];
+        short nKern = GetFixKerning();
+        double nOldValue = (*pDXArray)[0];
         tools::Long nSpaceSum = nKern;
-        pDXArray->adjust(0, nSpaceSum);
+        (*pDXArray)[0] += nSpaceSum;
 
         for ( sal_Int32 i = 1; i < nLen; i++ )
         {
@@ -492,14 +492,14 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                 nOldValue = (*pDXArray)[i];
                 nSpaceSum += nKern;
             }
-            pDXArray->adjust(i, nSpaceSum);
+            (*pDXArray)[i] += nSpaceSum;
         }
 
         // The last one is a nKern too big:
         nOldValue = (*pDXArray)[nLen - 1];
-        tools::Long nNewValue = nOldValue - nKern;
+        double nNewValue = nOldValue - nKern;
         for ( sal_Int32 i = nLen - 1; i >= 0 && (*pDXArray)[i] == nOldValue; --i)
-            pDXArray->set(i, nNewValue);
+            (*pDXArray)[i] = nNewValue;
 
         aTxtSize.AdjustWidth(nSpaceSum - nKern);
     }
@@ -525,7 +525,7 @@ Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
 }
 
 static void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUString& rStr,
-                           std::span<const sal_Int32> pDXAry,
+                           KernArraySpan pDXAry,
                            std::span<const sal_Bool> pKashidaAry,
                            sal_Int32 nIndex, sal_Int32 nLen )
 {
@@ -536,7 +536,7 @@ static void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUSt
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
     const sal_Int32 nIdx, const sal_Int32 nLen,
-    std::span<const sal_Int32> pDXArray,
+    KernArraySpan pDXArray,
     std::span<const sal_Bool> pKashidaArray) const
 {
 
@@ -728,14 +728,11 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
         KernArray aKernArray;
         aPartSize.setWidth(basegfx::fround<tools::Long>(
             pOut->GetTextArray(_rTxt, &aKernArray, _nIdx, _nLen).nWidth));
-        assert(pDXAry->get_factor() == aKernArray.get_factor());
-        auto& dest = pDXAry->get_subunit_array();
-        sal_Int32 nStart = dest.empty() ? 0 : dest.back();
+        double nStart = pDXAry->empty() ? 0 : pDXAry->back();
         size_t nSrcLen = aKernArray.size();
-        dest.reserve(dest.size() + nSrcLen);
-        const auto& src = aKernArray.get_subunit_array();
+        pDXAry->reserve(pDXAry->size() + nSrcLen);
         for (size_t i = 0; i < nSrcLen; ++i)
-            dest.push_back(src[i] + nStart);
+            (*pDXAry).push_back(aKernArray[i] + nStart);
     }
     else
     {
@@ -782,11 +779,11 @@ protected:
     Point aPos;
     Point aSpacePos;
     short nKern;
-    std::span<const sal_Int32> pDXArray;
+    KernArraySpan pDXArray;
     std::span<const sal_Bool> pKashidaArray;
 public:
     SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *_pOut, const OUString &_rTxt,
-                      std::span<const sal_Int32> _pDXArray,
+                      KernArraySpan _pDXArray,
                       std::span<const sal_Bool> _pKashidaArray,
                       const sal_Int32 _nIdx, const sal_Int32 _nLen,
                       const Point &rPos, const short nKrn )
@@ -872,10 +869,10 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 nSpanIdx,
 
         Point aStartPos(aPos.X() + nStartX, aPos.Y());
 
-        std::vector<sal_Int32> aDXArray;
-        aDXArray.reserve(nSpanLen);
+        KernArray aDXArray;
+        aDXArray.resize(nSpanLen);
         for (sal_Int32 i = 0; i < nSpanLen; ++i)
-            aDXArray.push_back(pDXArray[nStartOffset + i] - nStartX);
+            aDXArray[i] = pDXArray[nStartOffset + i] - nStartX;
 
         auto aKashidaArray = !pKashidaArray.empty() ?
             std::span<const sal_Bool>(pKashidaArray.data() + nStartOffset, nSpanLen) :
@@ -901,7 +898,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 nSpanIdx,
 
 void SvxFont::DrawCapital( OutputDevice *pOut,
                const Point &rPos, const OUString &rTxt,
-               std::span<const sal_Int32> pDXArray,
+               KernArraySpan pDXArray,
                std::span<const sal_Bool> pKashidaArray,
                const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {

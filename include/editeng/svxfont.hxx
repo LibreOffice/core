@@ -26,6 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include <tools/long.hxx>
 #include <vcl/font.hxx>
+#include <vcl/kernarray.hxx>
 #include <editeng/editengdllapi.h>
 #include <tools/poly.hxx>
 
@@ -33,7 +34,6 @@
 // See i#1526# for full explanation
 #define SMALL_CAPS_PERCENTAGE 80
 
-class KernArray;
 class SvxDoCapitals;
 class OutputDevice;
 class Printer;
@@ -82,7 +82,7 @@ public:
     Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt, KernArray* pDXAry,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                      std::span<const sal_Int32> pDXArray,
+                      KernArraySpan pDXArray,
                       std::span<const sal_Bool> pKashidaArray,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
@@ -96,7 +96,7 @@ public:
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
-                        std::span<const sal_Int32> pDXArray = {},
+                        KernArraySpan pDXArray = {},
                         std::span<const sal_Bool> pKashidaArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,

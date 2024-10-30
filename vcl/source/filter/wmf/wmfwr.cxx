@@ -1204,8 +1204,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 }
                 else
                 {
+                    const double fAdjust = static_cast<double>(pA->GetWidth()) / nNormSize;
                     for ( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
-                        aDXAry.set(i, aDXAry[i] * static_cast<sal_Int32>(pA->GetWidth()) / nNormSize);
+                        aDXAry[i] *= fAdjust;
                     if ( ( nLen <= 1 ) || ( static_cast<sal_Int32>(pA->GetWidth()) == nNormSize ) )
                         aDXAry.clear();
                     aSrcLineInfo = LineInfo();

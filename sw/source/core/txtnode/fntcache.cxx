@@ -1108,7 +1108,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 tools::Long nSum = nDiff;
                 for( sal_Int32 i = 0; i < nZwi; )
                 {
-                    aKernArray.adjust(i, nSum);
+                    aKernArray[i] += nSum;
                     if( ++i == nRest )
                         nDiff += nAdd;
                     nSum += nDiff;
@@ -1202,7 +1202,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     if (CH_BLANK == rInf.GetText()[sal_Int32(rInf.GetIdx()) + i])
                         nKernSum += nSpaceAdd;
-                    aKernArray.adjust(i, nKernSum);
+                    aKernArray[i] += nKernSum;
                 }
 
                 // In case of underlined/strike-through justified text
@@ -1213,14 +1213,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     // If it is a single underlined space, output 2 spaces:
                     if (TextFrameIndex(1) == rInf.GetLen())
                     {
-                        aKernArray.set(0, rInf.GetWidth() + nSpaceAdd);
+                        aKernArray[0] = rInf.GetWidth() + nSpaceAdd;
                         rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                              aKernArray, aKashidaArray, sal_Int32(rInf.GetIdx()), 1 );
                     }
                     else
                     {
                         sal_Int32 nIndex(sal_Int32(rInf.GetLen()) - 2);
-                        aKernArray.adjust(nIndex, nSpaceAdd);
+                        aKernArray[nIndex] += nSpaceAdd;
                         DrawTextArray(rInf.GetOut(), aTextOriginPos, rInf.GetText(), aKernArray,
                                       aKashidaArray, sal_Int32{ rInf.GetIdx() },
                                       sal_Int32{ rInf.GetLen() }, rInf.GetLayoutContext());
@@ -1455,9 +1455,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         // have to output 2 spaces:
         if ((nCnt == TextFrameIndex(1)) && rInf.GetSpace() && (cChPrev == CH_BLANK))
         {
-            aKernArray.set(0, rInf.GetWidth() +
+            aKernArray[0] = rInf.GetWidth() +
                             rInf.GetKern() +
-                           (rInf.GetSpace() / SPACING_PRECISION_FACTOR));
+                           (rInf.GetSpace() / SPACING_PRECISION_FACTOR);
 
             if ( bSwitchL2R )
                 rInf.GetFrame()->SwitchLTRtoRTL( aTextOriginPos );
@@ -1615,9 +1615,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         for( sal_Int32 i = 1 ; i < nLen ; ++i )
                         {
                             if ( aBulletOverlay[ i ] == CH_BULLET )
-                                aKernArray.adjust(i - 1, nShift);
+                                aKernArray[i - 1] += nShift;
                             if ( nAdd )
-                                aKernArray.adjust(i - 1, -nAdd);
+                                aKernArray[i - 1] += -nAdd;
                         }
                     }
                     rInf.GetOut().DrawTextArray( aTextOriginPos, aBulletOverlay, aKernArray,

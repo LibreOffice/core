@@ -208,12 +208,7 @@ namespace dxcanvas
             if( rLogicalAdvancements.getLength() )
             {
                 // create the DXArray
-                const sal_Int32 nLen( rLogicalAdvancements.getLength() );
-                KernArray DXArray;
-                DXArray.reserve(nLen);
-                for( sal_Int32 i=0; i<nLen; ++i )
-                    DXArray.push_back(basegfx::fround(rLogicalAdvancements[i]));
-
+                KernArraySpan DXArray( rLogicalAdvancements.getConstArray(), rLogicalAdvancements.getLength() );
                 std::span<const sal_Bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
 
                 // draw the String

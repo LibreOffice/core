@@ -169,8 +169,6 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, aViewState, aRenderState));
-
         std::vector< ::tools::Rectangle > aMetricVector;
         uno::Sequence<geometry::RealRectangle2D> aBoundingBoxes;
         if (pVDev->GetGlyphBoundRects(

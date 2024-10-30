@@ -3389,7 +3389,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownFormFieldButton)
         CPPUNIT_ASSERT_EQUAL("drop-down"_ostr, sType);
 
         OString sTextArea( aTree.get_child("textArea").get_value<std::string>() );
-        CPPUNIT_ASSERT_EQUAL("1538, 1418, 1026, 275"_ostr, sTextArea);
+        CPPUNIT_ASSERT_EQUAL("1538, 1418, 1025, 275"_ostr, sTextArea);
 
         boost::property_tree::ptree aItems = aTree.get_child("params").get_child("items");
         CPPUNIT_ASSERT_EQUAL(size_t(6), aItems.size());

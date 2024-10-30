@@ -2724,7 +2724,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     if( !pDXArray.empty() )
     {
         aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
-        aTmpArray.assign(pDXArray);
+        aTmpArray.assign(pDXArray.begin(), pDXArray.end());
     }
     else
     {
@@ -2786,7 +2786,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
                 const double fFactor = static_cast<double>(nWidth) / aNormSize.Width();
 
                 for( i = 0; i < ( nLen - 1 ); i++ )
-                    aTmpArray.set(i, basegfx::fround(aTmpArray[i] * fFactor));
+                    aTmpArray[i] *= fFactor;
             }
             else
             {

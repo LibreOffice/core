@@ -2140,12 +2140,12 @@ void Test::testCreateLines()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rLine.GetStart());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rLine.GetEnd());
 
-        std::vector<sal_Int32> const& rArray = rLine.GetCharPosArray();
+        KernArray const& rArray = rLine.GetCharPosArray();
         CPPUNIT_ASSERT_EQUAL(size_t(3), rArray.size());
 
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(173), rArray[0]);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(333), rArray[1]);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(493), rArray[2]);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(173), sal_Int32(rArray[0]));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(333), sal_Int32(rArray[1]));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(493), sal_Int32(rArray[2]));
     }
 
     {

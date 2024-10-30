@@ -191,14 +191,14 @@ namespace
             }
 
             sal_Int32 nStartOffset = nSpanIdx - nIdx;
-            sal_Int32 nStartX = nStartOffset ? m_rInfo.mpDXArray[nStartOffset - 1] : 0;
+            double nStartX = nStartOffset ? m_rInfo.mpDXArray[nStartOffset - 1] : 0;
 
             Point aStartPos(m_rInfo.mrStartPos.X() + nStartX, m_rInfo.mrStartPos.Y());
 
-            std::vector<sal_Int32> aDXArray;
-            aDXArray.reserve(nSpanLen);
+            KernArray aDXArray;
+            aDXArray.resize(nSpanLen);
             for (sal_Int32 i = 0; i < nSpanLen; ++i)
-                aDXArray.push_back(m_rInfo.mpDXArray[nStartOffset + i] - nStartX);
+                aDXArray[i] = m_rInfo.mpDXArray[nStartOffset + i] - nStartX;
 
             auto aKashidaArray = !m_rInfo.mpKashidaArray.empty() ?
                 std::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen) :

@@ -4439,7 +4439,7 @@ tools::Long ImpEditEngine::GetXPos(ParaPortion const& rParaPortion, EditLine con
                         if ( nType == AsianCompressionFlags::PunctuationRight && !rLine.GetCharPosArray().empty() )
                         {
                             sal_Int32 n = nIndex - nTextPortionStart;
-                            const sal_Int32* pDXArray = rLine.GetCharPosArray().data() + (nTextPortionStart - rLine.GetStart());
+                            const double* pDXArray = rLine.GetCharPosArray().data() + (nTextPortionStart - rLine.GetStart());
                             sal_Int32 nCharWidth = ( ( (n+1) < rPortion.GetLen() ) ? pDXArray[n] : rPortion.GetSize().Width() )
                                                             - ( n ? pDXArray[n-1] : 0 );
                             if ( (n+1) < rPortion.GetLen() )

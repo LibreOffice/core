@@ -353,22 +353,14 @@ void TextSimplePortionPrimitive2D::createTextLayouter(TextLayouterDevice& rTextL
 std::unique_ptr<SalLayout>
 TextSimplePortionPrimitive2D::createSalLayout(TextLayouterDevice& rTextLayouter) const
 {
-    // create integer DXArray. As mentioned above we can act in the
+    // As mentioned above we can act in the
     // Text's local coordinate system without transformation at all
     const ::std::vector<double>& rDXArray(getDXArray());
-    KernArray aDXArray;
-
-    if (!rDXArray.empty())
-    {
-        aDXArray.reserve(rDXArray.size());
-        for (auto const& elem : rDXArray)
-            aDXArray.push_back(basegfx::fround(elem));
-    }
 
     // create SalLayout. No need for a position, as mentioned text can work
     // without transformations, so start point is always 0,0
     return rTextLayouter.getSalLayout(getText(), getTextPosition(), getTextLength(),
-                                      basegfx::B2DPoint(0.0, 0.0), aDXArray, getKashidaArray());
+                                      basegfx::B2DPoint(0.0, 0.0), rDXArray, getKashidaArray());
 }
 
 // provide unique ID

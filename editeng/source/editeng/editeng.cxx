@@ -1582,7 +1582,7 @@ EditEngine::CreateTransferable(const ESelection& rSelection)
 // ======================    Virtual Methods    ========================
 
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
-                              std::span<const sal_Int32>, std::span<const sal_Bool>,
+                              KernArraySpan, std::span<const sal_Bool>,
                               const SvxFont&, sal_Int32 /*nPara*/, sal_uInt8 /*nRightToLeft*/,
                               const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool,
                               const css::lang::Locale*, const Color&, const Color&)

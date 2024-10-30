@@ -47,6 +47,7 @@
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
+#include <vcl/kernarray.hxx>
 #include <comphelper/errcode.hxx>
 #include <functional>
 
@@ -498,7 +499,7 @@ public:
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              std::span<const sal_Int32> pDXArray,
+                              KernArraySpan pDXArray,
                               std::span<const sal_Bool> pKashidaArray,
                               const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,

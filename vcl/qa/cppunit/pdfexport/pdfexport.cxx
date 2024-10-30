@@ -2246,7 +2246,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
                 // this changed to the end of the text, not the start of the fly
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(187.207, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(187.157, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(688.389, pNumB->GetValue(), 1e-3);
@@ -2312,7 +2312,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(660.789, pNumT->GetValue(), 1e-3);
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(146.157, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(146.107, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(674.589, pNumB->GetValue(), 1e-3);
@@ -2372,13 +2372,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), rElements.size());
                 const auto* pNumL = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[0]);
                 CPPUNIT_ASSERT(pNumL);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(146.093, pNumL->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(146.043, pNumL->GetValue(), 1e-3);
                 const auto* pNumT = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[1]);
                 CPPUNIT_ASSERT(pNumT);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(660.789, pNumT->GetValue(), 1e-3);
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(179.457, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(179.357, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(674.589, pNumB->GetValue(), 1e-3);
@@ -2510,7 +2510,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816)
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(633.189, pNumT->GetValue(), 1e-3);
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(86.807, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(86.757, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(646.989, pNumB->GetValue(), 1e-3);
@@ -2636,7 +2636,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
                 // this changed to the end of the text, not the start of the fly
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(191.707, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(191.657, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(785.189, pNumB->GetValue(), 1e-3);
@@ -2792,7 +2792,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157816Link)
                 const auto* pNumR = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[2]);
                 CPPUNIT_ASSERT(pNumR);
                 // this changed to the end of the text, not the start of the fly
-                CPPUNIT_ASSERT_DOUBLES_EQUAL(191.707, pNumR->GetValue(), 1e-3);
+                CPPUNIT_ASSERT_DOUBLES_EQUAL(191.657, pNumR->GetValue(), 1e-3);
                 const auto* pNumB = dynamic_cast<vcl::filter::PDFNumberElement*>(rElements[3]);
                 CPPUNIT_ASSERT(pNumB);
                 CPPUNIT_ASSERT_DOUBLES_EQUAL(771.389, pNumB->GetValue(), 1e-3);

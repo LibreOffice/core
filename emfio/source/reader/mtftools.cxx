@@ -1681,7 +1681,7 @@ namespace emfio
                 // #i121382# Map DXArray using WorldTransform
                 const Size aSizeX(ImplMap(Size(nSumX, 0)));
                 const basegfx::B2DVector aVectorX(aSizeX.Width(), aSizeX.Height());
-                pDXArry->set(i, basegfx::fround(aVectorX.getLength()) * (nSumX >= 0 ? 1 : -1));
+                (*pDXArry)[i] = aVectorX.getLength() * (nSumX >= 0 ? 1 : -1);
 
                 if (pDYArry)
                 {

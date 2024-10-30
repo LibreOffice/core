@@ -2141,8 +2141,8 @@ tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, T
                 nSub -= nLast;
                 nLast = rKernArray[ nI ];
                 if( nI && nMove )
-                    rKernArray.adjust(nI - 1, nMove);
-                rKernArray.adjust(nI, -nSub);
+                    rKernArray[nI - 1] += nMove;
+                rKernArray[nI] += -nSub;
                 ++nI;
                 ++nIdx;
             }
@@ -2163,7 +2163,7 @@ tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, T
         while( nIdx < nTmpChg )
         {
             nLast = rKernArray[ nI ];
-            rKernArray.adjust(nI, -nSub);
+            rKernArray[nI] += -nSub;
             ++nI;
             ++nIdx;
         }
@@ -2251,7 +2251,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( KernArray* pKernArray,
 
             while ( nArrayPos < nArrayEnd )
             {
-                pKernArray->adjust(sal_Int32(nArrayPos), nKashAdd);
+                (*pKernArray)[sal_Int32(nArrayPos)] += nKashAdd;
                 ++nArrayPos;
             }
             nKashAdd += nSpaceAdd;
@@ -2496,7 +2496,7 @@ TextFrameIndex SwScriptInfo::ThaiJustify( std::u16string_view aText, KernArray* 
         }
 
         if (pKernArray)
-            pKernArray->adjust(nI, nSpaceSum);
+            (*pKernArray)[nI] += nSpaceSum;
     }
 
     return nCnt;
@@ -2877,7 +2877,7 @@ void SwScriptInfo::CJKJustify( const OUString& rText, KernArray& rKernArray,
             if (nNext < sal_Int32(nStt + nLen) || !bIsSpaceStop)
                 nSpaceSum += nSpaceAdd;
         }
-        rKernArray.adjust(nI, nSpaceSum);
+        rKernArray[nI] += nSpaceSum;
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

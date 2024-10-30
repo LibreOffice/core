@@ -71,14 +71,14 @@ struct ExtraPortionInfo
     bool bFirstCharIsRightPunktuation = false;
     bool bCompressed = false;
 
-    std::unique_ptr<sal_Int32[]> pOrgDXArray;
+    std::unique_ptr<double[]> pOrgDXArray;
     std::vector<sal_Int32> lineBreaksList;
 
-    void SaveOrgDXArray(const sal_Int32* pDXArray, sal_Int32 nLen)
+    void SaveOrgDXArray(const double* pDXArray, sal_Int32 nLen)
     {
         if (pDXArray)
         {
-            pOrgDXArray.reset(new sal_Int32[nLen]);
+            pOrgDXArray.reset(new double[nLen]);
             memcpy(pOrgDXArray.get(), pDXArray, nLen * sizeof(sal_Int32));
         }
         else

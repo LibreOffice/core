@@ -865,8 +865,8 @@ void SvmTest::testTextArray()
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
-    sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawTextArray(Point(4,6), u"123456"_ustr, KernArraySpan(aDX), {}, 1, 4);
+    KernArray aDX { 10, 15, 20, 25, 30, 35 };
+    pVirtualDev->DrawTextArray(Point(4,6), u"123456"_ustr, aDX, {}, 1, 4);
 
     checkTextArray(writeAndReadStream(aGDIMetaFile));
     checkTextArray(readFile(u"textarray.svm"));
@@ -892,8 +892,8 @@ void SvmTest::testTextArrayWithContext()
     GDIMetaFile aGDIMetaFile;
     ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
     setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
-    sal_Int32 const aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawPartialTextArray(Point(4, 6), u"123456"_ustr, KernArraySpan(aDX), {}, 0, 5, 1, 4);
+    KernArray aDX { 10, 15, 20, 25, 30, 35 };
+    pVirtualDev->DrawPartialTextArray(Point(4, 6), u"123456"_ustr, aDX, {}, 0, 5, 1, 4);
 
     checkTextArrayWithContext(writeAndReadStream(aGDIMetaFile));
     checkTextArrayWithContext(readFile(u"textarraycontext.svm"));

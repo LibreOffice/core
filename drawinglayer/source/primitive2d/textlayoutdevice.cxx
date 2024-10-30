@@ -274,13 +274,8 @@ void TextLayouterDevice::getTextOutlines(basegfx::B2DPolyPolygonVector& rB2DPoly
         OSL_ENSURE(nDXArrayCount == nTextLength,
                    "DXArray size does not correspond to text portion size (!)");
 
-        KernArray aIntegerDXArray;
-        aIntegerDXArray.reserve(nDXArrayCount);
-        for (sal_uInt32 a(0); a < nDXArrayCount; a++)
-            aIntegerDXArray.push_back(basegfx::fround(rDXArray[a]));
-
-        mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0,
-                                 aIntegerDXArray, rKashidaArray);
+        mrDevice.GetTextOutlines(rB2DPolyPolyVector, rText, nIndex, nIndex, nLength, 0, rDXArray,
+                                 rKashidaArray);
     }
     else
     {
@@ -374,8 +369,7 @@ TextLayouterDevice::getSalLayout(const OUString& rText, sal_uInt32 nIndex, sal_u
         SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&mrDevice, rText, nIndex, nLength));
     const Point aStartPoint(basegfx::fround<tools::Long>(rStartPoint.getX()),
                             basegfx::fround<tools::Long>(rStartPoint.getY()));
-    KernArraySpan aKernArraySpan(rDXArray);
-    return mrDevice.ImplLayout(rText, nIndex, nLength, aStartPoint, 0, aKernArraySpan, pKashidaAry,
+    return mrDevice.ImplLayout(rText, nIndex, nLength, aStartPoint, 0, rDXArray, pKashidaAry,
                                SalLayoutFlags::NONE, nullptr, pGlyphs);
 }
 

@@ -22,16 +22,14 @@
 #include <vector>
 #include <sal/types.h>
 #include <tools/gen.hxx>
+#include <vcl/kernarray.hxx>
 
 class ParaPortion;
 
 class EditLine
 {
-public:
-    typedef std::vector<sal_Int32> CharPosArrayType;
-
 private:
-    CharPosArrayType maPositions;
+    KernArray maPositions;
     std::vector<sal_Bool> maKashidaPositions;
     sal_Int32 mnTextWidth = 0;
     sal_Int32 mnStartPosX = 0;
@@ -111,8 +109,8 @@ public:
 
     bool IsEmpty() const { return mnEnd <= mnStart; }
 
-    CharPosArrayType& GetCharPosArray() { return maPositions; }
-    const CharPosArrayType& GetCharPosArray() const { return maPositions; }
+    KernArray& GetCharPosArray() { return maPositions; }
+    const KernArray& GetCharPosArray() const { return maPositions; }
 
     std::vector<sal_Bool>& GetKashidaArray() { return maKashidaPositions; }
     const std::vector<sal_Bool>& GetKashidaArray() const { return maKashidaPositions; }

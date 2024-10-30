@@ -407,7 +407,7 @@ public:
     sal_Int32           mnTextLen;
     sal_Int32           mnPara;
     const SvxFont&      mrFont;
-    std::span<const sal_Int32> mpDXArray;
+    KernArraySpan mpDXArray;
     std::span<const sal_Bool> mpKashidaArray;
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
@@ -431,7 +431,7 @@ public:
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        std::span<const sal_Int32> pDXArr,
+        KernArraySpan pDXArr,
         std::span<const sal_Bool> pKashidaArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
@@ -824,7 +824,7 @@ public:
 
     SAL_DLLPRIVATE void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              std::span<const sal_Int32> pDXArray,
+                              KernArraySpan pDXArray,
                               std::span<const sal_Bool> pKashidaArray,
                               const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,

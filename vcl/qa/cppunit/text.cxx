@@ -240,16 +240,16 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextFontSpecificKerning)
 
     // absolute character widths AKA text array.
     tools::Long nRefTextWidth = 2671;
-    std::vector<sal_Int32> aRefCharWidths = { 1270, 2671 };
+    KernArray aRefCharWidths{ 1270, 2671 };
     KernArray aCharWidths;
     tools::Long nTextWidth
         = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths).nWidth);
 
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths[0]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths[1]);
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aAV));
@@ -290,16 +290,16 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextNoKerning)
 
     // absolute character widths AKA text array.
     tools::Long nRefTextWidth = 2802;
-    std::vector<sal_Int32> aRefCharWidths = { 1401, 2802 };
+    KernArray aRefCharWidths{ 1401, 2802 };
     KernArray aCharWidths;
     tools::Long nTextWidth
         = basegfx::fround<tools::Long>(pOutDev->GetTextArray(aAV, &aCharWidths).nWidth);
 
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
-    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths[0]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths[1]);
     // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, tools::Long(aCharWidths.back()));
 
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aAV));

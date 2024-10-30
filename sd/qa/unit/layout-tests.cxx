@@ -393,9 +393,9 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
 
     // index, length, x, y
     const std::tuple<int, int, int, int> strings[] = {
-        { 0, 6, 9599, 8647 }, //                        Lorem
+        { 0, 6, 9600, 8647 }, //                        Lorem
         { 6, 22, 7570, 9358 }, //               ipsum dolor sit amet,
-        { 28, 29, 6775, 10069 }, //         consectetur adipiscing elit.
+        { 28, 29, 6776, 10069 }, //         consectetur adipiscing elit.
         { 57, 29, 6299, 10780 }, //         Vestibulum consequat mi quis
         { 86, 37, 5453, 11491 }, //     pretium semper. Proin luctus orci ac
         { 123, 36, 5134, 12202 }, //     neque venenatis, quis commodo dolor
@@ -404,7 +404,7 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf152906_AdjustToContour)
         { 243, 40, 4975, 14335 }, //   nec pellentesque eros molestie eget. In
         { 283, 42, 4552, 15046 }, //  consectetur aliquam hendrerit. Sed cursus
         { 325, 38, 5363, 15757 }, //    mauris vitae ligula pellentesque, non
-        { 363, 42, 4692, 16468 }, //  pellentesque urna aliquet. Fusce placerat
+        { 363, 42, 4693, 16468 }, //  pellentesque urna aliquet. Fusce placerat
         { 405, 37, 5047, 17179 }, //    mauris enim, nec rutrum purus semper
         { 442, 33, 5963, 17890 }, //      vel. Praesent tincidunt neque eu
         { 475, 29, 6387, 18601 }, //        pellentesque pharetra. Fusce

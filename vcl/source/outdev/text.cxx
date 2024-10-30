@@ -814,7 +814,7 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
         nPartLen = rStr.getLength() - nPartIndex;
     }
 
-    std::vector<sal_Int32>* pDXAry = pKernArray ? &pKernArray->get_subunit_array() : nullptr;
+    KernArray* pDXAry = pKernArray;
 
     // do layout
     std::unique_ptr<SalLayout> pSalLayout;
@@ -885,16 +885,10 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
     if (pDXPixelArray)
     {
         assert(pKernArray && "pDXPixelArray depends on pKernArray existing");
-        int nSubPixelFactor = pKernArray->get_factor();
         if (mbMap)
         {
             for (int i = 0; i < nPartLen; ++i)
-                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i] * nSubPixelFactor);
-        }
-        else if (nSubPixelFactor)
-        {
-            for (int i = 0; i < nPartLen; ++i)
-                (*pDXPixelArray)[i] *= nSubPixelFactor;
+                (*pDXPixelArray)[i] = ImplDevicePixelToLogicWidthDouble((*pDXPixelArray)[i]);
         }
     }
 
@@ -902,7 +896,7 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
     {
         pDXAry->resize(nPartLen);
         for (int i = 0; i < nPartLen; ++i)
-            (*pDXAry)[i] = basegfx::fround((*pDXPixelArray)[i]);
+            (*pDXAry)[i] = (*pDXPixelArray)[i];
     }
 
     vcl::TextArrayMetrics stReturnValue;
@@ -919,7 +913,7 @@ OutputDevice::GetPartialTextArray(const OUString& rStr, KernArray* pKernArray, s
     return stReturnValue;
 }
 
-void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXArray,
+void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretPos,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       const SalLayoutGlyphs* pGlyphs ) const
 {
@@ -930,7 +924,6 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXAr
         nLen = rStr.getLength() - nIndex;
 
     sal_Int32 nCaretPos = nLen * 2;
-    std::vector<sal_Int32>& rCaretPos = rCaretXArray.get_subunit_array();
     rCaretPos.resize(nCaretPos);
 
     // do layout
@@ -950,7 +943,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXAr
     for (i = 0; i < nCaretPos; ++i)
         if (aCaretPixelPos[i] >= 0)
             break;
-    tools::Long nXPos = (i < nCaretPos) ? aCaretPixelPos[i] : -1;
+    double nXPos = (i < nCaretPos) ? aCaretPixelPos[i] : -1;
     for (i = 0; i < nCaretPos; ++i)
     {
         if (aCaretPixelPos[i] >= 0)
@@ -967,21 +960,15 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, KernArray& rCaretXAr
             aCaretPixelPos[i] = nWidth - aCaretPixelPos[i] - 1;
     }
 
-    int nSubPixelFactor = rCaretXArray.get_factor();
     // convert from font units to logical units
     if( mbMap )
     {
         for (i = 0; i < nCaretPos; ++i)
-            aCaretPixelPos[i] = ImplDevicePixelToLogicWidth(aCaretPixelPos[i] * nSubPixelFactor);
-    }
-    else if (nSubPixelFactor)
-    {
-        for (i = 0; i < nCaretPos; ++i)
-            aCaretPixelPos[i] *= nSubPixelFactor;
+            aCaretPixelPos[i] = ImplDevicePixelToLogicWidthDouble(aCaretPixelPos[i]);
     }
 
     for (i = 0; i < nCaretPos; ++i)
-        rCaretPos[i] = basegfx::fround(aCaretPixelPos[i]);
+        rCaretPos[i] = aCaretPixelPos[i];
 }
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,
@@ -1266,12 +1253,11 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
         {
             // convert from logical units to font units without rounding,
             // keeping accuracy for lower levels
-            int nSubPixels = pDXArray.get_factor();
             for (int i = 0; i < nJustLen; ++i)
             {
                 stJustification.SetTotalAdvance(
                     nJustMinCluster + i,
-                    ImplLogicWidthToDeviceSubPixel(pDXArray.get_subunit(i)) / nSubPixels);
+                    ImplLogicWidthToDeviceSubPixel(pDXArray[i]));
             }
 
             nEndGlyphCoord = stJustification.GetTotalAdvance(nJustMinCluster + nJustLen - 1);
@@ -1280,7 +1266,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(
         {
             for (int i = 0; i < nJustLen; ++i)
             {
-                stJustification.SetTotalAdvance(nJustMinCluster + i, pDXArray.get(i));
+                stJustification.SetTotalAdvance(nJustMinCluster + i, pDXArray[i]);
             }
 
             nEndGlyphCoord

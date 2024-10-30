@@ -1399,7 +1399,7 @@ CPPUNIT_TEST_FIXTURE(Test, testExtTextOutOpaqueAndClipWMF)
 
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor", "color", u"#ff8000");
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/polypolygoncolor/polypolygon", "path",
-                u"m1067 1067h1317v473h-1317z");
+                u"m1067 1067h1317.12890625v473h-1317.12890625z");
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "text", u"OOOO");
     assertXPath(pDocument, aPrefix + "group[3]/mask/group/textsimpleportion", "fontcolor",
                 u"#000000");

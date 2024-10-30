@@ -991,15 +991,8 @@ namespace cppcanvas::internal
                     nStrikeoutWidth += nInterval;
                     KernArray aStrikeoutCharWidths;
 
-                    for ( int i = 0;i<nLen; i++)
-                    {
-                        aStrikeoutCharWidths.push_back(nStrikeoutWidth);
-                    }
-
-                    for ( int i = 1;i< nLen; i++ )
-                    {
-                        aStrikeoutCharWidths.adjust(i, aStrikeoutCharWidths[i - 1]);
-                    }
+                    for ( int i = 0;i< nLen; i++ )
+                        aStrikeoutCharWidths.push_back(nStrikeoutWidth * (i + 1));
 
                     pStrikeoutTextAction =
                         TextActionFactory::createTextAction(
@@ -2566,7 +2559,7 @@ namespace cppcanvas::internal
                         rVDev.GetTextArray( pAct->GetText(), &aDXArray,
                                             pAct->GetIndex(), pAct->GetLen() );
 
-                        const sal_Int32 nWidthDifference( pAct->GetWidth() - aDXArray[ nLen-1 ] );
+                        const double nWidthDifferencePerDx = ( pAct->GetWidth() - aDXArray[ nLen-1 ] ) / nLen;
 
                         // Last entry of pDXArray contains total width of the text
                         for (sal_Int32 i = 1; i <= nLen; ++i)
@@ -2577,7 +2570,7 @@ namespace cppcanvas::internal
                             // entry represents the 'end' position of
                             // the corresponding character, thus, we
                             // let i run from 1 to nLen.
-                            aDXArray.adjust(i - 1, i * nWidthDifference / nLen);
+                            aDXArray[i - 1] += i * nWidthDifferencePerDx;
                         }
 
                         createTextAction(

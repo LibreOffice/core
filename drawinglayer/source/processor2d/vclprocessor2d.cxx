@@ -309,7 +309,7 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
                 aDXArray.reserve(rTextCandidate.getDXArray().size());
                 for (auto const& elem : rTextCandidate.getDXArray())
-                    aDXArray.push_back(basegfx::fround(elem * fPixelVectorFactor));
+                    aDXArray.push_back(elem * fPixelVectorFactor);
             }
 
             // set parameters and paint text snippet

@@ -2193,7 +2193,7 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
                                 {
                                     double fMul = GetStretch();
                                     for (size_t i = 0; i < nLen; ++i)
-                                        aDX.set(i, static_cast<sal_Int32>(aDX[i] / fMul + 0.5));
+                                        aDX[i] /= fMul;
                                 }
 
                                 mpDev->DrawTextArray(aDrawTextPos, aShort, aDX, {}, 0, nLen);

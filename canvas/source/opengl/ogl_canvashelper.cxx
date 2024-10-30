@@ -728,12 +728,7 @@ namespace oglcanvas
                 uno::Sequence<double> aLogicalAdvancements=xLayoutetText->queryLogicalAdvancements();
                 if( aLogicalAdvancements.hasElements() )
                 {
-                    // create the DXArray
-                    const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    KernArray aDXArray;
-                    aDXArray.resize(nLen);
-                    for( sal_Int32 i=0; i<nLen; ++i )
-                        aDXArray.set(i, basegfx::fround(aLogicalAdvancements[i]));
+                    KernArraySpan aDXArray(aLogicalAdvancements.getConstArray(), aLogicalAdvancements.getLength());
 
                     uno::Sequence<sal_Bool> aKashidaPositions=xLayoutetText->queryKashidaPositions();
                     std::span<const sal_Bool> aKashidaArray(aKashidaPositions.getConstArray(), aKashidaPositions.getLength());

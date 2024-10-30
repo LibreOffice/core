@@ -967,8 +967,7 @@ void Outliner::PaintBullet(sal_Int32 nPara, const Point& rStartPos, const Point&
                     aTextPos.AdjustY( -(aMetric.GetDescent()) );
                 }
 
-                assert(aBuf.get_factor() == 1);
-                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf.get_subunit_array(), {},
+                DrawingText(aTextPos, pPara->GetText(), 0, pPara->GetText().getLength(), aBuf, {},
                     aSvxFont, nPara, bRightToLeftPara ? 1 : 0, nullptr, nullptr, false, false, true, nullptr, Color(), Color());
             }
             else
@@ -1644,7 +1643,7 @@ void Outliner::StripPortions()
 }
 
 void Outliner::DrawingText( const Point& rStartPos, const OUString& rText, sal_Int32 nTextStart,
-                            sal_Int32 nTextLen, std::span<const sal_Int32> pDXArray,
+                            sal_Int32 nTextLen, std::span<const double> pDXArray,
                             std::span<const sal_Bool> pKashidaArray, const SvxFont& rFont,
                             sal_Int32 nPara, sal_uInt8 nRightToLeft,
                             const EEngineData::WrongSpellVector* pWrongSpellVector,

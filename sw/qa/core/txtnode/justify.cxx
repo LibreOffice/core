@@ -56,13 +56,13 @@ std::ostream& operator<<(std::ostream& rStrm, const CharWidthArray& rCharWidthAr
 void CharWidthArray::ConvertToKernArray()
 {
     for (std::size_t i = 1; i < maArray.size(); ++i)
-        maArray.adjust(i, maArray[i - 1]);
+        maArray[i] += maArray[i - 1];
 }
 
 void CharWidthArray::ConvertToCharWidths()
 {
     for (sal_Int32 i = maArray.size() - 1; i > 0; --i)
-        maArray.adjust(i, -maArray[i - 1]);
+        maArray[i] -= maArray[i - 1];
 }
 
 /// Convert maArray to kern array values, then invoke the function, and convert it back.

@@ -153,7 +153,7 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
                               const Point& rPoint,
                               size_t nIndex,
                               size_t nMaxEnd,
-                              std::span<const sal_Int32> pDXArray,
+                              KernArraySpan pDXArray,
                               WrongList const * pWrongs,
                               Degree10 nOrientation,
                               const Point& rOrigin,
@@ -1051,7 +1051,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             bEOL = true;
                             bBrokenLine = true;
                         }
-                        EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+                        KernArray& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
                         bCompressedChars = false;
@@ -1065,7 +1065,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         bLineBreak = true;
                         pPortion->SetKind( PortionKind::LINEBREAK );
                         bCompressedChars = false;
-                        EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+                        KernArray& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
                     }
@@ -1179,7 +1179,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                             }
                         }
                         nTmpWidth += pPortion->GetSize().Width();
-                        EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+                        KernArray& rArray = pLine->GetCharPosArray();
                         size_t nPos = nTmpPos - pLine->GetStart();
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
                         pPortion->SetKind(PortionKind::FIELD);
@@ -1233,15 +1233,13 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // The array is  generally flattened at the beginning
                 // => Always simply quick inserts.
                 size_t nPos = nTmpPos - pLine->GetStart();
-                EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
-                assert(aCharPositionArray.get_factor() == 1);
-                std::vector<sal_Int32>& rKernArray = aCharPositionArray.get_subunit_array();
-                rArray.insert( rArray.begin() + nPos, rKernArray.data(), rKernArray.data() + nPortionLen);
+                KernArray& rArray = pLine->GetCharPosArray();
+                rArray.insert( rArray.begin() + nPos, aCharPositionArray.data(), aCharPositionArray.data() + nPortionLen);
 
                 // And now check for Compression:
                 if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
                 {
-                    sal_Int32* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
+                    double* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
                     bCompressedChars |= ImplCalcAsianCompression(
                         pNode, pPortion, nTmpPos, pDXArray, 10000, false);
                 }
@@ -1435,7 +1433,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
             {
                 // I need the manipulated DXArray for determining the break position...
-                sal_Int32* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
+                double* pDXArray = pLine->GetCharPosArray().data() + (nPortionStart - pLine->GetStart());
                 ImplCalcAsianCompression(
                     pNode, pPortion, nPortionStart, pDXArray, 10000, true);
             }
@@ -1648,7 +1646,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         // If a portion was wrapped there may be far too many positions in
         // CharPosArray:
-        EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
+        KernArray& rArray = pLine->GetCharPosArray();
         size_t nLen = pLine->GetLen();
         if (rArray.size() > nLen)
             rArray.erase(rArray.begin()+nLen, rArray.end());
@@ -3477,7 +3475,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                std::span<const sal_Int32> pDXArray;
+                                KernArraySpan pDXArray;
                                 std::span<const sal_Bool> pKashidaArray;
                                 KernArray aTmpDXArray;
 
@@ -3486,7 +3484,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aText = rParaPortion.GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = rTextPortion.GetLen();
-                                    pDXArray = std::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
+                                    pDXArray = KernArraySpan(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
                                                     pLine->GetCharPosArray().size() - (nIndex - pLine->GetStart()));
 
                                     if (!pLine->GetKashidaArray().empty())
@@ -3647,9 +3645,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen,
                                         &aTmpDXArray );
-                                    assert(aTmpDXArray.get_factor() == 1);
-                                    std::vector<sal_Int32>& rKernArray = aTmpDXArray.get_subunit_array();
-                                    pDXArray = rKernArray;
+                                    pDXArray = KernArraySpan(aTmpDXArray);
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
@@ -3676,9 +3672,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetPhysFont(*GetRefDevice());
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(),
                                         &aTmpDXArray );
-                                    assert(aTmpDXArray.get_factor() == 1);
-                                    std::vector<sal_Int32>& rKernArray = aTmpDXArray.get_subunit_array();
-                                    pDXArray = rKernArray;
+                                    pDXArray = aTmpDXArray;
                                 }
 
                                 tools::Long nTxtWidth = rTextPortion.GetSize().Width();
@@ -4792,7 +4786,7 @@ Color ImpEditEngine::GetAutoColor() const
 
 bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                                              TextPortion* pTextPortion, sal_Int32 nStartPos,
-                                             sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax,
+                                             double* pDXArray, sal_uInt16 n100thPercentFromMax,
                                              bool bManipulateDXArray)
 {
     DBG_ASSERT( GetAsianCompressionMode() != CharCompressType::NONE, "ImplCalcAsianCompression - Why?" );
@@ -4960,7 +4954,7 @@ void ImpEditEngine::ImplExpandCompressedPortions(EditLine& rLine, ParaPortion& r
             sal_Int32 nTxtPortion = rParaPortion.GetTextPortions().GetPos( pTP );
             sal_Int32 nTxtPortionStart = rParaPortion.GetTextPortions().GetStartPos( nTxtPortion );
             DBG_ASSERT( nTxtPortionStart >= rLine.GetStart(), "Portion doesn't belong to the line!!!" );
-            sal_Int32* pDXArray = rLine.GetCharPosArray().data() + (nTxtPortionStart - rLine.GetStart());
+            double* pDXArray = rLine.GetCharPosArray().data() + (nTxtPortionStart - rLine.GetStart());
             if ( pTP->GetExtraInfos()->pOrgDXArray )
                 memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
             ImplCalcAsianCompression( rParaPortion.GetNode(), pTP, nTxtPortionStart, pDXArray, static_cast<sal_uInt16>(nCompressPercent), true );
