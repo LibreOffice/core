@@ -521,6 +521,7 @@ public:
 
     const ww8::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
+    bool m_bParaInlineHeading;        // exporting paragraph of inline heading
 
     Point* m_pFlyOffset;              // for adjusting of character-bound Fly in the Writer,
     RndStdIds m_eNewAnchorType;       // that is paragraph-bound in the WW.

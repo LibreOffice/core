@@ -2143,6 +2143,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         {
             // put inline heading inside a text frame to get the same layout with ToC/PDF bookmark support
             m_pImpl->m_StreamStateStack.top().bIsInlineParagraph = true;
+            // grab-bag it for multiple inline headings in the same paragraph
             m_pImpl->GetTopContext()->Insert( PROP_INLINE_HEADING, uno::Any( true ), false, PARA_GRAB_BAG );
         }
         break;

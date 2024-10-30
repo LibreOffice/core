@@ -59,6 +59,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IMark.hxx>
 #include <grfatr.hxx>
+#include <poolfmt.hxx>
 
 using namespace com::sun::star;
 
@@ -113,8 +114,17 @@ namespace
         for(const auto& rFly : rFlys)
         {
             const SwFrameFormat &rEntry = rFly.GetFormat();
-
-            if (const SwNode* pAnchor = rEntry.GetAnchor().GetAnchorNode())
+            const SwFormat* pParent = rEntry.DerivedFrom();
+            const SwFormatAnchor& rAnchor = rEntry.GetAnchor();
+            // keep only Inline Heading frames from the frames anchored as characters
+            bool bAsChar = rAnchor.GetAnchorId() ==
+                    static_cast<RndStdIds>(css::text::TextContentAnchorType_AS_CHARACTER);
+            if ( bAsChar &&
+                    !(pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING) )
+            {
+                continue;
+            }
+            if (const SwNode* pAnchor = rAnchor.GetAnchorNode())
             {
                 // the anchor position will be invalidated by SetRedlineFlags
                 // so set a dummy position and fix it in UpdateFramePositions
@@ -474,7 +484,7 @@ namespace sw
            */
         ww8::Frames GetFrames(const SwDoc &rDoc, SwPaM const *pPaM /*, bool bAll*/)
         {
-            SwPosFlyFrames aFlys(rDoc.GetAllFlyFormats(pPaM, true));
+            SwPosFlyFrames aFlys(rDoc.GetAllFlyFormats(pPaM, /*bDrawAlso=*/true, /*bAsCharAlso=*/true));
             ww8::Frames aRet(SwPosFlyFramesToFrames(aFlys));
             return aRet;
         }

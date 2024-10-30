@@ -2776,7 +2776,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         comphelper::SequenceAsHashMap aFrameGrabBag;
                         aFrameGrabBag[u"FrameInlineHeading"_ustr] <<= true;
 
-                        // TODO anchor as character
                         std::vector<beans::PropertyValue> aFrameProperties
                         {
                             comphelper::makePropertyValue(u"TextWrap"_ustr, css::text::WrapTextMode_RIGHT),
@@ -2786,15 +2785,20 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                             comphelper::makePropertyValue(getPropertyName(PROP_OPAQUE), false),
                             comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), text::SizeType::MIN),
                             comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), text::SizeType::MIN),
-                            comphelper::makePropertyValue(u"FrameInteropGrabBag"_ustr,
-                                            aFrameGrabBag.getAsConstPropertyValueList())
                         };
 
                         fillEmptyFrameProperties(aFrameProperties, false);
 
                         uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
 
-                        xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
+                        uno::Reference<text::XTextContent> xFrame = xBodyText->convertToTextFrame(xRangeStart, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
+                        uno::Reference<beans::XPropertySet> xFrameProps(xFrame, uno::UNO_QUERY);
+                        // set frame style now to avoid losing text content (convertToTextFrame() doesn't work
+                        // with frame styles anchored "as character")
+                        xFrameProps->setPropertyValue(u"FrameStyleName"_ustr, uno::Any(u"Inline Heading"_ustr));
+                        // set anchoring because setting frame style doesn't modify the anchoring to
+                        // its default "anchored as character" setting
+                        xFrameProps->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
                         m_StreamStateStack.top().bIsInlineParagraph = false;
                         m_StreamStateStack.top().bIsPreviousInlineParagraph = true;

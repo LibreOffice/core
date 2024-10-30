@@ -263,6 +263,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf131728)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:rPr/w:specVanish", 7);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf48459)
+{
+    loadAndSave("tdf48459.fodt");
+    // export Inline Heading frame style as style separator
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // This was 0 (no style separator)
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:rPr/w:vanish", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:rPr/w:specVanish", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testFdo77129)
 {
     loadAndSave("fdo77129.docx");

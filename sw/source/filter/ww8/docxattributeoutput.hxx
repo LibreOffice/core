@@ -858,6 +858,8 @@ private:
     bool m_bOpenedSectPr;
     /// Did we have a section break in this paragraph? Set by StartSection(), reset by the next StartParagraph().
     bool m_bHadSectPr;
+    /// Flag indicating that the paragraph properties are being written
+    bool m_bOpenedParaPr;
 
     /// Flag indicating that the Run Text is being written
     bool m_bRunTextIsOn;

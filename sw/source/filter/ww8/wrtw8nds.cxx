@@ -111,6 +111,7 @@
 #include <ndole.hxx>
 #include <formatflysplit.hxx>
 #include <annotationmark.hxx>
+#include <poolfmt.hxx>
 
 #include <cstdio>
 
@@ -181,30 +182,8 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
 
 static bool lcl_IsInlineHeading(const ww8::Frame &rFrame)
 {
-    const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
-
-    uno::Reference<drawing::XShape> xShape;
-    const SdrObject* pSdrObj = rFrameFormat.FindRealSdrObject();
-    if (pSdrObj)
-        xShape.set(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo;
-    if (xPropertySet.is())
-        xPropSetInfo = xPropertySet->getPropertySetInfo();
-
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(u"FrameInteropGrabBag"_ustr))
-    {
-        uno::Sequence<beans::PropertyValue> propList;
-        xPropertySet->getPropertyValue(u"FrameInteropGrabBag"_ustr) >>= propList;
-        auto pProp = std::find_if(std::cbegin(propList), std::cend(propList),
-                                  [](const beans::PropertyValue& rProp) {
-                                      return rProp.Name == "FrameInlineHeading";
-                                  });
-        if (pProp != std::cend(propList))
-            return true;
-    }
-
-    return false;
+    const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
+    return pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING;
 }
 
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
@@ -2358,7 +2337,11 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
             SwTextNode *pTextNode =
                 const_cast<SwTextNode*>(pInlineHeading->GetContent()->GetTextNode());
             if (pTextNode)
+            {
+                m_bParaInlineHeading = true;
                 OutputTextNode(*pTextNode);
+                m_bParaInlineHeading = false;
+            }
         }
     }
 

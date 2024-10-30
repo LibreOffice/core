@@ -165,6 +165,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <sfx2/printer.hxx>
 #include <unotxdoc.hxx>
+#include <poolfmt.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -1448,6 +1449,7 @@ void DocxAttributeOutput::StartParagraphProperties()
     m_pSerializer->mark(Tag_StartParagraphProperties);
 
     m_pSerializer->startElementNS(XML_w, XML_pPr);
+    m_bOpenedParaPr = true;
 
     // and output the section break now (if it appeared)
     if (m_pSectionInfo && m_rExport.m_nTextTyp == TXT_MAINTEXT)
@@ -1751,6 +1753,8 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // merge the properties _before_ the run (strictly speaking, just
     // after the start of the paragraph)
     m_pSerializer->mergeTopMarks(Tag_StartParagraphProperties, sax_fastparser::MergeMarks::PREPEND);
+
+    m_bOpenedParaPr = false;
 }
 
 void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
@@ -3643,11 +3647,12 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
     }
     m_aTextEffectsGrabBag.clear();
     m_aTextFillGrabBag.clear();
-
-    if ( m_bParaInlineHeading )
+    // export vanish and specVanish for the newly created inline headings
+    if ( m_bOpenedParaPr && m_rExport.m_bParaInlineHeading )
     {
+        m_pSerializer->singleElementNS(XML_w, XML_vanish);
         m_pSerializer->singleElementNS(XML_w, XML_specVanish);
-        m_bParaInlineHeading = false;
+        m_rExport.m_bParaInlineHeading = false;
     }
 }
 
@@ -6393,6 +6398,11 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 if (m_aFloatingTablesOfParagraph.find(&rFrame.GetFrameFormat()) != m_aFloatingTablesOfParagraph.end())
                     break;
 
+                // skip also inline headings already exported before
+                const SwFormat* pParent = rFrame.GetFrameFormat().DerivedFrom();
+                if ( pParent && pParent->GetPoolFormatId() == RES_POOLFRM_INLINE_HEADING )
+                    break;
+
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
                 const OUString& rName = rFrame.GetFrameFormat().GetName();
@@ -8321,7 +8331,16 @@ void DocxAttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
 void DocxAttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 {
     if ( rHidden.GetValue() )
+    {
         m_pSerializer->singleElementNS(XML_w, XML_vanish);
+        // export specVanish for inline headings
+        if (m_bOpenedParaPr && m_rExport.m_bParaInlineHeading)
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_specVanish);
+            // don't export extra vanish/specVanish
+            m_rExport.m_bParaInlineHeading = false;
+        }
+    }
     else
         m_pSerializer->singleElementNS(XML_w, XML_vanish, FSNS(XML_w, XML_val), "false");
 }
@@ -10202,7 +10221,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
             // Handled already in StartParagraph().
         }
         else if (rGrabBagElement.first == "ParaInlineHeading")
-            m_bParaInlineHeading = true;
+            m_rExport.m_bParaInlineHeading = true;
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << rGrabBagElement.first );
     }
@@ -10327,6 +10346,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
       m_bHadSectPr(false),
+      m_bOpenedParaPr( false ),
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
       m_bAnchorLinkedToNode(false),
@@ -10358,8 +10378,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0),
-      m_bParaInlineHeading(false)
+      m_nParaAfterSpacing(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
 {
     m_nHyperLinkCount.push_back(0);

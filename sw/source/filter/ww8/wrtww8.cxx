@@ -3431,6 +3431,7 @@ ErrCode MSWordExportBase::ExportDocument( bool bWriteAll )
     m_bFootnoteAtTextEnd = m_bEndAtTextEnd = true;
 
     m_pParentFrame = nullptr;
+    m_bParaInlineHeading = false;
     m_pFlyOffset = nullptr;
     m_eNewAnchorType = RndStdIds::FLY_AT_PAGE;
     m_nTextTyp = TXT_MAINTEXT;
@@ -3969,6 +3970,7 @@ MSWordExportBase::MSWordExportBase( SwDoc& rDocument, std::shared_ptr<SwUnoCurso
     , m_bFirstTOCNodeWithSection(false)
     , m_pChpIter(nullptr)
     , m_pParentFrame(nullptr)
+    , m_bParaInlineHeading(false)
     , m_pFlyOffset(nullptr)
     , m_eNewAnchorType(RndStdIds::FLY_AS_CHAR)
     , m_pStyAttr(nullptr)
