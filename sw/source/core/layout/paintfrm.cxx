@@ -7378,7 +7378,7 @@ std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const S
     if (aArea.IsEmpty())
         return aPolygons;
 
-    if (!rViewShell.GetViewOptions()->IsViewMetaChars())
+    if (!rViewShell.GetViewOptions()->IsTextBoundariesFull())
         aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea, false /* body */);
     else
         aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);
@@ -7470,7 +7470,7 @@ void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
 
     ::SwAlignRect( aArea, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
 
-    if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+    if ( !gProp.pSGlobalShell->GetViewOptions()->IsTextBoundariesFull( ) )
         ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
     else
         ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
@@ -7507,7 +7507,7 @@ std::vector<basegfx::B2DPolygon> SwHeadFootFrame::GetSubsidiaryLinesPolygons(con
 
     SwRect aArea( getFramePrintArea() );
     aArea.Pos() += getFrameArea().Pos();
-    if (!rViewShell.GetViewOptions()->IsViewMetaChars( ))
+    if (!rViewShell.GetViewOptions()->IsTextBoundariesFull( ))
         aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea, true /* header/footer*/);
     else
         aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);

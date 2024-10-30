@@ -312,6 +312,8 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xBookmarkCB;
     std::unique_ptr<weld::Widget> m_xBookmarkImg;
     std::unique_ptr<weld::Label> m_xBookmarkLabel;
+    std::unique_ptr<weld::RadioButton> m_xTextBoundariesFull;
+    std::unique_ptr<weld::RadioButton> m_xTextBoundariesCrop;
 
     std::unique_ptr<weld::Frame> m_xDirectCursorFrame;
     std::unique_ptr<weld::CheckButton> m_xOnOffCB;

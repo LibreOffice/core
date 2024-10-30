@@ -69,6 +69,7 @@ struct ViewOptFlags1
     bool bShowOutlineContentVisibilityButton : 1;
     bool bShowChangesInMargin : 1; //tracked deletions in margin
     bool bShowChangesInMargin2 : 1; //tracked insertions in margin
+    bool bTextBoundariesFull : 1;   // true = frame around text, false = crop marks at edges
 
     ViewOptFlags1()
         : bUseHeaderFooterMenu(false)
@@ -102,6 +103,7 @@ struct ViewOptFlags1
         , bShowOutlineContentVisibilityButton(false)
         , bShowChangesInMargin(false)
         , bShowChangesInMargin2(false)
+        , bTextBoundariesFull(true)
     {}
 
     bool operator==(const ViewOptFlags1& rOther) const
@@ -136,7 +138,8 @@ struct ViewOptFlags1
             && bPageback == rOther.bPageback
             && bShowOutlineContentVisibilityButton == rOther.bShowOutlineContentVisibilityButton
             && bShowChangesInMargin == rOther.bShowChangesInMargin
-            && bShowChangesInMargin2 == rOther.bShowChangesInMargin2;
+            && bShowChangesInMargin2 == rOther.bShowChangesInMargin2
+            && bTextBoundariesFull == rOther.bTextBoundariesFull;
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -661,6 +664,9 @@ public:
     bool   IsWhitespaceHidden() const { return IsHideWhitespaceMode() && !IsMultipageView(); }
     bool   IsMultipageView() const { return IsViewLayoutBookMode() ||
                                             GetViewLayoutColumns() == 0; }
+
+    bool IsTextBoundariesFull() const { return m_nCoreOptions.bTextBoundariesFull; }
+    void SetTextBoundariesFull( bool b) { m_nCoreOptions.bTextBoundariesFull = b; }
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.

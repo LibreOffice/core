@@ -34,6 +34,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     m_bCharHiddenText     =
     m_bBookmarks          =
     m_bManualBreak        = true;
+    m_bTextBoundariesFull = true;
     m_xDefaultAnchor      = 1; //FLY_TO_CHAR
 };
 
@@ -49,6 +50,7 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     m_bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
     m_bBookmarks          = rVOpt.IsShowBookmarks(true);
     m_bManualBreak        = rVOpt.IsLineBreak(true);
+    m_bTextBoundariesFull = rVOpt.IsTextBoundariesFull();
     m_xDefaultAnchor      = rVOpt.GetDefaultAnchor();
 }
 
@@ -71,6 +73,7 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               m_bCharHiddenText       == rItem.m_bCharHiddenText     &&
               m_bBookmarks            == rItem.m_bBookmarks          &&
               m_bManualBreak          == rItem.m_bManualBreak        &&
+              m_bTextBoundariesFull   == rItem.m_bTextBoundariesFull &&
               m_xDefaultAnchor        == rItem.m_xDefaultAnchor);
 }
 
@@ -84,6 +87,7 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenChar(m_bCharHiddenText );
     rVOpt.SetShowBookmarks(m_bBookmarks       );
     rVOpt.SetLineBreak  (m_bManualBreak       );
+    rVOpt.SetTextBoundariesFull(m_bTextBoundariesFull);
     rVOpt.SetDefaultAnchor( m_xDefaultAnchor  );
 }
 

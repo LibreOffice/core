@@ -1726,6 +1726,8 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xBookmarkCB(m_xBuilder->weld_check_button(u"bookmarks"_ustr))
     , m_xBookmarkImg(m_xBuilder->weld_widget(u"lockbookmarks"_ustr))
     , m_xBookmarkLabel(m_xBuilder->weld_label(u"bookmarks_label"_ustr))
+    , m_xTextBoundariesFull(m_xBuilder->weld_radio_button(u"rbTextBoundariesFull"_ustr))
+    , m_xTextBoundariesCrop(m_xBuilder->weld_radio_button(u"rbTextBoundariesCrop"_ustr))
     , m_xDirectCursorFrame(m_xBuilder->weld_frame(u"directcrsrframe"_ustr))
     , m_xOnOffCB(m_xBuilder->weld_check_button(u"cursoronoff"_ustr))
     , m_xOnOffImg(m_xBuilder->weld_widget(u"lockcursoronoff"_ustr))
@@ -1877,6 +1879,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aDisp.m_bBookmarks            = m_xBookmarkCB->get_active();
     aDisp.m_bManualBreak          = m_xBreakCB->get_active();
     aDisp.m_xDefaultAnchor        = m_xDefaultAnchorType->get_active();
+    aDisp.m_bTextBoundariesFull   = m_xTextBoundariesFull->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1987,6 +1990,11 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xDefaultAnchorType->set_active( pDocDisplayAttr->m_xDefaultAnchor );
         m_xDefaultAnchorType->set_sensitive(!bReadOnly);
         m_xDefaultAnchorTypeImg->set_visible(bReadOnly);
+
+        if (pDocDisplayAttr->m_bTextBoundariesFull)
+            m_xTextBoundariesFull->set_active(true);
+        else
+            m_xTextBoundariesCrop->set_active(true);
     }
 }
 
