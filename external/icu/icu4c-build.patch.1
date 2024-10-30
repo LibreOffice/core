@@ -1,3 +1,15 @@
+diff -ur icu.org/source/configure.ac icu/source/configure.ac
+--- icu.org/source/configure.ac	2024-10-25 03:24:00.000000000 +0900
++++ icu/source/configure.ac	2024-11-11 07:54:15.090673278 +0900
+@@ -8,7 +8,7 @@
+ 
+ # Check for minimum autoconf version. Use exactly this version when rebuilding
+ # 'aclocal.m4' and 'configure' for merging upstream, to avoid spurious diffs.
+-AC_PREREQ([2.72])
++AC_PREREQ([2.69])
+ 
+ # Process this file with autoreconf to produce a configure script
+ AC_INIT([ICU],
 diff -ur icu.org/source/config/mh-darwin icu/source/config/mh-darwin
 --- icu.org/source/config/mh-darwin	2016-06-15 20:58:17.000000000 +0200
 +++ icu/source/config/mh-darwin	2017-04-21 21:30:23.584568210 +0200
@@ -77,15 +89,3 @@ diff -ur icu.org/source/tools/toolutil/pkg_genc.cpp icu/source/tools/toolutil/pk
  /* 16 bytes alignment. */
  /* http://docs.oracle.com/cd/E19641-01/802-1947/802-1947.pdf */
      {"sun",
-diff -ur icu.org/source/tools/toolutil/pkg_genc.h icu/source/tools/toolutil/pkg_genc.h
---- icu.org/source/tools/toolutil/pkg_genc.h	2017-01-20 01:20:31.000000000 +0100
-+++ icu/source/tools/toolutil/pkg_genc.h	2017-04-21 21:30:23.582568215 +0200
-@@ -60,7 +60,7 @@
- #endif
- 
- #define LARGE_BUFFER_MAX_SIZE 2048
--#define SMALL_BUFFER_MAX_SIZE 512
-+#define SMALL_BUFFER_MAX_SIZE 2048
- #define SMALL_BUFFER_FLAG_NAMES 32
- #define BUFFER_PADDING_SIZE 20
- 

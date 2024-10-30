@@ -1,6 +1,6 @@
 diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
---- icu.org/source/common/dictbe.cpp	2023-06-14 06:23:55.000000000 +0900
-+++ icu/source/common/dictbe.cpp	2023-06-26 17:43:53.034173100 +0900
+--- icu.org/source/common/dictbe.cpp	2024-10-25 03:24:00.000000000 +0900
++++ icu/source/common/dictbe.cpp	2024-11-05 20:38:59.457423900 +0900
 @@ -35,7 +35,19 @@
   ******************************************************************
   */
@@ -208,7 +208,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd ) {
 +int32_t PossibleWord::candidates( UText *text, DictionaryMatcher *dict, int32_t rangeEnd, UnicodeSet const *ignoreSet, int32_t minLength) {
      // TODO: If getIndex is too slow, use offset < 0 and add discardAll()
-     int32_t start = (int32_t)utext_getNativeIndex(text);
+     int32_t start = static_cast<int32_t>(utext_getNativeIndex(text));
      if (start != offset) {
          offset = start;
 -        count = dict->matches(text, rangeEnd-start, UPRV_LENGTHOF(cuLengths), cuLengths, cpLengths, nullptr, &prefix);
@@ -324,7 +324,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +        return foundBreaks.size() - wordsFound;
 +    }
  
--    while (U_SUCCESS(status) && (current = (int32_t)utext_getNativeIndex(text)) < rangeEnd) {
+-    while (U_SUCCESS(status) && (current = static_cast<int32_t>(utext_getNativeIndex(text))) < rangeEnd) {
 -        cuWordLength = 0;
 -        cpWordLength = 0;
 -
@@ -351,7 +351,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -        // If there was more than one, see which one can take us forward the most words
 -        else if (candidates > 1) {
 -            // If we're already at the end of the range, we're done
--            if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+-            if (static_cast<int32_t>(utext_getNativeIndex(text)) >= rangeEnd) {
 -                goto foundBest;
 -            }
 -            do {
@@ -369,7 +369,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 +    }
  
 -                    // If we're already at the end of the range, we're done
--                    if ((int32_t)utext_getNativeIndex(text) >= rangeEnd) {
+-                    if (static_cast<int32_t>(utext_getNativeIndex(text)) >= rangeEnd) {
 -                        goto foundBest;
 -                    }
 +    // prev[i] is the index of the last code point in the previous word in
@@ -437,7 +437,7 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -        // just found (if there is one), but only if the preceding word does not exceed
 -        // the threshold.
 -        // The text iterator should now be positioned at the end of the word we found.
--        if ((int32_t)utext_getNativeIndex(text) < rangeEnd && cpWordLength < KHMER_ROOT_COMBINE_THRESHOLD) {
+-        if (static_cast<int32_t>(utext_getNativeIndex(text)) < rangeEnd && cpWordLength < KHMER_ROOT_COMBINE_THRESHOLD) {
 -            // if it is a dictionary word, do nothing. If it isn't, then if there is
 -            // no preceding word, or the non-word shares less than the minimum threshold
 -            // of characters with a dictionary word, then scan to resynchronize
@@ -450,9 +450,9 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -                UChar32 uc;
 -                int32_t chars = 0;
 -                for (;;) {
--                    int32_t pcIndex = (int32_t)utext_getNativeIndex(text);
+-                    int32_t pcIndex = static_cast<int32_t>(utext_getNativeIndex(text));
 -                    pc = utext_next32(text);
--                    int32_t pcSize = (int32_t)utext_getNativeIndex(text) - pcIndex;
+-                    int32_t pcSize = static_cast<int32_t>(utext_getNativeIndex(text)) - pcIndex;
 -                    chars += pcSize;
 -                    remaining -= pcSize;
 -                    if (remaining <= 0) {
@@ -536,9 +536,9 @@ diff -ur icu.org/source/common/dictbe.cpp icu/source/common/dictbe.cpp
 -
 -        // Never stop before a combining mark.
 -        int32_t currPos;
--        while ((currPos = (int32_t)utext_getNativeIndex(text)) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
+-        while ((currPos = static_cast<int32_t>(utext_getNativeIndex(text))) < rangeEnd && fMarkSet.contains(utext_current32(text))) {
 -            utext_next32(text);
--            cuWordLength += (int32_t)utext_getNativeIndex(text) - currPos;
+-            cuWordLength += static_cast<int32_t>(utext_getNativeIndex(text)) - currPos;
 +    }
 +    // Start pushing the optimal offset index into t_boundary (t for tentative).
 +    // prev[numCodePts] is guaranteed to be meaningful.
@@ -748,8 +748,8 @@ diff -ur icu.org/source/common/dictbe.h icu/source/common/dictbe.h
   public:
  
 diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionarydata.cpp
---- icu.org/source/common/dictionarydata.cpp	2023-06-14 06:23:55.000000000 +0900
-+++ icu/source/common/dictionarydata.cpp	2023-06-26 02:18:05.709454400 +0900
+--- icu.org/source/common/dictionarydata.cpp	2024-10-25 03:24:00.000000000 +0900
++++ icu/source/common/dictionarydata.cpp	2024-11-04 20:38:59.462426800 +0900
 @@ -44,7 +44,7 @@
  
  int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t limit,
@@ -758,10 +758,10 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
 +                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
  
      UCharsTrie uct(characters);
-     int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
+     int32_t startingTextIndex = static_cast<int32_t>(utext_getNativeIndex(text));
 @@ -55,7 +55,13 @@
          UStringTrieResult result = (codePointsMatched == 0) ? uct.first(c) : uct.next(c);
-         int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
+         int32_t lengthMatched = static_cast<int32_t>(utext_getNativeIndex(text)) - startingTextIndex;
          codePointsMatched += 1;
 +        if (ignoreSet != NULL && ignoreSet->contains(c)) {
 +            continue;
@@ -780,11 +780,11 @@ diff -ur icu.org/source/common/dictionarydata.cpp icu/source/common/dictionaryda
 -                            int32_t *prefix) const {
 +                            int32_t *prefix, UnicodeSet const* ignoreSet, int32_t minLength) const {
      BytesTrie bt(characters);
-     int32_t startingTextIndex = (int32_t)utext_getNativeIndex(text);
+     int32_t startingTextIndex = static_cast<int32_t>(utext_getNativeIndex(text));
      int32_t wordCount = 0;
 @@ -122,7 +128,13 @@
          UStringTrieResult result = (codePointsMatched == 0) ? bt.first(transform(c)) : bt.next(transform(c));
-         int32_t lengthMatched = (int32_t)utext_getNativeIndex(text) - startingTextIndex;
+         int32_t lengthMatched = static_cast<int32_t>(utext_getNativeIndex(text)) - startingTextIndex;
          codePointsMatched += 1;
 +        if (ignoreSet != NULL && ignoreSet->contains(c)) {
 +            continue;

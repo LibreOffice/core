@@ -1006,6 +1006,29 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "fa-Aran"_ostr;
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 76)
+        case USCRIPT_GARAY:
+            sRet = "wo-Gara"_ostr;
+            break;
+        case USCRIPT_GURUNG_KHEMA:
+            sRet = "gvr-Gukh"_ostr;
+            break;
+        case USCRIPT_KIRAT_RAI:
+            sRet = "bap-Krai"_ostr;
+            break;
+        case USCRIPT_OL_ONAL:
+            sRet = "unr-Onao"_ostr;
+            break;
+        case USCRIPT_SUNUWAR:
+            sRet = "suz-Sunu"_ostr;
+            break;
+        case USCRIPT_TODHRI:
+            sRet = "sq-Todr"_ostr;
+            break;
+        case USCRIPT_TULU_TIGALARI:
+            sRet = "sa-Tutg"_ostr;
+            break;
+#endif
     }
     return sRet;
 }

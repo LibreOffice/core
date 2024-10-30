@@ -1,10 +1,10 @@
 diff -ur icu.org/source/common/unicode/platform.h icu/source/common/unicode/platform.h
---- icu.org/source/common/unicode/platform.h	2021-10-28 18:04:57.000000000 +0200
-+++ icu/source/common/unicode/platform.h	2021-11-15 21:03:11.474638494 +0100
-@@ -818,7 +818,7 @@
+--- icu.org/source/common/unicode/platform.h	2024-10-25 03:24:00.000000000 +0900
++++ icu/source/common/unicode/platform.h	2024-11-04 20:40:39.757438800 +0900
+@@ -779,7 +779,7 @@
                              UPRV_HAS_DECLSPEC_ATTRIBUTE(__dllimport__))
  #   define U_EXPORT __declspec(dllexport)
- #elif defined(__GNUC__)
+ #elif defined(__GNUC__) || defined(__open_xl__)
 -#   define U_EXPORT __attribute__((visibility("default")))
 +#   define U_EXPORT
  #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \

@@ -1929,6 +1929,38 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x2EBF0, 0x2EE5F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 76)
+                case UBLOCK_EGYPTIAN_HIEROGLYPHS_EXTENDED_A:
+                    aAllSubsets.emplace_back( 0x13460, 0x1355F, SvxResId(RID_SUBSETSTR_EGYPTIAN_HIEROGLYPHS_EXTENDED_A) );
+                    break;
+                case UBLOCK_GARAY:
+                    aAllSubsets.emplace_back( 0x10D40, 0x10D8F, SvxResId(RID_SUBSETSTR_GARAY) );
+                    break;
+                case UBLOCK_GURUNG_KHEMA:
+                    aAllSubsets.emplace_back( 0x16100, 0x1613F, SvxResId(RID_SUBSETSTR_GURUNG_KHEMA) );
+                    break;
+                case UBLOCK_KIRAT_RAI:
+                    aAllSubsets.emplace_back( 0x16D40, 0x16D7F, SvxResId(RID_SUBSETSTR_KIRAT_RAI) );
+                    break;
+                case UBLOCK_MYANMAR_EXTENDED_C:
+                    aAllSubsets.emplace_back( 0x116D0, 0x116FF, SvxResId(RID_SUBSETSTR_MYANMAR_EXTENDED_C) );
+                    break;
+                case UBLOCK_OL_ONAL:
+                    aAllSubsets.emplace_back( 0x1E5D0, 0x1E5FF, SvxResId(RID_SUBSETSTR_OL_ONAL) );
+                    break;
+                case UBLOCK_SUNUWAR:
+                    aAllSubsets.emplace_back( 0x11BC0, 0x11BFF, SvxResId(RID_SUBSETSTR_SUNUWAR) );
+                    break;
+                case UBLOCK_SYMBOLS_FOR_LEGACY_COMPUTING_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x1CC00, 0x1CEBF, SvxResId(RID_SUBSETSTR_SYMBOLS_FOR_LEGACY_COMPUTING_SUPPLEMENT) );
+                    break;
+                case UBLOCK_TODHRI:
+                    aAllSubsets.emplace_back( 0x105C0, 0x105FF, SvxResId(RID_SUBSETSTR_TODHRI) );
+                    break;
+                case UBLOCK_TULU_TIGALARI:
+                    aAllSubsets.emplace_back( 0x11380, 0x113FF, SvxResId(RID_SUBSETSTR_TULU_TIGALARI) );
+                    break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
