@@ -288,7 +288,26 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         aHelpStr = aHelpStr.replaceFirst("%2", OUString::number(nCols) );
     }
     else if ( aViewData.GetDelMark( aDelRange ) )
+    {
         aHelpStr = ScResId( STR_QUICKHELP_DELETE );
+
+        if (ScTabViewShell* pLOKViewShell
+            = comphelper::LibreOfficeKit::isActive() ? aViewData.GetViewShell() : nullptr)
+        {
+            // autofill: collect the cell addresses that will be deleted
+            OUString sDeleteCellAddress
+                = OUString::Concat(OUString::number(aDelRange.aStart.Row()) + " "
+                                   + OUString::number(aDelRange.aStart.Col()) + " "
+                                   + OUString::number(aDelRange.aEnd.Row()) + " "
+                                   + OUString::number(aDelRange.aEnd.Col()));
+
+            tools::JsonWriter writer;
+            writer.put("type", "autofilldeletecells");
+            writer.put("delrange", sDeleteCellAddress);
+            OString sPayloadString = writer.finishAndGetAsOString();
+            pLOKViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
+        }
+    }
     else if ( nEndX != aMarkRange.aEnd.Col() || nEndY != aMarkRange.aEnd.Row() )
         aHelpStr = rDoc.GetAutoFillPreview( aMarkRange, nEndX, nEndY );
 
@@ -313,7 +332,8 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         sTipString = aHelpStr;
         sTopParent = pWin;
 
-        if (comphelper::LibreOfficeKit::isActive())
+        if (ScTabViewShell* pLOKViewShell
+            = comphelper::LibreOfficeKit::isActive() ? aViewData.GetViewShell() : nullptr)
         {
             // we need to use nAddX and nAddX here because we need the next row&column address
             OUString sCol = OUString::number(nEndX + nAddX);
@@ -327,8 +347,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             writer.put("text", sTipString);
             writer.put("celladdress", sCellAddress);
             OString sPayloadString = writer.finishAndGetAsOString();
-            ScTabViewShell* pViewShell = aViewData.GetViewShell();
-            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
+            pLOKViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TOOLTIP, sPayloadString);
         }
     }
 }
