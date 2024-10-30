@@ -63,4 +63,6 @@ $(eval $(call gb_CppunitTest_use_vcl,vcl_gtk3_a11y))
 $(eval $(call gb_CppunitTest_use_instdir_configuration,vcl_gtk3_a11y))
 $(eval $(call gb_CppunitTest_use_common_configuration,vcl_gtk3_a11y))
 
+$(call gb_CppunitTest_get_target,vcl_gtk3_a11y): $(call gb_Library_get_target,vclplug_gtk3)
+
 # vim: set noet sw=4 ts=4:
