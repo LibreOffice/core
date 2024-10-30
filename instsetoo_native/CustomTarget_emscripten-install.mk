@@ -18,7 +18,7 @@ emscripten_install_files := \
     soffice.data.js.metadata \
     soffice.js \
     soffice.wasm \
-    soffice.worker.js \
+    $(if $(EMSCRIPTEN_WORKERJS),soffice.worker.js) \
     $(if $(ENABLE_SYMBOLS_FOR),soffice.wasm.dwp) \
     $(if $(DISABLE_GUI),, \
         qt_soffice.html \

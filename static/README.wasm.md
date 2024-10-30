@@ -252,7 +252,7 @@ Module.uno_init.then(function() {
 ```
 
 If you enter the above examples into the browser console, you need to enter them into the console of
-the first soffice.worker.js thread, which is the LO main thread since we use -sPROXY_TO_PTHREAD, not
+the first web worker thread, which is the LO main thread since we use -sPROXY_TO_PTHREAD, not
 into the console of the browser's main thread.
 
 Alternatively, you can do the following:  Put an example into some file like `example.js` that you

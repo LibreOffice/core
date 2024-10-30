@@ -1437,6 +1437,7 @@ EMSCRIPTEN_MIN_MINOR=1
 EMSCRIPTEN_MIN_TINY=46
 EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRIPTEN_MIN_TINY}"
 
+EMSCRIPTEN_WORKERJS=
 if test "$_os" = "Emscripten"; then
     AC_MSG_CHECKING([if Emscripten is at least $EMSCRIPTEN_MIN_VERSION])
     if test -z "$EMSCRIPTEN_VERSION_H"; then
@@ -1487,9 +1488,21 @@ if test "$_os" = "Emscripten"; then
 
     dnl Some build-side things are conditional on "EMSCRIPTEN in BUILD_TYPE_FOR_HOST":
     BUILD_TYPE="$BUILD_TYPE EMSCRIPTEN"
+
+    dnl Generation of .worker.js files has been dropped completely from Emscripten 3.1.68, and the
+    dnl generated files were just unused dummies since Emscripten 3.1.58:
+    AC_MSG_CHECKING([if Emscripten still depends on a separate .worker.js file])
+    check_semantic_version_three 3 1 58 "$EMSCRIPTEN_MAJOR" "$EMSCRIPTEN_MINOR" "$EMSCRIPTEN_TINY"
+    if test $? -ne 0; then
+        AC_MSG_RESULT([yes])
+        EMSCRIPTEN_WORKERJS=TRUE
+    else
+        AC_MSG_RESULT([no])
+    fi
 fi
 AC_SUBST(EMSDK_FILE_PACKAGER)
 AC_SUBST(EMSCRIPTEN_EXTRA_SOFFICE_PRE_JS)
+AC_SUBST(EMSCRIPTEN_WORKERJS)
 
 ###############################################################################
 # Extensions switches --enable/--disable
