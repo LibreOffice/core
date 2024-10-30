@@ -2975,6 +2975,11 @@ void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
         comphelper::string::padToLength(aBuf, nLen, ' ');
     }
     s = aBuf.makeStringAndClear();
+    // Do not modify the original variable inadvertently
+    PopVar();
+    p = new SbxVariable;
+    p->PutString(s);
+    PushVar(p);
 }
 
 // jump (+target)
