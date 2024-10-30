@@ -12,6 +12,7 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtWidgets/QCompleter>
 #include <QtWidgets/QLineEdit>
 
 QtInstanceComboBox::QtInstanceComboBox(QComboBox* pComboBox)
@@ -268,9 +269,22 @@ bool QtInstanceComboBox::get_entry_selection_bounds(int& rStartPos, int& rEndPos
     return bHasSelection;
 }
 
-void QtInstanceComboBox::set_entry_completion(bool, bool)
+void QtInstanceComboBox::set_entry_completion(bool bEnable, bool bCaseSensitive)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        QCompleter* pCompleter = nullptr;
+        if (bEnable)
+        {
+            pCompleter = new QCompleter(m_pComboBox->model(), m_pComboBox);
+            pCompleter->setCompletionMode(QCompleter::InlineCompletion);
+            Qt::CaseSensitivity eCaseSensitivity
+                = bCaseSensitive ? Qt::CaseSensitive : Qt::CaseInsensitive;
+            pCompleter->setCaseSensitivity(eCaseSensitivity);
+        }
+
+        m_pComboBox->setCompleter(pCompleter);
+    });
 }
 
 void QtInstanceComboBox::set_entry_placeholder_text(const OUString& rText)
