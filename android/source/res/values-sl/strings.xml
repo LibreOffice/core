@@ -118,4 +118,18 @@
     <string name="save_alert_dialog_title">Ali želite shraniti dokument pred zapiranjem\?</string>
     <string name="action_text_copied">Besedilo je kopirano v odložišče</string>
     <string name="calc_alert_double_click_optimal_length">Namig: dvakrat tapnite glavo, da nastavite optimalno širino/višino.</string>
+    <string name="action_bold">Krepko</string>
+    <string name="message_save_incomplete">Shranjevanje ni uspelo. Ali ste opravili kakšne spremembe?</string>
+    <string name="directory_not_saved">Mapa ni shranjena.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Vaša naprava Android ne podpira projekcij svg v programu. Povezava do projekcije je kopirana na odložišče. Pritisnite tipko Domov, odprite sodoben spletni brskalnik, prilepite povezavo v naslovno vrstico in začnite.</string>
+    <string name="browser_app_name">Brskalnik LibreOffice</string>
+    <string name="search_not_found">Ključne besede ni možno najti</string>
+    <string name="menu_preferences">Nastavitve</string>
+    <string name="app_about_name"><b>Pregledovalnik LibreOffice Beta</b></string>
+    <string name="menu_search">Išči</string>
+    <string name="action_underline">Podčrtano</string>
+    <string name="action_italic">Ležeče</string>
+    <string name="action_strikeout">Prečrtano</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">V redu</string>
+    <string name="unable_to_go_further">Ni možno nadaljevati.</string>
 </resources>

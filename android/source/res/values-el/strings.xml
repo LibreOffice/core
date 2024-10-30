@@ -118,4 +118,18 @@
     <string name="select_insert_options">Διαλέξτε επιλογές εισαγωγής:</string>
     <string name="name_already_used">Το συγκεκριμένο όνομα χρησιμοποιείται ήδη.</string>
     <string name="tabhost_paragraph">Παράγραφος</string>
+    <string name="message_save_incomplete">Η αποθήκευση δεν είναι ολοκληρωμένη. Υπήρξαν αλλαγές;</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard">Η συσκευή σας Android δεν υποστηρίζει παρουσίαση svg εντός της εφαρμογής. Αντιγράψαμε το σύνδεσμο της παρουσίασης στο πρόχειρο. Πατήστε το πλήκτρο αρχικής οθόνης, ανοίξτε ένα σύγχρονο πρόγραμμα περιήγησης ιστού, επικολλήστε το στη γραμμή διευθύνσεων και συνεχίστε.</string>
+    <string name="alert_copy_svg_slide_show_to_clipboard_dismiss">Εντάξει</string>
+    <string name="directory_not_saved">Ο κατάλογος δεν αποθηκεύτηκε</string>
+    <string name="app_about_name"><b>LibreOffice Προβολή \'Beta\'</b></string>
+    <string name="browser_app_name">Περιηγητής LibreOffice</string>
+    <string name="menu_search">Αναζήτηση</string>
+    <string name="search_not_found">Η λέξη-κλειδί δεν βρέθηκε</string>
+    <string name="menu_preferences">Προτιμήσεις</string>
+    <string name="action_bold">Έντονα</string>
+    <string name="action_underline">Υπογραμμισμένα</string>
+    <string name="action_italic">Πλάγια</string>
+    <string name="action_strikeout">Διαγραμμένα</string>
+    <string name="unable_to_go_further">Αδυναμία συνέχισης</string>
 </resources>
