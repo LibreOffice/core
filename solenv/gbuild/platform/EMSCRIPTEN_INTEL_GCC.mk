@@ -81,7 +81,7 @@ define gb_Executable_Executable_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
-        $(patsubst %.lib,%.worker.js,$(3)) \
+        $(if $(EMSCRIPTEN_WORKERJS),$(patsubst %.lib,%.worker.js,$(3))) \
         $(patsubst %.lib,%.wasm.dwp,$(3)) \
 )
 
@@ -91,7 +91,7 @@ define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
         $(patsubst %.lib,%.linkdeps,$(3)) \
         $(patsubst %.lib,%.wasm,$(3)) \
-        $(patsubst %.lib,%.worker.js,$(3)) \
+        $(if $(EMSCRIPTEN_WORKERJS),$(patsubst %.lib,%.worker.js,$(3))) \
         $(patsubst %.lib,%.wasm.dwp,$(3)) \
 )
 
