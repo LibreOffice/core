@@ -687,7 +687,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
         else
         {
             bHasOnlyBlankPortions = false;
-            //bHasNonBlankPortions = true;
+            bHasNonBlankPortions = true;
         }
     }
 
