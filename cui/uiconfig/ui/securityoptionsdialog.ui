@@ -284,6 +284,19 @@
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
                     <child>
+                      <object class="GtkImage" id="lockremovepersonal">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkCheckButton" id="removepersonal">
                         <property name="label" translatable="yes" context="securityoptionsdialog|removepersonal">_Remove personal information on saving</property>
                         <property name="visible">True</property>
@@ -304,40 +317,127 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="lockremovepersonal">
+                      <object class="GtkImage" id="lockredlineinfo">
                         <property name="can-focus">False</property>
                         <property name="no-show-all">True</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
+                        <property name="margin-start">20</property>
                         <property name="icon-name">res/lock.png</property>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="blockuntrusted">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|blockuntrusted">Block any links from documents not among the trusted locations (see Macro Security)</property>
+                      <object class="GtkCheckButton" id="redlineinfo">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|redlineinfo">Keep track changes information</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
+                        <property name="margin-start">20</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="blockuntrusted-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|blockuntrusted">Blocks the use of linked images by documents not in the trusted locations defined on the Trusted Sources tab of the Macro Security dialog.</property>
-                          </object>
-                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">8</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="lockblockuntrusted">
+                      <object class="GtkImage" id="lockdocproperties">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="margin-start">20</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="docproperties">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|docproperties">Keep document user information</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">20</property>
+                        <property name="hexpand">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="locknoteauthor">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="margin-start">20</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="noteauthor">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|noteauthor">Keep author name and date of notes</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">20</property>
+                        <property name="hexpand">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="lockdocumentversion">
+                        <property name="can-focus">False</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="margin-start">20</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="documentversion">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|documentversion">Keep document version information</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="margin-start">20</property>
+                        <property name="hexpand">True</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="lockprintersettings">
                         <property name="can-focus">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
@@ -345,31 +445,27 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">8</property>
+                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="ctrlclick">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|ctrlclick">Ctrl-click required _to open hyperlinks</property>
+                      <object class="GtkCheckButton" id="printersettings">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|printersettings">Keep printer settings</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
+                        <property name="margin-start">20</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="ctrlclick-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctrlclick">If enabled, you must hold down the Ctrl key while clicking a hyperlink to follow that link. If not enabled, a click opens the hyperlink.</property>
-                          </object>
-                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">7</property>
+                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="lockctrlclick">
+                      <object class="GtkImage" id="lockpassword">
                         <property name="can-focus">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
@@ -377,7 +473,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
+                        <property name="top-attach">6</property>
                       </packing>
                     </child>
                     <child>
@@ -401,7 +497,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkImage" id="lockpassword">
+                      <object class="GtkImage" id="lockctrlclick">
                         <property name="can-focus">False</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
@@ -409,127 +505,59 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">6</property>
+                        <property name="top-attach">7</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="redlineinfo">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|redlineinfo">Keep track changes information</property>
+                      <object class="GtkCheckButton" id="ctrlclick">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|ctrlclick">Ctrl-click required _to open hyperlinks</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="margin-start">20</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="ctrlclick-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ctrlclick">If enabled, you must hold down the Ctrl key while clicking a hyperlink to follow that link. If not enabled, a click opens the hyperlink.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">7</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="docproperties">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|docproperties">Keep document user information</property>
+                      <object class="GtkImage" id="lockblockuntrusted">
+                        <property name="can-focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">res/lock.png</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">8</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="blockuntrusted">
+                        <property name="label" translatable="yes" context="securityoptionsdialog|blockuntrusted">Block any links from documents not among the trusted locations (see Macro Security)</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
-                        <property name="margin-start">20</property>
                         <property name="hexpand">True</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="blockuntrusted-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|blockuntrusted">Blocks the use of linked images by documents not in the trusted locations defined on the Trusted Sources tab of the Macro Security dialog.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="noteauthor">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|noteauthor">Keep author name and date of notes</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="margin-start">20</property>
-                        <property name="hexpand">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="documentversion">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|documentversion">Keep document version information</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="margin-start">20</property>
-                        <property name="hexpand">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="lockredlineinfo">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin-start">20</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="lockdocproperties">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin-start">20</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="locknoteauthor">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin-start">20</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="lockdocumentversion">
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin-start">20</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
+                        <property name="top-attach">8</property>
                       </packing>
                     </child>
                     <child>
@@ -562,34 +590,6 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">9</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="printersettings">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|printersettings">Keep printer settings</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="margin-start">20</property>
-                        <property name="hexpand">True</property>
-                        <property name="use-underline">True</property>
-                        <property name="draw-indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">5</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkImage" id="lockprintersettings">
-                        <property name="can-focus">False</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="icon-name">res/lock.png</property>
-                      </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">5</property>
                       </packing>
                     </child>
                   </object>
