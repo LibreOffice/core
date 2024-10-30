@@ -146,6 +146,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
         mbDoNotMirrorRtlDrawObjs            = aOptions.get(u"DoNotMirrorRtlDrawObjs"_ustr);
         mbContinuousEndnotes                = aOptions.get(u"ContinuousEndnotes"_ustr);
         mbMsWordCompGridMetrics             = aOptions.get(u"MsWordCompGridMetrics"_ustr);
+        mbIgnoreTabsAndBlanksForLineCalculation = aOptions.get(u"IgnoreTabsAndBlanksForLineCalculation"_ustr);
     }
     else
     {

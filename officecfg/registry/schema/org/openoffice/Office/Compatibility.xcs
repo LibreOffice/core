@@ -170,6 +170,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="IgnoreTabsAndBlanksForLineCalculation" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Make whitespace character height not affect line height</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>

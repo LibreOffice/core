@@ -1127,6 +1127,20 @@ void SwViewShell::SetMsWordCompGridMetrics(bool _bMsWordCompGridMetrics)
     }
 }
 
+void SwViewShell::SetIgnoreTabsAndBlanksForLineCalculation(bool val)
+{
+    IDocumentSettingAccess& rIDSA = getIDocumentSettingAccess();
+    if (rIDSA.get(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION) != val)
+    {
+        SwWait aWait(*GetDoc()->GetDocShell(), true);
+        rIDSA.set(DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION, val);
+        const SwInvalidateFlags nInv = SwInvalidateFlags::Size | SwInvalidateFlags::Section
+                                        | SwInvalidateFlags::PrtArea | SwInvalidateFlags::Table
+                                        | SwInvalidateFlags::Pos;
+        lcl_InvalidateAllContent(*this, nInv);
+    }
+}
+
 void SwViewShell::Reformat()
 {
     SwWait aWait( *GetDoc()->GetDocShell(), true );

@@ -456,6 +456,8 @@ public:
 
     SW_DLLPUBLIC void SetMsWordCompGridMetrics(bool bMsWordCompGridMetrics);
 
+    SW_DLLPUBLIC void SetIgnoreTabsAndBlanksForLineCalculation(bool bIgnoreTabsAndBlanksForLineCalculation);
+
     // DOCUMENT COMPATIBILITY FLAGS END
 
     // Calls Idle-formatter of Layout.
