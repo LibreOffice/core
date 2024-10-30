@@ -17,10 +17,11 @@ $(call gb_CustomTarget_get_target,vcl/qt5) : \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceComboBox.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceEntry.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLevelBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLinkButton.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceMessageDialog.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceRadioButton.moc \
-	$(gb_CustomTarget_workdir)/vcl/qt5/QtInstanceLevelBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtMenu.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt5/QtTransferable.moc \

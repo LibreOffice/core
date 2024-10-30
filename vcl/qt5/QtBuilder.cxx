@@ -207,10 +207,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         extractMnemonicWidget(sID, rMap);
         pObject = new QLabel(pParentWidget);
     }
-    else if (sName == u"GtkLevelBar")
+    else if (sName == u"GtkLevelBar" || sName == u"GtkProgressBar")
     {
         QProgressBar* pProgressBar = new QProgressBar(pParentWidget);
-        // don't show progress in percent as text
+        // don't show text (progress in percent) by default
         pProgressBar->setTextVisible(false);
         pObject = pProgressBar;
     }
