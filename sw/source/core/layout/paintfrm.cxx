@@ -7099,9 +7099,10 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                         const SwRect &rRect ) const
 {
-    const bool bSubsOpt
-        = isSubsidiaryLinesEnabled() || (IsSctFrame() && isSubsidiaryLinesForSectionsEnabled());
-    if ( bSubsOpt )
+    const bool bSubsOpt = isSubsidiaryLinesEnabled()
+                          || (IsSctFrame() && isSubsidiaryLinesForSectionsEnabled())
+                          || (IsFlyFrame() && isSubsidiaryLinesFlysEnabled());
+    if (bSubsOpt)
         PaintSubsidiaryLines( pPage, rRect );
 
     const SwFrame *pLow = Lower();
@@ -7482,11 +7483,7 @@ void SwSectionFrame::PaintSubsidiaryLines( const SwPageFrame * pPage,
     if (!gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries())
         return;
 
-    const bool bNoLowerColumn = !Lower() || !Lower()->IsColumnFrame();
-    if ( bNoLowerColumn )
-    {
-        SwLayoutFrame::PaintSubsidiaryLines( pPage, rRect );
-    }
+    SwLayoutFrame::PaintSubsidiaryLines( pPage, rRect );
 }
 
 /**
@@ -7578,11 +7575,7 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
 
     if (!bCell && IsFlyFrame())
     {
-        // particularly with images (but also plausible for any kind of frame),
-        // it is very disconcerting to see a fake border,
-        // so (just like the page boundary) only show fly "text boundaries"
-        // when "Show Formatting Marks" is turned on
-        if (!gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars())
+        if (!gProp.pSGlobalShell->GetViewOptions()->IsObjectBoundaries())
             return;
 
         // if the frame is wrap none or wrap through, then text boundary lines have no meaning
