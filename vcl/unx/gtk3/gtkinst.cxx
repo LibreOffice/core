@@ -22281,6 +22281,14 @@ public:
             m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntry, "key-press-event", G_CALLBACK(signalEntryKeyPress), this);
             m_nEntryPopulatePopupMenuSignalId = g_signal_connect(m_pEntry, "populate-popup", G_CALLBACK(signalEntryPopulatePopup), nullptr);
             m_nKeyPressEventSignalId = 0;
+
+            // for editable combobox, set a11y combobox role for the box containing the entry
+            // (in addition to the button for which this is already set in the .ui file that
+            // gets focus in case of the the non-editable combobox)
+            GtkWidget* pBox = GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "box"));
+            assert(pBox);
+            if (AtkObject* pBoxAccessible = gtk_widget_get_accessible(pBox))
+                atk_object_set_role(pBoxAccessible, ATK_ROLE_COMBO_BOX);
         }
         else
         {
