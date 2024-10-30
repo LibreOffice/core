@@ -22358,7 +22358,7 @@ public:
 
             // for editable combobox, set a11y combobox role for the box containing the entry
             // (in addition to the button for which this is already set in the .ui file that
-            // gets focus in case of the the non-editable combobox)
+            // gets focus in case of the non-editable combobox)
             GtkWidget* pBox = GTK_WIDGET(gtk_builder_get_object(pComboBuilder, "box"));
             assert(pBox);
             if (AtkObject* pBoxAccessible = gtk_widget_get_accessible(pBox))
