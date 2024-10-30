@@ -219,7 +219,9 @@ void recentUnoChanged( GtkWidget* pSelector, gpointer /* pItem */ )
 static void addToRecentUnoCommands(GtvApplicationWindow* pWindow, const std::string& rUnoCmd, std::string aArgs)
 {
     GtvMainToolbar* pToolbar = gtv_application_window_get_main_toolbar(pWindow);
-    aArgs.erase(std::find(aArgs.begin(), aArgs.end(), '\n'));
+    auto it = std::find(aArgs.begin(), aArgs.end(), '\n');
+    if (it != aArgs.end())
+        aArgs.erase(it);
     const std::string rUnoCmdStr = rUnoCmd + " | " + aArgs;
 
 
