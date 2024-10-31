@@ -2092,8 +2092,8 @@ tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, T
     if( nIdx > nLen || nCompIdx >= nCompCount )
         return 0;
 
-    tools::Long nSub = 0;
-    tools::Long nLast = nI ? rKernArray[ nI - 1 ] : 0;
+    double nSub = 0;
+    double nLast = nI ? rKernArray[ nI - 1 ] : 0;
     do
     {
         const CompType nType = GetCompType( nCompIdx );
@@ -2119,7 +2119,7 @@ tools::Long SwScriptInfo::Compress(KernArray& rKernArray, TextFrameIndex nIdx, T
                 nLast -= rKernArray[ nI ];
 
                 nLast *= nCompress;
-                tools::Long nMove = 0;
+                double nMove = 0;
                 if( SwScriptInfo::KANA != nType )
                 {
                     nLast /= 24000;

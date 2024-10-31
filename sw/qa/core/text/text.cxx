@@ -1625,7 +1625,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
             // Assert we are using the expected width for uncompressed chars
             CPPUNIT_ASSERT_EQUAL(sal_Int32(720), sal_Int32(pDXArray[0]));
             // Assert we are using the expected width for compressed chars
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(500), sal_Int32(pDXArray[6] - pDXArray[5]));
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(499), sal_Int32(pDXArray[6] - pDXArray[5]));
             break;
         }
     }
