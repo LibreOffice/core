@@ -53,73 +53,10 @@ using namespace ::com::sun::star::uno;
  */
 ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< PropertyValue >& rFilterData,
     const Reference< XComponent >& rxDoc)
-    : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog"),
-    mrDoc(rxDoc),
-    maConfigItem( u"Office.Common/Filter/PDF/Export/", &rFilterData ),
-    maConfigI18N( u"Office.Common/I18N/CTL/" ),
-    mbIsPresentation( false ),
-    mbIsSpreadsheet( false ),
-    mbIsWriter( false ),
-
-    mbSelectionPresent( false ),
-    mbUseCTLFont( false ),
-    mbUseLosslessCompression( true ),
-    mnQuality( 90 ),
-    mbReduceImageResolution( false ),
-    mnMaxImageResolution( 300 ),
-    mbUseTaggedPDF( false ),
-    mbUseTaggedPDFUserSelection( false ),
-    mbExportNotes( true ),
-    mbExportNotesInMargin( false ),
-    mbViewPDF( false ),
-    mbUseReferenceXObject( false ),
-    mbExportNotesPages( false ),
-    mbExportOnlyNotesPages( false ),
-    mbUseTransitionEffects( false ),
-    mbIsSkipEmptyPages( true ),
-    mbIsExportPlaceholders( false ),
-    mbAddStream( false ),
-    mnFormsType( 0 ),
-    mbExportFormFields( false ),
-    mbAllowDuplicateFieldNames( false ),
-    mbExportBookmarks( true ),
-    mbExportHiddenSlides ( false ),
-    mbSinglePageSheets ( false ),
-    mnOpenBookmarkLevels( -1 ),
-
-    mbHideViewerToolbar( false ),
-    mbHideViewerMenubar( false ),
-    mbHideViewerWindowControls( false ),
-    mbResizeWinToInit( false ),
-    mbCenterWindow( false ),
-    mbOpenInFullScreenMode( false ),
-    mbDisplayPDFDocumentTitle( false ),
-    mnMagnification( 0 ),
-    mnInitialView( 1 ),
-    mnZoom( 0 ),
-    mnInitialPage( 1 ),
-    mnPageLayout( 0 ),
-    mbFirstPageLeft( false ),
-
-    mbEncrypt( false ),
-    mbRestrictPermissions( false ),
-    mnPrint( 0 ),
-    mnChangesAllowed( 0 ),
-    mbCanCopyOrExtract( false ),
-    mbCanExtractForAccessibility( true ),
-
-    mbIsPageRangeChecked( false ),
-    msPageRange( ' ' ),
-    mbIsSheetRangeChecked( false ),
-    msSheetRange( ' ' ),
-
-    mbSelectionIsChecked( false ),
-    mbExportRelativeFsysLinks( false ),
-    mnViewPDFMode( 0 ),
-    mbConvertOOoTargets( false ),
-    mbExportBmkToPDFDestination( false ),
-
-    mbSignPDF( false )
+    : SfxTabDialogController(pParent, "filter/ui/pdfoptionsdialog.ui", "PdfOptionsDialog")
+    , mrDoc(rxDoc)
+    , maConfigItem( u"Office.Common/Filter/PDF/Export/", &rFilterData )
+    , maConfigI18N( u"Office.Common/I18N/CTL/" )
 {
     // check for selection
     try
