@@ -2270,7 +2270,7 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent, ScTabViewShell* pViewShell)
     m_xWidget->set_size_request(aSize.Width(), -1);
     SetSizePixel(m_xContainer->get_preferred_size());
 
-    FillRangeNames();
+    FillRangeNames(true);
 
     StartListening( *SfxGetpApp() ); // For Navigator rangename updates
 
@@ -2332,7 +2332,7 @@ OUString ScPosWnd::createLocalRangeName(std::u16string_view rName, std::u16strin
     return OUString::Concat(rName) + " (" + rTableName + ")";
 }
 
-void ScPosWnd::FillRangeNames()
+void ScPosWnd::FillRangeNames(bool initialize)
 {
     std::set<OUString> aSet;
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
@@ -2363,7 +2363,7 @@ void ScPosWnd::FillRangeNames()
         }
     }
 
-    if (aSet == aRangeNames && !aSet.empty())
+    if (aSet == aRangeNames && !initialize)
         return;
 
     aRangeNames = aSet;
