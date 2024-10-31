@@ -1117,7 +1117,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             // Modify Array for special justifications
 
-            tools::Long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
+            double nSpaceAdd = rInf.GetSpace() / double(SPACING_PRECISION_FACTOR);
             bool bSpecialJust = false;
 
             if ( rInf.GetFont() && rInf.GetLen() )
@@ -1193,7 +1193,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            tools::Long nKernSum = rInf.GetKern();
+            double nKernSum = rInf.GetKern();
 
             if ( bStretch || m_bPaintBlank || rInf.GetKern() || bSpecialJust )
             {
