@@ -343,8 +343,7 @@ void ScDBFunc::ToggleAutoFilter()
                                                                                            VclMessageType::Question,
                                                                                            VclButtonsType::YesNo,
                                                                                            // header from first row?
-                                                                                           ScResId(STR_MSSG_MAKEAUTOFILTER_0),
-                                                                                           SfxViewShell::Current()));
+                                                                                           ScResId(STR_MSSG_MAKEAUTOFILTER_0)));
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
