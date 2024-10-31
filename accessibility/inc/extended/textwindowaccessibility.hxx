@@ -322,24 +322,20 @@ public:
     const css::uno::Reference< css::accessibility::XAccessible >&
     getAccessible() const { return m_xAccessible; }
 
-    // Must be called only after init has been called.
     css::lang::Locale retrieveLocale();
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const *" instead of a
     // "::rtl::Reference< Paragraph > const &".
     ::sal_Int32 retrieveParagraphIndex(Paragraph const * pParagraph);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const *" instead of a
     // "::rtl::Reference< Paragraph > const &".
     ::sal_Int64 retrieveParagraphState(Paragraph const * pParagraph);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -347,14 +343,12 @@ public:
     css::awt::Rectangle
     retrieveParagraphBounds(Paragraph const * pParagraph, bool bAbsolute);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
     // "::rtl::Reference< Paragraph > const &".
     OUString retrieveParagraphText(Paragraph const * pParagraph);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -362,14 +356,12 @@ public:
     void retrieveParagraphSelection(Paragraph const * pParagraph,
                                     ::sal_Int32 * pBegin, ::sal_Int32 * pEnd);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const *" instead of a
     // "::rtl::Reference< Paragraph > const &".
     ::sal_Int32 retrieveParagraphCaretPosition(Paragraph const * pParagraph);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -379,7 +371,6 @@ public:
     retrieveCharacterBounds(Paragraph const * pParagraph,
                             ::sal_Int32 nIndex);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -387,7 +378,6 @@ public:
     ::sal_Int32 retrieveCharacterIndex(Paragraph const * pParagraph,
                                        css::awt::Point const & rPoint);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -397,7 +387,6 @@ public:
         Paragraph const * pParagraph, ::sal_Int32 nIndex,
         const css::uno::Sequence< OUString >& aRequestedAttributes);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -407,7 +396,6 @@ public:
         Paragraph const * pParagraph, ::sal_Int32 Index,
         const css::uno::Sequence< OUString >& RequestedAttributes);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -415,7 +403,6 @@ public:
     void changeParagraphText(Paragraph const * pParagraph,
                              OUString const & rText);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -425,7 +412,6 @@ public:
                              ::sal_Int32 nEnd, bool bCut, bool bPaste,
                              OUString const & rText);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -434,7 +420,6 @@ public:
     void copyParagraphText(Paragraph const * pParagraph,
                            ::sal_Int32 nBegin, ::sal_Int32 nEnd);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -445,7 +430,6 @@ public:
         css::uno::Sequence< css::beans::PropertyValue > const &
         rAttributeSet);
 
-    // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
     // within Paragraph's constructor (i.e., when the Paragraph's ref count is
     // still zero), pass a "Paragraph const &" instead of a
@@ -486,42 +470,36 @@ private:
     virtual void SAL_CALL disposing() override;
 
     // ??? Will be called with the external (Solar) mutex locked.
-    // init will already have been called.
     virtual void Notify(::SfxBroadcaster & rBC, ::SfxHint const & rHint) override;
 
     // Assuming that this will only be called with the external (Solar) mutex
     // locked.
-    // init will already have been called.
     DECL_LINK(WindowEventHandler, VclWindowEvent&, void);
 
     // Must be called with both the external (Solar) and internal mutex
-    // locked.
-    void init();
-
-    // Must be called with both the external (Solar) and internal mutex
-    // locked, and after init has been called:
+    // locked:
     static ::rtl::Reference< Paragraph >
     getParagraph(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex
-    // locked, and after init has been called.
+    // locked:
     // Throws css::uno::RuntimeException.
     css::uno::Reference< css::accessibility::XAccessible >
     getAccessibleChild(Paragraphs::iterator const & rIt);
 
     // Must be called with both the external (Solar) and internal mutex
-    // locked, and after init has been called:
+    // locked:
     void determineVisibleRange();
 
     // Must be called with both the external (Solar) and internal mutex
-    // locked, and after init has been called:
+    // locked:
     void notifyVisibleRangeChanges(
         Paragraphs::iterator const & rOldVisibleBegin,
         Paragraphs::iterator const & rOldVisibleEnd,
         Paragraphs::iterator const & rInserted);
 
     // Must be called with both the external (Solar) and internal mutex
-    // locked, and after init has been called:
+    // locked:
     void changeParagraphText(::sal_uInt32 nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
                              bool bCut, bool bPaste,
                              OUString const & rText);
@@ -555,9 +533,7 @@ private:
     SfxListenerGuard m_aEngineListener;
     WindowListenerGuard m_aViewListener;
 
-    // All the following members have valid values only after calling init:
-
-    std::unique_ptr< Paragraphs > m_xParagraphs;
+    Paragraphs m_aParagraphs;
 
     // m_nViewOffset is from the start of the document (0) to the start of the
     // current view, and m_nViewHeight is the height of the view:
