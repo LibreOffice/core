@@ -597,11 +597,11 @@ void SbiParser::Set()
     if( eTok == NEW )
     {
         Next();
-        auto pTypeDef = std::make_unique<SbiSymDef>( OUString() );
-        TypeDecl( *pTypeDef, true );
+        SbiSymDef aTypeDef( u""_ustr );
+        TypeDecl( aTypeDef, true );
 
         aLvalue.Gen();
-        aGen.Gen( SbiOpcode::CREATE_, pDef->GetId(), pTypeDef->GetTypeId() );
+        aGen.Gen( SbiOpcode::CREATE_, pDef->GetId(), aTypeDef.GetTypeId() );
         aGen.Gen( SbiOpcode::SETCLASS_, pDef->GetTypeId() );
     }
     else

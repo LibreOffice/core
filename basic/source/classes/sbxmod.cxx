@@ -1704,18 +1704,18 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
-    auto pParser = std::make_unique<SbiParser>(static_cast<StarBASIC*>(GetParent()), this );
-    pParser->SetCodeCompleting(true);
+    SbiParser aParser(static_cast<StarBASIC*>(GetParent()), this );
+    aParser.SetCodeCompleting(true);
 
-    while( pParser->Parse() ) {}
-    SbiSymPool* pPool = pParser->pPool;
+    while( aParser.Parse() ) {}
+    SbiSymPool* pPool = aParser.pPool;
     aCache.Clear();
     for( sal_uInt16 i = 0; i < pPool->GetSize(); ++i )
     {
         SbiSymDef* pSymDef = pPool->Get(i);
         //std::cerr << "i: " << i << ", type: " << pSymDef->GetType() << "; name:" << pSymDef->GetName() << std::endl;
         if( (pSymDef->GetType() != SbxEMPTY) && (pSymDef->GetType() != SbxNULL) )
-            aCache.InsertGlobalVar( pSymDef->GetName(), pParser->aGblStrings.Find(pSymDef->GetTypeId()) );
+            aCache.InsertGlobalVar( pSymDef->GetName(), aParser.aGblStrings.Find(pSymDef->GetTypeId()) );
 
         SbiSymPool& rChildPool = pSymDef->GetPool();
         for(sal_uInt16 j = 0; j < rChildPool.GetSize(); ++j )
@@ -1723,7 +1723,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
             SbiSymDef* pChildSymDef = rChildPool.Get(j);
             //std::cerr << "j: " << j << ", type: " << pChildSymDef->GetType() << "; name:" << pChildSymDef->GetName() << std::endl;
             if( (pChildSymDef->GetType() != SbxEMPTY) && (pChildSymDef->GetType() != SbxNULL) )
-                aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), pParser->aGblStrings.Find(pChildSymDef->GetTypeId()) );
+                aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), aParser.aGblStrings.Find(pChildSymDef->GetTypeId()) );
         }
     }
 }

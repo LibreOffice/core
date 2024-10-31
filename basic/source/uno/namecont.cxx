@@ -796,12 +796,12 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             source.sSystemId    = aFileName;
 
             // start parsing
-            auto pLibArray = std::make_unique<::xmlscript::LibDescriptorArray> ( );
+            ::xmlscript::LibDescriptorArray aLibArray;
 
             Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
             try
             {
-                xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray.get() ) );
+                xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( &aLibArray ) );
                 xParser->parseStream( source );
             }
             catch ( const xml::sax::SAXException& )
@@ -815,10 +815,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 return;
             }
 
-            sal_Int32 nLibCount = pLibArray->mnLibCount;
+            sal_Int32 nLibCount = aLibArray.mnLibCount;
             for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
             {
-                ::xmlscript::LibDescriptor& rLib = pLibArray->mpLibs[i];
+                ::xmlscript::LibDescriptor& rLib = aLibArray.mpLibs[i];
 
                 // Check storage URL
                 OUString aStorageURL = rLib.aStorageURL;
@@ -1859,7 +1859,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     int iArray = 0;
     pName = aNames.getConstArray();
     ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
-    auto pLibArray = std::make_unique< ::xmlscript::LibDescriptorArray > ( nLibsToSave );
+    ::xmlscript::LibDescriptorArray aLibArray( nLibsToSave );
     for( ; pName != pNamesEnd; ++pName )
     {
         SfxLibrary* pImplLib = getImplLib( *pName );
@@ -1869,7 +1869,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         }
         const bool bExtensionLib = pImplLib->mbExtension;
         ::xmlscript::LibDescriptor& rLib = bExtensionLib ?
-              aLibDescriptorForExtensionLibs : pLibArray->mpLibs[iArray];
+              aLibDescriptorForExtensionLibs : aLibArray.mpLibs[iArray];
         if( !bExtensionLib )
         {
             iArray++;
@@ -2112,7 +2112,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     try
     {
-        xmlscript::exportLibraryContainer( xWriter, pLibArray.get() );
+        xmlscript::exportLibraryContainer( xWriter, &aLibArray );
         if ( bStorage )
         {
             uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY_THROW );

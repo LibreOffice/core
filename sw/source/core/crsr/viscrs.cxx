@@ -659,14 +659,14 @@ void SwSelPaintRects::HighlightContentControl()
         }
         if (pCurContentControlAtCursor)
         {
-            auto pCursorForContentControl = std::make_unique<SwShellCursor>(
+            SwShellCursor aCursorForContentControl(
                 *GetShell(), SwPosition(*pTextNode, pCurContentControlAtCursor->GetStart()));
-            pCursorForContentControl->SetMark();
-            pCursorForContentControl->GetMark()->Assign(
+            aCursorForContentControl.SetMark();
+            aCursorForContentControl.GetMark()->Assign(
                 *pTextNode, *(pCurContentControlAtCursor->End()));
 
-            pCursorForContentControl->FillRects();
-            SwRects* pRects = pCursorForContentControl.get();
+            aCursorForContentControl.FillRects();
+            SwRects* pRects = &aCursorForContentControl;
             for (const auto& rRect : *pRects)
             {
                 tools::Rectangle aRect(rRect.SVRect());

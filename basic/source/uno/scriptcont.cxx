@@ -335,11 +335,11 @@ void SfxScriptLibraryContainer::importFromOldStorage( const OUString& aFile )
     rtl::Reference<SotStorage> xStorage(new SotStorage(false, aFile));
     if( xStorage->GetError() == ERRCODE_NONE )
     {
-        auto pBasicManager = std::make_unique<BasicManager> ( *xStorage, aFile );
+        BasicManager aBasicManager( *xStorage, aFile );
 
         // Set info
         LibraryContainerInfo aInfo( this, nullptr, this );
-        pBasicManager->SetLibraryContainerInfo( aInfo );
+        aBasicManager.SetLibraryContainerInfo( aInfo );
     }
 }
 

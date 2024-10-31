@@ -793,10 +793,10 @@ static void lcl_SaveDebugDoc( SfxObjectShell *xTargetDocShell,
     // aTempFile is not deleted, but that seems to be intentional
     utl::TempFileNamed aTempFile( basename, true, u".odt", &sTempDirURL );
     INetURLObject aTempFileURL( aTempFile.GetURL() );
-    auto pDstMed = std::make_unique<SfxMedium>(
+    SfxMedium aDstMed(
         aTempFileURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
         StreamMode::STD_READWRITE );
-    bool bAnyError = !xTargetDocShell->DoSaveAs( *pDstMed );
+    bool bAnyError = !xTargetDocShell->DoSaveAs( aDstMed );
     // xObjectShell->DoSaveCompleted crashes the mail merge unit tests, so skip it
     bAnyError |= (ERRCODE_NONE != xTargetDocShell->GetErrorIgnoreWarning());
     if( bAnyError )

@@ -112,15 +112,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF,
     //        UCOL_DEFAULT_STRENGTH, &parseError, &status);
 
-    auto coll = std::make_unique<icu::RuleBasedCollator>(reinterpret_cast<const UChar *>(Obuf.getStr()), status);
+    icu::RuleBasedCollator coll(reinterpret_cast<const UChar *>(Obuf.getStr()), status);
 
     if (U_SUCCESS(status)) {
         std::vector<uint8_t> data;
-        int32_t len = coll->cloneBinary(nullptr, 0, status);
+        int32_t len = coll.cloneBinary(nullptr, 0, status);
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             data.resize(len);
             status = U_ZERO_ERROR;
-            len = coll->cloneBinary(data.data(), len, status);
+            len = coll.cloneBinary(data.data(), len, status);
         }
         if (U_SUCCESS(status))
             data_write(argv[2], argv[3], data.data(), len);

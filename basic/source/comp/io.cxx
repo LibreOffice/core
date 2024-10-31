@@ -53,9 +53,7 @@ void SbiParser::Print()
     {
         if( !IsEoln( Peek() ) )
         {
-            auto pExpr = std::make_unique<SbiExpression>(this);
-            pExpr->Gen();
-            pExpr.reset();
+            SbiExpression(this).Gen();
             Peek();
             aGen.Gen( eCurTok == COMMA ? SbiOpcode::PRINTF_ : SbiOpcode::BPRINT_ );
         }
@@ -82,7 +80,7 @@ void SbiParser::Write()
 
     while( !bAbort )
     {
-        auto pExpr = std::make_unique<SbiExpression>(this);
+        std::optional<SbiExpression> pExpr(std::in_place, this);
         pExpr->Gen();
         pExpr.reset();
         aGen.Gen( SbiOpcode::BWRITE_ );
@@ -130,7 +128,7 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( true );
-    auto pExpr = std::make_unique<SbiExpression>( this, SbOPERAND );
+    std::optional<SbiExpression> pExpr( std::in_place, this, SbOPERAND );
     if( !pExpr->IsVariable() )
         Error( ERRCODE_BASIC_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
@@ -147,7 +145,7 @@ void SbiParser::Input()
 {
     aGen.Gen( SbiOpcode::RESTART_ );
     Channel( true );
-    auto pExpr = std::make_unique<SbiExpression>( this, SbOPERAND );
+    std::optional<SbiExpression> pExpr( std::in_place, this, SbOPERAND );
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -157,7 +155,7 @@ void SbiParser::Input()
         if( Peek() == COMMA )
         {
             Next();
-            pExpr.reset(new SbiExpression( this, SbOPERAND ));
+            pExpr.emplace( this, SbOPERAND );
         }
         else break;
     }
@@ -236,7 +234,7 @@ void SbiParser::Open()
     }
     TestToken( AS );
     // channel number
-    auto pChan = std::make_unique<SbiExpression>( this );
+    SbiExpression aChan( this );
     std::unique_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {
@@ -253,7 +251,7 @@ void SbiParser::Open()
     // channel number
     // file name
     pLen->Gen();
-    pChan->Gen();
+    aChan.Gen();
     aFileName.Gen();
     aGen.Gen( SbiOpcode::OPEN_, static_cast<sal_uInt32>(nMode), static_cast<sal_uInt32>(nFlags) );
     bInStatement = false;

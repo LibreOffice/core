@@ -431,21 +431,21 @@ bool ScDocumentLoader::GetFilterName( const OUString& rFileName,
     //  Filter detection
 
     std::shared_ptr<const SfxFilter> pSfxFilter;
-    auto pMedium = std::make_unique<SfxMedium>( rFileName, StreamMode::STD_READ );
-    if (pMedium->GetErrorIgnoreWarning() == ERRCODE_NONE && !comphelper::IsFuzzing())
+    SfxMedium aMedium( rFileName, StreamMode::STD_READ );
+    if (aMedium.GetErrorIgnoreWarning() == ERRCODE_NONE && !comphelper::IsFuzzing())
     {
         if ( bWithInteraction )
-            pMedium->UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
+            aMedium.UseInteractionHandler(true);   // #i73992# no longer called from GuessFilter
 
         SfxFilterMatcher aMatcher(u"scalc"_ustr);
         if( bWithContent )
-            aMatcher.GuessFilter( *pMedium, pSfxFilter );
+            aMatcher.GuessFilter( aMedium, pSfxFilter );
         else
-            aMatcher.GuessFilterIgnoringContent( *pMedium, pSfxFilter );
+            aMatcher.GuessFilterIgnoringContent( aMedium, pSfxFilter );
     }
 
     bool bOK = false;
-    if ( pMedium->GetErrorIgnoreWarning() == ERRCODE_NONE )
+    if ( aMedium.GetErrorIgnoreWarning() == ERRCODE_NONE )
     {
         if ( pSfxFilter )
             rFilter = pSfxFilter->GetFilterName();

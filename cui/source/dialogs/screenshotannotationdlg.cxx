@@ -278,11 +278,11 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     // get a suggestion for the filename from buildable name
     OUString aDerivedFileName = mrParentDialog.get_buildable_name();
 
-    auto xFileDlg = std::make_unique<sfx2::FileDialogHelper>(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
+    sfx2::FileDialogHelper aFileDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
                                                              FileDialogFlags::NONE, mpParentWindow);
-    xFileDlg->SetContext(sfx2::FileDialogHelper::ScreenshotAnnotation);
+    aFileDlg.SetContext(sfx2::FileDialogHelper::ScreenshotAnnotation);
 
-    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = xFileDlg->GetFilePicker();
+    const uno::Reference< ui::dialogs::XFilePicker3 > xFilePicker = aFileDlg.GetFilePicker();
 
     xFilePicker->setTitle(maSaveAsText);
 
