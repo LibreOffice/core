@@ -275,6 +275,67 @@ void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
     }
 }
 
+/** Writes the PDF structure to the string buffer.
+ *
+ * Structure elements like: objects, IDs, dictionaries, key/values, ...
+ *
+ */
+class PDFStructureWriter
+{
+    OStringBuffer maLine;
+public:
+    PDFStructureWriter()
+        : maLine(1024)
+    {
+    }
+
+    void startObject(sal_Int32 nID)
+    {
+        appendObjectID(nID, maLine);
+    }
+
+    void endObject()
+    {
+        maLine.append("endobj\n\n");
+    }
+
+    OStringBuffer& getLine()
+    {
+        return maLine;
+    }
+
+    void startDict()
+    {
+        maLine.append("<<");
+    }
+
+    void endDict()
+    {
+        maLine.append(">>\n");
+    }
+
+    void write(std::string_view key, std::string_view value)
+    {
+        maLine.append(key);
+        maLine.append(value);
+    }
+
+    void write(std::string_view key, sal_Int32 value)
+    {
+        maLine.append(key);
+        maLine.append(" ");
+        maLine.append(value);
+    }
+
+    void writeString(std::string_view key, char* pString, sal_Int32 nSize)
+    {
+        maLine.append(key);
+        maLine.append(" (");
+        appendLiteralString(pString, nSize, maLine);
+        maLine.append(")");
+    }
+};
+
 } // end anonymous namespace
 
 namespace vcl
@@ -6031,6 +6092,39 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     return nObject;
 }
 
+sal_Int32 PDFWriterImpl::emitEncrypt()
+{
+    //emit the security information
+    //must be emitted as indirect dictionary object, since
+    //Acrobat Reader 5 works only with this kind of implementation
+
+    sal_Int32 nObject = createObject();
+
+    if (updateObject(nObject))
+    {
+        PDFStructureWriter aWriter;
+        aWriter.startObject(nObject);
+        aWriter.startDict();
+        aWriter.write("/Filter", "/Standard");
+        aWriter.write("/V", 2);
+        aWriter.write("/Length", 128);
+        aWriter.write("/R", 3);
+        // emit the owner password, must not be encrypted
+        aWriter.writeString("/O", reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()));
+        aWriter.writeString("/U", reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()));
+        aWriter.write("/P", m_nAccessPermissions);
+        aWriter.endDict();
+        aWriter.endObject();
+
+        if (!writeBuffer(aWriter.getLine()))
+            nObject = 0;
+    }
+    else
+        nObject = 0;
+
+    return nObject;
+}
+
 bool PDFWriterImpl::emitTrailer()
 {
     // emit doc info
@@ -6040,33 +6134,7 @@ bool PDFWriterImpl::emitTrailer()
 
     if( m_aContext.Encryption.Encrypt() )
     {
-        //emit the security information
-        //must be emitted as indirect dictionary object, since
-        //Acrobat Reader 5 works only with this kind of implementation
-        nSecObject = createObject();
-
-        if( updateObject( nSecObject ) )
-        {
-            OStringBuffer aLineS( 1024 );
-            aLineS.append( nSecObject );
-            aLineS.append( " 0 obj\n"
-                           "<</Filter/Standard/V " );
-            // check the version
-            aLineS.append( "2/Length 128/R 3" );
-
-            // emit the owner password, must not be encrypted
-            aLineS.append( "/O(" );
-            appendLiteralString( reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()), aLineS );
-            aLineS.append( ")/U(" );
-            appendLiteralString( reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()), aLineS );
-            aLineS.append( ")/P " );// the permission set
-            aLineS.append( m_nAccessPermissions );
-            aLineS.append( ">>\nendobj\n\n" );
-            if( !writeBuffer( aLineS ) )
-                nSecObject = 0;
-        }
-        else
-            nSecObject = 0;
+        nSecObject = emitEncrypt();
     }
     // emit xref table
     // remember start

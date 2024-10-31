@@ -1010,6 +1010,8 @@ i12626
     // creates a PKCS7 object using the ByteRange and overwrite /Contents
     // of the signature dictionary
     bool finalizeSignature();
+    //writes encrypt
+    sal_Int32 emitEncrypt();
     // writes xref and trailer
     bool emitTrailer();
     // emits info dict (if applicable)
