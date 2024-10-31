@@ -399,7 +399,7 @@ void ImplSVData::dumpState(rtl::OStringBuffer &rState)
     rState.append("\t items:");
 
     for (auto it = maGDIData.maScaleCache.begin();
-         it != maGDIData.maScaleCache.begin(); ++it)
+         it != maGDIData.maScaleCache.end(); ++it)
     {
         rState.append("\n\t");
         rState.append(static_cast<sal_Int32>(it->first.maDestSize.Width()));
