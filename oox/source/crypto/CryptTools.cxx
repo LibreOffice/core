@@ -266,6 +266,16 @@ struct CryptoImpl
         return mSymKey;
     }
 
+    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type)
+    {
+        setupCryptoContext(key, iv, type, CKA_ENCRYPT);
+    }
+
+    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type)
+    {
+        setupCryptoContext(key, iv, type, CKA_DECRYPT);
+    }
+
     void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type, CK_ATTRIBUTE_TYPE operation)
     {
         CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
@@ -376,15 +386,9 @@ Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
     (void)key;
     (void)iv;
     (void)type;
-#endif
-
-#if USE_TLS_OPENSSL
+#else
     mpImpl->setupDecryptContext(key, iv, type);
 #endif
-
-#if USE_TLS_NSS
-    mpImpl->setupCryptoContext(key, iv, type, CKA_DECRYPT);
-#endif // USE_TLS_NSS
 }
 
 sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
@@ -429,13 +433,9 @@ Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
     (void)key;
     (void)iv;
     (void)type;
-#endif
-
-#if USE_TLS_OPENSSL
+#else
     mpImpl->setupEncryptContext(key, iv, type);
-#elif USE_TLS_NSS
-    mpImpl->setupCryptoContext(key, iv, type, CKA_ENCRYPT);
-#endif // USE_TLS_NSS
+#endif
 }
 
 sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
@@ -483,11 +483,13 @@ sal_Int32 getSizeForHashType(CryptoHashType eType)
 CryptoHash::CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
     : mnHashSize(getSizeForHashType(eType))
 {
-#if USE_TLS_OPENSSL
+#if USE_TLS_OPENSSL + USE_TLS_NSS > 0
     mpImpl->setupCryptoHashContext(rKey, eType);
-#elif USE_TLS_NSS
-    mpImpl->setupCryptoHashContext(rKey, eType);
+
+#if USE_TLS_NSS
     PK11_DigestBegin(mpImpl->mContext);
+#endif
+
 #else
     (void)rKey;
 #endif
