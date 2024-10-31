@@ -427,8 +427,6 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
                         void* pBuffer,
                         sal_Int32 BytesToRead)
 {
-    int nRet = 0;
-
     SAL_WARN_IF(!pPipe, "sal.osl.pipe", "osl_receivePipe: invalid pipe");
     if (!pPipe)
     {
@@ -437,10 +435,9 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
         return -1;
     }
 
-    nRet = recv(pPipe->m_Socket, pBuffer, BytesToRead, 0);
+    sal_Int32 nRet = recv(pPipe->m_Socket, pBuffer, BytesToRead, 0);
 
-    if (nRet < 0)
-        SAL_WARN("sal.osl.pipe", "recv() failed: " << UnixErrnoString(errno));
+    SAL_WARN_IF(nRet < 0, "sal.osl.pipe", "recv() failed: " << UnixErrnoString(errno));
 
     return nRet;
 }
