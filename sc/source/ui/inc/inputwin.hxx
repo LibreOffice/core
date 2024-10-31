@@ -194,7 +194,7 @@ private:
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 private:
-    void            FillRangeNames();
+    void            FillRangeNames(bool initialize = false);
     void            FillFunctions();
     void            DoEnter();
     void            HideTip();
