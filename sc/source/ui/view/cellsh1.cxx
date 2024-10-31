@@ -3374,13 +3374,13 @@ void RunPivotLayoutDialog(ScModule* pScMod,
 void SetupRangeForPivotTableDialog(const ScRange& rRange,
                                    ScAddress& rDestPos,
                                    ScDocument* pDoc,
-                                   TranslateId pSrcErrorId,
+                                   TranslateId& rSrcErrorId,
                                    std::unique_ptr<ScDPObject>& pNewDPObject)
 {
     ScSheetSourceDesc aShtDesc(pDoc);
     aShtDesc.SetSourceRange(rRange);
-    pSrcErrorId = aShtDesc.CheckSourceRange();
-    if (!pSrcErrorId)
+    rSrcErrorId = aShtDesc.CheckSourceRange();
+    if (!rSrcErrorId)
     {
         pNewDPObject.reset(new ScDPObject(pDoc));
         pNewDPObject->SetSheetDesc( aShtDesc );
