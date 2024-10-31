@@ -412,7 +412,7 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
 }
 
 // XPopupMenuController
-void NewMenuController::impl_setPopupMenu()
+void NewMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
 
     if ( m_xPopupMenu.is() )

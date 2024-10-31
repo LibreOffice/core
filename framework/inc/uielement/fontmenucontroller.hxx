@@ -52,7 +52,7 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         private:
-            virtual void impl_setPopupMenu() override;
+            virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
             void fillPopupMenu( const css::uno::Sequence< OUString >& rFontNameSeq, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
 
             OUString                                        m_aFontFamilyName;

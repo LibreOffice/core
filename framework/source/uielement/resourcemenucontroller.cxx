@@ -374,7 +374,7 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
 
 private:
-    virtual void impl_setPopupMenu() override;
+    virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
 };
 
 SaveAsMenuController::SaveAsMenuController( const css::uno::Reference< css::uno::XComponentContext >& rContext,
@@ -391,7 +391,7 @@ void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
     rPopupMenu->setCommand(nItemId, rCommand);
 }
 
-void SaveAsMenuController::impl_setPopupMenu()
+void SaveAsMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     SolarMutexGuard aGuard;
 
@@ -423,7 +423,7 @@ public:
     OUString SAL_CALL getImplementationName() override;
 
 private:
-    void impl_setPopupMenu() override;
+    void impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/) override;
 };
 
 constexpr sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
@@ -531,7 +531,7 @@ void WindowListMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
     }
 }
 
-void WindowListMenuController::impl_setPopupMenu()
+void WindowListMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     // Make this controller work also with initially empty
     // menu, which PopupMenu::ImplExecute doesn't allow.

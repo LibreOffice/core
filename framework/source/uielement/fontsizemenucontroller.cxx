@@ -244,7 +244,7 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
 }
 
 // XPopupMenuController
-void FontSizeMenuController::impl_setPopupMenu()
+void FontSizeMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     css::util::URL aTargetURL;

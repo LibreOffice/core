@@ -129,7 +129,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
 }
 
 // XPopupMenuController
-void LanguageSelectionMenuController::impl_setPopupMenu()
+void LanguageSelectionMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 

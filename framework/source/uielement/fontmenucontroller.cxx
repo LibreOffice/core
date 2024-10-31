@@ -177,7 +177,7 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
 }
 
 // XPopupMenuController
-void FontMenuController::impl_setPopupMenu()
+void FontMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 

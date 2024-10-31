@@ -96,8 +96,8 @@ public:
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
-    virtual void impl_setPopupMenu() override;
-    void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
+    virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
+    void fillPopupMenu(std::unique_lock<std::mutex>& rGuard, css::uno::Reference<css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
     void executeEntryImpl(std::unique_lock<std::mutex>& rGuard, sal_Int32 nIndex);
 
@@ -150,7 +150,7 @@ void InsertItem(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu,
 
 
 // private function
-void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu > const & rPopupMenu )
+void RecentFilesMenuController::fillPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/, Reference<css::awt::XPopupMenu> const & rPopupMenu)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -426,14 +426,14 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
 void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     std::unique_lock aLock( m_aMutex );
-    impl_setPopupMenu();
+    impl_setPopupMenu(aLock);
 }
 
 // XPopupMenuController
-void RecentFilesMenuController::impl_setPopupMenu()
+void RecentFilesMenuController::impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard)
 {
     if ( m_xPopupMenu.is() )
-        fillPopupMenu( m_xPopupMenu );
+        fillPopupMenu(rGuard, m_xPopupMenu);
 }
 
 // XDispatchProvider

@@ -105,7 +105,7 @@ namespace svt
             virtual void disposing(std::unique_lock<std::mutex>& rGuard) override;
 
             static void resetPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
-            virtual void impl_setPopupMenu();
+            virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard);
             static OUString determineBaseURL( std::u16string_view aURL );
 
             DECL_DLLPRIVATE_STATIC_LINK( PopupMenuControllerBase, ExecuteHdl_Impl, void*, void );

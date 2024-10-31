@@ -354,13 +354,15 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
         m_xURLTransformer->parseStrict( aTargetURL );
         m_xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-        impl_setPopupMenu();
+        impl_setPopupMenu(aLock);
     }
     updatePopupMenu();
 }
-void PopupMenuControllerBase::impl_setPopupMenu()
+
+void PopupMenuControllerBase::impl_setPopupMenu(std::unique_lock<std::mutex>& /*rGuard*/)
 {
 }
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

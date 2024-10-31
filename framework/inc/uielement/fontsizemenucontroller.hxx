@@ -52,7 +52,7 @@ namespace framework
             virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         private:
-            virtual void impl_setPopupMenu() override;
+            virtual void impl_setPopupMenu(std::unique_lock<std::mutex>& rGuard) override;
             void setCurHeight( tools::Long nHeight, css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
             OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame > const & rFrame );
