@@ -15,15 +15,22 @@ QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
     assert(pWidget->layout() && "no layout to use for container");
 }
 
-void QtInstanceContainer::move(weld::Widget*, weld::Container*) {}
+void QtInstanceContainer::move(weld::Widget*, weld::Container*)
+{
+    assert(false && "Not implemented yet");
+}
 
 css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
 {
+    assert(false && "Not implemented yet");
     return css::uno::Reference<css::awt::XWindow>();
 }
 
-void QtInstanceContainer::child_grab_focus() {}
+void QtInstanceContainer::child_grab_focus() { assert(false && "Not implemented yet"); }
 
-void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>&) {}
+void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>&)
+{
+    assert(false && "Not implemented yet");
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
