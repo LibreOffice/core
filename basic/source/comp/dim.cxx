@@ -987,20 +987,21 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     bool bError2 = true;
                     if( bOptional && bCompatible && eTok == EQ )
                     {
-                        auto pDefaultExpr = std::make_unique<SbiConstExpression>(this);
-                        SbxDataType eType2 = pDefaultExpr->GetType();
+                        {
+                            SbiConstExpression aDefaultExpr(this);
+                            SbxDataType eType2 = aDefaultExpr.GetType();
 
-                        sal_uInt16 nStringId;
-                        if( eType2 == SbxSTRING )
-                        {
-                            nStringId = aGblStrings.Add( pDefaultExpr->GetString() );
+                            sal_uInt16 nStringId;
+                            if (eType2 == SbxSTRING)
+                            {
+                                nStringId = aGblStrings.Add(aDefaultExpr.GetString());
+                            }
+                            else
+                            {
+                                nStringId = aGblStrings.Add(aDefaultExpr.GetValue(), eType2);
+                            }
+                            pPar->SetDefaultId(nStringId);
                         }
-                        else
-                        {
-                            nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
-                        }
-                        pPar->SetDefaultId( nStringId );
-                        pDefaultExpr.reset();
 
                         eTok = Next();
                         if( eTok == COMMA || eTok == RPAREN )
