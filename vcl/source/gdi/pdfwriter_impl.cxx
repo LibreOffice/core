@@ -641,6 +641,10 @@ const char* getPDFVersionStr(PDFWriter::PDFVersion ePDFVersion)
         case PDFWriter::PDFVersion::PDF_A_3:
         case PDFWriter::PDFVersion::PDF_1_7:
             return "1.7";
+        // PDF 2.0
+        case PDFWriter::PDFVersion::PDF_A_4:
+        case PDFWriter::PDFVersion::PDF_2_0:
+            return "2.0";
     }
 }
 
@@ -1250,10 +1254,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_nRC4KeyLength(0),
         m_bEncryptThisStream( false ),
         m_nAccessPermissions(0),
-        m_bIsPDF_A1( false ),
-        m_bIsPDF_A2( false ),
-        m_bIsPDF_UA( false ),
-        m_bIsPDF_A3( false ),
         m_rOuterFace( i_rOuterFace )
 {
     m_aStructure.emplace_back( );
@@ -1331,17 +1331,27 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     // insert outline root
     m_aOutline.emplace_back( );
 
-    m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1);
-    if( m_bIsPDF_A1 )
-        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
-
-    m_bIsPDF_A2 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_2);
-    if( m_bIsPDF_A2 )
-        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
-
-    m_bIsPDF_A3 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_3);
-    if( m_bIsPDF_A3 )
-        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
+    switch (m_aContext.Version)
+    {
+        case PDFWriter::PDFVersion::PDF_A_1:
+            m_bIsPDF_A1 = true;
+            m_aContext.Version = PDFWriter::PDFVersion::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
+            break;
+        case PDFWriter::PDFVersion::PDF_A_2:
+            m_bIsPDF_A2 = true;
+            m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
+            break;
+        case PDFWriter::PDFVersion::PDF_A_3:
+            m_bIsPDF_A3 = true;
+            m_aContext.Version = PDFWriter::PDFVersion::PDF_1_7;
+            break;
+        case PDFWriter::PDFVersion::PDF_A_4:
+            m_bIsPDF_A4 = true;
+            m_aContext.Version = PDFWriter::PDFVersion::PDF_2_0;
+            break;
+        default:
+            break;
+    }
 
     if (m_aContext.UniversalAccessibilityCompliance)
     {
@@ -3698,7 +3708,7 @@ bool PDFWriterImpl::emitLinkAnnotations()
 // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
 // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
         aLine.append( "<</Type/Annot" );
-        if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
+        if (m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3 || m_bIsPDF_A4)
             aLine.append( "/F 4" );
         aLine.append( "/Subtype/Link/Border[0 0 0]/Rect[" );
 
@@ -4043,7 +4053,7 @@ void PDFWriterImpl::emitTextAnnotationLine(OStringBuffer & aLine, PDFNoteEntry c
 
     // i59651: key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
     // see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
-    if (m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
+    if (m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3 || m_bIsPDF_A4)
         aLine.append("/F 4 ");
 
     aLine.append("/Popup ");
@@ -4636,7 +4646,7 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
 
             // PDF/A requires sub-dicts for /FT/Btn objects (clause
             // 6.3.3)
-            if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3)
+            if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3 || m_bIsPDF_A4)
             {
                 if( rWidget.m_eType == PDFWriter::RadioButton ||
                     rWidget.m_eType == PDFWriter::CheckBox ||
@@ -5016,7 +5026,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
         if( rWidget.m_eType == PDFWriter::PushButton )
         {
-            if(!m_bIsPDF_A1)
+            if (!m_bIsPDF_A1)
             {
                 OStringBuffer aDest;
                 if( rWidget.m_nDest != -1 && appendDest( m_aDestinationIdTranslation[ rWidget.m_nDest ], aDest ) )
@@ -5544,7 +5554,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( getResourceDictObj() );
         aLine.append( " 0 R" );
         // NeedAppearances must not be used if PDF is signed
-        if( m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3
+        if(m_bIsPDF_A1 || m_bIsPDF_A2 || m_bIsPDF_A3 || m_bIsPDF_A4
 #if HAVE_FEATURE_NSS
             || ( m_nSignatureObject != -1 )
 #endif
@@ -5856,7 +5866,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 // emits the output intent dictionary
 sal_Int32 PDFWriterImpl::emitOutputIntent()
 {
-    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 )
+    if (!m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 && !m_bIsPDF_A4)
         return 0;
 
     //emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
@@ -5959,7 +5969,7 @@ static void lcl_assignMeta(const css::uno::Sequence<OUString>& rValues, std::vec
 // emits the document metadata
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
-    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 && !m_bIsPDF_UA)
+    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 && !m_bIsPDF_A4 && !m_bIsPDF_UA)
         return 0;
 
     //get the object number for all the destinations
@@ -5975,6 +5985,8 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
             aMetadata.mnPDF_A = 2;
         else if (m_bIsPDF_A3)
             aMetadata.mnPDF_A = 3;
+        else if (m_bIsPDF_A4)
+            aMetadata.mnPDF_A = 4;
 
         aMetadata.mbPDF_UA = m_bIsPDF_UA;
 
