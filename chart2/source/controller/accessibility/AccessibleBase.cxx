@@ -757,13 +757,13 @@ Color AccessibleBase::getColor( eColorType eColType )
             {
                 if( eColType == ACC_BASE_FOREGROUND )
                 {
-                    drawing::LineStyle aLStyle;
+                    drawing::LineStyle aLStyle = drawing::LineStyle_SOLID;
                     if( xObjProp->getPropertyValue( aStylePropName ) >>= aLStyle )
                         bTransparent = (aLStyle == drawing::LineStyle_NONE);
                 }
                 else
                 {
-                    drawing::FillStyle aFStyle;
+                    drawing::FillStyle aFStyle = drawing::FillStyle_SOLID;
                     if( xObjProp->getPropertyValue( aStylePropName ) >>= aFStyle )
                         bTransparent = (aFStyle == drawing::FillStyle_NONE);
                 }
