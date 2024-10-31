@@ -572,6 +572,7 @@ private:
 
     std::queue< ::TextHint > m_aParagraphNotifications;
     bool m_bSelectionChangedNotification;
+    bool m_bInParagraphNotificationsHandler = false;
 };
 
 }

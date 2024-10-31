@@ -1670,6 +1670,16 @@ Document::changeParagraphText(::sal_uInt32 nNumber, ::sal_uInt16 nBegin, ::sal_u
 
 void Document::handleParagraphNotifications()
 {
+    // Recursion is possible, e.g. when SfxHintId::TextParaInserted is being handled,
+    // and TextEngine::GetTextHeight is called for the paragraph being inserted; that
+    // tries to handle the following SfxHintId::TextFormatPara notification at the
+    // moment when the respective element hasn't yet been inserted into m_aParagraphs,
+    // which could crash. Therefore, re-entry is not allowed. The handling is done in
+    // a loop anyway, so it will process all of them in due order.
+    // See also comments in Document::Notify.
+    if (m_bInParagraphNotificationsHandler)
+        return;
+    m_bInParagraphNotificationsHandler = true;
     while (!m_aParagraphNotifications.empty())
     {
         ::TextHint aHint(m_aParagraphNotifications.front());
@@ -1856,6 +1866,7 @@ void Document::handleParagraphNotifications()
             break;
         }
     }
+    m_bInParagraphNotificationsHandler = false;
     if (m_bSelectionChangedNotification)
     {
         m_bSelectionChangedNotification = false;
