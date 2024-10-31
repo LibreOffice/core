@@ -206,7 +206,7 @@ void SAL_CALL ChartModel::storeSelf( const Sequence< beans::PropertyValue >& rMe
 // frame::XStorable (base of XStorable2)
 sal_Bool SAL_CALL ChartModel::hasLocation()
 {
-    //@todo guard
+    std::unique_lock aGuard(m_aLifeTimeManager.m_aAccessMutex);
     return !m_aResource.isEmpty();
 }
 
