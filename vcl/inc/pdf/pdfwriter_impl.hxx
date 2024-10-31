@@ -1097,9 +1097,10 @@ i12626
     /* true if PDF/A-4 is output */
     bool m_bIsPDF_A4 = false;
 
+    sal_Int32 m_nPDFA_Version = 0;
+
     /* PDF/UA support enabled */
     bool m_bIsPDF_UA = false;
-
 
     PDFWriter&      m_rOuterFace;
 
