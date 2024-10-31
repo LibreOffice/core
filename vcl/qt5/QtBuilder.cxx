@@ -220,7 +220,7 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         if (rMap.contains(u"label"_ustr))
             pLabel->setDisplayText(toQString(rMap[u"label"_ustr]));
         if (rMap.contains(u"uri"_ustr))
-            pLabel->setUri(toQString(rMap[u"label"_ustr]));
+            pLabel->setUri(toQString(rMap[u"uri"_ustr]));
 
         pObject = pLabel;
     }
