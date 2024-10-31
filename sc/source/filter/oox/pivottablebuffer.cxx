@@ -608,7 +608,7 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
         means 'count all', and 'countNum' means 'count numbers'. On the
         other hand, for subtotals, 'countA' means 'count all', and 'count'
         means 'count numbers' (see above). */
-    GeneralFunction eAggFunc = GeneralFunction_SUM;
+    GeneralFunction eAggFunc;
     switch( rDataField.mnSubtotal )
     {
         case XML_sum:       eAggFunc = GeneralFunction_SUM;         break;
@@ -622,7 +622,10 @@ void PivotTableField::convertDataField( const PTDataFieldModel& rDataField )
         case XML_stdDevp:   eAggFunc = GeneralFunction_STDEVP;      break;
         case XML_var:       eAggFunc = GeneralFunction_VAR;         break;
         case XML_varp:      eAggFunc = GeneralFunction_VARP;        break;
-        default:            OSL_FAIL( "PivotTableField::convertDataField - unknown aggregation function" );
+        default:
+          OSL_FAIL( "PivotTableField::convertDataField - unknown aggregation function" );
+          eAggFunc = GeneralFunction_SUM;
+          break;
     }
     aPropSet.setProperty( PROP_Function, eAggFunc );
 
