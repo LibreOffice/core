@@ -69,7 +69,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pA
     m_xImagesLst->connect_changed(LINK(this, SdPhotoAlbumDialog, SelectHdl));
     m_xInsTypeCombo->connect_changed(LINK(this, SdPhotoAlbumDialog, TypeSelectHdl));
 
-    m_pGraphicFilter = new GraphicFilter;
+    m_pGraphicFilter = std::make_unique<GraphicFilter>();
     m_xAddBtn->grab_focus();
 }
 

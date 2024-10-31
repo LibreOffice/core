@@ -38,7 +38,7 @@ public:
 
 private:
     SdDrawDocument* m_pDoc;
-    GraphicFilter* m_pGraphicFilter;
+    std::unique_ptr<GraphicFilter> m_pGraphicFilter;
 
     GraphCtrl m_aImg;
 
