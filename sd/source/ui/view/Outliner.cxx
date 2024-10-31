@@ -1756,17 +1756,19 @@ void SdOutliner::EnterEditMode (bool bGrabFocus)
     }
     else
     {
-        std::shared_ptr<sd::ViewShell> pOverridingViewShell{};
-        sd::ViewShellBase* pBase = getViewShellBase();
-        if (auto pViewShellManager = pBase->GetViewShellManager())
-            pOverridingViewShell = pViewShellManager->GetOverridingMainShell();
-
-        if (pOverridingViewShell)
+        if (sd::ViewShellBase* pBase = getViewShellBase())
         {
-            auto pMainViewShell = getViewShellBase()->GetMainViewShell().get();
-            pMainViewShell->GetParentWindow()->GrabFocus();
-            pMainViewShell->GetContentWindow()->GrabFocus();
-            bGrabFocus = true;
+            std::shared_ptr<sd::ViewShell> pOverridingViewShell{};
+            if (auto pViewShellManager = pBase->GetViewShellManager())
+                pOverridingViewShell = pViewShellManager->GetOverridingMainShell();
+
+            if (pOverridingViewShell)
+            {
+                auto pMainViewShell = pBase->GetMainViewShell().get();
+                pMainViewShell->GetParentWindow()->GrabFocus();
+                pMainViewShell->GetContentWindow()->GrabFocus();
+                bGrabFocus = true;
+            }
         }
 
         mpView->SdrBeginTextEdit(mpSearchSpellTextObj, pPV, mpWindow, true, this, pOutlinerView,
