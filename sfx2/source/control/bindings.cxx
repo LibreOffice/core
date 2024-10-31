@@ -1207,6 +1207,8 @@ void SfxBindings::UpdateControllers_Impl
               SfxItemPool::IsSlot(rFound.nWhichId) )
     {
         // no Status or Default but without Pool
+        // tdf#162666 note that use DISABLED_POOL_ITEM needs to be
+        // handled correctly in the cache, see comments there
         rCache.SetState( SfxItemState::UNKNOWN, DISABLED_POOL_ITEM );
     }
     else if ( SfxItemState::DISABLED == eState )
