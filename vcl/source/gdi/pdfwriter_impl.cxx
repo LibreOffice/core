@@ -5854,51 +5854,63 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
 
     if( updateObject( nObject ) )
     {
-        OStringBuffer aLine( 1024 );
-        aLine.append( nObject );
-        aLine.append( " 0 obj\n"
-                      "<<" );
-        if( !m_aContext.DocumentInfo.Title.isEmpty() )
+        OStringBuffer aLine(1024);
+        appendObjectID(nObject, aLine);
+        aLine.append("<<");
+
+        // These entries are deprecated in PDF 2.0 (in favor of XMP metadata) and shouldn't be written.
+        // Exception: CreationDate and ModDate (which we don't write)
+        if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
         {
-            aLine.append( "/Title" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
-            aLine.append( "\n" );
+            if (!m_aContext.DocumentInfo.Title.isEmpty())
+            {
+                aLine.append("/Title" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
+                aLine.append("\n" );
+            }
+            if( !m_aContext.DocumentInfo.Author.isEmpty() )
+            {
+                aLine.append( "/Author" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, nObject, aLine );
+                aLine.append( "\n" );
+            }
+            if( !m_aContext.DocumentInfo.Subject.isEmpty() )
+            {
+                aLine.append( "/Subject" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Subject, nObject, aLine );
+                aLine.append( "\n" );
+            }
+            if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
+            {
+                aLine.append( "/Keywords" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Keywords, nObject, aLine );
+                aLine.append( "\n" );
+            }
+            if( !m_aContext.DocumentInfo.Creator.isEmpty() )
+            {
+                aLine.append( "/Creator" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Creator, nObject, aLine );
+                aLine.append( "\n" );
+            }
+            if( !m_aContext.DocumentInfo.Producer.isEmpty() )
+            {
+                aLine.append( "/Producer" );
+                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Producer, nObject, aLine );
+                aLine.append( "\n" );
+            }
         }
-        if( !m_aContext.DocumentInfo.Author.isEmpty() )
+
+        // Allowed in PDF 2.0
         {
-            aLine.append( "/Author" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, nObject, aLine );
-            aLine.append( "\n" );
-        }
-        if( !m_aContext.DocumentInfo.Subject.isEmpty() )
-        {
-            aLine.append( "/Subject" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Subject, nObject, aLine );
-            aLine.append( "\n" );
-        }
-        if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
-        {
-            aLine.append( "/Keywords" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Keywords, nObject, aLine );
-            aLine.append( "\n" );
-        }
-        if( !m_aContext.DocumentInfo.Creator.isEmpty() )
-        {
-            aLine.append( "/Creator" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Creator, nObject, aLine );
-            aLine.append( "\n" );
-        }
-        if( !m_aContext.DocumentInfo.Producer.isEmpty() )
-        {
-            aLine.append( "/Producer" );
-            appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Producer, nObject, aLine );
+            aLine.append("/CreationDate");
+            appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
             aLine.append( "\n" );
         }
 
-        aLine.append( "/CreationDate" );
-        appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
-        aLine.append( ">>\nendobj\n\n" );
-        if( ! writeBuffer( aLine ) )
+        aLine.append(">>\n");
+        aLine.append("endobj\n\n" );
+
+        if (!writeBuffer(aLine))
             nObject = 0;
     }
     else
@@ -6089,7 +6101,7 @@ static void lcl_assignMeta(const css::uno::Sequence<OUString>& rValues, std::vec
 // Since in PDF 1.4
 sal_Int32 PDFWriterImpl::emitDocumentMetadata()
 {
-    if( !m_bIsPDF_A1 && !m_bIsPDF_A2 && !m_bIsPDF_A3 && !m_bIsPDF_A4 && !m_bIsPDF_UA)
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4)
         return 0;
 
     //get the object number for all the destinations
