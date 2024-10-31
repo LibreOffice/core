@@ -526,6 +526,11 @@ private:
         const css::uno::Sequence< OUString >& RequestedAttributes,
         tPropValMap& rRunAttrSeq);
 
+    Paragraphs::iterator getIter(Paragraphs::size_type n) { return m_aParagraphs.begin() + std::min(n, m_aParagraphs.size()); }
+    Paragraphs::iterator visibleBegin() { return getIter(m_nVisibleBegin); }
+    Paragraphs::iterator visibleEnd() { return getIter(m_nVisibleEnd); }
+    Paragraphs::iterator focused() { return getIter(m_nFocused); }
+
     css::uno::Reference< css::accessibility::XAccessible > m_xAccessible;
     ::TextEngine & m_rEngine;
     ::TextView & m_rView;
@@ -540,14 +545,14 @@ private:
     ::sal_Int32 m_nViewOffset;
     ::sal_Int32 m_nViewHeight;
 
-    // m_aVisibleBegin points to the first Paragraph that is (partially)
-    // contained in the view, and m_aVisibleEnd points past the last Paragraph
+    // m_nVisibleBegin points to the first Paragraph that is (partially)
+    // contained in the view, and m_nVisibleEnd points past the last Paragraph
     // that is (partially) contained.  If no Paragraphs are (partially) in the
-    // view, both m_aVisibleBegin and m_aVisibleEnd are set to
-    // m_xParagraphs->end().  These values are only changed by
+    // view, both m_nVisibleBegin and m_nVisibleEnd are set to
+    // m_xParagraphs->size().  These values are only changed by
     // determineVisibleRange.
-    Paragraphs::iterator m_aVisibleBegin;
-    Paragraphs::iterator m_aVisibleEnd;
+    Paragraphs::size_type m_nVisibleBegin = 0;
+    Paragraphs::size_type m_nVisibleEnd = 0;
 
     // m_nVisibleBeginOffset is from m_nViewOffset back to the start of the
     // Paragraph pointed to by m_aVisibleBegin (and always has a non-negative
@@ -563,7 +568,7 @@ private:
     ::sal_Int32 m_nSelectionLastPara;
     ::sal_Int32 m_nSelectionLastPos;
 
-    Paragraphs::iterator m_aFocused;
+    Paragraphs::size_type m_nFocused = 0;
 
     std::queue< ::TextHint > m_aParagraphNotifications;
     bool m_bSelectionChangedNotification;

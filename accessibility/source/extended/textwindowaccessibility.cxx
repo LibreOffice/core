@@ -32,6 +32,7 @@
 #include <extended/textwindowaccessibility.hxx>
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
+#include <o3tl/safeint.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <utility>
 #include <vcl/svapp.hxx>
@@ -723,7 +724,7 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
     m_nViewHeight = static_cast<::sal_Int32>(m_rView.GetWindow()->GetOutputSizePixel().Height());
     // XXX  numeric overflow
     determineVisibleRange();
-    m_aFocused = m_aParagraphs.end();
+    m_nFocused = m_aParagraphs.size();
     m_aEngineListener.startListening(m_rEngine);
     m_aViewListener.startListening(*m_rView.GetWindow());
 }
@@ -741,10 +742,9 @@ css::lang::Locale Document::retrieveLocale()
     // If a client holds on to a Paragraph that is no longer visible, it can
     // happen that this Paragraph lies outside the range from m_aVisibleBegin
     // to m_aVisibleEnd.  In that case, return -1 instead of a valid index:
-    Paragraphs::iterator aPara(m_aParagraphs.begin()
-                               + pParagraph->getNumber());
-    return aPara < m_aVisibleBegin || aPara >= m_aVisibleEnd
-        ? -1 : static_cast< ::sal_Int32 >(aPara - m_aVisibleBegin);
+    auto nPara(pParagraph->getNumber());
+    return nPara < m_nVisibleBegin || nPara >= m_nVisibleEnd
+        ? -1 : static_cast< ::sal_Int32 >(nPara - m_nVisibleBegin);
         // XXX  numeric overflow
 }
 
@@ -762,14 +762,13 @@ css::lang::Locale Document::retrieveLocale()
           | css::accessibility::AccessibleStateType::MULTI_LINE;
     if (!m_rView.IsReadOnly())
         nState |= css::accessibility::AccessibleStateType::EDITABLE;
-    Paragraphs::iterator aPara(m_aParagraphs.begin()
-                               + pParagraph->getNumber());
-    if (aPara >= m_aVisibleBegin && aPara < m_aVisibleEnd)
+    auto nPara(pParagraph->getNumber());
+    if (nPara >= m_nVisibleBegin && nPara < m_nVisibleEnd)
     {
         nState
             |= css::accessibility::AccessibleStateType::VISIBLE
             | css::accessibility::AccessibleStateType::SHOWING;
-        if (aPara == m_aFocused)
+        if (nPara == m_nFocused)
             nState |= css::accessibility::AccessibleStateType::FOCUSED;
     }
     return nState;
@@ -787,15 +786,14 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
     // lies before m_aVisibleBegin.  In that case, calculate the vertical
     // position of the Paragraph starting at paragraph 0, otherwise optimize
     // and start at m_aVisibleBegin:
-    Paragraphs::iterator aPara(m_aParagraphs.begin()
-                               + pParagraph->getNumber());
+    auto nPara(pParagraph->getNumber());
     auto lAddHeight = [](const sal_Int32& rSum, const ParagraphInfo& rParagraph) {
         return rSum + rParagraph.getHeight(); };
     ::sal_Int32 nPos;
-    if (aPara < m_aVisibleBegin)
-        nPos = std::accumulate(m_aParagraphs.begin(), aPara, sal_Int32(0), lAddHeight);
+    if (nPara < m_nVisibleBegin)
+        nPos = std::accumulate(m_aParagraphs.begin(), getIter(nPara), sal_Int32(0), lAddHeight);
     else
-        nPos = std::accumulate(m_aVisibleBegin, aPara, m_nViewOffset - m_nVisibleBeginOffset, lAddHeight);
+        nPos = std::accumulate(visibleBegin(), getIter(nPara), m_nViewOffset - m_nVisibleBeginOffset, lAddHeight);
 
     Point aOrig(0, 0);
     if (bAbsolute)
@@ -804,7 +802,7 @@ Document::retrieveParagraphBounds(Paragraph const * pParagraph,
     return css::awt::Rectangle(
         static_cast< ::sal_Int32 >(aOrig.X()),
         static_cast< ::sal_Int32 >(aOrig.Y()) + nPos - m_nViewOffset,
-        m_rView.GetWindow()->GetOutputSizePixel().Width(), aPara->getHeight());
+        m_rView.GetWindow()->GetOutputSizePixel().Width(), getIter(nPara)->getHeight());
         // XXX  numeric overflow (3x)
 }
 
@@ -1299,18 +1297,18 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
     rtl::Reference<::utl::AccessibleRelationSetHelper> pRelationSetHelper = new ::utl::AccessibleRelationSetHelper();
 
-    Paragraphs::iterator aPara( m_aParagraphs.begin() + pParagraph->getNumber() );
+    auto nPara(pParagraph->getNumber());
 
-    if ( aPara > m_aVisibleBegin && aPara < m_aVisibleEnd )
+    if (nPara > m_nVisibleBegin && nPara < m_nVisibleEnd)
     {
-        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(aPara - 1) };
+        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara - 1)) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
 
-    if ( aPara >= m_aVisibleBegin && aPara < m_aVisibleEnd -1 )
+    if (nPara >= m_nVisibleBegin && m_nVisibleEnd > 1 && nPara < m_nVisibleEnd - 1)
     {
-        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(aPara + 1) };
+        css::uno::Sequence<css::uno::Reference<css::accessibility::XAccessible>> aSequence { getAccessibleChild(getIter(nPara + 1)) };
         css::accessibility::AccessibleRelation aRelation( css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO, aSequence );
         pRelationSetHelper->AddRelation( aRelation );
     }
@@ -1322,7 +1320,7 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 sal_Int64 SAL_CALL Document::getAccessibleChildCount()
 {
     ::comphelper::OExternalLockGuard aGuard(this);
-    return m_aVisibleEnd - m_aVisibleBegin;
+    return m_nVisibleEnd - m_nVisibleBegin;
 }
 
 // virtual
@@ -1330,13 +1328,12 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Document::getAccessibleChild(sal_Int64 i)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
-    if (i < 0 || i >= m_aVisibleEnd - m_aVisibleBegin)
+    if (i < 0 || o3tl::make_unsigned(i) >= m_nVisibleEnd - m_nVisibleBegin)
         throw css::lang::IndexOutOfBoundsException(
             u"textwindowaccessibility.cxx:"
             " Document::getAccessibleChild"_ustr,
             getXWeak());
-    return getAccessibleChild(m_aVisibleBegin
-                              + static_cast< Paragraphs::size_type >(i));
+    return getAccessibleChild(getIter(m_nVisibleBegin + i));
 }
 
 // virtual
@@ -1356,8 +1353,7 @@ Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
     {
         ::sal_Int32 nOffset = m_nViewOffset + rPoint.Y; // XXX  numeric overflow
         ::sal_Int32 nPos = m_nViewOffset - m_nVisibleBeginOffset;
-        for (Paragraphs::iterator aIt(m_aVisibleBegin); aIt != m_aVisibleEnd;
-             ++aIt)
+        for (Paragraphs::iterator aIt(visibleBegin()), aEnd(visibleEnd()); aIt != aEnd; ++aIt)
         {
             nPos += aIt->getHeight(); // XXX  numeric overflow
             if (nOffset < nPos)
@@ -1449,9 +1445,8 @@ void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
             {
                 m_nViewOffset = nOffset;
 
-                Paragraphs::iterator aOldVisibleBegin(
-                    m_aVisibleBegin);
-                Paragraphs::iterator aOldVisibleEnd(m_aVisibleEnd);
+                Paragraphs::iterator aOldVisibleBegin(visibleBegin());
+                Paragraphs::iterator aOldVisibleEnd(visibleEnd());
 
                 determineVisibleRange();
 
@@ -1509,8 +1504,8 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
             {
                 m_nViewHeight = nHeight;
 
-                Paragraphs::iterator aOldVisibleBegin(m_aVisibleBegin);
-                Paragraphs::iterator aOldVisibleEnd(m_aVisibleEnd);
+                Paragraphs::iterator aOldVisibleBegin(visibleBegin());
+                Paragraphs::iterator aOldVisibleEnd(visibleEnd());
 
                 determineVisibleRange();
 
@@ -1526,10 +1521,10 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             sal_Int64 count = getAccessibleChildCount();
-            bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
-            if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
+            bool bEmpty = m_nFocused == m_nVisibleEnd && count == 1;
+            if (bEmpty || (m_nFocused >= m_nVisibleBegin && m_nFocused < m_nVisibleEnd))
             {
-                Paragraphs::iterator aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                Paragraphs::iterator aTemp = bEmpty ? visibleBegin() : focused();
                 ::rtl::Reference< Paragraph > xParagraph(getParagraph(aTemp));
                 if (xParagraph.is())
                 {
@@ -1551,10 +1546,10 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                 break;
             //to enable the PARAGRAPH to get focus for multiline edit
             sal_Int64 count = getAccessibleChildCount();
-            bool bEmpty = m_aFocused == m_aVisibleEnd && count == 1;
-            if ((m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd) || bEmpty)
+            bool bEmpty = m_nFocused == m_nVisibleEnd && count == 1;
+            if (bEmpty || (m_nFocused >= m_nVisibleBegin && m_nFocused < m_nVisibleEnd))
             {
-                Paragraphs::iterator aTemp = bEmpty ? m_aVisibleBegin : m_aFocused;
+                Paragraphs::iterator aTemp = bEmpty ? visibleBegin() : focused();
                 ::rtl::Reference< Paragraph > xParagraph(getParagraph(aTemp));
                 if (xParagraph.is())
                     xParagraph->notifyEvent(
@@ -1591,22 +1586,22 @@ Document::getAccessibleChild(Paragraphs::iterator const & rIt)
 
 void Document::determineVisibleRange()
 {
-    Paragraphs::iterator const aEnd = m_aParagraphs.end();
+    auto const nEnd = m_aParagraphs.size();
 
-    m_aVisibleBegin = aEnd;
-    m_aVisibleEnd = aEnd;
+    m_nVisibleBegin = nEnd;
+    m_nVisibleEnd = nEnd;
     m_nVisibleBeginOffset = 0;
 
     ::sal_Int32 nPos = 0;
-    for (Paragraphs::iterator aIt = m_aParagraphs.begin(); m_aVisibleEnd == aEnd && aIt != aEnd; ++aIt)
+    for (Paragraphs::size_type i = 0; m_nVisibleEnd == nEnd && i != nEnd; ++i)
     {
         ::sal_Int32 const nOldPos = nPos;
-        nPos += aIt->getHeight(); // XXX  numeric overflow
-        if (m_aVisibleBegin == aEnd)
+        nPos += m_aParagraphs[i].getHeight(); // XXX  numeric overflow
+        if (m_nVisibleBegin == nEnd)
         {
             if (nPos >= m_nViewOffset)
             {
-                m_aVisibleBegin = aIt;
+                m_nVisibleBegin = i;
                 m_nVisibleBeginOffset = m_nViewOffset - nOldPos;
             }
         }
@@ -1614,14 +1609,14 @@ void Document::determineVisibleRange()
         {
             if (nPos >= m_nViewOffset + m_nViewHeight) // XXX  numeric overflow
             {
-                m_aVisibleEnd = aIt;
+                m_nVisibleEnd = i;
             }
         }
     }
 
     SAL_WARN_IF(
-            !((m_aVisibleBegin == m_aParagraphs.end() && m_aVisibleEnd == m_aParagraphs.end() && m_nVisibleBeginOffset == 0)
-                || (m_aVisibleBegin < m_aVisibleEnd && m_nVisibleBeginOffset >= 0)),
+            !((m_nVisibleBegin == m_aParagraphs.size() && m_nVisibleEnd == m_aParagraphs.size() && m_nVisibleBeginOffset == 0)
+                || (m_nVisibleBegin < m_nVisibleEnd && m_nVisibleBeginOffset >= 0)),
             "accessibility",
             "invalid visible range");
 }
@@ -1633,19 +1628,18 @@ void Document::notifyVisibleRangeChanges(
 {
     // XXX  Replace this code that determines which paragraphs have changed from
     // invisible to visible or vice versa with a better algorithm.
+    auto aVisibleBegin = visibleBegin(), aVisibleEnd = visibleEnd();
     for (Paragraphs::iterator aIt(rOldVisibleBegin); aIt != rOldVisibleEnd;
          ++aIt)
     {
-        if (aIt != rInserted
-            && (aIt < m_aVisibleBegin || aIt >= m_aVisibleEnd))
+        if (aIt != rInserted && (aIt < aVisibleBegin || aIt >= aVisibleEnd))
             NotifyAccessibleEvent(
                 css::accessibility::AccessibleEventId::
                 CHILD,
                 css::uno::Any(getAccessibleChild(aIt)),
                 css::uno::Any());
     }
-    for (Paragraphs::iterator aIt(m_aVisibleBegin); aIt != m_aVisibleEnd;
-         ++aIt)
+    for (Paragraphs::iterator aIt(aVisibleBegin); aIt != aVisibleEnd; ++aIt)
     {
         if (aIt == rInserted
             || aIt < rOldVisibleBegin || aIt >= rOldVisibleEnd)
@@ -1687,15 +1681,11 @@ void Document::handleParagraphNotifications()
                 ::sal_uInt32 n = static_cast< ::sal_uInt32 >( aHint.GetValue() );
                 assert(n <= m_aParagraphs.size() && "bad SfxHintId::TextParaInserted event");
 
-                // Save the values of old iterators (the iterators themselves
-                // will get invalidated), and adjust the old values so that they
+                // Save the values of old offsets, and adjust the old values so that they
                 // reflect the insertion of the new paragraph:
-                Paragraphs::size_type nOldVisibleBegin
-                    = m_aVisibleBegin - m_aParagraphs.begin();
-                Paragraphs::size_type nOldVisibleEnd
-                    = m_aVisibleEnd - m_aParagraphs.begin();
-                Paragraphs::size_type nOldFocused
-                    = m_aFocused - m_aParagraphs.begin();
+                Paragraphs::size_type nOldVisibleBegin = m_nVisibleBegin;
+                Paragraphs::size_type nOldVisibleEnd = m_nVisibleEnd;
+                Paragraphs::size_type nOldFocused = m_nFocused;
                 if (n <= nOldVisibleBegin)
                     ++nOldVisibleBegin; // XXX  numeric overflow
                 if (n <= nOldVisibleEnd)
@@ -1709,13 +1699,13 @@ void Document::handleParagraphNotifications()
 
                 Paragraphs::iterator aIns(
                     m_aParagraphs.insert(
-                        m_aParagraphs.begin() + n,
+                        getIter(n),
                         ParagraphInfo(static_cast< ::sal_Int32 >(
                                           m_rEngine.GetTextHeight(n)))));
                     // XXX  numeric overflow (2x)
 
                 determineVisibleRange();
-                m_aFocused = m_aParagraphs.begin() + nOldFocused;
+                m_nFocused = nOldFocused;
 
                 for (Paragraphs::iterator aIt(aIns);;)
                 {
@@ -1728,9 +1718,7 @@ void Document::handleParagraphNotifications()
                         xParagraph->numberChanged(true);
                 }
 
-                notifyVisibleRangeChanges(
-                    m_aParagraphs.begin() + nOldVisibleBegin,
-                    m_aParagraphs.begin() + nOldVisibleEnd, aIns);
+                notifyVisibleRangeChanges(getIter(nOldVisibleBegin), getIter(nOldVisibleEnd), aIns);
                 break;
             }
         case SfxHintId::TextParaRemoved:
@@ -1738,8 +1726,8 @@ void Document::handleParagraphNotifications()
                 ::sal_uInt32 n = static_cast< ::sal_uInt32 >( aHint.GetValue() );
                 if (n == TEXT_PARA_ALL)
                 {
-                    for (Paragraphs::iterator aIt(m_aVisibleBegin);
-                         aIt != m_aVisibleEnd; ++aIt)
+                    for (Paragraphs::iterator aIt(visibleBegin()), aEnd(visibleEnd());
+                         aIt != aEnd; ++aIt)
                     {
                         NotifyAccessibleEvent(
                             css::accessibility::AccessibleEventId::
@@ -1754,27 +1742,22 @@ void Document::handleParagraphNotifications()
                     m_nSelectionFirstPos = -1;
                     m_nSelectionLastPara = -1;
                     m_nSelectionLastPos = -1;
-                    m_aFocused = m_aParagraphs.end();
+                    m_nFocused = m_aParagraphs.size();
                 }
                 else
                 {
                     assert(n < m_aParagraphs.size() && "Bad SfxHintId::TextParaRemoved event");
 
-                    Paragraphs::iterator aIt(m_aParagraphs.begin() + n);
-                        // numeric overflow cannot occur
+                    Paragraphs::iterator aIt(getIter(n));
 
-                    // Save the values of old iterators (the iterators
-                    // themselves will get invalidated), and adjust the old
+                    // Save the values of old offsets, and adjust the old
                     // values so that they reflect the removal of the paragraph:
-                    Paragraphs::size_type nOldVisibleBegin
-                        = m_aVisibleBegin - m_aParagraphs.begin();
-                    Paragraphs::size_type nOldVisibleEnd
-                        = m_aVisibleEnd - m_aParagraphs.begin();
+                    Paragraphs::size_type nOldVisibleBegin = m_nVisibleBegin;
+                    Paragraphs::size_type nOldVisibleEnd = m_nVisibleEnd;
                     bool bWasVisible
                         = nOldVisibleBegin <= n && n < nOldVisibleEnd;
-                    Paragraphs::size_type nOldFocused
-                        = m_aFocused - m_aParagraphs.begin();
-                    bool bWasFocused = aIt == m_aFocused;
+                    Paragraphs::size_type nOldFocused = m_nFocused;
+                    bool bWasFocused = n == m_nFocused;
                     if (n < nOldVisibleBegin)
                         --nOldVisibleBegin;
                     if (n < nOldVisibleEnd)
@@ -1816,8 +1799,7 @@ void Document::handleParagraphNotifications()
                     aIt = m_aParagraphs.erase(aIt);
 
                     determineVisibleRange();
-                    m_aFocused = bWasFocused ? m_aParagraphs.end()
-                        : m_aParagraphs.begin() + nOldFocused;
+                    m_nFocused = bWasFocused ? m_aParagraphs.size() : nOldFocused;
 
                     for (; aIt != m_aParagraphs.end(); ++aIt)
                     {
@@ -1839,8 +1821,8 @@ void Document::handleParagraphNotifications()
                         xComponent->dispose();
 
                     notifyVisibleRangeChanges(
-                        m_aParagraphs.begin() + nOldVisibleBegin,
-                        m_aParagraphs.begin() + nOldVisibleEnd,
+                        getIter(nOldVisibleBegin),
+                        getIter(nOldVisibleEnd),
                         m_aParagraphs.end());
                 }
                 break;
@@ -1854,8 +1836,8 @@ void Document::handleParagraphNotifications()
                     changeHeight(static_cast< ::sal_Int32 >(
                                      m_rEngine.GetTextHeight(n)));
                     // XXX  numeric overflow
-                Paragraphs::iterator aOldVisibleBegin(m_aVisibleBegin);
-                Paragraphs::iterator aOldVisibleEnd(m_aVisibleEnd);
+                Paragraphs::iterator aOldVisibleBegin(visibleBegin());
+                Paragraphs::iterator aOldVisibleEnd(visibleEnd());
                 determineVisibleRange();
                 notifyVisibleRangeChanges(aOldVisibleBegin, aOldVisibleEnd,
                                           m_aParagraphs.end());
@@ -1980,7 +1962,7 @@ SelChangeType getSelChangeType(const TextPaM& Os, const TextPaM& Oe,
 
 void Document::sendEvent(::sal_Int32 start, ::sal_Int32 end, ::sal_Int16 nEventId)
 {
-    size_t nAvailDistance = std::distance(m_aParagraphs.begin(), m_aVisibleEnd);
+    size_t nAvailDistance = std::distance(m_aParagraphs.begin(), visibleEnd());
 
     Paragraphs::iterator aEnd(m_aParagraphs.begin());
     size_t nEndDistance = std::min<size_t>(end + 1, nAvailDistance);
@@ -2017,11 +1999,11 @@ void Document::handleSelectionChangeNotification()
         // XXX  numeric overflow
 
     // Lose focus:
-    Paragraphs::iterator aIt(m_aParagraphs.begin() + nNewLastPara);
-    if (m_aFocused != m_aParagraphs.end() && m_aFocused != aIt
-        && m_aFocused >= m_aVisibleBegin && m_aFocused < m_aVisibleEnd)
+    Paragraphs::iterator aIt(getIter(nNewLastPara));
+    if (m_nFocused < m_aParagraphs.size() && focused() != aIt
+        && m_nFocused >= m_nVisibleBegin && m_nFocused < m_nVisibleEnd)
     {
-        ::rtl::Reference< Paragraph > xParagraph(getParagraph(m_aFocused));
+        ::rtl::Reference< Paragraph > xParagraph(getParagraph(focused()));
         if (xParagraph.is())
             xParagraph->notifyEvent(
                 css::accessibility::AccessibleEventId::
@@ -2032,8 +2014,8 @@ void Document::handleSelectionChangeNotification()
     }
 
     // Gain focus and update cursor position:
-    if (aIt >= m_aVisibleBegin && aIt < m_aVisibleEnd
-        && (aIt != m_aFocused
+    if (aIt >= visibleBegin() && aIt < visibleEnd()
+        && (aIt != focused()
             || nNewLastPara != m_nSelectionLastPara
             || nNewLastPos != m_nSelectionLastPos))
     {
@@ -2043,8 +2025,7 @@ void Document::handleSelectionChangeNotification()
             //disable the first event when user types in empty field.
             sal_Int64 count = getAccessibleChildCount();
             bool bEmpty = count > 1;
-            //if (aIt != m_aFocused)
-            if (aIt != m_aFocused && bEmpty)
+            if (aIt != focused() && bEmpty)
                 xParagraph->notifyEvent(
                     css::accessibility::AccessibleEventId::
                     STATE_CHANGED,
@@ -2062,7 +2043,7 @@ void Document::handleSelectionChangeNotification()
                     css::uno::Any(nNewLastPos));
         }
     }
-    m_aFocused = aIt;
+    m_nFocused = std::distance(m_aParagraphs.begin(), aIt);
 
     if (m_nSelectionFirstPara != -1)
     {
