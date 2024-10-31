@@ -754,21 +754,29 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_7;
                 break;
             case 1:
-                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_1;
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_1;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = true;  // does not allow transparencies
                 bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 2:
-                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_2;
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_2;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
                 bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 3:
-                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_3;
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_3;
+                bUseTaggedPDF = true;           // force the tagged PDF as well
+                mbRemoveTransparencies = false; // does allow transparencies
+                bEncrypt = false;               // no encryption
+                xEnc.clear();
+                break;
+            case 4:
+                // TODO - determine what is allowed for PDFA/4
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_A_4;
                 bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
                 bEncrypt = false;               // no encryption
@@ -782,6 +790,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 break;
             case 17:
                 aContext.Version = vcl::PDFWriter::PDFVersion::PDF_1_7;
+                break;
+            case 20:
+                aContext.Version = vcl::PDFWriter::PDFVersion::PDF_2_0;
                 break;
             }
 

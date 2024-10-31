@@ -5058,6 +5058,11 @@
                   <desc>PDF 1.7</desc>
                 </info>
               </enumeration>
+              <enumeration oor:value="20">
+                <info>
+                  <desc>PDF 2.0</desc>
+                </info>
+              </enumeration>
               <enumeration oor:value="1">
                 <info>
                   <desc>PDF/A-1 (ISO 19005-1:2005)</desc>
@@ -5066,6 +5071,16 @@
               <enumeration oor:value="2">
                 <info>
                   <desc>PDF/A-2 (ISO 19005-2:2011)</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="3">
+                <info>
+                  <desc>PDF/A-3 (ISO 19005-3:2012)</desc>
+                </info>
+              </enumeration>
+              <enumeration oor:value="4">
+                <info>
+                  <desc>PDF/A-4 (ISO 19005-4)</desc>
                 </info>
               </enumeration>
             </constraints>

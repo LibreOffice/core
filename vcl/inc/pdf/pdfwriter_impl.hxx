@@ -1087,14 +1087,17 @@ i12626
     void drawEmphasisMark(  tools::Long nX, tools::Long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
 
     /* true if PDF/A-1a or PDF/A-1b is output */
-    bool            m_bIsPDF_A1;
+    bool m_bIsPDF_A1 = false;
     /* true if PDF/A-2a is output */
-    bool            m_bIsPDF_A2;
+    bool m_bIsPDF_A2 = false;
+    /* true if PDF/A-3 is output */
+    bool m_bIsPDF_A3 = false;
+    /* true if PDF/A-4 is output */
+    bool m_bIsPDF_A4 = false;
 
     /* PDF/UA support enabled */
-    bool m_bIsPDF_UA;
+    bool m_bIsPDF_UA = false;
 
-    bool            m_bIsPDF_A3;
 
     PDFWriter&      m_rOuterFace;
 
