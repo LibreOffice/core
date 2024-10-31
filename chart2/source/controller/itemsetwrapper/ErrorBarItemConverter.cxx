@@ -347,6 +347,8 @@ void ErrorBarItemConverter::FillSpecialItem(
                         eErrorKind = SvxChartKindError::StdError; break;
                     case css::chart::ErrorBarStyle::FROM_DATA:
                         eErrorKind = SvxChartKindError::Range; break;
+                    default:
+                        eErrorKind = SvxChartKindError::NONE; break;
                 }
             }
             rOutItemSet.Put( SvxChartKindErrorItem( eErrorKind, SCHATTR_STAT_KIND_ERROR ));
