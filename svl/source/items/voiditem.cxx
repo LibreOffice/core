@@ -19,12 +19,17 @@
 
 #include <svl/voiditem.hxx>
 #include <libxml/xmlwriter.h>
+#include <sal/log.hxx>
 
 SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 
 SfxVoidItem::SfxVoidItem(sal_uInt16 which)
     : SfxPoolItem(which)
 {
+#ifdef DBG_UTIL
+    if (0 == which)
+        SAL_INFO("svl.items", "ITEM: SfxVoidItem with 0 == WhichID gets constructed (!)");
+#endif
 }
 
 SfxVoidItem::SfxVoidItem(const SfxVoidItem& rCopy)

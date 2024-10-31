@@ -67,7 +67,7 @@ friend class BindDispatch_Impl;
     css::uno::Reference < css::frame::XDispatch > xMyDispatch;
     SfxControllerItem*      pController;    // Pointer to first bound Controller (interlinked with each other)
     SfxSlotServer           aSlotServ;      // SlotServer, SlotPtr = 0 -> not on Stack
-    SfxPoolItem*            pLastItem;      // Last sent Item, never -1
+    const SfxPoolItem*      pLastItem;      // Last sent Item, never -1
     SfxItemState            eLastState;     // Last sent State
     bool                    bCtrlDirty:1;   // Update Controller?
     bool                    bSlotDirty:1;   // Present Function, must be updated
