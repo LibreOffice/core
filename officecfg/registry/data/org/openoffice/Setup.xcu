@@ -877,6 +877,8 @@
                 <it>/org.openoffice.Office.Common/I18N</it>
                 <it>/org.openoffice.Office.Common/Load</it>
                 <it>/org.openoffice.Office.Common/Misc/DisableUICustomization</it>
+                <it>/org.openoffice.Office.Common/Misc/LibreofficeTheme</it>
+                <it>/org.openoffice.Office.Common/Misc/LoadDefaultSystemColors</it>
                 <it>/org.openoffice.Office.Common/Misc/ExperimentalMode</it>
                 <it>/org.openoffice.Office.Common/Misc/FormControlPilotsEnabled</it>
                 <it>/org.openoffice.Office.Common/Misc/LastTipOfTheDayID</it>

@@ -71,6 +71,9 @@ public:
     bool
     operator!=(const vcl::IconThemeSelector&) const;
 
+    static OUString
+    GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme);
+
 private:
     /** Return the first element of the themes, or the fallback if the vector is empty */
     static OUString
@@ -79,9 +82,6 @@ private:
     /** The name of the icon themes which are used as fallbacks */
     static constexpr OUString FALLBACK_LIGHT_ICON_THEME_ID = u"colibre"_ustr;
     static constexpr OUString FALLBACK_DARK_ICON_THEME_ID = u"colibre_dark"_ustr;
-
-    static OUString
-    GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme);
 
     OUString mPreferredIconTheme;
     bool mUseHighContrastTheme;

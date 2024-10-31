@@ -1699,8 +1699,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 }
 
+static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor)
+{
+    // Add a minimal dark scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = rDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Dark"_ustr);
+    }
+    // Add a minimal light scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = rLightColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Light"_ustr);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
 {
+    addDarkLightThemes(COL_BLACK, COL_WHITE);
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;
@@ -1769,28 +1792,6 @@ static Color getTilePixelColor(SwXTextDocument* pXTextDocument, int nPixelX, int
     BitmapScopedReadAccess pAccess(aBitmap);
     Color aActualColor(pAccess->GetPixel(nPixelX, nPixelY));
     return aActualColor;
-}
-
-static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor)
-{
-    // Add a minimal dark scheme
-    {
-        svtools::EditableColorConfig aColorConfig;
-        svtools::ColorConfigValue aValue;
-        aValue.bIsVisible = true;
-        aValue.nColor = rDarkColor;
-        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Dark"_ustr);
-    }
-    // Add a minimal light scheme
-    {
-        svtools::EditableColorConfig aColorConfig;
-        svtools::ColorConfigValue aValue;
-        aValue.bIsVisible = true;
-        aValue.nColor = rLightColor;
-        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Light"_ustr);
-    }
 }
 
 // Test that changing the theme in one view doesn't change it in the other view

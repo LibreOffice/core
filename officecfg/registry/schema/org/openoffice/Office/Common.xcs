@@ -5334,6 +5334,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="LibreOfficeTheme" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Enable LibreOffice Theme.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="WriteLayerStateAsConfigItem" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>If 'true', the config items VisibleLayers, PrintableLayers and

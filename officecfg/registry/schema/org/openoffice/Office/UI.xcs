@@ -40,6 +40,7 @@
       <info>
         <desc>Defines the templates for color settings used to customize the appearance of the applications.</desc>
       </info>
+      <!-- Group_General -->
       <group oor:name="DocColor">
         <info>
           <desc>Specifies the color settings for the document.</desc>
@@ -775,6 +776,277 @@
         <prop oor:name="Color" oor:type="xs:int">
           <info>
             <desc>Specifies the color used for SQL parameters.</desc>
+          </info>
+        </prop>
+      </group>
+      <!-- Group Application -->
+      <group oor:name="WindowColor">
+        <info>
+          <desc>Allows to overwrite the system window color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the window color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="WindowTextColor">
+        <info>
+          <desc>Allows to overwrite the system window text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the window text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BaseColor">
+        <info>
+          <desc>Allows to overwrite the system base color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the base color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ButtonColor">
+        <info>
+          <desc>Allows to overwrite the system button color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the button color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ButtonTextColor">
+        <info>
+          <desc>Allows to overwrite the system button text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the button text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="AccentColor">
+        <info>
+          <desc>Allows to overwrite the system accent color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the accent color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DisabledColor">
+        <info>
+          <desc>Allows to overwrite the system disabled color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the disabled color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="DisabledTextColor">
+        <info>
+          <desc>Allows to overwrite the system disabled text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the disabled text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ShadowColor">
+        <info>
+          <desc>Allows to overwrite the widget shadow color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the widget shadow color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="SeparatorColor">
+        <info>
+          <desc>Allows to overwrite the separator color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the separator color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="FaceColor">
+        <info>
+          <desc>Allows to overwrite the system face color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the face color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveColor">
+        <info>
+          <desc>Allows to overwrite the system active color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveTextColor">
+        <info>
+          <desc>Allows to overwrite the system active text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ActiveBorderColor">
+        <info>
+          <desc>Allows to overwrite the system active border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the active border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="FieldColor">
+        <info>
+          <desc>Allows to overwrite the system field color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the field color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarColor">
+        <info>
+          <desc>Allows to overwrite the system menubar color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarTextColor">
+        <info>
+          <desc>Allows to overwrite the system menubar text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarHighlightColor">
+        <info>
+          <desc>Allows to overwrite the system menubar highlight color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar highlight color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBarHighlightTextColor">
+        <info>
+          <desc>Allows to overwrite the system menubar highlight text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menubar highlight text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuColor">
+        <info>
+          <desc>Allows to overwrite the system menu color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuTextColor">
+        <info>
+          <desc>Allows to overwrite the system menu text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuHighlightColor">
+        <info>
+          <desc>Allows to overwrite the system menu highlight color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu highlight color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuHighlightTextColor">
+        <info>
+          <desc>Allows to overwrite the system menu highlight text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu highlight text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="MenuBorderColor">
+        <info>
+          <desc>Allows to overwrite the system menu border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the menu border color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="InactiveColor">
+        <info>
+          <desc>Allows to overwrite the system inactive color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the inactive color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="InactiveTextColor">
+        <info>
+          <desc>Allows to overwrite the system inactive text color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the inactive text color.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="InactiveBorderColor">
+        <info>
+          <desc>Allows to overwrite the system inactive border color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the inactive border color.</desc>
           </info>
         </prop>
       </group>

@@ -35,6 +35,7 @@
 #include <helpids.h>
 #include <dialmgr.hxx>
 #include "optcolor.hxx"
+#include <svtools/restartdialog.hxx>
 #include <strings.hrc>
 #include <svtools/miscopt.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -500,7 +501,7 @@ void ColorConfigWindow_Impl::CreateEntries()
     const ColorListBox* pCache = nullptr;
 
     // creating entries
-    vEntries.reserve(ColorConfigEntryCount);
+    vEntries.reserve(ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT);
     for (size_t i = 0; i < std::size(vEntryInfo); ++i)
     {
         vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *m_xBuilder,
@@ -571,7 +572,7 @@ void ColorConfigWindow_Impl::Update (
     std::optional<OUString> aUIColorSchemeName = officecfg::Office::UI::ColorScheme::CurrentColorScheme::get();
     OUString aUIColorSchemePath = officecfg::Office::UI::ColorScheme::ColorSchemes::path() + u"/" + aUIColorSchemeName.value();
 
-    for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
+    for (unsigned i = 0; i != ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT; ++i)
     {
         OUString sPath = aUIColorSchemePath + vEntryInfo[i].sPropName;
         ColorConfigEntry const aColorEntry = static_cast<ColorConfigEntry>(i);
@@ -583,7 +584,7 @@ void ColorConfigWindow_Impl::Update (
     }
 
     // updating extended entries
-    decltype(vEntries)::size_type i = ColorConfigEntryCount;
+    decltype(vEntries)::size_type i = ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT;
     unsigned const nExtCount = pExtConfig->GetComponentCount();
     for (unsigned j = 0; j != nExtCount; ++j)
     {
@@ -602,7 +603,7 @@ void ColorConfigWindow_Impl::Update (
 
 void ColorConfigWindow_Impl::UpdateEntries()
 {
-    for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
+    for (unsigned i = 0; i != ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT; ++i)
     {
         ColorConfigEntry const aEntry = static_cast<ColorConfigEntry>(i);
         Color aColor = ColorConfig::GetDefaultColor(aEntry);
@@ -613,7 +614,7 @@ void ColorConfigWindow_Impl::UpdateEntries()
 // ClickHdl()
 void ColorConfigWindow_Impl::ClickHdl(EditableColorConfig* pConfig, const weld::Toggleable& rBox)
 {
-    for (unsigned i = 0; i != ColorConfigEntryCount; ++i)
+    for (unsigned i = 0; i != ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT; ++i)
     {
         if (vEntries[i]->Is(&rBox))
         {
@@ -634,7 +635,7 @@ void ColorConfigWindow_Impl::ColorHdl(
     unsigned i = 0;
 
     // default entries
-    for ( ; i != ColorConfigEntryCount; ++i)
+    for ( ; i != ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT; ++i)
     {
         if (pBox && vEntries[i]->Is(pBox))
         {
@@ -648,7 +649,7 @@ void ColorConfigWindow_Impl::ColorHdl(
 
     // extended entries
     unsigned const nExtCount = pExtConfig->GetComponentCount();
-    i = ColorConfigEntryCount;
+    i = ColorConfigEntryCount - THEME_APPLICATION_COLORS_COUNT;
     for (unsigned j = 0; j != nExtCount; ++j)
     {
         OUString sComponentName = pExtConfig->GetComponentName(j);
@@ -813,6 +814,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, weld::Widget&, rCtrl, void)
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, u"cui/ui/optappearancepage.ui"_ustr, u"OptAppearancePage"_ustr, &rCoreSet)
     , bFillItemSetCalled(false)
+    , m_bShowRestartDialog(false)
     , m_nSizeAllocEventId(nullptr)
     , m_xAutoColorLB(m_xBuilder->weld_combo_box(u"autocolorlb"_ustr))
     , m_xAutoColorImg(m_xBuilder->weld_widget(u"lockautocolorlb"_ustr))
@@ -864,6 +866,12 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     m_xColorConfigCT.reset();
     if (m_nSizeAllocEventId)
         Application::RemoveUserEvent(m_nSizeAllocEventId);
+
+    if (m_bShowRestartDialog)
+    {
+        ::svtools::executeRestartDialog(comphelper::getProcessComponentContext(), GetFrameWeld(),
+                svtools::RESTART_REASON_THEME_CHANGE);
+    }
 }
 
 std::unique_ptr<SfxTabPage> SvxColorOptionsTabPage::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet)
@@ -975,6 +983,12 @@ IMPL_LINK(SvxColorOptionsTabPage, SchemeChangedHdl_Impl, weld::ComboBox&, rBox, 
     pColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(rBox.get_active_text()));
     pExtColorConfig->LoadScheme(lcl_TranslatedNameToSchemeId(rBox.get_active_text()));
     UpdateColorConfig();
+
+    // show restart dialog only when LibreOffice Theme is enabled and
+    // the theme was changed.
+    if (officecfg::Office::Common::Misc::LibreOfficeTheme::get()
+        && rBox.get_value_changed_from_saved())
+        m_bShowRestartDialog = true;
 }
 
 IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, weld::Button&, rButton, void)

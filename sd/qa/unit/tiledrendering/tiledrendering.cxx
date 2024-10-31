@@ -2417,6 +2417,11 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCutSelectionChange)
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testGetViewRenderState)
 {
+    // Add a pair of schemes, last added is the default
+    svtools::EditableColorConfig aColorConfig;
+    aColorConfig.AddScheme(u"Dark"_ustr);
+    aColorConfig.AddScheme(u"Light"_ustr);
+
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();
     ViewCallback aView1;

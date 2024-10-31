@@ -95,8 +95,41 @@ enum ColorConfigEntry : int
     SQLKEYWORD,
     SQLPARAMETER,
     SQLCOMMENT,
+
+    // colors for Libreoffice Theme (Application)
+    WINDOWCOLOR         ,
+    WINDOWTEXTCOLOR     ,
+    BASECOLOR           ,
+    BUTTONCOLOR         ,
+    BUTTONTEXTCOLOR     ,
+    ACCENTCOLOR         ,
+    DISABLEDCOLOR       ,
+    DISABLEDTEXTCOLOR   ,
+    SHADECOLOR         ,
+    SEPARATORCOLOR      ,
+    FACECOLOR           ,
+    ACTIVECOLOR         ,
+    ACTIVETEXTCOLOR     ,
+    ACTIVEBORDERCOLOR   ,
+    FIELDCOLOR          ,
+    MENUBARCOLOR        ,
+    MENUBARTEXTCOLOR    ,
+    MENUBARHIGHLIGHTCOLOR ,
+    MENUBARHIGHLIGHTTEXTCOLOR ,
+    MENUCOLOR           ,
+    MENUTEXTCOLOR       ,
+    MENUHIGHLIGHTCOLOR  ,
+    MENUHIGHLIGHTTEXTCOLOR ,
+    MENUBORDERCOLOR     ,
+    INACTIVECOLOR       ,
+    INACTIVETEXTCOLOR   ,
+    INACTIVEBORDERCOLOR ,
+
     ColorConfigEntryCount
 };
+
+constexpr OUString AUTOMATIC_COLOR_SCHEME = u"COLOR_SCHEME_LIBREOFFICE_AUTOMATIC"_ustr;
+constexpr size_t THEME_APPLICATION_COLORS_COUNT = ColorConfigEntryCount - WINDOWCOLOR;
 
 class ColorConfig_Impl;
 struct ColorConfigValue
@@ -105,6 +138,7 @@ struct ColorConfigValue
     bool        bIsVisible; //validity depends on the element type
     ::Color     nColor;
     ColorConfigValue() : bIsVisible(false), nColor(0) {}
+    ColorConfigValue(const Color& rColor, bool bVisible) : bIsVisible(bVisible), nColor(rColor) {}
     bool operator !=(const ColorConfigValue& rCmp) const
         { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}
 };
@@ -127,6 +161,9 @@ public:
     //  1 gets the default color on dark mod.
     static Color            GetDefaultColor(ColorConfigEntry eEntry, int nMod = -1);
     static const OUString& GetCurrentSchemeName();
+
+    static void             LoadThemeColorsFromRegistry();
+    static void             SetupTheme();
 };
 
 class SVT_DLLPUBLIC EditableColorConfig

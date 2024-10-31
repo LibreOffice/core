@@ -56,6 +56,9 @@ public:
         case svtools::RESTART_REASON_EXTENSION_INSTALL:
             reason_ = m_xBuilder->weld_widget(u"reason_extension_install"_ustr);
             break;
+        case svtools::RESTART_REASON_THEME_CHANGE:
+            reason_ = m_xBuilder->weld_widget(u"reason_theme_reload"_ustr);
+            break;
         case svtools::RESTART_REASON_SKIA:
             reason_ = m_xBuilder->weld_widget(u"reason_skia"_ustr);
             break;

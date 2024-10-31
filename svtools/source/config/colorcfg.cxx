@@ -41,7 +41,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/themecolors.hxx>
 #include <officecfg/Office/UI.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace utl;
 using namespace com::sun::star;
@@ -175,7 +177,35 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/SQLOperator"),  false },
         { std::u16string_view(u"/SQLKeyword"),  false },
         { std::u16string_view(u"/SQLParameter"),  false },
-        { std::u16string_view(u"/SQLComment"),  false }
+        { std::u16string_view(u"/SQLComment"),  false },
+
+        { std::u16string_view(u"/WindowColor")     ,false },
+        { std::u16string_view(u"/WindowTextColor") ,false },
+        { std::u16string_view(u"/BaseColor")     ,false },
+        { std::u16string_view(u"/ButtonColor")     ,false },
+        { std::u16string_view(u"/ButtonTextColor")     ,false },
+        { std::u16string_view(u"/AccentColor")     ,false },
+        { std::u16string_view(u"/DisabledColor")     ,false },
+        { std::u16string_view(u"/DisabledTextColor")     ,false },
+        { std::u16string_view(u"/ShadowColor")     ,false },
+        { std::u16string_view(u"/SeparatorColor")     ,false },
+        { std::u16string_view(u"/FaceColor")     ,false },
+        { std::u16string_view(u"/ActiveColor")     ,false },
+        { std::u16string_view(u"/ActiveTextColor")     ,false },
+        { std::u16string_view(u"/ActiveBorderColor")     ,false },
+        { std::u16string_view(u"/FieldColor")     ,false },
+        { std::u16string_view(u"/MenuBarColor")     ,false },
+        { std::u16string_view(u"/MenuBarTextColor")     ,false },
+        { std::u16string_view(u"/MenuBarHighlightColor")     ,false },
+        { std::u16string_view(u"/MenuBarHighlightTextColor")     ,false },
+        { std::u16string_view(u"/MenuColor")     ,false },
+        { std::u16string_view(u"/MenuTextColor")     ,false },
+        { std::u16string_view(u"/MenuHighlightColor")     ,false },
+        { std::u16string_view(u"/MenuHighlightTextColor")     ,false },
+        { std::u16string_view(u"/MenuBorderColor")     ,false },
+        { std::u16string_view(u"/InactiveColor")     ,false },
+        { std::u16string_view(u"/InactiveTextColor")     ,false },
+        { std::u16string_view(u"/InactiveBorderColor")     ,false }
     };
 
     uno::Sequence<OUString> aNames(2 * ColorConfigEntryCount);
@@ -228,6 +258,24 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
         aCurrentVal.getConstArray()[0] >>= sScheme;
     }
     m_sLoadedScheme = sScheme;
+
+    // in cases like theme change/extension removal, use AUTOMATIC_COLOR_SCHEME as fallback.
+    if (!ThemeColors::IsAutomaticTheme(sScheme))
+    {
+        uno::Sequence<OUString> aSchemes = GetSchemeNames();
+        bool bFound = false;
+        for (const OUString& rSchemeName : aSchemes)
+        {
+            if (sScheme == rSchemeName)
+            {
+                bFound = true;
+                break;
+            }
+        }
+
+        if (!bFound)
+            sScheme = AUTOMATIC_COLOR_SCHEME;
+    }
 
     uno::Sequence < OUString > aColorNames = GetPropertyNames(sScheme);
     uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
@@ -347,6 +395,7 @@ void ColorConfig_Impl::CommitCurrentSchemeName()
     uno::Sequence< uno::Any > aCurrentVal(1);
     aCurrentVal.getArray()[0] <<= m_sLoadedScheme;
     PutProperties(aCurrent, aCurrentVal);
+    ThemeColors::GetThemeColors().SetThemeName(m_sLoadedScheme);
 }
 
 void ColorConfig_Impl::SetColorConfigValue(ColorConfigEntry eValue, const ColorConfigValue& rValue )
@@ -398,6 +447,63 @@ IMPL_LINK( ColorConfig_Impl, DataChangedEventListener, VclSimpleEvent&, rEvent, 
     }
 }
 
+// Loads the ThemeColors (ExpertConfig Colors) into static ThemeColors::maThemeColors
+void ColorConfig::LoadThemeColorsFromRegistry()
+{
+    ThemeColors& rThemeColors = ThemeColors::GetThemeColors();
+
+    rThemeColors.SetWindowColor(m_pImpl->GetColorConfigValue(svtools::WINDOWCOLOR).nColor);
+    rThemeColors.SetWindowTextColor(m_pImpl->GetColorConfigValue(svtools::WINDOWTEXTCOLOR).nColor);
+    rThemeColors.SetBaseColor(m_pImpl->GetColorConfigValue(svtools::BASECOLOR).nColor);
+    rThemeColors.SetButtonColor(m_pImpl->GetColorConfigValue(svtools::BUTTONCOLOR).nColor);
+    rThemeColors.SetButtonTextColor(m_pImpl->GetColorConfigValue(svtools::BUTTONTEXTCOLOR).nColor);
+    rThemeColors.SetAccentColor(m_pImpl->GetColorConfigValue(svtools::ACCENTCOLOR).nColor);
+    rThemeColors.SetDisabledColor(m_pImpl->GetColorConfigValue(svtools::DISABLEDCOLOR).nColor);
+    rThemeColors.SetDisabledTextColor(m_pImpl->GetColorConfigValue(svtools::DISABLEDTEXTCOLOR).nColor);
+    rThemeColors.SetShadeColor(m_pImpl->GetColorConfigValue(svtools::SHADECOLOR).nColor);
+    rThemeColors.SetSeparatorColor(m_pImpl->GetColorConfigValue(svtools::SEPARATORCOLOR).nColor);
+    rThemeColors.SetFaceColor(m_pImpl->GetColorConfigValue(svtools::FACECOLOR).nColor);
+    rThemeColors.SetActiveColor(m_pImpl->GetColorConfigValue(svtools::ACTIVECOLOR).nColor);
+    rThemeColors.SetActiveTextColor(m_pImpl->GetColorConfigValue(svtools::ACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetActiveBorderColor(m_pImpl->GetColorConfigValue(svtools::ACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetFieldColor(m_pImpl->GetColorConfigValue(svtools::FIELDCOLOR).nColor);
+    rThemeColors.SetMenuBarColor(m_pImpl->GetColorConfigValue(svtools::MENUBARCOLOR).nColor);
+    rThemeColors.SetMenuBarTextColor(m_pImpl->GetColorConfigValue(svtools::MENUBARTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightColor(m_pImpl->GetColorConfigValue(svtools::MENUBARHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuBarHighlightTextColor(m_pImpl->GetColorConfigValue(svtools::MENUBARHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuColor(m_pImpl->GetColorConfigValue(svtools::MENUCOLOR).nColor);
+    rThemeColors.SetMenuTextColor(m_pImpl->GetColorConfigValue(svtools::MENUTEXTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightColor(m_pImpl->GetColorConfigValue(svtools::MENUHIGHLIGHTCOLOR).nColor);
+    rThemeColors.SetMenuHighlightTextColor(m_pImpl->GetColorConfigValue(svtools::MENUHIGHLIGHTTEXTCOLOR).nColor);
+    rThemeColors.SetMenuBorderColor(m_pImpl->GetColorConfigValue(svtools::MENUBORDERCOLOR).nColor);
+    rThemeColors.SetInactiveColor(m_pImpl->GetColorConfigValue(svtools::INACTIVECOLOR).nColor);
+    rThemeColors.SetInactiveTextColor(m_pImpl->GetColorConfigValue(svtools::INACTIVETEXTCOLOR).nColor);
+    rThemeColors.SetInactiveBorderColor(m_pImpl->GetColorConfigValue(svtools::INACTIVEBORDERCOLOR).nColor);
+    rThemeColors.SetThemeName(GetCurrentSchemeName());
+
+    ThemeColors::SetThemeLoaded(true);
+}
+
+void ColorConfig::SetupTheme()
+{
+    if (!officecfg::Office::Common::Misc::LibreOfficeTheme::get()
+        || ThemeColors::IsAutomaticTheme(GetCurrentSchemeName()))
+    {
+        ThemeColors::SetThemeLoaded(false);
+        return;
+    }
+
+    if (!ThemeColors::IsThemeLoaded())
+    {
+        // extension to registry
+        m_pImpl->Load(GetCurrentSchemeName());
+        m_pImpl->CommitCurrentSchemeName();
+
+        // registry to theme
+        LoadThemeColorsFromRegistry();
+    }
+}
+
 ColorConfig::ColorConfig()
 {
     if (comphelper::IsFuzzing())
@@ -411,6 +517,7 @@ ColorConfig::ColorConfig()
     }
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);
+    SetupTheme();
 }
 
 ColorConfig::~ColorConfig()
@@ -428,6 +535,11 @@ ColorConfig::~ColorConfig()
 
 Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
 {
+    // the actual value of default color doesn't matter for colors in Group_Application
+    // and this is just to prevent index out of bound error.
+    if (eEntry >= WINDOWCOLOR)
+        return COL_GRAY;
+
     enum ColorType { clLight = 0,
                      clDark,
                      nColorTypes };
@@ -575,7 +687,19 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, bool bSmart
 
 const OUString& ColorConfig::GetCurrentSchemeName()
 {
-    officecfg::Office::UI::ColorScheme::CurrentColorScheme::get();
+    uno::Sequence<OUString> aNames = m_pImpl->GetSchemeNames();
+    OUString aCurrentSchemeName = officecfg::Office::UI::ColorScheme::CurrentColorScheme::get().value();
+
+    for (const OUString& rSchemeName : aNames)
+        if (rSchemeName == aCurrentSchemeName)
+            return m_pImpl->GetLoadedScheme();
+
+    // Use "Automatic" as fallback
+    auto pChange(comphelper::ConfigurationChanges::create());
+    officecfg::Office::UI::ColorScheme::CurrentColorScheme::set(AUTOMATIC_COLOR_SCHEME, pChange);
+    pChange->commit();
+
+    m_pImpl->SetCurrentSchemeName(AUTOMATIC_COLOR_SCHEME);
     return m_pImpl->GetLoadedScheme();
 }
 

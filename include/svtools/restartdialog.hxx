@@ -50,6 +50,9 @@ enum RestartReason {
     // "For the extension to work properly,
     // %PRODUCTNAME must be restarted.":
     RESTART_REASON_EXTENSION_INSTALL,
+    // "To apply theme changes,
+    // %PRODUCTNAME must be restarted.":
+    RESTART_REASON_THEME_CHANGE,
     // For the Skia changes to take effect,
     // %PRODUCTNAME must be restarted:
     RESTART_REASON_SKIA,

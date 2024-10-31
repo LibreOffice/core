@@ -28,6 +28,7 @@ struct ImplSVEvent;
 class SvxColorOptionsTabPage : public SfxTabPage
 {
     bool bFillItemSetCalled;
+    bool m_bShowRestartDialog;
 
     ImplSVEvent* m_nSizeAllocEventId;
 
