@@ -119,8 +119,11 @@ fix16_t fix16_div(fix16_t a, fix16_t b)
         int shift = std::countl_zero(remainder);
         if (shift > bit_pos)
             shift = bit_pos;
-        remainder = (remainder & mask(32 - shift)) << shift;
-        bit_pos -= shift;
+        if (shift)
+        {
+            remainder = (remainder & mask(32 - shift)) << shift;
+            bit_pos -= shift;
+        }
 
         uint32_t div = remainder / divider;
         remainder = remainder % divider;
