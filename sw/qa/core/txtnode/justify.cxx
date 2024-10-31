@@ -79,7 +79,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreJustifyTest, testSpaceDistributionHalfSpace)
     // Related to: tdf#149017
     static constexpr OUStringLiteral aText = u"ne del pro";
     CharWidthArray aActual{ 720, 639, 360, 720, 639, 400, 360, 720, 480, 720 };
-    CharWidthArray aExpected{ 720, 851, 573, 720, 639, 612, 573, 720, 480, 720 };
+    CharWidthArray aExpected{
+        720.0, 851.5, 572.5, 720.0, 639.0, 612.5, 572.5, 720.0, 480.0, 720.0
+    };
 
     aActual.InvokeWithKernArray(
         [&] { sw::Justify::SpaceDistribution(aActual.maArray, aText, 0, 10, 425, 0, false); });

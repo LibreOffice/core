@@ -113,10 +113,10 @@ void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText, sal_Int
     // A Space at the beginning or end of the text must be positioned
     // before (resp. after) the whole intermediate space, otherwise
     // the underline/strike-through would have gaps.
-    tools::Long nSpaceSum = 0;
+    double nSpaceSum = 0;
     // in word line mode and for Arabic, we disable the half space trick:
-    const tools::Long nHalfSpace = bNoHalfSpace ? 0 : nSpaceAdd / 2;
-    const tools::Long nOtherHalf = nSpaceAdd - nHalfSpace;
+    const double nHalfSpace = bNoHalfSpace ? 0 : nSpaceAdd / 2.0;
+    const double nOtherHalf = nSpaceAdd - nHalfSpace;
     tools::Long nKernSum = nKern;
     sal_Unicode cChPrev = aText[nStt];
 
@@ -161,7 +161,7 @@ void SpaceDistribution(KernArray& rKernArray, std::u16string_view aText, sal_Int
             rKernArray[nPrevIdx] += -nSpaceAdd;
 
         // Advance nPrevIdx and assign kern values to previous cluster.
-        for (tools::Long nValue = rKernArray[nPrevIdx++]; nPrevIdx < i; ++nPrevIdx)
+        for (double nValue = rKernArray[nPrevIdx++]; nPrevIdx < i; ++nPrevIdx)
             rKernArray[nPrevIdx] = nValue;
     }
 
