@@ -352,17 +352,17 @@ void ScDBFunc::ToggleAutoFilter()
                 xBox->set_title(ScResId(STR_MSSG_DOSUBTOTALS_0)); // "StarCalc"
                 xBox->set_default_response(RET_YES);
                 xBox->SetInstallLOKNotifierHdl(LINK(this, ScDBFunc, InstallLOKNotifierHdl));
-                xBox->runAsync(xBox, [pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam] (sal_Int32 nResult) {
+                xBox->runAsync(xBox, [pDocSh, pViewData, pDBData, nRow, nTab, aParam] (sal_Int32 nResult) {
                     if (nResult == RET_YES)
                     {
                         pDBData->SetHeader( true );     //! Undo ??
                     }
 
-                    ApplyAutoFilter(pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam);
+                    ApplyAutoFilter(pDocSh, pViewData, pDBData, nRow, nTab, aParam);
                 });
             }
             else
-                ApplyAutoFilter(pDocSh, pViewData, pDBData, nCol, nRow, nTab, aParam);
+                ApplyAutoFilter(pDocSh, pViewData, pDBData, nRow, nTab, aParam);
         }
         else
         {
@@ -381,7 +381,7 @@ IMPL_STATIC_LINK_NOARG(ScDBFunc, InstallLOKNotifierHdl, void*, vcl::ILibreOffice
 }
 
 void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData* pViewData, ScDBData* pDBData,
-                               SCCOL nCol, SCROW nRow, SCTAB nTab, ScQueryParam aParam)
+                               SCROW nRow, SCTAB nTab, ScQueryParam aParam)
 {
     ScDocument& rDoc = pViewData->GetDocument();
     ScRange aRange;
@@ -391,7 +391,7 @@ void ScDBFunc::ApplyAutoFilter(ScDocShell* pDocSh, ScViewData* pViewData, ScDBDa
 
     pDBData->SetAutoFilter(true);
 
-    for (nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
+    for (SCCOL nCol=aParam.nCol1; nCol<=aParam.nCol2; nCol++)
     {
         ScMF nFlag = rDoc.GetAttr(nCol, nRow, nTab, ATTR_MERGE_FLAG)->GetValue();
         rDoc.ApplyAttr(nCol, nRow, nTab, ScMergeFlagAttr(nFlag | ScMF::Auto));
