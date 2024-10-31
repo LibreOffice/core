@@ -592,18 +592,20 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
         SetActiveWindow(pWin);
     }
 
+    ::sd::View* pView = GetView();
+    if (!pView)
+        return;
+
     // insert MouseEvent into E3dView
-    if (GetView() != nullptr)
-        GetView()->SetMouseEvent(rMEvt);
+    pView->SetMouseEvent(rMEvt);
 
     bool bConsumed = false;
-    if( GetView() )
-        bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
+    bConsumed = pView->getSmartTags().MouseButtonDown( rMEvt );
 
     if( bConsumed )
         return;
 
-    rtl::Reference< sdr::SelectionController > xSelectionController( GetView()->getSelectionController() );
+    rtl::Reference< sdr::SelectionController > xSelectionController( pView->getSelectionController() );
     if( !xSelectionController.is() || !xSelectionController->onMouseButtonDown( rMEvt, pWin ) )
     {
         if(HasCurrentFunction())
