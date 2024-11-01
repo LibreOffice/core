@@ -1458,6 +1458,7 @@ void ScInterpreter::ScCritBinom()
                         return;
                     }
                 }
+                assert(i > 0 && "coverity 2023.12.2");
                 PushDouble( i - 1 );
             }
         }
