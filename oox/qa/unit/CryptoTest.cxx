@@ -31,8 +31,7 @@ class CryptoTest : public CppUnit::TestFixture
 {
 public:
     virtual ~CryptoTest() override;
-    void testCryptoHash();
-    void testRoundUp();
+
     void testStandard2007();
     void testAgileEncryptionVerifier();
     void testAgileEncryptionInfoWritingAndParsing();
@@ -40,8 +39,6 @@ public:
     void testAgileEncryptingAndDecrypting();
 
     CPPUNIT_TEST_SUITE(CryptoTest);
-    CPPUNIT_TEST(testCryptoHash);
-    CPPUNIT_TEST(testRoundUp);
     CPPUNIT_TEST(testStandard2007);
     CPPUNIT_TEST(testAgileEncryptionVerifier);
     CPPUNIT_TEST(testAgileEncryptionInfoWritingAndParsing);
@@ -69,61 +66,6 @@ CryptoTest::~CryptoTest()
 #if USE_TLS_NSS
     NSS_Shutdown();
 #endif
-}
-
-void CryptoTest::testCryptoHash()
-{
-    // Check examples from Wikipedia (https://en.wikipedia.org/wiki/HMAC)
-    OString aContentString("The quick brown fox jumps over the lazy dog"_ostr);
-    std::vector<sal_uInt8> aContent(aContentString.getStr(),
-                                    aContentString.getStr() + aContentString.getLength());
-    std::vector<sal_uInt8> aKey = { 'k', 'e', 'y' };
-    {
-        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA1);
-        aCryptoHash.update(aContent);
-        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
-        CPPUNIT_ASSERT_EQUAL(std::string("de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9"),
-                             toString(aHash));
-    }
-
-    {
-        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA256);
-        aCryptoHash.update(aContent);
-        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
-        CPPUNIT_ASSERT_EQUAL(
-            std::string("f7bc83f430538424b13298e6aa6fb143ef4d59a14946175997479dbc2d1a3cd8"),
-            toString(aHash));
-    }
-
-    {
-        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA384);
-        aCryptoHash.update(aContent);
-        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
-        CPPUNIT_ASSERT_EQUAL(std::string("d7f4727e2c0b39ae0f1e40cc96f60242d5b7801841cea6fc592c5d3e1"
-                                         "ae50700582a96cf35e1e554995fe4e03381c237"),
-                             toString(aHash));
-    }
-
-    {
-        oox::crypto::CryptoHash aCryptoHash(aKey, oox::crypto::CryptoHashType::SHA512);
-        aCryptoHash.update(aContent);
-        std::vector<sal_uInt8> aHash = aCryptoHash.finalize();
-        CPPUNIT_ASSERT_EQUAL(
-            std::string("b42af09057bac1e2d41708e48a902e09b5ff7f12ab428a4fe86653c73dd248fb82f948a549"
-                        "f7b791a5b41915ee4d1ec3935357e4e2317250d0372afa2ebeeb3a"),
-            toString(aHash));
-    }
-}
-
-void CryptoTest::testRoundUp()
-{
-    CPPUNIT_ASSERT_EQUAL(16, oox::crypto::roundUp(16, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(32, 16));
-    CPPUNIT_ASSERT_EQUAL(64, oox::crypto::roundUp(64, 16));
-
-    CPPUNIT_ASSERT_EQUAL(16, oox::crypto::roundUp(01, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(17, 16));
-    CPPUNIT_ASSERT_EQUAL(32, oox::crypto::roundUp(31, 16));
 }
 
 void CryptoTest::testStandard2007()

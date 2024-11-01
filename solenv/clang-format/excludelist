@@ -5316,7 +5316,6 @@ include/oox/core/relations.hxx
 include/oox/core/relationshandler.hxx
 include/oox/core/xmlfilterbase.hxx
 include/oox/crypto/AgileEngine.hxx
-include/oox/crypto/CryptTools.hxx
 include/oox/crypto/CryptoEngine.hxx
 include/oox/crypto/DocumentDecryption.hxx
 include/oox/crypto/DocumentEncryption.hxx
@@ -6961,7 +6960,6 @@ oox/source/core/relations.cxx
 oox/source/core/relationshandler.cxx
 oox/source/core/xmlfilterbase.cxx
 oox/source/crypto/AgileEngine.cxx
-oox/source/crypto/CryptTools.cxx
 oox/source/crypto/DocumentEncryption.cxx
 oox/source/crypto/Standard2007Engine.cxx
 oox/source/docprop/docprophandler.cxx
