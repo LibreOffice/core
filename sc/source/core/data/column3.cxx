@@ -2720,35 +2720,30 @@ void ScColumn::GetFilterEntries(
 
 void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntries& rFilterEntries)
 {
-    Color aBackColor;
-    bool bCondBackColor = false;
-    ScAddress aCell(GetCol(), 0, GetTab());
-    ScConditionalFormat* pCondFormat = nullptr;
-
-    const SfxItemSet* pCondSet = nullptr;
-    const SvxBrushItem* pBrush = nullptr;
-    const ScPatternAttr* pPattern = nullptr;
-    const ScColorScaleFormat* pColFormat = nullptr;
-
     if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2))
         return;
 
+    ScAddress aCell(GetCol(), 0, GetTab());
     while (nRow1 <= nRow2)
     {
         aCell.SetRow(nRow1);
-        pPattern = GetDoc().GetPattern(aCell.Col(), aCell.Row(), aCell.Tab());
+
+        Color aBackColor;
+        bool bCondBackColor = false;
+
+        const ScPatternAttr* pPattern = GetDoc().GetPattern(aCell.Col(), aCell.Row(), aCell.Tab());
         if (pPattern)
         {
             if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
             {
-                pCondSet = GetDoc().GetCondResult(GetCol(), nRow1, GetTab());
-                pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                const SfxItemSet* pCondSet = GetDoc().GetCondResult(GetCol(), nRow1, GetTab());
+                const SvxBrushItem* pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
                 aBackColor = pBrush->GetColor();
                 bCondBackColor = true;
             }
         }
 
-        pCondFormat = GetDoc().GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
+        ScConditionalFormat* pCondFormat = GetDoc().GetCondFormat(aCell.Col(), aCell.Row(), aCell.Tab());
         if (pCondFormat)
         {
             for (size_t nFormat = 0; nFormat < pCondFormat->size(); nFormat++)
@@ -2756,7 +2751,7 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
                 auto aEntry = pCondFormat->GetEntry(nFormat);
                 if (aEntry->GetType() == ScFormatEntry::Type::Colorscale)
                 {
-                    pColFormat = static_cast<const ScColorScaleFormat*>(aEntry);
+                    const ScColorScaleFormat* pColFormat = static_cast<const ScColorScaleFormat*>(aEntry);
                     std::optional<Color> oColor = pColFormat->GetColor(aCell);
                     if (oColor)
                     {
@@ -2769,7 +2764,7 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
 
         if (!bCondBackColor)
         {
-            pBrush = GetDoc().GetAttr(aCell, ATTR_BACKGROUND);
+            const SvxBrushItem* pBrush = GetDoc().GetAttr(aCell, ATTR_BACKGROUND);
             aBackColor = pBrush->GetColor();
         }
 
