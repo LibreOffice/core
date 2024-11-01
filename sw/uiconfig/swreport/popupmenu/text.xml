@@ -29,6 +29,7 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:FieldDialog"/>
   <menu:menuitem menu:id=".uno:ContentControlProperties"/>
+  <menu:menuitem menu:id=".uno:DeleteContentControl"/>
   <menu:menuitem menu:id=".uno:EditFootnote"/>
   <menu:menuitem menu:id=".uno:IndexEntryDialog"/>
   <menu:menuitem menu:id=".uno:AuthoritiesEntryDialog"/>

@@ -2651,6 +2651,20 @@ SfxVoidItem DeleteSections FN_DELETE_SECTIONS
     GroupId = SfxGroupId::Controls;
 ]
 
+SfxVoidItem DeleteContentControl FN_DELETE_CONTENT_CONTROL
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    GroupId = SfxGroupId::Controls;
+]
+
 SfxVoidItem DeleteFields FN_DELETE_FIELDS
 (SfxStringItem TypeName FN_PARAM_1, SfxStringItem NamePrefix FN_PARAM_2)
 [

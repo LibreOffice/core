@@ -70,6 +70,8 @@
 #include <swdtflvr.hxx>
 #include <swundo.hxx>
 #include <reffld.hxx>
+#include <textcontentcontrol.hxx>
+#include <txatbase.hxx>
 #include <docsh.hxx>
 #include <inputwin.hxx>
 #include <chrdlgmodes.hxx>
@@ -81,6 +83,7 @@
 #include <strings.hrc>
 #include <txatbase.hxx>
 #include <paratr.hxx>
+#include <ndtxt.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
@@ -531,6 +534,18 @@ void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         pDoc->DelSectionFormat(pFormat);
     }
 }
+
+void DeleteContentControl( SwWrtShell& rWrtSh )
+{
+    SwTextContentControl* pTextContentControl = rWrtSh.CursorInsideContentControl();
+    if (pTextContentControl) {
+        const SwFormatContentControl& rFormatContentControl = pTextContentControl->GetContentControl();
+        const std::shared_ptr<SwContentControl>& pContentControl = rFormatContentControl.GetContentControl();
+        pContentControl->SetReadWrite(true);
+        pTextContentControl->Delete(true);
+    }
+}
+
 
 void UpdateBookmarks(SfxRequest& rReq, SwWrtShell& rWrtSh)
 {
@@ -1339,6 +1354,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // This deletes all sections in the document matching a specified prefix. Note that the
             // section is deleted, but not its contents.
             DeleteSections(rReq, rWrtSh);
+            break;
+        }
+        case FN_DELETE_CONTENT_CONTROL:
+        {
+            DeleteContentControl( rWrtSh );
             break;
         }
         case FN_SET_REMINDER:
@@ -3878,6 +3898,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSet.Put(SfxBoolItem(nWhich, bProtected));
             }
             break;
+            case FN_DELETE_CONTENT_CONTROL:
             case FN_CONTENT_CONTROL_PROPERTIES:
             {
                 if (!GetShell().CursorInsideContentControl())
