@@ -547,6 +547,11 @@
                     <property name="tooltip-text" translatable="yes" context="optviewpage|useskia|tooltip_text">Requires restart</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="useskia-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optviewage|extended_tips|useskia">Use the high performance Skia graphics engine to render all visual elements of the application, including windows, menus, toolbars and icons.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
@@ -563,6 +568,11 @@
                     <property name="margin-start">18</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="forceskiaraster-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="optviewpage|extended_tips|forceskiaraster">Disables Skia's use of the computer graphics device. This still uses Skia software but with calls for raster framing, reduced and simplified graphics processing unit load.</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
