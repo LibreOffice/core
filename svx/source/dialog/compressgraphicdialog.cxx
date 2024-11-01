@@ -125,7 +125,7 @@ void CompressGraphicsDialog::Initialize()
     m_xLosslessRB = m_xBuilder->weld_radio_button(u"radio-lossless"_ustr);
     m_xQualityMF = m_xBuilder->weld_spin_button(u"spin-quality"_ustr);
     m_xQualitySlider = m_xBuilder->weld_scale(u"scale-quality"_ustr);
-    m_xReduceResolutionCB = m_xBuilder->weld_check_button(u"checkbox-reduce-resolution"_ustr);
+    m_xReduceResolutionCB = m_xBuilder->weld_check_button(u"checkbox-change-resolution"_ustr);
     m_xMFNewWidth = m_xBuilder->weld_spin_button(u"spin-new-width"_ustr);
     m_xMFNewHeight = m_xBuilder->weld_spin_button(u"spin-new-height"_ustr);
     m_xResolutionLB = m_xBuilder->weld_combo_box(u"combo-resolution"_ustr);

@@ -275,8 +275,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="reduceresolution">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|reduceresolution">Reduce ima_ge resolution to:</property>
+                  <object class="GtkCheckButton" id="changeresolution">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|changeresolution">Change ima_ge resolution to:</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -287,8 +287,8 @@
                       <relation type="label-for" target="resolution"/>
                     </accessibility>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="reduceresolution-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|reduceresolution">Select to resample or down-size the images to a lower number of pixels per inch.</property>
+                      <object class="AtkObject" id="changeresolution-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|changeresolution">Select to resample or down-size the images to a lower number of pixels per inch.</property>
                       </object>
                     </child>
                   </object>
@@ -318,7 +318,7 @@
                       </object>
                     </child>
                     <accessibility>
-                      <relation type="labelled-by" target="reduceresolution"/>
+                      <relation type="labelled-by" target="changeresolution"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="resolution-atkobject">
@@ -1091,7 +1091,7 @@
       <widget name="selection"/>
       <widget name="losslesscompress"/>
       <widget name="box3"/>
-      <widget name="reduceresolution"/>
+      <widget name="changeresolution"/>
       <widget name="watermark"/>
     </widgets>
   </object>

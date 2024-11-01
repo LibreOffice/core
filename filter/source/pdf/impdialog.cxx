@@ -550,7 +550,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxRbJPEGCompression(m_xBuilder->weld_radio_button(u"jpegcompress"_ustr))
     , mxQualityFrame(m_xBuilder->weld_widget(u"qualityframe"_ustr))
     , mxNfQuality(m_xBuilder->weld_metric_spin_button(u"quality"_ustr, FieldUnit::PERCENT))
-    , mxCbReduceImageResolution(m_xBuilder->weld_check_button(u"reduceresolution"_ustr))
+    , mxCbReduceImageResolution(m_xBuilder->weld_check_button(u"changeresolution"_ustr))
     , mxCoReduceImageResolution(m_xBuilder->weld_combo_box(u"resolution"_ustr))
     , mxCbPDFA(m_xBuilder->weld_check_button(u"pdfa"_ustr))
     , mxCbPDFUA(m_xBuilder->weld_check_button(u"pdfua"_ustr))
