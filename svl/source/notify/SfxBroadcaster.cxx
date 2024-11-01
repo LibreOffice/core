@@ -27,6 +27,9 @@
 #include <cassert>
 #include <vector>
 
+// Note: The loops in this file cannot be range-based
+// because vectors can change size during the loops.
+
 // broadcast immediately
 
 void SfxBroadcaster::Broadcast(const SfxHint& rHint)
