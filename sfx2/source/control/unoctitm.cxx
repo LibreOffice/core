@@ -1294,6 +1294,7 @@ constexpr auto handlers = frozen::make_unordered_map<std::u16string_view, Payloa
     { u"Protect", EnabledPayload },
     { u"UnsetCellsReadOnly", EnabledPayload },
     { u"ContentControlProperties", EnabledPayload },
+    { u"DeleteContentControl", EnabledPayload },
     { u"InsertCheckboxContentControl", EnabledPayload },
     { u"InsertContentControl", EnabledPayload },
     { u"InsertDateContentControl", EnabledPayload },

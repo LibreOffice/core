@@ -4029,6 +4029,7 @@ static void doc_iniUnoCommands ()
         u".uno:Protect"_ustr,
         u".uno:UnsetCellsReadOnly"_ustr,
         u".uno:ContentControlProperties"_ustr,
+        u".uno:DeleteContentControl"_ustr,
         u".uno:InsertCheckboxContentControl"_ustr,
         u".uno:InsertContentControl"_ustr,
         u".uno:InsertDateContentControl"_ustr,

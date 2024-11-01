@@ -1880,6 +1880,12 @@ interface BaseText
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_DELETE_CONTENT_CONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     FN_DELETE_FIELDS
     [
         ExecMethod = Execute ;
