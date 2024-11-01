@@ -255,7 +255,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
             assert(nLineLen > 0);
             nLineLen--;
             // remove spaces and tabs
-            while ( (*pLine == ' ') || (*pLine == '\t') )
+            while ( nLineLen > 0 && (*pLine == ' ' || *pLine == '\t') )
             {
                 nLineLen--;
                 pLine++;
@@ -263,11 +263,8 @@ static void ImplMakeConfigList( ImplConfigData* pData,
             nNameLen = 0;
             while ( (nNameLen < nLineLen) && (pLine[nNameLen] != ']') )
                 nNameLen++;
-            if ( nNameLen )
-            {
-                while ( (pLine[nNameLen-1] == ' ') || (pLine[nNameLen-1] == '\t') )
-                    nNameLen--;
-            }
+            while ( nNameLen > 0 && (pLine[nNameLen-1] == ' ' || pLine[nNameLen-1] == '\t') )
+                nNameLen--;
             pGroup->maGroupName = makeOString(pLine, nNameLen);
         }
         else
@@ -320,11 +317,8 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                         nNameLen++;
                     nKeyLen = nNameLen;
                     // Remove spaces and tabs
-                    if ( nNameLen )
-                    {
-                        while ( (pLine[nNameLen-1] == ' ') || (pLine[nNameLen-1] == '\t') )
-                            nNameLen--;
-                    }
+                    while ( nNameLen > 0 && (pLine[nNameLen-1] == ' ' || pLine[nNameLen-1] == '\t') )
+                        nNameLen--;
                     pKey->maKey = makeOString(pLine, nNameLen);
                     nKeyLen++;
                     if ( nKeyLen < nLineLen )
