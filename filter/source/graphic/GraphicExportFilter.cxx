@@ -105,7 +105,7 @@ void GraphicExportFilter::gatherProperties( const uno::Sequence< beans::Property
     if ( aInternalFilterName.isEmpty() )
         return;
 
-    GraphicFilter aGraphicFilter( true );
+    GraphicFilter aGraphicFilter;
 
     sal_uInt16 nFilterCount = aGraphicFilter.GetExportFormatCount();
     sal_uInt16 nFormat;

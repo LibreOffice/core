@@ -88,7 +88,7 @@ public:
 
     bool    IsExportPixelFormat( sal_uInt16 nFormat );
 
-    explicit FilterConfigCache( bool bUseConfig );
+    explicit FilterConfigCache();
                 ~FilterConfigCache();
 };
 

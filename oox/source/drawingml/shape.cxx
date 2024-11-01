@@ -2426,7 +2426,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase const & rFilte
         aTempStream.Seek( STREAM_SEEK_TO_BEGIN );
 
         Graphic aGraphic;
-        GraphicFilter aFilter( false );
+        GraphicFilter aFilter;
         if ( aFilter.ImportGraphic( aGraphic, u"", aTempStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE ) != ERRCODE_NONE )
         {
             SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: Unable to import rendered stream into graphic object" );

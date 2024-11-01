@@ -33,7 +33,7 @@ class VclFiltersTest :
 public:
     VclFiltersTest() :
         BootstrapFixture(true, false),
-        mpGraphicFilter(new GraphicFilter(false))
+        mpGraphicFilter(new GraphicFilter)
     {}
 
     virtual bool load(const OUString &,

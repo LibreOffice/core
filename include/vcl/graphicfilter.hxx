@@ -227,7 +227,7 @@ public:
 class VCL_DLLPUBLIC GraphicFilter
 {
 public:
-                    GraphicFilter( bool bUseConfig = true );
+                    GraphicFilter();
                     ~GraphicFilter();
 
     sal_uInt16      GetImportFormatCount() const;
@@ -335,7 +335,6 @@ public:
     SAL_DLLPRIVATE static ErrCode readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType);
 
 private:
-    OUString        aFilterPath;
     FilterConfigCache*  pConfig;
 
     SAL_DLLPRIVATE ErrCode ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
@@ -345,7 +344,6 @@ private:
 
     /** Information about errors during the GraphicFilter operation. */
     std::optional<ErrCode> mxErrorEx;
-    bool                bUseConfig;
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

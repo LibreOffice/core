@@ -211,7 +211,7 @@ sal_Int16 SvFilterOptionsDialog::execute()
     }
     if ( !aInternalFilterName.isEmpty() )
     {
-        GraphicFilter aGraphicFilter( true );
+        GraphicFilter aGraphicFilter;
 
         sal_uInt16 nFormat, nFilterCount = aGraphicFilter.GetExportFormatCount();
         for ( nFormat = 0; nFormat < nFilterCount; nFormat++ )

@@ -274,25 +274,17 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
     return aGraphic;
 }
 
-GraphicFilter::GraphicFilter( bool bConfig )
-    : bUseConfig(bConfig)
+GraphicFilter::GraphicFilter()
 {
     {
         std::scoped_lock aGuard( getListMutex() );
 
         if ( gaFilterHdlList.empty() )
-            pConfig = new FilterConfigCache( bUseConfig );
+            pConfig = new FilterConfigCache;
         else
             pConfig = gaFilterHdlList.front()->pConfig;
 
         gaFilterHdlList.push_back( this );
-    }
-
-    if( bUseConfig )
-    {
-        OUString url(u"$BRAND_BASE_DIR/" LIBO_LIB_FOLDER ""_ustr);
-        rtl::Bootstrap::expandMacros(url); //TODO: detect failure
-        osl::FileBase::getSystemPathFromFileURL(url, aFilterPath);
     }
 
     mxErrorEx = ERRCODE_NONE;

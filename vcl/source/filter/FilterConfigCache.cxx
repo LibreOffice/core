@@ -260,11 +260,9 @@ void FilterConfigCache::ImplInitSmart()
     }
 }
 
-FilterConfigCache::FilterConfigCache(bool bConfig)
+FilterConfigCache::FilterConfigCache()
 {
-    if (bConfig)
-        bConfig = !comphelper::IsFuzzing();
-    if (bConfig)
+    if (!comphelper::IsFuzzing())
         ImplInit();
     else
         ImplInitSmart();
