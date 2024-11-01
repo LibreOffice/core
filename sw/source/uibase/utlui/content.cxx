@@ -5495,16 +5495,34 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
                 assert(dynamic_cast<SwOutlineContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 SwOutlineContent* pOutlineContent = static_cast<SwOutlineContent*>(pUserData);
                 SwOutlineNodes::size_type nOutlinePos = pOutlineContent->GetOutlinePos();
+                const OUString& rOutlineName = pOutlineContent->GetName();
                 const SwNodes& rNodes = m_pActiveShell->GetDoc()->GetNodes();
                 const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
                 SwNode* pStartNode = rOutlineNodes[nOutlinePos];
                 SwNode* pEndNode = &rNodes.GetEndOfContent();
-                if (nOutlinePos + 1 < rOutlineNodes.size())
-                    pEndNode = rOutlineNodes[nOutlinePos + 1];
+
+                // tdf#163646 - Show in the tooltip for heading entries in Writer Navigator the
+                // outline word and character count of the heading ncluding the outline word and
+                // character count of all sub headings
+                int nEntryDepth = m_xTreeView->get_iter_depth(rEntry);
+                std::unique_ptr<weld::TreeIter> xIter = m_xTreeView->make_iterator(&rEntry);
+                int nIterDepth;
+                while (m_xTreeView->iter_next(*xIter)
+                       && (nIterDepth = m_xTreeView->get_iter_depth(*xIter)))
+                {
+                    if (nIterDepth <= nEntryDepth)
+                    {
+                        pOutlineContent
+                            = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xIter));
+                        pEndNode = rOutlineNodes[pOutlineContent->GetOutlinePos()];
+                        break;
+                    }
+                }
+
                 SwPaM aPaM(*pStartNode, *pEndNode);
                 SwDocStat aDocStat;
                 SwDoc::CountWords(aPaM, aDocStat);
-                sEntry = pOutlineContent->GetName() + "\n" + SwResId(FLD_STAT_WORD) + ": "
+                sEntry = rOutlineName + "\n" + SwResId(FLD_STAT_WORD) + ": "
                          + OUString::number(aDocStat.nWord) + "\n" + SwResId(FLD_STAT_CHAR) + ": "
                          + OUString::number(aDocStat.nChar);
             }
