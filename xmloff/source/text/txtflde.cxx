@@ -176,6 +176,18 @@ uno::Reference<text::XText> GetToplevelText(const uno::Reference<text::XText>& x
     }
     return xRet;
 }
+
+uno::Reference<css::text::XText> XTextFromTextRangeProp(const Reference<XPropertySet>& xPropSet)
+{
+    try
+    {
+        return xPropSet->getPropertyValue(u"TextRange"_ustr).query<css::text::XText>();
+    }
+    catch (css::uno::Exception&)
+    {
+        return {};
+    }
+}
 }
 
 SvXMLEnumStringMapEntry<FieldIdEnum> const aFieldServiceNameMapping[] =
@@ -368,7 +380,6 @@ constexpr OUString gsPropertyValue(u"Value"_ustr);
 constexpr OUString gsPropertyVariableName(u"VariableName"_ustr);
 constexpr OUString gsPropertyHelp(u"Help"_ustr);
 constexpr OUString gsPropertyTooltip(u"Tooltip"_ustr);
-constexpr OUStringLiteral gsPropertyTextRange(u"TextRange");
 
 XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
                                         std::unique_ptr<XMLPropertyState> pCombinedCharState)
@@ -909,8 +920,12 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         break;
     }
 
-    case FIELD_ID_SCRIPT:
     case FIELD_ID_ANNOTATION:
+        if (auto xText = XTextFromTextRangeProp(xPropSet))
+            GetExport().GetTextParagraphExport()->collectTextAutoStyles(xText, bProgress);
+        break;
+
+    case FIELD_ID_SCRIPT:
     case FIELD_ID_BIBLIOGRAPHY:
     case FIELD_ID_DDE:
     case FIELD_ID_REF_REFERENCE:
@@ -1837,16 +1852,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             }
         }
 
-        css::uno::Reference < css::text::XText > xText;
-        try
-        {
-            css::uno::Any aRet = rPropSet->getPropertyValue(gsPropertyTextRange);
-            aRet >>= xText;
-        }
-        catch ( css::uno::Exception& )
-        {}
-
-        if ( xText.is() )
+        if (auto xText = XTextFromTextRangeProp(rPropSet))
             GetExport().GetTextParagraphExport()->exportText( xText );
         else
             ProcessParagraphSequence(GetStringProperty(gsPropertyContent,rPropSet));
