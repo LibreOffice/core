@@ -338,7 +338,6 @@ private:
     OUString        aFilterPath;
     FilterConfigCache*  pConfig;
 
-    SAL_DLLPRIVATE void ImplInit();
     SAL_DLLPRIVATE ErrCode ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
     SAL_DLLPRIVATE ErrCode ImpTestOrFindFormat( std::u16string_view rPath, SvStream& rStream, sal_uInt16& rFormat );
 

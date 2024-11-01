@@ -277,26 +277,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 GraphicFilter::GraphicFilter( bool bConfig )
     : bUseConfig(bConfig)
 {
-    ImplInit();
-}
-
-GraphicFilter::~GraphicFilter()
-{
-    {
-        std::scoped_lock aGuard( getListMutex() );
-        auto it = std::find(gaFilterHdlList.begin(), gaFilterHdlList.end(), this);
-        if( it != gaFilterHdlList.end() )
-            gaFilterHdlList.erase( it );
-
-        if( gaFilterHdlList.empty() )
-            delete pConfig;
-    }
-
-    mxErrorEx.reset();
-}
-
-void GraphicFilter::ImplInit()
-{
     {
         std::scoped_lock aGuard( getListMutex() );
 
@@ -316,6 +296,21 @@ void GraphicFilter::ImplInit()
     }
 
     mxErrorEx = ERRCODE_NONE;
+}
+
+GraphicFilter::~GraphicFilter()
+{
+    {
+        std::scoped_lock aGuard( getListMutex() );
+        auto it = std::find(gaFilterHdlList.begin(), gaFilterHdlList.end(), this);
+        if( it != gaFilterHdlList.end() )
+            gaFilterHdlList.erase( it );
+
+        if( gaFilterHdlList.empty() )
+            delete pConfig;
+    }
+
+    mxErrorEx.reset();
 }
 
 ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
