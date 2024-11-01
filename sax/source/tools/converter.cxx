@@ -904,8 +904,7 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::u16string_view rStri
         { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
             if (!aRest.empty())
             {
-                // Wrong unit
-                fAngle = 0;
+                // Wrong unit. Don't change rAngle, rely on callers checking boolean return
                 return false;
             }
             if (!isWrongOOo10thDegAngle)
@@ -942,8 +941,7 @@ bool Converter::convert10thDegAngle(sal_Int16& rAngle, std::string_view rString,
         { // isWrongOOo10thDegAngle = true: nothing to do here. Wrong, but backward compatible.
             if (!aRest.empty())
             {
-                // Wrong unit
-                fAngle = 0;
+                // Wrong unit. Don't change rAngle, rely on callers checking boolean return
                 return false;
             }
             if (!isWrongOOo10thDegAngle)
