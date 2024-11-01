@@ -10378,7 +10378,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_bParaBeforeAutoSpacing(false),
       m_bParaAfterAutoSpacing(false),
       m_nParaBeforeSpacing(0),
-      m_nParaAfterSpacing(0)
+      m_nParaAfterSpacing(0),
+      m_bParaInlineHeading(false)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
 {
     m_nHyperLinkCount.push_back(0);
