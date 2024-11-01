@@ -135,7 +135,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/core/relationshandler \
     oox/source/core/xmlfilterbase \
     oox/source/crypto/AgileEngine \
-    oox/source/crypto/CryptTools \
     oox/source/crypto/DocumentEncryption \
     oox/source/crypto/DocumentDecryption \
     oox/source/crypto/Standard2007Engine \

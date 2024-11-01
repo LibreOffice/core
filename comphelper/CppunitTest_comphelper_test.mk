@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,comphelper_test, \
     comphelper/qa/unit/types_test \
     comphelper/qa/unit/test_guards \
     comphelper/qa/unit/test_traceevent \
+    comphelper/qa/unit/CryptoTest \
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,comphelper_test))

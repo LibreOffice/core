@@ -8,7 +8,7 @@
  *
  */
 
-#include <oox/crypto/CryptTools.hxx>
+#include <comphelper/crypto/Crypto.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <sal/types.h>
 
@@ -26,20 +26,20 @@
 #include <pk11pub.h>
 #endif // USE_TLS_NSS
 
-namespace oox::crypto {
-
+namespace comphelper
+{
 #if USE_TLS_OPENSSL
 
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L)
 
-static HMAC_CTX *HMAC_CTX_new(void)
+static HMAC_CTX* HMAC_CTX_new(void)
 {
-   HMAC_CTX *pContext = new HMAC_CTX;
-   HMAC_CTX_init(pContext);
-   return pContext;
+    HMAC_CTX* pContext = new HMAC_CTX;
+    HMAC_CTX_init(pContext);
+    return pContext;
 }
 
-static void HMAC_CTX_free(HMAC_CTX *pContext)
+static void HMAC_CTX_free(HMAC_CTX* pContext)
 {
     HMAC_CTX_cleanup(pContext);
     delete pContext;
@@ -48,17 +48,21 @@ static void HMAC_CTX_free(HMAC_CTX *pContext)
 
 namespace
 {
-    struct cipher_delete
-    {
-        void operator()(EVP_CIPHER_CTX* p) { EVP_CIPHER_CTX_free(p); }
-    };
+struct cipher_delete
+{
+    void operator()(EVP_CIPHER_CTX* p) { EVP_CIPHER_CTX_free(p); }
+};
 
-    struct hmac_delete
+struct hmac_delete
+{
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_free' is deprecated
+        void
+        operator()(HMAC_CTX* p)
     {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_free' is deprecated
-        void operator()(HMAC_CTX* p) { HMAC_CTX_free(p); }
-SAL_WNODEPRECATED_DECLARATIONS_POP
-    };
+        HMAC_CTX_free(p);
+    }
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+};
 }
 
 struct CryptoImpl
@@ -68,7 +72,8 @@ struct CryptoImpl
 
     CryptoImpl() = default;
 
-    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
+    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                             Crypto::CryptoType eType)
     {
         mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
@@ -84,7 +89,8 @@ struct CryptoImpl
         EVP_CIPHER_CTX_set_padding(mpContext.get(), 0);
     }
 
-    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType eType)
+    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                             Crypto::CryptoType eType)
     {
         mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
@@ -112,24 +118,28 @@ struct CryptoImpl
 
     void setupCryptoHashContext(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
     {
-SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_new' is deprecated
-        mpHmacContext.reset(HMAC_CTX_new());
-SAL_WNODEPRECATED_DECLARATIONS_POP
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_CTX_new' is deprecated
+            mpHmacContext.reset(HMAC_CTX_new());
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         const EVP_MD* aEvpMd = nullptr;
         switch (eType)
         {
             case CryptoHashType::SHA1:
-                aEvpMd = EVP_sha1(); break;
+                aEvpMd = EVP_sha1();
+                break;
             case CryptoHashType::SHA256:
-                aEvpMd = EVP_sha256(); break;
+                aEvpMd = EVP_sha256();
+                break;
             case CryptoHashType::SHA384:
-                aEvpMd = EVP_sha384(); break;
+                aEvpMd = EVP_sha384();
+                break;
             case CryptoHashType::SHA512:
-                aEvpMd = EVP_sha512(); break;
+                aEvpMd = EVP_sha512();
+                break;
         }
-SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Init_ex' is deprecated
-        HMAC_Init_ex(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd, nullptr);
-SAL_WNODEPRECATED_DECLARATIONS_POP
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Init_ex' is deprecated
+            HMAC_Init_ex(mpHmacContext.get(), rKey.data(), rKey.size(), aEvpMd, nullptr);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 
     ~CryptoImpl()
@@ -140,7 +150,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
     static const EVP_CIPHER* getCipher(Crypto::CryptoType type)
     {
-        switch(type)
+        switch (type)
         {
             case Crypto::CryptoType::AES_128_ECB:
                 return EVP_aes_128_ecb();
@@ -163,10 +173,10 @@ struct CryptoImpl
 {
     PK11SlotInfo* mSlot;
     PK11Context* mContext;
-    SECItem*     mSecParam;
-    PK11SymKey*  mSymKey;
+    SECItem* mSecParam;
+    PK11SymKey* mSymKey;
     PK11Context* mWrapKeyContext;
-    PK11SymKey*  mWrapKey;
+    PK11SymKey* mWrapKey;
 
     CryptoImpl()
         : mSlot(nullptr)
@@ -184,7 +194,10 @@ struct CryptoImpl
             {
                 PRErrorCode error = PR_GetError();
                 const char* errorText = PR_ErrorToName(error);
-                throw css::uno::RuntimeException("NSS_NoDB_Init failed with " + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " (" + OUString::number(static_cast<int>(error)) + ")");
+                throw css::uno::RuntimeException(
+                    "NSS_NoDB_Init failed with "
+                    + OUString(errorText, strlen(errorText), RTL_TEXTENCODING_UTF8) + " ("
+                    + OUString::number(static_cast<int>(error)) + ")");
             }
         }
     }
@@ -227,7 +240,8 @@ struct CryptoImpl
             int wrap_key_len = PK11_GetBestKeyLength(mSlot, wrap_mechanism);
             mWrapKey = PK11_KeyGen(mSlot, wrap_mechanism, nullptr, wrap_key_len, nullptr);
             if (!mWrapKey)
-                throw css::uno::RuntimeException("PK11_KeyGen SymKey failure", css::uno::Reference<css::uno::XInterface>());
+                throw css::uno::RuntimeException("PK11_KeyGen SymKey failure",
+                                                 css::uno::Reference<css::uno::XInterface>());
 
             /*
              * Encrypt authkey with wrapping key
@@ -237,21 +251,26 @@ struct CryptoImpl
              * Initialization of IV is not needed because PK11_GetBestWrapMechanism should return ECB mode
              */
             SECItem tmp_sec_item = {};
-            mWrapKeyContext = PK11_CreateContextBySymKey(wrap_mechanism, CKA_ENCRYPT, mWrapKey, &tmp_sec_item);
+            mWrapKeyContext
+                = PK11_CreateContextBySymKey(wrap_mechanism, CKA_ENCRYPT, mWrapKey, &tmp_sec_item);
             if (!mWrapKeyContext)
-                throw css::uno::RuntimeException("PK11_CreateContextBySymKey failure", css::uno::Reference<css::uno::XInterface>());
+                throw css::uno::RuntimeException("PK11_CreateContextBySymKey failure",
+                                                 css::uno::Reference<css::uno::XInterface>());
 
             unsigned char wrapped_key_data[MAX_WRAPPED_KEY_LEN];
             int wrapped_key_len = sizeof(wrapped_key_data);
 
             if (PK11_CipherOp(mWrapKeyContext, wrapped_key_data, &wrapped_key_len,
-                sizeof(wrapped_key_data), key->data, key->len) != SECSuccess)
+                              sizeof(wrapped_key_data), key->data, key->len)
+                != SECSuccess)
             {
-                throw css::uno::RuntimeException("PK11_CipherOp failure", css::uno::Reference<css::uno::XInterface>());
+                throw css::uno::RuntimeException("PK11_CipherOp failure",
+                                                 css::uno::Reference<css::uno::XInterface>());
             }
 
             if (PK11_Finalize(mWrapKeyContext) != SECSuccess)
-                throw css::uno::RuntimeException("PK11_Finalize failure", css::uno::Reference<css::uno::XInterface>());
+                throw css::uno::RuntimeException("PK11_Finalize failure",
+                                                 css::uno::Reference<css::uno::XInterface>());
 
             /*
              * Finally unwrap sym key
@@ -261,28 +280,31 @@ struct CryptoImpl
             wrapped_key.len = wrapped_key_len;
 
             mSymKey = PK11_UnwrapSymKey(mWrapKey, wrap_mechanism, &tmp_sec_item, &wrapped_key,
-                mechanism, operation, key->len);
+                                        mechanism, operation, key->len);
         }
         return mSymKey;
     }
 
-    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type)
+    void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                             CryptoType type)
     {
         setupCryptoContext(key, iv, type, CKA_ENCRYPT);
     }
 
-    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type)
+    void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                             CryptoType type)
     {
         setupCryptoContext(key, iv, type, CKA_DECRYPT);
     }
 
-    void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto::CryptoType type, CK_ATTRIBUTE_TYPE operation)
+    void setupCryptoContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
+                            CryptoType type, CK_ATTRIBUTE_TYPE operation)
     {
         CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
 
         SECItem ivItem;
         ivItem.type = siBuffer;
-        if(iv.empty())
+        if (iv.empty())
             ivItem.data = nullptr;
         else
             ivItem.data = iv.data();
@@ -290,16 +312,16 @@ struct CryptoImpl
 
         SECItem* pIvItem = nullptr;
 
-        switch(type)
+        switch (type)
         {
-            case Crypto::CryptoType::AES_128_ECB:
+            case CryptoType::AES_128_ECB:
                 mechanism = CKM_AES_ECB;
                 break;
-            case Crypto::CryptoType::AES_128_CBC:
+            case CryptoType::AES_128_CBC:
                 mechanism = CKM_AES_CBC;
                 pIvItem = &ivItem;
                 break;
-            case Crypto::CryptoType::AES_256_CBC:
+            case CryptoType::AES_256_CBC:
                 mechanism = CKM_AES_CBC;
                 pIvItem = &ivItem;
                 break;
@@ -310,16 +332,18 @@ struct CryptoImpl
         mSlot = PK11_GetBestSlot(mechanism, nullptr);
 
         if (!mSlot)
-            throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
+            throw css::uno::RuntimeException("NSS Slot failure",
+                                             css::uno::Reference<css::uno::XInterface>());
 
         SECItem keyItem;
         keyItem.type = siBuffer;
         keyItem.data = key.data();
-        keyItem.len  = key.size();
+        keyItem.len = key.size();
 
         mSymKey = ImportSymKey(mechanism, CKA_ENCRYPT, &keyItem);
         if (!mSymKey)
-            throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
+            throw css::uno::RuntimeException("NSS SymKey failure",
+                                             css::uno::Reference<css::uno::XInterface>());
 
         mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
         mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
@@ -329,7 +353,7 @@ struct CryptoImpl
     {
         CK_MECHANISM_TYPE aMechanism = static_cast<CK_ULONG>(-1);
 
-        switch(eType)
+        switch (eType)
         {
             case CryptoHashType::SHA1:
                 aMechanism = CKM_SHA_1_HMAC;
@@ -348,15 +372,17 @@ struct CryptoImpl
         mSlot = PK11_GetBestSlot(aMechanism, nullptr);
 
         if (!mSlot)
-            throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
+            throw css::uno::RuntimeException("NSS Slot failure",
+                                             css::uno::Reference<css::uno::XInterface>());
 
         SECItem aKeyItem;
         aKeyItem.data = rKey.data();
-        aKeyItem.len  = rKey.size();
+        aKeyItem.len = rKey.size();
 
         mSymKey = ImportSymKey(aMechanism, CKA_SIGN, &aKeyItem);
         if (!mSymKey)
-            throw css::uno::RuntimeException("NSS SymKey failure", css::uno::Reference<css::uno::XInterface>());
+            throw css::uno::RuntimeException("NSS SymKey failure",
+                                             css::uno::Reference<css::uno::XInterface>());
 
         SECItem param;
         param.data = nullptr;
@@ -366,7 +392,8 @@ struct CryptoImpl
 };
 #else
 struct CryptoImpl
-{};
+{
+};
 #endif
 
 Crypto::Crypto()
@@ -374,9 +401,7 @@ Crypto::Crypto()
 {
 }
 
-Crypto::~Crypto()
-{
-}
+Crypto::~Crypto() {}
 
 // DECRYPT
 
@@ -391,12 +416,14 @@ Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
 #endif
 }
 
-sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
+sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
+                           sal_uInt32 inputLength)
 {
     int outputLength = 0;
 
 #if USE_TLS_OPENSSL + USE_TLS_NSS > 0
-    sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
+    sal_uInt32 actualInputLength
+        = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 #else
     (void)output;
     (void)input;
@@ -404,23 +431,26 @@ sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 #endif
 
 #if USE_TLS_OPENSSL
-    (void)EVP_DecryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(), actualInputLength);
+    (void)EVP_DecryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(),
+                            actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
     if (!mpImpl->mContext)
         return 0;
-    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
+    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength,
+                        input.data(), actualInputLength);
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
 }
 
-sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, std::vector<sal_uInt8>& key)
+sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
+                              std::vector<sal_uInt8>& key)
 {
     sal_uInt32 outputLength = 0;
     std::vector<sal_uInt8> iv;
-    Decrypt crypto(key, iv, Crypto::AES_128_ECB);
+    Decrypt crypto(key, iv, CryptoType::AES_128_ECB);
     outputLength = crypto.update(output, input);
     return outputLength;
 }
@@ -438,12 +468,14 @@ Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, Crypto
 #endif
 }
 
-sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
+sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
+                           sal_uInt32 inputLength)
 {
     int outputLength = 0;
 
 #if USE_TLS_OPENSSL + USE_TLS_NSS > 0
-    sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
+    sal_uInt32 actualInputLength
+        = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 #else
     (void)output;
     (void)input;
@@ -451,11 +483,13 @@ sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 #endif
 
 #if USE_TLS_OPENSSL
-    (void)EVP_EncryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(), actualInputLength);
+    (void)EVP_EncryptUpdate(mpImpl->mpContext.get(), output.data(), &outputLength, input.data(),
+                            actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
+    (void)PK11_CipherOp(mpImpl->mContext, output.data(), &outputLength, actualInputLength,
+                        input.data(), actualInputLength);
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
@@ -465,15 +499,18 @@ sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8
 
 namespace
 {
-
 sal_Int32 getSizeForHashType(CryptoHashType eType)
 {
     switch (eType)
     {
-        case CryptoHashType::SHA1: return 20;
-        case CryptoHashType::SHA256: return 32;
-        case CryptoHashType::SHA384: return 48;
-        case CryptoHashType::SHA512: return 64;
+        case CryptoHashType::SHA1:
+            return 20;
+        case CryptoHashType::SHA256:
+            return 32;
+        case CryptoHashType::SHA384:
+            return 48;
+        case CryptoHashType::SHA512:
+            return 64;
     }
     return 0;
 }
@@ -498,16 +535,18 @@ CryptoHash::CryptoHash(std::vector<sal_uInt8>& rKey, CryptoHashType eType)
 bool CryptoHash::update(std::vector<sal_uInt8>& rInput, sal_uInt32 nInputLength)
 {
 #if USE_TLS_OPENSSL + USE_TLS_NSS > 0
-    sal_uInt32 nActualInputLength = (nInputLength == 0 || nInputLength > rInput.size()) ? rInput.size() : nInputLength;
+    sal_uInt32 nActualInputLength
+        = (nInputLength == 0 || nInputLength > rInput.size()) ? rInput.size() : nInputLength;
 #else
     (void)rInput;
     (void)nInputLength;
 #endif
 
 #if USE_TLS_OPENSSL
-SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Update' is deprecated
-    return HMAC_Update(mpImpl->mpHmacContext.get(), rInput.data(), nActualInputLength) != 0;
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Update' is deprecated
+        return HMAC_Update(mpImpl->mpHmacContext.get(), rInput.data(), nActualInputLength)
+        != 0;
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 #elif USE_TLS_NSS
     return PK11_DigestOp(mpImpl->mContext, rInput.data(), nActualInputLength) == SECSuccess;
 #else
@@ -518,19 +557,18 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 std::vector<sal_uInt8> CryptoHash::finalize()
 {
     std::vector<sal_uInt8> aHash(mnHashSize, 0);
-    unsigned int nSizeWritten;
 #if USE_TLS_OPENSSL
-SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Final' is deprecated
-    (void) HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten);
-SAL_WNODEPRECATED_DECLARATIONS_POP
+    unsigned int nSizeWritten = 0;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH // 'HMAC_Final' is deprecated
+        (void) HMAC_Final(mpImpl->mpHmacContext.get(), aHash.data(), &nSizeWritten);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 #elif USE_TLS_NSS
+    unsigned int nSizeWritten = 0;
     PK11_DigestFinal(mpImpl->mContext, aHash.data(), &nSizeWritten, aHash.size());
 #endif
-    (void)nSizeWritten;
-
     return aHash;
 }
 
-} // namespace oox::crypto
+} // namespace comphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

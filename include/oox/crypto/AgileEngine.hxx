@@ -8,16 +8,15 @@
  *
  */
 
-#ifndef INCLUDED_OOX_CRYPTO_AGILEENGINE_HXX
-#define INCLUDED_OOX_CRYPTO_AGILEENGINE_HXX
+#pragma once
 
 #include <vector>
 
 #include <oox/dllapi.h>
-#include <oox/crypto/CryptTools.hxx>
 #include <oox/crypto/CryptoEngine.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <comphelper/crypto/Crypto.hxx>
 
 namespace oox {
     class BinaryXInputStream;
@@ -94,7 +93,7 @@ private:
             std::vector<sal_uInt8>& rInput,
             std::vector<sal_uInt8>& rOutput);
 
-    static Crypto::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
+    static comphelper::CryptoType cryptoType(const AgileEncryptionInfo& rInfo);
 
 public:
     AgileEngine();
@@ -141,8 +140,6 @@ public:
     bool setupEncryptionKey(OUString const & rPassword);
 };
 
-} // namespace oox::crypto
-
-#endif
+} // namespace comphelper::crypto
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

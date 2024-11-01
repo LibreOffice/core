@@ -75,6 +75,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/enumerablemap \
     comphelper/source/container/enumhelper \
     comphelper/source/container/namecontainer \
+    comphelper/source/crypto/Crypto \
     comphelper/source/eventattachermgr/eventattachermgr \
     comphelper/source/misc/accessiblecomponenthelper \
     comphelper/source/misc/accessibleeventnotifier \
