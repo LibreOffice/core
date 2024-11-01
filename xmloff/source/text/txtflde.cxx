@@ -768,16 +768,8 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
             // a header text.
             Reference<XText> xOurText = GetToplevelText(rTextField->getAnchor()->getText());
 
-            std::map<Reference<XText>, std::set<OUString> >::iterator aMapIter =
-                moUsedMasters->find(xOurText);
-
             // insert a list for our XText (if necessary)
-            if (aMapIter == moUsedMasters->end())
-            {
-                (*moUsedMasters)[xOurText] = std::set<OUString>();
-                aMapIter = moUsedMasters->find(xOurText);
-            }
-
+            auto aMapIter = moUsedMasters->try_emplace(xOurText).first;
             assert(aMapIter != moUsedMasters->end());
 
             // insert this text field master
