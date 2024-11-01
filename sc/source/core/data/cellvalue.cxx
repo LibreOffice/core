@@ -685,4 +685,24 @@ bool ScRefCellValue::equalsWithoutFormat( const ScRefCellValue& r ) const
     return equalsWithoutFormatImpl(*this, r);
 }
 
+bool ScRefCellValue::operator==( const ScRefCellValue& r ) const
+{
+    if (meType != r.meType)
+        return false;
+
+    switch (meType)
+    {
+        case CELLTYPE_NONE:
+            return true;
+        case CELLTYPE_VALUE:
+            return mfValue == r.mfValue;
+        case CELLTYPE_STRING:
+            return mpString == r.mpString;
+        case CELLTYPE_FORMULA:
+            return equalsFormulaCells(getFormula(), r.getFormula());
+        default:
+            return false;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
