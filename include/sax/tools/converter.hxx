@@ -78,6 +78,18 @@ public:
                                 sal_Int16 SourceUnit,
                                 sal_Int16 nTargetUnit  );
 
+    /** convert string to measure and unit pair */
+    static bool convertMeasureUnit(double& rValue, std::optional<sal_Int16>& rValueUnit,
+                                   std::u16string_view rString);
+
+    /** convert string to measure and unit pair */
+    static bool convertMeasureUnit(double& rValue, std::optional<sal_Int16>& rValueUnit,
+                                   std::string_view rString);
+
+    /** convert measure and unit pair to string */
+    static void convertMeasureUnit(OUStringBuffer& rBuffer, double dValue,
+                                   std::optional<sal_Int16> nValueUnit);
+
     /** convert string to boolean */
     static bool convertBool( bool& rBool,
                              std::u16string_view rString );

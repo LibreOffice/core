@@ -56,6 +56,7 @@ public:
     void testPercent();
     void testColor();
     void testNumber();
+    void testConvertMeasureUnit();
 
     CPPUNIT_TEST_SUITE(ConverterTest);
     CPPUNIT_TEST(testDuration);
@@ -67,6 +68,7 @@ public:
     CPPUNIT_TEST(testPercent);
     CPPUNIT_TEST(testColor);
     CPPUNIT_TEST(testNumber);
+    CPPUNIT_TEST(testConvertMeasureUnit);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -612,6 +614,90 @@ void ConverterTest::testNumber()
     doTestStringToNumber(-30, "7", -100, -30);
     doTestStringToNumber(0, "-0", 0, 1);
     doTestStringToNumber(0, "666", -0, 0);
+}
+
+void ConverterTest::testConvertMeasureUnit()
+{
+    auto fnFromStr = [](std::string_view aStr, double dExpValue, std::optional<sal_Int16> nExpUnit,
+                        bool bExpResult)
+    {
+        double dValue = 0.0;
+        std::optional<sal_Int16> nUnit;
+
+        bool bResult = Converter::convertMeasureUnit(dValue, nUnit, aStr);
+
+        CPPUNIT_ASSERT_EQUAL(bExpResult, bResult);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(dExpValue, dValue, 0.00001);
+        CPPUNIT_ASSERT_EQUAL(nExpUnit.has_value(), nUnit.has_value());
+
+        if (nExpUnit.has_value())
+        {
+            CPPUNIT_ASSERT_EQUAL(nExpUnit.value(), nUnit.value());
+        }
+    };
+
+    auto fnToStr = [](double dValue, std::optional<sal_Int16> nValueUnit) -> OUString
+    {
+        OUStringBuffer stBuf;
+        Converter::convertMeasureUnit(stBuf, dValue, nValueUnit);
+        return stBuf.makeStringAndClear();
+    };
+
+    // Characteristic cases without unit parsing
+    fnFromStr("5000", 5000.0, std::nullopt, true);
+    fnFromStr("-123", -123.0, std::nullopt, true);
+    CPPUNIT_ASSERT_EQUAL(u"5000"_ustr, fnToStr(5000.0, std::nullopt));
+    CPPUNIT_ASSERT_EQUAL(u"-123"_ustr, fnToStr(-123.0, std::nullopt));
+
+    // Characteristic case with invalid unit
+    fnFromStr("5000xy", 0.0, std::nullopt, false);
+
+    // Characteristic cases for unit printing
+    CPPUNIT_ASSERT_EQUAL(u"5000em"_ustr, fnToStr(5000.0, MeasureUnit::FONT_EM));
+    CPPUNIT_ASSERT_EQUAL(u"-123%"_ustr, fnToStr(-123.0, MeasureUnit::PERCENT));
+
+    // Branch coverage for unit parsing
+    fnFromStr("5000%", 5000.0, MeasureUnit::PERCENT, true);
+    fnFromStr("5000cm", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000em", 5000.0, MeasureUnit::FONT_EM, true);
+    fnFromStr("5000ic", 5000.0, MeasureUnit::FONT_IC, true);
+    fnFromStr("5000in", 5000.0, MeasureUnit::INCH, true);
+    fnFromStr("5000mm", 5000.0, MeasureUnit::MM, true);
+    fnFromStr("5000pt", 5000.0, MeasureUnit::POINT, true);
+    fnFromStr("5000pc", 5000.0, MeasureUnit::PICA, true);
+    fnFromStr("5000px", 5000.0, MeasureUnit::PIXEL, true);
+
+    // All units should be case-insensitive
+    fnFromStr("5000cm", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000Cm", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000cM", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000CM", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000px", 5000.0, MeasureUnit::PIXEL, true);
+    fnFromStr("5000Px", 5000.0, MeasureUnit::PIXEL, true);
+    fnFromStr("5000pX", 5000.0, MeasureUnit::PIXEL, true);
+    fnFromStr("5000PX", 5000.0, MeasureUnit::PIXEL, true);
+
+    // Characteristic cases for whitespace between numbers and units
+    fnFromStr("5000 cm", 5000.0, MeasureUnit::CM, true);
+    fnFromStr("5000\t\tcm", 5000.0, MeasureUnit::CM, true);
+
+    // tdf#36709: Measure conversion was refactored to isolate parsing and unit conversion.
+    // Some of the unit parsing code looks suspicious. The current behavior is correct, but could
+    // be prone to well-meaning breakage (e.g. refactoring, argument reordering). The following
+    // cases exercise relevant edge cases.
+
+    // The tail after percent is always ignored
+    fnFromStr("5000 %%", 5000.0, MeasureUnit::PERCENT, true);
+    fnFromStr("5000 % ", 5000.0, MeasureUnit::PERCENT, true);
+    fnFromStr("5000 %cmcmcmcm cm", 5000.0, MeasureUnit::PERCENT, true);
+
+    // The tail after other units, however, is not ignored
+    fnFromStr("5000 cmc", 0.0, std::nullopt, false);
+    fnFromStr("5000 ccm", 0.0, std::nullopt, false);
+
+    // Whitespace is allowed after units, but not inside units
+    fnFromStr("5000 c m", 0.0, std::nullopt, false);
+    fnFromStr("5000 cm ", 5000.0, MeasureUnit::CM, true);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConverterTest);

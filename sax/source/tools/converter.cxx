@@ -38,6 +38,7 @@
 #include <tools/time.hxx>
 
 #include <algorithm>
+#include <map>
 #include <string_view>
 
 using namespace com::sun::star;
@@ -52,6 +53,10 @@ const std::string_view gpsCM = "cm";
 const std::string_view gpsPT = "pt";
 const std::string_view gpsINCH = "in";
 const std::string_view gpsPC = "pc";
+const std::string_view gpsPX = "px";
+const std::string_view gpsPERCENT = "%";
+const std::string_view gpsFONT_EM = "em";
+const std::string_view gpsFONT_IC = "ic";
 
 const sal_Int8 XML_MAXDIGITSCOUNT_TIME = 14;
 
@@ -66,6 +71,14 @@ static sal_Int64 toInt64_WithLength(const char * str, sal_Int16 radix, sal_Int32
 
 namespace
 {
+const std::map<sal_Int16, std::string_view> stConvertMeasureUnitStrMap{
+    { MeasureUnit::MM, gpsMM },          { MeasureUnit::CM, gpsCM },
+    { MeasureUnit::INCH, gpsINCH },      { MeasureUnit::POINT, gpsPT },
+    { MeasureUnit::PICA, gpsPC },        { MeasureUnit::PERCENT, gpsPERCENT },
+    { MeasureUnit::PIXEL, gpsPX },       { MeasureUnit::FONT_EM, gpsFONT_EM },
+    { MeasureUnit::FONT_IC, gpsFONT_IC }
+};
+
 o3tl::Length Measure2O3tlUnit(sal_Int16 nUnit)
 {
     switch (nUnit)
@@ -121,14 +134,62 @@ template <typename V> bool wordEndsWith(V string, std::string_view expected)
 
 }
 
-/** convert string to measure using optional min and max values*/
-template<typename V>
-static bool lcl_convertMeasure( sal_Int32& rValue,
-                                V rString,
-                                sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
-                                sal_Int32 nMin /* = SAL_MIN_INT32 */,
-                                sal_Int32 nMax /* = SAL_MAX_INT32 */ )
+/** parse unit substring into measure unit*/
+template <class V> static std::optional<sal_Int16> lcl_parseMeasureUnit(const V& rString)
 {
+    if (rString.empty())
+    {
+        return std::nullopt;
+    }
+
+    switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[0]))
+    {
+        case u'%':
+            return MeasureUnit::PERCENT;
+
+        case u'c':
+            if (wordEndsWith(rString.substr(1), "m"))
+                return MeasureUnit::CM;
+            break;
+
+        case u'e':
+            if (wordEndsWith(rString.substr(1), "m"))
+                return MeasureUnit::FONT_EM;
+            break;
+
+        case u'i':
+            if (wordEndsWith(rString.substr(1), "c"))
+                return MeasureUnit::FONT_IC;
+            if (wordEndsWith(rString.substr(1), "n"))
+                return MeasureUnit::INCH;
+            break;
+
+        case u'm':
+            if (wordEndsWith(rString.substr(1), "m"))
+                return MeasureUnit::MM;
+            break;
+
+        case u'p':
+            if (wordEndsWith(rString.substr(1), "c"))
+                return MeasureUnit::PICA;
+            if (wordEndsWith(rString.substr(1), "t"))
+                return MeasureUnit::POINT;
+            if (wordEndsWith(rString.substr(1), "x"))
+                return MeasureUnit::PIXEL;
+            break;
+    }
+
+    return std::nullopt;
+}
+
+/** parse measure string into double and measure unit*/
+template <class V>
+static bool lcl_parseMeasure(double& rValue, std::optional<sal_Int16>& rSourceUnit, bool& rNeg, const V& rString)
+{
+    rValue = 0.0;
+    rSourceUnit.reset();
+    rNeg = false;
+
     bool bNeg = false;
     double nVal = 0;
 
@@ -175,21 +236,50 @@ static bool lcl_convertMeasure( sal_Int32& rValue,
     while( (nPos < nLen) && (rString[nPos] <= ' ') )
         nPos++;
 
-    if( nPos < nLen )
+    if (nPos < nLen)
     {
+        // Parse unit from the tail
+        auto nUnit = lcl_parseMeasureUnit(rString.substr(nPos));
+        if (!nUnit.has_value())
+        {
+            return false;
+        }
 
+        rSourceUnit = nUnit.value();
+    }
+
+    rValue = nVal;
+    rNeg = bNeg;
+
+    return true;
+}
+
+/** convert string to measure using optional min and max values*/
+template <class V>
+static bool lcl_convertMeasure(sal_Int32& rValue, const V& rString,
+        sal_Int16 nTargetUnit /* = MeasureUnit::MM_100TH */,
+        sal_Int32 nMin /* = SAL_MIN_INT32 */,
+        sal_Int32 nMax /* = SAL_MAX_INT32 */)
+{
+    double nVal = 0.0;
+    std::optional<sal_Int16> nSourceUnit;
+    bool bNeg = false;
+
+    if (!lcl_parseMeasure(nVal, nSourceUnit, bNeg, rString))
+    {
+        return false;
+    }
+
+    if (nSourceUnit.has_value())
+    {
         if( MeasureUnit::PERCENT == nTargetUnit )
         {
-            if( '%' != rString[nPos] )
+            if (MeasureUnit::PERCENT != nSourceUnit)
                 return false;
         }
         else if( MeasureUnit::PIXEL == nTargetUnit )
         {
-            if( nPos + 1 >= nLen ||
-                ('p' != rString[nPos] &&
-                 'P' != rString[nPos])||
-                ('x' != rString[nPos+1] &&
-                 'X' != rString[nPos+1]) )
+            if (MeasureUnit::PIXEL != nSourceUnit)
                 return false;
         }
         else
@@ -202,57 +292,52 @@ static bool lcl_convertMeasure( sal_Int32& rValue,
 
             if( MeasureUnit::TWIP == nTargetUnit )
             {
-                switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[nPos]))
+                switch (nSourceUnit.value())
                 {
-                case u'c':
-                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                    case MeasureUnit::CM:
                         eFrom = o3tl::Length::cm;
-                    break;
-                case u'i':
-                    if (wordEndsWith(rString.substr(nPos + 1), "n"))
+                        break;
+                    case MeasureUnit::INCH:
                         eFrom = o3tl::Length::in;
-                    break;
-                case u'm':
-                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        break;
+                    case MeasureUnit::MM:
                         eFrom = o3tl::Length::mm;
-                    break;
-                case u'p':
-                    if (wordEndsWith(rString.substr(nPos + 1), "t"))
+                        break;
+                    case MeasureUnit::POINT:
                         eFrom = o3tl::Length::pt;
-                    else if (wordEndsWith(rString.substr(nPos + 1), "c"))
+                        break;
+                    case MeasureUnit::PICA:
                         eFrom = o3tl::Length::pc;
-                    break;
+                        break;
                 }
             }
             else if( MeasureUnit::MM_100TH == nTargetUnit || MeasureUnit::MM_10TH == nTargetUnit )
             {
-                switch (rtl::toAsciiLowerCase<sal_uInt32>(rString[nPos]))
+                switch (nSourceUnit.value())
                 {
-                case u'c':
-                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                    case MeasureUnit::CM:
                         eFrom = o3tl::Length::cm;
-                    break;
-                case u'i':
-                    if (wordEndsWith(rString.substr(nPos + 1), "n"))
+                        break;
+                    case MeasureUnit::INCH:
                         eFrom = o3tl::Length::in;
-                    break;
-                case u'm':
-                    if (wordEndsWith(rString.substr(nPos + 1), "m"))
+                        break;
+                    case MeasureUnit::MM:
                         eFrom = o3tl::Length::mm;
-                    break;
-                case u'p':
-                    if (wordEndsWith(rString.substr(nPos + 1), "t"))
+                        break;
+                    case MeasureUnit::POINT:
                         eFrom = o3tl::Length::pt;
-                    else if (wordEndsWith(rString.substr(nPos + 1), "c"))
+                        break;
+                    case MeasureUnit::PICA:
                         eFrom = o3tl::Length::pc;
-                    else if (wordEndsWith(rString.substr(nPos + 1), "x"))
+                        break;
+                    case MeasureUnit::PIXEL:
                         eFrom = o3tl::Length::px;
-                    break;
+                        break;
                 }
             }
             else if( MeasureUnit::POINT == nTargetUnit )
             {
-                if (wordEndsWith(rString.substr(nPos), "pt"))
+                if (MeasureUnit::POINT == nSourceUnit)
                     eFrom = o3tl::Length::pt;
             }
 
@@ -433,6 +518,53 @@ void Converter::convertMeasure( OUStringBuffer& rBuffer,
 
     if (psUnit.length() > 0)
         rBuffer.appendAscii(psUnit.data(), psUnit.length());
+}
+
+/** convert string to measure with unit*/
+bool Converter::convertMeasureUnit(double& rValue, std::optional<sal_Int16>& rValueUnit,
+                                   std::u16string_view rString)
+{
+    bool bNeg = false;
+    bool bResult = lcl_parseMeasure(rValue, rValueUnit, bNeg, rString);
+
+    if (bNeg)
+    {
+        rValue = -rValue;
+    }
+
+    return bResult;
+}
+
+/** convert string to measure with unit*/
+bool Converter::convertMeasureUnit(double& rValue, std::optional<sal_Int16>& rValueUnit,
+                                   std::string_view rString)
+{
+    bool bNeg = false;
+    bool bResult = lcl_parseMeasure(rValue, rValueUnit, bNeg, rString);
+
+    if (bNeg)
+    {
+        rValue = -rValue;
+    }
+
+    return bResult;
+}
+
+/** convert measure with given unit to string with given unit*/
+void Converter::convertMeasureUnit(OUStringBuffer& rBuffer, double dValue,
+                                   std::optional<sal_Int16> nValueUnit)
+{
+    ::rtl::math::doubleToUStringBuffer(rBuffer, dValue, rtl_math_StringFormat_Automatic,
+                                       rtl_math_DecimalPlaces_Max, '.', true);
+
+    if (nValueUnit.has_value())
+    {
+        if (auto it = stConvertMeasureUnitStrMap.find(*nValueUnit);
+            it != stConvertMeasureUnitStrMap.end())
+        {
+            rBuffer.appendAscii(it->second.data(), it->second.length());
+        }
+    }
 }
 
 /** convert string to boolean */

@@ -84,6 +84,12 @@ published constants MeasureUnit
     /** all measures for this component are in SYSFONT */
     const short SYSFONT = 18;
 
+    /** all measures for this component are in em relative to the font */
+    const short FONT_EM = 19;
+
+    /** all measures for this component are in ideographic advances relative to the font */
+    const short FONT_IC = 20;
+
 };
 
 
