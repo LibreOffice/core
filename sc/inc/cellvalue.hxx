@@ -128,6 +128,8 @@ public:
     ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos );
     ScRefCellValue( ScDocument& rDoc, const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
 
+    bool operator==(const ScRefCellValue&) const;
+
     void clear();
 
     CellType getType() const { return meType; }
