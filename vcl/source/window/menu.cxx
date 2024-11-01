@@ -2275,26 +2275,25 @@ tools::Rectangle Menu::GetCharacterBounds( sal_uInt16 nItemID, tools::Long nInde
 
 tools::Long Menu::GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const
 {
-    tools::Long nIndex = -1;
     rItemID = 0;
     if( ! mpLayoutData )
         ImplFillLayoutData();
     if( mpLayoutData )
     {
-        nIndex = mpLayoutData->GetIndexForPoint( rPoint );
+        // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+        tools::Long nIndex = mpLayoutData->GetIndexForPoint( rPoint );
         for( size_t i = 0; i < mpLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpLayoutData->m_aLineIndices.size()-1 || mpLayoutData->m_aLineIndices[i+1] > nIndex) )
             {
-                // make index relative to item
-                nIndex -= mpLayoutData->m_aLineIndices[i];
                 rItemID = mpLayoutData->m_aLineItemIds[i];
-                break;
+                // return index relative to item
+                return nIndex - mpLayoutData->m_aLineIndices[i];
             }
         }
     }
-    return nIndex;
+    return -1;
 }
 
 tools::Rectangle Menu::GetBoundingRectangle( sal_uInt16 nPos ) const
