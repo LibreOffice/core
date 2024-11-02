@@ -383,7 +383,7 @@ bool SwGlossaryHdl::ExpandGlossary(weld::Window* pParent)
         if(m_pWrtShell->IsSelection())
             aShortName = m_pWrtShell->GetSelText();
     }
-    return pGlossary && Expand(pParent, aShortName, &m_rStatGlossaries, std::move(pGlossary));
+    return Expand(pParent, aShortName, &m_rStatGlossaries, std::move(pGlossary));
 }
 
 bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
@@ -396,7 +396,8 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     // search for text block
     // - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : USHRT_MAX;
+    sal_uInt16 nFound = (!rCfg.IsSearchInAllCategories() && pGlossary) ?
+        pGlossary->GetIndex( aShortName ) : USHRT_MAX;
     // if not found then search in all groups
     if (nFound == USHRT_MAX)
     {
@@ -407,7 +408,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         {
             // get group name with path-extension
             const OUString sGroupName = pGlossaryList->GetGroupName(i);
-            if(sGroupName == pGlossary->GetName())
+            if (pGlossary && sGroupName == pGlossary->GetName())
                 continue;
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i);
             if(nBlockCount)
