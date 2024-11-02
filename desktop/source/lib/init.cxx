@@ -113,6 +113,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -8280,12 +8281,20 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             utl::Bootstrap::reloadData();
 
             // Now that bootstrap User/Shared installation paths have been (re)set to the final
-            // location, reinitialize the PathSettings so $(userurl)/$(instdir) path variables
-            // will be expanded using these newly set paths and not the paths detected during
-            // preinit which used unorthodox throwaway temp locations
+            // location, reinitialize the PathSubstitution rules and PathSettings so that
+            // $(userurl)/$(instdir) path variables will be expanded using these newly set
+            // paths and not the paths detected during preinit which used unorthodox throwaway
+            // temp locations
+
+            // First reinitialize the PathSubstitution rules
+            uno::Reference<css::util::XStringSubstitution> xPathSubst(util::PathSubstitution::create(xContext));
+            uno::Reference<lang::XInitialization> xReInitSubstitution(xPathSubst, uno::UNO_QUERY_THROW);
+            xReInitSubstitution->initialize({});
+
+            // PathSettings depend on PathSubstitution rules
             uno::Reference<css::util::XPathSettings> xPathSettings = util::thePathSettings::get(xContext);
-            uno::Reference<lang::XInitialization> xReInit(xPathSettings, uno::UNO_QUERY_THROW);
-            xReInit->initialize({});
+            uno::Reference<lang::XInitialization> xReInitSettings(xPathSettings, uno::UNO_QUERY_THROW);
+            xReInitSettings->initialize({});
         }
     }
 
