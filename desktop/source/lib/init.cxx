@@ -106,6 +106,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -7986,6 +7987,9 @@ static void preloadData()
 
     // Set user profile's path back to the original one
     rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserPath);
+
+    // Note that unotools::Bootstrap has initialized from the temp UserInstallation at this point
+    // see Bootstrap::reloadData for when it gets resynced
 }
 
 namespace {
@@ -8177,29 +8181,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (eStage != PRE_INIT)
         comphelper::LibreOfficeKit::setStatusIndicatorCallback(lo_status_indicator_callback, pLib);
 
-    if (pUserProfileUrl && eStage != PRE_INIT)
-    {
-        OUString url(
-            pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
-        OUString path;
-        if (url.startsWithIgnoreAsciiCase("vnd.sun.star.pathname:", &path))
-        {
-            OUString url2;
-            osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(
-                path, url2);
-            if (e == osl::FileBase::E_None)
-                url = url2;
-            else
-                SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
-        }
-        rtl::Bootstrap::set(u"UserInstallation"_ustr, url);
-        if (eStage == SECOND_INIT)
-        {
-            comphelper::rng::reseed();
-            utl::Bootstrap::reloadData();
-        }
-    }
-
     OUString aAppPath;
     if (pAppPath)
     {
@@ -8230,6 +8211,40 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     OUString aAppURL;
     if (osl::FileBase::getFileURLFromSystemPath(aAppPath, aAppURL) != osl::FileBase::E_None)
         return 0;
+
+    if (pUserProfileUrl && eStage != PRE_INIT)
+    {
+        OUString url(
+            pUserProfileUrl, strlen(pUserProfileUrl), RTL_TEXTENCODING_UTF8);
+        OUString path;
+        if (url.startsWithIgnoreAsciiCase("vnd.sun.star.pathname:", &path))
+        {
+            OUString url2;
+            osl::FileBase::RC e = osl::FileBase::getFileURLFromSystemPath(
+                path, url2);
+            if (e == osl::FileBase::E_None)
+                url = url2;
+            else
+                SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
+        }
+
+        rtl::Bootstrap::set(u"UserInstallation"_ustr, url);
+        rtl::Bootstrap::set(u"BRAND_BASE_DIR"_ustr, aAppURL + "/..");
+        if (eStage == SECOND_INIT)
+        {
+            comphelper::rng::reseed();
+
+            utl::Bootstrap::reloadData();
+
+            // Now that bootstrap User/Shared installation paths have been (re)set to the final
+            // location, reinitialize the PathSettings so $(userurl)/$(instdir) path variables
+            // will be expanded using these newly set paths and not the paths detected during
+            // preinit which used unorthodox throwaway temp locations
+            uno::Reference<css::util::XPathSettings> xPathSettings = util::thePathSettings::get(xContext);
+            uno::Reference<lang::XInitialization> xReInit(xPathSettings, uno::UNO_QUERY_THROW);
+            xReInit->initialize({});
+        }
+    }
 
 #ifdef IOS
     // A LibreOffice-using iOS app should have the ICU data file in the app bundle. Initialize ICU
