@@ -451,6 +451,38 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf127217)
     CPPUNIT_ASSERT(!pAnnot->hasKey("DA"_ostr));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142741)
+{
+    // Import the doc and export as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "ExportFormFields", uno::Any(true) },
+    }));
+    aMediaDescriptor[u"FilterData"_ustr] <<= aFilterData;
+    saveAsPDF(u"tdf142741.odt");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(2,
+                         pPdfDocument->getPageCount()); // To ensure that exported pdf has 2 pages
+
+    for (int pageNum = 0; pageNum < 2; ++pageNum)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(pageNum);
+        CPPUNIT_ASSERT(pPdfPage);
+
+        CPPUNIT_ASSERT_EQUAL(1,
+                             pPdfPage->getAnnotationCount()); // Expect only one annotation per page
+        std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPdfPage->getAnnotation(0);
+        CPPUNIT_ASSERT(pAnnotation);
+
+        // Check if annotation is a link and has the expected content, here "1" (both in first page content and footnote of second page)
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Link, pAnnotation->getSubType());
+        OUString content = pAnnotation->getString(vcl::pdf::constDictionaryKeyContents);
+        CPPUNIT_ASSERT_EQUAL(u"1"_ustr, content);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf109143)
 {
     // Import the bugdoc and export as PDF.
