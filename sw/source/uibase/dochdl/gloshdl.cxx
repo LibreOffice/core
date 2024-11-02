@@ -466,10 +466,10 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
             }
             OUString aTmp( SwResId(STR_NOGLOS));
             aTmp = aTmp.replaceFirst("%1", aShortName);
-            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pWrtShell->GetView().GetFrameWeld(),
+            std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(m_pWrtShell->GetView().GetFrameWeld(),
                                                           VclMessageType::Info, VclButtonsType::Ok,
                                                           aTmp));
-            xInfoBox->run();
+            xInfoBox->runAsync(xInfoBox, [] (sal_uInt32){ });
         }
 
         return false;
