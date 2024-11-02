@@ -80,9 +80,7 @@ void SbiParser::Write()
 
     while( !bAbort )
     {
-        std::optional<SbiExpression> pExpr(std::in_place, this);
-        pExpr->Gen();
-        pExpr.reset();
+        SbiExpression(this).Gen();
         aGen.Gen( SbiOpcode::BWRITE_ );
         if( Peek() == COMMA )
         {
@@ -128,14 +126,15 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( true );
-    std::optional<SbiExpression> pExpr( std::in_place, this, SbOPERAND );
-    if( !pExpr->IsVariable() )
-        Error( ERRCODE_BASIC_VAR_EXPECTED );
-    if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
-        Error( ERRCODE_BASIC_CONVERSION );
-    pExpr->Gen();
-    aGen.Gen( SbiOpcode::LINPUT_ );
-    pExpr.reset();
+    {
+        SbiExpression aExpr(this, SbOPERAND);
+        if (!aExpr.IsVariable())
+            Error(ERRCODE_BASIC_VAR_EXPECTED);
+        if (aExpr.GetType() != SbxVARIANT && aExpr.GetType() != SbxSTRING)
+            Error(ERRCODE_BASIC_CONVERSION);
+        aExpr.Gen();
+        aGen.Gen(SbiOpcode::LINPUT_);
+    }
     aGen.Gen( SbiOpcode::CHAN0_ );     // ResetChannel() not in StepLINPUT() anymore
 }
 
@@ -145,21 +144,17 @@ void SbiParser::Input()
 {
     aGen.Gen( SbiOpcode::RESTART_ );
     Channel( true );
-    std::optional<SbiExpression> pExpr( std::in_place, this, SbOPERAND );
     while( !bAbort )
     {
-        if( !pExpr->IsVariable() )
+        SbiExpression aExpr(this, SbOPERAND);
+        if (!aExpr.IsVariable())
             Error( ERRCODE_BASIC_VAR_EXPECTED );
-        pExpr->Gen();
+        aExpr.Gen();
         aGen.Gen( SbiOpcode::INPUT_ );
-        if( Peek() == COMMA )
-        {
-            Next();
-            pExpr.emplace( this, SbOPERAND );
-        }
-        else break;
+        if (Peek() != COMMA)
+            break;
+        Next();
     }
-    pExpr.reset();
     aGen.Gen( SbiOpcode::CHAN0_ );
 }
 
