@@ -64,7 +64,7 @@ using namespace store;
 
 storeError store_acquireHandle (
     storeHandle Handle
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreObject *pHandle = static_cast<OStoreObject*>(Handle);
     if (!pHandle)
@@ -76,7 +76,7 @@ storeError store_acquireHandle (
 
 storeError store_releaseHandle (
     storeHandle Handle
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreObject *pHandle = static_cast<OStoreObject*>(Handle);
     if (!pHandle)
@@ -89,7 +89,7 @@ storeError store_releaseHandle (
 storeError store_createMemoryFile (
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     if (!phFile)
         return store_E_InvalidParameter;
@@ -122,7 +122,7 @@ storeError store_openFile (
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
     storeFileHandle *phFile
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     if (phFile)
         *phFile = nullptr;
@@ -157,7 +157,7 @@ storeError store_openFile (
  */
 storeError store_closeFile (
     storeFileHandle Handle
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStorePageManager *pManager =
         OStoreHandle<OStorePageManager>::query (Handle);
@@ -171,7 +171,7 @@ storeError store_closeFile (
 
 storeError store_flushFile (
     storeFileHandle Handle
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreHandle<OStorePageManager> xManager (
         OStoreHandle<OStorePageManager>::query (Handle));
@@ -187,7 +187,7 @@ storeError store_openDirectory (
     rtl_uString const    *pName,
     storeAccessMode       eAccessMode,
     storeDirectoryHandle *phDirectory
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     storeError eErrCode = store_E_None;
     if (phDirectory)
@@ -221,7 +221,7 @@ storeError store_openDirectory (
 storeError store_findFirst (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreHandle<OStoreDirectory_Impl> xDirectory (
         OStoreHandle<OStoreDirectory_Impl>::query (Handle));
@@ -242,7 +242,7 @@ storeError store_findFirst (
 storeError store_findNext (
     storeDirectoryHandle  Handle,
     storeFindData        *pFindData
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreHandle<OStoreDirectory_Impl> xDirectory (
         OStoreHandle<OStoreDirectory_Impl>::query (Handle));
@@ -267,7 +267,7 @@ storeError store_openStream (
     rtl_uString const *pName,
     storeAccessMode    eAccessMode,
     storeStreamHandle *phStream
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     storeError eErrCode = store_E_None;
     if (phStream)
@@ -307,7 +307,7 @@ storeError store_readStream (
     void              *pBuffer,
     sal_uInt32         nBytes,
     sal_uInt32        *pnDone
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreHandle<OStoreLockBytes> xLockBytes (
         OStoreHandle<OStoreLockBytes>::query (Handle));
@@ -326,7 +326,7 @@ storeError store_writeStream (
     const void        *pBuffer,
     sal_uInt32         nBytes,
     sal_uInt32        *pnDone
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     OStoreHandle<OStoreLockBytes> xLockBytes (
         OStoreHandle<OStoreLockBytes>::query (Handle));
@@ -343,7 +343,7 @@ storeError store_remove (
     storeFileHandle Handle,
     rtl_uString const *pPath,
     rtl_uString const *pName
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     storeError eErrCode = store_E_None;
 

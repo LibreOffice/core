@@ -741,7 +741,7 @@ rtl_arena_type * SAL_CALL rtl_arena_create(
     void * (SAL_CALL * source_alloc)(rtl_arena_type *, sal_Size *),
     void   (SAL_CALL * source_free) (rtl_arena_type *, void *, sal_Size),
     SAL_UNUSED_PARAMETER int
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     rtl_arena_type * result = nullptr;
     sal_Size         size   = sizeof(rtl_arena_type);
@@ -787,7 +787,7 @@ try_alloc:
     return result;
 }
 
-void SAL_CALL rtl_arena_destroy(rtl_arena_type * arena) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_arena_destroy(rtl_arena_type * arena) noexcept
 {
     if (arena)
     {
@@ -800,7 +800,7 @@ void SAL_CALL rtl_arena_destroy(rtl_arena_type * arena) SAL_THROW_EXTERN_C()
 void * SAL_CALL rtl_arena_alloc(
     rtl_arena_type * arena,
     sal_Size *       pSize
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     void * addr = nullptr;
 
@@ -860,7 +860,7 @@ void SAL_CALL rtl_arena_free (
     rtl_arena_type * arena,
     void *           addr,
     sal_Size         size
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     if (arena)
     {

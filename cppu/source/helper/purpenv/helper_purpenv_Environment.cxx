@@ -128,25 +128,25 @@ static void s_acquire(uno_Environment * pEnv) //SAL_THROW_EXTERN_C()
     pBase->acquire();
 }
 
-static void s_release(uno_Environment * pEnv) SAL_THROW_EXTERN_C()
+static void s_release(uno_Environment * pEnv) noexcept
 {
     Base * pBase = static_cast<Base *>(pEnv->pReserved);
     pBase->release();
 }
 
-static void s_harden(uno_Environment ** ppHardEnv, uno_Environment * pEnv) SAL_THROW_EXTERN_C()
+static void s_harden(uno_Environment ** ppHardEnv, uno_Environment * pEnv) noexcept
 {
     Base * pBase = static_cast<Base *>(pEnv->pReserved);
     pBase->harden(ppHardEnv);
 }
 
-static void s_acquireWeak(uno_Environment * pEnv) SAL_THROW_EXTERN_C()
+static void s_acquireWeak(uno_Environment * pEnv) noexcept
 {
     Base * pBase = static_cast<Base *>(pEnv->pReserved);
     pBase->acquireWeak();
 }
 
-static void s_releaseWeak(uno_Environment * pEnv) SAL_THROW_EXTERN_C()
+static void s_releaseWeak(uno_Environment * pEnv) noexcept
 {
     Base * pBase = static_cast<Base *>(pEnv->pReserved);
     pBase->releaseWeak();

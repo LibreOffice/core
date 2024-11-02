@@ -90,7 +90,7 @@ rtl_cache_type * SAL_CALL rtl_cache_create(
     void *           userarg,
     rtl_arena_type *,
     int
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     rtl_cache_type * result = nullptr;
     sal_Size         size   = sizeof(rtl_cache_type);
@@ -130,7 +130,7 @@ try_alloc:
     return result;
 }
 
-void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) noexcept
 {
     if (cache)
     {
@@ -138,7 +138,7 @@ void SAL_CALL rtl_cache_destroy(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
     }
 }
 
-void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) noexcept
 {
     void * obj = nullptr;
 
@@ -161,7 +161,7 @@ void * SAL_CALL rtl_cache_alloc(rtl_cache_type * cache) SAL_THROW_EXTERN_C()
 void SAL_CALL rtl_cache_free(
     rtl_cache_type * cache,
     void *           obj
-) SAL_THROW_EXTERN_C()
+) noexcept
 {
     if (obj && cache)
     {
@@ -176,7 +176,7 @@ void SAL_CALL rtl_cache_free(
 
 #if defined(SAL_UNX)
 
-void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
 {
     //currently glibc doesn't implement memset_s
     volatile char *p = static_cast<volatile char*>(Ptr);
@@ -186,7 +186,7 @@ void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C
 
 #elif defined(_WIN32)
 
-void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_secureZeroMemory(void *Ptr, sal_Size Bytes) noexcept
 {
     RtlSecureZeroMemory(Ptr, Bytes);
 }

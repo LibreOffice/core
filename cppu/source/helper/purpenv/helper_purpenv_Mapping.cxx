@@ -63,8 +63,7 @@ static void s_mapInterface(
     uno_Mapping                       * puno_Mapping,
     void                             ** ppOut,
     void                              * pUnoI,
-    typelib_InterfaceTypeDescription  * pTypeDescr )
-    SAL_THROW_EXTERN_C()
+    typelib_InterfaceTypeDescription  * pTypeDescr ) noexcept
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);
     pMapping->mapInterface(
@@ -73,15 +72,13 @@ static void s_mapInterface(
 }
 
 extern "C" {
-static void s_acquire(uno_Mapping * puno_Mapping)
-    SAL_THROW_EXTERN_C()
+static void s_acquire(uno_Mapping * puno_Mapping) noexcept
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);
     pMapping->acquire();
 }
 
-static void s_release(uno_Mapping * puno_Mapping)
-    SAL_THROW_EXTERN_C()
+static void s_release(uno_Mapping * puno_Mapping) noexcept
 {
     Mapping * pMapping = static_cast<Mapping * >(puno_Mapping);
     pMapping->release();
@@ -97,8 +94,7 @@ static void s_getIdentifier_v(va_list * pParam)
     pEnv->getObjectIdentifier(pEnv, ppOid, pUnoI);
 }
 
-static void s_free(uno_Mapping * puno_Mapping)
-    SAL_THROW_EXTERN_C()
+static void s_free(uno_Mapping * puno_Mapping) noexcept
 {
     Mapping * pMapping = static_cast<Mapping *>(puno_Mapping);
     delete pMapping;

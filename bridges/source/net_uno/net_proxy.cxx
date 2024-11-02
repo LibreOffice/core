@@ -16,28 +16,26 @@ namespace net_uno
 {
 namespace
 {
-void SAL_CALL NetProxy_acquire(uno_Interface* pUnoI) SAL_THROW_EXTERN_C()
+void SAL_CALL NetProxy_acquire(uno_Interface* pUnoI) noexcept
 {
     NetProxy* that = static_cast<NetProxy*>(pUnoI);
     that->acquire();
 }
 
-void SAL_CALL NetProxy_release(uno_Interface* pUnoI) SAL_THROW_EXTERN_C()
+void SAL_CALL NetProxy_release(uno_Interface* pUnoI) noexcept
 {
     NetProxy* that = static_cast<NetProxy*>(pUnoI);
     that->release();
 }
 
-void SAL_CALL NetProxy_free([[maybe_unused]] uno_ExtEnvironment* pEnv, void* pUnoI)
-    SAL_THROW_EXTERN_C()
+void SAL_CALL NetProxy_free([[maybe_unused]] uno_ExtEnvironment* pEnv, void* pUnoI) noexcept
 {
     NetProxy* that = static_cast<NetProxy*>(pUnoI);
     delete that;
 }
 
 void SAL_CALL NetProxy_dispatch(uno_Interface* pUnoI, const typelib_TypeDescription* pMemberTD,
-                                void* pUnoRet, void** pUnoArgs, uno_Any** pUnoExc)
-    SAL_THROW_EXTERN_C()
+                                void* pUnoRet, void** pUnoArgs, uno_Any** pUnoExc) noexcept
 {
     NetProxy* proxy = static_cast<NetProxy*>(pUnoI);
 

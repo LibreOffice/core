@@ -35,13 +35,13 @@ struct RandomPool_Impl
 
 }
 
-rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
+rtlRandomPool SAL_CALL rtl_random_createPool() noexcept
 {
     RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(rtl_allocateZeroMemory(sizeof(RandomPool_Impl)));
     return static_cast< rtlRandomPool >(pImpl);
 }
 
-void SAL_CALL rtl_random_destroyPool(rtlRandomPool Pool) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_random_destroyPool(rtlRandomPool Pool) noexcept
 {
     RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
     if (pImpl)
@@ -51,7 +51,7 @@ void SAL_CALL rtl_random_destroyPool(rtlRandomPool Pool) SAL_THROW_EXTERN_C()
 }
 
 rtlRandomError SAL_CALL rtl_random_addBytes(
-    rtlRandomPool Pool, const void *Buffer, sal_Size /*Bytes*/) SAL_THROW_EXTERN_C()
+    rtlRandomPool Pool, const void *Buffer, sal_Size /*Bytes*/) noexcept
 {
     RandomPool_Impl *pImpl = static_cast< RandomPool_Impl* >(Pool);
     const sal_uInt8 *pBuffer = static_cast< const sal_uInt8* >(Buffer);
@@ -63,7 +63,7 @@ rtlRandomError SAL_CALL rtl_random_addBytes(
 }
 
 rtlRandomError SAL_CALL rtl_random_getBytes (
-    rtlRandomPool, void *Buffer, sal_Size Bytes) SAL_THROW_EXTERN_C()
+    rtlRandomPool, void *Buffer, sal_Size Bytes) noexcept
 {
     sal_uInt8 *pBuffer = static_cast< sal_uInt8* >(Buffer);
 

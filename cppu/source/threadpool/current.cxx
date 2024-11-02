@@ -117,8 +117,7 @@ IdContainer& getIdContainer()
 
 extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
     void * pCurrentContext,
-    rtl_uString * pEnvTypeName, void * pEnvContext )
-    SAL_THROW_EXTERN_C()
+    rtl_uString * pEnvTypeName, void * pEnvContext ) noexcept
 {
     IdContainer& id = getIdContainer();
 
@@ -163,8 +162,7 @@ extern "C" sal_Bool SAL_CALL uno_setCurrentContext(
 }
 
 extern "C" sal_Bool SAL_CALL uno_getCurrentContext(
-    void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext )
-    SAL_THROW_EXTERN_C()
+    void ** ppCurrentContext, rtl_uString * pEnvTypeName, void * pEnvContext ) noexcept
 {
     IdContainer& id = getIdContainer();
 

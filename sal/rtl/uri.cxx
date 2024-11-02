@@ -461,8 +461,7 @@ void appendPath(
 
 }
 
-sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
-    SAL_THROW_EXTERN_C()
+sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass) noexcept
 {
     static constexpr std::array<sal_Bool, rtl::UriCharClassSize> aCharClass[] = {
         rtl::createUriCharClass(u8""), // None
@@ -497,8 +496,7 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
 
 void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                             rtl_UriEncodeMechanism eMechanism,
-                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
-    SAL_THROW_EXTERN_C()
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult) noexcept
 {
     assert(!pCharClass[0x25]); // make sure the percent sign is encoded...
 
@@ -563,8 +561,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
 void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                             rtl_UriDecodeMechanism eMechanism,
-                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
-    SAL_THROW_EXTERN_C()
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult) noexcept
 {
     switch (eMechanism)
     {
@@ -620,8 +617,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
 sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString * pRelUriRef,
                                          rtl_uString ** pResult,
-                                         rtl_uString ** pException)
-    SAL_THROW_EXTERN_C()
+                                         rtl_uString ** pException) noexcept
 {
     // Use the strict parser algorithm from RFC 3986, section 5.2, to turn the
     // relative URI into an absolute one:

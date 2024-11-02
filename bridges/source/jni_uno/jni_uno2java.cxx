@@ -40,22 +40,18 @@ extern "C"
 {
 
 
-void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
-    SAL_THROW_EXTERN_C();
+void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy ) noexcept;
 
 
-void UNO_proxy_acquire( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C();
+void UNO_proxy_acquire( uno_Interface * pUnoI ) noexcept;
 
 
-void UNO_proxy_release( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C();
+void UNO_proxy_release( uno_Interface * pUnoI ) noexcept;
 
 
 void UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
-    void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
-    SAL_THROW_EXTERN_C();
+    void * uno_ret, void * uno_args[], uno_Any ** uno_exc ) noexcept;
 }
 }
 
@@ -504,8 +500,7 @@ extern "C"
 {
 
 
-void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
-    SAL_THROW_EXTERN_C()
+void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy ) noexcept
 {
     UNO_proxy * that = static_cast< UNO_proxy * >( proxy );
     Bridge const * bridge = that->m_bridge;
@@ -542,16 +537,14 @@ void UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
 }
 
 
-void UNO_proxy_acquire( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C()
+void UNO_proxy_acquire( uno_Interface * pUnoI ) noexcept
 {
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     that->acquire();
 }
 
 
-void UNO_proxy_release( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C()
+void UNO_proxy_release( uno_Interface * pUnoI ) noexcept
 {
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     that->release();
@@ -560,8 +553,7 @@ void UNO_proxy_release( uno_Interface * pUnoI )
 
 void UNO_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
-    void * uno_ret, void * uno_args [], uno_Any ** uno_exc )
-    SAL_THROW_EXTERN_C()
+    void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) noexcept
 {
     UNO_proxy const * that = static_cast< UNO_proxy const * >( pUnoI );
     Bridge const * bridge = that->m_bridge;

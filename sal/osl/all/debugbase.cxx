@@ -69,8 +69,7 @@ extern "C" {
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 #endif
 
-osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
-    SAL_THROW_EXTERN_C()
+osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex() noexcept
 {
     static osl::Mutex aMutex;
     return aMutex;
@@ -79,8 +78,7 @@ osl::Mutex & SAL_CALL osl_detail_ObjectRegistry_getMutex()
 #pragma clang diagnostic pop
 #endif
 
-bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
-    SAL_THROW_EXTERN_C()
+bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName ) noexcept
 {
     std::vector<OString> const& rVec = StaticDebugBaseAddressFilter();
     if (rVec.empty())
@@ -95,8 +93,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
 }
 
 bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
-    osl::detail::ObjectRegistryData const& rData, std::size_t nExpected )
-    SAL_THROW_EXTERN_C()
+    osl::detail::ObjectRegistryData const& rData, std::size_t nExpected ) noexcept
 {
     std::size_t nSize;
     if (rData.m_bStoreAddresses)
@@ -113,8 +110,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(
 }
 
 void SAL_CALL osl_detail_ObjectRegistry_registerObject(
-    osl::detail::ObjectRegistryData & rData, void const* pObj )
-    SAL_THROW_EXTERN_C()
+    osl::detail::ObjectRegistryData & rData, void const* pObj ) noexcept
 {
     if (rData.m_bStoreAddresses) {
         osl::MutexGuard const guard( osl_detail_ObjectRegistry_getMutex() );
@@ -128,8 +124,7 @@ void SAL_CALL osl_detail_ObjectRegistry_registerObject(
 }
 
 void SAL_CALL osl_detail_ObjectRegistry_revokeObject(
-    osl::detail::ObjectRegistryData & rData, void const* pObj )
-    SAL_THROW_EXTERN_C()
+    osl::detail::ObjectRegistryData & rData, void const* pObj ) noexcept
 {
     if (rData.m_bStoreAddresses) {
         osl::MutexGuard const guard( osl_detail_ObjectRegistry_getMutex() );

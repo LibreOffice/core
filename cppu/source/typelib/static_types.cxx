@@ -105,8 +105,7 @@ extern "C"
 {
 
 typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
-    typelib_TypeClass eTypeClass )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeClass eTypeClass ) noexcept
 {
     static typelib_TypeDescriptionReference * s_aTypes[] = {
         nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr,
@@ -271,8 +270,7 @@ typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_getByTypeClass(
 
 void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeClass eTypeClass, const char * pTypeName )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeClass eTypeClass, const char * pTypeName ) noexcept
 {
     if (! *ppRef)
     {
@@ -290,8 +288,7 @@ void SAL_CALL typelib_static_type_init(
 
 void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
-    typelib_TypeDescriptionReference * pElementType )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference * pElementType ) noexcept
 {
     if ( *ppRef)
         return;
@@ -409,8 +406,7 @@ void SAL_CALL typelib_static_compound_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
-    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
-    SAL_THROW_EXTERN_C()
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers ) noexcept
 {
     init(ppRef, eTypeClass, pTypeName, pBaseType, nMembers, ppMembers, nullptr);
 }
@@ -419,8 +415,7 @@ void SAL_CALL typelib_static_struct_type_init(
     typelib_TypeDescriptionReference ** ppRef, const char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
     sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
-    sal_Bool const * pParameterizedTypes )
-    SAL_THROW_EXTERN_C()
+    sal_Bool const * pParameterizedTypes ) noexcept
 {
     init(
         ppRef, typelib_TypeClass_STRUCT, pTypeName, pBaseType, nMembers,
@@ -430,8 +425,7 @@ void SAL_CALL typelib_static_struct_type_init(
 void SAL_CALL typelib_static_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const char * pTypeName,
-    typelib_TypeDescriptionReference * pBaseType )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference * pBaseType ) noexcept
 {
     // coverity[callee_ptr_arith] - not a bug
     typelib_static_mi_interface_type_init(
@@ -442,8 +436,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const char * pTypeName,
     sal_Int32 nBaseTypes,
-    typelib_TypeDescriptionReference ** ppBaseTypes )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference ** ppBaseTypes ) noexcept
 {
     if ( *ppRef)
         return;
@@ -505,8 +498,7 @@ void SAL_CALL typelib_static_mi_interface_type_init(
 void SAL_CALL typelib_static_enum_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     const char * pTypeName,
-    sal_Int32 nDefaultValue )
-    SAL_THROW_EXTERN_C()
+    sal_Int32 nDefaultValue ) noexcept
 {
     if ( *ppRef)
         return;

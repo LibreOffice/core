@@ -16,26 +16,26 @@ namespace net_uno
 {
 namespace
 {
-void SAL_CALL Mapping_acquire(uno_Mapping* mapping) SAL_THROW_EXTERN_C()
+void SAL_CALL Mapping_acquire(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     that->m_bridge->acquire();
 }
 
-void SAL_CALL Mapping_release(uno_Mapping* mapping) SAL_THROW_EXTERN_C()
+void SAL_CALL Mapping_release(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     that->m_bridge->release();
 }
 
-void SAL_CALL Mapping_free(uno_Mapping* mapping) SAL_THROW_EXTERN_C()
+void SAL_CALL Mapping_free(uno_Mapping* mapping) noexcept
 {
     Mapping* that = static_cast<Mapping*>(mapping);
     delete that->m_bridge;
 }
 
 void SAL_CALL Mapping_net2uno(uno_Mapping* mapping, void** ppOut, void* pIn,
-                              typelib_InterfaceTypeDescription* pTD) SAL_THROW_EXTERN_C()
+                              typelib_InterfaceTypeDescription* pTD) noexcept
 {
     assert(ppOut && pTD && "### null ptr!");
 
@@ -51,7 +51,7 @@ void SAL_CALL Mapping_net2uno(uno_Mapping* mapping, void** ppOut, void* pIn,
 }
 
 void SAL_CALL Mapping_uno2net(uno_Mapping* mapping, void** ppOut, void* pIn,
-                              typelib_InterfaceTypeDescription* pTD) SAL_THROW_EXTERN_C()
+                              typelib_InterfaceTypeDescription* pTD) noexcept
 {
     assert(ppOut && pTD && "### null ptr!");
 
@@ -130,7 +130,7 @@ static void net_env_disposing(uno_Environment* env)
     delete static_cast<Context*>(env->pContext);
 }
 
-SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment* net_env) SAL_THROW_EXTERN_C()
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment* net_env) noexcept
 {
     // The code creating the uno_Environment needs to initialize
     // pContext with a Context object, complete with all callbacks.
@@ -141,7 +141,7 @@ SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment* net_env) SAL_THRO
 }
 
 SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(uno_Mapping** ppMapping, uno_Environment* pFrom,
-                                             uno_Environment* pTo) SAL_THROW_EXTERN_C()
+                                             uno_Environment* pTo) noexcept
 {
     assert(ppMapping && pFrom && pTo);
 

@@ -29,8 +29,7 @@ using namespace ::rtl;
 
 
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
-    typelib_TypeDescriptionReference * pType )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference * pType ) noexcept
 {
     OUString ret = "unsatisfied query for interface of type "
         + OUString::unacquired( &pType->pTypeName ) + "!";
@@ -40,8 +39,7 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iquery_msg(
 
 
 extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
-    typelib_TypeDescriptionReference * pType )
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference * pType ) noexcept
 {
     OUString ret = "invalid attempt to assign an empty interface of type "
         + OUString::unacquired( &pType->pTypeName ) + "!";
@@ -51,8 +49,7 @@ extern "C" rtl_uString * SAL_CALL cppu_unsatisfied_iset_msg(
 
 
 extern "C" rtl_uString * SAL_CALL cppu_Any_extraction_failure_msg(
-    uno_Any const * pAny, typelib_TypeDescriptionReference * pType )
-    SAL_THROW_EXTERN_C()
+    uno_Any const * pAny, typelib_TypeDescriptionReference * pType ) noexcept
 {
     OUString ret = "Cannot extract an Any(" +
         OUString::unacquired(&pAny->pType->pTypeName) +

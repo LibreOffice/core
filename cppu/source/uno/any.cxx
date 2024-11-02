@@ -30,8 +30,7 @@ extern "C"
 void SAL_CALL uno_type_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pDest, release );
     if (pType)
@@ -47,8 +46,7 @@ void SAL_CALL uno_type_any_assign(
 void SAL_CALL uno_any_assign(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pDest, release );
     if (pTypeDescr)
@@ -64,8 +62,7 @@ void SAL_CALL uno_any_assign(
 void SAL_CALL uno_type_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_AcquireFunc acquire )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire ) noexcept
 {
     if (pType)
     {
@@ -80,8 +77,7 @@ void SAL_CALL uno_type_any_construct(
 void SAL_CALL uno_any_construct(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire ) noexcept
 {
     if (pTypeDescr)
     {
@@ -96,8 +92,7 @@ void SAL_CALL uno_any_construct(
 void SAL_CALL uno_type_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_Mapping * mapping )
-    SAL_THROW_EXTERN_C()
+    uno_Mapping * mapping ) noexcept
 {
     if (pType)
     {
@@ -112,8 +107,7 @@ void SAL_CALL uno_type_any_constructAndConvert(
 void SAL_CALL uno_any_constructAndConvert(
     uno_Any * pDest, void * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_Mapping * mapping )
-    SAL_THROW_EXTERN_C()
+    uno_Mapping * mapping ) noexcept
 {
     if (pTypeDescr)
     {
@@ -125,14 +119,12 @@ void SAL_CALL uno_any_constructAndConvert(
     }
 }
 
-void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL uno_any_destruct( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pValue, release );
 }
 
-void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL uno_any_clear( uno_Any * pValue, uno_ReleaseFunc release ) noexcept
 {
     _destructAny( pValue, release );
     CONSTRUCT_EMPTY_ANY( pValue );

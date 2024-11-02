@@ -42,19 +42,15 @@ using namespace cli_uno;
 extern "C"
 {
 
-void SAL_CALL cli_proxy_free( uno_ExtEnvironment * env, void * proxy )
-    SAL_THROW_EXTERN_C();
+void SAL_CALL cli_proxy_free( uno_ExtEnvironment * env, void * proxy ) noexcept;
 
-void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C();
+void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI ) noexcept;
 
-void SAL_CALL cli_proxy_release( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C();
+void SAL_CALL cli_proxy_release( uno_Interface * pUnoI ) noexcept;
 
 void SAL_CALL cli_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
-    void * uno_ret, void * uno_args[], uno_Any ** uno_exc )
-    SAL_THROW_EXTERN_C();
+    void * uno_ret, void * uno_args[], uno_Any ** uno_exc ) noexcept;
 
 
 }
@@ -886,8 +882,7 @@ inline void CliProxy::release() const
 
 
 extern "C"
-void SAL_CALL cli_proxy_free( uno_ExtEnvironment *, void * proxy )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL cli_proxy_free( uno_ExtEnvironment *, void * proxy ) noexcept
 {
     cli_uno::CliProxy * cliProxy = reinterpret_cast<
         cli_uno::CliProxy * >( proxy );
@@ -896,16 +891,14 @@ void SAL_CALL cli_proxy_free( uno_ExtEnvironment *, void * proxy )
 }
 
 extern "C"
-void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL cli_proxy_acquire( uno_Interface * pUnoI ) noexcept
 {
     CliProxy const * cliProxy = static_cast< CliProxy const * >( pUnoI );
     cliProxy->acquire();
 }
 
 extern "C"
-void SAL_CALL cli_proxy_release( uno_Interface * pUnoI )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL cli_proxy_release( uno_Interface * pUnoI ) noexcept
 {
     CliProxy * cliProxy = static_cast< CliProxy * >( pUnoI );
     cliProxy->release();
@@ -916,8 +909,7 @@ extern "C"
 
 void SAL_CALL cli_proxy_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * member_td,
-    void * uno_ret, void * uno_args [], uno_Any ** uno_exc )
-    SAL_THROW_EXTERN_C()
+    void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) noexcept
 {
     CliProxy * proxy = static_cast< CliProxy* >( pUnoI );
     try

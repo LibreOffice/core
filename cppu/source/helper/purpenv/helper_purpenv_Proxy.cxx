@@ -103,8 +103,7 @@ extern "C" { static void s_Proxy_dispatch(
     typelib_TypeDescription const * pMemberType,
     void                          * pReturn,
     void                          * pArgs[],
-    uno_Any                      ** ppException)
-    SAL_THROW_EXTERN_C()
+    uno_Any                      ** ppException) noexcept
 {
     Proxy * pThis = static_cast<Proxy *>(pUnoI);
 
@@ -158,20 +157,20 @@ extern "C" { static void s_Proxy_dispatch(
                      ppException );
 }}
 
-extern "C" void Proxy_free(SAL_UNUSED_PARAMETER uno_ExtEnvironment * /*pEnv*/, void * pProxy) SAL_THROW_EXTERN_C()
+extern "C" void Proxy_free(SAL_UNUSED_PARAMETER uno_ExtEnvironment * /*pEnv*/, void * pProxy) noexcept
 {
     Proxy * pThis = static_cast<Proxy * >(static_cast<uno_Interface *>(pProxy));
     delete pThis;
 }
 
 extern "C" {
-static void s_Proxy_acquire(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
+static void s_Proxy_acquire(uno_Interface * pUnoI) noexcept
 {
     Proxy * pProxy = static_cast<Proxy *>(pUnoI);
     pProxy->acquire();
 }
 
-static void s_Proxy_release(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
+static void s_Proxy_release(uno_Interface * pUnoI) noexcept
 {
     Proxy * pProxy = static_cast<Proxy *>(pUnoI);
     pProxy->release();

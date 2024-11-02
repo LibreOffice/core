@@ -65,7 +65,7 @@ static void mark_static(void *addr, sal_Size /* size */)
     str->refCount |= SAL_STRING_STATIC_FLAG;
 }
 
-void SAL_CALL rtl_alloc_preInit (sal_Bool start) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_alloc_preInit (sal_Bool start) noexcept
 {
     if (start)
     {

@@ -56,8 +56,7 @@ static const css::uno::Type & getVetoableTypeIdentifier()
 
 extern "C" {
 
-static int compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
-    SAL_THROW_EXTERN_C()
+static int compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) noexcept
 {
    return static_cast<OUString const *>(arg1)->compareTo( static_cast<Property const *>(arg2)->Name );
 }
@@ -969,8 +968,7 @@ void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
 
 extern "C" {
 
-static int compare_Property_Impl( const void *arg1, const void *arg2 )
-    SAL_THROW_EXTERN_C()
+static int compare_Property_Impl( const void *arg1, const void *arg2 ) noexcept
 {
    return static_cast<Property const *>(arg1)->Name.compareTo( static_cast<Property const *>(arg2)->Name );
 }

@@ -682,8 +682,7 @@ void writeLine(
 }
 
 extern "C" void SAL_CALL uno_dumpEnvironment(
-    void * stream, uno_Environment * pEnv, const char * pFilter )
-    SAL_THROW_EXTERN_C()
+    void * stream, uno_Environment * pEnv, const char * pFilter ) noexcept
 {
     assert(pEnv && "### null ptr!");
     OUStringBuffer buf;
@@ -764,8 +763,7 @@ extern "C" void SAL_CALL uno_dumpEnvironment(
 
 
 extern "C" void SAL_CALL uno_dumpEnvironmentByName(
-    void * stream, rtl_uString * pEnvDcp, const char * pFilter )
-    SAL_THROW_EXTERN_C()
+    void * stream, rtl_uString * pEnvDcp, const char * pFilter ) noexcept
 {
     uno_Environment * pEnv = nullptr;
     uno_getEnvironment( &pEnv, pEnvDcp, nullptr );
@@ -1089,8 +1087,7 @@ static uno_Environment * initDefaultEnvironment(
 
 
 void SAL_CALL uno_createEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
-    SAL_THROW_EXTERN_C()
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext ) noexcept
 {
     assert(ppEnv && "### null ptr!");
     if (*ppEnv)
@@ -1101,8 +1098,7 @@ void SAL_CALL uno_createEnvironment(
 }
 
 void SAL_CALL uno_getEnvironment(
-    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext )
-    SAL_THROW_EXTERN_C()
+    uno_Environment ** ppEnv, rtl_uString * pEnvDcp, void * pContext ) noexcept
 {
     assert(ppEnv && "### null ptr!");
     OUString const & rEnvDcp = OUString::unacquired( &pEnvDcp );
@@ -1124,8 +1120,7 @@ void SAL_CALL uno_getEnvironment(
 
 void SAL_CALL uno_getRegisteredEnvironments(
     uno_Environment *** pppEnvs, sal_Int32 * pnLen, uno_memAlloc memAlloc,
-    rtl_uString * pEnvDcp )
-    SAL_THROW_EXTERN_C()
+    rtl_uString * pEnvDcp ) noexcept
 {
     EnvironmentsData & rData = theEnvironmentsData();
 

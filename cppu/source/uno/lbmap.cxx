@@ -578,8 +578,7 @@ extern "C"
 
 void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
-    rtl_uString * pAddPurpose )
-    SAL_THROW_EXTERN_C()
+    rtl_uString * pAddPurpose ) noexcept
 {
     assert(ppMapping != nullptr);
     assert(pFrom != nullptr);
@@ -644,8 +643,7 @@ void SAL_CALL uno_getMapping(
 
 void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
-    rtl_uString * pAddPurpose )
-    SAL_THROW_EXTERN_C()
+    rtl_uString * pAddPurpose ) noexcept
 {
     assert(ppMapping && pFrom && pTo && "### null ptr!");
     if (*ppMapping)
@@ -674,8 +672,7 @@ void SAL_CALL uno_getMappingByName(
 
 void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
-    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
-    SAL_THROW_EXTERN_C()
+    uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose ) noexcept
 {
     MappingsData & rData = getMappingsData();
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
@@ -708,8 +705,7 @@ void SAL_CALL uno_registerMapping(
 }
 
 void SAL_CALL uno_revokeMapping(
-    uno_Mapping * pMapping )
-    SAL_THROW_EXTERN_C()
+    uno_Mapping * pMapping ) noexcept
 {
     MappingsData & rData = getMappingsData();
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
@@ -730,8 +726,7 @@ void SAL_CALL uno_revokeMapping(
 
 
 void SAL_CALL uno_registerMappingCallback(
-    uno_getMappingFunc pCallback )
-    SAL_THROW_EXTERN_C()
+    uno_getMappingFunc pCallback ) noexcept
 {
     OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
@@ -740,8 +735,7 @@ void SAL_CALL uno_registerMappingCallback(
 }
 
 void SAL_CALL uno_revokeMappingCallback(
-    uno_getMappingFunc pCallback )
-    SAL_THROW_EXTERN_C()
+    uno_getMappingFunc pCallback ) noexcept
 {
     OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();

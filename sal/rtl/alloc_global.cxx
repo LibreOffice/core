@@ -22,7 +22,7 @@
 
 #include <oslmemory.h>
 
-void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateMemory(sal_Size n) noexcept
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -30,7 +30,7 @@ void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()
     return malloc (n);
 }
 
-void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) noexcept
 {
     SAL_WARN_IF(
         n >= SAL_MAX_INT32, "sal.rtl",
@@ -38,18 +38,18 @@ void* SAL_CALL rtl_reallocateMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
     return realloc (p, n);
 }
 
-void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeMemory(void * p) noexcept
 {
     free (p);
 }
 
-void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
+void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) noexcept
 {
     SAL_WARN_IF( n >= SAL_MAX_INT32, "sal.rtl", "suspicious massive alloc " << n);
     return calloc(n, 1);
 }
 
-void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) noexcept
 {
     if (p)
     {
@@ -58,12 +58,12 @@ void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
     }
 }
 
-void* SAL_CALL rtl_allocateAlignedMemory(sal_Size Alignment, sal_Size Bytes) SAL_THROW_EXTERN_C()
+void* SAL_CALL rtl_allocateAlignedMemory(sal_Size Alignment, sal_Size Bytes) noexcept
 {
     return osl_aligned_alloc(Alignment, Bytes);
 }
 
-void SAL_CALL rtl_freeAlignedMemory(void* Ptr) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_freeAlignedMemory(void* Ptr) noexcept
 {
     osl_aligned_free(Ptr);
 }

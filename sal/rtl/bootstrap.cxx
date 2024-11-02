@@ -706,7 +706,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     return static_cast< rtlBootstrapHandle >( that );
 }
 
-void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle) noexcept
 {
     if (!handle)
         return;

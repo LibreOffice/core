@@ -149,8 +149,7 @@ void MediatorMapping::mapInterface(
     *ppOut = ret;
 }
 
-extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping)
-    SAL_THROW_EXTERN_C()
+extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping) noexcept
 {
     delete static_cast<MediatorMapping *>(pMapping);
 }}

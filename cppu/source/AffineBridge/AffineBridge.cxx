@@ -344,8 +344,7 @@ bool AffineBridge::v_isValid(OUString * pReason)
 
 #endif
 
-extern "C" void SAL_DLLPUBLIC_EXPORT uno_initEnvironment(uno_Environment * pEnv)
-    SAL_THROW_EXTERN_C()
+extern "C" void SAL_DLLPUBLIC_EXPORT uno_initEnvironment(uno_Environment * pEnv) noexcept
 {
     cppu::helper::purpenv::Environment_initWithEnterable(pEnv, new AffineBridge());
 }

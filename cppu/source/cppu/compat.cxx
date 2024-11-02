@@ -21,14 +21,14 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL typelib_static_array_type_init(
     typelib_TypeDescriptionReference **, typelib_TypeDescriptionReference *,
-    sal_Int32, ...) SAL_THROW_EXTERN_C()
+    sal_Int32, ...) noexcept
 {
     std::abort();
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL typelib_typedescription_newArray(
     typelib_TypeDescription **, typelib_TypeDescriptionReference *,
-    sal_Int32, sal_Int32 *) SAL_THROW_EXTERN_C()
+    sal_Int32, sal_Int32 *) noexcept
 {
     std::abort();
 }
@@ -36,8 +36,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL typelib_typedescription_newArray(
 SAL_DLLPUBLIC_EXPORT void SAL_CALL typelib_typedescription_newUnion(
     typelib_TypeDescription **, rtl_uString *,
     typelib_TypeDescriptionReference *, sal_Int64,
-    typelib_TypeDescriptionReference *, sal_Int32, void *)
-    SAL_THROW_EXTERN_C()
+    typelib_TypeDescriptionReference *, sal_Int32, void *) noexcept
 {
     std::abort();
 }

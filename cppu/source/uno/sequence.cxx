@@ -668,8 +668,7 @@ extern "C"
 sal_Bool SAL_CALL uno_type_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
     void * pElements, sal_Int32 len,
-    uno_AcquireFunc acquire )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire ) noexcept
 {
     assert( len >= 0 );
     bool ret;
@@ -716,8 +715,7 @@ sal_Bool SAL_CALL uno_type_sequence_construct(
 sal_Bool SAL_CALL uno_sequence_construct(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
     void * pElements, sal_Int32 len,
-    uno_AcquireFunc acquire )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire ) noexcept
 {
     bool ret;
     if (len > 0)
@@ -754,8 +752,7 @@ sal_Bool SAL_CALL uno_sequence_construct(
 
 sal_Bool SAL_CALL uno_type_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescriptionReference * pType,
-    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     assert(ppSequence && "### null ptr!");
     assert(nSize >= 0 && "### new size must be at least 0!");
@@ -776,8 +773,7 @@ sal_Bool SAL_CALL uno_type_sequence_realloc(
 
 sal_Bool SAL_CALL uno_sequence_realloc(
     uno_Sequence ** ppSequence, typelib_TypeDescription * pTypeDescr,
-    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    sal_Int32 nSize, uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     assert(ppSequence && "### null ptr!");
     OSL_ENSURE( nSize >= 0, "### new size must be at least 0!" );
@@ -796,8 +792,7 @@ sal_Bool SAL_CALL uno_sequence_realloc(
 sal_Bool SAL_CALL uno_type_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescriptionReference * pType,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     assert(ppSequence && "### null ptr!");
     bool ret = true;
@@ -843,8 +838,7 @@ sal_Bool SAL_CALL uno_type_sequence_reference2One(
 sal_Bool SAL_CALL uno_sequence_reference2One(
     uno_Sequence ** ppSequence,
     typelib_TypeDescription * pTypeDescr,
-    uno_AcquireFunc acquire, uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_AcquireFunc acquire, uno_ReleaseFunc release ) noexcept
 {
     assert(ppSequence && "### null ptr!");
     bool ret = true;
@@ -888,8 +882,7 @@ void SAL_CALL uno_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescription * pTypeDescr,
-    uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_ReleaseFunc release ) noexcept
 {
     if (*ppDest != pSource)
     {
@@ -904,8 +897,7 @@ void SAL_CALL uno_type_sequence_assign(
     uno_Sequence ** ppDest,
     uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pType,
-    uno_ReleaseFunc release )
-    SAL_THROW_EXTERN_C()
+    uno_ReleaseFunc release ) noexcept
 {
     if (*ppDest != pSource)
     {
@@ -917,8 +909,7 @@ void SAL_CALL uno_type_sequence_assign(
 
 void uno_type_sequence_destroy(
     uno_Sequence * sequence, typelib_TypeDescriptionReference * type,
-    uno_ReleaseFunc release)
-    SAL_THROW_EXTERN_C()
+    uno_ReleaseFunc release) noexcept
 {
     idestroySequence(sequence, type, nullptr, release);
 }

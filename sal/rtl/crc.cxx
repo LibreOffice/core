@@ -28,7 +28,7 @@
 
 sal_uInt32 SAL_CALL rtl_crc32 (
     sal_uInt32  Crc,
-    const void *Data, sal_uInt32 DatLen) SAL_THROW_EXTERN_C()
+    const void *Data, sal_uInt32 DatLen) noexcept
 {
     // Check that our types map to zlib correctly.
     static_assert(sizeof(uLong) >= sizeof(sal_uInt32));

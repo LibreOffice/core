@@ -147,8 +147,7 @@ static void environmentDisposing(
 #define uno_initEnvironment CPPU_ENV_uno_initEnvironment
 #endif
 
-SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment * pCppEnv)
-    SAL_THROW_EXTERN_C()
+SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment * pCppEnv) noexcept
 {
     assert(pCppEnv->pExtEnv);
     assert(
@@ -168,8 +167,7 @@ SAL_DLLPUBLIC_EXPORT void uno_initEnvironment(uno_Environment * pCppEnv)
 #endif
 
 SAL_DLLPUBLIC_EXPORT void uno_ext_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
-    SAL_THROW_EXTERN_C()
+    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo) noexcept
 {
     assert(ppMapping && pFrom && pTo);
     if (!(ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv))
