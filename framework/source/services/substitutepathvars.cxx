@@ -35,6 +35,7 @@
 
 #include <officecfg/Office/Paths.hxx>
 
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -130,7 +131,8 @@ struct ReSubstFixedVarOrder
 
 typedef comphelper::WeakComponentImplHelper<
     css::util::XStringSubstitution,
-    css::lang::XServiceInfo > SubstitutePathVariables_BASE;
+    css::lang::XServiceInfo,
+    css::lang::XInitialization > SubstitutePathVariables_BASE;
 
 class SubstitutePathVariables : public SubstitutePathVariables_BASE
 {
@@ -157,7 +159,12 @@ public:
     virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
     virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
 
-protected:
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/) override;
+
+private:
+    void            impl_initialize();
+
     void            SetPredefinedPathVariables();
 
     // Special case (transient) values can change during runtime!
@@ -189,6 +196,11 @@ private:
 
 SubstitutePathVariables::SubstitutePathVariables()
 {
+    impl_initialize();
+}
+
+void SubstitutePathVariables::impl_initialize()
+{
     SetPredefinedPathVariables();
 
     // Init the predefined/fixed variable to index hash map
@@ -217,6 +229,12 @@ SubstitutePathVariables::SubstitutePathVariables()
         }
     }
     sort(m_aReSubstFixedVarOrder.begin(),m_aReSubstFixedVarOrder.end());
+}
+
+void SAL_CALL SubstitutePathVariables::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+{
+    std::unique_lock g(m_aMutex);
+    impl_initialize();
 }
 
 // XStringSubstitution
@@ -598,7 +616,6 @@ OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const
 
 void SubstitutePathVariables::SetPredefinedPathVariables()
 {
-
     m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
     rtl::Bootstrap::expandMacros(
         m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
