@@ -523,21 +523,10 @@ void DeleteSections(SfxRequest& rReq, SwWrtShell& rWrtSh)
         });
 
     SwDoc* pDoc = rWrtSh.GetDoc();
-    SwSectionFormats& rFormats = pDoc->GetSections();
     std::vector<SwSectionFormat*> aRemovals;
-    for (SwSectionFormat* pFormat : rFormats)
-    {
-
-        if (!aSectionNamePrefix.isEmpty())
-        {
-            if (!pFormat->GetName().startsWith(aSectionNamePrefix))
-            {
-                continue;
-            }
-        }
-
-        aRemovals.push_back(pFormat);
-    }
+    for (SwSectionFormat* pFormat : pDoc->GetSections())
+        if (aSectionNamePrefix.isEmpty() || pFormat->GetName().startsWith(aSectionNamePrefix))
+            aRemovals.push_back(pFormat);
 
     for (const auto& pFormat : aRemovals)
     {
