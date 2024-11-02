@@ -1206,6 +1206,8 @@ void SectionPropertyMap::HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl)
                     rDM_Impl.GetPageStyles()->getStyleByName(u"Standard"_ustr);
         for (const beans::Property& rProp : m_aPageStyle->getPropertySetInfo()->getProperties())
         {
+            if (!rProp.Name.startsWith("Fill")) // only copy XATTR_FILL properties
+                continue;
             try
             {
                 const uno::Any aFillValue = xDefaultPageStyle->getPropertyValue(rProp.Name);
