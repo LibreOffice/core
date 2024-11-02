@@ -33,6 +33,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
@@ -88,6 +89,7 @@ sal_Int32 impl_getPropGroup(sal_Int32 nID)
 
 typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo,
+            css::lang::XInitialization,
             css::util::XChangesListener,    // => XEventListener
             css::util::XPathSettings>       // => XPropertySet
                 PathSettings_BASE;
@@ -325,6 +327,10 @@ public:
         { ::cppu::OPropertySetHelper::addVetoableChangeListener(p1, p2); }
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& p1, const css::uno::Reference<css::beans::XVetoableChangeListener>& p2) override
         { ::cppu::OPropertySetHelper::removeVetoableChangeListener(p1, p2); }
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArguments) override;
+
     /** read all configured paths and create all needed internal structures. */
     void impl_readAll();
 
@@ -1402,6 +1408,14 @@ css::uno::Reference< css::container::XNameAccess > PathSettings::fa_getCfgNew()
     }
 
     return xCfg;
+}
+
+// XInitialization
+void SAL_CALL PathSettings::initialize(const css::uno::Sequence<css::uno::Any>& /*rArguments*/)
+{
+    // so we can reinitialize/reset all path variables to default
+    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    impl_readAll();
 }
 
 }
