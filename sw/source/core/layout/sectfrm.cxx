@@ -2252,7 +2252,8 @@ bool SwSectionFrame::Growable() const
 
 SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
 {
-    if (GetSection()->CalcHiddenFlag())
+    SwSection* pSection = GetSection();
+    if (pSection && pSection->CalcHiddenFlag())
     {
         return 0;
     }
@@ -2272,7 +2273,6 @@ SwTwips SwSectionFrame::Grow_( SwTwips nDist, bool bTst )
         bool bGrow = !Lower() || !Lower()->IsColumnFrame() || !Lower()->GetNext();
         if (!bGrow)
         {
-            SwSection* pSection = GetSection();
             bGrow = pSection && pSection->GetFormat()->GetBalancedColumns().GetValue();
         }
         if( !bGrow )
