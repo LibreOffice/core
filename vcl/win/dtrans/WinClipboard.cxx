@@ -284,33 +284,39 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
 
 void CWinClipboard::handleClipboardContentChanged()
 {
-    std::unique_lock aGuard(m_aMutex);
-    if (m_bDisposed)
-        return;
-
-    m_foreignContent.clear();
-    // If new own content assignment is pending, do it; otherwise, clear it.
-    // This makes sure that there will be no stuck clipboard content.
-    m_pCurrentOwnClipContent = std::exchange(m_pNewOwnClipContent, nullptr);
-
-    if (!maClipboardListeners.getLength(aGuard))
-        return;
-
-    try
+    // The object must be destroyed only outside of the mutex lock, because it may call
+    // CWinClipboard::onReleaseDataObject in another thread of this process
+    css::uno::Reference<css::datatransfer::XTransferable> old_foreignContent;
     {
-        uno::Reference<datatransfer::XTransferable> rXTransf(getContents_noLock());
-        datatransfer::clipboard::ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this),
-                                                            rXTransf);
-        maClipboardListeners.notifyEach(
-            aGuard, &datatransfer::clipboard::XClipboardListener::changedContents, aClipbEvent);
-    }
-    catch (const lang::DisposedException&)
-    {
-        OSL_FAIL("Service Manager disposed");
+        std::unique_lock aGuard(m_aMutex);
+        if (m_bDisposed)
+            return;
 
-        aGuard.unlock();
-        // no further clipboard changed notifications
-        unregisterClipboardViewer();
+        old_foreignContent = std::move(m_foreignContent); // clear m_foreignContent
+        assert(!m_foreignContent.is());
+        // If new own content assignment is pending, do it; otherwise, clear it.
+        // This makes sure that there will be no stuck clipboard content.
+        m_pCurrentOwnClipContent = std::exchange(m_pNewOwnClipContent, nullptr);
+
+        if (!maClipboardListeners.getLength(aGuard))
+            return;
+
+        try
+        {
+            uno::Reference<datatransfer::XTransferable> rXTransf(getContents_noLock());
+            datatransfer::clipboard::ClipboardEvent aClipbEvent(static_cast<XClipboard*>(this),
+                                                                rXTransf);
+            maClipboardListeners.notifyEach(
+                aGuard, &datatransfer::clipboard::XClipboardListener::changedContents, aClipbEvent);
+        }
+        catch (const lang::DisposedException&)
+        {
+            OSL_FAIL("Service Manager disposed");
+
+            aGuard.unlock();
+            // no further clipboard changed notifications
+            unregisterClipboardViewer();
+        }
     }
 }
 
