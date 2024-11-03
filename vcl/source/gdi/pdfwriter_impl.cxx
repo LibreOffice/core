@@ -99,7 +99,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
-#include <frozen/map.h>
+#include <frozen/unordered_map.h>
 
 using namespace::com::sun::star;
 
@@ -1838,7 +1838,7 @@ sal_Int32 PDFWriterImpl::emitStructIDTree(sal_Int32 const nObject)
 
 const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 {
-    static constexpr auto aAttributeStrings = frozen::make_map<PDFWriter::StructAttribute, const char*>({
+    static constexpr auto aAttributeStrings = frozen::make_unordered_map<PDFWriter::StructAttribute, const char*>({
         { PDFWriter::Placement,         "Placement" },
         { PDFWriter::WritingMode,       "WritingMode" },
         { PDFWriter::SpaceBefore,       "SpaceBefore" },
@@ -1877,7 +1877,7 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
 
 const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue eVal )
 {
-    static constexpr auto aValueStrings = frozen::make_map<PDFWriter::StructAttributeValue, const char*>({
+    static constexpr auto aValueStrings = frozen::make_unordered_map<PDFWriter::StructAttributeValue, const char*>({
         { PDFWriter::NONE,       "None" },
         { PDFWriter::Block,      "Block" },
         { PDFWriter::Inline,     "Inline" },
@@ -10762,7 +10762,7 @@ void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 
 const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
 {
-    static constexpr auto aTagStrings = frozen::make_map<PDFWriter::StructElement, const char*>({
+    static constexpr auto aTagStrings = frozen::make_unordered_map<PDFWriter::StructElement, const char*>({
         { PDFWriter::NonStructElement, "NonStruct" },
         { PDFWriter::Document, "Document" },
         { PDFWriter::Part,         "Part" },
