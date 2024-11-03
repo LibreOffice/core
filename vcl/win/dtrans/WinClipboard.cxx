@@ -172,6 +172,9 @@ void SAL_CALL CWinClipboard::setContents(
     const uno::Reference<datatransfer::XTransferable>& xTransferable,
     const uno::Reference<datatransfer::clipboard::XClipboardOwner>& xClipboardOwner)
 {
+    // The object must be destroyed only outside of the mutex lock, because it may call
+    // CWinClipboard::onReleaseDataObject in another thread of this process synchronously
+    css::uno::Reference<css::datatransfer::XTransferable> prev_foreignContent;
     std::unique_lock aGuard(m_aMutex);
 
     if (m_bDisposed)
@@ -180,7 +183,8 @@ void SAL_CALL CWinClipboard::setContents(
 
     IDataObjectPtr pIDataObj;
 
-    m_foreignContent.clear();
+    prev_foreignContent = std::move(m_foreignContent); // clear m_foreignContent
+    assert(!m_foreignContent.is());
     m_pCurrentOwnClipContent = nullptr;
 
     if (xTransferable.is())
@@ -284,7 +288,7 @@ void SAL_CALL CWinClipboard::removeClipboardListener(
 void CWinClipboard::handleClipboardContentChanged()
 {
     // The object must be destroyed only outside of the mutex lock, because it may call
-    // CWinClipboard::onReleaseDataObject in another thread of this process
+    // CWinClipboard::onReleaseDataObject in another thread of this process synchronously
     css::uno::Reference<css::datatransfer::XTransferable> old_foreignContent;
     {
         std::unique_lock aGuard(m_aMutex);
