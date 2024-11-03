@@ -24,8 +24,8 @@
 
 #include <sal/log.hxx>
 
-ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
-    mfVal(0.0), mbAlloc(false), mbString(false)
+ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry, sal_Int8 nSearchMode ) :
+    mfVal(0.0), mbAlloc(false), mbString(false), meSearchMode(static_cast<SearchMode>(nSearchMode))
 {
     switch (rEntry.eOp)
     {
@@ -54,7 +54,8 @@ ScLookupCache::QueryCriteria::QueryCriteria( const ScLookupCache::QueryCriteria 
     mfVal( r.mfVal),
     mbAlloc( false),
     mbString( false),
-    meOp( r.meOp)
+    meOp( r.meOp),
+    meSearchMode( r.meSearchMode)
 {
     if (r.mbString && r.mpStr)
     {
@@ -72,7 +73,7 @@ ScLookupCache::Result ScLookupCache::lookup( ScAddress & o_rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress ) const
 {
     auto it( maQueryMap.find( QueryKey( rQueryAddress,
-                    rCriteria.getQueryOp())));
+                    rCriteria.getQueryOp(), rCriteria.getSearchMode())));
     if (it == maQueryMap.end())
         return NOT_CACHED;
     const QueryCriteriaAndResult& rResult = (*it).second;
@@ -102,7 +103,7 @@ bool ScLookupCache::insert( const ScAddress & rResultAddress,
         const QueryCriteria & rCriteria, const ScAddress & rQueryAddress,
         const bool bAvailable )
 {
-    QueryKey aKey( rQueryAddress, rCriteria.getQueryOp());
+    QueryKey aKey( rQueryAddress, rCriteria.getQueryOp(), rCriteria.getSearchMode() );
     QueryCriteriaAndResult aResult( rCriteria, rResultAddress);
     if (!bAvailable)
         aResult.maAddress.SetRow(-1);
