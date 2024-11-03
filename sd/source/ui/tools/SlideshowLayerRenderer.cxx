@@ -18,6 +18,10 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlnclit.hxx>
 
 #include <vcl/virdev.hxx>
 #include <tools/json_writer.hxx>
@@ -704,8 +708,51 @@ void writeBoundingBox(::tools::JsonWriter& aJsonWriter, SdrObject* pObject)
     aJsonWriter.put("height", aRect.GetHeight());
 }
 
+uno::Reference<text::XTextRange>
+getParagraphFromShape(int nPara, uno::Reference<beans::XPropertySet> const& xShape)
+{
+    uno::Reference<text::XText> xText
+        = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
+    if (!xText.is())
+        return {};
+
+    uno::Reference<container::XEnumerationAccess> paraEnumAccess(xText, uno::UNO_QUERY);
+    if (!paraEnumAccess.is())
+        return {};
+    uno::Reference<container::XEnumeration> paraEnum(paraEnumAccess->createEnumeration());
+    if (!paraEnum.is())
+        return {};
+
+    for (int i = 0; i < nPara; ++i)
+        paraEnum->nextElement();
+
+    uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(), uno::UNO_QUERY_THROW);
+
+    return xParagraph;
+}
+
+void writeFontColor(::tools::JsonWriter& aJsonWriter, SdrObject* pObject, sal_Int32 nParagraph)
+{
+    uno::Reference<drawing::XShape> xShape = GetXShapeForSdrObject(pObject);
+    uno::Reference<beans::XPropertySet> xShapePropSet(xShape, uno::UNO_QUERY_THROW);
+    if (!xShapePropSet.is())
+        return;
+
+    uno::Reference<text::XTextRange> xParagraph = getParagraphFromShape(nParagraph, xShapePropSet);
+    if (!xParagraph.is())
+        return;
+
+    uno::Reference<beans::XPropertySet> xPropSet(xParagraph->getStart(), uno::UNO_QUERY_THROW);
+    if (!xPropSet)
+        return;
+
+    Color aCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= aCharColor;
+    aJsonWriter.put("fontColor", "#" + aCharColor.AsRGBHEXString());
+}
+
 void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& rLayerInfo,
-                   SdrObject* pObject)
+                   SdrObject* pObject, sal_Int32 nParagraph = -1)
 {
     aJsonWriter.put("type", "animated");
     {
@@ -719,6 +766,28 @@ void writeAnimated(::tools::JsonWriter& aJsonWriter, AnimationLayerInfo const& r
         aJsonWriter.put("type", "bitmap");
         writeContentNode(aJsonWriter);
         writeBoundingBox(aJsonWriter, pObject);
+
+        if (nParagraph < 0)
+        {
+            drawing::FillStyle aFillStyle
+                = pObject->GetProperties().GetItem(XATTR_FILLSTYLE).GetValue();
+            if (aFillStyle == drawing::FillStyle::FillStyle_SOLID)
+            {
+                auto aFillColor = pObject->GetProperties().GetItem(XATTR_FILLCOLOR).GetColorValue();
+                aJsonWriter.put("fillColor", "#" + aFillColor.AsRGBHEXString());
+            }
+            drawing::LineStyle aLineStyle
+                = pObject->GetProperties().GetItem(XATTR_LINESTYLE).GetValue();
+            if (aLineStyle == drawing::LineStyle::LineStyle_SOLID)
+            {
+                auto aLineColor = pObject->GetProperties().GetItem(XATTR_LINECOLOR).GetColorValue();
+                aJsonWriter.put("lineColor", "#" + aLineColor.AsRGBHEXString());
+            }
+        }
+        else
+        {
+            writeFontColor(aJsonWriter, pObject, nParagraph);
+        }
     }
 }
 
@@ -757,7 +826,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
             auto aParagraphInfoIterator = rInfo.maParagraphInfos.find(nParagraph);
             if (aParagraphInfoIterator != rInfo.maParagraphInfos.end())
             {
-                writeAnimated(aJsonWriter, aParagraphInfoIterator->second, pObject);
+                writeAnimated(aJsonWriter, aParagraphInfoIterator->second, pObject, nParagraph);
             }
         }
         else if (rInfo.moObjectInfo)
