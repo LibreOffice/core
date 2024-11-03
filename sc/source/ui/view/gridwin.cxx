@@ -4228,10 +4228,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     if ( rEvt.mbLeaving )
     {
         DrawMarkDropObj( nullptr );
-        if ( rData.pCellTransfer )
-            return AcceptPrivateDrop( rEvt, rData );   // hide drop marker for internal D&D
-        else
-            return rEvt.mnAction;
+        return AcceptPrivateDrop( rEvt, rData );   // hide drop marker for internal D&D
     }
 
     if ( mrViewData.GetDocShell()->IsReadOnly() )
