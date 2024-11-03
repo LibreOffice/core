@@ -427,7 +427,7 @@
 #define STR_NON_INTERACTIVE_FORMS                   NC_("STR_NON_INTERACTIVE_FORMS", "Check if the document contains interactive input fields.")
 #define STR_FLOATING_TEXT                           NC_("STR_FLOATING_TEXT", "Check if all Frames/Text boxes are anchored “As Character”.")
 #define STR_HEADING_IN_TABLE                        NC_("STR_HEADING_IN_TABLE", "Check if all tables contain headings.")
-#define STR_HEADING_ORDER                           NC_("STR_HEADING_ORDER", "Check if the table heading order is correct.")
+#define STR_HEADING_ORDER                           NC_("STR_HEADING_ORDER", "Check if the headings are in correct order.")
 #define STR_HEADING_START                           NC_("STR_HEADING_START", "Check if heading order starts with level 1.")
 #define STR_FONTWORKS                               NC_("STR_FONTWORKS", "Check if the document contains fontwork objects.")
 #define STR_TABLE_FORMATTING                        NC_("STR_TABLE_FORMATTING", "Check if document contains empty table cells for formatting.")
