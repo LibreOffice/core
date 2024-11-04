@@ -530,7 +530,7 @@ VclBuilder::VclBuilder(vcl::Window* pParent, std::u16string_view sUIDir, const O
             if (rType == "role")
             {
                 sal_Int16 role = BuilderUtils::getRoleFromName(rParam);
-                if (role != com::sun::star::accessibility::AccessibleRole::UNKNOWN)
+                if (role != css::accessibility::AccessibleRole::UNKNOWN)
                     pSource->SetAccessibleRole(role);
             }
             else

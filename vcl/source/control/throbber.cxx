@@ -37,7 +37,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::graphic::XGraphicProvider;
 using ::com::sun::star::uno::Exception;
-namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
+namespace ImageScaleMode = css::awt::ImageScaleMode;
 
 Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     :ImageControl( i_parentWindow, i_style )

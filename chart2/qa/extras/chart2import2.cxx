@@ -37,9 +37,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest2, testTdf114179)
     xDiagram.set(xChartDoc->getFirstDiagram());
     CPPUNIT_ASSERT_MESSAGE("There is a Diagram.", xDiagram.is());
     awt::Size aPage(0, 0);
-    uno::Reference<com::sun::star::embed::XVisualObject> xVisualObject(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<css::embed::XVisualObject> xVisualObject(xChartDoc, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xVisualObject.is());
-    aPage = xVisualObject->getVisualAreaSize(com::sun::star::embed::Aspects::MSOLE_CONTENT);
+    aPage = xVisualObject->getVisualAreaSize(css::embed::Aspects::MSOLE_CONTENT);
     Reference<beans::XPropertySet> xProp(xDiagram, uno::UNO_QUERY);
     chart2::RelativeSize aRelativeSize;
     xProp->getPropertyValue(u"RelativeSize"_ustr) >>= aRelativeSize;

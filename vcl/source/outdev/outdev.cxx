@@ -774,7 +774,7 @@ Reference< css::rendering::XSpriteCanvas > OutputDevice::GetSpriteCanvas() const
 }
 
 // Generic implementation, Window will override.
-com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool bSpriteCanvas ) const
+css::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetCanvas( bool bSpriteCanvas ) const
 {
     /* Arguments:
        0: ptr to creating instance (Window or VirtualDevice)

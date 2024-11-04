@@ -1264,7 +1264,7 @@ private:
 
         if (xJavaComponentLoader.is())
         {
-            const css::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRegistryKey;
+            const css::uno::Reference< css::registry::XRegistryKey > xRegistryKey;
             try
             {
                 xJavaComponentLoader->activate(u""_ustr, u""_ustr, u""_ustr, xRegistryKey);

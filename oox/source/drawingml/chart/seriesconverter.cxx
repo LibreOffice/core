@@ -170,7 +170,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     if( !(bDataSeriesLabel || rDataLabel.monLabelPos.has_value()) )
         return;
 
-    namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+    namespace csscd = css::chart::DataLabelPlacement;
     sal_Int32 nPlacement = -1;
     switch( rDataLabel.monLabelPos.value_or( XML_TOKEN_INVALID ) )
     {
@@ -534,7 +534,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
         aBarProp.setProperty( PROP_ShowNegativeError, bShowNeg );
 
         // type of displayed error
-        namespace cssc = ::com::sun::star::chart;
+        namespace cssc = css::chart;
         switch( mrModel.mnValueType )
         {
             case XML_cust:

@@ -36,11 +36,11 @@
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/task/XJob.hpp>
 
-namespace beans = com::sun::star::beans ;
-namespace frame = com::sun::star::frame ;
-namespace lang = com::sun::star::lang ;
-namespace task = com::sun::star::task ;
-namespace uno = com::sun::star::uno ;
+namespace beans = css::beans ;
+namespace frame = css::frame ;
+namespace lang = css::lang ;
+namespace task = css::task ;
+namespace uno = css::uno ;
 
 namespace
 {

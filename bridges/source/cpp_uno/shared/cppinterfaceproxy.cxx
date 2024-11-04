@@ -54,7 +54,7 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
     delete[] reinterpret_cast< char * >(pThis);
 }
 
-com::sun::star::uno::XInterface * CppInterfaceProxy::create(
+css::uno::XInterface * CppInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge, uno_Interface * pUnoI,
     typelib_InterfaceTypeDescription * pTypeDescr, OUString const & rOId)
 {
@@ -122,10 +122,10 @@ CppInterfaceProxy::CppInterfaceProxy(
 CppInterfaceProxy::~CppInterfaceProxy()
 {}
 
-com::sun::star::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
+css::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
     CppInterfaceProxy * pProxy)
 {
-    return reinterpret_cast< com::sun::star::uno::XInterface * >(
+    return reinterpret_cast< css::uno::XInterface * >(
         &pProxy->vtables);
 }
 

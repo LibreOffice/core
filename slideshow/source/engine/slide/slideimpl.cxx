@@ -1159,7 +1159,7 @@ void SlideImpl::prefetch()
     std::vector<Graphic*> graphics;
     for (sal_Int32 i = 0; i < mxDrawPage->getCount(); i++)
     {
-        com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape(mxDrawPage->getByIndex(i), com::sun::star::uno::UNO_QUERY_THROW);
+        css::uno::Reference<css::drawing::XShape> xShape(mxDrawPage->getByIndex(i), css::uno::UNO_QUERY_THROW);
         SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
         if (!pObj)
             continue;

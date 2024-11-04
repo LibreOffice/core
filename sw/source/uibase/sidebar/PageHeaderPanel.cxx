@@ -39,9 +39,9 @@ std::unique_ptr<PanelLayout> PageHeaderPanel::Create(
     SfxBindings* pBindings)
 {
     if( pParent == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException(u"no parent window given to PageHeaderPanel::Create"_ustr, nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent window given to PageHeaderPanel::Create"_ustr, nullptr, 0);
     if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException(u"no SfxBindings given to PageHeaderPanel::Create"_ustr, nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no SfxBindings given to PageHeaderPanel::Create"_ustr, nullptr, 0);
 
     return std::make_unique<PageHeaderPanel>(pParent, pBindings);
 }

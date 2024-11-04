@@ -488,9 +488,9 @@ GraphicImport::~GraphicImport()
 {
 }
 
-com::sun::star::awt::Point GraphicImport::GetGraphicObjectPosition() const
+css::awt::Point GraphicImport::GetGraphicObjectPosition() const
 {
-    return (com::sun::star::awt::Point(m_pImpl->m_nLeftPosition, m_pImpl->m_nTopPosition));
+    return (css::awt::Point(m_pImpl->m_nLeftPosition, m_pImpl->m_nTopPosition));
 }
 
 bool GraphicImport::GetLayoutInCell() const

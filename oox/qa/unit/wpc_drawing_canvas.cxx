@@ -149,7 +149,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_BentConnector)
     CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
     uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(2), uno::UNO_QUERY);
-    com::sun::star::drawing::ConnectorType eEdgeKind;
+    css::drawing::ConnectorType eEdgeKind;
     xShapeProps->getPropertyValue(UNO_NAME_EDGEKIND) >>= eEdgeKind;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_STANDARD, eEdgeKind);
 
@@ -324,7 +324,7 @@ CPPUNIT_TEST_FIXTURE(TestWPC, WPC_CurvedConnector2)
     CPPUNIT_ASSERT(xInfo->supportsService(u"com.sun.star.drawing.ConnectorShape"_ustr));
 
     uno::Reference<beans::XPropertySet> xShapeProps(xGroup->getByIndex(3), uno::UNO_QUERY);
-    com::sun::star::drawing::ConnectorType eEdgeKind;
+    css::drawing::ConnectorType eEdgeKind;
     xShapeProps->getPropertyValue(UNO_NAME_EDGEKIND) >>= eEdgeKind;
     CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_CURVE, eEdgeKind);
 

@@ -836,7 +836,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
 
 sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const SfxItemSet& rItemSet )
 {
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    namespace ApiScriptType = css::i18n::ScriptType;
 
     /*  #i17050# #i107170# We need to determine which font items are set in the
         item set, and which script type we should prefer according to the

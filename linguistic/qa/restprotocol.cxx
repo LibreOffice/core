@@ -152,11 +152,11 @@ void TestRestProtocol::testProofreading()
 
     CPPUNIT_ASSERT_EQUAL(u"duden"_ustr, *LanguageToolCfg::RestProtocol::get());
 
-    Reference<::com::sun::star::linguistic2::XProofreader> xProofreader(
+    Reference<css::linguistic2::XProofreader> xProofreader(
         m_xSFactory->createInstance(u"com.sun.star.linguistic2.Proofreader"_ustr), UNO_QUERY);
     CPPUNIT_ASSERT(xProofreader.is());
 
-    com::sun::star::linguistic2::ProofreadingResult aResult
+    css::linguistic2::ProofreadingResult aResult
         = xProofreader->doProofreading(u"id"_ustr, u"ths is a tst"_ustr, aLocale, 0, 0, {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aResult.aErrors.getLength());

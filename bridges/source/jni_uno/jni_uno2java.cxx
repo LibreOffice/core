@@ -573,9 +573,9 @@ void UNO_proxy_dispatch(
                 reinterpret_cast<
                 typelib_InterfaceAttributeTypeDescription const * >(
                     member_td );
-            com::sun::star::uno::TypeDescription attrib_holder;
+            css::uno::TypeDescription attrib_holder;
             while ( attrib_td->pBaseRef != nullptr ) {
-                attrib_holder = com::sun::star::uno::TypeDescription(
+                attrib_holder = css::uno::TypeDescription(
                     attrib_td->pBaseRef );
                 assert(
                     attrib_holder.get()->eTypeClass
@@ -616,9 +616,9 @@ void UNO_proxy_dispatch(
                 reinterpret_cast<
                 typelib_InterfaceMethodTypeDescription const * >(
                     member_td );
-            com::sun::star::uno::TypeDescription method_holder;
+            css::uno::TypeDescription method_holder;
             while ( method_td->pBaseRef != nullptr ) {
-                method_holder = com::sun::star::uno::TypeDescription(
+                method_holder = css::uno::TypeDescription(
                     method_td->pBaseRef );
                 assert(
                     method_holder.get()->eTypeClass

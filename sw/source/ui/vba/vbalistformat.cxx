@@ -288,7 +288,7 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
                     rPropertySet->getPropertyValue(u"ParaTabStops"_ustr) >>= stops;
                     css::style::TabStop tabStop{};
                     tabStop.Position = nListtabStopPosition;
-                    tabStop.Alignment = com::sun::star::style::TabAlign::TabAlign_LEFT;
+                    tabStop.Alignment = css::style::TabAlign::TabAlign_LEFT;
                     tabStop.FillChar = ' ';
                     rPropertySet->setPropertyValue(u"ParaTabStops"_ustr,
                                     css::uno::Any(comphelper::combineSequences({ tabStop }, stops)));

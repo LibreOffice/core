@@ -181,8 +181,8 @@ Thread::~Thread() {}
 std::unique_ptr<PanelLayout> CommentsPanel::Create(weld::Widget* pParent)
 {
     if (pParent == nullptr)
-        throw ::com::sun::star::lang::IllegalArgumentException(
-            "no parent window given to CommentsPanel::Create", nullptr, 0);
+        throw css::lang::IllegalArgumentException("no parent window given to CommentsPanel::Create",
+                                                  nullptr, 0);
     return std::make_unique<CommentsPanel>(pParent);
 }
 

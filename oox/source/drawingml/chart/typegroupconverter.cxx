@@ -69,7 +69,7 @@ const char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
 const char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 const char SERVICE_CHART2_HISTO[]     = "com.sun.star.chart2.HistogramChartType";
 
-namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+namespace csscd = css::chart::DataLabelPlacement;
 
 const TypeGroupInfo spTypeInfos[] =
 {
@@ -491,7 +491,7 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
     if( isSeriesFrameFormat() )
         return;
 
-    namespace cssc = ::com::sun::star::chart2;
+    namespace cssc = css::chart2;
 
     // symbol style
     cssc::Symbol aSymbol;
@@ -538,7 +538,7 @@ void TypeGroupConverter::convertLineSmooth( PropertySet& rPropSet, bool bOoxSmoo
 {
     if( !isSeriesFrameFormat() && (maTypeInfo.meTypeCategory != TYPECATEGORY_RADAR) )
     {
-        namespace cssc = ::com::sun::star::chart2;
+        namespace cssc = css::chart2;
         cssc::CurveStyle eCurveStyle = bOoxSmooth ? cssc::CurveStyle_CUBIC_SPLINES : cssc::CurveStyle_LINES;
         rPropSet.setProperty( PROP_CurveStyle, eCurveStyle );
     }
@@ -549,7 +549,7 @@ void TypeGroupConverter::convertBarGeometry( PropertySet& rPropSet, sal_Int32 nO
     if( !(mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR)) )
         return;
 
-    namespace cssc = ::com::sun::star::chart2;
+    namespace cssc = css::chart2;
 
     sal_Int32 nGeom3d = cssc::DataPointGeometry3D::CUBOID;
     switch( nOoxShape )
@@ -615,7 +615,7 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     PropertySet aSeriesProp( rxSeries );
 
     // series stacking mode
-    namespace cssc = ::com::sun::star::chart2;
+    namespace cssc = css::chart2;
     cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
     // stacked overrides deep-3d
     if( isStacked() || isPercent() )

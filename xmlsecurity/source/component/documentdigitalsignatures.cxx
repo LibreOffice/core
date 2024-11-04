@@ -95,7 +95,7 @@ private:
     /// @throws css::uno::RuntimeException
     css::uno::Sequence<css::security::DocumentSignatureInformation>
     ImplVerifySignatures(const css::uno::Reference<css::embed::XStorage>& rxStorage,
-                         const ::com::sun::star::uno::Reference<css::io::XInputStream>& xSignStream,
+                         const css::uno::Reference<css::io::XInputStream>& xSignStream,
                          DocumentSignatureMode eMode);
 
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
@@ -168,7 +168,7 @@ public:
     css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>
         SAL_CALL chooseEncryptionCertificate(const CertificateKind certificateKind) override;
     css::uno::Reference<css::security::XCertificate> SAL_CALL chooseCertificateWithProps(
-        css::uno::Sequence<::com::sun::star::beans::PropertyValue>& Properties) override;
+        css::uno::Sequence<css::beans::PropertyValue>& Properties) override;
 
     sal_Bool SAL_CALL signDocumentWithCertificate(
                             css::uno::Reference<css::security::XCertificate> const & xCertificate,
@@ -709,7 +709,7 @@ DocumentDigitalSignatures::chooseEncryptionCertificate(const CertificateKind cer
         return aCerts;
 }
 
-css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<::com::sun::star::beans::PropertyValue>& rProperties)
+css::uno::Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificateWithProps(Sequence<css::beans::PropertyValue>& rProperties)
 {
     std::map<OUString, OUString> aProperties;
     auto xCert = chooseCertificatesImpl( aProperties, CertificateChooserUserAction::Sign )[0];

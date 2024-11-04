@@ -56,15 +56,15 @@
 #include <utility>
 #include <vcl/svapp.hxx>
 
-namespace beans = com::sun::star::beans ;
-namespace container = com::sun::star::container ;
-namespace deployment = com::sun::star::deployment ;
-namespace io = com::sun::star::io ;
-namespace lang = com::sun::star::lang ;
-namespace task = com::sun::star::task ;
-namespace ucb = com::sun::star::ucb ;
-namespace uno = com::sun::star::uno ;
-namespace xml = com::sun::star::xml ;
+namespace beans = css::beans ;
+namespace container = css::container ;
+namespace deployment = css::deployment ;
+namespace io = css::io ;
+namespace lang = css::lang ;
+namespace task = css::task ;
+namespace ucb = css::ucb ;
+namespace uno = css::uno ;
+namespace xml = css::xml ;
 
 
 namespace

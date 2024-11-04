@@ -836,7 +836,7 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
                     m_oSymbolProperties_InvisibleSymbolForSelection.emplace();
                     m_oSymbolProperties_InvisibleSymbolForSelection->Style = SymbolStyle_STANDARD;
                     m_oSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;//square
-                    m_oSymbolProperties_InvisibleSymbolForSelection->Size = com::sun::star::awt::Size(0, 0);//tdf#126033
+                    m_oSymbolProperties_InvisibleSymbolForSelection->Size = css::awt::Size(0, 0);//tdf#126033
                     m_oSymbolProperties_InvisibleSymbolForSelection->BorderColor = 0xff000000;//invisible
                     m_oSymbolProperties_InvisibleSymbolForSelection->FillColor = 0xff000000;//invisible
                 }

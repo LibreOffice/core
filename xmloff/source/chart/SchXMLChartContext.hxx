@@ -100,7 +100,7 @@ private:
     bool mbRowHasLabels;
     css::chart::ChartDataRowSource meDataRowSource;
     bool mbIsStockChart;
-    com::sun::star::chart2::PieChartSubType mPieSubType;
+    css::chart2::PieChartSubType mPieSubType;
 
     OUString msCategoriesAddress;
     OUString msChartAddress;

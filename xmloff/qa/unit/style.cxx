@@ -80,7 +80,7 @@ struct XmlFont
     }
 };
 
-Color asColor(com::sun::star::rendering::RGBColor const& rRGBColor)
+Color asColor(css::rendering::RGBColor const& rRGBColor)
 {
     basegfx::BColor aBColor(rRGBColor.Red, rRGBColor.Green, rRGBColor.Blue);
     return Color(aBColor);

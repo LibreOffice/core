@@ -283,7 +283,7 @@ void NotebookbarTabControl::FillShortcutsToolBox(Reference<XComponentContext> co
                                           ToolBox* pShortcuts
 )
 {
-    Reference<::com::sun::star::container::XIndexAccess> xIndex;
+    Reference<css::container::XIndexAccess> xIndex;
 
     try
     {

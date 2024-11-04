@@ -203,8 +203,8 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
     try
     {
-        namespace cssc = ::com::sun::star::chart;
-        namespace cssc2 = ::com::sun::star::chart2;
+        namespace cssc = css::chart;
+        namespace cssc2 = css::chart2;
 
         // create the legend
         Reference< XLegend > xLegend( createInstance( u"com.sun.star.chart2.Legend"_ustr ), UNO_QUERY_THROW );

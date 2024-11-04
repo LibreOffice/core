@@ -244,7 +244,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 
     /*  Following all conversions needing the old Chart1 API that involves full
         initialization of the chart view. */
-    namespace cssc = ::com::sun::star::chart;
+    namespace cssc = css::chart;
     Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY );
     if( xChart1Doc.is() )
     {

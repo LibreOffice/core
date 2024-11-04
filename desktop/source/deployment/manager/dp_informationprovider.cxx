@@ -45,13 +45,13 @@
 #include <dp_version.hxx>
 #include <dp_update.hxx>
 
-namespace beans      = com::sun::star::beans ;
-namespace deployment = com::sun::star::deployment ;
-namespace lang       = com::sun::star::lang ;
-namespace task       = com::sun::star::task ;
-namespace css_ucb    = com::sun::star::ucb ;
-namespace uno        = com::sun::star::uno ;
-namespace xml = com::sun::star::xml ;
+namespace beans      = css::beans ;
+namespace deployment = css::deployment ;
+namespace lang       = css::lang ;
+namespace task       = css::task ;
+namespace css_ucb    = css::ucb ;
+namespace uno        = css::uno ;
+namespace xml = css::xml ;
 
 
 namespace dp_info {

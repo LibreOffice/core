@@ -94,12 +94,12 @@
 #include <comphelper/processfactory.hxx>
 #include <config_features.h>
 
-namespace uno = com::sun::star::uno;
-namespace frame = com::sun::star::frame;
-namespace lang = com::sun::star::lang;
-namespace container = com::sun::star::container;
-namespace beans = com::sun::star::beans;
-namespace graphic = com::sun::star::graphic;
+namespace uno = css::uno;
+namespace frame = css::frame;
+namespace lang = css::lang;
+namespace container = css::container;
+namespace beans = css::beans;
+namespace graphic = css::graphic;
 
 #if OSL_DEBUG_LEVEL > 1
 

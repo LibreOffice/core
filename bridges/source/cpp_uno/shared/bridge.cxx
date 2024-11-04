@@ -79,7 +79,7 @@ void cpp2unoMapping(
         uno_Interface * pSurrogate
             = bridges::cpp_uno::shared::UnoInterfaceProxy::create(
                 pBridge,
-                static_cast< ::com::sun::star::uno::XInterface * >( pCppI ),
+                static_cast< css::uno::XInterface * >( pCppI ),
                 pTypeDescr, pOId );
 
         // proxy may be exchanged during registration
@@ -100,7 +100,7 @@ void uno2cppMapping(
     assert(ppCppI && pTypeDescr);
     if (*ppCppI)
     {
-        static_cast< ::com::sun::star::uno::XInterface * >( *ppCppI )->
+        static_cast< css::uno::XInterface * >( *ppCppI )->
             release();
         *ppCppI = nullptr;
     }
@@ -122,7 +122,7 @@ void uno2cppMapping(
     if (! *ppCppI) // no existing interface, register new proxy interface
     {
         // try to publish a new proxy (ref count initially 1)
-        com::sun::star::uno::XInterface * pProxy
+        css::uno::XInterface * pProxy
             = bridges::cpp_uno::shared::CppInterfaceProxy::create(
                 pBridge, static_cast< uno_Interface * >( pUnoI ),
                 pTypeDescr, pOId );

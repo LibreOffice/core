@@ -236,8 +236,8 @@ awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
 
 void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& )
 {
-    com::sun::star::uno::Any aFocused;
-    com::sun::star::uno::Any aEmpty;
+    css::uno::Any aFocused;
+    css::uno::Any aEmpty;
     aFocused <<= FOCUSED;
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aFocused,aEmpty);
@@ -246,8 +246,8 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& 
 
 void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& )
 {
-    com::sun::star::uno::Any aFocused;
-    com::sun::star::uno::Any aEmpty;
+    css::uno::Any aFocused;
+    css::uno::Any aEmpty;
     aFocused <<= FOCUSED;
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);

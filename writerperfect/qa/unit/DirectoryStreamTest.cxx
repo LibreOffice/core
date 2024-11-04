@@ -20,8 +20,8 @@
 #include <DirectoryStream.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
 
 using std::unique_ptr;
 

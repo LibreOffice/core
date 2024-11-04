@@ -181,7 +181,7 @@ private:
     OUString impl_g_getLocation();
 
     bool
-        impl_isControllerConnected( const css::uno::Reference< com::sun::star::frame::XController >& xController );
+        impl_isControllerConnected( const css::uno::Reference< css::frame::XController >& xController );
 
     /// @throws css::uno::RuntimeException
     css::uno::Reference< css::frame::XController >
@@ -204,7 +204,7 @@ private:
         const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor,
         const css::uno::Reference< css::embed::XStorage >& xStorage );
     void impl_loadGraphics(
-        const css::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+        const css::uno::Reference< css::embed::XStorage >& xStorage );
     css::uno::Reference< css::document::XFilter >
         impl_createFilter( const css::uno::Sequence< css::beans::PropertyValue > & rMediaDescriptor );
 

@@ -43,10 +43,10 @@
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 
-namespace uno = com::sun::star::uno;
-namespace frame = com::sun::star::frame;
-namespace container = com::sun::star::container;
-namespace beans = com::sun::star::beans;
+namespace uno = css::uno;
+namespace frame = css::frame;
+namespace container = css::container;
+namespace beans = css::beans;
 
 static bool isCategoryAvailable(std::u16string_view sClassId, std::u16string_view sUIItemId,
                                 std::u16string_view sActiveCategory, bool& isCategory)

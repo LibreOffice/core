@@ -28,14 +28,14 @@
 
 #include <ucbhelper/content.hxx>
 
-namespace beans = com::sun::star::beans;
-namespace container = com::sun::star::container;
-namespace document = com::sun::star::document;
-namespace frame = com::sun::star::frame;
-namespace lang = com::sun::star::lang;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
-namespace util = com::sun::star::util;
+namespace beans = css::beans;
+namespace container = css::container;
+namespace document = css::document;
+namespace frame = css::frame;
+namespace lang = css::lang;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
+namespace util = css::util;
 
 namespace writerperfect::test
 {

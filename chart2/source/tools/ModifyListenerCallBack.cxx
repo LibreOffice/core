@@ -67,7 +67,7 @@ void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& /
     m_xBroadcaster.clear();
 }
 
-void ModifyListenerCallBack_impl::startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster )
+void ModifyListenerCallBack_impl::startListening( const css::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
 {
     if( m_xBroadcaster == xBroadcaster )
         return;
@@ -97,7 +97,7 @@ ModifyListenerCallBack::~ModifyListenerCallBack()
     stopListening();
 }
 
-void ModifyListenerCallBack::startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster )
+void ModifyListenerCallBack::startListening( const css::uno::Reference< css::util::XModifyBroadcaster >& xBroadcaster )
 {
     pModifyListener_impl->startListening( xBroadcaster );
 }

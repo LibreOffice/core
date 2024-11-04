@@ -52,10 +52,10 @@ public:
     virtual ~DAVSessionFactory() override;
 
     /// @throws DAVException
-    rtl::Reference<DAVSession> createDAVSession(
-        const OUString& inUri,
-        const ::com::sun::star::uno::Sequence<::com::sun::star::beans::NamedValue>& rFlags,
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+    rtl::Reference<DAVSession>
+    createDAVSession(const OUString& inUri,
+                     const css::uno::Sequence<css::beans::NamedValue>& rFlags,
+                     const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
 private:
     typedef std::map<OUString, DAVSession*> Map;

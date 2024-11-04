@@ -41,9 +41,9 @@ information easily via callbacks.
 TODO: the callbacks are not implemented yet, we just approve any interaction
 that we get.
 */
-class LOKInteractionHandler: public cppu::WeakImplHelper<com::sun::star::lang::XServiceInfo,
-                                                         com::sun::star::lang::XInitialization,
-                                                         com::sun::star::task::XInteractionHandler2>
+class LOKInteractionHandler: public cppu::WeakImplHelper<css::lang::XServiceInfo,
+                                                         css::lang::XInitialization,
+                                                         css::task::XInteractionHandler2>
 {
 private:
     desktop::LibLibreOffice_Impl * m_pLOKit;
@@ -76,7 +76,7 @@ private:
     bool handlePasswordRequest(const css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> &rContinuations, const css::uno::Any& rRequest);
     static bool handleMacroConfirmationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
 
-    static bool handleFilterOptionsRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request);
+    static bool handleFilterOptionsRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request);
     static bool handlePackageReparationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
 
     static bool handleLoadReadOnlyRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
@@ -95,13 +95,13 @@ public:
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override;
 
-    virtual com::sun::star::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
-    virtual void SAL_CALL initialize(com::sun::star::uno::Sequence<com::sun::star::uno::Any > const & rArguments) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any > const & rArguments) override;
 
-    virtual void SAL_CALL handle(com::sun::star::uno::Reference<com::sun::star::task::XInteractionRequest> const & rRequest) override;
+    virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override;
 
-    virtual sal_Bool SAL_CALL handleInteractionRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request) override;
+    virtual sal_Bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& Request) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

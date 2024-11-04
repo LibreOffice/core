@@ -3134,7 +3134,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
         OUString key = sModule + viewLang;
 
         // Check it in configurations map. Create a configuration manager if there isn't one for the key.
-        std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxApplication::Get()->GetAcceleratorConfs_Impl();
+        std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxApplication::Get()->GetAcceleratorConfs_Impl();
         if (acceleratorConfs.find(key) == acceleratorConfs.end())
         {
             // Create a new configuration manager for the module.

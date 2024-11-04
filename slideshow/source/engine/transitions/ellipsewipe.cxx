@@ -30,7 +30,7 @@ namespace slideshow::internal {
     ::basegfx::B2DPoint rCenter(0.5,0.5);
     double fRadius = ::basegfx::pruneScaleValue( t * M_SQRT2 / 2.0 );
 
-    if( mnSubType == com::sun::star::animations::TransitionSubType::VERTICAL )
+    if( mnSubType == css::animations::TransitionSubType::VERTICAL )
     {
         // oval:
         ::basegfx::B2DPolygon poly (

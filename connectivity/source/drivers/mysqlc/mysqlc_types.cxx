@@ -29,14 +29,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ------------- MySQL-Type: BIT. SDBC-Type: Bit -------------
     {
         "BIT", // Typename
-        com::sun::star::sdbc::DataType::BIT, // sdbc-type
+        css::sdbc::DataType::BIT, // sdbc-type
         1, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -48,14 +48,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ------------ MySQL-Type: BOOL. SDBC-Type: Bit -------------
     {
         "BOOL", // Typename
-        com::sun::star::sdbc::DataType::BIT, // sdbc-type
+        css::sdbc::DataType::BIT, // sdbc-type
         1, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -67,14 +67,14 @@ TypeInfoDef const mysqlc_types[] = {
     // --------- MySQL-Type: TINYINT SDBC-Type: TINYINT ----------
     {
         "TINYINT", // Typename
-        com::sun::star::sdbc::DataType::TINYINT, // sdbc-type
+        css::sdbc::DataType::TINYINT, // sdbc-type
         3, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -86,14 +86,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: BIGINT SDBC-Type: BIGINT ----------
     {
         "BIGINT", // Typename
-        com::sun::star::sdbc::DataType::BIGINT, // sdbc-type
+        css::sdbc::DataType::BIGINT, // sdbc-type
         19, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -105,14 +105,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: LONG VARBINARY SDBC-Type: LONGVARBINARY ----------
     {
         "LONG VARBINARY", // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
+        css::sdbc::DataType::LONGVARBINARY, // sdbc-type
         16777215, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -124,14 +124,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: MEDIUMBLOB SDBC-Type: LONGVARBINARY ----------
     {
         "MEDIUMBLOB", // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
+        css::sdbc::DataType::LONGVARBINARY, // sdbc-type
         16777215, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -143,14 +143,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: LONGBLOB SDBC-Type: LONGVARBINARY ----------
     {
         "LONGBLOB", // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
+        css::sdbc::DataType::LONGVARBINARY, // sdbc-type
         -1, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -162,14 +162,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: BLOB SDBC-Type: LONGVARBINARY ----------
     {
         "BLOB", // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
+        css::sdbc::DataType::LONGVARBINARY, // sdbc-type
         0xFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -181,14 +181,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: TINYBLOB SDBC-Type: LONGVARBINARY ----------
     {
         "TINYBLOB", // Typename
-        com::sun::star::sdbc::DataType::LONGVARBINARY, // sdbc-type
+        css::sdbc::DataType::LONGVARBINARY, // sdbc-type
         0xFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -200,14 +200,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: VARBINARY SDBC-Type: VARBINARY ----------
     {
         "VARBINARY", // Typename
-        com::sun::star::sdbc::DataType::VARBINARY, // sdbc-type
+        css::sdbc::DataType::VARBINARY, // sdbc-type
         0xFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "(M)", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -219,14 +219,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: BINARY SDBC-Type: BINARY ----------
     {
         "BINARY", // Typename
-        com::sun::star::sdbc::DataType::BINARY, // sdbc-type
+        css::sdbc::DataType::BINARY, // sdbc-type
         0xFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "(M)", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         true, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -238,14 +238,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: LONG VARCHAR SDBC-Type: LONG VARCHAR ----------
     {
         "LONG VARCHAR", // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
+        css::sdbc::DataType::LONGVARCHAR, // sdbc-type
         0xFFFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -257,14 +257,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: MEDIUMTEXT SDBC-Type: LONG VARCHAR ----------
     {
         "MEDIUMTEXT", // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
+        css::sdbc::DataType::LONGVARCHAR, // sdbc-type
         0xFFFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -276,14 +276,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: LONGTEXT SDBC-Type: LONG VARCHAR ----------
     {
         "LONGTEXT", // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
+        css::sdbc::DataType::LONGVARCHAR, // sdbc-type
         0xFFFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -295,14 +295,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: TEXT SDBC-Type: LONG VARCHAR ----------
     {
         "TEXT", // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
+        css::sdbc::DataType::LONGVARCHAR, // sdbc-type
         0xFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -314,14 +314,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: TINYTEXT SDBC-Type: LONG VARCHAR ----------
     {
         "TINYTEXT", // Typename
-        com::sun::star::sdbc::DataType::LONGVARCHAR, // sdbc-type
+        css::sdbc::DataType::LONGVARCHAR, // sdbc-type
         0xFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -333,14 +333,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: CHAR SDBC-Type: CHAR ----------
     {
         "CHAR", // Typename
-        com::sun::star::sdbc::DataType::CHAR, // sdbc-type
+        css::sdbc::DataType::CHAR, // sdbc-type
         0xFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "(M)", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -352,14 +352,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: DECIMAL SDBC-Type: DECIMAL ----------
     {
         "DECIMAL", // Typename
-        com::sun::star::sdbc::DataType::DECIMAL, // sdbc-type
+        css::sdbc::DataType::DECIMAL, // sdbc-type
         17, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M[,D])] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -371,14 +371,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: NUMERIC SDBC-Type: NUMERIC ----------
     {
         "NUMERIC", // Typename
-        com::sun::star::sdbc::DataType::NUMERIC, // sdbc-type
+        css::sdbc::DataType::NUMERIC, // sdbc-type
         17, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M[,D])] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -390,14 +390,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: INTEGER SDBC-Type: INTEGER ----------
     {
         "INTEGER", // Typename
-        com::sun::star::sdbc::DataType::INTEGER, // sdbc-type
+        css::sdbc::DataType::INTEGER, // sdbc-type
         10, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -409,14 +409,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: INT SDBC-Type: INTEGER ----------
     {
         "INT", // Typename
-        com::sun::star::sdbc::DataType::INTEGER, // sdbc-type
+        css::sdbc::DataType::INTEGER, // sdbc-type
         10, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -428,14 +428,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: MEDIUMINT SDBC-Type: INTEGER ----------
     {
         "MEDIUMINT", // Typename
-        com::sun::star::sdbc::DataType::INTEGER, // sdbc-type
+        css::sdbc::DataType::INTEGER, // sdbc-type
         7, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -447,14 +447,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: SMALLINT SDBC-Type: INTEGER ----------
     {
         "SMALLINT", // Typename
-        com::sun::star::sdbc::DataType::SMALLINT, // sdbc-type
+        css::sdbc::DataType::SMALLINT, // sdbc-type
         5, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -466,14 +466,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: FLOAT SDBC-Type: REAL ----------
     {
         "FLOAT", // Typename
-        com::sun::star::sdbc::DataType::REAL, // sdbc-type
+        css::sdbc::DataType::REAL, // sdbc-type
         10, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M,D)] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -485,14 +485,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: DOUBLE SDBC-Type: DOUBLE ----------
     {
         "DOUBLE", // Typename
-        com::sun::star::sdbc::DataType::DOUBLE, // sdbc-type
+        css::sdbc::DataType::DOUBLE, // sdbc-type
         17, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M,D)] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -504,14 +504,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: DOUBLE PRECISION SDBC-Type: DOUBLE ----------
     {
         "DOUBLE PRECISION", // Typename
-        com::sun::star::sdbc::DataType::DOUBLE, // sdbc-type
+        css::sdbc::DataType::DOUBLE, // sdbc-type
         17, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M,D)] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -523,14 +523,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: REAL SDBC-Type: DOUBLE ----------
     {
         "REAL", // Typename
-        com::sun::star::sdbc::DataType::DOUBLE, // sdbc-type
+        css::sdbc::DataType::DOUBLE, // sdbc-type
         17, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M,D)] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment
@@ -542,14 +542,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: VARCHAR SDBC-Type: VARCHAR ----------
     {
         "VARCHAR", // Typename
-        com::sun::star::sdbc::DataType::VARCHAR, // sdbc-type
+        css::sdbc::DataType::VARCHAR, // sdbc-type
         255, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "(M)", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -561,14 +561,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: ENUM SDBC-Type: VARCHAR ----------
     {
         "ENUM", // Typename
-        com::sun::star::sdbc::DataType::VARCHAR, // sdbc-type
+        css::sdbc::DataType::VARCHAR, // sdbc-type
         0xFFFF, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -580,14 +580,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: SET SDBC-Type: VARCHAR ----------
     {
         "SET", // Typename
-        com::sun::star::sdbc::DataType::VARCHAR, // sdbc-type
+        css::sdbc::DataType::VARCHAR, // sdbc-type
         64, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -599,14 +599,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: DATE SDBC-Type: DATE ----------
     {
         "DATE", // Typename
-        com::sun::star::sdbc::DataType::DATE, // sdbc-type
+        css::sdbc::DataType::DATE, // sdbc-type
         0, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -618,14 +618,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: TIME SDBC-Type: TIME ----------
     {
         "TIME", // Typename
-        com::sun::star::sdbc::DataType::TIME, // sdbc-type
+        css::sdbc::DataType::TIME, // sdbc-type
         0, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -637,14 +637,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: DATETIME SDBC-Type: TIMESTAMP ----------
     {
         "DATETIME", // Typename
-        com::sun::star::sdbc::DataType::TIMESTAMP, // sdbc-type
+        css::sdbc::DataType::TIMESTAMP, // sdbc-type
         0, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -656,14 +656,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: TIMESTAMP SDBC-Type: TIMESTAMP ----------
     {
         "TIMESTAMP", // Typename
-        com::sun::star::sdbc::DataType::TIMESTAMP, // sdbc-type
+        css::sdbc::DataType::TIMESTAMP, // sdbc-type
         0, // Precision
         "'", // Literal prefix
         "'", // Literal suffix
         "[(M)]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         false, // unsignable
         false, // fixed_prec_scale
         false, // auto_increment
@@ -677,14 +677,14 @@ TypeInfoDef const mysqlc_types[] = {
     // ----------- MySQL-Type: YEAR SDBC-Type: INTEGER  ----------
     {
         "YEAR", // Typename
-        com::sun::star::sdbc::DataType::SMALLINT, // sdbc-type
+        css::sdbc::DataType::SMALLINT, // sdbc-type
         10, // Precision
         "", // Literal prefix
         "", // Literal suffix
         "[(M)] [UNSIGNED] [ZEROFILL]", // Create params
-        com::sun::star::sdbc::ColumnValue::NULLABLE, // nullable
+        css::sdbc::ColumnValue::NULLABLE, // nullable
         false, // case sensitive
-        com::sun::star::sdbc::ColumnSearch::FULL, // searchable
+        css::sdbc::ColumnSearch::FULL, // searchable
         true, // unsignable
         false, // fixed_prec_scale
         true, // auto_increment

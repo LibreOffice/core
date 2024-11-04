@@ -230,7 +230,7 @@ private:
     */
     css::uno::Reference<css::drawing::framework::XResourceId> GetMainPaneId (
         const css::uno::Reference<css::presentation::XPresentation2>& rxPresentation,
-        const css::uno::Reference<com::sun::star::uno::XComponentContext>& xContext) const;
+        const css::uno::Reference<css::uno::XComponentContext>& xContext) const;
 };
 
 }

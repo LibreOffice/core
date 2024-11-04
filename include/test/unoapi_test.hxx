@@ -75,9 +75,8 @@ protected:
     rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
 private:
-    void
-    setTestInteractionHandler(const char* pPassword,
-                              std::vector<com::sun::star::beans::PropertyValue>& rFilterOptions);
+    void setTestInteractionHandler(const char* pPassword,
+                                   std::vector<css::beans::PropertyValue>& rFilterOptions);
 
     bool mbSkipValidation;
     OUString m_aBaseString;

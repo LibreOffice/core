@@ -36,11 +36,11 @@
 #include <shlobj.h>
 #endif
 
-namespace container = com::sun::star::container ;
-namespace beans = com::sun::star::beans ;
-namespace lang = com::sun::star::lang ;
-namespace util = com::sun::star::util ;
-namespace uno = com::sun::star::uno ;
+namespace container = css::container ;
+namespace beans = css::beans ;
+namespace lang = css::lang ;
+namespace util = css::util ;
+namespace uno = css::uno ;
 
 #define LAST_CHECK              "LastCheck"
 #define UPDATE_VERSION          "UpdateVersion"

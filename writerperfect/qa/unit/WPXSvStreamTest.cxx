@@ -26,9 +26,9 @@
 
 #include <WPXSvInputStream.hxx>
 
-namespace io = com::sun::star::io;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
+namespace io = css::io;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
 
 using std::shared_ptr;
 using std::unique_ptr;

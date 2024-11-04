@@ -56,7 +56,7 @@ namespace svt::uno
             css::uno::Reference<css::awt::XWindow> xPageWindow(m_xWizardPage->getWindow(), UNO_SET_THROW);
 
             // tdf#132110 use the current size of the child as the size request
-            com::sun::star::awt::Rectangle aChildRect = xPageWindow->getPosSize();
+            css::awt::Rectangle aChildRect = xPageWindow->getPosSize();
             pParent->set_size_request(aChildRect.Width, aChildRect.Height);
 
             xPageWindow->setVisible(true);

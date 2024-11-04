@@ -55,8 +55,8 @@ namespace svt::table
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::uno::Reference;
 
-    namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
-    namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
+    namespace AccessibleEventId = css::accessibility::AccessibleEventId;
+    namespace AccessibleTableModelChangeType = css::accessibility::AccessibleTableModelChangeType;
 
 
     //= SuppressCursor

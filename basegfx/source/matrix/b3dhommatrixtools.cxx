@@ -22,7 +22,7 @@
 
 namespace basegfx::utils
 {
-B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(const com::sun::star::drawing::HomogenMatrix& rMatrixIn)
+B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(const css::drawing::HomogenMatrix& rMatrixIn)
 {
     B3DHomMatrix aRetval;
 
@@ -47,7 +47,7 @@ B3DHomMatrix UnoHomogenMatrixToB3DHomMatrix(const com::sun::star::drawing::Homog
 }
 
 void B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
-                                    com::sun::star::drawing::HomogenMatrix& rMatrixOut)
+                                    css::drawing::HomogenMatrix& rMatrixOut)
 {
     rMatrixOut.Line1.Column1 = rMatrixIn.get(0, 0);
     rMatrixOut.Line1.Column2 = rMatrixIn.get(0, 1);

@@ -99,7 +99,7 @@ public:
     bool IsGraphic() const;
     sal_Int32 GetLeftMarginOrig() const;
 
-    com::sun::star::awt::Point GetGraphicObjectPosition() const;
+    css::awt::Point GetGraphicObjectPosition() const;
 
     bool GetLayoutInCell() const;
 

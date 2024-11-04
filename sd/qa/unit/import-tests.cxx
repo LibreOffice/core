@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf153466)
     uno::Reference<beans::XPropertySet> xBackground(
         xPageSet->getPropertyValue(u"Background"_ustr).get<uno::Reference<beans::XPropertySet>>());
 
-    com::sun::star::drawing::RectanglePoint aRectanglePoint;
+    css::drawing::RectanglePoint aRectanglePoint;
     xBackground->getPropertyValue(u"FillBitmapRectanglePoint"_ustr) >>= aRectanglePoint;
     CPPUNIT_ASSERT_EQUAL(drawing::RectanglePoint::RectanglePoint_RIGHT_BOTTOM, aRectanglePoint);
 

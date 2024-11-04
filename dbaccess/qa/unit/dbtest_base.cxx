@@ -73,7 +73,7 @@ void DBTestBase::createDBDocument(const OUString& rDriverURL)
     uno::Reference< XOfficeDatabaseDocument > xDocument(
         m_xSFactory->createInstance(u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr),
         UNO_QUERY_THROW);
-    uno::Reference< com::sun::star::frame::XStorable > xStorable(xDocument, UNO_QUERY_THROW);
+    uno::Reference< css::frame::XStorable > xStorable(xDocument, UNO_QUERY_THROW);
 
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     uno::Reference< XPropertySet > xPropertySet(xDataSource, UNO_QUERY_THROW);

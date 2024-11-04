@@ -367,7 +367,7 @@ XclExpStringRef lclCreateFormattedString(
 
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    namespace ApiScriptType = css::i18n::ScriptType;
     // #i63255# get script type for leading weak characters
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rText );
 
@@ -443,7 +443,7 @@ XclExpStringRef lclCreateFormattedString(
 
     // script type handling
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    namespace ApiScriptType = css::i18n::ScriptType;
     // #i63255# get script type for leading weak characters
     sal_Int16 nLastScript = XclExpStringHelper::GetLeadingScriptType( rRoot, rEE.GetText() );
 
@@ -659,7 +659,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
 
 sal_Int16 XclExpStringHelper::GetLeadingScriptType( const XclExpRoot& rRoot, const OUString& rString )
 {
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    namespace ApiScriptType = css::i18n::ScriptType;
     Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
     sal_Int32 nStrPos = 0;
     sal_Int32 nStrLen = rString.getLength();

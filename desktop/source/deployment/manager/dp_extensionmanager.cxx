@@ -55,14 +55,14 @@
 #include <set>
 #include <string_view>
 
-namespace lang  = com::sun::star::lang;
-namespace task = com::sun::star::task;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
-namespace beans = com::sun::star::beans;
-namespace util = com::sun::star::util;
+namespace lang  = css::lang;
+namespace task = css::task;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
+namespace beans = css::beans;
+namespace util = css::util;
 
-using ::com::sun::star::uno::Reference;
+using css::uno::Reference;
 
 namespace {
 

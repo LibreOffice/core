@@ -164,7 +164,7 @@ Color XclDefaultPalette::GetDefColor( sal_uInt16 nXclIndex ) const
 
 // Font Data ==================================================================
 
-namespace Awt              = ::com::sun::star::awt;
+namespace Awt              = css::awt;
 namespace AwtFontFamily    = Awt::FontFamily;
 namespace AwtFontLineStyle  = Awt::FontUnderline;
 namespace AwtFontStrikeout = Awt::FontStrikeout;
@@ -747,7 +747,7 @@ void XclFontPropSetHelper::WriteFontProperties(
 
 ScfPropSetHelper& XclFontPropSetHelper::GetChartHelper( sal_Int16 nScript )
 {
-    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    namespace ApiScriptType = css::i18n::ScriptType;
     switch( nScript )
     {
         case ApiScriptType::LATIN:      return maHlpChWstrn;

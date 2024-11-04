@@ -81,9 +81,9 @@ static SvxPageUsage PosToPageUsage_Impl( sal_uInt16 nPos )
 std::unique_ptr<PanelLayout> PageStylesPanel::Create(weld::Widget* pParent, SfxBindings* pBindings)
 {
     if( pParent == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException(u"no parent window given to PageStylesPanel::Create"_ustr, nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no parent window given to PageStylesPanel::Create"_ustr, nullptr, 0);
     if( pBindings == nullptr )
-        throw ::com::sun::star::lang::IllegalArgumentException(u"no SfxBindings given to PageStylesPanel::Create"_ustr, nullptr, 0);
+        throw css::lang::IllegalArgumentException(u"no SfxBindings given to PageStylesPanel::Create"_ustr, nullptr, 0);
 
     return std::make_unique<PageStylesPanel>(pParent, pBindings);
 }

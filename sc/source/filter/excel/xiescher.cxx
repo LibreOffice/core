@@ -1539,7 +1539,7 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
 
             // orientation (this is only a fake, drawing does not support real text orientation)
-            namespace csst = ::com::sun::star::text;
+            namespace csst = css::text;
             csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
             switch( maTextData.maData.mnOrient )
             {
@@ -2183,7 +2183,7 @@ void XclImpButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty( u"Align"_ustr, nHorAlign );
 
     // vertical text alignment
-    namespace csss = ::com::sun::star::style;
+    namespace csss = css::style;
     csss::VerticalAlignment eVerAlign = csss::VerticalAlignment_MIDDLE;
     switch( maTextData.maData.GetVerAlign() )
     {
@@ -2201,7 +2201,7 @@ void XclImpButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetBoolProperty( u"DefaultButton"_ustr, bDefButton );
 
     // button type (flags cannot be combined in OOo)
-    namespace cssa = ::com::sun::star::awt;
+    namespace cssa = css::awt;
     cssa::PushButtonType eButtonType = cssa::PushButtonType_STANDARD;
     if( ::get_flag( maTextData.maData.mnButtonFlags, EXC_OBJ_BUTTON_CLOSE ) )
         eButtonType = cssa::PushButtonType_OK;
@@ -2286,7 +2286,7 @@ void XclImpCheckBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty( u"DefaultState"_ustr, nApiState );
 
     // box style
-    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
+    namespace AwtVisualEffect = css::awt::VisualEffect;
     sal_Int16 nEffect = ::get_flagvalue( mnCheckBoxFlags, EXC_OBJ_CHECKBOX_FLAT, AwtVisualEffect::FLAT, AwtVisualEffect::LOOK3D );
     rPropSet.SetProperty( u"VisualEffect"_ustr, nEffect );
 
@@ -2294,7 +2294,7 @@ void XclImpCheckBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetBoolProperty( u"MultiLine"_ustr, false );
 
     // #i40279# always centered vertically
-    namespace csss = ::com::sun::star::style;
+    namespace csss = css::style;
     rPropSet.SetProperty( u"VerticalAlign"_ustr, csss::VerticalAlignment_MIDDLE );
 
     // background color
@@ -2425,7 +2425,7 @@ void XclImpLabelObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
     // text alignment (always top/left aligned)
     rPropSet.SetProperty( u"Align"_ustr, sal_Int16( 0 ) );
-    namespace csss = ::com::sun::star::style;
+    namespace csss = css::style;
     rPropSet.SetProperty( u"VerticalAlign"_ustr, csss::VerticalAlignment_TOP );
 
     // always wrap text automatically
@@ -2696,7 +2696,7 @@ void XclImpScrollBarObj::DoProcessControl( ScfPropertySet& rPropSet ) const
     rPropSet.SetProperty< sal_Int32 >( u"BlockIncrement"_ustr, mnPageStep );
     rPropSet.SetProperty( u"VisibleSize"_ustr, ::std::min< sal_Int32 >( mnPageStep, 1 ) );
 
-    namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    namespace AwtScrollOrient = css::awt::ScrollBarOrientation;
     sal_Int32 nApiOrient = ::get_flagvalue( mnOrient, EXC_OBJ_SCROLLBAR_HOR, AwtScrollOrient::HORIZONTAL, AwtScrollOrient::VERTICAL );
     rPropSet.SetProperty( u"Orientation"_ustr, nApiOrient );
 }
@@ -2733,7 +2733,7 @@ void XclImpTbxObjListBase::ReadLbsData( XclImpStream& rStrm )
 void XclImpTbxObjListBase::SetBoxFormatting( ScfPropertySet& rPropSet ) const
 {
     // border style
-    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
+    namespace AwtVisualEffect = css::awt::VisualEffect;
     sal_Int16 nApiBorder = ::get_flagvalue( mnListFlags, EXC_OBJ_LISTBOX_FLAT, AwtVisualEffect::FLAT, AwtVisualEffect::LOOK3D );
     rPropSet.SetProperty( u"Border"_ustr, nApiBorder );
 
@@ -3547,7 +3547,7 @@ rtl::Reference<SdrObject> XclImpDffConverter::CreateSdrObject( const XclImpPictu
                 if( aGraphic.GetType() != GraphicType::NONE )
                 {
                     ErrCode nError = ERRCODE_NONE;
-                    namespace cssea = ::com::sun::star::embed::Aspects;
+                    namespace cssea = css::embed::Aspects;
                     sal_Int64 nAspects = rPicObj.IsSymbol() ? cssea::MSOLE_ICON : cssea::MSOLE_CONTENT;
                     xSdrObj =
                         CreateSdrOLEFromStorage(

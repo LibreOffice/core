@@ -859,7 +859,7 @@ namespace xforms
         {
             aTypeValue = Convert::get().toAny( value, getCppuType() );
         }
-        catch (com::sun::star::lang::IllegalArgumentException)
+        catch (css::lang::IllegalArgumentException)
         {
             return false;
         }
@@ -916,7 +916,7 @@ namespace xforms
         {
             aTypedValue = Convert::get().toAny( value, getCppuType() );
         }
-        catch (com::sun::star::lang::IllegalArgumentException)
+        catch (css::lang::IllegalArgumentException)
         {
             return false;
         }
@@ -996,7 +996,7 @@ namespace xforms
         {
             aTypedValue = Convert::get().toAny( value, getCppuType() );
         }
-        catch (com::sun::star::uno::RuntimeException)
+        catch (css::uno::RuntimeException)
         {
             return false;
         }

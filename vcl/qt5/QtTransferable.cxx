@@ -316,8 +316,7 @@ QVariant QtMimeData::retrieveData(const QString& mimeType, QMetaType) const
     try
     {
         // tdf#129809 take a reference in case m_aContents is replaced during this call
-        css::uno::Reference<com::sun::star::datatransfer::XTransferable> xCurrentContents(
-            m_aContents);
+        css::uno::Reference<css::datatransfer::XTransferable> xCurrentContents(m_aContents);
         aValue = xCurrentContents->getTransferData(aFlavor);
     }
     catch (...)

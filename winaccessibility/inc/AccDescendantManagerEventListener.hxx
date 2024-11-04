@@ -36,7 +36,7 @@ enum class UnoMSAAEvent;
 class AccDescendantManagerEventListener: public AccComponentEventListener
 {
 private:
-    std::vector<com::sun::star::accessibility::XAccessible*> m_aUnselectedChildrenForDeletion;
+    std::vector<css::accessibility::XAccessible*> m_aUnselectedChildrenForDeletion;
 
 public:
     AccDescendantManagerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager& rManager);

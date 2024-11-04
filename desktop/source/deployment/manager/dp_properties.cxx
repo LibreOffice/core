@@ -26,12 +26,12 @@
 #include <dp_ucb.h>
 #include "dp_properties.hxx"
 
-namespace lang  = com::sun::star::lang;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
+namespace lang  = css::lang;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
 
 
-using ::com::sun::star::uno::Reference;
+using css::uno::Reference;
 
 constexpr OUString PROP_SUPPRESS_LICENSE = u"SUPPRESS_LICENSE"_ustr;
 constexpr OUStringLiteral PROP_EXTENSION_UPDATE = u"EXTENSION_UPDATE";

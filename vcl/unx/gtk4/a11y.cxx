@@ -275,63 +275,63 @@ static void applyStates(GtkAccessible* pGtkAccessible,
     const sal_Int64 nStates = xContext->getAccessibleStateSet();
     gtk_accessible_update_property(
         pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_MODAL,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MODAL),
+        bool(nStates & css::accessibility::AccessibleStateType::MODAL),
         GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_LINE),
+        bool(nStates & css::accessibility::AccessibleStateType::MULTI_LINE),
         GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE),
+        bool(nStates & css::accessibility::AccessibleStateType::MULTI_SELECTABLE),
         GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
-        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::EDITABLE)), -1);
-    if (nStates & com::sun::star::accessibility::AccessibleStateType::HORIZONTAL)
+        bool(!(nStates & css::accessibility::AccessibleStateType::EDITABLE)), -1);
+    if (nStates & css::accessibility::AccessibleStateType::HORIZONTAL)
     {
         gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
                                        GTK_ORIENTATION_HORIZONTAL, -1);
     }
-    else if (nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL)
+    else if (nStates & css::accessibility::AccessibleStateType::VERTICAL)
     {
         gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
                                        GTK_ORIENTATION_VERTICAL, -1);
     }
 
-    gtk_accessible_update_state(
-        pGtkAccessible, GTK_ACCESSIBLE_STATE_BUSY,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::BUSY),
-        GTK_ACCESSIBLE_STATE_DISABLED,
-        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)), -1);
+    gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_BUSY,
+                                bool(nStates & css::accessibility::AccessibleStateType::BUSY),
+                                GTK_ACCESSIBLE_STATE_DISABLED,
+                                bool(!(nStates & css::accessibility::AccessibleStateType::ENABLED)),
+                                -1);
 
     // when explicitly setting any value for GTK_ACCESSIBLE_STATE_CHECKED,
     // Gtk will also report ATSPI_STATE_CHECKABLE on the AT-SPI layer
-    if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKABLE)
+    if (nStates & css::accessibility::AccessibleStateType::CHECKABLE)
     {
         GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
-        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+        if (nStates & css::accessibility::AccessibleStateType::INDETERMINATE)
             eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
-        else if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKED)
+        else if (nStates & css::accessibility::AccessibleStateType::CHECKED)
             eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
         gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
     }
 
-    if (nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDABLE)
+    if (nStates & css::accessibility::AccessibleStateType::EXPANDABLE)
     {
         gtk_accessible_update_state(
             pGtkAccessible, GTK_ACCESSIBLE_STATE_EXPANDED,
-            bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED), -1);
+            bool(nStates & css::accessibility::AccessibleStateType::EXPANDED), -1);
     }
 
-    if (nStates & com::sun::star::accessibility::AccessibleStateType::SELECTABLE)
+    if (nStates & css::accessibility::AccessibleStateType::SELECTABLE)
     {
         gtk_accessible_update_state(
             pGtkAccessible, GTK_ACCESSIBLE_STATE_SELECTED,
-            bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
+            bool(nStates & css::accessibility::AccessibleStateType::SELECTED), -1);
     }
 
     const sal_Int16 nRole = xContext->getAccessibleRole();
-    if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
+    if (nRole == css::accessibility::AccessibleRole::TOGGLE_BUTTON)
     {
         GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
-        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+        if (nStates & css::accessibility::AccessibleStateType::INDETERMINATE)
             eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
-        else if (nStates & com::sun::star::accessibility::AccessibleStateType::PRESSED)
+        else if (nStates & css::accessibility::AccessibleStateType::PRESSED)
             eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
         gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_PRESSED, eState, -1);
     }

@@ -1361,7 +1361,7 @@ void ChartController::executeDispatch_SourceData()
     if ( rModel.hasInternalDataProvider() )
     {
         // Check if we will able to create data provider later
-        css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(
+        css::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(
             rModel.getParent(), uno::UNO_QUERY);
         if (!xCreatorDoc.is())
             return;

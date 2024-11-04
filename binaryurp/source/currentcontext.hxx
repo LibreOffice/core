@@ -28,9 +28,9 @@ class UnoInterfaceReference;
 
 namespace binaryurp::current_context
 {
-com::sun::star::uno::UnoInterfaceReference get();
+css::uno::UnoInterfaceReference get();
 
-void set(com::sun::star::uno::UnoInterfaceReference const& value);
+void set(css::uno::UnoInterfaceReference const& value);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

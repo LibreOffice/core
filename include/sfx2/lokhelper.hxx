@@ -87,7 +87,7 @@ class SFX2_DLLPUBLIC SfxLokHelper
 {
 public:
     /// Gets the short cut accelerators.
-    static std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
+    static std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& getAcceleratorConfs();
     /// Create a new view shell from the current view frame.
     /// This assumes a single document is ever loaded.
     static int createView();

@@ -35,10 +35,10 @@
 
 #include "download.hxx"
 
-namespace beans = com::sun::star::beans ;
-namespace container = com::sun::star::container ;
-namespace lang = com::sun::star::lang ;
-namespace uno = com::sun::star::uno ;
+namespace beans = css::beans ;
+namespace container = css::container ;
+namespace lang = css::lang ;
+namespace uno = css::uno ;
 
 namespace {
 

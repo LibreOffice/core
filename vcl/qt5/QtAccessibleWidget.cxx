@@ -197,15 +197,15 @@ sal_Int16 lcl_matchQtTextBoundaryType(QAccessible::TextBoundaryType boundaryType
     switch (boundaryType)
     {
         case QAccessible::CharBoundary:
-            return com::sun::star::accessibility::AccessibleTextType::CHARACTER;
+            return css::accessibility::AccessibleTextType::CHARACTER;
         case QAccessible::WordBoundary:
-            return com::sun::star::accessibility::AccessibleTextType::WORD;
+            return css::accessibility::AccessibleTextType::WORD;
         case QAccessible::SentenceBoundary:
-            return com::sun::star::accessibility::AccessibleTextType::SENTENCE;
+            return css::accessibility::AccessibleTextType::SENTENCE;
         case QAccessible::ParagraphBoundary:
-            return com::sun::star::accessibility::AccessibleTextType::PARAGRAPH;
+            return css::accessibility::AccessibleTextType::PARAGRAPH;
         case QAccessible::LineBoundary:
-            return com::sun::star::accessibility::AccessibleTextType::LINE;
+            return css::accessibility::AccessibleTextType::LINE;
         case QAccessible::NoBoundary:
             // assert here, better handle it directly at call site
             assert(false

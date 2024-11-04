@@ -46,15 +46,15 @@ namespace binaryurp {
 
 typedef
     cppu::WeakComponentImplHelper<
-        com::sun::star::lang::XServiceInfo,
-        com::sun::star::bridge::XBridgeFactory2 >
+        css::lang::XServiceInfo,
+        css::bridge::XBridgeFactory2 >
     BridgeFactoryBase;
 
 class BridgeFactory : private cppu::BaseMutex, public BridgeFactoryBase
 {
 public:
     void removeBridge(
-        com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
+        css::uno::Reference< css::bridge::XBridge >
             const & bridge);
 
     using BridgeFactoryBase::acquire;
@@ -72,38 +72,34 @@ private:
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
+    virtual css::uno::Reference< css::bridge::XBridge >
     SAL_CALL createBridge(
         OUString const & sName, OUString const & sProtocol,
-        com::sun::star::uno::Reference<
-            com::sun::star::connection::XConnection > const & aConnection,
-        com::sun::star::uno::Reference<
-            com::sun::star::bridge::XInstanceProvider > const &
+        css::uno::Reference< css::connection::XConnection > const & aConnection,
+        css::uno::Reference< css::bridge::XInstanceProvider > const &
                 anInstanceProvider) override;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::bridge::XBridge >
+    virtual css::uno::Reference< css::bridge::XBridge >
     SAL_CALL getBridge(
         OUString const & sName) override;
 
     virtual
-    com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
+    css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
     SAL_CALL getExistingBridges() override;
 
     void SAL_CALL disposing() override;
 
     typedef
-        std::vector<
-            com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
+        std::vector< css::uno::Reference< css::bridge::XBridge > >
         BridgeVector;
 
     typedef
         std::map<
             OUString,
-            com::sun::star::uno::Reference< com::sun::star::bridge::XBridge > >
+            css::uno::Reference< css::bridge::XBridge > >
         BridgeMap;
 
     BridgeVector unnamed_;

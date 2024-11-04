@@ -371,7 +371,7 @@ namespace svx
     {
     }
 
-    void ToolboxButtonLineStyleUpdater::Update(const com::sun::star::frame::FeatureStateEvent& rEvent)
+    void ToolboxButtonLineStyleUpdater::Update(const css::frame::FeatureStateEvent& rEvent)
     {
         if (rEvent.FeatureURL.Complete == ".uno:LineDash")
         {

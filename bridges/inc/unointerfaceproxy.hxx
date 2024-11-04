@@ -60,21 +60,21 @@ public:
     // Interface for Bridge:
 
     static UnoInterfaceProxy * create(
-        Bridge * pBridge, com::sun::star::uno::XInterface * pCppI,
+        Bridge * pBridge, css::uno::XInterface * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         OUString const & rOId);
 
     // Interface for individual CPP--UNO bridges:
 
     Bridge * getBridge() { return pBridge; }
-    com::sun::star::uno::XInterface * getCppI() { return pCppI; }
+    css::uno::XInterface * getCppI() { return pCppI; }
 
 private:
     UnoInterfaceProxy(UnoInterfaceProxy const &) = delete;
     UnoInterfaceProxy& operator =(const UnoInterfaceProxy&) = delete;
 
     UnoInterfaceProxy(
-        Bridge * pBridge_, com::sun::star::uno::XInterface * pCppI_,
+        Bridge * pBridge_, css::uno::XInterface * pCppI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
         OUString aOId_);
 
@@ -84,7 +84,7 @@ private:
     Bridge * pBridge;
 
     // mapping information
-    com::sun::star::uno::XInterface * pCppI; // wrapped interface
+    css::uno::XInterface * pCppI; // wrapped interface
     typelib_InterfaceTypeDescription * pTypeDescr;
     OUString oid;
 

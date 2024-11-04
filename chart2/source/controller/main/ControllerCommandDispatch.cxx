@@ -555,7 +555,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
         OSL_ENSURE(xChartModel.is(), "Invalid XChartDocument");
         if ( xChartModel.is() )
         {
-            css::uno::Reference< com::sun::star::chart2::XDataProviderAccess > xCreatorDoc(xChartModel->getParent(), uno::UNO_QUERY);
+            css::uno::Reference< css::chart2::XDataProviderAccess > xCreatorDoc(xChartModel->getParent(), uno::UNO_QUERY);
             bCanCreateDataProvider = xCreatorDoc.is();
         }
     }

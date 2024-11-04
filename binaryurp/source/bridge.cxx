@@ -165,7 +165,7 @@ void PopOutgoingRequest::clear() {
 }
 
 struct Bridge::SubStub {
-    com::sun::star::uno::UnoInterfaceReference object;
+    css::uno::UnoInterfaceReference object;
 
     sal_uInt32 references;
 };

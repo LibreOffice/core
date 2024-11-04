@@ -239,7 +239,7 @@ namespace dbaui
 
             if (m_xDirectSQL->get_active())
             {
-                Reference< com::sun::star::beans::XPropertySet > xStatementProps(xStatement, UNO_QUERY_THROW);
+                Reference< css::beans::XPropertySet > xStatementProps(xStatement, UNO_QUERY_THROW);
                 try
                 {
                     xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(false));

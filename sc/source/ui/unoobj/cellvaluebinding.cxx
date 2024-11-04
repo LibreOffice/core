@@ -42,7 +42,7 @@ namespace calc
 
 #define PROP_HANDLE_BOUND_CELL  1
 
-    namespace lang = ::com::sun::star::lang;
+    namespace lang = css::lang;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::table;

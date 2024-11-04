@@ -24,8 +24,7 @@ class OOO_DLLPUBLIC_TEST XSheetConditionalEntries
 {
 public:
     virtual css::uno::Reference<css::uno::XInterface> init() = 0;
-    virtual css::uno::Sequence<com::sun::star::beans::PropertyValue>
-    createCondition(const sal_Int32 nr) = 0;
+    virtual css::uno::Sequence<css::beans::PropertyValue> createCondition(const sal_Int32 nr) = 0;
 
     void testAddNew();
     void testClear();

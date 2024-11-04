@@ -45,12 +45,12 @@ void extract(
     const& xErrorContext )
 {
     if (nArg >= seq.getLength()) {
-        throw ::com::sun::star::lang::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             u"No such argument available!"_ustr,
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! fromAny(seq[nArg], &v)) {
-        throw ::com::sun::star::lang::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             "Cannot extract ANY { "
             + seq[nArg].getValueTypeName()
             + " } to " + ::cppu::UnoType<T>::get().getTypeName(),
@@ -136,7 +136,7 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         CPPUNIT_ASSERT_MESSAGE( "seq1 and seq2 are equal",
                                 bool(seq1 == seq2) );
     }
-    catch( ::com::sun::star::lang::IllegalArgumentException& err ) {
+    catch( css::lang::IllegalArgumentException& err ) {
         std::stringstream ss;
         ss << "IllegalArgumentException when unwrapping arguments at: " <<
             err.ArgumentPosition;
@@ -149,7 +149,7 @@ void VariadicTemplatesTest::testUnwrapArgs() {
             static_cast< sal_uInt32 >( 4 ) );
         ::comphelper::unwrapArgs( seq, tmp6, tmp7, tmp10, tmp11, tmp10, tmp6 );
     }
-    catch( ::com::sun::star::lang::IllegalArgumentException& err ) {
+    catch( css::lang::IllegalArgumentException& err ) {
         CPPUNIT_ASSERT_EQUAL( static_cast< short >( 5 ), err.ArgumentPosition );
     }
 
@@ -164,14 +164,14 @@ void VariadicTemplatesTest::testUnwrapArgs() {
             static_cast< sal_uInt32 >( 4 ) );
         ::comphelper::unwrapArgs( seq, test1, test2, test3, test4, test5 );
     }
-    catch( ::com::sun::star::lang::IllegalArgumentException& err1 ) {
+    catch( css::lang::IllegalArgumentException& err1 ) {
         try {
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > seq(
                 static_cast< sal_uInt32 >( 4 ) );
             unwrapArgsBaseline( seq, test1, test2, test3, test4, test5 );
             CPPUNIT_FAIL( "unwrapArgs failed while the baseline did not throw" );
         }
-        catch( ::com::sun::star::lang::IllegalArgumentException& err2 ) {
+        catch( css::lang::IllegalArgumentException& err2 ) {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "err1.ArgumentPosition == err2.ArgumentPosition",
                                     err1.ArgumentPosition, err2.ArgumentPosition );
         }

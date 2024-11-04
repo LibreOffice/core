@@ -38,7 +38,7 @@ private:
 public:
     ReaderState() {}
 
-    com::sun::star::uno::TypeDescription typeCache[cache::size];
+    css::uno::TypeDescription typeCache[cache::size];
     OUString oidCache[cache::size];
     rtl::ByteSequence tidCache[cache::size];
 };

@@ -661,41 +661,41 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     switch (pEvent->keyval)
     {
     case GDK_KEY_BackSpace:
-        nKeyCode = com::sun::star::awt::Key::BACKSPACE;
+        nKeyCode = css::awt::Key::BACKSPACE;
         break;
     case GDK_KEY_Delete:
-        nKeyCode = com::sun::star::awt::Key::DELETE;
+        nKeyCode = css::awt::Key::DELETE;
         break;
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
-        nKeyCode = com::sun::star::awt::Key::RETURN;
+        nKeyCode = css::awt::Key::RETURN;
         break;
     case GDK_KEY_Escape:
-        nKeyCode = com::sun::star::awt::Key::ESCAPE;
+        nKeyCode = css::awt::Key::ESCAPE;
         break;
     case GDK_KEY_Tab:
-        nKeyCode = com::sun::star::awt::Key::TAB;
+        nKeyCode = css::awt::Key::TAB;
         break;
     case GDK_KEY_Down:
-        nKeyCode = com::sun::star::awt::Key::DOWN;
+        nKeyCode = css::awt::Key::DOWN;
         break;
     case GDK_KEY_Up:
-        nKeyCode = com::sun::star::awt::Key::UP;
+        nKeyCode = css::awt::Key::UP;
         break;
     case GDK_KEY_Left:
-        nKeyCode = com::sun::star::awt::Key::LEFT;
+        nKeyCode = css::awt::Key::LEFT;
         break;
     case GDK_KEY_Right:
-        nKeyCode = com::sun::star::awt::Key::RIGHT;
+        nKeyCode = css::awt::Key::RIGHT;
         break;
     case GDK_KEY_Page_Down:
-        nKeyCode = com::sun::star::awt::Key::PAGEDOWN;
+        nKeyCode = css::awt::Key::PAGEDOWN;
         break;
     case GDK_KEY_Page_Up:
-        nKeyCode = com::sun::star::awt::Key::PAGEUP;
+        nKeyCode = css::awt::Key::PAGEUP;
         break;
     case GDK_KEY_Insert:
-        nKeyCode = com::sun::star::awt::Key::INSERT;
+        nKeyCode = css::awt::Key::INSERT;
         break;
     case GDK_KEY_Shift_L:
     case GDK_KEY_Shift_R:
@@ -716,7 +716,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         break;
     default:
         if (pEvent->keyval >= GDK_KEY_F1 && pEvent->keyval <= GDK_KEY_F26)
-            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_KEY_F1);
+            nKeyCode = css::awt::Key::F1 + (pEvent->keyval - GDK_KEY_F1);
         else
             nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
     }

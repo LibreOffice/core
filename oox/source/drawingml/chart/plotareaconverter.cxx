@@ -212,7 +212,7 @@ View3DConverter::~View3DConverter()
 
 void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, TypeGroupConverter const & rTypeGroup )
 {
-    namespace cssd = ::com::sun::star::drawing;
+    namespace cssd = css::drawing;
     PropertySet aPropSet( rxDiagram );
 
     sal_Int32 nRotationY = 0;
@@ -466,7 +466,7 @@ void PlotAreaConverter::convertPositionFromModel()
 
     try
     {
-        namespace cssc = ::com::sun::star::chart;
+        namespace cssc = css::chart;
         Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );
         Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
         // for pie charts, always set inner plot area size to exclude the data labels as Excel does

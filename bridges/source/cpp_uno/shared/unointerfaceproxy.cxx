@@ -84,7 +84,7 @@ void releaseProxy(uno_Interface * pUnoI)
 
 UnoInterfaceProxy * UnoInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge,
-    com::sun::star::uno::XInterface * pCppI,
+    css::uno::XInterface * pCppI,
     typelib_InterfaceTypeDescription * pTypeDescr,
     OUString const & rOId)
 {
@@ -93,7 +93,7 @@ UnoInterfaceProxy * UnoInterfaceProxy::create(
 
 UnoInterfaceProxy::UnoInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_,
-    com::sun::star::uno::XInterface * pCppI_,
+    css::uno::XInterface * pCppI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, OUString aOId_)
     : nRef( 1 )
     , pBridge( pBridge_ )

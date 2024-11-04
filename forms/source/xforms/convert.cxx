@@ -134,7 +134,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
 
         return aDate;
     }
@@ -204,7 +204,7 @@ namespace
 
         // all okay?
         if ( !bWellformed )
-            throw com::sun::star::lang::IllegalArgumentException();
+            throw css::lang::IllegalArgumentException();
 
         return aTime;
     }

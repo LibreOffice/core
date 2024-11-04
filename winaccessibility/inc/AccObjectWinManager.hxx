@@ -51,8 +51,8 @@ AccObjectWinManager complete the functions:
 class AccObjectWinManager
 {
 private:
-    typedef std::map<com::sun::star::accessibility::XAccessible*, AccObject> XIdToAccObjHash;
-    typedef std::map<HWND, com::sun::star::accessibility::XAccessible*> XHWNDToXAccHash;
+    typedef std::map<css::accessibility::XAccessible*, AccObject> XIdToAccObjHash;
+    typedef std::map<HWND, css::accessibility::XAccessible*> XHWNDToXAccHash;
     typedef std::map<const long, AccObject*> XResIdToAccObjHash;
 
     typedef std::map<const HWND, css::accessibility::XAccessible* >

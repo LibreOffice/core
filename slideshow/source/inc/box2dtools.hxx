@@ -145,7 +145,7 @@ private:
         @param rVelocity
         Velocity vector in LO user space coordinates.
      */
-    void setShapeLinearVelocity(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+    void setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
                                 const basegfx::B2DVector& rVelocity);
 
     /** Sets rotation angle of the shape's corresponding Box2D body
@@ -156,8 +156,7 @@ private:
         @param fAngle
         Angle of rotation in degrees.
      */
-    void setShapeAngle(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-                       const double fAngle);
+    void setShapeAngle(const css::uno::Reference<css::drawing::XShape> xShape, const double fAngle);
 
     /** Rotates shape's corresponding Box2D body to specified angle
 
@@ -174,9 +173,8 @@ private:
         @param fPassedTime
         Time frame which the Box2D body should rotate to the specified angle.
      */
-    void setShapeAngleByAngularVelocity(
-        const css::uno::Reference<com::sun::star::drawing::XShape> xShape, const double fAngle,
-        const double fPassedTime);
+    void setShapeAngleByAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+                                        const double fAngle, const double fPassedTime);
 
     /** Sets angular velocity of the shape's corresponding Box2D body.
 
@@ -186,7 +184,7 @@ private:
         @param fAngularVelocity
         Angular velocity in degrees per second.
      */
-    void setShapeAngularVelocity(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+    void setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
                                  const double fAngularVelocity);
 
     /** Sets whether a shape's corresponding Box2D body has collision in the Box2D World or not
@@ -200,7 +198,7 @@ private:
         true if collisions should be enabled for the corresponding Box2D body of this shape
         and false if it should be disabled.
     */
-    void setShapeCollision(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+    void setShapeCollision(const css::uno::Reference<css::drawing::XShape> xShape,
                            const bool bCanCollide);
 
     /** Process the updates queued in the maShapeParallelUpdateQueue
@@ -222,14 +220,12 @@ private:
               const int nPositionIterations = 2);
 
     /// Queue a rotation update that is simulated as if shape's corresponding box2D body rotated to given angle when processed
-    void
-    queueDynamicRotationUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-                               const double fAngle);
+    void queueDynamicRotationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                    const double fAngle);
 
     /// Queue an angular velocity update that sets the shape's corresponding box2D body angular velocity to the given value when processed
-    void
-    queueAngularVelocityUpdate(const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-                               const double fAngularVelocity, const int nDelayForSteps = 0);
+    void queueAngularVelocityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                    const double fAngularVelocity, const int nDelayForSteps = 0);
 
     /// Queue an collision update that sets the collision of shape's corresponding box2D body when processed
     void queueShapeVisibilityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
@@ -333,7 +329,7 @@ public:
 
     /// Queue an appropriate update for a path animation that is in parallel with a physics animation
     void queueShapePathAnimationUpdate(
-        const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+        const css::uno::Reference<css::drawing::XShape>& xShape,
         const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
         const bool bIsFirstUpdate);
 

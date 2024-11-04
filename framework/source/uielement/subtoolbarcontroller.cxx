@@ -51,7 +51,7 @@ class SubToolBarController : public ToolBarBase
     css::uno::Reference< css::ui::XUIElement > m_xUIElement;
     void disposeUIElement();
 public:
-    explicit SubToolBarController( const rtl::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    explicit SubToolBarController( const rtl::Reference< css::uno::XComponentContext >& rxContext,
                                    const css::uno::Sequence< css::uno::Any >& rxArgs );
     virtual ~SubToolBarController() override;
 
@@ -100,7 +100,7 @@ public:
 }
 
 SubToolBarController::SubToolBarController(
-    const rtl::Reference< com::sun::star::uno::XComponentContext >& rxContext,
+    const rtl::Reference< css::uno::XComponentContext >& rxContext,
     const css::uno::Sequence< css::uno::Any >& rxArgs
 )   : ToolBarBase(
         rxContext,

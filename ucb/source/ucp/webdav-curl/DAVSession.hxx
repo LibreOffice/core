@@ -61,7 +61,7 @@ public:
     }
 
     virtual bool CanUse( const OUString & rURI,
-            const ::com::sun::star::uno::Sequence<::com::sun::star::beans::NamedValue>& rFlags ) = 0;
+            const css::uno::Sequence<css::beans::NamedValue>& rFlags ) = 0;
 
     virtual bool UsesProxy() = 0;
 

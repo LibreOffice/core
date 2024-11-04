@@ -28,15 +28,15 @@ sal_Int16 lcl_GtkTextGranularityToUNOBoundaryType(GtkAccessibleTextGranularity e
     switch (eGranularity)
     {
         case GTK_ACCESSIBLE_TEXT_GRANULARITY_CHARACTER:
-            return com::sun::star::accessibility::AccessibleTextType::CHARACTER;
+            return css::accessibility::AccessibleTextType::CHARACTER;
         case GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD:
-            return com::sun::star::accessibility::AccessibleTextType::WORD;
+            return css::accessibility::AccessibleTextType::WORD;
         case GTK_ACCESSIBLE_TEXT_GRANULARITY_SENTENCE:
-            return com::sun::star::accessibility::AccessibleTextType::SENTENCE;
+            return css::accessibility::AccessibleTextType::SENTENCE;
         case GTK_ACCESSIBLE_TEXT_GRANULARITY_LINE:
-            return com::sun::star::accessibility::AccessibleTextType::LINE;
+            return css::accessibility::AccessibleTextType::LINE;
         case GTK_ACCESSIBLE_TEXT_GRANULARITY_PARAGRAPH:
-            return com::sun::star::accessibility::AccessibleTextType::PARAGRAPH;
+            return css::accessibility::AccessibleTextType::PARAGRAPH;
         default:
             assert(false && "Unhandled GtkAccessibleTextGranularity.");
             return GTK_ACCESSIBLE_TEXT_GRANULARITY_CHARACTER;
@@ -178,7 +178,7 @@ static gboolean lo_accessible_text_get_attributes(GtkAccessibleText* self, unsig
 
     css::uno::Sequence<css::beans::PropertyValue> aAttribs;
     css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAttributes(
-        xText, com::sun::star::uno::UNO_QUERY);
+        xText, css::uno::UNO_QUERY);
     if (xAttributes.is())
         aAttribs = xAttributes->getRunAttributes(offset, css::uno::Sequence<OUString>());
     else
@@ -211,7 +211,7 @@ static void lo_accessible_text_get_default_attributes(GtkAccessibleText* self,
         return;
 
     css::uno::Reference<css::accessibility::XAccessibleTextAttributes> xAttributes(
-        xText, com::sun::star::uno::UNO_QUERY);
+        xText, css::uno::UNO_QUERY);
     if (!xAttributes.is())
         return;
 
@@ -243,7 +243,7 @@ static gboolean lo_accessible_text_get_extents(GtkAccessibleText* self, unsigned
         return false;
     }
 
-    com::sun::star::awt::Rectangle aBounds = xText->getCharacterBounds(start);
+    css::awt::Rectangle aBounds = xText->getCharacterBounds(start);
     extents->origin.x = aBounds.X;
     extents->origin.y = aBounds.Y;
     extents->size.width = aBounds.Width;

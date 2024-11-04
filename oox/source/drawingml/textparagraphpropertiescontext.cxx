@@ -54,7 +54,7 @@ namespace {
 double  lclGetGraphicAspectRatio( const Reference< XGraphic >& rxGraphic )
 {
     double fRatio = 1.0;
-    Reference< com::sun::star::beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
+    Reference< css::beans::XPropertySet > xGraphicPropertySet( rxGraphic, UNO_QUERY_THROW );
     css::awt::Size aSizeHmm( 0, 0 );
     xGraphicPropertySet->getPropertyValue( u"Size100thMM"_ustr ) >>= aSizeHmm;
 

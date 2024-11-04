@@ -446,7 +446,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                         else
                         {
                             //Calc is parent document
-                            Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
+                            Reference< css::beans::XPropertySetInfo > xInfo = xParentProps->getPropertySetInfo();
                             if (xInfo->hasPropertyByName(u"PageStyle"_ustr))
                             {
                                 xParentProps->getPropertyValue( u"PageStyle"_ustr ) >>= aPageStyle;
@@ -457,7 +457,7 @@ void lcl_setDefaultWritingMode( const std::shared_ptr< DrawModelWrapper >& pDraw
                         if( nWritingMode == -1 || nWritingMode == text::WritingMode2::PAGE )
                         {
                             uno::Reference< beans::XPropertySet > xPageStyle( xPageStyles->getByName( aPageStyle ), uno::UNO_QUERY );
-                            Reference< com::sun::star::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
+                            Reference< css::beans::XPropertySetInfo > xInfo = xPageStyle->getPropertySetInfo();
                             if (xInfo->hasPropertyByName(u"WritingMode"_ustr))
                             {
                                 if( xPageStyle.is() )

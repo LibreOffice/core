@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
         CPPUNIT_ASSERT_EQUAL(int(drawing::FillStyle_GRADIENT), static_cast<int>(aFillStyle));
 
         // Test gradient properties
-        com::sun::star::awt::Gradient2 aFillGradient;
+        css::awt::Gradient2 aFillGradient;
         aXBackgroundPropSet->getPropertyValue(u"FillGradient"_ustr) >>= aFillGradient;
 
         // MCGR: Use the completely imported gradient to check for correctness

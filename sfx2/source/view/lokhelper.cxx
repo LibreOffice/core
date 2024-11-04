@@ -121,7 +121,7 @@ int SfxLokHelper::createView()
     return createView(pViewShell->GetViewFrame(), pViewShell->GetDocId());
 }
 
-std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& SfxLokHelper::getAcceleratorConfs()
+std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& SfxLokHelper::getAcceleratorConfs()
 {
     return SfxApplication::GetOrCreate()->GetAcceleratorConfs_Impl();
 }

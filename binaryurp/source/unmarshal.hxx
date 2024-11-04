@@ -41,7 +41,7 @@ class Unmarshal {
 public:
     Unmarshal(
         rtl::Reference< Bridge > bridge, ReaderState & state,
-        com::sun::star::uno::Sequence< sal_Int8 > const & buffer);
+        css::uno::Sequence< sal_Int8 > const & buffer);
 
     ~Unmarshal();
 
@@ -51,13 +51,13 @@ public:
 
     sal_uInt32 read32();
 
-    com::sun::star::uno::TypeDescription readType();
+    css::uno::TypeDescription readType();
 
     OUString readOid();
 
     rtl::ByteSequence readTid();
 
-    BinaryAny readValue(com::sun::star::uno::TypeDescription const & type);
+    BinaryAny readValue(css::uno::TypeDescription const & type);
 
     void done() const;
 
@@ -75,15 +75,15 @@ private:
 
     OUString readString();
 
-    BinaryAny readSequence(com::sun::star::uno::TypeDescription const & type);
+    BinaryAny readSequence(css::uno::TypeDescription const & type);
 
     void readMemberValues(
-        com::sun::star::uno::TypeDescription const & type,
+        css::uno::TypeDescription const & type,
         std::vector< BinaryAny > * values);
 
     rtl::Reference< Bridge > bridge_;
     ReaderState & state_;
-    com::sun::star::uno::Sequence< sal_Int8 > buffer_;
+    css::uno::Sequence< sal_Int8 > buffer_;
     sal_uInt8 const * data_;
     sal_uInt8 const * end_;
 };

@@ -1662,7 +1662,7 @@ bool Window::set_property(const OUString &rKey, const OUString &rValue)
     else if (rKey == "accessible-role")
     {
         sal_Int16 role = BuilderUtils::getRoleFromName(rValue);
-        if (role != com::sun::star::accessibility::AccessibleRole::UNKNOWN)
+        if (role != css::accessibility::AccessibleRole::UNKNOWN)
             SetAccessibleRole(role);
     }
     else if (rKey == "use-markup")

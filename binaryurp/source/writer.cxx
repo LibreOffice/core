@@ -115,7 +115,7 @@ void Writer::queueRequest(
 
 void Writer::queueReply(
     rtl::ByteSequence const & tid,
-    com::sun::star::uno::TypeDescription const & member, bool setter,
+    css::uno::TypeDescription const & member, bool setter,
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny >&& outArguments, bool setCurrentContextMode)
 {
@@ -342,7 +342,7 @@ void Writer::sendRequest(
 
 void Writer::sendReply(
     rtl::ByteSequence const & tid,
-    com::sun::star::uno::TypeDescription const & member, bool setter,
+    css::uno::TypeDescription const & member, bool setter,
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny > const & outArguments)
 {

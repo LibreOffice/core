@@ -232,7 +232,7 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
         mbRowHasLabels( false ),
         meDataRowSource( chart::ChartDataRowSource_COLUMNS ),
         mbIsStockChart( false ),
-        mPieSubType(com::sun::star::chart2::PieChartSubType_NONE)
+        mPieSubType(css::chart2::PieChartSubType_NONE)
 {
 }
 
@@ -318,7 +318,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
     OUString sAutoStyleName;
     OUString aOldChartTypeName;
     bool bHasAddin = false;
-    mPieSubType = com::sun::star::chart2::PieChartSubType_NONE;
+    mPieSubType = css::chart2::PieChartSubType_NONE;
 
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
@@ -392,12 +392,12 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
                 break;
             case XML_ELEMENT(LO_EXT, XML_SUB_BAR):
                 if (aIter.toString().toBoolean()) {
-                    mPieSubType = com::sun::star::chart2::PieChartSubType_BAR;
+                    mPieSubType = css::chart2::PieChartSubType_BAR;
                 }
                 break;
             case XML_ELEMENT(LO_EXT, XML_SUB_PIE):
                 if (aIter.toString().toBoolean()) {
-                    mPieSubType = com::sun::star::chart2::PieChartSubType_PIE;
+                    mPieSubType = css::chart2::PieChartSubType_PIE;
                 }
                 break;
             default:

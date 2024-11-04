@@ -31,10 +31,10 @@
 #include <sal/log.hxx>
 #include <stdio.h>
 
-namespace deployment = ::com::sun::star::deployment;
-namespace lang = ::com::sun::star::lang;
-namespace uno = ::com::sun::star::uno;
-namespace xml = ::com::sun::star::xml;
+namespace deployment = css::deployment;
+namespace lang = css::lang;
+namespace uno = css::uno;
+namespace xml = css::xml;
 
 
 SAL_IMPLEMENT_MAIN()

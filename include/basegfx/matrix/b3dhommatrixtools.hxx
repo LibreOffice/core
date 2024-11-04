@@ -33,11 +33,10 @@ namespace basegfx::utils
     B3DHomMatrix. drawing::HomogenMatrix4 is not used by OOo
  */
 BASEGFX_DLLPUBLIC B3DHomMatrix
-UnoHomogenMatrixToB3DHomMatrix(const com::sun::star::drawing::HomogenMatrix& rMatrixIn);
+UnoHomogenMatrixToB3DHomMatrix(const css::drawing::HomogenMatrix& rMatrixIn);
 
-BASEGFX_DLLPUBLIC void
-B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
-                               com::sun::star::drawing::HomogenMatrix& rMatrixOut);
+BASEGFX_DLLPUBLIC void B3DHomMatrixToUnoHomogenMatrix(const B3DHomMatrix& rMatrixIn,
+                                                      css::drawing::HomogenMatrix& rMatrixOut);
 
 } // end of namespace basegfx::tools
 

@@ -191,7 +191,7 @@ void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>&
 
     for (size_t i = 0; i < rCustomShowList.size(); ++i)
     {
-        Reference<com::sun::star::container::XIndexContainer> xShow(mxShowFactory->createInstance(),
+        Reference<css::container::XIndexContainer> xShow(mxShowFactory->createInstance(),
                                                                     UNO_QUERY);
         if (xShow.is())
         {

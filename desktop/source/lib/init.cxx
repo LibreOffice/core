@@ -7778,7 +7778,7 @@ static void lo_status_indicator_callback(void *data, comphelper::LibreOfficeKit:
 /// Used by preloadData (LibreOfficeKit) for providing different shortcuts for different languages.
 static void preLoadShortCutAccelerators()
 {
-    std::unordered_map<OUString, css::uno::Reference<com::sun::star::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxLokHelper::getAcceleratorConfs();
+    std::unordered_map<OUString, css::uno::Reference<css::ui::XAcceleratorConfiguration>>& acceleratorConfs = SfxLokHelper::getAcceleratorConfs();
     css::uno::Sequence<OUString> installedLocales(officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
     OUString actualLang = officecfg::Setup::L10N::ooLocale::get();
 

@@ -96,8 +96,7 @@ void AccEventListener::HandleNameChangedEvent()
  * @param oldValue the child to be deleted
  * @param newValue the child to be added
  */
-void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue,
-                                               com::sun::star::uno::Any newValue)
+void AccEventListener::HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue)
 {
     Reference<XAccessible> xChild;
     if (newValue >>= xChild)

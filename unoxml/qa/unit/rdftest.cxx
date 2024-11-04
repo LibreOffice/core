@@ -63,7 +63,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testCVE_2012_0037)
 {
     const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                           css::uno::UNO_SET_THROW);
-    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+    const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
@@ -202,7 +202,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testSPARQL)
 {
     const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                           css::uno::UNO_SET_THROW);
-    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+    const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
@@ -372,7 +372,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xDocRepo->createGraph(xFoo);
         CPPUNIT_FAIL("expected ElementExistException");
     }
-    catch (com::sun::star::container::ElementExistException&)
+    catch (css::container::ElementExistException&)
     {
     }
 
@@ -400,7 +400,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
     // 8. empty: stmts
     CPPUNIT_ASSERT(!xEnum->hasMoreElements());
 
-    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+    const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
@@ -555,7 +555,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xDocRepo->importGraph(rdf::FileFormat::RDF_XML, xInputStream, xBar, xBase);
         CPPUNIT_FAIL("importing existing graph did not fail");
     }
-    catch (com::sun::star::container::ElementExistException&)
+    catch (css::container::ElementExistException&)
     {
     }
 
@@ -591,7 +591,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xBazGraph->clear();
         CPPUNIT_FAIL("deleted graph not invalid (clear)");
     }
-    catch (com::sun::star::container::NoSuchElementException&)
+    catch (css::container::NoSuchElementException&)
     {
     }
 
@@ -600,7 +600,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xBazGraph->addStatement(xFoo, xFoo, xFoo);
         CPPUNIT_FAIL("deleted graph not invalid (add)");
     }
-    catch (com::sun::star::container::NoSuchElementException&)
+    catch (css::container::NoSuchElementException&)
     {
     }
 
@@ -609,7 +609,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xBazGraph->removeStatements(nullptr, nullptr, nullptr);
         CPPUNIT_FAIL("deleted graph not invalid (remove)");
     }
-    catch (com::sun::star::container::NoSuchElementException&)
+    catch (css::container::NoSuchElementException&)
     {
     }
 
@@ -618,7 +618,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testRDF)
         xBazGraph->getStatements(nullptr, nullptr, nullptr);
         CPPUNIT_FAIL("deleted graph not invalid (remove)");
     }
-    catch (com::sun::star::container::NoSuchElementException&)
+    catch (css::container::NoSuchElementException&)
     {
     }
 }
@@ -942,7 +942,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testTdf123293)
 {
     const uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(),
                                                           css::uno::UNO_SET_THROW);
-    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+    const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
@@ -1121,7 +1121,7 @@ CPPUNIT_TEST_FIXTURE(RDFStreamTest, testDocumentMetadataAccess)
     {
     }
 
-    const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+    const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);

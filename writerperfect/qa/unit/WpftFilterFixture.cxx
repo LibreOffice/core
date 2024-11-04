@@ -13,9 +13,9 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/theDesktop.hpp>
 
-namespace document = com::sun::star::document;
-namespace frame = com::sun::star::frame;
-namespace uno = com::sun::star::uno;
+namespace document = css::document;
+namespace frame = css::frame;
+namespace uno = css::uno;
 
 namespace writerperfect::test
 {

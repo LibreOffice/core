@@ -36,7 +36,7 @@ bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxP
     for (auto const& rProperty : xProperties)
     {
         if (rProperty.Name == rPropertyName)
-            return (rProperty.Attributes & com::sun::star::beans::PropertyAttribute::READONLY) != 0;
+            return (rProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
     }
 
     return false;

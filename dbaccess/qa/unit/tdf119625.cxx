@@ -101,7 +101,7 @@ void Tdf119625Test::testTime()
         CPPUNIT_ASSERT(xRes->next());
         CPPUNIT_ASSERT_EQUAL(xRow->getShort(1), e.id);
         auto time_got = xRow->getTime(4);
-        auto time_expected = com::sun::star::util::Time(0, e.s, e.m, e.h, false);
+        auto time_expected = css::util::Time(0, e.s, e.m, e.h, false);
         auto equal_times = time_got == time_expected;
         CPPUNIT_ASSERT(equal_times);
     }

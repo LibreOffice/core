@@ -41,10 +41,10 @@
 #include <WPXSvInputStream.hxx>
 #include <utility>
 
-namespace io = com::sun::star::io;
-namespace sdbc = com::sun::star::sdbc;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
+namespace io = css::io;
+namespace sdbc = css::sdbc;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
 
 namespace writerperfect
 {

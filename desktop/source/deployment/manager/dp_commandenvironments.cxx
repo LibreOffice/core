@@ -28,12 +28,12 @@
 #include "dp_commandenvironments.hxx"
 #include <osl/diagnose.h>
 
-namespace deployment = com::sun::star::deployment;
-namespace task = com::sun::star::task;
-namespace ucb = com::sun::star::ucb;
-namespace uno = com::sun::star::uno;
+namespace deployment = css::deployment;
+namespace task = css::task;
+namespace ucb = css::ucb;
+namespace uno = css::uno;
 
-using ::com::sun::star::uno::Reference;
+using css::uno::Reference;
 
 namespace dp_manager {
 

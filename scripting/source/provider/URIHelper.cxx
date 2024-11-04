@@ -29,10 +29,10 @@
 namespace func_provider
 {
 
-namespace uno = ::com::sun::star::uno;
-namespace ucb = ::com::sun::star::ucb;
-namespace lang = ::com::sun::star::lang;
-namespace uri = ::com::sun::star::uri;
+namespace uno = css::uno;
+namespace ucb = css::ucb;
+namespace lang = css::lang;
+namespace uri = css::uri;
 
 constexpr OUString SHARE = u"share"_ustr;
 

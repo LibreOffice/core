@@ -28,14 +28,14 @@ GtkAccessibleEventListener::~GtkAccessibleEventListener()
     g_object_unref(m_pLoAccessible);
 }
 
-void GtkAccessibleEventListener::disposing(const com::sun::star::lang::EventObject&)
+void GtkAccessibleEventListener::disposing(const css::lang::EventObject&)
 {
     assert(m_pLoAccessible);
     GtkAccessibleRegistry::remove(m_pLoAccessible->uno_accessible);
 }
 
 void GtkAccessibleEventListener::notifyEvent(
-    const com::sun::star::accessibility::AccessibleEventObject& rEvent)
+    const css::accessibility::AccessibleEventObject& rEvent)
 {
     switch (rEvent.EventId)
     {

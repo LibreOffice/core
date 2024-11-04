@@ -998,7 +998,7 @@ void DesktopLOKTest::testWriterComments()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     pDocument->pClass->registerCallback(pDocument, &DesktopLOKTest::callback, this);
-    uno::Reference<awt::XReschedule> xToolkit = com::sun::star::awt::Toolkit::create(comphelper::getProcessComponentContext());
+    uno::Reference<awt::XReschedule> xToolkit = css::awt::Toolkit::create(comphelper::getProcessComponentContext());
 
     // Insert a comment at the beginning of the document and wait till the main
     // loop grabs the focus, so characters end up in the annotation window.
@@ -1024,7 +1024,7 @@ void DesktopLOKTest::testWriterComments()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'e', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 's', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // Test that the typed characters ended up in the right window.
@@ -2987,7 +2987,7 @@ void DesktopLOKTest::testTextSelectionHandles()
     // deselect & check
     m_aTextSelectionStart = ""_ostr;
     m_aTextSelectionEnd = ""_ostr;
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
     pText = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", nullptr);
     CPPUNIT_ASSERT_EQUAL(static_cast<char *>(nullptr), pText);
@@ -3140,7 +3140,7 @@ void DesktopLOKTest::testSpellcheckerMultiView()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
 
     // Start spellchecking.
     pDocument->pClass->postUnoCommand(pDocument, ".uno:SpellDialog", nullptr, false);
@@ -3308,7 +3308,7 @@ void DesktopLOKTest::testJumpCursor()
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'v', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'i', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 'a', 0);
-    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, com::sun::star::awt::Key::ESCAPE);
+    pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, css::awt::Key::ESCAPE);
     Scheduler::ProcessEventsToIdle();
 
     // There is a cursor jump to (0, 0) due to

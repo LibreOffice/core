@@ -133,10 +133,10 @@ class SwNavigationPI final : public PanelLayout
 public:
 
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+            const css::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* pBindings);
     SwNavigationPI(weld::Widget* pParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxFrame,
+            const css::uno::Reference< css::frame::XFrame >& rxFrame,
             SfxBindings* _pBindings, SfxNavigator* pNavigatorDlg);
     virtual ~SwNavigationPI() override;
 

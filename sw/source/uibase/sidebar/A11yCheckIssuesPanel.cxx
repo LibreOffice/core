@@ -101,7 +101,7 @@ std::unique_ptr<PanelLayout> A11yCheckIssuesPanel::Create(weld::Widget* pParent,
                                                           SfxBindings* pBindings)
 {
     if (pParent == nullptr)
-        throw ::com::sun::star::lang::IllegalArgumentException(
+        throw css::lang::IllegalArgumentException(
             u"no parent window given to A11yCheckIssuesPanel::Create"_ustr, nullptr, 0);
     return std::make_unique<A11yCheckIssuesPanel>(pParent, pBindings);
 }

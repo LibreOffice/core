@@ -37,7 +37,7 @@ public:
     WriterState():
         typeCache(cache::size), oidCache(cache::size), tidCache(cache::size) {}
 
-    Cache< com::sun::star::uno::TypeDescription > typeCache;
+    Cache< css::uno::TypeDescription > typeCache;
 
     Cache< OUString > oidCache;
 

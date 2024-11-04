@@ -40,9 +40,7 @@ public:
 
     ~ModifyListenerCallBack();
 
-    void startListening(
-        const ::com::sun::star::uno::Reference<::com::sun::star::util::XModifyBroadcaster>&
-            xBroadcaster);
+    void startListening(const css::uno::Reference<css::util::XModifyBroadcaster>& xBroadcaster);
     SAL_DLLPRIVATE void stopListening();
 
 private: //methods

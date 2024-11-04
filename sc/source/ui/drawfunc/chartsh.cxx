@@ -38,7 +38,7 @@
 using namespace css::uno;
 using namespace sfx2::sidebar;
 
-namespace drawing = com::sun::star::drawing;
+namespace drawing = css::drawing;
 
 namespace {
 

@@ -53,12 +53,12 @@
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
-namespace beans = com::sun::star::beans ;
-namespace deployment = com::sun::star::deployment ;
-namespace lang = com::sun::star::lang ;
-namespace c3s = com::sun::star::system ;
-namespace task = com::sun::star::task ;
-namespace uno = com::sun::star::uno ;
+namespace beans = css::beans ;
+namespace deployment = css::deployment ;
+namespace lang = css::lang ;
+namespace c3s = css::system ;
+namespace task = css::task ;
+namespace uno = css::uno ;
 
 constexpr OUStringLiteral PROPERTY_TITLE = u"BubbleHeading";
 constexpr OUStringLiteral PROPERTY_TEXT = u"BubbleText";

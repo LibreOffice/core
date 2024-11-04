@@ -58,8 +58,8 @@ SfxItemPropertyMapEntry const saTextColumns_Impl[] = {
       css::beans::PropertyAttribute::READONLY, 0 },
     { u"AutomaticDistance"_ustr, WID_TXTCOL_AUTO_DISTANCE, cppu::UnoType<sal_Int32>::get(), 0, 0 },
     { u"SeparatorLineWidth"_ustr, WID_TXTCOL_LINE_WIDTH, cppu::UnoType<sal_Int32>::get(), 0, 0 },
-    { u"SeparatorLineColor"_ustr, WID_TXTCOL_LINE_COLOR,
-      cppu::UnoType<com::sun::star::util::Color>::get(), 0, 0 },
+    { u"SeparatorLineColor"_ustr, WID_TXTCOL_LINE_COLOR, cppu::UnoType<css::util::Color>::get(), 0,
+      0 },
     { u"SeparatorLineRelativeHeight"_ustr, WID_TXTCOL_LINE_REL_HGT, cppu::UnoType<sal_Int32>::get(),
       0, 0 },
     { u"SeparatorLineVerticalAlignment"_ustr, WID_TXTCOL_LINE_ALIGN,
@@ -117,7 +117,7 @@ private:
 
     //separator line
     sal_Int32 m_nSepLineWidth = 0;
-    com::sun::star::util::Color m_nSepLineColor = 0; // black
+    css::util::Color m_nSepLineColor = 0; // black
     sal_Int32 m_nSepLineHeightRelative = 100; // full height
     css::style::VerticalAlignment m_nSepLineVertAlign = css::style::VerticalAlignment_MIDDLE;
     bool m_bSepLineIsOn = false;

@@ -510,7 +510,7 @@ private:
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
     SdViewOptions maViewOptions;
 
-    css::uno::Reference<com::sun::star::presentation::XSlideShow> mxSlideShow;
+    css::uno::Reference<css::presentation::XSlideShow> mxSlideShow;
 };
 
     /// Merge the background properties together and deposit the result in rMergeAttr

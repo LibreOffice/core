@@ -72,8 +72,8 @@ namespace ucb::ucp::ext
     using ::com::sun::star::deployment::PackageInformationProvider;
     using ::com::sun::star::deployment::XPackageInformationProvider;
 
-    namespace OpenMode = ::com::sun::star::ucb::OpenMode;
-    namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
+    namespace OpenMode = css::ucb::OpenMode;
+    namespace PropertyAttribute = css::beans::PropertyAttribute;
 
 
     //= helper

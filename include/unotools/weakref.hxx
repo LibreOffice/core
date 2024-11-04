@@ -46,7 +46,7 @@ namespace unotools
     avoid overly tight requirements on when interface_type needs to be complete.)
 */
 template <class interface_type>
-class SAL_WARN_UNUSED WeakReference : public com::sun::star::uno::WeakReferenceHelper
+class SAL_WARN_UNUSED WeakReference : public css::uno::WeakReferenceHelper
 {
 public:
     /** Default ctor.  Creates an empty weak reference.

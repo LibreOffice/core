@@ -47,7 +47,7 @@ class CppInterfaceProxy {
 public:
     // Interface for Bridge:
 
-    static com::sun::star::uno::XInterface * create(
+    static css::uno::XInterface * create(
         Bridge * pBridge, uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr,
         OUString const & rOId);
@@ -76,7 +76,7 @@ private:
 
     ~CppInterfaceProxy();
 
-    static com::sun::star::uno::XInterface * castProxyToInterface(
+    static css::uno::XInterface * castProxyToInterface(
         CppInterfaceProxy * pProxy);
 
     std::atomic<std::size_t> nRef;

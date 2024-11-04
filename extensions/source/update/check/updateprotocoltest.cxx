@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include "sal/log.hxx"
 
-namespace task = ::com::sun::star::task;
-namespace uno  = ::com::sun::star::uno;
+namespace task = css::task;
+namespace uno  = css::uno;
 
 
 SAL_IMPLEMENT_MAIN()

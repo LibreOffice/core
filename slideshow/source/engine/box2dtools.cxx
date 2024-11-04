@@ -267,7 +267,7 @@ void box2DWorld::createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlide
     pStaticBody->CreateFixture(&aFixtureDef);
 }
 
-void box2DWorld::setShapePosition(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+void box2DWorld::setShapePosition(const css::uno::Reference<css::drawing::XShape> xShape,
                                   const basegfx::B2DPoint& rOutPos)
 {
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -277,8 +277,8 @@ void box2DWorld::setShapePosition(const css::uno::Reference<com::sun::star::draw
 }
 
 void box2DWorld::setShapePositionByLinearVelocity(
-    const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-    const basegfx::B2DPoint& rOutPos, const double fPassedTime)
+    const css::uno::Reference<css::drawing::XShape> xShape, const basegfx::B2DPoint& rOutPos,
+    const double fPassedTime)
 {
     assert(mpBox2DWorld);
     if (fPassedTime > 0) // this only makes sense if there was an advance in time
@@ -290,9 +290,8 @@ void box2DWorld::setShapePositionByLinearVelocity(
     }
 }
 
-void box2DWorld::setShapeLinearVelocity(
-    const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-    const basegfx::B2DVector& rVelocity)
+void box2DWorld::setShapeLinearVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+                                        const basegfx::B2DVector& rVelocity)
 {
     assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -301,7 +300,7 @@ void box2DWorld::setShapeLinearVelocity(
     pBox2DBody->setLinearVelocity(rVelocity);
 }
 
-void box2DWorld::setShapeAngle(const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
+void box2DWorld::setShapeAngle(const css::uno::Reference<css::drawing::XShape> xShape,
                                const double fAngle)
 {
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -311,7 +310,7 @@ void box2DWorld::setShapeAngle(const css::uno::Reference<com::sun::star::drawing
 }
 
 void box2DWorld::setShapeAngleByAngularVelocity(
-    const css::uno::Reference<com::sun::star::drawing::XShape> xShape, const double fAngle,
+    const css::uno::Reference<css::drawing::XShape> xShape, const double fAngle,
     const double fPassedTime)
 {
     assert(mpBox2DWorld);
@@ -324,9 +323,8 @@ void box2DWorld::setShapeAngleByAngularVelocity(
     }
 }
 
-void box2DWorld::setShapeAngularVelocity(
-    const css::uno::Reference<com::sun::star::drawing::XShape> xShape,
-    const double fAngularVelocity)
+void box2DWorld::setShapeAngularVelocity(const css::uno::Reference<css::drawing::XShape> xShape,
+                                         const double fAngularVelocity)
 {
     assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -335,8 +333,8 @@ void box2DWorld::setShapeAngularVelocity(
     pBox2DBody->setAngularVelocity(fAngularVelocity);
 }
 
-void box2DWorld::setShapeCollision(
-    const css::uno::Reference<com::sun::star::drawing::XShape> xShape, bool bCanCollide)
+void box2DWorld::setShapeCollision(const css::uno::Reference<css::drawing::XShape> xShape,
+                                   bool bCanCollide)
 {
     assert(mpBox2DWorld);
     const auto iter = mpXShapeToBodyMap.find(xShape);
@@ -449,18 +447,17 @@ void box2DWorld::setHasWorldStepper(const bool bHasWorldStepper)
     mbHasWorldStepper = bHasWorldStepper;
 }
 
-void box2DWorld::queueDynamicPositionUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-    const basegfx::B2DPoint& rOutPos)
+void box2DWorld::queueDynamicPositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                            const basegfx::B2DPoint& rOutPos)
 {
     Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION_CHANGE };
     aQueueElement.maPosition = rOutPos;
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueLinearVelocityUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-    const basegfx::B2DVector& rVelocity, const int nDelayForSteps)
+void box2DWorld::queueLinearVelocityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                           const basegfx::B2DVector& rVelocity,
+                                           const int nDelayForSteps)
 {
     Box2DDynamicUpdateInformation aQueueElement
         = { xShape, {}, BOX2D_UPDATE_LINEAR_VELOCITY, nDelayForSteps };
@@ -468,17 +465,16 @@ void box2DWorld::queueLinearVelocityUpdate(
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueDynamicRotationUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const double fAngle)
+void box2DWorld::queueDynamicRotationUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                            const double fAngle)
 {
     Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_ANGLE };
     aQueueElement.mfAngle = fAngle;
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueAngularVelocityUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-    const double fAngularVelocity, const int nDelayForSteps)
+void box2DWorld::queueAngularVelocityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                            const double fAngularVelocity, const int nDelayForSteps)
 {
     Box2DDynamicUpdateInformation aQueueElement
         = { xShape, {}, BOX2D_UPDATE_ANGULAR_VELOCITY, nDelayForSteps };
@@ -486,17 +482,16 @@ void box2DWorld::queueAngularVelocityUpdate(
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueShapeVisibilityUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape, const bool bVisibility)
+void box2DWorld::queueShapeVisibilityUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                            const bool bVisibility)
 {
     Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_VISIBILITY };
     aQueueElement.mbVisibility = bVisibility;
     maShapeParallelUpdateQueue.push(aQueueElement);
 }
 
-void box2DWorld::queueShapePositionUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
-    const basegfx::B2DPoint& rOutPos)
+void box2DWorld::queueShapePositionUpdate(const css::uno::Reference<css::drawing::XShape>& xShape,
+                                          const basegfx::B2DPoint& rOutPos)
 {
     Box2DDynamicUpdateInformation aQueueElement = { xShape, {}, BOX2D_UPDATE_POSITION };
     aQueueElement.maPosition = rOutPos;
@@ -504,7 +499,7 @@ void box2DWorld::queueShapePositionUpdate(
 }
 
 void box2DWorld::queueShapePathAnimationUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const css::uno::Reference<css::drawing::XShape>& xShape,
     const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer, const bool bIsFirstUpdate)
 {
     // Workaround for PathAnimations since they do not have their own AttributeType
@@ -514,7 +509,7 @@ void box2DWorld::queueShapePathAnimationUpdate(
 }
 
 void box2DWorld::queueShapeAnimationUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const css::uno::Reference<css::drawing::XShape>& xShape,
     const slideshow::internal::ShapeAttributeLayerSharedPtr& pAttrLayer,
     const slideshow::internal::AttributeType eAttrType, const bool bIsFirstUpdate)
 {
@@ -540,7 +535,7 @@ void box2DWorld::queueShapeAnimationUpdate(
 }
 
 void box2DWorld::queueShapeAnimationEndUpdate(
-    const css::uno::Reference<com::sun::star::drawing::XShape>& xShape,
+    const css::uno::Reference<css::drawing::XShape>& xShape,
     const slideshow::internal::AttributeType eAttrType)
 {
     switch (eAttrType)

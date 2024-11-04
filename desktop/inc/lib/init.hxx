@@ -281,7 +281,7 @@ namespace desktop {
 
     /// Helper function to convert JSON to a vector of PropertyValues.
     /// Public to be unit-test-able.
-    DESKTOP_DLLPUBLIC std::vector<com::sun::star::beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON);
+    DESKTOP_DLLPUBLIC std::vector<css::beans::PropertyValue> jsonToPropertyValuesVector(const char* pJSON);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

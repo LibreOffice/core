@@ -27,8 +27,8 @@
 
 using writerperfect::WPXSvInputStream;
 
-namespace beans = com::sun::star::beans;
-namespace ucb = com::sun::star::ucb;
+namespace beans = css::beans;
+namespace ucb = css::ucb;
 
 bool KeynoteImportFilter::doImportDocument(weld::Window*, librevenge::RVNGInputStream& rInput,
                                            OdpGenerator& rGenerator, utl::MediaDescriptor&)
@@ -59,7 +59,7 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     bool bIsPackage = false;
     bool bUCBContentChanged = false;
     const beans::PropertyValue* pValue = Descriptor.getConstArray();
-    css::uno::Reference<com::sun::star::io::XInputStream> xInputStream;
+    css::uno::Reference<css::io::XInputStream> xInputStream;
     css::uno::Reference<ucb::XContent> xContent;
     css::uno::Sequence<beans::NamedValue> lComponentDataNV;
     css::uno::Sequence<beans::PropertyValue> lComponentDataPV;

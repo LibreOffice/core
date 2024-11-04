@@ -4625,12 +4625,12 @@ rtl::Reference<SdrObject> SvxMSDffManager::ImportShape( const DffRecordHeader& r
                             if (seqAdjustmentValues[0].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
                                 pseqAdjustmentValues[0].Value <<= -90.0;
-                                pseqAdjustmentValues[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+                                pseqAdjustmentValues[0].State = css::beans::PropertyState_DIRECT_VALUE;
                             }
                             if (seqAdjustmentValues[1].State == css::beans::PropertyState_DEFAULT_VALUE)
                             {
                                 pseqAdjustmentValues[1].Value <<= 0.0;
-                                pseqAdjustmentValues[1].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+                                pseqAdjustmentValues[1].State = css::beans::PropertyState_DIRECT_VALUE;
                             }
                             seqAdjustmentValues[0].Value >>= fStartAngle;
                             seqAdjustmentValues[1].Value >>= fEndAngle;

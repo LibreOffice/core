@@ -49,15 +49,15 @@ sal_Int16 lcl_matchIA2TextBoundaryType(IA2TextBoundaryType boundaryType)
     switch (boundaryType)
     {
     case IA2_TEXT_BOUNDARY_CHAR:
-        return com::sun::star::accessibility::AccessibleTextType::CHARACTER;
+        return css::accessibility::AccessibleTextType::CHARACTER;
     case IA2_TEXT_BOUNDARY_WORD:
-       return com::sun::star::accessibility::AccessibleTextType::WORD;
+       return css::accessibility::AccessibleTextType::WORD;
     case IA2_TEXT_BOUNDARY_SENTENCE:
-        return com::sun::star::accessibility::AccessibleTextType::SENTENCE;
+        return css::accessibility::AccessibleTextType::SENTENCE;
     case IA2_TEXT_BOUNDARY_PARAGRAPH:
-        return com::sun::star::accessibility::AccessibleTextType::PARAGRAPH;
+        return css::accessibility::AccessibleTextType::PARAGRAPH;
     case IA2_TEXT_BOUNDARY_LINE:
-        return com::sun::star::accessibility::AccessibleTextType::LINE;
+        return css::accessibility::AccessibleTextType::LINE;
     case IA2_TEXT_BOUNDARY_ALL:
         // assert here, better handle it directly at call site
         assert(false

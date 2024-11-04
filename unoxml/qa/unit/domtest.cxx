@@ -293,7 +293,7 @@ public:
         }
 
         uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext(), css::uno::UNO_SET_THROW);
-        const uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
+        const uno::Reference<css::ucb::XSimpleFileAccess> xFileAccess(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.ucb.SimpleFileAccess"_ustr, xContext),
         uno::UNO_QUERY_THROW);
@@ -308,7 +308,7 @@ public:
             mxDomBuilder->parseURI(u""_ustr);
             CPPUNIT_FAIL("XDocumentBuilder.parseURI(\"\")");
         }
-        catch (com::sun::star::ucb::ContentCreationException&)
+        catch (css::ucb::ContentCreationException&)
         {
         }
 

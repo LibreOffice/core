@@ -182,7 +182,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         aParser.parseStream( rCustomStream, true );
 }
 
-Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport::getCorePropertiesStream(
+Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getCorePropertiesStream(
     const Reference< XStorage >& rxSource)
 {
     Sequence< InputSource > aCoreStreams = lclGetCoreStreams(rxSource);
@@ -192,7 +192,7 @@ Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport
     return aCoreStreams[0].aInputStream;
 }
 
-Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport::getExtendedPropertiesStream(
+Reference < css::io::XInputStream > SAL_CALL DocumentPropertiesImport::getExtendedPropertiesStream(
     const Reference< XStorage >& rxSource)
 {
     Sequence< InputSource > aExtStreams = lclGetExtStreams(rxSource);
@@ -202,7 +202,7 @@ Reference < com::sun::star::io::XInputStream > SAL_CALL DocumentPropertiesImport
     return aExtStreams[0].aInputStream;
 }
 
-css::uno::Sequence< css::uno::Reference< com::sun::star::io::XInputStream > > SAL_CALL DocumentPropertiesImport::getCustomPropertiesStreams(
+css::uno::Sequence< css::uno::Reference< css::io::XInputStream > > SAL_CALL DocumentPropertiesImport::getCustomPropertiesStreams(
     const Reference< XStorage >& rxSource)
 {
     Sequence <InputSource> aExtStreams = lclGetCustomStreams(rxSource);

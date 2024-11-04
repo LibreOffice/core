@@ -149,8 +149,8 @@ void AxisConverter::convertFromModel(const Reference<XCoordinateSystem>& rxCoord
     Reference< XAxis > xAxis;
     try
     {
-        namespace cssc = ::com::sun::star::chart;
-        namespace cssc2 = ::com::sun::star::chart2;
+        namespace cssc = css::chart;
+        namespace cssc2 = css::chart2;
 
         const TypeGroupInfo& rTypeInfo = rTypeGroups.front()->getTypeInfo();
         ObjectFormatter& rFormatter = getFormatter();
