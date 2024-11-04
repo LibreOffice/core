@@ -343,7 +343,7 @@ void SAL_CALL PopupMenuControllerBase::setPopupMenu( const Reference< awt::XPopu
         // Create popup menu on demand
         SolarMutexGuard aSolarMutexGuard;
 
-        m_xPopupMenu = dynamic_cast<VCLXPopupMenu*>(xPopupMenu.get());
+        m_xPopupMenu = dynamic_cast<VCLXMenu*>(xPopupMenu.get());
         assert(bool(xPopupMenu) == bool(m_xPopupMenu) && "we only support VCLXPopupMenu");
         m_xPopupMenu->addMenuListener( Reference< awt::XMenuListener >(this) );
 
