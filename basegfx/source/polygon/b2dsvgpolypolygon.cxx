@@ -543,20 +543,7 @@ namespace basegfx::utils
                                     // of radicant solved for fRY,
                                     // with s=fRX/fRY)
                                     const double fRatio(fRX/fRY);
-                                    const double fRadicant2(
-                                        p1_prime.getY()*p1_prime.getY() +
-                                        p1_prime.getX()*p1_prime.getX()/(fRatio*fRatio));
-                                    if( fRadicant2 < 0.0 )
-                                    {
-                                        // only trivial solution, one
-                                        // of the axes 0 -> straight
-                                        // line segment according to
-                                        // SVG spec
-                                        aCurrPoly.append(B2DPoint(nX, nY));
-                                        continue;
-                                    }
-
-                                    fRY=sqrt(fRadicant2);
+                                    fRY=std::hypot(p1_prime.getY(), p1_prime.getX()/fRatio);
                                     fRX=fRatio*fRY;
 
                                     // keep center_prime forced to (0,0)
