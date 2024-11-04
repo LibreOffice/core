@@ -497,6 +497,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/pdf/EncryptionHashTransporter \
     vcl/source/pdf/ExternalPDFStreams \
     vcl/source/pdf/PDFiumTools \
+    vcl/source/pdf/PDFEncryptor \
     vcl/source/pdf/PdfConfig \
     vcl/source/pdf/ResourceDict \
     vcl/source/pdf/Matrix3 \
