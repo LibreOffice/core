@@ -53,6 +53,7 @@
 #include <vclpluginapi.h>
 #include <tools/debug.hxx>
 #include <comphelper/flagguard.hxx>
+#include <config_emscripten.h>
 #include <config_vclplug.h>
 #include <dndhelper.hxx>
 #include <vcl/qt/QtUtils.hxx>
@@ -298,7 +299,7 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp)
 
 #ifndef EMSCRIPTEN
     m_bSupportsOpenGL = true;
-#else
+#elif !HAVE_EMSCRIPTEN_JSPI
     ImplGetSVData()->maAppData.m_bUseSystemLoop = true;
 #endif
 }

@@ -2181,6 +2181,14 @@ AC_ARG_WITH(main-module,
 ,)
 
 if test "$_os" = Emscripten; then
+    AC_ARG_ENABLE(emscripten-jspi,
+        AS_HELP_STRING([--enable-emscripten-jspi],
+            [Experimentally enable use of the Emscripten -sJSPI feature.]))
+else
+    enable_emscripten_jspi=
+fi
+
+if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-proxy-to-pthread,
         AS_HELP_STRING([--disable-emscripten-proxy-to-pthread],
             [Experimentally disable use of the Emscripten -sPROXY_TO_PTHREAD feature.]),,
@@ -4198,6 +4206,14 @@ AC_SUBST(CROSS_COMPILING)
 AC_SUBST(ENABLE_WASM_STRIP)
 AC_SUBST(ENABLE_WASM_STRIP_WRITER)
 AC_SUBST(ENABLE_WASM_STRIP_CALC)
+
+if test "$enable_emscripten_jspi" = yes; then
+    ENABLE_EMSCRIPTEN_JSPI=TRUE
+    AC_DEFINE(HAVE_EMSCRIPTEN_JSPI)
+else
+    ENABLE_EMSCRIPTEN_JSPI=
+fi
+AC_SUBST(ENABLE_EMSCRIPTEN_JSPI)
 
 if test "$enable_emscripten_proxy_to_pthread" = yes; then
     ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD=TRUE
