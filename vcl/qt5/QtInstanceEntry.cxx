@@ -12,6 +12,8 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtGui/QIcon>
+
 QtInstanceEntry::QtInstanceEntry(QLineEdit* pLineEdit)
     : QtInstanceWidget(pLineEdit)
     , m_pLineEdit(pLineEdit)
@@ -114,9 +116,32 @@ bool QtInstanceEntry::get_editable() const
     return bEditable;
 }
 
-void QtInstanceEntry::set_message_type(weld::EntryMessageType)
+void QtInstanceEntry::set_message_type(weld::EntryMessageType eType)
 {
-    assert(false && "Not implemented yet");
+    SolarMutexGuard g;
+
+    GetQtInstance().RunInMainThread([&] {
+        for (QAction* pAction : m_pLineEdit->actions())
+            m_pLineEdit->removeAction(pAction);
+
+        switch (eType)
+        {
+            case weld::EntryMessageType::Normal:
+                // don't do anything special
+                return;
+            case weld::EntryMessageType::Warning:
+                m_pLineEdit->addAction(QIcon::fromTheme("dialog-warning"),
+                                       QLineEdit::TrailingPosition);
+                return;
+            case weld::EntryMessageType::Error:
+                m_pLineEdit->addAction(QIcon::fromTheme("dialog-error"),
+                                       QLineEdit::TrailingPosition);
+                return;
+            default:
+                assert(false && "Unknown EntryMessageType");
+                return;
+        }
+    });
 }
 
 void QtInstanceEntry::set_placeholder_text(const OUString& rText)
