@@ -18,6 +18,7 @@
  */
 
 #include <pdf/pdfwriter_impl.hxx>
+#include <pdf/EncryptionHashTransporter.hxx>
 
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/virdev.hxx>
@@ -33,7 +34,6 @@
 #include <tools/stream.hxx>
 
 #include <comphelper/fileformat.h>
-#include <comphelper/hash.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
@@ -43,7 +43,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-#include <cppuhelper/implbase.hxx>
+
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <vcl/skia/SkiaHelper.hxx>
@@ -1079,72 +1079,6 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
 // Encryption methods
 
-/* a crutch to transport a ::comphelper::Hash safely though UNO API
-   this is needed for the PDF export dialog, which otherwise would have to pass
-   clear text passwords down till they can be used in PDFWriter. Unfortunately
-   the MD5 sum of the password (which is needed to create the PDF encryption key)
-   is not sufficient, since an MD5 digest cannot be created in an arbitrary state
-   which would be needed in PDFWriterImpl::computeEncryptionKey.
-*/
-class EncHashTransporter : public cppu::WeakImplHelper < css::beans::XMaterialHolder >
-{
-    ::std::unique_ptr<::comphelper::Hash> m_pDigest;
-    sal_IntPtr                  maID;
-    std::vector< sal_uInt8 >    maOValue;
-
-    static std::map< sal_IntPtr, EncHashTransporter* >      sTransporters;
-public:
-    EncHashTransporter()
-        : m_pDigest(new ::comphelper::Hash(::comphelper::HashType::MD5))
-    {
-        maID = reinterpret_cast< sal_IntPtr >(this);
-        while( sTransporters.find( maID ) != sTransporters.end() ) // paranoia mode
-            maID++;
-        sTransporters[ maID ] = this;
-    }
-
-    virtual ~EncHashTransporter() override
-    {
-        sTransporters.erase( maID );
-        SAL_INFO( "vcl", "EncHashTransporter freed" );
-    }
-
-    ::comphelper::Hash* getUDigest() { return m_pDigest.get(); };
-    std::vector< sal_uInt8 >& getOValue() { return maOValue; }
-    void invalidate()
-    {
-        m_pDigest.reset();
-    }
-
-    // XMaterialHolder
-    virtual uno::Any SAL_CALL getMaterial() override
-    {
-        return uno::Any( sal_Int64(maID) );
-    }
-
-    static EncHashTransporter* getEncHashTransporter( const uno::Reference< beans::XMaterialHolder >& );
-
-};
-
-std::map< sal_IntPtr, EncHashTransporter* > EncHashTransporter::sTransporters;
-
-EncHashTransporter* EncHashTransporter::getEncHashTransporter( const uno::Reference< beans::XMaterialHolder >& xRef )
-{
-    EncHashTransporter* pResult = nullptr;
-    if( xRef.is() )
-    {
-        uno::Any aMat( xRef->getMaterial() );
-        sal_Int64 nMat = 0;
-        if( aMat >>= nMat )
-        {
-            std::map< sal_IntPtr, EncHashTransporter* >::iterator it = sTransporters.find( static_cast<sal_IntPtr>(nMat) );
-            if( it != sTransporters.end() )
-                pResult = it->second;
-        }
-    }
-    return pResult;
-}
-
 void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
 {
     if( !m_aContext.Encryption.Encrypt() )
@@ -1195,7 +1129,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
     uno::Reference< beans::XMaterialHolder > xResult;
     if( !i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty() )
     {
-        rtl::Reference<EncHashTransporter> pTransporter = new EncHashTransporter;
+        rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;
         xResult = pTransporter;
 
         // get padded passwords
@@ -1220,7 +1154,7 @@ uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OU
 bool PDFWriterImpl::prepareEncryption( const uno::Reference< beans::XMaterialHolder >& xEnc )
 {
     bool bSuccess = false;
-    EncHashTransporter* pTransporter = EncHashTransporter::getEncHashTransporter( xEnc );
+    EncryptionHashTransporter* pTransporter = EncryptionHashTransporter::getEncHashTransporter( xEnc );
     if( pTransporter )
     {
         sal_Int32 nKeyLength = 0, nRC4KeyLength = 0;
@@ -1297,7 +1231,7 @@ it will be 16 byte long for 128 bit security; for 40 bit security only the first
 TODO: in pdf ver 1.5 and 1.6 the step 6 is different, should be implemented. See spec.
 
 */
-bool PDFWriterImpl::computeEncryptionKey( EncHashTransporter* i_pTransporter, vcl::PDFWriter::PDFEncryptionProperties& io_rProperties, sal_Int32 i_nAccessPermissions )
+bool PDFWriterImpl::computeEncryptionKey( EncryptionHashTransporter* i_pTransporter, vcl::PDFWriter::PDFEncryptionProperties& io_rProperties, sal_Int32 i_nAccessPermissions )
 {
     bool bSuccess = true;
     ::std::vector<unsigned char> nMD5Sum;
@@ -1433,7 +1367,7 @@ bool PDFWriterImpl::computeODictionaryValue( const sal_uInt8* i_pPaddedOwnerPass
 /**********************************
 Algorithms 3.4 and 3.5  Compute the encryption dictionary /U value, save into the class data member, revision 2 (40 bit) or 3 (128 bit)
 */
-bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
+bool PDFWriterImpl::computeUDictionaryValue( EncryptionHashTransporter* i_pTransporter,
                                              vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                              sal_Int32 i_nKeyLength,
                                              sal_Int32 i_nAccessPermissions
