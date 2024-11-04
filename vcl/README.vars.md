@@ -68,7 +68,9 @@ will be used to write the log under `instdir/uitest/`.
 * `SAL_VCL_QT_NO_FONTCONFIG` - ignore fontconfig provided font substitutions
 * `SAL_VCL_QT_NO_NATIVE` - disable `QStyle`'d controls
 * `SAL_VCL_QT_USE_QFONT` - use `QFont` for text layout and rendering (default is to use cairo)
-* `SAL_VCL_QT_NO_WELDED_WIDGETS` - disable the use of welded Qt widgets, reverts to previous VCL widget behavior
+* `SAL_VCL_QT_USE_WELDED_WIDGETS` - enable use of welded Qt widgets also for dialogs created from .ui files
+* `SAL_VCL_QT_NO_WELDED_WIDGETS` - disable the use of welded Qt widgets completely (also for simple message
+  dialogs), reverts to previous VCL widget behavior
 
 ## Mac
 
