@@ -107,12 +107,8 @@ double SvgNumber::solve(const InfoProvider& rInfoProvider, NumberType aNumberTyp
             else // length
             {
                 // it's a length, relative to sqrt((w^2 + h^2)/2)
-                const double fCurrentWidth(aViewPort.getWidth());
-                const double fCurrentHeight(aViewPort.getHeight());
-                const double fCurrentLength(
-                    sqrt((fCurrentWidth * fCurrentWidth + fCurrentHeight * fCurrentHeight)/2.0));
-
-                fRetval *= fCurrentLength;
+                const double fDiagLength(std::hypot(aViewPort.getWidth(), aViewPort.getHeight()));
+                fRetval *= fDiagLength / M_SQRT2;
             }
         }
 
