@@ -2162,6 +2162,14 @@ AC_ARG_WITH(wasm-module,
 # with 'calc impress writer' enabled. (buffer source exceeds maximum size)
 
 if test "$_os" = Emscripten; then
+    AC_ARG_ENABLE(emscripten-jspi,
+        AS_HELP_STRING([--enable-emscripten-jspi],
+            [Experimentally enable use of the Emscripten -sJSPI feature.]))
+else
+    enable_emscripten_jspi=
+fi
+
+if test "$_os" = Emscripten; then
     AC_ARG_ENABLE(emscripten-proxy-to-pthread,
         AS_HELP_STRING([--disable-emscripten-proxy-to-pthread],
             [Experimentally disable use of the Emscripten -sPROXY_TO_PTHREAD feature.]),,
@@ -4156,6 +4164,14 @@ AC_SUBST(ENABLE_WASM_STRIP_WRITER)
 AC_SUBST(ENABLE_WASM_STRIP_BASIC_DRAW_MATH_IMPRESS)
 AC_SUBST(ENABLE_WASM_STRIP_CALC)
 AC_SUBST(ENABLE_WASM_STRIP_ACCESSIBILITY)
+
+if test "$enable_emscripten_jspi" = yes; then
+    ENABLE_EMSCRIPTEN_JSPI=TRUE
+    AC_DEFINE(HAVE_EMSCRIPTEN_JSPI)
+else
+    ENABLE_EMSCRIPTEN_JSPI=
+fi
+AC_SUBST(ENABLE_EMSCRIPTEN_JSPI)
 
 if test "$enable_emscripten_proxy_to_pthread" = yes; then
     ENABLE_EMSCRIPTEN_PROXY_TO_PTHREAD=TRUE
