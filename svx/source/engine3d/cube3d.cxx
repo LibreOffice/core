@@ -46,8 +46,8 @@ E3dCubeObj::E3dCubeObj(
     SetDefaultAttributes(rDefault);
 
     // position centre or left, bottom, back (dependent on bPosIsCenter)
-    aCubePos = aPos;
-    aCubeSize = r3DSize;
+    m_aCubePos = aPos;
+    m_aCubeSize = r3DSize;
 }
 
 E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel)
@@ -67,9 +67,9 @@ E3dCubeObj::E3dCubeObj(SdrModel& rSdrModel, E3dCubeObj const & rSource)
 
     SetDefaultAttributes(aDefault);
 
-    aCubePos = rSource.aCubePos;
-    aCubeSize = rSource.aCubeSize;
-    bPosIsCenter = rSource.bPosIsCenter;
+    m_aCubePos = rSource.m_aCubePos;
+    m_aCubeSize = rSource.m_aCubeSize;
+    m_bPosIsCenter = rSource.m_bPosIsCenter;
 }
 
 E3dCubeObj::~E3dCubeObj()
@@ -78,9 +78,9 @@ E3dCubeObj::~E3dCubeObj()
 
 void E3dCubeObj::SetDefaultAttributes(const E3dDefaultAttributes& rDefault)
 {
-    aCubePos = rDefault.GetDefaultCubePos();
-    aCubeSize = rDefault.GetDefaultCubeSize();
-    bPosIsCenter = rDefault.GetDefaultCubePosIsCenter();
+    m_aCubePos = rDefault.GetDefaultCubePos();
+    m_aCubeSize = rDefault.GetDefaultCubeSize();
+    m_bPosIsCenter = rDefault.GetDefaultCubePosIsCenter();
 }
 
 SdrObjKind E3dCubeObj::GetObjIdentifier() const
@@ -104,27 +104,27 @@ rtl::Reference<SdrObject> E3dCubeObj::CloneSdrObject(SdrModel& rTargetModel) con
 
 void E3dCubeObj::SetCubePos(const basegfx::B3DPoint& rNew)
 {
-    if(aCubePos != rNew)
+    if(m_aCubePos != rNew)
     {
-        aCubePos = rNew;
+        m_aCubePos = rNew;
         ActionChanged();
     }
 }
 
 void E3dCubeObj::SetCubeSize(const basegfx::B3DVector& rNew)
 {
-    if(aCubeSize != rNew)
+    if(m_aCubeSize != rNew)
     {
-        aCubeSize = rNew;
+        m_aCubeSize = rNew;
         ActionChanged();
     }
 }
 
 void E3dCubeObj::SetPosIsCenter(bool bNew)
 {
-    if(bPosIsCenter != bNew)
+    if(m_bPosIsCenter != bNew)
     {
-        bPosIsCenter = bNew;
+        m_bPosIsCenter = bNew;
         ActionChanged();
     }
 }
