@@ -24,7 +24,7 @@ namespace vcl::pdf
    clear text passwords down till they can be used in PDFWriter. Unfortunately
    the MD5 sum of the password (which is needed to create the PDF encryption key)
    is not sufficient, since an MD5 digest cannot be created in an arbitrary state
-   which would be needed in PDFWriterImpl::computeEncryptionKey.
+   which would be needed in computeEncryptionKey.
 */
 class EncryptionHashTransporter : public cppu::WeakImplHelper<css::beans::XMaterialHolder>
 {
