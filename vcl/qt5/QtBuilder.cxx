@@ -105,6 +105,9 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     QLayout* pParentLayout = qobject_cast<QLayout*>(pParent);
 
     QObject* pObject = nullptr;
+    // in case a QLayout is created, an additional QWidget parent
+    // will also be created because that is needed for QtInstanceContainer
+    QWidget* pLayoutParentWidget = nullptr;
 
     if (sName == u"GtkMessageDialog")
     {
@@ -120,11 +123,20 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         }
         else
         {
+            QWidget* pBoxParentWidget = pParentWidget;
+            // Unless this is the direct GtkBox child of a GtkDialog, create a parent widget
+            // that can be used to create a QtInstanceContainer for this box
+            if (!qobject_cast<QDialog*>(pParentWidget))
+            {
+                pLayoutParentWidget = new QWidget(pParentWidget);
+                pBoxParentWidget = pLayoutParentWidget;
+            }
+
             const bool bVertical = hasOrientationVertical(rMap);
             if (bVertical)
-                pObject = new QVBoxLayout(pParentWidget);
+                pObject = new QVBoxLayout(pBoxParentWidget);
             else
-                pObject = new QHBoxLayout(pParentWidget);
+                pObject = new QHBoxLayout(pBoxParentWidget);
         }
     }
     else if (sName == u"GtkButtonBox")
@@ -189,7 +201,8 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkGrid")
     {
-        pObject = new QGridLayout(pParentWidget);
+        pLayoutParentWidget = new QWidget(pParentWidget);
+        pObject = new QGridLayout(pLayoutParentWidget);
     }
     else if (sName == u"GtkImage")
     {
@@ -243,8 +256,20 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         assert(false && "Widget type not supported yet");
     }
 
-    if (QWidget* pWidget = qobject_cast<QWidget*>(pObject))
+    QWidget* pWidget = qobject_cast<QWidget*>(pObject);
+    if (!pWidget)
+        pWidget = pLayoutParentWidget;
+
+    if (pWidget)
     {
+        if (!pParentLayout && pParentWidget)
+        {
+            // if the parent is a widget, use the widget's layout, and ensure it has one set
+            pParentLayout = pParentWidget->layout();
+            if (!pParentLayout)
+                pParentLayout = new QVBoxLayout(pParentWidget);
+        }
+
         // add widget to parent layout
         if (pParentLayout)
             pParentLayout->addWidget(pWidget);
@@ -365,7 +390,7 @@ void QtBuilder::applyAtkProperties(QObject* pObject, const stringmap& rPropertie
     }
 }
 
-void QtBuilder::applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& rGrid,
+void QtBuilder::applyGridPackingProperties(QWidget* pCurrentChild, QGridLayout& rGrid,
                                            const stringmap& rPackingProperties)
 {
     assert(pCurrentChild);
@@ -385,18 +410,8 @@ void QtBuilder::applyGridPackingProperties(QObject* pCurrentChild, QGridLayout& 
     auto aHeightIt = rPackingProperties.find(u"height"_ustr);
     sal_Int32 nRowSpan = (aHeightIt == rPackingProperties.end()) ? 1 : aHeightIt->second.toInt32();
 
-    if (pCurrentChild->isWidgetType())
-    {
-        QWidget* pWidget = static_cast<QWidget*>(pCurrentChild);
-        rGrid.removeWidget(pWidget);
-        rGrid.addWidget(pWidget, nRow, nColumn, nRowSpan, nColumnSpan);
-        return;
-    }
-
-    // if it's not a QWidget, it must be a QLayout
-    QLayout* pLayout = static_cast<QLayout*>(pCurrentChild);
-    rGrid.removeItem(pLayout);
-    rGrid.addLayout(pLayout, nRow, nColumn, nRowSpan, nColumnSpan);
+    rGrid.removeWidget(pCurrentChild);
+    rGrid.addWidget(pCurrentChild, nRow, nColumn, nRowSpan, nColumnSpan);
 }
 
 void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
@@ -405,8 +420,23 @@ void QtBuilder::applyPackingProperties(QObject* pCurrentChild, QObject* pParent,
     if (!pCurrentChild)
         return;
 
+    QWidget* pWidget = nullptr;
+    if (pCurrentChild->isWidgetType())
+        pWidget = static_cast<QWidget*>(pCurrentChild);
+    else
+    {
+        QObject* pParentObject = pCurrentChild->parent();
+        assert(pParent && "Non-widget (i.e. layout) has no parent");
+        if (pParentObject->isWidgetType())
+            pWidget = static_cast<QWidget*>(pParentObject);
+    }
+
+    if (!pWidget)
+        return;
+
+    // check parent's parent, due to extra QWidget parents for layouts
     if (QGridLayout* pGrid = qobject_cast<QGridLayout*>(pParent))
-        applyGridPackingProperties(pCurrentChild, *pGrid, rPackingProperties);
+        applyGridPackingProperties(pWidget, *pGrid, rPackingProperties);
     else
         SAL_WARN("vcl.qt", "QtBuilder::applyPackingProperties not yet implemented for this case");
 }
