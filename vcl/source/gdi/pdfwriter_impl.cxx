@@ -275,18 +275,52 @@ void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
         }
     }
 }
+} // end anonymous namespace
+
+namespace vcl::pdf
+{
+const sal_uInt8 PDFEncryptor::s_nPadString[32] =
+{
+    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
+    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
+};
+}
+
+namespace vcl
+{
+
+namespace
+{
+
+template < class GEOMETRY >
+GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
+{
+    GEOMETRY aPoint;
+    if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
+    {
+        aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
+    }
+    else
+    {
+        aPoint = OutputDevice::LogicToLogic( _rObject, _rSource, _rDest );
+    }
+    return aPoint;
+}
+
+void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
 
 /** Writes the PDF structure to the string buffer.
  *
  * Structure elements like: objects, IDs, dictionaries, key/values, ...
- *
  */
 class PDFStructureWriter
 {
     OStringBuffer maLine;
+    PDFWriterImpl& mrWriterImpl;
 public:
-    PDFStructureWriter()
+    PDFStructureWriter(PDFWriterImpl& rWriterImpl)
         : maLine(1024)
+        , mrWriterImpl(rWriterImpl)
     {
     }
 
@@ -335,37 +369,19 @@ public:
         appendLiteralString(pString, nSize, maLine);
         maLine.append(")");
     }
-};
 
-} // end anonymous namespace
-
-namespace vcl
-{
-const sal_uInt8 PDFWriterImpl::s_nPadString[32] =
-{
-    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
-    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
-};
-
-namespace
-{
-
-template < class GEOMETRY >
-GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevice* _pPixelConversion, const GEOMETRY& _rObject )
-{
-    GEOMETRY aPoint;
-    if ( MapUnit::MapPixel == _rSource.GetMapUnit() )
+    void writeUnicodeEncrypt(std::string_view key, OUString const& rString, sal_Int32 nObject)
     {
-        aPoint = _pPixelConversion->PixelToLogic( _rObject, _rDest );
+        maLine.append(key);
+        mrWriterImpl.appendUnicodeTextStringEncrypt(rString, nObject, maLine);
     }
-    else
-    {
-        aPoint = OutputDevice::LogicToLogic( _rObject, _rSource, _rDest );
-    }
-    return aPoint;
-}
 
-void removePlaceholderSE(std::vector<PDFStructureElement> & rStructure, PDFStructureElement& rEle);
+    void writeLiteralEncrypt(std::string_view key, std::string_view value, sal_Int32 nObject)
+    {
+        maLine.append(key);
+        mrWriterImpl.appendLiteralStringEncrypt(value, nObject, maLine);
+    }
+};
 
 } // end anonymous namespace
 
@@ -1311,10 +1327,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_aFile(m_aContext.URL),
         m_bOpen(false),
         m_DocDigest(::comphelper::HashType::MD5),
-        m_aCipher( nullptr ),
-        m_nKeyLength(0),
-        m_nRC4KeyLength(0),
-        m_bEncryptThisStream( false ),
         m_nAccessPermissions(0),
         m_rOuterFace( i_rOuterFace )
 {
@@ -1351,9 +1363,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     // setup DocInfo
     setupDocInfo();
 
-    /* prepare the cypher engine, can be done in CTOR, free in DTOR */
-    m_aCipher = rtl_cipher_createARCFOUR( rtl_Cipher_ModeStream );
-
     if( xEnc.is() )
         prepareEncryption( xEnc );
 
@@ -1372,7 +1381,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
             OSL_ENSURE( false, "encryption data failed sanity check, encryption disabled" );
         }
         else // setup key lengths
-            m_nAccessPermissions = computeAccessPermissions( m_aContext.Encryption, m_nKeyLength, m_nRC4KeyLength );
+            m_nAccessPermissions = computeAccessPermissions(m_aContext.Encryption, m_aPDFEncryptor.m_nKeyLength, m_aPDFEncryptor.m_nRC4KeyLength);
     }
 
     // write header
@@ -1439,8 +1448,6 @@ PDFWriterImpl::~PDFWriterImpl()
 
 void PDFWriterImpl::dispose()
 {
-    if( m_aCipher )
-        rtl_cipher_destroyARCFOUR( m_aCipher );
     m_aPages.clear();
     VirtualDevice::dispose();
 }
@@ -1615,7 +1622,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
         }
         //encrypt in place
-        rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars );
+        rtl_cipher_encodeARCFOUR( m_aPDFEncryptor.m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars);
         //now append, hexadecimal (appendHex), the encrypted result
         for(int i = 0; i < nChars; i++)
             appendHex( m_vEncryptionBuffer[i], rOutBuffer );
@@ -1635,7 +1642,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
         m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
-        rtl_cipher_encodeARCFOUR( m_aCipher, rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars );
+        rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars);
         appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
@@ -1743,17 +1750,15 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
     else
     {
         bool  buffOK = true;
-        if( m_bEncryptThisStream )
+        if (m_aPDFEncryptor.m_bEncryptThisStream)
         {
             /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
             m_vEncryptionBuffer.resize(nBytes);
-            if( buffOK )
-                rtl_cipher_encodeARCFOUR( m_aCipher,
-                                          pBuffer, static_cast<sal_Size>(nBytes),
-                                          m_vEncryptionBuffer.data(), static_cast<sal_Size>(nBytes) );
+            if (buffOK)
+                rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, pBuffer, static_cast<sal_Size>(nBytes), m_vEncryptionBuffer.data(), static_cast<sal_Size>(nBytes));
         }
 
-        const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_vEncryptionBuffer.data()  : pBuffer;
+        const void* pWriteBuffer = (m_aPDFEncryptor.m_bEncryptThisStream && buffOK) ? m_vEncryptionBuffer.data()  : pBuffer;
         m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
 
         if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
@@ -5852,68 +5857,48 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
 {
     sal_Int32 nObject = createObject();
 
-    if( updateObject( nObject ) )
+    if (!updateObject(nObject))
+        return 0;
+
+    PDFStructureWriter aWriter(*this);
+    aWriter.startObject(nObject);
+    aWriter.startDict();
+
+    // These entries are deprecated in PDF 2.0 (in favor of XMP metadata) and shouldn't be written.
+    // Exception: CreationDate and ModDate (which we don't write)
+    if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
     {
-        OStringBuffer aLine(1024);
-        appendObjectID(nObject, aLine);
-        aLine.append("<<");
-
-        // These entries are deprecated in PDF 2.0 (in favor of XMP metadata) and shouldn't be written.
-        // Exception: CreationDate and ModDate (which we don't write)
-        if (m_aContext.Version < PDFWriter::PDFVersion::PDF_2_0)
+        if (!m_aContext.DocumentInfo.Title.isEmpty())
         {
-            if (!m_aContext.DocumentInfo.Title.isEmpty())
-            {
-                aLine.append("/Title" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Title, nObject, aLine );
-                aLine.append("\n" );
-            }
-            if( !m_aContext.DocumentInfo.Author.isEmpty() )
-            {
-                aLine.append( "/Author" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Author, nObject, aLine );
-                aLine.append( "\n" );
-            }
-            if( !m_aContext.DocumentInfo.Subject.isEmpty() )
-            {
-                aLine.append( "/Subject" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Subject, nObject, aLine );
-                aLine.append( "\n" );
-            }
-            if( !m_aContext.DocumentInfo.Keywords.isEmpty() )
-            {
-                aLine.append( "/Keywords" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Keywords, nObject, aLine );
-                aLine.append( "\n" );
-            }
-            if( !m_aContext.DocumentInfo.Creator.isEmpty() )
-            {
-                aLine.append( "/Creator" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Creator, nObject, aLine );
-                aLine.append( "\n" );
-            }
-            if( !m_aContext.DocumentInfo.Producer.isEmpty() )
-            {
-                aLine.append( "/Producer" );
-                appendUnicodeTextStringEncrypt( m_aContext.DocumentInfo.Producer, nObject, aLine );
-                aLine.append( "\n" );
-            }
+            aWriter.writeUnicodeEncrypt("/Title", m_aContext.DocumentInfo.Title, nObject);
         }
-
-        // Allowed in PDF 2.0
+        if (!m_aContext.DocumentInfo.Author.isEmpty())
         {
-            aLine.append("/CreationDate");
-            appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
-            aLine.append( "\n" );
+            aWriter.writeUnicodeEncrypt("/Author", m_aContext.DocumentInfo.Author, nObject);
         }
-
-        aLine.append(">>\n");
-        aLine.append("endobj\n\n" );
-
-        if (!writeBuffer(aLine))
-            nObject = 0;
+        if (!m_aContext.DocumentInfo.Subject.isEmpty())
+        {
+            aWriter.writeUnicodeEncrypt("/Subject", m_aContext.DocumentInfo.Subject, nObject);
+        }
+        if (!m_aContext.DocumentInfo.Keywords.isEmpty())
+        {
+            aWriter.writeUnicodeEncrypt("/Keywords", m_aContext.DocumentInfo.Keywords, nObject);
+        }
+        if (!m_aContext.DocumentInfo.Creator.isEmpty())
+        {
+            aWriter.writeUnicodeEncrypt("/Creator", m_aContext.DocumentInfo.Creator, nObject);
+        }
+        if (!m_aContext.DocumentInfo.Producer.isEmpty())
+        {
+            aWriter.writeUnicodeEncrypt("/Producer", m_aContext.DocumentInfo.Producer, nObject);
+        }
     }
-    else
+    // Allowed in PDF 2.0
+    aWriter.writeLiteralEncrypt("/CreationDate", m_aCreationDateString, nObject);
+    aWriter.endDict();
+    aWriter.endObject();
+
+    if (!writeBuffer(aWriter.getLine()))
         nObject = 0;
 
     return nObject;
@@ -6167,7 +6152,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
 
     if (updateObject(nObject))
     {
-        PDFStructureWriter aWriter;
+        PDFStructureWriter aWriter(*this);
         aWriter.startObject(nObject);
         aWriter.startDict();
         aWriter.write("/Filter", "/Standard");
@@ -6272,6 +6257,7 @@ bool PDFWriterImpl::emitTrailer()
         }
         aLine.append( "> ]\n" );
     }
+
     if( !aDocChecksum.isEmpty() )
     {
         aLine.append( "/DocChecksum /" );
@@ -9808,7 +9794,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                     m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
                 }
                 //encrypt the colorspace lookup table
-                rtl_cipher_encodeARCFOUR( m_aCipher, m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar );
+                rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar);
                 //now queue the data for output
                 nChar = 0;
                 for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
