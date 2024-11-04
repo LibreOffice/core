@@ -59,9 +59,9 @@
     <string name="calc_insert_before">הוספה</string>
     <string name="calc_delete">מחיקה</string>
     <string name="calc_optimal_length">אורך מיטבי</string>
-    <string name="calc_adjust_length">כיוון אורך</string>
-    <string name="calc_adjust_height">כיוון גובה</string>
-    <string name="calc_adjust_width">כיוון רוחב</string>
+    <string name="calc_adjust_length">התאמת האורך</string>
+    <string name="calc_adjust_height">התאמת הגובה</string>
+    <string name="calc_adjust_width">התאמת הרוחב</string>
     <string name="calc_optimal_height">גובה מיטבי</string>
     <string name="calc_optimal_width">רוחב מיטבי</string>
     <string name="calc_optimal_length_confirm">אישור</string>
