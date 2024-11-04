@@ -65,9 +65,9 @@
 
 class FontSubsetInfo;
 class ZCodec;
-class EncHashTransporter;
 struct BitStreamState;
 namespace vcl::font { class PhysicalFontFace; }
+namespace vcl::pdf { class EncryptionHashTransporter; }
 class SvStream;
 class SvMemoryStream;
 
@@ -1083,7 +1083,7 @@ private:
     pad a password according  algorithm 3.2, step 1 */
     static void padPassword( std::u16string_view i_rPassword, sal_uInt8* o_pPaddedPW );
     /* algorithm 3.2: compute an encryption key */
-    static bool computeEncryptionKey( EncHashTransporter*,
+    static bool computeEncryptionKey( vcl::pdf::EncryptionHashTransporter*,
                                       vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                       sal_Int32 i_nAccessPermissions
                                      );
@@ -1093,7 +1093,7 @@ private:
                                          sal_Int32 i_nKeyLength
                                         );
     /* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
-    static bool computeUDictionaryValue( EncHashTransporter* i_pTransporter,
+    static bool computeUDictionaryValue( vcl::pdf::EncryptionHashTransporter* i_pTransporter,
                                          vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
                                          sal_Int32 i_nKeyLength,
                                          sal_Int32 i_nAccessPermissions

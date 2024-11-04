@@ -309,11 +309,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/scrptrun \
     vcl/source/gdi/CommonSalLayout \
     vcl/source/gdi/TypeSerializer \
-    vcl/source/pdf/PdfConfig \
-    vcl/source/pdf/ResourceDict \
-    vcl/source/pdf/Matrix3 \
-    vcl/source/pdf/XmpMetadata \
-    vcl/source/pdf/ExternalPDFStreams \
     vcl/source/graphic/BinaryDataContainer \
     vcl/source/graphic/BinaryDataContainerTools \
     vcl/source/graphic/GraphicID \
@@ -499,7 +494,13 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
+    vcl/source/pdf/EncryptionHashTransporter \
+    vcl/source/pdf/ExternalPDFStreams \
     vcl/source/pdf/PDFiumTools \
+    vcl/source/pdf/PdfConfig \
+    vcl/source/pdf/ResourceDict \
+    vcl/source/pdf/Matrix3 \
+    vcl/source/pdf/XmpMetadata \
     vcl/source/uitest/logger \
     vcl/source/uitest/uiobject \
     vcl/source/uitest/uitest \
