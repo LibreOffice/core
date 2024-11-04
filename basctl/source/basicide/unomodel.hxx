@@ -24,22 +24,13 @@
 namespace basctl
 {
 
-class SIDEModel : public SfxBaseModel,
-                public com::sun::star::lang::XServiceInfo
+class SIDEModel : public cppu::ImplInheritanceHelper<SfxBaseModel, css::lang::XServiceInfo>
 {
     /// @throws css::io::IOException
     static void notImplemented();
 public:
     explicit SIDEModel(SfxObjectShell *pObjSh);
     virtual ~SIDEModel() override;
-
-    //XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
-
-    //XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

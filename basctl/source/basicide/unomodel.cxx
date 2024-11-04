@@ -68,49 +68,15 @@ public:
 namespace basctl
 {
 
-using namespace ::cppu;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 
 SIDEModel::SIDEModel( SfxObjectShell *pObjSh )
-: SfxBaseModel(pObjSh)
+    : cppu::ImplInheritanceHelper<SfxBaseModel, css::lang::XServiceInfo>(pObjSh)
 {
 }
 
 SIDEModel::~SIDEModel()
 {
-}
-
-uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType )
-{
-    uno::Any aRet =  ::cppu::queryInterface ( rType,
-                                    // OWeakObject interfaces
-                                    static_cast< XInterface* >( static_cast< OWeakObject* >( this ) ),
-                                    static_cast< XWeak* > ( this ),
-                                    static_cast< XServiceInfo*  > ( this ) );
-    if (!aRet.hasValue())
-        aRet = SfxBaseModel::queryInterface ( rType );
-    return aRet;
-}
-
-void SAL_CALL SIDEModel::acquire() noexcept
-{
-    SolarMutexGuard aGuard;
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SIDEModel::release() noexcept
-{
-    SolarMutexGuard aGuard;
-    OWeakObject::release();
-}
-
-uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  )
-{
-    return comphelper::concatSequences(
-            SfxBaseModel::getTypes(),
-            uno::Sequence {  cppu::UnoType<XServiceInfo>::get() });
 }
 
 OUString SIDEModel::getImplementationName()
