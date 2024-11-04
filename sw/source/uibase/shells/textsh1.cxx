@@ -150,9 +150,6 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-//#include <../../../../chart2/source/controller/inc/ChartController.hxx>
-//#include <DataSeries.hxx>
-
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
 using namespace ::com::sun::star::container;
