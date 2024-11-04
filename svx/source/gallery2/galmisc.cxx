@@ -86,12 +86,7 @@ bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
         aCodec.Read( aMemStm );
         aMemStm.Seek( 0 );
 
-        if( 1 == nVersion )
-        {
-            OSL_FAIL( "staroffice binary file formats are no longer supported inside the gallery!" );
-            bRet = false;
-        }
-        else if( 2 == nVersion )
+        if ( 2 == nVersion )
         {
             // recall to read as XML
             bRet = GallerySvDrawImport( aMemStm, rModel );
