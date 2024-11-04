@@ -46,6 +46,7 @@ $(eval $(call gb_Library_use_libraries,sw_writerfilter,\
     sax \
     sfx \
     sot \
+    svl \
     svt \
 	svxcore \
     sw \

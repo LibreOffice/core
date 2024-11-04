@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <rtl/ustring.hxx>
+#include <svl/sharedstring.hxx>
 #include "PropertyIds.hxx"
 #include <unordered_map>
 
 namespace writerfilter::dmapper{
 
-OUString getPropertyName( PropertyIds eId )
+const OUString & getPropertyName( PropertyIds eId )
 {
     static const std::unordered_map<PropertyIds, OUString> constPropertyMap {
         { PROP_CHAR_WEIGHT, u"CharWeight"_ustr},
@@ -402,7 +403,7 @@ OUString getPropertyName( PropertyIds eId )
     if (iterator != constPropertyMap.end())
         return iterator->second;
 
-    return OUString();
+    return svl::SharedString::EMPTY_STRING;
 }
 
 bool isCharacterProperty( const PropertyIds eId )

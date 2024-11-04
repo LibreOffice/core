@@ -402,7 +402,7 @@ enum PropertyIds
     };
 
 //Returns the UNO string equivalent to eId.
-OUString getPropertyName(PropertyIds eId);
+const OUString & getPropertyName(PropertyIds eId);
 
 bool isCharacterProperty(const PropertyIds eId);
 
