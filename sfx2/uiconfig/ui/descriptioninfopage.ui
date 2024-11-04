@@ -399,6 +399,7 @@
                     <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <property name="wrap-mode">word</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="comments-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="descriptioninfopage|extended_tip|comments">Enter comments to help identify the document.</property>
