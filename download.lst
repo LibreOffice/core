@@ -105,8 +105,8 @@ EPUBGEN_TARBALL := libepubgen-0.1.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ETONYEK_SHA256SUM := b430435a6e8487888b761dc848b7981626eb814884963ffe25eb26a139301e9a
-ETONYEK_VERSION_MICRO := 10
+ETONYEK_SHA256SUM := b9fa82fbeb8cb7a701101060e4f3e1e4ef7c38f574b2859d3ecbe43604c21f83
+ETONYEK_VERSION_MICRO := 12
 ETONYEK_TARBALL := libetonyek-0.1.$(ETONYEK_VERSION_MICRO).tar.xz
 # three static lines
 # so that git cherry-pick
