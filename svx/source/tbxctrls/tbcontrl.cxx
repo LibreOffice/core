@@ -177,6 +177,11 @@ public:
             m_xWidget->set_entry_text(rText);
     }
 
+    int find_text(const OUString& rText)
+    {
+        return m_xWidget->find_text(rText);
+    }
+
     void set_active(int nActive)
     {
         m_xWidget->set_active(nActive);
@@ -3257,15 +3262,14 @@ void SvxStyleToolBoxControl::FillStyleBox()
         {
             if ( aStyles.size() + pBox->get_count() > 12)
                 break;
-            // insert default style only if not used (and added to rStyle before)
-            if (std::find(aStyles.begin(), aStyles.end(), rStyle.second) >= aStyles.end())
-                pBox->append_text(rStyle.second);
+            pBox->append_text(rStyle.second);
         }
     }
     std::sort(aStyles.begin(), aStyles.end());
 
     for (const auto& rStyle : aStyles)
-        pBox->append_text(rStyle);
+        if (pBox->find_text(rStyle) == -1)
+            pBox->append_text(rStyle);
 
     if ((pImpl->bSpecModeWriter || pImpl->bSpecModeCalc) && !comphelper::LibreOfficeKit::isActive())
         pBox->append_text(pImpl->aMore);
