@@ -60,6 +60,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstddef>
+#include <numbers>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -1382,8 +1383,8 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
         {
             const double fScaleX = fWidthH / 128.0;
             const double fScaleY = fHeightH / 128.0;
-            const double fSmall = sqrt(200.0);
-            const double fLarge = 128.0 - fSmall;
+            constexpr double fSmall = std::numbers::sqrt2 * 10;
+            constexpr double fLarge = 128.0 - fSmall;
 
             *pInnerSequence++ = toPoint( fX, fY - fScaleY * fSmall );
 
@@ -1417,7 +1418,7 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
         {
             const double fScaleX = fWidthH / 128.0;
             const double fScaleY = fHeightH / 128.0;
-            const double fHalf = 10.0; //half line width on 256 size square
+            constexpr double fHalf = 10.0; //half line width on 256 size square
             const double fdX = fScaleX * fHalf;
             const double fdY = fScaleY * fHalf;
 
@@ -1451,12 +1452,12 @@ static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::P
         }
         case Symbol_Asterisk:
         {
-            const double fHalf = 10.0; // half line width on 256 size square
-            const double fTwoY = fHalf * sqrt(3.0);
-            const double fFourY = (128.0 - 2.0 * fHalf ) / sqrt(3.0);
-            const double fThreeX = 128.0 - fHalf;
-            const double fThreeY = fHalf * sqrt(3.0) + fFourY;
-            const double fFiveX = 2.0 * fHalf;
+            constexpr double fHalf = 10.0; // half line width on 256 size square
+            constexpr double fTwoY = fHalf * std::numbers::sqrt3;
+            constexpr double fFourY = (128.0 - 2.0 * fHalf ) * std::numbers::inv_sqrt3;
+            constexpr double fThreeX = 128.0 - fHalf;
+            constexpr double fThreeY = fHalf * std::numbers::sqrt3 + fFourY;
+            constexpr double fFiveX = 2.0 * fHalf;
 
             const double fScaleX = fWidthH / 128.0;
             const double fScaleY = fHeightH / 128.0;
