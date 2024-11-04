@@ -1151,8 +1151,8 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
     if( !m_aContext.Encryption.Encrypt() )
         return;
 
-    m_bEncryptThisStream = true;
-    sal_Int32 i = m_nKeyLength;
+    m_aPDFEncryptor.m_bEncryptThisStream = true;
+    sal_Int32 i = m_aPDFEncryptor.m_nKeyLength;
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
@@ -1163,7 +1163,7 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
     // the i+2 to take into account the generation number, always zero
     // initialize the RC4 with the key
     // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
+    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.m_nRC4KeyLength, nullptr, 0);
 }
 
 void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
@@ -1171,7 +1171,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
     if( !m_aContext.Encryption.Encrypt() )
         return;
 
-    sal_Int32 i = m_nKeyLength;
+    sal_Int32 i = m_aPDFEncryptor.m_nKeyLength;
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
@@ -1182,7 +1182,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
     // initialize the RC4 with the key
     // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR( m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_nRC4KeyLength, nullptr, 0 );
+    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.m_nRC4KeyLength, nullptr, 0);
 }
 
 /* init the encryption engine
@@ -1285,7 +1285,7 @@ void PDFWriterImpl::padPassword( std::u16string_view i_rPassword, sal_uInt8* o_p
     //pad it with standard byte string
     sal_Int32 i,y;
     for( i = nCurrentChar, y = 0 ; i < ENCRYPTED_PWD_SIZE; i++, y++ )
-        o_pPaddedPW[i] = s_nPadString[y];
+        o_pPaddedPW[i] = PDFEncryptor::s_nPadString[y];
 }
 
 /**********************************
@@ -1460,7 +1460,7 @@ bool PDFWriterImpl::computeUDictionaryValue( EncHashTransporter* i_pTransporter,
             for(sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                 io_rProperties.UValue[i] = 0;
             //steps 2 and 3
-            aDigest.update(s_nPadString, sizeof(s_nPadString));
+            aDigest.update(PDFEncryptor::s_nPadString, sizeof(PDFEncryptor::s_nPadString));
             aDigest.update(io_rProperties.DocumentIdentifier.data(), io_rProperties.DocumentIdentifier.size());
 
             ::std::vector<unsigned char> const nMD5Sum(aDigest.finalize());

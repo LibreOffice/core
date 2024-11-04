@@ -34,11 +34,11 @@
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
 #include <pdf/Matrix3.hxx>
+#include <pdf/PDFEncryptor.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <osl/file.hxx>
-#include <rtl/cipher.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
@@ -72,7 +72,6 @@ class SvStream;
 class SvMemoryStream;
 
 // the maximum password length
-constexpr sal_Int32 ENCRYPTED_PWD_SIZE = 32;
 constexpr sal_Int32 MD5_DIGEST_SIZE = 16;
 // security 128 bit
 constexpr sal_Int32 SECUR_128BIT_KEY = 16;
@@ -810,6 +809,8 @@ private:
 
     ExternalPDFStreams m_aExternalPDFStreams;
 
+    PDFEncryptor m_aPDFEncryptor;
+
     /* output redirection; e.g. to accumulate content streams for
        XObjects
      */
@@ -835,22 +836,6 @@ private:
         }
         return nPosition;
     }
-/*
-variables for PDF security
-i12626
-*/
-/* used to cipher the stream data and for password management */
-    rtlCipher                               m_aCipher;
-    /* pad string used for password in Standard security handler */
-    static const sal_uInt8                  s_nPadString[ENCRYPTED_PWD_SIZE];
-
-    /* the encryption key, formed with the user password according to algorithm 3.2, maximum length is 16 bytes + 3 + 2
-    for 128 bit security   */
-    sal_Int32                               m_nKeyLength; // key length, 16 or 5
-    sal_Int32                               m_nRC4KeyLength; // key length, 16 or 10, to be input to the algorithm 3.1
-
-    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
-    bool                                    m_bEncryptThisStream;
 
     /* the numerical value of the access permissions, according to PDF spec, must be signed */
     sal_Int32                               m_nAccessPermissions;
@@ -866,17 +851,19 @@ i12626
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
-    void disableStreamEncryption() override { m_bEncryptThisStream = false; };
+    void disableStreamEncryption() override { m_aPDFEncryptor.m_bEncryptThisStream = false; };
 
     /* */
     void enableStringEncryption( sal_Int32 nObject );
 
-// test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
+public: // Temporary for PDFStructureWriter
+    // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
     void appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     void appendLiteralStringEncrypt( std::u16string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc = RTL_TEXTENCODING_ASCII_US );
     void appendLiteralStringEncrypt( std::string_view rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
+private:
     /* creates fonts and subsets that will be emitted later */
     void registerGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const LogicalFontInstance* pFont, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
     void registerSimpleGlyph(const sal_GlyphId, const vcl::font::PhysicalFontFace*, const std::vector<sal_Ucs>&, sal_Int32, sal_uInt8&, sal_Int32&);
