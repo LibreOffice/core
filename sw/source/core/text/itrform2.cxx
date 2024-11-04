@@ -1272,7 +1272,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                     rtl::Reference<SwXTextDocument> xDocumentMetadataAccess(pShell->GetBaseModel());
 
                     const css::uno::Reference<css::rdf::XResource> xSubject(xRet, uno::UNO_QUERY);
-                    const uno::Reference<rdf::XRepository>& xRepository =
+                    const uno::Reference<rdf::XRepository> xRepository =
                         xDocumentMetadataAccess->getRDFRepository();
                     const uno::Reference<container::XEnumeration> xEnum(
                         xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);

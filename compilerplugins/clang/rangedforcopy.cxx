@@ -56,6 +56,10 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
     if (!type->isRecordType() || type->isReferenceType() || type->isPointerType())
         return true;
 
+    if (auto exprWithCleanups = dyn_cast<ExprWithCleanups>(varDecl->getInit()))
+        if (dyn_cast<CXXBindTemporaryExpr>(exprWithCleanups->getSubExpr()->IgnoreImpCasts()))
+            return true;
+
     if (loplugin::TypeCheck(type).Class("__bit_const_reference").StdNamespace())
     {
         // With libc++ without _LIBCPP_ABI_BITSET_VECTOR_BOOL_CONST_SUBSCRIPT_RETURN_BOOL,

@@ -891,7 +891,7 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::Bookmark*
             static uno::Reference< rdf::XURI > xODF_SHADING(
                 rdf::URI::createKnown(xContext, rdf::URIs::LO_EXT_SHADING), uno::UNO_SET_THROW);
 
-            const uno::Reference<rdf::XRepository>& xRepository =
+            const uno::Reference<rdf::XRepository> xRepository =
                 xModel->getRDFRepository();
             const uno::Reference<container::XEnumeration> xEnum(
                 xRepository->getStatements(xSubject, xODF_SHADING, nullptr), uno::UNO_SET_THROW);
@@ -935,7 +935,7 @@ static OUString getBookmarkType(const SwTextNode& rNode, const sw::mark::Bookmar
 
             uno::Reference<rdf::XDocumentMetadataAccess> xDocumentMetadataAccess(
                 pShell->GetBaseModel());
-            const uno::Reference<rdf::XRepository>& xRepository =
+            const uno::Reference<rdf::XRepository> xRepository =
                 xDocumentMetadataAccess->getRDFRepository();
             const uno::Reference<container::XEnumeration> xEnum(
                 xRepository->getStatements(xSubject, xODF_PREFIX, nullptr), uno::UNO_SET_THROW);

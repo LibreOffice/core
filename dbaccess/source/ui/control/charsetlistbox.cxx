@@ -28,7 +28,7 @@ namespace dbaui
     CharSetListBox::CharSetListBox(std::unique_ptr<weld::ComboBox> xControl)
         : m_xControl(std::move(xControl))
     {
-        for (auto const& charset : m_aCharSets)
+        for (auto const charset : m_aCharSets)
         {
             m_xControl->append_text(charset.getDisplayName());
         }
