@@ -38,7 +38,7 @@ bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 
     rStm.ReadUChar( cByte1 ).ReadUChar( cByte2 ).ReadUChar( cByte3 ).ReadUChar( cByte4 ).ReadUChar( cByte5 ).ReadUChar( cByte6 );
 
-    if ( cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
+    if (rStm.good() && cByte1 == 'S' && cByte2 == 'V' && cByte3 == 'R' && cByte4 == 'L' && cByte5 == 'E' && ( cByte6 == '1' || cByte6 == '2' ) )
     {
         rVersion = ( ( cByte6 == '1' ) ? 1 : 2 );
         bRet = true;
