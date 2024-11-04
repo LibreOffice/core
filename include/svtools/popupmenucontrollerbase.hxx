@@ -33,6 +33,7 @@
 #include <comphelper/compbase.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 
 namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
@@ -118,7 +119,7 @@ namespace svt
             css::uno::Reference< css::frame::XDispatch >           m_xDispatch;
             css::uno::Reference< css::frame::XFrame >              m_xFrame;
             css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
-            rtl::Reference< VCLXPopupMenu >                        m_xPopupMenu;
+            rtl::Reference< VCLXMenu >                             m_xPopupMenu;
             comphelper::OInterfaceContainerHelper4<XStatusListener> maStatusListeners;
     };
 }
