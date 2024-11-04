@@ -5279,9 +5279,9 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
 
         SolarMutexGuard aGuard;
         OutputDevice *pDevice = Application::GetDefaultDevice();
-        OutputDevice::ImplClearAllFontData(false);
+        OutputDevice::ImplClearAllFontData(true);
         pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
-        OutputDevice::ImplRefreshAllFontData(false);
+        OutputDevice::ImplRefreshAllFontData(true);
     }
 #endif
 }
