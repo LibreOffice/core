@@ -2724,8 +2724,10 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
 
     ScAddress aCell(GetCol(), 0, GetTab());
     ScDocument& rDoc = GetDoc();
+    // cache the output of GetCondResult
     const ScPatternAttr* pPrevPattern = nullptr;
     ScRefCellValue aPrevCellValue;
+    Color aPrevPatternColor;
     while (nRow1 <= nRow2)
     {
         aCell.SetRow(nRow1);
@@ -2737,27 +2739,26 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
 
         if (pPattern)
         {
-            // Speed up processing when dealing with runs of identical cells. We only
-            // care about collecting unique colors, so no need to process a cell if the result
-            // will be the same as the previous cell.
-            // Which we can only do if there is no conditional format to override the color on this cell.
-            if (!pCondFormat)
+            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
             {
+                // Speed up processing when dealing with runs of identical cells. This avoids
+                // an expensive GetCondResult call.
                 ScRefCellValue aCellValue = GetCellValue(nRow1);
                 if (pPrevPattern == pPattern && aCellValue == aPrevCellValue)
                 {
-                    nRow1++;
-                    continue;
+                    aBackColor = aPrevPatternColor;
+                    bCondBackColor = true;
                 }
-                aPrevCellValue = aCellValue;
-                pPrevPattern = pPattern;
-            }
-            if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty())
-            {
-                const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
-                const SvxBrushItem* pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
-                aBackColor = pBrush->GetColor();
-                bCondBackColor = true;
+                else
+                {
+                    const SfxItemSet* pCondSet = rDoc.GetCondResult(GetCol(), nRow1, GetTab());
+                    const SvxBrushItem* pBrush = &pPattern->GetItem(ATTR_BACKGROUND, pCondSet);
+                    aBackColor = pBrush->GetColor();
+                    bCondBackColor = true;
+                    aPrevCellValue = aCellValue;
+                    pPrevPattern = pPattern;
+                    aPrevPatternColor = aBackColor;
+                }
             }
         }
 
@@ -2774,8 +2775,6 @@ void ScColumn::GetBackColorFilterEntries(SCROW nRow1, SCROW nRow2, ScFilterEntri
                     {
                         aBackColor = *oColor;
                         bCondBackColor = true;
-                        // we are overriding the color, so we need to clear the one-item cache.
-                        pPrevPattern = nullptr;
                     }
                 }
             }
