@@ -59,7 +59,7 @@ class CWinClipboard final
     CMtaOleClipboard m_MtaOleClipboard;
     CXNotifyingDataObject* m_pNewOwnClipContent = nullptr; // until onClipboardContentChanged
     CXNotifyingDataObject* m_pCurrentOwnClipContent = nullptr;
-    com::sun::star::uno::Reference<com::sun::star::datatransfer::XTransferable> m_foreignContent;
+    css::uno::Reference<css::datatransfer::XTransferable> m_foreignContent;
     comphelper::OInterfaceContainerHelper4<css::datatransfer::clipboard::XClipboardListener>
         maClipboardListeners;
 
