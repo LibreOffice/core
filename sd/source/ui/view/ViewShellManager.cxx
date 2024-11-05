@@ -752,7 +752,7 @@ void ViewShellManager::Implementation::UpdateShellStack()
 
     SfxShell* pPreviousTopViewShell = mpTopViewShell;
     // Update the pointer to the top-most active view shell.
-    mpTopViewShell = (maActiveViewShells.empty())
+    mpTopViewShell = (maActiveViewShells.empty() || mbFormShellAboveParent)
         ? nullptr : maActiveViewShells.begin()->mpShell;
 
     bool bTopViewShellChanged = mpTopViewShell != pPreviousTopViewShell;
