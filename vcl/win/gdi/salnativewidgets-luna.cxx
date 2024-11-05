@@ -47,6 +47,7 @@
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
 #include <win/salframe.h>
+#include <win/salinst.h>
 #include <win/scoped_gdi.hxx>
 #include <win/wingdiimpl.hxx>
 
@@ -911,25 +912,27 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             else
                 iState = bChecked ? TS_CHECKED : TS_NORMAL;
 
-            if (bUseDarkMode && GetSalInstance()->getOSVersion().startsWith(u"Windows 11")
-                && (bChecked
-                    || (nState & (ControlState::PRESSED) || (nState & ControlState::ROLLOVER))))
+            if (bUseDarkMode && (bChecked || (nState & (ControlState::PRESSED) || (nState & ControlState::ROLLOVER))))
             {
-                // tdf#152534 workaround bug with Windows 11 Dark theme using
-                // light blue as highlight color which gives insufficient
-                // contrast for hovered-over or pressed/checked toolbar buttons:
-                // manually draw background (using color a bit lighter than background
-                // for non-highlighted items) and draw a frame around it
-                ScopedHBRUSH aBgColorBrush(CreateSolidBrush(RGB(38, 38, 38)));
-                FillRect(hDC, &rc, aBgColorBrush.get());
-                const Color aFrameColor = Application::GetSettings().GetStyleSettings().GetDisableColor();
-                ScopedHBRUSH aFrameBrush(CreateSolidBrush(
-                    RGB(aFrameColor.GetRed(), aFrameColor.GetGreen(), aFrameColor.GetBlue())));
-                FrameRect(hDC, &rc, aFrameBrush.get());
+                const WinOSVersionInfo aVersion = WinSalInstance::getWinOSVersionInfo();
+                if (aVersion.m_nMajorVersion == 10 && aVersion.m_nBuildNumber >= 22000)
+                {
+                    // tdf#152534 workaround bug with Windows 11 Dark theme using
+                    // light blue as highlight color which gives insufficient
+                    // contrast for hovered-over or pressed/checked toolbar buttons:
+                    // manually draw background (using color a bit lighter than background
+                    // for non-highlighted items) and draw a frame around it
+                    ScopedHBRUSH aBgColorBrush(CreateSolidBrush(RGB(38, 38, 38)));
+                    FillRect(hDC, &rc, aBgColorBrush.get());
+                    const Color aFrameColor = Application::GetSettings().GetStyleSettings().GetDisableColor();
+                    ScopedHBRUSH aFrameBrush(CreateSolidBrush(
+                        RGB(aFrameColor.GetRed(), aFrameColor.GetGreen(), aFrameColor.GetBlue())));
+                    FrameRect(hDC, &rc, aFrameBrush.get());
 
-                DrawThemeText(hTheme, hDC, iPart, iState, o3tl::toW(aCaption.getStr()), -1,
-                              DT_CENTER | DT_VCENTER | DT_SINGLELINE, 0, &rc);
-                return true;
+                    DrawThemeText(hTheme, hDC, iPart, iState, o3tl::toW(aCaption.getStr()), -1,
+                                  DT_CENTER | DT_VCENTER | DT_SINGLELINE, 0, &rc);
+                    return true;
+                }
             }
 
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);

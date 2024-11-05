@@ -24,8 +24,16 @@
 #include <osl/conditn.hxx>
 
 #include <salinst.hxx>
+#include <win/salframe.h>
 
 class SalYieldMutex;
+
+struct WinOSVersionInfo
+{
+    DWORD m_nMajorVersion = 0;
+    DWORD m_nMinorVersion = 0;
+    DWORD m_nBuildNumber = 0;
+};
 
 class WinSalInstance : public SalInstance
 {
@@ -72,6 +80,7 @@ public:
     virtual OUString            GetConnectionIdentifier() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
+    static WinOSVersionInfo getWinOSVersionInfo();
     virtual OUString            getOSVersion() override;
     virtual void BeforeAbort(const OUString&, bool) override;
 
