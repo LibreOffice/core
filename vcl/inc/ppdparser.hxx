@@ -183,7 +183,7 @@ public:
 
     const ::std::vector< PPDConstraint >& getConstraints() const { return m_aConstraints; }
 
-    OUString        getDefaultPaperDimension() const;
+    const OUString & getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
     { getPaperDimension( getDefaultPaperDimension(), rWidth, rHeight ); }
     bool getPaperDimension( std::u16string_view rPaperName,
@@ -202,7 +202,7 @@ public:
 
     // values int pt
 
-    OUString        getDefaultInputSlot() const;
+    const OUString & getDefaultInputSlot() const;
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
     // values in dpi

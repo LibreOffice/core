@@ -1157,13 +1157,13 @@ void Application::SetAppName( const OUString& rUniqueName )
     pSVData->maAppData.mxAppName = rUniqueName;
 }
 
-OUString Application::GetAppName()
+const OUString & Application::GetAppName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mxAppName )
         return *(pSVData->maAppData.mxAppName);
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 enum {hwAll=0, hwEnv=1, hwUI=2};
@@ -1391,13 +1391,13 @@ Help* Application::GetHelp()
     return ImplGetSVData()->maAppData.mpHelp;
 }
 
-OUString Application::GetToolkitName()
+const OUString & Application::GetToolkitName()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maAppData.mxToolkitName )
         return *(pSVData->maAppData.mxToolkitName);
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 vcl::Window* Dialog::GetDefDialogParent()

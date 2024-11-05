@@ -24,10 +24,10 @@ class QtHyperlinkLabel : public QLabel
 public:
     QtHyperlinkLabel(QWidget* pParent);
 
-    QString displayText() const { return m_sDisplayText; }
+    const QString& displayText() const { return m_sDisplayText; }
     void setDisplayText(const QString& rDisplayText);
 
-    QString uri() const { return m_sUri; }
+    const QString& uri() const { return m_sUri; }
     void setUri(const QString& rUri);
 
 private:

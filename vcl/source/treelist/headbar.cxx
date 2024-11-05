@@ -1222,12 +1222,12 @@ void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     }
 }
 
-OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
+const OUString & HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
     if ( nPos != HEADERBAR_ITEM_NOTFOUND )
         return mvItemList[ nPos ]->maText;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const

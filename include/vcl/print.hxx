@@ -228,7 +228,7 @@ public:
     void                        SetUsePrintDialogSetting(bool bUsed) { mbUsePrintSetting = bUsed; }
     bool                        IsUsePrintDialogSetting() { return mbUsePrintSetting; }
     void                        SetPrintPageSize(Size aPrintPageSize) { maPrintPageSize = aPrintPageSize; }
-    Size                        GetPrintPageSize() { return maPrintPageSize; }
+    const Size &                GetPrintPageSize() { return maPrintPageSize; }
     bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
     SAL_DLLPRIVATE void                        SetDuplexMode( DuplexMode );

@@ -272,11 +272,11 @@ FilterConfigCache::~FilterConfigCache()
 {
 }
 
-OUString FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetImportFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sFilterName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 sal_uInt16 FilterConfigCache::GetImportFormatNumber( std::u16string_view rFormatName )
@@ -331,18 +331,18 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumberForTypeName( std::u16string_v
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-OUString FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetImportFormatName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sUIName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetImportFormatMediaType( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sMediaType;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
@@ -352,25 +352,25 @@ OUString FilterConfigCache::GetImportFormatShortName( sal_uInt16 nFormat )
     return OUString();
 }
 
-OUString FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
+const OUString & FilterConfigCache::GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     if ( (nFormat < aImport.size()) && (o3tl::make_unsigned(nEntry) < aImport[ nFormat ].lExtensionList.size()) )
         return aImport[ nFormat ].lExtensionList[ nEntry ];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetImportFilterType( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sType;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetImportFilterTypeName( sal_uInt16 nFormat )
 {
     if( nFormat < aImport.size() )
         return aImport[ nFormat ].sFilterType;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString FilterConfigCache::GetImportWildcard(sal_uInt16 nFormat, sal_Int32 nEntry)
@@ -381,11 +381,11 @@ OUString FilterConfigCache::GetImportWildcard(sal_uInt16 nFormat, sal_Int32 nEnt
     return aWildcard;
 }
 
-OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sFilterName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 sal_uInt16 FilterConfigCache::GetExportFormatNumber(std::u16string_view rFormatName)
@@ -436,18 +436,18 @@ sal_uInt16 FilterConfigCache::GetExportFormatNumberForTypeName( std::u16string_v
     return GRFILTER_FORMAT_NOTFOUND;
 }
 
-OUString FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetExportFormatName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sUIName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sMediaType;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
@@ -457,18 +457,18 @@ OUString FilterConfigCache::GetExportFormatShortName( sal_uInt16 nFormat )
     return OUString();
 }
 
-OUString FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
+const OUString & FilterConfigCache::GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry )
 {
     if ( (nFormat < aExport.size()) && (o3tl::make_unsigned(nEntry) < aExport[ nFormat ].lExtensionList.size()) )
         return aExport[ nFormat ].lExtensionList[ nEntry ];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
+const OUString & FilterConfigCache::GetExportInternalFilterName( sal_uInt16 nFormat )
 {
     if( nFormat < aExport.size() )
         return aExport[ nFormat ].sInternalFilterName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString FilterConfigCache::GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry )

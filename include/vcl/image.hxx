@@ -59,7 +59,7 @@ public:
         return !(Image::operator==(rImage));
     }
 
-    OUString GetStock() const;
+    const OUString & GetStock() const;
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);
 

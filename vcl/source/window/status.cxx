@@ -1222,14 +1222,14 @@ void StatusBar::SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand )
     }
 }
 
-OUString StatusBar::GetItemCommand( sal_uInt16 nItemId )
+const OUString & StatusBar::GetItemCommand( sal_uInt16 nItemId )
 {
     sal_uInt16 nPos = GetItemPos( nItemId );
 
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
         return mvItemList[ nPos ]->maCommand;
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )

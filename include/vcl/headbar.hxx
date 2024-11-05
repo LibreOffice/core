@@ -294,7 +294,7 @@ public:
     HeaderBarItemBits   GetItemBits( sal_uInt16 nItemId ) const;
 
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
-    OUString            GetItemText( sal_uInt16 nItemId ) const;
+    const OUString &    GetItemText( sal_uInt16 nItemId ) const;
 
     OUString            GetHelpText( sal_uInt16 nItemId ) const;
 

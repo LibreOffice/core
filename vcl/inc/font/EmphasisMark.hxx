@@ -25,10 +25,10 @@ class VCL_DLLPUBLIC EmphasisMark
 public:
     EmphasisMark(FontEmphasisMark eEmphasis, tools::Long nHeight, sal_Int32 nDPIY);
 
-    tools::PolyPolygon GetShape() const { return maPolyPoly; }
+    const tools::PolyPolygon& GetShape() const { return maPolyPoly; }
     bool IsShapePolyLine() const { return mbIsPolyLine; }
-    tools::Rectangle GetRect1() const { return maRect1; }
-    tools::Rectangle GetRect2() const { return maRect2; }
+    const tools::Rectangle& GetRect1() const { return maRect1; }
+    const tools::Rectangle& GetRect2() const { return maRect2; }
     tools::Long GetYOffset() const { return mnYOff; }
     tools::Long GetWidth() const { return mnWidth; }
 

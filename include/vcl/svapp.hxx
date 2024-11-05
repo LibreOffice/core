@@ -912,7 +912,7 @@ public:
 
      @returns The application name.
     */
-    static OUString             GetAppName();
+    static const OUString &     GetAppName();
 
     /**
      * Get the OS version based on the OS specific implementation.
@@ -961,7 +961,7 @@ public:
 
      @returns The toolkit name.
     */
-    static OUString             GetToolkitName();
+    static const OUString &     GetToolkitName();
 
     /** Get the number of screens available for the display.
 

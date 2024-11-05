@@ -172,7 +172,7 @@ public:
 
     BitmapChecksum  GetChecksum() const;
 
-    OUString getOriginURL() const;
+    const OUString & getOriginURL() const;
     void setOriginURL(OUString const & rOriginURL);
 
     SAL_DLLPRIVATE OString getUniqueID() const;

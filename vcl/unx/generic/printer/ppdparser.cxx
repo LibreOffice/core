@@ -1348,12 +1348,12 @@ void PPDParser::parseConstraint( const OString& rLine )
         m_aConstraints.push_back( aConstraint );
 }
 
-OUString PPDParser::getDefaultPaperDimension() const
+const OUString & PPDParser::getDefaultPaperDimension() const
 {
     if( m_pDefaultPaperDimension )
         return m_pDefaultPaperDimension->m_aOption;
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool PPDParser::getMargins(
@@ -1477,11 +1477,11 @@ OUString PPDParser::matchPaper(int nWidth, int nHeight, psp::orientation* pOrien
     return matchPaperImpl(nHeight, nWidth, false, pOrientation);
 }
 
-OUString PPDParser::getDefaultInputSlot() const
+const OUString & PPDParser::getDefaultInputSlot() const
 {
     if( m_pDefaultInputSlot )
         return m_pDefaultInputSlot->m_aValue;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void PPDParser::getResolutionFromString(std::u16string_view rString,

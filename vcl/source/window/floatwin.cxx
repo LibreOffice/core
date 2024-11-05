@@ -50,7 +50,7 @@ FloatingWindow::ImplData::ImplData()
     mpBox = nullptr;
 }
 
-AbsoluteScreenPixelRectangle FloatingWindow::ImplGetItemEdgeClipRect()
+const AbsoluteScreenPixelRectangle & FloatingWindow::ImplGetItemEdgeClipRect()
 {
     return mpImplData->maItemEdgeClipRect;
 }

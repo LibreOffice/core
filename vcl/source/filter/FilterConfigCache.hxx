@@ -62,14 +62,14 @@ public:
     sal_uInt16  GetImportFormatNumberForShortName( std::u16string_view rShortName );
     sal_uInt16  GetImportFormatNumberForTypeName( std::u16string_view rType );
     sal_uInt16  GetImportFormatNumberForExtension( std::u16string_view rExt );
-    OUString    GetImportFilterName( sal_uInt16 nFormat );
-    OUString    GetImportFormatName( sal_uInt16 nFormat );
-    OUString    GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
-    OUString    GetImportFormatMediaType( sal_uInt16 nFormat );
+    const OUString & GetImportFilterName( sal_uInt16 nFormat );
+    const OUString & GetImportFormatName( sal_uInt16 nFormat );
+    const OUString & GetImportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0);
+    const OUString & GetImportFormatMediaType( sal_uInt16 nFormat );
     OUString    GetImportFormatShortName( sal_uInt16 nFormat );
     OUString    GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
-    OUString    GetImportFilterType( sal_uInt16 nFormat );
-    OUString    GetImportFilterTypeName( sal_uInt16 nFormat );
+    const OUString & GetImportFilterType( sal_uInt16 nFormat );
+    const OUString & GetImportFilterTypeName( sal_uInt16 nFormat );
 
 
     sal_uInt16  GetExportFormatCount() const
@@ -78,13 +78,13 @@ public:
     sal_uInt16  GetExportFormatNumberForMediaType( std::u16string_view rMediaType );
     sal_uInt16  GetExportFormatNumberForShortName( std::u16string_view rShortName );
     sal_uInt16  GetExportFormatNumberForTypeName( std::u16string_view rType );
-    OUString    GetExportFilterName( sal_uInt16 nFormat );
-    OUString    GetExportFormatName( sal_uInt16 nFormat );
-    OUString    GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
-    OUString    GetExportFormatMediaType( sal_uInt16 nFormat );
+    const OUString & GetExportFilterName( sal_uInt16 nFormat );
+    const OUString & GetExportFormatName( sal_uInt16 nFormat );
+    const OUString & GetExportFormatExtension( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    const OUString & GetExportFormatMediaType( sal_uInt16 nFormat );
     OUString    GetExportFormatShortName( sal_uInt16 nFormat );
     OUString    GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry );
-    OUString    GetExportInternalFilterName( sal_uInt16 nFormat );
+    const OUString & GetExportInternalFilterName( sal_uInt16 nFormat );
 
     bool    IsExportPixelFormat( sal_uInt16 nFormat );
 

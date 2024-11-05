@@ -101,7 +101,7 @@ public:
                    static AbsoluteScreenPixelRectangle ImplConvertToAbsPos(vcl::Window* pReference, const tools::Rectangle& rRect);
     SAL_DLLPRIVATE static tools::Rectangle ImplConvertToRelPos(vcl::Window* pReference, const AbsoluteScreenPixelRectangle& rRect);
     SAL_DLLPRIVATE void             ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId );
-    SAL_DLLPRIVATE AbsoluteScreenPixelRectangle ImplGetItemEdgeClipRect();
+    SAL_DLLPRIVATE const AbsoluteScreenPixelRectangle & ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
                    void             PixelInvalidate(const tools::Rectangle* pRectangle) override;
 

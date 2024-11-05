@@ -160,7 +160,7 @@ public:
     void*               GetItemData( sal_uInt16 nItemId ) const;
 
     void                SetItemCommand( sal_uInt16 nItemId, const OUString& rCommand );
-    OUString            GetItemCommand( sal_uInt16 nItemId );
+    const OUString &    GetItemCommand( sal_uInt16 nItemId );
 
     void                SetHelpText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetHelpText( sal_uInt16 nItemId ) const;

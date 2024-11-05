@@ -331,12 +331,12 @@ sal_uInt16 GraphicFilter::GetImportFormatNumberForTypeName( std::u16string_view 
     return pConfig->GetImportFormatNumberForTypeName( rType );
 }
 
-OUString GraphicFilter::GetImportFormatName( sal_uInt16 nFormat )
+const OUString & GraphicFilter::GetImportFormatName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFormatName( nFormat );
 }
 
-OUString GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
+const OUString & GraphicFilter::GetImportFormatTypeName( sal_uInt16 nFormat )
 {
     return pConfig->GetImportFilterTypeName( nFormat );
 }
@@ -378,7 +378,7 @@ sal_uInt16 GraphicFilter::GetExportFormatNumberForShortName( std::u16string_view
     return pConfig->GetExportFormatNumberForShortName( rShortName );
 }
 
-OUString GraphicFilter::GetExportInternalFilterName( sal_uInt16 nFormat )
+const OUString & GraphicFilter::GetExportInternalFilterName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportInternalFilterName( nFormat );
 }
@@ -388,12 +388,12 @@ sal_uInt16 GraphicFilter::GetExportFormatNumberForTypeName( std::u16string_view 
     return pConfig->GetExportFormatNumberForTypeName( rType );
 }
 
-OUString GraphicFilter::GetExportFormatName( sal_uInt16 nFormat )
+const OUString & GraphicFilter::GetExportFormatName( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatName( nFormat );
 }
 
-OUString GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
+const OUString & GraphicFilter::GetExportFormatMediaType( sal_uInt16 nFormat )
 {
     return pConfig->GetExportFormatMediaType( nFormat );
 }

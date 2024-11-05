@@ -94,7 +94,7 @@ bool toBool(std::u16string_view rValue)
 
 namespace
 {
-    OUString mapStockToImageResource(std::u16string_view sType)
+    const OUString & mapStockToImageResource(std::u16string_view sType)
     {
         if (sType == u"view-refresh")
             return SV_RESID_BITMAP_REFRESH;
@@ -118,7 +118,7 @@ namespace
             return IMG_CALENDAR;
         else if (sType == u"accessories-character-map")
             return IMG_CHARACTER_MAP;
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
 }

@@ -100,8 +100,8 @@ protected:
     static OUString getStyleClass(xmlreader::XmlReader& reader);
     static bool hasOrientationVertical(stringmap& rMap);
 
-    OUString getUIFileUrl() { return m_sUIFileUrl; }
-    OUString getHelpRoot() { return m_sHelpRoot; }
+    const OUString& getUIFileUrl() { return m_sUIFileUrl; }
+    const OUString& getHelpRoot() { return m_sHelpRoot; }
     bool isLegacy() { return m_bLegacy; }
     const std::locale& getResLocale() const;
     const std::vector<SizeGroup>& getSizeGroups() const;

@@ -321,7 +321,7 @@ public:
     OUString GetHelpId( sal_uInt16 nItemId ) const;
 
     void SetHelpId( const OUString& rHelpId ) { m_sMenuHelpId = rHelpId; }
-    OUString GetHelpId() const { return m_sMenuHelpId; }
+    const OUString & GetHelpId() const { return m_sMenuHelpId; }
 
     void SetActivateHdl( const Link<Menu *, bool>& rLink )
     {

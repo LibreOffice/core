@@ -517,13 +517,13 @@ sal_Int32 Graphic::getPageNumber() const
     return mxImpGraphic->getPageNumber();
 }
 
-OUString Graphic::getOriginURL() const
+const OUString & Graphic::getOriginURL() const
 {
     if (mxImpGraphic)
     {
         return mxImpGraphic->getOriginURL();
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void Graphic::setOriginURL(OUString const & rOriginURL)

@@ -78,11 +78,11 @@ void Image::ImplInit(const BitmapEx& rBitmapEx)
         mpImplData = std::make_shared<ImplImage>(rBitmapEx);
 }
 
-OUString Image::GetStock() const
+const OUString & Image::GetStock() const
 {
     if (mpImplData)
         return mpImplData->getStock();
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 Size Image::GetSizePixel() const
