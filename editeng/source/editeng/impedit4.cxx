@@ -327,21 +327,15 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel, bool bCl
     aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO ) ) );
     aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
     aFontTable.emplace_back( new SvxFontItem( maEditDoc.GetItemPool().GetUserOrPoolDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
-    for ( sal_uInt16 nScriptType = 0; nScriptType < 3; nScriptType++ )
+    for (auto nWhich : { EE_CHAR_FONTINFO, EE_CHAR_FONTINFO_CJK, EE_CHAR_FONTINFO_CTL })
     {
-        sal_uInt16 nWhich = EE_CHAR_FONTINFO;
-        if ( nScriptType == 1 )
-            nWhich = EE_CHAR_FONTINFO_CJK;
-        else if ( nScriptType == 2 )
-            nWhich = EE_CHAR_FONTINFO_CTL;
-
         ItemSurrogates aSurrogates;
         maEditDoc.GetItemPool().GetItemSurrogates(aSurrogates, nWhich);
         for (const SfxPoolItem* pItem : aSurrogates)
         {
             SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(pItem);
             bool bAlreadyExist = false;
-            size_t nTestMax = nScriptType ? aFontTable.size() : 1;
+            const size_t nTestMax = nWhich == EE_CHAR_FONTINFO ? 1 : aFontTable.size();
             for ( size_t nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
             {
                 bAlreadyExist = *aFontTable[ nTest ] == *pFontItem;
