@@ -701,6 +701,107 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf145584)
     CPPUNIT_ASSERT_EQUAL(u"World"_ustr, sText);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf131728)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc("tdf131728.docx");
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Save as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
+                                           { "FilterData", uno::Any(aFilterData) },
+                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+
+    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have bad order
+    // (starting with the outlines of text frames)
+    CPPUNIT_ASSERT_EQUAL(u"Article 1. Definitions\n"
+                         " Apple\n"
+                         " Bread\n"
+                         " Cable\n"
+                         " Cable\n" // ???
+                         "Article 2. Three style separators in one line!\n"
+                         " Heading 2\n"
+                         " Heading 2 Again\n"_ustr,
+                         pPdfDocument->getBookmarks());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf95239)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+    {
+        return;
+    }
+    createSwDoc("tdf95239.fodt");
+    SwDoc* const pDoc = getSwDoc();
+    SwWrtShell* const pWrtSh = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtSh);
+
+    // Save as PDF.
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
+        { { "ExportBookmarksToPDFDestination", uno::Any(true) } }));
+
+    uno::Sequence<beans::PropertyValue> aDescriptor(
+        comphelper::InitPropertySequence({ { "FilterName", uno::Any(u"writer_pdf_Export"_ustr) },
+                                           { "FilterData", uno::Any(aFilterData) },
+                                           { "URL", uno::Any(maTempFile.GetURL()) } }));
+
+    dispatchCommand(mxComponent, u".uno:ExportToPDF"_ustr, aDescriptor);
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have bad order
+    // (starting with the outlines of text frames)
+    CPPUNIT_ASSERT_EQUAL(u"H1\n"
+                         " H2\n"
+                         "  H3\n"
+                         "   Lorem\n"
+                         "    Vestibulum\n"
+                         "    Integer\n"
+                         "   Aliquam\n"
+                         "    Donec\n"
+                         "    Praesent\n"
+                         "  H3\n"
+                         "   Lorem\n"
+                         "    Vestibulum\n"
+                         "    Integer\n"
+                         "   Aliquam\n"
+                         "    Donec\n"
+                         "    Praesent\n"
+                         "H1\n"
+                         " H2\n"
+                         "  H3\n"
+                         "   Lorem\n"
+                         "    Vestibulum\n"
+                         "    Integer\n"
+                         "   Aliquam\n"
+                         "    Donec\n"
+                         "    Praesent\n"_ustr,
+                         pPdfDocument->getBookmarks());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf152575)
 {
     // FIXME: the DPI check should be removed when either (1) the test is fixed to work with

@@ -26,6 +26,7 @@
 #include <tools/stream.hxx>
 #include <tools/UnitConversion.hxx>
 #include <o3tl/string_view.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmapex.hxx>
@@ -484,6 +485,7 @@ public:
     std::unique_ptr<PDFiumPage> openPage(int nIndex) override;
     std::unique_ptr<PDFiumSignature> getSignature(int nIndex) override;
     std::vector<unsigned int> getTrailerEnds() override;
+    OUString getBookmarks() override;
 };
 
 class PDFiumImpl : public PDFium
@@ -744,6 +746,56 @@ std::vector<unsigned int> PDFiumDocumentImpl::getTrailerEnds()
     std::vector<unsigned int> aTrailerEnds(nNumTrailers);
     FPDF_GetTrailerEnds(mpPdfDocument, aTrailerEnds.data(), aTrailerEnds.size());
     return aTrailerEnds;
+}
+
+static void lcl_getBookmarks(int nLevel, OUStringBuffer& rBuf, FPDF_DOCUMENT pDoc,
+                             FPDF_BOOKMARK pBookmark)
+{
+    // no first child or too much levels
+    if (!pBookmark || nLevel > 10)
+        return;
+
+    OUString aString;
+    int nBytes = FPDFBookmark_GetTitle(pBookmark, nullptr, 0);
+    assert(nBytes % 2 == 0);
+    nBytes /= 2;
+
+    std::unique_ptr<sal_Unicode[]> pText(new sal_Unicode[nBytes]);
+
+    int nActualBytes = FPDFBookmark_GetTitle(pBookmark, pText.get(), nBytes * 2);
+    assert(nActualBytes % 2 == 0);
+    nActualBytes /= 2;
+    if (nActualBytes > 1)
+    {
+#if defined OSL_BIGENDIAN
+        // The data returned by FPDFTextObj_GetText is documented to always be UTF-16LE:
+        for (int i = 0; i != nActualBytes; ++i)
+        {
+            pText[i] = OSL_SWAPWORD(pText[i]);
+        }
+#endif
+        // insert nLevel spaces before the title
+        rBuf.append(OUString("          ").subView(0, nLevel));
+        aString = OUString(pText.get());
+    }
+
+    rBuf.append(aString);
+    rBuf.append("\n");
+
+    // get children
+    lcl_getBookmarks(nLevel + 1, rBuf, pDoc, FPDFBookmark_GetFirstChild(pDoc, pBookmark));
+
+    // get siblings
+    while (nullptr != (pBookmark = FPDFBookmark_GetNextSibling(pDoc, pBookmark)))
+        lcl_getBookmarks(nLevel, rBuf, pDoc, pBookmark);
+}
+
+OUString PDFiumDocumentImpl::getBookmarks()
+{
+    OUStringBuffer aBuf;
+    FPDF_BOOKMARK pBookmark = FPDFBookmark_GetFirstChild(mpPdfDocument, nullptr);
+    lcl_getBookmarks(0, aBuf, mpPdfDocument, pBookmark);
+    return aBuf.makeStringAndClear();
 }
 
 basegfx::B2DSize PDFiumDocumentImpl::getPageSize(int nIndex)

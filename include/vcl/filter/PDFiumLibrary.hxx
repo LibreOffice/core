@@ -240,6 +240,7 @@ public:
     virtual std::unique_ptr<PDFiumPage> openPage(int nIndex) = 0;
     virtual std::unique_ptr<PDFiumSignature> getSignature(int nIndex) = 0;
     virtual std::vector<unsigned int> getTrailerEnds() = 0;
+    virtual OUString getBookmarks() = 0;
 };
 
 struct VCL_DLLPUBLIC PDFiumLibrary final

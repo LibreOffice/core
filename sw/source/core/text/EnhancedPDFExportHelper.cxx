@@ -2703,6 +2703,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
             std::stack< StackEntry > aOutlineStack;
             aOutlineStack.push( StackEntry( -1, -1 ) ); // push default value
 
+            // outlines inside flys (text frames) collected before the normal
+            // outlines by GetOutLineNds(), so store them with page/position data
+            // to insert later on the right page and position:
+            // tuple< nDestPageNum, rDestRect, nLevel, rEntry, nDestId >
+            typedef std::tuple< sal_Int32, SwRect, sal_Int32, const OUString, sal_Int32 > FlyEntry;
+            std::vector< FlyEntry > aFlyVector;
+            sal_Int32 nStartFly = 0; // first not processed item in aFlyVector
+
             const SwOutlineNodes::size_type nOutlineCount =
                 mrSh.getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
             for ( SwOutlineNodes::size_type i = 0; i < nOutlineCount; ++i )
@@ -2716,6 +2724,14 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                      // #i40292# Skip empty outlines:
                      pTNd->GetText().isEmpty())
                     continue;
+
+                // Check if outline is inside a text frame
+                bool bFlyOutline = pTNd->GetFlyFormat();
+
+                // save outline stack to use for postponed fly outlines
+                std::stack< StackEntry > aSavedOutlineStack;
+                if ( !aFlyVector.empty() && !bFlyOutline )
+                    aSavedOutlineStack = aOutlineStack;
 
                 // Get parent id from stack:
                 const sal_Int8 nLevel = static_cast<sal_Int8>(mrSh.getIDocumentOutlineNodesAccess()->getOutlineLevel( i ));
@@ -2749,6 +2765,42 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     const OUString& rEntry = mrSh.getIDocumentOutlineNodesAccess()->getOutlineText(
                         i, mrSh.GetLayout(), true, false, false );
 
+                    // postpone fly outlines
+                    if ( bFlyOutline )
+                    {
+                        aFlyVector.push_back(
+                                    FlyEntry(nDestPageNum, rDestRect, nLevel, rEntry, nDestId) );
+                        continue;
+                    }
+
+                    // create new outline items from postponed fly outlines, if they are before
+                    // the recent not fly outline (and after the already created fly outlines)
+                    for (size_t j = nStartFly; j < aFlyVector.size(); ++j)
+                    {
+                        if ( std::get<0>(aFlyVector[j]) < nDestPageNum ||
+                             ( std::get<0>(aFlyVector[j]) == nDestPageNum &&
+                               std::get<1>(aFlyVector[j]).Pos().Y() < rDestRect.Pos().Y() ) )
+                        {
+                            sal_Int32 nFlyLevel = std::get<2>(aFlyVector[j]);
+                            sal_Int8 nLevelOnTopOfSavedStack = aSavedOutlineStack.top().first;
+                            while ( nLevelOnTopOfSavedStack >= nFlyLevel &&
+                                    nLevelOnTopOfSavedStack != -1 )
+                            {
+                                aSavedOutlineStack.pop();
+                                nLevelOnTopOfSavedStack = aSavedOutlineStack.top().first;
+                            }
+                            const sal_Int32 nFlyParent = aSavedOutlineStack.top().second;
+                            const sal_Int32 nId = pPDFExtOutDevData->CreateOutlineItem( nFlyParent,
+                                                      std::get<3>(aFlyVector[j]),
+                                                      std::get<4>(aFlyVector[j]) );
+                            // Push current level and outline id on saved stack:
+                            aSavedOutlineStack.push( StackEntry( nFlyLevel, nId ) );
+                            ++nStartFly;
+                        }
+                        else
+                            break;
+                    }
+
                     // Create a new outline item:
                     const sal_Int32 nOutlineId =
                         pPDFExtOutDevData->CreateOutlineItem( nParent, rEntry, nDestId );
@@ -2756,6 +2808,25 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // Push current level and nOutlineId on stack:
                     aOutlineStack.push( StackEntry( nLevel, nOutlineId ) );
                 }
+            }
+
+            // create remaining fly outlines
+            for (size_t j = nStartFly; j < aFlyVector.size(); ++j)
+            {
+                sal_Int32 nLevel = std::get<2>(aFlyVector[j]);
+                sal_Int8 nLevelOnTopOfStack = aOutlineStack.top().first;
+                while ( nLevelOnTopOfStack >= nLevel &&
+                        nLevelOnTopOfStack != -1 )
+                {
+                    aOutlineStack.pop();
+                    nLevelOnTopOfStack = aOutlineStack.top().first;
+                }
+                const sal_Int32 nParent = aOutlineStack.top().second;
+
+                const sal_Int32 nOutlineId = pPDFExtOutDevData->CreateOutlineItem( nParent,
+                                          std::get<3>(aFlyVector[j]),
+                                          std::get<4>(aFlyVector[j]) );
+                aOutlineStack.push( StackEntry( std::get<2>(aFlyVector[j]), nOutlineId ) );
             }
         }
 
