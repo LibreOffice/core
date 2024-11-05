@@ -276,15 +276,6 @@ void appendDestinationName( const OUString& rString, OStringBuffer& rBuffer )
 }
 } // end anonymous namespace
 
-namespace vcl::pdf
-{
-const sal_uInt8 PDFEncryptor::s_nPadString[32] =
-{
-    0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
-    0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68, 0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A
-};
-}
-
 namespace vcl
 {
 
@@ -725,7 +716,106 @@ const char* getPDFVersionStr(PDFWriter::PDFVersion ePDFVersion)
     }
 }
 
-} // end namespace
+void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
+                               const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
+                               const OString& i_rCString1,
+                               const css::util::DateTime& rCreationMetaDate, OString& o_rCString2)
+{
+    o_rIdentifier.clear();
+
+    //build the document id
+    OString aInfoValuesOut;
+    OStringBuffer aID(1024);
+    if (!i_rDocInfo.Title.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Title, aID);
+    if (!i_rDocInfo.Author.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Author, aID);
+    if (!i_rDocInfo.Subject.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Subject, aID);
+    if (!i_rDocInfo.Keywords.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Keywords, aID);
+    if (!i_rDocInfo.Creator.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Creator, aID);
+    if (!i_rDocInfo.Producer.isEmpty())
+        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Producer, aID);
+
+    TimeValue aTVal, aGMT;
+    oslDateTime aDT;
+    aDT.NanoSeconds = rCreationMetaDate.NanoSeconds;
+    aDT.Seconds = rCreationMetaDate.Seconds;
+    aDT.Minutes = rCreationMetaDate.Minutes;
+    aDT.Hours = rCreationMetaDate.Hours;
+    aDT.Day = rCreationMetaDate.Day;
+    aDT.Month = rCreationMetaDate.Month;
+    aDT.Year = rCreationMetaDate.Year;
+
+    osl_getSystemTime(&aGMT);
+    osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
+    OStringBuffer aCreationMetaDateString(64);
+
+    // i59651: we fill the Metadata date string as well, if PDF/A is requested
+    // according to ISO 19005-1:2005 6.7.3 the date is corrected for
+    // local time zone offset UTC only, whereas Acrobat 8 seems
+    // to use the localtime notation only
+    // according to a recommendation in XMP Specification (Jan 2004, page 75)
+    // the Acrobat way seems the right approach
+    aCreationMetaDateString.append(char('0' + ((aDT.Year / 1000) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Year / 100) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Year / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Year) % 10)));
+    aCreationMetaDateString.append("-");
+    aCreationMetaDateString.append(char('0' + ((aDT.Month / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Month) % 10)));
+    aCreationMetaDateString.append("-");
+    aCreationMetaDateString.append(char('0' + ((aDT.Day / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Day) % 10)));
+    aCreationMetaDateString.append("T");
+    aCreationMetaDateString.append(char('0' + ((aDT.Hours / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Hours) % 10)));
+    aCreationMetaDateString.append(":");
+    aCreationMetaDateString.append(char('0' + ((aDT.Minutes / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Minutes) % 10)));
+    aCreationMetaDateString.append(":");
+    aCreationMetaDateString.append(char('0' + ((aDT.Seconds / 10) % 10)));
+    aCreationMetaDateString.append(char('0' + ((aDT.Seconds) % 10)));
+
+    sal_uInt32 nDelta = 0;
+    if (aGMT.Seconds > aTVal.Seconds)
+    {
+        nDelta = aGMT.Seconds - aTVal.Seconds;
+        aCreationMetaDateString.append("-");
+    }
+    else if (aGMT.Seconds < aTVal.Seconds)
+    {
+        nDelta = aTVal.Seconds - aGMT.Seconds;
+        aCreationMetaDateString.append("+");
+    }
+    else
+    {
+        aCreationMetaDateString.append("Z");
+    }
+    if (nDelta)
+    {
+        aCreationMetaDateString.append(char('0' + ((nDelta / 36000) % 10)));
+        aCreationMetaDateString.append(char('0' + ((nDelta / 3600) % 10)));
+        aCreationMetaDateString.append(":");
+        aCreationMetaDateString.append(char('0' + ((nDelta / 600) % 6)));
+        aCreationMetaDateString.append(char('0' + ((nDelta / 60) % 10)));
+    }
+    aID.append(i_rCString1.getStr(), i_rCString1.getLength());
+
+    aInfoValuesOut = aID.makeStringAndClear();
+    o_rCString2 = aCreationMetaDateString.makeStringAndClear();
+
+    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
+    aDigest.update(reinterpret_cast<unsigned char const*>(&aGMT), sizeof(aGMT));
+    aDigest.update(reinterpret_cast<unsigned char const*>(aInfoValuesOut.getStr()),
+                   aInfoValuesOut.getLength());
+    //the binary form of the doc id is needed for encryption stuff
+    o_rIdentifier = aDigest.finalize();
+}
+
+} // end anonymous namespace
 
 PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
         :
@@ -1305,7 +1395,7 @@ double PDFPage::getHeight() const
 }
 
 PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
-                               const css::uno::Reference< css::beans::XMaterialHolder >& xEnc,
+                               const css::uno::Reference< css::beans::XMaterialHolder >& xEncryptionMaterialHolder,
                                PDFWriter& i_rOuterFace)
         : VirtualDevice(Application::GetDefaultDevice(), DeviceFormat::WITHOUT_ALPHA, OUTDEV_PDF),
         m_aMapMode( MapUnit::MapPoint, Point(), Fraction( 1, pointToPixel(1) ), Fraction( 1, pointToPixel(1) ) ),
@@ -1326,7 +1416,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
         m_aFile(m_aContext.URL),
         m_bOpen(false),
         m_DocDigest(::comphelper::HashType::MD5),
-        m_nAccessPermissions(0),
         m_rOuterFace( i_rOuterFace )
 {
     m_aStructure.emplace_back( );
@@ -1364,25 +1453,12 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     // setup DocInfo
     setupDocInfo();
 
-    if( xEnc.is() )
-        prepareEncryption( xEnc );
+    if (xEncryptionMaterialHolder.is())
+        m_aPDFEncryptor.prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
 
-    if( m_aContext.Encryption.Encrypt() )
+    if (m_aContext.Encryption.Encrypt())
     {
-        // sanity check
-        if( m_aContext.Encryption.OValue.size() != ENCRYPTED_PWD_SIZE ||
-            m_aContext.Encryption.UValue.size() != ENCRYPTED_PWD_SIZE ||
-            m_aContext.Encryption.EncryptionKey.size() != MAXIMUM_RC4_KEY_LENGTH
-           )
-        {
-            // the field lengths are invalid ? This was not setup by initEncryption.
-            // do not encrypt after all
-            m_aContext.Encryption.OValue.clear();
-            m_aContext.Encryption.UValue.clear();
-            OSL_ENSURE( false, "encryption data failed sanity check, encryption disabled" );
-        }
-        else // setup key lengths
-            m_nAccessPermissions = computeAccessPermissions(m_aContext.Encryption, m_aPDFEncryptor.m_nKeyLength, m_aPDFEncryptor.m_nRC4KeyLength);
+        m_aPDFEncryptor.setupKeysAndCheck(m_aContext.Encryption);
     }
 
     // write header
@@ -1470,7 +1546,7 @@ void PDFWriterImpl::setupDocInfo()
 {
     std::vector< sal_uInt8 > aId;
     m_aCreationDateString = PDFWriter::GetDateTime();
-    computeDocumentIdentifier( aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aContext.DocumentInfo.ModificationDate, m_aCreationMetaDateString );
+    computeDocumentIdentifier(aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aContext.DocumentInfo.ModificationDate, m_aCreationMetaDateString);
     if( m_aContext.Encryption.DocumentIdentifier.empty() )
         m_aContext.Encryption.DocumentIdentifier = aId;
 }
@@ -6022,7 +6098,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
         // emit the owner password, must not be encrypted
         aWriter.writeString("/O", reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()));
         aWriter.writeString("/U", reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()));
-        aWriter.write("/P", m_nAccessPermissions);
+        aWriter.write("/P", m_aPDFEncryptor.getAccessPermissions());
         aWriter.endDict();
         aWriter.endObject();
 

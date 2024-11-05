@@ -10,16 +10,38 @@
 
 #include <pdf/PDFEncryptor.hxx>
 #include <pdf/EncryptionHashTransporter.hxx>
-#include <pdf/pdfwriter_impl.hxx>
+#include <vcl/pdfwriter.hxx>
+#include <comphelper/crypto/Crypto.hxx>
 #include <comphelper/hash.hxx>
+#include <comphelper/random.hxx>
+#include <comphelper/diagnose_ex.hxx>
+#include <array>
+
+using namespace css;
 
 namespace vcl::pdf
 {
-/*************************************************************
-begin i12626 methods
+namespace
+{
+// the maximum password length
+constexpr sal_Int32 MD5_DIGEST_SIZE = 16;
 
-Implements Algorithm 3.2, step 1 only
-*/
+// security 128 bit
+constexpr sal_Int32 SECUR_128BIT_KEY = 16;
+
+// maximum length of MD5 digest input, in step 2 of algorithm 3.1
+// PDF spec ver. 1.4: see there for details
+constexpr sal_Int32 MAXIMUM_RC4_KEY_LENGTH = SECUR_128BIT_KEY + 3 + 2;
+
+constexpr sal_Int32 ENCRYPTED_PWD_SIZE = 32;
+
+/* pad string used for password in Standard security handler */
+constexpr const std::array<sal_uInt8, 32> s_nPadString
+    = { 0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E,
+        0x56, 0xFF, 0xFA, 0x01, 0x08, 0x2E, 0x2E, 0x00, 0xB6, 0xD0, 0x68,
+        0x3E, 0x80, 0x2F, 0x0C, 0xA9, 0xFE, 0x64, 0x53, 0x69, 0x7A };
+
+/** Implements Algorithm 3.2, step 1 only */
 void padPassword(std::u16string_view i_rPassword, sal_uInt8* o_pPaddedPW)
 {
     // get ansi-1252 version of the password string CHECKIT ! i12626
@@ -36,21 +58,19 @@ void padPassword(std::u16string_view i_rPassword, sal_uInt8* o_pPaddedPW)
     //pad it with standard byte string
     sal_Int32 i, y;
     for (i = nCurrentChar, y = 0; i < ENCRYPTED_PWD_SIZE; i++, y++)
-        o_pPaddedPW[i] = PDFEncryptor::s_nPadString[y];
+        o_pPaddedPW[i] = s_nPadString[y];
 }
 
-/**********************************
-Algorithm 3.2  Compute the encryption key used
-
-step 1 should already be done before calling, the paThePaddedPassword parameter should contain
-the padded password and must be 32 byte long, the encryption key is returned into the paEncryptionKey parameter,
-it will be 16 byte long for 128 bit security; for 40 bit security only the first 5 bytes are used
-
-TODO: in pdf ver 1.5 and 1.6 the step 6 is different, should be implemented. See spec.
-
-*/
+/** Algorithm 3.2  Compute the encryption key used
+ * Step 1 should already be done before calling, the paThePaddedPassword parameter should contain
+ * the padded password and must be 32 byte long, the encryption key is returned into the
+ * paEncryptionKey parameter, it will be 16 byte long for 128 bit security; for 40 bit security
+ * only the first 5 bytes are used
+ *
+ * TODO: in pdf ver 1.5 and 1.6 the step 6 is different, should be implemented. See spec.
+ */
 bool computeEncryptionKey(EncryptionHashTransporter* i_pTransporter,
-                          vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
+                          vcl::PDFEncryptionProperties& io_rProperties,
                           sal_Int32 i_nAccessPermissions)
 {
     bool bSuccess = true;
@@ -106,10 +126,10 @@ bool computeEncryptionKey(EncryptionHashTransporter* i_pTransporter,
     return bSuccess;
 }
 
-/**********************************
-Algorithm 3.3  Compute the encryption dictionary /O value, save into the class data member
-the step numbers down here correspond to the ones in PDF v.1.4 specification
-*/
+/** Algorithm 3.3
+ * Compute the encryption dictionary /O value, save into the class data member the step
+ * numbers down here correspond to the ones in PDF v.1.4 specification
+ */
 bool computeODictionaryValue(const sal_uInt8* i_pPaddedOwnerPassword,
                              const sal_uInt8* i_pPaddedUserPassword,
                              std::vector<sal_uInt8>& io_rOValue, sal_Int32 i_nKeyLength)
@@ -170,10 +190,8 @@ bool computeODictionaryValue(const sal_uInt8* i_pPaddedOwnerPassword,
                     rtl_cipher_encodeARCFOUR(
                         aCipher, io_rOValue.data(),
                         sal_Int32(io_rOValue.size()), // the data to be encrypted
-                        io_rOValue.data(),
-                        sal_Int32(
-                            io_rOValue
-                                .size())); // encrypted data, can be the same as the input, encrypt "in place"
+                        io_rOValue.data(), sal_Int32(io_rOValue.size()));
+                    // encrypted data, can be the same as the input, encrypt "in place"
                     //step 8, store in class data member
                 }
             }
@@ -192,12 +210,14 @@ bool computeODictionaryValue(const sal_uInt8* i_pPaddedOwnerPassword,
     return bSuccess;
 }
 
-/**********************************
-Algorithms 3.4 and 3.5  Compute the encryption dictionary /U value, save into the class data member, revision 2 (40 bit) or 3 (128 bit)
-*/
+/** Algorithms 3.4 and 3.5
+ *
+ * Compute the encryption dictionary /U value, save into the class data member,
+ * revision 2 (40 bit) or 3 (128 bit)
+ */
 bool computeUDictionaryValue(EncryptionHashTransporter* i_pTransporter,
-                             vcl::PDFWriter::PDFEncryptionProperties& io_rProperties,
-                             sal_Int32 i_nKeyLength, sal_Int32 i_nAccessPermissions)
+                             vcl::PDFEncryptionProperties& io_rProperties, sal_Int32 i_nKeyLength,
+                             sal_Int32 i_nAccessPermissions)
 {
     bool bSuccess = true;
 
@@ -219,7 +239,7 @@ bool computeUDictionaryValue(EncryptionHashTransporter* i_pTransporter,
             for (sal_uInt32 i = MD5_DIGEST_SIZE; i < sal_uInt32(io_rProperties.UValue.size()); i++)
                 io_rProperties.UValue[i] = 0;
             //steps 2 and 3
-            aDigest.update(PDFEncryptor::s_nPadString, sizeof(PDFEncryptor::s_nPadString));
+            aDigest.update(s_nPadString.data(), sizeof(s_nPadString));
             aDigest.update(io_rProperties.DocumentIdentifier.data(),
                            io_rProperties.DocumentIdentifier.size());
 
@@ -266,102 +286,7 @@ bool computeUDictionaryValue(EncryptionHashTransporter* i_pTransporter,
     return bSuccess;
 }
 
-void computeDocumentIdentifier(std::vector<sal_uInt8>& o_rIdentifier,
-                               const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
-                               const OString& i_rCString1,
-                               const css::util::DateTime& rCreationMetaDate, OString& o_rCString2)
-{
-    o_rIdentifier.clear();
-
-    //build the document id
-    OString aInfoValuesOut;
-    OStringBuffer aID(1024);
-    if (!i_rDocInfo.Title.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Title, aID);
-    if (!i_rDocInfo.Author.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Author, aID);
-    if (!i_rDocInfo.Subject.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Subject, aID);
-    if (!i_rDocInfo.Keywords.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Keywords, aID);
-    if (!i_rDocInfo.Creator.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Creator, aID);
-    if (!i_rDocInfo.Producer.isEmpty())
-        PDFWriter::AppendUnicodeTextString(i_rDocInfo.Producer, aID);
-
-    TimeValue aTVal, aGMT;
-    oslDateTime aDT;
-    aDT.NanoSeconds = rCreationMetaDate.NanoSeconds;
-    aDT.Seconds = rCreationMetaDate.Seconds;
-    aDT.Minutes = rCreationMetaDate.Minutes;
-    aDT.Hours = rCreationMetaDate.Hours;
-    aDT.Day = rCreationMetaDate.Day;
-    aDT.Month = rCreationMetaDate.Month;
-    aDT.Year = rCreationMetaDate.Year;
-
-    osl_getSystemTime(&aGMT);
-    osl_getLocalTimeFromSystemTime(&aGMT, &aTVal);
-    OStringBuffer aCreationMetaDateString(64);
-
-    // i59651: we fill the Metadata date string as well, if PDF/A is requested
-    // according to ISO 19005-1:2005 6.7.3 the date is corrected for
-    // local time zone offset UTC only, whereas Acrobat 8 seems
-    // to use the localtime notation only
-    // according to a recommendation in XMP Specification (Jan 2004, page 75)
-    // the Acrobat way seems the right approach
-    aCreationMetaDateString.append(OStringChar(static_cast<char>('0' + ((aDT.Year / 1000) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Year / 100) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Year / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Year) % 10))) + "-"
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Month / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Month) % 10))) + "-"
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Day / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Day) % 10))) + "T"
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Hours / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Hours) % 10))) + ":"
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Minutes / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Minutes) % 10)))
-                                   + ":"
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Seconds / 10) % 10)))
-                                   + OStringChar(static_cast<char>('0' + ((aDT.Seconds) % 10))));
-
-    sal_uInt32 nDelta = 0;
-    if (aGMT.Seconds > aTVal.Seconds)
-    {
-        nDelta = aGMT.Seconds - aTVal.Seconds;
-        aCreationMetaDateString.append("-");
-    }
-    else if (aGMT.Seconds < aTVal.Seconds)
-    {
-        nDelta = aTVal.Seconds - aGMT.Seconds;
-        aCreationMetaDateString.append("+");
-    }
-    else
-    {
-        aCreationMetaDateString.append("Z");
-    }
-    if (nDelta)
-    {
-        aCreationMetaDateString.append(
-            OStringChar(static_cast<char>('0' + ((nDelta / 36000) % 10)))
-            + OStringChar(static_cast<char>('0' + ((nDelta / 3600) % 10))) + ":"
-            + OStringChar(static_cast<char>('0' + ((nDelta / 600) % 6)))
-            + OStringChar(static_cast<char>('0' + ((nDelta / 60) % 10))));
-    }
-    aID.append(i_rCString1.getStr(), i_rCString1.getLength());
-
-    aInfoValuesOut = aID.makeStringAndClear();
-    o_rCString2 = aCreationMetaDateString.makeStringAndClear();
-
-    ::comphelper::Hash aDigest(::comphelper::HashType::MD5);
-    aDigest.update(reinterpret_cast<unsigned char const*>(&aGMT), sizeof(aGMT));
-    aDigest.update(reinterpret_cast<unsigned char const*>(aInfoValuesOut.getStr()),
-                   aInfoValuesOut.getLength());
-    //the binary form of the doc id is needed for encryption stuff
-    o_rIdentifier = aDigest.finalize();
-}
-
-sal_Int32 computeAccessPermissions(const vcl::PDFWriter::PDFEncryptionProperties& i_rProperties,
+sal_Int32 computeAccessPermissions(const vcl::PDFEncryptionProperties& i_rProperties,
                                    sal_Int32& o_rKeyLength, sal_Int32& o_rRC4KeyLength)
 {
     /*
@@ -386,6 +311,92 @@ sal_Int32 computeAccessPermissions(const vcl::PDFWriter::PDFEncryptionProperties
     nAccessPermissions |= (i_rProperties.CanAssemble) ? 1 << 10 : 0;
     nAccessPermissions |= (i_rProperties.CanPrintFull) ? 1 << 11 : 0;
     return nAccessPermissions;
+}
+
+} // end anonymous namespace
+
+PDFEncryptor::PDFEncryptor()
+{
+    /* prepare the cypher engine */
+    m_aCipher = rtl_cipher_createARCFOUR(rtl_Cipher_ModeStream);
+}
+
+PDFEncryptor::~PDFEncryptor() { rtl_cipher_destroyARCFOUR(m_aCipher); }
+
+/* init the encryption engine
+1. init the document id, used both for building the document id and for building the encryption key(s)
+2. build the encryption key following algorithms described in the PDF specification
+ */
+uno::Reference<beans::XMaterialHolder>
+PDFEncryptor::initEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword)
+{
+    uno::Reference<beans::XMaterialHolder> xResult;
+    if (!i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty())
+    {
+        rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;
+        xResult = pTransporter;
+
+        // get padded passwords
+        sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
+        padPassword(i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW);
+        padPassword(i_rUserPassword, aPadUPW);
+
+        if (computeODictionaryValue(aPadOPW, aPadUPW, pTransporter->getOValue(), SECUR_128BIT_KEY))
+        {
+            pTransporter->getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
+        }
+        else
+            xResult.clear();
+
+        // trash temporary padded cleartext PWDs
+        rtl_secureZeroMemory(aPadOPW, sizeof(aPadOPW));
+        rtl_secureZeroMemory(aPadUPW, sizeof(aPadUPW));
+    }
+    return xResult;
+}
+
+bool PDFEncryptor::prepareEncryption(
+    const uno::Reference<beans::XMaterialHolder>& xEncryptionMaterialHolder,
+    vcl::PDFEncryptionProperties& rProperties)
+{
+    bool bSuccess = false;
+    EncryptionHashTransporter* pTransporter
+        = EncryptionHashTransporter::getEncHashTransporter(xEncryptionMaterialHolder);
+    if (pTransporter)
+    {
+        sal_Int32 nKeyLength = 0, nRC4KeyLength = 0;
+        sal_Int32 nAccessPermissions
+            = computeAccessPermissions(rProperties, nKeyLength, nRC4KeyLength);
+        rProperties.OValue = pTransporter->getOValue();
+        bSuccess
+            = computeUDictionaryValue(pTransporter, rProperties, nKeyLength, nAccessPermissions);
+    }
+    if (!bSuccess)
+    {
+        rProperties.OValue.clear();
+        rProperties.UValue.clear();
+        rProperties.EncryptionKey.clear();
+    }
+    return bSuccess;
+}
+
+void PDFEncryptor::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
+{
+    // sanity check
+    if (rProperties.OValue.size() != ENCRYPTED_PWD_SIZE
+        || rProperties.UValue.size() != ENCRYPTED_PWD_SIZE
+        || rProperties.EncryptionKey.size() != MAXIMUM_RC4_KEY_LENGTH)
+    {
+        // the field lengths are invalid ? This was not setup by initEncryption.
+        // do not encrypt after all
+        rProperties.OValue.clear();
+        rProperties.UValue.clear();
+        OSL_ENSURE(false, "encryption data failed sanity check, encryption disabled");
+    }
+    else // setup key lengths
+    {
+        m_nAccessPermissions = computeAccessPermissions(rProperties, m_nKeyLength, m_nRC4KeyLength);
+    }
 }
 
 } // end vcl::pdf

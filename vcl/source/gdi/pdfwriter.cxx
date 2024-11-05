@@ -470,11 +470,9 @@ std::set< PDFWriter::ErrorCode > const & PDFWriter::GetErrors() const
 }
 
 css::uno::Reference< css::beans::XMaterialHolder >
-PDFWriter::InitEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword
-                          )
+PDFWriter::InitEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword)
 {
-    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword );
+    return PDFEncryptor::initEncryption(i_rOwnerPassword, i_rUserPassword);
 }
 
 void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
