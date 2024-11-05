@@ -1277,6 +1277,7 @@ MSO_SPT GETVMLShapeType(std::u16string_view aType)
         {"actionButtonMovie", mso_sptActionButtonMovie},
         {"hostControl", mso_sptHostControl},
         {"textBox", mso_sptTextBox},
+        {"roundRect", mso_sptRoundRectangle},
     };
 
     auto i(aDMLToVMLMap.find(GetOOXMLPresetGeometry(aType)));

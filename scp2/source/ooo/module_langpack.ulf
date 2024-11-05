@@ -250,6 +250,12 @@ en-US = "Southern Sotho (Sutu)"
 [STR_DESC_MODULE_LANGPACK_ST]
 en-US = "Installs the Southern Sotho (Sutu) user interface"
 
+[STR_NAME_MODULE_LANGPACK_TL]
+en-US = "Tagalog"
+
+[STR_DESC_MODULE_LANGPACK_TL]
+en-US = "Installs the Tagalog user interface"
+
 [STR_NAME_MODULE_LANGPACK_TN]
 en-US = "Tswana"
 

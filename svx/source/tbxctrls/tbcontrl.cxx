@@ -485,6 +485,7 @@ private:
     std::vector<std::pair<BitmapEx, OUString>> aImgVec;
     bool                        bParagraphMode;
     bool                        m_bIsWriter;
+    bool                        m_bIsCalc;
 
     void InitImageList();
     void CalcSizeValueSet();
@@ -2463,11 +2464,16 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     , mxFrameSetWin(new weld::CustomWeld(*m_xBuilder, u"valueset"_ustr, *mxFrameSet))
     , bParagraphMode(false)
     , m_bIsWriter(false)
+    , m_bIsCalc(false)
 {
 
     // check whether the document is Writer or not
+    // check also if it's Calc or not
     if (Reference<lang::XServiceInfo> xSI{ m_xFrame->getController()->getModel(), UNO_QUERY })
+    {
         m_bIsWriter = xSI->supportsService(u"com.sun.star.text.TextDocument"_ustr);
+        m_bIsCalc = xSI->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr);
+    }
 
     mxFrameSet->SetStyle(WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT);
     AddStatusListener(u".uno:BorderReducedMode"_ustr);
@@ -2487,14 +2493,14 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl(SvxFrameToolBoxControl* pControl, weld:
     // diagonal borders available only for Calc.
     // Therefore, Calc uses 10 border types while
     // Writer uses 8 of them - for a single cell.
-    for ( i=1; i < (m_bIsWriter ? 9 : 11); i++ )
+    for ( i=1; i < (m_bIsCalc ? 11 : 9); i++ )
         mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     //bParagraphMode should have been set in StateChanged
     if ( !bParagraphMode )
         // when multiple cell selected:
         // Writer has 12 border types and Calc has 15 of them.
-        for ( i = (m_bIsWriter ? 9 : 11); i < (m_bIsWriter ? 13 : 16); i++ )
+        for ( i = (m_bIsCalc ? 11 : 9); i < (m_bIsCalc ? 16 : 13); i++ )
             mxFrameSet->InsertItem(i, Image(aImgVec[i-1].first), aImgVec[i-1].second);
 
     // adjust frame column for Writer
@@ -2560,7 +2566,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
     // nSel has 15 cases which means 15 border
     // types for Calc. But Writer uses only 12
     // of them - when diagonal borders excluded.
-    if (m_bIsWriter)
+    if (!m_bIsCalc)
     {
         // add appropriate increments
         // to match the correct borders.
@@ -2727,7 +2733,7 @@ void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rE
         return;
 
     // set 12 border types for Writer, otherwise 15 for Calc.
-    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(m_bIsWriter ? 12 : 15) );
+    bool bTableMode = ( mxFrameSet->GetItemCount() == static_cast<size_t>(m_bIsCalc ? 15 : 12) );
     bool bResize    = false;
 
     if ( bTableMode && bParagraphMode )
@@ -2761,10 +2767,10 @@ void SvxFrameWindow_Impl::CalcSizeValueSet()
 
 void SvxFrameWindow_Impl::InitImageList()
 {
-    if (m_bIsWriter)
+    if (!m_bIsCalc)
     {
-        // Writer-specific aImgVec.
-        // Since Writer doesn't have diagonal borders,
+        // not Writer/Impress/Draw-specific aImgVec.
+        // Since they don't have diagonal borders,
         // we have to use 12 border types here.
         aImgVec = {
             {BitmapEx(RID_SVXBMP_FRAME1), SvxResId(RID_SVXSTR_TABLE_PRESET_NONE)},

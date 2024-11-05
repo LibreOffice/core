@@ -184,9 +184,7 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetFrameWeld(), rWrtSh.GetView(), *pCoreSet, SwCharDlgMode::Std));
 
-        if (nSlot == FN_INSERT_HYPERLINK)
-            pDlg->SetCurPageId(u"hyperlink"_ustr);
-        else if (nSlot == SID_CHAR_DLG_EFFECT)
+        if (nSlot == SID_CHAR_DLG_EFFECT)
             pDlg->SetCurPageId(u"fonteffects"_ustr);
         else if (nSlot == SID_CHAR_DLG_POSITION)
             pDlg->SetCurPageId(u"position"_ustr);
@@ -1464,7 +1462,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_CHAR_SCALEWIDTH :
         case SID_ATTR_CHAR_ROTATED :
         case FN_TXTATR_INET :
-        case FN_INSERT_HYPERLINK:
         {
             const sal_uInt16 nWhich = GetPool().GetWhichIDFromSlotID( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
@@ -2376,7 +2373,6 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             }
             break;
 
-        case FN_INSERT_HYPERLINK:
         case SID_INSERTDOC:
         case FN_INSERT_GLOSSARY:
         case FN_EXPAND_GLOSSARY:

@@ -1022,20 +1022,26 @@ void PrintDialog::updatePageSize(int nOrientation)
 {
     VclPtr<Printer> aPrt(maPController->getPrinter());
 
-    PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
-    Size aSize(aInfo.getWidth(), aInfo.getHeight());
-    if (aSize.IsEmpty())
-        aSize = aPrt->GetSizeOfPaper();
-
-    if (nOrientation != ORIENTATION_AUTOMATIC)
+    Size aSize;
+    if (mxNupPagesBox->get_active_id() == "1")
     {
-        if ((nOrientation == ORIENTATION_PORTRAIT && aSize.Width() > aSize.Height())
-            || (nOrientation == ORIENTATION_LANDSCAPE && aSize.Width() < aSize.Height()))
+        PaperInfo aInfo = aPrt->GetPaperInfo(mxPaperSizeBox->get_active());
+        aSize = Size(aInfo.getWidth(), aInfo.getHeight());
+        if (aSize.IsEmpty())
+            aSize = aPrt->GetSizeOfPaper();
+
+        if (nOrientation != ORIENTATION_AUTOMATIC)
         {
-            // coverity[swapped_arguments : FALSE] - this is in the intended order
-            aSize = Size(aSize.Height(), aSize.Width());
+            if ((nOrientation == ORIENTATION_PORTRAIT && aSize.Width() > aSize.Height())
+                || (nOrientation == ORIENTATION_LANDSCAPE && aSize.Width() < aSize.Height()))
+            {
+                // coverity[swapped_arguments : FALSE] - this is in the intended order
+                aSize = Size(aSize.Height(), aSize.Width());
+            }
         }
     }
+    else
+        aSize = getJobPageSize();
 
     aPrt->SetPrintPageSize(aSize);
     aPrt->SetUsePrintDialogSetting(true);
@@ -2024,6 +2030,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
     {
         if( !mxPagesBtn->get_active() )
             mxPagesBtn->set_active(true);
+        updatePageSize(mxOrientationBox->get_active());
         updateNupFromPages( false );
     }
     else if ( &rBox == mxPaperSizeBox.get() )

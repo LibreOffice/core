@@ -111,18 +111,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf160490)
     sal_Int32 nHeight1 = xShape1->getSize().Height;
 
     // Without the fix in place, this test would have failed with
-    // Expected: placeholder height: 3730
-    // Actual  : placeholder height: 2627
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3730), nHeight1);
+    // Expected: placeholder height: 2627
+    // Actual  : placeholder height: 3476
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2627), nHeight1);
 
     uno::Reference<drawing::XShape> xShape2(getShapeFromPage(0, 1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape2.is());
     sal_Int32 nHeight2 = xShape2->getSize().Height;
 
     // Without the fix in place, this test would have failed with
-    // Expected: placeholder height: 3366
-    // Actual  : placeholder height: 2373
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3366), nHeight2);
+    // Expected: placeholder height: 2373
+    // Actual  : placeholder height: 3116
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2373), nHeight2);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf157285)

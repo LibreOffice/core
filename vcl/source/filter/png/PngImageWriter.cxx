@@ -142,6 +142,10 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
         return false;
     }
 
+    basegfx::B2DSize const aPPM = rGraphic.GetPPM();
+    png_set_pHYs(pPng, pInfo, std::round(aPPM.getWidth()), std::round(aPPM.getHeight()),
+                 PNG_RESOLUTION_METER);
+
     BitmapEx aBitmapEx;
     if (rGraphic.GetBitmapEx().getPixelFormat() == vcl::PixelFormat::N32_BPP)
     {

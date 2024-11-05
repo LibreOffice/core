@@ -333,7 +333,7 @@ static const sal_Unicode * lcl_XL_ParseSheetRef( const sal_Unicode* start,
             aTabName += std::u16string_view( pCurrentStart, sal::static_int_cast<sal_Int32>( p - pCurrentStart));
         if (aTabName.isEmpty())
             return nullptr;
-        if (p == pMsoxlQuoteStop)
+        if (p == pMsoxlQuoteStop && *pMsoxlQuoteStop == '\'')
             ++p;    // position on ! of ...'!...
         if( *p != '!' && ( !bAllow3D || *p != ':' ) )
             return (!bAllow3D && *p == ':') ? p : start;
@@ -495,6 +495,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     rEndTabName.clear();
     rExternDocName.clear();
     const sal_Unicode* pMsoxlQuoteStop = nullptr;
+    const sal_Unicode* pQuoted3DStop = nullptr;
     if (*p == '[')
     {
         ++p;
@@ -531,11 +532,18 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // 'E:\[EXTDATA8.XLS]Sheet1'!$A$7  or
         // 'E:\[EXTDATA12B.XLSB]Sheet1:Sheet3'!$A$11
         // But, 'Sheet1'!B3 would also be a valid!
-        // Excel does not allow [ and ] characters in sheet names though.
+        // Then again, 'Sheet1':'Sheet2'!C4 would be logical and Calc wrote
+        // that to OOXML but Excel instead does 'Sheet1:Sheet2'!C4 which is
+        // the worse you can get.
+        // Excel does not allow [ and ] and : characters in sheet names though.
         // But, more sickness comes with MOOXML as there may be
         // '[1]Sheet 4'!$A$1  where [1] is the external doc's index.
         p = parseQuotedName(p, rExternDocName);
-        if (*p != '!')
+        if (*p == ':')
+        {
+            // The incorrect 'Sheet1':'Sheet2' case. Just fall through.
+        }
+        else if (*p != '!')
         {
             rExternDocName.clear();
             return start;
@@ -544,7 +552,24 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         {
             sal_Int32 nOpen = rExternDocName.indexOf( '[');
             if (nOpen == -1)
+            {
                 rExternDocName.clear();
+                // Look for 'Sheet1:Sheet2'!
+                if (*p == '!')
+                {
+                    const sal_Unicode* pQ = start + 1;
+                    do
+                    {
+                        if (*pQ == ':')
+                        {
+                            pMsoxlQuoteStop = pQ;
+                            pQuoted3DStop = p - 1;
+                            break;
+                        }
+                    }
+                    while (++pQ < p);
+                }
+            }
             else
             {
                 sal_Int32 nClose = rExternDocName.indexOf( ']', nOpen+1);
@@ -574,7 +599,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
             }
         }
         if (rExternDocName.isEmpty())
-            p = start;
+            p = (pQuoted3DStop ? start + 1 : start);
     }
 
     startTabs = p;
@@ -590,7 +615,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         if( *p == ':' ) // 3d ref
         {
             startEndTabs = p + 1;
-            p = lcl_XL_ParseSheetRef( startEndTabs, rEndTabName, false, pMsoxlQuoteStop, pErrRef);
+            p = lcl_XL_ParseSheetRef( startEndTabs, rEndTabName, false,
+                    (pQuoted3DStop ? pQuoted3DStop : pMsoxlQuoteStop), pErrRef);
             if( p == nullptr )
             {
                 nFlags = nSaveFlags;
@@ -2142,6 +2168,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
     if( !(nFlags & ScRefFlags::TAB_3D) )
         return;
 
+    sal_Int32 nQuotePos = rString.getLength();
     OUString aTabName, aDocName;
     lcl_Split_DocTab( rDoc, rRange.aStart.Tab(), rDetails, nFlags, aTabName, aDocName );
     switch (rDetails.eConv)
@@ -2164,6 +2191,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
             if (!aDocName.isEmpty())
             {
                 rString.append("[" + aDocName + "]");
+                nQuotePos = rString.getLength();
             }
             rString.append(aTabName);
         break;
@@ -2171,8 +2199,7 @@ static void lcl_ScRange_Format_XL_Header( OUStringBuffer& rString, const ScRange
     if( nFlags & ScRefFlags::TAB2_3D )
     {
         lcl_Split_DocTab( rDoc, rRange.aEnd.Tab(), rDetails, nFlags, aTabName, aDocName );
-        rString.append(":");
-        rString.append(aTabName);
+        ScCompiler::FormExcelSheetRange( rString, nQuotePos, aTabName);
     }
     rString.append("!");
 }

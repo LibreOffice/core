@@ -1179,11 +1179,11 @@ struct ConventionXL
             GetTab(rLimits, rPos, rTabNames, rRef.Ref2, aEndTabName);
         }
 
+        const sal_Int32 nQuotePos = rBuf.getLength();
         rBuf.append( aStartTabName );
         if( !bSingleRef && rRef.Ref2.IsFlag3D() && aStartTabName != aEndTabName )
         {
-            rBuf.append( ':' );
-            rBuf.append( aEndTabName );
+            ScCompiler::FormExcelSheetRange( rBuf, nQuotePos, aEndTabName);
         }
 
         rBuf.append( '!' );
@@ -1386,7 +1386,7 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         }
 
         makeSingleCellStr(rLimits, rBuf, aRef.Ref1, aAbs1);
-        if (!bSingleRef)
+        if (!bSingleRef && (aAbs1.Row() != aAbs2.Row() || aAbs1.Col() != aAbs2.Col()))
         {
             rBuf.append( ':' );
             makeSingleCellStr(rLimits, rBuf, aRef.Ref2, aAbs2);
@@ -1729,6 +1729,12 @@ struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 
         r1c1_add_row(rBuf, rRef.Ref1, aAbsRef.aStart);
         r1c1_add_col(rBuf, rRef.Ref1, aAbsRef.aStart);
+        // We can't parse a single col/row reference in the context of a R1C1
+        // 3D reference back yet, otherwise (if Excel understands it) an
+        // additional condition similar to ConventionXL_A1::makeRefStr() could
+        // be
+        //
+        //   && (aAbsRef.aStart.Row() != aAbsRef.aEnd.Row() || aAbsRef.aStart.Col() != aAbsRef.aEnd.Col())
         if (!bSingleRef)
         {
             rBuf.append( ':' );
@@ -1992,6 +1998,29 @@ void ScCompiler::CheckTabQuotes( OUString& rString,
     {
         rString = "'" + rString + "'";
     }
+}
+
+void ScCompiler::FormExcelSheetRange( OUStringBuffer& rBuf, sal_Int32 nQuotePos, const OUString& rEndTabName )
+{
+    OUString aEndTabName(rEndTabName);
+    if (nQuotePos < rBuf.getLength())
+    {
+        const bool bQuoted2 = (!aEndTabName.isEmpty() && aEndTabName[0] == '\'');
+        if (bQuoted2)
+            aEndTabName = aEndTabName.subView(1);   //  Sheet2'
+        if (rBuf[nQuotePos] == '\'')                // 'Sheet1'
+        {
+            const sal_Int32 nLast = rBuf.getLength() - 1;
+            if (rBuf[nLast] == '\'')
+                rBuf.remove(nLast, 1);              // 'Sheet1
+        }
+        else if (bQuoted2)                          //  Sheet1
+        {
+            rBuf.insert(nQuotePos, '\'');           // 'Sheet1
+        }
+    }
+    rBuf.append( ':' );
+    rBuf.append( aEndTabName );
 }
 
 sal_Int32 ScCompiler::GetDocTabPos( const OUString& rString )

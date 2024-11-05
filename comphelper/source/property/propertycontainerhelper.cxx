@@ -399,7 +399,7 @@ void OPropertyContainerHelper::getFastPropertyValue(Any& _rValue, sal_Int32 _nHa
     PropertiesIterator aPos = const_cast<OPropertyContainerHelper*>(this)->searchHandle(_nHandle);
     if (aPos == m_aProperties.end())
     {
-        OSL_FAIL( "OPropertyContainerHelper::getFastPropertyValue: unknown handle!" );
+        assert( false && "OPropertyContainerHelper::getFastPropertyValue: unknown handle" );
         // should not happen if the derived class has built a correct property set info helper to be used by
         // our base class OPropertySetHelper
         return;

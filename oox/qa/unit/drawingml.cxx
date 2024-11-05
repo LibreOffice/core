@@ -464,6 +464,23 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
     CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xShapeSlideNum->getShapeType());
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_objPlaceholderCustomShape)
+{
+    // slide with object placeholder with custom shape
+    loadFromFile(u"testTdf157019_objPlaceholderCustomShape.pptx");
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Test if we were able to import the outliner shape with CustomShape service.
+    // Without the fix in place, this test would have failed with
+    // Expected: shape type: "com.sun.star.drawing.CustomShape"
+    // Actual  : shape type: "com.sun.star.presentation.OutlinerShape"
+    uno::Reference<drawing::XShape> xObjShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.drawing.CustomShape"_ustr, xObjShape->getShapeType());
+}
+
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
 {
     // Given a document with a table style, using theme color with tinting in the A2 cell:
