@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <IconThemeSelector.hxx>
+#include <QtCustomStyle.hxx>
 #include <QtFrame.hxx>
 #include <QtFrame.moc>
 
@@ -29,7 +31,6 @@
 #include <QtMenu.hxx>
 #include <QtSvpGraphics.hxx>
 #include <QtSystem.hxx>
-#include <QtTools.hxx>
 #include <QtTransferable.hxx>
 #if CHECK_ANY_QT_USING_X11
 #include <QtX11Support.hxx>
@@ -1026,11 +1027,6 @@ void QtFrame::setInputLanguage(LanguageType nInputLanguage)
     CallCallback(SalEvent::InputLanguageChange, nullptr);
 }
 
-static Color toColor(const QColor& rColor)
-{
-    return Color(rColor.red(), rColor.green(), rColor.blue());
-}
-
 static bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont)
 {
     FontAttributes aFA;
@@ -1068,6 +1064,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
 {
     if (QtData::noNativeControls())
         return;
+    QtCustomStyle::LoadCustomStyle(GetUseDarkMode());
 
     StyleSettings style(rSettings.GetStyleSettings());
     const css::lang::Locale aLocale = rSettings.GetUILanguageTag().getLocale();

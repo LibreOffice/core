@@ -82,6 +82,11 @@ inline QColor toQColor(const Color& rColor)
     return QColor(rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue(), rColor.GetAlpha());
 }
 
+inline Color toColor(const QColor& rColor)
+{
+    return Color(rColor.red(), rColor.green(), rColor.blue());
+}
+
 Qt::DropActions toQtDropActions(sal_Int8 dragOperation);
 sal_Int8 toVclDropActions(Qt::DropActions dragOperation);
 sal_Int8 toVclDropAction(Qt::DropAction dragOperation);

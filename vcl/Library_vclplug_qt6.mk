@@ -81,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt6,\
     vcl/qt6/QtBitmap \
     vcl/qt6/QtBuilder \
     vcl/qt6/QtClipboard \
+    vcl/qt6/QtCustomStyle \
     vcl/qt6/QtData \
     vcl/qt6/QtDragAndDrop \
     vcl/qt6/QtFilePicker \

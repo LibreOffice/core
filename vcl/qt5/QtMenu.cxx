@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <QtCustomStyle.hxx>
+#include <vcl/themecolors.hxx>
 #include <QtMenu.hxx>
 #include <QtMenu.moc>
 
@@ -482,6 +484,14 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
 
 void QtMenu::DoFullMenuUpdate(Menu* pMenuBar)
 {
+    if (mpQMenuBar && ThemeColors::IsThemeLoaded()
+        && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
+        mpQMenuBar->setPalette(QtCustomStyle::GetMenuBarPalette());
+
+    if (mpQMenu && ThemeColors::IsThemeLoaded()
+        && !ThemeColors::IsAutomaticTheme(ThemeColors::GetThemeColors().GetThemeName()))
+        mpQMenu->setPalette(QtCustomStyle::GetMenuPalette());
+
     // clear action groups since menu is rebuilt
     ResetAllActionGroups();
     ShowCloseButton(false);
