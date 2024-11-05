@@ -770,7 +770,7 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
     maRenderState.incrementIndex();
 }
 
-bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
+bool SlideshowLayerRenderer::render(unsigned char* pBuffer, bool& bIsBitmapLayer, OString& rJsonMsg)
 {
     // We want to render one pass (one iteration through objects)
 
@@ -784,6 +784,8 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
         createViewAndDraw(aRenderContext, &aRedirector);
         aRedirector.finalizeRenderPasses();
 
+        bIsBitmapLayer = true;
+
         // Write JSON for the Background layer
         writeBackgroundJSON(rJsonMsg);
 
@@ -796,7 +798,9 @@ bool SlideshowLayerRenderer::render(unsigned char* pBuffer, OString& rJsonMsg)
 
         auto const& rRenderPass = maRenderState.maRenderPasses.front();
         maRenderState.meStage = rRenderPass.meStage;
-        if (!rRenderPass.mbPlaceholder) // no need to render if placehodler
+
+        bIsBitmapLayer = !rRenderPass.mbPlaceholder;
+        if (bIsBitmapLayer) // no need to render if placehodler
         {
             RenderPassObjectRedirector aRedirector(maRenderState, rRenderPass);
             createViewAndDraw(aRenderContext, &aRedirector);
