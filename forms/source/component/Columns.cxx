@@ -334,7 +334,7 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool 
     }
 
     aNewProps.realloc( pNewProps - aNewProps.getArray() );
-    _rProps = aNewProps;
+    _rProps = std::move(aNewProps);
 }
 
 

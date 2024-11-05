@@ -759,7 +759,7 @@ uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventH
         auto pVbaArgs2 = aVbaArgs2.getArray();
         *pVbaArgs2 = createWorksheet( rArgs, 0 );
         std::copy_n(std::cbegin(aVbaArgs), nLength, std::next(pVbaArgs2));
-        aVbaArgs = aVbaArgs2;
+        aVbaArgs = std::move(aVbaArgs2);
     }
 
     return aVbaArgs;

@@ -1227,7 +1227,7 @@ Reference< XShape > const & Shape::createAndInsert(
             pPoints[i] = awt::Point(static_cast<sal_Int32>(aPoint.getX()), static_cast<sal_Int32>(aPoint.getY()));
         }
         uno::Sequence< uno::Sequence< awt::Point > > aPolyPolySequence( 1 );
-        aPolyPolySequence.getArray()[ 0 ] = aPointSequence;
+        aPolyPolySequence.getArray()[ 0 ] = std::move(aPointSequence);
 
         maShapeProperties.setProperty(PROP_PolyPolygon, aPolyPolySequence);
     }
@@ -2772,7 +2772,7 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
 
                 pdiagramRelTuple[2] <<= sTarget.copy( sTarget.lastIndexOf(".") );
 
-                pxRelListTemp[counter] = diagramRelTuple;
+                pxRelListTemp[counter] = std::move(diagramRelTuple);
                 ++counter;
             }
             xRelListTemp.realloc(counter);

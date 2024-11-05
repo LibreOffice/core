@@ -560,7 +560,7 @@ namespace
                 SAL_WARN_IF( aValues.getLength() != 1, "linguistic", "unexpected length of sequence" );
                 Sequence< OUString > aSvcImplNames;
                 if (aValues.getConstArray()[0] >>= aSvcImplNames)
-                    aRes = aSvcImplNames;
+                    aRes = std::move(aSvcImplNames);
                 else
                 {
                     SAL_WARN( "linguistic", "type mismatch" );
@@ -683,7 +683,7 @@ void LngSvcMgr::UpdateAll()
             // merge services list (previously configured to be listed first).
             aCfgSvcs = lcl_MergeSeq( aCfgSvcs, aNewSvcs );
 
-            aCurSvcs[k][ aCfgLocaleStr ] = aCfgSvcs;
+            aCurSvcs[k][ aCfgLocaleStr ] = std::move(aCfgSvcs);
         }
     }
 

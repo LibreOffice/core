@@ -354,7 +354,7 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
             for (sal_Int32& ix : asNonConstRange(to))
                 ix = from[ix];
         }
-        offset = to;
+        offset = std::move(to);
         return tmpStr;
     }
 }
@@ -405,7 +405,7 @@ TransliterationImpl::folding( const OUString& inStr, sal_Int32 startPos, sal_Int
             for (sal_Int32& ix : asNonConstRange(to))
                 ix = from[ix];
         }
-        offset = to;
+        offset = std::move(to);
         return tmpStr;
     }
 }

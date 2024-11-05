@@ -1726,7 +1726,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         if(bChanged)
         {
             aChange.realloc(nStart);
-            rLinguData.GetThesTable()[ nLang ] = aChange;
+            rLinguData.GetThesTable()[ nLang ] = std::move(aChange);
         }
     }
 

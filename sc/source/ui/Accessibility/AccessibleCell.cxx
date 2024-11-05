@@ -478,7 +478,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     OSL_ENSURE(nCount == nPos, "something went wrong");
     AccessibleRelation aRelation;
     aRelation.RelationType = aRelationType;
-    aRelation.TargetSet = aTargetSet;
+    aRelation.TargetSet = std::move(aTargetSet);
     pRelationSet->AddRelation(aRelation);
 }
 

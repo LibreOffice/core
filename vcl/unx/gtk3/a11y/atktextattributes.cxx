@@ -1381,7 +1381,7 @@ attribute_set_map_to_property_values(
     }
 
     aAttributeList.realloc( nIndex );
-    rValueList = aAttributeList;
+    rValueList = std::move(aAttributeList);
     return true;
 }
 

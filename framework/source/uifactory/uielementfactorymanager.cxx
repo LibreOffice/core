@@ -182,7 +182,7 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
                 }
             }
 
-            aSeqSeq.getArray()[nIndex++] = aSeq;
+            aSeqSeq.getArray()[nIndex++] = std::move(aSeq);
         }
     }
 

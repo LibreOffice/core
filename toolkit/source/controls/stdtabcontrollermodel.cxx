@@ -338,7 +338,7 @@ void StdTabControllerModel::getGroup( sal_Int32 nGroup, css::uno::Sequence< css:
             nG++;
         }
     }
-    rGroup = aSeq;
+    rGroup = std::move(aSeq);
 }
 
 void StdTabControllerModel::getGroupByName( const OUString& rName, css::uno::Sequence< css::uno::Reference< css::awt::XControlModel > >& rGroup )

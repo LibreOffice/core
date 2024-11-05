@@ -69,7 +69,7 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
     uno::Sequence<beans::PropertyValue> aProps;
     if (!(aElement >>= aProps))
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
-    maProperties[nIndex] = aProps;
+    maProperties[nIndex] = std::move(aProps);
 }
 
 // XIndexAccess

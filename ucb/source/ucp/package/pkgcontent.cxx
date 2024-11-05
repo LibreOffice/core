@@ -130,7 +130,7 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
         aSeq.getArray()[ 1 ].Attributes
             = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
               | ucb::ContentInfoAttribute::KIND_DOCUMENT;
-        aSeq.getArray()[ 1 ].Properties = aProps;
+        aSeq.getArray()[ 1 ].Properties = std::move(aProps);
 
         return aSeq;
     }
@@ -1179,7 +1179,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         aEvent.OldValue     <<= m_aProps.aEncryptionKey;
                         aEvent.NewValue     <<= aNewValue;
 
-                        m_aProps.aEncryptionKey = aNewValue;
+                        m_aProps.aEncryptionKey = std::move(aNewValue);
                         nChanged++;
                         bStore = true;
                         m_nModifiedProps |= ENCRYPTIONKEY_MODIFIED;

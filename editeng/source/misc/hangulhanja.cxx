@@ -416,7 +416,7 @@ namespace editeng
                             nDiff=0;
                         pTmp[n]=m_aCurrentSuggestions[n-nDiff];
                     }
-                    m_aCurrentSuggestions = aTmp;
+                    m_aCurrentSuggestions = std::move(aTmp);
                 }
             }
         }

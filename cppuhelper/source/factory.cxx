@@ -671,7 +671,7 @@ Sequence< OUString > ORegistryFactoryHelper::getSupportedServiceNames()
                 for( OUString & key : asNonConstRange(seqKeys) )
                     key = key.copy(nPrefixLen);
 
-                aServiceNames = seqKeys;
+                aServiceNames = std::move(seqKeys);
             }
         }
         catch (InvalidRegistryException &)

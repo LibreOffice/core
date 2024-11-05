@@ -77,7 +77,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>&
         if ( ( aAnyValues[ 0 ] >>= aValues ) ||
              ( !aAnyValues[ 0 ].hasValue() ) )
         {
-            m_seqURLs = aValues;
+            m_seqURLs = std::move(aValues);
             m_bInited = true;
         }
     }

@@ -228,7 +228,7 @@ namespace {
         }
         lcl_checkPaths( aMultiplePaths, *this );
         // if we survived this, the paths are valid, and we're done here ...
-        m_aWizardSteps = aMultiplePaths;
+        m_aWizardSteps = std::move(aMultiplePaths);
 
         m_bInitialized = true;
     }

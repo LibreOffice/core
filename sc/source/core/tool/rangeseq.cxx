@@ -78,7 +78,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument& rDoc, const S
             pColAry[nCol] = lcl_DoubleToLong( rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) ) );
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -106,7 +106,7 @@ bool ScRangeToSequence::FillLongArray( uno::Any& rAny, const ScMatrix* pMatrix )
             else
                 pColAry[nCol] = lcl_DoubleToLong( pMatrix->GetDouble( nCol, nRow ) );
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -131,7 +131,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, ScDocument& rDoc, const
             pColAry[nCol] = rDoc.GetValue(
                 ScAddress( static_cast<SCCOL>(nStartCol+nCol), static_cast<SCROW>(nStartRow+nRow), nTab ) );
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -159,7 +159,7 @@ bool ScRangeToSequence::FillDoubleArray( uno::Any& rAny, const ScMatrix* pMatrix
             else
                 pColAry[nCol] = pMatrix->GetDouble( nCol, nRow );
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -190,7 +190,7 @@ bool ScRangeToSequence::FillStringArray( uno::Any& rAny, ScDocument& rDoc, const
             if ( nErrCode != FormulaError::NONE )
                 bHasErrors = true;
         }
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -229,7 +229,7 @@ bool ScRangeToSequence::FillStringArray(uno::Any& rAny, const ScMatrix* pMatrix,
             pColAry[nCol] = aStr;
         }
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -276,7 +276,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument& rDoc, const 
             else
                 rElement <<= aCell.getString(&rDoc);
         }
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;
@@ -317,7 +317,7 @@ bool ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix,
             }
         }
 
-        pRowAry[nRow] = aColSeq;
+        pRowAry[nRow] = std::move(aColSeq);
     }
 
     rAny <<= aRowSeq;

@@ -259,7 +259,7 @@ void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > &
         cs(m_xTypeDescription->getConstants());
     auto [begin, end] = asNonConstRange(cs);
     std::sort(begin, end, CompareConstants());
-    m_aConstants = cs;
+    m_aConstants = std::move(cs);
 }
 
 OUString StringRepresentation::convertSimpleToString( const uno::Any& _rValue )

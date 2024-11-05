@@ -1032,9 +1032,9 @@ bool SvtLinguConfig::GetDictionaryEntry(
             // if everything was fine return the result
             if (bSuccess)
             {
-                rDicEntry.aLocations    = aLocations;
+                rDicEntry.aLocations    = std::move(aLocations);
                 rDicEntry.aFormatName   = aFormatName;
-                rDicEntry.aLocaleNames  = aLocaleNames;
+                rDicEntry.aLocaleNames  = std::move(aLocaleNames);
             }
         }
     }

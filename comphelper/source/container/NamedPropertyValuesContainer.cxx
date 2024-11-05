@@ -102,8 +102,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
     uno::Sequence<beans::PropertyValue> aProps;
     if( !(aElement >>= aProps) )
         throw lang::IllegalArgumentException(u"element is not beans::PropertyValue"_ustr, static_cast<cppu::OWeakObject*>(this), 2);
-
-    (*aIter).second = aProps;
+    (*aIter).second = std::move(aProps);
 }
 
 // XNameAccess

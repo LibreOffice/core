@@ -142,7 +142,7 @@ namespace dbaccess
                 aEventDescriptor.realloc( 0 );
         }
 
-        elementPos->second = aEventDescriptor;
+        elementPos->second = std::move(aEventDescriptor);
     }
 
     Any SAL_CALL DocumentEvents::getByName( const OUString& Name )

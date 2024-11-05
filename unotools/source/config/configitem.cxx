@@ -423,7 +423,7 @@ Sequence< Any > ConfigItem::GetProperties(
     {
         Sequence< Any > lValues;
         impl_packLocalizedProperties( rNames, aRet, lValues );
-        aRet = lValues;
+        aRet = std::move(lValues);
     }
     return aRet;
 }

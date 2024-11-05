@@ -2910,7 +2910,7 @@ uno::Sequence< uno::Sequence<double> > SAL_CALL ScCellRangesBase::getData()
             for (sal_Int32 nCol = 0; nCol < nColCount; nCol++)
                 pColAry[nCol] = pMemChart->GetData( nCol, nRow );
 
-            pRowAry[nRow] = aColSeq;
+            pRowAry[nRow] = std::move(aColSeq);
         }
 
         return aRowSeq;
@@ -4964,7 +4964,7 @@ uno::Sequence< uno::Sequence<OUString> > SAL_CALL ScCellRangeObj::getFormulaArra
                 pColAry[nColIndex] = lcl_GetInputString( pDocSh->GetDocument(),
                                     ScAddress( nStartCol+nColIndex, nStartRow+nRowIndex, nTab ), true );
 
-            pRowAry[nRowIndex] = aColSeq;
+            pRowAry[nRowIndex] = std::move(aColSeq);
         }
 
         return aRowSeq;

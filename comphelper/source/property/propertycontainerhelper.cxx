@@ -484,7 +484,7 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
               );
 
     // copy the output
-    _rProps = aOutput;
+    _rProps = std::move(aOutput);
 }
 
 

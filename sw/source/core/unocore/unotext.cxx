@@ -2051,7 +2051,7 @@ lcl_ApplyRowProperties(
             // for vertical merging later
             TableColumnSeparators aSeparators;
             rProperty.Value >>= aSeparators;
-            rRowSeparators = aSeparators;
+            rRowSeparators = std::move(aSeparators);
         }
         xRow->setPropertyValue(rProperty.Name, rProperty.Value);
     }

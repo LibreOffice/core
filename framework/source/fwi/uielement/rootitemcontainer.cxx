@@ -200,7 +200,7 @@ void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aIt
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
-    m_aItemVector[Index] = aSeq;
+    m_aItemVector[Index] = std::move(aSeq);
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )

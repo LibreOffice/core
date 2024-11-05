@@ -4784,7 +4784,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
 
     *pResult = comphelper::containerToSequence(aResult);
 
-    m_pImpl->m_aRelInfo = aSeq;
+    m_pImpl->m_aRelInfo = std::move(aSeq);
     m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
@@ -4812,7 +4812,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
         auto nInd = static_cast<sal_Int32>(std::distance(std::cbegin(aSeq), pRel));
         comphelper::removeElementAt(aSeq, nInd);
 
-        m_pImpl->m_aRelInfo = aSeq;
+        m_pImpl->m_aRelInfo = std::move(aSeq);
         m_pImpl->m_xNewRelInfoStream.clear();
         m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 

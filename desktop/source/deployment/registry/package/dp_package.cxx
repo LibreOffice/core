@@ -1260,7 +1260,7 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
         const ::osl::MutexGuard guard( m_aMutex );
         pBundle = m_pBundle;
         if (pBundle == nullptr) {
-            m_bundle = ret;
+            m_bundle = std::move(ret);
             pBundle = &m_bundle;
             OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
             m_pBundle = pBundle;

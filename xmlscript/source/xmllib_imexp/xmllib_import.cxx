@@ -228,7 +228,7 @@ void LibraryElement::endElement()
     LibDescriptor* pLib = mxImport->mpLibDesc;
     if( !pLib )
         pLib = &static_cast< LibrariesElement* >( mxParent.get() )->mLibDescriptors.back();
-    pLib->aElementNames = aElementNames;
+    pLib->aElementNames = std::move(aElementNames);
 }
 
 Reference< css::xml::sax::XDocumentHandler >

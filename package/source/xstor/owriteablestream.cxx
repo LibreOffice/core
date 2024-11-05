@@ -2641,7 +2641,7 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 
     *pPair = comphelper::containerToSequence(aResult);
 
-    m_pImpl->m_aNewRelInfo = aSeq;
+    m_pImpl->m_aNewRelInfo = std::move(aSeq);
     m_pImpl->m_xNewRelInfoStream.clear();
     m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 }
@@ -2669,7 +2669,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
         auto nInd = static_cast<sal_Int32>(std::distance(std::cbegin(aSeq), pRel));
         comphelper::removeElementAt(aSeq, nInd);
 
-        m_pImpl->m_aNewRelInfo = aSeq;
+        m_pImpl->m_aNewRelInfo = std::move(aSeq);
         m_pImpl->m_xNewRelInfoStream.clear();
         m_pImpl->m_nRelInfoStatus = RELINFO_CHANGED;
 

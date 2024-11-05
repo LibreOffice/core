@@ -155,7 +155,7 @@ namespace frm
             {
                 aTmpRange[i] = m_aTypedItems[j];
             }
-            m_aTypedItems = aTmp;
+            m_aTypedItems = std::move(aTmp);
         }
         else if (m_aTypedItems.hasElements())
         {

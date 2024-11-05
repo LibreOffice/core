@@ -337,7 +337,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                             pPropValArr[2].Value <<= aToken.sText;
                         }
                         beans::PropertyValues* pValues = aSequPropVals.getArray();
-                        pValues[nTokenIndex] = aPropVals;
+                        pValues[nTokenIndex] = std::move(aPropVals);
                         nTokenIndex++;
                     }
                     aSequPropVals.realloc(nTokenIndex);

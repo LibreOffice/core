@@ -198,7 +198,7 @@ void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
-    m_aItemVector[Index] = aSeq;
+    m_aItemVector[Index] = std::move(aSeq);
 }
 
 } // namespace framework

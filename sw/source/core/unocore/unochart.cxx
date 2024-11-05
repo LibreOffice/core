@@ -454,7 +454,7 @@ static bool GetSubranges( std::u16string_view rRangeRepresentation,
     }
     aRanges.realloc( nCnt );
 
-    rSubRanges = aRanges;
+    rSubRanges = std::move(aRanges);
     return bRes;
 }
 

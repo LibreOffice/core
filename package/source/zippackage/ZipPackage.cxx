@@ -1908,7 +1908,7 @@ void SAL_CALL ZipPackage::setPropertyValue( const OUString& aPropertyName, const
             throw IllegalArgumentException(THROW_WHERE "unexpected Gpg properties are provided.", uno::Reference< uno::XInterface >(), 2 );
         }
 
-        m_aGpgProps = aGpgProps;
+        m_aGpgProps = std::move(aGpgProps);
 
         // override algorithm defaults (which are some legacy ODF
         // defaults) with reasonable values

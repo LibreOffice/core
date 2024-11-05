@@ -176,7 +176,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
         // use either scripting context or maybe zero args?
         invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
-    m_sAargs = invokeArgs;
+    m_sAargs = std::move(invokeArgs);
     // don't create pkg mgr MSP for documents, not supported
     if ( !m_bIsPkgMSP && !m_xModel.is() )
     {

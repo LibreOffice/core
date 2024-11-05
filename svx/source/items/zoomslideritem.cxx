@@ -145,7 +145,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                     if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
                         SetValue( static_cast<sal_uInt16>(nCurrentZoom) );
-                        maValues = aValues;
+                        maValues = std::move(aValues);
                         mnMinZoom = sal::static_int_cast< sal_uInt16 >( nMinZoom );
                         mnMaxZoom = sal::static_int_cast< sal_uInt16 >( nMaxZoom );
 

@@ -1624,7 +1624,7 @@ void PrinterController::setUIOptions( const css::uno::Sequence< css::beans::Prop
             if( !aDep.maDependsOnName.isEmpty() )
                 mpImplData->maControlDependencies[ aPropName ] = std::move(aDep);
             if( aChoicesDisabled.hasElements() )
-                mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
+                mpImplData->maChoiceDisableMap[ aPropName ] = std::move(aChoicesDisabled);
         }
     }
 }

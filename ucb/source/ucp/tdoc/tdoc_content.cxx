@@ -2816,7 +2816,7 @@ ContentProperties::getCreatableContentsInfo() const
             aSeq.getArray()[ 1 ].Attributes
                 = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
                   | ucb::ContentInfoAttribute::KIND_DOCUMENT;
-            aSeq.getArray()[ 1 ].Properties = aProps;
+            aSeq.getArray()[ 1 ].Properties = std::move(aProps);
 
             return aSeq;
         }

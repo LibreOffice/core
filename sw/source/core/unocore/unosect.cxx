@@ -805,7 +805,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                 pValues[nProperty] >>= aSeq;
                 if (m_bIsDescriptor)
                 {
-                    m_pProps->m_Password = aSeq;
+                    m_pProps->m_Password = std::move(aSeq);
                 }
                 else
                 {

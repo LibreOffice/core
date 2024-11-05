@@ -1244,7 +1244,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             const sal_Unicode *pChar = sTempString.getStr();
             for ( sal_Int32 i = 0; i < nPathLength; i++ )
                 pArray[i] = static_cast < sal_Int8 > ( pChar[i] );
-            aNewKey = aSequence;
+            aNewKey = std::move(aSequence);
         }
 
         if ( aNewKey.hasElements() )
@@ -1252,7 +1252,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             if ( !m_xBaseEncryptionData.is() )
                 m_xBaseEncryptionData = new BaseEncryptionData;
 
-            m_aEncryptionKey = aNewKey;
+            m_aEncryptionKey = std::move(aNewKey);
             // In case of new raw stream, the stream must not be encrypted on storing
             m_bHaveOwnKey = true;
             if ( m_nStreamMode != PACKAGE_STREAM_RAW )
@@ -1284,7 +1284,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             if ( !m_xBaseEncryptionData.is() )
                 m_xBaseEncryptionData = new BaseEncryptionData;
 
-            m_aStorageEncryptionKeys = aKeys;
+            m_aStorageEncryptionKeys = std::move(aKeys);
 
             // In case of new raw stream, the stream must not be encrypted on storing
             m_bHaveOwnKey = true;

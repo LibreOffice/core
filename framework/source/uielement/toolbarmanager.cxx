@@ -1399,7 +1399,7 @@ void ToolBarManager::FillToolbarFromContainer( const Reference< XIndexAccess >& 
                 {
                     auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(aCommandURL, m_aModuleIdentifier);
                     if (!aProperties.hasElements()) // E.g., user-provided macro command?
-                        aProperties = aProps; // Use existing info, including user-provided Label
+                        aProperties = std::move(aProps); // Use existing info, including user-provided Label
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
 

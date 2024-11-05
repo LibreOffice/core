@@ -73,7 +73,7 @@ bool StdTabController::ImplCreateComponentSequence(
                 aSeqRange[nRealControls++] = xCurrentControl;
         }
         aSeq.realloc(nRealControls);
-        rControls = aSeq;
+        rControls = std::move(aSeq);
     }
 
     // there may be less controls than models, but never more controls than models

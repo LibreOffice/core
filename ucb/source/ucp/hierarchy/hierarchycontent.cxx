@@ -1745,7 +1745,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
-        aSeq.getArray()[ 0 ].Properties = aFolderProps;
+        aSeq.getArray()[ 0 ].Properties = std::move(aFolderProps);
 
         // Link.
         aSeq.getArray()[ 1 ].Type = HIERARCHY_LINK_CONTENT_TYPE;
@@ -1762,7 +1762,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
-        aSeq.getArray()[ 1 ].Properties = aLinkProps;
+        aSeq.getArray()[ 1 ].Properties = std::move(aLinkProps);
 
         return aSeq;
     }

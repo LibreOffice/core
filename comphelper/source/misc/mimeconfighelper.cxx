@@ -862,11 +862,11 @@ uno::Sequence< beans::PropertyValue > MimeConfigurationHelper::SearchForFilter(
                 {
                     if ( ( nFlags & SfxFilterFlags::DEFAULT ) == SfxFilterFlags::DEFAULT )
                     {
-                        aFilterProps = aProps;
+                        aFilterProps = std::move(aProps);
                         break;
                     }
                     else if ( !aFilterProps.hasElements() )
-                        aFilterProps = aProps;
+                        aFilterProps = std::move(aProps);
                 }
             }
         }

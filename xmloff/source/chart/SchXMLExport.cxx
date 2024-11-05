@@ -341,7 +341,7 @@ CustomLabelData lcl_getCustomLabelField(SvXMLExport const& rExport,
                 }
             }
 
-            aData.maFields = aCustomLabels;
+            aData.maFields = std::move(aCustomLabels);
             return aData;
         }
     }

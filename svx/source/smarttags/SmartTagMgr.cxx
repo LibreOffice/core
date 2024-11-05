@@ -162,8 +162,8 @@ void SmartTagMgr::GetActionSequences( std::vector< OUString >& rSmartTagTypes,
             aIndicesRange[ i++ ] = (*aActionsIter).second.mnSmartTagIndex;
         }
 
-        pActionComponentsSequence[ j ] = aActions;
-        pActionIndicesSequence[ j ]  = aIndices;
+        pActionComponentsSequence[ j ] = std::move(aActions);
+        pActionIndicesSequence[ j ]  = std::move(aIndices);
     }
 }
 

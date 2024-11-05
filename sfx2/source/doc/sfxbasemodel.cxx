@@ -573,7 +573,7 @@ namespace
             aStrippedTypes.getArray(),
             [&i_rTypeToStrip](const uno::Type& aType) { return aType == i_rTypeToStrip; }
         );
-        io_rTypes = aStrippedTypes;
+        io_rTypes = std::move(aStrippedTypes);
     }
 }
 
@@ -935,7 +935,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
-        m_pData->m_seqArguments = aStrippedArgs;
+        m_pData->m_seqArguments = std::move(aStrippedArgs);
 
         SfxMedium* pMedium = pObjectShell->GetMedium();
         if ( pMedium )
@@ -1094,7 +1094,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
                 }
             }
 
-            m_pData->m_seqArguments = aFinalCache;
+            m_pData->m_seqArguments = std::move(aFinalCache);
         }
 
         return seqArgsNew;

@@ -1363,7 +1363,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 aTemp.getArray()[i+1] = rTypes.getConstArray()[i];
             aTemp.getArray()[0].MimeType = "text/plain;charset=utf-16";
             aTemp.getArray()[0].DataType = cppu::UnoType<OUString>::get();
-            rTypes = aTemp;
+            rTypes = std::move(aTemp);
 
             std::vector< Atom > aNativeTemp( nNewFlavors );
             for( i = 0; i < nNewFlavors-1; i++ )
@@ -1538,7 +1538,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
 
             // insert IncrementalTransfer
             IncrementalTransfer& rInc   = m_aIncrementals[ requestor ][ property ];
-            rInc.m_aData                = aData;
+            rInc.m_aData                = std::move(aData);
             rInc.m_nBufferPos           = 0;
             rInc.m_aRequestor           = requestor;
             rInc.m_aProperty            = property;
@@ -1904,7 +1904,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent const & rNoti
                     Sequence< sal_Int8 > aData( it->second->m_aData.getLength() + nItems*nUnitSize );
                     memcpy( aData.getArray(), it->second->m_aData.getArray(), it->second->m_aData.getLength() );
                     memcpy( aData.getArray() + it->second->m_aData.getLength(), pData, nItems*nUnitSize );
-                    it->second->m_aData = aData;
+                    it->second->m_aData = std::move(aData);
                 }
                 else
                 {

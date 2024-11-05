@@ -499,7 +499,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
         SfxFilterFlags nFlags = static_cast<SfxFilterFlags>(aFiltHM.getUnpackedValueOrDefault(u"Flags"_ustr,
                                                         sal_Int32(0) ));
         if ( ( ( nFlags & nMust ) == nMust ) && !( nFlags & nDont ) )
-            aFilterProps = aProps;
+            aFilterProps = std::move(aProps);
     }
 
     return aFilterProps;

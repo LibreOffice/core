@@ -2734,7 +2734,7 @@ Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
             }
         }
         else
-            aResultSeq = lFiles;
+            aResultSeq = std::move(lFiles);
     }
 
     return aResultSeq;

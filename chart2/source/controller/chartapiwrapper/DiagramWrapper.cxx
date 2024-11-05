@@ -1655,7 +1655,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
                 series->getFastPropertyValue(PROP_DATASERIES_ATTRIBUTED_DATA_POINTS)); // "AttributedDataPoints"
             uno::Sequence< sal_Int32 > aSeq;
             if( aVal >>= aSeq )
-                aResultRange[ i ] = aSeq;
+                aResultRange[ i ] = std::move(aSeq);
             ++i;
         }
         m_aOuterValue <<= aResult;

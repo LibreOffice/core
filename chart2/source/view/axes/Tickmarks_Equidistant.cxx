@@ -171,7 +171,7 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
     }
 
     aSubTicks.realloc(nRealSubTickCount);
-    rParentTicks.getArray()[nDepth] = aSubTicks;
+    rParentTicks.getArray()[nDepth] = std::move(aSubTicks);
     if(static_cast<sal_Int32>(m_rIncrement.SubIncrements.size())>nDepth)
         addSubTicks( nDepth+1, rParentTicks );
 }

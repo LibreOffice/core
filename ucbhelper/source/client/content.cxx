@@ -584,7 +584,7 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
                             ? OpenMode::DOCUMENTS : OpenMode::ALL;
     aArg.Priority   = 0; // unused
     aArg.Sink.clear(); // unused
-    aArg.Properties = aProps;
+    aArg.Properties = std::move(aProps);
 
     Command aCommand;
     aCommand.Name     = "open";

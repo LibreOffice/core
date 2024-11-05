@@ -580,7 +580,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             );
         }
 
-        aCurSelection = aTranslated;
+        aCurSelection = std::move(aTranslated);
     }
 
     SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh.get(), false);

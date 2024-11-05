@@ -322,7 +322,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 
     // Return result of this operation.
     seqDestination.realloc( 0 );
-    seqDestination = seqResult;
+    seqDestination = std::move(seqResult);
 }
 
 //  debug methods

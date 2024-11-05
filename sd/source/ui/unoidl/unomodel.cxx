@@ -1740,7 +1740,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  )
                     cppu::UnoType<presentation::XCustomPresentationSupplier>::get(),
                     cppu::UnoType<presentation::XHandoutMasterSupplier>::get() });
         }
-        maTypeSequence = aTypes;
+        maTypeSequence = std::move(aTypes);
     }
 
     return maTypeSequence;

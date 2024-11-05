@@ -443,7 +443,7 @@ void FilePolicy::refresh()
                 sal_Int32 len = perms.getLength();
                 perms.realloc( len +1 );
                 perms.getArray()[ len ] = perm;
-                userPermissions[ userId ] = perms;
+                userPermissions[ userId ] = std::move(perms);
             }
             else
             {
@@ -461,7 +461,7 @@ void FilePolicy::refresh()
 
     // assign new ones
     MutexGuard guard( m_aMutex );
-    m_defaultPermissions = defaultPermissions;
+    m_defaultPermissions = std::move(defaultPermissions);
     m_userPermissions = std::move(userPermissions);
 }
 

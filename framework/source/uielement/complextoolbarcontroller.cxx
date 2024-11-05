@@ -112,7 +112,7 @@ void SAL_CALL ComplexToolbarController::execute( sal_Int16 KeyModifier )
         ExecuteInfo* pExecuteInfo = new ExecuteInfo;
         pExecuteInfo->xDispatch     = std::move(xDispatch);
         pExecuteInfo->aTargetURL    = std::move(aTargetURL);
-        pExecuteInfo->aArgs         = aArgs;
+        pExecuteInfo->aArgs         = std::move(aArgs);
         Application::PostUserEvent( LINK(nullptr, ComplexToolbarController , ExecuteHdl_Impl), pExecuteInfo );
     }
 }
@@ -264,7 +264,7 @@ void ComplexToolbarController::addNotifyInfo(
     auto pInfoSeq = aInfoSeq.getArray();
     pInfoSeq[nCount].Name  = "Source";
     pInfoSeq[nCount].Value <<= getFrameInterface();
-    pNotifyInfo->aInfoSeq  = aInfoSeq;
+    pNotifyInfo->aInfoSeq  = std::move(aInfoSeq);
 
     Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );
 }

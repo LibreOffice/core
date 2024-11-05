@@ -945,7 +945,7 @@ Sequence< Sequence< OUString > > FormController::getPredicateExpressions()
             ++componentIndex;
         }
 
-        aExpressionsRange[ termIndex ] = aConjunction;
+        aExpressionsRange[ termIndex ] = std::move(aConjunction);
         ++termIndex;
     }
 
@@ -2073,7 +2073,7 @@ Sequence< Reference< XControl > > FormController::getControls()
         if ( j != nModels )
             aNewControls.realloc( j );
 
-        m_aControls = aNewControls;
+        m_aControls = std::move(aNewControls);
         m_bControlsSorted = true;
     }
     return m_aControls;

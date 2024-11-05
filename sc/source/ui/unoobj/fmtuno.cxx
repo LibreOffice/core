@@ -284,7 +284,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
             else if ( rProp.Value >>= aTokens )
             {
                 aEntry.maExpr2.clear();
-                aEntry.maTokens2 = aTokens;
+                aEntry.maTokens2 = std::move(aTokens);
             }
         }
         else if ( rProp.Name == SC_UNONAME_SOURCEPOS )

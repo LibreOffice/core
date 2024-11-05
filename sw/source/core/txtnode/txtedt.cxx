@@ -2034,7 +2034,7 @@ void SwTextNode::TransliterateText(
                 aChgData.nStart     = nStt;
                 aChgData.nLen       = nLen;
                 aChgData.sChanged   = sChgd;
-                aChgData.aOffsets   = aOffsets;
+                aChgData.aOffsets   = std::move(aOffsets);
                 aChanges.push_back( aChgData );
             }
 

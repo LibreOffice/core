@@ -382,7 +382,7 @@ void SortedDynamicResultSet::SendNotify()
         }
 
         ListEvent aNewEvent;
-        aNewEvent.Changes = aActionList;
+        aNewEvent.Changes = std::move(aActionList);
 
         mxListener->notify( aNewEvent );
     }

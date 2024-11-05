@@ -387,7 +387,7 @@ void RecentDocsViewItem::OpenDocument()
     sfx2::LoadRecentFile *const pLoadRecentFile = new sfx2::LoadRecentFile;
     pLoadRecentFile->xDispatch = std::move(xDispatch);
     pLoadRecentFile->aTargetURL = std::move(aTargetURL);
-    pLoadRecentFile->aArgSeq = aArgsList;
+    pLoadRecentFile->aArgSeq = std::move(aArgsList);
     pLoadRecentFile->pView = &mrParentView;
 
     mrParentView.PostLoadRecentUsedFile(pLoadRecentFile);

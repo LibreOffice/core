@@ -1085,7 +1085,7 @@ Content::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > aDocProps( 1 );
     aDocProps.getArray()[ 0 ] = aProp;
-    aSeq.getArray()[ 0 ].Properties = aDocProps;
+    aSeq.getArray()[ 0 ].Properties = std::move(aDocProps);
 
     // folder.
     aSeq.getArray()[ 1 ].Type = WEBDAV_COLLECTION_TYPE;
@@ -1094,7 +1094,7 @@ Content::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > aFolderProps( 1 );
     aFolderProps.getArray()[0] = std::move(aProp);
-    aSeq.getArray()[ 1 ].Properties = aFolderProps;
+    aSeq.getArray()[ 1 ].Properties = std::move(aFolderProps);
     return aSeq;
 }
 
