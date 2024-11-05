@@ -369,10 +369,10 @@ sal_Bool SAL_CALL GlobalEventConfig::hasElements(  )
     return m_pImpl->hasElements( );
 }
 
-OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
+const OUString & GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
     if (comphelper::IsFuzzing())
-        return OUString();
+        return EMPTY_OUSTRING;
     static rtl::Reference<GlobalEventConfig> createImpl(new GlobalEventConfig);
     return GlobalEventConfig::m_pImpl->GetEventName( nIndex );
 }
