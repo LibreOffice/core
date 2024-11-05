@@ -7825,7 +7825,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 0, SC_OPCODE_V_LOOKUP );
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData, 1 /*searchfwd*/, SC_OPCODE_V_LOOKUP );
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
