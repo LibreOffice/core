@@ -8,6 +8,7 @@
  */
 
 #include <QtInstanceWidget.hxx>
+#include <QtInstanceContainer.hxx>
 
 #include <vcl/transfer.hxx>
 #include <vcl/qt/QtUtils.hxx>
@@ -402,7 +403,14 @@ void QtInstanceWidget::thaw() {}
 
 void QtInstanceWidget::set_busy_cursor(bool) {}
 
-std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const { return nullptr; }
+std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
+{
+    QWidget* pParentWidget = m_pWidget->parentWidget();
+    if (!pParentWidget)
+        return nullptr;
+
+    return std::make_unique<QtInstanceContainer>(pParentWidget);
+}
 
 void QtInstanceWidget::queue_resize() {}
 
