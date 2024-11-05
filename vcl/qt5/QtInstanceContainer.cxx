@@ -12,6 +12,7 @@
 QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
     : QtInstanceWidget(pWidget)
 {
+    assert(pWidget->layout() && "no layout to use for container");
 }
 
 void QtInstanceContainer::move(weld::Widget*, weld::Container*) {}

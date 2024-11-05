@@ -103,10 +103,18 @@ std::unique_ptr<weld::Widget> QtInstanceBuilder::weld_widget(const OUString& rId
     return xRet;
 }
 
-std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString&)
+std::unique_ptr<weld::Container> QtInstanceBuilder::weld_container(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QLayout* pLayout = m_xBuilder->get<QLayout>(rId);
+    if (!pLayout)
+        return nullptr;
+
+    QWidget* pParentWidget = pLayout->parentWidget();
+    assert(pParentWidget && pParentWidget == pLayout->parent()
+           && "layout has no direct widget parent");
+    std::unique_ptr<weld::Container> xRet(
+        pParentWidget ? std::make_unique<QtInstanceContainer>(pParentWidget) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Box> QtInstanceBuilder::weld_box(const OUString&)
