@@ -374,14 +374,34 @@ bool isOkToRemoveArithmeticCast(
 }
 
 
-static bool BaseCheckNotSubclass(const clang::CXXRecordDecl *BaseDefinition, void *p) {
-    if (!BaseDefinition)
-        return true;
+static bool BaseCheckSubclass(const clang::CXXRecordDecl *BaseDefinition, void *p) {
+    assert(BaseDefinition != nullptr);
     auto const & base = *static_cast<const DeclChecker *>(p);
     if (base(BaseDefinition)) {
-        return false;
+        return true;
     }
-    return true;
+    return false;
+}
+
+bool forAnyBase(
+    clang::CXXRecordDecl const * decl, clang::CXXRecordDecl::ForallBasesCallback matches)
+{
+    // Based on the implementation of clang::CXXRecordDecl::forallBases in LLVM's
+    // clang/lib/AST/CXXInheritance.cpp:
+    for (auto const & i: decl->bases()) {
+        auto const t = i.getType()->getAs<clang::RecordType>();
+        if (t == nullptr) {
+            return false;
+        }
+        auto const b = llvm::cast_or_null<clang::CXXRecordDecl>(t->getDecl()->getDefinition());
+        if (b == nullptr || (b->isDependentContext() && !b->isCurrentInstantiation(decl))) {
+            return false;
+        }
+        if (matches(b) || forAnyBase(b, matches)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base, bool checkSelf) {
@@ -392,9 +412,9 @@ bool isDerivedFrom(const clang::CXXRecordDecl *decl, DeclChecker base, bool chec
     if (!decl->hasDefinition()) {
         return false;
     }
-    if (!decl->forallBases(
+    if (forAnyBase(decl,
             [&base](const clang::CXXRecordDecl *BaseDefinition) -> bool
-                { return BaseCheckNotSubclass(BaseDefinition, &base); }))
+                { return BaseCheckSubclass(BaseDefinition, &base); }))
     {
         return true;
     }
