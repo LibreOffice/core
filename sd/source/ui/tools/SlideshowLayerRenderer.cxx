@@ -94,20 +94,55 @@ public:
 
 namespace
 {
-bool hasFields(SdrObject* pObject)
+sal_Int32 getFieldType(SdrObject* pObject)
 {
     auto* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
     if (!pTextObject)
-        return false;
+        return -2;
 
     OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     if (pOutlinerParagraphObject)
     {
         const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
-        if (rEditText.IsFieldObject())
-            return true;
+        if (rEditText.IsFieldObject() && rEditText.GetField() && rEditText.GetField()->GetField())
+            return rEditText.GetField()->GetField()->GetClassId();
     }
-    return false;
+    return -2;
+}
+
+bool hasFields(SdrObject* pObject) { return getFieldType(pObject) > -2; }
+
+OUString getFieldName(sal_Int32 nType)
+{
+    switch (nType)
+    {
+        case text::textfield::Type::PAGE:
+            return u"Page"_ustr;
+        case text::textfield::Type::PAGE_NAME:
+            return u"PageName"_ustr;
+        default:
+            return u""_ustr;
+    }
+}
+
+OUString getMasterTextFieldType(SdrObject* pObject)
+{
+    OUString aType;
+
+    uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
+    if (!xShape.is())
+        return aType;
+
+    OUString sShapeType = xShape->getShapeType();
+
+    if (sShapeType == u"com.sun.star.presentation.SlideNumberShape")
+        aType = u"SlideNumber"_ustr;
+    else if (sShapeType == u"com.sun.star.presentation.FooterShape")
+        aType = u"Footer"_ustr;
+    else if (sShapeType == u"com.sun.star.presentation.DateTimeShape")
+        aType = u"DateTime"_ustr;
+
+    return aType;
 }
 
 /// Sets visible for all kinds of polypolys in the container
@@ -250,27 +285,11 @@ private:
         mpCurrentRenderPass = newRenderPass();
     }
 
-    OUString getMasterTextFieldString(SdrObject* pObject)
+    bool isTextFieldVisible(std::u16string_view svType) const
     {
-        OUString aType;
-
-        uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
-        if (!xShape.is())
-            return aType;
-
-        OUString sShapeType = xShape->getShapeType();
-
-        if (mrRenderState.mbSlideNumberEnabled
-            && sShapeType == u"com.sun.star.presentation.SlideNumberShape")
-            aType = u"SlideNumber"_ustr;
-        else if (mrRenderState.mbFooterEnabled
-                 && sShapeType == u"com.sun.star.presentation.FooterShape")
-            aType = u"Footer"_ustr;
-        else if (mrRenderState.mbDateTimeEnabled
-                 && sShapeType == u"com.sun.star.presentation.DateTimeShape")
-            aType = u"DateTime"_ustr;
-
-        return aType;
+        return (mrRenderState.mbSlideNumberEnabled && svType == u"SlideNumber")
+               || (mrRenderState.mbFooterEnabled && svType == u"Footer")
+               || (mrRenderState.mbDateTimeEnabled && svType == u"DateTime");
     }
 
 public:
@@ -286,9 +305,13 @@ public:
         if (mrRenderState.maRenderPasses.back().isEmpty())
             mrRenderState.maRenderPasses.pop_back();
 
+        // Merge text field render passes into the main render pass list.
+        // We prepend them, so that they are rendered and sent to the client first.
+        // So, when the client try to draw a master page layer corresponding
+        // to a text field placeholder the content is already available.
         for (auto& rRenderWork : mrRenderState.maTextFields)
         {
-            mrRenderState.maRenderPasses.push_back(rRenderWork);
+            mrRenderState.maRenderPasses.push_front(rRenderWork);
         }
     }
 
@@ -313,18 +336,57 @@ public:
         const bool bVisible
             = pObject->getSdrPageFromSdrObject()->checkVisibility(rOriginal, rDisplayInfo, true);
 
-        if (!bVisible)
-            return;
-
         // Determine the current stage, depending on the page
         RenderStage eCurrentStage
             = pPage->IsMasterPage() ? RenderStage::Master : RenderStage::Slide;
 
+        OUString sTextFieldType = getMasterTextFieldType(pObject);
+        bool isPresentationTextField = !sTextFieldType.isEmpty();
+        if (!isPresentationTextField)
+        {
+            sTextFieldType = getFieldName(getFieldType(pObject));
+        }
+
+        // Check if the object has slide number, footer, date/time
+        if (eCurrentStage == RenderStage::Master && !sTextFieldType.isEmpty())
+        {
+            // it's not possible to set visibility for non-presentation text fields
+            bool bIsTextFieldVisible
+                = !isPresentationTextField || isTextFieldVisible(sTextFieldType);
+
+            // A placeholder always needs to be exported even if the content is hidden
+            // since it could be visible on another slide and master page layers should be cached
+            // on the client
+            closeRenderPass();
+
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+            mpCurrentRenderPass->mbPlaceholder = true;
+            mpCurrentRenderPass->maFieldType = sTextFieldType;
+            mpCurrentRenderPass->mpObject = pObject;
+            closeRenderPass();
+
+            // Collect text field content if it's visible
+            // Both checks are needed!
+            if (bVisible && bIsTextFieldVisible)
+            {
+                RenderPass aTextFieldPass;
+                aTextFieldPass.maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+                aTextFieldPass.meStage = RenderStage::TextFields;
+                aTextFieldPass.maFieldType = sTextFieldType;
+                aTextFieldPass.mpObject = pObject;
+
+                mrRenderState.maTextFields.push_back(aTextFieldPass);
+            }
+            return;
+        }
+
+        if (!bVisible)
+            return;
+
         // We switched from master objecst to slide objects
         if (eCurrentStage == RenderStage::Slide && mePreviousStage == RenderStage::Master)
             closeRenderPass();
-
-        OUString sTextFieldString = getMasterTextFieldString(pObject);
 
         // check if object is in an animation
         auto aIterator = mrRenderState.maAnimationRenderInfoList.find(pObject);
@@ -380,36 +442,6 @@ public:
                 mpCurrentRenderPass->mpObject = pObject;
                 closeRenderPass();
             }
-        }
-        // Check if the object has slide number, footer, date/time
-        else if (eCurrentStage == RenderStage::Master && !sTextFieldString.isEmpty())
-        {
-            closeRenderPass();
-
-            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
-            mpCurrentRenderPass->meStage = eCurrentStage;
-            mpCurrentRenderPass->mbPlaceholder = true;
-            mpCurrentRenderPass->maFieldType = sTextFieldString;
-            mpCurrentRenderPass->mpObject = pObject;
-            closeRenderPass();
-
-            RenderPass aTextFieldPass;
-            aTextFieldPass.maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
-            aTextFieldPass.meStage = RenderStage::TextFields;
-            aTextFieldPass.maFieldType = sTextFieldString;
-            aTextFieldPass.mpObject = pObject;
-
-            mrRenderState.maTextFields.push_back(aTextFieldPass);
-        }
-        // Check if the object has fields
-        else if (eCurrentStage == RenderStage::Master && hasFields(pObject))
-        {
-            closeRenderPass();
-
-            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
-            mpCurrentRenderPass->meStage = eCurrentStage;
-            mpCurrentRenderPass->mpObject = pObject;
-            closeRenderPass();
         }
         // No specal handling is needed, just add the object to the current rendering pass
         else
@@ -748,12 +780,16 @@ void SlideshowLayerRenderer::writeJSON(OString& rJsonMsg, RenderPass const& rRen
             {
                 auto aContentNode = aJsonWriter.startNode("content");
                 aJsonWriter.put("type", rRenderPass.maFieldType);
+                std::string sHash = pObject ? std::to_string(pObject->GetUniqueID()) : "";
+                aJsonWriter.put("hash", sHash);
             }
         }
         else if (rRenderPass.meStage == RenderStage::TextFields)
         {
             auto aContentNode = aJsonWriter.startNode("content");
             aJsonWriter.put("type", rRenderPass.maFieldType);
+            std::string sHash = pObject ? std::to_string(pObject->GetUniqueID()) : "";
+            aJsonWriter.put("hash", sHash);
             writeContentNode(aJsonWriter);
         }
         else
