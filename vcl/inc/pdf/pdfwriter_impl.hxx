@@ -843,8 +843,6 @@ private:
         return nPosition;
     }
 
-    /* the numerical value of the access permissions, according to PDF spec, must be signed */
-    sal_Int32                               m_nAccessPermissions;
     /* string to hold the PDF creation date */
     OString                            m_aCreationDateString;
     /* string to hold the PDF creation date, for PDF/A metadata */
@@ -857,7 +855,7 @@ private:
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
-    void disableStreamEncryption() override { m_aPDFEncryptor.m_bEncryptThisStream = false; };
+    void disableStreamEncryption() override { m_aPDFEncryptor.m_bEncryptThisStream = false; }
 
     /* */
     void enableStringEncryption( sal_Int32 nObject );
@@ -1088,7 +1086,6 @@ private:
 
     pad a password according  algorithm 3.2, step 1 */
     void setupDocInfo();
-    bool prepareEncryption( const css::uno::Reference< css::beans::XMaterialHolder >& );
 
     // helper for playMetafile
     void implWriteGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient,
@@ -1108,10 +1105,6 @@ public:
     PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, const css::uno::Reference< css::beans::XMaterialHolder >&, PDFWriter& );
     ~PDFWriterImpl() override;
     void dispose() override;
-
-    static css::uno::Reference< css::beans::XMaterialHolder >
-           initEncryption( const OUString& i_rOwnerPassword,
-                           const OUString& i_rUserPassword );
 
     /* document structure */
     void newPage( double nPageWidth , double nPageHeight, PDFWriter::Orientation eOrientation );

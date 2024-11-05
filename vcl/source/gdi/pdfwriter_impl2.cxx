@@ -1083,7 +1083,7 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
         return;
 
     m_aPDFEncryptor.m_bEncryptThisStream = true;
-    sal_Int32 i = m_aPDFEncryptor.m_nKeyLength;
+    sal_Int32 i = m_aPDFEncryptor.getKeyLength();
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
@@ -1094,7 +1094,7 @@ void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
     // the i+2 to take into account the generation number, always zero
     // initialize the RC4 with the key
     // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.m_nRC4KeyLength, nullptr, 0);
+    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.getRC4KeyLength(), nullptr, 0);
 }
 
 void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
@@ -1102,7 +1102,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
     if( !m_aContext.Encryption.Encrypt() )
         return;
 
-    sal_Int32 i = m_aPDFEncryptor.m_nKeyLength;
+    sal_Int32 i = m_aPDFEncryptor.getKeyLength();
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
     m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
@@ -1113,60 +1113,7 @@ void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
         m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
     // initialize the RC4 with the key
     // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.m_nRC4KeyLength, nullptr, 0);
-}
-
-/* init the encryption engine
-1. init the document id, used both for building the document id and for building the encryption key(s)
-2. build the encryption key following algorithms described in the PDF specification
- */
-uno::Reference< beans::XMaterialHolder > PDFWriterImpl::initEncryption( const OUString& i_rOwnerPassword,
-                                                                        const OUString& i_rUserPassword
-                                                                        )
-{
-    uno::Reference< beans::XMaterialHolder > xResult;
-    if( !i_rOwnerPassword.isEmpty() || !i_rUserPassword.isEmpty() )
-    {
-        rtl::Reference<EncryptionHashTransporter> pTransporter = new EncryptionHashTransporter;
-        xResult = pTransporter;
-
-        // get padded passwords
-        sal_uInt8 aPadUPW[ENCRYPTED_PWD_SIZE], aPadOPW[ENCRYPTED_PWD_SIZE];
-        padPassword( i_rOwnerPassword.isEmpty() ? i_rUserPassword : i_rOwnerPassword, aPadOPW );
-        padPassword( i_rUserPassword, aPadUPW );
-
-        if( computeODictionaryValue( aPadOPW, aPadUPW, pTransporter->getOValue(), SECUR_128BIT_KEY ) )
-        {
-            pTransporter->getUDigest()->update(aPadUPW, ENCRYPTED_PWD_SIZE);
-        }
-        else
-            xResult.clear();
-
-        // trash temporary padded cleartext PWDs
-        rtl_secureZeroMemory (aPadOPW, sizeof(aPadOPW));
-        rtl_secureZeroMemory (aPadUPW, sizeof(aPadUPW));
-    }
-    return xResult;
-}
-
-bool PDFWriterImpl::prepareEncryption( const uno::Reference< beans::XMaterialHolder >& xEnc )
-{
-    bool bSuccess = false;
-    EncryptionHashTransporter* pTransporter = EncryptionHashTransporter::getEncHashTransporter( xEnc );
-    if( pTransporter )
-    {
-        sal_Int32 nKeyLength = 0, nRC4KeyLength = 0;
-        sal_Int32 nAccessPermissions = computeAccessPermissions( m_aContext.Encryption, nKeyLength, nRC4KeyLength );
-        m_aContext.Encryption.OValue = pTransporter->getOValue();
-        bSuccess = computeUDictionaryValue( pTransporter, m_aContext.Encryption, nKeyLength, nAccessPermissions );
-    }
-    if( ! bSuccess )
-    {
-        m_aContext.Encryption.OValue.clear();
-        m_aContext.Encryption.UValue.clear();
-        m_aContext.Encryption.EncryptionKey.clear();
-    }
-    return bSuccess;
+    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.getRC4KeyLength(), nullptr, 0);
 }
 
 const tools::Long unsetRun[256] =

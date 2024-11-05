@@ -73,6 +73,50 @@ class VCL_DLLPUBLIC PDFOutputStream
     virtual void write( const css::uno::Reference< css::io::XOutputStream >& xStream ) = 0;
 };
 
+/* The following structure describes the permissions used in PDF security */
+struct PDFEncryptionProperties
+{
+    //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
+    bool CanPrintTheDocument;
+    bool CanModifyTheContent;
+    bool CanCopyOrExtract;
+    bool CanAddOrModify;
+    //for revision 3 (bit 128 security) only
+    bool CanFillInteractive;
+    bool CanExtractForAccessibility;
+    bool CanAssemble;
+    bool CanPrintFull;
+
+    // encryption will only happen if EncryptionKey is not empty
+    // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
+    // if these do not match, behavior is undefined, most likely an invalid PDF will be produced
+    // OValue, UValue, EncryptionKey and DocumentIdentifier can be computed from
+    // PDFDocInfo, Owner password and User password used the InitEncryption method which
+    // implements the algorithms described in the PDF reference chapter 3.5: Encryption
+    std::vector<sal_uInt8> OValue;
+    std::vector<sal_uInt8> UValue;
+    std::vector<sal_uInt8> EncryptionKey;
+    std::vector<sal_uInt8> DocumentIdentifier;
+
+    //permission default set for 128 bit, accessibility only
+    PDFEncryptionProperties() :
+        CanPrintTheDocument         ( false ),
+        CanModifyTheContent         ( false ),
+        CanCopyOrExtract            ( false ),
+        CanAddOrModify              ( false ),
+        CanFillInteractive          ( false ),
+        CanExtractForAccessibility  ( true ),
+        CanAssemble                 ( false ),
+        CanPrintFull                ( false )
+        {}
+
+
+    bool Encrypt() const
+    {
+        return ! OValue.empty() && ! UValue.empty() && ! DocumentIdentifier.empty();
+    }
+};
+
 class PDFWriter
 {
     ScopedVclPtr<PDFWriterImpl> xImplementation;
@@ -523,51 +567,6 @@ public:
         LaunchAction
     };
 
-/*
-The following structure describes the permissions used in PDF security
- */
-    struct PDFEncryptionProperties
-    {
-
-        //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
-        bool CanPrintTheDocument;
-        bool CanModifyTheContent;
-        bool CanCopyOrExtract;
-        bool CanAddOrModify;
-        //for revision 3 (bit 128 security) only
-        bool CanFillInteractive;
-        bool CanExtractForAccessibility;
-        bool CanAssemble;
-        bool CanPrintFull;
-
-        // encryption will only happen if EncryptionKey is not empty
-        // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
-        // if these do not match, behavior is undefined, most likely an invalid PDF will be produced
-        // OValue, UValue, EncryptionKey and DocumentIdentifier can be computed from
-        // PDFDocInfo, Owner password and User password used the InitEncryption method which
-        // implements the algorithms described in the PDF reference chapter 3.5: Encryption
-        std::vector<sal_uInt8> OValue;
-        std::vector<sal_uInt8> UValue;
-        std::vector<sal_uInt8> EncryptionKey;
-        std::vector<sal_uInt8> DocumentIdentifier;
-
-        //permission default set for 128 bit, accessibility only
-        PDFEncryptionProperties() :
-            CanPrintTheDocument         ( false ),
-            CanModifyTheContent         ( false ),
-            CanCopyOrExtract            ( false ),
-            CanAddOrModify              ( false ),
-            CanFillInteractive          ( false ),
-            CanExtractForAccessibility  ( true ),
-            CanAssemble                 ( false ),
-            CanPrintFull                ( false )
-            {}
-
-
-        bool Encrypt() const
-        { return ! OValue.empty() && ! UValue.empty() && ! DocumentIdentifier.empty(); }
-    };
-
     struct PDFDocInfo
     {
         OUString          Title;          // document title
@@ -649,7 +648,7 @@ The following structure describes the permissions used in PDF security
         sal_Int32                       InitialPage;
         sal_Int32                       OpenBookmarkLevels; // -1 means all levels
 
-        PDFWriter::PDFEncryptionProperties  Encryption;
+        PDFEncryptionProperties  Encryption;
         PDFWriter::PDFDocInfo           DocumentInfo;
 
         bool                            SignPDF;
