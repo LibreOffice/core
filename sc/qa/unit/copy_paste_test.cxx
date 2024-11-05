@@ -45,6 +45,7 @@ public:
     void tdf113500_autofillMixed();
     void tdf137625_autofillMergedUserlist();
     void tdf137624_autofillMergedMixed();
+    void tdf122716_rtf_portion_encoding();
 
     CPPUNIT_TEST_SUITE(ScCopyPasteTest);
     CPPUNIT_TEST(testCopyPasteXLS);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(tdf113500_autofillMixed);
     CPPUNIT_TEST(tdf137625_autofillMergedUserlist);
     CPPUNIT_TEST(tdf137624_autofillMergedMixed);
+    CPPUNIT_TEST(tdf122716_rtf_portion_encoding);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -863,6 +865,32 @@ void ScCopyPasteTest::tdf137624_autofillMergedMixed()
             CPPUNIT_ASSERT_EQUAL(aStr1, aStr2);
         }
     }
+}
+
+void ScCopyPasteTest::tdf122716_rtf_portion_encoding()
+{
+    // Given a document with an explicitly defined "204" (Russian) charset for a font,
+    // and a cell having contents of "Šampūnas", which has character "Š" representable
+    // in Windows-1252 (RTF default), but not in Windows-1251 (i.e. charset 204):
+    loadFromFile(u"xlsx/tdf122716_font_with_charset.xlsx");
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    // Obtain a transferable, similar to what happens on copy to clipboard:
+    auto xTransferable = pModelObj->getSelection();
+    // Get the RTF data:
+    auto rtf_any = xTransferable->getTransferData({ u"text/rtf"_ustr, {}, {} });
+    css::uno::Sequence<sal_Int8> rtf_bytes;
+    CPPUNIT_ASSERT(rtf_any >>= rtf_bytes);
+    OString rtf_string(reinterpret_cast<const char*>(rtf_bytes.getConstArray()),
+                       rtf_bytes.getLength());
+    // Check that the font with charset was actually emitted
+    CPPUNIT_ASSERT(rtf_string.indexOf("\\fcharset204 Liberation Sans;") >= 0);
+    // Make sure that Unicode markup is emitted for the non-Ascii characters.
+    // Without the fix, "\u352" wasn't there, because the export was using Windows-1252
+    // encoding unconditionally, even though the exported font defined a different one;
+    // so the exported characters only had Unicode markup, when not representable in the
+    // Windows-1252 encoding, and "Š" got exported as "\'8a". On import to Writer, font
+    // encoding was used, and "\'8a" was interpreted as a Cyrillic alphabet character.
+    CPPUNIT_ASSERT(rtf_string.indexOf("\\u352\\'3famp\\u363\\'3fnas") >= 0);
 }
 
 ScCopyPasteTest::ScCopyPasteTest()
