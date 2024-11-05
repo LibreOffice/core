@@ -31,6 +31,7 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svxdllapi.h>
+#include <tools/UniqueID.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
@@ -267,6 +268,8 @@ public:
 
     virtual void SAL_CALL acquire() noexcept override final;
     virtual void SAL_CALL release() noexcept override final;
+
+    sal_uInt64 GetUniqueID() const { return maUniqueID.getID(); }
 
     // SdrModel/SdrPage access on SdrObject level
     SdrPage* getSdrPageFromSdrObject() const;
@@ -949,6 +952,7 @@ private:
     std::unique_ptr<Impl>             mpImpl;
     SdrObjList*                       mpParentOfSdrObject;     // list that includes this object
     sal_uInt32                        m_nOrdNum;      // order number of the object in the list
+    class UniqueID                          maUniqueID;
     std::unique_ptr<SfxGrabBagItem>   m_pGrabBagItem; // holds the GrabBagItem property
     // Position in the navigation order. SAL_MAX_UINT32 when not used.
     sal_uInt32                        mnNavigationPosition;
