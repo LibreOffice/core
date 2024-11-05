@@ -200,6 +200,14 @@ do
                 -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
                 -certfile intermediate/certs/ca-chain.cert.pem \
                 -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
+        else
+            openssl pkcs12 -export \
+                -out ./intermediate/private/example-xmlsecurity-${i}.cert.p12 \
+                -passout env:SSLPASS \
+                -inkey intermediate/private/example-xmlsecurity-${i}.key.pem \
+                -in intermediate/certs/example-xmlsecurity-${i}.cert.pem \
+                -certfile intermediate/certs/ca-chain.cert.pem \
+                -CSP "Microsoft Enhanced RSA and AES Cryptographic Provider"
         fi
     fi
 done
@@ -209,9 +217,8 @@ echo "Authority certificate is at: <$root/ca/intermediate/certs/ca-chain.cert.pe
 echo "To be able to import it in Windows, rename the '.pem' extension to '.cer'."
 for i in Alice Bob
 do
-    if [ "$pass" == "y" ]; then
-        echo "Signing certificate is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.cert.p12>."
-    else
+    echo "Signing certificate is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.cert.p12>."
+    if [ "$pass" != "y" ]; then
         echo "Cert file is at <$root/ca/intermediate/certs/example-xmlsecurity-${i}.cert.pem>."
         echo "Key file is at <$root/ca/intermediate/private/example-xmlsecurity-${i}.key.pem>."
     fi
