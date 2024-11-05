@@ -99,6 +99,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     bSubTotalsBindFormatsToContent(false),
     bSubTotalsIsCaseSensitive(false),
     bSubTotalsInsertPageBreaks(false),
+    bSubTotalsSummaryBelow(true),
     bSubTotalsSortGroups(false),
     bSubTotalsEnabledUserList(false),
     bSubTotalsAscending(true),
@@ -325,6 +326,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         aParam.bUserDef = bSubTotalsEnabledUserList;
         aParam.nUserIndex = nSubTotalsUserListIndex;
         aParam.bPagebreak = bSubTotalsInsertPageBreaks;
+        aParam.bSummaryBelow = bSubTotalsSummaryBelow;
         aParam.bCaseSens = bSubTotalsIsCaseSensitive;
         aParam.bDoSort = bSubTotalsSortGroups;
         aParam.bAscending = bSubTotalsAscending;
@@ -633,6 +635,9 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
                 break;
             case XML_ELEMENT( TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE ):
                 pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(IsXMLToken(aIter, XML_TRUE));
+                break;
+            case XML_ELEMENT( LO_EXT, XML_SUMMARY_BELOW ):
+                pDatabaseRangeContext->SetSubTotalsSummaryBelow(IsXMLToken(aIter, XML_TRUE));
                 break;
         }
     }

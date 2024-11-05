@@ -655,6 +655,9 @@ private:
         if (aParam.bCaseSens)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
 
+        if (!aParam.bSummaryBelow)
+            mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_SUMMARY_BELOW, XML_FALSE);
+
         SvXMLElementExport aElemSTRs(mrExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES, true, true);
 
         if (aParam.bDoSort)

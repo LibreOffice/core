@@ -1937,6 +1937,7 @@ namespace xmloff::token {
         TOKEN( "sub-view-size",                   XML_SUB_VIEW_SIZE ),
         TOKEN( "suffix",                          XML_SUFFIX ),
         TOKEN( "sum",                             XML_SUM ),
+        TOKEN( "summary-below",                   XML_SUMMARY_BELOW ),
         TOKEN( "swiss",                           XML_SWISS ),
         TOKEN( "symbol",                          XML_SYMBOL ),
         TOKEN( "symbol-height",                   XML_SYMBOL_HEIGHT ),

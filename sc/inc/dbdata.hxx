@@ -192,7 +192,7 @@ public:
     SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
     SC_DLLPUBLIC void       SetAdvancedQuerySource(const ScRange* pSource);
 
-    void        GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
+    SC_DLLPUBLIC void       GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const;
     void        SetSubTotalParam(const ScSubTotalParam& rSubTotalParam);
 
     void        GetImportParam(ScImportParam& rImportParam) const;

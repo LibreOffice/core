@@ -21,6 +21,8 @@
 #include <postit.hxx>
 #include <validat.hxx>
 #include <scresid.hxx>
+#include <dbdata.hxx>
+#include <subtotalparam.hxx>
 #include <globstr.hrc>
 #include <tabprotection.hxx>
 #include <dpobject.hxx>
@@ -392,6 +394,34 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162262)
     CPPUNIT_ASSERT(pSheet);
 
     assertXPath(pSheet, "/x:worksheet/x:sheetPr/x:outlinePr", "summaryBelow", u"0"_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf162262_summarybelow)
+{
+    createScDoc("ods/tdf162262_summarybelow.ods");
+
+    ScDocument* pDoc = getScDoc();
+    ScDBCollection* pDBCollection = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(pDBCollection);
+    {
+        const ScDBData* pDBData = pDBCollection->GetDBAtArea(0, 0, 0, 1, 13);
+        CPPUNIT_ASSERT(pDBData);
+        ScSubTotalParam aParam;
+        pDBData->GetSubTotalParam(aParam);
+        CPPUNIT_ASSERT(!aParam.bSummaryBelow);
+    }
+
+    saveAndReload(u"calc8"_ustr);
+    pDoc = getScDoc();
+    pDBCollection = pDoc->GetDBCollection();
+    CPPUNIT_ASSERT(pDBCollection);
+    {
+        const ScDBData* pDBData = pDBCollection->GetDBAtArea(0, 0, 0, 1, 13);
+        CPPUNIT_ASSERT(pDBData);
+        ScSubTotalParam aParam;
+        pDBData->GetSubTotalParam(aParam);
+        CPPUNIT_ASSERT(!aParam.bSummaryBelow);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf122331)
