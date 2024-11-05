@@ -4956,7 +4956,7 @@ void ImpEditEngine::ImplExpandCompressedPortions(EditLine& rLine, ParaPortion& r
             DBG_ASSERT( nTxtPortionStart >= rLine.GetStart(), "Portion doesn't belong to the line!!!" );
             double* pDXArray = rLine.GetCharPosArray().data() + (nTxtPortionStart - rLine.GetStart());
             if ( pTP->GetExtraInfos()->pOrgDXArray )
-                memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(sal_Int32) );
+                memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray.get(), (pTP->GetLen()-1)*sizeof(double) );
             ImplCalcAsianCompression( rParaPortion.GetNode(), pTP, nTxtPortionStart, pDXArray, static_cast<sal_uInt16>(nCompressPercent), true );
         }
     }
