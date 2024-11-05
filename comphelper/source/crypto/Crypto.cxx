@@ -73,7 +73,7 @@ struct CryptoImpl
     CryptoImpl() = default;
 
     void setupEncryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
-                             Crypto::CryptoType eType)
+                             CryptoType eType)
     {
         mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
@@ -90,7 +90,7 @@ struct CryptoImpl
     }
 
     void setupDecryptContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv,
-                             Crypto::CryptoType eType)
+                             CryptoType eType)
     {
         mpContext.reset(EVP_CIPHER_CTX_new());
         EVP_CIPHER_CTX_init(mpContext.get());
@@ -148,15 +148,15 @@ struct CryptoImpl
             EVP_CIPHER_CTX_cleanup(mpContext.get());
     }
 
-    static const EVP_CIPHER* getCipher(Crypto::CryptoType type)
+    static const EVP_CIPHER* getCipher(CryptoType type)
     {
         switch (type)
         {
-            case Crypto::CryptoType::AES_128_ECB:
+            case CryptoType::AES_128_ECB:
                 return EVP_aes_128_ecb();
-            case Crypto::CryptoType::AES_128_CBC:
+            case CryptoType::AES_128_CBC:
                 return EVP_aes_128_cbc();
-            case Crypto::CryptoType::AES_256_CBC:
+            case CryptoType::AES_256_CBC:
                 return EVP_aes_256_cbc();
             default:
                 break;
