@@ -863,7 +863,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
     , aFilterCfgStr(CuiResId(RID_CUISTR_FILTERNAME_CFG))
     , m_bStylesInfoInitialized(false)
     , m_aUpdateDataTimer("SfxAcceleratorConfigPage UpdateDataTimer")
-    , m_aFillGroupIdle("SfxAcceleratorConfigPage m_aFillGroupIdle")
     , m_xEntriesBox(m_xBuilder->weld_tree_view(u"shortcuts"_ustr))
     , m_xOfficeButton(m_xBuilder->weld_radio_button(u"office"_ustr))
     , m_xModuleButton(m_xBuilder->weld_radio_button(u"module"_ustr))
@@ -933,15 +932,10 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage(weld::Container* pPage,
 
     m_aUpdateDataTimer.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, ImplUpdateDataHdl));
     m_aUpdateDataTimer.SetTimeout(EDIT_UPDATEDATA_TIMEOUT);
-
-    m_aFillGroupIdle.SetInvokeHandler(LINK(this, SfxAcceleratorConfigPage, TimeOut_Impl));
-    m_aFillGroupIdle.SetPriority(TaskPriority::HIGHEST);
 }
 
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
-    m_aFillGroupIdle.Stop();
-
     // free memory - remove all dynamic user data
     for (int i = 0, nCount = m_xEntriesBox->n_children(); i < nCount; ++i)
     {
@@ -1310,15 +1304,9 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl, weld::Toggleable&, void)
     if (m_xEntriesBox->n_children())
         m_xEntriesBox->select(0);
 
-    m_aFillGroupIdle.Start();
-}
-
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, TimeOut_Impl, Timer*, void)
-{
     // activating the selection, typically "all commands", can take a long time
     // -> show wait cursor and disable input
     weld::WaitObject aWaitObject(GetFrameWeld());
-
     weld::TreeView& rTreeView = m_xGroupLBox->get_widget();
     SelectHdl(rTreeView);
 }

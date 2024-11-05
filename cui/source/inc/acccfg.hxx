@@ -105,8 +105,6 @@ private:
     Timer m_aUpdateDataTimer;
     i18nutil::SearchOptions2 m_options;
 
-    Idle m_aFillGroupIdle;
-
     std::unique_ptr<weld::TreeView> m_xEntriesBox;
     std::unique_ptr<weld::RadioButton> m_xOfficeButton;
     std::unique_ptr<weld::RadioButton> m_xModuleButton;
