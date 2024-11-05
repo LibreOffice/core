@@ -4006,7 +4006,7 @@ bool INetURLObject::isAnyKnownWebDAVScheme() const {
 }
 
 // static
-OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
+const OUString & INetURLObject::GetScheme(INetProtocol eTheScheme)
 {
     return getSchemeInfo(eTheScheme).m_aPrefix;
 }
