@@ -212,7 +212,7 @@ protected:
 
         void setAutoClose(bool bAutoClose) { mbAutoClose = bAutoClose; }
 
-        css::uno::Reference<css::accessibility::XAccessible> getAccessible() const
+        const css::uno::Reference<css::accessibility::XAccessible>& getAccessible() const
         {
             return mxAccessible;
         }

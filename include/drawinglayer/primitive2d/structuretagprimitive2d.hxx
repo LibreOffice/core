@@ -74,7 +74,7 @@ namespace drawinglayer::primitive2d
             bool isDecorative() const { return mbIsDecorative; }
             bool isTaggedSdrObject() const;
             void const* GetAnchorStructureElementKey() const { return m_pAnchorStructureElementKey; }
-            ::std::vector<sal_Int32> GetAnnotIds() const { return m_AnnotIds; }
+            const ::std::vector<sal_Int32> & GetAnnotIds() const { return m_AnnotIds; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;

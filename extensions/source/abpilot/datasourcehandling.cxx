@@ -441,10 +441,10 @@ namespace abp
     }
 
 
-    OUString ODataSource::getName() const
+    const OUString & ODataSource::getName() const
     {
         if ( !isValid() )
-            return OUString();
+            return EMPTY_OUSTRING;
         return m_pImpl->sName;
     }
 

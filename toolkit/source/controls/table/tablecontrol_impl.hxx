@@ -280,7 +280,7 @@ namespace svt::table
         tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const;
 
         // A11Y
-        rtl::Reference<vcl::table::IAccessibleTableControl>
+        const rtl::Reference<vcl::table::IAccessibleTableControl> &
                         getAccessible( vcl::Window& i_parentWindow );
         void            disposeAccessible();
 

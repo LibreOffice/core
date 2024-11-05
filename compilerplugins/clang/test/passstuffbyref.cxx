@@ -45,6 +45,8 @@ struct S2 {
     OUString get11() const { return mxCow->get(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
     OUString get12() { return child.get2(false); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
 
+    OUString get13() { return OUString(); } // expected-error {{rather return class rtl::OUString by const& than by value, to avoid unnecessary copying [loplugin:passstuffbyref]}}
+
     // no warning expected
     OUString set1() { return OUString("xxx"); }
     OUString set2() { OUString v1("xxx"); return v1; }

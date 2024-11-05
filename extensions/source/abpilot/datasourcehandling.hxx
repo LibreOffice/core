@@ -123,7 +123,7 @@ namespace abp
             // TODO: put this into the context class
 
         /// returns the name of the data source
-        OUString
+        const OUString &
                     getName() const;
 
         /// renames the data source

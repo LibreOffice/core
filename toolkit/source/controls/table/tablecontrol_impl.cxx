@@ -2368,7 +2368,7 @@ namespace svt::table
     }
 
 
-    rtl::Reference<vcl::table::IAccessibleTableControl> TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
+    const rtl::Reference<vcl::table::IAccessibleTableControl> & TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
     {
         if (m_pAccessibleTable)
             return m_pAccessibleTable;

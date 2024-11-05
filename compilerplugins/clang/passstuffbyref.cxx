@@ -189,12 +189,20 @@ void PassStuffByRef::checkParams(const FunctionDecl * functionDecl) {
         return;
     }
     // these functions are passed as parameters to another function
-    if (loplugin::DeclCheck(functionDecl).MemberFunction()
+    auto dc = loplugin::DeclCheck(functionDecl);
+    if (dc.MemberFunction()
         .Class("ShapeAttributeLayer").Namespace("internal")
         .Namespace("slideshow").GlobalNamespace())
     {
         return;
     }
+    // not sure why, but changing these causes problems
+    if (dc.Function("lcl_createColorMapFromShapeProps")
+        || dc.Function("getAPIAnglesFrom3DProperties").Class("Scene3DHelper")
+        || dc.Function("FillSeriesSimple").Class("ScTable")
+        || dc.Function("FillAutoSimple").Class("ScTable"))
+        return;
+
     unsigned n = functionDecl->getNumParams();
     assert(!functionDecls_.empty());
     functionDecls_.back().check = true;
@@ -282,28 +290,51 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
         || dc.Function("parseSingleValue").AnonymousNamespace().Namespace("configmgr").GlobalNamespace()
         || dc.Function("Create").Class("HandlerComponentBase").Namespace("pcr").GlobalNamespace()
         || dc.Function("toAny").Struct("Convert").Namespace("detail").Namespace("comphelper").GlobalNamespace()
-        || dc.Function("makeAny").Namespace("utl").GlobalNamespace()) {
+        || dc.Function("makeAny").Namespace("utl").GlobalNamespace()
+        || dc.Operator(OO_Call).Struct("makeAny") // in chart2
+        || dc.Function("toString").Struct("assertion_traits"))
         return;
-    }
-    if (startswith(type.getAsString(), "struct o3tl::strong_int")) {
+    // these are sometimes dummy classes
+    if (dc.MemberFunction().Class("DdeService")
+        || dc.MemberFunction().Class("DdeConnection")
+        || dc.MemberFunction().Class("DdeTopic")
+        || dc.MemberFunction().Class("CrashReporter"))
         return;
-    }
+    // function has its address taken and is used as a function pointer value
+    if (dc.Function("xforms_bool"))
+        return;
+    if (startswith(type.getAsString(), "struct o3tl::strong_int"))
+        return;
+    // false positive
+    if (dc.Function("FindFieldSep").Namespace("mark").Namespace("sw"))
+        return;
+    // false positive
+    if (dc.Function("GetTime").Class("SwDateTimeField"))
+        return;
+    // false positive
+    if (dc.Function("Create").Class("StyleFamilyEntry"))
+        return;
+    if (dc.Function("getManualMax").Class("SparklineAttributes"))
+        return;
+    if (dc.Function("getManualMin").Class("SparklineAttributes"))
+        return;
+    if (dc.Function("ReadEmbeddedData").Class("XclImpHyperlink"))
+        return;
+
     auto tc = loplugin::TypeCheck(functionDecl->getReturnType());
+
     // these functions are passed by function-pointer
     if (functionDecl->getIdentifier() && functionDecl->getName() == "GetRanges"
         && tc.Struct("WhichRangesContainer").GlobalNamespace())
         return;
-    // extremely simple class, might as well pass by value
-    if (tc.Class("Color")) {
+
+    // extremely simple classes, might as well pass by value
+    if (tc.Class("Color")
+        || tc.Struct("TranslateId")
+        || tc.Class("span").StdNamespace()
+        || tc.Class("strong_ordering").StdNamespace()
+        || tc.Struct("TokenId"))
         return;
-    }
-    // extremely simple class, might as well pass by value
-    if (tc.Struct("TranslateId")) {
-        return;
-    }
-    if (tc.Class("span").Namespace("o3tl")) {
-        return;
-    }
 
     // functionDecl->dump();
 
@@ -318,7 +349,7 @@ void PassStuffByRef::checkReturnValue(const FunctionDecl * functionDecl, const C
     report( DiagnosticsEngine::Warning,
             "rather return %0 by const& than by value, to avoid unnecessary copying",
             functionDecl->getSourceRange().getBegin())
-        << type.getAsString() << functionDecl->getSourceRange();
+        << type.getAsString();
 
     // display the location of the class member declaration so I don't have to search for it by hand
     auto canonicalDecl = functionDecl->getCanonicalDecl();
@@ -337,7 +368,12 @@ bool PassStuffByRef::VisitReturnStmt(const ReturnStmt * returnStmt)
 {
     if (!mbInsideFunctionDecl)
         return true;
-    const Expr* expr = dyn_cast<Expr>(*returnStmt->child_begin())->IgnoreParenImpCasts();
+    if (returnStmt->child_begin() == returnStmt->child_end())
+        return true;
+    auto expr = dyn_cast<Expr>(*returnStmt->child_begin());
+    if (!expr)
+        return true;
+    expr = expr->IgnoreParenImpCasts();
 
     if (isReturnExprDisqualified(expr))
         mbFoundReturnValueDisqualifier = true;
@@ -379,7 +415,13 @@ bool PassStuffByRef::isReturnExprDisqualified(const Expr* expr)
         if (isa<MaterializeTemporaryExpr>(expr)) {
             return true;
         }
-        if (isa<CXXBindTemporaryExpr>(expr)) {
+        if (auto bindExpr = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+            // treat "return OUString();" as fine, because that is easy to convert
+            // to use EMPTY_OUSTRING.
+            if (loplugin::TypeCheck(expr->getType()).Class("OUString"))
+                if (auto tempExpr = dyn_cast<CXXTemporaryObjectExpr>(bindExpr->getSubExpr()))
+                    if (tempExpr->getNumArgs() == 0)
+                        return false;
             return true;
         }
         if (isa<InitListExpr>(expr)) {
@@ -474,6 +516,7 @@ bool PassStuffByRef::VisitVarDecl(const VarDecl * varDecl)
         dc.Class("SolarMutexGuard").GlobalNamespace() ||
         dc.Class("SfxModelGuard").GlobalNamespace() ||
         dc.Class("ReadWriteGuard").Namespace("utl").GlobalNamespace() ||
+        dc.Class("LifeTimeGuard").Namespace("apphelper").GlobalNamespace() || // in chart2
         dc.Class("unique_lock").StdNamespace() ||
         dc.Class("lock_guard").StdNamespace() ||
         dc.Class("scoped_lock").StdNamespace())

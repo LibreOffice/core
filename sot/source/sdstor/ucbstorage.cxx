@@ -569,9 +569,9 @@ struct UCBStorageElement_Impl
 
     ::ucbhelper::Content*       GetContent();
     bool                        IsModified() const;
-    OUString                    GetContentType() const;
+    const OUString &            GetContentType() const;
     void                        SetContentType( const OUString& );
-    OUString                    GetOriginalContentType() const;
+    const OUString &            GetOriginalContentType() const;
     bool                        IsLoaded() const
                                 { return m_xStream.is() || m_xStorage.is(); }
 };
@@ -586,7 +586,7 @@ struct UCBStorageElement_Impl
         return nullptr;
 }
 
-OUString UCBStorageElement_Impl::GetContentType() const
+const OUString & UCBStorageElement_Impl::GetContentType() const
 {
     if ( m_xStream.is() )
         return m_xStream->m_aContentType;
@@ -595,7 +595,7 @@ OUString UCBStorageElement_Impl::GetContentType() const
     else
     {
         OSL_FAIL("Element not loaded!");
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 }
 
@@ -612,14 +612,14 @@ void UCBStorageElement_Impl::SetContentType( const OUString& rType )
     }
 }
 
-OUString UCBStorageElement_Impl::GetOriginalContentType() const
+const OUString & UCBStorageElement_Impl::GetOriginalContentType() const
 {
     if ( m_xStream.is() )
         return m_xStream->m_aOriginalContentType;
     else if ( m_xStorage.is() )
         return m_xStorage->m_aOriginalContentType;
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 bool UCBStorageElement_Impl::IsModified() const
