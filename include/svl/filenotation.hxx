@@ -41,7 +41,7 @@ namespace svt
         OFileNotation( const OUString& _rUrlOrPath );
         OFileNotation( const OUString& _rUrlOrPath, NOTATION _eInputNotation );
 
-        OUString get(NOTATION _eOutputNotation) const;
+        const OUString & get(NOTATION _eOutputNotation) const;
 
     private:
         SVL_DLLPRIVATE void construct( const OUString& _rUrlOrPath );

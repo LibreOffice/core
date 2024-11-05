@@ -39,7 +39,7 @@ SvxMacro::SvxMacro( OUString _aMacName, const OUString &rLanguage)
         eType=JAVASCRIPT;
 }
 
-OUString SvxMacro::GetLanguage()const
+const OUString & SvxMacro::GetLanguage()const
 {
     if(eType==STARBASIC)
     {

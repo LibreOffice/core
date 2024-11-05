@@ -105,7 +105,7 @@ namespace svt
         OSL_ENSURE( bSuccess, "OFileNotation::OFileNotation: could not detect the format!" );
     }
 
-    OUString OFileNotation::get(NOTATION _eOutputNotation) const
+    const OUString & OFileNotation::get(NOTATION _eOutputNotation) const
     {
         switch (_eOutputNotation)
         {
@@ -114,7 +114,7 @@ namespace svt
         }
 
         OSL_FAIL("OFileNotation::get: invalid enum value!");
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
 }   // namespace svt

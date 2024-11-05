@@ -56,7 +56,7 @@ public:
 
     const OUString &GetLibName() const        { return aLibName; }
     const OUString &GetMacName() const        { return aMacName; }
-    OUString GetLanguage()const;
+    const OUString &GetLanguage()const;
 
     ScriptType GetScriptType() const        { return eType; }
 

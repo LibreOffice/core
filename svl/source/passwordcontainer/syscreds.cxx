@@ -58,7 +58,7 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     return getSystemCredentialsURLs(aGuard);
 }
 
-uno::Sequence< OUString >
+const uno::Sequence< OUString > &
 SysCredentialsConfigItem::getSystemCredentialsURLs(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !m_bInited )

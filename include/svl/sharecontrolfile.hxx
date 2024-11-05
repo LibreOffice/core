@@ -64,7 +64,7 @@ public:
     void RemoveFile();
 private:
     void RemoveFileImpl(std::unique_lock<std::mutex>& rGuard);
-    std::vector< LockFileEntry > GetUsersDataImpl(std::unique_lock<std::mutex>& rGuard);
+    const std::vector< LockFileEntry > & GetUsersDataImpl(std::unique_lock<std::mutex>& rGuard);
 };
 
 }

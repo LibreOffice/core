@@ -138,20 +138,20 @@ public:
         return ::std::vector< OUString >();
     }
 
-    OUString GetPersistentPasswords() const
+    const OUString & GetPersistentPasswords() const
     {
         if ( m_bHasPersistentPassword )
             return m_aPersistentPassword;
 
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
-    OUString GetPersistentIV() const
+    const OUString & GetPersistentIV() const
     {
         if ( m_bHasPersistentPassword )
             return m_aPersistentIV;
 
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
     void SetMemoryPasswords( ::std::vector< OUString >&& aMemList )

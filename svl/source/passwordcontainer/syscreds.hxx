@@ -44,7 +44,7 @@ class SysCredentialsConfigItem : public utl::ConfigItem
         //bool isSystemCredentialsURL( const OUString & rURL ) const;
 
     private:
-        css::uno::Sequence< OUString > getSystemCredentialsURLs(std::unique_lock<std::mutex>& rGuard);
+        const css::uno::Sequence< OUString > & getSystemCredentialsURLs(std::unique_lock<std::mutex>& rGuard);
         virtual void ImplCommit() override;
 
         std::mutex m_aMutex;

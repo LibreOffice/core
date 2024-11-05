@@ -142,7 +142,7 @@ std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::
     return GetUsersDataImpl(aGuard);
 }
 
-std::vector< o3tl::enumarray< LockFileComponent, OUString > > ShareControlFile::GetUsersDataImpl(std::unique_lock<std::mutex>& /*rGuard*/)
+const std::vector< o3tl::enumarray< LockFileComponent, OUString > > & ShareControlFile::GetUsersDataImpl(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !IsValid() )
         throw io::NotConnectedException();
