@@ -1024,6 +1024,10 @@ void ViewShellBase::setEditMode(int nMode)
 
     if (DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell))
     {
+        EditMode eOrigEditMode = pDrawViewShell->GetEditMode();
+        PageKind eOrigPageKind = pDrawViewShell->GetPageKind();
+        sal_uInt16 nSelectedPage = pDrawViewShell->GetCurPagePos();
+
         switch ( nMode )
         {
         case 0:
@@ -1038,6 +1042,19 @@ void ViewShellBase::setEditMode(int nMode)
             pDrawViewShell->SetPageKind(PageKind::Notes);
             pDrawViewShell->ChangeEditMode(EditMode::Page, false);
             break;
+        }
+
+        /*
+           If the EditMode is unchanged, then ChangeEditMode was typically a
+           no-op, and an additional explicit SwitchPage is required to reselect
+           the equivalent page from the other mode, otherwise a switch from
+           e.g. Notes to Standard will still render the still selected Note
+           page.
+        */
+        if (eOrigEditMode == pDrawViewShell->GetEditMode() &&
+            eOrigPageKind != pDrawViewShell->GetPageKind())
+        {
+            pDrawViewShell->SwitchPage(nSelectedPage);
         }
     }
 }

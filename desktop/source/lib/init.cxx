@@ -4334,6 +4334,7 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     // TODO: we could be clever and e.g. set to 0 when we change to/from
     // embedded object mode, and not when changing between slide/notes/combined
     // modes?
+    // TODO: Also now see ViewShellBase::setEditMode for a similar case
     if ( nCurrentPart < pDoc->getParts() )
     {
         pDoc->setPart( nCurrentPart );
