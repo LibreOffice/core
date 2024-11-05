@@ -19,6 +19,8 @@ class QtInstanceMessageDialog : public QtInstanceDialog, public virtual weld::Me
 
 private:
     QMessageBox* m_pMessageDialog;
+    // widget containing a layout to add additional items
+    QWidget* m_pExtraControlsContainer;
 
 public:
     QtInstanceMessageDialog(QMessageBox* pMessageDialog);
@@ -41,6 +43,7 @@ public:
     virtual int run() override;
 
 private:
+    QWidget* addWidgetForExtraItems();
     virtual QPushButton* buttonForResponseCode(int nResponse);
 
 protected slots:

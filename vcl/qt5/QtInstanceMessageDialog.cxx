@@ -12,13 +12,18 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 
 QtInstanceMessageDialog::QtInstanceMessageDialog(QMessageBox* pMessageDialog)
     : QtInstanceDialog(pMessageDialog)
     , m_pMessageDialog(pMessageDialog)
 {
     assert(m_pMessageDialog);
+
+    m_pExtraControlsContainer = addWidgetForExtraItems();
+    assert(m_pExtraControlsContainer);
 }
 
 void QtInstanceMessageDialog::set_primary_text(const rtl::OUString& rText)
@@ -47,7 +52,10 @@ void QtInstanceMessageDialog::set_secondary_text(const rtl::OUString& rText)
     m_pMessageDialog->setInformativeText(toQString(rText));
 }
 
-weld::Container* QtInstanceMessageDialog::weld_message_area() { return nullptr; }
+weld::Container* QtInstanceMessageDialog::weld_message_area()
+{
+    return new QtInstanceContainer(m_pExtraControlsContainer);
+}
 
 OUString QtInstanceMessageDialog::get_primary_text() const
 {
@@ -163,6 +171,58 @@ void QtInstanceMessageDialog::dialogFinished(int nResult)
         nResponseCode = pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
 
     QtInstanceDialog::dialogFinished(nResponseCode);
+}
+
+QWidget* QtInstanceMessageDialog::addWidgetForExtraItems()
+{
+    // make use of implementation detail that QMessageBox uses QGridLayout for its layout
+    // (logic here will need to be adjusted if that ever changes)
+    QGridLayout* pDialogLayout = qobject_cast<QGridLayout*>(m_pMessageDialog->layout());
+    assert(pDialogLayout && "QMessageBox has unexpected layout");
+
+    // find last label
+    const int nItemCount = pDialogLayout->count();
+    int nLastLabelIndex = -1;
+    for (int i = nItemCount - 1; i >= 0; --i)
+    {
+        if (QLayoutItem* pItem = pDialogLayout->itemAt(i))
+        {
+            if (qobject_cast<QLabel*>(pItem->widget()))
+            {
+                nLastLabelIndex = i;
+                break;
+            }
+        }
+    }
+    assert(nLastLabelIndex >= 0 && "didn't find label in message box");
+
+    // shift everything after the last label down by one row
+    for (int i = nLastLabelIndex + 1; i < nItemCount; ++i)
+    {
+        if (QLayoutItem* pItem = pDialogLayout->itemAt(i))
+        {
+            int nRow = 0;
+            int nCol = 0;
+            int nRowSpan = 0;
+            int nColSpan = 0;
+            pDialogLayout->getItemPosition(i, &nRow, &nCol, &nRowSpan, &nColSpan);
+            pDialogLayout->removeItem(pItem);
+            pDialogLayout->addItem(pItem, nRow + 1, nCol, nRowSpan, nColSpan);
+        }
+    }
+
+    // insert an additional layout in the now empty row, underneath the last label
+    int nLabelRow = 0;
+    int nLabelCol = 0;
+    int nLabelRowSpan = 0;
+    int nLabelColSpan = 0;
+    pDialogLayout->getItemPosition(nLastLabelIndex, &nLabelRow, &nLabelCol, &nLabelRowSpan,
+                                   &nLabelColSpan);
+    QWidget* pWidget = new QWidget;
+    pWidget->setLayout(new QVBoxLayout);
+    pDialogLayout->addWidget(pWidget, nLabelRow + 1, nLabelCol);
+
+    return pWidget;
 }
 
 QPushButton* QtInstanceMessageDialog::buttonForResponseCode(int nResponse)
