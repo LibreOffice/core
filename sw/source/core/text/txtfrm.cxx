@@ -1578,7 +1578,16 @@ bool SwTextFrame::IsHiddenNow() const
         {
             SwFormatAutoFormat const& rListAutoFormat{pNode->GetAttr(RES_PARATR_LIST_AUTOFMT)};
             std::shared_ptr<SfxItemSet> const pSet{rListAutoFormat.GetStyleHandle()};
-            SvxCharHiddenItem const*const pItem{pSet ? pSet->GetItemIfSet(RES_CHRATR_HIDDEN) : nullptr};
+            SvxCharHiddenItem const* pItem{pSet ? pSet->GetItemIfSet(RES_CHRATR_HIDDEN) : nullptr};
+            if (!pItem)
+            {
+                // don't use node's mpAttrSet, it doesn't apply to para marker
+                SwFormatColl const*const pStyle{pNode->GetFormatColl()};
+                if (pStyle)
+                {
+                    pItem = &pStyle->GetFormatAttr(RES_CHRATR_HIDDEN);
+                }
+            }
             if (!pItem || !pItem->GetValue())
             {
                 bHiddenCharsHidePara = false;
