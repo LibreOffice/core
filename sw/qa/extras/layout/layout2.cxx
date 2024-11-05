@@ -1995,8 +1995,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testParagraphMarkInCell)
         xmlDocUniquePtr pXmlDoc = parseLayoutDump();
         assertXPath(pXmlDoc, "/root/page/body/txt[1]/infos/bounds", "height", u"230");
         // the problem was that the table rows were not hidden
-        //TODO        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[1]/infos/bounds", "height",
-        //                    u"0");
+        assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[1]/infos/bounds", "height", u"0");
         assertXPath(pXmlDoc, "/root/page/body/tab[1]/row[2]/infos/bounds", "height", u"0");
         assertXPath(pXmlDoc, "/root/page/body/txt[2]/infos/bounds", "height", u"230");
     }
