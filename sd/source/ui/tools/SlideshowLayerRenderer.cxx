@@ -456,7 +456,10 @@ public:
 
         auto const& rParagraphs = aIterator->second;
 
-        if (!rParagraphs.empty())
+        // A render pass for the non-animated part of a text shapes whose paragraphs are all animated
+        // has no paragraphs (rParagraphs.empty()) anyway it still needs to be modified in order to
+        // render the text shape background only; on the contrary it will render all paragraphs.
+        if (!rParagraphs.empty() || mrRenderPass.mbRenderObjectBackground)
         {
             auto const& rViewInformation2D = rOriginal.GetObjectContact().getViewInformation2D();
             auto rContainer
