@@ -115,7 +115,7 @@ bool MacabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc,
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    constexpr OUString sModuleName( u"" SAL_MODULENAME( "macabdrv1" ) ""_ustr );
+    static constexpr OUString sModuleName( u"" SAL_MODULENAME( "macabdrv1" ) ""_ustr );
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
