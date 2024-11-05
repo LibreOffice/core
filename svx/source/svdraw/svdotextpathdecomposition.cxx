@@ -81,7 +81,7 @@ namespace
 
                 for(sal_Int32 a=0; a < mnTextLength; a++)
                 {
-                    maDblDXArray.push_back(static_cast<double>(rInfo.mpDXArray[a]));
+                    maDblDXArray.push_back(rInfo.mpDXArray[a]);
                 }
             }
         }

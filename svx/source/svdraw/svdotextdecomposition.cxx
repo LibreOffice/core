@@ -299,7 +299,7 @@ namespace
             aDXArray.reserve(rInfo.mnTextLen);
             for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
             {
-                aDXArray.push_back(static_cast<double>(rInfo.mpDXArray[a]));
+                aDXArray.push_back(rInfo.mpDXArray[a]);
             }
         }
 
