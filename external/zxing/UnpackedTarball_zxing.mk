@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,zxing,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,zxing, \
 	external/zxing/0001-add-ZXVersion-h.patch \
+	external/zxing/include.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
