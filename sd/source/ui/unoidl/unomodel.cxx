@@ -3874,6 +3874,8 @@ void SdXImpressDocument::setPartMode( int nPartMode )
         break;
     }
     pViewSh->SetPageKind( aPageKind );
+    //TODO do the same as setEditMode and then can probably remove the TODOs
+    //from doc_setPartMode
 }
 
 int SdXImpressDocument::getEditMode()
