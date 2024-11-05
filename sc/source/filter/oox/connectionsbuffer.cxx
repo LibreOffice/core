@@ -205,8 +205,7 @@ void Connection::importDbPr(const AttributeList& rAttribs)
 {
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::uno::Any> aDbPrAny = getSequenceOfAny(xFastAttributeList);
-        maModel.maDbPrSequenceAny = aDbPrAny;
+        maModel.maDbPrSequenceAny = getSequenceOfAny(xFastAttributeList);
     }
 }
 
@@ -214,8 +213,7 @@ void Connection::importOlapPr(const AttributeList& rAttribs)
 {
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::uno::Any> aOlapPrAny = getSequenceOfAny(xFastAttributeList);
-        maModel.maOlapPrSequenceAny = aOlapPrAny;
+        maModel.maOlapPrSequenceAny = getSequenceOfAny(xFastAttributeList);
     }
 }
 
@@ -259,8 +257,7 @@ void Connection::importTextPr(const AttributeList& rAttribs)
 
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::uno::Any> aTextPrAny = getSequenceOfAny(xFastAttributeList);
-        rTextPr.maTextPrSequenceAny = aTextPrAny;
+        rTextPr.maTextPrSequenceAny = getSequenceOfAny(xFastAttributeList);
     }
 }
 
@@ -274,8 +271,7 @@ void Connection::importTextFields(const AttributeList& rAttribs)
 
         if (auto xFastAttributeList = rAttribs.getFastAttributeList())
         {
-            css::uno::Sequence<css::uno::Any> aTextFieldsAny = getSequenceOfAny(xFastAttributeList);
-            maModel.mxTextPr->maTextFieldsSequenceAny = aTextFieldsAny;
+            maModel.mxTextPr->maTextFieldsSequenceAny = getSequenceOfAny(xFastAttributeList);
         }
     }
 }
@@ -287,8 +283,7 @@ void Connection::importTextField(const AttributeList& rAttribs)
 
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::uno::Any> aTextFieldAny = getSequenceOfAny(xFastAttributeList);
-        maModel.mxTextPr->vTextField.push_back(aTextFieldAny);
+        maModel.mxTextPr->vTextField.push_back(getSequenceOfAny(xFastAttributeList));
     }
 }
 
@@ -306,8 +301,7 @@ void Connection::importParameter(const AttributeList& rAttribs)
 
     if (auto xFastAttributeList = rAttribs.getFastAttributeList())
     {
-        css::uno::Sequence<css::uno::Any> aParameterAny = getSequenceOfAny(xFastAttributeList);
-        maModel.mxParameters->vParameter.push_back(aParameterAny);
+        maModel.mxParameters->vParameter.push_back(getSequenceOfAny(xFastAttributeList));
     }
 }
 
