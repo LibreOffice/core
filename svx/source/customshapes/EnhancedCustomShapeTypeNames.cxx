@@ -539,12 +539,11 @@ static const TypeACCNameHashMap& GetACCHashMap()
 
 const OUString & EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
 {
-    static const OUString EMPTY;
     const TypeACCNameHashMap& rACCMap = GetACCHashMap();
     auto aHashIter = rACCMap.find( rShapeType );
     if ( aHashIter != rACCMap.end() )
         return aHashIter->second;
-    return EMPTY;
+    return EMPTY_OUSTRING;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

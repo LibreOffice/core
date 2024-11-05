@@ -99,8 +99,6 @@ struct XMLPropertyMapEntry
      */
     bool            mbImportOnly;
 
-    static constexpr OUString EMPTY{u""_ustr};
-
     constexpr XMLPropertyMapEntry(
             const OUString& sApiName,
             sal_uInt16      nNameSpace,
@@ -119,7 +117,7 @@ struct XMLPropertyMapEntry
     /// used to mark the end of the array
     constexpr XMLPropertyMapEntry(std::nullptr_t)
         :
-        msApiName(EMPTY),
+        msApiName(EMPTY_OUSTRING),
         meXMLName(xmloff::token::XML_TOKEN_INVALID), mnNameSpace(0), mnType(0),
         mnContextId(0), mnEarliestODFVersionForExport(SvtSaveOptions::ODFSVER_010),
         mbImportOnly(false)

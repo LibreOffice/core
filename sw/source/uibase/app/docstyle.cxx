@@ -858,8 +858,7 @@ const OUString&  SwDocStyleSheet::GetParent() const
         case SfxStyleFamily::Pseudo:
         default:
             {
-                static const OUString sEmpty;
-                return sEmpty; // there's no parent
+                return EMPTY_OUSTRING; // there's no parent
             }
         }
 

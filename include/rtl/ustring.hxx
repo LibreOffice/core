@@ -3987,6 +3987,16 @@ struct hash<::rtl::OUString>
 
 }
 
+#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+/**
+  * static empty string object, handy for returning from functions where the function is
+  * returning a "const OUString &"
+  *
+  * @since LibreOffice 25.2
+  */
+static inline constexpr ::rtl::OUString EMPTY_OUSTRING = u""_ustr;
+#endif
+
 #endif
 /// @endcond
 

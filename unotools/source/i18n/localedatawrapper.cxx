@@ -382,8 +382,7 @@ const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     if ( nWord < 0 || o3tl::make_unsigned(nWord) >= aReservedWords.size() )
     {
         SAL_WARN( "unotools.i18n", "getOneReservedWord: bounds" );
-        static const OUString EMPTY;
-        return EMPTY;
+        return EMPTY_OUSTRING;
     }
     return aReservedWords[nWord];
 }

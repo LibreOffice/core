@@ -112,8 +112,7 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::getIdentifier( const Refer
     }
     else
     {
-        static const OUString aEmpty;
-        return aEmpty;
+        return EMPTY_OUSTRING;
     }
 }
 

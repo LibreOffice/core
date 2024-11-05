@@ -160,7 +160,6 @@ struct CommandToRID
 
 static OUString ImplGetRID( std::u16string_view aCommand )
 {
-    static constexpr OUString EMPTY = u""_ustr;
     static constexpr CommandToRID aImplCommandToResMap[] =
     {
         { ".uno:GrafRed",           RID_SVXBMP_GRAF_RED             },
@@ -170,7 +169,7 @@ static OUString ImplGetRID( std::u16string_view aCommand )
         { ".uno:GrafContrast",      RID_SVXBMP_GRAF_CONTRAST        },
         { ".uno:GrafGamma",         RID_SVXBMP_GRAF_GAMMA           },
         { ".uno:GrafTransparence",  RID_SVXBMP_GRAF_TRANSPARENCE    },
-        { nullptr, EMPTY }
+        { nullptr, EMPTY_OUSTRING }
     };
 
     OUString sRID;
