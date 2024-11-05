@@ -2744,6 +2744,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+    <!-- TODO no proposal, tdf#162262 -->
+  <rng:define name="table-subtotal-rules-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:summary-below">
+        <rng:ref name="boolean"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
     <!-- TODO no proposal, 9009663d -->
   <rng:define name="chart-chart-attlist" combine="interleave">
     <rng:optional>

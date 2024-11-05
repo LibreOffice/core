@@ -1928,6 +1928,7 @@ namespace xmloff::token {
         XML_SUB_VIEW_SIZE,
         XML_SUFFIX,
         XML_SUM,
+        XML_SUMMARY_BELOW,
         XML_SWISS,
         XML_SYMBOL,
         XML_SYMBOL_HEIGHT,
