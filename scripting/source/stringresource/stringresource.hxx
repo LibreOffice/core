@@ -200,7 +200,7 @@ protected:
     void implInitializeCommonParameters( std::unique_lock<std::mutex>& rGuard, const css::uno::Sequence< css::uno::Any >& aArguments );
 
     // Scan locale properties files
-    virtual void implScanLocales();
+    virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard);
 
     // Method to load a locale if necessary, returns true if loading was successful
     virtual bool loadLocale( LocaleItem* pLocaleItem ) override;
@@ -333,7 +333,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     css::uno::Reference< css::embed::XStorage >       m_xStorage;
     bool                                              m_bStorageChanged;
 
-    virtual void implScanLocales() override;
+    virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:
@@ -415,7 +415,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 
     const css::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccessImpl();
 
-    virtual void implScanLocales() override;
+    virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
     virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
 
 public:

@@ -697,7 +697,7 @@ void StringResourcePersistenceImpl::implInitializeCommonParameters
         throw IllegalArgumentException( u"XInitialization::initialize: Expected Comment string"_ustr, Reference< XInterface >(), 4 );
     }
 
-    implScanLocales();
+    implScanLocales(rGuard);
 
     implSetCurrentLocale( rGuard, aCurrentLocale, true/*FindClosestMatch*/, true/*bUseDefaultIfNoMatch*/ );
 }
@@ -1527,7 +1527,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
 }
 
 // Scan locale properties files
-void StringResourcePersistenceImpl::implScanLocales()
+void StringResourcePersistenceImpl::implScanLocales(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     // Dummy implementation, method not called for this
     // base class, but pure virtual not possible-
@@ -2229,7 +2229,7 @@ void StringResourceWithStorageImpl::setStorage( const Reference< XStorage >& Sto
 
 
 // Scan locale properties files
-void StringResourceWithStorageImpl::implScanLocales()
+void StringResourceWithStorageImpl::implScanLocales(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if( m_xStorage.is() )
     {
@@ -2528,7 +2528,7 @@ void StringResourceWithLocationImpl::setURL( const OUString& URL )
 
 
 // Scan locale properties files
-void StringResourceWithLocationImpl::implScanLocales()
+void StringResourceWithLocationImpl::implScanLocales(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccessImpl();
     if( xFileAccess->isFolder( m_aLocation ) )
