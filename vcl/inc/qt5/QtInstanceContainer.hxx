@@ -11,18 +11,23 @@
 
 #include "QtInstanceWidget.hxx"
 
+#include <QtWidgets/QLayout>
+
 class QtInstanceContainer : public QtInstanceWidget, public virtual weld::Container
 {
 public:
     QtInstanceContainer(QWidget* pWidget);
 
-    virtual void move(weld::Widget*, weld::Container*) override;
+    virtual void move(weld::Widget* pWidget, weld::Container* pNewParent) override;
 
     virtual css::uno::Reference<css::awt::XWindow> CreateChildFrame() override;
 
     virtual void child_grab_focus() override;
 
     virtual void connect_container_focus_changed(const Link<Container&, void>&) override;
+
+private:
+    QLayout& getLayout();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

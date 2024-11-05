@@ -15,9 +15,24 @@ QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
     assert(pWidget->layout() && "no layout to use for container");
 }
 
-void QtInstanceContainer::move(weld::Widget*, weld::Container*)
+void QtInstanceContainer::move(weld::Widget* pWidget, weld::Container* pNewParent)
 {
-    assert(false && "Not implemented yet");
+    QtInstanceWidget* pQtInstanceWidget = dynamic_cast<QtInstanceWidget*>(pWidget);
+    assert(pQtInstanceWidget);
+    QWidget* pQWidget = pQtInstanceWidget->getQWidget();
+    assert(pQWidget);
+    getLayout().removeWidget(pQWidget);
+
+    if (!pNewParent)
+    {
+        pQWidget->deleteLater();
+        return;
+    }
+
+    QtInstanceContainer* pNewContainer = dynamic_cast<QtInstanceContainer*>(pNewParent);
+    assert(pNewContainer);
+    QLayout& rNewLayout = pNewContainer->getLayout();
+    rNewLayout.addWidget(pQWidget);
 }
 
 css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
@@ -31,6 +46,13 @@ void QtInstanceContainer::child_grab_focus() { assert(false && "Not implemented 
 void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>&)
 {
     assert(false && "Not implemented yet");
+}
+
+QLayout& QtInstanceContainer::getLayout()
+{
+    QLayout* pLayout = getQWidget()->layout();
+    assert(pLayout);
+    return *pLayout;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
