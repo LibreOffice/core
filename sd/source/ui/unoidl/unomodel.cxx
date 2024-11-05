@@ -4790,12 +4790,11 @@ bool SdXImpressDocument::renderNextSlideLayer(unsigned char* pBuffer, bool& bIsB
         return bDone;
 
     OString sMsg;
-    bool bOK = mpSlideshowLayerRenderer->render(pBuffer, rScale, sMsg);
+    bool bOK = mpSlideshowLayerRenderer->render(pBuffer, bIsBitmapLayer, rScale, sMsg);
 
     if (bOK)
     {
         rJsonMsg = OUString::fromUtf8(sMsg);
-        bIsBitmapLayer = true;
         bDone = false;
     }
 
