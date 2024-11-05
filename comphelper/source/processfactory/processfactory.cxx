@@ -106,7 +106,7 @@ Reference< XComponentContext > getComponentContext(
     return xRet;
 }
 
-Reference< XComponentContext > getProcessComponentContext()
+const Reference< XComponentContext > & getProcessComponentContext()
 {
     static const uno::Reference<XComponentContext> processComponentContext = getComponentContext( getProcessServiceFactory() );
     return processComponentContext;

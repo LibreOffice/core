@@ -123,7 +123,7 @@ private:
     void insertEntry(std::unique_lock<std::mutex>&, sal_Int32 Index);
 
     /// @throws Exception
-    Reference< XIdlReflection > getReflection(std::unique_lock<std::mutex>&);
+    const Reference< XIdlReflection > & getReflection(std::unique_lock<std::mutex>&);
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
     @param _nIndex
@@ -370,7 +370,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     }
 }
 
-Reference< XIdlReflection > ImplEventAttacherManager::getReflection(std::unique_lock<std::mutex>&)
+const Reference< XIdlReflection > & ImplEventAttacherManager::getReflection(std::unique_lock<std::mutex>&)
 {
     // Do we already have a service? If not, create one.
     if( !mxCoreReflection.is() )

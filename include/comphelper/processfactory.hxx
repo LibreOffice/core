@@ -62,7 +62,7 @@ getComponentContext(
  * Throws a RuntimeException if no component context can be obtained.
  */
 COMPHELPER_DLLPUBLIC
-css::uno::Reference< css::uno::XComponentContext >
+const css::uno::Reference< css::uno::XComponentContext > &
 getProcessComponentContext();
 
 }
