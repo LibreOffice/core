@@ -1474,6 +1474,19 @@ void SwTextFrame::ResetPreps()
     }
 }
 
+static auto FindCellFrame(SwFrame const* pLower) -> SwLayoutFrame const*
+{
+    while (pLower)
+    {
+        if (pLower->IsCellFrame())
+        {
+            return static_cast<SwLayoutFrame const*>(pLower);
+        }
+        pLower = pLower->GetUpper();
+    }
+    return nullptr;
+}
+
 bool SwTextFrame::IsHiddenNow() const
 {
     SwFrameSwapper aSwapper( this, true );
@@ -1548,12 +1561,27 @@ bool SwTextFrame::IsHiddenNow() const
         SwTextNode const*const pNode{ m_pMergedPara
             ? m_pMergedPara->pLastNode
             : static_cast<SwTextNode const*>(SwFrame::GetDep()) };
-        SwFormatAutoFormat const& rListAutoFormat{pNode->GetAttr(RES_PARATR_LIST_AUTOFMT)};
-        std::shared_ptr<SfxItemSet> const pSet{rListAutoFormat.GetStyleHandle()};
-        SvxCharHiddenItem const*const pItem{pSet ? pSet->GetItemIfSet(RES_CHRATR_HIDDEN) : nullptr};
-        if (!pItem || !pItem->GetValue())
+        // Word ignores hidden formatting on the cell end marker
+        bool isLastInCell{false};
+        if (SwLayoutFrame const*const pCellFrame{FindCellFrame(this)})
         {
-            bHiddenCharsHidePara = false;
+            SwContentFrame const* pNext{GetNextContentFrame()};
+            // skip frame in hidden section ("this" is *not* in hidden section!)
+            while (pNext && pNext->SwContentFrame::IsHiddenNow())
+            {
+                pNext = pNext->GetNextContentFrame();
+            }
+            isLastInCell = pNext == nullptr || !pCellFrame->IsAnLower(pNext);
+        }
+        if (!isLastInCell)
+        {
+            SwFormatAutoFormat const& rListAutoFormat{pNode->GetAttr(RES_PARATR_LIST_AUTOFMT)};
+            std::shared_ptr<SfxItemSet> const pSet{rListAutoFormat.GetStyleHandle()};
+            SvxCharHiddenItem const*const pItem{pSet ? pSet->GetItemIfSet(RES_CHRATR_HIDDEN) : nullptr};
+            if (!pItem || !pItem->GetValue())
+            {
+                bHiddenCharsHidePara = false;
+            }
         }
     }
     const SwViewShell* pVsh = getRootFrame()->GetCurrShell();
