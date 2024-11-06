@@ -811,9 +811,8 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, M
             break;
         }
         case MapUnit::Map100thMM:
-        //then the core is surely also in 1/100 mm
         case MapUnit::MapTwip:
-        // Here surely TWIP
+            // In both cases, the units match core
             nDiff = static_cast<short>(nProp);
             break;
         default:
