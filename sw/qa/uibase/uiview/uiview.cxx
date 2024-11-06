@@ -313,6 +313,21 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testPrintPreview)
     pView->SetFormShell(pFormShell);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, TestTdf152839_Formtext)
+{
+    createSwDoc("tdf152839_formtext.rtf");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nBottom
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[2]/cell[1]/infos/bounds", "bottom")
+              .toInt32();
+    sal_Int32 nHeight
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[2]/cell[1]/txt/infos/bounds", "height")
+              .toInt32();
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(2000), nBottom);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(723), nHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1361,7 +1361,11 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 if( !rInf.X() && !m_pCurr->GetNextPortion() && !m_pCurr->GetLen()  && !GetFnt()->IsURL() )
                     pPor = m_pCurr;
                 else
+                {
                     pPor = new SwTextPortion;
+                    if (pBM && pBM->GetFieldname() == ODF_FORMTEXT)
+                        pPor->SetFieldmarkText(true);
+                }
             }
         }
     }

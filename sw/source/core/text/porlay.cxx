@@ -350,18 +350,23 @@ void SwLineLayout::CreateSpaceAdd( const tools::Long nInit )
 
 // #i3952# Returns true if there are only blanks in [nStt, nEnd[
 // Used to implement IgnoreTabsAndBlanksForLineCalculation compat flag
-static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, TextFrameIndex nEnd)
+static bool lcl_HasOnlyBlanks(std::u16string_view rText, TextFrameIndex nStt, TextFrameIndex nEnd,
+    bool isFieldMarkPortion)
 {
     while ( nStt < nEnd )
     {
         switch (rText[sal_Int32(nStt++)])
         {
         case 0x0020: // SPACE
-        case 0x2002: // EN SPACE
         case 0x2003: // EM SPACE
         case 0x2005: // FOUR-PER-EM SPACE
         case 0x3000: // IDEOGRAPHIC SPACE
             continue;
+        case 0x2002: // EN SPACE :
+            if (isFieldMarkPortion)
+                return false;
+            else
+                continue;
         default:
             return false;
         }
@@ -464,7 +469,8 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                     bool isSpacePortion = false;
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
                             ( pPos->IsTextPortion() &&
-                              (isSpacePortion = lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen() ) ) ) )
+                              (isSpacePortion = lcl_HasOnlyBlanks( rInf.GetText(), nPorSttIdx, nPorSttIdx + pPos->GetLen(),
+                                  pPos->IsFieldmarkText() ) ) ) )
                     {
                         pLast = pPos;
                         if (pPos->InTabGrp())
@@ -680,7 +686,9 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
 
         // #i3952#
         if ( bIgnoreBlanksAndTabsForLineHeightCalculation &&
-             lcl_HasOnlyBlanks( rInf.GetText(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
+            lcl_HasOnlyBlanks(rInf.GetText(), rInf.GetLineStart(),
+                                 rInf.GetLineStart() + GetLen(),
+                                 false))
         {
             bHasBlankPortion = true;
         }

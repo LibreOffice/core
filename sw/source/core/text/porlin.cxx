@@ -68,7 +68,8 @@ SwLinePortion::SwLinePortion( ) :
     mnHangingBaseline( 0 ),
     mnWhichPor( PortionType::NONE ),
     m_bJoinBorderWithPrev(false),
-    m_bJoinBorderWithNext(false)
+    m_bJoinBorderWithNext(false),
+    m_bIsFieldmarkText(false)
 {
 }
 
