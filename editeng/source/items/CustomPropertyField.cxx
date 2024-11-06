@@ -48,21 +48,21 @@ MetaAction* CustomPropertyField::createBeginComment() const
     return new MetaCommentAction("FIELD_SEQ_BEGIN"_ostr);
 }
 
-OUString CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties)
+const OUString & CustomPropertyField::GetFormatted(uno::Reference<document::XDocumentProperties> const & xDocumentProperties)
 {
     if (msName.isEmpty())
-        return OUString();
+        return EMPTY_OUSTRING;
     if (!xDocumentProperties.is())
-        return OUString();
+        return EMPTY_OUSTRING;
     uno::Reference<beans::XPropertyContainer> xPropertyContainer = xDocumentProperties->getUserDefinedProperties();
     if (!xPropertyContainer.is())
-        return OUString();
+        return EMPTY_OUSTRING;
     uno::Reference<beans::XPropertySet> xPropertySet(xPropertyContainer, uno::UNO_QUERY);
     if (!xPropertySet.is())
-        return OUString();
+        return EMPTY_OUSTRING;
     uno::Any aAny = xPropertySet->getPropertyValue(msName);
     if (!aAny.has<OUString>())
-        return OUString();
+        return EMPTY_OUSTRING;
     msCurrentPresentation = aAny.get<OUString>();
     return msCurrentPresentation;
 }

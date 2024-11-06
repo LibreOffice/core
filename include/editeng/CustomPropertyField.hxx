@@ -41,7 +41,7 @@ public:
 
     virtual MetaAction* createBeginComment() const override;
 
-    OUString GetFormatted(css::uno::Reference<css::document::XDocumentProperties> const & xDocumentProperties);
+    const OUString & GetFormatted(css::uno::Reference<css::document::XDocumentProperties> const & xDocumentProperties);
 
     OUString const & GetName() const
     {

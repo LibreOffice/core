@@ -472,7 +472,7 @@ void Outliner::QuickFormatDoc()
     pEditEngine->QuickFormatDoc();
 }
 
-ScalingParameters Outliner::getScalingParameters() const
+const ScalingParameters & Outliner::getScalingParameters() const
 {
     return pEditEngine->getScalingParameters();
 }

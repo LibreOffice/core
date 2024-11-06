@@ -1273,7 +1273,7 @@ public:
 
     void setScalingParameters(ScalingParameters const& rScalingParameters);
 
-    ScalingParameters getScalingParameters()
+    const ScalingParameters & getScalingParameters()
     {
         return maScalingParameters;
     }

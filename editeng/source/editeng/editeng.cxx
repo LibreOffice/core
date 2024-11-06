@@ -1401,7 +1401,7 @@ bool EditEngine::HasText( const SvxSearchItem& rSearchItem )
     return getImpl().HasText(rSearchItem);
 }
 
-ScalingParameters EditEngine::getScalingParameters() const
+const ScalingParameters & EditEngine::getScalingParameters() const
 {
     return getImpl().getScalingParameters();
 }

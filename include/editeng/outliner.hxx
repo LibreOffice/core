@@ -924,7 +924,7 @@ public:
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder );
     SAL_DLLPRIVATE bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, bool* pbBulletPos );
 
-    ScalingParameters getScalingParameters() const;
+    const ScalingParameters & getScalingParameters() const;
     void setScalingParameters(ScalingParameters const& rScalingParameters);
     void resetScalingParameters()
     {
