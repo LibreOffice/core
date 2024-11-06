@@ -24,9 +24,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,gpgmepp, \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-win32-macro.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-fix-libtool.patch.1) \
     $(if $(filter MSC,$(COM)),external/gpgmepp/w32-add-initializer.patch.1) \
+    $(if $(filter MSC,$(COM)),external/gpgmepp/strcasecmp.patch) \
     external/gpgmepp/w32-build-fixes-2.patch \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/asan.patch) \
     $(if $(filter LINUX,$(OS)),external/gpgmepp/rpath.patch) \
+    $(if $(filter LINUX,$(OS)),external/gpgmepp/gettid.patch) \
     external/gpgmepp/ubsan.patch \
     external/gpgmepp/c++20.patch \
     external/gpgmepp/clang-cl.patch \
