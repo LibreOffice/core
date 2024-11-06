@@ -4075,6 +4075,7 @@ void SalInstanceTreeView::bulk_insert_for_each(
             AddStringItem(aVclIter.iter, u""_ustr, aVclIter.iter->ItemCount());
         m_xTreeView->Insert(aVclIter.iter, pVclParent, TREELIST_APPEND);
         func(aVclIter, i);
+        m_xTreeView->CalcEntryHeight(aVclIter.iter);
 
         if (!pFixedWidths)
             continue;
