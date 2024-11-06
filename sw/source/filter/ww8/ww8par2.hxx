@@ -229,7 +229,7 @@ class WW8TabDesc
     short m_nBands;
     short m_nMinLeft;
     short m_nMaxRight;
-    short m_nSwWidth;
+    SwTwips m_nSwWidth;
     short m_nPreferredWidth;
     short m_nPercentWidth;
 

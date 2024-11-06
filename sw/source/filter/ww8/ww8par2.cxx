@@ -2525,7 +2525,7 @@ void WW8TabDesc::CreateSwTable()
                 nLeft += GetMinLeft();
             else
             {
-                const short nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
+                const SwTwips nTableWidth = m_nPreferredWidth ? m_nPreferredWidth : m_nSwWidth;
                 nLeft += m_pIo->m_aSectionManager.GetTextAreaWidth();
                 nLeft = nLeft - nTableWidth - GetMinLeft();
             }
