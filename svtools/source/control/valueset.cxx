@@ -1801,14 +1801,14 @@ OUString ValueSet::RequestHelp(tools::Rectangle& rHelpRect)
     return sRet;
 }
 
-OUString ValueSet::GetItemText(sal_uInt16 nItemId) const
+const OUString & ValueSet::GetItemText(sal_uInt16 nItemId) const
 {
     const size_t nPos = GetItemPos(nItemId);
 
     if ( nPos != VALUESET_ITEM_NOTFOUND )
         return mItemList[nPos]->maText;
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void ValueSet::SetExtraSpacing( sal_uInt16 nNewSpacing )

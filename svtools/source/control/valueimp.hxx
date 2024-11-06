@@ -61,7 +61,7 @@ struct ValueSetItem
     explicit ValueSetItem( ValueSet& rParent );
     ~ValueSetItem();
 
-    rtl::Reference< ValueItemAcc > GetAccessible( bool bIsTransientChildrenDisabled );
+    const rtl::Reference< ValueItemAcc > & GetAccessible( bool bIsTransientChildrenDisabled );
 };
 
 typedef comphelper::WeakComponentImplHelper<

@@ -2215,20 +2215,20 @@ void TabBar::SetPageText(sal_uInt16 nPageId, const OUString& rText)
     }
 }
 
-OUString TabBar::GetPageText(sal_uInt16 nPageId) const
+const OUString & TabBar::GetPageText(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->maItemList[nPos].maText;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString TabBar::GetAuxiliaryText(sal_uInt16 nPageId) const
+const OUString & TabBar::GetAuxiliaryText(sal_uInt16 nPageId) const
 {
     sal_uInt16 nPos = GetPagePos(nPageId);
     if (nPos != PAGE_NOT_FOUND)
         return mpImpl->maItemList[nPos].maAuxiliaryText;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void TabBar::SetAuxiliaryText(sal_uInt16 nPageId, const OUString& rText )

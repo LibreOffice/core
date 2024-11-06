@@ -159,7 +159,7 @@ public:
 
     std::unique_ptr<FontList> Clone() const;
 
-    OUString                GetFontMapText( const FontMetric& rFontMetric ) const;
+    const OUString &        GetFontMapText( const FontMetric& rFontMetric ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }

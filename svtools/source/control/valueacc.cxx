@@ -53,7 +53,7 @@ ValueSetItem::~ValueSetItem()
     }
 }
 
-rtl::Reference< ValueItemAcc > ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
+const rtl::Reference< ValueItemAcc > & ValueSetItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new ValueItemAcc( this, bIsTransientChildrenDisabled );

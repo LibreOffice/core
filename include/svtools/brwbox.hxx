@@ -528,7 +528,7 @@ public:
     tools::Long            GetTitleHeight() const;
 
     // access to dynamic values of cursor row
-    OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
+    const OUString &       GetColumnTitle( sal_uInt16 nColumnId ) const;
     tools::Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
     tools::Long     GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16      GetColumnId( sal_uInt16 nPos ) const;

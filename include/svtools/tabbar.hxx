@@ -376,7 +376,7 @@ private:
 
 protected:
     virtual void AddTabClick();
-    OUString     GetAuxiliaryText(sal_uInt16 nPageId) const; // needed in derived class LayerTabBar
+    const OUString & GetAuxiliaryText(sal_uInt16 nPageId) const; // needed in derived class LayerTabBar
     void         SetAuxiliaryText(sal_uInt16 nPageId, const OUString& rText );
 
 public:
@@ -477,7 +477,7 @@ public:
     void            EndSwitchPage();
 
     virtual void    SetPageText( sal_uInt16 nPageId, const OUString& rText );
-    OUString        GetPageText( sal_uInt16 nPageId ) const;
+    const OUString & GetPageText( sal_uInt16 nPageId ) const;
     OUString        GetHelpText( sal_uInt16 nPageId ) const;
 
     tools::Long            GetSplitSize() const { return mnSplitSize; }

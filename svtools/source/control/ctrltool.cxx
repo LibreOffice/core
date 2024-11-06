@@ -509,11 +509,11 @@ OUString FontList::GetStyleName(const FontMetric& rInfo) const
     return aStyleName;
 }
 
-OUString FontList::GetFontMapText( const FontMetric& rInfo ) const
+const OUString & FontList::GetFontMapText( const FontMetric& rInfo ) const
 {
     if ( rInfo.GetFamilyName().isEmpty() )
     {
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
     // Search Fontname

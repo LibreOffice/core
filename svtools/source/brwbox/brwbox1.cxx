@@ -832,12 +832,12 @@ void BrowseBox::RemoveColumns()
 }
 
 
-OUString BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
+const OUString & BrowseBox::GetColumnTitle( sal_uInt16 nId ) const
 {
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
     if ( nItemPos >= mvCols.size() )
-        return OUString();
+        return EMPTY_OUSTRING;
     return mvCols[ nItemPos ]->Title();
 }
 

@@ -507,7 +507,7 @@ static TranslateId GetFolderDescriptionId_Impl( const OUString& rURL )
     return pRet;
 }
 
-static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType )
+static const OUString & GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType )
 {
     if (eImageType == vcl::ImageType::Size32)
     {
@@ -737,7 +737,7 @@ static OUString GetImageNameFromList_Impl( SvImageId nImageId, vcl::ImageType eI
         }
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 static Image GetImageFromList_Impl( SvImageId nImageId, vcl::ImageType eImageType)
@@ -810,7 +810,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
     return sDescription;
 }
 
-OUString SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool bBig)
+const OUString & SvFileInformationManager::GetImageId(const INetURLObject& rObject, bool bBig)
 {
     SvImageId nImage = GetImageId_Impl(
         rObject, true, utl::UCBContentHelper::getDefaultCommandEnvironment() );
@@ -827,7 +827,7 @@ Image SvFileInformationManager::GetImage(
     return GetImageFromList_Impl(nImage, bBig ? vcl::ImageType::Size26 : vcl::ImageType::Size16);
 }
 
-OUString SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
+const OUString & SvFileInformationManager::GetFileImageId(const INetURLObject& rObject)
 {
     SvImageId nImage = GetImageId_Impl(
         rObject, false, utl::UCBContentHelper::getDefaultCommandEnvironment() );
@@ -847,7 +847,7 @@ Image SvFileInformationManager::GetImageNoDefault(const INetURLObject& rObject, 
     return GetImageFromList_Impl(nImage, eImageType);
 }
 
-OUString SvFileInformationManager::GetFolderImageId( const svtools::VolumeInfo& rInfo )
+const OUString & SvFileInformationManager::GetFolderImageId( const svtools::VolumeInfo& rInfo )
 {
     SvImageId nImage = SvImageId::Folder;
     DBG_ASSERT( nImage != SvImageId::NONE, "invalid ImageId" );
