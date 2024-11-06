@@ -4396,13 +4396,13 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 ApplyGraphicTransparency_Impl();
                 xOldGrfObj.reset();
 
-                if (!aGraphic.IsNone() && eGraphicPos == GPOS_NONE)
-                {
-                    eGraphicPos = GPOS_MM;
-                }
-                else if (aGraphic.IsNone())
+                if (aGraphic.IsNone())
                 {
                     eGraphicPos = GPOS_NONE;
+                }
+                else if (eGraphicPos == GPOS_NONE)
+                {
+                    eGraphicPos = GPOS_MM;
                 }
             }
         }
