@@ -48,6 +48,7 @@ private:
     PortionType mnWhichPor;       // Who's who?
     bool m_bJoinBorderWithPrev;
     bool m_bJoinBorderWithNext;
+    bool m_bIsFieldmarkText;
     SwTwips m_nExtraBlankWidth = 0;    // width of spaces after the break
     SwTwips m_nExtraShrunkWidth = 0;   // width of not shrunk line
 
@@ -170,8 +171,10 @@ public:
 
     bool GetJoinBorderWithPrev() const { return m_bJoinBorderWithPrev; }
     bool GetJoinBorderWithNext() const { return m_bJoinBorderWithNext; }
+    bool IsFieldmarkText() const {return m_bIsFieldmarkText;}
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
+    void SetFieldmarkText(bool bSet) { m_bIsFieldmarkText = bSet; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                            TextFrameIndex& rOffset) const;
