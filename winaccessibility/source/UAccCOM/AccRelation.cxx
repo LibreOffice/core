@@ -192,31 +192,31 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::put_XSubInterface(hyper pXSubInt
     return S_OK;
 }
 
-const wchar_t* CAccRelation::mapToIA2RelationType(sal_Int16 nUnoRelationType)
+const wchar_t* CAccRelation::mapToIA2RelationType(AccessibleRelationType eUnoRelationType)
 {
-    switch (nUnoRelationType)
+    switch (eUnoRelationType)
     {
-        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case AccessibleRelationType_CONTENT_FLOWS_FROM:
             return IA2_RELATION_FLOWS_FROM;
-        case AccessibleRelationType::CONTENT_FLOWS_TO:
+        case AccessibleRelationType_CONTENT_FLOWS_TO:
             return IA2_RELATION_FLOWS_TO;
-        case AccessibleRelationType::CONTROLLED_BY:
+        case AccessibleRelationType_CONTROLLED_BY:
             return IA2_RELATION_CONTROLLED_BY;
-        case AccessibleRelationType::CONTROLLER_FOR:
+        case AccessibleRelationType_CONTROLLER_FOR:
             return IA2_RELATION_CONTROLLER_FOR;
-        case AccessibleRelationType::LABEL_FOR:
+        case AccessibleRelationType_LABEL_FOR:
             return IA2_RELATION_LABEL_FOR;
-        case AccessibleRelationType::LABELED_BY:
+        case AccessibleRelationType_LABELED_BY:
             return IA2_RELATION_LABELED_BY;
-        case AccessibleRelationType::MEMBER_OF:
+        case AccessibleRelationType_MEMBER_OF:
             return IA2_RELATION_MEMBER_OF;
-        case AccessibleRelationType::SUB_WINDOW_OF:
+        case AccessibleRelationType_SUB_WINDOW_OF:
             return IA2_RELATION_SUBWINDOW_OF;
-        case AccessibleRelationType::NODE_CHILD_OF:
+        case AccessibleRelationType_NODE_CHILD_OF:
             return IA2_RELATION_NODE_CHILD_OF;
-        case AccessibleRelationType::DESCRIBED_BY:
+        case AccessibleRelationType_DESCRIBED_BY:
             return IA2_RELATION_DESCRIBED_BY;
-        case AccessibleRelationType::INVALID:
+        case AccessibleRelationType_INVALID:
             return L"INVALID";
         default:
             assert(false && "unhandled AccessibleRelationType");
@@ -224,31 +224,31 @@ const wchar_t* CAccRelation::mapToIA2RelationType(sal_Int16 nUnoRelationType)
     }
 }
 
-sal_Int16 CAccRelation::mapToUnoRelationType(const BSTR aIA2RelationType)
+AccessibleRelationType CAccRelation::mapToUnoRelationType(const BSTR aIA2RelationType)
 {
     if (wcscmp(aIA2RelationType, IA2_RELATION_FLOWS_FROM) == 0)
-        return AccessibleRelationType::CONTENT_FLOWS_FROM;
+        return AccessibleRelationType_CONTENT_FLOWS_FROM;
     if (wcscmp(aIA2RelationType, IA2_RELATION_FLOWS_TO) == 0)
-        return AccessibleRelationType::CONTENT_FLOWS_TO;
+        return AccessibleRelationType_CONTENT_FLOWS_TO;
     if (wcscmp(aIA2RelationType, IA2_RELATION_CONTROLLED_BY) == 0)
-        return AccessibleRelationType::CONTROLLED_BY;
+        return AccessibleRelationType_CONTROLLED_BY;
     if (wcscmp(aIA2RelationType, IA2_RELATION_CONTROLLER_FOR) == 0)
-        return AccessibleRelationType::CONTROLLER_FOR;
+        return AccessibleRelationType_CONTROLLER_FOR;
     if (wcscmp(aIA2RelationType, IA2_RELATION_LABEL_FOR) == 0)
-        return AccessibleRelationType::LABEL_FOR;
+        return AccessibleRelationType_LABEL_FOR;
     if (wcscmp(aIA2RelationType, IA2_RELATION_LABELED_BY) == 0)
-        return AccessibleRelationType::LABELED_BY;
+        return AccessibleRelationType_LABELED_BY;
     if (wcscmp(aIA2RelationType, IA2_RELATION_MEMBER_OF) == 0)
-        return AccessibleRelationType::MEMBER_OF;
+        return AccessibleRelationType_MEMBER_OF;
     if (wcscmp(aIA2RelationType, IA2_RELATION_SUBWINDOW_OF) == 0)
-        return AccessibleRelationType::SUB_WINDOW_OF;
+        return AccessibleRelationType_SUB_WINDOW_OF;
     if (wcscmp(aIA2RelationType, IA2_RELATION_NODE_CHILD_OF) == 0)
-        return AccessibleRelationType::NODE_CHILD_OF;
+        return AccessibleRelationType_NODE_CHILD_OF;
     if (wcscmp(aIA2RelationType, IA2_RELATION_DESCRIBED_BY) == 0)
-        return AccessibleRelationType::DESCRIBED_BY;
+        return AccessibleRelationType_DESCRIBED_BY;
 
     // not all IAccessible2 relation types have a UNO equivalent
-    return AccessibleRelationType::INVALID;
+    return AccessibleRelationType_INVALID;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

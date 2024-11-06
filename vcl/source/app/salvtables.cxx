@@ -6308,7 +6308,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
                 pLabeledBy->GetAccessible()
             };
             pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
-                css::accessibility::AccessibleRelationType::LABELED_BY, aSequence));
+                css::accessibility::AccessibleRelationType_LABELED_BY, aSequence));
         }
         vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if (pMemberOf && pMemberOf != pWindow)
@@ -6317,7 +6317,7 @@ a11yrelationset SalInstanceDrawingArea::get_accessible_relation_set()
                 pMemberOf->GetAccessible()
             };
             pRelationSetHelper->AddRelation(css::accessibility::AccessibleRelation(
-                css::accessibility::AccessibleRelationType::MEMBER_OF, aSequence));
+                css::accessibility::AccessibleRelationType_MEMBER_OF, aSequence));
         }
     }
     return pRelationSetHelper;

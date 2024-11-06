@@ -394,21 +394,21 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     if ( pLabeledBy && pLabeledBy != pWindow )
     {
         uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabeledBy->GetAccessible() };
-        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+        rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_LABELED_BY, aSequence));
     }
 
     vcl::Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
     if ( pLabelFor && pLabelFor != pWindow )
     {
         uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabelFor->GetAccessible() };
-        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
+        rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_LABEL_FOR, aSequence));
     }
 
     vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
     if ( pMemberOf && pMemberOf != pWindow )
     {
         uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pMemberOf->GetAccessible() };
-        rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::MEMBER_OF, aSequence ) );
+        rRelationSet.AddRelation(accessibility::AccessibleRelation(accessibility::AccessibleRelationType_MEMBER_OF, aSequence));
     }
 }
 

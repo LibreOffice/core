@@ -117,14 +117,14 @@ test::AccessibleTestBase::getPreviousFlowingSibling(
     const uno::Reference<accessibility::XAccessibleContext>& xContext)
 {
     return getFirstRelationTargetOfType(xContext,
-                                        accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM);
+                                        accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM);
 }
 
 uno::Reference<accessibility::XAccessibleContext> test::AccessibleTestBase::getNextFlowingSibling(
     const uno::Reference<accessibility::XAccessibleContext>& xContext)
 {
     return getFirstRelationTargetOfType(xContext,
-                                        accessibility::AccessibleRelationType::CONTENT_FLOWS_TO);
+                                        accessibility::AccessibleRelationType_CONTENT_FLOWS_TO);
 }
 
 /* Care has to be taken not to walk sideways as the relation is also used
@@ -234,7 +234,8 @@ OUString test::AccessibleTestBase::collectText(
 
 uno::Reference<accessibility::XAccessibleContext>
 test::AccessibleTestBase::getFirstRelationTargetOfType(
-    const uno::Reference<accessibility::XAccessibleContext>& xContext, sal_Int16 relationType)
+    const uno::Reference<accessibility::XAccessibleContext>& xContext,
+    css::accessibility::AccessibleRelationType relationType)
 {
     auto relset = xContext->getAccessibleRelationSet();
 
@@ -281,7 +282,7 @@ void test::AccessibleTestBase::dumpA11YTree(
 
                 const auto& rel = xRelSet->getRelation(i);
                 std::cout << "(type=" << AccessibilityTools::getRelationTypeName(rel.RelationType)
-                          << " (" << rel.RelationType << ")";
+                          << " (" << static_cast<int>(rel.RelationType) << ")";
                 std::cout << " targets=[";
                 int j = 0;
                 for (const uno::Reference<accessibility::XAccessible>& xTarget : rel.TargetSet)

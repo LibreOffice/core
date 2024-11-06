@@ -61,29 +61,26 @@ interface XAccessibleRelationSet : ::com::sun::star::uno::XInterface
     /** Tests whether the relation set contains a relation matching the
         specified key.
 
-        @param aRelationType
-            The type of relation to look for in this set of relations.  This
-            has to be one of the constants of
-            AccessibleRelationType.
+        @param eRelationType
+            The type of relation to look for in this set of relations.
 
         @return
             Returns `TRUE` if there is a (at least one) relation of the
             given type and `FALSE` if there is no such relation in the set.
     */
-    boolean containsRelation ([in] short aRelationType);
+    boolean containsRelation ([in] ::com::sun::star::accessibility::AccessibleRelationType eRelationType);
 
     /** Retrieve and return the relation with the given relation type.
 
         @param aRelationType
-            The type of the relation to return.  This has to be one of the
-            constants of AccessibleRelationType.
+            The type of the relation to return.
 
         @return
             If a relation with the given type could be found than (a copy
             of) this relation is returned.  Otherwise a relation with the
             type INVALID is returned.
     */
-    AccessibleRelation getRelationByType ([in] short aRelationType);
+    AccessibleRelation getRelationByType ([in] ::com::sun::star::accessibility::AccessibleRelationType eRelationType);
 };
 
 }; }; }; };

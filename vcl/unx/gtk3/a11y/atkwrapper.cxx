@@ -61,45 +61,45 @@ using namespace ::com::sun::star;
 
 static GObjectClass *parent_class = nullptr;
 
-static AtkRelationType mapRelationType( sal_Int16 nRelation )
+static AtkRelationType mapRelationType(accessibility::AccessibleRelationType eRelation)
 {
     AtkRelationType type = ATK_RELATION_NULL;
 
-    switch( nRelation )
+    switch (eRelation)
     {
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM:
             type = ATK_RELATION_FLOWS_FROM;
             break;
 
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_TO:
             type = ATK_RELATION_FLOWS_TO;
             break;
 
-        case accessibility::AccessibleRelationType::CONTROLLED_BY:
+        case accessibility::AccessibleRelationType_CONTROLLED_BY:
             type = ATK_RELATION_CONTROLLED_BY;
             break;
 
-        case accessibility::AccessibleRelationType::CONTROLLER_FOR:
+        case accessibility::AccessibleRelationType_CONTROLLER_FOR:
             type = ATK_RELATION_CONTROLLER_FOR;
             break;
 
-        case accessibility::AccessibleRelationType::LABEL_FOR:
+        case accessibility::AccessibleRelationType_LABEL_FOR:
             type = ATK_RELATION_LABEL_FOR;
             break;
 
-        case accessibility::AccessibleRelationType::LABELED_BY:
+        case accessibility::AccessibleRelationType_LABELED_BY:
             type = ATK_RELATION_LABELLED_BY;
             break;
 
-        case accessibility::AccessibleRelationType::MEMBER_OF:
+        case accessibility::AccessibleRelationType_MEMBER_OF:
             type = ATK_RELATION_MEMBER_OF;
             break;
 
-        case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+        case accessibility::AccessibleRelationType_SUB_WINDOW_OF:
             type = ATK_RELATION_SUBWINDOW_OF;
             break;
 
-        case accessibility::AccessibleRelationType::NODE_CHILD_OF:
+        case accessibility::AccessibleRelationType_NODE_CHILD_OF:
             type = ATK_RELATION_NODE_CHILD_OF;
             break;
 

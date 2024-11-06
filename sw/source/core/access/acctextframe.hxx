@@ -104,7 +104,7 @@ private:
     SwFlyFrame* getFlyFrame() const;
 
     css::accessibility::AccessibleRelation makeRelation(
-        sal_Int16 nType, const SwFlyFrame* pFrame );
+        css::accessibility::AccessibleRelationType eType, const SwFlyFrame* pFrame);
 
 public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL getAccessibleRelationSet() override;

@@ -466,7 +466,7 @@ namespace accessibility
             rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSetHelper = new utl::AccessibleRelationSetHelper;
             Sequence<Reference<XAccessible>> aSequence { xParent };
             pRelationSetHelper->AddRelation(
-                AccessibleRelation( AccessibleRelationType::NODE_CHILD_OF, aSequence ) );
+                AccessibleRelation( AccessibleRelationType_NODE_CHILD_OF, aSequence ) );
             xRelSet = pRelationSetHelper;
         }
         return xRelSet;

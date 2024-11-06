@@ -518,13 +518,13 @@ uno::Reference< XAccessibleRelationSet > ScAccessibleEditObject::getAccessibleRe
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pLabeledBy->GetAccessible() };
-            rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::LABELED_BY, aSequence ) );
+            rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType_LABELED_BY, aSequence ) );
         }
         vcl::Window* pMemberOf = pWindow->GetAccessibleRelationMemberOf();
         if ( pMemberOf && pMemberOf != pWindow )
         {
             uno::Sequence< uno::Reference<css::accessibility::XAccessible> > aSequence { pMemberOf->GetAccessible() };
-            rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF, aSequence ) );
+            rRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType_MEMBER_OF, aSequence ) );
         }
         return rRelationSet;
     }

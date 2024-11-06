@@ -414,7 +414,7 @@ void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelatio
                     bFound = true;
             }
             if (bFound)
-                AddRelation(aCellIter.GetPos(), AccessibleRelationType::CONTROLLER_FOR, pRelationSet);
+                AddRelation(aCellIter.GetPos(), AccessibleRelationType_CONTROLLER_FOR, pRelationSet);
         }
     }
 }
@@ -432,20 +432,20 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
         ScRange aRef;
         while ( aIter.GetNextRef( aRef ) )
         {
-            AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
+            AddRelation( aRef, AccessibleRelationType_CONTROLLED_BY, pRelationSet);
         }
     }
 }
 
 void ScAccessibleCell::AddRelation(const ScAddress& rCell,
-    const sal_uInt16 aRelationType,
+    const AccessibleRelationType eRelationType,
     utl::AccessibleRelationSetHelper* pRelationSet)
 {
-    AddRelation(ScRange(rCell, rCell), aRelationType, pRelationSet);
+    AddRelation(ScRange(rCell, rCell), eRelationType, pRelationSet);
 }
 
 void ScAccessibleCell::AddRelation(const ScRange& rRange,
-    const sal_uInt16 aRelationType,
+    const AccessibleRelationType eRelationType,
     utl::AccessibleRelationSetHelper* pRelationSet)
 {
     uno::Reference < XAccessibleTable > xTable ( getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY );
@@ -477,7 +477,7 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     }
     OSL_ENSURE(nCount == nPos, "something went wrong");
     AccessibleRelation aRelation;
-    aRelation.RelationType = aRelationType;
+    aRelation.RelationType = eRelationType;
     aRelation.TargetSet = std::move(aTargetSet);
     pRelationSet->AddRelation(aRelation);
 }

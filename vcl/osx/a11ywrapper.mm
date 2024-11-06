@@ -206,8 +206,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
     if( rxAccessibleRelationSet.is() )
     {
-        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
-        if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() )
+        AccessibleRelation relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType_MEMBER_OF );
+        if ( relationMemberOf.RelationType == AccessibleRelationType_MEMBER_OF && relationMemberOf.TargetSet.hasElements() )
             return relationMemberOf.TargetSet[0];
     }
     return Reference < XAccessible > ();
@@ -341,8 +341,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
     if ( mActsAsRadioGroup ) {
         NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
         Reference < XAccessibleRelationSet > rxAccessibleRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
-        AccessibleRelation const relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType::MEMBER_OF );
-        if ( relationMemberOf.RelationType == AccessibleRelationType::MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
+        AccessibleRelation const relationMemberOf = rxAccessibleRelationSet -> getRelationByType ( AccessibleRelationType_MEMBER_OF );
+        if ( relationMemberOf.RelationType == AccessibleRelationType_MEMBER_OF && relationMemberOf.TargetSet.hasElements() ) {
             for (Reference <XAccessible> const & rMateAccessible : relationMemberOf.TargetSet ) {
                 if ( rMateAccessible.is() ) {
                     Reference< XAccessibleContext > rMateAccessibleContext( rMateAccessible -> getAccessibleContext() );
@@ -677,8 +677,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         NSString * title = [ self titleAttribute ];
         id titleElement = nil;
         if ( [ title length ] == 0 ) {
-            AccessibleRelation relationLabeledBy = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType::LABELED_BY );
-            if ( relationLabeledBy.RelationType == AccessibleRelationType::LABELED_BY && relationLabeledBy.TargetSet.hasElements()  ) {
+            AccessibleRelation relationLabeledBy = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType_LABELED_BY );
+            if ( relationLabeledBy.RelationType == AccessibleRelationType_LABELED_BY && relationLabeledBy.TargetSet.hasElements()  ) {
                 Reference <XAccessible> rxAccessible = relationLabeledBy.TargetSet[0];
                 titleElement = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessible -> getAccessibleContext() ];
             }
@@ -692,8 +692,8 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
 -(id)servesAsTitleForUIElementsAttribute {
     if ( [ self accessibleContext ] -> getAccessibleRelationSet().is() ) {
         id titleForElement = nil;
-        AccessibleRelation relationLabelFor = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType::LABEL_FOR );
-        if ( relationLabelFor.RelationType == AccessibleRelationType::LABEL_FOR && relationLabelFor.TargetSet.hasElements() ) {
+        AccessibleRelation relationLabelFor = [ self accessibleContext ] -> getAccessibleRelationSet() -> getRelationByType ( AccessibleRelationType_LABEL_FOR );
+        if ( relationLabelFor.RelationType == AccessibleRelationType_LABEL_FOR && relationLabelFor.TargetSet.hasElements() ) {
             Reference <XAccessible> rxAccessible = relationLabelFor.TargetSet[0];
             titleForElement = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessible -> getAccessibleContext() ];
         }
@@ -839,10 +839,10 @@ static std::ostream &operator<<(std::ostream &s, NSObject *obj) {
         if ( title && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
-        if ( [ title length ] == 0 && rxRelationSet.is() && rxRelationSet -> containsRelation ( AccessibleRelationType::LABELED_BY ) ) {
+        if ( [ title length ] == 0 && rxRelationSet.is() && rxRelationSet -> containsRelation ( AccessibleRelationType_LABELED_BY ) ) {
             [ attributeNames addObject: NSAccessibilityTitleUIElementAttribute ];
         }
-        if ( rxRelationSet.is() && rxRelationSet -> containsRelation ( AccessibleRelationType::LABEL_FOR ) ) {
+        if ( rxRelationSet.is() && rxRelationSet -> containsRelation ( AccessibleRelationType_LABEL_FOR ) ) {
             [ attributeNames addObject: NSAccessibilityServesAsTitleForUIElementsAttribute ];
         }
         // Special Attributes depending on interface
@@ -1156,9 +1156,9 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
             if ( [ element isKindOfClass: [ SalFrameWindow class ] ] && [ self isViewElement: element hitByPoint: point ] ) {
                 // we have a child window that is hit
                 Reference < XAccessibleRelationSet > relationSet = [ static_cast<SalFrameWindow *>(element) accessibleContext ] -> getAccessibleRelationSet();
-                if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType::SUB_WINDOW_OF )) {
+                if ( relationSet.is() && relationSet -> containsRelation ( AccessibleRelationType_SUB_WINDOW_OF )) {
                     // we have a valid relation to the parent element
-                    AccessibleRelation const relation = relationSet -> getRelationByType ( AccessibleRelationType::SUB_WINDOW_OF );
+                    AccessibleRelation const relation = relationSet -> getRelationByType ( AccessibleRelationType_SUB_WINDOW_OF );
                     for (Reference<XAccessible> const & rxAccessible : relation.TargetSet) {
                         if ( rxAccessible.is() && rxAccessible -> getAccessibleContext().is() ) {
                             // hit test for children of parent

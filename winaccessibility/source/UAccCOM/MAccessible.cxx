@@ -713,7 +713,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         AccessibleRelation accRelation;
                         for(int i=0; i<nRelCount ; i++)
                         {
-                            if (pRrelationSet->getRelation(i).RelationType == AccessibleRelationType::LABELED_BY)
+                            if (pRrelationSet->getRelation(i).RelationType == AccessibleRelationType_LABELED_BY)
                             {
                                 accRelation = pRrelationSet->getRelation(i);
                                 paccRelation = &accRelation;
@@ -736,7 +736,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                         paccRelation = nullptr;
                         for(int j=0; j<nRelCount ; j++)
                         {
-                            if (pRrelationSet->getRelation(j).RelationType == AccessibleRelationType::LABEL_FOR)
+                            if (pRrelationSet->getRelation(j).RelationType == AccessibleRelationType_LABEL_FOR)
                             {
                                 accRelation = pRrelationSet->getRelation(j);
                                 paccRelation = &accRelation;
@@ -1765,7 +1765,7 @@ static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
     for(sal_Int32 i=0 ; i<nRelations ; i++)
     {
         AccessibleRelation accRelation = pRrelationSet->getRelation(i);
-        if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
+        if (accRelation.RelationType == AccessibleRelationType_MEMBER_OF)
         {
             Sequence<Reference<XAccessible>> xTargets = accRelation.TargetSet;
             return xTargets[0].get();
@@ -1834,7 +1834,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             for(int i=0 ; i<nRel ; i++)
             {
                 AccessibleRelation accRelation = pRrelationSet->getRelation(i);
-                if (accRelation.RelationType == AccessibleRelationType::MEMBER_OF)
+                if (accRelation.RelationType == AccessibleRelationType_MEMBER_OF)
                 {
                     Sequence<Reference<XAccessible>> xTargets = accRelation.TargetSet;
 
@@ -2727,12 +2727,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relationTargetsOfType(BSTR t
         if (!xRelationSet.is())
             return S_FALSE;
 
-        const sal_Int16 nUnoRelationType = CAccRelation::mapToUnoRelationType(type);
-        if (nUnoRelationType == AccessibleRelationType::INVALID)
+        const AccessibleRelationType eUnoRelationType = CAccRelation::mapToUnoRelationType(type);
+        if (eUnoRelationType == AccessibleRelationType_INVALID)
             return S_FALSE;
 
-        AccessibleRelation aRelation = xRelationSet->getRelationByType(nUnoRelationType);
-        if (aRelation.RelationType != nUnoRelationType || !aRelation.TargetSet.hasElements())
+        AccessibleRelation aRelation = xRelationSet->getRelationByType(eUnoRelationType);
+        if (aRelation.RelationType != eUnoRelationType || !aRelation.TargetSet.hasElements())
             return S_FALSE;
 
         const sal_Int32 nRetCount

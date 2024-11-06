@@ -738,8 +738,8 @@ namespace accessibility
             {
                 uno::Sequence<uno::Reference<XAccessible>> aSequence
                     { mpParaManager->GetChild( nMyParaIndex - 1 ).first.get() };
-                AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
-                                            aSequence );
+                AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM,
+                                           aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
             }
 
@@ -749,8 +749,8 @@ namespace accessibility
             {
                 uno::Sequence<uno::Reference<XAccessible>> aSequence
                     { mpParaManager->GetChild( nMyParaIndex + 1 ).first.get() };
-                AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
-                                            aSequence );
+                AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO,
+                                           aSequence );
                 pAccRelSetHelper->AddRelation( aAccRel );
             }
 

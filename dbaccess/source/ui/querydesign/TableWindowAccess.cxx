@@ -181,20 +181,20 @@ namespace dbaui
             OJoinTableView* pView = m_pTable->getTableView();
             auto aIter = pView->getTableConnections(m_pTable) + nIndex;
             aRet.TargetSet = { getParentChild(aIter - pView->getTableConnections().begin()) };
-            aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
+            aRet.RelationType = AccessibleRelationType_CONTROLLER_FOR;
         }
         return aRet;
     }
-    sal_Bool SAL_CALL OTableWindowAccess::containsRelation( sal_Int16 aRelationType )
+    sal_Bool SAL_CALL OTableWindowAccess::containsRelation(AccessibleRelationType eRelationType)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        return      AccessibleRelationType::CONTROLLER_FOR == aRelationType
+        return AccessibleRelationType_CONTROLLER_FOR == eRelationType
                 &&  m_pTable && m_pTable->getTableView()->ExistsAConn(m_pTable);
     }
-    AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType( sal_Int16 aRelationType )
+    AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType(AccessibleRelationType eRelationType)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
-        if( AccessibleRelationType::CONTROLLER_FOR == aRelationType && m_pTable)
+        if (AccessibleRelationType_CONTROLLER_FOR == eRelationType && m_pTable)
         {
             OJoinTableView* pView = m_pTable->getTableView();
             const auto& rConnectionList = pView->getTableConnections();
@@ -213,7 +213,7 @@ namespace dbaui
             }
 
             Sequence<Reference<css::accessibility::XAccessible>> aSeq(aRelations.data(), aRelations.size());
-            return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR, aSeq);
+            return AccessibleRelation(AccessibleRelationType_CONTROLLER_FOR, aSeq);
         }
         return AccessibleRelation();
     }

@@ -140,15 +140,15 @@ namespace dbaui
                      m_pLine->GetDestWin()->GetAccessible() };
         }
 
-        return AccessibleRelation(AccessibleRelationType::CONTROLLED_BY,aSeq);
+        return AccessibleRelation(AccessibleRelationType_CONTROLLED_BY,aSeq);
     }
-    sal_Bool SAL_CALL OConnectionLineAccess::containsRelation( sal_Int16 aRelationType )
+    sal_Bool SAL_CALL OConnectionLineAccess::containsRelation(AccessibleRelationType eRelationType)
     {
-        return AccessibleRelationType::CONTROLLED_BY == aRelationType;
+        return AccessibleRelationType_CONTROLLED_BY == eRelationType;
     }
-    AccessibleRelation SAL_CALL OConnectionLineAccess::getRelationByType( sal_Int16 aRelationType )
+    AccessibleRelation SAL_CALL OConnectionLineAccess::getRelationByType(AccessibleRelationType eRelationType)
     {
-        if( AccessibleRelationType::CONTROLLED_BY == aRelationType )
+        if (AccessibleRelationType_CONTROLLED_BY == eRelationType)
             return getRelation(0);
         return AccessibleRelation();
     }

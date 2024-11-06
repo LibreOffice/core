@@ -27,10 +27,13 @@
 #include <cppunit/TestAssert.h>
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+
+using css::accessibility::AccessibleRelationType;
 
 class OOO_DLLPUBLIC_TEST AccessibilityTools
 {
@@ -178,7 +181,7 @@ public:
 
     static OUString getRoleName(const sal_Int16 role);
     static OUString getEventIdName(const sal_Int16 event_id);
-    static OUString getRelationTypeName(const sal_Int16 rel_type);
+    static OUString getRelationTypeName(AccessibleRelationType rel_type);
 
     template <typename T> static std::string debugString(const css::uno::Reference<T>& x)
     {

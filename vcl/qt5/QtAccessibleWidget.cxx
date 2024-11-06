@@ -219,35 +219,35 @@ sal_Int16 lcl_matchQtTextBoundaryType(QAccessible::TextBoundaryType boundaryType
     return -1;
 }
 
-QAccessible::Relation lcl_matchUnoRelation(short relationType)
+QAccessible::Relation lcl_matchUnoRelation(AccessibleRelationType eRelationType)
 {
     // Qt semantics is the other way around
-    switch (relationType)
+    switch (eRelationType)
     {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-        case AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case AccessibleRelationType_CONTENT_FLOWS_FROM:
             return QAccessible::FlowsTo;
-        case AccessibleRelationType::CONTENT_FLOWS_TO:
+        case AccessibleRelationType_CONTENT_FLOWS_TO:
             return QAccessible::FlowsFrom;
 #endif
-        case AccessibleRelationType::CONTROLLED_BY:
+        case AccessibleRelationType_CONTROLLED_BY:
             return QAccessible::Controller;
-        case AccessibleRelationType::CONTROLLER_FOR:
+        case AccessibleRelationType_CONTROLLER_FOR:
             return QAccessible::Controlled;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-        case AccessibleRelationType::DESCRIBED_BY:
+        case AccessibleRelationType_DESCRIBED_BY:
             return QAccessible::DescriptionFor;
 #endif
-        case AccessibleRelationType::LABELED_BY:
+        case AccessibleRelationType_LABELED_BY:
             return QAccessible::Label;
-        case AccessibleRelationType::LABEL_FOR:
+        case AccessibleRelationType_LABEL_FOR:
             return QAccessible::Labelled;
-        case AccessibleRelationType::INVALID:
-        case AccessibleRelationType::MEMBER_OF:
-        case AccessibleRelationType::SUB_WINDOW_OF:
-        case AccessibleRelationType::NODE_CHILD_OF:
+        case AccessibleRelationType_INVALID:
+        case AccessibleRelationType_MEMBER_OF:
+        case AccessibleRelationType_SUB_WINDOW_OF:
+        case AccessibleRelationType_NODE_CHILD_OF:
         default:
-            SAL_WARN("vcl.qt", "Unmatched relation: " << relationType);
+            SAL_WARN("vcl.qt", "Unmatched relation: " << static_cast<int>(eRelationType));
             return {};
     }
 }

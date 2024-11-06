@@ -31,14 +31,13 @@ struct AccessibleRelation
 {
     /** Type of the relation.
 
-        <p>Its value has to be one of the constants defined by
-        AccessibleRelationType.  If that value is INVALID then
+        <p>If that value is INVALID then
         the whole relation is regarded as invalid.  The content of the
         TargetSet is then undefined.</p>
 
         @see AccessibleRelationType
     */
-    short RelationType;
+    ::com::sun::star::accessibility::AccessibleRelationType RelationType;
 
     /** Set of objects that are the relation's targets.
 

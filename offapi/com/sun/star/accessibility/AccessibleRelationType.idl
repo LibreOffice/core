@@ -21,70 +21,65 @@ module com { module sun { module star { module accessibility {
 
 /** Collection of relation types.
 
-    <p>This list of constants defines the available types of relations that
+    <p>This enum defines the available types of relations that
     are usable by AccessibleRelation.</p>
-
-    <p>We are using constants instead of a more typesafe enum.  The reason
-    for this is that IDL enums may not be extended.  Therefore, in order to
-    include future extensions to the set of roles we have to use constants
-    here.</p>
 
     @since OOo 1.1.2
 */
-constants AccessibleRelationType
+enum AccessibleRelationType
 {
     /** Invalid relation type.
 
         <p>Indicates an invalid relation type.  This is used to indicate
         that a retrieval method could not find a requested relation.</p>
     */
-    const short INVALID = 0;
+    INVALID,
 
     /** Content-flows-from relation.
 
         <p>Indicates a content flow between the related objects.</p>
     */
-    const short CONTENT_FLOWS_FROM = 1;
+    CONTENT_FLOWS_FROM,
 
     /** Content-flows-to relation.
 
         <p>Indicates a content flow between the related objects.</p>
     */
-    const short CONTENT_FLOWS_TO = 2;
+    CONTENT_FLOWS_TO,
 
     /** Controlled-by relation type.
 
         <p>Indicates an object is controlled by one or more target
         objects.</p>
     */
-    const short CONTROLLED_BY = 3;
+    CONTROLLED_BY,
 
     /** Controller-for relation type.
 
         <p>Indicates an object is a controller for one or more target
         objects.</p>
     */
-    const short CONTROLLER_FOR = 4;
+    CONTROLLER_FOR,
 
     /** Label-for relation type.
 
         <p>Indicates an object is a label for one or more target
         objects.</p>
     */
-    const short LABEL_FOR = 5;
+    LABEL_FOR,
 
     /** Labeled-by relation type.
 
         <p>Indicates an object is labeled by one or more target objects.</p>
     */
-    const short LABELED_BY = 6;
+    LABELED_BY,
 
     /** Member-of relation type.
 
         <p>Indicates an object is a member of a group of one or more target
         objects.</p>
     */
-    const short MEMBER_OF = 7;
+    MEMBER_OF,
 
     /** Sub-Window-of relation type.
 
@@ -93,7 +88,7 @@ constants AccessibleRelationType
         window.  Note that there is no relation that points the other way,
         from the parent window to the child window.</p>
     */
-    const short SUB_WINDOW_OF = 8;
+    SUB_WINDOW_OF,
 
     /** Node-Child-of relation type.
 
@@ -103,7 +98,7 @@ constants AccessibleRelationType
 
         @since OOo 3.0
     */
-    const short NODE_CHILD_OF = 9;
+    NODE_CHILD_OF,
 
     /** Described-by relation type.
 
@@ -111,7 +106,7 @@ constants AccessibleRelationType
 
         @since OOo 3.5
     */
-    const short DESCRIBED_BY = 10;
+    DESCRIBED_BY
 };
 
 }; }; }; };

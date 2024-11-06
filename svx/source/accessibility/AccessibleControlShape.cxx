@@ -554,11 +554,11 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
         css::uno::Sequence<css::uno::Reference<XAccessible>> aSequence { xAcc };
         if( getAccessibleRole() == AccessibleRole::RADIO_BUTTON )
         {
-            pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF, aSequence ) );
+            pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType_MEMBER_OF, aSequence ) );
         }
         else
         {
-            pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType::LABELED_BY, aSequence ) );
+            pRelationSetHelper->AddRelation( AccessibleRelation( AccessibleRelationType_LABELED_BY, aSequence ) );
         }
     }
     return pRelationSetHelper;

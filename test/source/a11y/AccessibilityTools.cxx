@@ -620,34 +620,35 @@ OUString AccessibilityTools::getEventIdName(const sal_Int16 event_id)
     return unknownName(event_id);
 }
 
-OUString AccessibilityTools::getRelationTypeName(const sal_Int16 rel_type)
+OUString AccessibilityTools::getRelationTypeName(AccessibleRelationType rel_type)
 {
     switch (rel_type)
     {
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM:
             return u"CONTENT_FLOWS_FROM"_ustr;
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_TO:
             return u"CONTENT_FLOWS_TO"_ustr;
-        case accessibility::AccessibleRelationType::CONTROLLED_BY:
+        case accessibility::AccessibleRelationType_CONTROLLED_BY:
             return u"CONTROLLED_BY"_ustr;
-        case accessibility::AccessibleRelationType::CONTROLLER_FOR:
+        case accessibility::AccessibleRelationType_CONTROLLER_FOR:
             return u"CONTROLLER_FOR"_ustr;
-        case accessibility::AccessibleRelationType::DESCRIBED_BY:
+        case accessibility::AccessibleRelationType_DESCRIBED_BY:
             return u"DESCRIBED_BY"_ustr;
-        case accessibility::AccessibleRelationType::INVALID:
+        case accessibility::AccessibleRelationType_INVALID:
             return u"INVALID"_ustr;
-        case accessibility::AccessibleRelationType::LABELED_BY:
+        case accessibility::AccessibleRelationType_LABELED_BY:
             return u"LABELED_BY"_ustr;
-        case accessibility::AccessibleRelationType::LABEL_FOR:
+        case accessibility::AccessibleRelationType_LABEL_FOR:
             return u"LABEL_FOR"_ustr;
-        case accessibility::AccessibleRelationType::MEMBER_OF:
+        case accessibility::AccessibleRelationType_MEMBER_OF:
             return u"MEMBER_OF"_ustr;
-        case accessibility::AccessibleRelationType::NODE_CHILD_OF:
+        case accessibility::AccessibleRelationType_NODE_CHILD_OF:
             return u"NODE_CHILD_OF"_ustr;
-        case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+        case accessibility::AccessibleRelationType_SUB_WINDOW_OF:
             return u"SUB_WINDOW_OF"_ustr;
+        default:
+            return unknownName(static_cast<sal_Int64>(rel_type));
     }
-    return unknownName(rel_type);
 }
 
 OUString AccessibilityTools::debugName(accessibility::XAccessibleContext* ctx)

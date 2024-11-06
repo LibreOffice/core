@@ -109,13 +109,13 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct count of relations", sal_Int32(1),
                                      set->getRelationCount());
-        sal_Int16 firstrelation = set->getRelation(0).RelationType;
+        AccessibleRelationType firstrelation = set->getRelation(0).RelationType;
         css::uno::Reference<css::accessibility::XAccessibleText> adummy(
             set->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
         atarget = adummy;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct relation type for paragraph 0",
                                      AccessibilityTools::getRelationTypeName(
-                                         accessibility::AccessibleRelationType::CONTENT_FLOWS_TO),
+                                         accessibility::AccessibleRelationType_CONTENT_FLOWS_TO),
                                      AccessibilityTools::getRelationTypeName(firstrelation));
 
         css::uno::Reference<css::accessibility::XAccessibleText> paraText2(para2,
@@ -129,23 +129,23 @@ void AccessibleRelationSet::contents_flows_to_and_from()
     css::uno::Reference<css::accessibility::XAccessibleRelationSet> set2
         = oObj2->getAccessibleRelationSet();
 
-    sal_Int16 relationtypes[2] = { accessibility::AccessibleRelationType::INVALID,
-                                   accessibility::AccessibleRelationType::INVALID };
+    AccessibleRelationType relationtypes[2] = { accessibility::AccessibleRelationType_INVALID,
+                                                accessibility::AccessibleRelationType_INVALID };
     css::uno::Reference<css::accessibility::XAccessibleText> atargets[2];
 
     if (set2.is())
     {
         CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct count of relations", sal_Int32(2),
                                      set2->getRelationCount());
-        sal_Int16 tmprelation = set2->getRelation(0).RelationType;
-        if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM)
+        AccessibleRelationType tmprelation = set2->getRelation(0).RelationType;
+        if (tmprelation == accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
             atargets[0] = adummy;
             relationtypes[0] = tmprelation;
         }
-        else if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_TO)
+        else if (tmprelation == accessibility::AccessibleRelationType_CONTENT_FLOWS_TO)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(0).TargetSet[0], uno::UNO_QUERY_THROW);
@@ -157,14 +157,14 @@ void AccessibleRelationSet::contents_flows_to_and_from()
             CPPUNIT_FAIL("didn't gain correct relation type");
         }
         tmprelation = set2->getRelation(1).RelationType;
-        if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM)
+        if (tmprelation == accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(1).TargetSet[0], uno::UNO_QUERY_THROW);
             atargets[0] = adummy;
             relationtypes[0] = tmprelation;
         }
-        else if (tmprelation == accessibility::AccessibleRelationType::CONTENT_FLOWS_TO)
+        else if (tmprelation == accessibility::AccessibleRelationType_CONTENT_FLOWS_TO)
         {
             css::uno::Reference<css::accessibility::XAccessibleText> adummy(
                 set2->getRelation(1).TargetSet[0], uno::UNO_QUERY_THROW);
@@ -179,7 +179,7 @@ void AccessibleRelationSet::contents_flows_to_and_from()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct relation type for paragraph 1",
                                  AccessibilityTools::getRelationTypeName(
-                                     accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM),
+                                     accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM),
                                  AccessibilityTools::getRelationTypeName(relationtypes[0]));
 
     css::uno::Reference<css::accessibility::XAccessibleText> paraText1(para1, uno::UNO_QUERY_THROW);
@@ -188,7 +188,7 @@ void AccessibleRelationSet::contents_flows_to_and_from()
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("didn't gain correct relation type for paragraph 3",
                                  AccessibilityTools::getRelationTypeName(
-                                     accessibility::AccessibleRelationType::CONTENT_FLOWS_TO),
+                                     accessibility::AccessibleRelationType_CONTENT_FLOWS_TO),
                                  AccessibilityTools::getRelationTypeName(relationtypes[1]));
 
     css::uno::Reference<css::accessibility::XAccessibleText> paraText3(para3, uno::UNO_QUERY_THROW);

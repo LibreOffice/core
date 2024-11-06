@@ -25,8 +25,8 @@
 
 namespace uno = ::com::sun::star::uno;
 
+using namespace com::sun::star::accessibility;
 using ::com::sun::star::accessibility::AccessibleRelation;
-namespace AccessibleRelationType = ::com::sun::star::accessibility::AccessibleRelationType;
 
 void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelationSetHelper& rRelationSet)
 {
@@ -37,7 +37,7 @@ void FloatingWindowAccessible::FillAccessibleRelationSet(utl::AccessibleRelation
         if( pParentWindow )
         {
             uno::Sequence<uno::Reference<css::accessibility::XAccessible>> aSequence { pParentWindow->GetAccessible() };
-            rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::SUB_WINDOW_OF, aSequence ) );
+            rRelationSet.AddRelation(AccessibleRelation(AccessibleRelationType_SUB_WINDOW_OF, aSequence));
         }
     }
 }

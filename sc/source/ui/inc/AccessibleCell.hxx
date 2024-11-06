@@ -22,6 +22,7 @@
 #include <memory>
 #include "AccessibleCellBase.hxx"
 #include "viewdata.hxx"
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <rtl/ref.hxx>
 #include <editeng/AccessibleStaticTextBase.hxx>
@@ -35,6 +36,8 @@ class ScAccessibleDocument;
 
 typedef cppu::ImplHelper1< css::accessibility::XAccessibleExtendedAttributes>
                     ScAccessibleCellAttributeImpl;
+
+using css::accessibility::AccessibleRelationType;
 
 /** @descr
         This base class provides an implementation of the
@@ -152,10 +155,10 @@ private:
     void FillDependents(utl::AccessibleRelationSetHelper* pRelationSet);
     void FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet);
     void AddRelation(const ScAddress& rCell,
-        const sal_uInt16 aRelationType,
+        const AccessibleRelationType eRelationType,
         ::utl::AccessibleRelationSetHelper* pRelationSet);
     void AddRelation(const ScRange& rRange,
-        const sal_uInt16 aRelationType,
+        const AccessibleRelationType eRelationType,
         ::utl::AccessibleRelationSetHelper* pRelationSet);
     bool IsFormulaMode();
     bool IsDropdown() const;

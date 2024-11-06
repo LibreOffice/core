@@ -301,7 +301,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvRuler::getAccessible
     if( xAccObj.is() )
     {
         Sequence<Reference<css::accessibility::XAccessible>> aSeq{ xAccObj };
-        pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLER_FOR, aSeq ) );
+        pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType_CONTROLLER_FOR, aSeq ) );
     }
 
     return pRelationSet;
@@ -840,7 +840,7 @@ Reference< XAccessibleRelationSet > SAL_CALL ScAccessibleCsvGrid::getAccessibleR
         if( xAccObj.is() )
         {
             Sequence<Reference<css::accessibility::XAccessible>> aSeq{ xAccObj };
-            pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType::CONTROLLED_BY, aSeq ) );
+            pRelationSet->AddRelation( AccessibleRelation( AccessibleRelationType_CONTROLLED_BY, aSeq ) );
         }
     }
 

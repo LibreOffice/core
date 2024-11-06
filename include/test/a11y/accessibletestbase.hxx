@@ -77,7 +77,7 @@ protected:
 
     static css::uno::Reference<css::accessibility::XAccessibleContext> getFirstRelationTargetOfType(
         const css::uno::Reference<css::accessibility::XAccessibleContext>& xContext,
-        sal_Int16 relationType);
+        css::accessibility::AccessibleRelationType relationType);
 
     /**
      * @brief Tries to list all children of an accessible

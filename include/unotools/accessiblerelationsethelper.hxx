@@ -22,10 +22,13 @@
 
 #include <unotools/unotoolsdllapi.h>
 
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
 #include <vector>
+
+using css::accessibility::AccessibleRelationType;
 
 //= XAccessibleRelationSet helper classes
 
@@ -77,22 +80,20 @@ public:
     /** Tests whether the relation set contains a relation matching the
         specified key.
 
-        @param aRelationType
-            The type of relation to look for in this set of relations.  This
-            has to be one of the constants of
-            AccessibleRelationType.
+        @param eRelationType
+            The type of relation to look for in this set of relations.
 
         @return
             Returns <TRUE/> if there is a (at least one) relation of the
             given type and <FALSE/> if there is no such relation in the set.
     */
-    virtual sal_Bool SAL_CALL containsRelation(sal_Int16 aRelationType) override;
+    virtual sal_Bool SAL_CALL
+    containsRelation(css::accessibility::AccessibleRelationType eRelationType) override;
 
     /** Retrieve and return the relation with the given relation type.
 
-        @param aRelationType
-            The type of the relation to return.  This has to be one of the
-            constants of AccessibleRelationType.
+        @param eRelationType
+            The type of the relation to return.
 
         @return
             If a relation with the given type could be found than (a copy
@@ -100,7 +101,7 @@ public:
             type INVALID is returned.
     */
     virtual css::accessibility::AccessibleRelation SAL_CALL
-    getRelationByType(sal_Int16 aRelationType) override;
+    getRelationByType(AccessibleRelationType eRelationType) override;
 
     /// @throws uno::RuntimeException
     void AddRelation(const css::accessibility::AccessibleRelation& rRelation);

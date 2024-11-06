@@ -22,8 +22,11 @@
 #include "Resource.h" // main symbols
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include "UNOXWrapper.h"
+
+using css::accessibility::AccessibleRelationType;
 
 /**
  * CAccRelation implements IAccessibleRelation interface.
@@ -74,8 +77,8 @@ public:
     // Override of IUNOXWrapper.
     STDMETHOD(put_XSubInterface)(hyper pXSubInterface) override;
 
-    static const wchar_t* mapToIA2RelationType(sal_Int16 nUnoRelationType);
-    static sal_Int16 mapToUnoRelationType(const BSTR aIA2RelationType);
+    static const wchar_t* mapToIA2RelationType(AccessibleRelationType eUnoRelationType);
+    static AccessibleRelationType mapToUnoRelationType(const BSTR aIA2RelationType);
 
 private:
     css::accessibility::AccessibleRelation relation;

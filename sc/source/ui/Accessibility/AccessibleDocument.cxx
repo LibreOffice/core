@@ -894,7 +894,7 @@ rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSe
 
             AccessibleRelation aRelation;
             aRelation.TargetSet = { Get(pAccShapeData) };
-            aRelation.RelationType = AccessibleRelationType::CONTROLLER_FOR;
+            aRelation.RelationType = AccessibleRelationType_CONTROLLER_FOR;
 
             pRelationSet->AddRelation(aRelation);
         }
@@ -1147,7 +1147,7 @@ rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSe
         }
         AccessibleRelation aRelation;
         aRelation.TargetSet = { xAccessible };
-        aRelation.RelationType = AccessibleRelationType::CONTROLLED_BY;
+        aRelation.RelationType = AccessibleRelationType_CONTROLLED_BY;
         pRelationSet->AddRelation(aRelation);
     }
 

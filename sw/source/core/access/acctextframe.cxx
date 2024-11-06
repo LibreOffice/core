@@ -269,10 +269,10 @@ SwFlyFrame* SwAccessibleTextFrame::getFlyFrame() const
     return pFlyFrame;
 }
 
-AccessibleRelation SwAccessibleTextFrame::makeRelation( sal_Int16 nType, const SwFlyFrame* pFrame )
+AccessibleRelation SwAccessibleTextFrame::makeRelation(AccessibleRelationType eType, const SwFlyFrame* pFrame )
 {
     uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pFrame) };
-    return AccessibleRelation( nType, aSequence );
+    return AccessibleRelation(eType, aSequence);
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccessibleRelationSet( )
@@ -291,12 +291,12 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     const SwFlyFrame* pPrevFrame = pFlyFrame->GetPrevLink();
     if( pPrevFrame != nullptr )
         pHelper->AddRelation( makeRelation(
-            AccessibleRelationType::CONTENT_FLOWS_FROM, pPrevFrame ) );
+            AccessibleRelationType_CONTENT_FLOWS_FROM, pPrevFrame ) );
 
     const SwFlyFrame* pNextFrame = pFlyFrame->GetNextLink();
     if( pNextFrame != nullptr )
         pHelper->AddRelation( makeRelation(
-            AccessibleRelationType::CONTENT_FLOWS_TO, pNextFrame ) );
+            AccessibleRelationType_CONTENT_FLOWS_TO, pNextFrame ) );
 
     return pHelper;
 }

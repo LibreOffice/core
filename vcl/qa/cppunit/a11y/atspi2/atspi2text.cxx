@@ -938,7 +938,7 @@ sal_Int64 Atspi2TestTree::swChildIndex(uno::Reference<accessibility::XAccessible
     for (sal_Int64 n = 0;; n++)
     {
         auto xPrev = getFirstRelationTargetOfType(
-            xContext, accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM);
+            xContext, accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM);
         if (!xPrev.is())
             return n;
         xContext = xPrev;
@@ -977,7 +977,7 @@ void Atspi2TestTree::testSwScroll(
     do
     {
         xLONextContext = getFirstRelationTargetOfType(
-            xLONextContext, accessibility::AccessibleRelationType::CONTENT_FLOWS_TO);
+            xLONextContext, accessibility::AccessibleRelationType_CONTENT_FLOWS_TO);
         xLONextText.set(xLONextContext, uno::UNO_QUERY);
         nAfterLast++;
     } while (xLONextContext.is() && !xLONextText.is());

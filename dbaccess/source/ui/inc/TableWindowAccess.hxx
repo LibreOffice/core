@@ -19,10 +19,13 @@
 #pragma once
 
 #include "TableWindow.hxx"
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <vcl/vclptr.hxx>
+
+using css::accessibility::AccessibleRelationType;
 
 namespace dbaui
 {
@@ -71,8 +74,8 @@ namespace dbaui
         // XAccessibleRelationSet
         virtual sal_Int32 SAL_CALL getRelationCount(  ) override;
         virtual css::accessibility::AccessibleRelation SAL_CALL getRelation( sal_Int32 nIndex ) override;
-        virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType ) override;
-        virtual css::accessibility::AccessibleRelation SAL_CALL getRelationByType( sal_Int16 aRelationType ) override;
+        virtual sal_Bool SAL_CALL containsRelation(AccessibleRelationType eRelationType) override;
+        virtual css::accessibility::AccessibleRelation SAL_CALL getRelationByType(AccessibleRelationType eRelationType) override;
     };
 }
 

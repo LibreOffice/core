@@ -85,8 +85,8 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
         aVec.reserve(aGroup.size());
         std::transform(aGroup.begin(), aGroup.end(), std::back_inserter(aVec),
             [](const VclPtr<RadioButton>& rxItem) { return rxItem->GetAccessible(); });
-        rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF,
-                                                      comphelper::containerToSequence(aVec) ) );
+        rRelationSet.AddRelation(AccessibleRelation(AccessibleRelationType_MEMBER_OF,
+                                                    comphelper::containerToSequence(aVec)));
     }
 }
 

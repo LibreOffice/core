@@ -75,24 +75,22 @@ public class NameProvider
 
 
     /** Return the name of the specified relation.
-        @param nRelation
-            Id of the relation for which to return its name.  This is one of
-            the ids listed in the <type>AccessibleRelationType</const>
-            constants group.
+        @param eRelation
+            Id of the relation for which to return its name.
         @return
             Returns the name of the specified relation type or an empty
-            string if an invalid / unknown role id was given.
+            string if an invalid / unknown relation type id was given.
      */
-    public static String getRelationName (int nRelation)
+    public static String getRelationName (AccessibleRelationType eRelation)
     {
-        return maRelationMap.get (Integer.valueOf(nRelation));
+        return maRelationMap.get(eRelation);
     }
 
 
     private static HashMap<Integer, String> maStateMap = new HashMap<Integer, String>();
     private static HashMap<Integer, String> maEventMap = new HashMap<Integer, String>();
     private static HashMap<Integer, String> maRoleMap = new HashMap<Integer, String>();
-    private static HashMap<Integer, String> maRelationMap = new HashMap<Integer, String>();
+    private static HashMap<AccessibleRelationType, String> maRelationMap = new HashMap<AccessibleRelationType, String>();
 
     static {
         maStateMap.put (Integer.valueOf(AccessibleStateType.INVALID), "INVALID");
@@ -264,14 +262,14 @@ public class NameProvider
         maRoleMap.put (Integer.valueOf(AccessibleRole.VIEW_PORT), "VIEW_PORT");
         maRoleMap.put (Integer.valueOf(AccessibleRole.WINDOW), "WINDOW");
 
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.INVALID), "INVALID");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.CONTENT_FLOWS_FROM), "CONTENT_FLOWS_FROM");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.CONTENT_FLOWS_TO), "CONTENT_FLOWS_TO");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.CONTROLLED_BY), "CONTROLLED_BY");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.CONTROLLER_FOR), "CONTROLLER_FOR");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.LABEL_FOR), "LABEL_FOR");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.LABELED_BY), "LABELED_BY");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.MEMBER_OF), "MEMBER_OF");
-        maRelationMap.put (Integer.valueOf(AccessibleRelationType.SUB_WINDOW_OF), "SUB_WINDOW_OF");
+        maRelationMap.put (AccessibleRelationType.INVALID, "INVALID");
+        maRelationMap.put (AccessibleRelationType.CONTENT_FLOWS_FROM, "CONTENT_FLOWS_FROM");
+        maRelationMap.put (AccessibleRelationType.CONTENT_FLOWS_TO, "CONTENT_FLOWS_TO");
+        maRelationMap.put (AccessibleRelationType.CONTROLLED_BY, "CONTROLLED_BY");
+        maRelationMap.put (AccessibleRelationType.CONTROLLER_FOR, "CONTROLLER_FOR");
+        maRelationMap.put (AccessibleRelationType.LABEL_FOR, "LABEL_FOR");
+        maRelationMap.put (AccessibleRelationType.LABELED_BY, "LABELED_BY");
+        maRelationMap.put (AccessibleRelationType.MEMBER_OF, "MEMBER_OF");
+        maRelationMap.put (AccessibleRelationType.SUB_WINDOW_OF, "SUB_WINDOW_OF");
     }
 }

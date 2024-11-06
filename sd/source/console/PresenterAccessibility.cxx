@@ -210,7 +210,7 @@ public:
     AccessibleRelationSet();
 
     void AddRelation (
-        const sal_Int16 nRelationType,
+        const AccessibleRelationType eRelationType,
         const Reference<XAccessible>& rxObject);
 
     //----- XAccessibleRelationSet --------------------------------------------
@@ -219,9 +219,9 @@ public:
 
     virtual AccessibleRelation SAL_CALL getRelation (sal_Int32 nIndex) override;
 
-    virtual sal_Bool SAL_CALL containsRelation (sal_Int16 nRelationType) override;
+    virtual sal_Bool SAL_CALL containsRelation(css::accessibility::AccessibleRelationType eRelationType) override;
 
-    virtual AccessibleRelation SAL_CALL getRelationByType (sal_Int16 nRelationType) override;
+    virtual AccessibleRelation SAL_CALL getRelationByType(AccessibleRelationType eRelationType) override;
 
 private:
     ::std::vector<AccessibleRelation> maRelations;
@@ -1193,11 +1193,11 @@ AccessibleRelationSet::AccessibleRelationSet()
 }
 
 void AccessibleRelationSet::AddRelation (
-    const sal_Int16 nRelationType,
+    const AccessibleRelationType eRelationType,
     const Reference<XAccessible>& rxObject)
 {
     maRelations.emplace_back();
-    maRelations.back().RelationType = nRelationType;
+    maRelations.back().RelationType = eRelationType;
     maRelations.back().TargetSet = { rxObject };
 }
 
@@ -1216,16 +1216,16 @@ AccessibleRelation SAL_CALL AccessibleRelationSet::getRelation (sal_Int32 nIndex
         return maRelations[nIndex];
 }
 
-sal_Bool SAL_CALL AccessibleRelationSet::containsRelation (sal_Int16 nRelationType)
+sal_Bool SAL_CALL AccessibleRelationSet::containsRelation(AccessibleRelationType eRelationType)
 {
     return std::any_of(maRelations.begin(), maRelations.end(),
-        [nRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == nRelationType; });
+        [eRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == eRelationType; });
 }
 
-AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType (sal_Int16 nRelationType)
+AccessibleRelation SAL_CALL AccessibleRelationSet::getRelationByType(AccessibleRelationType eRelationType)
 {
     auto iRelation = std::find_if(maRelations.begin(), maRelations.end(),
-        [nRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == nRelationType; });
+        [eRelationType](const AccessibleRelation& rRelation) { return rRelation.RelationType == eRelationType; });
     if (iRelation != maRelations.end())
         return *iRelation;
     return AccessibleRelation();
@@ -1260,12 +1260,12 @@ Reference<XAccessibleRelationSet> SAL_CALL
         {
             if (mnParagraphIndex>0)
                 pSet->AddRelation(
-                    AccessibleRelationType::CONTENT_FLOWS_FROM,
+                    AccessibleRelationType_CONTENT_FLOWS_FROM,
                     xParentContext->getAccessibleChild(mnParagraphIndex-1));
 
             if (mnParagraphIndex<xParentContext->getAccessibleChildCount()-1)
                 pSet->AddRelation(
-                    AccessibleRelationType::CONTENT_FLOWS_TO,
+                    AccessibleRelationType_CONTENT_FLOWS_TO,
                     xParentContext->getAccessibleChild(mnParagraphIndex+1));
         }
     }

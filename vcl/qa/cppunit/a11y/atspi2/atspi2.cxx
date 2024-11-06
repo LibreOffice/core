@@ -194,33 +194,33 @@ static AtspiStateType mapAtspiState(sal_Int64 nState)
     }
 }
 
-static AtspiRelationType mapRelationType(sal_Int16 nRelation)
+static AtspiRelationType mapRelationType(AccessibleRelationType eRelation)
 {
-    switch (nRelation)
+    switch (eRelation)
     {
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM:
             return ATSPI_RELATION_FLOWS_FROM;
-        case accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+        case accessibility::AccessibleRelationType_CONTENT_FLOWS_TO:
             return ATSPI_RELATION_FLOWS_TO;
-        case accessibility::AccessibleRelationType::CONTROLLED_BY:
+        case accessibility::AccessibleRelationType_CONTROLLED_BY:
             return ATSPI_RELATION_CONTROLLED_BY;
-        case accessibility::AccessibleRelationType::CONTROLLER_FOR:
+        case accessibility::AccessibleRelationType_CONTROLLER_FOR:
             return ATSPI_RELATION_CONTROLLER_FOR;
-        case accessibility::AccessibleRelationType::DESCRIBED_BY:
+        case accessibility::AccessibleRelationType_DESCRIBED_BY:
             return ATSPI_RELATION_DESCRIBED_BY;
-        case accessibility::AccessibleRelationType::LABEL_FOR:
+        case accessibility::AccessibleRelationType_LABEL_FOR:
             return ATSPI_RELATION_LABEL_FOR;
-        case accessibility::AccessibleRelationType::LABELED_BY:
+        case accessibility::AccessibleRelationType_LABELED_BY:
             return ATSPI_RELATION_LABELLED_BY;
-        case accessibility::AccessibleRelationType::MEMBER_OF:
+        case accessibility::AccessibleRelationType_MEMBER_OF:
             return ATSPI_RELATION_MEMBER_OF;
-        case accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+        case accessibility::AccessibleRelationType_SUB_WINDOW_OF:
             return ATSPI_RELATION_SUBWINDOW_OF;
-        case accessibility::AccessibleRelationType::NODE_CHILD_OF:
+        case accessibility::AccessibleRelationType_NODE_CHILD_OF:
             return ATSPI_RELATION_NODE_CHILD_OF;
+        default:
+            return ATSPI_RELATION_NULL;
     }
-
-    return ATSPI_RELATION_NULL;
 }
 
 static std::string debugString(const Atspi::Accessible& pAtspiAccessible)
@@ -470,13 +470,13 @@ CPPUNIT_TEST_FIXTURE(Atspi2TestTree, Test1)
     CPPUNIT_ASSERT(xLODocFirstChild.is());
     CPPUNIT_ASSERT(
         !getFirstRelationTargetOfType(xLODocFirstChild->getAccessibleContext(),
-                                      accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM));
+                                      accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM));
     const auto nLODocChildCount = xLODocContext->getAccessibleChildCount();
     const auto xLODocLastChild = xLODocContext->getAccessibleChild(nLODocChildCount - 1);
     CPPUNIT_ASSERT(xLODocLastChild.is());
     CPPUNIT_ASSERT(
         !getFirstRelationTargetOfType(xLODocLastChild->getAccessibleContext(),
-                                      accessibility::AccessibleRelationType::CONTENT_FLOWS_TO));
+                                      accessibility::AccessibleRelationType_CONTENT_FLOWS_TO));
     // END HACK
 
     auto xContext = getWindowAccessibleContext();

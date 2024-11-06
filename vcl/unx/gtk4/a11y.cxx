@@ -410,25 +410,25 @@ static void applyRelations(LoAccessible* pLoAccessible,
         css::accessibility::AccessibleRelation aRelation = xRelationSet->getRelation(i);
         switch (aRelation.RelationType)
         {
-            case css::accessibility::AccessibleRelationType::CONTENT_FLOWS_TO:
+            case css::accessibility::AccessibleRelationType_CONTENT_FLOWS_TO:
                 eGtkRelation = GTK_ACCESSIBLE_RELATION_FLOW_TO;
                 break;
-            case css::accessibility::AccessibleRelationType::CONTROLLER_FOR:
+            case css::accessibility::AccessibleRelationType_CONTROLLER_FOR:
                 eGtkRelation = GTK_ACCESSIBLE_RELATION_CONTROLS;
                 break;
-            case css::accessibility::AccessibleRelationType::DESCRIBED_BY:
+            case css::accessibility::AccessibleRelationType_DESCRIBED_BY:
                 eGtkRelation = GTK_ACCESSIBLE_RELATION_DESCRIBED_BY;
                 break;
-            case css::accessibility::AccessibleRelationType::LABELED_BY:
+            case css::accessibility::AccessibleRelationType_LABELED_BY:
                 eGtkRelation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
                 break;
-            case css::accessibility::AccessibleRelationType::CONTENT_FLOWS_FROM:
-            case css::accessibility::AccessibleRelationType::CONTROLLED_BY:
-            case css::accessibility::AccessibleRelationType::INVALID:
-            case css::accessibility::AccessibleRelationType::LABEL_FOR:
-            case css::accessibility::AccessibleRelationType::MEMBER_OF:
-            case css::accessibility::AccessibleRelationType::NODE_CHILD_OF:
-            case css::accessibility::AccessibleRelationType::SUB_WINDOW_OF:
+            case css::accessibility::AccessibleRelationType_CONTENT_FLOWS_FROM:
+            case css::accessibility::AccessibleRelationType_CONTROLLED_BY:
+            case css::accessibility::AccessibleRelationType_INVALID:
+            case css::accessibility::AccessibleRelationType_LABEL_FOR:
+            case css::accessibility::AccessibleRelationType_MEMBER_OF:
+            case css::accessibility::AccessibleRelationType_NODE_CHILD_OF:
+            case css::accessibility::AccessibleRelationType_SUB_WINDOW_OF:
                 // GTK has no equivalent for these
                 continue;
             default:

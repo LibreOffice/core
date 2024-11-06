@@ -756,8 +756,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
         if ( pPrevContentFrame )
         {
             uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pPrevContentFrame) };
-            AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_FROM,
-                                        aSequence );
+            AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_FROM, aSequence);
             pHelper->AddRelation( aAccRel );
         }
 
@@ -765,8 +764,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleParagraph::getAccess
         if ( pNextContentFrame )
         {
             uno::Sequence<uno::Reference<XAccessible>> aSequence { GetMap()->GetContext(pNextContentFrame) };
-            AccessibleRelation aAccRel( AccessibleRelationType::CONTENT_FLOWS_TO,
-                                        aSequence );
+            AccessibleRelation aAccRel(AccessibleRelationType_CONTENT_FLOWS_TO, aSequence);
             pHelper->AddRelation( aAccRel );
         }
     }

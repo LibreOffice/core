@@ -132,14 +132,14 @@ void AccessibleContextBase::SetRelationSet (
 {
     // Try to emit some meaningful events indicating differing relations in
     // both sets.
-    const std::pair<short int, short int> aRelationDescriptors[] = {
-        { AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED },
-        { AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED },
-        { AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED },
-        { AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED },
-        { AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED },
+    const std::pair<AccessibleRelationType, short int> aRelationDescriptors[] = {
+        { AccessibleRelationType_CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED },
+        { AccessibleRelationType_CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED },
+        { AccessibleRelationType_LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED },
+        { AccessibleRelationType_LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED },
+        { AccessibleRelationType_MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED },
     };
-    for (const std::pair<short int, short int>& rPair : aRelationDescriptors)
+    for (const std::pair<AccessibleRelationType, short int>& rPair : aRelationDescriptors)
     {
         if (mxRelationSet->containsRelation(rPair.first)
             != rxNewRelationSet->containsRelation(rPair.first))

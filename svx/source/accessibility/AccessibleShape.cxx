@@ -364,7 +364,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     if(aSequence[0])
     {
         pRelationSet->AddRelation(
-                                  AccessibleRelation( AccessibleRelationType::DESCRIBED_BY, aSequence ) );
+                                  AccessibleRelation(AccessibleRelationType_DESCRIBED_BY, aSequence));
     }
     return pRelationSet;
 }
