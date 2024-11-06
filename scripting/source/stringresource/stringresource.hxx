@@ -101,7 +101,7 @@ protected:
     sal_Int32                                                 m_nNextUniqueNumericId;
 
     // Scans ResourceID to start with number and adapt m_nNextUniqueNumericId
-    void implScanIdForNumber( const OUString& ResourceID );
+    void implScanIdForNumber(std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID);
     const static sal_Int32 UNIQUE_NUMBER_NEEDS_INITIALISATION = -1;
 
     // Checks read only status and throws exception if it's true
@@ -126,9 +126,9 @@ protected:
 
     //=== Impl methods for ...ForLocale methods ===
     /// @throws css::resource::MissingResourceException
-    OUString implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem );
-    bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
-    css::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
+    OUString implResolveString(std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem);
+    bool implHasEntryForId(std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID, LocaleItem* pLocaleItem);
+    css::uno::Sequence< OUString > implGetResourceIDs(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem);
     void implSetString( std::unique_lock<std::mutex>& rGuard, const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );
     /// @throws css::resource::MissingResourceException
@@ -136,9 +136,9 @@ protected:
 
     // Method to load a locale if necessary, returns true if loading was
     // successful. Default implementation in base class just returns true.
-    virtual bool loadLocale( LocaleItem* pLocaleItem );
+    virtual bool loadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem);
 
-    virtual void implLoadAllLocales();
+    virtual void implLoadAllLocales(std::unique_lock<std::mutex>& rGuard);
 
 public:
     explicit StringResourceImpl(
@@ -203,20 +203,20 @@ protected:
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard);
 
     // Method to load a locale if necessary, returns true if loading was successful
-    virtual bool loadLocale( LocaleItem* pLocaleItem ) override;
+    virtual bool loadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
     // does the actual loading
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem );
+    virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem);
 
-    virtual void implLoadAllLocales() override;
+    virtual void implLoadAllLocales(std::unique_lock<std::mutex>& rGuard) override;
 
     void implScanLocaleNames( const css::uno::Sequence< OUString >& aContentSeq );
     static OUString implGetFileNameForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase );
     static OUString implGetPathForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase,
         std::u16string_view aLocation, bool bDefaultFile=false );
 
-    bool implReadPropertiesFile( LocaleItem* pLocaleItem,
-        const css::uno::Reference< css::io::XInputStream >& xInput );
+    bool implReadPropertiesFile(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem,
+        const css::uno::Reference< css::io::XInputStream >& xInput);
 
     bool implWritePropertiesFile( LocaleItem const * pLocaleItem,
               const css::uno::Reference< css::io::XOutputStream >& xOutputStream,
@@ -228,6 +228,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void implStoreAtStorage
     (
+        std::unique_lock<std::mutex>& rGuard,
         const OUString& aNameBase,
         const OUString& aComment,
         const css::uno::Reference< css::embed::XStorage >& Storage,
@@ -257,6 +258,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void implStoreAtLocation
     (
+        std::unique_lock<std::mutex>& rGuard,
         std::u16string_view Location,
         const OUString& aNameBase,
         const OUString& aComment,
@@ -334,7 +336,7 @@ class StringResourceWithStorageImpl : public StringResourceWithStorageImpl_BASE
     bool                                              m_bStorageChanged;
 
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
+    virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
     explicit StringResourceWithStorageImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
@@ -416,7 +418,7 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
     const css::uno::Reference< css::ucb::XSimpleFileAccess3 > & getFileAccessImpl();
 
     virtual void implScanLocales(std::unique_lock<std::mutex>& rGuard) override;
-    virtual bool implLoadLocale( LocaleItem* pLocaleItem ) override;
+    virtual bool implLoadLocale(std::unique_lock<std::mutex>& rGuard, LocaleItem* pLocaleItem) override;
 
 public:
     explicit StringResourceWithLocationImpl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
