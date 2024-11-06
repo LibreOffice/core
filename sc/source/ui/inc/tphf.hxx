@@ -56,7 +56,7 @@ class ScHeaderPage : public ScHFPage
 public:
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     ScHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer & GetRanges();
 };
 
 class ScFooterPage : public ScHFPage
@@ -64,7 +64,7 @@ class ScFooterPage : public ScHFPage
 public:
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     ScFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer & GetRanges();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

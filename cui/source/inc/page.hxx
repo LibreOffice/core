@@ -172,7 +172,7 @@ public:
     virtual ~SvxPageDescPage() override;
 
     // returns the range of the Which values
-    static WhichRangesContainer GetRanges() { return pRanges; }
+    static const WhichRangesContainer & GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rOutSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

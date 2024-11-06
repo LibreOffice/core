@@ -350,12 +350,12 @@ OUString PaletteManager::GetPaletteName()
     return aNames[mnCurrentPalette];
 }
 
-OUString PaletteManager::GetSelectedPalettePath()
+const OUString & PaletteManager::GetSelectedPalettePath()
 {
     if (mnCurrentPalette < m_Palettes.size() && mnCurrentPalette != 0)
         return m_Palettes[mnCurrentPalette - 1]->GetPath();
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 tools::Long PaletteManager::GetColorCount() const

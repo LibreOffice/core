@@ -37,7 +37,7 @@ public:
     SdParagraphNumTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
 
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer & GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -69,9 +69,10 @@ std::unique_ptr<SfxTabPage> SdParagraphNumTabPage::Create(weld::Container* pPage
     return std::make_unique<SdParagraphNumTabPage>(pPage, pController, *rAttrSet);
 }
 
-WhichRangesContainer SdParagraphNumTabPage::GetRanges()
+const WhichRangesContainer & SdParagraphNumTabPage::GetRanges()
 {
-    return WhichRangesContainer(svl::Items<ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>);
+    static const auto gRanges = WhichRangesContainer(svl::Items<ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END>);
+    return gRanges;
 }
 
 bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

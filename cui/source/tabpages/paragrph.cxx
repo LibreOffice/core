@@ -2648,9 +2648,10 @@ std::unique_ptr<SfxTabPage> SvxAsianTabPage::Create(weld::Container* pPage, weld
     return std::make_unique<SvxAsianTabPage>(pPage, pController, *rSet);
 }
 
-WhichRangesContainer SvxAsianTabPage::GetRanges()
+const WhichRangesContainer & SvxAsianTabPage::GetRanges()
 {
-    return WhichRangesContainer(svl::Items<SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES>);
+    static const auto gRanges = WhichRangesContainer(svl::Items<SID_ATTR_PARA_SCRIPTSPACE, SID_ATTR_PARA_FORBIDDEN_RULES>);
+    return gRanges;
 }
 
 bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )

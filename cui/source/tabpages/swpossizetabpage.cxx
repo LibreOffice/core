@@ -743,7 +743,7 @@ std::unique_ptr<SfxTabPage> SvxSwPosSizeTabPage::Create(weld::Container* pPage, 
     return std::make_unique<SvxSwPosSizeTabPage>(pPage, pController, *rSet);
 }
 
-WhichRangesContainer SvxSwPosSizeTabPage::GetRanges()
+const WhichRangesContainer & SvxSwPosSizeTabPage::GetRanges()
 {
     static const WhichRangesContainer ranges(svl::Items<
         SID_ATTR_TRANSFORM_POS_X, SID_ATTR_TRANSFORM_POS_Y,

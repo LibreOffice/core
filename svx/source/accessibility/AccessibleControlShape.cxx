@@ -67,7 +67,7 @@ namespace
     constexpr OUString LABEL_CONTROL_PROPERTY_NAME = u"LabelControl"_ustr;
 
     // return the property which should be used as AccessibleName
-    OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
+    const OUString & lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
     {
         if ( _rxPSI.is() && _rxPSI->hasPropertyByName( LABEL_PROPERTY_NAME ) )
             return LABEL_PROPERTY_NAME;

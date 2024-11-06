@@ -135,19 +135,19 @@ public:
     }
 
     // Changes without triggering notification broadcast
-    css::geometry::RealPoint2D GetPosition() const { return m_Position; }
+    const css::geometry::RealPoint2D& GetPosition() const { return m_Position; }
     void SetPosition(const css::geometry::RealPoint2D& rValue) { m_Position = rValue; }
 
-    css::geometry::RealSize2D GetSize() const { return m_Size; }
+    const css::geometry::RealSize2D& GetSize() const { return m_Size; }
     void SetSize(const css::geometry::RealSize2D& rValue) { m_Size = rValue; }
 
-    OUString GetAuthor() const { return m_Author; }
+    const OUString& GetAuthor() const { return m_Author; }
     void SetAuthor(const OUString& rValue) { m_Author = rValue; }
 
-    OUString GetInitials() const { return m_Initials; }
+    const OUString& GetInitials() const { return m_Initials; }
     void SetInitials(const OUString& rValue) { m_Initials = rValue; }
 
-    css::util::DateTime GetDateTime() const { return m_DateTime; }
+    const css::util::DateTime& GetDateTime() const { return m_DateTime; }
     void SetDateTime(const css::util::DateTime& rValue) { m_DateTime = rValue; }
 
     virtual css::uno::Reference<css::text::XText> SAL_CALL getTextRange() override;
@@ -160,7 +160,7 @@ public:
 
     OUString GetText();
     void SetText(OUString const& rText);
-    rtl::Reference<sdr::annotation::TextApiObject> getTextApiObject() { return m_TextRange; }
+    const rtl::Reference<sdr::annotation::TextApiObject>& getTextApiObject() { return m_TextRange; }
 
     SdrModel* GetModel() const;
     SdrPage const* getPage() const { return mpPage; }

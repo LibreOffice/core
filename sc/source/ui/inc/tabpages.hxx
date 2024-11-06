@@ -30,7 +30,7 @@ public:
                                               const SfxItemSet* rAttrSet);
     virtual ~ScTabPageProtection() override;
 
-    static WhichRangesContainer GetRanges () { return pProtectionRanges; }
+    static const WhichRangesContainer & GetRanges () { return pProtectionRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset           ( const SfxItemSet* ) override;
 

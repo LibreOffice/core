@@ -37,7 +37,7 @@
 class SfxTabPage;
 
 typedef std::unique_ptr<SfxTabPage> (*CreateTabPage)(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rAttrSet);
-typedef WhichRangesContainer (*GetTabPageRanges)(); // provides international Which-value
+typedef const WhichRangesContainer & (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
 struct TabDlg_Impl;

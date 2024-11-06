@@ -83,7 +83,7 @@ public:
     virtual ~SvxBorderTabPage() override;
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController,
                                 const SfxItemSet* rAttrSet);
-    static WhichRangesContainer GetRanges() { return pRanges; }
+    static const WhichRangesContainer & GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rCoreAttrs ) override;
     virtual void        Reset( const SfxItemSet* ) override;

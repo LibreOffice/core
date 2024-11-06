@@ -118,7 +118,7 @@ public:
 
     css::uno::Reference< css::table::XTable > getTable() const;
     /// Get the concrete UNO class for the table
-    rtl::Reference< sdr::table::TableModel > getUnoTable() const;
+    const rtl::Reference< sdr::table::TableModel > & getUnoTable() const;
 
     bool isValid( const sdr::table::CellPos& rPos ) const;
     static CellPos getFirstCell();

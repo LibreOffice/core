@@ -52,7 +52,7 @@ namespace svx
         SvxShowCharSetItem( SvxShowCharSet& rParent, SvxShowCharSetAcc* _pParent, sal_uInt16 _nPos );
         ~SvxShowCharSetItem();
 
-        rtl::Reference< SvxShowCharSetItemAcc > GetAccessible();
+        const rtl::Reference< SvxShowCharSetItemAcc > & GetAccessible();
     };
 
 

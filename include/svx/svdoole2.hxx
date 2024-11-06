@@ -172,7 +172,7 @@ public:
     void SetGraphicToObj( const css::uno::Reference< css::io::XInputStream >& xGrStream,
                           const OUString& aMediaType );
 
-    css::uno::Reference< css::frame::XModel > GetParentXModel()  const;
+    const css::uno::Reference< css::frame::XModel > & GetParentXModel()  const;
     bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
     bool AddOwnLightClient();
 

@@ -86,7 +86,7 @@ public:
             css::uno::Reference<css::text::XNumberingFormatter> const & xFormatter,
             const css::lang::Locale& rLocale);
 
-    std::vector<std::pair<OUString, OUString>> GetCustomBullets() { return maCustomBullets; }
+    const std::vector<std::pair<OUString, OUString>> & GetCustomBullets() { return maCustomBullets; }
     void SetCustomBullets(const std::vector<std::pair<OUString, OUString>>& rCustomBullets);
 
     virtual FactoryFunction GetUITestFactory() const override;

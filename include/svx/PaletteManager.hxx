@@ -68,7 +68,7 @@ public:
     sal_Int32   GetPalette() const;
     sal_Int32   GetPaletteCount() const { return mnNumOfPalettes; }
     OUString    GetPaletteName();
-    OUString    GetSelectedPalettePath();
+    const OUString & GetSelectedPalettePath();
 
     tools::Long        GetColorCount() const;
     tools::Long        GetRecentColorCount() const;

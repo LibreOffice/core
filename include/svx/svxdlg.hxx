@@ -55,7 +55,7 @@ class SdrObject;
 class SvxSpellWrapper;
 struct FmSearchContext;
 
-typedef WhichRangesContainer (*DialogGetRanges)();
+typedef const WhichRangesContainer & (*DialogGetRanges)();
 
 typedef ::std::vector< OUString > TargetList;
 

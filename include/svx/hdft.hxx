@@ -97,7 +97,7 @@ class SVX_DLLPUBLIC SvxHeaderPage final : public SvxHFPage
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     // returns the Which values to the range
-    static WhichRangesContainer GetRanges() { return pRanges; }
+    static const WhichRangesContainer & GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxHeaderPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 
@@ -105,7 +105,7 @@ class SVX_DLLPUBLIC SvxFooterPage final : public SvxHFPage
 {
 public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
-    static WhichRangesContainer GetRanges() { return pRanges; }
+    static const WhichRangesContainer & GetRanges() { return pRanges; }
     SVX_DLLPRIVATE SvxFooterPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
 };
 

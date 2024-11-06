@@ -143,7 +143,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxCharNamePage() override;
 
-    static WhichRangesContainer GetRanges() { return pNameRanges; }
+    static const WhichRangesContainer & GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -222,7 +222,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static WhichRangesContainer GetRanges() { return pEffectsRanges; }
+    static const WhichRangesContainer & GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -292,7 +292,7 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
 public:
-    static WhichRangesContainer GetRanges() { return pPositionRanges; }
+    static const WhichRangesContainer & GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
@@ -331,7 +331,7 @@ public:
     virtual void        ActivatePage( const SfxItemSet& rSet ) override;
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
-    static WhichRangesContainer GetRanges() { return pTwoLinesRanges; }
+    static const WhichRangesContainer & GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) override;
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;

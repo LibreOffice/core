@@ -82,7 +82,7 @@ public:
     SfxBindings&            GetBindings() const { return *m_pBindings; }
 };
 
-typedef WhichRangesContainer (*GetTabPageRanges)(); // provides international Which values
+typedef const WhichRangesContainer & (*GetTabPageRanges)(); // provides international Which values
 
 class SFX2_DLLPUBLIC SfxOkDialogController : public SfxDialogController
 {

@@ -58,7 +58,7 @@ public:
     virtual ~SvxBkgTabPage() override;
 
     // returns the area of the which-values
-    static WhichRangesContainer GetRanges() { return pBkgRanges; }
+    static const WhichRangesContainer & GetRanges() { return pBkgRanges; }
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;

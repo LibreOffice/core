@@ -206,7 +206,7 @@ public:
     void    Construct();
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() { return pLineRanges; }
+    static const WhichRangesContainer & GetRanges() { return pLineRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet* ) override;

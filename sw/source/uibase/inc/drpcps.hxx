@@ -151,7 +151,7 @@ public:
     virtual ~SwDropCapsPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static WhichRangesContainer GetRanges() { return s_aPageRg; }
+    static const WhichRangesContainer & GetRanges() { return s_aPageRg; }
 
 
     virtual bool FillItemSet(      SfxItemSet *rSet) override;

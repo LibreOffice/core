@@ -102,7 +102,7 @@ public:
 
     DECL_LINK(ELRLoseFocusHdl, weld::MetricSpinButton&, void);
 
-    static WhichRangesContainer GetRanges() { return pStdRanges; }
+    static const WhichRangesContainer & GetRanges() { return pStdRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
@@ -165,8 +165,8 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet );
     virtual ~SvxParaAlignTabPage() override;
 
-    static WhichRangesContainer GetRanges() { return pAlignRanges; }
-    static WhichRangesContainer GetSdrRanges() { return pSdrAlignRanges; }
+    static const WhichRangesContainer & GetRanges() { return pAlignRanges; }
+    static const WhichRangesContainer & GetSdrRanges() { return pSdrAlignRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;
@@ -201,7 +201,7 @@ public:
                                 const SfxItemSet* rSet );
     virtual ~SvxExtParagraphTabPage() override;
 
-    static WhichRangesContainer GetRanges() { return pExtRanges; }
+    static const WhichRangesContainer & GetRanges() { return pExtRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;
@@ -315,7 +315,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
     virtual ~SvxAsianTabPage() override;
 
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer & GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

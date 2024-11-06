@@ -139,7 +139,7 @@ public:
     virtual ~SvxPositionSizeTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() {  return pPosSizeRanges; }
+    static const WhichRangesContainer & GetRanges() {  return pPosSizeRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -195,7 +195,7 @@ public:
     virtual ~SvxAngleTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() { return pAngleRanges; }
+    static const WhichRangesContainer & GetRanges() { return pAngleRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;
@@ -239,7 +239,7 @@ public:
     virtual ~SvxSlantTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() {  return pSlantRanges; }
+    static const WhichRangesContainer & GetRanges() {  return pSlantRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

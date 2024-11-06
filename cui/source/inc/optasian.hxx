@@ -52,7 +52,7 @@ public:
 
     static std::unique_ptr<SfxTabPage>
     Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet);
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer& GetRanges();
 
     virtual OUString GetAllStrings() override;
 

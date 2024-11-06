@@ -107,9 +107,10 @@ void SvxPostItDialog::ShowLastAuthor(std::u16string_view rAuthor, std::u16string
     m_xLastEditFT->set_label( sTxt );
 }
 
-WhichRangesContainer SvxPostItDialog::GetRanges()
+const WhichRangesContainer & SvxPostItDialog::GetRanges()
 {
-    return WhichRangesContainer(svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT>);
+    static const auto gRanges = WhichRangesContainer(svl::Items<SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_TEXT>);
+    return gRanges;
 }
 
 void SvxPostItDialog::EnableTravel(bool bNext, bool bPrev)

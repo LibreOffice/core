@@ -29,7 +29,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rCoreSet);
     virtual         ~ScTablePage() override;
 
-    static WhichRangesContainer GetRanges () { return pPageTableRanges; }
+    static const WhichRangesContainer & GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) override;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) override;
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;

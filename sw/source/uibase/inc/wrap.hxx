@@ -96,7 +96,7 @@ public:
     virtual bool    FillItemSet(SfxItemSet *rSet) override;
     virtual void    Reset(const SfxItemSet *rSet) override;
 
-    static WhichRangesContainer GetRanges() { return s_aWrapPageRg; }
+    static const WhichRangesContainer & GetRanges() { return s_aWrapPageRg; }
     void     SetNewFrame(bool bNewFrame) { m_bNew = bNewFrame; }
     void     SetFormatUsed(bool bFormat, bool bDrawMode) { m_bFormat = bFormat; m_bDrawMode = bDrawMode; }
     void     SetShell(SwWrtShell* pSh) { m_pWrtSh = pSh; }

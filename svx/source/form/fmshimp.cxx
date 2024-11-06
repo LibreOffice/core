@@ -431,7 +431,7 @@ namespace
     }
 
 
-    OUString getServiceNameByControlType(SdrObjKind nType)
+    const OUString & getServiceNameByControlType(SdrObjKind nType)
     {
         switch (nType)
         {
@@ -459,7 +459,7 @@ namespace
             case SdrObjKind::FormNavigationBar   : return FM_SUN_COMPONENT_NAVIGATIONBAR;
             default:;
         }
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
 }

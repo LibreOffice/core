@@ -912,7 +912,7 @@ Reference< XTable > SdrTableObj::getTable() const
     return mpImpl->mxTable;
 }
 
-rtl::Reference< TableModel > SdrTableObj::getUnoTable() const
+const rtl::Reference< TableModel > & SdrTableObj::getUnoTable() const
 {
     return mpImpl->mxTable;
 }

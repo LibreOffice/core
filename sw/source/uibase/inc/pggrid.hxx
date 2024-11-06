@@ -76,7 +76,7 @@ public:
     virtual ~SwTextGridPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *rSet);
-    static WhichRangesContainer GetRanges();
+    static const WhichRangesContainer & GetRanges();
 
     virtual bool    FillItemSet(SfxItemSet *rSet) override;
     virtual void    Reset(const SfxItemSet *rSet) override;

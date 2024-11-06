@@ -64,7 +64,7 @@ public:
                                     const SfxItemSet* rAttrSet );
     virtual ~SvxNumberFormatTabPage() override;
     // Returns area information.
-    static WhichRangesContainer GetRanges() { return pRanges; }
+    static const WhichRangesContainer & GetRanges() { return pRanges; }
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) override;
     virtual void            Reset( const SfxItemSet* rSet ) override;

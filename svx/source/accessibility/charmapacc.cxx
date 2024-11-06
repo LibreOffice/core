@@ -55,7 +55,7 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
     }
 }
 
-rtl::Reference<SvxShowCharSetItemAcc> SvxShowCharSetItem::GetAccessible()
+const rtl::Reference<SvxShowCharSetItemAcc> & SvxShowCharSetItem::GetAccessible()
 {
     if( !m_xItem.is() )
     {

@@ -58,7 +58,7 @@ public:
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rAttrSet );
     explicit            AlignmentTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet);
 
-    static WhichRangesContainer GetRanges() { return s_pRanges; }
+    static const WhichRangesContainer & GetRanges() { return s_pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) override;
     virtual void        Reset( const SfxItemSet* rSet ) override;

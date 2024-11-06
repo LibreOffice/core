@@ -1914,7 +1914,7 @@ bool SdrOle2Obj::IsCalc() const
         || SvGlobalName(SO3_SC_CLASSID) == aObjClsId;
 }
 
-uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
+const uno::Reference< frame::XModel > & SdrOle2Obj::GetParentXModel() const
 {
     return getSdrModelFromSdrObject().getUnoModel();
 }

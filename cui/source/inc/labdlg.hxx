@@ -81,7 +81,7 @@ public:
     virtual ~SvxCaptionTabPage() override;
 
     static std::unique_ptr<SfxTabPage>  Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() { return pCaptionRanges; }
+    static const WhichRangesContainer & GetRanges() { return pCaptionRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) override;
     virtual void        Reset( const SfxItemSet * ) override;

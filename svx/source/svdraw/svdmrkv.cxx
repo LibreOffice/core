@@ -812,7 +812,7 @@ namespace
         {
         }
 
-        basegfx::B2DRange getTextBounds(const sdr::contact::ViewObjectContact &rVOC, sdr::contact::DisplayInfo &raDisplayInfo)
+        const basegfx::B2DRange & getTextBounds(const sdr::contact::ViewObjectContact &rVOC, sdr::contact::DisplayInfo &raDisplayInfo)
         {
             this->process(rVOC.getPrimitive2DSequence(raDisplayInfo));
             return maTextRange;

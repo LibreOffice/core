@@ -195,7 +195,7 @@ public:
     virtual ~SvxTransparenceTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet*);
-    static WhichRangesContainer GetRanges() { return pTransparenceRanges; }
+    static const WhichRangesContainer & GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) override;
     virtual void Reset(const SfxItemSet*) override;
@@ -275,7 +275,7 @@ public:
     static std::unique_ptr<SfxTabPage>
     CreateWithSlideBackground(weld::Container* pPage, weld::DialogController* pController,
                               const SfxItemSet*);
-    static WhichRangesContainer GetRanges() { return pAreaRanges; }
+    static const WhichRangesContainer & GetRanges() { return pAreaRanges; }
 
     virtual OUString GetAllStrings() override;
 
@@ -337,7 +337,7 @@ public:
     virtual ~SvxShadowTabPage() override;
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
-    static WhichRangesContainer GetRanges() { return pShadowRanges; }
+    static const WhichRangesContainer & GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) override;
     virtual void Reset( const SfxItemSet * ) override;

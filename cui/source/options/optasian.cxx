@@ -400,10 +400,11 @@ IMPL_LINK(SvxAsianLayoutPage, ModifyHdl, weld::Entry&, rEdit, void)
     pImpl->aConfig.SetStartEndChars( aLocale, bEnable ? &sStart : nullptr, bEnable ? &sEnd : nullptr);
 }
 
-WhichRangesContainer SvxAsianLayoutPage::GetRanges()
+const WhichRangesContainer & SvxAsianLayoutPage::GetRanges()
 {
     //no items are used
-    return WhichRangesContainer();
+    static const WhichRangesContainer gEmpty;
+    return gEmpty;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
