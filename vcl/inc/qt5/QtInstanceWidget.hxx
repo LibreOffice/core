@@ -50,7 +50,7 @@ public:
 
     virtual void hide() override;
 
-    virtual void set_size_request(int, int) override;
+    virtual void set_size_request(int nWidth, int nHeight) override;
 
     virtual Size get_size_request() const override;
 

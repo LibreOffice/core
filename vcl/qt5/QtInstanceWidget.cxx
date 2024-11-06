@@ -184,9 +184,20 @@ void QtInstanceWidget::hide()
     m_pWidget->hide();
 }
 
-void QtInstanceWidget::set_size_request(int, int) {}
+void QtInstanceWidget::set_size_request(int nWidth, int nHeight)
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] { m_pWidget->setMinimumSize(nWidth, nHeight); });
+}
 
-Size QtInstanceWidget::get_size_request() const { return Size(); }
+Size QtInstanceWidget::get_size_request() const
+{
+    SolarMutexGuard g;
+
+    Size aSize;
+    GetQtInstance().RunInMainThread([&] { aSize = toSize(m_pWidget->minimumSize()); });
+    return aSize;
+}
 
 Size QtInstanceWidget::get_preferred_size() const
 {
