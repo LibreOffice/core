@@ -206,6 +206,8 @@ static AtspiRelationType mapRelationType(sal_Int16 nRelation)
             return ATSPI_RELATION_CONTROLLED_BY;
         case accessibility::AccessibleRelationType::CONTROLLER_FOR:
             return ATSPI_RELATION_CONTROLLER_FOR;
+        case accessibility::AccessibleRelationType::DESCRIBED_BY:
+            return ATSPI_RELATION_DESCRIBED_BY;
         case accessibility::AccessibleRelationType::LABEL_FOR:
             return ATSPI_RELATION_LABEL_FOR;
         case accessibility::AccessibleRelationType::LABELED_BY:
