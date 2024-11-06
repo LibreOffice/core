@@ -121,6 +121,11 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     }
     else
     {
+        auto nWidth = m_xTypeLB->get_approximate_digit_width() * FIELD_COLUMN_WIDTH;
+        auto nHeight = m_xTypeLB->get_height_rows(8);
+        m_xTypeLB->set_size_request(nWidth, nHeight);
+        m_xSelectionLB->set_size_request(nWidth, nHeight);
+        m_xFormatLB->set_size_request(nWidth, nHeight/2);
         const SwField* pCurField = GetCurField();
         assert(pCurField && "<SwFieldVarPage::Reset(..)> - <SwField> instance missing!");
         nTypeId = pCurField->GetTypeId();
