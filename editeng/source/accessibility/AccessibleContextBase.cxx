@@ -132,14 +132,13 @@ void AccessibleContextBase::SetRelationSet (
 {
     // Try to emit some meaningful events indicating differing relations in
     // both sets.
-    typedef std::pair<short int,short int> RD;
-    const RD aRelationDescriptors[] = {
-        RD(AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED),
-        RD(AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED),
-        RD(AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED),
-        RD(AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED),
-        RD(AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED),
-        RD(AccessibleRelationType::INVALID, -1),
+    const std::pair<short int, short int> aRelationDescriptors[] = {
+        { AccessibleRelationType::CONTROLLED_BY, AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED },
+        { AccessibleRelationType::CONTROLLER_FOR, AccessibleEventId::CONTROLLER_FOR_RELATION_CHANGED },
+        { AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED },
+        { AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED },
+        { AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED },
+        { AccessibleRelationType::INVALID, -1},
     };
     for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
         if (mxRelationSet->containsRelation(aRelationDescriptors[i].first)
