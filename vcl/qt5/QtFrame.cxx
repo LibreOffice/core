@@ -361,19 +361,19 @@ void QtFrame::SetIcon(sal_uInt16 nIcon)
     QString appicon;
 
     if (nIcon == SV_ICON_ID_TEXT)
-        appicon = "libreoffice-writer";
+        appicon = "zetaoffice24.2-writer";
     else if (nIcon == SV_ICON_ID_SPREADSHEET)
-        appicon = "libreoffice-calc";
+        appicon = "zetaoffice24.2-calc";
     else if (nIcon == SV_ICON_ID_DRAWING)
-        appicon = "libreoffice-draw";
+        appicon = "zetaoffice24.2-draw";
     else if (nIcon == SV_ICON_ID_PRESENTATION)
-        appicon = "libreoffice-impress";
+        appicon = "zetaoffice24.2-impress";
     else if (nIcon == SV_ICON_ID_DATABASE)
-        appicon = "libreoffice-base";
+        appicon = "zetaoffice24.2-base";
     else if (nIcon == SV_ICON_ID_FORMULA)
-        appicon = "libreoffice-math";
+        appicon = "zetaoffice24.2-math";
     else
-        appicon = "libreoffice-startcenter";
+        appicon = "zetaoffice24.2-startcenter";
 
     QIcon aIcon = QIcon::fromTheme(appicon);
     m_pQWidget->window()->setWindowIcon(aIcon);

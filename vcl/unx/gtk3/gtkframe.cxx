@@ -1919,19 +1919,19 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
     gchar* appicon;
 
     if (nIcon == SV_ICON_ID_TEXT)
-        appicon = g_strdup ("libreoffice-writer");
+        appicon = g_strdup ("zetaoffice24.2-writer");
     else if (nIcon == SV_ICON_ID_SPREADSHEET)
-        appicon = g_strdup ("libreoffice-calc");
+        appicon = g_strdup ("zetaoffice24.2-calc");
     else if (nIcon == SV_ICON_ID_DRAWING)
-        appicon = g_strdup ("libreoffice-draw");
+        appicon = g_strdup ("zetaoffice24.2-draw");
     else if (nIcon == SV_ICON_ID_PRESENTATION)
-        appicon = g_strdup ("libreoffice-impress");
+        appicon = g_strdup ("zetaoffice24.2-impress");
     else if (nIcon == SV_ICON_ID_DATABASE)
-        appicon = g_strdup ("libreoffice-base");
+        appicon = g_strdup ("zetaoffice24.2-base");
     else if (nIcon == SV_ICON_ID_FORMULA)
-        appicon = g_strdup ("libreoffice-math");
+        appicon = g_strdup ("zetaoffice24.2-math");
     else
-        appicon = g_strdup ("libreoffice-startcenter");
+        appicon = g_strdup ("zetaoffice24.2-startcenter");
 
     SetIcon(appicon);
 
@@ -2016,7 +2016,7 @@ void GtkSalFrame::Show( bool bVisible, bool /*bNoActivate*/ )
         if (bAppIdImmutable)
         {
             OString sOrigName(g_get_prgname());
-            g_set_prgname("libreoffice-startcenter");
+            g_set_prgname("zetaoffice24.2-startcenter");
             gtk_widget_show(m_pWindow);
             g_set_prgname(sOrigName.getStr());
         }
