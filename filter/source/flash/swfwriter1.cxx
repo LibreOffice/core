@@ -1179,9 +1179,6 @@ bool Writer::Impl_writeFilling(SvtGraphicFill const& rFilling)
                     aMatrix.set(a, b, aTransform.matrix[a * 3 + b]);
                 }
             }
-            aMatrix.set(2, 0, 0.0);
-            aMatrix.set(2, 1, 0.0);
-            aMatrix.set(2, 2, 1.0);
 
             // scale bitmap
             double XScale = aOldRect.GetWidth()
