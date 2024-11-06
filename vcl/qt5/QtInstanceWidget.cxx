@@ -187,7 +187,8 @@ void QtInstanceWidget::hide()
 void QtInstanceWidget::set_size_request(int nWidth, int nHeight)
 {
     SolarMutexGuard g;
-    GetQtInstance().RunInMainThread([&] { m_pWidget->setMinimumSize(nWidth, nHeight); });
+    GetQtInstance().RunInMainThread(
+        [&] { m_pWidget->setMinimumSize(std::max(0, nWidth), std::max(0, nHeight)); });
 }
 
 Size QtInstanceWidget::get_size_request() const
