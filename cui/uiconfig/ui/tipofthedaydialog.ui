@@ -20,24 +20,6 @@
             <property name="hexpand">True</property>
             <property name="layout-style">end</property>
             <child>
-              <object class="GtkCheckButton" id="cbShowTip">
-                <property name="label" translatable="yes" context="TipOfTheDay|Checkbox">_Show tips on startup</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes" context="TipOfTheDay|Checkbox_Tooltip">Enable the dialog again at Tools - Options - %PRODUCTNAME - General, or Help - Show Tip of the Day</property>
-                <property name="use-underline">True</property>
-                <property name="active">True</property>
-                <property name="draw-indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="btnNext">
                 <property name="label" translatable="yes" context="TipOfTheDayDialog|Next_Button">_Next Tip</property>
                 <property name="visible">True</property>
@@ -154,6 +136,23 @@
                     <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="cbShowTip">
+                    <property name="label" translatable="yes" context="TipOfTheDay|Checkbox">_Show tips on startup</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="tooltip-text" translatable="yes" context="TipOfTheDay|Checkbox_Tooltip">Enable the dialog again at Tools - Options - %PRODUCTNAME - General, or Help - Show Tip of the Day</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
