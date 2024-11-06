@@ -18,4 +18,4 @@
 
 # OpenOffice Dev UpgradeCode
 
-{E54FAE36-AEA4-4964-B4BB-CE9D4CEB4B3E}	# OOo Dev UpgradeCode
+{37aae910-33dc-486d-bb66-d1fd8516e326}	# OOo Dev UpgradeCode

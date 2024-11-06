@@ -18,4 +18,4 @@
 
 # OpenOffice 2 UpgradeCodes
 
-{7C35B9AB-2CE3-4C18-BE7C-5B97EA089EB3}	# OOo UpgradeCode
+{a4842878-10e7-4d23-aa14-9ff98afcb39e}	# OOo UpgradeCode
