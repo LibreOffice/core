@@ -530,6 +530,8 @@ void StringResourceImpl::implScanIdForNumber( const OUString& ResourceID )
 
 sal_Int32 StringResourceImpl::getUniqueNumericId(  )
 {
+    std::unique_lock aGuard( m_aMutex );
+
     if( m_nNextUniqueNumericId == UNIQUE_NUMBER_NEEDS_INITIALISATION )
     {
         implLoadAllLocales();
@@ -1165,6 +1167,8 @@ Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 
 Sequence< sal_Int8 > StringResourcePersistenceImpl::exportBinary(  )
 {
+    std::unique_lock aGuard( m_aMutex );
+
     BinaryOutput aOut;
 
     sal_Int32 nLocaleCount = m_aLocaleItemVector.size();
