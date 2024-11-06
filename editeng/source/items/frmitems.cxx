@@ -4377,14 +4377,12 @@ bool SvxBrushItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             Graphic aGraphic;
 
-            if (rVal.getValueType() == ::cppu::UnoType<OUString>::get())
+            if (OUString aURL; rVal >>= aURL)
             {
-                OUString aURL = rVal.get<OUString>();
                 aGraphic = vcl::graphic::loadFromURL(aURL);
             }
-            else if (rVal.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
+            else if (uno::Reference<graphic::XGraphic> xGraphic; rVal >>= xGraphic)
             {
-                auto xGraphic = rVal.get<uno::Reference<graphic::XGraphic>>();
                 aGraphic = Graphic(xGraphic);
             }
 
