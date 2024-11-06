@@ -17,30 +17,30 @@
     </columns>
   </object>
   <object class="GtkDialog" id="ProtectSheetDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="title" translatable="yes" context="protectsheetdlg|ProtectSheetDialog">Protect Sheet</property>
     <property name="modal">True</property>
-    <property name="default_width">0</property>
-    <property name="default_height">0</property>
-    <property name="type_hint">dialog</property>
+    <property name="default-width">0</property>
+    <property name="default-height">0</property>
+    <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="ok">
                 <property name="label" translatable="yes" context="stock">_OK</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -53,8 +53,8 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes" context="stock">_Cancel</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -67,8 +67,8 @@
               <object class="GtkButton" id="help">
                 <property name="label" translatable="yes" context="stock">_Help</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
@@ -82,14 +82,14 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="pack_type">end</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="orientation">vertical</property>
@@ -97,7 +97,7 @@
             <child>
               <object class="GtkBox" id="box2">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
@@ -105,10 +105,10 @@
                   <object class="GtkCheckButton" id="protect">
                     <property name="label" translatable="yes" context="protectsheetdlg|protect">P_rotect this sheet and the contents of protected cells</property>
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -120,33 +120,33 @@
                   <!-- n-columns=2 n-rows=3 -->
                   <object class="GtkGrid" id="passwords">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|label1">_Password:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">password1</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">password1</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|label2">_Confirm:</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic_widget">password2</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">password2</property>
                         <property name="xalign">1</property>
                       </object>
                       <packing>
@@ -157,29 +157,29 @@
                     <child>
                       <object class="GtkEntry" id="password1">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="visibility">False</property>
-                        <property name="activates_default">True</property>
-                        <property name="width_chars">24</property>
+                        <property name="activates-default">True</property>
+                        <property name="width-chars">24</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="input_purpose">password</property>
+                        <property name="input-purpose">password</property>
                       </object>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="password2">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="can-focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="visibility">False</property>
-                        <property name="activates_default">True</property>
-                        <property name="width_chars">24</property>
+                        <property name="activates-default">True</property>
+                        <property name="width-chars">24</property>
                         <property name="truncate-multiline">True</property>
-                        <property name="input_purpose">password</property>
+                        <property name="input-purpose">password</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -190,6 +190,11 @@
                       <object class="GtkLevelBar" id="passwordbar">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="passwordbar-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="protectsheetdlg|extended_tip|passwordbar">Measure of password strength</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -216,7 +221,7 @@
             <child>
               <object class="GtkBox" id="options">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
@@ -224,10 +229,10 @@
                 <child>
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="protectsheetdlg|label4">Allow all users of this sheet to:</property>
-                    <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">checklist</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">checklist</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -239,23 +244,23 @@
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
+                    <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="hscrollbar_policy">never</property>
-                    <property name="vscrollbar_policy">never</property>
-                    <property name="shadow_type">in</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="vscrollbar-policy">never</property>
+                    <property name="shadow-type">in</property>
                     <child>
                       <object class="GtkTreeView" id="checklist">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                         <property name="model">liststore1</property>
-                        <property name="headers_visible">False</property>
-                        <property name="search_column">0</property>
-                        <property name="show_expanders">False</property>
+                        <property name="headers-visible">False</property>
+                        <property name="search-column">0</property>
+                        <property name="show-expanders">False</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="Macro Library List-selection2"/>
                         </child>
@@ -297,12 +302,12 @@
                 </child>
                 <child>
                   <object class="GtkBox" id="box4">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkLabel" id="protected">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|protected">Select protected cells</property>
                       </object>
                       <packing>
@@ -314,7 +319,7 @@
                     <child>
                       <object class="GtkLabel" id="delete-columns">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|delete-columns">Delete columns</property>
                       </object>
                       <packing>
@@ -326,7 +331,7 @@
                     <child>
                       <object class="GtkLabel" id="delete-rows">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|delete-rows">Delete rows</property>
                       </object>
                       <packing>
@@ -338,7 +343,7 @@
                     <child>
                       <object class="GtkLabel" id="insert-columns">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|insert-columns">Insert columns</property>
                       </object>
                       <packing>
@@ -350,7 +355,7 @@
                     <child>
                       <object class="GtkLabel" id="insert-rows">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|insert-rows">Insert rows</property>
                       </object>
                       <packing>
@@ -362,13 +367,37 @@
                     <child>
                       <object class="GtkLabel" id="unprotected">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
+                        <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="protectsheetdlg|unprotected">Select unprotected cells</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="useautofilter">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="protectsheetdlg|delete-columns">Use AutoFilter</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="usepivot">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="protectsheetdlg|delete-columns">Use Pivot Table and Pivot Chart</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                   </object>
@@ -399,9 +428,6 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child type="titlebar">
-      <placeholder/>
-    </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="ProtectSheetDialog-atkobject">
         <property name="AtkObject::accessible-description" translatable="yes" context="protectsheetdlg|extended_tip|ProtectSheetDialog">Protects the cells in the current sheet from being modified.</property>

@@ -52,6 +52,7 @@
 #include <compressedarray.hxx>
 #include <refdata.hxx>
 #include <docsh.hxx>
+#include <dpobject.hxx>
 
 #include <scitems.hxx>
 #include <editeng/boxitem.hxx>
@@ -436,9 +437,14 @@ void ScTable::DeleteArea(
 
         if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
-            ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-            aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
-            ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
+            // Do not overwrite cell protection if we are in a Pivot table area and its not protected
+            const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
+            if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
+            {
+                ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+                aPattern.GetItemSet().Put(ScProtectionAttr(false));
+                ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
+            }
         }
 
         if( nDelFlag & InsertDeleteFlags::ATTRIB )
@@ -473,6 +479,18 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 
     if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
     {
+        // Do not overwrite cell protection if we are in a Pivot table area and its not protected
+        const ScRange& rRange = rMark.GetArea();
+        const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab,
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+        if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
+        {
+            SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet(*rDocument.GetPool());
+            aSet.Put(ScProtectionAttr(false));
+            ScItemPoolCache aCache(rDocument.getCellAttributeHelper(), aSet);
+            ApplySelectionCache(aCache, rMark);
+        }
+
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END> aSet(*rDocument.GetPool());
         aSet.Put( ScProtectionAttr( false ) );
         ScItemPoolCache aCache(rDocument.getCellAttributeHelper(), aSet );
@@ -773,9 +791,14 @@ void ScTable::CopyFromClip(
     // Do not set protected cell in a protected sheet
     if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
     {
-        ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
-        aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
-        ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
+        // Do not overwrite cell protection if we are in a Pivot table area and its not protected
+        const ScDPObject* pDPObj = rDocument.GetDPAtArea(nTab, nCol1, nRow1, nCol2, nRow2);
+        if (!pDPObj || (pDPObj && !GetProtection()->isOptionEnabled(ScTableProtection::PIVOT_TABLES)))
+        {
+            ScPatternAttr aPattern(rDocument.getCellAttributeHelper());
+            aPattern.GetItemSet().Put(ScProtectionAttr(false));
+            ApplyPatternArea(nCol1, nRow1, nCol2, nRow2, aPattern);
+        }
     }
 
     // create deep copies for conditional formatting
@@ -2709,8 +2732,7 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         if (!bIsEditable)
         {
             // An enhanced protection permission may override the attribute.
-            if (pTabProtection)
-                bIsEditable = pTabProtection->isBlockEditable( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab));
+            bIsEditable = pTabProtection->isBlockEditable( ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab));
         }
         if (bIsEditable)
         {

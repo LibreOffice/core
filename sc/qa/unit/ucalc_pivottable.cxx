@@ -17,6 +17,7 @@
 #include <stringutil.hxx>
 #include <dbdocfun.hxx>
 #include <generalfunction.hxx>
+#include <tabprotection.hxx>
 
 #include <formula/errorcodes.hxx>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -2114,6 +2115,32 @@ CPPUNIT_TEST_FIXTURE(TestPivottable, testPivotTableDocFunc)
         bSuccess = checkDPTableOutput(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    // Start: Test Pivot table with tab protection
+    ScTableProtection aProtect;
+    aProtect.setProtected(true);
+    m_pDoc->SetTabProtection(1, &aProtect);
+
+    bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Pivot table should not be allowed to remove.", !bSuccess);
+
+    bSuccess = aFunc.UpdatePivotTable(*pDPObject, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Pivot table should not be allowed to update.", !bSuccess);
+
+    // Allow pivot table usage
+    aProtect.setOption(ScTableProtection::PIVOT_TABLES, true);
+    m_pDoc->SetTabProtection(1, &aProtect);
+
+    bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Pivot table should not be allowed to remove.", !bSuccess);
+
+    bSuccess = aFunc.UpdatePivotTable(*pDPObject, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Pivot table should be allowed to update.", bSuccess);
+
+    aProtect.setProtected(false);
+    aProtect.setOption(ScTableProtection::PIVOT_TABLES, false);
+    m_pDoc->SetTabProtection(1, &aProtect);
+    // End: Test Pivot table with tab protection
 
     // Remove this pivot table output. This should also clear the pivot cache
     // it was referencing.

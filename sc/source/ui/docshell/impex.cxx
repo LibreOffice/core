@@ -230,7 +230,7 @@ bool ScImportExport::StartPaste()
 {
     if ( !bAll )
     {
-        ScEditableTester aTester( rDoc, aRange );
+        ScEditableTester aTester( rDoc, aRange, sc::EditAction::Unknown );
         if ( !aTester.IsEditable() )
         {
             std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),

@@ -417,6 +417,8 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     bool bInsertRows = false;
     bool bDeleteColumns = false;
     bool bDeleteRows = false;
+    bool bUseAutoFilter = false;
+    bool bUsePivot = false;
 
     if ( rAttrList.is() )
     {
@@ -447,6 +449,12 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
             case XML_ELEMENT( LO_EXT, XML_DELETE_ROWS ):
                 bDeleteRows = IsXMLToken(aIter, XML_TRUE);
                 break;
+            case XML_ELEMENT( LO_EXT, XML_USE_AUTOFILTER ):
+                bUseAutoFilter = IsXMLToken(aIter, XML_TRUE);
+                break;
+            case XML_ELEMENT( LO_EXT, XML_USE_PIVOT ):
+                bUsePivot = IsXMLToken(aIter, XML_TRUE);
+                break;
             default:
                 XMLOFF_WARN_UNKNOWN("sc", aIter);
             }
@@ -460,6 +468,8 @@ ScXMLTableProtectionContext::ScXMLTableProtectionContext(
     rProtectData.mbInsertRows = bInsertRows;
     rProtectData.mbDeleteColumns = bDeleteColumns;
     rProtectData.mbDeleteRows = bDeleteRows;
+    rProtectData.mbUseAutoFilter = bUseAutoFilter;
+    rProtectData.mbUsePivot = bUsePivot;
 }
 
 ScXMLTableProtectionContext::~ScXMLTableProtectionContext()

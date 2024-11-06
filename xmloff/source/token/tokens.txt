@@ -2008,6 +2008,7 @@ uplimit
 upright
 url
 use
+use-autofilter
 use-caption
 use-cell-protection
 use-chart-objects
@@ -2025,6 +2026,7 @@ use-objects
 use-optimal-column-width
 use-optimal-row-height
 use-other-objects
+use-pivot
 use-spreadsheet-objects
 use-styles
 use-tables

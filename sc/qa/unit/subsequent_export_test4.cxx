@@ -24,6 +24,8 @@
 #include <dbdata.hxx>
 #include <subtotalparam.hxx>
 #include <globstr.hrc>
+#include <tabprotection.hxx>
+#include <dpobject.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -2059,6 +2061,56 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testNotesAuthor)
     // Reset config change
     officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(false, pBatch);
     pBatch->commit();
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testSheetProtections)
+{
+    auto verify = [this]() {
+        ScDocument* pDoc = getScDoc();
+
+        // 1. tab autofilter allowed, pivot tables not allowed
+        const ScTableProtection* pTab1Protect = pDoc->GetTabProtection(0);
+        CPPUNIT_ASSERT(pTab1Protect);
+        CPPUNIT_ASSERT(pTab1Protect->isOptionEnabled(ScTableProtection::AUTOFILTER));
+        CPPUNIT_ASSERT(!pTab1Protect->isOptionEnabled(ScTableProtection::PIVOT_TABLES));
+
+        // 2. tab autofilter NOT allowed, pivot tables allowed
+        const ScTableProtection* pTab2Protect = pDoc->GetTabProtection(1);
+        CPPUNIT_ASSERT(pTab2Protect);
+        CPPUNIT_ASSERT(!pTab2Protect->isOptionEnabled(ScTableProtection::AUTOFILTER));
+        CPPUNIT_ASSERT(pTab2Protect->isOptionEnabled(ScTableProtection::PIVOT_TABLES));
+
+        // check we have pivot table
+        ScDPObject* pDPObj1 = pDoc->GetDPAtCursor(0, 0, 1);
+        CPPUNIT_ASSERT(pDPObj1);
+        CPPUNIT_ASSERT(!pDPObj1->GetName().isEmpty());
+
+        // 3. tab autofilter NOT allowed, pivot tables not allowed
+        const ScTableProtection* pTab3Protect = pDoc->GetTabProtection(2);
+        CPPUNIT_ASSERT(pTab3Protect);
+        CPPUNIT_ASSERT(!pTab3Protect->isOptionEnabled(ScTableProtection::AUTOFILTER));
+        CPPUNIT_ASSERT(!pTab3Protect->isOptionEnabled(ScTableProtection::PIVOT_TABLES));
+
+        // 4. tab autofilter allowed, pivot tables not allowed
+        const ScTableProtection* pTab4Protect = pDoc->GetTabProtection(3);
+        CPPUNIT_ASSERT(pTab4Protect);
+        CPPUNIT_ASSERT(pTab4Protect->isOptionEnabled(ScTableProtection::AUTOFILTER));
+        CPPUNIT_ASSERT(!pTab4Protect->isOptionEnabled(ScTableProtection::PIVOT_TABLES));
+
+        // check we have pivot table
+        ScDPObject* pDPObj2 = pDoc->GetDPAtCursor(0, 0, 3);
+        CPPUNIT_ASSERT(pDPObj2);
+        CPPUNIT_ASSERT(!pDPObj2->GetName().isEmpty());
+    };
+
+    createScDoc("xlsx/tdfSheetProts.xlsx");
+    verify();
+
+    saveAndReload(u"Calc Office Open XML"_ustr);
+    verify();
+
+    saveAndReload(u"calc8"_ustr);
+    verify();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

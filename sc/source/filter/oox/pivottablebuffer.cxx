@@ -1355,7 +1355,10 @@ void PivotTable::finalizeImport()
         mpDPObject->PutInteropGrabBag(std::move(maInteropGrabBag));
 
         // insert the DataPilot table into the sheet
+        ScDocument& rDoc = getDocImport().getDoc();
+        rDoc.SetImportingXML(true);
         xDPTables->insertNewByName( maDefModel.maName, aPos, mxDPDescriptor );
+        rDoc.SetImportingXML(false);
     }
     catch( Exception& )
     {

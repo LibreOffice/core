@@ -2809,6 +2809,16 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
           <rng:ref name="boolean"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:use-autofilter">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:use-pivot">
+          <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
     </rng:element>
   </rng:define>
   <rng:define name="office-spreadsheet-attlist" combine="interleave">

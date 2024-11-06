@@ -1116,11 +1116,19 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_FILTER:
             case SID_SPECIAL_FILTER:
                 {
-                    ScRange aDummy;
-                    ScMarkType eMarkType = GetViewData().GetSimpleArea( aDummy);
-                    if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                    const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+                    if (pTabProt && pTabProt->isProtected() && !pTabProt->isOptionEnabled(ScTableProtection::AUTOFILTER))
                     {
-                        rSet.DisableItem( nWhich );
+                        rSet.DisableItem(nWhich);
+                    }
+                    else
+                    {
+                        ScRange aDummy;
+                        ScMarkType eMarkType = GetViewData().GetSimpleArea(aDummy);
+                        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                        {
+                            rSet.DisableItem(nWhich);
+                        }
                     }
                 }
                 break;
@@ -1138,6 +1146,17 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                             GetViewData().IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                    else
+                    {
+                        if (nWhich == SID_OPENDLG_PIVOTTABLE)
+                        {
+                            const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+                            if (pTabProt && pTabProt->isProtected() && !pTabProt->isOptionEnabled(ScTableProtection::PIVOT_TABLES))
+                            {
+                                rSet.DisableItem(nWhich);
+                            }
+                        }
                     }
                 }
                 break;
@@ -1174,29 +1193,37 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_AUTO_FILTER:
             case SID_AUTOFILTER_HIDE:
                 {
-                    if (!bAutoFilterTested)
+                    const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+                    if (pTabProt && pTabProt->isProtected() && !pTabProt->isOptionEnabled(ScTableProtection::AUTOFILTER))
                     {
-                        bAutoFilter = rDoc.HasAutoFilter( nPosX, nPosY, nTab );
-                        bAutoFilterTested = true;
-                    }
-                    if ( nWhich == SID_AUTO_FILTER )
-                    {
-                        ScRange aDummy;
-                        ScMarkType eMarkType = GetViewData().GetSimpleArea( aDummy);
-                        if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
-                        {
-                            rSet.DisableItem( nWhich );
-                        }
-                        else if (rDoc.GetDPAtBlock(aDummy))
-                        {
-                            rSet.DisableItem( nWhich );
-                        }
-                        else
-                            rSet.Put( SfxBoolItem( nWhich, bAutoFilter ) );
+                        rSet.DisableItem(nWhich);
                     }
                     else
-                        if (!bAutoFilter)
-                            rSet.DisableItem( nWhich );
+                    {
+                        if (!bAutoFilterTested)
+                        {
+                            bAutoFilter = rDoc.HasAutoFilter(nPosX, nPosY, nTab);
+                            bAutoFilterTested = true;
+                        }
+                        if (nWhich == SID_AUTO_FILTER)
+                        {
+                            ScRange aDummy;
+                            ScMarkType eMarkType = GetViewData().GetSimpleArea(aDummy);
+                            if (eMarkType != SC_MARK_SIMPLE && eMarkType != SC_MARK_SIMPLE_FILTERED)
+                            {
+                                rSet.DisableItem(nWhich);
+                            }
+                            else if (rDoc.GetDPAtBlock(aDummy))
+                            {
+                                rSet.DisableItem(nWhich);
+                            }
+                            else
+                                rSet.Put(SfxBoolItem(nWhich, bAutoFilter));
+                        }
+                        else
+                            if (!bAutoFilter)
+                                rSet.DisableItem(nWhich);
+                    }
                 }
                 break;
 

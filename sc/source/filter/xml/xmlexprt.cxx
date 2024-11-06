@@ -2907,6 +2907,11 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
         if (pProtect->isOptionEnabled(ScTableProtection::DELETE_ROWS))
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_DELETE_ROWS, XML_TRUE);
 
+        if (pProtect->isOptionEnabled(ScTableProtection::AUTOFILTER))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_USE_AUTOFILTER, XML_TRUE);
+        if (pProtect->isOptionEnabled(ScTableProtection::PIVOT_TABLES))
+            AddAttribute(XML_NAMESPACE_LO_EXT, XML_USE_PIVOT, XML_TRUE);
+
         OUString aElemName = GetNamespaceMap().GetQNameByKey(
             XML_NAMESPACE_LO_EXT, GetXMLToken(XML_TABLE_PROTECTION));
 

@@ -961,20 +961,21 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
 }
 
 bool ScDocument::IsEditActionAllowed(
-    sc::ColRowEditAction eAction, SCTAB nTab, SCCOLROW nStart, SCCOLROW nEnd ) const
+    sc::EditAction eAction, SCTAB nTab, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
         return false;
 
-    return pTab->IsEditActionAllowed(eAction, nStart, nEnd);
+    return pTab->IsEditActionAllowed(eAction, nStartCol, nStartRow, nEndCol, nEndRow);
 }
 
 bool ScDocument::IsEditActionAllowed(
-    sc::ColRowEditAction eAction, const ScMarkData& rMark, SCCOLROW nStart, SCCOLROW nEnd ) const
+    sc::EditAction eAction, const ScMarkData& rMark, SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const
 {
     return std::all_of(rMark.begin(), rMark.end(),
-        [this, &eAction, &nStart, &nEnd](const SCTAB& rTab) { return IsEditActionAllowed(eAction, rTab, nStart, nEnd); });
+        [this, &eAction, &nStartCol, &nStartRow, &nEndCol, &nEndRow](const SCTAB& rTab)
+        { return IsEditActionAllowed(eAction, rTab, nStartCol, nStartRow, nEndCol, nEndRow); });
 }
 
 std::optional<sc::ColumnIterator> ScDocument::GetColumnIterator( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const

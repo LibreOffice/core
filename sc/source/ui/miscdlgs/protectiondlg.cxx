@@ -33,6 +33,8 @@ const std::vector<ScTableProtection::Option> aOptions = {
     ScTableProtection::INSERT_ROWS,
     ScTableProtection::DELETE_COLUMNS,
     ScTableProtection::DELETE_ROWS,
+    ScTableProtection::AUTOFILTER,
+    ScTableProtection::PIVOT_TABLES,
 };
 
 }
@@ -53,6 +55,8 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     , m_xInsertRows(m_xBuilder->weld_label(u"insert-rows"_ustr))
     , m_xDeleteColumns(m_xBuilder->weld_label(u"delete-columns"_ustr))
     , m_xDeleteRows(m_xBuilder->weld_label(u"delete-rows"_ustr))
+    , m_xAutoFilter(m_xBuilder->weld_label(u"useautofilter"_ustr))
+    , m_xPivot(m_xBuilder->weld_label(u"usepivot"_ustr))
 {
     m_aSelectLockedCells = m_xProtected->get_label();
     m_aSelectUnlockedCells = m_xUnprotected->get_label();
@@ -60,6 +64,8 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     m_aInsertRows = m_xInsertRows->get_label();
     m_aDeleteColumns = m_xDeleteColumns->get_label();
     m_aDeleteRows = m_xDeleteRows->get_label();
+    m_aAutoFilter = m_xAutoFilter->get_label();
+    m_aPivot = m_xPivot->get_label();
 
     m_xOptionsListBox->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
@@ -114,6 +120,8 @@ void ScTableProtectionDlg::Init()
     InsertEntry(m_aInsertRows);
     InsertEntry(m_aDeleteColumns);
     InsertEntry(m_aDeleteRows);
+    InsertEntry(m_aAutoFilter);
+    InsertEntry(m_aPivot);
 
     m_xOptionsListBox->set_toggle(0, TRISTATE_TRUE);
     m_xOptionsListBox->set_toggle(1, TRISTATE_TRUE);

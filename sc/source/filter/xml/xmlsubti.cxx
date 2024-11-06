@@ -49,7 +49,9 @@ ScXMLTabProtectionData::ScXMLTabProtectionData() :
     mbInsertColumns(false),
     mbInsertRows(false),
     mbDeleteColumns(false),
-    mbDeleteRows(false)
+    mbDeleteRows(false),
+    mbUseAutoFilter(false),
+    mbUsePivot(false)
 {
 }
 
@@ -208,6 +210,8 @@ void ScMyTables::DeleteTable()
     aProtect.setOption(ScTableProtection::INSERT_ROWS,    maProtectionData.mbInsertRows);
     aProtect.setOption(ScTableProtection::DELETE_COLUMNS, maProtectionData.mbDeleteColumns);
     aProtect.setOption(ScTableProtection::DELETE_ROWS,    maProtectionData.mbDeleteRows);
+    aProtect.setOption(ScTableProtection::AUTOFILTER,     maProtectionData.mbUseAutoFilter);
+    aProtect.setOption(ScTableProtection::PIVOT_TABLES,   maProtectionData.mbUsePivot);
     rImport.GetDocument()->SetTabProtection(maCurrentCellPos.Tab(), &aProtect);
 }
 

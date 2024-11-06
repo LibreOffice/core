@@ -1213,7 +1213,8 @@ bool lcl_EmptyExcept( ScDocument& rDoc, const ScRange& rRange, const ScRange& rE
     return true;        // nothing found - empty
 }
 
-bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
+bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi,
+    sc::EditAction eAction = sc::EditAction::Unknown)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     if (!rDocShell.IsEditable() || rDoc.GetChangeTrack())
@@ -1228,7 +1229,7 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange & r = rRanges[i];
-        ScEditableTester aTester(rDoc, r);
+        ScEditableTester aTester(rDoc, r, eAction);
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -1249,7 +1250,8 @@ void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument& rDoc, const ScRang
     rDoc.CopyToDocument(rRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
 }
 
-bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
+bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi,
+    sc::EditAction eAction = sc::EditAction::Unknown)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
@@ -1279,14 +1281,17 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
         return false;
     }
 
-    ScEditableTester aTester(rDoc, rNewOut);
-    if (!aTester.IsEditable())
+    if (!rDoc.IsImportingXML())
     {
-        //  destination area isn't editable
-        if (!bApi)
-            rDocShell.ErrorMessage(aTester.GetMessageId());
+        ScEditableTester aTester(rDoc, rNewOut, eAction);
+        if (!aTester.IsEditable())
+        {
+            //  destination area isn't editable
+            if (!bApi)
+                rDocShell.ErrorMessage(aTester.GetMessageId());
 
-        return false;
+            return false;
+        }
     }
 
     return true;
@@ -1484,12 +1489,12 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     weld::WaitObject aWait(ScDocShell::GetActiveDialogParent());
 
     // At least one cell in the output range should be editable. Check in advance.
-    if (!isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (!rDoc.IsImportingXML() && !isEditable(rDocShell, ScRange(rDPObj.GetOutRange().aStart), bApi))
         return false;
 
     ScDocumentUniquePtr pNewUndoDoc;
 
-    ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
@@ -1537,8 +1542,9 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
         return false;
     }
 
+    if (!rDoc.IsImportingXML())
     {
-        ScEditableTester aTester(rDoc, aNewOut);
+        ScEditableTester aTester(rDoc, aNewOut, sc::EditAction::Unknown);
         if (!aTester.IsEditable())
         {
             //  destination area isn't editable
@@ -1594,7 +1600,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     ScDocShellModificator aModificator( rDocShell );
     weld::WaitObject aWait( ScDocShell::GetActiveDialogParent() );
 
-    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi))
+    if (!isEditable(rDocShell, rDPObj.GetOutRange(), bApi, sc::EditAction::UpdatePivotTable))
         return false;
 
     ScDocumentUniquePtr pOldUndoDoc;
@@ -1621,7 +1627,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
         rDPObj.SetName( rDoc.GetDPCollection()->CreateNewName() );
 
     ScRange aNewOut;
-    if (!checkNewOutputRange(rDPObj, rDocShell, aNewOut, bApi))
+    if (!checkNewOutputRange(rDPObj, rDocShell, aNewOut, bApi, sc::EditAction::UpdatePivotTable))
     {
         rDPObj = aUndoDPObj;
         return false;

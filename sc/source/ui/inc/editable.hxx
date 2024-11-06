@@ -28,7 +28,7 @@ class ScMarkData;
 
 namespace sc {
 
-enum class ColRowEditAction;
+enum class EditAction;
 
 }
 
@@ -54,7 +54,7 @@ public:
                         const ScMarkData& rMark );
 
             // calls TestRange
-            ScEditableTester( const ScDocument& rDoc, const ScRange& rRange );
+            ScEditableTester( const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction );
 
             // calls TestSelection
             ScEditableTester( const ScDocument& rDoc, const ScMarkData& rMark );
@@ -62,24 +62,29 @@ public:
             // calls TestView
             ScEditableTester( ScViewFunc* pView );
 
-    ScEditableTester(
-        const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
-        const ScMarkData& rMark );
+            ScEditableTester(
+                const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol,
+                SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark );
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
     void    TestBlock( const ScDocument& rDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         bool bNoMatrixAtAll = false );
+    void    TestBlockForAction( const ScDocument& rDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                        sc::EditAction eAction );
     void    TestSelectedBlock( const ScDocument& rDoc,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
     void    TestRange( const ScDocument& rDoc, const ScRange& rRange );
+    void    TestRangeForAction( const ScDocument& rDoc, const ScRange& rRange,
+                       sc::EditAction eAction );
     void    TestSelection( const ScDocument& rDoc, const ScMarkData& rMark );
 
-    void TestBlockForAction(
-        const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
-        const ScMarkData& rMark );
+    void    TestBlockForAction(
+                        const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
+                        SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark );
 
     bool IsEditable() const { return mbIsEditable; }
     bool IsFormatEditable() const { return mbIsEditable || mbOnlyMatrix; }

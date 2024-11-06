@@ -45,11 +45,14 @@ ScEditableTester::ScEditableTester( const ScDocument& rDoc,
     TestSelectedBlock( rDoc, nStartCol, nStartRow, nEndCol, nEndRow, rMark );
 }
 
-ScEditableTester::ScEditableTester( const ScDocument& rDoc, const ScRange& rRange ) :
+ScEditableTester::ScEditableTester( const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction ) :
     mbIsEditable(true),
     mbOnlyMatrix(true)
 {
-    TestRange( rDoc, rRange );
+    if (eAction == sc::EditAction::Unknown)
+        TestRange(rDoc, rRange);
+    else
+        TestRangeForAction( rDoc, rRange, eAction );
 }
 
 ScEditableTester::ScEditableTester( const ScDocument& rDoc, const ScMarkData& rMark ) :
@@ -73,10 +76,11 @@ ScEditableTester::ScEditableTester( ScViewFunc* pView ) :
 }
 
 ScEditableTester::ScEditableTester(
-    const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd, const ScMarkData& rMark ) :
+    const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
+    SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark ) :
     ScEditableTester()
 {
-    TestBlockForAction(rDoc, eAction, nStart, nEnd, rMark);
+    TestBlockForAction(rDoc, eAction, nStartCol, nStartRow, nEndCol, nEndRow, rMark);
 }
 
 void ScEditableTester::TestBlock( const ScDocument& rDoc, SCTAB nTab,
@@ -85,12 +89,21 @@ void ScEditableTester::TestBlock( const ScDocument& rDoc, SCTAB nTab,
     if (mbIsEditable || mbOnlyMatrix)
     {
         bool bThisMatrix;
-        if (!rDoc.IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix, bNoMatrixAtAll))
+        if (!rDoc.IsBlockEditable( nTab, nStartCol, nStartRow, nEndCol, nEndRow, &bThisMatrix, bNoMatrixAtAll ))
         {
             mbIsEditable = false;
             if ( !bThisMatrix )
                 mbOnlyMatrix = false;
         }
+    }
+}
+
+void ScEditableTester::TestBlockForAction( const ScDocument& rDoc, SCTAB nTab,
+        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sc::EditAction eAction )
+{
+    if (mbIsEditable || mbOnlyMatrix)
+    {
+        mbIsEditable = rDoc.IsEditActionAllowed(eAction, nTab, nStartCol, nStartRow, nEndCol, nEndRow);
     }
 }
 
@@ -108,7 +121,7 @@ void ScEditableTester::TestSelectedBlock( const ScDocument& rDoc,
     }
 }
 
-void ScEditableTester::TestRange(  const ScDocument& rDoc, const ScRange& rRange )
+void ScEditableTester::TestRange( const ScDocument& rDoc, const ScRange& rRange )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -118,6 +131,18 @@ void ScEditableTester::TestRange(  const ScDocument& rDoc, const ScRange& rRange
     SCTAB nEndTab = rRange.aEnd.Tab();
     for (SCTAB nTab=nStartTab; nTab<=nEndTab; nTab++)
         TestBlock( rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, false );
+}
+
+void ScEditableTester::TestRangeForAction(const ScDocument& rDoc, const ScRange& rRange, sc::EditAction eAction)
+{
+    SCCOL nStartCol = rRange.aStart.Col();
+    SCROW nStartRow = rRange.aStart.Row();
+    SCTAB nStartTab = rRange.aStart.Tab();
+    SCCOL nEndCol = rRange.aEnd.Col();
+    SCROW nEndRow = rRange.aEnd.Row();
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (SCTAB nTab = nStartTab; nTab <= nEndTab; nTab++)
+        TestBlockForAction(rDoc, nTab, nStartCol, nStartRow, nEndCol, nEndRow, eAction);
 }
 
 void ScEditableTester::TestSelection( const ScDocument& rDoc, const ScMarkData& rMark )
@@ -135,8 +160,8 @@ void ScEditableTester::TestSelection( const ScDocument& rDoc, const ScMarkData& 
 }
 
 void ScEditableTester::TestBlockForAction(
-    const ScDocument& rDoc, sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd,
-    const ScMarkData& rMark )
+    const ScDocument& rDoc, sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
+    SCCOL nEndCol, SCROW nEndRow, const ScMarkData& rMark )
 {
     mbOnlyMatrix = false;
 
@@ -145,7 +170,7 @@ void ScEditableTester::TestBlockForAction(
         if (!mbIsEditable)
             return;
 
-        mbIsEditable = rDoc.IsEditActionAllowed(eAction, rTab, nStart, nEnd);
+        mbIsEditable = rDoc.IsEditActionAllowed(eAction, rTab, nStartCol, nStartRow, nEndCol, nEndRow);
     }
 }
 
