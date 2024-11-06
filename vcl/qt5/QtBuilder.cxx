@@ -245,6 +245,13 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         pObject = new QScrollArea(pParentWidget);
     }
+    else if (sName == u"GtkSeparator")
+    {
+        const bool bVertical = hasOrientationVertical(rMap);
+        QFrame* pFrame = new QFrame(pParentWidget);
+        pFrame->setFrameShape(bVertical ? QFrame::VLine : QFrame::HLine);
+        pObject = pFrame;
+    }
     else if (sName == u"GtkTextView")
     {
         pObject = new QPlainTextEdit(pParentWidget);
