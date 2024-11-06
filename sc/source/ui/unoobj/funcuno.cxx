@@ -581,11 +581,10 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
         {
             ArrayOfArrayProc<uno::Any>::processSequences( pDoc, rArg, aTokenArr, nDocRow, bArgErr, bOverflow );
         }
-        else if ( aType.equals( cppu::UnoType<table::XCellRange>::get()) )
+        else if (uno::Reference<table::XCellRange> xRange; rArg >>= xRange)
         {
             // currently, only our own cell ranges are supported
 
-            uno::Reference<table::XCellRange> xRange(rArg, uno::UNO_QUERY);
             ScCellRangesBase* pImpl = dynamic_cast<ScCellRangesBase*>( xRange.get() );
             if ( pImpl )
             {

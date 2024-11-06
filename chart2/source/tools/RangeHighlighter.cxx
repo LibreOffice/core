@@ -100,9 +100,8 @@ void RangeHighlighter::determineRanges()
         m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( m_xChartModel );
 
         uno::Any aSelection( m_xSelectionSupplier->getSelection());
-        const uno::Type& rType = aSelection.getValueType();
 
-        if ( rType == cppu::UnoType<OUString>::get() )
+        if (aSelection.getValueType() == cppu::UnoType<OUString>::get())
         {
             // @todo??: maybe getSelection() should return a model object rather than a CID
 
@@ -169,11 +168,9 @@ void RangeHighlighter::determineRanges()
                 }
             }
         }
-        else if ( rType == cppu::UnoType< drawing::XShape >::get() )
+        else if (Reference<drawing::XShape> xShape; aSelection >>= xShape)
         {
             // #i12587# support for shapes in chart
-            Reference< drawing::XShape > xShape;
-            aSelection >>= xShape;
             if ( xShape.is() )
             {
                 return;

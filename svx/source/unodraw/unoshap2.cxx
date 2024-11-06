@@ -1196,21 +1196,19 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 bOk = true;
             }
         }
-        else if (rValue.getValueType() == cppu::UnoType<graphic::XGraphic>::get())
+        else if (uno::Reference<graphic::XGraphic> xGraphic; rValue >>= xGraphic)
         {
-            auto xGraphic = rValue.get<uno::Reference<graphic::XGraphic>>();
             if (xGraphic.is())
             {
                 static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(Graphic(xGraphic));
                 bOk = true;
             }
         }
-        else if (rValue.getValueType() == cppu::UnoType<awt::XBitmap>::get())
+        else if (uno::Reference<awt::XBitmap> xBitmap; rValue >>= xBitmap)
         {
-            auto xBitmap = rValue.get<uno::Reference<awt::XBitmap>>();
             if (xBitmap.is())
             {
-                uno::Reference<graphic::XGraphic> xGraphic(xBitmap, uno::UNO_QUERY);
+                xGraphic.set(xBitmap, uno::UNO_QUERY);
                 Graphic aGraphic(xGraphic);
                 static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
                 bOk = true;

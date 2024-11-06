@@ -118,12 +118,8 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
 {
     for( const auto& rAny : aArguments )
     {
-        if( rAny.getValueType() ==
-                cppu::UnoType<XDocumentHandler>::get())
-        {
-            rAny >>= xHandler;
+        if (rAny >>= xHandler)
             rAny >>= xExtHandler;
-        }
     }
 }
 

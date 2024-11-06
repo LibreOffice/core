@@ -3352,7 +3352,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 static uno::Reference< table::XCellRange > processKey( const uno::Any& Key, const uno::Reference<  uno::XComponentContext >& xContext, ScDocShell* pDocSh )
 {
     uno::Reference< excel::XRange > xKeyRange;
-    if ( Key.getValueType() == cppu::UnoType<excel::XRange>::get() )
+    if (Key.getValueTypeClass() == css::uno::TypeClass_INTERFACE)
     {
         xKeyRange.set( Key, uno::UNO_QUERY_THROW );
     }

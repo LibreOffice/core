@@ -239,12 +239,11 @@ ObjectIdentifier::ObjectIdentifier( const Reference< drawing::XShape >& rxShape 
 
 ObjectIdentifier::ObjectIdentifier( const Any& rAny )
 {
-    const uno::Type& rType = rAny.getValueType();
-    if ( rType == cppu::UnoType<OUString>::get() )
+    if (rAny.getValueType() == cppu::UnoType<OUString>::get())
     {
         rAny >>= m_aObjectCID;
     }
-    else if ( rType == cppu::UnoType< drawing::XShape >::get() )
+    else
     {
         rAny >>= m_xAdditionalShape;
     }

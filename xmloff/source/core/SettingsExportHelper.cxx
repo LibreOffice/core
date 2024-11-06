@@ -143,18 +143,12 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 aAny >>= aProps;
                 exportbase64Binary(aProps, rName);
             }
-            else if (aType.equals(cppu::UnoType<container::XNameContainer>::get()) ||
-                    aType.equals(cppu::UnoType<container::XNameAccess>::get()))
+            else if (uno::Reference<container::XNameAccess> aNamed; aAny >>= aNamed)
             {
-                uno::Reference< container::XNameAccess> aNamed;
-                aAny >>= aNamed;
                 exportNameAccess(aNamed, rName);
             }
-            else if (aType.equals(cppu::UnoType<container::XIndexAccess>::get()) ||
-                    aType.equals(cppu::UnoType<container::XIndexContainer>::get()) )
+            else if (uno::Reference<container::XIndexAccess> aIndexed; aAny >>= aIndexed)
             {
-                uno::Reference<container::XIndexAccess> aIndexed;
-                aAny >>= aIndexed;
                 exportIndexAccess(aIndexed, rName);
             }
             else if (aType.equals(cppu::UnoType<util::DateTime>::get()) )
@@ -163,9 +157,9 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 aAny >>= aDateTime;
                 exportDateTime(aDateTime, rName);
             }
-            else if( aType.equals(cppu::UnoType<i18n::XForbiddenCharacters>::get()) )
+            else if (uno::Reference<i18n::XForbiddenCharacters> xForbChars; aAny >>= xForbChars)
             {
-                exportForbiddenCharacters( aAny, rName );
+                exportForbiddenCharacters(xForbChars, rName);
             }
             else if( aType.equals(cppu::UnoType<uno::Sequence<formula::SymbolDescriptor>>::get() ) )
             {
@@ -416,14 +410,10 @@ void XMLSettingsExportHelper::exportIndexAccess(
 }
 
 void XMLSettingsExportHelper::exportForbiddenCharacters(
-                    const uno::Any &rAny,
+                    const uno::Reference<i18n::XForbiddenCharacters>& xForbChars,
                     const OUString& rName) const
 {
-    uno::Reference<i18n::XForbiddenCharacters> xForbChars;
-    uno::Reference<linguistic2::XSupportedLocales> xLocales;
-
-    rAny >>= xForbChars;
-    rAny >>= xLocales;
+    uno::Reference<linguistic2::XSupportedLocales> xLocales(xForbChars, css::uno::UNO_QUERY);
 
     SAL_WARN_IF( !(xForbChars.is() && xLocales.is()), "xmloff","XMLSettingsExportHelper::exportForbiddenCharacters: got illegal forbidden characters!" );
 

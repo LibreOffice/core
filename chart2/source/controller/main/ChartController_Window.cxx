@@ -1644,8 +1644,7 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
 
     if ( rSelection.hasValue() )
     {
-        const uno::Type& rType = rSelection.getValueType();
-        if ( rType == cppu::UnoType< OUString >::get() )
+        if (rSelection.getValueType() == cppu::UnoType<OUString>::get())
         {
             OUString aNewCID;
             if ( ( rSelection >>= aNewCID ) && m_aSelection.setSelection( aNewCID ) )
@@ -1653,10 +1652,9 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
                 bSuccess = true;
             }
         }
-        else if ( rType == cppu::UnoType<drawing::XShape>::get() )
+        else if (uno::Reference<drawing::XShape> xShape; rSelection >>= xShape)
         {
-            uno::Reference< drawing::XShape > xShape;
-            if ( ( rSelection >>= xShape ) && m_aSelection.setSelection( xShape ) )
+            if (m_aSelection.setSelection(xShape))
             {
                 bSuccess = true;
             }

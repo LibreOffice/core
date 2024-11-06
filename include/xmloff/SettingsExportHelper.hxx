@@ -31,6 +31,7 @@
 
 namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::formula { struct SymbolDescriptor; }
+namespace com::sun::star::i18n { class XForbiddenCharacters; }
 namespace com::sun::star::util { class XStringSubstitution; }
 
 namespace com
@@ -85,7 +86,7 @@ class UNLESS_MERGELIBS_MORE(XMLOFF_DLLPUBLIC) XMLSettingsExportHelper
                     const css::uno::Sequence < css::formula::SymbolDescriptor > &rProps,
                     const OUString& rName) const;
     void exportForbiddenCharacters(
-                    const css::uno::Any &rAny,
+                    const css::uno::Reference<css::i18n::XForbiddenCharacters>& xForbChars,
                     const OUString& rName) const;
 
 public:

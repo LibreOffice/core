@@ -52,18 +52,14 @@ void XMLAutoTextEventImport::initialize(const Sequence<Any>& rArguments)
 
     for (const auto& rArgument : rArguments)
     {
-        const Type& rType = rArgument.getValueType();
-        if (rType == cppu::UnoType<XEventsSupplier>::get())
+        if (Reference<XEventsSupplier> xSupplier; rArgument >>= xSupplier)
         {
-            Reference<XEventsSupplier> xSupplier;
-            rArgument >>= xSupplier;
             DBG_ASSERT(xSupplier.is(), "need XEventsSupplier or XNameReplace");
 
             xEvents = xSupplier->getEvents();
         }
-        else if (rType == cppu::UnoType<XNameReplace>::get())
+        else if (rArgument >>= xEvents)
         {
-            rArgument >>= xEvents;
             DBG_ASSERT(xEvents.is(), "need XEventsSupplier or XNameReplace");
         }
     }

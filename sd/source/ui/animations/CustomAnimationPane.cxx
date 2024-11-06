@@ -1647,10 +1647,8 @@ void CustomAnimationPane::onChangeCurrentPage()
     }
 }
 
-static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
+static bool getTextSelection(const Reference< XTextRange >& xSelectedText, Reference< XShape >& xShape, std::vector< sal_Int16 >& rParaList )
 {
-    Reference< XTextRange > xSelectedText;
-    rSelection >>= xSelectedText;
     if( xSelectedText.is() ) try
     {
         xShape.set( xSelectedText->getText(), UNO_QUERY_THROW );
@@ -1739,11 +1737,8 @@ void CustomAnimationPane::onAdd()
     // gather shapes from the selection
     maViewSelection = mxView->getSelection();
 
-    if( maViewSelection.getValueType() == cppu::UnoType<XShapes>::get())
+    if (Reference<XIndexAccess> xShapes; maViewSelection >>= xShapes)
     {
-        Reference< XIndexAccess > xShapes;
-        maViewSelection >>= xShapes;
-
         sal_Int32 nCount = xShapes->getCount();
         aTargets.reserve( nCount );
         for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
@@ -1759,19 +1754,17 @@ void CustomAnimationPane::onAdd()
             }
         }
     }
-    else if ( maViewSelection.getValueType() == cppu::UnoType<XShape>::get())
+    else if (Reference<XText> xText; maViewSelection >>= xText)
     {
         aTargets.push_back( maViewSelection );
-        Reference< XText > xText;
-        maViewSelection >>= xText;
         if( !xText.is() || xText->getString().isEmpty() )
             bHasText = false;
     }
-    else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
+    else if (Reference<XTextCursor> xCursor; maViewSelection >>= xCursor)
     {
         Reference< XShape > xShape;
         std::vector< sal_Int16 > aParaList;
-        if( getTextSelection( maViewSelection, xShape, aParaList ) )
+        if (getTextSelection(xCursor, xShape, aParaList))
         {
             ParagraphTarget aParaTarget;
             aParaTarget.Shape = std::move(xShape);

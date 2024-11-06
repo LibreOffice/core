@@ -1603,10 +1603,8 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             break;
 
         case TypeClass_INTERFACE:
-            if (_rValue.getValueType() == cppu::UnoType<XInputStream>::get())
+            if (Reference<XInputStream> xStream; _rValue >>= xStream)
             {
-                Reference< XInputStream >  xStream;
-                _rValue >>= xStream;
                 _rxParameters->setBinaryStream(_nColumnIndex, xStream, xStream->available());
                 break;
             }

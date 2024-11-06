@@ -1185,10 +1185,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else if (pEntry->nMemberId == MID_TEXT_BOX_CONTENT)
                 {
-                    if (aValue.getValueType()
-                        == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
-                        SwTextBoxHelper::set(pFormat, pObj,
-                                             aValue.get<uno::Reference<text::XTextFrame>>());
+                    if (uno::Reference<text::XTextFrame> xTextFrame; aValue >>= xTextFrame)
+                        SwTextBoxHelper::set(pFormat, pObj, xTextFrame);
                     else
                         SAL_WARN( "sw.uno", "This is not a TextFrame!" );
                 }
