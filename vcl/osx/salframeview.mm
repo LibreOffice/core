@@ -212,6 +212,32 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     }
 }
 
+static void freezeWindowSizeAndReschedule( NSWindow *pWindow )
+{
+    if ( pWindow )
+    {
+        // Application::Reschedule() can potentially display a modal
+        // dialog which will cause a hang so temporarily disable any
+        // resizing by clamping the window's minimum and maximum sizes
+        // to the current frame size which in Application::Reschedule().
+        bool bIsLiveResize = ImplGetSVData()->mpWinData->mbIsLiveResize;
+        NSSize aMinSize = [pWindow minSize];
+        NSSize aMaxSize = [pWindow maxSize];
+        if ( bIsLiveResize )
+        {
+            NSRect aFrame = [pWindow frame];
+            [pWindow setMinSize:aFrame.size];
+            [pWindow setMaxSize:aFrame.size];
+        }
+        Application::Reschedule( true );
+        if ( bIsLiveResize )
+        {
+            [pWindow setMinSize:aMinSize];
+            [pWindow setMaxSize:aMaxSize];
+        }
+    }
+}
+
 @interface NSResponder (SalFrameWindow)
 -(BOOL)accessibilityIsIgnored;
 @end
@@ -454,18 +480,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
             // not trigger redrawing with the new size.
             // Instead, force relayout by dispatching all pending internal
             // events and firing any pending timers.
-            // Also, Application::Reschedule() can potentially display a
-            // modal dialog which will cause a hang so temporarily disable
-            // live resize by clamping the window's minimum and maximum sizes
-            // to the current frame size which in Application::Reschedule().
-            NSRect aFrame = [self frame];
-            NSSize aMinSize = [self minSize];
-            NSSize aMaxSize = [self maxSize];
-            [self setMinSize:aFrame.size];
-            [self setMaxSize:aFrame.size];
-            Application::Reschedule( true );
-            [self setMinSize:aMinSize];
-            [self setMaxSize:aMaxSize];
+            freezeWindowSizeAndReschedule( self );
 
             if ( ImplGetSVData()->mpWinData->mbIsLiveResize )
             {
@@ -1931,36 +1946,11 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         mbNeedSpecialKeyHandle = true;
     }
 
-    // FIXME:
-    // #i106901#
-    // if we come here outside of mbInKeyInput, this is likely to be because
-    // of the keyboard viewer. For unknown reasons having no marked range
-    // in this case causes a crash. So we say we have a marked range anyway
-    // This is a hack, since it is not understood what a) causes that crash
-    // and b) why we should have a marked range at this point.
-    if( ! mbInKeyInput )
-        bHasMarkedText = true;
-
     return bHasMarkedText;
 }
 
 - (NSRange)markedRange
 {
-    // FIXME:
-    // #i106901#
-    // if we come here outside of mbInKeyInput, this is likely to be because
-    // of the keyboard viewer. For unknown reasons having no marked range
-    // in this case causes a crash. So we say we have a marked range anyway
-    // This is a hack, since it is not understood what a) causes that crash
-    // and b) why we should have a marked range at this point. Stop the native
-    // input method popup from appearing in the bottom left corner of the
-    // screen by returning the marked range if is valid when called outside of
-    // mbInKeyInput. If a zero length range is returned, macOS won't call
-    // [self firstRectForCharacterRange:actualRange:] for any newly appended
-    // uncommitted text.
-    if( ! mbInKeyInput )
-        return mMarkedRange.location != NSNotFound ? mMarkedRange : NSMakeRange( 0, 0 );
-
     return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
 }
 
@@ -1989,6 +1979,7 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
     [self unmarkText];
 
     int len = [aString length];
+    bool bReschedule = false;
     SalExtTextInputEvent aInputEvent;
     if( len > 0 ) {
         // Set the marked and selected ranges to the marked text and selected
@@ -2053,16 +2044,35 @@ static void updateWinDataInLiveResize(bool bInLiveResize)
         aInputEvent.mnCursorPos = nSelectionStart;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = aInputFlags.data();
-        mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+        if( AquaSalFrame::isAlive( mpFrame ) )
+        {
+            bReschedule = true;
+            mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+        }
     } else {
         aInputEvent.maText.clear();
         aInputEvent.mnCursorPos = 0;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = nullptr;
-        mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
-        mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+        if( AquaSalFrame::isAlive( mpFrame ) )
+        {
+            bReschedule = true;
+            mpFrame->CallCallback( SalEvent::ExtTextInput, static_cast<void *>(&aInputEvent) );
+            if( AquaSalFrame::isAlive( mpFrame ) )
+                mpFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
+        }
     }
-    mbKeyHandled= true;
+
+    // tdf#163764 force pending timers to run after marked text changes
+    // During native dictation, waiting for the next native event is
+    // blocked while dictation runs in a loop within a native callback.
+    // Because of this, LibreOffice's painting timers won't fire until
+    // dictation is cancelled or the user pauses speaking. So, force
+    // any pending timers to fire after the marked text changes.
+    if( bReschedule && ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent )
+        freezeWindowSizeAndReschedule( [self window] );
+
+    mbKeyHandled = true;
 }
 
 - (void)unmarkText

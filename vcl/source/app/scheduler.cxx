@@ -389,7 +389,7 @@ void Scheduler::CallbackTaskScheduling()
         // Only higher priority tasks need to be fired to redraw the window
         // so skip firing potentially long-running tasks, such as the Writer
         // idle layout timer, when a window is in live resize
-        if ( ImplGetSVData()->mpWinData->mbIsLiveResize && nTaskPriority == static_cast<int>(TaskPriority::LOWEST) )
+        if ( nTaskPriority == static_cast<int>(TaskPriority::LOWEST) && ( ImplGetSVData()->mpWinData->mbIsLiveResize || ImplGetSVData()->mpWinData->mbIsWaitingForNativeEvent ) )
             continue;
 
         pSchedulerData = rSchedCtx.mpFirstSchedulerData[nTaskPriority];
