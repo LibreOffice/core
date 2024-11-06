@@ -3666,6 +3666,9 @@ module com {
      [property, optional] short ParaHyphenationMinWordLength;
      [property, optional] long ParaHyphenationZone;
      [property, optional, readonly] long SortedTextId;
+     [property, optional] boolean ParaHyphenationKeep;
+     [property, optional] long ParaHyphenationKeepType;
+     [property, optional] short ParaHyphenationCompoundMinLeadingChars;
     };
    };
    module util {
@@ -13274,6 +13277,7 @@ module com {
      [property] boolean IgnoreBlankCells;
      [property] ::com::sun::star::sheet::ValidationAlertStyle ErrorAlertStyle;
      [property, optional] short ShowList;
+     [property, optional] boolean IsCaseSensitive;
     };
     published service UniqueCellFormatRanges {
      interface ::com::sun::star::container::XIndexAccess;
@@ -14211,12 +14215,12 @@ module com {
     };
     published service PrintSettings {
      [property] boolean PrintGraphics;
-     [property] boolean PrintTables;
-     [property] boolean PrintDrawings;
+     /** @deprecated */ [property] boolean PrintTables;
+     /** @deprecated */ [property] boolean PrintDrawings;
      [property] boolean PrintLeftPages;
      [property] boolean PrintRightPages;
      [property] boolean PrintControls;
-     [property] boolean PrintReversed;
+     /** @deprecated */ [property] boolean PrintReversed;
      [property] boolean PrintPaperFromSetup;
      [property] string PrintFaxName;
      [property] ::com::sun::star::text::NotePrintMode PrintAnnotationMode;
@@ -14499,7 +14503,7 @@ module com {
      [property] string DocumentURL;
      [property, readonly] ::com::sun::star::frame::XModel Model;
      [property] short OutputType;
-     [property] boolean SinglePrintJobs;
+     /** @deprecated */ [property] boolean SinglePrintJobs;
      [property] string OutputURL;
      [property] boolean FileNameFromColumn;
      [property] string FileNamePrefix;
@@ -15304,6 +15308,7 @@ module com {
      const short LR_TB = 0;
      /** @deprecated */ const short PAGE = 4;
      const short RL_TB = 1;
+     const short STACKED = 7;
      const short TB_LR = 3;
      const short TB_RL = 2;
      const short TB_RL90 = 6;
@@ -17490,7 +17495,7 @@ module com {
      [property] boolean PrintGraphics;
      [property] boolean PrintLeftPages;
      [property] boolean PrintRightPages;
-     [property] boolean PrintTables;
+     /** @deprecated */ [property] boolean PrintTables;
      [property] boolean PrintReversed;
      [property] boolean PrintProspect;
      [property] boolean PrintPageBackground;
