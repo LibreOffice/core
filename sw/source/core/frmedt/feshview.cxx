@@ -217,8 +217,9 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                                 pOldSelFly->GetAnchorFrame()->GetUpper() )
                         {
                             const SwNode * pOldNd = pContact->GetAnchorNode().FindTableNode();
+                            const SwNode * pNewNd = GetCursor()->GetPointNode().FindTableNode();
                             // the original image was in a table, but the cursor is not in that
-                            if ( pOldNd && pOldNd != GetCursor()->GetPointNode().FindTableNode() )
+                            if ( pOldNd && pOldNd != pNewNd )
                             {
                                 const SwRect& rCellFrame =
                                     pOldSelFly->GetAnchorFrame()->GetUpper()->getFrameArea();
@@ -229,8 +230,10 @@ bool SwFEShell::SelectObj( const Point& rPt, sal_uInt8 nFlag, SdrObject *pObj )
                                     pWrtShell->SelectTableRowCol( aPtCellTopRight );
                             }
                             // same table, but not in the same cell
-                            else if ( pContact->GetAnchorNode().GetTableBox() !=
-                                            GetCursor()->GetPointNode().GetTextNode()->GetTableBox() )
+                            else if ( pOldNd && pOldNd == pNewNd &&
+                                    GetCursor()->GetPointNode().GetTextNode() &&
+                                    pContact->GetAnchorNode().GetTableBox() !=
+                                    GetCursor()->GetPointNode().GetTextNode()->GetTableBox() )
                             {
                                 aPt.setX( aPt.getX() + 2 + pOldSelFly->getFrameArea().Width() );
                                 // put the text cursor after the object
