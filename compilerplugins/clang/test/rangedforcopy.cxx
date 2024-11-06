@@ -8,6 +8,7 @@
  */
 
 #include <vector>
+#include <svl/typedwhich.hxx>
 
 struct S
 {
@@ -37,4 +38,13 @@ void f(std::vector<bool> const& v)
     }
 }
 
+// no warning expected
+class SvxFontItem;
+constexpr TypedWhichId<SvxFontItem> EE_CHAR_FONTINFO1(12);
+constexpr TypedWhichId<SvxFontItem> EE_CHAR_FONTINFO2(13);
+void f2()
+{
+    for (auto nWhich : { EE_CHAR_FONTINFO1, EE_CHAR_FONTINFO2 })
+        (void)nWhich;
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
