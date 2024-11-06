@@ -186,6 +186,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     {
         pObject = new QDialog(pParentWidget);
     }
+    else if (sName == u"GtkDrawingArea")
+    {
+        pObject = new QLabel(pParentWidget);
+    }
     else if (sName == u"GtkEntry")
     {
         QLineEdit* pLineEdit = new QLineEdit(pParentWidget);

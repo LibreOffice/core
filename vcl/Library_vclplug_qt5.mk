@@ -103,6 +103,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_qt5,\
     vcl/qt5/QtInstanceContainer \
     vcl/qt5/QtInstanceComboBox \
     vcl/qt5/QtInstanceDialog \
+    vcl/qt5/QtInstanceDrawingArea \
     vcl/qt5/QtInstanceEntry \
     vcl/qt5/QtInstanceFrame \
     vcl/qt5/QtInstanceImage \

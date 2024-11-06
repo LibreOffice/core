@@ -14,6 +14,7 @@
 #include <QtBuilder.hxx>
 #include <QtInstanceCheckButton.hxx>
 #include <QtInstanceComboBox.hxx>
+#include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceEntry.hxx>
 #include <QtInstanceFrame.hxx>
 #include <QtInstanceImage.hxx>
@@ -317,10 +318,12 @@ std::unique_ptr<weld::Expander> QtInstanceBuilder::weld_expander(const OUString&
 }
 
 std::unique_ptr<weld::DrawingArea>
-QtInstanceBuilder::weld_drawing_area(const OUString&, const a11yref&, FactoryFunction, void*)
+QtInstanceBuilder::weld_drawing_area(const OUString& rId, const a11yref&, FactoryFunction, void*)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QLabel* pLabel = m_xBuilder->get<QLabel>(rId);
+    std::unique_ptr<weld::DrawingArea> xRet(pLabel ? std::make_unique<QtInstanceDrawingArea>(pLabel)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::Menu> QtInstanceBuilder::weld_menu(const OUString&)
