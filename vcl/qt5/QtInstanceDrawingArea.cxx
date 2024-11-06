@@ -10,12 +10,17 @@
 #include <QtInstanceDrawingArea.hxx>
 #include <QtInstanceDrawingArea.moc>
 
+#include <vcl/qt/QtUtils.hxx>
+
 QtInstanceDrawingArea::QtInstanceDrawingArea(QLabel* pLabel)
     : QtInstanceWidget(pLabel)
     , m_pLabel(pLabel)
     , m_xDevice(DeviceFormat::WITHOUT_ALPHA)
 {
     assert(m_pLabel);
+
+    // install event filter, so eventFilter() can handle widget events
+    m_pLabel->installEventFilter(this);
 }
 
 void QtInstanceDrawingArea::queue_draw()
@@ -73,5 +78,50 @@ AbsoluteScreenPixelPoint QtInstanceDrawingArea::get_accessible_location_on_scree
 }
 
 void QtInstanceDrawingArea::click(const Point&) { assert(false && "Not implemented yet"); }
+
+bool QtInstanceDrawingArea::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    if (pObject != m_pLabel)
+        return false;
+
+    SolarMutexGuard g;
+    assert(GetQtInstance().IsMainThread());
+
+    switch (pEvent->type())
+    {
+        case QEvent::Paint:
+            handlePaintEvent();
+            return false;
+        case QEvent::Resize:
+            handleResizeEvent();
+            return false;
+        default:
+            return false;
+    }
+}
+
+void QtInstanceDrawingArea::handlePaintEvent()
+{
+    tools::Rectangle aRect(0, 0, m_pLabel->width(), m_pLabel->height());
+    aRect = m_xDevice->PixelToLogic(aRect);
+    m_xDevice->Erase(aRect);
+    m_aDrawHdl.Call(std::pair<vcl::RenderContext&, const tools::Rectangle&>(*m_xDevice, aRect));
+    QPixmap aPixmap = toQPixmap(*m_xDevice);
+
+    // set new pixmap if it changed
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (aPixmap.toImage() != m_pLabel->pixmap().toImage())
+#else
+    if (aPixmap.toImage() != m_pLabel->pixmap(Qt::ReturnByValue).toImage())
+#endif
+        m_pLabel->setPixmap(aPixmap);
+}
+
+void QtInstanceDrawingArea::handleResizeEvent()
+{
+    const Size aSize = toSize(m_pLabel->size());
+    m_xDevice->SetOutputSizePixel(aSize);
+    m_aSizeAllocateHdl.Call(aSize);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

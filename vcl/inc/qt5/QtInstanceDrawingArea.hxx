@@ -45,6 +45,12 @@ public:
     virtual a11yrelationset get_accessible_relation_set() override;
     virtual AbsoluteScreenPixelPoint get_accessible_location_on_screen() override;
 
+    virtual bool eventFilter(QObject* pObject, QEvent* pEvent) override;
+
+private:
+    void handlePaintEvent();
+    void handleResizeEvent();
+
 private:
     virtual void click(const Point&) override;
 };

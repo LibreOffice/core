@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/image.hxx>
+#include <vcl/outdev.hxx>
 
 #include <QtCore/QString>
 #include <QtGui/QPixmap>
@@ -51,6 +52,11 @@ inline QPixmap toQPixmap(const css::uno::Reference<css::graphic::XGraphic>& rIma
 
     Image aImage(rImage);
     return toQPixmap(aImage);
+}
+
+inline QPixmap toQPixmap(const OutputDevice& rDevice)
+{
+    return toQPixmap(Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel())));
 }
 
 inline QPixmap loadQPixmapIcon(const OUString& rIconName)
