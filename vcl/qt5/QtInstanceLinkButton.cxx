@@ -55,6 +55,7 @@ OUString QtInstanceLinkButton::get_uri() const
 
 void QtInstanceLinkButton::linkActivated(const QString& rUrl)
 {
+    SolarMutexGuard g;
     if (signal_activate_link())
         return;
 
