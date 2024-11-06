@@ -468,8 +468,8 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
                         {
                             if (xTransferable->getTransferData(aFlavor) >>= aClipBoardContent)
                             {
-                                INetURLObject aURL;
-                                aURL.SetSmartURL(aClipBoardContent);
+                                // tdf#162753 - allow only syntactically valid hyperlink targets
+                                INetURLObject aURL(aClipBoardContent);
                                 if (!aURL.HasError())
                                     aStrURL
                                         = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
