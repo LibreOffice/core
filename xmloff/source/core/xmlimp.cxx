@@ -2016,23 +2016,23 @@ OUString SvXMLImport::getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLN
         return OUString();
 }
 
-OUString SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
+const OUString & SvXMLImport::getNamespaceURIFromToken( sal_Int32 nToken )
 {
     sal_Int32 nNamespaceToken = ( nToken & NMSP_MASK ) >> NMSP_SHIFT;
     auto aIter( aNamespaceMap.find( nNamespaceToken ) );
     if( aIter != aNamespaceMap.end() )
         return (*aIter).second.second;
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
-OUString SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
+const OUString & SvXMLImport::getNamespacePrefixFromURI( const OUString& rURI )
 {
     auto aIter( aNamespaceURIPrefixMap.find(rURI) );
     if( aIter != aNamespaceURIPrefixMap.end() )
         return (*aIter).second;
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 sal_Int32 SvXMLImport::getTokenFromName( std::u16string_view rName )

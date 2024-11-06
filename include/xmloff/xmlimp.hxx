@@ -386,8 +386,8 @@ public:
     static const OUString & getNameFromToken( sal_Int32 nToken );
     static OUString getPrefixAndNameFromToken( sal_Int32 nToken );
     static OUString getNamespacePrefixFromToken(sal_Int32 nToken, const SvXMLNamespaceMap* pMap);
-    static OUString getNamespaceURIFromToken( sal_Int32 nToken );
-    static OUString getNamespacePrefixFromURI( const OUString& rURI );
+    static const OUString & getNamespaceURIFromToken( sal_Int32 nToken );
+    static const OUString & getNamespacePrefixFromURI( const OUString& rURI );
     static sal_Int32 getTokenFromName(std::u16string_view sName);
 
     SvXMLNamespaceMap& GetNamespaceMap() { return *mxNamespaceMap; }

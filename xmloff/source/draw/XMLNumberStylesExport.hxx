@@ -33,7 +33,7 @@ public:
     static void exportTimeStyle(SdXMLExport& rExport, sal_Int32 nStyle);
     static void exportDateStyle(SdXMLExport& rExport, sal_Int32 nStyle);
 
-    static OUString getTimeStyleName(const sal_Int32 nTimeFormat);
+    static const OUString& getTimeStyleName(const sal_Int32 nTimeFormat);
     static OUString getDateStyleName(const sal_Int32 nDateFormat);
 };
 

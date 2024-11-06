@@ -49,7 +49,7 @@ public:
 
     void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
-    model::ComplexColor getComplexColor() { return maComplexColor; }
+    const model::ComplexColor& getComplexColor() { return maComplexColor; }
 };
 
 class XMLOFF_DLLPUBLIC XMLComplexColorContext final : public SvXMLImportContext

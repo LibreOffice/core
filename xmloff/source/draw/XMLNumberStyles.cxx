@@ -438,7 +438,7 @@ void SdXMLNumberStylesExporter::exportDateStyle( SdXMLExport& rExport, sal_Int32
     }
 }
 
-OUString SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat )
+const OUString & SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat )
 {
     sal_Int32 nFormat = nTimeFormat;
     if( nFormat > 1 )
@@ -450,7 +450,7 @@ OUString SdXMLNumberStylesExporter::getTimeStyleName(const sal_Int32 nTimeFormat
     }
     else
     {
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 }
 

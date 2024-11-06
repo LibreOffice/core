@@ -156,7 +156,7 @@ bool XMLTextListsHelper::IsListProcessed( const OUString& sListId ) const
     return mpProcessedLists->find( sListId ) != mpProcessedLists->end();
 }
 
-OUString XMLTextListsHelper::GetListStyleOfProcessedList(
+const OUString & XMLTextListsHelper::GetListStyleOfProcessedList(
                                             const OUString& sListId ) const
 {
     if ( mpProcessedLists )
@@ -168,10 +168,10 @@ OUString XMLTextListsHelper::GetListStyleOfProcessedList(
         }
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
+const OUString & XMLTextListsHelper::GetContinueListIdOfProcessedList(
                                             const OUString& sListId ) const
 {
     if ( mpProcessedLists )
@@ -183,7 +183,7 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
         }
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 

@@ -64,9 +64,9 @@ class XMLTextListsHelper
                                   const OUString& sListStyleDefaultListId = OUString() );
 
         bool IsListProcessed( const OUString& sListId ) const;
-        OUString GetListStyleOfProcessedList(
+        const OUString & GetListStyleOfProcessedList(
                                         const OUString& sListId ) const;
-        OUString GetContinueListIdOfProcessedList(
+        const OUString & GetContinueListIdOfProcessedList(
                                         const OUString& sListId ) const;
         const OUString& GetLastProcessedListId() const { return msLastProcessedListId;}
         const OUString& GetListStyleOfLastProcessedList() const { return msListStyleOfLastProcessedList;}

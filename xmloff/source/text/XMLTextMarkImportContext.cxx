@@ -126,7 +126,7 @@ SvXMLEnumMapEntry<lcl_MarkType> const lcl_aMarkTypeMap[] =
 };
 
 
-static OUString lcl_getFormFieldmarkName(std::u16string_view name)
+static const OUString & lcl_getFormFieldmarkName(std::u16string_view name)
 {
     if (name == ODF_FORMCHECKBOX ||
         name == u"msoffice.field.FORMCHECKBOX" ||
@@ -136,7 +136,7 @@ static OUString lcl_getFormFieldmarkName(std::u16string_view name)
              name == u"ecma.office-open-xml.field.FORMDROPDOWN")
         return ODF_FORMDROPDOWN;
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 static OUString lcl_getFieldmarkName(OUString const& name)

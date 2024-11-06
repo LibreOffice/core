@@ -420,7 +420,7 @@ public:
     const OUString& GetOrigName() const { return m_sOrigName; }
 
     css::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
-    OUString GetMimeType() const { return sMimeType; }
+    const OUString & GetMimeType() const { return sMimeType; }
 
     const css::uno::Reference < css::beans::XPropertySet >& GetPropSet() const { return xPropSet; }
 };
