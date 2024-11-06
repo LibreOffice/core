@@ -70,6 +70,7 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xTypeLB->set_size_request(nWidth, nHeight);
     m_xSelectionLB->set_size_request(nWidth, nHeight);
     m_xFormatLB->set_size_request(nWidth, nHeight/2);
+    m_xNumFormatLB->get_widget().set_size_request(nWidth, nHeight/2);
 
     m_xValueED->get_widget().set_size_request(m_xValueED->get_widget().get_preferred_size().Width(),
                                    m_xValueED->get_widget().get_height_rows(3));
