@@ -20,23 +20,3 @@
  #include <process.h>
  
  #include "priv-io.h"
---- lang/cpp/src/gpgaddexistingsubkeyeditinteractor.h
-+++ lang/cpp/src/gpgaddexistingsubkeyeditinteractor.h
-@@ -27,6 +27,7 @@
- #include "editinteractor.h"
- 
- #include <memory>
-+#include <string>
- 
- namespace GpgME
- {
---- lang/cpp/src/gpgrevokekeyeditinteractor.h
-+++ lang/cpp/src/gpgrevokekeyeditinteractor.h
-@@ -28,6 +28,7 @@
- #include "global.h"
- 
- #include <memory>
-+#include <string>
- #include <vector>
- 
- namespace GpgME
