@@ -3564,7 +3564,7 @@ void SbRtl_VarType(StarBASIC *, SbxArray & rPar, bool)
 }
 
 // Exported function
-OUString getBasicTypeName( SbxDataType eType )
+const OUString & getBasicTypeName( SbxDataType eType )
 {
     static constexpr OUString pTypeNames[] =
     {

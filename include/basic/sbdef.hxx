@@ -28,7 +28,7 @@ class ErrCode;
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
-BASIC_DLLPUBLIC OUString getBasicTypeName( SbxDataType eType );
+BASIC_DLLPUBLIC const OUString & getBasicTypeName( SbxDataType eType );
 
 // Returns type name for Basic objects, especially
 // important for SbUnoObj instances

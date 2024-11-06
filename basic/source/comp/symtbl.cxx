@@ -40,10 +40,10 @@ SbiStringPool::SbiStringPool( )
 SbiStringPool::~SbiStringPool()
 {}
 
-OUString SbiStringPool::Find( sal_uInt32 n ) const
+const OUString & SbiStringPool::Find( sal_uInt32 n ) const
 {
     if( n == 0 || n > aData.size() )
-        return OUString();
+        return EMPTY_OUSTRING;
     else
         return aData[n - 1];
 }

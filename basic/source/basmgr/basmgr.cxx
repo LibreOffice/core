@@ -1215,14 +1215,14 @@ bool BasicManager::HasLib( std::u16string_view rName ) const
     return false;
 }
 
-OUString BasicManager::GetLibName( sal_uInt16 nLib )
+const OUString & BasicManager::GetLibName( sal_uInt16 nLib )
 {
     DBG_ASSERT(  nLib < maLibs.size(), "Lib?!" );
     if ( nLib < maLibs.size() )
     {
         return maLibs[nLib]->GetLibName();
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool BasicManager::LoadLib( sal_uInt16 nLib )

@@ -1712,7 +1712,7 @@ ErrCode StarBASIC::GetErrBasic()
 }
 
 // make the additional message for the RTL function error accessible
-OUString StarBASIC::GetErrorMsg()
+const OUString & StarBASIC::GetErrorMsg()
 {
     if( GetSbData()->pInst )
     {
@@ -1720,7 +1720,7 @@ OUString StarBASIC::GetErrorMsg()
     }
     else
     {
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 }
 

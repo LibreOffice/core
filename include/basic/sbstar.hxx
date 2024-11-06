@@ -93,7 +93,7 @@ public:
     static bool     IsRunning();
     static ErrCode  GetErrBasic();
     // #66536 make additional message accessible by RTL function Error
-    static OUString GetErrorMsg();
+    static const OUString & GetErrorMsg();
     static sal_Int32 GetErl();
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) override;

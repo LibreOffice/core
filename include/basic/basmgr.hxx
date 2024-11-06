@@ -127,7 +127,7 @@ public:
     StarBASIC* GetLib( std::u16string_view rName ) const;
     sal_uInt16      GetLibId( std::u16string_view rName ) const;
 
-    OUString        GetLibName( sal_uInt16 nLib );
+    const OUString &        GetLibName( sal_uInt16 nLib );
 
     /** announces the library containers which belong to this BasicManager
 

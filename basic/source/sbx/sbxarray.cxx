@@ -144,17 +144,17 @@ void SbxArray::Put( SbxVariable* pVar, sal_uInt32 nIdx )
     }
 }
 
-OUString SbxArray::GetAlias( sal_uInt32 nIdx )
+const OUString & SbxArray::GetAlias( sal_uInt32 nIdx )
 {
     if( !CanRead() )
     {
         SetError( ERRCODE_BASIC_PROP_WRITEONLY );
-        return OUString();
+        return EMPTY_OUSTRING;
     }
     SbxVarEntry& rRef = reinterpret_cast<SbxVarEntry&>(GetRef( nIdx ));
 
     if (!rRef.maAlias)
-        return OUString();
+        return EMPTY_OUSTRING;
 
     return *rRef.maAlias;
 }
