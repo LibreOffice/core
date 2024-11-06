@@ -138,12 +138,13 @@ void AccessibleContextBase::SetRelationSet (
         { AccessibleRelationType::LABELED_BY, AccessibleEventId::LABELED_BY_RELATION_CHANGED },
         { AccessibleRelationType::LABEL_FOR, AccessibleEventId::LABEL_FOR_RELATION_CHANGED },
         { AccessibleRelationType::MEMBER_OF, AccessibleEventId::MEMBER_OF_RELATION_CHANGED },
-        { AccessibleRelationType::INVALID, -1},
     };
-    for (int i=0; aRelationDescriptors[i].first!=AccessibleRelationType::INVALID; i++)
-        if (mxRelationSet->containsRelation(aRelationDescriptors[i].first)
-        != rxNewRelationSet->containsRelation(aRelationDescriptors[i].first))
-        CommitChange (aRelationDescriptors[i].second, uno::Any(), uno::Any(), -1);
+    for (const std::pair<short int, short int>& rPair : aRelationDescriptors)
+    {
+        if (mxRelationSet->containsRelation(rPair.first)
+            != rxNewRelationSet->containsRelation(rPair.first))
+            CommitChange(rPair.second, uno::Any(), uno::Any(), -1);
+    }
 
     mxRelationSet = rxNewRelationSet;
 }
