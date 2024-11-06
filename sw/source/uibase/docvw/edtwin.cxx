@@ -1954,7 +1954,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     }
                     else if (!rSh.IsCursorInParagraphMetadataField())
                     {
-                        rSh.InfoReadOnlyDialog(false);
+                        rSh.InfoReadOnlyDialog(/*bAsync=*/true);
                         eKeyState = SwKeyState::End;
                     }
                     break;
