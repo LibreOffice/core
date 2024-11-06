@@ -303,7 +303,7 @@ public:
      *
      * @return the resultset for that the supplier supplies data.
      */
-    rtl::Reference< ResultSet > getResultSet() const { return m_pResultSet; }
+    ResultSet* getResultSet() const { return m_pResultSet; }
 
     /**
      * This method returns the identifier string of the content at the
