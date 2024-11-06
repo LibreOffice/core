@@ -2035,7 +2035,7 @@ HRESULT InterfaceOleWrapper::doInvoke( DISPPARAMS * pdispparams, VARIANT * pvarR
         Exception excTarget;
         org >>= excTarget;
         OUString message=
-            org.getValueType().getTypeName() + ": " + excTarget.Message;
+            org.getValueTypeName() + ": " + excTarget.Message;
         writeExcepinfo(pexcepinfo, message);
         ret = DISP_E_EXCEPTION;
     }
@@ -2126,7 +2126,7 @@ HRESULT InterfaceOleWrapper::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIAN
             pexcepinfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
             pexcepinfo->bstrSource = SysAllocString(L"any ONE component");
             pexcepinfo->bstrDescription = SysAllocString(
-                o3tl::toW(org.getValueType().getTypeName().getStr()));
+                o3tl::toW(org.getValueTypeName().getStr()));
         }
         ret = DISP_E_EXCEPTION;
     }

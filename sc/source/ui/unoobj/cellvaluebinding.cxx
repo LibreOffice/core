@@ -277,7 +277,7 @@ namespace calc
         if ( aValue.hasValue() )
             checkValueType( aGuard, aValue.getValueType() );
 
-        switch ( aValue.getValueType().getTypeClass() )
+        switch ( aValue.getValueTypeClass() )
         {
         case TypeClass_STRING:
             {

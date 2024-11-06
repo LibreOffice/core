@@ -165,7 +165,7 @@ Any ONumericModel::translateDbColumnToControlValue()
 Any ONumericModel::getDefaultForReset() const
 {
     Any aValue;
-    if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
+    if (m_aDefault.getValueTypeClass() == TypeClass_DOUBLE)
         aValue = m_aDefault;
 
     return aValue;

@@ -673,7 +673,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
                 throw BridgeRuntimeError(
                     "[automation bridge]UnoConversionUtilities<T>::anyToVariant \n"
                     "Conversion of any with " +
-                    rAny.getValueType().getTypeName() +
+                    rAny.getValueTypeName() +
                     " to VARIANT with type: " + OUString::number(static_cast<sal_Int32>(type)) +
                     " failed! Error code: " + OUString::number(hr));
 
@@ -1007,7 +1007,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
         {
             throw IllegalArgumentException(
                       "[automation bridge]UnoConversionUtilities<T>::anyToVariant\n"
-                      "The provided any of type\" " + rAny.getValueType().getTypeName() +
+                      "The provided any of type\" " + rAny.getValueTypeName() +
                 "\" is unappropriate for conversion!", Reference<XInterface>(), -1);
 
         }
@@ -1055,7 +1055,7 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
     SAFEARRAY*  pArray= nullptr;
     // Get the dimensions. This is done by examining the type name string
     // The count of brackets determines the dimensions.
-    OUString sTypeName= rSeq.getValueType().getTypeName();
+    OUString sTypeName= rSeq.getValueTypeName();
     sal_Int32 dims=0;
     for(sal_Int32 lastIndex=0;(lastIndex= sTypeName.indexOf( L'[', lastIndex)) != -1; lastIndex++,dims++);
 

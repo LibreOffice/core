@@ -62,7 +62,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                 case DataType::BOOLEAN:
                 case DataType::TINYINT:
                 case DataType::SMALLINT:
-                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_BOOLEAN)
+                    if (_rVal.getValueTypeClass() == css::uno::TypeClass_BOOLEAN)
                     {
                         if (::cppu::any2bool(_rVal))
                             aRet.append("1");
@@ -104,14 +104,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                 {
                     DateTime aDateTime;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                         _rVal >>= nValue;
                         aDateTime = DBTypeConversion::toDateTime(nValue);
                         bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
+                    else if (_rVal.getValueTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                         _rVal >>= sValue;
@@ -136,14 +136,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                 {
                     Date aDate;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                         _rVal >>= nValue;
                         aDate = DBTypeConversion::toDate(nValue);
                         bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
+                    else if (_rVal.getValueTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                         _rVal >>= sValue;
@@ -161,14 +161,14 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal,
                 {
                     css::util::Time aTime;
                     bool bOk = false;
-                    if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE)
+                    if (_rVal.getValueTypeClass() == css::uno::TypeClass_DOUBLE)
                     {
                         double nValue = 0.0;
                         _rVal >>= nValue;
                         aTime = DBTypeConversion::toTime(nValue);
                         bOk = true;
                     }
-                    else if (_rVal.getValueType().getTypeClass() == css::uno::TypeClass_STRING)
+                    else if (_rVal.getValueTypeClass() == css::uno::TypeClass_STRING)
                     {
                         OUString sValue;
                         _rVal >>= sValue;

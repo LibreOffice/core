@@ -160,7 +160,7 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & P
         if ( sReturn.isEmpty() && PropertyValue.hasValue() )
         {
             SAL_WARN( "extensions.propctrlr", "StringRepresentation::convertPropertyValueToStringRepresentation: cannot convert values of type '"
-                        << PropertyValue.getValueType().getTypeName()
+                        << PropertyValue.getValueTypeName()
                         << "'!" );
         }
 #endif

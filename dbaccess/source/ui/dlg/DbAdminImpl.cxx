@@ -896,7 +896,7 @@ template<class T> static bool checkItemType(const SfxPoolItem* pItem){ return dy
 
 void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
 {
-    switch ( _rValue.getValueType().getTypeClass() )
+    switch ( _rValue.getValueTypeClass() )
     {
         case TypeClass_STRING:
             if ( implCheckItemType( _rSet, _nId, checkItemType<SfxStringItem> ) )

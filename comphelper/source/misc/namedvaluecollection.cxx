@@ -197,7 +197,7 @@ namespace comphelper
         throw IllegalArgumentException(
             "Invalid value type for '" + _rValueName
             + "'.\nExpected: " + _rExpectedValueType.getTypeName()
-            + "\nFound: " + pos->second.getValueType().getTypeName(),
+            + "\nFound: " + pos->second.getValueTypeName(),
             nullptr, 0 );
     }
 
@@ -223,7 +223,7 @@ namespace comphelper
                 throw IllegalArgumentException(
                     OUString::Concat("Invalid value type for '") + _rValueName
                     + "'.\nExpected: " + _rExpectedValueType.getTypeName()
-                    + "\nFound: " + rPropVal.Value.getValueType().getTypeName(),
+                    + "\nFound: " + rPropVal.Value.getValueTypeName(),
                     nullptr, 0 );
             }
         }

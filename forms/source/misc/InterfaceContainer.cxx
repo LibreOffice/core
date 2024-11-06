@@ -1097,7 +1097,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
 
-    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+    if (Element.getValueTypeClass() != TypeClass_INTERFACE)
         throw IllegalArgumentException();
 
     Reference<XPropertySet> xSet;

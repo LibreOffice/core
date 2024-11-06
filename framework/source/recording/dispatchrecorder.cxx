@@ -279,7 +279,7 @@ void DispatchRecorder::AppendToBuffer( const css::uno::Any& aValue, OUStringBuff
 
         if (aValue.getValueTypeClass() == css::uno::TypeClass_ENUM )
         {
-            OUString aName = aValue.getValueType().getTypeName();
+            OUString aName = aValue.getValueTypeName();
             aArgumentBuffer.append( aName );
             aArgumentBuffer.append(".");
         }

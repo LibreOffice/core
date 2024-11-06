@@ -477,7 +477,7 @@ void Test::testPolyStruct() {
         u"test.codemaker.cppumaker.Struct<char,short>"_ustr,
         (css::uno::Any(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
-         getValueType().getTypeName()));
+         getValueTypeName()));
 
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >
         aEmptySequence;

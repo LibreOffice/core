@@ -99,7 +99,7 @@ css::uno::Type const & mapType(Type type) {
 }
 
 Type getDynamicType(css::uno::Any const & value) {
-    switch (value.getValueType().getTypeClass()) {
+    switch (value.getValueTypeClass()) {
     case css::uno::TypeClass_VOID:
         return TYPE_NIL;
     case css::uno::TypeClass_BOOLEAN:
@@ -125,7 +125,7 @@ Type getDynamicType(css::uno::Any const & value) {
         return TYPE_STRING;
     case css::uno::TypeClass_SEQUENCE: //TODO
         {
-            OUString name(value.getValueType().getTypeName());
+            OUString name(value.getValueTypeName());
             if ( name == "[]byte" ) {
                 return TYPE_HEXBINARY;
             } else if (name == "[]boolean")

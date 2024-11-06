@@ -622,7 +622,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             // Special treatment for multiline edit only if we have a control for it
             Any aTmp = xComponentSet->getPropertyValue( PROPERTY_MULTILINE );
             bool bMulti =   rxSubmitButton.is()
-                            && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
+                            && (aTmp.getValueTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
             OUString sText;
             if ( bMulti ) // For multiline edit, get the text at the control
@@ -1398,7 +1398,7 @@ void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any
             if (pnHandles[nPos] == PROPERTY_ID_ISMODIFIED)
                 break;
 
-        if ((nPos < nCount) && (pNewValues[nPos].getValueType().getTypeClass() == TypeClass_BOOLEAN) && getBOOL(pNewValues[nPos]))
+        if ((nPos < nCount) && (pNewValues[nPos].getValueTypeClass() == TypeClass_BOOLEAN) && getBOOL(pNewValues[nPos]))
         {   // yeah, we found it, and it changed to TRUE
             if (nPos == 0)
             {   // just cut the first element

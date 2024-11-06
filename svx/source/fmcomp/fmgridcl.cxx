@@ -761,7 +761,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
             xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
             DBG_ASSERT(xCurCol.is(), "FmGridHeader::PreExecuteColumnContextMenu : the Peer has invalid columns !");
             aHidden = xCurCol->getPropertyValue(FM_PROP_HIDDEN);
-            DBG_ASSERT(aHidden.getValueType().getTypeClass() == TypeClass_BOOLEAN,
+            DBG_ASSERT(aHidden.getValueTypeClass() == TypeClass_BOOLEAN,
                 "FmGridHeader::PreExecuteColumnContextMenu : the property 'hidden' should be boolean !");
             if (::comphelper::getBOOL(aHidden))
             {
@@ -1140,7 +1140,7 @@ void FmGridControl::SetDesignMode(bool bMode)
         {
             Any aSelection = xSelSupplier->getSelection();
             Reference< css::beans::XPropertySet >  xColumn;
-            if (aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE)
+            if (aSelection.getValueTypeClass() == TypeClass_INTERFACE)
                 xColumn.set(aSelection, css::uno::UNO_QUERY);
             Reference< XInterface >  xCurrent;
             for (sal_Int32 i=0; i<xColumns->getCount(); ++i)

@@ -37,7 +37,7 @@ void raisePyExceptionWithAny( const css::uno::Any &anyExc )
         PyRef exc = runtime.any2PyObject( anyExc );
         if( exc.is() )
         {
-            PyRef type( getClass( anyExc.getValueType().getTypeName(),runtime ) );
+            PyRef type( getClass( anyExc.getValueTypeName(),runtime ) );
             PyErr_SetObject( type.get(), exc.get());
         }
         else
@@ -46,7 +46,7 @@ void raisePyExceptionWithAny( const css::uno::Any &anyExc )
             anyExc >>= e;
 
             OUString buf = "Couldn't convert uno exception to a python exception (" +
-                anyExc.getValueType().getTypeName() + ": " + e.Message + ")";
+                anyExc.getValueTypeName() + ": " + e.Message + ")";
             PyErr_SetString(
                 PyExc_SystemError,
                 OUStringToOString(buf,RTL_TEXTENCODING_ASCII_US).getStr() );

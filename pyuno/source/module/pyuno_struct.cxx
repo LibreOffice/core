@@ -73,7 +73,7 @@ static PyObject *PyUNOStruct_repr( PyObject *self )
     PyUNO *me = reinterpret_cast<PyUNO*>( self );
     PyObject *ret = nullptr;
 
-    if( me->members->wrappedObject.getValueType().getTypeClass()
+    if( me->members->wrappedObject.getValueTypeClass()
         == css::uno::TypeClass_EXCEPTION )
     {
         Reference< XMaterialHolder > rHolder(me->members->xInvocation,UNO_QUERY);
@@ -134,7 +134,7 @@ static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
         if( strcmp( name, "__class__" ) == 0 )
         {
             return getClass(
-                me->members->wrappedObject.getValueType().getTypeName(), runtime ).getAcquired();
+                me->members->wrappedObject.getValueTypeName(), runtime ).getAcquired();
         }
 
         PyObject *pRet = PyObject_GenericGetAttr( self, PyUnicode_FromString( name ) );

@@ -1381,7 +1381,7 @@ void BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& 
         if ( pVariable )
             *pOldValue = sbxToUnoValue( pVariable );
     }
-    SbxObjectRef xUnoObj = GetSbUnoObject( _rValue.getValueType ().getTypeName () , _rValue );
+    SbxObjectRef xUnoObj = GetSbUnoObject( _rValue.getValueTypeName () , _rValue );
     xUnoObj->SetName(rName);
     xUnoObj->SetFlag( SbxFlagBits::DontStore );
     pStandardLib->Insert( xUnoObj.get() );

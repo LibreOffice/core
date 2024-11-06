@@ -78,7 +78,7 @@ ScVbaWSFunction::invoke(const OUString& FunctionName, const uno::Sequence< uno::
     {
         for( uno::Any & rArray : asNonConstRange(aParamTemp) )
         {
-            switch( rArray.getValueType().getTypeClass()  )
+            switch( rArray.getValueTypeClass()  )
             {
                 case uno::TypeClass_BOOLEAN:
                     lclConvertBooleanToDouble( rArray );

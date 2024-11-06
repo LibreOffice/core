@@ -181,7 +181,7 @@ namespace pcr
             // nothing to do, type is already as desired
             return aPropertyValue;
 
-        if ( _rControlValue.getValueType().getTypeClass() == TypeClass_STRING )
+        if ( _rControlValue.getValueTypeClass() == TypeClass_STRING )
         {
             OUString sControlValue;
             _rControlValue >>= sControlValue;

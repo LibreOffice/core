@@ -972,7 +972,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings()
 static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, bool& bException)
 {
     bException = false;
-    TypeClass eType = rValue.getValueType().getTypeClass();
+    TypeClass eType = rValue.getValueTypeClass();
 
     sal_uInt32 nRet = 0;
     if( eType == TypeClass_UNSIGNED_LONG )

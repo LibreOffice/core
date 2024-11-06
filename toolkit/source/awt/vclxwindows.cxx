@@ -1865,7 +1865,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
         case BASEPROPERTY_HIGHLIGHT_COLOR:
         {
             Color nColor = 0;
-            bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+            bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
             if (bVoid)
             {
                 nColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
@@ -1881,7 +1881,7 @@ void VCLXListBox::setProperty( const OUString& PropertyName, const css::uno::Any
         case BASEPROPERTY_HIGHLIGHT_TEXT_COLOR:
         {
             Color nColor = 0;
-            bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+            bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
             if (bVoid)
             {
                 nColor = Application::GetSettings().GetStyleSettings().GetHighlightTextColor();
@@ -2335,7 +2335,7 @@ void SAL_CALL VCLXDialog::setProperty(
     if ( !pDialog )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -2459,7 +2459,7 @@ void SAL_CALL VCLXMultiPage::setProperty(
     if ( !pTabControl )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -2680,7 +2680,7 @@ void SAL_CALL VCLXTabPage::setProperty(
     if ( !pTabPage )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -3344,7 +3344,7 @@ void VCLXScrollBar::setProperty( const OUString& PropertyName, const css::uno::A
     if ( !pScrollBar )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -4141,7 +4141,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const css::uno::An
     if ( !pComboBox )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
     {
@@ -4639,7 +4639,7 @@ void VCLXDateField::setProperty( const OUString& PropertyName, const css::uno::A
     if ( !(GetWindow()) )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -5109,7 +5109,7 @@ void VCLXTimeField::setProperty( const OUString& PropertyName, const css::uno::A
     if ( !(GetWindow()) )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -5425,7 +5425,7 @@ void VCLXNumericField::setProperty( const OUString& PropertyName, const css::uno
     if ( !(GetWindow()) )
         return;
 
-    bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -6183,7 +6183,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
             VclPtr<vcl::Window> pWindow = GetWindow();
             if ( pWindow )
             {
-                bool bVoid = Value.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+                bool bVoid = Value.getValueTypeClass() == css::uno::TypeClass_VOID;
 
                 if ( bVoid )
                 {
@@ -6596,7 +6596,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
             case BASEPROPERTY_EFFECTIVE_VALUE:
             case BASEPROPERTY_VALUE_DOUBLE:
             {
-                const css::uno::TypeClass rTC = Value.getValueType().getTypeClass();
+                const css::uno::TypeClass rTC = Value.getValueTypeClass();
                 if (rTC != css::uno::TypeClass_STRING)
                     // no string
                     if (rTC != css::uno::TypeClass_DOUBLE)
@@ -6733,7 +6733,7 @@ css::uno::Any SVTXFormattedField::convertEffectiveValue(const css::uno::Any& rVa
         return aReturn;
 
     Formatter& rFieldFormatter = pField->GetFormatter();
-    switch (rValue.getValueType().getTypeClass())
+    switch (rValue.getValueTypeClass())
     {
         case css::uno::TypeClass_DOUBLE:
             if (rFieldFormatter.TreatingAsNumber())
@@ -6791,7 +6791,7 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
         return;
 
     Formatter& rFormatter = pField->GetFormatter();
-    switch (rValue.getValueType().getTypeClass())
+    switch (rValue.getValueTypeClass())
 
     {
         case css::uno::TypeClass_DOUBLE:
@@ -6802,8 +6802,8 @@ void SVTXFormattedField::SetMinValue(const css::uno::Any& rValue)
             break;
         }
         default:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == css::uno::TypeClass_VOID, "SVTXFormattedField::SetMinValue : invalid argument (an exception will be thrown) !");
-            if ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID )
+            DBG_ASSERT(rValue.getValueTypeClass() == css::uno::TypeClass_VOID, "SVTXFormattedField::SetMinValue : invalid argument (an exception will be thrown) !");
+            if ( rValue.getValueTypeClass() != css::uno::TypeClass_VOID )
 
             {
                 throw css::lang::IllegalArgumentException();
@@ -6834,7 +6834,7 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
         return;
 
     Formatter& rFormatter = pField->GetFormatter();
-    switch (rValue.getValueType().getTypeClass())
+    switch (rValue.getValueTypeClass())
     {
         case css::uno::TypeClass_DOUBLE:
         {
@@ -6844,7 +6844,7 @@ void SVTXFormattedField::SetMaxValue(const css::uno::Any& rValue)
             break;
         }
         default:
-            if (rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID)
+            if (rValue.getValueTypeClass() != css::uno::TypeClass_VOID)
 
             {
                 throw css::lang::IllegalArgumentException();
@@ -6877,7 +6877,7 @@ void SVTXFormattedField::SetDefaultValue(const css::uno::Any& rValue)
     css::uno::Any aConverted = convertEffectiveValue(rValue);
 
     Formatter& rFormatter = pField->GetFormatter();
-    switch (aConverted.getValueType().getTypeClass())
+    switch (aConverted.getValueTypeClass())
     {
         case css::uno::TypeClass_DOUBLE:
         {
@@ -6968,7 +6968,7 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
     else
     {
         Formatter& rFormatter = pField->GetFormatter();
-        if (rValue.getValueType().getTypeClass() == css::uno::TypeClass_DOUBLE )
+        if (rValue.getValueTypeClass() == css::uno::TypeClass_DOUBLE )
         {
             double d = 0.0;
             rValue >>= d;
@@ -6976,7 +6976,7 @@ void SVTXFormattedField::SetValue(const css::uno::Any& rValue)
         }
         else
         {
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == css::uno::TypeClass_STRING, "SVTXFormattedField::SetValue : invalid argument !");
+            DBG_ASSERT(rValue.getValueTypeClass() == css::uno::TypeClass_STRING, "SVTXFormattedField::SetValue : invalid argument !");
 
             OUString sText;
             rValue >>= sText;

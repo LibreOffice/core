@@ -606,17 +606,17 @@ namespace frm
                 break;
 
             case PROPERTY_ID_TARGET_URL :
-                DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+                DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_STRING, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
                 rValue >>= m_sTargetURL;
                 break;
 
             case PROPERTY_ID_TARGET_FRAME :
-                DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+                DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_STRING, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
                 rValue >>= m_sTargetFrame;
                 break;
 
             case PROPERTY_ID_DISPATCHURLINTERNAL:
-                DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+                DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_BOOLEAN, "OClickableImageBaseModel::setFastPropertyValue_NoBroadcast : invalid type !" );
                 rValue >>= m_bDispatchUrlInternal;
                 break;
 

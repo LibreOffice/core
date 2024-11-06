@@ -141,7 +141,7 @@ namespace xmloff
 
             // the type attribute
 
-            bool bIsEmptyValue = TypeClass_VOID == aValue.getValueType().getTypeClass();
+            bool bIsEmptyValue = TypeClass_VOID == aValue.getValueTypeClass();
             if ( bIsEmptyValue )
             {
                 css::beans::Property aPropDesc = m_xPropertyInfo->getPropertyByName( rProperty );

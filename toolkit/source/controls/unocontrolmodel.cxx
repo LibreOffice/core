@@ -549,7 +549,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
         const css::uno::Any* pProp = &(maData[rProp]);
         OutStream->writeShort( rProp );
 
-        bool bVoid = pProp->getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+        bool bVoid = pProp->getValueTypeClass() == css::uno::TypeClass_VOID;
 
         OutStream->writeBoolean( bVoid );
 
@@ -1030,7 +1030,7 @@ css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 
 bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rGuard, Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
 {
-    bool bVoid = rValue.getValueType().getTypeClass() == css::uno::TypeClass_VOID;
+    bool bVoid = rValue.getValueTypeClass() == css::uno::TypeClass_VOID;
     if ( bVoid )
     {
         rConvertedValue.clear();
@@ -1105,7 +1105,7 @@ bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rG
                     break;
                     case TypeClass_INTERFACE:
                     {
-                        if ( rValue.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                        if ( rValue.getValueTypeClass() == TypeClass_INTERFACE )
                         {
                             Reference< XInterface > xPure( rValue, UNO_QUERY );
                             if ( xPure.is() )
@@ -1133,7 +1133,7 @@ bool UnoControlModel::convertFastPropertyValue( std::unique_lock<std::mutex>& rG
                         "Unable to convert the given value for the property "
                         + GetPropertyName( static_cast<sal_uInt16>(nPropId) )
                         + ".\nExpected type: " + pDestType->getTypeName()
-                        + "\nFound type: " + rValue.getValueType().getTypeName(),
+                        + "\nFound type: " + rValue.getValueTypeName(),
                         static_cast< css::beans::XPropertySet* >(this),
                         1);
                 }
@@ -1154,7 +1154,7 @@ void UnoControlModel::setFastPropertyValue_NoBroadcast( std::unique_lock<std::mu
     const css::uno::Any* pProp = it == maData.end() ? nullptr : &(it->second);
     ENSURE_OR_RETURN_VOID( pProp, "UnoControlModel::setFastPropertyValue_NoBroadcast: invalid property id!" );
 
-    DBG_ASSERT( ( rValue.getValueType().getTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( static_cast<sal_uInt16>(nPropId) ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
+    DBG_ASSERT( ( rValue.getValueTypeClass() != css::uno::TypeClass_VOID ) || ( GetPropertyAttribs( static_cast<sal_uInt16>(nPropId) ) & css::beans::PropertyAttribute::MAYBEVOID ), "Property should not be VOID!" );
     maData[ nPropId ] = rValue;
 }
 

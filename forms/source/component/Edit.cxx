@@ -541,7 +541,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
     if (m_xAggregateSet.is())
     {
         Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
-        if  (   (aDefaultControl.getValueType().getTypeClass() == TypeClass_STRING)
+        if  (   (aDefaultControl.getValueTypeClass() == TypeClass_STRING)
             &&  (getString(aDefaultControl) == STARDIV_ONE_FORM_CONTROL_TEXTFIELD )
             )
         {

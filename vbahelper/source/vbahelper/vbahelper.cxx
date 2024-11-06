@@ -444,7 +444,7 @@ void WaitUntilPreviewIsClosed( SfxViewFrame* pViewFrame )
 
 bool extractBoolFromAny( const uno::Any& rAny )
 {
-    switch( rAny.getValueType().getTypeClass() )
+    switch( rAny.getValueTypeClass() )
     {
         case uno::TypeClass_BOOLEAN:
             return rAny.get< bool >();
@@ -465,7 +465,7 @@ bool extractBoolFromAny( const uno::Any& rAny )
 
 OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
 {
-    switch( rAny.getValueType().getTypeClass() )
+    switch( rAny.getValueTypeClass() )
     {
         case uno::TypeClass_STRING:
             return rAny.get< OUString >();

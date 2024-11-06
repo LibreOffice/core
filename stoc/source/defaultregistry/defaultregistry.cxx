@@ -1054,8 +1054,8 @@ void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments 
 {
     Guard< Mutex > aGuard( m_mutex );
     if ( (aArguments.getLength() == 2) &&
-         (aArguments[0].getValueType().getTypeClass() == TypeClass_INTERFACE) &&
-         (aArguments[1].getValueType().getTypeClass() == TypeClass_INTERFACE) )
+         (aArguments[0].getValueTypeClass() == TypeClass_INTERFACE) &&
+         (aArguments[1].getValueTypeClass() == TypeClass_INTERFACE) )
     {
         aArguments[0] >>= m_localReg;
         aArguments[1] >>= m_defaultReg;

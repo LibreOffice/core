@@ -296,7 +296,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments)
     // get services from the argument list
     for( const Any& arg : Arguments )
     {
-        if( arg.getValueType().getTypeClass() != TypeClass_INTERFACE )
+        if( arg.getValueTypeClass() != TypeClass_INTERFACE )
             throw IllegalArgumentException();
 
         // InvocationAdapter service ?
@@ -435,7 +435,7 @@ void SAL_CALL FilterAllListenerImpl::firing(const AllEventObject& Event)
 void FilterAllListenerImpl::convertToEventReturn( Any & rRet, const Type & rRetType )
 {
     // no return value? Set to the specified values
-    if( rRet.getValueType().getTypeClass() == TypeClass_VOID )
+    if( rRet.getValueTypeClass() == TypeClass_VOID )
     {
         switch( rRetType.getTypeClass()  )
         {

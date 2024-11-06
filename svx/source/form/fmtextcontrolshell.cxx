@@ -362,7 +362,7 @@ namespace svx
             }
             else
             {
-                switch ( _rUnoState.getValueType().getTypeClass() )
+                switch ( _rUnoState.getValueTypeClass() )
                 {
                 case TypeClass_BOOLEAN:
                 {

@@ -100,7 +100,7 @@ DtransX11ConfigItem::DtransX11ConfigItem() :
 #if OSL_DEBUG_LEVEL > 1
         else
             SAL_INFO("vcl.unx.dtrans", "found SelectionTimeout of type \""
-                    << value.getValueType().getTypeName() << "\".");
+                    << value.getValueTypeName() << "\".");
 #endif
     }
 }

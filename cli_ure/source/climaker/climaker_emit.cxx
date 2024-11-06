@@ -86,7 +86,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
     default:
         throw RuntimeException(
             "unexpected constant type " +
-            value.getValueType().getTypeName() );
+            value.getValueTypeName() );
     }
 }
 

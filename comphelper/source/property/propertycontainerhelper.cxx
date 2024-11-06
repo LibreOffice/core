@@ -199,7 +199,7 @@ namespace
         throw IllegalArgumentException(
             "The given value cannot be converted to the required property type."
             " (property name \"" +  _rProperty.aProperty.Name
-            + "\", found value type \"" + _rValue.getValueType().getTypeName()
+            + "\", found value type \"" + _rValue.getValueTypeName()
             + "\", required property type \"" + _rProperty.aProperty.Type.getTypeName()
             + "\")",
             nullptr, 4 );

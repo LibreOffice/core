@@ -2154,7 +2154,7 @@ void Test::testStruct() {
 void Test::testPoly() {
     css::uno::Any a;
     a <<= Poly< css::uno::Sequence< ::sal_Unicode > >();
-    CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", u"Poly<[]char>"_ustr, a.getValueType().getTypeName() );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "type name", u"Poly<[]char>"_ustr, a.getValueTypeName() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "constructor",
         css::uno::Any(Poly< css::uno::Sequence< ::sal_Unicode > >()), a);

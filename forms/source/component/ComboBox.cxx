@@ -203,7 +203,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             break;
 
         case PROPERTY_ID_LISTSOURCE :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
+            DBG_ASSERT(_rValue.getValueTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aListSource;
             // The ListSource has changed -> reload
@@ -217,13 +217,13 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             break;
 
         case PROPERTY_ID_EMPTY_IS_NULL :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN,
+            DBG_ASSERT(_rValue.getValueTypeClass() == TypeClass_BOOLEAN,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_bEmptyIsNull;
             break;
 
         case PROPERTY_ID_DEFAULT_TEXT :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
+            DBG_ASSERT(_rValue.getValueTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aDefaultText;
             resetNoBroadcast();
@@ -339,7 +339,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
 
     // Mask for Any
     sal_uInt16 nAnyMask = 0;
-    if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
+    if (m_aBoundColumn.getValueTypeClass() == TypeClass_SHORT)
         nAnyMask |= BOUNDCOLUMN;
     _rxOutStream << nAnyMask;
 

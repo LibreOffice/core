@@ -52,7 +52,7 @@ const double MAX_FLOAT      = FLT_MAX;
 static void printValue( const Any & rVal )
 {
     // print value
-    OString aStr( OUStringToOString( rVal.getValueType().getTypeName(), RTL_TEXTENCODING_ISO_8859_1 ) );
+    OString aStr( OUStringToOString( rVal.getValueTypeName(), RTL_TEXTENCODING_ISO_8859_1 ) );
     printf( "(%s)", aStr.getStr() );
 
     switch (rVal.getValueTypeClass())
@@ -250,7 +250,7 @@ static sal_Bool convertTo( const Type & rDestType, const Any & rVal, sal_Bool bE
             printf( "# re-conversion of " );
             printValue( aRet );
             printf( " to " );
-            printf( rVal.getValueType().getTypeName().getStr() );
+            printf( rVal.getValueTypeName().getStr() );
             printf( " failed! [" );
             printf( aExcMsg.getStr() );
             printf( "]\n" );

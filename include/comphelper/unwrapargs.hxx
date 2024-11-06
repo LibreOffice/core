@@ -82,7 +82,7 @@ namespace detail {
         {
             OUString msg =
                 "Cannot extract ANY { " +
-                seq[nArg].getValueType().getTypeName() +
+                seq[nArg].getValueTypeName() +
                 " } to " +
                 ::cppu::UnoType<T>::get().getTypeName() +
                 "!";

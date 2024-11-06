@@ -329,7 +329,7 @@ EMSCRIPTEN_BINDINGS(PrimaryBindings)
         .constructor(&constructAny)
         .function("getType", &css::uno::Any::getValueType)
         .function("get", +[](css::uno::Any const& self) {
-            switch (self.getValueType().getTypeClass())
+            switch (self.getValueTypeClass())
             {
                 case css::uno::TypeClass_VOID:
                     return emscripten::val::undefined();

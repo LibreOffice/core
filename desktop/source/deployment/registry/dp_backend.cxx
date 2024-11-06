@@ -663,7 +663,7 @@ void Package::processPackage_impl(
                 (doRegisterPackage
                  ? DpResId(RID_STR_ERROR_WHILE_REGISTERING)
                  : DpResId(RID_STR_ERROR_WHILE_REVOKING))
-                + getDisplayName() + ": " + exc.getValueType().getTypeName() + " \"" + e.Message
+                + getDisplayName() + ": " + exc.getValueTypeName() + " \"" + e.Message
                 + "\"",
                 static_cast<OWeakObject *>(this), exc );
         }

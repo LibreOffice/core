@@ -423,7 +423,7 @@ void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
         return;
     }
     Any aAnyISP = pUnoObj->getUnoAny();
-    TypeClass eType = aAnyISP.getValueType().getTypeClass();
+    TypeClass eType = aAnyISP.getValueTypeClass();
 
     if( eType != TypeClass_INTERFACE )
     {

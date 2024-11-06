@@ -364,7 +364,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     Reference<XInterface> xInterface;
     if( !(obj >>= xInterface) )
     {
-        TypeClass eObjType = obj.getValueType().getTypeClass();
+        TypeClass eObjType = obj.getValueTypeClass();
         if( nSequenceIndex >= mnPropCount)
             throw IllegalArgumentException(
                 "IntrospectionAccessStatic_Impl::setPropertyValueByIndex(), index > propertyCount, " +
@@ -373,7 +373,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
         if( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION )
             throw IllegalArgumentException(
                 "IntrospectionAccessStatic_Impl::setPropertyValueByIndex(), expected struct or exception, got" +
-                obj.getValueType().getTypeName(), Reference<XInterface>(), 0);
+                obj.getValueTypeName(), Reference<XInterface>(), 0);
     }
 
     // Test flags
@@ -509,7 +509,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_
     Reference<XInterface> xInterface;
     if( !(obj >>= xInterface) )
     {
-        TypeClass eObjType = obj.getValueType().getTypeClass();
+        TypeClass eObjType = obj.getValueTypeClass();
         if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
         {
             // throw IllegalArgumentException();
@@ -1547,7 +1547,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     }
 
     // Examine object
-    TypeClass eType = aToInspectObj.getValueType().getTypeClass();
+    TypeClass eType = aToInspectObj.getValueTypeClass();
     if( eType != TypeClass_INTERFACE && eType != TypeClass_STRUCT  && eType != TypeClass_EXCEPTION )
         return css::uno::Reference<css::beans::XIntrospectionAccess>();
 

@@ -439,7 +439,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     {
         throw IllegalArgumentException(
             "pq_driver: expected string as first argument, got "
-            + aArguments[0].getValueType().getTypeName(),
+            + aArguments[0].getValueTypeName(),
             *this, 0 );
     }
 

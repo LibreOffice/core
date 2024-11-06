@@ -214,7 +214,7 @@ namespace pcr
               const Any& _rPropertyValue )
         {
             Reference< resource::XStringResourceResolver > xRet;
-            const TypeClass eType = _rPropertyValue.getValueType().getTypeClass();
+            const TypeClass eType = _rPropertyValue.getValueTypeClass();
             if ( (eType == TypeClass_STRING || eType == TypeClass_SEQUENCE) &&
                     lcl_isLanguageDependentProperty( _rPropertyName ) )
             {
@@ -253,7 +253,7 @@ namespace pcr
             = lcl_getStringResourceResolverForProperty( m_xComponent, _rPropertyName, aPropertyValue );
         if( xStringResourceResolver.is() )
         {
-            TypeClass eType = aPropertyValue.getValueType().getTypeClass();
+            TypeClass eType = aPropertyValue.getValueTypeClass();
             if( eType == TypeClass_STRING )
             {
                 OUString aPropStr;
@@ -347,7 +347,7 @@ namespace pcr
                 if( xStringResourceManager.is() )
                 {
                     Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
-                    TypeClass eType = aPropertyValue.getValueType().getTypeClass();
+                    TypeClass eType = aPropertyValue.getValueTypeClass();
                     if( eType == TypeClass_STRING )
                     {
                         OUString aPropStr;

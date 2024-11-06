@@ -1293,7 +1293,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
 
     if (m_nNamePropHandle == nHandle)
     {
-        if (aValue.getValueType().getTypeClass() != TypeClass_STRING)
+        if (aValue.getValueTypeClass() != TypeClass_STRING)
         {
             throw css::lang::IllegalArgumentException();
         }
@@ -1593,7 +1593,7 @@ void SAL_CALL SbaXFormAdapter::removeResetListener(const css::uno::Reference< cs
 void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName)
 {
     // extract the form component
-    if (aElement.getValueType().getTypeClass() != TypeClass_INTERFACE)
+    if (aElement.getValueTypeClass() != TypeClass_INTERFACE)
     {
         throw css::lang::IllegalArgumentException();
     }
@@ -1757,7 +1757,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
         throw css::lang::IndexOutOfBoundsException();
 
     // extract the form component
-    if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
+    if (Element.getValueTypeClass() != TypeClass_INTERFACE)
     {
         throw css::lang::IllegalArgumentException();
     }

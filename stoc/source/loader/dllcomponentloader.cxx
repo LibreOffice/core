@@ -99,7 +99,7 @@ void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& 
 
 //      Reference< XMultiServiceFactory > rServiceManager;
 
-//      if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
+//      if( aArgs.getConstArray()[0].getValueTypeClass() == TypeClass_INTERFACE )
 //      {
 //          aArgs.getConstArray()[0] >>= rServiceManager;
 //      }

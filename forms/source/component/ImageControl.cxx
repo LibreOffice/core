@@ -248,7 +248,7 @@ void OImageControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, con
     switch (nHandle)
     {
         case PROPERTY_ID_READONLY :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "OImageControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_BOOLEAN, "OImageControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             m_bReadOnly = getBOOL(rValue);
             break;
 

@@ -45,7 +45,7 @@ void convertPropertyValue(bool & b, const css::uno::Any & a)
     if( a >>= b )
         return;
 
-    switch( a.getValueType().getTypeClass() ) {
+    switch( a.getValueTypeClass() ) {
     case css::uno::TypeClass_BYTE:
         b = a.get<sal_Int8>() != 0;
         break;
@@ -85,7 +85,7 @@ void convertPropertyValue(sal_Bool & target, css::uno::Any const & source) {
 inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int64>(a.get<bool>());
             break;
@@ -106,7 +106,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const css::uno::Any 
 inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt64>(a.get<bool>());
             break;
@@ -126,7 +126,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const css::uno::Any
 inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int32>(a.get<bool>());
             break;
@@ -146,7 +146,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const css::uno::Any 
 inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt32>(a.get<bool>());
             break;
@@ -166,7 +166,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const css::uno::Any
 inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int16>(a.get<bool>());
             break;
@@ -186,7 +186,7 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const css::uno::Any 
 inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_uInt16>(a.get<bool>());
             break;
@@ -206,7 +206,7 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const css::uno::Any
 inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const css::uno::Any & a )
 {
     if( !(a >>= i) ) {
-        switch( a.getValueType().getTypeClass() ) {
+        switch( a.getValueTypeClass() ) {
         case css::uno::TypeClass_BOOLEAN:
             i = static_cast<sal_Int8>(a.get<bool>());
             break;
@@ -221,7 +221,7 @@ inline void SAL_CALL convertPropertyValue( float &f , const css::uno::Any &a )
     if( a >>= f )
         return;
 
-    switch( a.getValueType().getTypeClass() ) {
+    switch( a.getValueTypeClass() ) {
     case css::uno::TypeClass_BOOLEAN:
         f = static_cast<float>(a.get<bool>());
         break;
@@ -257,7 +257,7 @@ inline void SAL_CALL convertPropertyValue( double &d , const css::uno::Any &a )
     if( a >>= d )
         return;
 
-    switch( a.getValueType().getTypeClass() ) {
+    switch( a.getValueTypeClass() ) {
     case css::uno::TypeClass_BOOLEAN:
         d = static_cast<double>(a.get<bool>());
         break;

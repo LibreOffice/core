@@ -67,7 +67,7 @@ OUString enumValueToEnumName(uno::Any const& aValue,
                  uno::UNO_QUERY);
 
     uno::Reference<reflection::XEnumTypeDescription> xTypeDescription;
-    xTypeDescription.set(xManager->getByHierarchicalName(aValue.getValueType().getTypeName()),
+    xTypeDescription.set(xManager->getByHierarchicalName(aValue.getValueTypeName()),
                          uno::UNO_QUERY);
 
     const uno::Sequence<sal_Int32> aValues = xTypeDescription->getEnumValues();
@@ -300,7 +300,7 @@ OUString convertAnyToShortenedString(const uno::Any& aValue,
 /** converts an any's type to a string (in a short form) */
 OUString getAnyType(const uno::Any& aValue)
 {
-    OUString aTypeName = aValue.getValueType().getTypeName();
+    OUString aTypeName = aValue.getValueTypeName();
     return aTypeName.replaceAll("com.sun.star", "css");
 }
 
@@ -558,7 +558,7 @@ public:
     {
         if (maAny.hasValue())
         {
-            switch (maAny.getValueType().getTypeClass())
+            switch (maAny.getValueTypeClass())
             {
                 case uno::TypeClass_INTERFACE:
                 {
@@ -853,8 +853,7 @@ void GenericPropertiesNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree,
 void StructNode::fillChildren(std::unique_ptr<weld::TreeView>& pTree, const weld::TreeIter* pParent)
 {
     auto xReflection = reflection::theCoreReflection::get(mxContext);
-    uno::Reference<reflection::XIdlClass> xClass
-        = xReflection->forName(maAny.getValueType().getTypeName());
+    uno::Reference<reflection::XIdlClass> xClass = xReflection->forName(maAny.getValueTypeName());
 
     const auto xFields = xClass->getFields();
 
@@ -875,7 +874,7 @@ ObjectInspectorNodeInterface* BasicValueNode::createNodeObjectForAny(OUString co
                                                                      const uno::Any& rAny,
                                                                      OUString const& rInfo)
 {
-    switch (rAny.getValueType().getTypeClass())
+    switch (rAny.getValueTypeClass())
     {
         case uno::TypeClass_INTERFACE:
             return new GenericPropertiesNode(rName, rAny, rInfo, mxContext);

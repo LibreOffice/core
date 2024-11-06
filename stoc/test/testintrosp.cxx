@@ -944,7 +944,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                 OSL_ENSURE( aValStr == aDemandedValStr, aErrorStr.getStr() );
 
                 // check value and modify it according to its type
-                TypeClass eType = aPropVal.getValueType().getTypeClass();
+                TypeClass eType = aPropVal.getValueTypeClass();
                 Any aNewVal;
                 sal_Bool bModify = sal_True;
                 switch( eType )

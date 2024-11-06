@@ -96,9 +96,9 @@ void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 
     // Masking for any
     sal_uInt16 nAnyMask = 0;
-    if (m_aDefault.getValueType().getTypeClass() == TypeClass_LONG)
+    if (m_aDefault.getValueTypeClass() == TypeClass_LONG)
         nAnyMask |= DEFAULT_LONG;
-    else if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
+    else if (m_aDefault.getValueTypeClass() == TypeClass_DOUBLE)
         nAnyMask |= DEFAULT_DOUBLE;
     else if (m_aDefault.getValueType() == cppu::UnoType<util::Time>::get())
         nAnyMask |= DEFAULT_TIME;
@@ -322,16 +322,16 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     switch (nHandle)
     {
         case PROPERTY_ID_EMPTY_IS_NULL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bEmptyIsNull = getBOOL(rValue);
             break;
         case PROPERTY_ID_FILTERPROPOSAL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN, "invalid type" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_BOOLEAN, "invalid type" );
             m_bFilterProposal = getBOOL(rValue);
             break;
         // Changing the default values causes a reset
         case PROPERTY_ID_DEFAULT_TEXT:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aDefaultText;
             resetNoBroadcast();
             break;

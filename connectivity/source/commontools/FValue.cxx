@@ -2299,7 +2299,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
 
 void ORowSetValue::fill(const Any& _rValue)
 {
-    switch (_rValue.getValueType().getTypeClass())
+    switch (_rValue.getValueTypeClass())
     {
         case TypeClass_VOID:
             setNull();            break;

@@ -488,13 +488,13 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                 }
             }
         }
-        throw RuntimeException( "Any carries enum " + a.getValueType().getTypeName() +
+        throw RuntimeException( "Any carries enum " + a.getValueTypeName() +
                 " with invalid value " + OUString::number(l) );
     }
     case css::uno::TypeClass_EXCEPTION:
     case css::uno::TypeClass_STRUCT:
     {
-        PyRef excClass = getClass( a.getValueType().getTypeName(), *this );
+        PyRef excClass = getClass( a.getValueTypeName(), *this );
         PyRef value = PyUNOStruct_new( a, getImpl()->cargo->xInvocation );
         PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE, NOT_NULL );
         PyTuple_SetItem( argsTuple.get() , 0 , value.getAcquired() );
@@ -502,7 +502,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         if( ! ret.is() )
         {
             throw RuntimeException( "Couldn't instantiate python representation of structured UNO type " +
-                        a.getValueType().getTypeName() );
+                        a.getValueTypeName() );
         }
 
         if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )

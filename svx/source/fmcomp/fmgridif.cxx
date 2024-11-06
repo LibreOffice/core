@@ -1361,7 +1361,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
         else if (evt.PropertyName == FM_PROP_WIDTH)
         {
             sal_Int32 nWidth = 0;
-            if (evt.NewValue.getValueType().getTypeClass() == TypeClass_VOID)
+            if (evt.NewValue.getValueTypeClass() == TypeClass_VOID)
                 nWidth = pGrid->GetDefaultColumnWidth(pGrid->GetColumnTitle(nId));
                 // GetDefaultColumnWidth already considered the zoom factor
             else
@@ -1386,7 +1386,7 @@ void FmXGridPeer::propertyChange(const PropertyChangeEvent& evt)
         }
         else if (evt.PropertyName == FM_PROP_HIDDEN)
         {
-            DBG_ASSERT(evt.NewValue.getValueType().getTypeClass() == TypeClass_BOOLEAN,
+            DBG_ASSERT(evt.NewValue.getValueTypeClass() == TypeClass_BOOLEAN,
                 "FmXGridPeer::propertyChange : the property 'hidden' should be of type boolean !");
             if (::comphelper::getBOOL(evt.NewValue))
                 pGrid->HideColumn(nId);
@@ -2245,7 +2245,7 @@ void FmXGridPeer::selectionChanged(const EventObject& evt)
 
     Reference< css::view::XSelectionSupplier >  xSelSupplier(evt.Source, UNO_QUERY);
     Any aSelection = xSelSupplier->getSelection();
-    DBG_ASSERT(aSelection.getValueType().getTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
+    DBG_ASSERT(aSelection.getValueTypeClass() == TypeClass_INTERFACE, "FmXGridPeer::selectionChanged : invalid selection !");
     Reference< XPropertySet >  xSelection;
     aSelection >>= xSelection;
     if (xSelection.is())

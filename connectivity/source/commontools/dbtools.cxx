@@ -1030,7 +1030,7 @@ try
         {   // Unlike the ValueMin the EffectiveMin can be void
             if (hasProperty(sPropValueMin, xNewProps))
             {
-                OSL_ENSURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
+                OSL_ENSURE(aEffectiveMin.getValueTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMin, aEffectiveMin);
             }
@@ -1040,7 +1040,7 @@ try
         {   // analog
             if (hasProperty(sPropValueMax, xNewProps))
             {
-                OSL_ENSURE(aEffectiveMax.getValueType().getTypeClass() == TypeClass_DOUBLE,
+                OSL_ENSURE(aEffectiveMax.getValueTypeClass() == TypeClass_DOUBLE,
                     "TransferFormComponentProperties : invalid property type !");
                 xNewProps->setPropertyValue(sPropValueMax, aEffectiveMax);
             }
@@ -1050,8 +1050,8 @@ try
         Any aEffectiveDefault( xOldProps->getPropertyValue(sPropEffectiveDefault) );
         if (aEffectiveDefault.hasValue())
         {
-            bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
-            OSL_ENSURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
+            bool bIsString = aEffectiveDefault.getValueTypeClass() == TypeClass_STRING;
+            OSL_ENSURE(bIsString || aEffectiveDefault.getValueTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
                 // The Effective-Properties should always be void or string or double...
 

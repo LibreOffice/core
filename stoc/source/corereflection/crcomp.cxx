@@ -136,7 +136,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
+        "expected struct or exception, got " + rObj.getValueTypeName(),
         getXWeak(), 0 );
 }
 
@@ -168,7 +168,7 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
+        "expected struct or exception, got " + rObj.getValueTypeName(),
         getXWeak(), 0 );
 }
 
@@ -201,7 +201,7 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
+        "expected struct or exception, got " + rObj.getValueTypeName(),
         getXWeak(), 0 );
 }
 

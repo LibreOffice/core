@@ -232,20 +232,20 @@ bool testAny(
         fprintf(
             stderr, "any is different after roundtrip: in %s, out %s\n",
             OUStringToOString(
-                any.getValueType().getTypeName(),
+                any.getValueTypeName(),
                 RTL_TEXTENCODING_ASCII_US).getStr(),
             OUStringToOString(
-                any2.getValueType().getTypeName(),
+                any2.getValueTypeName(),
                 RTL_TEXTENCODING_ASCII_US).getStr());
         success = false;
     }
     if (typeName != nullptr
-        && !any2.getValueType().getTypeName().equalsAscii(typeName))
+        && !any2.getValueTypeName().equalsAscii(typeName))
     {
         fprintf(
             stderr, "any has wrong type after roundtrip: %s instead of %s\n",
             OUStringToOString(
-                any2.getValueType().getTypeName(),
+                any2.getValueTypeName(),
                 RTL_TEXTENCODING_ASCII_US).getStr(),
             typeName);
         success = false;

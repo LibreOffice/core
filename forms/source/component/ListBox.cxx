@@ -299,7 +299,7 @@ namespace frm
         switch (_nHandle)
         {
         case PROPERTY_ID_BOUNDCOLUMN :
-            DBG_ASSERT((_rValue.getValueType().getTypeClass() == TypeClass_SHORT) || (_rValue.getValueType().getTypeClass() == TypeClass_VOID),
+            DBG_ASSERT((_rValue.getValueTypeClass() == TypeClass_SHORT) || (_rValue.getValueTypeClass() == TypeClass_VOID),
                 "OListBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             m_aBoundColumn = _rValue;
             break;
@@ -570,7 +570,7 @@ namespace frm
 
         // Masking for any
         sal_uInt16 nAnyMask = 0;
-        if (m_aBoundColumn.getValueType().getTypeClass() != TypeClass_VOID)
+        if (m_aBoundColumn.getValueTypeClass() != TypeClass_VOID)
             nAnyMask |= BOUNDCOLUMN;
 
         _rxOutStream << nAnyMask;
@@ -745,7 +745,7 @@ namespace frm
         }
 
         ::std::optional< sal_Int16 > aBoundColumn(std::nullopt);
-        if ( m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT )
+        if ( m_aBoundColumn.getValueTypeClass() == TypeClass_SHORT )
         {
             sal_Int16 nBoundColumn( 0 );
             m_aBoundColumn >>= nBoundColumn;

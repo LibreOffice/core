@@ -230,7 +230,7 @@ public:
 
     OUString SAL_CALL dumpAny(css::uno::Any const& value) override
     {
-        return "[" + value.getValueType().getTypeName() + ": " + dumpValue(value) + "]";
+        return "[" + value.getValueTypeName() + ": " + dumpValue(value) + "]";
     }
 
     OUString SAL_CALL dumpConstant(OUString const& constantsGroup,

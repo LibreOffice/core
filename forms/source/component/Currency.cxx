@@ -184,7 +184,7 @@ bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
     if ( aControlValue != m_aSaveValue )
     {
-        if ( aControlValue.getValueType().getTypeClass() == TypeClass_VOID )
+        if ( aControlValue.getValueTypeClass() == TypeClass_VOID )
             m_xColumnUpdate->updateNull();
         else
         {
@@ -216,7 +216,7 @@ Any OCurrencyModel::translateDbColumnToControlValue()
 Any OCurrencyModel::getDefaultForReset() const
 {
     Any aValue;
-    if ( m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE )
+    if ( m_aDefault.getValueTypeClass() == TypeClass_DOUBLE )
         aValue = m_aDefault;
 
     return aValue;

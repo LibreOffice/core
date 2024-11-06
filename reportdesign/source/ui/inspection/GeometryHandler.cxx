@@ -967,7 +967,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                     // nothing to do, type is already as desired
                     return aPropertyValue;
 
-                if ( _rControlValue.getValueType().getTypeClass() == uno::TypeClass_STRING )
+                if ( _rControlValue.getValueTypeClass() == uno::TypeClass_STRING )
                 {
                     OUString sControlValue;
                     _rControlValue >>= sControlValue;

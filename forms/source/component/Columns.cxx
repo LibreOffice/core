@@ -413,7 +413,7 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any
     switch (nHandle)
     {
         case PROPERTY_ID_LABEL:
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "invalid type" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_STRING, "invalid type" );
             rValue >>= m_aLabel;
             break;
         case PROPERTY_ID_WIDTH:
@@ -477,7 +477,7 @@ void OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
     _rxOutStream->writeShort(0x0002);
 
     sal_uInt16 nAnyMask = 0;
-    if (m_aWidth.getValueType().getTypeClass() == TypeClass_LONG)
+    if (m_aWidth.getValueTypeClass() == TypeClass_LONG)
         nAnyMask |= WIDTH;
 
     if (m_aAlign.getValueTypeClass() == TypeClass_SHORT)

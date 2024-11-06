@@ -52,7 +52,7 @@ void extract(
     if (! fromAny(seq[nArg], &v)) {
         throw ::com::sun::star::lang::IllegalArgumentException(
             "Cannot extract ANY { "
-            + seq[nArg].getValueType().getTypeName()
+            + seq[nArg].getValueTypeName()
             + " } to " + ::cppu::UnoType<T>::get().getTypeName(),
             xErrorContext,
             static_cast<sal_Int16>(nArg) );

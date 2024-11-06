@@ -2302,7 +2302,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     Remove( u"Parent"_ustr, SbxClassType::DontCare );
 
     // check the type of the objects
-    TypeClass eType = aUnoObj_.getValueType().getTypeClass();
+    TypeClass eType = aUnoObj_.getValueTypeClass();
     Reference< XInterface > x;
     if( eType == TypeClass_INTERFACE )
     {
@@ -2353,7 +2353,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
         // insert the real name of the class
         if( aName_.isEmpty() )
         {
-            aClassName_ = aUnoObj_.getValueType().getTypeName();
+            aClassName_ = aUnoObj_.getValueTypeName();
             bSetClassName = true;
         }
         StructRefInfo aThisStruct( maTmpUnoObj, maTmpUnoObj.getValueType(), 0 );
@@ -3127,7 +3127,7 @@ void RTL_Impl_IsUnoStruct( SbxArray& rPar )
         return;
     }
     Any aAny = obj->getUnoAny();
-    TypeClass eType = aAny.getValueType().getTypeClass();
+    TypeClass eType = aAny.getValueTypeClass();
     if( eType == TypeClass_STRUCT )
     {
         refVar->PutBool( true );
@@ -3160,7 +3160,7 @@ void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
         return;
     }
     Any aAny1 = obj1->getUnoAny();
-    TypeClass eType1 = aAny1.getValueType().getTypeClass();
+    TypeClass eType1 = aAny1.getValueTypeClass();
     if( eType1 != TypeClass_INTERFACE )
     {
         return;
@@ -3180,7 +3180,7 @@ void RTL_Impl_EqualUnoObjects( SbxArray& rPar )
         return;
     }
     Any aAny2 = obj2->getUnoAny();
-    TypeClass eType2 = aAny2.getValueType().getTypeClass();
+    TypeClass eType2 = aAny2.getValueTypeClass();
     if( eType2 != TypeClass_INTERFACE )
     {
         return;
@@ -3377,7 +3377,7 @@ SbxVariable* SbUnoClass::Find( const OUString& rName, SbxClassType )
                     try
                     {
                         Any aValue = xHarryName->getByHierarchicalName( aNewName );
-                        TypeClass eType = aValue.getValueType().getTypeClass();
+                        TypeClass eType = aValue.getValueTypeClass();
 
                         // Interface located? Then it is a class
                         if( eType == TypeClass_INTERFACE )

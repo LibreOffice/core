@@ -1005,7 +1005,7 @@ void OServiceManager::insert( const Any & Element )
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
-            "exception interface, got " + Element.getValueType().getTypeName(),
+            "exception interface, got " + Element.getValueTypeName(),
             Reference< XInterface >(), 0 );
     }
     Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
@@ -1077,7 +1077,7 @@ void OServiceManager::remove( const Any & Element )
     else
     {
         throw IllegalArgumentException(
-            "expected interface or string, got " + Element.getValueType().getTypeName(),
+            "expected interface or string, got " + Element.getValueTypeName(),
             Reference< XInterface >(), 0 );
     }
 

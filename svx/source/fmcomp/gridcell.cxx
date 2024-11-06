@@ -1281,7 +1281,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
             Any aFmtKey( xUnoModel->getPropertyValue(FM_PROP_FORMATKEY));
             if (aFmtKey.hasValue())
             {
-                DBG_ASSERT(aFmtKey.getValueType().getTypeClass() == TypeClass_LONG, "DbFormattedField::Init : invalid format key property (no sal_Int32) !");
+                DBG_ASSERT(aFmtKey.getValueTypeClass() == TypeClass_LONG, "DbFormattedField::Init : invalid format key property (no sal_Int32) !");
                 nFormatKey = ::comphelper::getINT32(aFmtKey);
             }
             else
@@ -1348,9 +1348,9 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MIN, xUnoModel))
         {
             Any aMin( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MIN));
-            if (aMin.getValueType().getTypeClass() != TypeClass_VOID)
+            if (aMin.getValueTypeClass() != TypeClass_VOID)
             {
-                DBG_ASSERT(aMin.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid min value !");
+                DBG_ASSERT(aMin.getValueTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid min value !");
                 double dMin = ::comphelper::getDouble(aMin);
                 rControlFormatter.SetMinValue(dMin);
                 rPainterFormatter.SetMinValue(dMin);
@@ -1366,9 +1366,9 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
         if (::comphelper::hasProperty(FM_PROP_EFFECTIVE_MAX, xUnoModel))
         {
             Any aMax(xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_MAX));
-            if (aMax.getValueType().getTypeClass() != TypeClass_VOID)
+            if (aMax.getValueTypeClass() != TypeClass_VOID)
             {
-                DBG_ASSERT(aMax.getValueType().getTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
+                DBG_ASSERT(aMax.getValueTypeClass() == TypeClass_DOUBLE, "DbFormattedField::Init : the model has an invalid max value !");
                 double dMax = ::comphelper::getDouble(aMax);
                 rControlFormatter.SetMaxValue(dMax);
                 rPainterFormatter.SetMaxValue(dMax);
@@ -1386,7 +1386,7 @@ void DbFormattedField::Init( BrowserDataWin& rParent, const Reference< XRowSet >
     Any aDefault( xUnoModel->getPropertyValue(FM_PROP_EFFECTIVE_DEFAULT));
     if (aDefault.hasValue())
     {   // the thing can be a double or a string
-        switch (aDefault.getValueType().getTypeClass())
+        switch (aDefault.getValueTypeClass())
         {
             case TypeClass_DOUBLE:
                 if (m_rColumn.IsNumeric())
@@ -2258,7 +2258,7 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
     weld::DateFormatter& rPainterFormatter = static_cast<weld::DateFormatter&>(pPainter->get_formatter());
 
     Any  aCentury = _rxModel->getPropertyValue( FM_PROP_DATE_SHOW_CENTURY );
-    if ( aCentury.getValueType().getTypeClass() != TypeClass_VOID )
+    if ( aCentury.getValueTypeClass() != TypeClass_VOID )
     {
         bool bShowDateCentury = getBOOL( aCentury );
 

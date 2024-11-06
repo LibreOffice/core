@@ -151,7 +151,7 @@ void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT :
-            DBG_ASSERT(rValue.getValueType().getTypeClass() == TypeClass_STRING, "OFileControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(rValue.getValueTypeClass() == TypeClass_STRING, "OFileControlModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             rValue >>= m_sDefaultValue;
             break;
         default:

@@ -1642,7 +1642,7 @@ static bool checkUnoStructCopy( bool bVBA, SbxVariableRef const & refVal, SbxVar
         aAny = pUnoVal ? pUnoVal->getUnoAny() : pUnoStructVal->getUnoAny();
     else
         return false;
-    if (  aAny.getValueType().getTypeClass() != TypeClass_STRUCT )
+    if (  aAny.getValueTypeClass() != TypeClass_STRUCT )
         return false;
 
     refVar->SetType( SbxOBJECT );
@@ -3866,7 +3866,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
                     {
                         Any aAny = pUnoObj->getUnoAny();
 
-                        if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                        if( aAny.getValueTypeClass() == TypeClass_INTERFACE )
                         {
                             Reference< XDefaultMethod > xDfltMethod( aAny, UNO_QUERY );
 
@@ -3995,7 +3995,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                 {
                     Any aAny = pUnoObj->getUnoAny();
 
-                    if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                    if( aAny.getValueTypeClass() == TypeClass_INTERFACE )
                     {
                         Reference< XIndexAccess > xIndexAccess( aAny, UNO_QUERY );
                         if ( !bVBAEnabled )
@@ -4061,7 +4061,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                         pUnoObj = pSbObj;
                                         Any aUnoAny = pUnoObj->getUnoAny();
 
-                                        if( aUnoAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                                        if( aUnoAny.getValueTypeClass() == TypeClass_INTERFACE )
                                             x = aUnoAny;
                                         pElem = pDflt;
                                     }

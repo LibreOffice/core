@@ -512,7 +512,7 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
         case PROPERTY_ID_CURSORCOLOR:
             if (!rValue.hasValue() || !m_aCursorColor.hasValue())
             {
-                if (rValue.hasValue() && (TypeClass_LONG != rValue.getValueType().getTypeClass()))
+                if (rValue.hasValue() && (TypeClass_LONG != rValue.getValueTypeClass()))
                 {
                     throw IllegalArgumentException();
                 }
@@ -790,15 +790,15 @@ void OGridControlModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     // 4. Attributes
     // Masking for all 'any' types
     sal_uInt16 nAnyMask = 0;
-    if (m_aRowHeight.getValueType().getTypeClass() == TypeClass_LONG)
+    if (m_aRowHeight.getValueTypeClass() == TypeClass_LONG)
         nAnyMask |= ROWHEIGHT;
     if ( getFont() != getDefaultFont() )
         nAnyMask |= FONTATTRIBS | FONTSIZE | FONTTYPE | FONTDESCRIPTOR;
-    if (m_aTabStop.getValueType().getTypeClass() == TypeClass_BOOLEAN)
+    if (m_aTabStop.getValueTypeClass() == TypeClass_BOOLEAN)
         nAnyMask |= TABSTOP;
     if ( hasTextColor() )
         nAnyMask |= TEXTCOLOR;
-    if (m_aBackgroundColor.getValueType().getTypeClass() == TypeClass_LONG)
+    if (m_aBackgroundColor.getValueTypeClass() == TypeClass_LONG)
         nAnyMask |= BACKGROUNDCOLOR;
     if (!m_bRecordMarker)
         nAnyMask |= RECORDMARKER;

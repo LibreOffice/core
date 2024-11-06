@@ -1096,7 +1096,7 @@ bool AnimationExporter::exportAnimProperty( SvStream& rStrm, const sal_uInt16 nP
     bool bRet = false;
     if ( rAny.hasValue() )
     {
-        switch( rAny.getValueType().getTypeClass() )
+        switch( rAny.getValueTypeClass() )
         {
             case css::uno::TypeClass_UNSIGNED_SHORT :
             case css::uno::TypeClass_SHORT :

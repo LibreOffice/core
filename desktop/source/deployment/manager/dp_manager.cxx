@@ -441,7 +441,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         Any exc( ::cppu::getCaughtException() );
         throw lang::WrappedTargetRuntimeException(
             ("[context=\"" + context + "\"] caught unexpected "
-             + exc.getValueType().getTypeName() + ": " + e.Message),
+             + exc.getValueTypeName() + ": " + e.Message),
             Reference<XInterface>(), exc );
     }
 }

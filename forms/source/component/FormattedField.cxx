@@ -420,7 +420,7 @@ void OFormattedModel::_propertyChanged( const css::beans::PropertyChangeEvent& e
 
     if ( evt.PropertyName == PROPERTY_FORMATKEY )
     {
-        if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )
+        if ( evt.NewValue.getValueTypeClass() == TypeClass_LONG )
         {
             try
             {
@@ -634,7 +634,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     if (m_xAggregateSet.is())
     {
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-        if (aSupplier.getValueType().getTypeClass() != TypeClass_VOID)
+        if (aSupplier.getValueTypeClass() != TypeClass_VOID)
         {
             OSL_VERIFY( aSupplier >>= xSupplier );
         }
@@ -687,7 +687,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         }
         {
             OStreamSection aDownCompat2(_rxOutStream);
-            switch (aEffectiveValue.getValueType().getTypeClass())
+            switch (aEffectiveValue.getValueTypeClass())
             {
                 case TypeClass_STRING:
                     _rxOutStream->writeShort(0x0000);
@@ -809,7 +809,7 @@ bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 
     // empty string + EmptyIsNull = void
     if  (   !aControlValue.hasValue()
-        ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
+        ||  (   ( aControlValue.getValueTypeClass() == TypeClass_STRING )
             &&  getString( aControlValue ).isEmpty()
             &&  m_bEmptyIsNull
             )
@@ -820,13 +820,13 @@ bool OFormattedModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
         try
         {
             double f = 0.0;
-            if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE || (aControlValue >>= f)) // #i110323
+            if ( aControlValue.getValueTypeClass() == TypeClass_DOUBLE || (aControlValue >>= f)) // #i110323
             {
                 DBTypeConversion::setValue( m_xColumnUpdate, m_aNullDate, getDouble( aControlValue ), m_nKeyType );
             }
             else
             {
-                DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalid value type!" );
+                DBG_ASSERT( aControlValue.getValueTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalid value type!" );
                 m_xColumnUpdate->updateString( getString( aControlValue ) );
             }
         }

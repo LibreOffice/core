@@ -81,7 +81,7 @@ void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const An
     switch (_nHandle)
     {
         case PROPERTY_ID_HIDDEN_VALUE :
-            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING, "OHiddenModel::setFastPropertyValue_NoBroadcast : invalid type !" );
+            DBG_ASSERT(_rValue.getValueTypeClass() == TypeClass_STRING, "OHiddenModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_sHiddenValue;
             break;
         default:

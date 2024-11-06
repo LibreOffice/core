@@ -1040,7 +1040,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
     SfxStyleSheetBase* pBase = m_pBasePool->Find(sStyleName, m_rEntry.family());
     if (pBase)
         throw container::ElementExistException();
-    if(rElement.getValueType().getTypeClass() != uno::TypeClass_INTERFACE)
+    if(rElement.getValueTypeClass() != uno::TypeClass_INTERFACE)
         throw lang::IllegalArgumentException();
     if (SwGetPoolIdFromName::CellStyle == m_rEntry.poolId())
     {

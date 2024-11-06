@@ -194,7 +194,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
 void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rRetType )
 {
     // no return value? Set to the specified values
-    if( rRet.getValueType().getTypeClass() == TypeClass_VOID )
+    if( rRet.getValueTypeClass() == TypeClass_VOID )
     {
         switch( rRetType.getTypeClass()  )
         {
@@ -267,7 +267,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 convertToEventReturn( aRet, aRetType );
             }
 
-            switch( aRet.getValueType().getTypeClass()  )
+            switch( aRet.getValueTypeClass()  )
             {
                 case TypeClass_INTERFACE:
                     {

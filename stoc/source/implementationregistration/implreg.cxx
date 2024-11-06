@@ -1142,7 +1142,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 
             Any aAny = xPropSet->getPropertyValue( Registry );
 
-            if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE ) {
+            if( aAny.getValueTypeClass() == TypeClass_INTERFACE ) {
                 aAny >>= xRegistry;
             }
          }
@@ -1173,7 +1173,7 @@ void ImplementationRegistration::initialize(
     Reference< XSimpleRegistry > rReg;
 
     // 1st argument : An instance of an implementation loader
-    if( aArgs[0].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
+    if( aArgs[0].getValueTypeClass() == TypeClass_INTERFACE ) {
         aArgs[0] >>= rLoader;
     }
     if( !rLoader.is()) {
@@ -1185,7 +1185,7 @@ void ImplementationRegistration::initialize(
     }
 
     // 2nd argument : The service name of the loader. This name is written into the registry
-    if( aArgs[1].getValueType().getTypeClass() == TypeClass_STRING ) {
+    if( aArgs[1].getValueTypeClass() == TypeClass_STRING ) {
         aArgs[1] >>= loaderServiceName;
     }
     if( loaderServiceName.isEmpty() ) {
@@ -1196,7 +1196,7 @@ void ImplementationRegistration::initialize(
     }
 
     // 3rd argument : The file name of the dll, that contains the loader
-    if( aArgs[2].getValueType().getTypeClass() == TypeClass_STRING ) {
+    if( aArgs[2].getValueTypeClass() == TypeClass_STRING ) {
         aArgs[2] >>= locationUrl;
     }
     if( locationUrl.isEmpty() ) {
@@ -1207,7 +1207,7 @@ void ImplementationRegistration::initialize(
     }
 
     // 4th argument : The registry, the service should be written to
-    if( aArgs[3].getValueType().getTypeClass() == TypeClass_INTERFACE ) {
+    if( aArgs[3].getValueTypeClass() == TypeClass_INTERFACE ) {
         aArgs[3] >>= rReg;
     }
 
@@ -1342,7 +1342,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
             try {
                 Any aAny = xPropSet->getPropertyValue( Registry );
 
-                if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                if( aAny.getValueTypeClass() == TypeClass_INTERFACE )
                 {
                     aAny >>= xRegistry;
                 }
