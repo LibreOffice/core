@@ -128,6 +128,18 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
     ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
     bool bDisable = pDocSh->IsReadOnly() || rDoc.GetChangeTrack();
+    bool bFilterDisable = bDisable;
+    if (!bDisable)
+    {
+        SCCOL nTab = pViewShell->GetViewData().GetTabNo();
+        const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+        if (pTabProt && pTabProt->isProtected())
+        {
+            bDisable = true;
+            if (!pTabProt->isOptionEnabled(ScTableProtection::PIVOT_TABLES))
+                bFilterDisable = true;
+        }
+    }
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -148,7 +160,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
             case SID_DP_FILTER:
             {
                 ScDPObject* pDPObj = GetCurrDPObject();
-                if( bDisable || !pDPObj || !pDPObj->IsSheetData() )
+                if( bFilterDisable || !pDPObj || !pDPObj->IsSheetData() )
                     rSet.DisableItem( nWhich );
             }
             break;

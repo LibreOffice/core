@@ -45,6 +45,8 @@ private:
     OUString m_aInsertRows;
     OUString m_aDeleteColumns;
     OUString m_aDeleteRows;
+    OUString m_aAutoFilter;
+    OUString m_aPivot;
 
     std::unique_ptr<weld::CheckButton> m_xBtnProtect;
     std::unique_ptr<weld::Container> m_xPasswords;
@@ -60,6 +62,8 @@ private:
     std::unique_ptr<weld::Label> m_xInsertRows;
     std::unique_ptr<weld::Label> m_xDeleteColumns;
     std::unique_ptr<weld::Label> m_xDeleteRows;
+    std::unique_ptr<weld::Label> m_xAutoFilter;
+    std::unique_ptr<weld::Label> m_xPivot;
 
     void InsertEntry(const OUString& rTxt);
 

@@ -409,7 +409,8 @@ public:
     const ScTableProtection* GetProtection() const;
     void            GetUnprotectedCells( ScRangeList& rRangeList ) const;
 
-    bool IsEditActionAllowed( sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd ) const;
+    bool            IsEditActionAllowed( sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
+                                         SCCOL nEndCol, SCROW nEndRow ) const;
 
     Size            GetPageSize() const;
     void            SetPageSize( const Size& rSize );

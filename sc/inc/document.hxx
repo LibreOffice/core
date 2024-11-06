@@ -865,6 +865,7 @@ public:
     SC_DLLPUBLIC bool                  HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
     SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
+    SC_DLLPUBLIC const ScDPObject*     GetDPAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(ScAddress const& rAddress) const
     {
@@ -971,8 +972,10 @@ public:
                                                     SCCOL nEndCol, SCROW nEndRow,
                                                     const ScMarkData& rMark ) const;
 
-    bool IsEditActionAllowed( sc::ColRowEditAction eAction, SCTAB nTab, SCCOLROW nStart, SCCOLROW nEnd ) const;
-    bool IsEditActionAllowed( sc::ColRowEditAction eAction, const ScMarkData& rMark, SCCOLROW nStart, SCCOLROW nEnd ) const;
+    bool            IsEditActionAllowed( sc::EditAction eAction, SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
+                                         SCCOL nEndCol, SCROW nEndRow ) const;
+    bool            IsEditActionAllowed( sc::EditAction eAction, const ScMarkData& rMark, SCCOL nStartCol,
+                                         SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow ) const;
 
     SC_DLLPUBLIC bool GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 

@@ -2071,9 +2071,20 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         SCROW nRealPosY;
         mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nRealPosX, nRealPosY, false );//the real row/col
 
+        bool bAutoFilterDisable = false;
+        bool bPivotDisable = false;
+
+        if (rDoc.IsTabProtected(nTab))
+        {
+            const ScTableProtection* pTabProtection = rDoc.GetTabProtection(nTab);
+            bAutoFilterDisable = pTabProtection && !pTabProtection->isOptionEnabled(ScTableProtection::AUTOFILTER);//autofilter
+            bPivotDisable = pTabProtection && !pTabProtection->isOptionEnabled(ScTableProtection::PIVOT_TABLES);//pivot
+        }
+
         // show in the merged cells the filter of the first cell (nPosX instead of nRealPosX)
         const ScMergeFlagAttr* pRealPosAttr = rDoc.GetAttr(nPosX, nRealPosY, nTab, ATTR_MERGE_FLAG);
-        if( pRealPosAttr->HasAutoFilter() )
+
+        if (!bAutoFilterDisable && pRealPosAttr->HasAutoFilter())
         {
             SC_MOD()->InputEnterHandler();
             if (DoAutoFilterButton(nPosX, nRealPosY, rMEvt))
@@ -2081,7 +2092,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         }
 
         const ScMergeFlagAttr* pAttr = rDoc.GetAttr(nPosX, nPosY, nTab, ATTR_MERGE_FLAG);
-        if (pAttr->HasAutoFilter())
+        if (!bAutoFilterDisable && pAttr->HasAutoFilter())
         {
             if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
             {
@@ -2090,7 +2101,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             }
         }
 
-        if (pAttr->HasPivotButton() || pAttr->HasPivotPopupButton() || pAttr->HasPivotMultiFieldPopupButton())
+        if (!bPivotDisable && (pAttr->HasPivotButton() || pAttr->HasPivotPopupButton() ||
+            pAttr->HasPivotMultiFieldPopupButton()))
         {
             DoPushPivotButton(nPosX, nPosY, rMEvt, pAttr->HasPivotButton(),
                 pAttr->HasPivotPopupButton(), pAttr->HasPivotMultiFieldPopupButton());
@@ -2098,7 +2110,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             return;
         }
 
-        if (pAttr->HasPivotToggle())
+        if (!bPivotDisable && pAttr->HasPivotToggle())
         {
             DoPushPivotToggle(nPosX, nPosY, rMEvt);
             rState.mbActivatePart = false;

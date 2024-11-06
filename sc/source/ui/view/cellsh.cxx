@@ -255,15 +255,15 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_ROWS_BEFORE:           // insert rows
             case FID_INS_ROWS_AFTER:
             {
-                sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertRowsBefore;
+                sc::EditAction eAction = sc::EditAction::InsertRowsBefore;
                 if (nWhich == FID_INS_ROWS_AFTER)
-                    eAction = sc::ColRowEditAction::InsertRowsAfter;
+                    eAction = sc::EditAction::InsertRowsAfter;
 
                 bDisable = (!bSimpleArea) || GetViewData().SimpleColMarked();
                 if (!bEditable && nCol1 == 0 && nCol2 == rDoc.MaxCol())
                 {
                     // See if row insertions are allowed.
-                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nRow1, nRow2);
+                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nCol1, nRow1, nCol2, nRow2);
                 }
                 break;
             }
@@ -275,16 +275,16 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case FID_INS_COLUMNS_BEFORE:        // insert columns
             case FID_INS_COLUMNS_AFTER:
             {
-                sc::ColRowEditAction eAction = sc::ColRowEditAction::InsertColumnsBefore;
+                sc::EditAction eAction = sc::EditAction::InsertColumnsBefore;
                 if (nWhich == FID_INS_COLUMNS_AFTER)
-                    eAction = sc::ColRowEditAction::InsertColumnsAfter;
+                    eAction = sc::EditAction::InsertColumnsAfter;
 
                 bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED)
                            || GetViewData().SimpleRowMarked();
                 if (!bEditable && nRow1 == 0 && nRow2 == rDoc.MaxRow())
                 {
                     // See if row insertions are allowed.
-                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nCol1, nCol2);
+                    bEditable = rDoc.IsEditActionAllowed(eAction, rMark, nCol1, nRow1, nCol2, nRow2);
                 }
                 break;
             }

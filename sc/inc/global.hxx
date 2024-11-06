@@ -424,7 +424,7 @@ enum ScDBObject
 
 namespace sc {
 
-enum class ColRowEditAction
+enum class EditAction
 {
     Unknown,
     InsertColumnsBefore,
@@ -432,7 +432,8 @@ enum class ColRowEditAction
     InsertRowsBefore,
     InsertRowsAfter,
     DeleteColumns,
-    DeleteRows
+    DeleteRows,
+    UpdatePivotTable
 };
 
 }

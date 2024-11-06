@@ -379,6 +379,20 @@ const ScDPCollection* ScDocument::GetDPCollection() const
     return pDPCollection.get();
 }
 
+const ScDPObject* ScDocument::GetDPAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+{
+    if (!pDPCollection)
+        return nullptr;
+
+    sal_uInt16 nCount = pDPCollection->GetCount();
+    ScRange aRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    for (sal_uInt16 i = 0; i < nCount; i++)
+        if ((*pDPCollection)[i].GetOutRange() == aRange)
+            return &(*pDPCollection)[i];
+
+    return nullptr;
+}
+
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (!pDPCollection)

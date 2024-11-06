@@ -1904,19 +1904,19 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     {
         case INS_INSCOLS_BEFORE:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::InsertColumnsBefore, nMergeTestStartCol, nMergeTestEndCol, aMark);
+                rDoc, sc::EditAction::InsertColumnsBefore, nMergeTestStartCol, 0, nMergeTestEndCol, rDoc.MaxRow(), aMark);
             break;
         case INS_INSCOLS_AFTER:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::InsertColumnsAfter, nMergeTestStartCol, nMergeTestEndCol, aMark);
+                rDoc, sc::EditAction::InsertColumnsAfter, nMergeTestStartCol, 0, nMergeTestEndCol, rDoc.MaxRow(), aMark);
             break;
         case INS_INSROWS_BEFORE:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::InsertRowsBefore, nMergeTestStartRow, nMergeTestEndRow, aMark);
+                rDoc, sc::EditAction::InsertRowsBefore, 0, nMergeTestStartRow, rDoc.MaxCol(), nMergeTestEndRow, aMark);
             break;
         case INS_INSROWS_AFTER:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::InsertRowsAfter, nMergeTestStartRow, nMergeTestEndRow, aMark);
+                rDoc, sc::EditAction::InsertRowsAfter, 0, nMergeTestStartRow, rDoc.MaxCol(), nMergeTestEndRow, aMark);
             break;
         default:
             aTester = ScEditableTester(
@@ -2406,11 +2406,11 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     {
         case DelCellCmd::Cols:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::DeleteColumns, nUndoStartCol, nUndoEndCol, aMark);
+                rDoc, sc::EditAction::DeleteColumns, nUndoStartCol, 0, nUndoEndCol, rDoc.MaxRow(), aMark);
             break;
         case DelCellCmd::Rows:
             aTester = ScEditableTester(
-                rDoc, sc::ColRowEditAction::DeleteRows, nUndoStartRow, nUndoEndRow, aMark);
+                rDoc, sc::EditAction::DeleteRows, 0, nUndoStartRow, rDoc.MaxCol(), nUndoEndRow, aMark);
             break;
         default:
             aTester = ScEditableTester(
@@ -4887,7 +4887,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     //!     Source range can be protected !!!
     //!     but can't contain matrix fragments !!!
 
-    ScEditableTester aTester( rDoc, aDestArea );
+    ScEditableTester aTester( rDoc, aDestArea, sc::EditAction::Unknown );
     if ( !aTester.IsEditable() )
     {
         if (!bApi)
@@ -5740,7 +5740,7 @@ void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bInteraction 
     if (!rDoc.IsUndoEnabled())
         bRecord = false;
 
-    ScEditableTester aTester(rDoc, rRange);
+    ScEditableTester aTester(rDoc, rRange, sc::EditAction::Unknown);
     if (!aTester.IsEditable())
     {
         if (bInteraction)

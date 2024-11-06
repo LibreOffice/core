@@ -339,8 +339,8 @@ void ScTable::SetNeedsListeningGroup( SCCOL nCol, SCROW nRow )
     CreateColumnIfNotExists(nCol).SetNeedsListeningGroup(nRow);
 }
 
-bool ScTable::IsEditActionAllowed(
-    sc::ColRowEditAction eAction, SCCOLROW nStart, SCCOLROW nEnd ) const
+bool ScTable::IsEditActionAllowed( sc::EditAction eAction, SCCOL nStartCol, SCROW nStartRow,
+    SCCOL nEndCol, SCROW nEndRow ) const
 {
     if (!IsProtected())
     {
@@ -349,20 +349,20 @@ bool ScTable::IsEditActionAllowed(
 
         switch (eAction)
         {
-            case sc::ColRowEditAction::InsertColumnsBefore:
-            case sc::ColRowEditAction::InsertColumnsAfter:
-            case sc::ColRowEditAction::DeleteColumns:
+            case sc::EditAction::InsertColumnsBefore:
+            case sc::EditAction::InsertColumnsAfter:
+            case sc::EditAction::DeleteColumns:
             {
-                nCol1 = nStart;
-                nCol2 = nEnd;
+                nCol1 = nStartCol;
+                nCol2 = nEndCol;
                 break;
             }
-            case sc::ColRowEditAction::InsertRowsBefore:
-            case sc::ColRowEditAction::InsertRowsAfter:
-            case sc::ColRowEditAction::DeleteRows:
+            case sc::EditAction::InsertRowsBefore:
+            case sc::EditAction::InsertRowsAfter:
+            case sc::EditAction::DeleteRows:
             {
-                nRow1 = nStart;
-                nRow2 = nEnd;
+                nRow1 = nStartRow;
+                nRow2 = nEndRow;
                 break;
             }
             default:
@@ -381,37 +381,44 @@ bool ScTable::IsEditActionAllowed(
 
     switch (eAction)
     {
-        case sc::ColRowEditAction::InsertColumnsBefore:
-        case sc::ColRowEditAction::InsertColumnsAfter:
+        case sc::EditAction::InsertColumnsBefore:
+        case sc::EditAction::InsertColumnsAfter:
         {
             // TODO: improve the matrix range handling for the insert-before action.
-            if (HasBlockMatrixFragment(nStart, 0, nEnd, rDocument.MaxRow()))
+            if (HasBlockMatrixFragment(nStartCol, nStartRow, nEndCol, nEndRow))
                 return false;
 
             return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_COLUMNS);
         }
-        case sc::ColRowEditAction::InsertRowsBefore:
-        case sc::ColRowEditAction::InsertRowsAfter:
+        case sc::EditAction::InsertRowsBefore:
+        case sc::EditAction::InsertRowsAfter:
         {
             // TODO: improve the matrix range handling for the insert-before action.
-            if (HasBlockMatrixFragment(0, nStart, rDocument.MaxCol(), nEnd))
+            if (HasBlockMatrixFragment(nStartCol, nStartRow, nEndCol, nEndRow))
                 return false;
 
             return pTabProtection->isOptionEnabled(ScTableProtection::INSERT_ROWS);
         }
-        case sc::ColRowEditAction::DeleteColumns:
+        case sc::EditAction::DeleteColumns:
         {
             if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_COLUMNS))
                 return false;
 
-            return !HasAttrib(nStart, 0, nEnd, rDocument.MaxRow(), HasAttrFlags::Protected);
+            return !HasAttrib(nStartCol, nStartRow, nEndCol, nEndRow, HasAttrFlags::Protected);
         }
-        case sc::ColRowEditAction::DeleteRows:
+        case sc::EditAction::DeleteRows:
         {
             if (!pTabProtection->isOptionEnabled(ScTableProtection::DELETE_ROWS))
                 return false;
 
-            return !HasAttrib(0, nStart, rDocument.MaxCol(), nEnd, HasAttrFlags::Protected);
+            return !HasAttrib(nStartCol, nStartRow, nEndCol, nEndRow, HasAttrFlags::Protected);
+        }
+        case sc::EditAction::UpdatePivotTable:
+        {
+            if (pTabProtection->isOptionEnabled(ScTableProtection::PIVOT_TABLES))
+                return true;
+
+            return !HasAttrib(nStartCol, nStartRow, nEndCol, nEndRow, HasAttrFlags::Protected);
         }
         default:
             ;

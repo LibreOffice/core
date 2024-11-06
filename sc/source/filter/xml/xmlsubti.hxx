@@ -42,6 +42,8 @@ struct ScXMLTabProtectionData
     bool            mbInsertRows;
     bool            mbDeleteColumns;
     bool            mbDeleteRows;
+    bool            mbUseAutoFilter;
+    bool            mbUsePivot;
 
     ScXMLTabProtectionData();
 };
