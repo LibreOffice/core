@@ -34,7 +34,7 @@ SwDocDisplayItem::SwDocDisplayItem() :
     m_bCharHiddenText     =
     m_bBookmarks          =
     m_bManualBreak        = true;
-    m_bTextBoundariesFull = true;
+    m_bTextBoundariesFull = false; // default is crop
     m_xDefaultAnchor      = 1; //FLY_TO_CHAR
 };
 

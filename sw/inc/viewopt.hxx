@@ -103,7 +103,7 @@ struct ViewOptFlags1
         , bShowOutlineContentVisibilityButton(false)
         , bShowChangesInMargin(false)
         , bShowChangesInMargin2(false)
-        , bTextBoundariesFull(true)
+        , bTextBoundariesFull(false)
     {}
 
     bool operator==(const ViewOptFlags1& rOther) const

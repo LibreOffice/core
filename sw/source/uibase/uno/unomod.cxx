@@ -96,7 +96,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_BOOKMARKS,
     HANDLE_VIEWSET_SHOW_OUTLINECONTENTVISIBILITYBUTTON,
     HANDLE_VIEWSET_TREAT_SUB_OUTLINE_LEVELS_AS_CONTENT,
-    HANDLE_VIEWSET_CHANGES_IN_MARGIN
+    HANDLE_VIEWSET_CHANGES_IN_MARGIN,
+    HANDLE_VIEWSET_TEXTBOUNDARIES
 };
 
 enum SwPrintSettingsPropertyHandles
@@ -174,6 +175,7 @@ static rtl::Reference<ChainablePropertySetInfo> lcl_createViewSettingsInfo()
         { u"VerticalRulerMetric"_ustr,  HANDLE_VIEWSET_VERT_RULER_METRIC   , cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE},
         { u"ZoomType"_ustr,             HANDLE_VIEWSET_ZOOM_TYPE            , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
         { u"ZoomValue"_ustr,            HANDLE_VIEWSET_ZOOM                 , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
+        { u"TextBoundaries"_ustr,       HANDLE_VIEWSET_TEXTBOUNDARIES       , cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE},
         { OUString(), 0, css::uno::Type(), 0 }
     };
     return new ChainablePropertySetInfo ( aViewSettingsMap_Impl );
@@ -749,6 +751,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 }
         }
         break;
+        case HANDLE_VIEWSET_TEXTBOUNDARIES: mpViewOption->SetTextBoundariesFull(*o3tl::doAccess<bool>(rValue)); break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -929,6 +932,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             bBool = false;
         }
         break;
+        case HANDLE_VIEWSET_TEXTBOUNDARIES : bBoolVal = mpConstViewOption->IsTextBoundariesFull(); break;
         default: OSL_FAIL("there is no such ID!");
     }
     if( bBool )

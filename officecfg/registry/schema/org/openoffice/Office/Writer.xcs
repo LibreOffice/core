@@ -900,6 +900,14 @@
           </constraints>
           <value>1</value>
         </prop>
+        <prop oor:name="TextBoundaries" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Not accessible via user interface -->
+          <info>
+            <desc>Shows text boundaries as full frame (true) or crop marks (false), if enabled.</desc>
+            <label>Show text boundaries as full frame or crop marks</label>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="Zoom">
           <info>
