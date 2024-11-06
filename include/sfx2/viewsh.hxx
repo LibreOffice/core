@@ -497,7 +497,7 @@ public:
     OUString getA11yFocusedParagraph() const;
     int getA11yCaretPosition() const;
     void SetSigningCertificate(const css::uno::Reference<css::security::XCertificate>& xCertificate);
-    css::uno::Reference<css::security::XCertificate> GetSigningCertificate() const;
+    const css::uno::Reference<css::security::XCertificate> & GetSigningCertificate() const;
 };
 
 #endif // INCLUDED_SFX2_VIEWSH_HXX

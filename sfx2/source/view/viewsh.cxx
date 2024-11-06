@@ -2812,7 +2812,7 @@ void SfxViewShell::SetSigningCertificate(const uno::Reference<security::XCertifi
     pImpl->m_xSigningCertificate = xCertificate;
 }
 
-uno::Reference<security::XCertificate> SfxViewShell::GetSigningCertificate() const
+const uno::Reference<security::XCertificate> & SfxViewShell::GetSigningCertificate() const
 {
     return pImpl->m_xSigningCertificate;
 }

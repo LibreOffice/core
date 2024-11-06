@@ -221,7 +221,7 @@ public:
     SAL_DLLPRIVATE OUString const & GetBackup_Impl();
 
     SAL_DLLPRIVATE css::uno::Reference< css::embed::XStorage > const & GetZipStorageToSign_Impl( bool bReadOnly = true );
-    SAL_DLLPRIVATE css::uno::Reference<css::embed::XStorage> GetScriptingStorageToSign_Impl();
+    SAL_DLLPRIVATE const css::uno::Reference<css::embed::XStorage> & GetScriptingStorageToSign_Impl();
     SAL_DLLPRIVATE void CloseZipStorage_Impl();
 
     // the storage that will be returned by the medium on GetStorage request

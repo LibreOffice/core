@@ -1999,7 +1999,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     return pImpl->xStorage;
 }
 
-uno::Reference<embed::XStorage> SfxMedium::GetScriptingStorageToSign_Impl()
+const uno::Reference<embed::XStorage> & SfxMedium::GetScriptingStorageToSign_Impl()
 {
     // this was set when it was initially loaded
     if (pImpl->m_bODFWholesomeEncryption)

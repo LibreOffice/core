@@ -2938,11 +2938,11 @@ bool SfxViewFrame::DoClose()
     return GetFrame().DoClose();
 }
 
-OUString SfxViewFrame::GetActualPresentationURL_Impl() const
+const OUString & SfxViewFrame::GetActualPresentationURL_Impl() const
 {
     if ( m_xObjSh.is() )
         return m_xObjSh->GetMedium()->GetName();
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SfxViewFrame::SetModalMode( bool bModal )
