@@ -256,6 +256,12 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
         pFrame->setFrameShape(bVertical ? QFrame::VLine : QFrame::HLine);
         pObject = pFrame;
     }
+    else if (sName == u"GtkSpinButton")
+    {
+        QDoubleSpinBox* pSpinBox = new QDoubleSpinBox(pParentWidget);
+        setSpinButtonProperties(*pSpinBox, rMap);
+        pObject = pSpinBox;
+    }
     else if (sName == u"GtkTextView")
     {
         pObject = new QPlainTextEdit(pParentWidget);
@@ -553,6 +559,31 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
             {
                 pButton->setText(convertAccelerator(rValue));
             }
+        }
+    }
+}
+
+void QtBuilder::setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps)
+{
+    auto aDigitsIt = rProps.find(u"digits"_ustr);
+    sal_Int32 nDigits = (aDigitsIt != rProps.end()) ? aDigitsIt->second.toInt32() : 0;
+    rSpinBox.setDecimals(nDigits);
+
+    auto aAdjustmentIt = rProps.find("adjustment");
+    if (aAdjustmentIt != rProps.end())
+    {
+        const Adjustment* pAdjustment = get_adjustment_by_name(aAdjustmentIt->second);
+        assert(pAdjustment && "referenced adjustment doesn't exist");
+        for (auto const & [ rKey, rValue ] : *pAdjustment)
+        {
+            if (rKey == u"upper")
+                rSpinBox.setMaximum(rValue.toDouble());
+            else if (rKey == u"lower")
+                rSpinBox.setMinimum(rValue.toDouble());
+            else if (rKey == "value")
+                rSpinBox.setValue(rValue.toDouble());
+            else if (rKey == "step-increment")
+                rSpinBox.setSingleStep(rValue.toDouble());
         }
     }
 }

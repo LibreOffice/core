@@ -14,6 +14,7 @@
 #include <QtCore/QObject>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
@@ -72,6 +73,7 @@ public:
 
 private:
     void setProperties(QObject* obj, stringmap& rProps);
+    void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
 

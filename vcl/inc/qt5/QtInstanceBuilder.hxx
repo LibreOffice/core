@@ -56,7 +56,7 @@ public:
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& rId) override;
     virtual std::unique_ptr<weld::Calendar> weld_calendar(const OUString&) override;
     virtual std::unique_ptr<weld::Entry> weld_entry(const OUString& rId) override;
-    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OUString&) override;
+    virtual std::unique_ptr<weld::SpinButton> weld_spin_button(const OUString& rId) override;
     virtual std::unique_ptr<weld::MetricSpinButton> weld_metric_spin_button(const OUString&,
                                                                             FieldUnit) override;
     virtual std::unique_ptr<weld::FormattedSpinButton>

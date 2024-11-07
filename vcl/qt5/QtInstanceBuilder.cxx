@@ -24,6 +24,7 @@
 #include <QtInstanceMessageDialog.hxx>
 #include <QtInstanceProgressBar.hxx>
 #include <QtInstanceRadioButton.hxx>
+#include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
@@ -250,10 +251,12 @@ std::unique_ptr<weld::Entry> QtInstanceBuilder::weld_entry(const OUString& rId)
     return xRet;
 }
 
-std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString&)
+std::unique_ptr<weld::SpinButton> QtInstanceBuilder::weld_spin_button(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QDoubleSpinBox* pSpinBox = m_xBuilder->get<QDoubleSpinBox>(rId);
+    std::unique_ptr<weld::SpinButton> xRet(
+        pSpinBox ? std::make_unique<QtInstanceSpinButton>(pSpinBox) : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::MetricSpinButton> QtInstanceBuilder::weld_metric_spin_button(const OUString&,
