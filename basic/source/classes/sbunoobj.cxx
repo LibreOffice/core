@@ -2613,19 +2613,19 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
             }
             if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
             {
-                const Property& rProp = mxUnoAccess->
+                const Property aProp = mxUnoAccess->
                     getProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS );
 
                 // If the property could be void the type had to be set to Variant
                 SbxDataType eSbxType;
-                if( rProp.Attributes & PropertyAttribute::MAYBEVOID )
+                if( aProp.Attributes & PropertyAttribute::MAYBEVOID )
                     eSbxType = SbxVARIANT;
                 else
-                    eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
+                    eSbxType = unoToSbxType( aProp.Type.getTypeClass() );
 
-                SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
+                SbxDataType eRealSbxType = ( ( aProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( aProp.Type.getTypeClass() ) : eSbxType );
                 // create the property and superimpose it
-                auto pProp = tools::make_ref<SbUnoProperty>( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false, ( rProp.Type.getTypeClass() ==  css::uno::TypeClass_STRUCT  ) );
+                auto pProp = tools::make_ref<SbUnoProperty>( aProp.Name, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() ==  css::uno::TypeClass_STRUCT  ) );
                 QuickInsert( pProp.get() );
                 pRes = pProp.get();
             }
@@ -2633,12 +2633,12 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                 MethodConcept::ALL - MethodConcept::DANGEROUS ) )
             {
                 // address the method
-                const Reference< XIdlMethod >& rxMethod = mxUnoAccess->
+                const Reference< XIdlMethod > xMethod = mxUnoAccess->
                     getMethod( aUName, MethodConcept::ALL - MethodConcept::DANGEROUS );
 
                 // create SbUnoMethod and superimpose it
-                auto xMethRef = tools::make_ref<SbUnoMethod>( rxMethod->getName(),
-                    unoToSbxType( rxMethod->getReturnType() ), rxMethod, false );
+                auto xMethRef = tools::make_ref<SbUnoMethod>( xMethod->getName(),
+                    unoToSbxType( xMethod->getReturnType() ), xMethod, false );
                 QuickInsert( xMethRef.get() );
                 pRes = xMethRef.get();
             }

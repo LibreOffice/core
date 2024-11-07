@@ -819,17 +819,17 @@ void SbRtl_InStr(StarBASIC *, SbxArray & rPar, bool)
             bTextMode = rPar.Get(4)->GetInteger();
         }
         sal_Int32 nPos;
-        const OUString& rToken = rPar.Get(nFirstStringPos + 1)->GetOUString();
+        const OUString aToken = rPar.Get(nFirstStringPos + 1)->GetOUString();
 
         // #97545 Always find empty string
-        if( rToken.isEmpty() )
+        if( aToken.isEmpty() )
         {
             nPos = nStartPos;
         }
         else
         {
-            const OUString& rStr1 = rPar.Get(nFirstStringPos)->GetOUString();
-            const sal_Int32 nrStr1Len = rStr1.getLength();
+            const OUString aStr1 = rPar.Get(nFirstStringPos)->GetOUString();
+            const sal_Int32 nrStr1Len = aStr1.getLength();
             if (nStartPos > nrStr1Len)
             {
                 // Start position is greater than the string being searched
@@ -839,20 +839,20 @@ void SbRtl_InStr(StarBASIC *, SbxArray & rPar, bool)
             {
                 if( !bTextMode )
                 {
-                    nPos = rStr1.indexOf( rToken, nStartPos - 1 ) + 1;
+                    nPos = aStr1.indexOf( aToken, nStartPos - 1 ) + 1;
                 }
                 else
                 {
                     // tdf#139840 - case-insensitive operation for non-ASCII characters
                     i18nutil::SearchOptions2 aSearchOptions;
-                    aSearchOptions.searchString = rToken;
+                    aSearchOptions.searchString = aToken;
                     aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
                     aSearchOptions.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
                     utl::TextSearch textSearch(aSearchOptions);
 
                     sal_Int32 nStart = nStartPos - 1;
                     sal_Int32 nEnd = nrStr1Len;
-                    nPos = textSearch.SearchForward(rStr1, &nStart, &nEnd) ? nStart + 1 : 0;
+                    nPos = textSearch.SearchForward(aStr1, &nStart, &nEnd) ? nStart + 1 : 0;
                 }
             }
         }
@@ -1261,19 +1261,19 @@ void SbRtl_Right(StarBASIC *, SbxArray & rPar, bool)
     if (rPar.Count() < 3)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
-    const OUString& rStr = rPar.Get(1)->GetOUString();
+    const OUString aStr = rPar.Get(1)->GetOUString();
     int nResultLen = rPar.Get(2)->GetLong();
     if( nResultLen < 0 )
     {
         nResultLen = 0;
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    int nStrLen = rStr.getLength();
+    int nStrLen = aStr.getLength();
     if ( nResultLen > nStrLen )
     {
         nResultLen = nStrLen;
     }
-    OUString aResultStr = rStr.copy( nStrLen - nResultLen );
+    OUString aResultStr = aStr.copy( nStrLen - nResultLen );
     rPar.Get(0)->PutString(aResultStr);
 }
 
@@ -1413,8 +1413,8 @@ void SbRtl_StrComp(StarBASIC *, SbxArray & rPar, bool)
         rPar.Get(0)->PutEmpty();
         return;
     }
-    const OUString& rStr1 = rPar.Get(1)->GetOUString();
-    const OUString& rStr2 = rPar.Get(2)->GetOUString();
+    const OUString aStr1 = rPar.Get(1)->GetOUString();
+    const OUString aStr2 = rPar.Get(2)->GetOUString();
 
     SbiInstance* pInst = GetSbData()->pInst;
     bool bTextCompare;
@@ -1452,12 +1452,12 @@ void SbRtl_StrComp(StarBASIC *, SbxArray & rPar, bool)
 
         LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
         pTransliterationWrapper->loadModuleIfNeeded( eLangType );
-        nRetValue = pTransliterationWrapper->compareString( rStr1, rStr2 );
+        nRetValue = pTransliterationWrapper->compareString( aStr1, aStr2 );
     }
     else
     {
         sal_Int32 aResult;
-        aResult = rStr1.compareTo( rStr2 );
+        aResult = aStr1.compareTo( aStr2 );
         if ( aResult < 0  )
         {
             nRetValue = -1;
@@ -1490,8 +1490,8 @@ void SbRtl_String(StarBASIC *, SbxArray & rPar, bool)
         }
         else
         {
-            const OUString& rStr = rPar.Get(2)->GetOUString();
-            aFiller = rStr[0];
+            const OUString aStr = rPar.Get(2)->GetOUString();
+            aFiller = aStr[0];
         }
         OUStringBuffer aBuf(lCount);
         string::padToLength(aBuf, lCount, aFiller);
@@ -3716,8 +3716,8 @@ void SbRtl_Len(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        const OUString& rStr = rPar.Get(1)->GetOUString();
-        rPar.Get(0)->PutLong(rStr.getLength());
+        const OUString aStr = rPar.Get(1)->GetOUString();
+        rPar.Get(0)->PutLong(aStr.getLength());
     }
 }
 
@@ -3728,12 +3728,12 @@ void SbRtl_DDEInitiate(StarBASIC *, SbxArray & rPar, bool)
     {
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
-    const OUString& rApp = rPar.Get(1)->GetOUString();
-    const OUString& rTopic = rPar.Get(2)->GetOUString();
+    const OUString aApp = rPar.Get(1)->GetOUString();
+    const OUString aTopic = rPar.Get(2)->GetOUString();
 
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     size_t nChannel;
-    ErrCode nDdeErr = pDDE->Initiate( rApp, rTopic, nChannel );
+    ErrCode nDdeErr = pDDE->Initiate( aApp, aTopic, nChannel );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -3787,10 +3787,10 @@ void SbRtl_DDERequest(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     size_t nChannel = rPar.Get(1)->GetInteger();
-    const OUString& rItem = rPar.Get(2)->GetOUString();
+    const OUString aItem = rPar.Get(2)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     OUString aResult;
-    ErrCode nDdeErr = pDDE->Request( nChannel, rItem, aResult );
+    ErrCode nDdeErr = pDDE->Request( nChannel, aItem, aResult );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -3810,9 +3810,9 @@ void SbRtl_DDEExecute(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     size_t nChannel = rPar.Get(1)->GetInteger();
-    const OUString& rCommand = rPar.Get(2)->GetOUString();
+    const OUString aCommand = rPar.Get(2)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    ErrCode nDdeErr = pDDE->Execute( nChannel, rCommand );
+    ErrCode nDdeErr = pDDE->Execute( nChannel, aCommand );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -3828,10 +3828,10 @@ void SbRtl_DDEPoke(StarBASIC *, SbxArray & rPar, bool)
         return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     }
     size_t nChannel = rPar.Get(1)->GetInteger();
-    const OUString& rItem = rPar.Get(2)->GetOUString();
-    const OUString& rData = rPar.Get(3)->GetOUString();
+    const OUString aItem = rPar.Get(2)->GetOUString();
+    const OUString aData = rPar.Get(3)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    ErrCode nDdeErr = pDDE->Poke( nChannel, rItem, rData );
+    ErrCode nDdeErr = pDDE->Poke( nChannel, aItem, aData );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );

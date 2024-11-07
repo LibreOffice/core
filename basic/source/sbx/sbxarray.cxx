@@ -376,7 +376,7 @@ std::pair<bool, sal_uInt32> SbxArray::StoreData( SvStream& rStrm ) const
         if (rEntry.mpVar.is() && !(rEntry.mpVar->GetFlags() & SbxFlagBits::DontStore))
         {
             rStrm.WriteUInt16( n );
-            const auto& [bSuccess, nVersionModule] = rEntry.mpVar->Store(rStrm);
+            const auto [bSuccess, nVersionModule] = rEntry.mpVar->Store(rStrm);
             if (!bSuccess)
                 return { false, 0 };
             else if (nVersionModule > nVersion)

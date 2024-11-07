@@ -621,7 +621,7 @@ std::pair<bool, sal_uInt32> SbxObject::StoreData( SvStream& rStrm ) const
     rStrm.Seek( nPos );
     rStrm.WriteUInt32( nNew - nPos );
     rStrm.Seek( nNew );
-    const auto& [bSuccess, nVersion] = pMethods->Store( rStrm );
+    const auto [bSuccess, nVersion] = pMethods->Store( rStrm );
     if( !bSuccess )
     {
         return { false, 0 };

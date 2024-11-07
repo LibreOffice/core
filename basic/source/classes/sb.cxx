@@ -1853,7 +1853,7 @@ std::pair<bool, sal_uInt32> StarBASIC::StoreData( SvStream& r ) const
     r.WriteUInt16( static_cast<sal_uInt16>(pModules.size()));
     for( const auto& rpModule: pModules )
     {
-        const auto& [bSuccessModule, nVersionModule] = rpModule->Store(r);
+        const auto [bSuccessModule, nVersionModule] = rpModule->Store(r);
         if( !bSuccessModule )
         {
             return { false, 0 };

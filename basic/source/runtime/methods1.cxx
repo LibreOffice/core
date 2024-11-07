@@ -881,20 +881,20 @@ static bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxSTRING:
     case SbxLPSTR:
         {
-            const OUString& rStr = rVar.GetOUString();
+            const OUString aStr = rVar.GetOUString();
             if( !bBinary || bIsArray )
             {
                 if( bIsVariant )
                 {
                     pStrm->WriteUInt16( SbxSTRING );
                 }
-                pStrm->WriteUniOrByteString( rStr, osl_getThreadTextEncoding() );
+                pStrm->WriteUniOrByteString( aStr, osl_getThreadTextEncoding() );
             }
             else
             {
                 // without any length information! without end-identifier!
                 // What does that mean for Unicode?! Choosing conversion to ByteString...
-                OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
+                OString aByteStr(OUStringToOString(aStr, osl_getThreadTextEncoding()));
                 pStrm->WriteOString( aByteStr );
             }
         }

@@ -1630,7 +1630,7 @@ std::pair<bool, sal_uInt32> SbModule::StoreData( SvStream& rStrm ) const
     bool bFixup = ( pImage && !pImage->ExceedsLegacyLimits() );
     if ( bFixup )
         fixUpMethodStart( true );
-    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    const auto [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
     if (!bSuccess)
         return { false, 0 };
 
@@ -1761,7 +1761,7 @@ void SbModule::StoreBinaryData( SvStream& rStrm )
     if (!Compile())
         return;
 
-    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    const auto [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
     if (!bSuccess)
         return;
 
@@ -1913,7 +1913,7 @@ bool SbJScriptModule::LoadData( SvStream& rStrm, sal_uInt16 )
 
 std::pair<bool, sal_uInt32> SbJScriptModule::StoreData( SvStream& rStrm ) const
 {
-    const auto& [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
+    const auto [bSuccess, nVersion] = SbxObject::StoreData(rStrm);
     if( !bSuccess )
         return { false, 0 };
 

@@ -290,7 +290,7 @@ bool SbxStdCollection::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 
 std::pair<bool, sal_uInt32> SbxStdCollection::StoreData( SvStream& rStrm ) const
 {
-    const auto& [bRes, nVersion] = SbxCollection::StoreData(rStrm);
+    const auto [bRes, nVersion] = SbxCollection::StoreData(rStrm);
     if( bRes )
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aElemClass,
