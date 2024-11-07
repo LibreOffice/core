@@ -33,10 +33,12 @@ public:
 
     void testCryptoHash();
     void testRoundUp();
+    void testEncrypt_AES256();
 
     CPPUNIT_TEST_SUITE(CryptoTest);
     CPPUNIT_TEST(testCryptoHash);
     CPPUNIT_TEST(testRoundUp);
+    CPPUNIT_TEST(testEncrypt_AES256);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -93,6 +95,48 @@ void CryptoTest::testRoundUp()
     CPPUNIT_ASSERT_EQUAL(16, comphelper::roundUp(01, 16));
     CPPUNIT_ASSERT_EQUAL(32, comphelper::roundUp(17, 16));
     CPPUNIT_ASSERT_EQUAL(32, comphelper::roundUp(31, 16));
+}
+
+void CryptoTest::testEncrypt_AES256()
+{
+    std::vector<sal_uInt8> key = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                   0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> iv = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+                                  0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16 };
+
+    std::vector<sal_uInt8> original = { 's', 'e', 'c', 'r', 'e', 't', '\0' };
+
+    std::vector<sal_uInt8> encrypted(original.size());
+
+    sal_uInt32 nWrittenSize = 0;
+
+    comphelper::Encrypt aEncryptor(key, iv, comphelper::CryptoType::AES_256_CBC);
+    nWrittenSize = aEncryptor.update(encrypted, original);
+
+    // nothing should be written as the size of the input is not a multiple of block size
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), nWrittenSize);
+
+    original.resize(16, 0); // apply padding to make it multiple of block size
+    encrypted.resize(16, 0);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                         comphelper::hashToString(original));
+
+    nWrittenSize = aEncryptor.update(encrypted, original);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("181fd8e8e33d2e0b06abc41c2b90f6e5"),
+                         comphelper::hashToString(encrypted));
+
+    std::vector<sal_uInt8> decrypted(encrypted.size());
+
+    comphelper::Decrypt aDecryptor(key, iv, comphelper::CryptoType::AES_256_CBC);
+    nWrittenSize = aDecryptor.update(decrypted, encrypted);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(16), nWrittenSize);
+
+    CPPUNIT_ASSERT_EQUAL(std::string("73656372657400000000000000000000"),
+                         comphelper::hashToString(decrypted));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CryptoTest);

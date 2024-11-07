@@ -75,11 +75,21 @@ public:
                                 std::vector<sal_uInt8>& key);
 };
 
+/** Encrypt vector of bytes with AES encryption */
 class COMPHELPER_DLLPUBLIC Encrypt final : public Crypto
 {
 public:
+    /** Initialize encryption for key, init vector and encryption type.
+     *
+     * key - encryption key, key size should be the same as block size
+     * iv - init vector: it can be empty - will not be used (init vector will be 0)
+     */
     Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type);
 
+    /** Encrypt the input and write into output
+     *
+     * inputLength - size from the input to be encrypted (0 means to use the size of the vector)
+     */
     sal_uInt32 update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input,
                       sal_uInt32 inputLength = 0);
 };
