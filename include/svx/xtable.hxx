@@ -46,6 +46,7 @@ private:
 
 public:
     XColorEntry(const Color& rColor, const OUString& rName);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const Color& GetColor() const
     {
@@ -61,6 +62,7 @@ private:
 public:
     XLineEndEntry(basegfx::B2DPolyPolygon aB2DPolyPolygon, const OUString& rName);
     XLineEndEntry(const XLineEndEntry& rOther);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const basegfx::B2DPolyPolygon& GetLineEnd() const
     {
@@ -76,6 +78,7 @@ private:
 public:
     XDashEntry(const XDash& rDash, const OUString& rName);
     XDashEntry(const XDashEntry& rOther);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const XDash& GetDash() const
     {
@@ -91,6 +94,7 @@ private:
 public:
     XHatchEntry(const XHatch& rHatch, const OUString& rName);
     XHatchEntry(const XHatchEntry& rOther);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const XHatch& GetHatch() const
     {
@@ -106,6 +110,7 @@ private:
 public:
     XGradientEntry(const basegfx::BGradient& rGradient, const OUString& rName);
     XGradientEntry(const XGradientEntry& rOther);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const basegfx::BGradient& GetGradient() const
     {
@@ -121,6 +126,7 @@ private:
 public:
     XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName);
     XBitmapEntry(const XBitmapEntry& rOther);
+    std::unique_ptr<XPropertyEntry> Clone() const override;
 
     const GraphicObject& GetGraphicObject() const
     {
@@ -166,6 +172,9 @@ protected:
     XPropertyList(XPropertyListType t, OUString aPath, OUString aReferer);
     bool isValidIdx(tools::Long nIndex) const;
     virtual BitmapEx CreateBitmapForUI(tools::Long nIndex) = 0;
+
+private:
+    bool mbNeedsExportableList; // impl: avoid seldom-needed, expensive list cloning
 
 public:
     XPropertyList(const XPropertyList&) = delete;

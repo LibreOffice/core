@@ -37,8 +37,10 @@
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svl/intitem.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/opengrf.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -167,9 +169,13 @@ void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
     sal_Int32 nPos( 0 );
     if ( !aItem.isPattern() )
     {
-        nPos = SearchBitmapList( aItem.GetGraphicObject() );
-        if (nPos == -1)
+        const GraphicObject& aGraphicObj = aItem.GetGraphicObject();
+        if (aGraphicObj.GetType() != GraphicType::Bitmap)
             return;
+
+        nPos = SearchBitmapList(aGraphicObj);
+        if (nPos == -1)
+            nPos = AddBitmap(aGraphicObj, aItem.GetName(), /*OnlyForThisDocument=*/true);
     }
     else
     {
@@ -781,18 +787,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         pDlg.disposeAndClear();
 
         if( !nError )
-        {
-            m_pBitmapList->Insert(std::make_unique<XBitmapEntry>(aGraphic, aName), nCount);
-
-            sal_Int32 nId = m_xBitmapLB->GetItemId( nCount - 1 );
-            BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview( nCount, m_xBitmapLB->GetIconSize() );
-
-            m_xBitmapLB->InsertItem( nId + 1, Image(aBitmap), aName );
-            m_xBitmapLB->SelectItem( nId + 1 );
-            m_nBitmapListState |= ChangeType::MODIFIED;
-
-            ModifyBitmapHdl(m_xBitmapLB.get());
-        }
+            AddBitmap(aGraphic, aName);
     }
     else
     {
@@ -834,6 +829,33 @@ sal_Int32 SvxBitmapTabPage::SearchBitmapList(std::u16string_view rBitmapName)
         }
     }
     return nPos;
+}
+
+tools::Long SvxBitmapTabPage::AddBitmap(const GraphicObject& rGraphicObject, const OUString& rName,
+                                        bool bOnlyForThisDocument)
+{
+    const tools::Long nLastPos = m_pBitmapList->Count();
+
+    auto xBitmapEntry = std::make_unique<XBitmapEntry>(rGraphicObject, rName);
+    if (bOnlyForThisDocument)
+        xBitmapEntry->SetSavingAllowed(false);
+    m_pBitmapList->Insert(std::move(xBitmapEntry), nLastPos);
+
+    BitmapEx aBitmap = m_pBitmapList->GetBitmapForPreview(nLastPos, m_xBitmapLB->GetIconSize());
+
+    const sal_uInt16 nHighestId = m_xBitmapLB->GetItemId(nLastPos - 1);
+    m_xBitmapLB->InsertItem(nHighestId + 1, Image(aBitmap), rName);
+    m_xBitmapLB->SelectItem(nHighestId + 1);
+    m_nBitmapListState |= ChangeType::MODIFIED;
+
+    ModifyBitmapHdl(m_xBitmapLB.get());
+
+    // inform sidebar, etc. that the list of images has changed.
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    if (pViewFrame)
+        pViewFrame->GetBindings().Invalidate(SID_ATTR_PAGE_BITMAP, /*ClearCacheStatus=*/true);
+
+    return nLastPos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

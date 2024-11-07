@@ -22,6 +22,7 @@
 
 XPropertyEntry::XPropertyEntry(OUString aPropEntryName)
     : maPropEntryName(std::move(aPropEntryName))
+    , mbSavingAllowed(true)
 {
 }
 

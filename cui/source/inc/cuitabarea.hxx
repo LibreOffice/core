@@ -551,6 +551,8 @@ private:
     void CalculateBitmapPresetSize();
     sal_Int32 SearchBitmapList(std::u16string_view rBitmapName);
     sal_Int32 SearchBitmapList(const GraphicObject& rGraphicObject);
+    tools::Long AddBitmap(const GraphicObject& rGraphicObject, const OUString& rName,
+                          bool bOnlyForThisDocument = false);
 
 public:
     SvxBitmapTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
