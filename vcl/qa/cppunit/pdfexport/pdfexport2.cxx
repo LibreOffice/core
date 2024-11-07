@@ -668,6 +668,46 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion15)
     CPPUNIT_ASSERT_EQUAL(15, nFileVersion);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testVersion20)
+{
+    // Create an empty document.
+    mxComponent = loadFromDesktop("private:factory/swriter");
+
+    // Save as PDF.
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(20)) } });
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    int nFileVersion = pPdfDocument->getFileVersion();
+    CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testEncryptionRoundtrip)
+{
+    mxComponent = loadFromDesktop("private:factory/swriter");
+
+    // Save PDF
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    uno::Sequence<beans::PropertyValue> aFilterData = comphelper::InitPropertySequence(
+        { { "SelectPdfVersion", uno::Any(sal_Int32(20)) },
+          { "EncryptFile", uno::Any(true) },
+          { "DocumentOpenPassword", uno::Any(u"secret"_ustr) } });
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Load the exported result in PDFium
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport("secret"_ostr);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    int nFileVersion = pPdfDocument->getFileVersion();
+    CPPUNIT_ASSERT_EQUAL(20, nFileVersion);
+}
+
 // Check round-trip of importing and exporting the PDF with PDFium filter,
 // which imports the PDF document as multiple PDFs as graphic object.
 // Each page in the document has one PDF graphic object which content is
