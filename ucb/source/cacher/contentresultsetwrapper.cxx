@@ -362,7 +362,7 @@ Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper::getPropertySetIn
 }
 
 // virtual
-Reference< XPropertySetInfo > ContentResultSetWrapper::getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard)
+const Reference< XPropertySetInfo > & ContentResultSetWrapper::getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard)
 {
     impl_EnsureNotDisposed(rGuard);
     if( m_xPropertySetInfo.is() )

@@ -146,7 +146,7 @@ namespace chelp {
         static OString getImageTheme();
 
         OUString getInstallPathAsURL();
-        OUString getInstallPathAsURL(std::unique_lock<std::mutex>& rGuard);
+        const OUString & getInstallPathAsURL(std::unique_lock<std::mutex>& rGuard);
 
         const std::vector< OUString >& getModuleList( const OUString& Language );
 

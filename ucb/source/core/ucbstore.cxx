@@ -818,7 +818,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 }
 
 
-Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex>& /*rGuard*/)
+const Reference< XMultiServiceFactory > & PropertySetRegistry::getConfigProvider(std::unique_lock<std::mutex>& /*rGuard*/)
 {
     if ( !m_xConfigProvider.is() )
     {

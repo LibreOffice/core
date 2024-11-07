@@ -93,7 +93,7 @@ class PropertySetRegistry : public cppu::WeakImplHelper <
     bool                              m_bTriedToGetRootWriteAccess;
 
 private:
-    css::uno::Reference< css::lang::XMultiServiceFactory >
+    const css::uno::Reference< css::lang::XMultiServiceFactory > &
     getConfigProvider(std::unique_lock<std::mutex>& l);
 
     void add   ( std::unique_lock<std::mutex>& rCreatorGuard, PersistentPropertySet* pSet );

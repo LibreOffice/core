@@ -1252,10 +1252,10 @@ auto CurlProcessor::ProcessRequest(
         OUString UserName;
         OUString PassWord;
         decltype(CURLAUTH_ANY) AuthMask; ///< allowed auth methods
-        Auth(OUString aUserName, OUString aPassword, decltype(CURLAUTH_ANY) const & rAuthMask)
+        Auth(OUString aUserName, OUString aPassword, decltype(CURLAUTH_ANY) aAuthMask)
             : UserName(std::move(aUserName))
             , PassWord(std::move(aPassword))
-            , AuthMask(rAuthMask)
+            , AuthMask(aAuthMask)
         {
         }
     };

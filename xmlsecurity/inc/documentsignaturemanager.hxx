@@ -127,7 +127,10 @@ public:
     {
         mxSignatureStream = xSignatureStream;
     }
-    css::uno::Reference<css::io::XStream> getSignatureStream() const { return mxSignatureStream; }
+    const css::uno::Reference<css::io::XStream>& getSignatureStream() const
+    {
+        return mxSignatureStream;
+    }
     void setScriptingSignatureStream(
         const css::uno::Reference<css::io::XStream>& xScriptingSignatureStream)
     {

@@ -262,7 +262,7 @@ OUString Databases::getInstallPathAsURL()
     return m_aInstallDirectory;
 }
 
-OUString Databases::getInstallPathAsURL(std::unique_lock<std::mutex>& )
+const OUString & Databases::getInstallPathAsURL(std::unique_lock<std::mutex>& )
 {
     return m_aInstallDirectory;
 }

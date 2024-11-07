@@ -118,7 +118,7 @@ namespace chelp {
 
         OUString const & get_id();
 
-        OUString get_tag();
+        const OUString & get_tag();
 
         //  Not called for a directory
 
@@ -126,7 +126,7 @@ namespace chelp {
 
         const OUString& get_eid() const   { return m_aEid; }
 
-        OUString get_title();
+        const OUString & get_title();
 
         OUString get_jar();
 
@@ -198,9 +198,9 @@ namespace chelp {
 
         void init();
 
-        OUString get_the_tag();
+        const OUString & get_the_tag();
 
-        OUString get_the_title();
+        const OUString & get_the_title();
 
         void readHelpDataFile();
 

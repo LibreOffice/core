@@ -46,7 +46,7 @@ using namespace com::sun::star;
 
 namespace
 {
-OUString getDigestURI(sal_Int32 nID)
+const OUString & getDigestURI(sal_Int32 nID)
 {
     switch( nID )
     {

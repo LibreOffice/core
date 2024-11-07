@@ -173,7 +173,7 @@ public:
 
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
     getPropertySetInfo() override final;
-    css::uno::Reference< css::beans::XPropertySetInfo >
+    const css::uno::Reference< css::beans::XPropertySetInfo > &
     getPropertySetInfoImpl(std::unique_lock<std::mutex>& rGuard);
 
     virtual void SAL_CALL

@@ -113,12 +113,12 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
             return p2->isSelected();
         }
 
-        OUString newName() const
+        const OUString & newName() const
         {
             if( p1->isSelected() )
                 return p1->getName();
             else
-                return OUString();
+                return EMPTY_OUSTRING;
         }
 
         css::uno::Reference<css::task::XInteractionRequest> const& getRequest() const
