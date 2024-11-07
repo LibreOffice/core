@@ -4599,22 +4599,26 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                     break;
                                     case EAS_MetalType :
                                     {
-                                        // export only if ODF extensions are enabled
+                                        // In ODF since ODF 1.4. Before 1.4, export only in extended.
                                         sal_Int16 eMetalType;
                                         if (rProp.Value >>= eMetalType)
                                         {
+                                            // LibreOffice had used the same values as later specified in ODF 1.4
+                                            if (eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
+                                                aStr = "loext:MetalMSCompatible";
+                                            else
+                                                aStr = "draw:MetalODF";
+
                                             SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
                                             if (eVersion >= SvtSaveOptions::ODFSVER_014)
                                             {
-                                                aStr = "draw:MetalODF";
+                                                if (!(eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+                                                    && eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
+                                                    rExport.AddAttribute(XML_NAMESPACE_XMLNS, XML_NP_LO_EXT, XML_N_LO_EXT);
                                                 rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_EXTRUSION_METAL_TYPE, aStr);
                                             }
                                             else if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
                                             {
-                                                if (eMetalType == drawing::EnhancedCustomShapeMetalType::MetalMSCompatible)
-                                                    aStr = "loext:MetalMSCompatible";
-                                                else
-                                                    aStr = "draw:MetalODF";
                                                 rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_EXTRUSION_METAL_TYPE, aStr);
                                             }
                                         }
@@ -4703,8 +4707,11 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                         double fExtrusionSpecularity = 0;
                                         if ( rProp.Value >>= fExtrusionSpecularity )
                                         {
+                                            // ODF 1.0/1.1 allow arbitrary percent, ODF 1.2/1.3 restrict it to 0%-100%,
+                                            // ODF 1.4 restricts it to non negative percent.
                                             SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
-                                            if (fExtrusionSpecularity > 100.0 && eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
+                                            if (fExtrusionSpecularity > 100.0 && eVersion & SvtSaveOptions::ODFSVER_EXTENDED
+                                                && eVersion >= SvtSaveOptions::ODFSVER_012 && eVersion < SvtSaveOptions::ODFSVER_014)
                                             {
                                                 // tdf#147580 write values > 100% in loext
                                                 ::sax::Converter::convertDouble(
@@ -4717,14 +4724,20 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
                                                 aStr = aStrBuffer.makeStringAndClear();
                                                 rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXTRUSION_SPECULARITY_LOEXT, aStr );
                                             }
-                                            // tdf#147580 ODF 1 allows arbitrary percent, later versions not
+                                            // clamp fExtrusionSpecularity to allowed values
                                             if (eVersion >= SvtSaveOptions::ODFSVER_012 && eVersion < SvtSaveOptions::ODFSVER_014)
-                                            {
                                                 fExtrusionSpecularity = std::clamp<double>(fExtrusionSpecularity, 0.0, 100.0);
-                                            }
-                                            ::sax::Converter::convertDouble( aStrBuffer, fExtrusionSpecularity );
+                                            else if (eVersion >= SvtSaveOptions::ODFSVER_014)
+                                                fExtrusionSpecularity = std::max<double>(0.0, fExtrusionSpecularity);
+                                            // write percent
+                                            ::sax::Converter::convertDouble(
+                                                aStrBuffer,
+                                                fExtrusionSpecularity,
+                                                false,
+                                                util::MeasureUnit::PERCENT,
+                                                util::MeasureUnit::PERCENT);
+                                            aStrBuffer.append( '%' );
                                             aStr = aStrBuffer.makeStringAndClear();
-
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SPECULARITY, aStr );
                                         }
                                     }

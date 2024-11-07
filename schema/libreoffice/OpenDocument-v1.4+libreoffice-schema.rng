@@ -2951,24 +2951,6 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
-  <!-- FIXME: tdf#162686 -->
-  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:extrusion-metal-type">
-        <rng:ref name="namespacedToken"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
-  <!-- FIXME: tdf#162687 -->
-  <rng:define name="draw-enhanced-geometry-attlist" combine="interleave">
-    <rng:optional>
-      <rng:attribute name="loext:extrusion-specularity-loext">
-        <rng:ref name="percent"/>
-      </rng:attribute>
-    </rng:optional>
-  </rng:define>
-
   <!-- TODO no proposal -->
   <rng:define name="draw-custom-shape-attlist" combine="interleave">
     <rng:ref name="common-draw-rel-size-attlist"/>

@@ -497,9 +497,11 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)
 }
 
 // Tests for save/load of new (LO 7.4) attribute loext:extrusion-metal-type
+// Since ODF 1.4 it is available as draw:extrusion-metal-type in the standard.
 namespace
 {
-void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape)
+void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape,
+                               sal_Int16 nExpectedMetalType)
 {
     uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
@@ -517,8 +519,7 @@ void lcl_assertMetalProperties(std::string_view sInfo, uno::Reference<drawing::X
     sal_Int16 nMetalType(-1);
     aExtrusionPropMap.getValue(u"MetalType"_ustr) >>= nMetalType;
     sMsg = OString::Concat(sInfo) + " MetalType";
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        sMsg.getStr(), css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible, nMetalType);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg.getStr(), nExpectedMetalType, nMetalType);
 }
 }
 
@@ -528,34 +529,108 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeExtended)
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
     // verify properties
     uno::Reference<drawing::XShape> xShape(getShape(0));
-    lcl_assertMetalProperties("from doc", xShape);
+    lcl_assertMetalProperties("from doc", xShape,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible);
 
-    // Test, that new attribute is written with loext namespace. Adapt when attribute is added to ODF.
-    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // Test, that attribute is written with 'draw' namespace in ODF version LATEST
     saveAndReload(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
     assertXPath(pXmlDoc,
-                "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
+                "//draw:enhanced-geometry[@draw:extrusion-metal-type='loext:MetalMSCompatible']");
 
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
-    lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload);
+    lcl_assertMetalProperties("from LATEST", xShapeReload,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible);
+
+    // Test, that attribute is written with 'loext' namespace in extended version before ODF 1.4
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
+    saveAndReload(u"writer8"_ustr);
+
+    // assert XML.
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
+    assertXPath(pXmlDoc,
+                "//draw:enhanced-geometry[@loext:extrusion-metal-type='loext:MetalMSCompatible']");
+
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload2(getShape(0));
+    lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload2,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalMSCompatible);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
 {
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf145700_3D_metal_type_MSCompatible.doc");
 
-    // save ODF 1.4 strict and test that new attribute is written.
+    // save in ODF 1.4 strict and test that new attribute is written.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
     save(u"writer8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
+    assertXPath(pXmlDoc,
+                "//draw:enhanced-geometry[@draw:extrusion-metal-type='loext:MetalMSCompatible']");
+
+    // save in ODF 1.3 strict and test that new attribute is not written.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
+    save(u"writer8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
+    assertXPathNoAttribute(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal-type");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeODF)
+{
+    Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
+    loadFromFile(u"tdf162686_3D_metal_type_ODF.fods");
+    // verify properties
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    lcl_assertMetalProperties("from doc", xShape,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalODF);
+
+    // Test, that attribute is written with 'draw' namespace in ODF version LATEST
+    saveAndReload(u"calc8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
     assertXPath(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal", u"true");
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-metal-type]", 1);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-metal-type='draw:MetalODF']");
+
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload(getShape(0));
+    lcl_assertMetalProperties("from LATEST", xShapeReload,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalODF);
+
+    // Test, that export in ODFVER_014 is valid. Needs adaption, when ODF 1.5 comes out.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
+    saveAndReload(u"calc8"_ustr);
+
+    // Test, that attribute is written with 'loext' namespace in extended version before ODF 1.4
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
+    saveAndReload(u"calc8"_ustr);
+
+    // assert XML.
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-metal-type='draw:MetalODF']");
+
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload2(getShape(0));
+    lcl_assertMetalProperties("from ODF 1.3 extended", xShapeReload2,
+                              css::drawing::EnhancedCustomShapeMetalType::MetalODF);
+
+    // Test, that attribute is not written at all in strict version before ODF 1.4
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
+    save(u"calc8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc, "//draw:enhanced-geometry", "extrusion-metal-type");
 }
 
 namespace
@@ -588,11 +663,13 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
     // value 122.0703125%.
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013_EXTENDED);
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
     saveAndReload(u"writer8"_ustr);
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100']");
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
     assertXPath(pXmlDoc,
                 "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']");
 
@@ -601,7 +678,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
     lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
 {
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
     // verify property
@@ -612,22 +689,33 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 
     // assert XML.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125']");
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125%']");
 
     // verify properties
     uno::Reference<drawing::XShape> xShapeReload(getShape(0));
     lcl_assertSpecularityProperty("from ODF 1.4", xShapeReload);
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityStrict)
 {
     Resetter resetter([]() { SetODFDefaultVersion(SvtSaveOptions::ODFVER_LATEST); });
     loadFromFile(u"tdf147580_extrusion-specularity.doc");
 
     // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.
-    // Save to ODF 1.3 strict and make sure it does not produce a validation error.
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_014);
+    save(u"writer8"_ustr);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='122.0703125%']");
+
+    // Save to ODF 1.3 strict and make sure draw:extrusion-specularity="100%" is written and
+    // loext:extrusion-specularity is not written.
+    // As of Nov 2024, validating against a version other than LATEST is not implemented.
+    skipValidation();
     SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
     save(u"writer8"_ustr);
+    pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@loext:extrusion-specularity]", 0);
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
 }
 
 namespace
