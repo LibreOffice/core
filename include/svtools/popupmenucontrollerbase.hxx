@@ -37,7 +37,7 @@
 namespace com :: sun :: star :: frame { class XFrame; }
 namespace com :: sun :: star :: uno { class XComponentContext; }
 namespace com :: sun :: star :: util { class XURLTransformer; }
-class VCLXMenu;
+class VCLXPopupMenu;
 
 namespace svt
 {
@@ -118,7 +118,7 @@ namespace svt
             css::uno::Reference< css::frame::XDispatch >           m_xDispatch;
             css::uno::Reference< css::frame::XFrame >              m_xFrame;
             css::uno::Reference< css::util::XURLTransformer >      m_xURLTransformer;
-            rtl::Reference< VCLXMenu >                             m_xPopupMenu;
+            rtl::Reference< VCLXPopupMenu >                        m_xPopupMenu;
             comphelper::OInterfaceContainerHelper4<XStatusListener> maStatusListeners;
     };
 }
