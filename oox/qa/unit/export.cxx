@@ -1416,6 +1416,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf134401_ExportAutoGrowToTextWordWrap)
     assertXPathNoAttribute(pXmlDoc, "//p:sp[1]/p:txBody/a:bodyPr", "wrap");
     assertXPath(pXmlDoc, "//p:sp[2]/p:txBody/a:bodyPr", "wrap", u"none");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf163803_ImageFill)
+{
+    loadFromFile(u"tdf163803_image_with_fill.pptx");
+    save(u"Impress Office Open XML"_ustr);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Check that the fill color is saved:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '//p:pic/p:spPr/a:solidFill' number of nodes is incorrect
+    // i.e. the <a:solidFill> element was not written.
+    assertXPath(pXmlDoc, "//p:pic/p:spPr/a:solidFill");
+    assertXPath(pXmlDoc, "//p:pic/p:spPr/a:solidFill/a:srgbClr", "val", u"000000");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
