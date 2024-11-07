@@ -23,6 +23,6 @@
 
 #include <rtl/ustring.hxx>
 
-OUString getRegistryDir(css::mozilla::MozillaProductType product);
+const OUString& getRegistryDir(css::mozilla::MozillaProductType product);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

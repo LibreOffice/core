@@ -98,7 +98,7 @@ public:
     sal_Int32 getMaxRowCount() const;
 
     // returns the UI string of the corresponding role
-    OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
+    const OUString & getRoleOfColumn( sal_Int32 nColumnIndex ) const;
     bool isCategoriesColumn( sal_Int32 nColumnIndex ) const;
 
     struct tDataHeader

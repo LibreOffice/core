@@ -174,7 +174,7 @@ private:
     void RenewTable();
     void ImplAdjustHeaderControls();
 
-    OUString GetColString( sal_Int32 nColumnId ) const;
+    const OUString & GetColString( sal_Int32 nColumnId ) const;
 
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit&, void );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit&, void );

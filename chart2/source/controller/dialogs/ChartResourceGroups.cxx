@@ -205,7 +205,7 @@ SplineResourceGroup::SplineResourceGroup(weld::Builder* pBuilder, weld::Window* 
     m_xLB_LineType->connect_changed(LINK(this, SplineResourceGroup, LineTypeChangeHdl));
 }
 
-std::shared_ptr<SplinePropertiesDialog> SplineResourceGroup::getSplinePropertiesDialog()
+const std::shared_ptr<SplinePropertiesDialog>& SplineResourceGroup::getSplinePropertiesDialog()
 {
     if (!m_xSplinePropertiesDialog)
     {
@@ -214,7 +214,7 @@ std::shared_ptr<SplinePropertiesDialog> SplineResourceGroup::getSplineProperties
     return m_xSplinePropertiesDialog;
 }
 
-std::shared_ptr<SteppedPropertiesDialog> SplineResourceGroup::getSteppedPropertiesDialog()
+const std::shared_ptr<SteppedPropertiesDialog>& SplineResourceGroup::getSteppedPropertiesDialog()
 {
     if (!m_xSteppedPropertiesDialog)
     {

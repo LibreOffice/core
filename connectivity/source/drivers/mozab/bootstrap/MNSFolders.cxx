@@ -148,10 +148,10 @@ namespace
 }
 
 
-OUString getRegistryDir(MozillaProductType product)
+const OUString & getRegistryDir(MozillaProductType product)
 {
     if (product == MozillaProductType_Default)
-        return OUString();
+        return EMPTY_OUSTRING;
 
     return lcl_guessProfileRoot( product );
 }

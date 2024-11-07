@@ -708,12 +708,12 @@ sal_Int32 DataBrowserModel::getMaxRowCount() const
     return nResult;
 }
 
-OUString DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
+const OUString & DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex != -1 &&
         o3tl::make_unsigned( nColumnIndex ) < m_aColumns.size())
         return m_aColumns[ nColumnIndex ].m_aUIRoleName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const

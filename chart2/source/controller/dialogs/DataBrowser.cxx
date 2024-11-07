@@ -663,12 +663,12 @@ void DataBrowser::RenewTable()
     Invalidate();
 }
 
-OUString DataBrowser::GetColString( sal_Int32 nColumnId ) const
+const OUString & DataBrowser::GetColString( sal_Int32 nColumnId ) const
 {
     OSL_ASSERT(m_apDataBrowserModel);
     if( nColumnId > 0 )
         return m_apDataBrowserModel->getRoleOfColumn( nColumnId - 1 );
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 OUString DataBrowser::GetCellText( sal_Int32 nRow, sal_uInt16 nColumnId ) const

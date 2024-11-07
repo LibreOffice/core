@@ -68,7 +68,7 @@ public:
 
     SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel >
         createUnoModel() override;
-    SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel >
+    SAL_DLLPRIVATE const css::uno::Reference< css::frame::XModel > &
         getUnoModel();
     SdrModel& getSdrModel();
 

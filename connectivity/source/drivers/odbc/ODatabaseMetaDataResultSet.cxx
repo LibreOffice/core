@@ -679,9 +679,9 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize()
     return 1;
 }
 
-OUString ODatabaseMetaDataResultSet::getCursorName()
+const OUString & ODatabaseMetaDataResultSet::getCursorName()
 {
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 

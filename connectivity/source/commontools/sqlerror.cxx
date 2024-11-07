@@ -127,7 +127,7 @@ namespace connectivity
             return {};
         }
 
-        OUString lcl_getResourceState(const ErrorCondition _eCondition)
+        const OUString & lcl_getResourceState(const ErrorCondition _eCondition)
         {
             switch (_eCondition)
             {
@@ -136,7 +136,7 @@ namespace connectivity
                 case css::sdb::ErrorCondition::DATA_CANNOT_SELECT_UNFILTERED:
                     return STR_DATA_CANNOT_SELECT_UNFILTERED_STATE;
             }
-            return OUString();
+            return EMPTY_OUSTRING;
         }
     }
 

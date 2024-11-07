@@ -127,7 +127,7 @@ uno::Reference< frame::XModel > DrawModelWrapper::createUnoModel()
     return new SvxUnoDrawingModel( this ); //tell Andreas Schluens if SvxUnoDrawingModel is not needed anymore -> remove export from svx to avoid link problems in writer
 }
 
-uno::Reference< frame::XModel > DrawModelWrapper::getUnoModel()
+const uno::Reference< frame::XModel > & DrawModelWrapper::getUnoModel()
 {
     return SdrModel::getUnoModel();
 }

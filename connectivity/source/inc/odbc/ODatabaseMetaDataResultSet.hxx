@@ -87,7 +87,7 @@ namespace connectivity::odbc
             static sal_Int32 getFetchSize();
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static OUString getCursorName();
+            static const OUString & getCursorName();
             SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
             sal_Int32 mapColumn (sal_Int32  column);
