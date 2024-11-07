@@ -29,6 +29,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <unotools/weakref.hxx>
 #include <ado/AConnection.hxx>
 #include <string_view>
 #include <vector>
@@ -59,7 +60,7 @@ namespace connectivity::ado
         protected:
             std::vector< OUString>               m_aBatchVector;
 
-            css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            unotools::WeakReference<OResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement
 
             OConnection*                                m_pConnection;// The owning Connection object

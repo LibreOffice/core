@@ -79,7 +79,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
 void OStatement_Base::disposeResultSet()
 {
     // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    rtl::Reference< OResultSet > xComp = m_xResultSet.get();
     if (xComp.is())
         xComp->dispose();
     m_xResultSet.clear();
@@ -178,8 +178,7 @@ void OStatement_Base::clearMyResultSet ()
 
     try
     {
-        Reference<XCloseable> xCloseable(
-            m_xResultSet.get(), css::uno::UNO_QUERY);
+        rtl::Reference<OResultSet> xCloseable = m_xResultSet.get();
         if ( xCloseable.is() )
             xCloseable->close();
     }
@@ -286,7 +285,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
 
     reset();
 
-    m_xResultSet = WeakReference<XResultSet>(nullptr);
+    m_xResultSet.clear();
 
     WpADORecordset aSet;
     aSet.Create();
@@ -308,7 +307,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const OUString& 
     rtl::Reference<OResultSet> pSet = new OResultSet(aSet,this);
     pSet->construct();
 
-    m_xResultSet = WeakReference<XResultSet>(pSet);
+    m_xResultSet = pSet.get();
 
     return pSet;
 }
@@ -417,7 +416,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::getResultSet(  )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    return m_xResultSet;
+    return m_xResultSet.get();
 }
 
 

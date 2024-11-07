@@ -264,7 +264,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  )
     rtl::Reference<OResultSet> pSet = new OResultSet(m_RecordSet,this);
     pSet->construct();
     pSet->setMetaData(getMetaData());
-    m_xResultSet = WeakReference<XResultSet>(pSet);
+    m_xResultSet = pSet.get();
 
     return pSet;
 }
