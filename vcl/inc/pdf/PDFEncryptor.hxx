@@ -12,15 +12,21 @@
 
 #include <string_view>
 #include <rtl/cipher.h>
-#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
+#include <vector>
 
 namespace vcl
 {
 struct PDFEncryptionProperties;
 }
+
 namespace com::sun::star::beans
 {
 class XMaterialHolder;
+}
+namespace com::sun::star::uno
+{
+template <typename> class Reference;
 }
 
 namespace vcl::pdf
@@ -38,15 +44,16 @@ private:
 
     sal_Int32 m_nKeyLength = 0; // key length, 16 or 5
     sal_Int32 m_nRC4KeyLength = 0; // key length, 16 or 10, to be input to the algorithm 3.1
+
+    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
+    bool m_bEncryptThisStream = false;
+
 public:
     PDFEncryptor();
     ~PDFEncryptor();
 
     /* used to cipher the stream data and for password management */
     rtlCipher m_aCipher = nullptr;
-
-    /* set to true if the following stream must be encrypted, used inside writeBuffer() */
-    bool m_bEncryptThisStream = false;
 
     sal_Int32 getAccessPermissions() { return m_nAccessPermissions; }
     sal_Int32 getKeyLength() { return m_nKeyLength; }
@@ -58,6 +65,15 @@ public:
         const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
         PDFEncryptionProperties& rProperties);
     void setupKeysAndCheck(PDFEncryptionProperties& rProperties);
+
+    void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject);
+    void enableStreamEncryption();
+    void disableStreamEncryption();
+
+    bool isStreamEncryptionEnabled() { return m_bEncryptThisStream; }
+
+    void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
+                 sal_uInt64 nOutputsSize);
 };
 }
 

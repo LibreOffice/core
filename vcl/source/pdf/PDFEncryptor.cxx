@@ -380,6 +380,7 @@ bool PDFEncryptor::prepareEncryption(
     return bSuccess;
 }
 
+/* this function implements part of the PDF spec algorithm 3.1 in encryption */
 void PDFEncryptor::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
 {
     // sanity check
@@ -397,6 +398,38 @@ void PDFEncryptor::setupKeysAndCheck(vcl::PDFEncryptionProperties& rProperties)
     {
         m_nAccessPermissions = computeAccessPermissions(rProperties, m_nKeyLength, m_nRC4KeyLength);
     }
+}
+
+void PDFEncryptor::enableStreamEncryption() { m_bEncryptThisStream = true; }
+
+void PDFEncryptor::disableStreamEncryption() { m_bEncryptThisStream = false; }
+
+void PDFEncryptor::setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject)
+{
+    std::vector<sal_uInt8> aKey(rEncryptionKey.begin(), rEncryptionKey.begin() + m_nKeyLength);
+    std::vector<sal_uInt8> aObjectArray{
+        sal_uInt8(nObject), sal_uInt8(nObject >> 8), sal_uInt8(nObject >> 16),
+        0, // generation number, always zero
+        0 // generation number, always zero
+    };
+    aKey.insert(aKey.end(), aObjectArray.begin(), aObjectArray.end());
+
+    // do the MD5 hash
+    auto const nMD5Sum
+        = comphelper::Hash::calculateHash(aKey.data(), aKey.size(), ::comphelper::HashType::MD5);
+
+    // initialize the RC4 with the key
+    // key length: see algorithm 3.1, step 4: (N+5) max 16
+    rtl_cipher_initARCFOUR(m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), getRC4KeyLength(),
+                           nullptr, 0);
+}
+
+/* implement the encryption part of the PDF spec encryption algorithm 3.1 */
+void PDFEncryptor::encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
+                           sal_uInt64 nOutputsSize)
+{
+    rtl_cipher_encodeARCFOUR(m_aCipher, pInput, sal_Size(nInputSize), pOutput,
+                             sal_Size(nOutputsSize));
 }
 
 } // end vcl::pdf

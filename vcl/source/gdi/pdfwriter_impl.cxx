@@ -1739,15 +1739,16 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
     else
     {
         bool  buffOK = true;
-        if (m_aPDFEncryptor.m_bEncryptThisStream)
+        if (m_aPDFEncryptor.isStreamEncryptionEnabled())
         {
-            /* implement the encryption part of the PDF spec encryption algorithm 3.1 */
             m_vEncryptionBuffer.resize(nBytes);
             if (buffOK)
-                rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, pBuffer, static_cast<sal_Size>(nBytes), m_vEncryptionBuffer.data(), static_cast<sal_Size>(nBytes));
+            {
+                m_aPDFEncryptor.encrypt(pBuffer, nBytes, m_vEncryptionBuffer.data(), nBytes);
+            }
         }
 
-        const void* pWriteBuffer = (m_aPDFEncryptor.m_bEncryptThisStream && buffOK) ? m_vEncryptionBuffer.data()  : pBuffer;
+        const void* pWriteBuffer = (m_aPDFEncryptor.isStreamEncryptionEnabled() && buffOK) ? m_vEncryptionBuffer.data() : pBuffer;
         m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
 
         if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)

@@ -837,10 +837,9 @@ private:
 
     void addRoleMap(OString aAlias, PDFWriter::StructElement eType);
 
-    /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
     void checkAndEnableStreamEncryption( sal_Int32 nObject ) override;
 
-    void disableStreamEncryption() override { m_aPDFEncryptor.m_bEncryptThisStream = false; }
+    void disableStreamEncryption() override;
 
     /* */
     void enableStringEncryption( sal_Int32 nObject );
