@@ -1077,43 +1077,27 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
 // Encryption methods
 
-void PDFWriterImpl::checkAndEnableStreamEncryption( sal_Int32 nObject )
+void PDFWriterImpl::checkAndEnableStreamEncryption(sal_Int32 nObject)
 {
-    if( !m_aContext.Encryption.Encrypt() )
+    if (!m_aContext.Encryption.Encrypt())
         return;
 
-    m_aPDFEncryptor.m_bEncryptThisStream = true;
-    sal_Int32 i = m_aPDFEncryptor.getKeyLength();
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
-    // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-    // do the MD5 hash
-    ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-        m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
-    // the i+2 to take into account the generation number, always zero
-    // initialize the RC4 with the key
-    // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.getRC4KeyLength(), nullptr, 0);
+    m_aPDFEncryptor.enableStreamEncryption();
+    m_aPDFEncryptor.setupEncryption(m_aContext.Encryption.EncryptionKey, nObject);
 }
 
-void PDFWriterImpl::enableStringEncryption( sal_Int32 nObject )
+void PDFWriterImpl::disableStreamEncryption()
 {
-    if( !m_aContext.Encryption.Encrypt() )
+    m_aPDFEncryptor.disableStreamEncryption();
+
+}
+
+void PDFWriterImpl::enableStringEncryption(sal_Int32 nObject)
+{
+    if (!m_aContext.Encryption.Encrypt())
         return;
 
-    sal_Int32 i = m_aPDFEncryptor.getKeyLength();
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>(nObject);
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 8 );
-    m_aContext.Encryption.EncryptionKey[i++] = static_cast<sal_uInt8>( nObject >> 16 );
-    // the other location of m_nEncryptionKey is already set to 0, our fixed generation number
-    // do the MD5 hash
-    // the i+2 to take into account the generation number, always zero
-    ::std::vector<unsigned char> const nMD5Sum(::comphelper::Hash::calculateHash(
-        m_aContext.Encryption.EncryptionKey.data(), i+2, ::comphelper::HashType::MD5));
-    // initialize the RC4 with the key
-    // key length: see algorithm 3.1, step 4: (N+5) max 16
-    rtl_cipher_initARCFOUR(m_aPDFEncryptor.m_aCipher, rtl_Cipher_DirectionEncode, nMD5Sum.data(), m_aPDFEncryptor.getRC4KeyLength(), nullptr, 0);
+    m_aPDFEncryptor.setupEncryption(m_aContext.Encryption.EncryptionKey, nObject);
 }
 
 const tools::Long unsetRun[256] =
