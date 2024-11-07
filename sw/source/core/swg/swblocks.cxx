@@ -152,25 +152,25 @@ sal_uInt16 SwImpBlocks::GetLongIndex( std::u16string_view aLong ) const
     return USHRT_MAX;
 }
 
-OUString SwImpBlocks::GetShortName( sal_uInt16 n ) const
+const OUString & SwImpBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
         return m_aNames[n]->m_aShort;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString SwImpBlocks::GetLongName( sal_uInt16 n ) const
+const OUString & SwImpBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
         return m_aNames[n]->m_aLong;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
+const OUString & SwImpBlocks::GetPackageName( sal_uInt16 n ) const
 {
     if( n < m_aNames.size() )
         return m_aNames[n]->m_aPackageName;
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SwImpBlocks::AddName( const OUString& rShort, const OUString& rLong,
@@ -268,18 +268,18 @@ sal_uInt16 SwTextBlocks::GetLongIndex( std::u16string_view r ) const
     return m_pImp ? m_pImp->GetLongIndex( r ) : USHRT_MAX;
 }
 
-OUString SwTextBlocks::GetShortName( sal_uInt16 n ) const
+const OUString & SwTextBlocks::GetShortName( sal_uInt16 n ) const
 {
     if( m_pImp )
         return m_pImp->GetShortName( n );
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString SwTextBlocks::GetLongName( sal_uInt16 n ) const
+const OUString & SwTextBlocks::GetLongName( sal_uInt16 n ) const
 {
     if( m_pImp )
         return m_pImp->GetLongName( n );
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool SwTextBlocks::Delete( sal_uInt16 n )
@@ -566,11 +566,11 @@ void SwTextBlocks::EndPutMuchBlockEntries()
         m_pImp->PutMuchEntries( false );
 }
 
-OUString SwTextBlocks::GetBaseURL() const
+const OUString & SwTextBlocks::GetBaseURL() const
 {
     if(m_pImp)
         return m_pImp->GetBaseURL();
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SwTextBlocks::SetBaseURL( const OUString& rURL )

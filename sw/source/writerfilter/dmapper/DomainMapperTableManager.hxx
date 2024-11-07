@@ -155,14 +155,14 @@ public:
             m_aMoved[m_aMoved.size() - 1] = "";
     }
 
-    OUString getMoved() const
+    const OUString & getMoved() const
     {
         if ( m_aMoved.size() >= 2 && !m_aMoved[m_aMoved.size() - 2].isEmpty() )
            return m_aMoved[m_aMoved.size() - 2];
         else if ( !m_aMoved.empty() )
            return m_aMoved[m_aMoved.size() -1 ];
 
-        return OUString();
+        return EMPTY_OUSTRING;
     }
 
 };

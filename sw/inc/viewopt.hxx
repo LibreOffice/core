@@ -330,7 +330,7 @@ public:
         m_sThemeName = rThemeName;
     }
 
-    OUString GetThemeName() const
+    const OUString & GetThemeName() const
     {
         return m_sThemeName;
     }

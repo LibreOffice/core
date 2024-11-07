@@ -238,8 +238,8 @@ namespace sw::mark
         virtual OUString GetContent() const { return OUString(); }
         virtual void ReplaceContent(const OUString& /*sNewContent*/) {}
 
-        OUString GetFieldname() const { return m_aFieldname; }
-        OUString GetFieldHelptext() const { return m_aFieldHelptext; }
+        const OUString & GetFieldname() const { return m_aFieldname; }
+        const OUString & GetFieldHelptext() const { return m_aFieldHelptext; }
 
         parameter_map_t* GetParameters() { return &m_vParams; }
 

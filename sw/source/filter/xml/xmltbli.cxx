@@ -1378,12 +1378,12 @@ sal_Int32 SwXMLTableContext::GetColumnWidth( sal_uInt32 nCol,
     return nWidth2;
 }
 
-OUString SwXMLTableContext::GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const
+const OUString & SwXMLTableContext::GetColumnDefaultCellStyleName( sal_uInt32 nCol ) const
 {
     if( m_xColumnDefaultCellStyleNames && nCol < m_xColumnDefaultCellStyleNames->size())
         return (*m_xColumnDefaultCellStyleNames)[static_cast<size_t>(nCol)];
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void SwXMLTableContext::InsertCell( const OUString& rStyleName,

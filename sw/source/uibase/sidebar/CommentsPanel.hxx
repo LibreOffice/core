@@ -88,8 +88,8 @@ public:
 
     void InitControls(const SwPostItField* pPostItField);
     void SetCommentText(OUString sText) { msText = sText; }
-    OUString GetAuthor() { return msAuthor; }
-    Date GetDate() { return maDate; }
+    const OUString& GetAuthor() { return msAuthor; }
+    const Date& GetDate() { return maDate; }
 };
 
 class Thread final

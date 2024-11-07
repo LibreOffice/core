@@ -600,12 +600,12 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
     return true;
 }
 
-OUString
+const OUString &
 SwTBC::GetCustomText()
 {
     if ( m_tbcd )
         return m_tbcd->getGeneralInfo().CustomText();
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool

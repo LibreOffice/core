@@ -3357,12 +3357,12 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
 }
 
 // find name of numrule valid for current WW-COL
-OUString WW8TabDesc::GetNumRuleName() const
+const OUString & WW8TabDesc::GetNumRuleName() const
 {
     sal_uInt16 nCol = GetLogicalWWCol();
     if (nCol < m_aNumRuleNames.size())
         return m_aNumRuleNames[nCol];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 void WW8TabDesc::SetNumRuleName( const OUString& rName )

@@ -91,9 +91,9 @@ public:
     sal_uInt16 GetCount() const;                      /// Get count of Text Blocks
     sal_uInt16 GetIndex( const OUString& ) const;     /// Index for shortnames
     sal_uInt16 GetLongIndex( std::u16string_view ) const; /// Index for longnames
-    OUString GetShortName( sal_uInt16 ) const;        /// Return shortname for index
-    OUString GetLongName( sal_uInt16 ) const;         /// Return longname for index
-    OUString GetPackageName( sal_uInt16 ) const;      /// Return packagename for index
+    const OUString & GetShortName( sal_uInt16 ) const;        /// Return shortname for index
+    const OUString & GetLongName( sal_uInt16 ) const;         /// Return longname for index
+    const OUString & GetPackageName( sal_uInt16 ) const;      /// Return packagename for index
 
     const OUString& GetFileName() const {return m_aFile;}      /// Return physical file name
     void SetName( const OUString& rName )             /// Logic name

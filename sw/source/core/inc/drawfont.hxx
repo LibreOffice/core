@@ -252,7 +252,7 @@ public:
         return m_nMeasureLen;
     }
 
-    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
+    const std::optional<SwLinePortionLayoutContext> & GetLayoutContext() const { return m_nLayoutContext; }
 
     sal_Int32 GetOffset() const
     {

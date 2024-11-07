@@ -395,7 +395,7 @@ void SwRedlineAcceptDlg::InitAuthors()
                                 m_bOnlyFormatedRedlines );
 }
 
-OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack,
+const OUString & SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uInt16 nStack,
                                             bool bTableChanges, bool bRowChanges)
 {
     switch (rRedln.GetType(nStack))
@@ -425,10 +425,10 @@ OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uI
         default: break;
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
-OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack)
+const OUString & SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uInt16 nStack)
 {
     switch( rRedln.GetType(nStack) )
     {
@@ -441,7 +441,7 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
         default:;//prevent warning
     }
 
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 // newly initialise after activation

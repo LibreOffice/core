@@ -67,7 +67,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-OUString BuildBitmap(bool bProtect, bool bHidden)
+const OUString & BuildBitmap(bool bProtect, bool bHidden)
 {
     if (bProtect)
         return bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE;

@@ -323,7 +323,7 @@ public:
     void RemoveBoxFormat(const OUString& sName);
     void ChangeBoxFormatName(std::u16string_view sFromName, const OUString& sToName);
     /// If found returns its name. If not found returns an empty OUString
-    OUString GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
+    const OUString & GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const;
     /// If found returns a ptr to a BoxFormat. If not found returns nullptr
     SwBoxAutoFormat* GetBoxFormat(std::u16string_view sName) const;
 };

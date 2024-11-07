@@ -335,14 +335,14 @@ public:
     void   SetName( const OUString& );
     ErrCode const & GetError() const { return m_nErr; }
 
-    OUString GetBaseURL() const;
+    const OUString & GetBaseURL() const;
     void   SetBaseURL( const OUString& rURL );
 
     sal_uInt16 GetCount() const;                        // Get count text modules.
     sal_uInt16 GetIndex( const OUString& ) const;       // Get index of short names.
     sal_uInt16 GetLongIndex( std::u16string_view ) const;   // Get index of long names.
-    OUString GetShortName( sal_uInt16 ) const;          // Get short name for index.
-    OUString GetLongName( sal_uInt16 ) const;           // Get long name for index.
+    const OUString & GetShortName( sal_uInt16 ) const;          // Get short name for index.
+    const OUString & GetLongName( sal_uInt16 ) const;           // Get long name for index.
 
     bool   Delete( sal_uInt16 );
     void   Rename( sal_uInt16, const OUString*, const OUString* );

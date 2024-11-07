@@ -106,7 +106,7 @@ constexpr AllHtmlFlags aHTMLOutFramePageFlyTable[][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+const AllHtmlFlags & getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
 {
     static_assert(std::size(aHTMLOutFramePageFlyTable) == MAX_FRMTYPES);
     assert(eFrameType < HTML_FRMTYPE_END);
@@ -199,7 +199,7 @@ constexpr AllHtmlFlags aHTMLOutFrameParaFrameTable[][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+const AllHtmlFlags & getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
 {
     static_assert(std::size(aHTMLOutFrameParaFrameTable) == MAX_FRMTYPES);
     assert(eFrameType < HTML_FRMTYPE_END);
@@ -291,7 +291,7 @@ constexpr AllHtmlFlags aHTMLOutFrameParaPrtAreaTable[][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+const AllHtmlFlags & getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
 {
     static_assert(std::size(aHTMLOutFrameParaPrtAreaTable) == MAX_FRMTYPES);
     assert(eFrameType < HTML_FRMTYPE_END);
@@ -383,7 +383,7 @@ constexpr AllHtmlFlags aHTMLOutFrameParaOtherTable[][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+const AllHtmlFlags & getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
 {
     static_assert(std::size(aHTMLOutFrameParaOtherTable) == MAX_FRMTYPES);
     assert(eFrameType < HTML_FRMTYPE_END);
@@ -475,7 +475,7 @@ constexpr AllHtmlFlags aHTMLOutFrameAsCharTable[][MAX_BROWSERS] =
     }
 };
 
-AllHtmlFlags getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
+const AllHtmlFlags & getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode)
 {
     static_assert(std::size(aHTMLOutFrameAsCharTable) == MAX_FRMTYPES);
     assert(eFrameType < HTML_FRMTYPE_END);

@@ -252,13 +252,13 @@ sal_uInt16 SwGlossaryHdl::GetGlossaryCnt() const
     return m_pCurGrp ? m_pCurGrp->GetCount() : 0;
 }
 
-OUString SwGlossaryHdl::GetGlossaryName( sal_uInt16 nId )
+const OUString & SwGlossaryHdl::GetGlossaryName( sal_uInt16 nId )
 {
     OSL_ENSURE(nId < GetGlossaryCnt(), "Text building block array over-indexed.");
     return m_pCurGrp->GetLongName( nId );
 }
 
-OUString SwGlossaryHdl::GetGlossaryShortName(sal_uInt16 nId)
+const OUString & SwGlossaryHdl::GetGlossaryShortName(sal_uInt16 nId)
 {
     OSL_ENSURE(nId < GetGlossaryCnt(), "Text building block array over-indexed.");
     return m_pCurGrp->GetShortName( nId );

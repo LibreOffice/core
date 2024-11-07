@@ -178,7 +178,7 @@ private:
     static void InitInterface_Impl();
 
 public:
-    static OUString GetEventName( sal_Int32 nId );
+    static const OUString & GetEventName( sal_Int32 nId );
 
     /// Doc is required for SO data exchange!
     SwDocShell( SfxObjectCreateMode eMode = SfxObjectCreateMode::EMBEDDED );

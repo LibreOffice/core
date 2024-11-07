@@ -1337,13 +1337,13 @@ Sequence< OUString >    SwDocShell::GetEventNames()
     return aRet;
 }
 
-OUString SwDocShell::GetEventName( sal_Int32 nIndex )
+const OUString & SwDocShell::GetEventName( sal_Int32 nIndex )
 {
     if (nIndex < s_nEvents)
     {
         return s_EventNames[nIndex];
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const

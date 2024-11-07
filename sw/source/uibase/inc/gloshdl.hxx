@@ -56,9 +56,9 @@ public:
     void        SetCurGroup(const OUString &aGrp, bool bApi = false, bool bAlwaysCreateNew = false);
 
     sal_uInt16  GetGlossaryCnt() const;
-    OUString    GetGlossaryName(sal_uInt16);
+    const OUString & GetGlossaryName(sal_uInt16);
     OUString    GetGlossaryShortName(std::u16string_view aName);
-    OUString    GetGlossaryShortName(sal_uInt16);
+    const OUString & GetGlossaryShortName(sal_uInt16);
 
     bool    Rename( const OUString& rOldShortName, const OUString& rNewShortName,
                         const OUString& rNewName);

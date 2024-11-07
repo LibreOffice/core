@@ -1658,7 +1658,7 @@ public:
     /// Get styleId of the nSlot-th style (nSlot is its position in m_aStyles).
     OString const & GetStyleId(sal_uInt16 nSlot) const;
     /// the awful TOC field references names, not styleIds
-    OUString GetStyleWWName(SwFormat const* pFormat) const;
+    OUString const & GetStyleWWName(SwFormat const* pFormat) const;
 
     const SwFormat* GetSwFormat(sal_uInt16 nSlot) const { return m_aStyles[nSlot].format; }
     /// Get numbering rule of the nSlot-th style

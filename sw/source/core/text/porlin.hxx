@@ -78,7 +78,7 @@ public:
     void ExtraShrunkWidth(const SwTwips nNew) { m_nExtraShrunkWidth = nNew; }
     SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
     void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
-    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
+    const std::optional<SwLinePortionLayoutContext> & GetLayoutContext() const { return m_nLayoutContext; }
     void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
     {
         m_nLayoutContext = nNew;

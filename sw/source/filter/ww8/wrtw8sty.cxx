@@ -476,14 +476,14 @@ OString const & MSWordStyles::GetStyleId(sal_uInt16 nSlot) const
     return m_aStyles[nSlot].style_id;
 }
 
-OUString MSWordStyles::GetStyleWWName(SwFormat const*const pFormat) const
+const OUString & MSWordStyles::GetStyleWWName(SwFormat const*const pFormat) const
 {
     if (auto slot = m_rExport.m_pStyles->GetSlot(pFormat); slot != 0xfff)
     {
         assert(!m_aStyles[slot].ww_name.isEmpty());
         return m_aStyles[slot].ww_name;
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 /// For WW8 only - extend pO so that the size of pTableStrm is even.

@@ -95,7 +95,7 @@ class SwAccessibleParagraph :
     /// get the (accessible) text string (requires frame; check before)
     OUString const & GetString();
 
-    static OUString GetDescription();
+    static const OUString & GetDescription();
 
     // get the current care position
     sal_Int32 GetCaretPos();

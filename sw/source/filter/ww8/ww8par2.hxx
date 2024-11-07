@@ -291,7 +291,7 @@ public:
     const WW8_TCell* GetCurrentWWCell() const { return m_pCurrentWWCell; }
     short GetCurrentCol() const { return m_nCurrentCol; }
     // find name of numrule valid for current WW-COL
-    OUString GetNumRuleName() const;
+    const OUString & GetNumRuleName() const;
     void SetNumRuleName( const OUString& rName );
 
     sw::util::RedlineStack* getOldRedlineStack() { return mxOldRedlineStack.get(); }

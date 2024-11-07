@@ -75,7 +75,7 @@ public:
 
     virtual void attribute(Id nName, const Value& rValue) override;
     virtual void sprm(Sprm& rSprm) override;
-    css::awt::Size getExtent() const { return m_Extent; }
+    const css::awt::Size& getExtent() const { return m_Extent; }
 };
 }
 

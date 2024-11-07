@@ -37,7 +37,7 @@ public:
     SwTBC();
     bool Read(SvStream &rS) override;
     bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
-    OUString GetCustomText();
+    const OUString & GetCustomText();
 };
 
 class SwCTB : public TBBase

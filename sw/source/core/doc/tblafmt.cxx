@@ -1222,7 +1222,7 @@ void SwCellStyleTable::RemoveBoxFormat(const OUString& sName)
     SAL_INFO("sw.core", "SwCellStyleTable::RemoveBoxFormat, format with given name doesn't exists");
 }
 
-OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
+const OUString & SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) const
 {
     for (size_t i=0; i < m_aCellStyles.size(); ++i)
     {
@@ -1231,7 +1231,7 @@ OUString SwCellStyleTable::GetBoxFormatName(const SwBoxAutoFormat& rBoxFormat) c
     }
 
     // box format not found
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 SwBoxAutoFormat* SwCellStyleTable::GetBoxFormat(std::u16string_view sName) const

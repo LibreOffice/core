@@ -85,11 +85,11 @@ struct AllHtmlFlags {
     HtmlContainerFlags nContainer;
 };
 
-AllHtmlFlags getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
-AllHtmlFlags getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
-AllHtmlFlags getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
-AllHtmlFlags getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
-AllHtmlFlags getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+const AllHtmlFlags & getHTMLOutFramePageFlyTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+const AllHtmlFlags & getHTMLOutFrameParaFrameTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+const AllHtmlFlags & getHTMLOutFrameParaPrtAreaTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+const AllHtmlFlags & getHTMLOutFrameParaOtherTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
+const AllHtmlFlags & getHTMLOutFrameAsCharTable(SwHTMLFrameType eFrameType, sal_uInt16 nExportMode);
 
 class SwHTMLPosFlyFrame
 {

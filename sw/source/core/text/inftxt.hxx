@@ -282,7 +282,7 @@ public:
     void SetMeasureLen(const TextFrameIndex nNew) { m_nMeasureLen = nNew; }
     void SetText( const OUString &rNew ){ m_pText = &rNew; }
 
-    std::optional<SwLinePortionLayoutContext> GetLayoutContext() const { return m_nLayoutContext; }
+    const std::optional<SwLinePortionLayoutContext> & GetLayoutContext() const { return m_nLayoutContext; }
 
     void SetLayoutContext(std::optional<SwLinePortionLayoutContext> nNew)
     {

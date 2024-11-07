@@ -123,9 +123,9 @@ OUString const & SwAccessibleParagraph::GetString()
     return GetPortionData().GetAccessibleString();
 }
 
-OUString SwAccessibleParagraph::GetDescription()
+const OUString & SwAccessibleParagraph::GetDescription()
 {
-    return OUString(); // provide empty description for paragraphs
+    return EMPTY_OUSTRING; // provide empty description for paragraphs
 }
 
 sal_Int32 SwAccessibleParagraph::GetCaretPos()

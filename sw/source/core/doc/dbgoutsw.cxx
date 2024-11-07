@@ -353,9 +353,9 @@ const char * dbg_out(const SwPaM & rPam)
     return dbg_out(lcl_dbg_out(rPam));
 }
 
-static OUString lcl_dbg_out(const SwNodeNum & )
+static const OUString & lcl_dbg_out(const SwNodeNum & )
 {
-    return OUString();/*rNum.ToString();*/
+    return EMPTY_OUSTRING;/*rNum.ToString();*/
 }
 
 const char * dbg_out(const SwNodeNum & rNum)
