@@ -539,8 +539,6 @@ public:
     virtual void set_title(const OUString& rTitle) = 0;
     virtual OUString get_title() const = 0;
     virtual void window_move(int x, int y) = 0;
-    virtual void set_modal(bool bModal) = 0;
-    virtual bool get_modal() const = 0;
     virtual bool get_resizable() const = 0;
     virtual Size get_size() const = 0;
     virtual Point get_position() const = 0;
@@ -617,6 +615,8 @@ private:
         = 0;
 
 public:
+    virtual void set_modal(bool bModal) = 0;
+    virtual bool get_modal() const = 0;
     virtual int run() = 0;
     // Run async without a controller
     // @param self - must point to this, to enforce that the dialog was created/held by a shared_ptr

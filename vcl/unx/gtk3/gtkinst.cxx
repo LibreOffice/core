@@ -6349,16 +6349,6 @@ public:
         return m_xWindow;
     }
 
-    virtual void set_modal(bool bModal) override
-    {
-        gtk_window_set_modal(m_pWindow, bModal);
-    }
-
-    virtual bool get_modal() const override
-    {
-        return gtk_window_get_modal(m_pWindow);
-    }
-
     virtual void resize_to_request() override
     {
 #if GTK_CHECK_VERSION(4, 0, 0)
@@ -7144,7 +7134,7 @@ public:
     {
         if (get_modal() == bModal)
             return;
-        GtkInstanceWindow::set_modal(bModal);
+        gtk_window_set_modal(m_pDialog, bModal);
         /* if change the dialog modality while its running, then also change the parent LibreOffice window
            modal count, we typically expect the dialog modality to be restored to its original state
 
@@ -7166,6 +7156,11 @@ public:
             else
                 m_aDialogRun.dec_modal_count();
         }
+    }
+
+    virtual bool get_modal() const override
+    {
+        return gtk_window_get_modal(m_pDialog);
     }
 
     virtual void response(int nResponse) override;

@@ -475,10 +475,6 @@ public:
 
     virtual void resize_to_request() override;
 
-    virtual void set_modal(bool bModal) override;
-
-    virtual bool get_modal() const override;
-
     virtual void window_move(int x, int y) override;
 
     virtual Size get_size() const override;

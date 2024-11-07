@@ -1616,10 +1616,6 @@ void resize_to_request(vcl::Window* pWindow)
 
 void SalInstanceWindow::resize_to_request() { ::resize_to_request(m_xWindow.get()); }
 
-void SalInstanceWindow::set_modal(bool bModal) { m_xWindow->ImplGetFrame()->SetModal(bModal); }
-
-bool SalInstanceWindow::get_modal() const { return m_xWindow->ImplGetFrame()->GetModal(); }
-
 void SalInstanceWindow::window_move(int x, int y) { m_xWindow->SetPosPixel(Point(x, y)); }
 
 Size SalInstanceWindow::get_size() const { return m_xWindow->GetSizePixel(); }

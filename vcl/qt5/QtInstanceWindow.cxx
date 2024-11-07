@@ -45,10 +45,6 @@ OUString QtInstanceWindow::get_title() const
 
 void QtInstanceWindow::window_move(int, int) {}
 
-void QtInstanceWindow::set_modal(bool) {}
-
-bool QtInstanceWindow::get_modal() const { return true; }
-
 bool QtInstanceWindow::get_resizable() const { return true; }
 
 Size QtInstanceWindow::get_size() const { return Size(); }
