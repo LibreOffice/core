@@ -295,6 +295,45 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                         }
                     }
                 }
+                //Overwrite font size attribute on fill cells
+                RTFValue::Pointer_t pFontSize;
+                RTFValue::Pointer_t pFontSizeCs;
+                int nCell = 1;
+                for (Buf_t& rTableBufferElement : m_aTableBufferStack.back())
+                {
+                    if (BUFFER_CELLEND == std::get<0>(rTableBufferElement))
+                        ++nCell;
+                    else if (nCell == nCellCount - 1)
+                    {
+                        if (BUFFER_PROPS_CHAR == std::get<0>(rTableBufferElement))
+                        {
+                            tools::SvRef<writerfilter::rtftok::RTFValue> xPropValue
+                                = std::get<1>(rTableBufferElement);
+                            RTFSprms& rElementSprms = xPropValue->getSprms();
+                            pFontSize = rElementSprms.find(NS_ooxml::LN_EG_RPrBase_sz);
+                            pFontSizeCs = rElementSprms.find(NS_ooxml::LN_EG_RPrBase_szCs);
+                        }
+                    }
+                }
+
+                nCell = 1;
+                for (Buf_t& rTableBufferElement : m_aTableBufferStack.back())
+                {
+                    if (BUFFER_CELLEND == std::get<0>(rTableBufferElement))
+                        ++nCell;
+                    //Remove paragraph spacing on fill cells
+                    if (nCell == nCellCount && BUFFER_PROPS == std::get<0>(rTableBufferElement))
+                    {
+                        tools::SvRef<writerfilter::rtftok::RTFValue> xPropValue
+                            = std::get<1>(rTableBufferElement);
+                        RTFSprms& rElementSprms = xPropValue->getSprms();
+                        rElementSprms.erase(NS_ooxml::LN_CT_PPrBase_spacing);
+                        if (pFontSize)
+                            rElementSprms.set(NS_ooxml::LN_EG_RPrBase_sz, pFontSize);
+                        if (pFontSizeCs)
+                            rElementSprms.set(NS_ooxml::LN_EG_RPrBase_szCs, pFontSizeCs);
+                    }
+                }
                 m_aStates.top().setTableRowWidthAfter(0);
             }
 
