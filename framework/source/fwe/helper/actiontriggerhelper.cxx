@@ -67,19 +67,13 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
                             Reference< XBitmap >& xBitmap,
                             Reference< XIndexContainer >& xSubContainer )
 {
-    Any a;
-
     try
     {
         // mandatory properties
-        a = xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr);
-        a >>= aMenuLabel;
-        a = xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr);
-        a >>= aCommandURL;
-        a = xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr);
-        a >>= xBitmap;
-        a = xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr);
-        a >>= xSubContainer;
+        xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr) >>= aMenuLabel;
+        xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr) >>= aCommandURL;
+        xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr) >>= xBitmap;
+        xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr) >>= xSubContainer;
     }
     catch (const Exception&)
     {
@@ -88,8 +82,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
     // optional properties
     try
     {
-        a = xActionTriggerPropertySet->getPropertyValue(u"HelpURL"_ustr);
-        a >>= aHelpURL;
+        xActionTriggerPropertySet->getPropertyValue(u"HelpURL"_ustr) >>= aHelpURL;
     }
     catch (const Exception&)
     {
@@ -115,7 +108,6 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                 if ( IsSeparator( xPropSet ))
                 {
                     // Separator
-                    SolarMutexGuard aGuard;
                     rSubMenu->insertSeparator(i);
                 }
                 else
@@ -130,7 +122,6 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                     sal_uInt16 nNewItemId = nItemId++;
                     GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
 
-                    SolarMutexGuard aGuard;
                     {
                         // insert new menu item
                         sal_Int32 nIndex = aCommandURL.indexOf( aSlotURL );
@@ -303,8 +294,6 @@ static Reference< XIndexContainer > CreateActionTriggerContainer( const Referenc
 static void FillActionTriggerContainerWithMenu(const Reference<XPopupMenu>& rMenu,
                                                const Reference<XIndexContainer>& rActionTriggerContainer)
 {
-    SolarMutexGuard aGuard;
-
     for (sal_uInt16 nPos = 0, nCount = rMenu->getItemCount(); nPos < nCount; ++nPos)
     {
         sal_uInt16 nItemId = rMenu->getItemId(nPos);
