@@ -552,9 +552,9 @@ void PageStylesPanel::ModifyFillColor()
     {
         case SOLID:
         {
-            auto aNamedColor =  mxBgColorLB->GetSelectedEntry();
-            XFillColorItem aItem(OUString(), aNamedColor.m_aColor);
-            aItem.setComplexColor(aNamedColor.getComplexColor());
+            const NamedColor& rNamedColor = mxBgColorLB->GetSelectedEntry();
+            XFillColorItem aItem(OUString(), rNamedColor.m_aColor);
+            aItem.setComplexColor(rNamedColor.getComplexColor());
             aItem.setComplexColor(mxBgColorLB->GetSelectedEntry().getComplexColor());
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_COLOR, SfxCallMode::RECORD, { &aItem });
         }

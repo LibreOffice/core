@@ -2099,9 +2099,9 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( bChanged )
     {
         SvxUnderlineItem aNewItem( eUnder, nWhich );
-        auto aNamedColor = m_xUnderlineColorLB->GetSelectedEntry();
-        aNewItem.SetColor(aNamedColor.m_aColor);
-        aNewItem.setComplexColor(aNamedColor.getComplexColor());
+        const NamedColor& rNamedColor = m_xUnderlineColorLB->GetSelectedEntry();
+        aNewItem.SetColor(rNamedColor.m_aColor);
+        aNewItem.setComplexColor(rNamedColor.getComplexColor());
         rSet->Put(aNewItem);
         bModified = true;
     }
@@ -2138,9 +2138,9 @@ bool SvxCharEffectsPage::FillItemSet( SfxItemSet* rSet )
     if ( bChanged )
     {
         SvxOverlineItem aNewItem( eOver, nWhich );
-        auto aNamedColor = m_xOverlineColorLB->GetSelectedEntry();
-        aNewItem.SetColor(aNamedColor.m_aColor);
-        aNewItem.setComplexColor(aNamedColor.getComplexColor());
+        const NamedColor& rNamedColor = m_xOverlineColorLB->GetSelectedEntry();
+        aNewItem.SetColor(rNamedColor.m_aColor);
+        aNewItem.setComplexColor(rNamedColor.getComplexColor());
         rSet->Put(aNewItem);
         bModified = true;
     }
