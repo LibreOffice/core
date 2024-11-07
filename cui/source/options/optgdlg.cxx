@@ -114,15 +114,17 @@ DeactivateRC OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 
 namespace
 {
-OUString impl_SystemFileOpenServiceName()
+const OUString & impl_SystemFileOpenServiceName()
 {
-    #if defined(_WIN32)
-    return "com.sun.star.ui.dialogs.SystemFilePicker";
-    #elif defined MACOSX
-    return "com.sun.star.ui.dialogs.AquaFilePicker";
-    #else
-    return OUString();
-    #endif
+#if defined(_WIN32)
+    static constexpr OUString gPicker = u"com.sun.star.ui.dialogs.SystemFilePicker"_ustr;
+    return gPicker;
+#elif defined MACOSX
+    static constexpr OUString gPicker = u"com.sun.star.ui.dialogs.AquaFilePicker"_ustr;
+    return gPicker;
+#else
+    return EMPTY_OUSTRING;
+#endif
 }
 
 bool lcl_HasSystemFilePicker()

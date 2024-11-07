@@ -182,7 +182,7 @@ namespace dbaui
         return sImageResourceID;
     }
 
-    OUString ImageProvider::getDatabaseImage()
+    const OUString & ImageProvider::getDatabaseImage()
     {
         return DATABASE_TREE_ICON;
     }

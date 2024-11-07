@@ -92,7 +92,7 @@ namespace dbaui
             @return
                 the image to be used for folders of this type
         */
-        static OUString getDatabaseImage();
+        static const OUString & getDatabaseImage();
     private:
         /// the connection we work with
         css::uno::Reference< css::sdbc::XConnection > mxConnection;

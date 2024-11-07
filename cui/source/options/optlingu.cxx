@@ -198,7 +198,7 @@ enum EID_OPTIONS
 
 }
 
-static OUString lcl_GetPropertyName( EID_OPTIONS eEntryId )
+static const OUString & lcl_GetPropertyName( EID_OPTIONS eEntryId )
 {
     switch (eEntryId)
     {

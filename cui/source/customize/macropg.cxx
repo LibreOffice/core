@@ -296,10 +296,10 @@ namespace
         return aPureMethod;
     }
 
-    OUString GetEventDisplayImage(std::u16string_view rURL)
+    const OUString & GetEventDisplayImage(std::u16string_view rURL)
     {
         if (rURL.empty())
-            return OUString();
+            return EMPTY_OUSTRING;
         size_t nIndex = rURL.find(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
         return bUNO ? RID_SVXBMP_COMPONENT : RID_SVXBMP_MACRO;
