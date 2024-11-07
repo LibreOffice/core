@@ -689,7 +689,7 @@ void PresLayoutPreview::Paint(vcl::RenderContext& rRenderContext, SdrTextObj con
 
     // determine line color
     svtools::ColorConfig aColorConfig;
-    svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::OBJECTBOUNDARIES ) );
+    svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( bVisible ? svtools::FONTCOLOR : svtools::DOCBOUNDARIES ) );
 
     // paint at OutDev
     rRenderContext.SetLineColor(aColor.nColor);

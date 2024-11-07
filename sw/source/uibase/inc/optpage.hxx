@@ -336,6 +336,12 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xEncloseWithCharactersCB;
     std::unique_ptr<weld::Widget> m_xEncloseWithCharactersImg;
 
+    std::unique_ptr<weld::CheckButton> m_xTextBoundariesCB;
+    std::unique_ptr<weld::CheckButton> m_xSectionBoundariesCB;
+    std::unique_ptr<weld::CheckButton> m_xTableBoundariesCB;
+
+    DECL_LINK(TextBoundariesHdl, weld::Toggleable&, void);
+
 public:
     SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
     virtual ~SwShdwCursorOptionsTabPage() override;

@@ -333,51 +333,12 @@ struct SwPaintProperties {
 
 static SwPaintProperties gProp;
 
-static bool isSubsidiaryLinesFlysEnabled()
-{
-    return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
-           !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-           !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
-           gProp.pSGlobalShell->GetViewOptions()->IsObjectBoundaries();
-}
-//other subsidiary lines enabled?
 static bool isSubsidiaryLinesEnabled()
 {
     return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
            !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
-           !gProp.pSGlobalShell->GetViewOptions()->IsWhitespaceHidden() &&
-           gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries();
-}
-//subsidiary lines for sections
-static bool isSubsidiaryLinesForSectionsEnabled()
-{
-    return !gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() &&
-           !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
-           !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&
-           gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries();
-}
-
-
-namespace {
-
-bool isTableBoundariesEnabled()
-{
-    if (!gProp.pSGlobalShell->GetViewOptions()->IsTable())
-        return false;
-
-    if (gProp.pSGlobalShell->GetViewOptions()->IsPagePreview())
-        return false;
-
-    if (gProp.pSGlobalShell->GetViewOptions()->IsReadonly())
-        return false;
-
-    if (gProp.pSGlobalShell->GetViewOptions()->IsFormView())
-        return false;
-
-    return gProp.pSGlobalShell->GetViewOptions()->IsTableBoundaries();
-}
-
+           gProp.pSGlobalShell->GetViewOptions()->IsShowBoundaries();
 }
 
 /**
@@ -1107,8 +1068,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             switch ( rLRect.GetSubColor() )
             {
                 case SubColFlags::Page: pCol = &pOpt->GetDocBoundariesColor(); break;
-                case SubColFlags::Fly: pCol = &pOpt->GetObjectBoundariesColor(); break;
                 case SubColFlags::Tab: pCol = &pOpt->GetTableBoundariesColor(); break;
+                case SubColFlags::Fly:
                 case SubColFlags::Sect: pCol = &pOpt->GetSectionBoundColor(); break;
             }
 
@@ -2576,7 +2537,9 @@ void SwTabFramePainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) cons
             const Color* pTmpColor = nullptr;
             if (0 == aStyles[ 0 ].GetWidth())
             {
-                if (isTableBoundariesEnabled() && gProp.pSGlobalShell->GetWin())
+                if (isSubsidiaryLinesEnabled() &&
+                    gProp.pSGlobalShell->GetViewOptions()->IsTableBoundaries() &&
+                    gProp.pSGlobalShell->GetWin())
                     aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
                 else
                     aStyles[0].SetType(SvxBorderLineStyle::NONE);
@@ -6564,7 +6527,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     _pViewShell->GetOut()->SetLineColor();
     if (!bRight)
     {
-        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetObjectBoundariesColor());
+        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetDocBoundariesColor());
         _pViewShell->GetOut()->DrawRect(tools::Rectangle(Point(aPageRect.Left()-pMgr->GetSidebarBorderWidth(),aPageRect.Top()),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height())))    ;
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             _pViewShell->GetOut()->SetFillColor(COL_BLACK);
@@ -6574,7 +6537,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     }
     else
     {
-        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetObjectBoundariesColor());
+        _pViewShell->GetOut()->SetFillColor(_pViewShell->GetViewOptions()->GetDocBoundariesColor());
         SwRect aSidebarBorder(aPageRect.TopRight(),Size(pMgr->GetSidebarBorderWidth(),aPageRect.Height()));
         _pViewShell->GetOut()->DrawRect(aSidebarBorder.SVRect());
         if (Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
@@ -7065,8 +7028,10 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 /// Refreshes all subsidiary lines of a page.
 void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 {
-    if ( !(isSubsidiaryLinesEnabled() || isTableBoundariesEnabled()
-        || isSubsidiaryLinesForSectionsEnabled() || isSubsidiaryLinesFlysEnabled()) )
+    if ( !(isSubsidiaryLinesEnabled() ||
+           gProp.pSGlobalShell->GetViewOptions()->IsTextBoundaries() ||
+           gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries() ||
+           gProp.pSGlobalShell->GetViewOptions()->IsTableBoundaries()) )
         return;
 
     if ( !rRect.HasArea() )
@@ -7099,10 +7064,7 @@ void SwPageFrame::RefreshSubsidiary( const SwRect &rRect ) const
 void SwLayoutFrame::RefreshLaySubsidiary( const SwPageFrame *pPage,
                                         const SwRect &rRect ) const
 {
-    const bool bSubsOpt = isSubsidiaryLinesEnabled()
-                          || (IsSctFrame() && isSubsidiaryLinesForSectionsEnabled())
-                          || (IsFlyFrame() && isSubsidiaryLinesFlysEnabled());
-    if (bSubsOpt)
+    if (isSubsidiaryLinesEnabled())
         PaintSubsidiaryLines( pPage, rRect );
 
     const SwFrame *pLow = Lower();
@@ -7350,7 +7312,7 @@ std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const S
 {
     std::vector<basegfx::B2DPolygon> aPolygons;
 
-    if (!rViewShell.GetViewOptions()->IsDocBoundaries())
+    if (!rViewShell.GetViewOptions()->IsTextBoundaries())
         return aPolygons;
 
     const SwFrame* pLay = Lower();
@@ -7499,7 +7461,7 @@ std::vector<basegfx::B2DPolygon> SwHeadFootFrame::GetSubsidiaryLinesPolygons(con
 {
     std::vector<basegfx::B2DPolygon> aPolygons;
 
-    if (!rViewShell.GetViewOptions()->IsDocBoundaries())
+    if (!rViewShell.GetViewOptions()->IsTextBoundaries())
         return aPolygons;
 
     SwRect aArea( getFramePrintArea() );
@@ -7573,22 +7535,12 @@ void SwLayoutFrame::PaintSubsidiaryLines( const SwPageFrame *pPage,
 
     const bool bCell = IsCellFrame();
 
-    if (!bCell && IsFlyFrame())
-    {
-        if (!gProp.pSGlobalShell->GetViewOptions()->IsObjectBoundaries())
-            return;
-
-        // if the frame is wrap none or wrap through, then text boundary lines have no meaning
-        // (unless the frame itself contains text)
-        const text::WrapTextMode aSurround = GetFormat()->GetSurround().GetSurround();
-        if (GetFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR
-            && (!Lower() || !Lower()->IsTextFrame())
-            && (aSurround == text::WrapTextMode::WrapTextMode_THROUGH
-                || aSurround == text::WrapTextMode::WrapTextMode_NONE))
-        {
-            return;
-        }
-    }
+    if ( (IsSctFrame() || IsFlyFrame()) &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsSectionBoundaries() )
+        return;
+    if ( IsTextFrame() &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsTextBoundaries() )
+        return;
 
     //  #i3662# - use frame area for cells for section use also frame area
     const bool bUseFrameArea = bCell || IsSctFrame();

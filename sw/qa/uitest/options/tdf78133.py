@@ -27,8 +27,8 @@ class tdf78133(UITestCase):
                 xLoAppColorsEntry = xLOEntry.getChild('8')
                 xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
                 #change text boundaries checkbox, save
-                docboundaries = xDialog.getChild("docboundaries")
-                docboundaries.executeAction("CLICK", tuple())
+                shadows = xDialog.getChild("shadows")
+                shadows.executeAction("CLICK", tuple())
             #verify - reopen dialog and check if "text boundaries" is still unchecked
             with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
@@ -38,7 +38,7 @@ class tdf78133(UITestCase):
                 xLoAppColorsEntry = xLOEntry.getChild('8')
                 xLoAppColorsEntry.executeAction("SELECT", tuple())          #Applications Colors
                 #change text boundaries checkbox, save
-                docboundaries = xDialog.getChild("docboundaries")
-                self.assertEqual(get_state_as_dict(docboundaries)["Selected"], "false")
+                shadows = xDialog.getChild("shadows")
+                self.assertEqual(get_state_as_dict(shadows)["Selected"], "false")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

@@ -1317,7 +1317,7 @@ rtl::Reference<SdrObject> SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText)
         // gray outline
         pClone->SetMergedItem(XLineStyleItem(css::drawing::LineStyle_SOLID));
         const svtools::ColorConfig aColorConfig;
-        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES));
         pClone->SetMergedItem(XLineColorItem(OUString(), aColor.nColor));
 
         // bitmap fill

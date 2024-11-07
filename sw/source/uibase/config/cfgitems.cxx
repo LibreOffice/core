@@ -34,7 +34,10 @@ SwDocDisplayItem::SwDocDisplayItem() :
     m_bCharHiddenText     =
     m_bBookmarks          =
     m_bManualBreak        = true;
+    m_bTextBoundaries     = true;
     m_bTextBoundariesFull = false; // default is crop
+    m_bSectionBoundaries  = true;
+    m_bTableBoundaries    = true;
     m_xDefaultAnchor      = 1; //FLY_TO_CHAR
 };
 
@@ -50,7 +53,10 @@ SwDocDisplayItem::SwDocDisplayItem(const SwViewOption& rVOpt ) :
     m_bCharHiddenText     = rVOpt.IsShowHiddenChar(true);
     m_bBookmarks          = rVOpt.IsShowBookmarks(true);
     m_bManualBreak        = rVOpt.IsLineBreak(true);
+    m_bTextBoundaries     = rVOpt.IsTextBoundaries();
     m_bTextBoundariesFull = rVOpt.IsTextBoundariesFull();
+    m_bSectionBoundaries  = rVOpt.IsSectionBoundaries();
+    m_bTableBoundaries    = rVOpt.IsTableBoundaries();
     m_xDefaultAnchor      = rVOpt.GetDefaultAnchor();
 }
 
@@ -73,7 +79,10 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
               m_bCharHiddenText       == rItem.m_bCharHiddenText     &&
               m_bBookmarks            == rItem.m_bBookmarks          &&
               m_bManualBreak          == rItem.m_bManualBreak        &&
+              m_bTextBoundaries       == rItem.m_bTextBoundaries     &&
               m_bTextBoundariesFull   == rItem.m_bTextBoundariesFull &&
+              m_bSectionBoundaries    == rItem.m_bSectionBoundaries  &&
+              m_bTableBoundaries      == rItem.m_bTableBoundaries    &&
               m_xDefaultAnchor        == rItem.m_xDefaultAnchor);
 }
 
@@ -87,7 +96,10 @@ void SwDocDisplayItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetShowHiddenChar(m_bCharHiddenText );
     rVOpt.SetShowBookmarks(m_bBookmarks       );
     rVOpt.SetLineBreak  (m_bManualBreak       );
+    rVOpt.SetTextBoundaries(m_bTextBoundaries);
     rVOpt.SetTextBoundariesFull(m_bTextBoundariesFull);
+    rVOpt.SetSectionBoundaries(m_bSectionBoundaries);
+    rVOpt.SetTableBoundaries(m_bTableBoundaries);
     rVOpt.SetDefaultAnchor( m_xDefaultAnchor  );
 }
 

@@ -117,7 +117,7 @@ namespace drawinglayer::primitive2d
                 return new GroupPrimitive2D(std::move(aContainer));
 
             const svtools::ColorConfig aColorConfig;
-            const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+            const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES));
 
             if(aColor.bIsVisible)
             {

@@ -889,6 +889,12 @@ interface BaseTextEditView
         StateMethod = StateViewOptions ;
     ]
 
+    FN_VIEW_BOUNDARIES // status()
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+    ]
+
     FN_VIEW_GRAPHIC // status()
     [
         ExecMethod = ExecViewOptions ;

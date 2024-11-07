@@ -47,7 +47,6 @@ SwViewColors SwViewOption::s_aInitialColorConfig {};
 SwViewColors::SwViewColors() :
     m_aDocColor(COL_LIGHTGRAY),
     m_aDocBoundColor(COL_LIGHTGRAY),
-    m_aObjectBoundColor(COL_LIGHTGRAY),
     m_aAppBackgroundColor(COL_LIGHTGRAY),
     m_aTableBoundColor(COL_LIGHTGRAY),
     m_aFontColor(COL_BLACK),
@@ -72,23 +71,12 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
 {
     m_aDocColor = rConfig.GetColorValue(svtools::DOCCOLOR).nColor;
 
-    svtools::ColorConfigValue aValue = rConfig.GetColorValue(svtools::DOCBOUNDARIES);
-    m_aDocBoundColor = aValue.nColor;
+    m_aDocBoundColor = rConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor;
     m_nAppearanceFlags = ViewOptFlags::NONE;
-    if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::DocBoundaries;
-
     m_aAppBackgroundColor = rConfig.GetColorValue(svtools::APPBACKGROUND).nColor;
+    m_aTableBoundColor = rConfig.GetColorValue(svtools::TABLEBOUNDARIES).nColor;
 
-    aValue = rConfig.GetColorValue(svtools::OBJECTBOUNDARIES);
-    m_aObjectBoundColor = aValue.nColor;
-    if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::ObjectBoundaries;
-
-    aValue = rConfig.GetColorValue(svtools::TABLEBOUNDARIES);
-    m_aTableBoundColor = aValue.nColor;
-    if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::TableBoundaries;
+    svtools::ColorConfigValue aValue;
 
     aValue = rConfig.GetColorValue(svtools::WRITERIDXSHADINGS);
     m_aIndexShadingsColor = aValue.nColor;
@@ -126,10 +114,7 @@ SwViewColors::SwViewColors(const svtools::ColorConfig& rConfig)
     if (aValue.bIsVisible && !comphelper::LibreOfficeKit::isActive())
         m_nAppearanceFlags |= ViewOptFlags::FieldShadings;
 
-    aValue = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES);
-    m_aSectionBoundColor = aValue.nColor;
-    if(aValue.bIsVisible)
-        m_nAppearanceFlags |= ViewOptFlags::SectionBoundaries;
+    m_aSectionBoundColor = rConfig.GetColorValue(svtools::WRITERSECTIONBOUNDARIES).nColor;
 
     aValue = rConfig.GetColorValue(svtools::WRITERPAGEBREAKS);
     m_aPageBreakColor = aValue.nColor;
@@ -470,11 +455,6 @@ const Color& SwViewOption::GetDocBoundariesColor() const
     return m_aColorConfig.m_aDocBoundColor;
 }
 
-const Color& SwViewOption::GetObjectBoundariesColor() const
-{
-    return m_aColorConfig.m_aObjectBoundColor;
-}
-
 const Color& SwViewOption::GetAppBackgroundColor() const
 {
     return m_aColorConfig.m_aAppBackgroundColor;
@@ -573,14 +553,10 @@ void SwViewOption::SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveIn
     };
     static const FlagToConfig_Impl aFlags[] =
     {
-        { ViewOptFlags::DocBoundaries     ,   svtools::DOCBOUNDARIES },
-        { ViewOptFlags::ObjectBoundaries  ,   svtools::OBJECTBOUNDARIES },
-        { ViewOptFlags::TableBoundaries   ,   svtools::TABLEBOUNDARIES },
         { ViewOptFlags::IndexShadings     ,   svtools::WRITERIDXSHADINGS },
         { ViewOptFlags::Links             ,   svtools::LINKS },
         { ViewOptFlags::VisitedLinks      ,   svtools::LINKSVISITED },
         { ViewOptFlags::FieldShadings     ,   svtools::WRITERFIELDSHADINGS },
-        { ViewOptFlags::SectionBoundaries ,   svtools::WRITERSECTIONBOUNDARIES },
         { ViewOptFlags::Shadow            ,   svtools::SHADOWCOLOR },
     };
     for (auto& item : aFlags)

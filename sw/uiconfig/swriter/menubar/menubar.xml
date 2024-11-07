@@ -206,9 +206,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
-      <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:TableBoundaries" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:SectionBoundaries" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowBoundaries" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowGraphics" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowWhitespace"/>
       <menu:menuseparator/>

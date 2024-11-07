@@ -3010,7 +3010,7 @@
       </node>
       <node oor:name=".uno:ViewBounds" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Te~xt Boundaries</value>
+          <value xml:lang="en-US">Te~xt Boundaries (deprecated)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3018,7 +3018,7 @@
       </node>
       <node oor:name=".uno:SectionBoundaries" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Sec~tion Boundaries</value>
+          <value xml:lang="en-US">Sec~tion Boundaries (deprecated)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3186,7 +3186,21 @@
       </node>
       <node oor:name=".uno:TableBoundaries" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Table Boundaries</value>
+          <value xml:lang="en-US">Table Boundaries (deprecated)</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShowBoundaries" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show Boundaries</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Boundaries</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Show boundaries for all types depending on settings at formatting aids.</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

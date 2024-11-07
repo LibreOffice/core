@@ -1744,6 +1744,9 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
     , m_xFmtAidsAutoComplFrame(m_xBuilder->weld_frame(u"fmtaidsautocompleteframe"_ustr))
     , m_xEncloseWithCharactersCB(m_xBuilder->weld_check_button(u"enclosewithcharacters"_ustr))
     , m_xEncloseWithCharactersImg(m_xBuilder->weld_widget(u"lockenclosewithcharacters"_ustr))
+    , m_xTextBoundariesCB(m_xBuilder->weld_check_button(u"cbTextBoundaries"_ustr))
+    , m_xSectionBoundariesCB(m_xBuilder->weld_check_button(u"cbSectionBoundaries"_ustr))
+    , m_xTableBoundariesCB(m_xBuilder->weld_check_button(u"cbTableBoundaries"_ustr))
 {
     SwFillMode eMode = SwFillMode::Tab;
     bool bIsOn = false;
@@ -1761,6 +1764,8 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
         bIsEncloseWithCharactersOn = pItem->IsEncloseWithCharactersOn();
     }
     m_xEncloseWithCharactersCB->set_active(bIsEncloseWithCharactersOn);
+
+    m_xTextBoundariesCB->connect_toggled(LINK(this, SwShdwCursorOptionsTabPage, TextBoundariesHdl));
 
     m_xDirectCursorFillMode->set_active( static_cast<int>(eMode) );
     const SfxUInt16Item* pHtmlModeItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
@@ -1788,6 +1793,13 @@ SwShdwCursorOptionsTabPage::SwShdwCursorOptionsTabPage(weld::Container* pPage, w
 
 SwShdwCursorOptionsTabPage::~SwShdwCursorOptionsTabPage()
 {
+}
+
+IMPL_LINK_NOARG( SwShdwCursorOptionsTabPage, TextBoundariesHdl, weld::Toggleable&, void )
+{
+    const bool bIsTextBoundaries(m_xTextBoundariesCB->get_active());
+    m_xTextBoundariesFull->set_sensitive(bIsTextBoundaries);
+    m_xTextBoundariesCrop->set_sensitive(bIsTextBoundaries);
 }
 
 std::unique_ptr<SfxTabPage> SwShdwCursorOptionsTabPage::Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet )
@@ -1880,6 +1892,9 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     aDisp.m_bManualBreak          = m_xBreakCB->get_active();
     aDisp.m_xDefaultAnchor        = m_xDefaultAnchorType->get_active();
     aDisp.m_bTextBoundariesFull   = m_xTextBoundariesFull->get_active();
+    aDisp.m_bTextBoundaries       = m_xTextBoundariesCB->get_active();
+    aDisp.m_bSectionBoundaries    = m_xSectionBoundariesCB->get_active();
+    aDisp.m_bTableBoundaries      = m_xTableBoundariesCB->get_active();
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
@@ -1991,10 +2006,25 @@ void SwShdwCursorOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_xDefaultAnchorType->set_sensitive(!bReadOnly);
         m_xDefaultAnchorTypeImg->set_visible(bReadOnly);
 
+        bReadOnly = officecfg::Office::Writer::Content::Display::TextBoundaries::isReadOnly();
+        m_xTextBoundariesCB->set_active( pDocDisplayAttr->m_bTextBoundaries );
+        m_xTextBoundariesCB->set_sensitive(!bReadOnly);
+
+        const bool bIsTextBoundaries(m_xTextBoundariesCB->get_active());
+        m_xTextBoundariesFull->set_sensitive(bIsTextBoundaries);
+        m_xTextBoundariesCrop->set_sensitive(bIsTextBoundaries);
         if (pDocDisplayAttr->m_bTextBoundariesFull)
             m_xTextBoundariesFull->set_active(true);
         else
             m_xTextBoundariesCrop->set_active(true);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::SectionBoundaries::isReadOnly();
+        m_xSectionBoundariesCB->set_active( pDocDisplayAttr->m_bSectionBoundaries );
+        m_xSectionBoundariesCB->set_sensitive(!bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::TableBoundaries::isReadOnly();
+        m_xTableBoundariesCB->set_active( pDocDisplayAttr->m_bTableBoundaries );
+        m_xTableBoundariesCB->set_sensitive(!bReadOnly);
     }
 }
 

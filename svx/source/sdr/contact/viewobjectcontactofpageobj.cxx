@@ -287,7 +287,7 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
     // add a gray outline frame, except not when printing
     if(bCreateGrayFrame)
     {
-        const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
+        const Color aFrameColor(aColorConfig.GetColorValue(svtools::DOCBOUNDARIES).nColor);
         basegfx::B2DPolygon aOwnOutline(basegfx::utils::createUnitPolygon());
         aOwnOutline.transform(aPageObjectTransform);
 

@@ -69,7 +69,11 @@ struct ViewOptFlags1
     bool bShowOutlineContentVisibilityButton : 1;
     bool bShowChangesInMargin : 1; //tracked deletions in margin
     bool bShowChangesInMargin2 : 1; //tracked insertions in margin
+    bool bTextBoundaries : 1;   // text boundaries
     bool bTextBoundariesFull : 1;   // true = frame around text, false = crop marks at edges
+    bool bSectionBoundaries : 1;   // section boundaries
+    bool bTableBoundaries : 1;   // table boundaries
+    bool bShowBoundaries : 1;   // show all boundaries
 
     ViewOptFlags1()
         : bUseHeaderFooterMenu(false)
@@ -103,7 +107,11 @@ struct ViewOptFlags1
         , bShowOutlineContentVisibilityButton(false)
         , bShowChangesInMargin(false)
         , bShowChangesInMargin2(false)
+        , bTextBoundaries(true)
         , bTextBoundariesFull(false)
+        , bSectionBoundaries(true)
+        , bTableBoundaries(true)
+        , bShowBoundaries(false)
     {}
 
     bool operator==(const ViewOptFlags1& rOther) const
@@ -139,7 +147,11 @@ struct ViewOptFlags1
             && bShowOutlineContentVisibilityButton == rOther.bShowOutlineContentVisibilityButton
             && bShowChangesInMargin == rOther.bShowChangesInMargin
             && bShowChangesInMargin2 == rOther.bShowChangesInMargin2
-            && bTextBoundariesFull == rOther.bTextBoundariesFull;
+            && bTextBoundaries == rOther.bTextBoundaries
+            && bTextBoundariesFull == rOther.bTextBoundariesFull
+            && bSectionBoundaries == rOther.bSectionBoundaries
+            && bTableBoundaries == rOther.bTableBoundaries
+            && bShowBoundaries == rOther.bShowBoundaries;
     }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
@@ -185,15 +197,11 @@ namespace o3tl {
 // Appearance flags.
 enum class ViewOptFlags {
     NONE               = 0x0000,
-    DocBoundaries      = 0x0001,
-    ObjectBoundaries   = 0x0002,
-    TableBoundaries    = 0x0004,
-    IndexShadings      = 0x0008,
-    Links              = 0x0010,
-    VisitedLinks       = 0x0020,
-    FieldShadings      = 0x0040,
-    SectionBoundaries  = 0x0080,
-    Shadow             = 0x0100,
+    IndexShadings      = 0x0001,
+    Links              = 0x0002,
+    VisitedLinks       = 0x0004,
+    FieldShadings      = 0x0008,
+    Shadow             = 0x0010,
 };
 namespace o3tl {
     template<> struct typed_flags<ViewOptFlags> : is_typed_flags<ViewOptFlags, 0x01ff> {};
@@ -207,7 +215,6 @@ struct SwViewColors
     {
         return m_aDocColor == rOther.m_aDocColor
             && m_aDocBoundColor == rOther.m_aDocBoundColor
-            && m_aObjectBoundColor == rOther.m_aObjectBoundColor
             && m_aAppBackgroundColor == rOther.m_aAppBackgroundColor
             && m_aTableBoundColor == rOther.m_aTableBoundColor
             && m_aFontColor == rOther.m_aFontColor
@@ -229,7 +236,6 @@ struct SwViewColors
     }
     Color m_aDocColor;  // color of document boundaries
     Color m_aDocBoundColor;  // color of document boundaries
-    Color m_aObjectBoundColor; // color of object boundaries
     Color m_aAppBackgroundColor; // application background
     Color m_aTableBoundColor; // color of table boundaries
     Color m_aFontColor;
@@ -665,8 +671,20 @@ public:
     bool   IsMultipageView() const { return IsViewLayoutBookMode() ||
                                             GetViewLayoutColumns() == 0; }
 
+    bool IsTextBoundaries() const { return m_nCoreOptions.bTextBoundaries; }
+    void SetTextBoundaries( bool b) { m_nCoreOptions.bTextBoundaries = b; }
+
     bool IsTextBoundariesFull() const { return m_nCoreOptions.bTextBoundariesFull; }
     void SetTextBoundariesFull( bool b) { m_nCoreOptions.bTextBoundariesFull = b; }
+
+    bool IsSectionBoundaries() const { return m_nCoreOptions.bSectionBoundaries; }
+    void SetSectionBoundaries( bool b) { m_nCoreOptions.bSectionBoundaries = b; }
+
+    bool IsTableBoundaries() const { return m_nCoreOptions.bTableBoundaries; }
+    void SetTableBoundaries( bool b) { m_nCoreOptions.bTableBoundaries = b; }
+
+    bool IsShowBoundaries() const { return m_nCoreOptions.bShowBoundaries; }
+    void SetShowBoundaries( bool b ) { m_nCoreOptions.bShowBoundaries = b; }
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.
@@ -842,7 +860,6 @@ public:
     SW_DLLPUBLIC const Color& GetDocColor() const;
     SW_DLLPUBLIC const Color& GetDocBoundariesColor() const;
     const Color& GetAppBackgroundColor() const;
-    const Color& GetObjectBoundariesColor() const;
     const Color& GetTableBoundariesColor() const;
     const Color& GetIndexShadingsColor() const;
     const Color& GetLinksColor() const;
@@ -861,19 +878,13 @@ public:
 
     bool IsAppearanceFlag(ViewOptFlags nFlag) const;
 
-    bool IsDocBoundaries() const {return IsAppearanceFlag(ViewOptFlags::DocBoundaries);}
-    bool IsObjectBoundaries() const {return IsAppearanceFlag(ViewOptFlags::ObjectBoundaries);}
-    bool IsTableBoundaries() const {return IsAppearanceFlag(ViewOptFlags::TableBoundaries);}
     bool IsIndexShadings() const {return IsAppearanceFlag(ViewOptFlags::IndexShadings);}
     bool IsLinks() const {return IsAppearanceFlag(ViewOptFlags::Links);}
     bool IsVisitedLinks() const {return IsAppearanceFlag(ViewOptFlags::VisitedLinks);}
     bool IsFieldShadings() const {return IsAppearanceFlag(ViewOptFlags::FieldShadings);}
-    bool IsSectionBoundaries() const {return IsAppearanceFlag(ViewOptFlags::SectionBoundaries);}
     bool IsShadow() const {return IsAppearanceFlag(ViewOptFlags::Shadow);}
 
     void     SetAppearanceFlag(ViewOptFlags nFlag, bool bSet, bool bSaveInConfig = false);
-
-    void     SetDocBoundaries(bool bSet)   {SetAppearanceFlag(ViewOptFlags::DocBoundaries, bSet);}
 
     // get/set default anchor (0..2); use GetDefaultAnchorType() to convert into RndStdIds::FLY_*
     sal_Int32 GetDefaultAnchor() const

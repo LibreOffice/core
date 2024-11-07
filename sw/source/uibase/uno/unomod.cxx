@@ -581,8 +581,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(*o3tl::doAccess<bool>(rValue));  break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(*o3tl::doAccess<bool>(rValue));   break;
-        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(ViewOptFlags::TableBoundaries, *o3tl::doAccess<bool>(rValue), true);    break;
-        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetTableBoundaries(*o3tl::doAccess<bool>(rValue));    break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetTextBoundaries(*o3tl::doAccess<bool>(rValue));    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   mpViewOption->SetShowContentTips(*o3tl::doAccess<bool>(rValue)); break;
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : mpViewOption->SetGridVisible(*o3tl::doAccess<bool>(rValue)); break;
@@ -751,7 +751,6 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 }
         }
         break;
-        case HANDLE_VIEWSET_TEXTBOUNDARIES: mpViewOption->SetTextBoundariesFull(*o3tl::doAccess<bool>(rValue)); break;
         default:
             throw UnknownPropertyException(OUString::number(rInfo.mnHandle));
     }
@@ -829,7 +828,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_HIDE_WHITESPACE       :   bBoolVal = mpConstViewOption->IsHideWhitespaceMode(); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = mpConstViewOption->IsTableBoundaries(); break;
-        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = mpConstViewOption->IsDocBoundaries(); break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = mpConstViewOption->IsTextBoundaries(); break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
         case  HANDLE_VIEWSET_SHOW_CONTENT_TIPS     :   bBoolVal = mpConstViewOption->IsShowContentTips(); break;
         case  HANDLE_VIEWSET_INLINECHANGES_TIPS    :   bBoolVal = mpConstViewOption->IsShowInlineTooltips(); break;
@@ -932,7 +931,6 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             bBool = false;
         }
         break;
-        case HANDLE_VIEWSET_TEXTBOUNDARIES : bBoolVal = mpConstViewOption->IsTextBoundariesFull(); break;
         default: OSL_FAIL("there is no such ID!");
     }
     if( bBool )

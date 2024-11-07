@@ -131,7 +131,7 @@
       <menu:menuitem menu:id=".uno:Ruler" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
-      <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowBoundaries" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations" menu:style="text"/>
       <menu:menuseparator/>

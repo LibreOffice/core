@@ -170,6 +170,7 @@ void SwView::RecheckBrowseMode()
             //SID_AUTOSPELL_MARKOFF,
             SID_TOGGLE_RESOLVED_NOTES, /* 11672*/
             FN_RULER,       /*20211*/
+            FN_VIEW_BOUNDARIES,  /*20212*/
             FN_VIEW_GRAPHIC,    /*20213*/
             FN_VIEW_BOUNDS,     /**/
             FN_VIEW_FIELDS,     /*20215*/
@@ -236,8 +237,10 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( bState );
             }
             break;
+            case FN_VIEW_BOUNDARIES:
+                aBool.SetValue( pOpt->IsShowBoundaries()); break;
             case FN_VIEW_BOUNDS:
-                aBool.SetValue( pOpt->IsDocBoundaries()); break;
+                aBool.SetValue( pOpt->IsTextBoundaries()); break;
             case FN_VIEW_SECTION_BOUNDARIES:
                 aBool.SetValue(pOpt->IsSectionBoundaries()); break;
             case FN_VIEW_GRAPHIC:
@@ -403,14 +406,26 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     case FN_VIEW_BOUNDS:
         if( STATE_TOGGLE == eState )
-            bFlag = !pOpt->IsDocBoundaries();
-        pOpt->SetAppearanceFlag(ViewOptFlags::DocBoundaries, bFlag, true );
+            bFlag = !pOpt->IsTextBoundaries();
+        pOpt->SetTextBoundaries( bFlag );
         break;
 
     case FN_VIEW_SECTION_BOUNDARIES:
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsSectionBoundaries();
-        pOpt->SetAppearanceFlag(ViewOptFlags::SectionBoundaries, bFlag, true );
+        pOpt->SetSectionBoundaries( bFlag );
+        break;
+
+    case FN_VIEW_TABLEGRID:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsTableBoundaries();
+        pOpt->SetTableBoundaries( bFlag );
+        break;
+
+    case FN_VIEW_BOUNDARIES:
+        if( STATE_TOGGLE == eState )
+            bFlag = !pOpt->IsShowBoundaries();
+        pOpt->SetShowBoundaries( bFlag );
         break;
 
     case SID_GRID_VISIBLE:
@@ -521,13 +536,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetViewAnyRuler( bFlag );
         break;
-
-    case FN_VIEW_TABLEGRID:
-        if( STATE_TOGGLE == eState )
-            bFlag = !pOpt->IsTableBoundaries();
-        pOpt->SetAppearanceFlag(ViewOptFlags::TableBoundaries, bFlag, true );
-        break;
-
     case FN_VIEW_FIELDNAME:
         if( STATE_TOGGLE == eState )
             bFlag = !pOpt->IsFieldName() ;

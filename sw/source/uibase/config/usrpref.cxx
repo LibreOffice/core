@@ -125,8 +125,12 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames() const
         "Display/DefaultAnchor",                // 25
         "Zoom/DefaultZoom",                     // 26
         "Zoom/ZoomType",                        // 27
-        "Zoom/ZoomValue",                       //28
-        "Display/TextBoundaries"                // 29
+        "Zoom/ZoomValue",                       // 28
+        "Display/TextBoundaries",               // 29
+        "Display/TextBoundariesFull",           // 30
+        "Display/SectionBoundaries",            // 31
+        "Display/TableBoundaries",              // 32
+        "Display/ShowBoundaries"                // 33
     };
 #if defined(__GNUC__) && !defined(__clang__)
     // clang 8.0.0 says strcmp isn't constexpr
@@ -205,7 +209,11 @@ void SwContentViewConfig::ImplCommit()
             case 26: bVal = m_rParent.IsDefaultZoom(); break;// "Zoom/DefaultZoom"
             case 27:pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomType()); break; // "Zoom/ZoomType"
             case 28: pValues[nProp] <<= static_cast<sal_Int32>(m_rParent.GetDefaultZoomValue()); break; // "Zoom/ZoomValue"
-            case 29: bVal = m_rParent.IsTextBoundariesFull(); break; // "Display/TextBoundaries"
+            case 29: bVal = m_rParent.IsTextBoundaries(); break; // "Display/TextBoundaries"
+            case 30: bVal = m_rParent.IsTextBoundariesFull(); break; // "Display/TextBoundariesFull"
+            case 31: bVal = m_rParent.IsSectionBoundaries(); break; // "Display/SectionBoundaries"
+            case 32: bVal = m_rParent.IsTableBoundaries(); break; // "Display/TableBoundaries"
+            case 33: bVal = m_rParent.IsShowBoundaries(); break; // "Display/ShowBoundaries"
         }
         if ((nProp != g_UpdateLinkIndex) && (nProp != g_DefaultAnchor) &&
             (nProp != g_ZoomType) && (nProp != g_ZoomValue))
@@ -283,7 +291,11 @@ void SwContentViewConfig::Load()
                     m_rParent.SetDefaultZoomValue(static_cast<sal_uInt16>(nSet), true);
                 }
                 break; //"Zoom/ZoomValue" // 28
-                case 29: m_rParent.SetTextBoundariesFull(bSet); break; //"Display/TextBoundaries" // 29
+                case 29: m_rParent.SetTextBoundaries(bSet); break; //"Display/TextBoundaries"
+                case 30: m_rParent.SetTextBoundariesFull(bSet); break; //"Display/TextBoundariesFull"
+                case 31: m_rParent.SetSectionBoundaries(bSet); break; //"Display/SectionBoundaries"
+                case 32: m_rParent.SetTableBoundaries(bSet); break; //"Display/TableBoundaries"
+                case 33: m_rParent.SetShowBoundaries(bSet); break; //"Display/ShowBoundaries"
             }
         }
     }

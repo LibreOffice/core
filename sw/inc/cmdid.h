@@ -157,6 +157,7 @@ class SwUINumRuleItem;
 #define FN_DRAW_WRAP_DLG        TypedWhichId<SfxInt16Item>(FN_VIEW + 3)   /* Draw wrapping dlg */
 #define FN_RULER                (FN_VIEW + 11)  /* Horizontal ruler */
 
+#define FN_VIEW_BOUNDARIES      (FN_VIEW + 12)  /* View text, section, table boundaries */
 #define FN_VIEW_GRAPHIC         (FN_VIEW + 13)  /* View graphic */
 #define FN_VIEW_BOUNDS          (FN_VIEW + 14)  /* View bounds */
 #define FN_VIEW_FIELDS          (FN_VIEW + 15)  /* View fields */
@@ -164,6 +165,7 @@ class SwUINumRuleItem;
 #define FN_VSCROLLBAR           (FN_VIEW + 17)  /* Vertical Scrollbar */
 #define FN_HSCROLLBAR           (FN_VIEW + 18)  /* Horizontal Scrollbar */
 #define FN_VIEW_SECTION_BOUNDARIES (FN_VIEW + 19)  /* View section boundaries */
+//  slot number 20220 conflicts with FN_BUL_NUM_RULE_INDEX!
 
 #define FN_VIEW_META_CHARS      (FN_VIEW + 24)  /* View meta chars */
 #define FN_VIEW_MARKS           (FN_VIEW + 25)  /* View marks */

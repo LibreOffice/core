@@ -6366,7 +6366,7 @@ SfxVoidItem SynchronizeLabelsDlg FN_SYNC_LABELS
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
+SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID // deprecated 25.2
 
 [
     AutoUpdate = FALSE,
@@ -6376,7 +6376,21 @@ SfxBoolItem TableBoundaries FN_VIEW_TABLEGRID
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::View;
+]
 
+SfxBoolItem ShowBoundaries FN_VIEW_BOUNDARIES
+[
+    AutoUpdate = TRUE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -6785,8 +6799,7 @@ SfxVoidItem UpdateInputFields FN_UPDATE_INPUTFIELDS
     GroupId = SfxGroupId::Edit;
 ]
 
-SfxBoolItem ViewBounds FN_VIEW_BOUNDS
-
+SfxBoolItem ViewBounds FN_VIEW_BOUNDS // deprecated 25.2
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -6797,14 +6810,13 @@ SfxBoolItem ViewBounds FN_VIEW_BOUNDS
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::View;
 ]
 
-SfxBoolItem SectionBoundaries FN_VIEW_SECTION_BOUNDARIES
-
+SfxBoolItem SectionBoundaries FN_VIEW_SECTION_BOUNDARIES // deprecated 25.2
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -6815,9 +6827,9 @@ SfxBoolItem SectionBoundaries FN_VIEW_SECTION_BOUNDARIES
     RecordPerSet;
 
 
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = SfxGroupId::View;
 ]
 

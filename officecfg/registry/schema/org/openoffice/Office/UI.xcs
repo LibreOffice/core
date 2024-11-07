@@ -55,12 +55,6 @@
         <info>
           <desc>Specifies the settings for the documents boundaries.</desc>
         </info>
-        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies the visibility of anchors (true = visible).</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="Color" oor:type="xs:int">
           <info>
             <desc>Specifies the color used for of the document boundaries.</desc>
@@ -77,32 +71,10 @@
           </info>
         </prop>
       </group>
-      <group oor:name="ObjectBoundaries">
-        <info>
-          <desc>Specifies the settings for object boundaries.</desc>
-        </info>
-        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies the visibility of object boundaries (true = visible).</desc>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="Color" oor:type="xs:int">
-          <info>
-            <desc>Specifies the color used for object boundaries.</desc>
-          </info>
-        </prop>
-      </group>
       <group oor:name="TableBoundaries">
         <info>
           <desc>Specifies the settings for table boundaries.</desc>
         </info>
-        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies the visibility of table boundaries (true = visible).</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="Color" oor:type="xs:int">
           <info>
             <desc>Specifies the color used for table boundaries.</desc>
@@ -269,12 +241,6 @@
         <info>
           <desc>Specifies the settings for section boundaries in Writer.</desc>
         </info>
-        <prop oor:name="IsVisible" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>Specifies the visibility of section boundaries (true = visible).</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="Color" oor:type="xs:int">
           <info>
             <desc>Specifies the color used for section boundaries.</desc>

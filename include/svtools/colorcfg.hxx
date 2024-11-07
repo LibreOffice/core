@@ -32,7 +32,6 @@ enum ColorConfigEntry : int
     DOCCOLOR            ,
     DOCBOUNDARIES       ,
     APPBACKGROUND       ,
-    OBJECTBOUNDARIES    ,
     TABLEBOUNDARIES     ,
     FONTCOLOR           ,
     LINKS               ,

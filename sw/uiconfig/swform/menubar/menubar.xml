@@ -168,8 +168,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
-      <menu:menuitem menu:id=".uno:ViewBounds" menu:style="text"/>
-      <menu:menuitem menu:id=".uno:TableBoundaries" menu:style="text"/>
+      <menu:menuitem menu:id=".uno:ShowBoundaries" menu:style="text"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewTrackChanges"/>

@@ -107,7 +107,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="tabs">
-                    <property name="label" translatable="yes" context="optformataidspage|tabs">Tabs</property>
+                    <property name="label" translatable="yes" context="optformataidspage|tabs">_Tabs</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -145,7 +145,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="hiddentext">
-                    <property name="label" translatable="yes" context="optformataidspage|hiddentext">Hidden characters</property>
+                    <property name="label" translatable="yes" context="optformataidspage|hiddentext">_Hidden characters</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -164,7 +164,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="bookmarks">
-                    <property name="label" translatable="yes" context="optformataidspage|bookmarks">Bookmarks</property>
+                    <property name="label" translatable="yes" context="optformataidspage|bookmarks">_Bookmarks</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -433,7 +433,7 @@
                 <property name="row-spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="mathbaseline">
-                    <property name="label" translatable="yes" context="optformataidspage|mathbaseline">Math baseline alignment</property>
+                    <property name="label" translatable="yes" context="optformataidspage|mathbaseline">_Math baseline alignment</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -844,38 +844,20 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=1 n-rows=2 -->
+              <!-- n-columns=2 n-rows=4 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
+                <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
                 <property name="row-spacing">3</property>
                 <child>
-                  <object class="GtkRadioButton" id="rbTextBoundariesCrop">
-                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesCrop">Crop marks</property>
+                  <object class="GtkCheckButton" id="cbTextBoundaries">
+                    <property name="label" translatable="yes" context="optformataidspage|cbTextBoundaries">Te_xt</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="halign">start</property>
-                    <property name="margin-start">12</property>
-                    <property name="use-underline">True</property>
-                    <property name="active">True</property>
-                    <property name="draw-indicator">True</property>
-                    <property name="group">rbTextBoundariesFull</property>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkRadioButton" id="rbTextBoundariesFull">
-                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesFull">Full</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="halign">start</property>
-                    <property name="margin-start">12</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
@@ -885,13 +867,85 @@
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="cbTableBoundaries">
+                    <property name="label" translatable="yes" context="optformataidspage|cbTableBoundaries">Tab_les</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="cbSectionBoundaries">
+                    <property name="label" translatable="yes" context="optformataidspage|cbSectionBoundaries">_Sections and Frames</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbTextBoundariesCrop">
+                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesCrop">_Crop marks</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="rbTextBoundariesFull">
+                    <property name="label" translatable="yes" context="optformataidspage|rbTextBoundariesFull">Border _Outline</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="margin-start">12</property>
+                    <property name="use-underline">True</property>
+                    <property name="active">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">rbTextBoundariesCrop</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
             <child type="label">
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optformataidspage|lbTextBoundaries">Text Boundaries</property>
+                <property name="label" translatable="yes" context="optformataidspage|lbObjectBoundaries">Object Boundaries</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

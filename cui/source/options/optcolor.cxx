@@ -108,10 +108,9 @@ const vEntryInfo[] =
     // The list of these entries (enum ColorConfigEntry) are in colorcfg.hxx.
 
     { Group_General, IDS(doccolor), std::u16string_view(u"/DocColor") },
-    { Group_General, IDS_CB(docboundaries), std::u16string_view(u"/DocBoundaries") },
+    { Group_General, IDS(docboundaries), std::u16string_view(u"/DocBoundaries") },
     { Group_General, IDS(appback), std::u16string_view(u"/AppBackground") },
-    { Group_General, IDS_CB(objboundaries), std::u16string_view(u"/ObjectBoundaries") },
-    { Group_General, IDS_CB(tblboundaries), std::u16string_view(u"/TableBoundaries") },
+    { Group_General, IDS(tblboundaries), std::u16string_view(u"/TableBoundaries") },
     { Group_General, IDS(font), std::u16string_view(u"/FontColor") },
     { Group_General, IDS_CB(unvisitedlinks), std::u16string_view(u"/Links") },
     { Group_General, IDS_CB(visitedlinks), std::u16string_view(u"/LinksVisited") },
@@ -125,7 +124,7 @@ const vEntryInfo[] =
     { Group_Writer,  IDS_CB(index), std::u16string_view(u"/WriterIdxShadings") },
     { Group_Writer,  IDS(direct), std::u16string_view(u"/WriterDirectCursor") },
     { Group_Writer,  IDS(script), std::u16string_view(u"/WriterScriptIndicator") },
-    { Group_Writer,  IDS_CB(section), std::u16string_view(u"/WriterSectionBoundaries") },
+    { Group_Writer,  IDS(section), std::u16string_view(u"/WriterSectionBoundaries") },
     { Group_Writer,  IDS(hdft), std::u16string_view(u"/WriterHeaderFooterMark") },
     { Group_Writer,  IDS(pagebreak), std::u16string_view(u"/WriterPageBreaks") },
     { Group_Writer,  IDS(nonprintchars), std::u16string_view(u"/WriterNonPrintChars") },
@@ -485,7 +484,7 @@ void ColorConfigWindow_Impl::CreateEntries()
     // get it to align its contents with that of a CheckBox
     {
         OUString sSampleText(u"XXXXXX"_ustr);
-        std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button(u"docboundaries"_ustr));
+        std::unique_ptr<weld::CheckButton> xCheckBox(m_xBuilder->weld_check_button(u"unvisitedlinks"_ustr));
         std::unique_ptr<weld::Label> xFixedText(m_xBuilder->weld_label(u"doccolor"_ustr));
         OUString sOrigCheck(xCheckBox->get_label());
         OUString sOrigFixed(xFixedText->get_label());

@@ -113,10 +113,9 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
     static const ColorConfigEntryData_Impl cNames[] =
     {
         { std::u16string_view(u"/DocColor")        ,false },
-        { std::u16string_view(u"/DocBoundaries")   ,true },
+        { std::u16string_view(u"/DocBoundaries")   ,false },
         { std::u16string_view(u"/AppBackground")   ,false },
-        { std::u16string_view(u"/ObjectBoundaries"),true },
-        { std::u16string_view(u"/TableBoundaries") ,true },
+        { std::u16string_view(u"/TableBoundaries") ,false },
         { std::u16string_view(u"/FontColor")     ,false },
         { std::u16string_view(u"/Links")           ,true },
         { std::u16string_view(u"/LinksVisited")    ,true },
@@ -129,7 +128,7 @@ uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
         { std::u16string_view(u"/WriterIdxShadings")     ,true },
         { std::u16string_view(u"/WriterDirectCursor")    ,true },
         { std::u16string_view(u"/WriterScriptIndicator")    ,false },
-        { std::u16string_view(u"/WriterSectionBoundaries")    ,true },
+        { std::u16string_view(u"/WriterSectionBoundaries")    ,false },
         { std::u16string_view(u"/WriterHeaderFooterMark")    ,false },
         { std::u16string_view(u"/WriterPageBreaks")    ,false },
         { std::u16string_view(u"/WriterNonPrintChars")    ,false },
@@ -549,7 +548,6 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry, int nMod)
         { COL_WHITE,        Color(0x1C1C1C) }, // DOCCOLOR
         { COL_LIGHTGRAY,    Color(0x808080) }, // DOCBOUNDARIES
         { Color(0xDFDFDE),  Color(0x333333) }, // APPBACKGROUND
-        { COL_LIGHTGRAY,    Color(0x808080) }, // OBJECTBOUNDARIES
         { COL_LIGHTGRAY,    Color(0x808080) }, // TABLEBOUNDARIES
         { COL_BLACK,        COL_BLACK       }, // FONTCOLOR
         { COL_BLUE,         Color(0x1D99F3) }, // LINKS

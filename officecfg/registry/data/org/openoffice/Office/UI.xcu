@@ -145,9 +145,6 @@
           </prop>
         </node>
         <node oor:name="DocBoundaries">
-          <prop oor:name="IsVisible">
-            <value>true</value>
-          </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
@@ -157,18 +154,7 @@
             <value xsi:nil="true"/>
           </prop>
         </node>
-        <node oor:name="ObjectBoundaries">
-          <prop oor:name="IsVisible">
-            <value>true</value>
-          </prop>
-          <prop oor:name="Color">
-            <value xsi:nil="true"/>
-          </prop>
-        </node>
         <node oor:name="TableBoundaries">
-          <prop oor:name="IsVisible">
-            <value>true</value>
-          </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
@@ -252,9 +238,6 @@
           </prop>
         </node>
         <node oor:name="WriterSectionBoundaries">
-          <prop oor:name="IsVisible">
-            <value>true</value>
-          </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
