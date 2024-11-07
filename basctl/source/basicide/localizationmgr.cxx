@@ -311,7 +311,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                         OUString aPureIdStr = implCreatePureResourceId
                             ( aDialogName, aCtrlName, aPropName, xStringResourceManager );
 
-                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+                        const Locale aDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
                         // Set Id for all locales
                         for (auto& rLocale : aLocaleSeq)
@@ -325,7 +325,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             catch(const MissingResourceException&)
                             {
                                 aResStr = xSourceStringResolver->resolveStringForLocale
-                                    ( aPureSourceIdStr, rDefaultLocale );
+                                    ( aPureSourceIdStr, aDefaultLocale );
                             }
                             xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                         }
@@ -340,7 +340,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     {
                         OUString aPureSourceIdStr = aPropStr.copy( 1 );
 
-                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+                        const Locale aDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
                         // Copy Id for all locales
                         for (auto& rLocale : aLocaleSeq)
@@ -354,7 +354,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                             catch(const MissingResourceException&)
                             {
                                 aResStr = xSourceStringResolver->resolveStringForLocale
-                                    ( aPureSourceIdStr, rDefaultLocale );
+                                    ( aPureSourceIdStr, aDefaultLocale );
                             }
                             xStringResourceManager->setStringForLocale( aPureSourceIdStr, aResStr, rLocale );
                         }
@@ -505,7 +505,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                             + aDot
                                             + aPropName;
 
-                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+                        const Locale aDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
                         for (sal_Int32 i = 0; i < nPropStringCount; ++i)
                         {
@@ -528,7 +528,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 catch(const MissingResourceException&)
                                 {
                                     aResStr = xSourceStringResolver->resolveStringForLocale
-                                        ( aPureSourceIdStr, rDefaultLocale );
+                                        ( aPureSourceIdStr, aDefaultLocale );
                                 }
                                 xStringResourceManager->setStringForLocale( aPureIdStr, aResStr, rLocale );
                             }
@@ -540,7 +540,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                     // Copy string from source to target resource
                     else if( eMode == COPY_RESOURCES && xSourceStringResolver.is() )
                     {
-                        const Locale& rDefaultLocale = xSourceStringResolver->getDefaultLocale();
+                        const Locale aDefaultLocale = xSourceStringResolver->getDefaultLocale();
 
                         for (auto& aSourceIdStr : aPropStrings)
                         {
@@ -558,7 +558,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
                                 catch(const MissingResourceException&)
                                 {
                                     aResStr = xSourceStringResolver->resolveStringForLocale
-                                        ( aPureSourceIdStr, rDefaultLocale );
+                                        ( aPureSourceIdStr, aDefaultLocale );
                                 }
                                 xStringResourceManager->setStringForLocale( aPureSourceIdStr, aResStr, rLocale );
                             }

@@ -1131,11 +1131,11 @@ namespace basegfx::utils
             }
 
             // provide callbacks as lambdas
-            const auto& rLineCallback(
+            const auto rLineCallback(
                 nullptr == pLineTarget
                 ? std::function<void(const basegfx::B2DPolygon&)>()
                 : [&pLineTarget](const basegfx::B2DPolygon& rSnippet){ pLineTarget->append(rSnippet); });
-            const auto& rGapCallback(
+            const auto rGapCallback(
                 nullptr == pGapTarget
                 ? std::function<void(const basegfx::B2DPolygon&)>()
                 : [&pGapTarget](const basegfx::B2DPolygon& rSnippet){ pGapTarget->append(rSnippet); });

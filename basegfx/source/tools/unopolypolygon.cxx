@@ -204,18 +204,18 @@ namespace basegfx::unotools
         std::unique_lock const guard( m_aMutex );
         modifying();
 
-        const B2DPolyPolygon& rNewPolyPoly(
+        const B2DPolyPolygon aNewPolyPoly(
             unotools::polyPolygonFromPoint2DSequenceSequence( points ) );
 
         if( nPolygonIndex == -1 )
         {
-            maPolyPoly = rNewPolyPoly;
+            maPolyPoly = aNewPolyPoly;
         }
         else
         {
             checkIndex( nPolygonIndex );
 
-            maPolyPoly.insert( nPolygonIndex, rNewPolyPoly );
+            maPolyPoly.insert( nPolygonIndex, aNewPolyPoly );
         }
     }
 
@@ -272,18 +272,18 @@ namespace basegfx::unotools
     {
         std::unique_lock const guard( m_aMutex );
         modifying();
-        const B2DPolyPolygon& rNewPolyPoly(
+        const B2DPolyPolygon aNewPolyPoly(
             unotools::polyPolygonFromBezier2DSequenceSequence( points ) );
 
         if( nPolygonIndex == -1 )
         {
-            maPolyPoly = rNewPolyPoly;
+            maPolyPoly = aNewPolyPoly;
         }
         else
         {
             checkIndex( nPolygonIndex );
 
-            maPolyPoly.insert( nPolygonIndex, rNewPolyPoly );
+            maPolyPoly.insert( nPolygonIndex, aNewPolyPoly );
         }
     }
 
@@ -300,15 +300,15 @@ namespace basegfx::unotools
             throw lang::IndexOutOfBoundsException();
 
         const B2DPoint& rPt( rPoly.getB2DPoint( nPointIndex ) );
-        const B2DPoint& rCtrl0( rPoly.getNextControlPoint(nPointIndex) );
-        const B2DPoint& rCtrl1( rPoly.getPrevControlPoint((nPointIndex + 1) % nPointCount) );
+        const B2DPoint aCtrl0( rPoly.getNextControlPoint(nPointIndex) );
+        const B2DPoint aCtrl1( rPoly.getPrevControlPoint((nPointIndex + 1) % nPointCount) );
 
         return geometry::RealBezierSegment2D( rPt.getX(),
                                               rPt.getY(),
-                                              rCtrl0.getX(),
-                                              rCtrl0.getY(),
-                                              rCtrl1.getX(),
-                                              rCtrl1.getY() );
+                                              aCtrl0.getX(),
+                                              aCtrl0.getY(),
+                                              aCtrl1.getX(),
+                                              aCtrl1.getY() );
     }
 
     void SAL_CALL UnoPolyPolygon::setBezierSegment( const geometry::RealBezierSegment2D& segment,

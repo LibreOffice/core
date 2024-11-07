@@ -104,7 +104,7 @@ namespace basegfx::utils
             }
 
             // provide callback as lambda
-            const auto& rLineCallback(
+            const auto rLineCallback(
                 nullptr == pLineTarget
                 ? std::function<void(const basegfx::B3DPolygon&)>()
                 : [&pLineTarget](const basegfx::B3DPolygon& rSnippet){ pLineTarget->append(rSnippet); });

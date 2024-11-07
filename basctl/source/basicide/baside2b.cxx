@@ -660,7 +660,7 @@ void EditorWindow::HandleAutoCorrect()
     const sal_uInt32 nLine =  aSel.GetStart().GetPara();
     const sal_Int32 nIndex =  aSel.GetStart().GetIndex();
     OUString aLine( pEditEngine->GetText( nLine ) ); // the line being modified
-    const OUString& sActSubName = GetActualSubName( nLine ); // the actual procedure
+    const OUString sActSubName = GetActualSubName( nLine ); // the actual procedure
 
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions( aLine, aPortions );
@@ -931,7 +931,7 @@ void EditorWindow::HandleCodeCompletion()
 
     if( !sVarType.isEmpty() && CodeCompleteOptions::IsAutoCorrectOn() )
     {//correct variable name, if autocorrection on
-        const OUString& sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
+        const OUString sStr = aCodeCompleteCache.GetCorrectCaseVarName( sBaseName, GetActualSubName(nLine) );
         if( !sStr.isEmpty() )
         {
             TextPaM aStart(nLine, aSel.GetStart().GetIndex() - sStr.getLength() );
@@ -2915,11 +2915,11 @@ void CodeCompleteWindow::ResizeAndPositionListBox()
 
     //calculate position
     const tools::Rectangle aVisArea( pParent->GetEditView()->GetStartDocPos(), pParent->GetOutputSizePixel() ); //the visible area
-    const Point& aBottomPoint = aVisArea.BottomRight();
+    const Point aBottomPoint = aVisArea.BottomRight();
 
     if( aVisArea.TopRight().getY() + aPos.getY() + aSize.getHeight() > aBottomPoint.getY() )
     {//clipped at the bottom: move it up
-        const tools::Long& nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
+        const tools::Long nParentFontHeight = pParent->GetEditEngine()->GetFont().GetFontHeight(); //parent's font (in the IDE): needed for height
         aPos.AdjustY( -(aSize.getHeight() + nParentFontHeight + nCursorPad) );
     }
 
