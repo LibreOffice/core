@@ -880,6 +880,8 @@ VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( static_cast<Menu
     ImplAddListener();
 }
 
+VCLXPopupMenu::~VCLXPopupMenu() = default;
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
 stardiv_Toolkit_VCLXPopupMenu_get_implementation(
     css::uno::XComponentContext *,

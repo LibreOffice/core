@@ -149,6 +149,8 @@ class TOOLKIT_DLLPUBLIC VCLXPopupMenu final : public VCLXMenu
 public:
     VCLXPopupMenu();
     VCLXPopupMenu( PopupMenu* pPopMenu );
+
+    ~VCLXPopupMenu() override;
 };
 
 #endif // INCLUDED_TOOLKIT_AWT_VCLXMENU_HXX
