@@ -3676,6 +3676,17 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf163285)
     CPPUNIT_ASSERT(topText3.startsWith("pg_3"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, TestTdf152839_firstRows)
+{
+    createSwDoc("tdf152839_firstrows.rtf");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nHeight
+        = getXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[2]/txt/infos/bounds", "height")
+              .toInt32();
+    CPPUNIT_ASSERT_LESSEQUAL(sal_Int32(230), nHeight);
+}
+
 } // end of anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
