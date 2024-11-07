@@ -24,6 +24,7 @@
 #include <imagerepository.hxx>
 #include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <vcl/graphic/BitmapHelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/wmfexternal.hxx>
@@ -51,6 +52,58 @@
 #include <vcl/TypeSerializer.hxx>
 
 using namespace com::sun::star;
+
+namespace vcl
+{
+BitmapEx GetBitmap(const css::uno::Reference<css::awt::XBitmap>& xBitmap)
+{
+    BitmapEx aBmp;
+    if (auto xGraphic = xBitmap.query<css::graphic::XGraphic>())
+    {
+        Graphic aGraphic(xGraphic);
+        aBmp = aGraphic.GetBitmapEx();
+    }
+    else if (xBitmap)
+    {
+        // This is an unknown implementation of a XBitmap interface
+        Bitmap aMask;
+        if (css::uno::Sequence<sal_Int8> aBytes = xBitmap->getMaskDIB(); aBytes.hasElements())
+        {
+            SvMemoryStream aMem(aBytes.getArray(), aBytes.getLength(), StreamMode::READ);
+            ReadDIB(aMask, aMem, true);
+            aMask.Invert(); // Convert from transparency to alpha
+        }
+        css::uno::Sequence<sal_Int8> aBytes = xBitmap->getDIB();
+        SvMemoryStream aMem(aBytes.getArray(), aBytes.getLength(), StreamMode::READ);
+        if (!aMask.IsEmpty())
+        {
+            Bitmap aDIB;
+            ReadDIB(aDIB, aMem, true);
+            aBmp = BitmapEx(aDIB, aMask);
+        }
+        else
+        {
+            ReadDIBBitmapEx(aBmp, aMem, true);
+        }
+    }
+    return aBmp;
+}
+
+css::uno::Reference<css::graphic::XGraphic> GetGraphic(const css::uno::Any& any)
+{
+    if (auto xRet = any.query<css::graphic::XGraphic>())
+        return xRet;
+
+    if (BitmapEx aBmpEx = GetBitmap(any.query<css::awt::XBitmap>()); !aBmpEx.IsEmpty())
+    {
+        rtl::Reference pUnoGraphic(new unographic::Graphic);
+        pUnoGraphic->init(aBmpEx);
+        return pUnoGraphic;
+    }
+
+    return {};
+}
+}
 
 namespace {
 
@@ -84,7 +137,6 @@ private:
 
     static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( std::u16string_view rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
-    static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
     static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
 };
 
@@ -189,43 +241,11 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( st
 }
 
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm )
-{
-    uno::Reference< ::graphic::XGraphic > xRet;
-    uno::Sequence< sal_Int8 > aBmpSeq( xBtm->getDIB() );
-    uno::Sequence< sal_Int8 > aMaskSeq( xBtm->getMaskDIB() );
-    SvMemoryStream aBmpStream( aBmpSeq.getArray(), aBmpSeq.getLength(), StreamMode::READ );
-    Bitmap aBmp;
-    BitmapEx aBmpEx;
-
-    ReadDIB(aBmp, aBmpStream, true);
-
-    if( aMaskSeq.hasElements() )
-    {
-        SvMemoryStream aMaskStream( aMaskSeq.getArray(), aMaskSeq.getLength(), StreamMode::READ );
-        Bitmap aMask;
-
-        ReadDIB(aMask, aMaskStream, true);
-        aBmpEx = BitmapEx( aBmp, aMask );
-    }
-    else
-        aBmpEx = BitmapEx( aBmp );
-
-    if( !aBmpEx.IsEmpty() )
-    {
-        rtl::Reference<::unographic::Graphic> pUnoGraphic = new ::unographic::Graphic;
-
-        pUnoGraphic->init( aBmpEx );
-        xRet = pUnoGraphic;
-    }
-    return xRet;
-}
-
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
 {
     OUString aURL;
     uno::Reference< io::XInputStream > xIStm;
-    uno::Reference< awt::XBitmap >xBtm;
+    uno::Any aBtm;
 
     for( const auto& rMediaProperty : rMediaProperties )
     {
@@ -242,7 +262,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
         }
         else if (aName == "Bitmap")
         {
-            aValue >>= xBtm;
+            aBtm = aValue;
         }
     }
 
@@ -276,11 +296,9 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
             xRet = pDescriptor;
         }
     }
-    else if( xBtm.is() )
+    else if (aBtm.hasValue())
     {
-        uno::Reference< ::graphic::XGraphic > xGraphic( implLoadBitmap( xBtm ) );
-        if( xGraphic.is() )
-            xRet.set( xGraphic, uno::UNO_QUERY );
+        xRet.set(vcl::GetGraphic(aBtm), uno::UNO_QUERY);
     }
 
     return xRet;
@@ -292,7 +310,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
     OUString                                aPath;
 
     uno::Reference< io::XInputStream > xIStm;
-    uno::Reference< awt::XBitmap >xBtm;
+    uno::Any aBtm;
 
     uno::Sequence< ::beans::PropertyValue > aFilterData;
 
@@ -314,7 +332,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         }
         else if (aName == "Bitmap")
         {
-            aValue >>= xBtm;
+            aBtm = aValue;
         }
         else if (aName == "FilterData")
         {
@@ -375,9 +393,9 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         if( !xRet.is() )
             pIStm = ::utl::UcbStreamHelper::CreateStream( aPath, StreamMode::READ );
     }
-    else if( xBtm.is() )
+    else if (aBtm.hasValue())
     {
-        xRet = implLoadBitmap( xBtm );
+        xRet = vcl::GetGraphic(aBtm);
     }
 
     if( pIStm )
