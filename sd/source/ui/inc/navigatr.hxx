@@ -152,7 +152,7 @@ private:
     */
     //    bool                        mbShowAllShapes;
 
-    static OUString             GetDragTypeSdBmpId(NavigatorDragType eDT);
+    static const OUString &     GetDragTypeSdBmpId(NavigatorDragType eDT);
     NavDocInfo*                 GetDocInfo();
 
                                 DECL_DLLPRIVATE_LINK( SelectToolboxHdl, const OUString&, void );

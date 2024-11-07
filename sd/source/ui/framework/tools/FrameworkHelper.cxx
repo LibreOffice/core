@@ -446,7 +446,7 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const OUString& rsViewURL)
         return ViewShell::ST_NONE;
 }
 
-OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
+const OUString & FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
 {
     switch (eType)
     {
@@ -460,7 +460,7 @@ OUString FrameworkHelper::GetViewURL (ViewShell::ShellType eType)
         case ViewShell::ST_SIDEBAR : return msSidebarViewURL;
         case ViewShell::ST_NOTESPANEL: return msNotesPanelViewURL;
         default:
-            return OUString();
+            return EMPTY_OUSTRING;
     }
 }
 

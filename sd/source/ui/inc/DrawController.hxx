@@ -223,7 +223,7 @@ public:
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
         getModuleController() override;
 
-    SD_DLLPUBLIC rtl::Reference<sd::framework::ConfigurationController> getConfigurationControllerImpl();
+    SD_DLLPUBLIC const rtl::Reference<sd::framework::ConfigurationController> & getConfigurationControllerImpl();
 
 private:
     /** This method must return the name to index table. This table

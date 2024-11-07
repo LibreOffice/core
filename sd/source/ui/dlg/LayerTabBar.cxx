@@ -98,7 +98,7 @@ OUString LayerTabBar::convertToLocalizedName(const OUString& rName)
 }
 
 // Use a method name, that is specific to LayerTabBar to make code better readable
-OUString LayerTabBar::GetLayerName(sal_uInt16 nPageId) const
+const OUString & LayerTabBar::GetLayerName(sal_uInt16 nPageId) const
 {
     return GetAuxiliaryText(nPageId);
 }

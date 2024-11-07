@@ -68,7 +68,7 @@ public:
     virtual void        SetPageText( sal_uInt16 nPageId, const OUString& rText ) override;
 
     // Returns the real layer name if exists and empty OUString otherwise.
-    OUString            GetLayerName(sal_uInt16 nPageId) const;
+    const OUString &    GetLayerName(sal_uInt16 nPageId) const;
 
     // Used e.g. in DeleteActualLayer() to test whether deleting is allowed.
     static bool IsRealNameOfStandardLayer(std::u16string_view rName);

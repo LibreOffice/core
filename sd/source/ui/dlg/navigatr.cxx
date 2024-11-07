@@ -704,12 +704,12 @@ void SdNavigatorWin::RefreshDocumentLB( const OUString* pDocName )
     mxLbDocs->set_active(nPos);
 }
 
-OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
+const OUString & SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
 {
     switch( eDT )
     {
         case NAVIGATOR_DRAGTYPE_NONE:
-                return OUString();
+                return EMPTY_OUSTRING;
         case NAVIGATOR_DRAGTYPE_URL:
                 return BMP_HYPERLINK;
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
@@ -718,7 +718,7 @@ OUString SdNavigatorWin::GetDragTypeSdBmpId(NavigatorDragType eDT)
                 return BMP_LINK;
         default: OSL_FAIL( "No resource for DragType available!" );
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()

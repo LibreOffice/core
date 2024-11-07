@@ -387,7 +387,7 @@ public:
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 
-    css::uno::Reference<css::presentation::XSlideShow> getXSlideShowInstance();
+    const css::uno::Reference<css::presentation::XSlideShow> & getXSlideShowInstance();
     void destroyXSlideShowInstance();
 
 protected:

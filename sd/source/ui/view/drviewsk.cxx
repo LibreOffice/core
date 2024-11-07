@@ -82,7 +82,7 @@ void DrawViewShell::destroyXSlideShowInstance()
     mxSlideShow.clear();
 }
 
-uno::Reference<presentation::XSlideShow> DrawViewShell::getXSlideShowInstance()
+const uno::Reference<presentation::XSlideShow> & DrawViewShell::getXSlideShowInstance()
 {
     if (!mxSlideShow.is())
     {

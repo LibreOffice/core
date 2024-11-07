@@ -121,7 +121,7 @@ public:
     /** Return a view URL for the given identifier.  See GetViewId() for a
         mapping in the opposite direction.
     */
-    static OUString GetViewURL (ViewShell::ShellType eType);
+    static const OUString & GetViewURL (ViewShell::ShellType eType);
 
     /** Return a ViewShell pointer for the given XView reference.  This
         assumes that the given reference is implemented by the
