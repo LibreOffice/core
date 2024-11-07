@@ -418,7 +418,10 @@ void SwTextAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 {
                     tools::Long nSpaceAdd = nGluePortionWidth / sal_Int32(nGluePortion);
                     // shrink, if not shrunk line width exceed the set line width
-                    if ( pCurrent->ExtraShrunkWidth() > 0 )
+                    // i.e. if pCurrent->ExtraShrunkWidth() > 0
+                    // tdf#163720 but at hyphenated lines, still nBreakWidth contains the correct
+                    // not shrunk line width (ExtraShrunkWidth + hyphen length), so use that
+                    if ( pCurrent->ExtraShrunkWidth() > nBreakWidth )
                         nBreakWidth = pCurrent->ExtraShrunkWidth();
                     // shrink, if portions exceed the line width
                     tools::Long nSpaceSub = ( nBreakWidth > pCurrent->Width() )
