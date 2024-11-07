@@ -73,7 +73,7 @@ public:
     virtual void Notify(const css::uno::Sequence<OUString>& aPropertyNames) override;
 
     ColorScheme GetColorScheme(const OUString& rScheme);
-    css::uno::Sequence<OUString> GetColorSchemeNames() { return m_aSchemeNames; }
+    const css::uno::Sequence<OUString>& GetColorSchemeNames() { return m_aSchemeNames; }
 
     // Returns the color scheme defined by the current Application Colors
     ColorScheme GetAutomaticColorScheme();

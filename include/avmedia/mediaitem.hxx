@@ -121,7 +121,7 @@ public:
     const OUString&         getFallbackURL() const;
 
     bool                    setMimeType(const OUString& rMimeType);
-    OUString                getMimeType() const;
+    const OUString&         getMimeType() const;
     bool setGraphic(const Graphic& rGraphic);
     const Graphic & getGraphic() const;
     bool setCrop(const css::text::GraphicCrop& rCrop);

@@ -105,7 +105,7 @@ namespace canvas
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /// Query all defining values of this object atomically
-        Values getValues() const;
+        const Values & getValues() const;
 
     private:
         virtual ~ParametricPolyPolygon() override; // we're a ref-counted UNO class. _We_ destroy ourselves.

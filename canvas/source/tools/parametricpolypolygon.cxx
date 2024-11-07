@@ -226,7 +226,7 @@ namespace canvas
     {
     }
 
-    ParametricPolyPolygon::Values ParametricPolyPolygon::getValues() const
+    const ParametricPolyPolygon::Values & ParametricPolyPolygon::getValues() const
     {
         return maValues;
     }

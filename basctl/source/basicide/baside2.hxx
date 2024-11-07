@@ -402,7 +402,7 @@ public:
     virtual bool HasActiveEditor () const override;
 
     void UpdateModule ();
-    OUString GetEditorColorScheme() { return m_sWinColorScheme; }
+    const OUString & GetEditorColorScheme() { return m_sWinColorScheme; }
     void SetEditorColorScheme(const OUString& rColorScheme);
 };
 
@@ -428,7 +428,7 @@ public:
     Color const & GetSyntaxBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
-    OUString GetActiveColorSchemeId() { return m_sColorSchemeId; }
+    const OUString & GetActiveColorSchemeId() { return m_sColorSchemeId; }
     void ApplyColorSchemeToCurrentWindow(const OUString& rSchemeId);
 
 protected:

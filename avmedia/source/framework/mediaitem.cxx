@@ -285,7 +285,7 @@ bool MediaItem::setMimeType(const OUString& rMimeType)
     return bChanged;
 }
 
-OUString MediaItem::getMimeType() const
+const OUString & MediaItem::getMimeType() const
 {
     return !m_pImpl->m_sMimeType.isEmpty() ? m_pImpl->m_sMimeType : AVMEDIA_MIMETYPE_COMMON;
 }
