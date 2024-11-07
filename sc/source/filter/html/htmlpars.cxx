@@ -717,8 +717,10 @@ void ScHTMLLayoutParser::Adjust()
             pE->nColOverlap = 1;
         }
         SCCOL nColTmp = o3tl::saturating_add(pE->nCol, pE->nColOverlap);
-        SCROW nRowTmp = o3tl::saturating_add(pE->nRow ,pE->nRowOverlap);
-        xLockedList->Join( ScRange( pE->nCol, pE->nRow, 0, nColTmp - 1, nRowTmp - 1, 0 ) );
+        SCROW nRowTmp = o3tl::saturating_add(pE->nRow, pE->nRowOverlap);
+        xLockedList->Join(ScRange(pE->nCol, pE->nRow, 0,
+                                  o3tl::saturating_sub<SCCOL>(nColTmp, 1),
+                                  o3tl::saturating_sub<SCROW>(nRowTmp, 1), 0));
         // Take over MaxDimensions
         if ( nColMax < nColTmp )
             nColMax = nColTmp;
