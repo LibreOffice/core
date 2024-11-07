@@ -54,7 +54,6 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 OConnection::OConnection(ODriver*   _pDriver)
                          : m_xCatalog(nullptr),
                          m_pDriver(_pDriver),
-                         m_pCatalog(nullptr),
                          m_nEngineType(0),
                          m_bClosed(false),
                          m_bAutocommit(true)
@@ -456,7 +455,7 @@ void OConnection::disposing()
 
     m_bClosed   = true;
     m_xMetaData = css::uno::WeakReference< css::sdbc::XDatabaseMetaData>();
-    m_xCatalog  = css::uno::WeakReference< css::sdbcx::XTablesSupplier>();
+    m_xCatalog.clear();
     m_pDriver   = nullptr;
 
     m_aAdoConnection.Close();

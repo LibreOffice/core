@@ -190,7 +190,6 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
             aCatalog.putref_ActiveConnection(pConnection->getConnection());
             rtl::Reference<OCatalog> pCatalog = new OCatalog(aCatalog,pConnection);
             xTab = pCatalog;
-            pConnection->setCatalog(xTab);
             pConnection->setCatalog(pCatalog.get());
         }
     }

@@ -24,9 +24,11 @@
 #include <map>
 #include <string_view>
 #include <connectivity/CommonTools.hxx>
+#include <unotools/weakref.hxx>
 #include <OTypeInfo.hxx>
 #include <TConnection.hxx>
 #include <ado/Awrapado.hxx>
+#include <ado/ACatalog.hxx>
 
 namespace connectivity::ado
 {
@@ -40,7 +42,6 @@ namespace connectivity::ado
 
         class WpADOConnection;
         class ODriver;
-        class OCatalog;
         typedef std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
@@ -54,11 +55,10 @@ namespace connectivity::ado
             OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
                                                                                 //  for each row returned by
                                                                                 //  DatabaseMetaData.getTypeInfo.
-            css::uno::WeakReference< css::sdbcx::XTablesSupplier>      m_xCatalog;
+            unotools::WeakReference<OCatalog>      m_xCatalog;
             ODriver*                    m_pDriver;
         private:
             WpADOConnection             m_aAdoConnection;
-            OCatalog*                   m_pCatalog;
             sal_Int32                   m_nEngineType;
             bool                        m_bClosed;
             bool                        m_bAutocommit;
@@ -108,15 +108,12 @@ namespace connectivity::ado
             virtual void SAL_CALL clearWarnings(  ) override;
 
             WpADOConnection& getConnection() { return m_aAdoConnection; }
-            void setCatalog(const css::uno::WeakReference< css::sdbcx::XTablesSupplier>& _xCat) { m_xCatalog = _xCat; }
-            void setCatalog(OCatalog* _pCatalog) { m_pCatalog = _pCatalog; }
+            void setCatalog(OCatalog* _pCatalog) { m_xCatalog = _pCatalog; }
 
             const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo;}
             OCatalog* getAdoCatalog() const
             {
-                if ( m_xCatalog.get().is() )
-                    return m_pCatalog;
-                return nullptr;
+                return m_xCatalog.get().get();
             }
 
             sal_Int32 getEngineType()   const { return m_nEngineType; }
