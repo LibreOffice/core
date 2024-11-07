@@ -26,6 +26,7 @@
 #include <editeng/numdef.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/util/MeasureUnit.hpp>
 #include <unotools/fontcvt.hxx>
 #include <editeng/editengdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
@@ -129,6 +130,7 @@ private:
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
 
     sal_Int32           nFirstLineOffset;   // First line indent
+    sal_Int16 nFirstLineOffsetUnit = css::util::MeasureUnit::TWIP;
     sal_Int32           nAbsLSpace;         // Distance Border<->Number
     short               nCharTextDistance;  // Distance Number<->Text
 
@@ -139,6 +141,7 @@ private:
     tools::Long                mnListtabPos;
     // specifies the first line indent
     tools::Long                mnFirstLineIndent;
+    sal_Int16 mnFirstLineIndentUnit = css::util::MeasureUnit::TWIP;
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     tools::Long                mnIndentAt;
 
@@ -210,6 +213,7 @@ public:
     sal_Int32       GetAbsLSpace() const;
     void            SetFirstLineOffset(sal_Int32 nSet) { nFirstLineOffset = nSet;}
     sal_Int32       GetFirstLineOffset() const;
+    sal_Int16 GetFirstLineOffsetUnit() const { return nFirstLineOffsetUnit; }
     void            SetCharTextDistance(short nSet) { nCharTextDistance = nSet; }
     short           GetCharTextDistance() const;
 
@@ -220,6 +224,7 @@ public:
     tools::Long GetListtabPos() const { return mnListtabPos;}
     void SetFirstLineIndent( const tools::Long nFirstLineIndent );
     tools::Long GetFirstLineIndent() const { return mnFirstLineIndent;}
+    sal_Int16 GetFirstLineIndentUnit() const { return mnFirstLineIndentUnit; }
     void SetIndentAt( const tools::Long nIndentAt );
     tools::Long GetIndentAt() const { return mnIndentAt;}
 

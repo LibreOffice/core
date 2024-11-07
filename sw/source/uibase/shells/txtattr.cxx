@@ -771,7 +771,10 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     SvxFirstLineIndentItem const& rFirstLine(aCoreSet.Get(RES_MARGIN_FIRSTLINE));
                     SvxTextLeftMarginItem const& rLeftMargin(aCoreSet.Get(RES_MARGIN_TEXTLEFT));
                     SvxRightMarginItem const& rRightMargin(aCoreSet.Get(RES_MARGIN_RIGHT));
-                    aLR.SetTextFirstLineOffset(rFirstLine.GetTextFirstLineOffset(), rFirstLine.GetPropTextFirstLineOffset());
+
+                    // tdf#36709: TODO: Handle font-relative units
+                    aLR.SetTextFirstLineOffset(rFirstLine.ResolveTextFirstLineOffset({}),
+                                               rFirstLine.GetPropTextFirstLineOffset());
                     aLR.SetAutoFirst(rFirstLine.IsAutoFirst());
                     aLR.SetTextLeft(rLeftMargin.GetTextLeft(), rLeftMargin.GetPropLeft());
                     aLR.SetRight(rRightMargin.GetRight(), rRightMargin.GetPropRight());

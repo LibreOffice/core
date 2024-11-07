@@ -45,6 +45,7 @@
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <vcl/metric.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <charatr.hxx>
 #include <viewsh.hxx>
@@ -338,6 +339,17 @@ sal_uInt16 SwFont::CalcShadowSpace(const SvxShadowItemSide nShadow, const bool b
     }
 
     return nSpace;
+}
+
+SvxFontUnitMetrics SwFont::GetFontUnitMetrics() const
+{
+    // tdf#36709: Metrics conversion should use em and ic values from the bound fonts.
+    // Unfortunately, this currently poses a problem due to font substitution: tests
+    // abort when a missing font is set on a device.
+    // In the interim, use height for all metrics. This is technically not correct, but
+    // should be close enough for common fonts.
+    return { /*em*/ static_cast<double>(GetHeight(GetActual())),
+             /*ic*/ static_cast<double>(GetHeight(SwFontScript::CJK)) };
 }
 
 void SwFont::dumpAsXml(xmlTextWriterPtr writer) const

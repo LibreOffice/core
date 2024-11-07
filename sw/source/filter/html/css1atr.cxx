@@ -2794,8 +2794,9 @@ static SwHTMLWriter& OutCSS1_SvxFirstLineIndent(SwHTMLWriter & rWrt, SfxPoolItem
     // match that of the current template
 
     // The LineIndent of the first line might contain the room for numbering
-    tools::Long nFirstLineIndent = static_cast<tools::Long>(rFirstLine.GetTextFirstLineOffset())
-            - rWrt.m_nFirstLineIndent;
+    tools::Long nFirstLineIndent
+        = static_cast<tools::Long>(rFirstLine.ResolveTextFirstLineOffset({}))
+          - rWrt.m_nFirstLineIndent;
     if (rWrt.m_nDfltFirstLineIndent != nFirstLineIndent)
     {
         rWrt.OutCSS1_UnitProperty(sCSS1_P_text_indent, nFirstLineIndent);

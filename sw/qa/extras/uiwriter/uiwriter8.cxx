@@ -991,8 +991,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
                              rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(
+            pFirstLineIndent->GetTextFirstLineOffsetValue(),
+            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
     }
 
     pWrtShell->FwdPara();
@@ -1017,8 +1020,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
                              rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(
+            pFirstLineIndent->GetTextFirstLineOffsetValue(),
+            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
     }
 
     pWrtShell->FwdPara();
@@ -1043,8 +1049,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testInsertAutoTextIntoListFromParaStyle)
         CPPUNIT_ASSERT_EQUAL(pNumRule, rNode.GetNumRule());
         CPPUNIT_ASSERT_EQUAL(pTextLeftMargin->GetTextLeft(),
                              rNode.GetAttr(RES_MARGIN_TEXTLEFT).GetTextLeft());
-        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffset(),
-                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(
+            pFirstLineIndent->GetTextFirstLineOffsetValue(),
+            rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetValue(), 0.01);
+        CPPUNIT_ASSERT_EQUAL(pFirstLineIndent->GetTextFirstLineOffsetUnit(),
+                             rNode.GetAttr(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffsetUnit());
     }
 }
 

@@ -251,10 +251,11 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
             // We had a relative value -> recalculate
             if (100 != pOldFirstLineIndent->GetPropTextFirstLineOffset())
             {
-                const short nOld = pOldFirstLineIndent->GetTextFirstLineOffset();
-                aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffset(),
+                const double dOld = pOldFirstLineIndent->GetTextFirstLineOffsetValue();
+                aNew.SetTextFirstLineOffset(pNewFirstLineIndent->GetTextFirstLineOffsetValue(),
+                                            pNewFirstLineIndent->GetTextFirstLineOffsetUnit(),
                                             pOldFirstLineIndent->GetPropTextFirstLineOffset());
-                bChg = nOld != aNew.GetTextFirstLineOffset();
+                bChg = dOld != aNew.GetTextFirstLineOffsetValue();
             }
             if( bChg )
             {

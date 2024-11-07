@@ -216,7 +216,8 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         Point aPnt1 = pFrame->getFrameArea().Pos() + pFrame->getFramePrintArea().Pos();
         SwTextNode const*const pTextNd(GetTextNodeForParaProps());
         short nFirstOffset;
-        pTextNd->GetFirstLineOfsWithNum( nFirstOffset );
+        // tdf#36709: TODO: Handle font-relative units
+        pTextNd->GetFirstLineOfsWithNum(nFirstOffset, {});
 
         Point aPnt2;
         if ( aRectFnSet.IsVert() )
@@ -1482,8 +1483,10 @@ void SwTextFrame::FillCursorPos( SwFillData& rFill ) const
             if( nFirst && nDiff > -1 )
                 rRect.Top( rRect.Top() + nFirst );
             rRect.Height( nLineHeight );
-            SwTwips nLeft = rFill.Left() + rTextLeftMargin.GetLeft(rFirstLine) +
-                            GetTextNodeForParaProps()->GetLeftMarginWithNum();
+
+            // tdf#36709: TODO: Handle font-relative units
+            SwTwips nLeft = rFill.Left() + rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {})
+                            + GetTextNodeForParaProps()->GetLeftMarginWithNum();
             SwTwips nRight = rFill.Right() - rRightMargin.GetRight();
             SwTwips nCenter = ( nLeft + nRight ) / 2;
             rRect.Left( nLeft );

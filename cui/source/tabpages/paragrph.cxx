@@ -411,20 +411,26 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
             if (m_aFLineIndent.IsRelative())
             {
-                item.SetTextFirstLineOffset(rOldItem.GetTextFirstLineOffset(),
+                item.SetTextFirstLineOffset(
+                    rOldItem.GetTextFirstLineOffsetValue(), rOldItem.GetTextFirstLineOffsetUnit(),
                     static_cast<sal_uInt16>(m_aFLineIndent.get_value(FieldUnit::NONE)));
             }
             else
             {
-                item.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)));
+                // tdf#36709: TODO: Handle font-relative units from GUI
+                item.SetTextFirstLineOffset(
+                    static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)),
+                    css::util::MeasureUnit::TWIP);
             }
         }
         else
         {
-            item.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)));
+            // tdf#36709: TODO: Handle font-relative units from GUI
+            item.SetTextFirstLineOffset(static_cast<sal_uInt16>(m_aFLineIndent.GetCoreValue(eUnit)),
+                                        css::util::MeasureUnit::TWIP);
         }
         item.SetAutoFirst(m_xAutoCB->get_active());
-        if (item.GetTextFirstLineOffset() < 0)
+        if (item.GetTextFirstLineOffsetValue() < 0)
         {
             bNullTab = true;
         }
@@ -660,16 +666,18 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
             }
             else
             {
+                // tdf#36709: TODO: Handle font-relative units from GUI
                 m_aFLineIndent.SetRelative(false);
                 m_aFLineIndent.set_min(-9999, FieldUnit::NONE);
                 m_aFLineIndent.SetFieldUnit(eFUnit);
-                m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffset(), eUnit);
+                m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffsetValue(), eUnit);
             }
             m_xAutoCB->set_active(rOldFirstLine.IsAutoFirst());
         }
         else
         {
-            m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffset(), eUnit);
+            // tdf#36709: TODO: Handle font-relative units from GUI
+            m_aFLineIndent.SetMetricValue(rOldFirstLine.GetTextFirstLineOffsetValue(), eUnit);
             m_xAutoCB->set_active(rOldFirstLine.IsAutoFirst());
         }
         AutoHdl_Impl(*m_xAutoCB);

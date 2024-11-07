@@ -638,13 +638,14 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                         nRight = nOldRight + static_cast< sal_uInt16 >(rPropInfo.m_nRightMargin);
                 }
                 if (rPropInfo.m_bTextIndent && pFirstLineItem)
-                    nIndent = pFirstLineItem->GetTextFirstLineOffset();
+                    nIndent = pFirstLineItem->ResolveTextFirstLineOffset({});
 
                 // Remember the value for the following paragraphs
                 pContext->SetMargins( nLeft, nRight, nIndent );
 
                 // Set the attribute on the current paragraph
-                SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem firstLine(nIndent, css::util::MeasureUnit::TWIP,
+                                                 RES_MARGIN_FIRSTLINE);
                 NewAttr(m_xAttrTab, &m_xAttrTab->pFirstLineIndent, firstLine);
                 EndAttr(m_xAttrTab->pFirstLineIndent, false);
                 SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);

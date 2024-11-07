@@ -212,8 +212,8 @@ namespace
                 {
                     SvxFirstLineIndentItem firstLine(pColl->GetFormatAttr(RES_MARGIN_FIRSTLINE));
                     SvxTextLeftMarginItem leftMargin(pColl->GetFormatAttr(RES_MARGIN_TEXTLEFT));
-                    firstLine.SetTextFirstLineOffsetValue(rNFormat.GetFirstLineOffset());
-                        //TODO: overflow
+                    firstLine.SetTextFirstLineOffset(rNFormat.GetFirstLineOffset(),
+                                                     rNFormat.GetFirstLineOffsetUnit());
                     leftMargin.SetTextLeft(rNFormat.GetAbsLSpace());
                     pColl->SetFormatAttr(firstLine);
                     pColl->SetFormatAttr(leftMargin);
@@ -232,7 +232,7 @@ namespace
                             bool bHeader, bool bTab )
     {
         sal_uInt16 nLeft = o3tl::convert(5 * nFact, o3tl::Length::mm, o3tl::Length::twip);
-        SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+        SvxFirstLineIndentItem const firstLine(RES_MARGIN_FIRSTLINE);
         SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
         rSet.Put(firstLine);
         rSet.Put(leftMargin);
@@ -257,7 +257,8 @@ namespace
                             sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                             SwTwips nUpper, SwTwips nLower )
     {
-        SvxFirstLineIndentItem const firstLine(sal_uInt16(nEZ), RES_MARGIN_FIRSTLINE);
+        SvxFirstLineIndentItem firstLine(nEZ, css::util::MeasureUnit::TWIP, RES_MARGIN_FIRSTLINE);
+
         SvxTextLeftMarginItem const leftMargin(sal_uInt16(nLeft), RES_MARGIN_TEXTLEFT);
         rSet.Put(firstLine);
         rSet.Put(leftMargin);
@@ -710,7 +711,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_IDENT:           // Text body indentation
             {
                 auto const first(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                                                       RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(0, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -720,7 +722,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                                                       RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -733,7 +736,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_TEXT_MOVE:            // Text body move
             {
                 auto const left(o3tl::convert(5, o3tl::Length::mm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -744,7 +747,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(45, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(5, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                                                       RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -757,7 +761,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
         case RES_POOLCOLL_MARGINAL:         // Text body marginal
             {
                 auto const left(o3tl::convert(4, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -952,7 +956,8 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const first(-o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
                 auto const left(o3tl::convert(6, o3tl::Length::mm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(first, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(first, css::util::MeasureUnit::TWIP,
+                                                       RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 aSet.Put(firstLine);
                 aSet.Put(leftMargin);
@@ -1025,7 +1030,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
                 aSet.Put(rightMargin);
 
                 // First line indent
-                aSet.Put(SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE));
+                aSet.Put(SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
 
                 // Added as part of tdf#159531
                 // Top/bottom spacing (i.e. Above/Below paragraph spacing)
@@ -1394,7 +1399,7 @@ SwTextFormatColl* DocumentStylePoolManager::GetTextCollFromPool( sal_uInt16 nId,
             {
                 auto const left(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
                 auto const right(o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip));
-                SvxFirstLineIndentItem const firstLine(0, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(left, RES_MARGIN_TEXTLEFT);
                 SvxRightMarginItem const rightMargin(right, RES_MARGIN_RIGHT);
                 aSet.Put(firstLine);

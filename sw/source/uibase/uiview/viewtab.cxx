@@ -630,7 +630,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             rSh.GetCurAttr( aSet );
             const SvxFirstLineIndentItem & rFirstLine(aSet.Get(RES_MARGIN_FIRSTLINE));
 
-            if (rFirstLine.GetTextFirstLineOffset() < 0)
+            if (rFirstLine.GetTextFirstLineOffsetValue() < 0.0)
             {
                 SvxTabStop aSwTabStop( 0, SvxTabAdjust::Default );
                 aTabStops.Insert( aSwTabStop );
@@ -705,7 +705,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
             {
                 SvxFirstLineIndentItem firstLine(aLRSpaceSet.Get(RES_MARGIN_FIRSTLINE));
                 const OUString ratio = fLineIndent->GetValue();
-                firstLine.SetTextFirstLineOffset(nPageWidth * ratio.toFloat());
+                firstLine.SetTextFirstLineOffset(nPageWidth * ratio.toFloat(),
+                                                 css::util::MeasureUnit::TWIP);
                 rSh.SetAttrItem(firstLine);
             }
             else if (const SfxStringItem *pLeftIndent = pReqArgs->GetItemIfSet(SID_PARAGRAPH_LEFT_INDENT))
@@ -733,7 +734,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         SvxFirstLineIndentItem firstLine(aLRSpaceSet.Get(RES_MARGIN_FIRSTLINE));
         SvxTextLeftMarginItem leftMargin(aLRSpaceSet.Get(RES_MARGIN_TEXTLEFT));
 
-        tools::Long nIndentDist = firstLine.GetTextFirstLineOffset();
+        // tdf#36709: TODO: Handle font-relative hanging indent
+        tools::Long nIndentDist = firstLine.ResolveTextFirstLineOffset({});
 
         if (nIndentDist == 0)
         {
@@ -742,7 +744,7 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         }
 
         leftMargin.SetTextLeft(leftMargin.GetTextLeft() + nIndentDist);
-        firstLine.SetTextFirstLineOffset(nIndentDist * -1);
+        firstLine.SetTextFirstLineOffset(nIndentDist * -1, css::util::MeasureUnit::TWIP);
 
         firstLine.SetAutoFirst(false); // old code would do this, is it wanted?
         rSh.SetAttrItem(firstLine);
@@ -1670,7 +1672,10 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     SvxFirstLineIndentItem const& rFirstLine(aCoreSet.Get(RES_MARGIN_FIRSTLINE));
                     SvxTextLeftMarginItem const& rLeftMargin(aCoreSet.Get(RES_MARGIN_TEXTLEFT));
                     SvxRightMarginItem const& rRightMargin(aCoreSet.Get(RES_MARGIN_RIGHT));
-                    aLR->SetTextFirstLineOffset(rFirstLine.GetTextFirstLineOffset(), rFirstLine.GetPropTextFirstLineOffset());
+
+                    // tdf#36709: TODO: Handle font-relative first-line indentation
+                    aLR->SetTextFirstLineOffset(rFirstLine.ResolveTextFirstLineOffset({}),
+                                                rFirstLine.GetPropTextFirstLineOffset());
                     aLR->SetAutoFirst(rFirstLine.IsAutoFirst());
                     aLR->SetTextLeft(rLeftMargin.GetTextLeft(), rLeftMargin.GetPropLeft());
                     aLR->SetRight(rRightMargin.GetRight(), rRightMargin.GetPropRight());
@@ -1684,7 +1689,9 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                         m_pNumRuleNodeFromDoc->GetLeftMarginWithNum( true ) );
 
                         short nFLOffset;
-                        m_pNumRuleNodeFromDoc->GetFirstLineOfsWithNum( nFLOffset );
+
+                        // tdf#36709: TODO: Handle font-relative units
+                        m_pNumRuleNodeFromDoc->GetFirstLineOfsWithNum(nFLOffset, {});
 
                         aLR->SetLeft( nOffset + nFLOffset );
                     }

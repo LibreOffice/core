@@ -575,9 +575,10 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 const SvxFirstLineIndentItem& rFirstLine(
                     GetTextNodeForParaProps()->GetSwAttrSet().GetFirstLineIndent());
 
-                if (0 < rFirstLine.GetTextFirstLineOffset())
+                // tdf#36709: TODO: Handle font-relative first-line indentation
+                if (0.0 < rFirstLine.GetTextFirstLineOffsetValue())
                 {
-                    aPos.AdjustX(rFirstLine.GetTextFirstLineOffset());
+                    aPos.AdjustX(rFirstLine.ResolveTextFirstLineOffset({}));
                 }
 
                 std::unique_ptr<SwSaveClip, o3tl::default_delete<SwSaveClip>> xClip;

@@ -2757,7 +2757,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     {
                         const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
                         if (pFirstLine)
-                            nFirstLineIndent = pFirstLine->GetTextFirstLineOffset();
+                            nFirstLineIndent = pFirstLine->ResolveTextFirstLineOffset({});
                     }
 
                     // Insert tab for aesthetic purposes #i24762#
@@ -3062,11 +3062,17 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     {
                         if (bParaRTL)
                         {
-                            firstLine.SetTextFirstLineOffsetValue(firstLine.GetTextFirstLineOffset() + pFormat->GetAbsLSpace() - pFormat->GetFirstLineOffset()); //TODO: overflow
+                            firstLine.SetTextFirstLineOffset(
+                                firstLine.ResolveTextFirstLineOffset({}) + pFormat->GetAbsLSpace()
+                                    - pFormat->GetFirstLineOffset(),
+                                css::util::MeasureUnit::TWIP);
                         }
                         else
                         {
-                            firstLine.SetTextFirstLineOffset(firstLine.GetTextFirstLineOffset() + GetWordFirstLineOffset(*pFormat));
+                            firstLine.SetTextFirstLineOffset(
+                                firstLine.ResolveTextFirstLineOffset({})
+                                    + GetWordFirstLineOffset(*pFormat),
+                                css::util::MeasureUnit::TWIP);
                         }
                     }
 
@@ -3165,7 +3171,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 const SvxTextLeftMarginItem *const pTextLeftMargin(oTmpSet->GetItemIfSet(RES_MARGIN_TEXTLEFT));
                 SvxFirstLineIndentItem firstLine(pFirstLineIndent
                         ? *pFirstLineIndent
-                        : SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE));
+                        : SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE));
                 SvxTextLeftMarginItem leftMargin(pTextLeftMargin
                         ? *pTextLeftMargin
                         : SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT));
@@ -3186,18 +3192,20 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if ( rNumFormat.GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine) + rNumFormat.GetAbsLSpace());
+                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine, /*metrics*/ {})
+                                           + rNumFormat.GetAbsLSpace());
                 }
                 else
                 {
-                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine) + rNumFormat.GetIndentAt());
+                    leftMargin.SetTextLeft(leftMargin.GetLeft(firstLine, /*metrics*/ {})
+                                           + rNumFormat.GetIndentAt());
                 }
 
                 // new first line indent = 0
                 // (first line indent is ignored)
                 if (!bParaRTL)
                 {
-                    firstLine.SetTextFirstLineOffset(0);
+                    firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
                 }
 
                 // put back the new item

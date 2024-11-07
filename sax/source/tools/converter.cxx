@@ -76,7 +76,7 @@ const std::map<sal_Int16, std::string_view> stConvertMeasureUnitStrMap{
     { MeasureUnit::INCH, gpsINCH },      { MeasureUnit::POINT, gpsPT },
     { MeasureUnit::PICA, gpsPC },        { MeasureUnit::PERCENT, gpsPERCENT },
     { MeasureUnit::PIXEL, gpsPX },       { MeasureUnit::FONT_EM, gpsFONT_EM },
-    { MeasureUnit::FONT_IC, gpsFONT_IC }
+    { MeasureUnit::FONT_CJK_ADVANCE, gpsFONT_IC }
 };
 
 o3tl::Length Measure2O3tlUnit(sal_Int16 nUnit)
@@ -159,7 +159,7 @@ template <class V> static std::optional<sal_Int16> lcl_parseMeasureUnit(const V&
 
         case u'i':
             if (wordEndsWith(rString.substr(1), "c"))
-                return MeasureUnit::FONT_IC;
+                return MeasureUnit::FONT_CJK_ADVANCE;
             if (wordEndsWith(rString.substr(1), "n"))
                 return MeasureUnit::INCH;
             break;

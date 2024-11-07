@@ -57,6 +57,9 @@ public:
     int             GetSlant() const                                                { return mnSlant; }
     double                 GetMinKashida() const                                           { return mnMinKashida; }
     tools::Long            GetHangingBaseline() const                                      { return mnHangingBaseline; }
+    double GetUnitEm() const { return mdEmSize; }
+    double GetHorCJKAdvance() const { return mdHorCJKAdvanceSize; }
+    double GetVertCJKAdvance() const { return mdVertCJKAdvanceSize; }
 
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
     void            SetMinKashida(double nMinKashida )                                     { mnMinKashida=nMinKashida; }
@@ -118,6 +121,9 @@ private:
     int             mnSlant;                    // Slant (Italic/Oblique)
     double                 mnMinKashida;               // Minimal width of kashida (Arabic)
     tools::Long            mnHangingBaseline;          // Offset of hanging baseline to Romn baseline
+    double mdEmSize; // Size of an 'em'
+    double mdHorCJKAdvanceSize; // Size of an 'ic' in horizontal text
+    double mdVertCJKAdvanceSize; // Size of an 'ic' in vertical text
 
     // font attributes queried from the font instance
     bool            mbFullstopCentered;

@@ -377,7 +377,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetRightMargin());
     nLeftMargin = rTextLeftMargin.GetTextLeft();
     nRightMargin = rRightMargin.GetRight();
-    nFirstLineIndent = rFirstLine.GetTextFirstLineOffset();
+    nFirstLineIndent = rFirstLine.ResolveTextFirstLineOffset({});
 
     const SvxULSpaceItem &rULSpace =
         (pReferenceFormat ? pReferenceFormat : pFormat)->GetULSpace();
@@ -717,7 +717,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             rWrt.m_nDfltLeftMargin = rTextLeftMargin.GetTextLeft();
 
         // In numbered lists, don't output a first line indent.
-        rWrt.m_nFirstLineIndent = rFirstLine.GetTextFirstLineOffset();
+        rWrt.m_nFirstLineIndent = rFirstLine.ResolveTextFirstLineOffset({});
     }
 
     if( rInfo.bInNumberBulletList && bNumbered && bPara && !rWrt.m_bCfgOutStyles )
@@ -2086,7 +2086,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             SvxFirstLineIndentItem const& rFirstLine(pItemSet->Get(RES_MARGIN_FIRSTLINE));
             SvxTextLeftMarginItem const& rTextLeftMargin(pItemSet->Get(RES_MARGIN_TEXTLEFT));
             SvxRightMarginItem const& rRightMargin(pItemSet->Get(RES_MARGIN_RIGHT));
-            sal_Int32 const nLeft(rTextLeftMargin.GetLeft(rFirstLine));
+            sal_Int32 const nLeft(rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {}));
             sal_Int32 const nRight(rRightMargin.GetRight());
             if( nLeft || nRight )
             {

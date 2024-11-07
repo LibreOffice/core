@@ -211,6 +211,10 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetSlant( ImplDevicePixelToLogicHeight( xFontMetric->GetSlant() ) );
     aMetric.SetHangingBaseline( ImplDevicePixelToLogicHeight( xFontMetric->GetHangingBaseline() ) );
 
+    aMetric.SetUnitEm(ImplDevicePixelToLogicWidth(xFontMetric->GetUnitEm()));
+    aMetric.SetHorCJKAdvance(ImplDevicePixelToLogicWidth(xFontMetric->GetHorCJKAdvance()));
+    aMetric.SetVertCJKAdvance(ImplDevicePixelToLogicHeight(xFontMetric->GetVertCJKAdvance()));
+
     // get miscellaneous data
     aMetric.SetQuality( xFontMetric->GetQuality() );
 

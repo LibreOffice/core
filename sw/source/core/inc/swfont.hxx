@@ -28,6 +28,7 @@
 #include <swtypes.hxx>
 #include "drawfont.hxx"
 #include <editeng/borderline.hxx>
+#include <editeng/lrspitem.hxx>
 #include <optional>
 #include <o3tl/enumarray.hxx>
 
@@ -426,6 +427,9 @@ public:
     sal_uInt16 CalcShadowSpace(
         const SvxShadowItemSide nShadow, const bool bVertLayout, const bool bVertLayoutLRBT,
         const bool bSkipLeft, const bool bSkipRight ) const;
+
+    // Extract metrics for font-relative unit conversion
+    SvxFontUnitMetrics GetFontUnitMetrics() const;
 
     void dumpAsXml( xmlTextWriterPtr writer ) const;
 };

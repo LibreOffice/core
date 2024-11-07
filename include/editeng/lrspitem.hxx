@@ -47,6 +47,22 @@ SetTextLeft SetTextFirst GetLeft GetTextLeft  GetTextFirst  (What?)
 
 class SvxFirstLineIndentItem;
 
+/// helper struct used for resolving font-relative indentation
+struct SvxFontUnitMetrics
+{
+    double m_dEmTwips = 0.0;
+    double m_dIcTwips = 0.0;
+    bool m_bInitialized = false;
+
+    SvxFontUnitMetrics() = default;
+    SvxFontUnitMetrics(double dEmTwips, double dIcTwips)
+        : m_dEmTwips(dEmTwips)
+        , m_dIcTwips(dIcTwips)
+        , m_bInitialized(true)
+    {
+    }
+};
+
 /// GetLeft() - for everything that's not applied to a paragraph
 class EDITENG_DLLPUBLIC SvxLeftMarginItem final : public SfxPoolItem
 {
@@ -100,7 +116,8 @@ public:
     //TODO: need this?
     //void SetLeft(SvxFirstLineIndentItem const& rFirstLine, const tools::Long nL, const sal_uInt16 nProp = 100);
     /// get left margin without negative first-line indent
-    tools::Long GetLeft(SvxFirstLineIndentItem const& rFirstLine) const;
+    tools::Long GetLeft(const SvxFirstLineIndentItem& rFirstLine,
+                        const SvxFontUnitMetrics& rMetrics) const;
     sal_uInt16 GetPropLeft() const { return m_nPropLeftMargin; }
 
     void SetTextLeft(const tools::Long nL, const sal_uInt16 nProp = 100);
@@ -136,33 +153,27 @@ class EDITENG_DLLPUBLIC SvxFirstLineIndentItem final : public SfxPoolItem
 {
 private:
     /// First-line indent always relative to GetTextLeft()
-    short m_nFirstLineOffset = 0;
+    double m_dFirstLineOffset = 0.0;
     sal_Int16 m_nUnit = css::util::MeasureUnit::TWIP;
     sal_uInt16 m_nPropFirstLineOffset = 100;
     /// Automatic calculation of the first line indent
     bool m_bAutoFirst = false;
 
 public:
-    bool IsAutoFirst()  const { return m_bAutoFirst; }
-    void SetAutoFirst(const bool bNew) { ASSERT_CHANGE_REFCOUNTED_ITEM; m_bAutoFirst = bNew; }
+    bool IsAutoFirst() const;
+    void SetAutoFirst(const bool bNew);
 
-    void SetTextFirstLineOffset(const short nF, const sal_uInt16 nProp = 100);
-    short GetTextFirstLineOffset() const { return m_nFirstLineOffset; }
-    double GetTextFirstLineOffsetDouble() const { return m_nFirstLineOffset; }
-    sal_Int16 GetTextFirstLineOffsetUnit() const { return m_nUnit; }
-    void SetPropTextFirstLineOffset(const sal_uInt16 nProp)
-                    { ASSERT_CHANGE_REFCOUNTED_ITEM; m_nPropFirstLineOffset = nProp; }
-    sal_uInt16 GetPropTextFirstLineOffset() const
-                    { return m_nPropFirstLineOffset; }
-    void SetTextFirstLineOffsetValue(const short nValue)
-    {
-        ASSERT_CHANGE_REFCOUNTED_ITEM;
-        m_nFirstLineOffset = nValue;
-        m_nUnit = css::util::MeasureUnit::TWIP;
-    }
+    void SetPropTextFirstLineOffset(sal_uInt16 nProp);
+    sal_uInt16 GetPropTextFirstLineOffset() const;
+
+    void SetTextFirstLineOffset(double dValue, sal_Int16 nUnit, sal_uInt16 nProp = 100);
+    double GetTextFirstLineOffsetValue() const;
+    sal_Int16 GetTextFirstLineOffsetUnit() const;
+    double ResolveTextFirstLineOffsetDouble(const SvxFontUnitMetrics& rMetrics) const;
+    sal_Int32 ResolveTextFirstLineOffset(const SvxFontUnitMetrics& rMetrics) const;
 
     explicit SvxFirstLineIndentItem(const sal_uInt16 nId);
-    SvxFirstLineIndentItem(const short nOffset, const sal_uInt16 nId);
+    SvxFirstLineIndentItem(double dValue, sal_uInt16 nUnit, const sal_uInt16 nId);
     SvxFirstLineIndentItem(SvxFirstLineIndentItem const &) = default; // SfxPoolItem copy function dichotomy
 
     // "pure virtual Methods" from SfxPoolItem

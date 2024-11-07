@@ -3311,7 +3311,8 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             if( pRule->IsAbsSpaces() )
             {
                 SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-                nRet = nRet - GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
+                // tdf#36709: TODO: Handle font-relative units
+                nRet = nRet - GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
             }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3324,27 +3325,29 @@ tools::Long SwTextNode::GetLeftMarginWithNum( bool bTextLeft ) const
             // list/paragraph items. (this is rather inelegant)
             SvxFirstLineIndentItem firstLine(GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem leftMargin(GetSwAttrSet().GetTextLeftMargin());
-            nRet = bTextLeft
-                ? - leftMargin.GetTextLeft()
-                : - leftMargin.GetLeft(firstLine);
+            // tdf#36709: TODO: Handle font-relative units
+            nRet = bTextLeft ? -leftMargin.GetTextLeft()
+                             : -leftMargin.GetLeft(firstLine, /*metrics*/ {});
             if (indents & ::sw::ListLevelIndents::LeftMargin)
             {
                 leftMargin.SetTextLeft(rFormat.GetIndentAt());
             }
             if (indents & ::sw::ListLevelIndents::FirstLine)
             {
-                firstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent());
+                firstLine.SetTextFirstLineOffset(rFormat.GetFirstLineIndent(),
+                                                 rFormat.GetFirstLineIndentUnit());
             }
-            nRet += bTextLeft
-                ? leftMargin.GetTextLeft()
-                : leftMargin.GetLeft(firstLine);
+            // tdf#36709: TODO: Handle font-relative units
+            nRet += bTextLeft ? leftMargin.GetTextLeft()
+                              : leftMargin.GetLeft(firstLine, /*metrics*/ {});
         }
     }
 
     return nRet;
 }
 
-bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
+bool SwTextNode::GetFirstLineOfsWithNum(short& rFLOffset,
+                                        const SvxFontUnitMetrics& rMetrics) const
 {
     // #i95907#
     rFLOffset = 0;
@@ -3363,7 +3366,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxFirstLineIndentItem const aItem(GetSwAttrSet().GetFirstLineIndent());
-                    rFLOffset = rFLOffset + aItem.GetTextFirstLineOffset();
+                    rFLOffset = rFLOffset + aItem.ResolveTextFirstLineOffset(rMetrics);
                 }
             }
             else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3375,7 +3378,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
                 else if (!getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
                     SvxFirstLineIndentItem const aItem(GetSwAttrSet().GetFirstLineIndent());
-                    rFLOffset = aItem.GetTextFirstLineOffset();
+                    rFLOffset = aItem.ResolveTextFirstLineOffset(rMetrics);
                 }
             }
         }
@@ -3383,7 +3386,7 @@ bool SwTextNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         return true;
     }
 
-    rFLOffset = GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
+    rFLOffset = GetSwAttrSet().GetFirstLineIndent().ResolveTextFirstLineOffset(rMetrics);
     return false;
 }
 
@@ -3398,12 +3401,16 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
         if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
             SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-            nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
+
+            // tdf#36709: TODO: Handle font-relative indentation
+            nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
 
             if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
             {
-                nAdditionalIndent = nAdditionalIndent -
-                    GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset();
+                // tdf#36709: TODO: Handle font-relative indentation
+                nAdditionalIndent
+                    = nAdditionalIndent
+                      - GetSwAttrSet().GetFirstLineIndent().ResolveTextFirstLineOffset({});
             }
         }
         else if ( rFormat.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
@@ -3414,26 +3421,30 @@ SwTwips SwTextNode::GetAdditionalIndentForStartingNewList() const
             ::sw::ListLevelIndents const indents(AreListLevelIndentsApplicable());
             SvxFirstLineIndentItem const aFirst(
                     indents & ::sw::ListLevelIndents::FirstLine
-                    ? SvxFirstLineIndentItem(rFormat.GetFirstLineIndent(), RES_MARGIN_FIRSTLINE)
+                    ? SvxFirstLineIndentItem(rFormat.GetFirstLineIndent(),
+                                             rFormat.GetFirstLineIndentUnit(), RES_MARGIN_FIRSTLINE)
                     : GetSwAttrSet().GetFirstLineIndent());
             SvxTextLeftMarginItem const aLeft(
                     indents & ::sw::ListLevelIndents::LeftMargin
                     ? SvxTextLeftMarginItem(rFormat.GetIndentAt(), RES_MARGIN_TEXTLEFT)
                     : GetSwAttrSet().GetTextLeftMargin());
-            nAdditionalIndent = aLeft.GetLeft(aFirst);
+            // tdf#36709: TODO: Handle font-relative indentation
+            nAdditionalIndent = aLeft.GetLeft(aFirst, /*metrics*/ {});
             if (!(indents & ::sw::ListLevelIndents::FirstLine))
             {
                 if (getIDocumentSettingAccess()->get(DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
-                    nAdditionalIndent = nAdditionalIndent - aFirst.GetTextFirstLineOffset();
+                    // tdf#36709: TODO: Handle font-relative first line indentation
+                    nAdditionalIndent = nAdditionalIndent - aFirst.ResolveTextFirstLineOffset({});
                 }
             }
         }
     }
     else
     {
+        // tdf#36709: TODO: Handle font-relative first line indentation
         SvxFirstLineIndentItem const& rFirst(GetSwAttrSet().GetFirstLineIndent());
-        nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst);
+        nAdditionalIndent = GetSwAttrSet().GetTextLeftMargin().GetLeft(rFirst, /*metrics*/ {});
     }
 
     return nAdditionalIndent;

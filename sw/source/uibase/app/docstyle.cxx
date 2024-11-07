@@ -215,7 +215,9 @@ public:
                 if (!oLRSpaceItem)
                     oLRSpaceItem.emplace(EE_PARA_LRSPACE);
                 auto pFirstLineItem = static_cast<const SvxFirstLineIndentItem*>(pItem);
-                (*oLRSpaceItem).SetTextFirstLineOffsetValue(pFirstLineItem->GetTextFirstLineOffset());
+                // tdf#36709: TODO: Handle font-relative first-line indentation
+                (*oLRSpaceItem)
+                    .SetTextFirstLineOffsetValue(pFirstLineItem->ResolveTextFirstLineOffset({}));
                 (*oLRSpaceItem).SetAutoFirst(pFirstLineItem->IsAutoFirst());
             }
             else if (nWhich == RES_MARGIN_TEXTLEFT)
@@ -1603,7 +1605,9 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
         {
             if (indents & ::sw::ListLevelIndents::FirstLine)
             {
-                SvxFirstLineIndentItem const firstLine(static_cast<short>(rFormat.GetFirstLineIndent()), RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(rFormat.GetFirstLineIndent(),
+                                                       rFormat.GetFirstLineIndentUnit(),
+                                                       RES_MARGIN_FIRSTLINE);
                 rSet.Put(firstLine);
             }
             if (indents & ::sw::ListLevelIndents::LeftMargin)

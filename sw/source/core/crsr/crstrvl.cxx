@@ -2438,7 +2438,7 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                     RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT> aSet(GetDoc()->GetAttrPool());
             SvxFirstLineIndentItem firstLine(pCNd->GetAttr(RES_MARGIN_FIRSTLINE));
             SvxTextLeftMarginItem leftMargin(pCNd->GetAttr(RES_MARGIN_TEXTLEFT));
-            firstLine.SetTextFirstLineOffset(0);
+            firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
             leftMargin.SetTextLeft(aFPos.nTabCnt);
             aSet.Put(firstLine);
             aSet.Put(leftMargin);

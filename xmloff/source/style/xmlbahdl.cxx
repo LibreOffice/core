@@ -220,7 +220,7 @@ bool XMLUnitMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue
         // This importer may only accept font-relative units.
         // Discard all other units to allow fall-through to other attributes.
         if (css::util::MeasureUnit::FONT_EM != nValueUnit
-            && css::util::MeasureUnit::FONT_IC != nValueUnit)
+            && css::util::MeasureUnit::FONT_CJK_ADVANCE != nValueUnit)
         {
             return false;
         }
@@ -244,7 +244,7 @@ bool XMLUnitMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
         // This exporter may only produce font-relative units.
         // Discard all other units to allow fall-through to other attributes.
         if (css::util::MeasureUnit::FONT_EM != nValueUnit
-            && css::util::MeasureUnit::FONT_IC != nValueUnit)
+            && css::util::MeasureUnit::FONT_CJK_ADVANCE != nValueUnit)
         {
             return false;
         }

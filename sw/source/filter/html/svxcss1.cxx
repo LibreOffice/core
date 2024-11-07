@@ -1987,7 +1987,8 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     if( !bSet )
         return;
 
-    SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+    SvxFirstLineIndentItem const firstLine(nIndent, css::util::MeasureUnit::TWIP,
+                                           RES_MARGIN_FIRSTLINE);
     rItemSet.Put(firstLine);
     rPropInfo.m_bTextIndent = true;
 }

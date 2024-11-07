@@ -114,8 +114,10 @@ auto DefaultToxTabStopTokenHandler::CalcEndStop(SwTextNode const& rNode,
             rNode.GetTextColl()->GetFirstLineIndent());
         SvxTextLeftMarginItem const& rTextLeftMargin(
             rNode.GetTextColl()->GetTextLeftMargin());
-        nRightMargin -= rTextLeftMargin.GetLeft(rFirstLine);
-        nRightMargin -= rFirstLine.GetTextFirstLineOffset();
+
+        // tdf#36709: TODO: Handle font-relative units
+        nRightMargin -= rTextLeftMargin.GetLeft(rFirstLine, /*metrics*/ {});
+        nRightMargin -= rFirstLine.ResolveTextFirstLineOffset(/*metrics*/ {});
     }
     return nRightMargin - 1; // subtract 1 twip to avoid equal for TabOverMargin
 }

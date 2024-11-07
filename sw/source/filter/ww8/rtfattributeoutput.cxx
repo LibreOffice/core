@@ -3253,7 +3253,9 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTextNode* pTextNd, sal_Int32 n
     SvxFirstLineIndentItem firstLine(rNdSet.Get(RES_MARGIN_FIRSTLINE));
     SvxTextLeftMarginItem leftMargin(rNdSet.Get(RES_MARGIN_TEXTLEFT));
     leftMargin.SetTextLeft(leftMargin.GetTextLeft() + pFormat->GetIndentAt());
-    firstLine.SetTextFirstLineOffset(pFormat->GetFirstLineOffset()); //TODO: overflow
+
+    firstLine.SetTextFirstLineOffset(pFormat->GetFirstLineOffset(),
+                                     pFormat->GetFirstLineOffsetUnit());
 
     sal_uInt16 nStyle = m_rExport.GetId(pFormat->GetCharFormat());
     OString* pString = m_rExport.GetStyle(nStyle);
@@ -3380,7 +3382,7 @@ void RtfAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rItem)
 void RtfAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_FI);
-    m_aStyles.append(static_cast<sal_Int32>(rFirstLine.GetTextFirstLineOffset()));
+    m_aStyles.append(rFirstLine.ResolveTextFirstLineOffset({}));
 }
 
 void RtfAttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)

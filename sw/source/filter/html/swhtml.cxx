@@ -4772,7 +4772,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         {
             sal_Int32 nLeft = rItemSet.Get(RES_MARGIN_TEXTLEFT).GetTextLeft();
             sal_Int32 nRight = rItemSet.Get(RES_MARGIN_RIGHT).GetRight();
-            nFirstLineIndent = rItemSet.Get(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset();
+            nFirstLineIndent = rItemSet.Get(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({});
 
             // In Definition lists the margins also contain the margins from the previous levels
             if( RES_POOLCOLL_HTML_DD == nTopColl )
@@ -4814,7 +4814,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         }
         if( !nFirstLineIndent )
         {
-            nFirstLineIndent = pCollToSet->GetFirstLineIndent().GetTextFirstLineOffset();
+            nFirstLineIndent = pCollToSet->GetFirstLineIndent().ResolveTextFirstLineOffset({});
         }
     }
 
@@ -4837,16 +4837,16 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     const SvxFirstLineIndentItem & rFirstLine = pCollToSet->GetFirstLineIndent();
     const SvxTextLeftMarginItem & rTextLeftMargin = pCollToSet->GetTextLeftMargin();
     const SvxRightMarginItem & rRightMargin = pCollToSet->GetRightMargin();
-    bool bSetLRSpace = nLeftMargin != rTextLeftMargin.GetTextLeft() ||
-                      nFirstLineIndent != rFirstLine.GetTextFirstLineOffset() ||
-                      nRightMargin != rRightMargin.GetRight();
+    bool bSetLRSpace = nLeftMargin != rTextLeftMargin.GetTextLeft()
+                       || nFirstLineIndent != rFirstLine.ResolveTextFirstLineOffset({})
+                       || nRightMargin != rRightMargin.GetRight();
 
     if( bSetLRSpace )
     {
         SvxFirstLineIndentItem firstLine(rFirstLine);
         SvxTextLeftMarginItem leftMargin(rTextLeftMargin);
         SvxRightMarginItem rightMargin(rRightMargin);
-        firstLine.SetTextFirstLineOffset(nFirstLineIndent);
+        firstLine.SetTextFirstLineOffset(nFirstLineIndent, css::util::MeasureUnit::TWIP);
         leftMargin.SetTextLeft(nLeftMargin);
         rightMargin.SetRight(nRightMargin);
         if( pItemSet )
@@ -5081,7 +5081,8 @@ void SwHTMLParser::InsertSpacer()
                 GetMarginsFromContextWithNumberBullet( nLeft, nRight, nIndent );
                 nIndent = nIndent + static_cast<short>(nSize);
 
-                SvxFirstLineIndentItem const firstLine(nIndent, RES_MARGIN_FIRSTLINE);
+                SvxFirstLineIndentItem const firstLine(nIndent, css::util::MeasureUnit::TWIP,
+                                                       RES_MARGIN_FIRSTLINE);
                 SvxTextLeftMarginItem const leftMargin(nLeft, RES_MARGIN_TEXTLEFT);
                 SvxRightMarginItem const rightMargin(nRight, RES_MARGIN_RIGHT);
 

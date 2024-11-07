@@ -660,7 +660,7 @@ void ConverterTest::testConvertMeasureUnit()
     fnFromStr("5000%", 5000.0, MeasureUnit::PERCENT, true);
     fnFromStr("5000cm", 5000.0, MeasureUnit::CM, true);
     fnFromStr("5000em", 5000.0, MeasureUnit::FONT_EM, true);
-    fnFromStr("5000ic", 5000.0, MeasureUnit::FONT_IC, true);
+    fnFromStr("5000ic", 5000.0, MeasureUnit::FONT_CJK_ADVANCE, true);
     fnFromStr("5000in", 5000.0, MeasureUnit::INCH, true);
     fnFromStr("5000mm", 5000.0, MeasureUnit::MM, true);
     fnFromStr("5000pt", 5000.0, MeasureUnit::POINT, true);

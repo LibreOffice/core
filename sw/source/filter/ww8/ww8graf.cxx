@@ -526,7 +526,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs(SfxItemSet& rS, sal_uInt16 nColl, ManTy
 
                 SvxLRSpaceItem aLR(rS.Get(EE_PARA_LRSPACE));
                 aLR.SetTextFirstLineOffset(
-                    pStyInf->m_pFormat->GetFirstLineIndent().GetTextFirstLineOffset());
+                    pStyInf->m_pFormat->GetFirstLineIndent().ResolveTextFirstLineOffset({}));
                 aLR.SetTextLeft(pStyInf->m_pFormat->GetTextLeftMargin().GetTextLeft());
                 aLR.SetRight(pStyInf->m_pFormat->GetRightMargin().GetRight());
                 rS.Put(aLR);
@@ -773,7 +773,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(WW8_CP nStartCp, WW8_CP nEndCp,
                             {
                                 aLR.SetTextFirstLineOffset(
                                     static_cast<const SvxFirstLineIndentItem*>(pItem)
-                                        ->GetTextFirstLineOffset());
+                                        ->ResolveTextFirstLineOffset({}));
                             }
                             else if (nWhich == RES_MARGIN_TEXTLEFT)
                             {

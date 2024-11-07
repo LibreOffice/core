@@ -70,17 +70,17 @@ bool SwWrtShell::TryRemoveIndent()
 
     SvxFirstLineIndentItem firstLine(aAttrSet.Get(RES_MARGIN_FIRSTLINE));
     SvxTextLeftMarginItem leftMargin(aAttrSet.Get(RES_MARGIN_TEXTLEFT));
-    short aOldFirstLineOfst = firstLine.GetTextFirstLineOffset();
+    short aOldFirstLineOfst = firstLine.ResolveTextFirstLineOffset({});
 
     if (aOldFirstLineOfst > 0)
     {
-        firstLine.SetTextFirstLineOffset(0);
+        firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
         bResult = true;
     }
     else if (aOldFirstLineOfst < 0)
     {
         // this used to call SetLeft() but this should be the same result
-        firstLine.SetTextFirstLineOffset(0);
+        firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
         leftMargin.SetTextLeft(leftMargin.GetTextLeft() + aOldFirstLineOfst);
         bResult = true;
     }

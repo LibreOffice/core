@@ -49,6 +49,10 @@ public:
     sal_Int32           GetBulletOffset() const                     { return mnBulletOffset; }
     sal_Int32           GetHangingBaseline() const                  { return mnHangingBaseline; }
 
+    double GetUnitEm() const { return mdEmSize; }
+    double GetHorCJKAdvance() const { return mdHorCJKAdvanceSize; }
+    double GetVertCJKAdvance() const { return mdVertCJKAdvanceSize; }
+
     void                SetAscent( sal_Int32 nAscent )                   { mnAscent = nAscent; }
     void                SetDescent( sal_Int32 nDescent )                 { mnDescent = nDescent; }
     void                SetExternalLeading( sal_Int32 nExtLeading )      { mnExtLeading = nExtLeading; }
@@ -57,6 +61,10 @@ public:
     void                SetSlant( sal_Int32 nSlant )                     { mnSlant = nSlant; }
     void                SetBulletOffset( sal_Int32 nOffset )             { mnBulletOffset = nOffset; }
     void                SetHangingBaseline( sal_Int32 nBaseline )        { mnHangingBaseline = nBaseline; }
+
+    void SetUnitEm(double dValue) { mdEmSize = dValue; }
+    void SetHorCJKAdvance(double dValue) { mdHorCJKAdvanceSize = dValue; }
+    void SetVertCJKAdvance(double dValue) { mdVertCJKAdvanceSize = dValue; }
 
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
@@ -85,6 +93,9 @@ private:
     sal_Int32           mnSlant;                       // Slant
     sal_Int32           mnBulletOffset;                // Offset for non-printing character
     sal_Int32           mnHangingBaseline;             // Offset from Romn baseline to hanging baseline.
+    double mdEmSize; // Size of an 'em' unit
+    double mdHorCJKAdvanceSize; // Size of an 'ic' unit in horizontal layout
+    double mdVertCJKAdvanceSize; // Size of an 'ic' unit in vertical layout
 
     bool                mbFullstopCentered;
 };

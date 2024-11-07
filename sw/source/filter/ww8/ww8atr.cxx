@@ -927,7 +927,8 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                     SvxTextLeftMarginItem leftMargin(aSet.Get(RES_MARGIN_TEXTLEFT));
 
                     leftMargin.SetTextLeft(leftMargin.GetTextLeft() + rNFormat.GetAbsLSpace());
-                    firstLine.SetTextFirstLineOffset(GetWordFirstLineOffset(rNFormat));
+                    firstLine.SetTextFirstLineOffset(GetWordFirstLineOffset(rNFormat),
+                                                     css::util::MeasureUnit::TWIP);
 
                     aSet.Put(firstLine);
                     aSet.Put(leftMargin);
@@ -4348,9 +4349,10 @@ void WW8AttributeOutput::FormatPaperBin( const SvxPaperBinItem& rPaperBin )
 
 void WW8AttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
+    // tdf#80596: TODO export sprmPDxcLeft1 for first line indents in ICs
     // sprmPDxaLeft1
     m_rWW8Export.InsUInt16( 0x8460 );        //asian version ?
-    m_rWW8Export.InsUInt16( rFirstLine.GetTextFirstLineOffset() );
+    m_rWW8Export.InsUInt16(rFirstLine.ResolveTextFirstLineOffset({}));
 }
 
 void WW8AttributeOutput::FormatTextLeftMargin(SvxTextLeftMarginItem const& rTextLeftMargin)

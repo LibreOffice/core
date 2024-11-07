@@ -43,6 +43,7 @@ class SwNumRule;
 class SwNodeNum;
 class SvxFirstLineIndentItem;
 class SvxTextLeftMarginItem;
+struct SvxFontUnitMetrics;
 class SwXParagraph;
 
 namespace utl {
@@ -530,13 +531,18 @@ public:
        Returns the combined first line indent of this text node and
        its numbering.
 
-       @param the first line indent of this text node taking the
-               numbering into account (return parameter)
+       @param rFirstOffset
+       the first line indent of this text node taking the numbering into
+       account (return parameter)
+
+       @param rMetrics
+       helper structure containing font metrics, used for resolving font-
+       relative indentation
 
        @retval true   this node has SwNodeNum and has numbering rule
        @retval false  else
      */
-    bool GetFirstLineOfsWithNum( short& rFirstOffset ) const;
+    bool GetFirstLineOfsWithNum( short& rFirstOffset, const SvxFontUnitMetrics& rMetrics ) const;
 
     SwTwips GetAdditionalIndentForStartingNewList() const;
 

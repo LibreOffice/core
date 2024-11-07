@@ -277,8 +277,8 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
                 }
                 if( aPropInfo.m_bTextIndent )
                 {
-                    short nTextIndent =
-                        aItemSet.Get(RES_MARGIN_FIRSTLINE).GetTextFirstLineOffset();
+                    short nTextIndent
+                        = aItemSet.Get(RES_MARGIN_FIRSTLINE).ResolveTextFirstLineOffset({});
                     aNumFormat.SetFirstLineOffset( nTextIndent );
                     bChangeNumFormat = true;
                 }

@@ -9276,7 +9276,8 @@ void DocxAttributeOutput::FormatPaperBin(const SvxPaperBinItem& rPaperBin)
 
 void DocxAttributeOutput::FormatFirstLineIndent(SvxFirstLineIndentItem const& rFirstLine)
 {
-    sal_Int32 const nFirstLineAdjustment(rFirstLine.GetTextFirstLineOffset());
+    // tdf#83844: TODO: export FONT_CJK_ADVANCE first line indent as HangingChars/FirstLineChars
+    sal_Int32 const nFirstLineAdjustment(rFirstLine.ResolveTextFirstLineOffset({}));
     if (nFirstLineAdjustment > 0)
     {
         AddToAttrList(m_pLRSpaceAttrList, FSNS(XML_w, XML_firstLine),

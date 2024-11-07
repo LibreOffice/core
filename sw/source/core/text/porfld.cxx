@@ -604,11 +604,14 @@ bool SwNumberPortion::Format( SwTextFormatInfo &rInf )
                 (IsFootnoteNumPortion() &&
                  rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::NO_GAP_AFTER_NOTE_NUMBER)))
             {
+                // tdf#36709: TODO: Handle font-relative first line indentation
                 nDiff = rInf.Left()
-                    + rInf.GetTextFrame()->GetTextNodeForParaProps()->
-                        GetSwAttrSet().GetFirstLineIndent().GetTextFirstLineOffset()
-                    - rInf.First()
-                    + rInf.ForcedLeftMargin();
+                        + rInf.GetTextFrame()
+                              ->GetTextNodeForParaProps()
+                              ->GetSwAttrSet()
+                              .GetFirstLineIndent()
+                              .ResolveTextFirstLineOffset({})
+                        - rInf.First() + rInf.ForcedLeftMargin();
             }
             else
             {

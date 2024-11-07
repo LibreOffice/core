@@ -292,7 +292,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
                         const SvxFirstLineIndentItem *const pFirstLine(aSet.GetItem<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
                         if (pFirstLine)
                         {
-                            nFirstLineIndent = pFirstLine->GetTextFirstLineOffset();
+                            nFirstLineIndent = pFirstLine->ResolveTextFirstLineOffset({});
                         }
                     }
 

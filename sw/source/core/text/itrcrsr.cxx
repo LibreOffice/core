@@ -161,6 +161,8 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     GetInfo().SetFont( GetFnt() );
     const SwTextNode *const pNode = m_pFrame->GetTextNodeForParaProps();
 
+    auto stMetrics = GetFnt()->GetFontUnitMetrics();
+
     SvxFirstLineIndentItem const& rFirstLine(pNode->GetSwAttrSet().GetFirstLineIndent());
     SvxTextLeftMarginItem const& rTextLeftMargin(pNode->GetSwAttrSet().GetTextLeftMargin());
     // #i95907#
@@ -192,7 +194,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                 // #i95907#
                 // #i111284#
                 // rSpace.GetLeft() + rSpace.GetTextLeft();
-                (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft());
+                (rTextLeftMargin.GetLeft(rFirstLine, stMetrics) - rTextLeftMargin.GetTextLeft());
     }
     else
     {
@@ -208,7 +210,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                     pNode->GetLeftMarginWithNum() -
                     // #i95907#
                     // #i111284#
-                    (rTextLeftMargin.GetLeft(rFirstLine) - rTextLeftMargin.GetTextLeft());
+                    (rTextLeftMargin.GetLeft(rFirstLine, stMetrics) - rTextLeftMargin.GetTextLeft());
         }
         else
         {
@@ -239,8 +241,7 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
     {
         short nFLOfst = 0;
         tools::Long nFirstLineOfs = 0;
-        if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
-            rFirstLine.IsAutoFirst())
+        if (!pNode->GetFirstLineOfsWithNum(nFLOfst, stMetrics) && rFirstLine.IsAutoFirst())
         {
             nFirstLineOfs = GetFnt()->GetSize( GetFnt()->GetActual() ).Height();
             LanguageType const aLang = m_pFrame->GetLangOfChar(
@@ -297,26 +298,6 @@ void SwTextMargin::CtorInitTextMargin( SwTextFrame *pNewFrame, SwTextSizeInfo *p
                         default: OSL_FAIL( ": unknown InterLineSpaceRule" );
                     }
                 }
-            }
-        }
-        else if (!pNode->GetFirstLineOfsWithNum(nFLOfst)
-                 && rFirstLine.GetTextFirstLineOffsetUnit() != css::util::MeasureUnit::TWIP)
-        {
-            auto nFntHeight = GetFnt()->GetSize(GetFnt()->GetActual()).Height();
-
-            // tdf#36709: TODO: Complete and consolidate unit conversion code
-            switch (rFirstLine.GetTextFirstLineOffsetUnit())
-            {
-                case css::util::MeasureUnit::FONT_IC:
-                case css::util::MeasureUnit::FONT_EM:
-                    nFirstLineOfs
-                        = static_cast<tools::Long>(static_cast<double>(nFntHeight)
-                                                   * rFirstLine.GetTextFirstLineOffsetDouble());
-                    break;
-
-                default:
-                    nFirstLineOfs = 0;
-                    break;
             }
         }
         else

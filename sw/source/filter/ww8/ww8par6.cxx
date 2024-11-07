@@ -4306,7 +4306,8 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
             if ( pFormat && pFormat->GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 pLeftMargin->SetTextLeft(pFormat->GetIndentAt());
-                pFirstLine->SetTextFirstLineOffset(static_cast<short>(pFormat->GetFirstLineIndent()));
+                pFirstLine->SetTextFirstLineOffset(pFormat->GetFirstLineIndent(),
+                                                   pFormat->GetFirstLineIndentUnit());
                 // make paragraph have hard-set indent attributes
                 pTextNode->SetAttr(*pLeftMargin);
                 pTextNode->SetAttr(*pFirstLine);
@@ -4378,11 +4379,13 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 {
                     const SvxFirstLineIndentItem & rFirstLine =
                         m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(RES_MARGIN_FIRSTLINE);
-                    nPara = nPara - rFirstLine.GetTextFirstLineOffset();
+                    // tdf#80596: TODO handle sprmPDxcLeft1
+                    nPara = nPara - rFirstLine.ResolveTextFirstLineOffset({});
                 }
             }
 
-            pFirstLine->SetTextFirstLineOffset(nPara);
+            // tdf#80596: TODO handle sprmPDxcLeft1
+            pFirstLine->SetTextFirstLineOffset(nPara, css::util::MeasureUnit::TWIP);
 
             if (!m_pCurrentColl)
             {

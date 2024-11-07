@@ -2353,7 +2353,8 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     {
         if (pCaller->IsRightToLeft())
         {
-            nRight += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent);
+            // tdf#36709: TODO: Handle font-relative units
+            nRight += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent, /*metrics*/ {});
         }
         else
         {
@@ -2408,7 +2409,8 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
     {
         if (pCaller->IsTextFrame())
         {
-            nLeft += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent);
+            // tdf#36709: TODO: Handle font-relative units
+            nLeft += m_pTextLeftMargin->GetLeft(*m_pFirstLineIndent, /*metrics*/ {});
         }
         else
             nLeft += m_xLR->GetLeft();

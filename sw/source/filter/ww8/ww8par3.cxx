@@ -1680,7 +1680,8 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
         SvxFirstLineIndentItem firstLine(rStyle.m_pFormat->GetFormatAttr(RES_MARGIN_FIRSTLINE));
         SvxTextLeftMarginItem leftMargin(rStyle.m_pFormat->GetFormatAttr(RES_MARGIN_TEXTLEFT));
         leftMargin.SetTextLeft(nAbsLSpace);
-        firstLine.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent));
+        firstLine.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent),
+                                         css::util::MeasureUnit::TWIP);
         rStyle.m_pFormat->SetFormatAttr(firstLine);
         rStyle.m_pFormat->SetFormatAttr(leftMargin);
         rStyle.m_bListRelevantIndentSet = true;
@@ -1702,7 +1703,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     else
     {
         leftMargin.SetTextLeft(0);
-        firstLine.SetTextFirstLineOffset(0);
+        firstLine.SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
     }
     rStyle.m_pFormat->SetFormatAttr(firstLine);
     rStyle.m_pFormat->SetFormatAttr(leftMargin);
@@ -2020,7 +2021,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                     pFirstLine.reset(pItem->Clone());
 
                 // reset/blank the left indent (and only the left)
-                pFirstLine->SetTextFirstLineOffset(0);
+                pFirstLine->SetTextFirstLineOffset(0.0, css::util::MeasureUnit::TWIP);
                 SvxTextLeftMarginItem leftMargin(0, RES_MARGIN_TEXTLEFT);
 
                 // apply the modified SvxLRSpaceItem to the current paragraph

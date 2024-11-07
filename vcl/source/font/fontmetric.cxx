@@ -42,15 +42,18 @@ using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 FontMetric::FontMetric()
-:   mnAscent( 0 ),
-    mnDescent( 0 ),
-    mnIntLeading( 0 ),
-    mnExtLeading( 0 ),
-    mnLineHeight( 0 ),
-    mnSlant( 0 ),
-    mnBulletOffset( 0 ),
-    mnHangingBaseline( 0 ),
-    mbFullstopCentered( false )
+    : mnAscent(0)
+    , mnDescent(0)
+    , mnIntLeading(0)
+    , mnExtLeading(0)
+    , mnLineHeight(0)
+    , mnSlant(0)
+    , mnBulletOffset(0)
+    , mnHangingBaseline(0)
+    , mdEmSize(0.0)
+    , mdHorCJKAdvanceSize(0.0)
+    , mdVertCJKAdvanceSize(0.0)
+    , mbFullstopCentered(false)
 {}
 
 FontMetric::FontMetric( const FontMetric& rFontMetric ) = default;
@@ -141,6 +144,9 @@ FontMetricData::FontMetricData( const vcl::font::FontSelectPattern& rFontSelData
     , mnSlant( 0 )
     , mnMinKashida( 0 )
     , mnHangingBaseline( 0 )
+    , mdEmSize(0.0)
+    , mdHorCJKAdvanceSize(0.0)
+    , mdVertCJKAdvanceSize(0.0)
     , mbFullstopCentered( false )
     , mnBulletOffset( 0 )
     , mnUnderlineSize( 0 )
@@ -535,6 +541,24 @@ void FontMetricData::ImplCalcLineSpacing(LogicalFontInstance* pFontInstance)
 
     if (mnAscent || mnDescent)
         mnIntLeading = mnAscent + mnDescent - mnHeight;
+
+    // tdf#36709: Additional font metrics are needed for font-relative indentation
+    mdEmSize = static_cast<double>(mnHeight);
+
+    // The ic is defined as the advance of CJK UNIFIED IDEOGRAPH-6C34 (水).
+    // If this character does not exist, it defaults to em.
+    mdHorCJKAdvanceSize = mdEmSize;
+    mdVertCJKAdvanceSize = mdEmSize;
+
+    hb_codepoint_t nIcGlyph;
+    if (hb_font_get_glyph(pHbFont, 0x6C34, /*variation selector*/ 0, &nIcGlyph))
+    {
+        auto nIcHAdvance = hb_font_get_glyph_h_advance(pHbFont, nIcGlyph);
+        mdHorCJKAdvanceSize = static_cast<double>(nIcHAdvance) * fScale;
+
+        auto nIcVAdvance = hb_font_get_glyph_v_advance(pHbFont, nIcGlyph);
+        mdVertCJKAdvanceSize = static_cast<double>(nIcVAdvance) * fScale;
+    }
 }
 
 void FontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
