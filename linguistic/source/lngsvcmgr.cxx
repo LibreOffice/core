@@ -654,9 +654,7 @@ void LngSvcMgr::UpdateAll()
             Sequence< OUString > aCfgSvcs( getConfiguredServices( aService, aLocale ));
             Sequence< OUString > aAvailSvcs( getAvailableServices( aService, aLocale ));
 
-            aCfgSvcs = lcl_RemoveMissingEntries( aCfgSvcs, aAvailSvcs );
-
-            aCurSvcs[k][ rNodeName ] = aCfgSvcs;
+            aCurSvcs[k][rNodeName] = lcl_RemoveMissingEntries(aCfgSvcs, aAvailSvcs);
         }
 
 

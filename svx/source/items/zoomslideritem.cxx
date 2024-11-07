@@ -173,7 +173,7 @@ bool SvxZoomSliderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
                 css::uno::Sequence < sal_Int32 > aValues;
                 if ( rVal >>= aValues )
                 {
-                    maValues = aValues;
+                    maValues = std::move(aValues);
                     return true;
                 }
                 else

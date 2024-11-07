@@ -2797,7 +2797,7 @@ ContentProperties::getCreatableContentsInfo() const
             // Folder.
             aSeq.getArray()[ 0 ].Type = TDOC_FOLDER_CONTENT_TYPE;
             aSeq.getArray()[ 0 ].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
-            aSeq.getArray()[ 0 ].Properties = aProps;
+            aSeq.getArray()[ 0 ].Properties = std::move(aProps);
 
             return aSeq;
         }

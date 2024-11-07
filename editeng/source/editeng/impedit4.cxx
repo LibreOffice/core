@@ -3071,7 +3071,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aChgData.nLen       = nLen;
                     aChgData.aSelection = EditSelection( EditPaM( pNode, nCurrentStart ), EditPaM( pNode, nCurrentEnd ) );
                     aChgData.aNewText   = aNewText;
-                    aChgData.aOffsets   = aOffsets;
+                    aChgData.aOffsets   = std::move(aOffsets);
                     aChanges.push_back( aChgData );
                 }
 
