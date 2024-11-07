@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/graphic/BitmapHelper.hxx>
 #include <vcl/GraphicLoader.hxx>
 
 #include <svx/svdpool.hxx>
@@ -1196,23 +1197,11 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 bOk = true;
             }
         }
-        else if (uno::Reference<graphic::XGraphic> xGraphic; rValue >>= xGraphic)
+        else if (uno::Reference<graphic::XGraphic> xGraphic = vcl::GetGraphic(rValue))
         {
-            if (xGraphic.is())
-            {
-                static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(Graphic(xGraphic));
-                bOk = true;
-            }
-        }
-        else if (uno::Reference<awt::XBitmap> xBitmap; rValue >>= xBitmap)
-        {
-            if (xBitmap.is())
-            {
-                xGraphic.set(xBitmap, uno::UNO_QUERY);
-                Graphic aGraphic(xGraphic);
-                static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(aGraphic);
-                bOk = true;
-            }
+            // Handles both graphic::XGraphic and awt::XBitmap
+            static_cast<SdrGrafObj*>(GetSdrObject())->SetGraphic(Graphic(xGraphic));
+            bOk = true;
         }
         if (bOk)
             GetSdrObject()->SetEmptyPresObj(false);

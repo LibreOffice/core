@@ -21,6 +21,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/event.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphic/BitmapHelper.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <vcl/unohelp.hxx>
@@ -60,37 +61,10 @@ uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 
 BitmapEx VCLUnoHelper::GetBitmap( const css::uno::Reference< css::awt::XBitmap>& rxBitmap )
 {
-    BitmapEx aBmp;
+    if (VCLXBitmap* pVCLBitmap = dynamic_cast<VCLXBitmap*>(rxBitmap.get()))
+        return pVCLBitmap->GetBitmap();
 
-    css::uno::Reference< css::graphic::XGraphic > xGraphic( rxBitmap, css::uno::UNO_QUERY );
-    if( xGraphic.is() )
-    {
-        Graphic aGraphic( xGraphic );
-        aBmp = aGraphic.GetBitmapEx();
-    }
-    else if ( rxBitmap.is() )
-    {
-        VCLXBitmap* pVCLBitmap = dynamic_cast<VCLXBitmap*>( rxBitmap.get() );
-        if ( pVCLBitmap )
-            aBmp = pVCLBitmap->GetBitmap();
-        else
-        {
-            Bitmap aDIB, aMask;
-            {
-                css::uno::Sequence<sal_Int8> aBytes = rxBitmap->getDIB();
-                SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
-                ReadDIB(aDIB, aMem, true);
-            }
-            {
-                css::uno::Sequence<sal_Int8> aBytes = rxBitmap->getMaskDIB();
-                SvMemoryStream aMem( aBytes.getArray(), aBytes.getLength(), StreamMode::READ );
-                ReadDIB(aMask, aMem, true);
-            }
-            aMask.Invert(); // Convert from transparency to alpha
-            aBmp = BitmapEx( aDIB, aMask );
-        }
-    }
-    return aBmp;
+    return vcl::GetBitmap(rxBitmap);
 }
 
 css::uno::Reference< css::awt::XBitmap> VCLUnoHelper::CreateBitmap( const BitmapEx& rBitmap )

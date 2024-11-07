@@ -30,6 +30,7 @@
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/graphic/BitmapHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/string_view.hxx>
 
@@ -64,7 +65,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
                             OUString& aMenuLabel,
                             OUString& aCommandURL,
                             OUString& aHelpURL,
-                            Reference< XBitmap >& xBitmap,
+                            Any& rImage,
                             Reference< XIndexContainer >& xSubContainer )
 {
     try
@@ -72,7 +73,7 @@ static void GetMenuItemAttributes( const Reference< XPropertySet >& xActionTrigg
         // mandatory properties
         xActionTriggerPropertySet->getPropertyValue(u"Text"_ustr) >>= aMenuLabel;
         xActionTriggerPropertySet->getPropertyValue(u"CommandURL"_ustr) >>= aCommandURL;
-        xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr) >>= xBitmap;
+        rImage = xActionTriggerPropertySet->getPropertyValue(u"Image"_ustr);
         xActionTriggerPropertySet->getPropertyValue(u"SubContainer"_ustr) >>= xSubContainer;
     }
     catch (const Exception&)
@@ -116,11 +117,11 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                     OUString aLabel;
                     OUString aCommandURL;
                     OUString aHelpURL;
-                    Reference< XBitmap > xBitmap;
+                    Any aImage;
                     Reference< XIndexContainer > xSubContainer;
 
                     sal_uInt16 nNewItemId = nItemId++;
-                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, xBitmap, xSubContainer );
+                    GetMenuItemAttributes( xPropSet, aLabel, aCommandURL, aHelpURL, aImage, xSubContainer );
 
                     {
                         // insert new menu item
@@ -141,43 +142,10 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                         }
 
                         // handle bitmap
-                        if ( xBitmap.is() )
+                        if (aImage.hasValue())
                         {
-                            bool bImageSet = false;
-
-                            Reference<css::graphic::XGraphic> xGraphic(xBitmap, UNO_QUERY);
-                            if (xGraphic.is())
-                            {
-                                // we can take the optimized route if XGraphic is supported
+                            if (auto xGraphic = vcl::GetGraphic(aImage))
                                 rSubMenu->setItemImage(nNewItemId, xGraphic, false);
-                                bImageSet = true;
-                            }
-
-                            if ( !bImageSet )
-                            {
-                                // This is an unknown implementation of a XBitmap interface. We have to
-                                // use a more time consuming way to build an Image!
-                                BitmapEx aBitmap;
-
-                                Sequence< sal_Int8 > aDIBSeq;
-                                {
-                                    aDIBSeq = xBitmap->getDIB();
-                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                    ReadDIBBitmapEx(aBitmap, aMem);
-                                }
-
-                                aDIBSeq = xBitmap->getMaskDIB();
-                                if ( aDIBSeq.hasElements() )
-                                {
-                                    Bitmap aMaskBitmap;
-                                    SvMemoryStream aMem( const_cast<sal_Int8 *>(aDIBSeq.getConstArray()), aDIBSeq.getLength(), StreamMode::READ );
-                                    ReadDIB(aMaskBitmap, aMem, true);
-                                    aBitmap = BitmapEx(aBitmap.GetBitmap(), aMaskBitmap);
-                                }
-
-                                if (!aBitmap.IsEmpty())
-                                    rSubMenu->setItemImage(nNewItemId, Graphic(aBitmap).GetXGraphic(), false);
-                            }
                         }
                         else
                         {
