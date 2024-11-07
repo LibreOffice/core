@@ -81,9 +81,7 @@
 #include <fldmgr.hxx>
 #include <ndtxt.hxx>
 #include <strings.hrc>
-#include <txatbase.hxx>
 #include <paratr.hxx>
-#include <ndtxt.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
