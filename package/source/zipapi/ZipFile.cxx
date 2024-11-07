@@ -964,7 +964,8 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
     // Just verify the path and calculate the data offset and otherwise
     // rely on the central directory info.
 
-    headerMemGrabber.ReadInt16(); // version - ignore any mismatch (Maven created JARs)
+    // version - ignore any mismatch (Maven created JARs)
+    sal_uInt16 const nVersion = headerMemGrabber.ReadUInt16();
     sal_uInt16 const nLocFlag = headerMemGrabber.ReadUInt16(); // general purpose bit flag
     sal_uInt16 const nLocMethod = headerMemGrabber.ReadUInt16(); // compression method
     // Do *not* compare timestamps, since MSO 2010 can produce documents
@@ -1020,6 +1021,11 @@ sal_uInt64 ZipFile::readLOC_Impl(ZipEntry &rEntry, std::vector<sal_Int8>& rNameB
 
             isZip64 = readExtraFields(extraMemGrabber, nExtraLen,
                     nLocSize, nLocCompressedSize, oOffset64, &aNameView);
+        }
+        if (!isZip64 && 45 <= nVersion)
+        {
+            // for Excel compatibility, assume Zip64 - https://rzymek.github.io/post/excel-zip64/
+            isZip64 = true;
         }
 
         // Just plain ignore bits 1 & 2 of the flag field - they are either
