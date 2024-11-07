@@ -224,8 +224,8 @@ class AddonsOptions_Impl : public ConfigItem
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const { return m_aCachedMenuBarPartProperties;}
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsNotebookBarPart ( sal_uInt32 nIndex ) const;
-        OUString                                        GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
-        OUString                                        GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const;
+        const OUString &                                GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+        const OUString &                                GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const { return m_aCachedHelpMenuProperties;}
         BitmapEx                                        GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
         const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const { return m_aCachedMergeMenuInsContainer;}
@@ -531,22 +531,22 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsNotebo
 
 //  public method
 
-OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
+const OUString & AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const
 {
     if ( nIndex < m_aCachedToolBarPartResourceNames.size() )
         return m_aCachedToolBarPartResourceNames[nIndex];
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 //  public method
 
-OUString AddonsOptions_Impl::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
+const OUString & AddonsOptions_Impl::GetAddonsNotebookBarResourceName( sal_uInt32 nIndex ) const
 {
     if ( nIndex < m_aCachedNotebookBarPartResourceNames.size() )
         return m_aCachedNotebookBarPartResourceNames[nIndex];
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 //  public method

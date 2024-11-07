@@ -462,7 +462,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
        )
     {
-        m_aJobCfg.setJobConfig(aAnalyzedResult.getArguments());
+        m_aJobCfg.setJobConfig(std::vector{aAnalyzedResult.getArguments()});
     }
 
     // disable a job for further executions.

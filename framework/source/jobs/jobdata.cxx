@@ -310,17 +310,17 @@ OUString JobData::getEnvironmentDescriptor() const
     return sDescriptor;
 }
 
-OUString JobData::getService() const
+const OUString & JobData::getService() const
 {
     return m_sService;
 }
 
-OUString JobData::getEvent() const
+const OUString & JobData::getEvent() const
 {
     return m_sEvent;
 }
 
-std::vector< css::beans::NamedValue > JobData::getJobConfig() const
+const std::vector< css::beans::NamedValue > & JobData::getJobConfig() const
 {
     return m_lArguments;
 }

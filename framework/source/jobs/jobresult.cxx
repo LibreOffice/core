@@ -170,9 +170,12 @@ bool JobResult::existPart(sal_uInt32 eParts) const { return ((m_eParts & eParts)
     @return     It returns the state of the internal member
                 without any checks!
 */
-std::vector<css::beans::NamedValue> JobResult::getArguments() const { return m_lArguments; }
+const std::vector<css::beans::NamedValue>& JobResult::getArguments() const { return m_lArguments; }
 
-css::frame::DispatchResultEvent JobResult::getDispatchResult() const { return m_aDispatchResult; }
+const css::frame::DispatchResultEvent& JobResult::getDispatchResult() const
+{
+    return m_aDispatchResult;
+}
 
 } // namespace framework
 

@@ -94,8 +94,8 @@ class JobResult final
         JobResult& operator=( const JobResult& rCopy );
 
         bool                                     existPart        ( sal_uInt32 eParts ) const;
-        std::vector< css::beans::NamedValue >    getArguments     (                   ) const;
-        css::frame::DispatchResultEvent          getDispatchResult(                   ) const;
+        const std::vector< css::beans::NamedValue > &   getArguments     (                   ) const;
+        const css::frame::DispatchResultEvent &         getDispatchResult(                   ) const;
 };
 
 } // namespace framework

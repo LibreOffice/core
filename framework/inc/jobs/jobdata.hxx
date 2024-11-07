@@ -174,10 +174,10 @@ class JobData final
         EMode                                        getMode                 () const;
         EEnvironment                                 getEnvironment          () const;
         OUString                              getEnvironmentDescriptor() const;
-        OUString                              getService              () const;
-        OUString                              getEvent                () const;
+        const OUString &                              getService              () const;
+        const OUString &                              getEvent                () const;
         css::uno::Sequence< css::beans::NamedValue > getConfig               () const;
-        std::vector< css::beans::NamedValue >    getJobConfig            () const;
+        const std::vector< css::beans::NamedValue > & getJobConfig            () const;
 
         bool                                     hasConfig               () const;
         bool                                     hasCorrectContext       ( std::u16string_view rModuleIdent ) const;

@@ -1465,12 +1465,12 @@ namespace frm
         public:
             explicit ExtractStringFromSequence_Safe( const std::vector< OUString >& _rList ) : m_rList( _rList ) { }
 
-            OUString operator ()( sal_Int16 _nIndex )
+            const OUString & operator ()( sal_Int16 _nIndex )
             {
                 OSL_ENSURE( _nIndex < static_cast<sal_Int32>(m_rList.size()), "ExtractStringFromSequence_Safe: inconsistence!" );
                 if ( _nIndex < static_cast<sal_Int32>(m_rList.size()) )
                     return m_rList[ _nIndex ];
-                return OUString();
+                return EMPTY_OUSTRING;
             }
         };
 
