@@ -87,6 +87,7 @@
 #include <svx/chrtitem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflgrit.hxx>
+#include <svx/xfillit0.hxx>
 
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
@@ -670,6 +671,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rReq.GetArgs() )
             {
                 std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
+                if (nSId == SID_ATTR_FILL_COLOR)
+                {
+                    const XFillStyleItem aXFillStyleItem;
+                    pNewArgs->Put(aXFillStyleItem);
+                }
                 lcl_convertStringArguments(pNewArgs);
                 mpDrawView->SetAttributes(*pNewArgs);
                 rReq.Done();
