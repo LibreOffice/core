@@ -71,7 +71,7 @@
 #define STR_POOLFRM_MARGINAL                    NC_("STR_POOLFRM_MARGINAL", "Marginalia")
 #define STR_POOLFRM_WATERSIGN                   NC_("STR_POOLFRM_WATERSIGN", "Watermark")
 #define STR_POOLFRM_LABEL                       NC_("STR_POOLFRM_LABEL", "Labels")
-#define STR_POOLFRM_INLINE_HEADING              NC_("STR_POOLFRM_MARGINAL", "Inline Heading")
+#define STR_POOLFRM_INLINE_HEADING              NC_("STR_POOLFRM_INLINE_HEADING", "Inline Heading")
 // Template names
 #define STR_POOLCOLL_STANDARD                   NC_("STR_POOLCOLL_STANDARD", "Default Paragraph Style")
 #define STR_POOLCOLL_TEXT                       NC_("STR_POOLCOLL_TEXT", "Body Text")
