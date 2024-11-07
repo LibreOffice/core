@@ -20,6 +20,7 @@
 #pragma once
 
 #include <helper/propertysetcontainer.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
@@ -30,19 +31,13 @@ inline constexpr OUString IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER = u"com.sun.
 namespace framework
 {
 
-class ActionTriggerContainer final : public PropertySetContainer,
-                                public css::lang::XMultiServiceFactory,
-                                public css::lang::XServiceInfo,
-                                public css::lang::XTypeProvider
+class ActionTriggerContainer final : public cppu::ImplInheritanceHelper<PropertySetContainer,
+                                                                        css::lang::XMultiServiceFactory,
+                                                                        css::lang::XServiceInfo>
 {
     public:
         ActionTriggerContainer();
         virtual ~ActionTriggerContainer() override;
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
 
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
@@ -53,10 +48,6 @@ class ActionTriggerContainer final : public PropertySetContainer,
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 
 }

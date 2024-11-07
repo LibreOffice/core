@@ -23,24 +23,20 @@
 
 #include <mutex>
 #include <vector>
-#include <cppuhelper/weak.hxx>
+
+#include <comphelper/compbase.hxx>
+
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace framework
 {
 
-class PropertySetContainer : public css::container::XIndexContainer    ,
-                             public ::cppu::OWeakObject
+class PropertySetContainer : public comphelper::WeakImplHelper<css::container::XIndexContainer>
 {
     public:
         PropertySetContainer();
         virtual ~PropertySetContainer() override;
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
 
         // XIndexContainer
         virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
@@ -66,7 +62,6 @@ class PropertySetContainer : public css::container::XIndexContainer    ,
     private:
         typedef std::vector< css::uno::Reference< css::beans::XPropertySet > > PropertySetVector;
         PropertySetVector                                                               m_aPropertySetVector;
-        std::mutex m_aMutex;
 };
 
 }

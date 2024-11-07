@@ -50,34 +50,6 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 {
 }
 
-// XInterface
-Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
-{
-    Any a = ::cppu::queryInterface(
-                aType ,
-                static_cast< XMultiServiceFactory*   >(this),
-                static_cast< XServiceInfo*           >(this),
-                static_cast< XTypeProvider*          >(this),
-                static_cast< XNamed*                 >(this));
-
-    if( a.hasValue() )
-    {
-        return a;
-    }
-
-    return PropertySetContainer::queryInterface( aType );
-}
-
-void SAL_CALL RootActionTriggerContainer::acquire() noexcept
-{
-    PropertySetContainer::acquire();
-}
-
-void SAL_CALL RootActionTriggerContainer::release() noexcept
-{
-    PropertySetContainer::release();
-}
-
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 {
@@ -191,26 +163,6 @@ sal_Bool SAL_CALL RootActionTriggerContainer::supportsService( const OUString& S
 Sequence< OUString > SAL_CALL RootActionTriggerContainer::getSupportedServiceNames()
 {
     return { SERVICENAME_ACTIONTRIGGERCONTAINER };
-}
-
-// XTypeProvider
-Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes()
-{
-    // Create a static typecollection ...
-    static ::cppu::OTypeCollection ourTypeCollection(
-                        cppu::UnoType<XMultiServiceFactory>::get(),
-                        cppu::UnoType<XIndexContainer>::get(),
-                        cppu::UnoType<XServiceInfo>::get(),
-                        cppu::UnoType<XTypeProvider>::get(),
-                        cppu::UnoType<XUnoTunnel>::get(),
-                        cppu::UnoType<XNamed>::get());
-
-    return ourTypeCollection.getTypes();
-}
-
-Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId()
-{
-    return css::uno::Sequence<sal_Int8>();
 }
 
 // private implementation helper

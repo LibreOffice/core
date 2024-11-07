@@ -20,6 +20,7 @@
 #pragma once
 
 #include <helper/propertysetcontainer.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -31,20 +32,14 @@ inline constexpr OUString IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER = u"com.
 namespace framework
 {
 
-class RootActionTriggerContainer final : public PropertySetContainer,
-                                    public css::lang::XMultiServiceFactory,
-                                    public css::lang::XServiceInfo,
-                                    public css::lang::XTypeProvider,
-                                    public css::container::XNamed
+class RootActionTriggerContainer final : public cppu::ImplInheritanceHelper<PropertySetContainer,
+                                                                            css::lang::XMultiServiceFactory,
+                                                                            css::lang::XServiceInfo,
+                                                                            css::container::XNamed>
 {
     public:
         RootActionTriggerContainer(css::uno::Reference<css::awt::XPopupMenu> xMenu, const OUString* pMenuIdentifier);
         virtual ~RootActionTriggerContainer() override;
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
 
         // XMultiServiceFactory
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
@@ -73,10 +68,6 @@ class RootActionTriggerContainer final : public PropertySetContainer,
         virtual OUString SAL_CALL getImplementationName(  ) override;
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
-
-        // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // XNamed
         virtual OUString SAL_CALL getName(  ) override;
