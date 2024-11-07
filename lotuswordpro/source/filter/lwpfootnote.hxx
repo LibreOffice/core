@@ -269,8 +269,8 @@ public:
     LwpFootnoteSeparatorOptions& GetFootnoteSeparator(){ return m_FootnoteSeparator;}
     bool GetContinuedFrom() const { return ((m_nFlag & FO_CONTINUEFROM) != 0);}
     bool GetContinuedOn() const { return ((m_nFlag & FO_CONTINUEON) != 0);}
-    OUString GetContinuedOnMessage() const;
-    OUString GetContinuedFromMessage() const;
+    const OUString & GetContinuedOnMessage() const;
+    const OUString & GetContinuedFromMessage() const;
     void SetMasterPage(const OUString& strMasterPage){ m_strMasterPage = strMasterPage;}
 };
 

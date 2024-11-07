@@ -1546,10 +1546,10 @@ OUString GraphicExport::writeNewEntryToStorage(const Graphic& rGraphic, bool bRe
 
 namespace
 {
-BitmapChecksum makeChecksumUniqueForSVG(BitmapChecksum const& rChecksum)
+BitmapChecksum makeChecksumUniqueForSVG(BitmapChecksum aChecksum)
 {
     // need to modify the checksum so we know it's for SVG - just invert it
-    return ~rChecksum;
+    return ~aChecksum;
 }
 
 } // end anonymous namespace

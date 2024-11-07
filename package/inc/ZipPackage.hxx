@@ -128,7 +128,7 @@ public:
 
     sal_Int32 GetStartKeyGenID() const { return m_nStartKeyGenerationID; }
     sal_Int32 GetEncAlgID() const { return m_nCommonEncryptionID; }
-    ::std::optional<sal_Int32> GetChecksumAlgID() const { return m_oChecksumDigestID; }
+    const ::std::optional<sal_Int32> & GetChecksumAlgID() const { return m_oChecksumDigestID; }
     sal_Int32 GetDefaultDerivedKeySize() const {
         return ::GetDefaultDerivedKeySize(m_nCommonEncryptionID);
     }

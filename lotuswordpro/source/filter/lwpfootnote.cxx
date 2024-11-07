@@ -522,7 +522,7 @@ void LwpFootnoteOptions::RegisterEndnoteStyle()
 /**
  * @descr  Get continue on message
  */
-OUString LwpFootnoteOptions::GetContinuedOnMessage() const
+const OUString& LwpFootnoteOptions::GetContinuedOnMessage() const
 {
     if (m_ContinuedOnMessage.HasValue())
     {
@@ -535,7 +535,7 @@ OUString LwpFootnoteOptions::GetContinuedOnMessage() const
 /**
  * @descr  Get continue from message
  */
-OUString LwpFootnoteOptions::GetContinuedFromMessage() const
+const OUString& LwpFootnoteOptions::GetContinuedFromMessage() const
 {
     if (m_ContinuedFromMessage.HasValue())
     {

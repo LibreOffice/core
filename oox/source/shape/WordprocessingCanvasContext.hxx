@@ -26,7 +26,7 @@ public:
     oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken,
                                                  const ::oox::AttributeList& rAttribs) override;
 
-    oox::drawingml::ShapePtr getShape() { return mpShapePtr; }
+    const oox::drawingml::ShapePtr& getShape() { return mpShapePtr; }
     const bool& isFullWPGSupport() const { return m_bFullWPGSupport; };
     void setFullWPGSupport(bool bUse) { m_bFullWPGSupport = bUse; };
 

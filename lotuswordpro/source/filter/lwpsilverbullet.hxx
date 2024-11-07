@@ -105,9 +105,9 @@ public:
 
     OUString const& GetBulletChar() const;
 
-    static OUString GetPrefix() { return OUString(); }
+    static const OUString& GetPrefix() { return EMPTY_OUSTRING; }
 
-    static OUString GetSuffix() { return OUString(); }
+    static const OUString& GetSuffix() { return EMPTY_OUSTRING; }
 
     bool HasName();
 

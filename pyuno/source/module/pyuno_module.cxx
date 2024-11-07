@@ -197,7 +197,7 @@ void fillStruct(
     }
 }
 
-OUString getLibDir();
+const OUString & getLibDir();
 OUString getLibDirImpl()
 {
     OUString libDir;
@@ -212,7 +212,7 @@ OUString getLibDirImpl()
     return libDir;
 }
 
-OUString getLibDir()
+const OUString & getLibDir()
 {
     static OUString sLibDir = getLibDirImpl();
     return sLibDir;
