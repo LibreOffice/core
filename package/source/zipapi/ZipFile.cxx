@@ -766,7 +766,8 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
     // Just verify the path and calculate the data offset and otherwise
     // rely on the central directory info.
 
-    aGrabber.ReadInt16(); // version - ignore any mismatch (Maven created JARs)
+    // version - ignore any mismatch (Maven created JARs)
+    sal_uInt16 const nVersion = aGrabber.ReadUInt16();
     sal_uInt16 const nLocFlag = aGrabber.ReadUInt16(); // general purpose bit flag
     sal_uInt16 const nLocMethod = aGrabber.ReadUInt16(); // compression method
     // Do *not* compare timestamps, since MSO 2010 can produce documents
@@ -831,6 +832,11 @@ sal_uInt64 ZipFile::readLOC(ZipEntry &rEntry)
                 SAL_INFO("package", "Zip64 not supported: \"" << rEntry.sPath << "\"");
                 bBroken = true; // this version does NOT support Zip64 files
             }
+        }
+        if (!isZip64 && 45 <= nVersion)
+        {
+            // for Excel compatibility, assume Zip64 - https://rzymek.github.io/post/excel-zip64/
+            isZip64 = true;
         }
 
         // Just plain ignore bits 1 & 2 of the flag field - they are either
