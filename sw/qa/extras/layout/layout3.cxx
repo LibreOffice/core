@@ -446,6 +446,44 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162220)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout[1]/SwGluePortion"_ostr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf163720)
+{
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    if (!xHyphenator->hasLocale(lang::Locale(u"en"_ustr, u"US"_ustr, OUString())))
+        return;
+
+    createSwDoc("tdf163720.fodt");
+    // Ensure that all text portions are calculated before testing.
+    SwDocShell* pShell = getSwDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Find the first text array action
+    for (size_t nAction = 0; nAction < xMetaFile->GetActionSize(); nAction++)
+    {
+        auto pAction = xMetaFile->GetAction(nAction);
+        if (pAction->GetType() == MetaActionType::TEXTARRAY)
+        {
+            auto pTextArrayAction = static_cast<MetaTextArrayAction*>(pAction);
+            auto pDXArray = pTextArrayAction->GetDXArray();
+
+            // There should be 101 chars on the first line
+            CPPUNIT_ASSERT_EQUAL(size_t(101), pDXArray.size());
+
+            // Assert we are using the expected position for the last char
+            // This was 10093, now 10003, according to the less shrinking,
+            // than needed for the extra hyphen glyph at hyphenation
+            CPPUNIT_ASSERT_LESS(sal_Int32(10010), pDXArray[100]);
+            break;
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf162725)
 {
     createSwDoc("tdf162725.fodt");
