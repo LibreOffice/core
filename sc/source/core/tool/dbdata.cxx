@@ -924,14 +924,14 @@ sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
     return -1;
 }
 
-OUString ScDBData::GetTableColumnName( SCCOL nCol ) const
+const OUString & ScDBData::GetTableColumnName( SCCOL nCol ) const
 {
     if (maTableColumnNames.empty())
-        return OUString();
+        return EMPTY_OUSTRING;
 
     SCCOL nOffset = nCol - nStartCol;
     if (nOffset <  0 || maTableColumnNames.size() <= o3tl::make_unsigned(nOffset))
-        return OUString();
+        return EMPTY_OUSTRING;
 
     return maTableColumnNames[nOffset];
 }

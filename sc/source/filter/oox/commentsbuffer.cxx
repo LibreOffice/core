@@ -299,7 +299,7 @@ void CommentsBuffer::appendAuthor( const OUString& rAuthor )
     maAuthors.push_back( rAuthor );
 }
 
-std::vector<OUString> CommentsBuffer::getAuthors() const { return maAuthors; }
+const std::vector<OUString> & CommentsBuffer::getAuthors() const { return maAuthors; }
 
 CommentRef CommentsBuffer::createComment()
 {

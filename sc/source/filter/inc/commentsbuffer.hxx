@@ -81,7 +81,7 @@ public:
     /** Finalizes the formatted string of all comments. */
     void                finalizeImport();
 
-    std::vector<OUString> getAuthors() const;
+    const std::vector<OUString> & getAuthors() const;
 
 private:
     typedef RefVector< Comment >                CommentVector;

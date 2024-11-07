@@ -67,12 +67,12 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     // equivalent of MAXCOLCOUNT in address.hxx
     SCCOL GetMaxColCount() const { return mnMaxCol + 1; }
     // max row number as string
-    OUString MaxRowAsString() const
+    const OUString& MaxRowAsString() const
     {
         return mnMaxRow == MAXROW ? MAXROW_STRING : MAXROW_JUMBO_STRING;
     }
     // mac col as string ("AMJ" or "XFD")
-    OUString MaxColAsString() const
+    const OUString& MaxColAsString() const
     {
         return mnMaxCol == MAXCOL ? MAXCOL_STRING : MAXCOL_JUMBO_STRING;
     }

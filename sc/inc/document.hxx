@@ -666,7 +666,7 @@ public:
         mbCustomXml = bUse;
         aCustomXmlFragmentPath = sCustomXmlPath;
     }
-    OUString getCustomXmlItems() { return aCustomXmlFragmentPath; }
+    const OUString & getCustomXmlItems() { return aCustomXmlFragmentPath; }
     bool hasCustomXml() { return mbCustomXml; }
 
     bool IsEmbedFonts() const { return mbEmbedFonts; }
@@ -742,7 +742,7 @@ public:
     void                        SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData.get(); }
     void SetEasyConditionalFormatDialogData(const ScConditionEasyDialogData& data);
-    ScConditionEasyDialogData GetEasyConditionalFormatDialogData() const
+    const ScConditionEasyDialogData & GetEasyConditionalFormatDialogData() const
     {
         return pConditionalFormatDialogData;
     }
@@ -989,8 +989,8 @@ public:
     SC_DLLPUBLIC SCROW MaxRow() const { return mxSheetLimits->mnMaxRow; }
     SC_DLLPUBLIC SCCOL GetMaxColCount() const { return mxSheetLimits->GetMaxColCount(); }
     SC_DLLPUBLIC SCROW GetMaxRowCount() const { return mxSheetLimits->GetMaxRowCount(); }
-    SC_DLLPUBLIC OUString MaxRowAsString() const { return mxSheetLimits->MaxRowAsString(); }
-    SC_DLLPUBLIC OUString MaxColAsString() const { return mxSheetLimits->MaxColAsString(); }
+    SC_DLLPUBLIC const OUString & MaxRowAsString() const { return mxSheetLimits->MaxRowAsString(); }
+    SC_DLLPUBLIC const OUString & MaxColAsString() const { return mxSheetLimits->MaxColAsString(); }
     ScSheetLimits& GetSheetLimits() const { return *mxSheetLimits; }
     [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mxSheetLimits->mnMaxCol); }
     [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mxSheetLimits->mnMaxRow); }
@@ -1003,7 +1003,7 @@ public:
 
     SC_DLLPUBLIC std::vector<OUString> GetAllTableNames() const;
 
-    OUString GetCopyTabName(SCTAB nTab) const;
+    const OUString & GetCopyTabName(SCTAB nTab) const;
 
     SC_DLLPUBLIC void      SetAnonymousDBData(SCTAB nTab, std::unique_ptr<ScDBData> pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);

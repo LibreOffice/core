@@ -2175,9 +2175,9 @@ OUString ScAccessibleDocument::GetCurrentCellName() const
     return sName;
 }
 
-OUString ScAccessibleDocument::GetCurrentCellDescription()
+const OUString & ScAccessibleDocument::GetCurrentCellDescription()
 {
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 ScDocument *ScAccessibleDocument::GetDocument() const

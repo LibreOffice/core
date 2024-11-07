@@ -196,11 +196,11 @@ public:
     /** Returns read-only access to the connection model data. */
     const ConnectionModel& getModel() const { return maModel; }
 
-    css::uno::Sequence<css::uno::Any> getDbPrSequenceAny() const
+    const css::uno::Sequence<css::uno::Any> & getDbPrSequenceAny() const
     {
         return maModel.maDbPrSequenceAny;
     }
-    css::uno::Sequence<css::uno::Any> getOlapPrSequenceAny() const
+    const css::uno::Sequence<css::uno::Any> & getOlapPrSequenceAny() const
     {
         return maModel.maOlapPrSequenceAny;
     }

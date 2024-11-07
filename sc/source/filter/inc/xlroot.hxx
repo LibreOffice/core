@@ -178,7 +178,7 @@ public:
     const OUString& GetUserName() const { return mrData.maUserName; }
 
     /** Returns the default password used for stream encryption. */
-    static OUString GetDefaultPassword() { return XclRootData::gaDefPassword; }
+    static const OUString & GetDefaultPassword() { return XclRootData::gaDefPassword; }
     /** Requests and verifies a password from the medium or the user. */
     css::uno::Sequence< css::beans::NamedValue >
         RequestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
@@ -217,7 +217,7 @@ public:
     /** Returns the number formatter of the Calc document. */
     SvNumberFormatter&  GetFormatter() const;
     /** Returns the null date of the current number formatter. */
-    Date                GetNullDate() const;
+    const Date &        GetNullDate() const;
     /** Returns the base year depending on the current null date (1900 or 1904). */
     sal_uInt16          GetBaseYear() const;
     /** Converts a date/time value to a floating-point value. */

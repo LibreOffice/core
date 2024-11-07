@@ -2899,32 +2899,32 @@ OUString ScDocShell::GetOwnFilterName()
     return pFilterSc50;
 }
 
-OUString ScDocShell::GetHtmlFilterName()
+const OUString & ScDocShell::GetHtmlFilterName()
 {
     return pFilterHtml;
 }
 
-OUString ScDocShell::GetWebQueryFilterName()
+const OUString & ScDocShell::GetWebQueryFilterName()
 {
     return pFilterHtmlWebQ;
 }
 
-OUString ScDocShell::GetAsciiFilterName()
+const OUString & ScDocShell::GetAsciiFilterName()
 {
     return SC_TEXT_CSV_FILTER_NAME;
 }
 
-OUString ScDocShell::GetLotusFilterName()
+const OUString & ScDocShell::GetLotusFilterName()
 {
     return pFilterLotus;
 }
 
-OUString ScDocShell::GetDBaseFilterName()
+const OUString & ScDocShell::GetDBaseFilterName()
 {
     return pFilterDBase;
 }
 
-OUString ScDocShell::GetDifFilterName()
+const OUString & ScDocShell::GetDifFilterName()
 {
     return pFilterDif;
 }

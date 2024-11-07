@@ -186,7 +186,7 @@ public:
      */
     SC_DLLPUBLIC SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    SC_DLLPUBLIC OUString GetDimensionName(std::vector<OUString>::size_type nDim) const;
+    SC_DLLPUBLIC const OUString & GetDimensionName(std::vector<OUString>::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 

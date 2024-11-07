@@ -62,7 +62,7 @@ bool ScPassHashHelper::needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash
     return false;
 }
 
-OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
+const OUString & ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 {
     switch (eHash)
     {
@@ -76,7 +76,7 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
         default:
             ;
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 ScPasswordHash ScPassHashHelper::getHashTypeFromURI(std::u16string_view rURI)

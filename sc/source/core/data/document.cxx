@@ -199,11 +199,11 @@ bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
     return false;
 }
 
-OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
+const OUString & ScDocument::GetCopyTabName( SCTAB nTab ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabNames.size()))
         return maTabNames[nTab];
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 bool ScDocument::SetCodeName( SCTAB nTab, const OUString& rName )

@@ -271,7 +271,7 @@ void  ScDPFilteredCache::getValue( ScDPValue& rVal, SCCOL nCol, SCROW nRow) cons
         rVal.Set(0.0, ScDPValue::Empty);
 }
 
-OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
+const OUString & ScDPFilteredCache::getFieldName(SCCOL nIndex) const
 {
     return mrCache.GetDimensionName(nIndex);
 }

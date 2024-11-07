@@ -445,7 +445,7 @@ public:
     void SetFormula(
         SCCOL nCol, SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram );
 
-    SC_DLLPUBLIC std::shared_ptr<sc::SolverSettings> GetSolverSettings();
+    SC_DLLPUBLIC const std::shared_ptr<sc::SolverSettings> & GetSolverSettings();
 
     // tdf#156815 Sets the solver settings object to nullptr to force reloading Solver settings the
     // next time the dialog is opened. This is required when sheets are renamed

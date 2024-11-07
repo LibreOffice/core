@@ -399,7 +399,7 @@ bool XclChartHelper::HasMarkerFillColor( sal_uInt16 nMarkerType )
     return (nMarkerType < SAL_N_ELEMENTS( spbFilled )) && spbFilled[ nMarkerType ];
 }
 
-OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
+const OUString & XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
 {
     switch( nBarType )
     {
@@ -409,7 +409,7 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
         case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
         default:    OSL_FAIL( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
     }
-    return OUString();
+    return EMPTY_OUSTRING;
 }
 
 // Chart formatting info provider =============================================

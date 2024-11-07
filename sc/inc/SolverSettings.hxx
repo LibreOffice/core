@@ -295,7 +295,7 @@ public:
     SC_DLLPUBLIC void GetEngineOptions(css::uno::Sequence<css::beans::PropertyValue>& aOptions);
     SC_DLLPUBLIC void
     SetEngineOptions(const css::uno::Sequence<css::beans::PropertyValue>& aOptions);
-    SC_DLLPUBLIC std::vector<ModelConstraint> GetConstraints() { return m_aConstraints; }
+    SC_DLLPUBLIC const std::vector<ModelConstraint>& GetConstraints() { return m_aConstraints; }
     SC_DLLPUBLIC void SetConstraints(std::vector<ModelConstraint> aConstraints);
 
     SC_DLLPUBLIC void SaveSolverSettings();

@@ -64,28 +64,28 @@ public:
 
     void resetColors();
 
-    model::ComplexColor getColorSeries() const;
+    const model::ComplexColor& getColorSeries() const;
     void setColorSeries(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorNegative() const;
+    const model::ComplexColor& getColorNegative() const;
     void setColorNegative(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorAxis() const;
+    const model::ComplexColor& getColorAxis() const;
     void setColorAxis(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorMarkers() const;
+    const model::ComplexColor& getColorMarkers() const;
     void setColorMarkers(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorFirst() const;
+    const model::ComplexColor& getColorFirst() const;
     void setColorFirst(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorLast() const;
+    const model::ComplexColor& getColorLast() const;
     void setColorLast(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorHigh() const;
+    const model::ComplexColor& getColorHigh() const;
     void setColorHigh(model::ComplexColor const& rColorSeries);
 
-    model::ComplexColor getColorLow() const;
+    const model::ComplexColor& getColorLow() const;
     void setColorLow(model::ComplexColor const& rColorSeries);
 
     AxisType getMinAxisType() const;

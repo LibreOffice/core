@@ -323,7 +323,7 @@ SvNumberFormatter& XclRoot::GetFormatter() const
     return *GetDoc().GetFormatTable();
 }
 
-Date XclRoot::GetNullDate() const
+const Date & XclRoot::GetNullDate() const
 {
     return GetFormatter().GetNullDate();
 }

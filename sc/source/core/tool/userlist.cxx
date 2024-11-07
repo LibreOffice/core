@@ -82,12 +82,12 @@ bool ScUserListData::GetSubIndex(const OUString& rSubStr, sal_uInt16& rIndex, bo
     return false;
 }
 
-OUString ScUserListData::GetSubStr(sal_uInt16 nIndex) const
+const OUString & ScUserListData::GetSubStr(sal_uInt16 nIndex) const
 {
     if (nIndex < maSubStrings.size())
         return maSubStrings[nIndex].maReal;
     else
-        return OUString();
+        return EMPTY_OUSTRING;
 }
 
 sal_Int32 ScUserListData::Compare(const OUString& rSubStr1, const OUString& rSubStr2) const

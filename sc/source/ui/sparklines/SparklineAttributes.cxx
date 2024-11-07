@@ -157,7 +157,7 @@ void SparklineAttributes::resetColors()
     m_aImplementation->m_aColorLow = model::ComplexColor();
 }
 
-model::ComplexColor SparklineAttributes::getColorSeries() const
+const model::ComplexColor& SparklineAttributes::getColorSeries() const
 {
     return m_aImplementation->m_aColorSeries;
 }
@@ -167,7 +167,7 @@ void SparklineAttributes::setColorSeries(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorSeries = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorNegative() const
+const model::ComplexColor& SparklineAttributes::getColorNegative() const
 {
     return m_aImplementation->m_aColorNegative;
 }
@@ -177,7 +177,7 @@ void SparklineAttributes::setColorNegative(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorNegative = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorAxis() const
+const model::ComplexColor& SparklineAttributes::getColorAxis() const
 {
     return m_aImplementation->m_aColorAxis;
 }
@@ -187,7 +187,7 @@ void SparklineAttributes::setColorAxis(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorAxis = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorMarkers() const
+const model::ComplexColor& SparklineAttributes::getColorMarkers() const
 {
     return m_aImplementation->m_aColorMarkers;
 }
@@ -196,7 +196,7 @@ void SparklineAttributes::setColorMarkers(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorMarkers = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorFirst() const
+const model::ComplexColor& SparklineAttributes::getColorFirst() const
 {
     return m_aImplementation->m_aColorFirst;
 }
@@ -205,7 +205,7 @@ void SparklineAttributes::setColorFirst(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorFirst = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorLast() const
+const model::ComplexColor& SparklineAttributes::getColorLast() const
 {
     return m_aImplementation->m_aColorLast;
 }
@@ -214,7 +214,7 @@ void SparklineAttributes::setColorLast(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorLast = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorHigh() const
+const model::ComplexColor& SparklineAttributes::getColorHigh() const
 {
     return m_aImplementation->m_aColorHigh;
 }
@@ -223,7 +223,7 @@ void SparklineAttributes::setColorHigh(model::ComplexColor const& rColor)
     m_aImplementation->m_aColorHigh = rColor;
 }
 
-model::ComplexColor SparklineAttributes::getColorLow() const
+const model::ComplexColor& SparklineAttributes::getColorLow() const
 {
     return m_aImplementation->m_aColorLow;
 }

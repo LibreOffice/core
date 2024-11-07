@@ -246,7 +246,7 @@ private:
     void RemoveChild(const css::uno::Reference<css::accessibility::XAccessible>& xAcc, bool bFireEvent);
 
     OUString GetCurrentCellName() const;
-    static OUString GetCurrentCellDescription();
+    static const OUString & GetCurrentCellDescription();
 
     tools::Rectangle GetVisibleArea_Impl() const;
 public:

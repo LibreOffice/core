@@ -1103,7 +1103,7 @@ public:
     /** Returns true, if the passed marker type is filled. */
     static bool         HasMarkerFillColor( sal_uInt16 nMarkerType );
     /** Returns the role name for a manual data source for error bars. */
-    static OUString GetErrorBarValuesRole( sal_uInt8 nBarType );
+    static const OUString & GetErrorBarValuesRole( sal_uInt8 nBarType );
 };
 
 // Chart formatting info provider =============================================

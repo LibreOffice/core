@@ -64,7 +64,7 @@ namespace ScPassHashHelper
      * returns false. */
     bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
 
-    OUString getHashURI(ScPasswordHash eHash);
+    const OUString & getHashURI(ScPasswordHash eHash);
 
     ScPasswordHash getHashTypeFromURI(std::u16string_view rURI);
 }

@@ -651,7 +651,7 @@ void ScTable::CollectBroadcasterState(sc::BroadcasterState& rState) const
         pCol->CollectBroadcasterState(rState);
 }
 
-std::shared_ptr<sc::SolverSettings> ScTable::GetSolverSettings()
+const std::shared_ptr<sc::SolverSettings> & ScTable::GetSolverSettings()
 {
     if (!m_pSolverSettings)
         m_pSolverSettings = std::make_shared<sc::SolverSettings>(*this);

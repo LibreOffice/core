@@ -47,7 +47,7 @@ public:
                                    ScViewData& rViewData, ScRange& aRange);
     virtual ~ScDuplicateRecordsDlg() override;
 
-    DuplicatesResponse GetDialogData() { return maResponse; };
+    const DuplicatesResponse& GetDialogData() { return maResponse; };
 
 private:
     void Init();

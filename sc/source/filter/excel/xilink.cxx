@@ -118,7 +118,7 @@ public:
     /** Returns the specified macro name (1-based) or an empty string on error. */
     OUString     GetMacroName( sal_uInt16 nXclNameIdx ) const;
 
-    OUString     GetTabName( sal_uInt16 nXtiTab ) const;
+    const OUString &    GetTabName( sal_uInt16 nXtiTab ) const;
 
     sal_uInt16          GetTabCount() const;
 
@@ -725,10 +725,10 @@ OUString XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
     return (pName && pName->IsVBName()) ? pName->GetScName() : OUString();
 }
 
-OUString XclImpSupbook::GetTabName( sal_uInt16 nXtiTab ) const
+const OUString & XclImpSupbook::GetTabName( sal_uInt16 nXtiTab ) const
 {
     if (nXtiTab >= maSupbTabList.size())
-        return OUString();
+        return EMPTY_OUSTRING;
     return maSupbTabList[nXtiTab]->GetTabName();
 }
 
