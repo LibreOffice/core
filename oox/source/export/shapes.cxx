@@ -1469,6 +1469,7 @@ void ShapeExport::WriteGraphicObjectShapePart( const Reference< XShape >& xShape
     }
     WriteShapeTransformation( xShape, XML_a, bFlipH, false, false, false, true );
     WritePresetShape( "rect"_ostr );
+    WriteFill(xShapeProps);
     // graphic object can come with the frame (bnc#654525)
     WriteOutline( xShapeProps );
 
