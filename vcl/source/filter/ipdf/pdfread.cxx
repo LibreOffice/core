@@ -332,6 +332,10 @@ findAnnotations(const std::unique_ptr<vcl::pdf::PDFiumPage>& pPage, basegfx::B2D
                         {
                             std::unique_ptr<vcl::pdf::PDFiumBitmap> pBitmap
                                 = pPageObject->getImageBitmap();
+                            if (!pBitmap)
+                            {
+                                continue;
+                            }
                             pMarker->maBitmapEx = pBitmap->createBitmapFromBuffer();
                         }
                     }
