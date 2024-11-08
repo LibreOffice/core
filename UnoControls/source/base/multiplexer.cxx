@@ -52,17 +52,18 @@ void OMRCListenerMultiplexerHelper::Multiplex(void (SAL_CALL Interface::*method)
     /* Is the control not destroyed? */
     if (!aLocalEvent.Source)
         return;
-    if (!aIterator.hasMoreElements())
-        return;
-    auto* pListener = aIterator.next().get();
-    assert(dynamic_cast<Interface*>(pListener));
-    try
+    while (aIterator.hasMoreElements())
     {
-        (static_cast<Interface*>(pListener)->*method)(aLocalEvent);
-    }
-    catch (const RuntimeException&)
-    {
-        /* Ignore all system exceptions from the listener! */
+        auto* pListener = aIterator.next().get();
+        assert(dynamic_cast<Interface*>(pListener));
+        try
+        {
+            (static_cast<Interface*>(pListener)->*method)(aLocalEvent);
+        }
+        catch (const RuntimeException&)
+        {
+            /* Ignore all system exceptions from the listener! */
+        }
     }
 }
 
