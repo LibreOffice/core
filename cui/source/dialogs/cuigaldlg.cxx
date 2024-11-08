@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl, weld::Button&, void)
     try
     {
         // setup folder picker
-        css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const css::uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
         OUString  aDlgPathName( SvtPathOptions().GetGraphicPath() );

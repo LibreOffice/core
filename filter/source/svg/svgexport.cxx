@@ -666,7 +666,7 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
 bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOStm)
 {
-    Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
+    const Reference< XComponentContext >&        xContext( ::comphelper::getProcessComponentContext() ) ;
     bool                                  bRet = false;
     // Instead of writing to rxOStm directly, we write here in case we need
     // to compress the output later
@@ -790,7 +790,7 @@ bool SVGFilter::implExportImpressOrDraw( const Reference< XOutputStream >& rxOSt
 
 bool SVGFilter::implExportWriterOrCalc( const Reference< XOutputStream >& rxOStm )
 {
-    Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
+    const Reference< XComponentContext >&        xContext( ::comphelper::getProcessComponentContext() ) ;
     bool                                  bRet = false;
 
     if( rxOStm.is() )

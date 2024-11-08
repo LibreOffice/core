@@ -755,7 +755,7 @@ namespace svt
             std::lock_guard aGuard( m_aMutex );
             if ( !m_xOfficeInstDirs.is() )
             {
-                uno::Reference< uno::XComponentContext > xCtx(
+                const uno::Reference< uno::XComponentContext >& xCtx(
                     comphelper::getProcessComponentContext() );
                 m_xOfficeInstDirs = util::theOfficeInstallationDirectories::get(xCtx);
             }

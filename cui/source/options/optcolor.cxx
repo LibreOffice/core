@@ -464,7 +464,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(weld::Window* pTopLevel, weld::Co
     , m_xWidget1(m_xBuilder->weld_widget(u"docboundaries"_ustr))
     , m_xWidget2(m_xBuilder->weld_widget(u"docboundaries_lb"_ustr))
 {
-    css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
     m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
     CreateEntries();

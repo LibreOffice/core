@@ -284,7 +284,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
                 return nullptr;
             }
 
-            const Reference<XComponentContext> xContext(
+            const Reference<XComponentContext>& xContext(
                 ::comphelper::getProcessComponentContext());
             const Reference<frame::XModel> xModel(
                 m_pObjectShell->GetModel());
@@ -3715,7 +3715,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
             Reference< embed::XStorage > xOOo1ConfigStorage = getDocumentSubStorage( u"Configurations"_ustr, embed::ElementModes::READ );
             if ( xOOo1ConfigStorage.is() )
             {
-                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                 std::vector< Reference< container::XIndexContainer > > rToolbars;
 
                 bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
@@ -4016,7 +4016,7 @@ Reference< frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
 
     if ( ! m_pData->m_xTitleHelper.is ())
     {
-        Reference< XComponentContext >     xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >&     xContext = ::comphelper::getProcessComponentContext();
         Reference< frame::XUntitledNumbers >    xDesktop( frame::Desktop::create(xContext), UNO_QUERY_THROW);
 
         m_pData->m_xTitleHelper = new ::framework::TitleHelper(xContext, Reference< frame::XModel >(this), xDesktop);

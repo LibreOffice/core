@@ -243,7 +243,7 @@ void CustomAnimationPresets::importEffects()
 {
     try
     {
-        uno::Reference< uno::XComponentContext > xContext(
+        const uno::Reference< uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager(), UNO_QUERY_THROW );
@@ -299,7 +299,7 @@ void CustomAnimationPresets::importResources()
     try
     {
         // Get service factory
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
         Reference< XMultiServiceFactory > xConfigProvider =
              configuration::theDefaultProvider::get( xContext );

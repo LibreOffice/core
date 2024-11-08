@@ -50,7 +50,7 @@ CSubmission::SubmissionResult CSubmission::replace(std::u16string_view aReplace,
         return CSubmission::UNKNOWN_ERROR;
 
     try {
-        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
         if (o3tl::equalsIgnoreAsciiCase(aReplace, u"all")
          || o3tl::equalsIgnoreAsciiCase(aReplace, u"document")) {
             Reference< XComponentLoader > xLoader;

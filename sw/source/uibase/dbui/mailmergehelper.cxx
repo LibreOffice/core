@@ -95,7 +95,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         weld::Window* pDialogParentWindow )
 {
     uno::Reference< mail::XSmtpService > xSmtpServer;
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     try
     {
         uno::Reference< mail::XMailServiceProvider > xMailServiceProvider(

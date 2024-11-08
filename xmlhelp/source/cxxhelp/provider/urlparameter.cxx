@@ -802,7 +802,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         if( bAddExtensionPath )
         {
-            Reference< XComponentContext > xContext(
+            const Reference< XComponentContext >& xContext(
                 comphelper::getProcessComponentContext() );
 
             OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );

@@ -235,7 +235,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     aEngine = "com.sun.star.drawing.EnhancedCustomShapeEngine";
                 }
-                uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
                 if ( !aEngine.isEmpty() )
                 {

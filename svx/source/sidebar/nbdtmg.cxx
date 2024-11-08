@@ -419,7 +419,7 @@ NumberingTypeMgr& NumberingTypeMgr::GetInstance()
 
 void NumberingTypeMgr::Init()
 {
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create( xContext );
 
     Sequence< Sequence< PropertyValue > > aNumberings;
@@ -588,7 +588,7 @@ OutlineTypeMgr& OutlineTypeMgr::GetInstance()
 
 void OutlineTypeMgr::Init()
 {
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference<XDefaultNumberingProvider> xDefNum = DefaultNumberingProvider::create( xContext );
 
     Sequence<Reference<XIndexAccess> > aOutlineAccess;

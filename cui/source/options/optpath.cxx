@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
     {
         try
         {
-            Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
             INetURLObject aURL( sWritable, INetProtocol::File );
@@ -608,7 +608,7 @@ void SvxPathTabPage::GetPathList(
         // load PathSettings service if necessary
         if ( !pImpl->m_xPathSettings.is() )
         {
-            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+            const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
             pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 
@@ -666,7 +666,7 @@ void SvxPathTabPage::SetPathList(
         // load PathSettings service if necessary
         if ( !pImpl->m_xPathSettings.is() )
         {
-            Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+            const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
             pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 

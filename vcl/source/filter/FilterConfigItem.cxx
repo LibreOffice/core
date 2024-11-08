@@ -99,7 +99,7 @@ void FilterConfigItem::ImpInitTree( std::u16string_view rSubTree )
 {
     bModified = false;
 
-    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     Reference< XMultiServiceFactory > xCfgProv = theDefaultProvider::get( xContext );
 

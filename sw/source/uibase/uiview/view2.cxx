@@ -2970,7 +2970,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         if(!GetWrtShell().IsAnyDatabaseFieldInDoc())
         {
             //check availability of data sources (except biblio source)
-            uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference<XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference<XDatabaseContext>  xDBContext = DatabaseContext::create(xContext);
             bool bCallAddressPilot = false;
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )

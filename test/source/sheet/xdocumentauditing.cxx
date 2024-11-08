@@ -44,7 +44,8 @@ namespace apitest
 void XDocumentAuditing::dispatch(const uno::Reference<frame::XFrame>& xFrame,
                                  const uno::Sequence<beans::PropertyValue>& rArguments)
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext
+        = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext),
                                                            UNO_SET_THROW);
     CPPUNIT_ASSERT(xDispatchHelper.is());

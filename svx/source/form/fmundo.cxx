@@ -113,7 +113,7 @@ private:
 
         try
         {
-            css::uno::Reference<css::uno::XComponentContext> context(
+            const css::uno::Reference<css::uno::XComponentContext>& context(
                 comphelper::getProcessComponentContext());
             Reference< XScriptListener > const xScriptListener(
                 context->getServiceManager()->createInstanceWithContext(

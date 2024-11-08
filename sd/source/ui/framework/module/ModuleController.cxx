@@ -139,7 +139,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
         return;
 
     // Create a new instance of the factory.
-    Reference<uno::XComponentContext> xContext =
+    const Reference<uno::XComponentContext>& xContext =
         ::comphelper::getProcessComponentContext();
 
     // Create the factory service.

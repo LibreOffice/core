@@ -256,7 +256,7 @@ static OUString queryFile( Printer const * pPrinter )
 {
     OUString aResult;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const css::uno::Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     css::uno::Reference< css::ui::dialogs::XFilePicker3 > xFilePicker = css::ui::dialogs::FilePicker::createWithMode(xContext, css::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION);
 
     try

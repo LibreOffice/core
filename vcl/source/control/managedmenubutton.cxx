@@ -56,7 +56,7 @@ void ManagedMenuButton::PrepareExecute()
         m_xPopupMenu = GetPopupMenu()->CreateMenuInterface();
 
     // FIXME: get the frame from the parent VclBuilder.
-    css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const css::uno::Reference<css::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     css::uno::Reference<css::frame::XDesktop2> xDesktop(css::frame::theDesktop::get(xContext));
     css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())

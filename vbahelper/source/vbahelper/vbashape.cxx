@@ -393,7 +393,7 @@ ScVbaShape::TextFrame()
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"com.sun.star.sheet.SpreadsheetDocument"_ustr ) )
     {
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.excel.TextFrame"_ustr , { uno::Any(getParent()), uno::Any(m_xShape) }, xContext );
         return uno::Any( xTextFrame );
     }
@@ -727,7 +727,7 @@ ScVbaShape::WrapFormat()
     uno::Reference< lang::XServiceInfo > xServiceInfo( m_xModel, uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( u"com.sun.star.text.TextDocument"_ustr ))
     {
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( u"ooo.vba.word.WrapFormat"_ustr ,{ uno::Any(getParent()), uno::Any(m_xShape) }, xContext );
         return uno::Any( xWrapFormat );
     }

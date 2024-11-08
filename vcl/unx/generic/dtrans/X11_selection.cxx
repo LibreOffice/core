@@ -3764,7 +3764,7 @@ void SelectionManager::run( void* pThis )
     timeval aLast;
     gettimeofday( &aLast, nullptr );
 
-    css::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const css::uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     This->m_xDesktop.set( Desktop::create(xContext) );
     This->m_xDesktop->addTerminateListener(This);
 

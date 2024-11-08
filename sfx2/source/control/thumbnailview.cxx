@@ -66,7 +66,7 @@ BitmapEx ThumbnailView::readThumbnail(const OUString &msURL)
     // Load the thumbnail from a template document.
     uno::Reference<io::XInputStream> xIStream;
 
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
     try
     {
         uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);

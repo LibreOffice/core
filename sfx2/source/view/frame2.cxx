@@ -225,7 +225,7 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
     try
     {
         // create and initialize new top level frame for this window
-        Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         Reference < XDesktop2 > xDesktop = Desktop::create( xContext );
         Reference < XFrame2 > xFrame = Frame::create( xContext );
 

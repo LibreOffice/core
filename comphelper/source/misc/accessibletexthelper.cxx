@@ -59,7 +59,7 @@ namespace comphelper
     {
         if ( !m_xBreakIter.is() )
         {
-            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             m_xBreakIter = i18n::BreakIterator::create(xContext);
         }
 

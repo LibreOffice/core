@@ -87,7 +87,8 @@ MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
     uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xFrame.is());
 
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext
+        = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
@@ -100,7 +101,7 @@ MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
 std::unique_ptr<SvStream> MacrosTest::parseExportStream(const OUString& url,
                                                         const OUString& rStreamName)
 {
-    uno::Reference<uno::XComponentContext> xComponentContext
+    const uno::Reference<uno::XComponentContext>& xComponentContext
         = comphelper::getProcessComponentContext();
     uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
         packages::zip::ZipFileAccess::createWithURL(xComponentContext, url));

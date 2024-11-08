@@ -121,7 +121,7 @@ TemplateScanner::~TemplateScanner()
 
 TemplateScanner::State TemplateScanner::GetTemplateRoot()
 {
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference<frame::XDocumentTemplates> xTemplates = frame::DocumentTemplates::create(xContext);
     mxTemplateRoot = xTemplates->getContent();
 

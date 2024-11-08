@@ -419,7 +419,7 @@ bool GDIMetaFile::ImplPlayWithRenderer(OutputDevice& rOut, const Point& rPos, Si
             uno::Reference< rendering::XBitmapCanvas > xBitmapCanvas( xBitmap, uno::UNO_QUERY );
             if( xBitmapCanvas.is() )
             {
-                uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
                 uno::Reference< rendering::XMtfRenderer > xMtfRenderer = rendering::MtfRenderer::createWithBitmapCanvas( xContext, xBitmapCanvas );
 
                 xBitmapCanvas->clear();

@@ -281,7 +281,7 @@ ErrCodeMsg ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
 
 bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
 {
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
     xml::sax::InputSource aParserInput;
     if (pMedium)
@@ -722,7 +722,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     if (pDrawLayer)
         pDrawLayer->setLock(bOldLock);
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
 
     uno::Reference<xml::sax::XWriter> xWriter = xml::sax::Writer::create(xContext);
 

@@ -2364,7 +2364,7 @@ bool XclImpChType::HasCategoryLabels() const
 Reference< XCoordinateSystem > XclImpChType::CreateCoordSystem( bool b3dChart ) const
 {
     // create the coordinate system object
-    Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
     {

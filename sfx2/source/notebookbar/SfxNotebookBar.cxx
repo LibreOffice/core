@@ -442,7 +442,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
     if (IsActive())
     {
-        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
@@ -572,7 +572,7 @@ void SfxNotebookBar::ShowMenubar(bool bShow)
 
     Reference<frame::XFrame> xFrame;
     vcl::EnumContext::Application eCurrentApp = vcl::EnumContext::Application::NONE;
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xContext );
 
     if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())

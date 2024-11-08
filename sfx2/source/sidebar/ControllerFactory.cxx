@@ -194,7 +194,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
 {
     try
     {
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         Reference<frame::XUIControllerFactory> xFactory = frame::theToolbarControllerFactory::get( xContext );
         OUString sModuleName (Tools::GetModuleName(rxController));
 

@@ -71,7 +71,7 @@ using namespace linguistic;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create( xContext ) ;
     return xRes;
 }

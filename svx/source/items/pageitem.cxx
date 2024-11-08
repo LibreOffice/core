@@ -109,7 +109,7 @@ namespace
         sal_uInt32 n = SvxNumberingTypeTable::FindIndex(eNumType);
         if (n != RESARRAY_INDEX_NOTFOUND)
             return SvxNumberingTypeTable::GetString(n);
-        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         css::uno::Reference<css::text::XDefaultNumberingProvider> xDefNum = css::text::DefaultNumberingProvider::create(xContext);
         css::uno::Reference<css::text::XNumberingTypeInfo> xInfo(xDefNum, css::uno::UNO_QUERY);
         if (!xInfo.is())

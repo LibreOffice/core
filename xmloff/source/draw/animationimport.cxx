@@ -510,7 +510,7 @@ AnimationNodeContext::AnimationNodeContext(
 
             if( pServiceName )
             {
-                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
                 mxNode.set(
                     xContext->getServiceManager()->createInstanceWithContext(OUString::createFromAscii(pServiceName), xContext),

@@ -350,7 +350,7 @@ void ImportExcel8::ReadBasic()
         }
         try
         {
-            uno::Reference< uno::XComponentContext > aCtx( ::comphelper::getProcessComponentContext() );
+            const uno::Reference< uno::XComponentContext >& aCtx( ::comphelper::getProcessComponentContext() );
             SfxMedium& rMedium = GetMedium();
             uno::Reference< io::XInputStream > xIn = rMedium.GetInputStream();
             oox::ole::OleStorage root( aCtx, xIn, false );

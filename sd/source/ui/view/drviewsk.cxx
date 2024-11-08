@@ -88,7 +88,7 @@ const uno::Reference<presentation::XSlideShow> & DrawViewShell::getXSlideShowIns
     {
         try
         {
-            auto xContext = ::comphelper::getProcessComponentContext();
+            const auto& xContext = ::comphelper::getProcessComponentContext();
             mxSlideShow.set(presentation::SlideShow::create(xContext), uno::UNO_SET_THROW);
         }
         catch (uno::Exception&)

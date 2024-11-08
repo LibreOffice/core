@@ -73,7 +73,7 @@ namespace offapp
         };
         m_xDriverList->set_column_fixed_widths(aWidths);
 
-        css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
         m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );

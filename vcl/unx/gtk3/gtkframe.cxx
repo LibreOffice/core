@@ -1471,7 +1471,7 @@ static void session_client_response(GDBusProxy* client_proxy)
 // unset documents "modify" flag so they won't veto closing
 static void clear_modify_and_terminate()
 {
-    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference<css::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop> xDesktop(frame::Desktop::create(xContext));
     uno::Reference<css::container::XEnumeration> xComponents = xDesktop->getComponents()->createEnumeration();
     while (xComponents->hasMoreElements())
@@ -1490,7 +1490,7 @@ static void session_client_signal(GDBusProxy* client_proxy, const char*, const c
 
     if (g_str_equal (signal_name, "QueryEndSession"))
     {
-        css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference<css::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference<frame::XDesktop2> xDesktop(frame::Desktop::create(xContext));
 
         bool bModified = false;

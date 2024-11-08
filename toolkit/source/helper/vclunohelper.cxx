@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
 uno::Reference< css::awt::XToolkit> VCLUnoHelper::CreateToolkit()
 {
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< awt::XToolkit> xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
     return xToolkit;
 }

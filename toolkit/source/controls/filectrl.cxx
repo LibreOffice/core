@@ -203,7 +203,7 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl, Button*, void)
 {
     try
     {
-        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
         Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createWithMode( xContext, dialogs::TemplateDescription::FILEOPEN_SIMPLE );
         // transform the system notation text into a file URL
         OUString sSystemNotation = GetText(), sFileURL;

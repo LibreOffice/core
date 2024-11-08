@@ -1115,7 +1115,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
     try
     {
         // get configuration provider
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                 configuration::theDefaultProvider::get( xContext );
 

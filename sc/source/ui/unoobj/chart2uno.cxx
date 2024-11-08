@@ -1037,7 +1037,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > lcl_createLabeledDataSequen
     {
         try
         {
-            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             if ( xContext.is() )
             {
                 xResult.set( chart2::data::LabeledDataSequence::create(xContext), uno::UNO_QUERY_THROW );

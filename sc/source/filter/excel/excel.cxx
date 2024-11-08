@@ -87,7 +87,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
     uno::Sequence< uno::Any > aArguments;
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), uno::UNO_QUERY);
@@ -276,7 +276,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
 
         if (sCryptoType.getLength())
         {
-            uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+            const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
             uno::Sequence<uno::Any> aArguments{
                 uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
             xPackageEncryption.set(

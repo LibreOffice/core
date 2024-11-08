@@ -1093,7 +1093,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                 return false;
 
             OUString sNewName( getServiceNameByControlType( nObjectTypes[ lookupSlot ] ) );
-            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
             Reference< XControlModel> xNewModel( xContext->getServiceManager()->createInstanceWithContext(sNewName, xContext), UNO_QUERY );
             if (!xNewModel.is())
                 return false;

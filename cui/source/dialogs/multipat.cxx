@@ -87,7 +87,7 @@ void SvxMultiPathDialog::AppendEntry(const OUString& rText, const OUString& rId)
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
 {
-    Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )
@@ -117,7 +117,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxPathSelectDialog, AddHdl_Impl, weld::Button&, void)
 {
-    Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, m_xDialog.get());
 
     if ( xFolderPicker->execute() != ExecutableDialogResults::OK )

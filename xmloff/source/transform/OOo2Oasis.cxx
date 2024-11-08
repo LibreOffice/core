@@ -1704,7 +1704,7 @@ void OOo2OasisTransformer::Initialize(
     Reference< XInterface > xFilter;
     if( !m_aSubServiceName.isEmpty() )
     {
-        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
         // get filter component
         xFilter =
             xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext);

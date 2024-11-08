@@ -50,7 +50,7 @@ void CertPathDialog::Init()
 
     try
     {
-        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         uno::Reference<xml::crypto::XNSSInitializer> xCipherContextSupplier = xml::crypto::NSSInitializer::create(xContext);
 
         OUString sActivePath = xCipherContextSupplier->getNSSPath();
@@ -138,7 +138,7 @@ bool CertPathDialog::isActiveServicePath() const
 
     try
     {
-        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         uno::Reference<xml::crypto::XNSSInitializer> xCipherContextSupplier = xml::crypto::NSSInitializer::create(xContext);
 
         if (!xCipherContextSupplier->getIsNSSinitialized())

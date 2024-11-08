@@ -174,7 +174,7 @@ void TipOfTheDayDialog::UpdateTip()
             {
                 css::util::URL aCommandURL;
                 aCommandURL.Complete = sLink;
-                const css::uno::Reference<css::uno::XComponentContext> xContext
+                const css::uno::Reference<css::uno::XComponentContext>& xContext
                     = comphelper::getProcessComponentContext();
                 const css::uno::Reference<css::util::XURLTransformer> xParser
                     = css::util::URLTransformer::create(xContext);

@@ -296,7 +296,7 @@ namespace dp_misc {
 DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL)
 {
     Reference< css::xml::dom::XNode > root;
-    Reference<css::uno::XComponentContext> context(
+    const Reference<css::uno::XComponentContext>& context(
         comphelper::getProcessComponentContext());
     try {
         root =

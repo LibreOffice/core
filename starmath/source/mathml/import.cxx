@@ -75,7 +75,8 @@ SmMlElement* SmMLImportWrapper::getElementTree()
 ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 {
     // Fetch context
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
     if (!xContext.is())
     {
         SAL_WARN("starmath", "Failed to fetch model while file input");
@@ -284,7 +285,8 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 {
     // Fetch context
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
     if (!xContext.is())
     {
         SAL_WARN("starmath", "Failed to fetch model while file input");

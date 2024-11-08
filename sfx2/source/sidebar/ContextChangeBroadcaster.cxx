@@ -111,7 +111,7 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
         return OUString();
     try
     {
-        const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
+        const Reference<XComponentContext>& xContext (::comphelper::getProcessComponentContext() );
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         return xModuleManager->identify(rxFrame);
     }

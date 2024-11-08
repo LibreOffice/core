@@ -63,7 +63,7 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
         // create XPrimitive2DRenderer
         try
         {
-            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+            const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
             uno::Sequence< beans::PropertyValue > aViewParameters = {
@@ -221,7 +221,7 @@ void VectorGraphicData::ensureSequenceAndRange()
     maRange.reset();
 
     // create Vector Graphic Data interpreter
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
 
     switch (getType())
     {

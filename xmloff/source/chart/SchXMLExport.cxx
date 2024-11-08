@@ -441,7 +441,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getCategories( const Referen
 Reference< chart2::data::XDataSource > lcl_createDataSource(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aData )
 {
-    Reference< uno::XComponentContext > xContext(
+    const Reference< uno::XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
     Reference< chart2::data::XDataSink > xSink(
         xContext->getServiceManager()->createInstanceWithContext(

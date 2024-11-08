@@ -89,7 +89,7 @@ DlgEdHint::~DlgEdHint()
 
 void DlgEditor::ShowDialog()
 {
-    uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >&  xContext = getProcessComponentContext();
 
     // create a dialog
     uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
@@ -415,7 +415,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
 {
     if ( !m_xSupplier.is() )
     {
-        Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         Reference< util::XNumberFormatsSupplier > xSupplier( util::NumberFormatsSupplier::createWithDefaultLocale(xContext) );
 
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -696,7 +696,7 @@ void DlgEditor::Copy()
     }
 
     // export clipboard dialog model to xml
-    Reference< XComponentContext > xContext(
+    const Reference< XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
     Reference< XInputStream > xStream( xISP->createInputStream() );
@@ -825,7 +825,7 @@ void DlgEditor::Paste()
         return;
 
     // create clipboard dialog model from xml
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
     Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
         u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), uno::UNO_QUERY );
 

@@ -471,7 +471,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     SAL_INFO_IF(rBaseURL.isEmpty(), "sw.filter", "sw::XMLReader: no base URL");
 
     // Get service factory
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
     uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
@@ -982,7 +982,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
 size_t XMLReader::GetSectionList( SfxMedium& rMedium,
                                   std::vector<OUString>& rStrings) const
 {
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
     uno::Reference < embed::XStorage > xStg2;
     if( ( xStg2 = rMedium.GetStorage() ).is() )

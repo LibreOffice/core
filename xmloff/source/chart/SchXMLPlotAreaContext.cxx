@@ -1026,7 +1026,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     xSeqProp->setPropertyValue(u"Role"_ustr, uno::Any( aRole ));
 
-    Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
     Reference< chart2::data::XLabeledDataSequence > xLabelSeq( chart2::data::LabeledDataSequence::create(xContext),
         uno::UNO_QUERY_THROW );

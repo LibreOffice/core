@@ -244,7 +244,7 @@ static OUString transliterate_titlecase_Impl(
     OUString aRes;
     if (!aText.isEmpty())
     {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         rtl::Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
 
         // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise

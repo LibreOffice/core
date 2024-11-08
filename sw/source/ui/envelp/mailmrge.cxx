@@ -559,7 +559,7 @@ OUString SwMailMergeDlg::GetTargetURL() const
 
 IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl, weld::Button&, void)
 {
-    uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFolderPicker2 > xFP = sfx2::createFolderPicker(xContext, m_xDialog.get());
     xFP->setDisplayDirectory( GetURLfromPath() );
     if( xFP->execute() == RET_OK ) {

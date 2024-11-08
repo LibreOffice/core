@@ -629,7 +629,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     if (comphelper::IsFuzzing())
         return;
 
-    Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const Reference<css::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     Reference<css::document::XImporter> xImporter(xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.Draw.XMLOasisStylesImporter"_ustr,
         { Any(comphelper::makePropertyValue(u"OrganizerMode"_ustr, true)) }, xContext), UNO_QUERY);

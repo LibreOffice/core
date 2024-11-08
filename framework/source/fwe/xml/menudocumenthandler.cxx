@@ -331,7 +331,7 @@ void SAL_CALL OReadMenuBarHandler::startElement(
         m_bMenuMode = true;
 
         // Container must be factory to create sub container
-        Reference< XComponentContext > xComponentContext(
+        const Reference< XComponentContext >& xComponentContext(
             comphelper::getProcessComponentContext() );
 
         Reference< XIndexContainer > xSubItemContainer;

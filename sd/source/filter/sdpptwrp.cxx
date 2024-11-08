@@ -87,7 +87,7 @@ static rtl::Reference<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const
 
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
     Sequence< Any > aArguments;
-    Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    const Reference<XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     Reference< css::packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), UNO_QUERY);
@@ -223,7 +223,7 @@ bool SdPPTFilter::Export()
 
             if (sCryptoType.getLength())
             {
-                Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+                const Reference<XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
                 Sequence<Any> aArguments{
                     Any(NamedValue(u"Binary"_ustr, Any(true))) };
                 xPackageEncryption.set(

@@ -597,7 +597,7 @@ namespace basctl
             if ( _eType == E_DIALOGS )
             {
                 // create dialog model
-                Reference< XComponentContext > aContext(
+                const Reference< XComponentContext >& aContext(
                     comphelper::getProcessComponentContext() );
                 Reference< XNameContainer > xDialogModel;
                 if ( _rxExistingDialogModel.is() )
@@ -733,7 +733,7 @@ namespace basctl
                 return false;
 
             // create new dialog model
-            Reference< XComponentContext > aContext(
+            const Reference< XComponentContext >& aContext(
                 comphelper::getProcessComponentContext() );
             Reference< XNameContainer > xDialogModel(
                 aContext->getServiceManager()->createInstanceWithContext(
@@ -915,7 +915,7 @@ namespace basctl
             if ( !xLibContainer->hasByName( _rLibName ) || !xLibContainer->isLibraryLink( _rLibName ) )
                 return false;
             OUString aFileURL;
-            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             Reference< XUriReferenceFactory > xUriFac = UriReferenceFactory::create(xContext);
 
             OUString aLinkURL( xLibContainer->getLibraryLinkURL( _rLibName ) );

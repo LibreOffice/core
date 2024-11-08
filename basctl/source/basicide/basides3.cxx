@@ -72,7 +72,7 @@ VclPtr<DialogWindow> Shell::CreateDlgWin( const ScriptDocument& rDocument, const
             if ( xISP.is() )
             {
                 // create dialog model
-                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+                const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
                 Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
                     ( u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );

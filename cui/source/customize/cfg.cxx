@@ -302,7 +302,7 @@ SaveInData::SaveInData(
         bReadOnly = xDocPersistence->isReadOnly();
     }
 
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
 
     uno::Reference< container::XNameAccess > xNameAccess(
         css::frame::theUICommandDescription::get(xContext) );
@@ -603,7 +603,7 @@ void MenuSaveInData::Apply(
     uno::Reference< container::XIndexContainer > const & rMenuBar,
     uno::Reference< lang::XSingleComponentFactory >& rFactory )
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
 
     for (auto const& entryData : *GetEntries())
     {
@@ -630,7 +630,7 @@ void SaveInData::ApplyMenu(
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry* pMenuData )
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
 
     for (auto const& entry : *pMenuData->GetEntries())
     {
@@ -702,7 +702,7 @@ ContextMenuSaveInData::ContextMenuSaveInData(
     const OUString& aModuleId, bool bIsDocConfig )
     : SaveInData( xCfgMgr, xParentCfgMgr, aModuleId, bIsDocConfig )
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const css::uno::Reference< css::uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     css::uno::Reference< css::container::XNameAccess > xConfig( css::ui::theWindowStateConfiguration::get( xContext ) );
     xConfig->getByName( aModuleId ) >>= m_xPersistentWindowState;
 }
@@ -1279,7 +1279,7 @@ OUString SvxConfigPage::GetFrameWithDefaultAndIdentify( uno::Reference< frame::X
     OUString sModuleID;
     try
     {
-        uno::Reference< uno::XComponentContext > xContext(
+        const uno::Reference< uno::XComponentContext >& xContext(
             ::comphelper::getProcessComponentContext() );
 
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(
@@ -1974,7 +1974,7 @@ ToolbarSaveInData::ToolbarSaveInData(
     m_aDescriptorContainer  ( ITEM_DESCRIPTOR_CONTAINER  )
 
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     // Initialize the m_xPersistentWindowState variable which is used
     // to get the default properties of system toolbars such as name
     uno::Reference< container::XNameAccess > xPWSS = css::ui::theWindowStateConfiguration::get( xContext );
@@ -2413,7 +2413,7 @@ void ToolbarSaveInData::ApplyToolbar(
     uno::Reference< lang::XSingleComponentFactory >& rFactory,
     SvxConfigEntry const * pToolbarData )
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
 
     for (auto const& entry : *pToolbarData->GetEntries())
     {
@@ -2742,7 +2742,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog(weld::Window *pWindow,
     Size aSize(m_xTbSymbol->CalcWindowSizePixel(Size(m_nExpectedSize, m_nExpectedSize), 11, 5));
     m_xTbSymbol->set_size_request(aSize.Width(), aSize.Height());
 
-    uno::Reference< uno::XComponentContext > xComponentContext =
+    const uno::Reference< uno::XComponentContext >& xComponentContext =
         ::comphelper::getProcessComponentContext();
 
     m_xGraphProvider.set( graphic::GraphicProvider::create( xComponentContext ) );

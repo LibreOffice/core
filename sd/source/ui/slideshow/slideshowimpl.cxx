@@ -2481,7 +2481,7 @@ Reference< XSlideShow > SlideshowImpl::createSlideShow()
 
     try
     {
-        Reference< uno::XComponentContext > xContext =
+        const Reference< uno::XComponentContext >& xContext =
             ::comphelper::getProcessComponentContext();
 
         xShow.set( presentation::SlideShow::create(xContext), UNO_SET_THROW );
@@ -2782,7 +2782,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
 {
     try
     {
-        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< util::XURLTransformer > xParser(util::URLTransformer::create(xContext));
         util::URL aURL;

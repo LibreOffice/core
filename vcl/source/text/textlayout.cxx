@@ -411,7 +411,7 @@ namespace vcl
         if (bHyphenate)
         {
             // get service provider
-            css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+            const css::uno::Reference<css::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
             css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr = css::linguistic2::LinguServiceManager::create(xContext);
             xHyph = xLinguMgr->getHyphenator();
         }

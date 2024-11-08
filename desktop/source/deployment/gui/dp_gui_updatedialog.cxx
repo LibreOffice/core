@@ -619,7 +619,7 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         util::URL aURL;
         xNameAccess->getByName(u"URL"_ustr) >>= aURL.Complete;
 
-        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference < util::XURLTransformer > xTransformer = util::URLTransformer::create(xContext);
 
         xTransformer->parseStrict(aURL);

@@ -301,7 +301,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
         if( xShape.is() )
         {
             // TODO/LATER: Optimize this, don't create a break iterator each time
-            Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             Reference < i18n::XBreakIterator > xBI = i18n::BreakIterator::create(xContext);
 
             Reference< XEnumerationAccess > xEA( xShape, UNO_QUERY_THROW );
@@ -944,7 +944,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
 {
     DBG_ASSERT( mbHasAfterEffect, "sd::CustomAnimationEffect::createAfterEffectNode(), this node has no after effect!" );
 
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
     Reference< XAnimate > xAnimate;
     if( maDimColor.hasValue() )
@@ -1005,7 +1005,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
         {
             sal_Int16 nTargetSubItem = mnTargetSubItem;
 
-            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             Reference< XTimeContainer > xNewContainer;
             if(nIterateType)
             {
@@ -1450,7 +1450,7 @@ void CustomAnimationEffect::createAudio( const css::uno::Any& rSource )
 
     try
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         Reference< XAudio > xAudio( Audio::create( xContext ) );
         xAudio->setSource( rSource );
         xAudio->setVolume( 1.0 );
@@ -1545,7 +1545,7 @@ void CustomAnimationEffect::setStopAudio()
         if( mxAudio.is() )
             removeAudio();
 
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         Reference< XCommand > xCommand( Command::create( xContext ) );
 
         xCommand->setCommand( EffectCommands::STOPAUDIO );
@@ -2016,7 +2016,7 @@ void stl_process_after_effect_node_func(AfterEffectNode const & rNode)
             }
             else // nextClick
             {
-                Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                 // insert the aftereffect in the next group
 
                 Reference< XTimeContainer > xClickContainer( xContainer->getParent(), UNO_QUERY_THROW );

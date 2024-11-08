@@ -274,7 +274,7 @@ namespace dbaui
                 if (eType ==  ::dbaccess::DST_THUNDERBIRD)
                     profileType = MozillaProductType_Thunderbird;
 
-                Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+                const Reference<XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
                 Reference<XMozillaBootstrap> xMozillaBootstrap = MozillaBootstrap::create(xContext);
 
                 // collect all Mozilla Profiles

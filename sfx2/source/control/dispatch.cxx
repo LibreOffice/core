@@ -1883,7 +1883,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, c
         css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );

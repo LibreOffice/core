@@ -339,7 +339,7 @@ XMLTokenEnum getTokenByChartType(
 
 Reference< chart2::data::XLabeledDataSequence2 > GetNewLabeledDataSequence()
 {
-    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     Reference< chart2::data::XLabeledDataSequence2 > xResult = chart2::data::LabeledDataSequence::create(xContext);
     return xResult;
 }

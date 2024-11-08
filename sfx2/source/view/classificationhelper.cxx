@@ -378,7 +378,7 @@ SfxClassificationHelper::Impl::Impl(uno::Reference<document::XDocumentProperties
 
 void SfxClassificationHelper::Impl::parsePolicy()
 {
-    uno::Reference<uno::XComponentContext> xComponentContext = comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xComponentContext = comphelper::getProcessComponentContext();
     SvtPathOptions aOptions;
     OUString aPath = aOptions.GetClassificationPath();
 

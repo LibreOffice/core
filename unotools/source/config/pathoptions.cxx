@@ -212,7 +212,7 @@ const OUString& SvtPathOptions_Impl::GetPath( SvtPathOptions::Paths ePath )
         else if (ePath == SvtPathOptions::Paths::Palette ||
                  ePath == SvtPathOptions::Paths::IconSet)
         {
-            auto ctx = comphelper::getProcessComponentContext();
+            const auto& ctx = comphelper::getProcessComponentContext();
             OUStringBuffer buf(aPathValue.getLength()*2);
             for (sal_Int32 i = 0;;)
             {
@@ -367,7 +367,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 
 SvtPathOptions_Impl::SvtPathOptions_Impl()
 {
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
     // Create necessary services
     Reference< XPathSettings > xPathSettings = thePathSettings::get(xContext);

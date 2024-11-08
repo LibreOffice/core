@@ -135,7 +135,7 @@ void PropBrw::ImplReCreateController()
 
     try
     {
-        Reference< XComponentContext > xOwnContext = comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xOwnContext = comphelper::getProcessComponentContext();
 
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =

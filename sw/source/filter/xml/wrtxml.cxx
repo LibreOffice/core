@@ -100,7 +100,7 @@ ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     }
 
     // Get service factory
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
     // Get data sink ...

@@ -39,7 +39,8 @@ Image TkResMgr::getImageFromURL(const OUString& i_rImageURL)
 
     try
     {
-        Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        const Reference<uno::XComponentContext>& xContext(
+            ::comphelper::getProcessComponentContext());
         Reference<XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
         ::comphelper::NamedValueCollection aMediaProperties;
         aMediaProperties.put(u"URL"_ustr, i_rImageURL);

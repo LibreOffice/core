@@ -311,7 +311,7 @@ SvxRubyData_Impl::SvxRubyData_Impl()
     : bHasSelectionChanged(false)
     , bDisposing(false)
 {
-    Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     xBreak = css::i18n::BreakIterator::create(xContext);
 }
 

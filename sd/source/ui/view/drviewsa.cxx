@@ -349,7 +349,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mnLockCount = 0;
 
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {

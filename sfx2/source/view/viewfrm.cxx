@@ -2789,7 +2789,7 @@ void SfxViewFrame::ExecView_Impl
 */
 static bool impl_maxOpenDocCountReached()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get());
     // NIL means: count of allowed documents = infinite !
     if (!x)
@@ -3070,7 +3070,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         OUString aModuleName;
         OUString aMacroName;
         OUString aLocation;
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         Reference< css::uri::XUriReferenceFactory > xFactory =
             css::uri::UriReferenceFactory::create( xContext );
         Reference< css::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
@@ -3270,7 +3270,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             else if ( rReq.GetSlot() == SID_RECORDMACRO )
             {
                 // enable recording
-                css::uno::Reference< css::uno::XComponentContext > xContext(
+                const css::uno::Reference< css::uno::XComponentContext >& xContext(
                         ::comphelper::getProcessComponentContext());
 
                 xRecorder = css::frame::DispatchRecorder::create( xContext );

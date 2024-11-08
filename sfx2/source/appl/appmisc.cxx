@@ -160,7 +160,7 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 
     // UNO dance to render from drawinglayer
 
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference< uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
 
     try
     {

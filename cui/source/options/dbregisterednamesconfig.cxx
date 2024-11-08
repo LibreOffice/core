@@ -39,7 +39,7 @@ namespace svx
 
         try
         {
-            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            const Reference<XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
             Reference< XDatabaseContext > xRegistrations(
                 DatabaseContext::create(xContext) );
 

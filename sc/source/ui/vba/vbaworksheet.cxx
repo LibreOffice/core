@@ -128,7 +128,7 @@ openNewDoc(const OUString& aSheetName )
     uno::Reference<frame::XModel> xModel;
     try
     {
-        uno::Reference< uno::XComponentContext > xContext(
+        const uno::Reference< uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
 
         uno::Reference <frame::XDesktop2 > xComponentLoader = frame::Desktop::create(xContext);

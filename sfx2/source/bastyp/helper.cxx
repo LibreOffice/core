@@ -103,7 +103,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
     vector< OUString > aProperties;
     try
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
 
@@ -161,7 +161,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
     OUStringBuffer aRet;
     try
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );

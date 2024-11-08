@@ -113,7 +113,7 @@ namespace
         aURL.removeSegment();
         aURL.removeFinalSlash();
         OUString aPath = aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-        uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
         _rDrvMgr.set( sdbc::DriverManager::create( xContext ) );
 

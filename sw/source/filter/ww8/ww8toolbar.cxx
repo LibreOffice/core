@@ -193,7 +193,7 @@ bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
             css::uno::Reference<css::ui::XUIConfigurationManager> xCfgMgr;
             if (!comphelper::IsFuzzing())
             {
-                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
                 xCfgMgr = xAppCfgSupp->getUIConfigurationManager(u"com.sun.star.text.TextDocument"_ustr);
             }
@@ -291,7 +291,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     }
 
                     uno::Reference< lang::XSingleComponentFactory > xSCF( xIndexContainer, uno::UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext(
+                    const uno::Reference< uno::XComponentContext >& xContext(
                         comphelper::getProcessComponentContext() );
                     uno::Reference< container::XIndexContainer > xMenuContainer( xSCF->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
                     // create the popup menu

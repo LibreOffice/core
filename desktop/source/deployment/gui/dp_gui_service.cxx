@@ -74,7 +74,7 @@ int MyApp::Main()
 
 void MyApp::DeInit()
 {
-    css::uno::Reference< css::uno::XComponentContext > context(
+    const css::uno::Reference< css::uno::XComponentContext >& context(
         comphelper::getProcessComponentContext());
     dp_misc::disposeBridges(context);
     css::uno::Reference< css::lang::XComponent >(

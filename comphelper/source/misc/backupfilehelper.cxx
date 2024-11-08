@@ -384,7 +384,7 @@ namespace
 
             // create content from current extension configuration
             uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             uno::Reference< deployment::XExtensionManager > m_xExtensionManager = deployment::ExtensionManager::get(xContext);
 
             try
@@ -505,7 +505,7 @@ namespace
         {
             if (DirectoryHelper::fileExists(aPath))
             {
-                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< xml::dom::XDocumentBuilder > xBuilder(xml::dom::DocumentBuilder::create(xContext));
                 uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(aPath);
 
@@ -607,7 +607,7 @@ namespace
             if (!DirectoryHelper::fileExists(rUnoPackagReg))
                 return;
 
-            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             uno::Reference< xml::dom::XDocumentBuilder > xBuilder = xml::dom::DocumentBuilder::create(xContext);
             uno::Reference< xml::dom::XDocument > aDocument = xBuilder->parseURI(rUnoPackagReg);
 
@@ -1879,7 +1879,7 @@ namespace comphelper
         if (!DirectoryHelper::fileExists(aRegistryModifications))
             return;
 
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         uno::Reference< XDocumentBuilder > xBuilder = DocumentBuilder::create(xContext);
         uno::Reference< XDocument > xDocument = xBuilder->parseURI(aRegistryModifications);
         uno::Reference< XElement > xRootElement = xDocument->getDocumentElement();

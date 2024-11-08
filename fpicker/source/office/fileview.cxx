@@ -442,7 +442,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl(std::unique_ptr<weld::TreeView> xTreeVi
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
     maResetQuickSearch.SetInvokeHandler( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
         InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
 
@@ -798,7 +798,7 @@ SvtFileView::SvtFileView(weld::Window* pTopLevel,
     if ( bShowType )
         nFlags |= FileViewFlags::SHOW_TYPE;
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
         InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );

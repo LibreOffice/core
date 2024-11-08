@@ -75,7 +75,7 @@ namespace svt
 
     void SmartContent::enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::EInterceptedInteractions eInterceptions)
     {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xGlobalInteractionHandler(
             InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
 
@@ -90,7 +90,7 @@ namespace svt
     {
         m_xOwnInteraction.clear();
 
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xGlobalInteractionHandler(
             InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
         m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );

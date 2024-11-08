@@ -381,7 +381,7 @@ IMPL_LINK(TreeListBox, CommandHdl, const CommandEvent&, rCEvt, bool)
         css::uno::Any(comphelper::makePropertyValue( u"IsContextMenu"_ustr, true ))
     };
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XPopupMenuController> xMenuController
         (xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), css::uno::UNO_QUERY);

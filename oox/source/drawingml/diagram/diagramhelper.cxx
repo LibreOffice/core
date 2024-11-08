@@ -100,7 +100,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     //       here. XShape creation may be isolated in the future.
     SdrModel& rModel(rTarget.getSdrModelFromSdrObject());
     uno::Reference< uno::XInterface > const & rUnoModel(rModel.getUnoModel());
-    css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const css::uno::Reference<css::uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     rtl::Reference<oox::shape::ShapeFilterBase> xFilter(new oox::shape::ShapeFilterBase(xContext));
 
     // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes

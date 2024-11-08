@@ -1221,7 +1221,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
 
                     Sequence< Reference<chart2::XDataPointCustomLabelField>> xLabels(nLabelCount);
                     auto pxLabels = xLabels.getArray();
-                    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                    const Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
                     for( size_t j = 0; j < nLabelCount; ++j )
                     {
                         Reference< chart2::XDataPointCustomLabelField > xCustomLabel = chart2::DataPointCustomLabelField::create(xContext);

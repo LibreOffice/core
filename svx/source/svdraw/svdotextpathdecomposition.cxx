@@ -236,7 +236,7 @@ namespace
             mrShadowDecomposition(rShadowDecomposition)
         {
             // prepare BreakIterator
-            uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+            const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
             mxBreak = i18n::BreakIterator::create(xContext);
         }
 

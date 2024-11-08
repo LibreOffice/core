@@ -726,7 +726,7 @@ namespace
             try
             {
                 Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY );
-                const Reference< XComponentContext > xContext(
+                const Reference< XComponentContext >& xContext(
                     ::comphelper::getProcessComponentContext() );
                 _rxContainer.set (   _bScript
                                 ?   DocumentScriptLibraryContainer::create(

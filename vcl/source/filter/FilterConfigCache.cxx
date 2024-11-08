@@ -89,7 +89,7 @@ OUString FilterConfigCache::FilterConfigCacheEntry::GetShortName()
  */
 static Reference< XInterface > openConfig(const char* sPackage)
 {
-    Reference< XComponentContext > xContext(
+    const Reference< XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
     Reference< XInterface >           xCfg;
     try

@@ -50,7 +50,7 @@ namespace offapp
     {
         try
         {
-            Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             Reference< XDriverManager2 > xEnumAccess = DriverManager::create( xContext );
 
             Reference< XEnumeration > xEnumDrivers = xEnumAccess->createEnumeration();

@@ -57,7 +57,7 @@ namespace svx
         m_xURL->DisableHistory();
         m_xURL->SetFilter(u"*.odb");
 
-        css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
         m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 
         m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );

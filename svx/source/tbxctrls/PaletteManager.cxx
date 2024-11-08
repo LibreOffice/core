@@ -444,7 +444,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
     using namespace css::beans;
     using namespace css::util;
 
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
     Reference<XDesktop2> xDesktop = Desktop::create(xContext);
     Reference<XFrame> xFrame(xDesktop->getCurrentFrame());
     Reference<XDispatchProvider> xDispatchProvider(xFrame, UNO_QUERY);

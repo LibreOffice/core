@@ -1502,7 +1502,7 @@ void VclMetafileProcessor2D::processTextSimplePortionPrimitive2D(
         // support for TEXT_ MetaFile actions only for decorated texts
         if (!gxBreakIterator.get() || !gxBreakIterator.get()->get())
         {
-            uno::Reference<uno::XComponentContext> xContext(
+            const uno::Reference<uno::XComponentContext>& xContext(
                 ::comphelper::getProcessComponentContext());
             gxBreakIterator.set(i18n::BreakIterator::create(xContext));
         }

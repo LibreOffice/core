@@ -189,7 +189,7 @@ static Reference< XHierarchicalNameAccess > const & getTypeProvider_Impl()
     // Do we have already CoreReflection; if not obtain it
     if( !xAccess.is() )
     {
-        Reference< XComponentContext > xContext(
+        const Reference< XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
@@ -215,7 +215,7 @@ static Reference< XTypeConverter > const & getTypeConverter_Impl()
     // Do we have already CoreReflection; if not obtain it
     if( !xTypeConverter.is() )
     {
-        Reference< XComponentContext > xContext(
+        const Reference< XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
@@ -236,7 +236,7 @@ SbUnoObject* createOLEObject_Impl( const OUString& aType )
 {
     static const Reference<XMultiServiceFactory> xOLEFactory = [] {
         Reference<XMultiServiceFactory> xFactory;
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
         if( xContext.is() )
         {
             Reference<XMultiComponentFactory> xSMgr = xContext->getServiceManager();
@@ -2388,7 +2388,7 @@ void SbUnoObject::doIntrospection()
     if( !bNeedIntrospection )
         return;
 
-    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
 
     if (!xContext.is())
         return;
@@ -4030,7 +4030,7 @@ void SbRtl_CreateUnoListener(StarBASIC * pBasic, SbxArray & rPar, bool)
         return;
 
     // get the AllListenerAdapterService
-    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // search the class
     Reference< XIdlClass > xClass = xCoreReflection->forName( aListenerClassName );
@@ -4374,7 +4374,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const OUStrin
 {
     Reference< XInterface > xRet;
 
-    Reference< XComponentContext > xContext(
+    const Reference< XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
 
@@ -4486,7 +4486,7 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
     // For now: Take first interface that allows to instantiate COM wrapper
     // TODO: Check if support for multiple interfaces is needed
 
-    Reference< XComponentContext > xContext(
+    const Reference< XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
     Reference< XMultiComponentFactory > xServiceMgr( xContext->getServiceManager() );
     Reference< XSingleServiceFactory > xComImplementsFactory

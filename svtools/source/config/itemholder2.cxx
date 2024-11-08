@@ -37,7 +37,7 @@ ItemHolder2::ItemHolder2()
 {
     try
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference< css::lang::XComponent > xCfg(
             css::configuration::theDefaultProvider::get( xContext ),
             css::uno::UNO_QUERY_THROW );

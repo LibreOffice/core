@@ -104,7 +104,7 @@ ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             m_xRoot = m_xBlkRoot->openStorageElement( aFolderName, embed::ElementModes::READ );
             uno::Reference < io::XStream > xStream = m_xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
 
-            uno::Reference< uno::XComponentContext > xContext =
+            const uno::Reference< uno::XComponentContext >& xContext =
                 comphelper::getProcessComponentContext();
 
             xml::sax::InputSource aParserInput;
@@ -193,7 +193,7 @@ ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get service factory
-        uno::Reference< uno::XComponentContext > xContext =
+        const uno::Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
         // create descriptor and reference to it. Either
@@ -286,7 +286,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
         }
 
         uno::Reference < io::XStream > xContents = m_xRoot->openStreamElement( aStreamName, embed::ElementModes::READ );
-        uno::Reference< uno::XComponentContext > xContext =
+        const uno::Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
@@ -346,7 +346,7 @@ ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
     */
     OUString aStreamName = rPackageName + ".xml";
 
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
         comphelper::getProcessComponentContext();
 
     uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
@@ -408,7 +408,7 @@ void SwXMLTextBlocks::ReadInfo()
         if ( !m_xBlkRoot.is() || !m_xBlkRoot->hasByName( sDocName ) || !m_xBlkRoot->isStreamElement( sDocName ) )
             return;
 
-        uno::Reference< uno::XComponentContext > xContext =
+        const uno::Reference< uno::XComponentContext >& xContext =
                 comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
@@ -441,7 +441,7 @@ void SwXMLTextBlocks::WriteInfo()
     if ( !(m_xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false )) )
         return;
 
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
         comphelper::getProcessComponentContext();
 
     uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
@@ -492,7 +492,7 @@ ErrCode SwXMLTextBlocks::SetMacroTable(
     // start XML autotext event export
     ErrCode nRes = ERRCODE_NONE;
 
-    uno::Reference< uno::XComponentContext > xContext =
+    const uno::Reference< uno::XComponentContext >& xContext =
         comphelper::getProcessComponentContext();
 
     // Get model

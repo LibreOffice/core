@@ -177,7 +177,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
             xDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq(
             xCooSysCnt->getCoordinateSystems());
-        Reference< uno::XComponentContext > xContext(
+        const Reference< uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
 
         if( nCoordinateSystemIndex < aCooSysSeq.getLength())

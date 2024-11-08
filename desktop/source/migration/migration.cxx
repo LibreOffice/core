@@ -201,7 +201,7 @@ bool MigrationImpl::doMigration()
             OUString aOldCfgDataPath = m_aInfo.userdata + "/user/config/soffice.cfg/modules/" + i.sModuleShortName;
             uno::Sequence< uno::Any > lArgs {uno::Any(aOldCfgDataPath), uno::Any(embed::ElementModes::READ)};
 
-            uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
+            const uno::Reference< uno::XComponentContext >& xContext(comphelper::getProcessComponentContext());
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(embed::FileSystemStorageFactory::create(xContext));
             uno::Reference< embed::XStorage >             xModules(xStorageFactory->createInstanceWithArguments(lArgs), uno::UNO_QUERY);
             uno::Reference< ui::XUIConfigurationManager2 > xOldCfgManager = ui::UIConfigurationManager::create(xContext);
@@ -868,7 +868,7 @@ void MigrationImpl::runServices()
     // and execute the migration job
     uno::Reference< XJob > xMigrationJob;
 
-    uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
+    const uno::Reference< uno::XComponentContext >& xContext(comphelper::getProcessComponentContext());
     for (auto const& rMigration : *m_vrMigrations)
     {
         if( !rMigration.service.isEmpty()) {

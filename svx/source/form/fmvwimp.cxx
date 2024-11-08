@@ -1060,7 +1060,7 @@ IMPL_LINK_NOARG( FmXFormView, OnStartControlWizard, void*, void )
         Reference< XExecutableDialog > xWizard;
         try
         {
-            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
             xWizard.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext( OUString::createFromAscii(pWizardAsciiName), aWizardArgs.getWrappedPropertyValues(), xContext ), UNO_QUERY);
         }
         catch (const Exception&)

@@ -184,7 +184,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     // currently there isn't anything else, throw any mime type to the media players
     //if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
-        uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+        const uno::Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
         const OUString sToolkitName = Application::GetToolkitName();
         if (sToolkitName == "gtk4")
             xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Gtk"_ustr, xContext);

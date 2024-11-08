@@ -86,7 +86,7 @@ static std::vector< OUString > GetMultiPaths_Impl(
     OUString                    aWritablePath;
 
     bool bSuccess = true;
-    uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >&  xContext( comphelper::getProcessComponentContext() );
     try
     {
         OUString aInternal( OUString::Concat(rPathPrefix) + "_internal" );

@@ -378,7 +378,7 @@ uno::Reference<drawing::XCustomShapeEngine> const & SdrObjCustomShape::GetCustom
     if ( !aXShape )
         return mxCustomShapeEngine;
 
-    uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
     OUString aEngine(GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE ).GetValue());
     static constexpr OUStringLiteral sEnhancedCustomShapeEngine = u"com.sun.star.drawing.EnhancedCustomShapeEngine";

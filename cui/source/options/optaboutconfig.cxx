@@ -703,7 +703,8 @@ void CuiAboutConfigTabPage::FillItems(const Reference<XNameAccess>& xNameAccess,
 Reference<XNameAccess> CuiAboutConfigTabPage::getConfigAccess(const OUString& sNodePath,
                                                               bool bUpdate)
 {
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        ::comphelper::getProcessComponentContext());
 
     uno::Reference<lang::XMultiServiceFactory> xConfigProvider(
         css::configuration::theDefaultProvider::get(xContext));

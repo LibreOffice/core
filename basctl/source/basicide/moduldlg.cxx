@@ -159,7 +159,7 @@ void Shell::CopyDialogResources(
         return;
 
     // create dialog model
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
     Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
         ( u"com.sun.star.awt.UnoControlDialogModel"_ustr, xContext ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );

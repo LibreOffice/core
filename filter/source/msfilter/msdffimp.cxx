@@ -2774,7 +2774,7 @@ void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItem
                     ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
                 try
                 {
-                    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                     css::uno::Reference< css::embed::XStorage > xStorage
                         ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
                             OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xContext, true ) );

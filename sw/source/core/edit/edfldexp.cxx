@@ -31,7 +31,8 @@ using namespace com::sun::star;
 bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
 {
     const SwFieldTypes* pFieldTypes = GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
-    uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        ::comphelper::getProcessComponentContext());
     uno::Reference<sdb::XDatabaseContext> xDBContext = sdb::DatabaseContext::create(xContext);
     std::vector<SwFormatField*> vFields;
     for (const auto& pFieldType : *pFieldTypes)

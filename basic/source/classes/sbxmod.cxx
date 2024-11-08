@@ -2596,7 +2596,7 @@ void SbUserFormModule::InitObject()
             Reference< script::vba::XVBACompatibility > xVBACompat( getVBACompatibility( m_xModel ), uno::UNO_SET_THROW );
             xVBACompat->broadcastVBAScriptEvent( script::vba::VBAScriptEventId::INITIALIZE_USERFORM, GetName() );
             uno::Reference< lang::XMultiServiceFactory > xVBAFactory( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
-            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
             OUString sDialogUrl( u"vnd.sun.star.script:"_ustr  );
             OUString sProjectName( u"Standard"_ustr );
 

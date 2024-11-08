@@ -3504,7 +3504,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_PRESENTATION_MINIMIZER:
         {
-            Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+            const Reference<XComponentContext>& xContext(::comphelper::getProcessComponentContext());
             Reference<util::XURLTransformer> xParser(util::URLTransformer::create(xContext));
             Reference<frame::XDispatchProvider> xProvider(GetViewShellBase().GetController()->getFrame(), UNO_QUERY);
             if (xProvider.is())

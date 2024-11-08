@@ -383,7 +383,7 @@ void SvxHyperlinkNewDocTp::DoApply()
 IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
 {
     DisableClose( true );
-    uno::Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference < XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, mpDialog->getDialog());
 
     OUString            aStrURL;

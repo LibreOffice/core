@@ -806,7 +806,7 @@ void SdTpOptionsMisc::UpdateCompatibilityControls()
     try
     {
         // Get a component enumeration from the desktop and search it for documents.
-        Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext());
+        const Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext());
         do
         {
             Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);

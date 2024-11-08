@@ -56,7 +56,7 @@ using namespace ::com::sun::star::linguistic2;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
     uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create(xContext);
     return xRes;
 }
@@ -402,7 +402,7 @@ LinguMgrExitLstnr::LinguMgrExitLstnr()
     // add object to frame::Desktop EventListeners in order to properly call
     // the AtExit function at application exit.
 
-    uno::Reference< XComponentContext >  xContext = getProcessComponentContext();
+    const uno::Reference< XComponentContext >&  xContext = getProcessComponentContext();
     xDesktop = Desktop::create( xContext );
     xDesktop->addEventListener( this );
 }

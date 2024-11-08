@@ -195,7 +195,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
         pPage->GetObj(0)->CloneSdrObject(
             bUseSpecialCalcMode ? *mpDestModel : mrSdrView.getSdrModelFromSdrView()));
 
-    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
     css::uno::Reference<css::frame::XModuleManager> xModuleManager =
             css::frame::ModuleManager::create(xContext);
     OUString aModuleIdentifier = xModuleManager->identify(mxFrame);

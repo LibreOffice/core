@@ -1973,7 +1973,7 @@ static OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::fram
 {
     try
     {
-        css::uno::Reference< css::uno::XComponentContext >  xContext      (::comphelper::getProcessComponentContext());
+        const css::uno::Reference< css::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
         css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
 
         OUString sModule = xModuleManager->identify(xFrame);
@@ -3123,7 +3123,7 @@ bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
     if (comphelper::LibreOfficeKit::isActive())
     {
         // Get the module name.
-        css::uno::Reference< css::uno::XComponentContext >  xContext      (::comphelper::getProcessComponentContext());
+        const css::uno::Reference< css::uno::XComponentContext >&  xContext      (::comphelper::getProcessComponentContext());
         css::uno::Reference< css::frame::XModuleManager2 >  xModuleManager(css::frame::ModuleManager::create(xContext));
         OUString sModule = xModuleManager->identify(rFrame.GetFrame().GetFrameInterface());
 

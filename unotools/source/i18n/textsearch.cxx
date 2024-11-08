@@ -106,7 +106,7 @@ Reference<XTextSearch2> TextSearch::getXTextSearch( const i18nutil::SearchOption
     if ( lcl_Equals(theCachedTextSearch.Options, rPara) )
         return theCachedTextSearch.xTextSearch;
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     theCachedTextSearch.xTextSearch.set( ::TextSearch2::create(xContext) );
     theCachedTextSearch.xTextSearch->setOptions2( rPara.toUnoSearchOptions2() );
     theCachedTextSearch.Options = rPara;

@@ -30,7 +30,7 @@ using namespace css::style;
 
 Reference<XDefaultNumberingProvider> SvxNumOptionsTabPageHelper::GetNumberingProvider()
 {
-    Reference<XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    const Reference<XComponentContext>& xContext(::comphelper::getProcessComponentContext());
     Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
     return xRet;
 }

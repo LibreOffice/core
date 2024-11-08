@@ -307,7 +307,7 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         return;
 
     // get the services needed for writing the xml data
-    Reference< uno::XComponentContext > xContext =
+    const Reference< uno::XComponentContext >& xContext =
             comphelper::getProcessComponentContext();
 
     Reference< XWriter > xWriter = Writer::create(xContext);
@@ -351,7 +351,7 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
     try {
         if ( xRoot.is() && xRoot->hasByName( sDocName ) && xRoot->isStreamElement( sDocName ) )
         {
-            Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
             InputSource aParserInput;
 

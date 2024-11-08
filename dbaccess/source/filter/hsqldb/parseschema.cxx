@@ -127,7 +127,7 @@ void SchemaParser::parseSchema()
 
     Reference<XStream> xStream(m_rStorage->openStreamElement(SCHEMA_FILENAME, ElementModes::READ));
 
-    Reference<XComponentContext> rContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& rContext = comphelper::getProcessComponentContext();
     Reference<XTextInputStream2> xTextInput = TextInputStream::create(rContext);
     xTextInput->setEncoding(u"UTF-8"_ustr);
     xTextInput->setInputStream(xStream->getInputStream());

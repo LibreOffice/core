@@ -306,7 +306,7 @@ namespace basic
         // global constants
 
         // StarDesktop
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         pBasicManager->SetGlobalUNOConstant( u"StarDesktop"_ustr, css::uno::Any( Desktop::create(xContext)));
 
         // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)

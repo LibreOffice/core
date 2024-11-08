@@ -158,7 +158,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
     m_xListLB->make_sorted();
     m_xOK->connect_clicked(LINK(this, SwAddressListDialog, OKHdl_Impl));
 
-    uno::Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference<XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
     m_xDBContext = DatabaseContext::create(xContext);
 
     SwMailMergeConfigItem& rConfigItem = m_pAddressPage->GetWizard()->GetConfigItem();
@@ -481,7 +481,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
             pUserData->xSource.set(xComplConnection, UNO_QUERY);
 
-            uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference< XInteractionHandler > xHandler = InteractionHandler::createWithParent(xContext, nullptr);
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }

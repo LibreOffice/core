@@ -95,7 +95,7 @@ struct UsageDescription
 
 static char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
         task::InteractionHandler::createWithParent(xContext, nullptr) );
 

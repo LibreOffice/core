@@ -75,7 +75,7 @@ static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>
 
     try
     {
-        Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+        const Reference<XComponentContext>&         xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
         _xFormatter.set(xRet, UNO_QUERY);
     }

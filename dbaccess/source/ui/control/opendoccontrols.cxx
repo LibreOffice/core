@@ -59,7 +59,7 @@ namespace dbaui
                 do
                 {
                     // Retrieve popup menu labels
-                    Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    const Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                     if ( !xContext.is() )
                         break;
 

@@ -614,7 +614,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     }
 
     // following operations can work on an internal type name only :-(
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XTypeDetection > xDetect(
          xContext->getServiceManager()->createInstanceWithContext(
              u"com.sun.star.document.TypeDetection"_ustr, xContext),

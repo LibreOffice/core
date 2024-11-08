@@ -605,7 +605,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 
     if (!sExecutable.isEmpty())
     {
-        uno::Reference<uno::XComponentContext> xContext
+        const uno::Reference<uno::XComponentContext>& xContext
             = ::comphelper::getProcessComponentContext();
         uno::Reference<css::system::XSystemShellExecute> xSystemShell(
             css::system::SystemShellExecute::create(xContext));

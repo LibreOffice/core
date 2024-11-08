@@ -371,7 +371,7 @@ namespace toolkit
             try
             {
                 // collect the image sizes of the different image sets
-                const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                 const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(xContext) );
 
                 const bool isHighContrast = pThrobber->GetSettings().GetStyleSettings().GetHighContrastMode();

@@ -84,7 +84,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
     SolarMutexGuard aSolarMutexGuard;
     resetPopupMenu( rPopupMenu );
 
-    const Reference<XComponentContext> xContext (::comphelper::getProcessComponentContext() );
+    const Reference<XComponentContext>& xContext (::comphelper::getProcessComponentContext() );
     const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
     vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(m_xFrame));
 

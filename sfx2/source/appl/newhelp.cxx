@@ -1685,7 +1685,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox()
 {
     sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     const OUString sPath { PATH_OFFICE_FACTORIES + sCurrentFactory };
 
     // Attention: This check boy knows two states:

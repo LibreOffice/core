@@ -291,7 +291,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
         do
         {
             // create service factory
-            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
             // create document handler
             uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );

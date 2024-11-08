@@ -71,7 +71,7 @@ BitmapEx loadFromName(const OUString& rFileName, const ImageLoadFlags eFlags)
 
 void loadFromSvg(SvStream& rStream, const OUString& sPath, BitmapEx& rBitmapEx, double fScalingFactor)
 {
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
     const uno::Reference<graphic::XSvgParser> xSvgParser = graphic::SvgTools::create(xContext);
 
     std::size_t nSize = rStream.remainingSize();

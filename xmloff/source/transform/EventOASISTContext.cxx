@@ -127,7 +127,7 @@ static bool ParseURL(
     const OUString& rAttrValue,
     OUString* pName, OUString* pLocation )
 {
-    Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     Reference< css::uri::XUriReferenceFactory > xFactory = css::uri::UriReferenceFactory::create(xContext);
 

@@ -346,7 +346,7 @@ namespace abp
                 {
                     // Embed.
                     OUString aStreamRelPath = u"EmbeddedDatabase"_ustr;
-                    auto xContext(comphelper::getProcessComponentContext());
+                    const auto& xContext(comphelper::getProcessComponentContext());
                     auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(aOwnURL);
                     assert(xUri.is());
                     xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)->createVndSunStarPkgUrlReference(xUri);

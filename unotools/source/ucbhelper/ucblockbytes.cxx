@@ -1015,9 +1015,7 @@ bool UcbLockBytes::setInputStreamImpl( std::unique_lock<std::mutex>& /*rGuard*/,
             m_xSeekable.set( rxInputStream, UNO_QUERY );
             if( !m_xSeekable.is() && rxInputStream.is() )
             {
-                Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                 rtl::Reference< utl::TempFileFastService > rxTempOut( new utl::TempFileFastService );
-
                 ::comphelper::OStorageHelper::CopyInputToOutput( rxInputStream, rxTempOut );
                 m_xInputStream.set( rxTempOut );
                 m_xSeekable.set( rxTempOut );

@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     return i18n::BreakIterator::create(xContext);
 }
 

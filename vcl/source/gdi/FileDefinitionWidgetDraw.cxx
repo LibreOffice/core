@@ -519,7 +519,7 @@ void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDr
                 {
                     SvFileStream aFileStream(rWidgetDraw.msSource, StreamMode::READ);
 
-                    uno::Reference<uno::XComponentContext> xContext(
+                    const uno::Reference<uno::XComponentContext>& xContext(
                         comphelper::getProcessComponentContext());
                     const uno::Reference<graphic::XSvgParser> xSvgParser
                         = graphic::SvgTools::create(xContext);

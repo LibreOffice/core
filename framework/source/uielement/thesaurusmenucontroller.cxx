@@ -95,7 +95,7 @@ void ThesaurusMenuController::fillPopupMenu()
     {
         try
         {
-            css::uno::Reference<css::uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+            const css::uno::Reference<css::uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
             css::uno::Reference<css::graphic::XGraphicProvider> xProvider(css::graphic::GraphicProvider::create(xContext));
             xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, aSynonymsImageUrl) });
         }

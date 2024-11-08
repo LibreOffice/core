@@ -81,7 +81,7 @@ static Reference< XConnection > getConnection(const OUString& _rURL)
     // first get the sdb::DataSource corresponding to the url
     Reference< XDataSource >    xDataSource;
     // is it a favorite title ?
-    Reference<XComponentContext>  xContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>&  xContext = comphelper::getProcessComponentContext();
     Reference< XDatabaseContext >  xNamingContext = DatabaseContext::create(xContext);
     if (xNamingContext->hasByName(_rURL))
     {
@@ -1198,7 +1198,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             else
                 aInstanceName += getControlName(nFormatKey);
 
-            Reference< XComponentContext >  xContext = comphelper::getProcessComponentContext();
+            const Reference< XComponentContext >&  xContext = comphelper::getProcessComponentContext();
             Reference< XInterface >  xObject = xContext->getServiceManager()->createInstanceWithContext(aInstanceName, xContext);
             xModel.set( xObject, UNO_QUERY );
             Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
@@ -1364,7 +1364,7 @@ uno::Reference< form::runtime::XFormController > const & BibDataManager::GetForm
 {
     if(!m_xFormCtrl.is())
     {
-        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         m_xFormCtrl = form::runtime::FormController::create(xContext);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         m_xFormDispatch.set( m_xFormCtrl, UNO_QUERY);

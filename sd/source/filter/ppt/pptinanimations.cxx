@@ -211,7 +211,7 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
     Reference< XAnimationNode > xNode;
     if( pServiceName )
     {
-        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         const OUString aServiceName( OUString::createFromAscii(pServiceName) );
         Reference< XInterface > xFac( xContext->getServiceManager()->createInstanceWithContext(aServiceName, xContext) );
         xNode.set(xFac , UNO_QUERY );
@@ -921,7 +921,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
                 {
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
-                        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                        const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                         Reference< XAnimationNode > xChildNode( Command::create(xContext), UNO_QUERY_THROW );
                         nNodes += importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );

@@ -132,7 +132,7 @@ void SbiStream::MapError()
 bool hasUno()
 {
     static const bool bRetVal = [] {
-        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
         if( !xContext.is() )
         {
             // No service manager at all

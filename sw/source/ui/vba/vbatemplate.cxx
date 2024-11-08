@@ -83,7 +83,7 @@ SwVbaTemplate::getPath()
 uno::Any SAL_CALL
 SwVbaTemplate::AutoTextEntries( const uno::Any& index )
 {
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
     // the default template is "Normal.dot" in Word.

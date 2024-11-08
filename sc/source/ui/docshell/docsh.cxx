@@ -841,7 +841,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
                     try
                     {
-                        uno::Reference< uno::XComponentContext > xContext(
+                        const uno::Reference< uno::XComponentContext >& xContext(
                             comphelper::getProcessComponentContext() );
                         uno::Reference< lang::XMultiServiceFactory > xServiceManager(
                             xContext->getServiceManager(),
@@ -3211,7 +3211,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
 {
     using namespace ::com::sun::star::ui;
 
-    Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     if (!xContext.is())
         return;
 

@@ -196,7 +196,8 @@ void SvxConfigPage::InsertEntryIntoNotebookbarTabUI(std::u16string_view sClassId
                                                     const weld::TreeIter& rIter)
 {
     css::uno::Reference<css::container::XNameAccess> m_xCommandToLabelMap;
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext
+        = ::comphelper::getProcessComponentContext();
     uno::Reference<container::XNameAccess> xNameAccess(
         css::frame::theUICommandDescription::get(xContext));
 

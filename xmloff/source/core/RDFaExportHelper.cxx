@@ -69,7 +69,7 @@ getRelativeReference(SvXMLExport const& rExport, OUString const& rURI)
         rExport.GetModel(), uno::UNO_QUERY_THROW );
     OUString const baseURI( xModelURI->getStringValue() );
 
-    uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference<uno::XComponentContext>& xContext( comphelper::getProcessComponentContext() );
     uno::Reference<uri::XUriReferenceFactory> const xUriFactory =
         uri::UriReferenceFactory::create( xContext );
 

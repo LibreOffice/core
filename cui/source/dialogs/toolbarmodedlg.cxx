@@ -35,7 +35,7 @@ static OUString GetCurrentApp()
     if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
     {
         const auto xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
-        const auto xContext = comphelper::getProcessComponentContext();
+        const auto& xContext = comphelper::getProcessComponentContext();
         const auto xModuleManager = css::frame::ModuleManager::create(xContext);
         switch (vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xCurrentFrame)))
         {
@@ -69,7 +69,7 @@ static OUString GetCurrentMode()
     OUString sResult;
     if (SfxViewFrame::Current())
     {
-        const auto xContext = comphelper::getProcessComponentContext();
+        const auto& xContext = comphelper::getProcessComponentContext();
         const utl::OConfigurationTreeRoot aAppNode(
             xContext, "org.openoffice.Office.UI.ToolbarMode/Applications/" + GetCurrentApp(), true);
         if (aAppNode.isValid())
@@ -190,7 +190,7 @@ IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
         OUString sCurrentApp = GetCurrentApp();
         if (SfxViewFrame::Current())
         {
-            const auto xContext = comphelper::getProcessComponentContext();
+            const auto& xContext = comphelper::getProcessComponentContext();
             const utl::OConfigurationTreeRoot aAppNode(
                 xContext, u"org.openoffice.Office.UI.ToolbarMode/Applications/"_ustr, true);
             if (sCurrentApp != "Writer")

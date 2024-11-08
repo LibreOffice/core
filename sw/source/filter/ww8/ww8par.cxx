@@ -5028,7 +5028,7 @@ ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary const *pGloss)
         try
         {
             rtl::Reference<SwXTextDocument> const xModel(m_rDoc.GetDocShell()->GetBaseModel());
-            uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+            const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
             uno::Reference<embed::XStorage> xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
             const uno::Reference<rdf::XURI> xBaseURI(sfx2::createBaseURI(xComponentContext, static_cast<SfxBaseModel*>(xModel.get()), m_sBaseURL));
             uno::Reference<task::XInteractionHandler> xHandler;
@@ -6436,7 +6436,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
 {
     // We have DRM encrypted storage. We should try to decrypt it first, if we can
     uno::Sequence< uno::Any > aArguments;
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
     uno::Reference< packages::XPackageEncryption > xPackageEncryption(
         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             u"com.sun.star.comp.oox.crypto.DRMDataSpace"_ustr, aArguments, xComponentContext), uno::UNO_QUERY);

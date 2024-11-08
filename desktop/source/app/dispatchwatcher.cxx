@@ -102,7 +102,7 @@ std::shared_ptr<const SfxFilter> impl_lookupExportFilterForUrl( std::u16string_v
         ":eflags=" +
         OUString::number(static_cast<int>(SFX_FILTER_NOTINSTALLED));
 
-    const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     const Reference< XContainerQuery > xFilterFactory(
             xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.FilterFactory"_ustr, xContext ),
             UNO_QUERY_THROW );
@@ -134,7 +134,7 @@ std::shared_ptr<const SfxFilter> impl_getExportFilterFromUrl(
 {
     try
     {
-        const Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
         const Reference< document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext( u"com.sun.star.document.TypeDetection"_ustr, xContext ),
             UNO_QUERY_THROW );

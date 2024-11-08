@@ -284,7 +284,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest const &rReq)
     case SID_CHINESE_CONVERSION:
         {
             //open ChineseTranslationDialog
-            Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+            const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
             if (!xContext.is())
                 return;
 

@@ -230,7 +230,7 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     try
     {
         // get the TypeDetection service to access all registered types
-        css::uno::Reference < css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference < css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         css::uno::Reference < css::document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.document.TypeDetection"_ustr, xContext),
             css::uno::UNO_QUERY );

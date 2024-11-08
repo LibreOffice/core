@@ -92,7 +92,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     pApp->Get_Impl()->mxAppDispatch->ReleaseAll();
     pApp->Get_Impl()->mxAppDispatch.clear();
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XDocumentEventListener > xGlobalBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
 
     css::document::DocumentEvent aEvent2;

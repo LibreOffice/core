@@ -345,7 +345,7 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XComponentContext > xContext(
+                const Reference< XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
 
                 // build service initialization argument
@@ -477,7 +477,7 @@ Reference< XHyphenatedWord > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XComponentContext > xContext(
+                const Reference< XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
 
                 // build service initialization argument
@@ -599,7 +599,7 @@ Reference< XPossibleHyphens > SAL_CALL
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
-                Reference< XComponentContext > xContext(
+                const Reference< XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
 
                 // build service initialization argument

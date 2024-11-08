@@ -306,7 +306,7 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
     {
         m_bAttemptedFormCreation = true;
 
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         m_xForms = css::form::Forms::create( xContext );
 
         if ( m_aFormsCreationHdl.IsSet() )

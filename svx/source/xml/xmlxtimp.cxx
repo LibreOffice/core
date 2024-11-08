@@ -427,7 +427,7 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
 
     try
     {
-        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         xml::sax::InputSource aParserInput;
         comphelper::LifecycleProxy aNasty;

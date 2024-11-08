@@ -341,7 +341,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XComponentContext > xContext(
+            const Reference< XComponentContext >& xContext(
                 comphelper::getProcessComponentContext() );
 
             // build service initialization argument
@@ -522,7 +522,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XSpellChecker >  *pRef  = pEntry->aSvcRefs .getArray();
 
-            Reference< XComponentContext > xContext(
+            const Reference< XComponentContext >& xContext(
                 comphelper::getProcessComponentContext() );
 
             // build service initialization argument

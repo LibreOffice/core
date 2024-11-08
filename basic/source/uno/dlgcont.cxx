@@ -125,7 +125,7 @@ bool SfxDialogLibraryContainer::isLibraryElementValid(const Any& rElement) const
 static bool writeOasis2OOoLibraryElement(
     const Reference< XInputStream >& xInput, const Reference< XOutputStream >& xOutput )
 {
-    Reference< XComponentContext > xContext(
+    const Reference< XComponentContext >& xContext(
         comphelper::getProcessComponentContext() );
 
     Reference< lang::XMultiComponentFactory > xSMgr(

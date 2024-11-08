@@ -225,7 +225,7 @@ bool SdGRFFilter::Export()
     // SJ: todo: error handling, the GraphicExportFilter does not support proper errorhandling
     bool bRet = false;
 
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference< drawing::XGraphicExportFilter > xExporter = drawing::GraphicExportFilter::create( xContext );
 
     SdPage* pPage = nullptr;

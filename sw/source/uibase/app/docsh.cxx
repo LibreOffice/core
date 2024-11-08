@@ -446,7 +446,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         if (!aURL.isEmpty())
         {
-            auto xContext(comphelper::getProcessComponentContext());
+            const auto& xContext(comphelper::getProcessComponentContext());
             auto xUri = css::uri::UriReferenceFactory::create(xContext)->parse(aURL);
             assert(xUri.is());
             xUri = css::uri::VndSunStarPkgUrlReferenceFactory::create(xContext)

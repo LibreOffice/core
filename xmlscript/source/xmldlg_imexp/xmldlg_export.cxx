@@ -730,7 +730,7 @@ void ElementDescriptor::readImageOrGraphicAttr(OUString const & rAttrName)
             Reference< document::XStorageBasedDocument > xDocStorage( _xDocument, UNO_QUERY );
             if ( xDocStorage.is() )
             {
-                Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+                const Reference<XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference<document::XGraphicStorageHandler> xGraphicStorageHandler;
                 xGraphicStorageHandler.set(document::GraphicStorageHandler::createWithStorage(xContext, xDocStorage->getDocumentStorage()));
                 if (xGraphicStorageHandler.is())

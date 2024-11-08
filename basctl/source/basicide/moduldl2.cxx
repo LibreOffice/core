@@ -565,7 +565,7 @@ void LibPage::NewLib()
 
 void LibPage::InsertLib()
 {
-    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     // file open dialog
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, m_pDialog->getDialog());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicInsertLib);
@@ -1018,7 +1018,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportPackage);
     const Reference <XFilePicker3>& xFP = aDlg.GetFilePicker();
 
-    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
     Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
 
@@ -1116,7 +1116,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 void LibPage::ExportAsBasic( const OUString& aLibName )
 {
     // Folder picker
-    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDialog->getDialog());
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, nullptr) );
 

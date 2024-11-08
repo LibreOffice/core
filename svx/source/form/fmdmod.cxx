@@ -37,7 +37,7 @@ using namespace ::svxform;
 
     if ( rServiceSpecifier.startsWith( "com.sun.star.form.component." ) )
     {
-        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const css::uno::Reference<css::uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
         xRet = xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, xContext);
     }
     else if ( rServiceSpecifier == "com.sun.star.drawing.ControlShape" )

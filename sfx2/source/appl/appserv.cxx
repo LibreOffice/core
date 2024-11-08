@@ -327,7 +327,7 @@ namespace
             if (nRet == RET_OK)
             {
                 sfx2::SafeMode::putFlag();
-                uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+                const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
                 css::task::OfficeRestartManager::get(xContext)->requestRestart(
                     css::uno::Reference< css::task::XInteractionHandler >());
             }
@@ -947,7 +947,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             OUString aNewName(pModeName->GetValue());
-            uno::Reference< uno::XComponentContext > xContext =
+            const uno::Reference< uno::XComponentContext >& xContext =
                     ::comphelper::getProcessComponentContext();
 
             // Get information about current frame and module
@@ -1280,7 +1280,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             if (SfxViewFrame* pViewFrame = SfxViewFrame::Current())
             {
                 Reference<XFrame> xCurrentFrame;
-                uno::Reference<uno::XComponentContext> xContext
+                const uno::Reference<uno::XComponentContext>& xContext
                     = ::comphelper::getProcessComponentContext();
                 xCurrentFrame = pViewFrame->GetFrame().GetFrameInterface();
                 const Reference<frame::XModuleManager> xModuleManager
@@ -1723,7 +1723,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
                     // So, since we know that our frame loader can handle it, we skip the generic framework loader
                     // mechanism, and the type detection (which doesn't know about the Basic IDE).
-                    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                     Reference< XSynchronousFrameLoader > xLoader(
                         xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.office.FrameLoader"_ustr, xContext),
                         UNO_QUERY_THROW );
@@ -1940,7 +1940,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
             OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
@@ -1960,7 +1960,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         case FN_BUSINESS_CARD :
         case FN_XFORMS_INIT :
         {
-            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             Reference< frame::XDispatchProvider > xProv = text::ModuleDispatcher::create( xContext );
 
             OUString aCmd = GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName();
@@ -1980,7 +1980,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             try
             {
-                Reference< uno::XComponentContext > xORB = ::comphelper::getProcessComponentContext();
+                const Reference< uno::XComponentContext >& xORB = ::comphelper::getProcessComponentContext();
                 Reference< ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::AddressBookSourcePilot::createWithParent(xORB, nullptr);
                 xDialog->execute();
             }

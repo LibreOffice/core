@@ -97,7 +97,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, weld::Button&, void)
         Reference< drawing::XDrawPages > xDrawPages = xDPS->getDrawPages();
         rtl::Reference< SdXImpressDocument > xShapeFactory( m_pDoc->getUnoModel() );
 
-        Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        const Reference< XComponentContext >& xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
         // determine if to use Captions (use TitleObject) and choose the correct AutoLayout

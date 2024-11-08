@@ -113,7 +113,7 @@ void FrameListAnalyzer::impl_analyze()
     {
         try
         {
-            css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
             OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = sModule == "com.sun.star.frame.StartModule";
@@ -184,7 +184,7 @@ void FrameListAnalyzer::impl_analyze()
             {
                 try
                 {
-                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                     css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
                     OUString sModule = xModuleMgr->identify(xFrame);
                     if (sModule == "com.sun.star.frame.StartModule")

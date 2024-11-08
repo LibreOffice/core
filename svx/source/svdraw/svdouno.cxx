@@ -371,7 +371,7 @@ void SdrUnoObj::CreateUnoControlModel(const OUString& rModelName)
     aUnoControlModelTypeName = rModelName;
 
     uno::Reference< awt::XControlModel >   xModel;
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     if (!aUnoControlModelTypeName.isEmpty() )
     {
         xModel.set(xContext->getServiceManager()->createInstanceWithContext(

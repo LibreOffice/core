@@ -1125,7 +1125,7 @@ void SdDrawDocument::InitLayoutVector()
     if (comphelper::IsFuzzing())
         return;
 
-    const Reference<css::uno::XComponentContext> xContext(
+    const Reference<css::uno::XComponentContext>& xContext(
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration
@@ -1163,7 +1163,7 @@ void SdDrawDocument::InitObjectVector()
     if (comphelper::IsFuzzing())
         return;
 
-    const Reference<css::uno::XComponentContext> xContext(
+    const Reference<css::uno::XComponentContext>& xContext(
         ::comphelper::getProcessComponentContext() );
 
     // get file list from configuration

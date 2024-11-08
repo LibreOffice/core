@@ -199,7 +199,7 @@ namespace drawinglayer::primitive2d
 
             if(!xBreakIterator.is())
             {
-                css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                const css::uno::Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                 xBreakIterator = css::i18n::BreakIterator::create(xContext);
             }
 

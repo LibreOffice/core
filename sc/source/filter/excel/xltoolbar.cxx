@@ -418,7 +418,7 @@ void ScCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     if(rCTB.empty())
         return;
 
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xAppCfgSupp( ui::theModuleUIConfigurationManagerSupplier::get(xContext) );
 
     for ( auto& rItem : rCTB )

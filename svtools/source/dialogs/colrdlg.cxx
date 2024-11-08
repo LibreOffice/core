@@ -63,7 +63,7 @@ short SvColorDialog::Execute(weld::Window* pParent)
     short ret = 0;
     try
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;
         if (pParent)
@@ -107,7 +107,7 @@ void SvColorDialog::ExecuteAsync(weld::Window* pParent, const std::function<void
 
     try
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
         Reference<css::awt::XWindow> xParent;
         if (pParent)

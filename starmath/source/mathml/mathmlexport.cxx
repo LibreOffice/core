@@ -91,7 +91,8 @@ sal_uInt32 ConvertMathToMathML(std::u16string_view rText, sal_Int32 nIndex = 0)
 bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 {
     bool bRet = true;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
 
     //Get model
     uno::Reference<lang::XComponent> xModelComp = xModel;

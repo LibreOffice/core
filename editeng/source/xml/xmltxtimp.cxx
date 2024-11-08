@@ -162,7 +162,7 @@ EditPaM SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection
     {
         do
         {
-            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = new utl::OInputStreamWrapper(rStream);

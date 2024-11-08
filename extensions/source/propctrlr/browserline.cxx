@@ -311,7 +311,7 @@ namespace pcr
         Reference<XGraphic> xGraphic;
         try
         {
-            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             Reference< XGraphicProvider > xGraphicProvider( GraphicProvider::create(xContext) );
 
             Sequence aMediaProperties{ comphelper::makePropertyValue(u"URL"_ustr, rImageURL) };

@@ -445,7 +445,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     ErrCodeMsg nRet = ERRCODE_NONE;
 
     // Get service factory
-    Reference< uno::XComponentContext > rxContext =
+    const Reference< uno::XComponentContext >& rxContext =
             comphelper::getProcessComponentContext();
 
     SdDrawDocument* pDoc = mrDocShell.GetDoc();
@@ -754,7 +754,7 @@ bool SdXMLFilter::Export()
             return false;
         }
 
-        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 

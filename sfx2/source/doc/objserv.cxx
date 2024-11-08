@@ -1067,7 +1067,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     if (xCtrl.is())
                         xParentWindow = xCtrl->getFrame()->getContainerWindow();
 
-                    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
                     uno::Reference< task::XInteractionHandler2 > xInteract(
                         task::InteractionHandler::createWithParent(xContext, xParentWindow) );

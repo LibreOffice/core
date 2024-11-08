@@ -69,7 +69,8 @@ using namespace ::xmloff::token;
 bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 {
     bool bRet = true;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
 
     // Check all fine
     SAL_WARN_IF(m_xModel == nullptr, "starmath", "Missing model");
@@ -224,7 +225,8 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
 
 OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
 {
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
 
     // Check all fine
     m_pElementTree = nullptr;

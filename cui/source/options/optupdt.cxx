@@ -91,7 +91,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
             + "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47());
 
 
-        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference < uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
 
         m_xUpdateAccess = setup::UpdateCheckConfig::create( xContext );
         m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::Toggleable&, 
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, weld::Button&, void)
 {
-    uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference < uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < ui::dialogs::XFolderPicker2 >  xFolderPicker = sfx2::createFolderPicker(xContext, GetFrameWeld());
 
     OUString aURL;
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, FileDialogHdl_Impl, weld::Button&, void)
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, weld::Button&, void)
 {
-    uno::Reference < uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference < uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {

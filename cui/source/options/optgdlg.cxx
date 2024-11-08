@@ -1451,7 +1451,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 
             // tell quickstarter to stop being a veto listener
 
-            Reference< XComponentContext > xContext(
+            const Reference< XComponentContext >& xContext(
                 comphelper::getProcessComponentContext());
             css::office::Quickstart::createAndSetVeto(xContext, false, false, false/*DisableVeto*/);
         }

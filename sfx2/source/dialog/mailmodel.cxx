@@ -242,7 +242,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     bool        bSendAsPDF = ( rType == PDF_DOCUMENT_TYPE );
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::uno::XComponentContext > xContext  = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext  = ::comphelper::getProcessComponentContext();
     if (!xContext.is())
         return eRet;
 
@@ -662,7 +662,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
     SendMailResult  eResult = SEND_MAIL_ERROR;
     if ( !maAttachedDocuments.empty() )
     {
-        css::uno::Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference < XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
         css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
 

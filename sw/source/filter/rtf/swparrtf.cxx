@@ -237,7 +237,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportRTF(SvStream& rStream)
         = css::frame::Desktop::create(comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XFrame> xTargetFrame = xDesktop->findFrame(u"_blank"_ustr, 0);
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
     uno::Reference<css::frame::XModel2> xModel(
         xContext->getServiceManager()->createInstanceWithContext(
             u"com.sun.star.text.TextDocument"_ustr, xContext),

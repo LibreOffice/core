@@ -57,7 +57,7 @@ public:
         {
             if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             {
-                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+                const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
                 const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
                 Reference<XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
                 OUString aModuleName = xModuleManager->identify( xFrame );
@@ -99,7 +99,7 @@ public:
         {
             if (SfxViewFrame* pViewFrm = SfxViewFrame::Current())
             {
-                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+                const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
                 const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
                 Reference<XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
                 OUString aModuleName = xModuleManager->identify( xFrame );
@@ -260,7 +260,7 @@ void NotebookbarTabControl::StateChanged(StateChangedType nStateChange)
 
         pToolBox->Clear();
 
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         const Reference<XModuleManager> xModuleManager  = ModuleManager::create( xContext );
         m_xFrame = pViewFrm->GetFrame().GetFrameInterface();
         OUString aModuleName = xModuleManager->identify( m_xFrame );
@@ -338,7 +338,7 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         Any(comphelper::makePropertyValue(u"Value"_ustr, u"notebookbar"_ustr)),
         Any(comphelper::makePropertyValue(u"Frame"_ustr, m_xFrame)) };
 
-    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
     Reference<XPopupMenuController> xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.framework.ResourceMenuController"_ustr, aArgs, xContext), UNO_QUERY);

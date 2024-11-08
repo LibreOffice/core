@@ -58,7 +58,7 @@ css::uno::Reference<css::graphic::XGraphic> Tools::GetImage(
 
         else
         {
-             Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+             const Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
              Reference<graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
              ::comphelper::NamedValueCollection aMediaProperties;
              aMediaProperties.put(u"URL"_ustr, rsURL);
@@ -73,7 +73,7 @@ util::URL Tools::GetURL (const OUString& rsCommand)
     util::URL aURL;
     aURL.Complete = rsCommand;
 
-    const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext());
+    const Reference<XComponentContext>& xComponentContext (::comphelper::getProcessComponentContext());
     const Reference<util::XURLTransformer> xParser = util::URLTransformer::create( xComponentContext );
     xParser->parseStrict(aURL);
 
@@ -97,7 +97,7 @@ OUString Tools::GetModuleName (
 
     try
     {
-        const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext());
+        const Reference<XComponentContext>& xComponentContext (::comphelper::getProcessComponentContext());
         const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xComponentContext );
         return xModuleManager->identify(rxController);
     }

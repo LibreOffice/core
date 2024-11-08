@@ -70,7 +70,7 @@ static uno::Sequence< lang::Locale > GetAvailLocales(
 {
     uno::Sequence< lang::Locale > aRes;
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     if( rSvcImplNames.hasElements() )
     {
         std::set< LanguageType > aLanguages;
@@ -417,7 +417,7 @@ LngSvcMgr::LngSvcMgr()
     aUpdateIdle.SetInvokeHandler(LINK(this, LngSvcMgr, updateAndBroadcast));
 
     // request to be notified if an extension has been added/removed
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(comphelper::getProcessComponentContext());
 
     uno::Reference<deployment::XExtensionManager> xExtensionManager;
     try {
@@ -935,7 +935,7 @@ void LngSvcMgr::GetAvailableSpellSvcs_Impl()
 
     pAvailSpellSvcs.emplace();
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
     uno::Reference< container::XEnumeration > xEnum;
@@ -989,7 +989,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
 
     pAvailGrammarSvcs.emplace();
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
     uno::Reference< container::XEnumeration > xEnum;
@@ -1047,7 +1047,7 @@ void LngSvcMgr::GetAvailableHyphSvcs_Impl()
         return;
 
     pAvailHyphSvcs.emplace();
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
     uno::Reference< container::XEnumeration > xEnum;
@@ -1099,7 +1099,7 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
     pAvailThesSvcs.emplace();
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xContext->getServiceManager(), uno::UNO_QUERY );
     uno::Reference< container::XEnumeration > xEnum;

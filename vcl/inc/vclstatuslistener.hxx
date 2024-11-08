@@ -48,7 +48,7 @@ VclStatusListener<T>::VclStatusListener(T* widget, const css::uno::Reference<css
     mWidget(widget),
     mxFrame(rFrame)
 {
-    css::uno::Reference<css::uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference<css::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     maCommandURL.Complete = aCommand;
     css::uno::Reference<css::util::XURLTransformer> xParser = css::util::URLTransformer::create(xContext);
     xParser->parseStrict(maCommandURL);

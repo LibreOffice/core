@@ -3743,7 +3743,7 @@ Reference< css::rendering::XCanvas > WindowOutputDevice::ImplGetCanvas( bool bSp
         GetSystemGfxDataAny()
     };
 
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
     // Create canvas instance with window handle
 

@@ -564,7 +564,7 @@ uno::Reference< linguistic2::XProofreader > GrammarCheckingIterator::GetGrammarC
         {
             try
             {
-                uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+                const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
                 uno::Reference< linguistic2::XProofreader > xGC(
                         xContext->getServiceManager()->createInstanceWithContext(aSvcImplName, xContext),
                         uno::UNO_QUERY_THROW );
@@ -883,7 +883,7 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 
     if (!m_xBreakIterator.is())
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
         m_xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
@@ -1095,7 +1095,7 @@ uno::Reference< util::XChangesBatch > const & GrammarCheckingIterator::GetUpdate
         try
         {
             // get configuration provider
-            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
             uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
                     configuration::theDefaultProvider::get( xContext );
 

@@ -26,7 +26,7 @@ using namespace ::com::sun::star;
 
 IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
 {
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     try {
         m_xIES = i18n::IndexEntrySupplier::create(xContext);

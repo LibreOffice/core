@@ -75,7 +75,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView const & rVw)
 // initialise database listboxes
 void SwChangeDBDlg::FillDBPopup()
 {
-    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
     const SwDBData& rDBData = m_pSh->GetDBData();
     m_xAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, u"");

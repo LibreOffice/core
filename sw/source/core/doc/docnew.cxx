@@ -127,7 +127,7 @@ constexpr OUStringLiteral DEFAULT_CHAR_FORMAT_NAME = u"Character style";
 {
     if (!m_xGCIterator.is() && SvtLinguConfig().HasGrammarChecker())
     {
-        uno::Reference< uno::XComponentContext >  xContext( comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext >&  xContext( comphelper::getProcessComponentContext() );
         try
         {
             m_xGCIterator = sw::proofreadingiterator::get( xContext );

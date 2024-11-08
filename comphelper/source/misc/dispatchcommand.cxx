@@ -39,7 +39,7 @@ bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::
 
     util::URL aCommandURL;
     aCommandURL.Complete = rCommand;
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<util::XURLTransformer> xParser = util::URLTransformer::create(xContext);
     xParser->parseStrict(aCommandURL);
 
@@ -66,7 +66,7 @@ bool dispatchCommand(const OUString& rCommand, const uno::Reference<css::frame::
 bool dispatchCommand(const OUString& rCommand, const css::uno::Sequence<css::beans::PropertyValue>& rArguments, const uno::Reference<css::frame::XDispatchResultListener>& rListener)
 {
     // Target where we will execute the .uno: command
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(xContext);
 
     uno::Reference<frame::XFrame> xFrame(xDesktop->getActiveFrame());

@@ -305,7 +305,7 @@ OUString SfxObjectFactory::GetModuleName() const
 {
     try
     {
-        css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
         css::uno::Reference< css::frame::XModuleManager2 > xModuleManager(
             css::frame::ModuleManager::create(xContext));

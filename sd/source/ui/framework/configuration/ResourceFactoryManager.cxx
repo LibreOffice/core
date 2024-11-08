@@ -42,7 +42,7 @@ ResourceFactoryManager::ResourceFactoryManager (const rtl::Reference<::sd::DrawC
     : mxControllerManager(rxManager)
 {
     // Create the URL transformer.
-    Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
+    const Reference<uno::XComponentContext>& xContext(::comphelper::getProcessComponentContext());
     mxURLTransformer = util::URLTransformer::create(xContext);
 }
 

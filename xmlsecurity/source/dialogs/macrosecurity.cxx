@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl, weld::Button&, void)
 {
     try
     {
-        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference < uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference < ui::dialogs::XFolderPicker2 > xFolderPicker = sfx2::createFolderPicker(xContext, m_pDlg->getDialog());
 
         short nRet = xFolderPicker->execute();

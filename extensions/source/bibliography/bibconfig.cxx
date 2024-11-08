@@ -283,7 +283,7 @@ const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {
     if(!aSourceNames.hasElements())
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
         aSourceNames = xDBContext->getElementNames();
     }

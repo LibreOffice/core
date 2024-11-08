@@ -1280,7 +1280,7 @@ namespace svxform
 
 
         // create new form
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         Reference< XForm >  xNewForm(xContext->getServiceManager()->createInstanceWithContext(FM_SUN_COMPONENT_FORM, xContext), UNO_QUERY);
         if (!xNewForm.is())
             return;
@@ -1342,7 +1342,7 @@ namespace svxform
         Reference<XForm>  xParentForm(pParentFormData->GetFormIface());
 
         // create new component
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         Reference<XFormComponent> xNewComponent( xContext->getServiceManager()->createInstanceWithContext(rServiceName, xContext), UNO_QUERY);
         if (!xNewComponent.is())
             return nullptr;

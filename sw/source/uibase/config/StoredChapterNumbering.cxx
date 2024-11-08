@@ -386,7 +386,7 @@ public:
 void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
-    uno::Reference<uno::XComponentContext> const xContext(
+    uno::Reference<uno::XComponentContext> const& xContext(
             ::comphelper::getProcessComponentContext());
 
     uno::Reference<io::XOutputStream> const xOutStream(
@@ -434,7 +434,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
 void ImportStoredChapterNumberingRules(SwChapterNumRules & rRules,
         SvStream & rStream, OUString const& rFileName)
 {
-    uno::Reference<uno::XComponentContext> const xContext(
+    uno::Reference<uno::XComponentContext> const& xContext(
             ::comphelper::getProcessComponentContext());
 
     uno::Reference<io::XInputStream> const xInStream(

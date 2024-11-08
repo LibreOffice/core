@@ -384,7 +384,7 @@ static OUString getDefaultModule_Impl()
 static OUString getCurrentModuleIdentifier_Impl()
 {
     OUString sIdentifier;
-    Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference < XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
     Reference < XDesktop2 > xDesktop = Desktop::create(xContext);
     Reference < XFrame > xCurrentFrame = xDesktop->getCurrentFrame();

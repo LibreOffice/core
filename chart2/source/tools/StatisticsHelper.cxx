@@ -121,7 +121,7 @@ void lcl_addSequenceToDataSource(
     const OUString & rRole )
 {
     Reference< chart2::data::XDataSink > xSink( xDataSource, uno::UNO_QUERY );
-    Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     if( ! xSink.is() )
         return;
 

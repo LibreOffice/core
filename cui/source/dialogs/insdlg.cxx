@@ -287,7 +287,7 @@ short SvInsertOleDlg::run()
 
             if ( !aFileName.isEmpty() )
             {
-                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                 uno::Reference< task::XInteractionHandler2 > xInteraction(
                     task::InteractionHandler::createWithParent(xContext, nullptr) );
 

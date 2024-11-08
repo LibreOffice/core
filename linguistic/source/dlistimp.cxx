@@ -761,7 +761,7 @@ static bool IsVers2OrNewer( const OUString& rFileURL, LanguageType& nLng, bool& 
         return false;
 
     // get stream to be used
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;

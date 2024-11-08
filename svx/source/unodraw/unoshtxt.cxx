@@ -507,7 +507,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             {
                 if ( !m_xLinguServiceManager.is() )
                 {
-                    css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
                     m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
                 }
 

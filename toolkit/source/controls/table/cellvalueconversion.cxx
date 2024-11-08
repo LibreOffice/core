@@ -247,7 +247,7 @@ bool CellValueConversion::ensureNumberFormatter()
 
     try
     {
-        Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
         // a number formatter
         Reference<XNumberFormatter> const xFormatter(NumberFormatter::create(xContext),
                                                      UNO_QUERY_THROW);

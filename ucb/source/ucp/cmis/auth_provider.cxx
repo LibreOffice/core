@@ -103,7 +103,7 @@ namespace cmis
                 }
             }
 
-            uno::Reference<uno::XComponentContext> xContext
+            const uno::Reference<uno::XComponentContext>& xContext
                 = ::comphelper::getProcessComponentContext();
             uno::Reference<task::XPasswordContainer2> xMasterPasswd
                 = task::PasswordContainer::create(xContext);
@@ -133,7 +133,7 @@ namespace cmis
         if (xEnv.is())
         {
             uno::Reference<task::XInteractionHandler> xIH = xEnv->getInteractionHandler();
-            uno::Reference<uno::XComponentContext> xContext
+            const uno::Reference<uno::XComponentContext>& xContext
                 = ::comphelper::getProcessComponentContext();
             uno::Reference<task::XPasswordContainer2> xMasterPasswd
                 = task::PasswordContainer::create(xContext);

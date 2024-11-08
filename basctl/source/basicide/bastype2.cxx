@@ -659,7 +659,7 @@ OUString SbTreeListBox::GetRootEntryBitmaps(const ScriptDocument& rDocument)
     if ( rDocument.isDocument() )
     {
         OUString sFactoryURL;
-        Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const Reference<uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
         Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
         try
         {

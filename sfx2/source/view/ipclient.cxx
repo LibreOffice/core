@@ -233,7 +233,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
     uno::Reference< frame::XFrame >              xFrame;
     uno::Reference< task::XStatusIndicator >     xStatusIndicator;
     uno::Reference< frame::XModel >              xModel( m_xObject->getComponent(), uno::UNO_QUERY );
-    uno::Reference< uno::XComponentContext >     xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >&     xContext( ::comphelper::getProcessComponentContext() );
 
     if ( xModel.is() )
     {

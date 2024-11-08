@@ -143,7 +143,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
     try
     {
-        uno::Reference<uno::XComponentContext > xContext(
+        const uno::Reference<uno::XComponentContext >& xContext(
             comphelper::getProcessComponentContext() );
         uno::Reference<util::XURLTransformer> xParser( util::URLTransformer::create(xContext) );
         xParser->parseStrict (url);

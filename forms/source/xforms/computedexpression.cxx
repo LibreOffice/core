@@ -153,7 +153,7 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
     Reference<XXPathAPI> xXPath( XPathAPI::create( comphelper::getProcessComponentContext() ) );
 
     // register xforms extension#
-    Reference< XComponentContext > aComponentContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& aComponentContext = comphelper::getProcessComponentContext();
     Reference< XXPathExtension > aExtension = XPathExtension::createWithModel(aComponentContext, aContext.mxModel, aContext.mxContextNode);
     xXPath->registerExtensionInstance(aExtension);
 

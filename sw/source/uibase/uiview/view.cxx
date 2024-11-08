@@ -2028,7 +2028,7 @@ OUString SwView::GetDataSourceName() const
 
 bool SwView::IsDataSourceAvailable(const OUString sDataSourceName)
 {
-    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
     Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(xContext);
 
     return xDatabaseContext->hasByName(sDataSourceName);

@@ -245,7 +245,7 @@ void SwView::StartTextConversion(
     const bool  bOther = !bSelection && !(m_pWrtShell->GetFrameType(nullptr,true) & FrameTypeFlags::BODY);
 
     {
-        const uno::Reference< uno::XComponentContext > xContext(
+        const uno::Reference< uno::XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
         SwHHCWrapper aWrap( this, xContext, nSourceLang, nTargetLang, pTargetFont,
                             nOptions, bIsInteractive,
@@ -821,7 +821,7 @@ void SwView::ExecSmartTagPopup( const Point& rPt )
         css::uno::Any(comphelper::makePropertyValue( u"CommandURL"_ustr, u".uno:OpenSmartTagMenuOnCursor"_ustr ))
     };
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XPopupMenuController > xPopupController(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
         u"com.sun.star.comp.svx.SmartTagMenuController"_ustr, aArgs, xContext ), css::uno::UNO_QUERY );

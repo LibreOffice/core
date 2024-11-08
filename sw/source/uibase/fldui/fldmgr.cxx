@@ -1874,7 +1874,7 @@ void SwFieldMgr::SetMacroPath(const OUString& rPath)
     // try to set sMacroName member variable by parsing the macro path
     // using the new URI parsing services
 
-    Reference< XComponentContext > xContext =
+    const Reference< XComponentContext >& xContext =
         ::comphelper::getProcessComponentContext();
 
     Reference< uri::XUriReferenceFactory >
@@ -1921,7 +1921,7 @@ Reference<XNumberingTypeInfo> const & SwFieldMgr::GetNumberingInfo() const
 {
     if(!m_xNumberingInfo.is())
     {
-        Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
+        const Reference<XComponentContext>&         xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
         const_cast<SwFieldMgr*>(this)->m_xNumberingInfo.set(xDefNum, UNO_QUERY);
     }

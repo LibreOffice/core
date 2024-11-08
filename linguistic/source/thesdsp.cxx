@@ -144,7 +144,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
             const OUString *pImplNames = pEntry->aSvcImplNames.getConstArray();
             Reference< XThesaurus > *pRef = pEntry->aSvcRefs.getArray();
 
-            Reference< XComponentContext > xContext(
+            const Reference< XComponentContext >& xContext(
                 comphelper::getProcessComponentContext() );
 
             // build service initialization argument

@@ -123,7 +123,7 @@ void SvxScriptOrgDialog::Init( std::u16string_view language  )
     deleteAllTree();
 
     Reference< browse::XBrowseNode > rootNode;
-    Reference< XComponentContext > xCtx(
+    const Reference< XComponentContext >& xCtx(
         comphelper::getProcessComponentContext() );
 
     Sequence< Reference< browse::XBrowseNode > > children;

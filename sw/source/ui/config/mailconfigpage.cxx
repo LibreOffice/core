@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SwTestAccountSettingsDialog, TestHdl, void*, void)
 
 void SwTestAccountSettingsDialog::Test()
 {
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
 
     OUString sException;
 

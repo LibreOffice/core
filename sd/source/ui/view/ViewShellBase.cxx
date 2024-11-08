@@ -1293,7 +1293,7 @@ void ViewShellBase::Implementation::SetPaneVisibility (
         if (!pDrawController)
             return;
 
-        const Reference< XComponentContext > xContext(
+        const Reference< XComponentContext >& xContext(
             ::comphelper::getProcessComponentContext() );
         Reference<XResourceId> xPaneId (ResourceId::create(
             xContext, rsPaneURL));
@@ -1363,7 +1363,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
-        const Reference< XComponentContext > xContext(
+        const Reference< XComponentContext >& xContext(
             ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());

@@ -964,7 +964,7 @@ void handleCrashReport()
 #if !defined ANDROID
 void handleSafeMode()
 {
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     Reference< css::frame::XSynchronousDispatch > xSafeModeUI(
         xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.SafeModeUI"_ustr, xContext),
@@ -1033,7 +1033,7 @@ bool impl_callRecoveryUI(bool bEmergencySave     ,
     static constexpr OUStringLiteral COMMAND_EMERGENCYSAVE = u"vnd.sun.star.autorecovery:/doEmergencySave";
     static constexpr OUStringLiteral COMMAND_RECOVERY = u"vnd.sun.star.autorecovery:/doAutoRecovery";
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     g_xRecoveryUI.set(
         xContext->getServiceManager()->createInstanceWithContext(u"com.sun.star.comp.svx.RecoveryUI"_ustr, xContext),
@@ -1375,7 +1375,7 @@ int Desktop::Main()
 
     recordTime(startT, "SetSplashScreenProgress(20): time = ");
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     Reference< XRestartManager > xRestartManager( OfficeRestartManager::get(xContext) );
 
@@ -2338,7 +2338,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     case ApplicationEvent::Type::Appear:
         if ( !GetCommandLineArgs().IsInvisible() && !impl_bringToFrontRecoveryUI() )
         {
-            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             // find active task - the active task is always a visible task
             Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
@@ -2427,7 +2427,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             // NOTICE: The quickstart service must be initialized inside the "main thread", so we use the
             // application events to do this (they are executed inside main thread)!!!
             // Don't start quickstart service if the user specified "--invisible" on the command line!
-            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
             css::office::Quickstart::createStart(xContext, true/*Quickstart*/);
         }
         break;
@@ -2437,7 +2437,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         // The user will try it again, in case nothing happens .-)
         try
         {
-            Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            const Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
             Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 
@@ -2512,7 +2512,7 @@ void Desktop::OpenSplashScreen()
         aSplashService = "com.sun.star.office.PipeSplashScreen";
 
     Sequence< Any > aSeq{ Any(true) /* bVisible */, Any(aAppName) };
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     m_rSplashScreen.set(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
         UNO_QUERY);
@@ -2583,7 +2583,7 @@ void Desktop::ShowBackingComponent(Desktop * progress)
     {
         return;
     }
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create(xContext);
     if (progress != nullptr)
     {

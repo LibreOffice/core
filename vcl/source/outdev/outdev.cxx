@@ -791,7 +791,7 @@ com::sun::star::uno::Reference< css::rendering::XCanvas > OutputDevice::ImplGetC
         GetSystemGfxDataAny()
     };
 
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
     static tools::DeleteUnoReferenceOnDeinit<css::lang::XMultiComponentFactory> xStaticCanvasFactory(
         css::rendering::CanvasFactory::create( xContext ) );

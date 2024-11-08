@@ -74,7 +74,7 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL, OUString const & 
 
     try
     {
-        uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         uno::Reference< graphic::XGraphicProvider > xProvider( graphic::GraphicProvider::create(xContext) );
         xGraphic = xProvider->queryGraphic({ comphelper::makePropertyValue(u"URL"_ustr, _rURL) });
     }

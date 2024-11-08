@@ -42,7 +42,7 @@ void Options::ReadFromConfig(bool i_bFile)
     try
     {
         // get service provider
-        css::uno::Reference<css::uno::XComponentContext> xContext(
+        const css::uno::Reference<css::uno::XComponentContext>& xContext(
             comphelper::getProcessComponentContext());
         // create configuration hierarchical access name
         try

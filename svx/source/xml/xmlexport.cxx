@@ -62,7 +62,7 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
             pModel->setUnoModel( pDrawingModel );
         }
 
-        uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         if( bDocRet )
         {
@@ -163,7 +163,7 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     try
     {
         // Get service factory
-        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
         if ( xTargetModel.is() )
             xTargetModel->lockControllers();

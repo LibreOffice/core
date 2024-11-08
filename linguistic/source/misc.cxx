@@ -672,7 +672,7 @@ uno::Reference< XLinguProperties > GetLinguProperties()
 
 uno::Reference< XSearchableDictionaryList > GetDictionaryList()
 {
-    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     uno::Reference< XSearchableDictionaryList > xRef;
     try
     {
@@ -705,7 +705,7 @@ AppExitListener::AppExitListener()
 {
     // add object to Desktop EventListeners in order to properly call
     // the AtExit function at application exit.
-    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     try
     {

@@ -65,7 +65,7 @@ namespace drawinglayer::primitive2d
             if(aUnoControlTypeName.isEmpty())
                 return;
 
-            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            const uno::Reference< uno::XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference< awt::XControl > xXControl(
                 xContext->getServiceManager()->createInstanceWithContext(aUnoControlTypeName, xContext), uno::UNO_QUERY);
 

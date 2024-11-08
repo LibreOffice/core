@@ -72,7 +72,7 @@ ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController*
     Init();
     SetExchangeSupport();
 
-    css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    const css::uno::Reference < css::uno::XComponentContext >& xContext(::comphelper::getProcessComponentContext());
     m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, u"*"_ustr);
 }
 

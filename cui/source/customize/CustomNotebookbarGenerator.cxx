@@ -216,7 +216,7 @@ void CustomNotebookbarGenerator::getFileNameAndAppName(OUString& sAppName,
     if (!pFrame)
         return;
 
-    const auto xContext = comphelper::getProcessComponentContext();
+    const auto& xContext = comphelper::getProcessComponentContext();
     utl::OConfigurationTreeRoot aRoot(xContext, u"org.openoffice.Office.UI.ToolbarMode/"_ustr,
                                       false);
     const Reference<frame::XFrame>& xFrame = pFrame->GetFrame().GetFrameInterface();

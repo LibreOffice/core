@@ -402,7 +402,7 @@ public:
 
 void SfxDocTplService::init_Impl()
 {
-    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     uno::Reference < task::XInteractionHandler > xInteractionHandler(
         task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
     maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
@@ -1717,7 +1717,7 @@ sal_Bool SfxDocTplService::storeTemplate( const OUString& rGroupName,
 
     try
     {
-        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
         // get document service name
         uno::Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );

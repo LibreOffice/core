@@ -88,7 +88,7 @@ const sal_Int16 DIC_VERSION_7 = 7;
 
 static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
     uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create( xContext ) ;
     return xRes;
 }
@@ -273,7 +273,7 @@ ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
     if (rMainURL.isEmpty())
         return ERRCODE_NONE;
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XInputStream stream
     uno::Reference< io::XInputStream > xStream;
@@ -407,7 +407,7 @@ ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
         return ERRCODE_NONE;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XOutputStream stream
     uno::Reference<io::XStream> xStream;

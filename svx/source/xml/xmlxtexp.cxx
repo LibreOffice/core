@@ -214,7 +214,7 @@ bool SvxXMLXTableExportComponent::save(
 
     try
     {
-        uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext>& xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 

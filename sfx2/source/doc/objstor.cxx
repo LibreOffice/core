@@ -137,7 +137,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
     if (!xModel.is())
         return;
 
-    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > xModelCollection =
         css::frame::theGlobalEventBroadcaster::get(xContext);
     try
@@ -1479,7 +1479,7 @@ bool SfxObjectShell::SaveTo_Impl
     // tdf#41063, tdf#135244: prevent jumping to cursor at any temporary modification
     auto aViewGuard(LockAllViews());
 
-    uno::Reference<uno::XComponentContext> const xContext(
+    uno::Reference<uno::XComponentContext> const& xContext(
         ::comphelper::getProcessComponentContext());
 
     std::shared_ptr<const SfxFilter> pFilter = rMedium.GetFilter();

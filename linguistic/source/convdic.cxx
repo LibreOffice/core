@@ -68,7 +68,7 @@ static void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport 
         return;
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get xInputStream stream
     uno::Reference< io::XInputStream > xIn;
@@ -207,7 +207,7 @@ void ConvDic::Save()
         return;
     DBG_ASSERT(!INetURLObject( aMainURL ).HasError(), "invalid URL");
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // get XOutputStream stream
     uno::Reference< io::XStream > xStream;

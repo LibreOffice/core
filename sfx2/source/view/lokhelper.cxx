@@ -902,7 +902,7 @@ std::string extractKey(const std::string & privateKey)
 
 css::uno::Reference<css::security::XCertificate> SfxLokHelper::getSigningCertificate(const std::string& rCert, const std::string& rKey)
 {
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())
@@ -959,7 +959,7 @@ uno::Reference<security::XCertificate> SfxLokHelper::addCertificate(
 
 void SfxLokHelper::addCertificates(const std::vector<std::string>& rCerts)
 {
-    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const uno::Reference<uno::XComponentContext>& xContext = comphelper::getProcessComponentContext();
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer = xml::crypto::SEInitializer::create(xContext);
     uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext = xSEInitializer->createSecurityContext(OUString());
     if (!xSecurityContext.is())

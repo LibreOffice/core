@@ -125,7 +125,7 @@ namespace bib
         if( !m_xControlContainer.is())
             return;
 
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
 
         if ( !m_xGridModel.is())
             return;

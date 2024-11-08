@@ -381,7 +381,7 @@ bool Desktop::CheckExtensionDependencies()
         return false;
     }
 
-    uno::Reference< uno::XComponentContext > xContext(
+    const uno::Reference< uno::XComponentContext >& xContext(
         comphelper::getProcessComponentContext());
 
     bool bDependenciesValid = impl_checkDependencies( xContext );
@@ -402,7 +402,7 @@ bool Desktop::CheckExtensionDependencies()
 
 void Desktop::SynchronizeExtensionRepositories(bool bCleanedExtensionCache, Desktop* pDesktop)
 {
-    uno::Reference< uno::XComponentContext > context(
+    const uno::Reference< uno::XComponentContext >& context(
         comphelper::getProcessComponentContext());
     uno::Reference< ucb::XCommandEnvironment > silent(
         new SilentCommandEnv(context, pDesktop));

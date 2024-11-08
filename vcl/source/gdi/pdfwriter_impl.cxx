@@ -10682,7 +10682,7 @@ void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 
     if (!m_xTrans.is())
     {
-        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const uno::Reference< uno::XComponentContext >& xContext( comphelper::getProcessComponentContext() );
         m_xTrans = util::URLTransformer::create(xContext);
     }
 

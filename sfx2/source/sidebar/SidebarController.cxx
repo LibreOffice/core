@@ -1008,7 +1008,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 {
     try
     {
-        const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext() );
+        const Reference<XComponentContext>& xComponentContext (::comphelper::getProcessComponentContext() );
         const Reference<ui::XUIElementFactory> xUIElementFactory =
                ui::theUIElementFactoryManager::get( xComponentContext );
 

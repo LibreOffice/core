@@ -1621,7 +1621,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     bool bSaveSpellCheck = false;
     const SfxPoolItem* pItem = nullptr;
 
-    Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >&  xContext( ::comphelper::getProcessComponentContext() );
     Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
     if ( const SfxHyphenRegionItem* pHyphenItem = rSet.GetItemIfSet(SID_ATTR_HYPHENREGION, false ) )
     {
@@ -2271,7 +2271,7 @@ OUString OfaTreeOptionsDialog::GetModuleIdentifier( const Reference< XFrame >& r
 {
     OUString sModule;
     Reference < XFrame > xCurrentFrame( rFrame );
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = comphelper::getProcessComponentContext();
     Reference < XModuleManager2 > xModuleManager = ModuleManager::create(xContext);
 
     if ( !xCurrentFrame.is() )

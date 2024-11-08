@@ -459,7 +459,7 @@ void SvtMatchContext_Impl::doExecute()
                     bool folder = false;
                     if (aURLObject.hasFinalSlash()) {
                         try {
-                            css::uno::Reference< css::uno::XComponentContext >
+                            const css::uno::Reference< css::uno::XComponentContext >&
                                 ctx(comphelper::getProcessComponentContext());
                             css::uno::Reference<
                                 css::ucb::XUniversalContentBroker > ucb(

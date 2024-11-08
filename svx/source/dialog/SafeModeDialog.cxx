@@ -254,7 +254,7 @@ IMPL_LINK(SafeModeDialog, DialogBtnHdl, weld::Button&, rBtn, void)
     {
         sfx2::SafeMode::putRestartFlag();
         m_xDialog->response(RET_CLOSE);
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = comphelper::getProcessComponentContext();
         css::task::OfficeRestartManager::get(xContext)->requestRestart(
             css::uno::Reference< css::task::XInteractionHandler >());
     }

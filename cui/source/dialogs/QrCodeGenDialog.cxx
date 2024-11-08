@@ -317,7 +317,7 @@ void QrCodeGenDialog::Apply()
     SvMemoryStream aSvgStream(4096, 4096);
     aSvgStream.WriteOString(aSvgImage);
     Reference<XInputStream> xInputStream(new utl::OSeekableInputStreamWrapper(aSvgStream));
-    Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
     Reference<XGraphicProvider> xProvider = css::graphic::GraphicProvider::create(xContext);
 
     Sequence<PropertyValue> aMediaProperties{ comphelper::makePropertyValue(u"InputStream"_ustr,

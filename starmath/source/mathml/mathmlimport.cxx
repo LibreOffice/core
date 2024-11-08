@@ -96,7 +96,8 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 {
     ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
 
     OSL_ENSURE(m_xModel.is(), "XMLReader::Read: got no model");
 
@@ -2633,7 +2634,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportMML(SvStream& rStream)
     uno::Reference<frame::XModel> xModel(xDocSh->GetModel());
 
     uno::Reference<beans::XPropertySet> xInfoSet;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+    const uno::Reference<uno::XComponentContext>& xContext(
+        comphelper::getProcessComponentContext());
     uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
 
     //SetLoading hack because the document properties will be re-initted

@@ -3821,7 +3821,7 @@ ErrCodeMsg SwWW8Writer::WriteStorage()
 
             if (sCryptoType.getLength())
             {
-                uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+                const uno::Reference<uno::XComponentContext>& xComponentContext(comphelper::getProcessComponentContext());
                 uno::Sequence<uno::Any> aArguments{
                     uno::Any(beans::NamedValue(u"Binary"_ustr, uno::Any(true))) };
                 xPackageEncryption.set(

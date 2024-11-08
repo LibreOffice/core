@@ -507,7 +507,7 @@ Reference<XClipboard> GetSystemPrimarySelection()
     Reference<XClipboard> xSelection;
     try
     {
-        Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+        const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
 #if USING_X11
         // A hack, making the primary selection available as an instance
         // of the SystemClipboard service on X11:

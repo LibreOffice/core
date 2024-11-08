@@ -921,7 +921,7 @@ void Connection::storeDatabase()
         Reference<XStream> xDBStream(
             m_xEmbeddedStorage->openStreamElement(our_sFBKLocation, ElementModes::WRITE));
         using namespace ::comphelper;
-        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
         Reference<XInputStream> xInputStream;
         if (!xContext.is())
             return;

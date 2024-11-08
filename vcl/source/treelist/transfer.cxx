@@ -193,7 +193,7 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
 
 static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, const DataFlavorEx& rFlavorEx )
 {
-    Reference< XComponentContext >       xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >&       xContext( ::comphelper::getProcessComponentContext() );
 
     try
     {
@@ -1232,7 +1232,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
 {
     try
     {
-        Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >&          xContext( ::comphelper::getProcessComponentContext() );
         Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
         DataFlavorEx                            aFlavorEx;
         static constexpr OUString        aCharsetStr( u"charset"_ustr );
@@ -2218,7 +2218,7 @@ TransferableDataHelper TransferableDataHelper::CreateFromPrimarySelection()
 bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInternalFlavor,
                                       const css::datatransfer::DataFlavor& rRequestFlavor )
 {
-    Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >&          xContext( ::comphelper::getProcessComponentContext() );
     bool                                    bRet = false;
 
     try

@@ -79,7 +79,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
             }
             else
             {
-                Reference< XComponentContext > xContext(
+                const Reference< XComponentContext >& xContext(
                     comphelper::getProcessComponentContext() );
                 Reference< provider::XScriptProviderFactory > xFactory =
                     provider::theMasterScriptProviderFactory::get( xContext );
@@ -405,7 +405,7 @@ css::uno::Reference< css::container::XNameContainer > implFindDialogLibForDialog
 
 void RTL_Impl_CreateUnoDialog( SbxArray& rPar )
 {
-    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
 
     // We need at least 1 parameter
     if (rPar.Count() < 2)

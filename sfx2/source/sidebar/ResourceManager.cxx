@@ -724,7 +724,7 @@ utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (const OUStr
 {
     try
     {
-        const Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+        const Reference<XComponentContext>& xContext(comphelper::getProcessComponentContext());
         const Reference<frame::XModuleManager2> xModuleAccess = frame::ModuleManager::create(xContext);
         const comphelper::NamedValueCollection aModuleProperties(xModuleAccess->getByName(rsModuleName));
         const OUString sWindowStateRef(aModuleProperties.getOrDefault(

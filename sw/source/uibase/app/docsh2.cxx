@@ -774,7 +774,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             ErrCodeMsg eErr = aWrt.Write( xWrt );
                             if( !eErr.IgnoreWarning() )
                             {
-                                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                                const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                                 uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
                                 uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );
@@ -832,7 +832,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->Seek( STREAM_SEEK_TO_BEGIN );
                     if ( nWhich == FN_OUTLINE_TO_IMPRESS )
                     {
-                        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                        const uno::Reference< uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
 
                         uno::Reference< frame::XDispatchHelper > xHelper( frame::DispatchHelper::create(xContext) );

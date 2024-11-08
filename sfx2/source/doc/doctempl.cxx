@@ -1561,7 +1561,7 @@ bool SfxDocTemplate_Impl::Construct( )
     if ( mbConstructed )
         return true;
 
-    uno::Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const uno::Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
 
     mxInfo.set(document::DocumentProperties::create(xContext), UNO_QUERY);
 

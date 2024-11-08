@@ -1441,7 +1441,7 @@ void SbRtl_StrComp(StarBASIC *, SbxArray & rPar, bool)
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper.get();
         if( !pTransliterationWrapper )
         {
-            uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
+            const uno::Reference< uno::XComponentContext >& xContext = getProcessComponentContext();
             GetSbData()->pTransliterationWrapper.reset(
                 new ::utl::TransliterationWrapper( xContext,
                     TransliterationFlags::IGNORE_CASE |
@@ -4084,7 +4084,7 @@ void SbRtl_StrConv(StarBASIC *, SbxArray & rPar, bool)
     OUString aStr = rPar.Get(1)->GetOUString();
     if (!aStr.isEmpty() && !aTranslitSet.empty())
     {
-        uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
+        const uno::Reference< uno::XComponentContext >& xContext = getProcessComponentContext();
 
         for (auto transliterationFlag : aTranslitSet)
         {

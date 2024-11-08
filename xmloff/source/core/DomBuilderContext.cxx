@@ -229,7 +229,7 @@ void DomBuilderContext::characters( const OUString& rCharacters )
 
 static Reference<XNode> lcl_createDomInstance()
 {
-    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+    const Reference<XComponentContext>& xContext = comphelper::getProcessComponentContext();
     SAL_WARN_IF( !xContext.is(), "xmloff", "can't get service factory" );
 
     Reference<XDocumentBuilder> xBuilder( DocumentBuilder::create(xContext) );

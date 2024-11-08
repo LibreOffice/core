@@ -27,7 +27,7 @@ FolderTree::FolderTree(std::unique_ptr<weld::TreeView> xTreeView, weld::Window* 
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 24,
                                   m_xTreeView->get_height_rows(7));
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    const Reference< XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
                 InteractionHandler::createWithParent(xContext, pTopLevel->GetXWindow()), UNO_QUERY_THROW);
     m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );

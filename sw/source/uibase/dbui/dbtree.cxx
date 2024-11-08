@@ -110,7 +110,7 @@ bool SwDBTreeList_Impl::HasContext()
 {
     if(!m_xDatabaseContext.is())
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( ::comphelper::getProcessComponentContext() );
         m_xDatabaseContext = DatabaseContext::create(xContext);
         m_xDatabaseContext->addContainerListener( this );
     }

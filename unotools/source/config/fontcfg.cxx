@@ -306,7 +306,7 @@ FontSubstConfiguration::FontSubstConfiguration() :
     try
     {
         // get service provider
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        const Reference< XComponentContext >& xContext( comphelper::getProcessComponentContext() );
         // create configuration hierarchical access name
         m_xConfigProvider = theDefaultProvider::get( xContext );
         Sequence<Any> aArgs(comphelper::InitAnyPropertySequence(
