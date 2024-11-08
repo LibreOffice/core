@@ -294,13 +294,9 @@ void SpellDialog::UpdateBoxes_Impl(bool bCallFromSelectHdl)
         m_xExplainLink->set_uri( aSpellErrorDescription.sExplanationURL );
         m_xExplainFT->set_label( aSpellErrorDescription.sExplanation );
     }
-    if( bSpellErrorDescription && !aSpellErrorDescription.sDialogTitle.isEmpty() )
-    {
-        // use this function to apply the correct image to be used...
-        SetTitle_Impl( nAltLanguage );
-        // then change the title to the one to be actually used
+
+    if (bSpellErrorDescription && !aSpellErrorDescription.sDialogTitle.isEmpty())
         m_xDialog->set_title(m_xDialog->strip_mnemonic(aSpellErrorDescription.sDialogTitle));
-    }
     else
         SetTitle_Impl( nAltLanguage );
     if( !bCallFromSelectHdl )
