@@ -191,12 +191,6 @@ void SAL_CALL BaseControl::dispose()
         m_xPeer->dispose();
         m_xPeerWindow.clear();
         m_xPeer.clear();
-
-        if ( m_xMultiplexer.is() )
-        {
-            // take changes on multiplexer
-            m_xMultiplexer->setPeer( Reference< XWindow >() );
-        }
     }
 
     // release view
