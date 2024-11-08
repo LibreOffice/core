@@ -286,7 +286,7 @@ OUString SvxAreaTabPage::GetAllStrings()
 
     for (const auto& toggle : toggleButton)
     {
-        if (const auto& pString = m_xBuilder->weld_toggle_button(toggle))
+        if (const auto pString = m_xBuilder->weld_toggle_button(toggle))
             sAllStrings += pString->get_label() + " ";
     }
 

@@ -1588,13 +1588,13 @@ namespace cppcanvas::internal
                         rVDev.Push();
                         rVDev.SetMapMode( rSubstitute.GetPrefMapMode() );
 
-                        const ::Point& rPos( rVDev.LogicToPixel( pAct->GetPoint() ) );
-                        const ::Size&  rSize( rVDev.LogicToPixel( pAct->GetSize() ) );
+                        const ::Point aPos( rVDev.LogicToPixel( pAct->GetPoint() ) );
+                        const ::Size  aSize( rVDev.LogicToPixel( pAct->GetSize() ) );
 
-                        rStates.getState().transform.translate( rPos.X(),
-                                                                 rPos.Y() );
-                        rStates.getState().transform.scale( static_cast<double>(rSize.Width()) / aMtfSizePix.Width(),
-                                                             static_cast<double>(rSize.Height()) / aMtfSizePix.Height() );
+                        rStates.getState().transform.translate( aPos.X(),
+                                                                aPos.Y() );
+                        rStates.getState().transform.scale( static_cast<double>(aSize.Width()) / aMtfSizePix.Width(),
+                                                             static_cast<double>(aSize.Height()) / aMtfSizePix.Height() );
 
                         createActions( const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
                                        rFactoryParms,

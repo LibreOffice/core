@@ -133,7 +133,7 @@ OUString DbRegistrationOptionsPage::GetAllStrings()
 {
     OUString sAllStrings;
 
-    if (const auto& pString = m_xBuilder->weld_label(u"label1"_ustr))
+    if (const auto pString = m_xBuilder->weld_label(u"label1"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");

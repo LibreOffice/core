@@ -60,7 +60,7 @@ OUString SvxBasicIDEOptionsPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -69,7 +69,7 @@ OUString SvxBasicIDEOptionsPage::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 

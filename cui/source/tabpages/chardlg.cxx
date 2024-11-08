@@ -867,13 +867,13 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     const SfxItemSet* pExampleSet = GetDialogExampleSet();
 
     bool bChanged = true;
-    const OUString& rFontName  = pNameBox->get_active_text();
+    const OUString aFontName  = pNameBox->get_active_text();
     const FontList* pFontList = GetFontList();
     OUString aStyleBoxText = pStyleBox->get_active_text();
     int nEntryPos = pStyleBox->find_text(aStyleBoxText);
     if (nEntryPos >= m_pImpl->m_nExtraEntryPos)
         aStyleBoxText.clear();
-    FontMetric aInfo( pFontList->Get( rFontName, aStyleBoxText ) );
+    FontMetric aInfo( pFontList->Get( aFontName, aStyleBoxText ) );
     SvxFontItem aFontItem( aInfo.GetFamilyType(), aInfo.GetFamilyName(), aInfo.GetStyleName(),
                            aInfo.GetPitch(), aInfo.GetCharSet(), nWhich );
     pOld = GetOldItem( rSet, nSlot );
@@ -894,7 +894,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
          static_cast<const SvxFontItem*>(pItem)->GetFamilyName() != aFontItem.GetFamilyName() )
         bChanged = true;
 
-    if ( bChanged && !rFontName.isEmpty() )
+    if ( bChanged && !aFontName.isEmpty() )
     {
         rSet.Put( aFontItem );
         bModified = true;

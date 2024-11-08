@@ -66,11 +66,11 @@ OUString SvxPersonalizationTabPage::GetAllStrings()
 
     for (const auto& radio : radioButton)
     {
-        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+        if (const auto pString = m_xBuilder->weld_radio_button(radio))
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_label(u"personas_label"_ustr))
+    if (const auto pString = m_xBuilder->weld_label(u"personas_label"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");

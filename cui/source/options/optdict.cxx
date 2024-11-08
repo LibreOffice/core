@@ -674,7 +674,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
     OUString rEntry = rEdt.get_text();
 
     sal_Int32 nWordLen = rEntry.getLength();
-    const OUString& rRepString = fixSpace(m_xReplaceED->get_text());
+    const OUString aRepString = fixSpace(m_xReplaceED->get_text());
 
     bool bEnableNewReplace  = false;
     bool bEnableDelete      = false;
@@ -696,7 +696,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, weld::Entry&, rEdt, void)
                 eCmpRes = cmpDicEntry_Impl( rEntry, aTestStr );
                 if(CDE_DIFFERENT != eCmpRes)
                 {
-                    if(!rRepString.isEmpty())
+                    if(!aRepString.isEmpty())
                         bFirstSelect = true;
                     bDoNothing=true;
                     m_pWordsLB->set_cursor(i);

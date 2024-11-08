@@ -84,8 +84,8 @@ void TextLinesHelper::init(double nLineWidth, const tools::TextLineInfo& rLineIn
 
 void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bNormalText) const
 {
-    const rendering::ViewState& rViewState(mpCanvas->getViewState());
-    const uno::Reference<rendering::XCanvas>& xCanvas(mpCanvas->getUNOCanvas());
+    const rendering::ViewState aViewState(mpCanvas->getViewState());
+    const uno::Reference<rendering::XCanvas> xCanvas(mpCanvas->getUNOCanvas());
     rendering::StrokeAttributes aStrokeAttributes;
     aStrokeAttributes.JoinType = rendering::PathJoinType::ROUND;
 
@@ -98,10 +98,10 @@ void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bN
         if (mbOverlineWaveline)
         {
             aStrokeAttributes.StrokeWidth = mbOverlineWavelineBold ? 2.0 : 1.0;
-            xCanvas->strokePolyPolygon(mxOverline, rViewState, aLocalState, aStrokeAttributes);
+            xCanvas->strokePolyPolygon(mxOverline, aViewState, aLocalState, aStrokeAttributes);
         }
         else
-            xCanvas->fillPolyPolygon(mxOverline, rViewState, aLocalState);
+            xCanvas->fillPolyPolygon(mxOverline, aViewState, aLocalState);
     }
 
     if (mxUnderline.is())
@@ -112,14 +112,14 @@ void TextLinesHelper::render(const rendering::RenderState& rRenderState, bool bN
         if (mbUnderlineWaveline)
         {
             aStrokeAttributes.StrokeWidth = mbUnderlineWavelineBold ? 2.0 : 1.0;
-            xCanvas->strokePolyPolygon(mxUnderline, rViewState, aLocalState, aStrokeAttributes);
+            xCanvas->strokePolyPolygon(mxUnderline, aViewState, aLocalState, aStrokeAttributes);
         }
         else
-            xCanvas->fillPolyPolygon(mxUnderline, rViewState, aLocalState);
+            xCanvas->fillPolyPolygon(mxUnderline, aViewState, aLocalState);
     }
 
     if (mxStrikeout.is())
-        xCanvas->fillPolyPolygon(mxStrikeout, rViewState, rRenderState);
+        xCanvas->fillPolyPolygon(mxStrikeout, aViewState, rRenderState);
 }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

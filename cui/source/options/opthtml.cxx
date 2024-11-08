@@ -60,10 +60,10 @@ OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* p
     sal_Int32 nPos;
     if ((nPos = aText.indexOf( aPlaceholder)) != -1)
     {
-        const OUString& rStr = SvtLanguageTable::GetLanguageString( LANGUAGE_ENGLISH_US);
-        if (!rStr.isEmpty())
+        const OUString aStr = SvtLanguageTable::GetLanguageString( LANGUAGE_ENGLISH_US);
+        if (!aStr.isEmpty())
         {
-            aText = aText.replaceAt( nPos, aPlaceholder.getLength(), rStr);
+            aText = aText.replaceAt( nPos, aPlaceholder.getLength(), aStr);
             m_xNumbersEnglishUSCB->set_label( aText);
         }
     }
@@ -89,7 +89,7 @@ OUString OfaHtmlTabPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -98,7 +98,7 @@ OUString OfaHtmlTabPage::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 

@@ -229,7 +229,7 @@ OUString OfaMiscTabPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -239,11 +239,11 @@ OUString OfaMiscTabPage::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 
-    if (const auto& pString = m_xBuilder->weld_button(u"assocfiles"_ustr))
+    if (const auto pString = m_xBuilder->weld_button(u"assocfiles"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
@@ -768,7 +768,7 @@ OUString OfaViewTabPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -777,7 +777,7 @@ OUString OfaViewTabPage::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -1014,7 +1014,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nStyleLB_InitialSelection = 0;
     }
     else {
-        const OUString& selected = SvtMiscOptions::GetIconTheme();
+        const OUString selected = SvtMiscOptions::GetIconTheme();
         const vcl::IconThemeInfo& selectedInfo =
                 vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, selected);
         nStyleLB_InitialSelection = m_xIconStyleLB->find_text(selectedInfo.GetDisplayName());
@@ -1374,7 +1374,7 @@ OUString OfaLanguagesTabPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
@@ -1383,7 +1383,7 @@ OUString OfaLanguagesTabPage::GetAllStrings()
 
     for (const auto& check : checkButton)
     {
-        if (const auto& pString = m_xBuilder->weld_check_button(check))
+        if (const auto pString = m_xBuilder->weld_check_button(check))
             sAllStrings += pString->get_label() + " ";
     }
 

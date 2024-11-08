@@ -1180,8 +1180,8 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
         }
     }
 
-    const OUString& rShortTxt = m_xShortED->get_text();
-    bool bEnableNew = !rShortTxt.isEmpty() &&
+    const OUString aShortTxt = m_xShortED->get_text();
+    bool bEnableNew = !aShortTxt.isEmpty() &&
                         ( !rRepString.isEmpty() ||
                                 ( bHasSelectionText && bSWriter )) &&
                         ( !bFirstSelIterSet || rRepString !=
@@ -1190,7 +1190,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, weld::Entry&, rEdt, void)
     {
         for (auto const& elem : aFormatText)
         {
-            if(elem == rShortTxt)
+            if(elem == aShortTxt)
             {
                 bEnableNew = false;
                 break;
@@ -1529,7 +1529,7 @@ IMPL_LINK(OfaAutocorrExceptPage, SelectHdl, weld::TreeView&, rBox, void)
 
 IMPL_LINK(OfaAutocorrExceptPage, ModifyHdl, weld::Entry&, rEdt, void)
 {
-    const OUString& sEntry = rEdt.get_text();
+    const OUString sEntry = rEdt.get_text();
     bool bEntryLen = !sEntry.isEmpty();
     if (&rEdt == m_xAbbrevED.get())
     {

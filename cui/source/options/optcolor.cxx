@@ -744,7 +744,7 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(weld::Window* pTopLevel, weld::Builde
 
     Link<weld::Toggleable&,void> aCheckLink = LINK(this, ColorConfigCtrl_Impl, ClickHdl);
     Link<ColorListBox&,void> aColorLink = LINK(this, ColorConfigCtrl_Impl, ColorHdl);
-    Link<weld::Widget&,void> const& aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
+    Link<weld::Widget&,void> const aGetFocusLink = LINK(this, ColorConfigCtrl_Impl, ControlFocusHdl);
     m_xScrollWindow->SetLinks(aCheckLink, aColorLink, aGetFocusLink, *m_xVScroll);
 }
 
@@ -887,7 +887,7 @@ OUString SvxColorOptionsTabPage::GetAllStrings()
 
     for (const auto& label : labels)
     {
-        if (const auto& pString = m_xBuilder->weld_label(label))
+        if (const auto pString = m_xBuilder->weld_label(label))
             sAllStrings += pString->get_label() + " ";
     }
 
