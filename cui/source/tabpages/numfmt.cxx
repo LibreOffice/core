@@ -1016,7 +1016,7 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
     {
         if(bUpdateEdit)
         {
-            OUString aFormat=aEntryList[nFmtLbSelPos];
+            const OUString& aFormat=aEntryList[nFmtLbSelPos];
             m_xEdFormat->set_text(aFormat);
             m_xFtComment->set_label(pNumFmtShell->GetComment4Entry(nFmtLbSelPos));
         }

@@ -144,7 +144,7 @@ bool lcl_HasSystemFilePicker()
 
     try
     {
-        OUString aFileService = impl_SystemFileOpenServiceName();
+        const OUString& aFileService = impl_SystemFileOpenServiceName();
         Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
         if ( xEnum.is() && xEnum->hasMoreElements() )
             bRet = true;
@@ -1134,7 +1134,7 @@ static Sequence< OUString > seqInstalledLanguages;
 
 static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocaleWrapper )
 {
-    Sequence< OUString > aDateAcceptancePatterns = rLocaleWrapper.getDateAcceptancePatterns();
+    const Sequence< OUString >& aDateAcceptancePatterns = rLocaleWrapper.getDateAcceptancePatterns();
     sal_Int32 nPatterns = aDateAcceptancePatterns.getLength();
     OUStringBuffer aBuf( nPatterns * 6 );   // 6 := length of Y-M-D;
     SAL_WARN_IF( !nPatterns, "cui.options", "No date acceptance pattern");

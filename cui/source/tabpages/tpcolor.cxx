@@ -265,7 +265,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 
     if ( nState >= SfxItemState::DEFAULT )
     {
-        XFillColorItem aColorItem( rSet->Get( XATTR_FILLCOLOR ) );
+        const XFillColorItem& aColorItem( rSet->Get( XATTR_FILLCOLOR ) );
         m_aPreviousColor = aColorItem.GetColorValue();
         aNewColor = aColorItem.GetColorValue();
     }

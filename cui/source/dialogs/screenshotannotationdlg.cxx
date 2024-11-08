@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(ScreenshotAnnotationDlg_Impl, saveButtonHandler, weld::Button&, 
     if (!files.hasElements())
         return;
 
-    OUString aConfirmedName = files[0];
+    const OUString& aConfirmedName = files[0];
 
     if (aConfirmedName.isEmpty())
         return;

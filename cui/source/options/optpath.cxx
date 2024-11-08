@@ -572,7 +572,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
         try
         {
             sfx2::FileDialogHelper aHelper(ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, FileDialogFlags::NONE, GetFrameWeld());
-            uno::Reference<ui::dialogs::XFilePicker3> xFilePicker = aHelper.GetFilePicker();
+            const uno::Reference<ui::dialogs::XFilePicker3>& xFilePicker = aHelper.GetFilePicker();
             xFilePicker->appendFilter(OUString(), u"*.xml"_ustr);
             if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
             {

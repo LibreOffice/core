@@ -149,7 +149,7 @@ void SvxBitmapTabPage::Construct()
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    XFillBitmapItem aItem( rSet.Get(XATTR_FILLBITMAP) );
+    const XFillBitmapItem& aItem( rSet.Get(XATTR_FILLBITMAP) );
 
     sal_Int32 nPos( 0 );
     if ( !aItem.isPattern() )
@@ -278,7 +278,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
     double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(m_fObjectHeight), mePoolUnit, MapUnit::Map100thMM )) / fUIScale);
     m_fObjectHeight = fTmpHeight;
 
-    XFillBitmapItem aItem( rAttrs->Get(XATTR_FILLBITMAP) );
+    const XFillBitmapItem& aItem( rAttrs->Get(XATTR_FILLBITMAP) );
 
     if(!aItem.isPattern())
     {

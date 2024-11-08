@@ -1231,7 +1231,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelSdwHdl_Impl, ValueSet*, void)
 
 IMPL_LINK(SvxBorderTabPage, SelColHdl_Impl, ColorListBox&, rColorBox, void)
 {
-    NamedColor aNamedColor = rColorBox.GetSelectedEntry();
+    const NamedColor& aNamedColor = rColorBox.GetSelectedEntry();
     m_aFrameSel.SetColorToSelection(aNamedColor.m_aColor, aNamedColor.getComplexColor());
 }
 

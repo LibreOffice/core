@@ -593,7 +593,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(weld::Container* pPage, weld::DialogControl
         {
             SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[ nItem ];
 
-            Reference<XIndexAccess> xLevel = aOutlineAccess[nItem];
+            const Reference<XIndexAccess>& xLevel = aOutlineAccess[nItem];
             for(sal_Int32 nLevel = 0; nLevel < SVX_MAX_NUM; nLevel++)
             {
                 // use the last locale-defined level for all remaining levels.

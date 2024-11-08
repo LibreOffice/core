@@ -600,7 +600,6 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
     {
         int nEntry = m_pWordsLB->get_selected_index();
         OUString aNewWord(fixSpace(m_xWordED->get_text()));
-        OUString sEntry(aNewWord);
         OUString aReplaceStr(fixSpace(m_xReplaceED->get_text()));
 
         DictionaryError nAddRes = DictionaryError::UNKNOWN;
@@ -632,21 +631,21 @@ bool SvxEditDictionaryDialog::NewDelHdl(const weld::Widget* pBtn)
         if (DictionaryError::NONE != nAddRes)
             SvxDicError(m_xDialog.get(), nAddRes);
 
-        if (DictionaryError::NONE == nAddRes && !sEntry.isEmpty())
+        if (DictionaryError::NONE == nAddRes && !aNewWord.isEmpty())
         {
             // insert new entry in list-box etc...
             m_pWordsLB->freeze();
 
             if (nEntry != -1) // entry selected in m_pWordsLB ie action = modify entry
             {
-                m_pWordsLB->set_text(nEntry, sEntry);
+                m_pWordsLB->set_text(nEntry, aNewWord);
                 if (!aReplaceStr.isEmpty())
                     m_pWordsLB->set_text(nEntry, aReplaceStr, 1);
             }
             else
             {
                 nEntry = GetLBInsertPos(aNewWord);
-                m_pWordsLB->insert_text(nEntry, sEntry);
+                m_pWordsLB->insert_text(nEntry, aNewWord);
                 if(!aReplaceStr.isEmpty())
                     m_pWordsLB->set_text(nEntry, aReplaceStr, 1);
             }

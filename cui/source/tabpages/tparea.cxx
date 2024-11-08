@@ -169,7 +169,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     drawing::FillStyle eXFS = drawing::FillStyle_NONE;
     if( rSet.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::INVALID )
     {
-        XFillStyleItem aFillStyleItem( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) );
+        const XFillStyleItem& aFillStyleItem( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) );
         eXFS = aFillStyleItem.GetValue();
         m_rXFSet.Put( aFillStyleItem );
     }
@@ -179,7 +179,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         default:
         case drawing::FillStyle_NONE:
         {
-            XFillUseSlideBackgroundItem aBckItem( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
+            const XFillUseSlideBackgroundItem& aBckItem( rSet.Get(XATTR_FILLUSESLIDEBACKGROUND));
             if (aBckItem.GetValue())
                 SelectFillType(*m_xBtnUseBackground);
             else

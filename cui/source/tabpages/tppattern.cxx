@@ -160,7 +160,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
     else
         aString += aURL.getBase();
 
-    XFillBitmapItem aItem( rSet.Get( XATTR_FILLBITMAP ) );
+    const XFillBitmapItem& aItem( rSet.Get( XATTR_FILLBITMAP ) );
 
     if ( aItem.isPattern() )
     {

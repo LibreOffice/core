@@ -172,13 +172,13 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         ChangeHatchHdl_Impl();
     }
 
-    XFillBackgroundItem aBckItem( rSet.Get(XATTR_FILLBACKGROUND));
+    const XFillBackgroundItem& aBckItem( rSet.Get(XATTR_FILLBACKGROUND));
     m_rXFSet.Put( aBckItem );
 
     if (aBckItem.GetValue())
     {
         m_xCbBackgroundColor->set_state(TRISTATE_TRUE);
-        XFillColorItem aColorItem( rSet.Get(XATTR_FILLCOLOR) );
+        const XFillColorItem& aColorItem( rSet.Get(XATTR_FILLCOLOR) );
         Color aColor(aColorItem.GetColorValue());
         m_xLbBackgroundColor->SelectEntry(aColor);
         m_xLbBackgroundColor->set_sensitive(true);
@@ -254,11 +254,11 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
     ChangeHatchHdl_Impl();
 
-    XFillColorItem aColItem( rSet->Get(XATTR_FILLCOLOR) );
+    const XFillColorItem& aColItem( rSet->Get(XATTR_FILLCOLOR) );
     m_xLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
     m_rXFSet.Put( aColItem );
 
-    XFillBackgroundItem aBckItem( rSet->Get(XATTR_FILLBACKGROUND) );
+    const XFillBackgroundItem& aBckItem( rSet->Get(XATTR_FILLBACKGROUND) );
     if(aBckItem.GetValue())
         m_xCbBackgroundColor->set_state(TRISTATE_TRUE);
     else

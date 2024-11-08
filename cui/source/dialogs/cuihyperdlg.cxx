@@ -238,7 +238,7 @@ void SvxHpLinkDlg::SetPage ( SvxHyperlinkItem const * pItem )
 {
     OUString sPageId(u"internet"_ustr);
 
-    OUString aStrURL(pItem->GetURL());
+    const OUString& aStrURL(pItem->GetURL());
     INetURLObject aURL(aStrURL);
     INetProtocol eProtocolTyp = aURL.GetProtocol();
 
