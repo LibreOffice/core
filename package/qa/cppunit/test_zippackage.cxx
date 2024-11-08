@@ -432,6 +432,34 @@ CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163341)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ZipPackageTest, testTdf163818)
+{
+    auto const url(m_directories.getURLFromSrc(u"/package/qa/cppunit/data/tdf163818.odg"));
+    uno::Sequence<uno::Any> const args{
+        uno::Any(url),
+        uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::PACKAGE)))
+    };
+
+    // unclear if this should be allowed?
+    CPPUNIT_ASSERT_THROW(m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                             ZipPackage, args, m_xContext),
+                         css::packages::zip::ZipIOException);
+
+    // recovery should work - except on this old branch, Zip64 code is missing so this file fails...
+    try
+    {
+        uno::Sequence<uno::Any> const args2{
+            uno::Any(url), uno::Any(beans::NamedValue(u"RepairPackage", uno::Any(true))),
+            uno::Any(beans::NamedValue("StorageFormat", uno::Any(embed::StorageFormats::ZIP)))
+        };
+        m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(ZipPackage, args2,
+                                                                               m_xContext);
+    }
+    catch (css::packages::zip::ZipIOException const&)
+    {
+    }
+}
+
 //CPPUNIT_TEST_SUITE_REGISTRATION(...);
 //CPPUNIT_PLUGIN_IMPLEMENT();
 
