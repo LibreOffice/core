@@ -453,7 +453,9 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
         OUString aStrURL(pHyperlinkItem->GetURL());
         // Store initial URL
         maStrInitURL = aStrURL;
-        if (aStrURL.isEmpty())
+        // tdf#162753 - propose clipboard content only for options internet and mail
+        if (aStrURL.isEmpty()
+            && (mpDialog->GetCurPageId() == "internet" || mpDialog->GetCurPageId() == "mail"))
         {
             if (auto xClipboard = GetSystemClipboard())
             {

@@ -138,6 +138,9 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     SetInputSet (mpItemSet.get());
 
+    // tdf#90496 - remember last used view in hyperlink dialog
+    SetCurPageId(msRememberedPageId);
+
     // insert pages
     AddTabPage(u"internet"_ustr, SvxHyperlinkInternetTp::Create);
     AddTabPage(u"mail"_ustr, SvxHyperlinkMailTp::Create);
@@ -146,9 +149,6 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
         AddTabPage(u"document"_ustr, SvxHyperlinkDocTp::Create);
         AddTabPage(u"newdocument"_ustr, SvxHyperlinkNewDocTp::Create);
     }
-
-    // tdf#90496 - remember last used view in hyperlink dialog
-    SetCurPageId(msRememberedPageId);
 
     // Init Dialog
     Start();
