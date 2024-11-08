@@ -12,6 +12,8 @@
 
 #include <vcl/qt/QtUtils.hxx>
 
+#include <QtGui/QWindow>
+
 QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
     : QtInstanceContainer(pWidget)
 {
@@ -63,7 +65,14 @@ void QtInstanceWindow::set_centered_on_parent(bool) {}
 
 bool QtInstanceWindow::has_toplevel_focus() const { return true; }
 
-void QtInstanceWindow::present() {}
+void QtInstanceWindow::present()
+{
+    SolarMutexGuard g;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWindow* pWindow = getQWidget()->windowHandle())
+            pWindow->requestActivate();
+    });
+}
 
 void QtInstanceWindow::change_default_widget(weld::Widget*, weld::Widget*) {}
 
