@@ -516,7 +516,7 @@ void ChartTypeTemplate::createCoordinateSystems(
         // there are coordinate systems but they do not fit.  So overwrite them.
 
         //copy as much info from former coordinate system as possible:
-        rtl::Reference< BaseCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
+        const rtl::Reference< BaseCoordinateSystem >& xOldCooSys( aCoordinateSystems[0] );
         sal_Int32 nMaxDimensionCount = std::min( xCooSys->getDimension(), xOldCooSys->getDimension() );
 
         for(sal_Int32 nDimensionIndex=0; nDimensionIndex<nMaxDimensionCount; nDimensionIndex++)
@@ -633,7 +633,7 @@ void ChartTypeTemplate::createAxes(
     if( rCoordSys.empty() )
         return;
 
-    rtl::Reference< BaseCoordinateSystem > xCooSys( rCoordSys[0] );
+    const rtl::Reference< BaseCoordinateSystem >& xCooSys( rCoordSys[0] );
     if(!xCooSys.is())
         return;
 

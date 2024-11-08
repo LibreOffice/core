@@ -728,7 +728,7 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
     if( xDataSource.is() && xDataProvider.is())
     {
         OUString aTmp( aNewValue );
-        OUString aXMLRange( aNewValue );
+        const OUString& aXMLRange( aNewValue );
         lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
         StatisticsHelper::setErrorDataSequence(
             xDataSource, xDataProvider, aTmp, true /* positive */, true /* y-error */, &aXMLRange );
@@ -792,7 +792,7 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
     if( xDataSource.is() && xDataProvider.is())
     {
         OUString aTmp( aNewValue );
-        OUString aXMLRange( aNewValue );
+        const OUString& aXMLRange( aNewValue );
         lcl_ConvertRangeFromXML( aTmp, m_spChart2ModelContact );
         StatisticsHelper::setErrorDataSequence(
             xDataSource, xDataProvider, aTmp, false /* positive */, true /* y-error */, &aXMLRange );

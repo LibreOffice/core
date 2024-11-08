@@ -187,7 +187,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
     sal_Int32 nGlobalSeriesIndex = 0; //for automatic symbols
     for (std::size_t nCS = 0; nCS < aCooSysList.size(); ++nCS)
     {
-        rtl::Reference<BaseCoordinateSystem> xCooSys(aCooSysList[nCS]);
+        const rtl::Reference<BaseCoordinateSystem>& xCooSys(aCooSysList[nCS]);
         VCoordinateSystem* pVCooSys
             = SeriesPlotterContainer::addCooSysToList(m_rVCooSysList, xCooSys, rChartModel);
         // Let's check whether the secondary Y axis is visible
@@ -207,7 +207,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(ChartModel& rChart
         std::vector<rtl::Reference<ChartType>> aChartTypeList(xCooSys->getChartTypes2());
         for (std::size_t nT = 0; nT < aChartTypeList.size(); ++nT)
         {
-            rtl::Reference<ChartType> xChartType(aChartTypeList[nT]);
+            const rtl::Reference<ChartType>& xChartType(aChartTypeList[nT]);
             if (nDimensionCount == 3
                 && xChartType->getChartType().equalsIgnoreAsciiCase(
                        CHART2_SERVICE_NAME_CHARTTYPE_PIE))

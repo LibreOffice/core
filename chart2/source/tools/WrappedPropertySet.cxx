@@ -215,10 +215,9 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
-        OUString aPropertyName( rNameSeq[nN] );
         try
         {
-            setPropertyValue( aPropertyName, rValueSeq[nN] );
+            setPropertyValue( rNameSeq[nN], rValueSeq[nN] );
         }
         catch( const beans::UnknownPropertyException& )
         {
@@ -242,8 +241,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
         {
             try
             {
-                OUString aPropertyName( rNameSeq[nN] );
-                pRetSeq[nN] = getPropertyValue( aPropertyName );
+                pRetSeq[nN] = getPropertyValue( rNameSeq[nN] );
             }
             catch( const beans::UnknownPropertyException& )
             {
@@ -313,8 +311,7 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
-            pRetSeq[nN] = getPropertyState( aPropertyName );
+            pRetSeq[nN] = getPropertyState( rNameSeq[nN] );
         }
     }
     return aRetSeq;
@@ -372,8 +369,7 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
-            pRetSeq[nN] = getPropertyDefault( aPropertyName );
+            pRetSeq[nN] = getPropertyDefault( rNameSeq[nN] );
         }
     }
     return aRetSeq;

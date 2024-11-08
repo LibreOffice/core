@@ -768,7 +768,7 @@ void DataBrowserModel::updateFromModel()
         sal_Int32 nLevelCount = rSplitCategoriesList.size();
         for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
         {
-            Reference< chart2::data::XLabeledDataSequence > xCategories( rSplitCategoriesList[nL] );
+            const Reference< chart2::data::XLabeledDataSequence >& xCategories( rSplitCategoriesList[nL] );
             if( !xCategories.is() )
                 continue;
 
@@ -794,7 +794,7 @@ void DataBrowserModel::updateFromModel()
 
         for( auto const & CT: aChartTypes )
         {
-            rtl::Reference< ChartType > xSeriesCnt( CT );
+            const rtl::Reference< ChartType >& xSeriesCnt( CT );
             OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( CT );
 
             const std::vector< rtl::Reference< DataSeries > > & aSeries( xSeriesCnt->getDataSeries2());
@@ -815,7 +815,7 @@ void DataBrowserModel::updateFromModel()
             for( rtl::Reference< DataSeries > const & dataSeries : aSeries )
             {
                 tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
-                rtl::Reference< DataSeries > xSeries( dataSeries );
+                const rtl::Reference< DataSeries >& xSeries( dataSeries );
                 if( xSeries.is())
                 {
                     const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aLSeqs( xSeries->getDataSequences2());

@@ -325,7 +325,7 @@ void ObjectHierarchy::createDataSeriesTree(
             std::vector< rtl::Reference< ChartType > > aChartTypeSeq( aCooSysSeq[nCooSysIdx]->getChartTypes2());
             for( std::size_t nCTIdx=0; nCTIdx<aChartTypeSeq.size(); ++nCTIdx )
             {
-                rtl::Reference< ChartType > xChartType( aChartTypeSeq[nCTIdx] );
+                const rtl::Reference< ChartType >& xChartType( aChartTypeSeq[nCTIdx] );
                 std::vector< rtl::Reference< DataSeries > > aSeriesSeq( xChartType->getDataSeries2() );
                 const sal_Int32 nNumberOfSeries =
                     ChartTypeHelper::getNumberOfDisplayedSeries( xChartType, aSeriesSeq.size());
@@ -616,7 +616,7 @@ void ObjectKeyNavigation::setCurrentSelection( const ObjectIdentifier& rOID )
 bool ObjectKeyNavigation::first()
 {
     ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider );
-    ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
+    const ObjectHierarchy::tChildContainer& aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
     bool bResult = !aSiblings.empty();
     if( bResult )
         setCurrentSelection( aSiblings.front());
@@ -628,7 +628,7 @@ bool ObjectKeyNavigation::first()
 bool ObjectKeyNavigation::last()
 {
     ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider );
-    ObjectHierarchy::tChildContainer aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
+    const ObjectHierarchy::tChildContainer& aSiblings( aHierarchy.getSiblings( getCurrentSelection() ) );
     bool bResult = !aSiblings.empty();
     if( bResult )
         setCurrentSelection( aSiblings.back());
@@ -692,7 +692,7 @@ bool ObjectKeyNavigation::down()
     bool bResult = aHierarchy.hasChildren( getCurrentSelection());
     if( bResult )
     {
-        ObjectHierarchy::tChildContainer aChildren = aHierarchy.getChildren( getCurrentSelection());
+        const ObjectHierarchy::tChildContainer& aChildren = aHierarchy.getChildren( getCurrentSelection());
         OSL_ASSERT( !aChildren.empty());
         setCurrentSelection( aChildren.front());
     }
@@ -702,7 +702,7 @@ bool ObjectKeyNavigation::down()
 bool ObjectKeyNavigation::veryFirst()
 {
     ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider );
-    ObjectHierarchy::tChildContainer aChildren( aHierarchy.getTopLevelChildren());
+    const ObjectHierarchy::tChildContainer& aChildren( aHierarchy.getTopLevelChildren());
     bool bResult = !aChildren.empty();
     if( bResult )
         setCurrentSelection( aChildren.front());
@@ -712,7 +712,7 @@ bool ObjectKeyNavigation::veryFirst()
 bool ObjectKeyNavigation::veryLast()
 {
     ObjectHierarchy aHierarchy( m_xChartDocument, m_pExplicitValueProvider );
-    ObjectHierarchy::tChildContainer aChildren( aHierarchy.getTopLevelChildren());
+    const ObjectHierarchy::tChildContainer& aChildren( aHierarchy.getTopLevelChildren());
     bool bResult = !aChildren.empty();
     if( bResult )
         setCurrentSelection( aChildren.back());

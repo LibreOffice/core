@@ -778,7 +778,7 @@ void OfPieChartDialogController::fillExtraControls(
     const std::vector< rtl::Reference< DataSeries > > dataSeriesVec =
         ChartModelHelper::getDataSeries( xChartModel);
     if (!dataSeriesVec.empty()) {
-        const rtl::Reference<DataSeries> ds = dataSeriesVec[0];
+        const rtl::Reference<DataSeries>& ds = dataSeriesVec[0];
         const DataSeries::tDataSequenceContainer data = ds->getDataSequences2();
         const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
             DataSeriesHelper::getAllDataSequencesByRole( data , u"values"_ustr ) );

@@ -107,7 +107,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
     if( xChartController.is() )
     {
         ObjectIdentifier aSelectedOID( xChartController->getSelection() );
-        OUString aSelectedCID = aSelectedOID.getObjectCID();
+        const OUString& aSelectedCID = aSelectedOID.getObjectCID();
 
         rtl::Reference<::chart::ChartModel> xChartDoc = xChartController->getChartModel();
         ObjectType eType( aSelectedOID.getObjectType() );

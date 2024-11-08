@@ -171,7 +171,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
-        OUString aPropertyName( rNameSeq[nN] );
+        const OUString& aPropertyName( rNameSeq[nN] );
         try
         {
             setPropertyValue( aPropertyName, rValueSeq[nN] );
@@ -192,7 +192,7 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const un
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyValue( aPropertyName );
         }
     }
@@ -231,7 +231,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL UpDownBarWrapper::getPropertyStat
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyState( aPropertyName );
         }
     }
@@ -283,7 +283,7 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyDefaults( const 
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyDefault( aPropertyName );
         }
     }

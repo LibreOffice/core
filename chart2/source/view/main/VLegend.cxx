@@ -330,7 +330,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nMaxColumnCount=-1;
         for( sal_Int32 nN=0; nN<static_cast<sal_Int32>(aTextShapes.size()); nN++ )
         {
-            rtl::Reference<SvxShapeText> xShape( aTextShapes[nN] );
+            const rtl::Reference<SvxShapeText>& xShape( aTextShapes[nN] );
             if( !xShape.is() )
                 continue;
             awt::Size aSize( xShape->getSize() );
@@ -586,7 +586,7 @@ awt::Size lcl_placeLegendEntries(
                 break;
 
             // text shape
-            rtl::Reference<SvxShapeText> xTextShape( aTextShapes[nEntry] );
+            const rtl::Reference<SvxShapeText>& xTextShape( aTextShapes[nEntry] );
             if( xTextShape.is() )
             {
                 awt::Size aTextSize( xTextShape->getSize() );

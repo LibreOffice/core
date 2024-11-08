@@ -1096,7 +1096,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                             else if( nT+1 < aChartTypeList.size() )
                             {
                                 //exchange series with next charttype
-                                rtl::Reference< ChartType > xOtherChartType( aChartTypeList[nT+1] );
+                                const rtl::Reference< ChartType >& xOtherChartType( aChartTypeList[nT+1] );
                                 if( xOtherChartType.is() && DiagramHelper::areChartTypesCompatible( xOtherChartType, xCurrentChartType ) )
                                 {
                                     bMovedOrMoveAllowed = true;
@@ -1259,7 +1259,7 @@ uno::Reference< chart2::data::XLabeledDataSequence > Diagram::getCategories()
         if (aCatAxes.empty())
             return xResult;
 
-        rtl::Reference< Axis > xCatAxis(aCatAxes[0]);
+        const rtl::Reference< Axis >& xCatAxis(aCatAxes[0]);
         if( !xCatAxis.is())
             return xResult;
 
@@ -1636,7 +1636,7 @@ StackMode Diagram::getStackMode( bool& rbFound, bool& rbAmbiguous )
         std::vector< rtl::Reference< ChartType > > aChartTypeList( xCooSys->getChartTypes2() );
         for( std::size_t nT = 0; nT < aChartTypeList.size(); ++nT )
         {
-            rtl::Reference< ChartType > xChartType( aChartTypeList[nT] );
+            const rtl::Reference< ChartType >& xChartType( aChartTypeList[nT] );
 
             StackMode eLocalStackMode = DiagramHelper::getStackModeFromChartType(
                 xChartType, rbFound, rbAmbiguous, xCooSys );

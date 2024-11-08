@@ -110,7 +110,7 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
                 if( aStrings.size() >= 3 && aStrings[0] == "soffice" )
                 {
-                    OUString aRangeString( aStrings[2] );
+                    const OUString& aRangeString( aStrings[2] );
                     if( m_xChartDocument.is())
                     {
                         Reference< frame::XModel > xParentModel( m_xChartDocument->getParent(), uno::UNO_QUERY );

@@ -326,7 +326,7 @@ bool PieChartTypeTemplate::matchesTemplate2(
             if( !aSeriesVec.empty() )
             {
                 //@todo in future this will depend on Orientation of the radius axis scale
-                rtl::Reference< DataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
+                const rtl::Reference< DataSeries >& xSeries( aSeriesVec[nOuterSeriesIndex] );
                 xSeries->getPropertyValue( u"Offset"_ustr) >>= fOffset;
 
                 // "AttributedDataPoints"

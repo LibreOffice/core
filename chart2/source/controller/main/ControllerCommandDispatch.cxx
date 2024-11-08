@@ -182,7 +182,7 @@ void ControllerState::update(
 
     uno::Any aSelObj( xSelectionSupplier->getSelection() );
     ObjectIdentifier aSelOID( aSelObj );
-    OUString aSelObjCID( aSelOID.getObjectCID() );
+    const OUString& aSelObjCID( aSelOID.getObjectCID() );
 
     bHasSelectedObject = aSelOID.isValid();
 

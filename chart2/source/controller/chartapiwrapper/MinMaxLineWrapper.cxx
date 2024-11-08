@@ -200,7 +200,7 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< OUStrin
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
-        OUString aPropertyName( rNameSeq[nN] );
+        const OUString& aPropertyName( rNameSeq[nN] );
         try
         {
             setPropertyValue( aPropertyName, rValueSeq[nN] );
@@ -221,7 +221,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyValues( const u
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyValue( aPropertyName );
         }
     }
@@ -268,7 +268,7 @@ uno::Sequence< beans::PropertyState > SAL_CALL MinMaxLineWrapper::getPropertySta
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyState( aPropertyName );
         }
     }
@@ -319,7 +319,7 @@ uno::Sequence< uno::Any > SAL_CALL MinMaxLineWrapper::getPropertyDefaults( const
         auto pRetSeq = aRetSeq.getArray();
         for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
         {
-            OUString aPropertyName( rNameSeq[nN] );
+            const OUString& aPropertyName( rNameSeq[nN] );
             pRetSeq[nN] = getPropertyDefault( aPropertyName );
         }
     }

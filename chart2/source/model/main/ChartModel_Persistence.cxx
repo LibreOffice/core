@@ -250,7 +250,7 @@ void SAL_CALL ChartModel::storeAsURL(
         return; //behave passive if already disposed or closed or throw exception @todo?
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
-    uno::Sequence< beans::PropertyValue > aReducedMediaDescriptor(
+    const uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
     m_bReadOnly = false;
@@ -278,7 +278,7 @@ void SAL_CALL ChartModel::storeToURL(
     aGuard.clear();
 
     apphelper::MediaDescriptorHelper aMediaDescriptorHelper(rMediaDescriptor);
-    uno::Sequence< beans::PropertyValue > aReducedMediaDescriptor(
+    const uno::Sequence< beans::PropertyValue >& aReducedMediaDescriptor(
         aMediaDescriptorHelper.getReducedForModel() );
 
     if ( rURL == "private:stream" )

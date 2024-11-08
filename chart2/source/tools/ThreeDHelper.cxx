@@ -670,7 +670,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
 
         for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
         {
-            rtl::Reference< DataSeries > xSeries( aSeriesList[nS] );
+            const rtl::Reference< DataSeries >& xSeries( aSeriesList[nS] );
             if(!nS)
             {
                 rnRoundedEdges = 0;

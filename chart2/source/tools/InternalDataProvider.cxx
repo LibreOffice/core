@@ -332,7 +332,7 @@ InternalDataProvider::InternalDataProvider(
                     sal_Int32 nLevelCount = rSplitCategoriesList.size();
                     for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
                     {
-                        Reference< chart2::data::XLabeledDataSequence > xLDS( rSplitCategoriesList[nL] );
+                        const Reference< chart2::data::XLabeledDataSequence >& xLDS( rSplitCategoriesList[nL] );
                         if( !xLDS.is() )
                             continue;
                         Sequence< uno::Any > aDataSeq;

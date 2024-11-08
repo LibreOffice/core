@@ -107,7 +107,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                         std::vector< rtl::Reference< DataSeries > > aSeries = ChartModelHelper::getDataSeries( &mrModel );
                         if( !aSeries.empty() )
                         {
-                            rtl::Reference< DataSeries > xSeriesSource = aSeries.front();
+                            const rtl::Reference< DataSeries >& xSeriesSource = aSeries.front();
                             OUString aStringDummy;
                             bool bDummy;
                             uno::Sequence< sal_Int32 > aSeqDummy;
@@ -194,7 +194,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     for(sal_Int32 nN=0;nN<nCount;nN++)
     {
         OUString aText;
-        uno::Any aAny = rInAnys[nN];
+        const uno::Any& aAny = rInAnys[nN];
         if( aAny.hasValue() )
         {
             double fDouble = 0;
@@ -437,7 +437,7 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
                 bIsDate = true;
 
             bool bContainsEmptyString = false;
-            uno::Any aAny = aValues[nN];
+            const uno::Any& aAny = aValues[nN];
             if( aAny.hasValue() )
             {
                 OUString aTest;

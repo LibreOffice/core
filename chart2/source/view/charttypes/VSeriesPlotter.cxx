@@ -1188,8 +1188,8 @@ void VSeriesPlotter::createErrorRectangle(
         double fScaledX = fX;
         m_pPosHelper->doLogicScaling( &fScaledX, nullptr, nullptr );
 
-        uno::Sequence< double > aDataX( rVDataSeries.getAllX() );
-        uno::Sequence< double > aDataY( rVDataSeries.getAllY() );
+        const uno::Sequence< double >& aDataX( rVDataSeries.getAllX() );
+        const uno::Sequence< double >& aDataY( rVDataSeries.getAllY() );
 
         double fPosX = 0.0;
         double fPosY = 0.0;
@@ -1303,7 +1303,7 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries const & rVDataSer
 {
     if(m_nDimension!=2)
         return;
-    rtl::Reference< DataSeries > xContainer( rVDataSeries.getModel() );
+    const rtl::Reference< DataSeries >& xContainer( rVDataSeries.getModel() );
     if(!xContainer.is())
         return;
 
@@ -2596,7 +2596,7 @@ bool lcl_HasVisibleLine( const uno::Reference< beans::XPropertySet >& xProps, bo
 bool lcl_HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLine )
 {
     bool bHasRegressionCurves = false;
-    rtl::Reference< DataSeries > xRegrCont( rSeries.getModel() );
+    const rtl::Reference< DataSeries >& xRegrCont( rSeries.getModel() );
     for( const rtl::Reference< RegressionCurveModel > & rCurve : xRegrCont->getRegressionCurves2() )
     {
         bHasRegressionCurves = true;
@@ -2716,7 +2716,7 @@ rtl::Reference< SvxShapeGroup > VSeriesPlotter::createLegendSymbolForPoint(
 
     // the default properties for the data point are the data series properties.
     // If a data point has own attributes overwrite them
-    Reference< beans::XPropertySet > xSeriesProps( rSeries.getPropertiesOfSeries() );
+    const Reference< beans::XPropertySet >& xSeriesProps( rSeries.getPropertiesOfSeries() );
     Reference< beans::XPropertySet > xPointSet( xSeriesProps );
     if( rSeries.isAttributedDataPoint( nPointIndex ) )
         xPointSet.set( rSeries.getPropertiesOfPoint( nPointIndex ));
@@ -2864,7 +2864,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
         if (!ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ))
             return aResult;
 
-        rtl::Reference< DataSeries > xRegrCont = rSeries.getModel();
+        const rtl::Reference< DataSeries >& xRegrCont = rSeries.getModel();
         if( xRegrCont.is())
         {
             const std::vector< rtl::Reference< RegressionCurveModel > > & aCurves = xRegrCont->getRegressionCurves2();
