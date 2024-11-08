@@ -1356,8 +1356,6 @@ ITiledRenderable* getTiledRenderable(LibreOfficeKitDocument* pThis)
     return dynamic_cast<ITiledRenderable*>(pDocument->mxComponent.get());
 }
 
-#ifndef IOS
-
 /*
  * Unfortunately clipboard creation using UNO is insanely baroque.
  * we also need to ensure that this works for the first view which
@@ -1374,8 +1372,6 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
     return xClip;
 }
-
-#endif
 
 const vcl::Font* FindFont(std::u16string_view rFontName)
 {
@@ -1553,9 +1549,7 @@ LibLODocument_Impl::LibLODocument_Impl(uno::Reference <css::lang::XComponent> xC
     }
     pClass = m_pDocumentClass.get();
 
-#ifndef IOS
     forceSetClipboardForCurrentView(this);
-#endif
 }
 
 LibLODocument_Impl::~LibLODocument_Impl()
@@ -2333,12 +2327,10 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
             return false;
         }
 
-#ifndef IOS
         auto xClip = forceSetClipboardForCurrentView(m_pDocument);
 
         uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(xClip);
         pWindow->SetClipboard(xClipboard);
-#endif
     }
     else if (aAction == "size_changed")
     {
@@ -6076,18 +6068,6 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
                             size_t     **pOutSizes,
                             char      ***pOutStreams)
 {
-#ifdef IOS
-    (void) pThis;
-    (void) pMimeTypes;
-    (void) pOutCount;
-    (void) pOutMimeTypes;
-    (void) pOutSizes;
-    (void) pOutStreams;
-
-    assert(!"doc_getClipboard should not be called on iOS");
-
-    return 0;
-#else
     comphelper::ProfileZone aZone("doc_getClipboard");
 
     SolarMutexGuard aGuard;
@@ -6164,7 +6144,6 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     }
 
     return 1;
-#endif
 }
 
 static int doc_setClipboard(LibreOfficeKitDocument* pThis,
@@ -6173,13 +6152,6 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
                             const size_t  *pInSizes,
                             const char   **pInStreams)
 {
-#ifdef IOS
-    (void) pThis;
-    (void) nInCount;
-    (void) pInMimeTypes;
-    (void) pInSizes;
-    (void) pInStreams;
-#else
     comphelper::ProfileZone aZone("doc_setClipboard");
 
     SolarMutexGuard aGuard;
@@ -6204,7 +6176,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
         SetLastExceptionMsg(u"Document doesn't support this mime type"_ustr);
         return false;
     }
-#endif
+
     return true;
 }
 
@@ -6957,11 +6929,7 @@ static int doc_createViewWithOptions(LibreOfficeKitDocument* pThis,
 
     vcl::lok::numberOfViewsChanged(SfxLokHelper::getViewsCount(pDocument->mnDocumentId));
 
-#ifdef IOS
-    (void) pThis;
-#else
     forceSetClipboardForCurrentView(pThis);
-#endif
 
     return nId;
 }
