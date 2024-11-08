@@ -148,11 +148,12 @@ int QtInstanceMessageDialog::run()
         return nRet;
     }
 
-    m_pMessageDialog->exec();
-    QAbstractButton* pClickedButton = m_pMessageDialog->clickedButton();
-    if (!pClickedButton)
-        return RET_CLOSE;
-    return pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
+    // if a button was clicked, return its response code
+    int nRet = m_pMessageDialog->exec();
+    if (QAbstractButton* pClickedButton = m_pMessageDialog->clickedButton())
+        return pClickedButton->property(PROPERTY_VCL_RESPONSE_CODE).toInt();
+
+    return nRet;
 }
 
 void QtInstanceMessageDialog::dialogFinished(int nResult)
