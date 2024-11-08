@@ -25,7 +25,7 @@
 
 #include "Connection.hxx"
 
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData3.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
@@ -35,7 +35,7 @@ namespace connectivity::firebird
         //************ Class: ODatabaseMetaData
 
 
-        typedef ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper< css::sdbc::XDatabaseMetaData3> ODatabaseMetaData_BASE;
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE
         {
@@ -198,6 +198,37 @@ namespace connectivity::firebird
             virtual sal_Bool SAL_CALL supportsBatchUpdates(  ) override;
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getUDTs( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const css::uno::Sequence< sal_Int32 >& types ) override;
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
+
+            // XDatabaseMetaData2
+            virtual ::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL getConnectionInfo() override;
+
+            // XDatabaseMetaData3
+            virtual sal_Bool SAL_CALL autoCommitFailureClosesAllResultSets() override;
+            virtual sal_Bool SAL_CALL generatedKeyAlwaysReturned() override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getAttributes( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const ::rtl::OUString& attributeNamePattern ) override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getClientInfoProperties() override;
+            virtual ::sal_Int32 SAL_CALL getDatabaseMajorVersion() override;
+            virtual ::sal_Int32 SAL_CALL getDatabaseMinorVersion() override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getFunctions( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& functionNamePattern ) override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getFunctionColumns( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& functionNamePattern, const ::rtl::OUString& columnNamePattern ) override;
+            virtual ::sal_Int32 SAL_CALL getMaxLogicalLobSize() override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getPseudoColumns( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern, const ::rtl::OUString& columnNamePattern ) override;
+            virtual ::sal_Int32 SAL_CALL getResultSetHoldability() override;
+            virtual ::sal_Int32 SAL_CALL getRowIdLifetime() override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getSchemasFiltered( const ::css::beans::Optional< ::rtl::OUString >& catalog, const ::css::beans::Optional< ::rtl::OUString >& schemaPattern ) override;
+            virtual ::sal_Int32 SAL_CALL getSQLStateType() override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getSuperTables( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& tableNamePattern ) override;
+            virtual ::css::uno::Reference< ::css::sdbc::XResultSet > SAL_CALL getSuperTypes( const ::rtl::OUString& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern ) override;
+            virtual ::sal_Bool SAL_CALL locatorsUpdateCopy() override;
+            virtual ::sal_Bool SAL_CALL supportsConvertInGeneral() override;
+            virtual ::sal_Bool SAL_CALL supportsGetGeneratedKeys() override;
+            virtual ::sal_Bool SAL_CALL supportsMultipleOpenResults() override;
+            virtual ::sal_Bool SAL_CALL supportsNamedParameters() override;
+            virtual ::sal_Bool SAL_CALL supportsRefCursors() override;
+            virtual ::sal_Bool SAL_CALL supportsSavepoints() override;
+            virtual ::sal_Bool SAL_CALL supportsSharding() override;
+            virtual ::sal_Bool SAL_CALL supportsStatementPooling() override;
+            virtual ::sal_Bool SAL_CALL supportsStoredFunctionsUsingCallSyntax() override;
         };
 
 }

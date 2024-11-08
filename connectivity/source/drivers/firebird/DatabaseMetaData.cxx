@@ -774,6 +774,192 @@ uno::Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     return m_pConnection;
 }
 
+::css::uno::Sequence< ::css::beans::PropertyValue > SAL_CALL ODatabaseMetaData::getConnectionInfo()
+{
+    // TODO IMPLEMENT
+    return Sequence< ::css::beans::PropertyValue >();
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::autoCommitFailureClosesAllResultSets()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+sal_Bool SAL_CALL ODatabaseMetaData::generatedKeyAlwaysReturned()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getAttributes( const ::rtl::OUString& /* catalog */,
+                           const ::rtl::OUString& /* schemaPattern */,
+                           const ::rtl::OUString& /* typeNamePattern */,
+                           const ::rtl::OUString& /* attributeNamePattern */)
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getClientInfoProperties()
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getDatabaseMajorVersion()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getDatabaseMinorVersion()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getFunctions( const ::rtl::OUString& /* catalog */, const ::rtl::OUString& /* schemaPattern */, const ::rtl::OUString& functionNamePattern )
+{
+    OUString strQuery(
+            "SELECT "
+            " null as FUNCTION_CAT,"
+            "RDB$FUNCTION_NAME as FUNCTION_NAME,"
+            "RDB$DESCRIPTION as REMARKS,"
+            "cast(null as blob sub_type text) as JB_FUNCTION_SOURCE,"
+            "'UDF' as JB_FUNCTION_KIND,"
+            "trim(trailing from RDB$MODULE_NAME) as JB_MODULE_NAME,"
+            "trim(trailing from RDB$ENTRYPOINT) as JB_ENTRYPOINT,"
+            "cast(null as varchar(255)) as JB_ENGINE_NAME"
+            "FROM RDB$FUNCTIONS"
+            "WHERE RDB$FUNCTION_NAME = " + functionNamePattern);
+
+    uno::Reference< XStatement > statement = m_pConnection->createStatement();
+    uno::Reference< XResultSet > rs = statement->executeQuery(strQuery);
+    return rs;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getFunctionColumns( const ::rtl::OUString& /* catalog */, const ::rtl::OUString& /* schemaPattern */, const ::rtl::OUString& /* functionNamePattern */, const ::rtl::OUString& /* columnNamePattern */ )
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getMaxLogicalLobSize()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPseudoColumns( const ::rtl::OUString& /* catalog */,
+                             const ::rtl::OUString& /* schemaPattern */,
+                             const ::rtl::OUString& /* tableNamePattern */,
+                             const ::rtl::OUString& /* columnNamePattern */)
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getResultSetHoldability()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getRowIdLifetime()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemasFiltered( const ::css::beans::Optional< ::rtl::OUString >& /* catalog */,
+                                 const ::css::beans::Optional< ::rtl::OUString >& /* schemaPattern */)
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+::sal_Int32 SAL_CALL ODatabaseMetaData::getSQLStateType()
+{
+    // TODO IMPLEMENT
+    return 0;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSuperTables( const ::rtl::OUString& /* catalog */,
+                         const ::rtl::OUString& /* schemaPattern */, const ::rtl::OUString& /* tableNamePattern */)
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSuperTypes( const ::rtl::OUString& /* catalog */,
+                      const ::rtl::OUString& /* schemaPattern */,
+                      const ::rtl::OUString& /* typeNamePattern */)
+{
+    // TODO IMPLEMENT
+    return nullptr;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::locatorsUpdateCopy()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsConvertInGeneral()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsGetGeneratedKeys()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsMultipleOpenResults()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsNamedParameters()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsRefCursors()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsSavepoints()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsSharding()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsStatementPooling()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
+::sal_Bool SAL_CALL ODatabaseMetaData::supportsStoredFunctionsUsingCallSyntax()
+{
+    // TODO IMPLEMENT
+    return false;
+}
+
 // here follow all methods which return a resultset
 // the first methods is an example implementation how to use this resultset
 // of course you could implement it on your and you should do this because
