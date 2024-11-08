@@ -1454,11 +1454,14 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     setupDocInfo();
 
     if (xEncryptionMaterialHolder.is())
-        m_aPDFEncryptor.prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
+    {
+        m_pPDFEncryptor.reset(new PDFEncryptor);
+        m_pPDFEncryptor->prepareEncryption(xEncryptionMaterialHolder, m_aContext.Encryption);
+    }
 
     if (m_aContext.Encryption.Encrypt())
     {
-        m_aPDFEncryptor.setupKeysAndCheck(m_aContext.Encryption);
+        m_pPDFEncryptor->setupKeysAndCheck(m_aContext.Encryption);
     }
 
     // write header
@@ -1592,7 +1595,7 @@ append the string as unicode hex, encrypted if needed
 inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer )
 {
     rOutBuffer.append( "<" );
-    if( m_aContext.Encryption.Encrypt() )
+    if (m_aContext.Encryption.Encrypt())
     {
         const sal_Unicode* pStr = rInString.getStr();
         sal_Int32 nLen = rInString.getLength();
@@ -1611,7 +1614,7 @@ inline void PDFWriterImpl::appendUnicodeTextStringEncrypt( const OUString& rInSt
             *pCopy++ = static_cast<sal_uInt8>( aUnChar & 255 );
         }
         //encrypt in place
-        rtl_cipher_encodeARCFOUR( m_aPDFEncryptor.m_aCipher, m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars);
+        m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChars, m_vEncryptionBuffer.data(), nChars);
         //now append, hexadecimal (appendHex), the encrypted result
         for(int i = 0; i < nChars; i++)
             appendHex( m_vEncryptionBuffer[i], rOutBuffer );
@@ -1626,12 +1629,12 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( std::string_view rInStrin
     rOutBuffer.append( "(" );
     sal_Int32 nChars = rInString.size();
     //check for encryption, if ok, encrypt the string, then convert with appndLiteralString
-    if( m_aContext.Encryption.Encrypt() )
+    if (m_aContext.Encryption.Encrypt())
     {
         m_vEncryptionBuffer.resize(nChars);
         //encrypt the string in a buffer, then append it
-        enableStringEncryption( nInObjectNumber );
-        rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars);
+        enableStringEncryption(nInObjectNumber);
+        m_pPDFEncryptor->encrypt(rInString.data(), nChars, m_vEncryptionBuffer.data(), nChars);
         appendLiteralString( reinterpret_cast<char*>(m_vEncryptionBuffer.data()), nChars, rOutBuffer );
     }
     else
@@ -1739,16 +1742,17 @@ bool PDFWriterImpl::writeBufferBytes( const void* pBuffer, sal_uInt64 nBytes )
     else
     {
         bool  buffOK = true;
-        if (m_aPDFEncryptor.isStreamEncryptionEnabled())
+        bool bStreamEncryption = m_pPDFEncryptor && m_pPDFEncryptor->isStreamEncryptionEnabled();
+        if (bStreamEncryption)
         {
             m_vEncryptionBuffer.resize(nBytes);
             if (buffOK)
             {
-                m_aPDFEncryptor.encrypt(pBuffer, nBytes, m_vEncryptionBuffer.data(), nBytes);
+                m_pPDFEncryptor->encrypt(pBuffer, nBytes, m_vEncryptionBuffer.data(), nBytes);
             }
         }
 
-        const void* pWriteBuffer = (m_aPDFEncryptor.isStreamEncryptionEnabled() && buffOK) ? m_vEncryptionBuffer.data() : pBuffer;
+        const void* pWriteBuffer = (bStreamEncryption && buffOK) ? m_vEncryptionBuffer.data() : pBuffer;
         m_DocDigest.update(static_cast<unsigned char const*>(pWriteBuffer), static_cast<sal_uInt32>(nBytes));
 
         if (m_aFile.write(pWriteBuffer, nBytes, nWritten) != osl::File::E_None)
@@ -6099,7 +6103,7 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
         // emit the owner password, must not be encrypted
         aWriter.writeString("/O", reinterpret_cast<char*>(m_aContext.Encryption.OValue.data()), sal_Int32(m_aContext.Encryption.OValue.size()));
         aWriter.writeString("/U", reinterpret_cast<char*>(m_aContext.Encryption.UValue.data()), sal_Int32(m_aContext.Encryption.UValue.size()));
-        aWriter.write("/P", m_aPDFEncryptor.getAccessPermissions());
+        aWriter.write("/P", m_pPDFEncryptor->getAccessPermissions());
         aWriter.endDict();
         aWriter.endObject();
 
@@ -9667,7 +9671,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
             aLine.append( "\n<" );
             if( m_aContext.Encryption.Encrypt() )
             {
-                enableStringEncryption( rObject.m_nObject );
+                enableStringEncryption(rObject.m_nObject);
                 //check encryption buffer size
                 m_vEncryptionBuffer.resize(pAccess->GetPaletteEntryCount()*3);
                 int nChar = 0;
@@ -9680,7 +9684,7 @@ bool PDFWriterImpl::writeBitmapObject( const BitmapEmit& rObject, bool bMask )
                     m_vEncryptionBuffer[nChar++] = rColor.GetBlue();
                 }
                 //encrypt the colorspace lookup table
-                rtl_cipher_encodeARCFOUR(m_aPDFEncryptor.m_aCipher, m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar);
+                m_pPDFEncryptor->encrypt(m_vEncryptionBuffer.data(), nChar, m_vEncryptionBuffer.data(), nChar);
                 //now queue the data for output
                 nChar = 0;
                 for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )

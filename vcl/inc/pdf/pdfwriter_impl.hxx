@@ -800,7 +800,7 @@ private:
 
     ExternalPDFStreams m_aExternalPDFStreams;
 
-    PDFEncryptor m_aPDFEncryptor;
+    std::unique_ptr<IPDFEncryptor> m_pPDFEncryptor;
 
     /* output redirection; e.g. to accumulate content streams for
        XObjects

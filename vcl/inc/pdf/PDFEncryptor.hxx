@@ -33,7 +33,29 @@ namespace vcl::pdf
 {
 class EncryptionHashTransporter;
 
-class PDFEncryptor
+class IPDFEncryptor
+{
+public:
+    virtual ~IPDFEncryptor() {}
+    virtual sal_Int32 getAccessPermissions() = 0;
+    virtual sal_Int32 getKeyLength() = 0;
+    virtual bool prepareEncryption(
+        const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
+        PDFEncryptionProperties& rProperties)
+        = 0;
+    virtual void setupKeysAndCheck(PDFEncryptionProperties& rProperties) = 0;
+
+    virtual void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject)
+        = 0;
+    virtual void enableStreamEncryption() = 0;
+    virtual void disableStreamEncryption() = 0;
+    virtual bool isStreamEncryptionEnabled() = 0;
+    virtual void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
+                         sal_uInt64 nOutputsSize)
+        = 0;
+};
+
+class PDFEncryptor : public IPDFEncryptor
 {
 private:
     /* the numerical value of the access permissions, according to PDF spec, must be signed */
@@ -50,30 +72,30 @@ private:
 
 public:
     PDFEncryptor();
-    ~PDFEncryptor();
+    virtual ~PDFEncryptor();
 
     /* used to cipher the stream data and for password management */
     rtlCipher m_aCipher = nullptr;
 
-    sal_Int32 getAccessPermissions() { return m_nAccessPermissions; }
-    sal_Int32 getKeyLength() { return m_nKeyLength; }
+    sal_Int32 getAccessPermissions() override { return m_nAccessPermissions; }
+    sal_Int32 getKeyLength() override { return m_nKeyLength; }
     sal_Int32 getRC4KeyLength() { return m_nRC4KeyLength; }
 
     static css::uno::Reference<css::beans::XMaterialHolder>
     initEncryption(const OUString& i_rOwnerPassword, const OUString& i_rUserPassword);
-    virtual bool prepareEncryption(
+    bool prepareEncryption(
         const css::uno::Reference<css::beans::XMaterialHolder>& xEncryptionMaterialHolder,
-        PDFEncryptionProperties& rProperties);
-    void setupKeysAndCheck(PDFEncryptionProperties& rProperties);
+        PDFEncryptionProperties& rProperties) override;
+    void setupKeysAndCheck(PDFEncryptionProperties& rProperties) override;
 
-    void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject);
-    void enableStreamEncryption();
-    void disableStreamEncryption();
+    void setupEncryption(std::vector<sal_uInt8> const& rEncryptionKey, sal_Int32 nObject) override;
+    void enableStreamEncryption() override;
+    void disableStreamEncryption() override;
 
-    bool isStreamEncryptionEnabled() { return m_bEncryptThisStream; }
+    bool isStreamEncryptionEnabled() override { return m_bEncryptThisStream; }
 
     void encrypt(const void* pInput, sal_uInt64 nInputSize, sal_uInt8* pOutput,
-                 sal_uInt64 nOutputsSize);
+                 sal_uInt64 nOutputsSize) override;
 };
 }
 
