@@ -95,6 +95,10 @@ void SvxShapeCollection::dispose()
         std::unique_lock g(m_aMutex);
         maEventListeners.disposeAndClear( g, aEvt );
         maShapeContainer.clear();
+
+        // bDisposed and bInDispose must be set in this order.
+        bDisposed = true;
+        bInDispose = false;
     }
     catch(const css::uno::Exception&)
     {
@@ -105,11 +109,6 @@ void SvxShapeCollection::dispose()
         bInDispose = false;
         throw;
     }
-
-    // the values bDispose and bInDisposing must set in this order.
-    // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
-    bDisposed = true;
-    bInDispose = false;
 }
 
 // XComponent
