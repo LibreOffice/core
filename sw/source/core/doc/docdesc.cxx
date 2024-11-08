@@ -671,6 +671,11 @@ void SwDoc::ChgPageDesc( size_t i, const SwPageDesc &rChged )
                 pBindings->Invalidate( SID_ATTR_PAGE_SIZE );
                 pBindings->Invalidate( SID_ATTR_PAGE_ULSPACE );
                 pBindings->Invalidate( SID_ATTR_PAGE_LRSPACE );
+                pBindings->Invalidate(SID_ATTR_PAGE_FILLSTYLE);
+                pBindings->Invalidate(SID_ATTR_PAGE_COLOR);
+                pBindings->Invalidate(SID_ATTR_PAGE_GRADIENT);
+                pBindings->Invalidate(SID_ATTR_PAGE_HATCH);
+                pBindings->Invalidate(SID_ATTR_PAGE_BITMAP);
             }
         }
     }
