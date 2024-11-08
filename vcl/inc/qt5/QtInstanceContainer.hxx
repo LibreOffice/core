@@ -13,8 +13,10 @@
 
 #include <QtWidgets/QLayout>
 
-class QtInstanceContainer : public QtInstanceWidget, public virtual weld::Container
+class QtInstanceContainer : public QObject, public QtInstanceWidget, public virtual weld::Container
 {
+    Q_OBJECT
+
 public:
     QtInstanceContainer(QWidget* pWidget);
 
@@ -24,7 +26,7 @@ public:
 
     virtual void child_grab_focus() override;
 
-    virtual void connect_container_focus_changed(const Link<Container&, void>&) override;
+    virtual void connect_container_focus_changed(const Link<Container&, void>& rLink) override;
 
 private:
     QLayout& getLayout();

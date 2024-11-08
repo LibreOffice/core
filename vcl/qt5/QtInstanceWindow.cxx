@@ -8,12 +8,15 @@
  */
 
 #include <QtInstanceWindow.hxx>
+#include <QtInstanceWindow.moc>
 
 #include <vcl/qt/QtUtils.hxx>
 
 QtInstanceWindow::QtInstanceWindow(QWidget* pWidget)
     : QtInstanceContainer(pWidget)
 {
+    // install event filter to handle window activation/deactivation events
+    pWidget->installEventFilter(this);
 }
 
 void QtInstanceWindow::set_title(const OUString& rTitle)
@@ -92,5 +95,21 @@ weld::ScreenShotCollection QtInstanceWindow::collect_screenshot_data()
 VclPtr<VirtualDevice> QtInstanceWindow::screenshot() { return nullptr; }
 
 const vcl::ILibreOfficeKitNotifier* QtInstanceWindow::GetLOKNotifier() { return nullptr; }
+
+bool QtInstanceWindow::eventFilter(QObject* pObject, QEvent* pEvent)
+{
+    if (pObject != getQWidget())
+        return false;
+
+    switch (pEvent->type())
+    {
+        case QEvent::WindowActivate:
+        case QEvent::WindowDeactivate:
+            signal_container_focus_changed();
+            return false;
+        default:
+            return false;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

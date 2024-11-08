@@ -13,6 +13,8 @@
 
 class QtInstanceWindow : public QtInstanceContainer, public virtual weld::Window
 {
+    Q_OBJECT
+
 public:
     QtInstanceWindow(QWidget* pWidget);
 
@@ -45,6 +47,8 @@ public:
     virtual VclPtr<VirtualDevice> screenshot() override;
 
     virtual const vcl::ILibreOfficeKitNotifier* GetLOKNotifier() override;
+
+    bool eventFilter(QObject* pObject, QEvent* pEvent) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

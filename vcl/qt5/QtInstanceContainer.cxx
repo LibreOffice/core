@@ -8,6 +8,9 @@
  */
 
 #include <QtInstanceContainer.hxx>
+#include <QtInstanceContainer.moc>
+
+#include <QtInstanceWindow.hxx>
 
 QtInstanceContainer::QtInstanceContainer(QWidget* pWidget)
     : QtInstanceWidget(pWidget)
@@ -43,9 +46,13 @@ css::uno::Reference<css::awt::XWindow> QtInstanceContainer::CreateChildFrame()
 
 void QtInstanceContainer::child_grab_focus() { assert(false && "Not implemented yet"); }
 
-void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>&)
+void QtInstanceContainer::connect_container_focus_changed(const Link<Container&, void>& rLink)
 {
-    assert(false && "Not implemented yet");
+    // for QtInstanceWindow, no special handling is needed, activate/deactivate events trigger the signal
+    if (!qobject_cast<QtInstanceWindow*>(this))
+        assert(false && "Not implemented yet");
+
+    weld::Container::connect_container_focus_changed(rLink);
 }
 
 QLayout& QtInstanceContainer::getLayout()

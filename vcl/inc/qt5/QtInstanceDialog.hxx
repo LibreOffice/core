@@ -13,7 +13,7 @@
 
 #include <QtWidgets/QAbstractButton>
 
-class QtInstanceDialog : public QObject, public QtInstanceWindow, public virtual weld::Dialog
+class QtInstanceDialog : public QtInstanceWindow, public virtual weld::Dialog
 {
     Q_OBJECT
 

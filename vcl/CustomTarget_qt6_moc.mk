@@ -15,6 +15,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtFrame.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstance.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceComboBox.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceContainer.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceDrawingArea.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceEntry.moc \
@@ -23,6 +24,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceMessageDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceRadioButton.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMenu.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtTransferable.moc \
