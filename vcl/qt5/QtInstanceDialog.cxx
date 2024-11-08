@@ -74,9 +74,12 @@ bool QtInstanceDialog::runAsync(std::shared_ptr<Dialog> const& rxSelf,
     return true;
 }
 
-void QtInstanceDialog::collapse(weld::Widget*, weld::Widget*) {}
+void QtInstanceDialog::collapse(weld::Widget*, weld::Widget*)
+{
+    assert(false && "Not implemented yet");
+}
 
-void QtInstanceDialog::undo_collapse() {}
+void QtInstanceDialog::undo_collapse() { assert(false && "Not implemented yet"); }
 
 void QtInstanceDialog::SetInstallLOKNotifierHdl(const Link<void*, vcl::ILibreOfficeKitNotifier*>&)
 {
@@ -103,7 +106,10 @@ void QtInstanceDialog::response(int nResponse)
     rQtInstance.RunInMainThread([&] { m_pDialog->done(nResponse); });
 }
 
-void QtInstanceDialog::add_button(const OUString&, int, const OUString&) {}
+void QtInstanceDialog::add_button(const OUString&, int, const OUString&)
+{
+    assert(false && "Not implemented yet");
+}
 
 void QtInstanceDialog::set_modal(bool bModal)
 {
@@ -132,11 +138,19 @@ bool QtInstanceDialog::get_modal() const
     return m_pDialog->isModal();
 }
 
-weld::Button* QtInstanceDialog::weld_widget_for_response(int) { return nullptr; }
+weld::Button* QtInstanceDialog::weld_widget_for_response(int)
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
 
-void QtInstanceDialog::set_default_response(int) {}
+void QtInstanceDialog::set_default_response(int) { assert(false && "Not implemented yet"); }
 
-weld::Container* QtInstanceDialog::weld_content_area() { return nullptr; }
+weld::Container* QtInstanceDialog::weld_content_area()
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
 
 void QtInstanceDialog::dialogFinished(int nResult)
 {

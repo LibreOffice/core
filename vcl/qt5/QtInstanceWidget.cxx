@@ -212,11 +212,23 @@ Size QtInstanceWidget::get_preferred_size() const
 
 float QtInstanceWidget::get_approximate_digit_width() const { return 1.0; }
 
-int QtInstanceWidget::get_text_height() const { return 1; }
+int QtInstanceWidget::get_text_height() const
+{
+    assert(false && "Not implemented yet");
+    return 0;
+}
 
-Size QtInstanceWidget::get_pixel_size(const OUString&) const { return Size(); }
+Size QtInstanceWidget::get_pixel_size(const OUString&) const
+{
+    assert(false && "Not implemented yet");
+    return Size();
+}
 
-vcl::Font QtInstanceWidget::get_font() { return vcl::Font(); }
+vcl::Font QtInstanceWidget::get_font()
+{
+    assert(false && "Not implemented yet");
+    return vcl::Font();
+}
 
 OUString QtInstanceWidget::get_buildable_name() const { return OUString(); }
 
@@ -250,39 +262,71 @@ OUString QtInstanceWidget::get_help_id() const
     return toOUString(aHelpIdVariant.toString());
 }
 
-void QtInstanceWidget::set_grid_left_attach(int) {}
+void QtInstanceWidget::set_grid_left_attach(int) { assert(false && "Not implemented yet"); }
 
-int QtInstanceWidget::get_grid_left_attach() const { return 1; }
+int QtInstanceWidget::get_grid_left_attach() const
+{
+    assert(false && "Not implemented yet");
+    return -1;
+}
 
-void QtInstanceWidget::set_grid_width(int) {}
+void QtInstanceWidget::set_grid_width(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_grid_top_attach(int) {}
+void QtInstanceWidget::set_grid_top_attach(int) { assert(false && "Not implemented yet"); }
 
-int QtInstanceWidget::get_grid_top_attach() const { return 1; }
+int QtInstanceWidget::get_grid_top_attach() const
+{
+    assert(false && "Not implemented yet");
+    return -1;
+}
 
-void QtInstanceWidget::set_hexpand(bool) {}
+void QtInstanceWidget::set_hexpand(bool) { assert(false && "Not implemented yet"); }
 
-bool QtInstanceWidget::get_hexpand() const { return true; }
+bool QtInstanceWidget::get_hexpand() const
+{
+    assert(false && "Not implemented yet");
+    return true;
+}
 
-void QtInstanceWidget::set_vexpand(bool) {}
+void QtInstanceWidget::set_vexpand(bool) { assert(false && "Not implemented yet"); }
 
-bool QtInstanceWidget::get_vexpand() const { return true; }
+bool QtInstanceWidget::get_vexpand() const
+{
+    assert(false && "Not implemented yet");
+    return true;
+}
 
-void QtInstanceWidget::set_margin_top(int) {}
+void QtInstanceWidget::set_margin_top(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_margin_bottom(int) {}
+void QtInstanceWidget::set_margin_bottom(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_margin_start(int) {}
+void QtInstanceWidget::set_margin_start(int) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_margin_end(int) {}
+void QtInstanceWidget::set_margin_end(int) { assert(false && "Not implemented yet"); }
 
-int QtInstanceWidget::get_margin_top() const { return 1; }
+int QtInstanceWidget::get_margin_top() const
+{
+    assert(false && "Not implemented yet");
+    return 0;
+}
 
-int QtInstanceWidget::get_margin_bottom() const { return 1; }
+int QtInstanceWidget::get_margin_bottom() const
+{
+    assert(false && "Not implemented yet");
+    return 0;
+}
 
-int QtInstanceWidget::get_margin_start() const { return 1; }
+int QtInstanceWidget::get_margin_start() const
+{
+    assert(false && "Not implemented yet");
+    return 0;
+}
 
-int QtInstanceWidget::get_margin_end() const { return 1; }
+int QtInstanceWidget::get_margin_end() const
+{
+    assert(false && "Not implemented yet");
+    return 0;
+}
 
 void QtInstanceWidget::set_accessible_name(const OUString& rName)
 {
@@ -361,7 +405,10 @@ OUString QtInstanceWidget::get_accessible_id() const
 #endif
 }
 
-void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*) {}
+void QtInstanceWidget::set_accessible_relation_labeled_by(weld::Widget*)
+{
+    assert(false && "Not implemented yet");
+}
 
 void QtInstanceWidget::set_tooltip_text(const OUString& rTip)
 {
@@ -392,28 +439,37 @@ OUString QtInstanceWidget::get_tooltip_text() const
     return toOUString(m_pWidget->toolTip());
 }
 
-void QtInstanceWidget::set_cursor_data(void*) {}
+void QtInstanceWidget::set_cursor_data(void*) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::grab_add() {}
+void QtInstanceWidget::grab_add() { assert(false && "Not implemented yet"); }
 
-bool QtInstanceWidget::has_grab() const { return true; }
+bool QtInstanceWidget::has_grab() const
+{
+    assert(false && "Not implemented yet");
+    return false;
+}
 
-void QtInstanceWidget::grab_remove() {}
+void QtInstanceWidget::grab_remove() { assert(false && "Not implemented yet"); }
 
 bool QtInstanceWidget::get_extents_relative_to(const Widget&, int&, int&, int&, int&) const
 {
-    return true;
+    assert(false && "Not implemented yet");
+    return false;
 }
 
-bool QtInstanceWidget::get_direction() const { return true; }
+bool QtInstanceWidget::get_direction() const
+{
+    assert(false && "Not implemented yet");
+    return false;
+}
 
-void QtInstanceWidget::set_direction(bool) {}
+void QtInstanceWidget::set_direction(bool) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::freeze() {}
+void QtInstanceWidget::freeze(){};
 
-void QtInstanceWidget::thaw() {}
+void QtInstanceWidget::thaw(){};
 
-void QtInstanceWidget::set_busy_cursor(bool) {}
+void QtInstanceWidget::set_busy_cursor(bool) { assert(false && "Not implemented yet"); }
 
 std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
 {
@@ -424,11 +480,18 @@ std::unique_ptr<weld::Container> QtInstanceWidget::weld_parent() const
     return std::make_unique<QtInstanceContainer>(pParentWidget);
 }
 
-void QtInstanceWidget::queue_resize() {}
+void QtInstanceWidget::queue_resize() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&) {}
+void QtInstanceWidget::help_hierarchy_foreach(const std::function<bool(const OUString&)>&)
+{
+    assert(false && "Not implemented yet");
+}
 
-OUString QtInstanceWidget::strip_mnemonic(const OUString&) const { return OUString(); }
+OUString QtInstanceWidget::strip_mnemonic(const OUString&) const
+{
+    assert(false && "Not implemented yet");
+    return OUString();
+}
 
 OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
 {
@@ -436,11 +499,16 @@ OUString QtInstanceWidget::escape_ui_str(const OUString& rLabel) const
     return rLabel.replaceAll("&", "&&");
 }
 
-VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const { return nullptr; }
+VclPtr<VirtualDevice> QtInstanceWidget::create_virtual_device() const
+{
+    assert(false && "Not implemented yet");
+    return nullptr;
+}
 
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> QtInstanceWidget::get_drop_target()
 {
-    return css::uno::Reference<css::datatransfer::dnd::XDropTarget>();
+    assert(false && "Not implemented yet");
+    return nullptr;
 }
 
 css::uno::Reference<css::datatransfer::clipboard::XClipboard>
@@ -449,22 +517,31 @@ QtInstanceWidget::get_clipboard() const
     return GetSystemClipboard();
 }
 
-void QtInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>&) {}
+void QtInstanceWidget::connect_get_property_tree(const Link<tools::JsonWriter&, void>&)
+{
+    // not implemented for the Qt variant
+}
 
-void QtInstanceWidget::get_property_tree(tools::JsonWriter&) {}
+void QtInstanceWidget::get_property_tree(tools::JsonWriter&)
+{
+    // not implemented for the Qt variant
+}
 
-void QtInstanceWidget::call_attention_to() {}
+void QtInstanceWidget::call_attention_to() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_stack_background() {}
+void QtInstanceWidget::set_stack_background() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_title_background() {}
+void QtInstanceWidget::set_title_background() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_toolbar_background() {}
+void QtInstanceWidget::set_toolbar_background() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_highlight_background() {}
+void QtInstanceWidget::set_highlight_background() { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::set_background(const Color&) {}
+void QtInstanceWidget::set_background(const Color&) { assert(false && "Not implemented yet"); }
 
-void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&) {}
+void QtInstanceWidget::draw(OutputDevice&, const Point&, const Size&)
+{
+    assert(false && "Not implemented yet");
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
