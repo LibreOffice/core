@@ -29,7 +29,10 @@ void QtHyperlinkLabel::setUri(const QString& rUri)
 
 void QtHyperlinkLabel::update()
 {
-    setText(QLatin1String("<a href=\"%1\">%2</a>").arg(m_sUri).arg(m_sDisplayText));
+    // Always set a non-empty URI, otherwise there's no clickable hyperlink
+    // (custom slot for QLabel::linkActivated doesn't necessarily need a URI)
+    const QString sUri = !m_sUri.isEmpty() ? m_sUri : QStringLiteral(" ");
+    setText(QLatin1String("<a href=\"%1\">%2</a>").arg(sUri).arg(m_sDisplayText));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
