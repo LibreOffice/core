@@ -210,7 +210,15 @@ Size QtInstanceWidget::get_preferred_size() const
     return aPreferredSize;
 }
 
-float QtInstanceWidget::get_approximate_digit_width() const { return 1.0; }
+float QtInstanceWidget::get_approximate_digit_width() const
+{
+    SolarMutexGuard g;
+
+    float fWidth = 0;
+    GetQtInstance().RunInMainThread(
+        [&] { fWidth = m_pWidget->fontMetrics().horizontalAdvance("0123456789") / 10.0; });
+    return fWidth;
+}
 
 int QtInstanceWidget::get_text_height() const
 {
