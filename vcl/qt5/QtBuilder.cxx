@@ -221,8 +221,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     }
     else if (sName == u"GtkLabel")
     {
+        QLabel* pLabel = new QLabel(pParentWidget);
+        setLabelProperties(*pLabel, rMap);
         extractMnemonicWidget(sID, rMap);
-        pObject = new QLabel(pParentWidget);
+        pObject = pLabel;
     }
     else if (sName == u"GtkLevelBar" || sName == u"GtkProgressBar")
     {
@@ -519,16 +521,6 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 pDialog->setWindowTitle(toQString(rValue));
         }
     }
-    else if (QLabel* pLabel = qobject_cast<QLabel*>(pObject))
-    {
-        for (auto const & [ rKey, rValue ] : rProps)
-        {
-            if (rKey == u"label")
-                pLabel->setText(convertAccelerator(rValue));
-            else if (rKey == u"wrap")
-                pLabel->setWordWrap(toBool(rValue));
-        }
-    }
     else if (QPlainTextEdit* pTextEdit = qobject_cast<QPlainTextEdit*>(pObject))
     {
         for (auto const & [ rKey, rValue ] : rProps)
@@ -560,6 +552,17 @@ void QtBuilder::setProperties(QObject* pObject, stringmap& rProps)
                 pButton->setText(convertAccelerator(rValue));
             }
         }
+    }
+}
+
+void QtBuilder::setLabelProperties(QLabel& rLabel, stringmap& rProps)
+{
+    for (auto const & [ rKey, rValue ] : rProps)
+    {
+        if (rKey == u"label")
+            rLabel.setText(convertAccelerator(rValue));
+        else if (rKey == u"wrap")
+            rLabel.setWordWrap(toBool(rValue));
     }
 }
 

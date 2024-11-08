@@ -73,6 +73,7 @@ public:
 
 private:
     void setProperties(QObject* obj, stringmap& rProps);
+    static void setLabelProperties(QLabel& rLabel, stringmap& rProps);
     void setSpinButtonProperties(QDoubleSpinBox& rSpinBox, stringmap& rProps);
     static QWidget* windowForObject(QObject* pObject);
     static QDialogButtonBox* findButtonBox(QDialog* pDialog);
