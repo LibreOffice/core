@@ -19,6 +19,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/embeddedfontshelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/storagehelper.hxx>
 
 #include <font/PhysicalFontFaceCollection.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -191,10 +192,6 @@ void EmbeddedFontsHelper::activateFonts()
 
 OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName, std::u16string_view extra )
 {
-    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-    rtl::Bootstrap::expandMacros( path );
-    path += "/user/temp/embeddedfonts/fromdocs/";
-    osl::Directory::createPath( path );
     OUString filename = fontName;
     static int uniqueCounter = 0;
     if( extra == u"?" )
@@ -202,6 +199,17 @@ OUString EmbeddedFontsHelper::fileUrlForTemporaryFont( const OUString& fontName,
     else
         filename += extra;
     filename += ".ttf"; // TODO is it always ttf?
+
+    if (!::comphelper::OStorageHelper::IsValidZipEntryFileName(filename, false))
+    {
+        SAL_WARN( "vcl.fonts", "Cannot use filename: " << filename << " for temporary font");
+        filename = "font" + OUString::number(uniqueCounter++) + ".ttf";
+    }
+
+    OUString path = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+    rtl::Bootstrap::expandMacros( path );
+    path += "/user/temp/embeddedfonts/fromdocs/";
+    osl::Directory::createPath( path );
     return path + filename;
 }
 
