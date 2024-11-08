@@ -847,8 +847,7 @@ void SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUString >& a
             {
                 if( !pNewParaSet )
                 {
-                    const SfxItemSet & rSet = pForwarder->GetParaAttribs( nTempPara );
-                    pOldParaSet.emplace( rSet );
+                    pOldParaSet.emplace( pForwarder->GetParaAttribs( nTempPara ) );
                     pNewParaSet.emplace( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
                 }
 

@@ -831,10 +831,10 @@ OUString lcl_getCurrentDocumentMimeType(const LibLODocument_Impl* pDocument)
 // Gets an undo manager to enter and exit undo context. Needed by ToggleOrientation
 css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
 {
-    const css::uno::Reference< css::frame::XController >& xController = rxFrame->getController();
+    const css::uno::Reference< css::frame::XController > xController = rxFrame->getController();
     if ( xController.is() )
     {
-        const css::uno::Reference< css::frame::XModel >& xModel = xController->getModel();
+        const css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
         if ( xModel.is() )
         {
             const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
@@ -1880,7 +1880,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
         case LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
         case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
         {
-            const auto& pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
+            const auto pos = std::find(m_queue1.rbegin(), m_queue1.rend(), type);
             auto pos2 = toQueue2(pos);
             if (pos != m_queue1.rend() && pos2->getPayload() == aCallbackData.getPayload())
             {
@@ -1893,12 +1893,12 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 
     if (type == LOK_CALLBACK_TEXT_SELECTION && aCallbackData.isEmpty())
     {
-        const auto& posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
+        const auto posStart = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_START);
         auto posStart2 = toQueue2(posStart);
         if (posStart != m_queue1.rend())
             posStart2->clear();
 
-        const auto& posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
+        const auto posEnd = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_TEXT_SELECTION_END);
         auto posEnd2 = toQueue2(posEnd);
         if (posEnd != m_queue1.rend())
             posEnd2->clear();
@@ -2064,7 +2064,7 @@ bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& a
 
     // If we have to invalidate all tiles, we can skip any new tile invalidation.
     // Find the last INVALIDATE_TILES entry, if any to see if it's invalidate-all.
-    const auto& pos
+    const auto pos
         = std::find(m_queue1.rbegin(), m_queue1.rend(), LOK_CALLBACK_INVALIDATE_TILES);
     if (pos != m_queue1.rend())
     {
@@ -2591,7 +2591,7 @@ bool CallbackFlushHandler::removeAll(int type, const std::function<bool (const C
 
 void CallbackFlushHandler::addViewStates(int viewId)
 {
-    const auto& result = m_viewStates.emplace(viewId, decltype(m_viewStates)::mapped_type());
+    const auto result = m_viewStates.emplace(viewId, decltype(m_viewStates)::mapped_type());
     if (!result.second && result.first != m_viewStates.end())
     {
         result.first->second.clear();

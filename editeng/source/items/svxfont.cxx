@@ -77,12 +77,12 @@ void SvxFont::SetNonAutoEscapement(short nNewEsc, const OutputDevice* pOutDev)
         double fAutoDescent = .2;
         if ( pOutDev )
         {
-            const FontMetric& rFontMetric = pOutDev->GetFontMetric();
-            double fFontHeight = rFontMetric.GetAscent() + rFontMetric.GetDescent();
+            const FontMetric aFontMetric = pOutDev->GetFontMetric();
+            double fFontHeight = aFontMetric.GetAscent() + aFontMetric.GetDescent();
             if ( fFontHeight )
             {
-                fAutoAscent = rFontMetric.GetAscent() / fFontHeight;
-                fAutoDescent = rFontMetric.GetDescent() / fFontHeight;
+                fAutoAscent = aFontMetric.GetAscent() / fFontHeight;
+                fAutoDescent = aFontMetric.GetDescent() / fFontHeight;
             }
         }
 

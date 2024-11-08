@@ -3375,7 +3375,7 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 {
     assert( IsUpdateLayout() && "Must not be reached when Update=FALSE: GetPaM" );
 
-    if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(aDocPos); pPortion)
+    if (const auto [pPortion, pLine, nLineStartX] = GetPortionAndLine(aDocPos); pPortion)
     {
         assert(pLine);
         assert(pPortion);
@@ -3395,7 +3395,7 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
 
 bool ImpEditEngine::IsTextPos(const Point& rDocPos, sal_uInt16 nBorder)
 {
-    if (const auto& [pPortion, pLine, nLineStartX] = GetPortionAndLine(rDocPos); pPortion)
+    if (const auto [pPortion, pLine, nLineStartX] = GetPortionAndLine(rDocPos); pPortion)
     {
         assert(pLine);
         assert(pPortion);

@@ -410,16 +410,16 @@ bool LOKInteractionHandler::handleFilterOptionsRequest(const uno::Reference<task
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         const uno::Reference<task::XInteractionRequest>& xRequest)
 {
-    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations = xRequest->getContinuations();
+    uno::Sequence<uno::Reference<task::XInteractionContinuation>> const aContinuations = xRequest->getContinuations();
     uno::Any const request(xRequest->getRequest());
 
-    if (handleIOException(rContinuations, request))
+    if (handleIOException(aContinuations, request))
         return true;
 
-    if (handleNetworkException(rContinuations, request))
+    if (handleNetworkException(aContinuations, request))
         return true;
 
-    if (handlePasswordRequest(rContinuations, request))
+    if (handlePasswordRequest(aContinuations, request))
         return true;
 
     if (handleFilterOptionsRequest(xRequest))
@@ -435,7 +435,7 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         return true;
 
     // TODO: perform more interactions 'for real' like the above
-    selectApproved(rContinuations);
+    selectApproved(aContinuations);
 
     return true;
 }

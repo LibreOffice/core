@@ -1008,14 +1008,14 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             sal_uInt16 const nProp = static_cast<const SvxEscapementItem&>(rItem).GetProportionalHeight();
             sal_uInt16 nProp100 = nProp*100;    // For SWG-Token Prop in 100th percent.
             short nEsc = static_cast<const SvxEscapementItem&>(rItem).GetEsc();
-            const FontMetric& rFontMetric = GetRefDevice()->GetFontMetric();
-            double fFontHeight = rFontMetric.GetAscent() + rFontMetric.GetDescent();
+            const FontMetric aFontMetric = GetRefDevice()->GetFontMetric();
+            double fFontHeight = aFontMetric.GetAscent() + aFontMetric.GetDescent();
             double fAutoAscent = .8;
             double fAutoDescent = .2;
             if ( fFontHeight )
             {
-                fAutoAscent = rFontMetric.GetAscent() / fFontHeight;
-                fAutoDescent = rFontMetric.GetDescent() / fFontHeight;
+                fAutoAscent = aFontMetric.GetAscent() / fFontHeight;
+                fAutoDescent = aFontMetric.GetDescent() / fFontHeight;
             }
             if ( nEsc == DFLT_ESC_AUTO_SUPER )
             {

@@ -374,13 +374,13 @@ namespace dbaccess
             return;
 
         // open the sub storage for the given kind of components
-        const OUString& rStorageName( getComponentsStorageName( m_eType ) );
+        const OUString aStorageName( getComponentsStorageName( m_eType ) );
         const Reference< XStorage > xComponentsStorage( i_rRecoveryStorage->openStorageElement(
-            rStorageName, ElementModes::READWRITE ), UNO_SET_THROW );
+            aStorageName, ElementModes::READWRITE ), UNO_SET_THROW );
 
         // find a free sub storage name, and create Yet Another Sub Storage
-        const OUString& rBaseName( lcl_getComponentStorageBaseName( m_eType ) );
-        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage, rBaseName );
+        const OUString aBaseName( lcl_getComponentStorageBaseName( m_eType ) );
+        const OUString sStorName = ::dbtools::createUniqueName( xComponentsStorage, aBaseName );
         const Reference< XStorage > xObjectStor( xComponentsStorage->openStorageElement(
             sStorName, ElementModes::READWRITE ), UNO_SET_THROW );
 

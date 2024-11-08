@@ -533,18 +533,18 @@ void SvxNumberFormat::SetIndentAt( const tools::Long nIndentAt )
 Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 {
     const MapMode aMapMM100( MapUnit::Map100thMM );
-    const Size& rSize = pGraphic->GetPrefSize();
+    const Size aSize = pGraphic->GetPrefSize();
     Size aRetSize;
     if ( pGraphic->GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel )
     {
         OutputDevice* pOutDev = Application::GetDefaultDevice();
         MapMode aOldMap( pOutDev->GetMapMode() );
         pOutDev->SetMapMode( aMapMM100 );
-        aRetSize = pOutDev->PixelToLogic( rSize );
+        aRetSize = pOutDev->PixelToLogic( aSize );
         pOutDev->SetMapMode( aOldMap );
     }
     else
-        aRetSize = OutputDevice::LogicToLogic( rSize, pGraphic->GetPrefMapMode(), aMapMM100 );
+        aRetSize = OutputDevice::LogicToLogic( aSize, pGraphic->GetPrefMapMode(), aMapMM100 );
     return aRetSize;
 }
 

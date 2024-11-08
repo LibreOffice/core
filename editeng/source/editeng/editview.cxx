@@ -245,11 +245,11 @@ void EditView::InvalidateOtherViewWindows( const tools::Rectangle& rInvRect )
 
 void EditView::Invalidate()
 {
-    const tools::Rectangle& rInvRect = GetInvalidateRect();
+    const tools::Rectangle aInvRect = GetInvalidateRect();
 
     LOKEditViewHistory::Update();
-    getImpl().InvalidateAtWindow(rInvRect);
-    InvalidateOtherViewWindows(rInvRect);
+    getImpl().InvalidateAtWindow(aInvRect);
+    InvalidateOtherViewWindows(aInvRect);
 }
 
 void EditView::SetReadOnly( bool bReadOnly )

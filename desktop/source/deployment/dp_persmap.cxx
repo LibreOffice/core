@@ -248,9 +248,9 @@ void PersistentMap::flush()
         OSL_ASSERT( o3tl::make_unsigned(nKeyLen) == nBytesWritten);
         m_MapFile.write( "\n", 1, nBytesWritten);
         // write line for value
-        const OString& rValString = encodeString( entry.second);
-        const sal_Int32 nValLen = rValString.getLength();
-        m_MapFile.write( rValString.getStr(), nValLen, nBytesWritten);
+        const OString aValString = encodeString( entry.second);
+        const sal_Int32 nValLen = aValString.getLength();
+        m_MapFile.write( aValString.getStr(), nValLen, nBytesWritten);
         OSL_ASSERT( o3tl::make_unsigned(nValLen) == nBytesWritten);
         m_MapFile.write( "\n", 1, nBytesWritten);
     }
