@@ -64,7 +64,7 @@ public:
     virtual std::unique_ptr<weld::ComboBox> weld_combo_box(const OUString& rId) override;
     virtual std::unique_ptr<weld::EntryTreeView>
     weld_entry_tree_view(const OUString&, const OUString&, const OUString&) override;
-    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OUString&) override;
+    virtual std::unique_ptr<weld::TreeView> weld_tree_view(const OUString& rId) override;
     virtual std::unique_ptr<weld::IconView> weld_icon_view(const OUString&) override;
     virtual std::unique_ptr<weld::Label> weld_label(const OUString&) override;
     virtual std::unique_ptr<weld::TextView> weld_text_view(const OUString& rId) override;

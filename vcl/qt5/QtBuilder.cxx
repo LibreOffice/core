@@ -29,6 +29,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QTreeView>
 
 namespace
 {
@@ -267,6 +268,10 @@ QObject* QtBuilder::makeObject(QObject* pParent, std::u16string_view sName, cons
     else if (sName == u"GtkTextView")
     {
         pObject = new QPlainTextEdit(pParentWidget);
+    }
+    else if (sName == u"GtkTreeView")
+    {
+        pObject = new QTreeView(pParentWidget);
     }
     else
     {

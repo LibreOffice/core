@@ -26,6 +26,7 @@
 #include <QtInstanceRadioButton.hxx>
 #include <QtInstanceSpinButton.hxx>
 #include <QtInstanceTextView.hxx>
+#include <QtInstanceTreeView.hxx>
 
 QtInstanceBuilder::QtInstanceBuilder(QWidget* pParent, std::u16string_view sUIRoot,
                                      const OUString& rUIFile)
@@ -291,10 +292,12 @@ QtInstanceBuilder::weld_entry_tree_view(const OUString&, const OUString&, const 
     return nullptr;
 }
 
-std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString&)
+std::unique_ptr<weld::TreeView> QtInstanceBuilder::weld_tree_view(const OUString& rId)
 {
-    assert(false && "Not implemented yet");
-    return nullptr;
+    QTreeView* pTreeView = m_xBuilder->get<QTreeView>(rId);
+    std::unique_ptr<weld::TreeView> xRet(pTreeView ? std::make_unique<QtInstanceTreeView>(pTreeView)
+                                                   : nullptr);
+    return xRet;
 }
 
 std::unique_ptr<weld::IconView> QtInstanceBuilder::weld_icon_view(const OUString&)

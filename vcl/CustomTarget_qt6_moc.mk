@@ -24,6 +24,7 @@ $(call gb_CustomTarget_get_target,vcl/qt6) : \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceMessageDialog.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceProgressBar.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceRadioButton.moc \
+	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceTreeView.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtInstanceWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMainWindow.moc \
 	$(gb_CustomTarget_workdir)/vcl/qt6/QtMenu.moc \
