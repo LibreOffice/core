@@ -59,6 +59,7 @@ bool QtInstanceBuilder::IsUIFileSupported(const OUString& rUIFile)
         u"modules/swriter/ui/inforeadonlydialog.ui"_ustr,
         u"modules/swriter/ui/renameobjectdialog.ui"_ustr,
         u"modules/swriter/ui/wordcount.ui"_ustr,
+        u"sfx/ui/helpmanual.ui"_ustr,
         u"sfx/ui/licensedialog.ui"_ustr,
         u"sfx/ui/password.ui"_ustr,
         u"sfx/ui/querysavedialog.ui"_ustr,
