@@ -264,9 +264,13 @@
                 <xsl:apply-templates select="@fo:min-height" />
                 <xsl:apply-templates select="@fo:max-height" />
             </xsl:variable>
+            <!-- inline heading -->
+            <xsl:variable name="inlineHeading">
+                <xsl:if test="parent::draw:frame/@text:anchor-type='as-char'">display:inline;</xsl:if>
+            </xsl:variable>
             <xsl:if test="normalize-space($dimension)!=''">
                 <xsl:attribute name="style">
-                    <xsl:value-of select="$dimension" />
+                    <xsl:value-of select="concat($dimension,$inlineHeading)" />
                 </xsl:attribute>
             </xsl:if>
 
@@ -1213,6 +1217,13 @@
                 </xsl:call-template>
             </xsl:attribute>
 
+            <!-- inline heading -->
+            <xsl:if test="parent::draw:text-box and ../../@text:anchor-type='as-char'">
+                <xsl:attribute name="style">
+                    <xsl:text>display:inline;</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+
             <xsl:call-template name="create-heading-anchor">
                 <xsl:with-param name="globalData" select="$globalData"/>
             </xsl:call-template>
@@ -1222,7 +1233,10 @@
             </xsl:apply-templates>
         </xsl:element>
 
-        <xsl:text>&#xa;</xsl:text>
+        <!-- add new line, except for inline headings to avoid of double spaces -->
+        <xsl:if test="not(parent::draw:text-box and ../../@text:anchor-type='as-char')">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="create-heading-anchor">
