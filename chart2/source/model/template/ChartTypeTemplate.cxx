@@ -300,7 +300,7 @@ bool ChartTypeTemplate::matchesTemplate2(
 
     try
     {
-        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq(
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
             xDiagram->getBaseCoordinateSystems());
 
         // need to have at least one coordinate system

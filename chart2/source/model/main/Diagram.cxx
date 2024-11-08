@@ -1023,7 +1023,7 @@ static bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 
         //find position of series.
         bool bFound = false;
-        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( rDiagram.getBaseCoordinateSystems() );
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysList( rDiagram.getBaseCoordinateSystems() );
 
         for( std::size_t nCS = 0; !bFound && nCS < aCooSysList.size(); ++nCS )
         {

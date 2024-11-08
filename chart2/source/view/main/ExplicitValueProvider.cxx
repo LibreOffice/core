@@ -46,7 +46,7 @@ bool lcl_getPropertySwapXAndYAxis(const rtl::Reference<Diagram>& xDiagram)
 
     if (xDiagram.is())
     {
-        const std::vector<rtl::Reference<BaseCoordinateSystem>>& aCooSysList(
+        const std::vector<rtl::Reference<BaseCoordinateSystem>> aCooSysList(
             xDiagram->getBaseCoordinateSystems());
         if (!aCooSysList.empty())
         {

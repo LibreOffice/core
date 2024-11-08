@@ -409,7 +409,7 @@ rtl::Reference<ChartType> getChartType(const rtl::Reference<ChartModel>& xModel)
     if (!xDiagram.is())
         return nullptr;
 
-    const std::vector<rtl::Reference<BaseCoordinateSystem>> & xCooSysSequence(xDiagram->getBaseCoordinateSystems());
+    const std::vector<rtl::Reference<BaseCoordinateSystem>> xCooSysSequence(xDiagram->getBaseCoordinateSystems());
 
     if (xCooSysSequence.empty())
         return nullptr;

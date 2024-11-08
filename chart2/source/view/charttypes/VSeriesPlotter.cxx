@@ -401,7 +401,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 
     try
     {
-        const uno::Reference< css::beans::XPropertySet >& xPropertySet(
+        const uno::Reference< css::beans::XPropertySet > xPropertySet(
             rDataSeries.getPropertiesOfPoint( nPointIndex ) );
         if( xPropertySet.is() )
         {

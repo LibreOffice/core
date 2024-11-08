@@ -135,7 +135,7 @@ rtl::Reference<ChartType> lcl_getFirstStockChartType( const rtl::Reference<::cha
 
     //iterate through all coordinate systems
 
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysList( xDiagram->getBaseCoordinateSystems() );
     for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysList )
     {
         //iterate through all chart types in the current coordinate system
@@ -471,7 +471,7 @@ OUString ObjectIdentifier::createParticleForCoordinateSystem(
     if( xDiagram.is() )
     {
         std::size_t nCooSysIndex = 0;
-        const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList( xDiagram->getBaseCoordinateSystems() );
+        const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysList( xDiagram->getBaseCoordinateSystems() );
         for( ; nCooSysIndex < aCooSysList.size(); ++nCooSysIndex )
         {
             if( xCooSys == aCooSysList[nCooSysIndex] )

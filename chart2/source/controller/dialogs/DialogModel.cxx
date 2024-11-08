@@ -398,7 +398,7 @@ std::vector< rtl::Reference< ChartType > >
         rtl::Reference< Diagram > xDiagram = m_xChartDocument->getFirstChartDiagram();
         if( xDiagram.is())
         {
-            const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysSeq(
+            const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysSeq(
                 xDiagram->getBaseCoordinateSystems());
             for( rtl::Reference< BaseCoordinateSystem > const & coords : aCooSysSeq )
             {

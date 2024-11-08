@@ -161,24 +161,24 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
     if( !m_xAxis.is() )
         return;
 
-    const chart2::ScaleData&     rScale( m_xAxis->getScaleData() );
-    const chart2::IncrementData& rIncrement( rScale.IncrementData );
-    const uno::Sequence< chart2::SubIncrement >& rSubIncrements( rScale.IncrementData.SubIncrements );
-    const TimeIncrement& rTimeIncrement( rScale.TimeIncrement );
-    bool bDateAxis = (rScale.AxisType == chart2::AxisType::DATE);
+    const chart2::ScaleData      aScale( m_xAxis->getScaleData() );
+    const chart2::IncrementData& rIncrement( aScale.IncrementData );
+    const uno::Sequence< chart2::SubIncrement >& rSubIncrements( aScale.IncrementData.SubIncrements );
+    const TimeIncrement& rTimeIncrement( aScale.TimeIncrement );
+    bool bDateAxis = (aScale.AxisType == chart2::AxisType::DATE);
     if( m_pExplicitScale )
         bDateAxis = (m_pExplicitScale->AxisType == chart2::AxisType::DATE);
 
     switch( nWhichId )
     {
         case SCHATTR_AXIS_AUTO_MAX:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(rScale.Maximum) ) );
+                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Maximum) ) );
             break;
 
         case SCHATTR_AXIS_MAX:
             {
                 double fMax = 10.0;
-                if( rScale.Maximum >>= fMax )
+                if( aScale.Maximum >>= fMax )
                     rOutItemSet.Put( SvxDoubleItem( fMax, SCHATTR_AXIS_MAX ) );
                 else
                 {
@@ -190,13 +190,13 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             break;
 
         case SCHATTR_AXIS_AUTO_MIN:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(rScale.Minimum) ) );
+                rOutItemSet.Put( SfxBoolItem( nWhichId, !hasDoubleValue(aScale.Minimum) ) );
             break;
 
         case SCHATTR_AXIS_MIN:
             {
                 double fMin = 0.0;
-                if( rScale.Minimum >>= fMin )
+                if( aScale.Minimum >>= fMin )
                     rOutItemSet.Put( SvxDoubleItem( fMin, SCHATTR_AXIS_MIN ) );
                 else if( m_pExplicitScale )
                     rOutItemSet.Put( SvxDoubleItem( m_pExplicitScale->Minimum, SCHATTR_AXIS_MIN ));
@@ -205,13 +205,13 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_LOGARITHM:
             {
-                bool bValue = AxisHelper::isLogarithmic( rScale.Scaling );
+                bool bValue = AxisHelper::isLogarithmic( aScale.Scaling );
                 rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
             break;
 
         case SCHATTR_AXIS_REVERSE:
-                rOutItemSet.Put( SfxBoolItem( nWhichId, (rScale.Orientation == AxisOrientation_REVERSE) ));
+                rOutItemSet.Put( SfxBoolItem( nWhichId, (aScale.Orientation == AxisOrientation_REVERSE) ));
             break;
 
         // Increment
@@ -316,14 +316,14 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(rScale.Origin) )));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, ( !hasDoubleValue(aScale.Origin) )));
         }
         break;
 
         case SCHATTR_AXIS_ORIGIN:
         {
             double fOrigin = 0.0;
-            if( !(rScale.Origin >>= fOrigin) )
+            if( !(aScale.Origin >>= fOrigin) )
             {
                 if( m_pExplicitScale )
                     fOrigin = m_pExplicitScale->Origin;
@@ -366,7 +366,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         break;
 
         case SCHATTR_AXIS_SHIFTED_CATEGORY_POSITION:
-            rOutItemSet.Put(SfxBoolItem(nWhichId, rScale.ShiftedCategoryPosition));
+            rOutItemSet.Put(SfxBoolItem(nWhichId, aScale.ShiftedCategoryPosition));
         break;
 
         case SCHATTR_AXIS_LABEL_POSITION:
@@ -423,11 +423,11 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         break;
 
         case SCHATTR_AXISTYPE:
-            rOutItemSet.Put( SfxInt32Item( nWhichId, rScale.AxisType ));
+            rOutItemSet.Put( SfxInt32Item( nWhichId, aScale.AxisType ));
         break;
 
         case SCHATTR_AXIS_AUTO_DATEAXIS:
-            rOutItemSet.Put( SfxBoolItem( nWhichId, rScale.AutoDateAxis ));
+            rOutItemSet.Put( SfxBoolItem( nWhichId, aScale.AutoDateAxis ));
         break;
 
         case SCHATTR_AXIS_ALLOW_DATEAXIS:

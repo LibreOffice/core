@@ -225,7 +225,7 @@ rtl::Reference<ChartType> getChartType(
         const rtl::Reference<::chart::ChartModel>& xModel)
 {
     rtl::Reference<Diagram> xDiagram = xModel->getFirstChartDiagram();
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > & xCooSysSequence( xDiagram->getBaseCoordinateSystems());
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > xCooSysSequence( xDiagram->getBaseCoordinateSystems());
     return xCooSysSequence[0]->getChartTypes2()[0];
 }
 

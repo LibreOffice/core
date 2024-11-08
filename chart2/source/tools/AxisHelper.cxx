@@ -745,7 +745,7 @@ bool AxisHelper::getIndicesForAxis( const rtl::Reference< Axis >& xAxis, const r
     rOutDimensionIndex = -1;
     rOutAxisIndex = -1;
 
-    const std::vector< rtl::Reference< BaseCoordinateSystem > > & aCooSysList = xDiagram->getBaseCoordinateSystems();
+    const std::vector< rtl::Reference< BaseCoordinateSystem > > aCooSysList = xDiagram->getBaseCoordinateSystems();
     for( std::size_t nC=0; nC < aCooSysList.size(); ++nC )
     {
         if( AxisHelper::getIndicesForAxis( xAxis, aCooSysList[nC], rOutDimensionIndex, rOutAxisIndex ) )

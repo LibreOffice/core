@@ -563,7 +563,7 @@ void ChartModel::impl_loadGraphics(
 {
     try
     {
-        const Reference< embed::XStorage >& xGraphicsStorage(
+        const Reference< embed::XStorage > xGraphicsStorage(
             xStorage->openStorageElement( u"Pictures"_ustr,
                                           embed::ElementModes::READ ) );
 

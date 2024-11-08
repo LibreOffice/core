@@ -451,7 +451,7 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
     if ( !(pDrawModelWrapper && m_pDrawViewWrapper) )
         return;
 
-    const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+    const Reference< drawing::XDrawPage > xDrawPage( pDrawModelWrapper->getMainDrawPage() );
     OSL_ASSERT( xDrawPage.is() );
 
     if ( !xDrawPage )

@@ -1627,10 +1627,10 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
 {
     loadFromFile(u"odp/chart.odp");
     uno::Reference< chart2::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0,0), uno::UNO_QUERY_THROW);
-    const uno::Reference< chart2::data::XDataProvider >& rxDataProvider = xChartDoc->getDataProvider();
+    const uno::Reference< chart2::data::XDataProvider > xDataProvider = xChartDoc->getDataProvider();
 
     // Parse 42 array
-    Reference<chart2::data::XDataSequence> xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;42;42;42}"_ustr, u""_ustr);
+    Reference<chart2::data::XDataSequence> xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;42;42;42}"_ustr, u""_ustr);
     Sequence<Any> xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1638,7 +1638,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse empty first and last
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{\"\";42;42;\"\"}"_ustr, u""_ustr);
+    xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{\"\";42;42;\"\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[0].getValue())));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[1]);
@@ -1646,7 +1646,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[3].getValue())));
 
     // Parse empty middle
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"\";\"\";42}"_ustr, u""_ustr);
+    xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"\";\"\";42}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT( std::isnan( *static_cast<const double*>(xSequence[1].getValue())) );
@@ -1654,7 +1654,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[3]);
 
     // Parse mixed types, numeric only role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
+    xDataSeq = xDataProvider->createDataSequenceByValueArray(u"values-y"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(42)), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[1]);
@@ -1662,7 +1662,7 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testInternalDataProvider)
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(0)),  xSequence[3]);
 
     // Parse mixed types, mixed role
-    xDataSeq = rxDataProvider->createDataSequenceByValueArray(u"categories"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
+    xDataSeq = xDataProvider->createDataSequenceByValueArray(u"categories"_ustr, u"{42;\"hello\";0;\"world\"}"_ustr, u""_ustr);
     xSequence = xDataSeq->getData();
     CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 1 42"_ustr), xSequence[0]);
     CPPUNIT_ASSERT_EQUAL(uno::Any(u"Row 2 hello"_ustr), xSequence[1]);

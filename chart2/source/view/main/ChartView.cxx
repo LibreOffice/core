@@ -921,7 +921,7 @@ constexpr sal_Int32 constPageLayoutFixedDistance = 350;
 bool getAvailablePosAndSizeForDiagram(
     CreateShapeParam2D& rParam, const awt::Size & rPageSize, rtl::Reference<Diagram> const& xDiagram)
 {
-    uno::Reference<beans::XPropertySet> const& xProp(xDiagram);
+    uno::Reference<beans::XPropertySet> const xProp(xDiagram);
     rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
