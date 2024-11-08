@@ -190,7 +190,7 @@ SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
     , m_xUndoPB(m_xBuilder->weld_button(u"undo"_ustr))
     , m_xClosePB(m_xBuilder->weld_button(u"close"_ustr))
     , m_xToolbar(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
-    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, u"sentence"_ustr, *m_xSentenceED))
+    , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, u"errorsentence"_ustr, *m_xSentenceED))
 {
     m_xSentenceED->SetSpellDialog(this);
     m_xSentenceED->Init(m_xToolbar.get());

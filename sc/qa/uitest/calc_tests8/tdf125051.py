@@ -23,7 +23,7 @@ class tdf125051(UITestCase):
             enter_text_to_cell(gridwin, "A1", "teext")
             gridwin.executeAction("SELECT", mkPropertyValues({"CELL": "A1"}))
             with self.ui_test.execute_dialog_through_command(".uno:SpellDialog", close_button="close") as xDialog:
-                xSentence = xDialog.getChild("sentence")
+                xSentence = xDialog.getChild("errorsentence")
                 self.assertEqual("teext", get_state_as_dict(xSentence)['Text'])
 
                 xLanguagelb = xDialog.getChild("languagelb")

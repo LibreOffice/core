@@ -165,12 +165,12 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkDrawingArea" id="sentence">
+                      <object class="GtkDrawingArea" id="errorsentence">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK</property>
                         <child internal-child="accessible">
-                          <object class="AtkObject" id="sentence-atkobject">
+                          <object class="AtkObject" id="errorsentence-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="spellingdialog|extended_tip|sentence">Displays the sentence with the misspelled word highlighted. Edit the word or the sentence, or click one of the suggestions in the text box below.</property>
                           </object>
                         </child>
@@ -275,7 +275,7 @@
                     <property name="hexpand">True</property>
                     <property name="label" translatable="yes" context="spellingdialog|notindictft">_Not in Dictionary</property>
                     <property name="use-underline">True</property>
-                    <property name="mnemonic-widget">sentence</property>
+                    <property name="mnemonic-widget">errorsentence</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
