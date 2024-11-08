@@ -1838,20 +1838,27 @@ bool ZipFile::checkSizeAndCRC( const ZipEntry& aEntry )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
-    sal_Int32 nCRC = 0;
-    sal_Int64 nSize = 0;
-
-    if( aEntry.nMethod == STORED )
-        return ( getCRC( aEntry.nOffset, aEntry.nSize ) == aEntry.nCrc );
-
-    if (aEntry.nCompressedSize < 0)
+    try
     {
-        SAL_WARN("package", "bogus compressed size of: " << aEntry.nCompressedSize);
+        sal_Int32 nCRC = 0;
+        sal_Int64 nSize = 0;
+
+        if( aEntry.nMethod == STORED )
+            return ( getCRC( aEntry.nOffset, aEntry.nSize ) == aEntry.nCrc );
+
+        if (aEntry.nCompressedSize < 0)
+        {
+            SAL_WARN("package", "bogus compressed size of: " << aEntry.nCompressedSize);
+            return false;
+        }
+
+        getSizeAndCRC( aEntry.nOffset, aEntry.nCompressedSize, &nSize, &nCRC );
+        return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
+    }
+    catch (uno::Exception const&)
+    {
         return false;
     }
-
-    getSizeAndCRC( aEntry.nOffset, aEntry.nCompressedSize, &nSize, &nCRC );
-    return ( aEntry.nSize == nSize && aEntry.nCrc == nCRC );
 }
 
 sal_Int32 ZipFile::getCRC( sal_Int64 nOffset, sal_Int64 nSize )
