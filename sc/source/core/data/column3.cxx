@@ -580,10 +580,11 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
         {
             nRow1 = std::min( nRow1, rCell.GetSharedTopRow());
             SCROW nCellLen = rCell.GetSharedLength();
-            assert(nCellLen > 0);
-            if (nRow2 < rCell.GetSharedTopRow() + nCellLen)
+            // coverity[ tainted_data_return : FALSE ] version 2023.12.2
+            const auto nEndRow = rCell.GetSharedTopRow() + nCellLen;
+            if (nRow2 < nEndRow)
             {
-                nRow2 = rCell.GetSharedTopRow() + nCellLen - 1;
+                nRow2 = nEndRow - 1;
                 bEnlargedDown = true;
                 // Same end row is also enlarged, i.e. doesn't need to be
                 // checked for another group.
