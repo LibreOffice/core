@@ -47,6 +47,7 @@ namespace com::sun::star::frame
 class XModel;
 }
 namespace ucbhelper { class Content; }
+namespace svl::crypto { class SigningContext; }
 
 class SvKeyValueIterator;
 class SfxFilter;
@@ -287,7 +288,7 @@ public:
 
     SAL_DLLPRIVATE bool SignDocumentContentUsingCertificate(
         const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
-        const css::uno::Reference<css::security::XCertificate>& xCertificate);
+        svl::crypto::SigningContext& rSigningContext);
 
     // the following two methods must be used and make sense only during saving currently
     // TODO/LATER: in future the signature state should be controlled by the medium not by the document

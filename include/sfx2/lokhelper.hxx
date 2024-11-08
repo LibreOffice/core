@@ -249,6 +249,10 @@ public:
     static void addCertificates(const std::vector<std::string>& rCerts);
     /// Parses a private key + certificate pair.
     static css::uno::Reference<css::security::XCertificate> getSigningCertificate(const std::string& rCert, const std::string& rKey);
+    /// Decides if it's OK to call getCommandValues(rCommand).
+    static bool supportsCommand(std::u16string_view rCommand);
+    /// Returns information about a given command in JSON format.
+    static void getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);

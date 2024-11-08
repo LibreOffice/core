@@ -133,6 +133,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/threadpool.hxx>
 #include <o3tl/string_view.hxx>
+#include <svl/cryptosign.hxx>
 #include <condition_variable>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -4173,7 +4174,7 @@ void SfxMedium::CreateTempFileNoCopy()
 
 bool SfxMedium::SignDocumentContentUsingCertificate(
     const css::uno::Reference<css::frame::XModel>& xModel, bool bHasValidDocumentSignature,
-    const Reference<XCertificate>& xCertificate)
+    svl::crypto::SigningContext& rSigningContext)
 {
     bool bChanges = false;
 
@@ -4241,7 +4242,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
                     xStream.set(xMetaInf->openStreamElement(xSigner->getDocumentContentSignatureDefaultStreamName(), embed::ElementModes::READWRITE), uno::UNO_SET_THROW);
 
                 bool bSuccess = xModelSigner->SignModelWithCertificate(
-                    xModel, xCertificate, GetZipStorageToSign_Impl(), xStream);
+                    xModel, rSigningContext, GetZipStorageToSign_Impl(), xStream);
 
                 if (bSuccess)
                 {
@@ -4262,7 +4263,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
 
                     // We need read-write to be able to add the signature relation.
                 bool bSuccess = xModelSigner->SignModelWithCertificate(
-                    xModel, xCertificate, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
+                    xModel, rSigningContext, GetZipStorageToSign_Impl(/*bReadOnly=*/false), xStream);
 
                 if (bSuccess)
                 {
@@ -4280,7 +4281,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
                 std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(GetName(), StreamMode::READ | StreamMode::WRITE));
                 uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
                 if (xModelSigner->SignModelWithCertificate(
-                        xModel, xCertificate, uno::Reference<embed::XStorage>(), xStream))
+                        xModel, rSigningContext, uno::Reference<embed::XStorage>(), xStream))
                     bChanges = true;
             }
         }

@@ -65,6 +65,7 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/link.hxx>
+#include <svl/cryptosign.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -589,7 +590,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if (xCertificate.is())
             {
 
-                bHaveWeSigned |= SignDocumentContentUsingCertificate(xCertificate);
+                svl::crypto::SigningContext aSigningContext;
+                aSigningContext.m_xCertificate = xCertificate;
+                bHaveWeSigned |= SignDocumentContentUsingCertificate(aSigningContext);
 
                 // Reload to show how the PDF actually looks like after signing. This also
                 // changes "finish signing" on the infobar back to "sign document" as a side
@@ -2198,14 +2201,16 @@ bool SfxObjectShell::ResignDocument(uno::Sequence< security::DocumentSignatureIn
         auto xCert = rInfo.Signer;
         if (xCert.is())
         {
-            bSignSuccess &= SignDocumentContentUsingCertificate(xCert);
+            svl::crypto::SigningContext aSigningContext;
+            aSigningContext.m_xCertificate = xCert;
+            bSignSuccess &= SignDocumentContentUsingCertificate(aSigningContext);
         }
     }
 
     return bSignSuccess;
 }
 
-bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertificate>& xCertificate)
+bool SfxObjectShell::SignDocumentContentUsingCertificate(svl::crypto::SigningContext& rSigningContext)
 {
     // 1. PrepareForSigning
 
@@ -2275,7 +2280,7 @@ bool SfxObjectShell::SignDocumentContentUsingCertificate(const Reference<XCertif
 
     // 3. Sign
     bool bSignSuccess = GetMedium()->SignDocumentContentUsingCertificate(
-        GetBaseModel(), HasValidSignatures(), xCertificate);
+        GetBaseModel(), HasValidSignatures(), rSigningContext);
 
     // 4. AfterSigning
     AfterSigning(bSignSuccess, false);

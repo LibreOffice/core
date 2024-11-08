@@ -19,6 +19,10 @@
 #include <sal/types.h>
 
 class SfxViewShell;
+namespace svl::crypto
+{
+class SigningContext;
+}
 
 namespace sfx2
 {
@@ -27,11 +31,10 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI SAL_LOPLUGIN_ANNOTATE("crosscast") Digita
 {
 public:
     /// Same as signDocumentWithCertificate(), but passes the xModel as well.
-    virtual bool
-    SignModelWithCertificate(const css::uno::Reference<css::frame::XModel>& xModel,
-                             const css::uno::Reference<css::security::XCertificate>& xCertificate,
-                             const css::uno::Reference<css::embed::XStorage>& xStorage,
-                             const css::uno::Reference<css::io::XStream>& xStream)
+    virtual bool SignModelWithCertificate(const css::uno::Reference<css::frame::XModel>& xModel,
+                                          svl::crypto::SigningContext& rSigningContext,
+                                          const css::uno::Reference<css::embed::XStorage>& xStorage,
+                                          const css::uno::Reference<css::io::XStream>& xStream)
         = 0;
 
     /// Async replacement for signDocumentContent().
